@@ -83,6 +83,13 @@ class cl_rhpessoalmov {
     var $rh02_laudodeficiencia = 0;
     var $rh02_laudoportadormolestia = 0;
     var $rh02_segatuacao = 0;
+    var $rh02_art61ldb1 = 'f';
+    var $rh02_art61ldb2 = 'f';
+    var $rh02_art61ldb3 = 'f';
+    var $rh02_art61ldb4 = 'f';
+    var $rh02_art61ldb5 = 'f';
+    var $rh02_art1leiprestpsiccologia = 'f';
+    var $rh02_art1leiprestservsocial = 'f';
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  rh02_instit = int4 = Cod. Instituição
@@ -188,6 +195,13 @@ class cl_rhpessoalmov {
             $this->rh02_laudodeficiencia = ($this->rh02_laudodeficiencia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_laudodeficiencia"]:$this->rh02_laudodeficiencia);
             $this->rh02_laudoportadormolestia = ($this->rh02_laudoportadormolestia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_laudoportadormolestia"]:$this->rh02_laudoportadormolestia);
             $this->rh02_segatuacao = ($this->rh02_segatuacao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_segatuacao"]:$this->rh02_segatuacao);
+            $this->rh02_art61ldb1 = ($this->rh02_art61ldb1 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb1"]:$this->rh02_art61ldb1);
+            $this->rh02_art61ldb2 = ($this->rh02_art61ldb2 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb2"]:$this->rh02_art61ldb2);
+            $this->rh02_art61ldb3 = ($this->rh02_art61ldb3 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb3"]:$this->rh02_art61ldb3);
+            $this->rh02_art61ldb4 = ($this->rh02_art61ldb4 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb4"]:$this->rh02_art61ldb4);
+            $this->rh02_art61ldb5 = ($this->rh02_art61ldb5 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb5"]:$this->rh02_art61ldb5);
+            $this->rh02_art1leiprestpsiccologia = ($this->rh02_art1leiprestpsiccologia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestpsiccologia"]:$this->rh02_art1leiprestpsiccologia);
+            $this->rh02_art1leiprestservsocial = ($this->rh02_art1leiprestservsocial == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestservsocial"]:$this->rh02_art1leiprestservsocial);
         }else{
             $this->rh02_instit = ($this->rh02_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_instit"]:$this->rh02_instit);
             $this->rh02_seqpes = ($this->rh02_seqpes == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_seqpes"]:$this->rh02_seqpes);
@@ -394,6 +408,27 @@ class cl_rhpessoalmov {
           $this->erro_status = "0";
           return false;
         }*/
+        if($this->rh02_art61ldb1 == null ){
+            $this->rh02_art61ldb1 = "f";
+        }
+        if($this->rh02_art61ldb2 == null ){
+            $this->rh02_art61ldb2 = "f";
+        }
+        if($this->rh02_art61ldb3 == null ){
+            $this->rh02_art61ldb3 = "f";
+        }
+        if($this->rh02_art61ldb4 == null ){
+            $this->rh02_art61ldb4 = "f";
+        }
+        if($this->rh02_art61ldb5 == null ){
+            $this->rh02_art61ldb5 = "f";
+        }
+        if($this->rh02_art1leiprestpsiccologia == null ){
+            $this->rh02_art1leiprestpsiccologia = "f";
+        }
+        if($this->rh02_art1leiprestservsocial == null ){
+            $this->rh02_art1leiprestservsocial = "f";
+        }
         if($rh02_seqpes == "" || $rh02_seqpes == null ){
             $result = db_query("select nextval('rhpessoalmov_rh02_seqpes_seq')");
             if($result==false){
@@ -518,6 +553,13 @@ class cl_rhpessoalmov {
                                ,".($this->rh02_laudodeficiencia == "null" || $this->rh02_laudodeficiencia == ""?"null":"'".$this->rh02_laudodeficiencia."'")."
                                ,".($this->rh02_laudoportadormolestia == "null" || $this->rh02_laudoportadormolestia == ""?"null":"'".$this->rh02_laudoportadormolestia."'")."
                                ,".($this->rh02_segatuacao == "null" || $this->rh02_segatuacao == ""?"null":"'".$this->rh02_segatuacao."'")."
+                               ,".($this->rh02_art61ldb1 == "null" || $this->rh02_art61ldb1 == ""?"f":"'".$this->rh02_art61ldb1."'")."
+                               ,".($this->rh02_art61ldb2 == "null" || $this->rh02_art61ldb2 == ""?"f":"'".$this->rh02_art61ldb2."'")."
+                               ,".($this->rh02_art61ldb3 == "null" || $this->rh02_art61ldb3 == ""?"f":"'".$this->rh02_art61ldb3."'")."
+                               ,".($this->rh02_art61ldb4 == "null" || $this->rh02_art61ldb4 == ""?"f":"'".$this->rh02_art61ldb4."'")."
+                               ,".($this->rh02_art61ldb5 == "null" || $this->rh02_art61ldb5 == ""?"f":"'".$this->rh02_art61ldb5."'")."
+                               ,".($this->rh02_art1leiprestpsiccologia == "null" || $this->rh02_art1leiprestpsiccologia == ""?"f":"'".$this->rh02_art1leiprestpsiccologia."'")."
+                               ,".($this->rh02_art1leiprestservsocial == "null" || $this->rh02_art1leiprestservsocial == ""?"f":"'".$this->rh02_art1leiprestservsocial."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -984,6 +1026,34 @@ class cl_rhpessoalmov {
                 $this->rh02_desctipoparentescoinst = "";
             }
             $sql  .= $virgula." rh02_desctipoparentescoinst = ".($this->rh02_desctipoparentescoinst == "null" || $this->rh02_desctipoparentescoinst == ""?"null":"'".$this->rh02_desctipoparentescoinst."'");
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb1)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb1"])){
+            $sql  .= $virgula." rh02_art61ldb1 = '{$this->rh02_art61ldb1}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb2)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb2"])){
+            $sql  .= $virgula." rh02_art61ldb2 = '{$this->rh02_art61ldb2}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb3)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb3"])){
+            $sql  .= $virgula." rh02_art61ldb3 = '{$this->rh02_art61ldb3}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb4)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb4"])){
+            $sql  .= $virgula." rh02_art61ldb4 = '{$this->rh02_art61ldb4}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb5)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb5"])){
+            $sql  .= $virgula." rh02_art61ldb5 = '{$this->rh02_art61ldb5}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art1leiprestpsiccologia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestpsiccologia"])){
+            $sql  .= $virgula." rh02_art1leiprestpsiccologia = '{$this->rh02_art1leiprestpsiccologia}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art1leiprestservsocial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestservsocial"])){
+            $sql  .= $virgula." rh02_art1leiprestservsocial = '{$this->rh02_art1leiprestservsocial}' ";
             $virgula = ",";
         }
         $sql .= " where ";
