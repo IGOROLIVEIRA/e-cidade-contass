@@ -59,7 +59,7 @@ $clcgm->rotulo->label();
                             </td>
                             <td align="left" nowrap="">
 								<?php
-								db_inputdata("datacadastro_original", '', '', '', true, 'text', 3);
+								db_input("datacadastro_original", 10, 'datacadastro_original', true, 'text', 3);
 								?>
                             </td>
                         </tr>
