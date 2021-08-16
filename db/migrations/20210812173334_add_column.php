@@ -1,15 +1,15 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+use Classes\PostgresMigration;
 
-class AddColumn extends AbstractMigration
+class AddColumn extends PostgresMigration
 {
     /**
      * Change Method.
      */
     public function change()
     {
-        $table = $this->table('ordembancariapagamento');
+        $table = $this->table('ordembancariapagamento', array('schema' => 'caixa'));
         $column = $table->hasColumn('k00_dtvencpag');
 
         if (!$column) {
