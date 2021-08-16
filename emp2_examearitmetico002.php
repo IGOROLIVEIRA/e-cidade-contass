@@ -469,11 +469,11 @@ if ($iRestosPagar != 1) {
                 $pdf->SetFont("", "B", "");
                 $pdf->Cell(25, $tam, "DOTAÇÃO:", 1, 0, "C", 1);
                 $pdf->Cell(25, $tam, "REDUZIDO: " . $oResult->o58_coddot, 1, 0, "C", 1);
-                $pdf->Cell(150, $tam, str_pad($oResult->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_unidade, 3, "0", STR_PAD_LEFT) .
+                $pdf->Cell(135, $tam, str_pad($oResult->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_unidade, 3, "0", STR_PAD_LEFT) .
                     str_pad($oResult->o58_funcao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_subfuncao, 3, "0", STR_PAD_LEFT) .
                     str_pad($oResult->o58_programa, 4, "0", STR_PAD_LEFT) . str_pad($oResult->o58_projativ, 4, "0", STR_PAD_LEFT) .
                     str_pad($oResult->o56_elemento, 6, "0", STR_PAD_LEFT) . " - " . $oResult->o56_descr, 1, 0, "C", 1);
-                $pdf->Cell(82, $tam, $oResult->o15_codtri.' - '.$oResult->o15_descr, 1, 1, "C", 1);
+                $pdf->Cell(97, $tam, substr($oResult->o15_codtri.' - '.$oResult->o15_descr,0,55), 1, 1, "C", 1);
 
                 $pdf->Cell(20, $tam, "Empenho", 1, 0, "C", 1);
                 $pdf->Cell(17, $tam, "Data Emp", 1, 0, "C", 1);
