@@ -37,7 +37,7 @@ addCabecalho($pdf, $alt);
 
 for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
 
-	if ($pdf->getY() > $pdf->h - 35) {
+	if ($pdf->getY() > $pdf->h - 40) {
       $pdf->addpage();
       addCabecalho($pdf, $alt);
   	}
