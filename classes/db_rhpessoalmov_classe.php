@@ -516,6 +516,13 @@ class cl_rhpessoalmov {
                                       ,rh02_laudodeficiencia
                                       ,rh02_laudoportadormolestia
                                       ,rh02_segatuacao
+                                      ,rh02_art61ldb1
+                                      ,rh02_art61ldb2
+                                      ,rh02_art61ldb3
+                                      ,rh02_art61ldb4
+                                      ,rh02_art61ldb5
+                                      ,rh02_art1leiprestpsiccologia
+                                      ,rh02_art1leiprestservsocial
                        )
                 values (
                                 $this->rh02_instit
