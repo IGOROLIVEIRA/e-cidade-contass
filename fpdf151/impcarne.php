@@ -1,4 +1,5 @@
 <?
+
 include("assinatura.php");
 
 /**
@@ -104,9 +105,10 @@ include("assinatura.php");
  *  MODELO 78  - EMPENHOS FOLHA
  *
  */
-class db_impcarne extends cl_assinatura {
+class db_impcarne extends cl_assinatura
+{
 
-/////   VARIÁVEIS PARA EMISSAO DE CARNES DE PARCELAMENTO - MODELO 1
+  /////   VARIÁVEIS PARA EMISSAO DE CARNES DE PARCELAMENTO - MODELO 1
   var $imprimecapa  = null;
   var $mod_rodape   = 1;
   var $modelo       = 1;
@@ -114,10 +116,10 @@ class db_impcarne extends cl_assinatura {
   var $dtparapag    = null;
   var $confirmdtpag = 'f';
 
-  var $tipodebito= 'TIPO DE DÉBITO';
-  var $tipoinscr1= null;
-  var $prefeitura= 'PREFEITURA DBSELLER';
-  var $secretaria= 'SECRETARIA DE FAZENDA';
+  var $tipodebito = 'TIPO DE DÉBITO';
+  var $tipoinscr1 = null;
+  var $prefeitura = 'PREFEITURA DBSELLER';
+  var $secretaria = 'SECRETARIA DE FAZENDA';
   var $debito    = null;
   var $logo      = null;
   var $motivo    = null;
@@ -199,22 +201,22 @@ class db_impcarne extends cl_assinatura {
   var $dados12  = null;
   var $dados13  = null;
 
-//////  VARIï¿½VEIS PARA EMISSAO DE CONTRA-CHEQUES
+  //////  VARIï¿½VEIS PARA EMISSAO DE CONTRA-CHEQUES
 
-  var $lotacao     	    = null;
-  var $descr_lota  	    = null;
-  var $funcao      	    = null;
-  var $descr_funcao	    = null;
-  var $mensagem    	    = null;
-  var $recordenvelope  	= 0;
-  var $linhasenvelope 	= 0;
-  var $quantidade	      = null;
-  var $valor		        = null;
-  var $tipo		          = null;
-  var $rubrica		      = null;
-  var $descr_rub	      = null;
+  var $lotacao           = null;
+  var $descr_lota        = null;
+  var $funcao            = null;
+  var $descr_funcao      = null;
+  var $mensagem          = null;
+  var $recordenvelope    = 0;
+  var $linhasenvelope   = 0;
+  var $quantidade        = null;
+  var $valor            = null;
+  var $tipo              = null;
+  var $rubrica          = null;
+  var $descr_rub        = null;
 
-//////  VARIÁVEIS PARA EMISSAO DE RECIBO DE PAGAMENTO - MODELO 2
+  //////  VARIÁVEIS PARA EMISSAO DE RECIBO DE PAGAMENTO - MODELO 2
   var $cgccpf           = null;
   var $identifica_dados = "";
   var $enderpref        = null;
@@ -259,7 +261,7 @@ class db_impcarne extends cl_assinatura {
   var $numpre           = null;
   var $valtotal         = null;
 
-//////  VARIÁVEIS PARA EMISSAO DE ALVARÁ
+  //////  VARIÁVEIS PARA EMISSAO DE ALVARÁ
 
   var $tipoalvara     = null;
   var $obs            = null;
@@ -289,45 +291,45 @@ class db_impcarne extends cl_assinatura {
   var $lancobs        = null; // observaï¿½ï¿½o do lanï¿½amento do alvara de sanitario
 
 
-//////  FICHA DE COMPENSACAO
+  //////  FICHA DE COMPENSACAO
 
-  var $numbanco		    = '';
-  var $bairrocontri	    = '';
+  var $numbanco        = '';
+  var $bairrocontri      = '';
   var $localpagamento   = '';
-  var $cedente		    = '';
-  var $agencia_cedente	= '';
-  var $data_documento	= '';
+  var $cedente        = '';
+  var $agencia_cedente  = '';
+  var $data_documento  = '';
   var $numero_documento = '';
-  var $especie_doc	    = '';
-  var $aceite		    = '';
+  var $especie_doc      = '';
+  var $aceite        = '';
   var $data_processamento = '';
-  var $nosso_numero  	= '';
-  var $codigo_cedente	= '';
-  var $codigo_rua	= '';
-  var $carteira		    = '';
-  var $especie		    = '';
-  var $valor_documento	= '';
-  var $instrucoes1  	= '';
-  var $instrucoes2	    = '';
-  var $instrucoes3  	= '';
+  var $nosso_numero    = '';
+  var $codigo_cedente  = '';
+  var $codigo_rua  = '';
+  var $carteira        = '';
+  var $especie        = '';
+  var $valor_documento  = '';
+  var $instrucoes1    = '';
+  var $instrucoes2      = '';
+  var $instrucoes3    = '';
   var $totaldesc      = 0;
   var $totalrec       = 0;
   var $totalacres     = 0;
-  var $instrucoes4  	= '';
-  var $instrucoes5	    = '';
+  var $instrucoes4    = '';
+  var $instrucoes5      = '';
   var $desconto_abatimento = '';
-  var $outras_deducoes	= '';
-  var $mora_multa	    = '';
-  var $outros_acrecimos	= '';
-  var $valor_cobrado	= '';
-  var $sacado1		    = '';
-  var $sacado2		    = '';
-  var $sacado3		    = '';
+  var $outras_deducoes  = '';
+  var $mora_multa      = '';
+  var $outros_acrecimos  = '';
+  var $valor_cobrado  = '';
+  var $sacado1        = '';
+  var $sacado2        = '';
+  var $sacado3        = '';
   //var $dtparapag        = '';
   //var $descr10          = '';
   var $uf_config        = '';
 
-//// vairaveis para o orcamento
+  //// vairaveis para o orcamento
   var $orccodigo        = '';
   var $orcdtlim         = '';
   var $orchrlim         = '';
@@ -336,7 +338,7 @@ class db_impcarne extends cl_assinatura {
 
 
 
-//// variaveis para a solicitaï¿½ï¿½o de compras
+  //// variaveis para a solicitaï¿½ï¿½o de compras
   var $secfaz           = null;  //Nome do secretï¿½rio da fazenda
   var $nompre           = null;  //Nome do prefeiro
 
@@ -417,95 +419,95 @@ class db_impcarne extends cl_assinatura {
   var $labtipo          = '';         // se for solicitaï¿½ï¿½o, label do tipo
   var $declaracao       = "";         // Usado para imprimir declaracao no orï¿½amento (OSORIO)
 
-//// variaveis para a autorizaï¿½ï¿½o de empenho E ORDEM DE COMPRA
+  //// variaveis para a autorizaï¿½ï¿½o de empenho E ORDEM DE COMPRA
   var $assinatura1       = 'VISTO';
 
   var $assinatura2       = 'TÉCNICO CONTÁBIL';
   var $assinatura3       = 'SECRETÁRIO(A) DA FAZENDA';
   var $assinatura4       = 'SECRETÁRIO DA FAZENDA';
-  var $assinaturaprefeito= 'PREFEITO MUNICIPAL';
+  var $assinaturaprefeito = 'PREFEITO MUNICIPAL';
 
-  var $usa_sub		= false;	// a prefeitura utiliza o orcamento no subelemento
-  var $telefone		= null;		// telefone
-  var $nvias		= 1;		// ano
-  var $ano		= null;		// ano
-  var $numaut 		= null;  	// numero do empenho
-  var $numsol 		= null;  	// numero do empenho
-  var $numemp 		= null;  	// numero do empenho
-    /*OC4401*/
+  var $usa_sub    = false;  // a prefeitura utiliza o orcamento no subelemento
+  var $telefone    = null;    // telefone
+  var $nvias    = 1;    // ano
+  var $ano    = null;    // ano
+  var $numaut     = null;    // numero do empenho
+  var $numsol     = null;    // numero do empenho
+  var $numemp     = null;    // numero do empenho
+  /*OC4401*/
   var $usuario  = null; // Usuário emissor do empenho
   /*FIM - OC4401*/
-  var $codemp 		= null;  	// numero do empenho do ano
-  var $emissao 		= null;  	// data da emissao
-  var $orgao 		= null;  	// data da emissao
-  var $descr_orgao	= null;  	// data da emissao
-  var $unidade 		= null;  	// data da emissao
-  var $descr_unidade	= null;  	// data da emissao
+  var $codemp     = null;    // numero do empenho do ano
+  var $emissao     = null;    // data da emissao
+  var $orgao     = null;    // data da emissao
+  var $descr_orgao  = null;    // data da emissao
+  var $unidade     = null;    // data da emissao
+  var $descr_unidade  = null;    // data da emissao
   var $subfuncao       = null;     // codigo da subfuncao
   var $descr_subfuncao = null;   // descricao da subfuncao
   var $programa        = null;     // codigo do programa
   var $descr_programa  = null;   // descricao do programa
-  var $projativ		= null;  	// data da emissao
-  var $descr_projativ	= null;  	// data da emissao
-  var $sintetico	= null;  	// data da emissao
-  var $descr_sintetico	= null;  	// data da emissao
-  var $recurso   	= null;  	// data da emissao
-  var $descr_recurso    = null;  	// data da emissao
-  var $orcado		= null;  	// data da emissao
-  var $saldo_ant	= null;  	// data da emissao
-  var $empenhado	= null;  	// data da emissao
-  var $numcgm 		= null;		// cgm do fornecedor
-  var $banco  		= null;		// banco
-  var $agencia		= null;		// agencia
-  var $agenciadv	= null;		// agencia
-  var $conta  		= null;		// conta
-  var $contadv 		= null;		// conta
-  var $dotacao 		= null;		// dotacao orcamentaria (orgao,unidade,funcao,subfuncao,programa,projativ,elemento,recurso)
-  var $descrdotacao 	= null;		// descricao da dotacao
-  var $coddot		= null;		// codigo reduzido da despesa
-  var $destino		= null;		// destino do material ou serviï¿½o
-  var $resumo		= null;		// destino do material ou serviï¿½o
-  var $licitacao  	= null;		// tipo de licitaï¿½ï¿½o
-  var $num_licitacao  	= null;		// numero da licitaï¿½ï¿½o
-  var $descr_licitacao 	= null;		// descriï¿½ï¿½o do tipo de licitaï¿½ï¿½o
-  var $descr_tipocompra	= null;		// descriï¿½ï¿½o do tipo de compra
-  var $prazo_ent  	= null;		// prazo de entrega
-//  var $obs		= null;		// observaï¿½ï¿½es
-  var $cond_pag		= null;		// condiï¿½ï¿½es de pagamento
-  var $out_cond		= null;		// outras condiï¿½ï¿½es de pagamento
-  var $telef_cont 	= null;		// telefone do contato
-  var $recorddositens 	= null;		// record set dos itens
-  var $linhasdositens 	= null;		// numero de itens da autorizacao
-  var $item	    	= null;		// codigo do item
+  var $projativ    = null;    // data da emissao
+  var $descr_projativ  = null;    // data da emissao
+  var $sintetico  = null;    // data da emissao
+  var $descr_sintetico  = null;    // data da emissao
+  var $recurso     = null;    // data da emissao
+  var $descr_recurso    = null;    // data da emissao
+  var $orcado    = null;    // data da emissao
+  var $saldo_ant  = null;    // data da emissao
+  var $empenhado  = null;    // data da emissao
+  var $numcgm     = null;    // cgm do fornecedor
+  var $banco      = null;    // banco
+  var $agencia    = null;    // agencia
+  var $agenciadv  = null;    // agencia
+  var $conta      = null;    // conta
+  var $contadv     = null;    // conta
+  var $dotacao     = null;    // dotacao orcamentaria (orgao,unidade,funcao,subfuncao,programa,projativ,elemento,recurso)
+  var $descrdotacao   = null;    // descricao da dotacao
+  var $coddot    = null;    // codigo reduzido da despesa
+  var $destino    = null;    // destino do material ou serviï¿½o
+  var $resumo    = null;    // destino do material ou serviï¿½o
+  var $licitacao    = null;    // tipo de licitaï¿½ï¿½o
+  var $num_licitacao    = null;    // numero da licitaï¿½ï¿½o
+  var $descr_licitacao   = null;    // descriï¿½ï¿½o do tipo de licitaï¿½ï¿½o
+  var $descr_tipocompra  = null;    // descriï¿½ï¿½o do tipo de compra
+  var $prazo_ent    = null;    // prazo de entrega
+  //  var $obs		= null;		// observaï¿½ï¿½es
+  var $cond_pag    = null;    // condiï¿½ï¿½es de pagamento
+  var $out_cond    = null;    // outras condiï¿½ï¿½es de pagamento
+  var $telef_cont   = null;    // telefone do contato
+  var $recorddositens   = null;    // record set dos itens
+  var $linhasdositens   = null;    // numero de itens da autorizacao
+  var $item        = null;    // codigo do item
   var $unidadeitem = null;
-  var $quantitem    	= null;		// quantidade do item
-  var $valoritem    	= null;		// valor unitï¿½rio do item
+  var $quantitem      = null;    // quantidade do item
+  var $valoritem      = null;    // valor unitï¿½rio do item
   var $empempenho       = null;         // cod empenho para emissï¿½o de ordem de compra
   var $dataordem        = null;         // data da geraï¿½ï¿½o da ordem de compra
   var $observacaoitem   = null;
   var $descricaoitem    = null;
-  var $ordpag		= null;		// numero da ordem de pagamento
-  var $elemento		= null;		// elemento da despesa
-  var $descr_elemento	= null;		// descriï¿½ï¿½o do elemento da despesa
-  var $elementoitem	= null;		// elemento do item da ordem de pagamento
-  var $descr_elementoitem= null;	// descriï¿½ï¿½o do elemento do item da ordem de pagamento
-  var $outrasordens     = null;		// saldo das outras ordens de pagamento do empenho
-  var $vlrrec           = null;		// valor das receitas de retenï¿½oes
+  var $ordpag    = null;    // numero da ordem de pagamento
+  var $elemento    = null;    // elemento da despesa
+  var $descr_elemento  = null;    // descriï¿½ï¿½o do elemento da despesa
+  var $elementoitem  = null;    // elemento do item da ordem de pagamento
+  var $descr_elementoitem = null;  // descriï¿½ï¿½o do elemento do item da ordem de pagamento
+  var $outrasordens     = null;    // saldo das outras ordens de pagamento do empenho
+  var $vlrrec           = null;    // valor das receitas de retenï¿½oes
   var $cnpj             = null;         // cpf ou cnpj do credor
-  var $anulado		= null;         // valor anulado
+  var $anulado    = null;         // valor anulado
   var $vlr_anul         = null;         // valor anulado
   var $data_est         = null;         // data estorno
   var $descr_anu        = null;         // descriï¿½ï¿½o da anulaï¿½ï¿½o
   var $Scodemp          = null;         // descriï¿½ï¿½o da anulaï¿½ï¿½o
   var $resumo_item      = null;         // resumo de item de SC em aut. de licitaï¿½ï¿½o
   var $informa_adic     = null;         // informaï¿½ï¿½es adicionais de autorizaï¿½ï¿½o: PC - aut. de processo de compras
-                                        //                                        AU - somente autorizaï¿½ï¿½o
+  //                                        AU - somente autorizaï¿½ï¿½o
   var $obs_ordcom_orcamval = null;      // Observacao de ordem de compra lanï¿½a valores
 
-// Variï¿½veis necessï¿½rias para requisiï¿½ï¿½o de saï¿½da de materiais
+  // Variï¿½veis necessï¿½rias para requisiï¿½ï¿½o de saï¿½da de materiais
   var $Rnumero          = null;
   var $Ratendrequi      = null;
-  var $Rdata		        = null;
+  var $Rdata            = null;
   var $Rdepart          = null;
   var $Rhora            = null;
   var $Rresumo          = null;
@@ -518,175 +520,175 @@ class db_impcarne extends cl_assinatura {
   var $robsdositens     = null;
   var $casadec          = null;
 
-// VARIAVEIS PARA EMISSï¿½O DO CARNE DE IPTU PARCELA UNICA guaiba
+  // VARIAVEIS PARA EMISSï¿½O DO CARNE DE IPTU PARCELA UNICA guaiba
 
-    var $iptj23_anousu      = '';
-    var $iptz01_nome        = '';
-    var $iptz01_numcgm      = '';
-    var $iptz01_cgccpf      = '';
-    var $iptz01_munic       = '';
-    var $iptz01_cidade      = '';
-    var $iptz01_bairro      = '';
-    var $iptbairroimo       = '';
-    var $iptz01_cep         = '';
-    var $iptz01_ender       = '';
-    var $iptj01_matric      = '';
-    var $iptj23_vlrter      = '';
-    var $iptj23_aliq        = '';
-    var $iptk00_percdes     = '';
-    var $iptj43_cep         = '';
-    var $iptdtvencunic      = '';
-    var $iptuvlrcor         = '';
-    var $ipttotal           = '';
-    var $iptnomepri         = '';
-    var $iptcodpri          = '';
-    var $iptproprietario    = '';
-    var $iptuvlrdesconto    = '';
-    var $iptbql             = '';
-    var $iptcodigo_barras   = '';
-    var $iptlinha_digitavel = '';
-    var $iptdataemis        = '';
-    var $iptprefeitura      = '';
-    var $iptdebant          = '';
-    var $iptsubtitulo       = '';
+  var $iptj23_anousu      = '';
+  var $iptz01_nome        = '';
+  var $iptz01_numcgm      = '';
+  var $iptz01_cgccpf      = '';
+  var $iptz01_munic       = '';
+  var $iptz01_cidade      = '';
+  var $iptz01_bairro      = '';
+  var $iptbairroimo       = '';
+  var $iptz01_cep         = '';
+  var $iptz01_ender       = '';
+  var $iptj01_matric      = '';
+  var $iptj23_vlrter      = '';
+  var $iptj23_aliq        = '';
+  var $iptk00_percdes     = '';
+  var $iptj43_cep         = '';
+  var $iptdtvencunic      = '';
+  var $iptuvlrcor         = '';
+  var $ipttotal           = '';
+  var $iptnomepri         = '';
+  var $iptcodpri          = '';
+  var $iptproprietario    = '';
+  var $iptuvlrdesconto    = '';
+  var $iptbql             = '';
+  var $iptcodigo_barras   = '';
+  var $iptlinha_digitavel = '';
+  var $iptdataemis        = '';
+  var $iptprefeitura      = '';
+  var $iptdebant          = '';
+  var $iptsubtitulo       = '';
 
-// VARIAVEIS PARA EMISSï¿½O DA CERTIDï¿½O DE ISENï¿½ï¿½O
+  // VARIAVEIS PARA EMISSï¿½O DA CERTIDï¿½O DE ISENï¿½ï¿½O
 
-    var $isenmatric      = '';
-    var $isennome        = '';
-    var $isencgc         = '';
-    var $isenender       = '';
-    var $isenbairro      = '';
-    var $isendtini       = '';
-    var $isendtfim       = '';
-    var $isenproc        = '';
-    var $isenmsg1        = '';
-    var $isenmsg2        = '';
-    var $isenmsg3        = '';
-    var $isenassinatura  = '';
-    var $isenassinatura2 = '';
-    var $isenprefeitura  = '';
-    var $isensetor       = '';
-    var $isenquadra      = '';
-    var $isenlote        = '';
-  	var $cabec_sec		 = '';
+  var $isenmatric      = '';
+  var $isennome        = '';
+  var $isencgc         = '';
+  var $isenender       = '';
+  var $isenbairro      = '';
+  var $isendtini       = '';
+  var $isendtfim       = '';
+  var $isenproc        = '';
+  var $isenmsg1        = '';
+  var $isenmsg2        = '';
+  var $isenmsg3        = '';
+  var $isenassinatura  = '';
+  var $isenassinatura2 = '';
+  var $isenprefeitura  = '';
+  var $isensetor       = '';
+  var $isenquadra      = '';
+  var $isenlote        = '';
+  var $cabec_sec     = '';
 
-// VARIAVEIS PARA EMISSAO DE CARNE PRE-IMPRESSO MODELO DE BAGE
+  // VARIAVEIS PARA EMISSAO DE CARNE PRE-IMPRESSO MODELO DE BAGE
 
-var $predescr3_1         = "";  // contribuinte
-var $predescr3_2         = "";  // endereco
-var $premunic            = "";  // municipio
-var $precep              = "";  // cep
-var $precgccpf           = "";  // cgccpf
-var $predatacalc         = "";  // data do recibo
-var $pretitulo8          = "";  // titulo matricula ou inscricao
-var $predescr8           = "";  // descr matricula ou inscricao
-var $pretipolograd       = "";  // titulo do logradouro
-var $prenomepri          = "";  // nome do logradouro
-var $prenrpri            = "";
-var $precomplpri         = "";  // numero e complemento
-var $prebairropri        = "";  // nome do bairro
-var $pretipobairro       = "";  //
-var $pretipocompl        = "";
-var $pretipodebito       = "";
-var $prehistoricoparcela = "";
-var $predescr4_2         = "";
-var $predescr16_1        = "";
-var $predescr16_2        = "";
-var $predescr16_3        = "";
-var $premsgunica         = "";
-var $predescr6           = "";  // Data de Vencimento
-var $predescr7           = "";  // qtd de URM ou valor
-var $predescr9           = "";
-
-
-var $loteamento         = "";
-
-// 	VARIAVEIS PARA GUIA ITBI
-var $z01_nome           ="";
-var $logoitbi           = "";
-var $nomeinst           = "";
-var $tipoitbi           = "";
-var $datavencimento     = "";
-var $it04_descr         = "";
-var $numpreitbi         = "";
-//var $ano                = "";
-var $itbi               = "";
-var $nomecompprinc      = "";
-var $outroscompradores  = "";
-var $z01_cgccpf         = "";
-var $cgccpfcomprador    = "";
-var $z01_ender          = "";
-var $z01_bairro         = "";
-var $enderecocomprador  = "";
-var $numerocomprador    = "";
-var $complcomprador     = "";
-var $z01_munic          = "";
-var $z01_uf             = "";
-var $z01_cep            = "";
-var $municipiocomprador = "";
-var $ufcomprador        = "";
-var $cepcomprador       = "";
-var $bairrocomprador    = "";
-var $it06_matric        = "";
-var $j39_numero         = "";
-var $j34_setor          = "";
-var $j34_quadra         = "";
-var $matriz             = "";
-var $j34_lote           = "";
-var $j13_descr          = "";
-var $j14_tipo           = "";
-var $j14_nome           = "";
-var $it07_descr         = "";
-var $it05_frente        = "";
-var $it05_fundos        = "";
-var $it05_esquerdo      = "";
-var $it05_direito       = "";
-var $it18_frente        = "";
-var $it18_fundos        = "";
-var $it18_prof          = "";
-var $areaterreno        = "";
-var $areatran           = "";
-var $areaterrenomat     = "";
-//var $areatotal= "";
-var $areaedificadamat   = "";
-var $areatotal          = "";
-//var $areaedificadamat= "";
-var $areatrans          = "";
-var $arrayj13_descr     = "";
-var $arrayj13_valor     = "";
-var $linhasresultcons   = "";
-var $arrayit09_codigo   = "";
-var $arrayit10_codigo   = "";
-var $arrayit08_area     = "";
-var $arrayit08_areatrans= "";
-var $arrayit08_ano      = "";
-var $tx_banc            = "";
-var $propri             = "";
-var $proprietarios      = "";
-var $it14_valoravalter  = "";
-var $it14_valoravalconstr= "";
-var $it14_valoraval     = "";
-var $it14_valoravalterfinanc= "";
-var $it14_valoravalconstrfinanc= "";
-var $it14_valoravalfinanc= "";
-var $it01_valortransacao= "";
-var $it04_aliquotafinanc= "";
-var $it04_aliquota      = "";
-var $it14_desc          = "";
-var $it14_valorpaga     = "";
-//var $arrayj13_descr     = "";
-var $arrayit19_valor    = "";
-var $it01_data          = "";
-var $linhasitbiruralcaract= "";
-var $outrostransmitentes="";
-var $it01_obs           ="";
-
-// VARIAVEIS DA CAPA DE PROCESSO
-var $result_vars;
+  var $predescr3_1         = "";  // contribuinte
+  var $predescr3_2         = "";  // endereco
+  var $premunic            = "";  // municipio
+  var $precep              = "";  // cep
+  var $precgccpf           = "";  // cgccpf
+  var $predatacalc         = "";  // data do recibo
+  var $pretitulo8          = "";  // titulo matricula ou inscricao
+  var $predescr8           = "";  // descr matricula ou inscricao
+  var $pretipolograd       = "";  // titulo do logradouro
+  var $prenomepri          = "";  // nome do logradouro
+  var $prenrpri            = "";
+  var $precomplpri         = "";  // numero e complemento
+  var $prebairropri        = "";  // nome do bairro
+  var $pretipobairro       = "";  //
+  var $pretipocompl        = "";
+  var $pretipodebito       = "";
+  var $prehistoricoparcela = "";
+  var $predescr4_2         = "";
+  var $predescr16_1        = "";
+  var $predescr16_2        = "";
+  var $predescr16_3        = "";
+  var $premsgunica         = "";
+  var $predescr6           = "";  // Data de Vencimento
+  var $predescr7           = "";  // qtd de URM ou valor
+  var $predescr9           = "";
 
 
-var $lUtilizaModeloDefault = true;
+  var $loteamento         = "";
+
+  // 	VARIAVEIS PARA GUIA ITBI
+  var $z01_nome           = "";
+  var $logoitbi           = "";
+  var $nomeinst           = "";
+  var $tipoitbi           = "";
+  var $datavencimento     = "";
+  var $it04_descr         = "";
+  var $numpreitbi         = "";
+  //var $ano                = "";
+  var $itbi               = "";
+  var $nomecompprinc      = "";
+  var $outroscompradores  = "";
+  var $z01_cgccpf         = "";
+  var $cgccpfcomprador    = "";
+  var $z01_ender          = "";
+  var $z01_bairro         = "";
+  var $enderecocomprador  = "";
+  var $numerocomprador    = "";
+  var $complcomprador     = "";
+  var $z01_munic          = "";
+  var $z01_uf             = "";
+  var $z01_cep            = "";
+  var $municipiocomprador = "";
+  var $ufcomprador        = "";
+  var $cepcomprador       = "";
+  var $bairrocomprador    = "";
+  var $it06_matric        = "";
+  var $j39_numero         = "";
+  var $j34_setor          = "";
+  var $j34_quadra         = "";
+  var $matriz             = "";
+  var $j34_lote           = "";
+  var $j13_descr          = "";
+  var $j14_tipo           = "";
+  var $j14_nome           = "";
+  var $it07_descr         = "";
+  var $it05_frente        = "";
+  var $it05_fundos        = "";
+  var $it05_esquerdo      = "";
+  var $it05_direito       = "";
+  var $it18_frente        = "";
+  var $it18_fundos        = "";
+  var $it18_prof          = "";
+  var $areaterreno        = "";
+  var $areatran           = "";
+  var $areaterrenomat     = "";
+  //var $areatotal= "";
+  var $areaedificadamat   = "";
+  var $areatotal          = "";
+  //var $areaedificadamat= "";
+  var $areatrans          = "";
+  var $arrayj13_descr     = "";
+  var $arrayj13_valor     = "";
+  var $linhasresultcons   = "";
+  var $arrayit09_codigo   = "";
+  var $arrayit10_codigo   = "";
+  var $arrayit08_area     = "";
+  var $arrayit08_areatrans = "";
+  var $arrayit08_ano      = "";
+  var $tx_banc            = "";
+  var $propri             = "";
+  var $proprietarios      = "";
+  var $it14_valoravalter  = "";
+  var $it14_valoravalconstr = "";
+  var $it14_valoraval     = "";
+  var $it14_valoravalterfinanc = "";
+  var $it14_valoravalconstrfinanc = "";
+  var $it14_valoravalfinanc = "";
+  var $it01_valortransacao = "";
+  var $it04_aliquotafinanc = "";
+  var $it04_aliquota      = "";
+  var $it14_desc          = "";
+  var $it14_valorpaga     = "";
+  //var $arrayj13_descr     = "";
+  var $arrayit19_valor    = "";
+  var $it01_data          = "";
+  var $linhasitbiruralcaract = "";
+  var $outrostransmitentes = "";
+  var $it01_obs           = "";
+
+  // VARIAVEIS DA CAPA DE PROCESSO
+  var $result_vars;
+
+
+  var $lUtilizaModeloDefault = true;
 
   /**
    * Variáveis de controle da marca d'agua
@@ -697,7 +699,8 @@ var $lUtilizaModeloDefault = true;
   /**
    * Limpa os dados da marca d'agua
    */
-  public function clearWaterMark() {
+  public function clearWaterMark()
+  {
 
     $this->lWaterMark = false;
     $this->aWaterMark = array();
@@ -713,23 +716,25 @@ var $lUtilizaModeloDefault = true;
    * @param integer $iFontSize - Tamanho da fonte
    * @param integer $iFillColor - Cor de preenchimento
    */
-  public function setWaterMark($x, $y, $sTexto, $nDirection, $iFontSize = 150, $iFillColor = 178) {
+  public function setWaterMark($x, $y, $sTexto, $nDirection, $iFontSize = 150, $iFillColor = 178)
+  {
 
     $this->lWaterMark = true;
     $this->aWaterMark = array(
-        'x' => $x,
-        'y' => $y,
-        'text' => $sTexto,
-        'direction' => $nDirection,
-        'font' => $iFontSize,
-        'fillcolor' => $iFillColor
-      );
+      'x' => $x,
+      'y' => $y,
+      'text' => $sTexto,
+      'direction' => $nDirection,
+      'font' => $iFontSize,
+      'fillcolor' => $iFillColor
+    );
   }
 
   /**
    * Imprime a marca d'agua na página atual
    */
-  public function printWaterMark() {
+  public function printWaterMark()
+  {
 
     if (!$this->lWaterMark) {
       return false;
@@ -740,87 +745,89 @@ var $lUtilizaModeloDefault = true;
     $this->objpdf->TextWithRotation($this->aWaterMark['x'], $this->aWaterMark['y'], $this->aWaterMark['text'], $this->aWaterMark['direction']);
   }
 
-//************************************************************//
+  //************************************************************//
 
-// variaveis para a nota de empenho
-/**
- * Construtor da classe
- * @param object  $objpdf    - Instancia da classe FPDF
- * @param integer $impmodelo - Numero do Modelo a ser utilizado.
- */
-  function db_impcarne($objpdf,$impmodelo){
+  // variaveis para a nota de empenho
+  /**
+   * Construtor da classe
+   * @param object  $objpdf    - Instancia da classe FPDF
+   * @param integer $impmodelo - Numero do Modelo a ser utilizado.
+   */
+  function __construct($objpdf, $impmodelo)
+  {
     $this->objpdf = $objpdf;
     $this->impmodelo = $impmodelo;
   }
-  function muda_pag($pagina, $xlin, $xcol, $fornec="false", &$contapagina, $mais=1, $mod=1) {
+  function muda_pag($pagina, $xlin, $xcol, $fornec = "false", &$contapagina, $mais = 1, $mod = 1)
+  {
     global $resparag, $resparagpadrao, $db61_texto, $db02_texto, $maislin, $xtotal, $flag_rodape;
 
     $x = false;
 
     $valor_da_posicao_atual = $this->objpdf->gety();
-    $valor_da_posicao_atual+= ($mais*5);
+    $valor_da_posicao_atual += ($mais * 5);
     $valor_da_posicao_atual = (int)$valor_da_posicao_atual;
 
 
     $valor_do_tamanho_pagin = $this->objpdf->h;
-    $valor_do_tamanho_pagin-= 58;
+    $valor_do_tamanho_pagin -= 58;
     $valor_do_tamanho_pagin = (int)$valor_do_tamanho_pagin;
 
     $valor_do_tamanho_mpagi = $this->objpdf->h;
-    $valor_do_tamanho_mpagi-= 30;
+    $valor_do_tamanho_mpagi -= 30;
     $valor_do_tamanho_mpagi = (int)$valor_do_tamanho_mpagi;
 
-//    echo "$valor_da_posicao_atual > $valor_do_tamanho_pagin <br>";
-    $valor_do_tamanho_pagin = $valor_do_tamanho_pagin-20;
-    if((($valor_da_posicao_atual > $valor_do_tamanho_pagin) && $contapagina == 1 ) ||  (($valor_da_posicao_atual > $valor_do_tamanho_mpagi) && $contapagina != 1)){
-      if($contapagina == 1){
-	$this->objpdf->Setfont('Arial','',9);
-	$this->objpdf->text(111.2,$xlin+224,'Continua na Página '.($contapagina+1));
-	$this->objpdf->setfillcolor(0,0,0);
+    //    echo "$valor_da_posicao_atual > $valor_do_tamanho_pagin <br>";
+    $valor_do_tamanho_pagin = $valor_do_tamanho_pagin - 20;
+    if ((($valor_da_posicao_atual > $valor_do_tamanho_pagin) && $contapagina == 1) ||  (($valor_da_posicao_atual > $valor_do_tamanho_mpagi) && $contapagina != 1)) {
+      if ($contapagina == 1) {
+        $this->objpdf->Setfont('Arial', '', 9);
+        $this->objpdf->text(111.2, $xlin + 224, 'Continua na Página ' . ($contapagina + 1));
+        $this->objpdf->setfillcolor(0, 0, 0);
 
-	$this->objpdf->SetFont('Arial','',4);
-	$this->objpdf->TextWithDirection(1.5,$xlin+60,$this->texto,'U'); // texto no canhoto do carne
-	$this->objpdf->setfont('Arial','',11);
-      }else{
-	$this->objpdf->Setfont('Arial','',9);
-	$this->objpdf->text(112.5,$xlin+271,'Continua na Página '.($contapagina+1));
+        $this->objpdf->SetFont('Arial', '', 4);
+        $this->objpdf->TextWithDirection(1.5, $xlin + 60, $this->texto, 'U'); // texto no canhoto do carne
+        $this->objpdf->setfont('Arial', '', 11);
+      } else {
+        $this->objpdf->Setfont('Arial', '', 9);
+        $this->objpdf->text(112.5, $xlin + 271, 'Continua na Página ' . ($contapagina + 1));
       }
 
       if ($contapagina == 1) {
-        $this->objpdf->Setfont('Arial','B',7);
+        $this->objpdf->Setfont('Arial', 'B', 7);
         $sqlparag = "select db02_texto
 	                   from db_documento
                  	   	    inner join db_docparag on db03_docum = db04_docum
                     	    inner join db_tipodoc on db08_codigo  = db03_tipodoc
                 	        inner join db_paragrafo on db04_idparag = db02_idparag
-               	     where db03_tipodoc = 1400 and db03_instit = cast(" . db_getsession("DB_instit")." as integer) order by db04_ordem ";
+               	     where db03_tipodoc = 1400 and db03_instit = cast(" . db_getsession("DB_instit") . " as integer) order by db04_ordem ";
 
         $resparag = @db_query($sqlparag);
 
-        if(@pg_numrows($resparag) > 0){
-            db_fieldsmemory($resparag,0);
+        if (@pg_numrows($resparag) > 0) {
+          db_fieldsmemory($resparag, 0);
 
-            eval($db02_texto);
-            $flag_rodape = true;
+          eval($db02_texto);
+          $flag_rodape = true;
         } else {
-            $sqlparagpadrao = "select db61_texto
+          $sqlparagpadrao = "select db61_texto
 	                             from db_documentopadrao
                   	   	            inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc
                      	              inner join db_tipodoc         on db08_codigo   = db60_tipodoc
                  	                  inner join db_paragrafopadrao on db61_codparag = db62_codparag
-               	               where db60_tipodoc = 1400 and db60_instit = cast(" . db_getsession("DB_instit")." as integer) order by db62_ordem";
+               	               where db60_tipodoc = 1400 and db60_instit = cast(" . db_getsession("DB_instit") . " as integer) order by db62_ordem";
 
-            $resparagpadrao = @db_query($sqlparagpadrao);
+          $resparagpadrao = @db_query($sqlparagpadrao);
 
-            if(@pg_numrows($resparagpadrao) > 0){
-                db_fieldsmemory($resparagpadrao,0);
+          if (@pg_numrows($resparagpadrao) > 0) {
+            db_fieldsmemory($resparagpadrao, 0);
 
-                eval($db61_texto);
-                $flag_rodape = true;
-            }
+            eval($db61_texto);
+            $flag_rodape = true;
+          }
         }
       }
-      $contapagina+=1;
+      $contapagina += 1;
       $this->objpdf->addpage();
       $pagina += 1;
       $muda_pag = true;
@@ -835,17 +842,17 @@ var $lUtilizaModeloDefault = true;
 
 
       $getlogo = db_getnomelogo();
-			$logo    = ($getlogo==false?'':$getlogo);
+      $logo    = ($getlogo == false ? '' : $getlogo);
 
-			// Imprime cabeï¿½alho com dados sobre a prefeitura se mudar de pï¿½gina
+      // Imprime cabeï¿½alho com dados sobre a prefeitura se mudar de pï¿½gina
       $this->objpdf->setfillcolor(245);
-      $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
-      $this->objpdf->setfillcolor(255,255,255);
-      $this->objpdf->Setfont('Arial','B',9);
+      $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
+      $this->objpdf->setfillcolor(255, 255, 255);
+      $this->objpdf->Setfont('Arial', 'B', 9);
 
       $lImprimeTipo = false;
 
-      if( !empty($this->StipoSolicitacao) ) {
+      if (!empty($this->StipoSolicitacao)) {
 
         $sDescricaoTipo   = 'SOLICITAÇÃO DE COMPRA N';
         $iLicitacaoTipo   = substr($this->StipoSolicitacao, 0, 1);
@@ -857,196 +864,193 @@ var $lUtilizaModeloDefault = true;
           case '6':
 
             $sDescricaoTipo   = substr($this->StipoSolicitacao, 1, 40);
-            $sDescricaoTipo   = mb_convert_case(str_replace('ã','Ã',$sDescricaoTipo), MB_CASE_UPPER, "ISO-8859-1");
-            $sDescricaoTipo   = mb_convert_case(str_replace('ç','Ç',$sDescricaoTipo), MB_CASE_UPPER, "ISO-8859-1");
-            $sRodapeCabecalho = 'SOLICITAÇÃO DE COMPRA N'.CHR(176);
+            $sDescricaoTipo   = mb_convert_case(str_replace('ã', 'Ã', $sDescricaoTipo), MB_CASE_UPPER, "ISO-8859-1");
+            $sDescricaoTipo   = mb_convert_case(str_replace('ç', 'Ç', $sDescricaoTipo), MB_CASE_UPPER, "ISO-8859-1");
+            $sRodapeCabecalho = 'SOLICITAÇÃO DE COMPRA N' . CHR(176);
             $lImprimeTipo     = true;
             break;
 
-          default:break;
+          default:
+            break;
         }
 
         if ($lImprimeTipo) {
-          $this->objpdf->text(130,$xlin-13, $sDescricaoTipo);
+          $this->objpdf->text(130, $xlin - 13, $sDescricaoTipo);
         } else {
 
-          $this->objpdf->text(130,$xlin-13,'SOLICITAÇÃO DE COMPRA N'.CHR(176));
-          $this->objpdf->text(185,$xlin-13,db_formatar($this->Snumero,'s','0',6,'e'));
+          $this->objpdf->text(130, $xlin - 13, 'SOLICITAÇÃO DE COMPRA N' . CHR(176));
+          $this->objpdf->text(185, $xlin - 13, db_formatar($this->Snumero, 's', '0', 6, 'e'));
         }
       }
 
-      $this->objpdf->Setfont('Arial','B',7);
-      $this->objpdf->text(130,$xlin-9,'ORGAO');
-      $this->objpdf->text(142,$xlin-9,': '.substr($this->Sorgao,0,35));
-      $this->objpdf->text(130,$xlin-5,'UNIDADE');
-      $this->objpdf->text(142,$xlin-5,': '.substr($this->Sunidade,0,35));
+      $this->objpdf->Setfont('Arial', 'B', 7);
+      $this->objpdf->text(130, $xlin - 9, 'ORGAO');
+      $this->objpdf->text(142, $xlin - 9, ': ' . substr($this->Sorgao, 0, 35));
+      $this->objpdf->text(130, $xlin - 5, 'UNIDADE');
+      $this->objpdf->text(142, $xlin - 5, ': ' . substr($this->Sunidade, 0, 35));
 
       if ($lImprimeTipo) {
 
-        $this->objpdf->text(130, $xlin - 2,'SOLICITAÇÃO DE COMPRA N'.CHR(176));
-        $this->objpdf->text(185, $xlin - 2,db_formatar($this->Snumero,'s','0',6,'e'));
-
+        $this->objpdf->text(130, $xlin - 2, 'SOLICITAÇÃO DE COMPRA N' . CHR(176));
+        $this->objpdf->text(185, $xlin - 2, db_formatar($this->Snumero, 's', '0', 6, 'e'));
       }
 
-      $this->objpdf->Setfont('Arial','B',9);
-			$this->objpdf->Image('imagens/files/'.$logo,15,$xlin-17,12);
-      $this->objpdf->Setfont('Arial','B',9);
-      $this->objpdf->text(40,$xlin-15,$this->prefeitura);
-      $this->objpdf->Setfont('Arial','',9);
-      $this->objpdf->text(40,$xlin-11,$this->enderpref);
-      $this->objpdf->text(40,$xlin-8,$this->municpref);
-      $this->objpdf->text(40,$xlin-5,$this->telefpref);
-      $this->objpdf->text(40,$xlin-2,$this->emailpref);
-      $this->objpdf->text(40,$xlin+ 1,db_formatar($this->cgcpref,'cnpj'));
-//      $this->objpdf->text(40,$xlin+2,'Continuaï¿½ï¿½o da Pï¿½gina '.($contapagina-1));
-      $this->objpdf->text(130,$xlin+2,'Página '.$contapagina);
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->Image('imagens/files/' . $logo, 15, $xlin - 17, 12);
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+      $this->objpdf->Setfont('Arial', '', 9);
+      $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+      $this->objpdf->text(40, $xlin - 8, $this->municpref);
+      $this->objpdf->text(40, $xlin - 5, $this->telefpref);
+      $this->objpdf->text(40, $xlin - 2, $this->emailpref);
+      $this->objpdf->text(40, $xlin + 1, db_formatar($this->cgcpref, 'cnpj'));
+      //      $this->objpdf->text(40,$xlin+2,'Continuaï¿½ï¿½o da Pï¿½gina '.($contapagina-1));
+      $this->objpdf->text(130, $xlin + 2, 'Página ' . $contapagina);
 
       $xlin = 0;
-      if((isset($fornec) && $fornec=="false") || !isset($fornec)){
-	    $this->objpdf->Setfont('Arial','B',8);
+      if ((isset($fornec) && $fornec == "false") || !isset($fornec)) {
+        $this->objpdf->Setfont('Arial', 'B', 8);
 
         if ($mod == 1) {
 
-           // Caixas dos label's
-           $this->objpdf->rect($xcol    ,$xlin+24,10,6,2,'DF','12');
-           $this->objpdf->rect($xcol+ 10,$xlin+24,12,6,2,'DF','12');
-           $this->objpdf->rect($xcol+ 22,$xlin+24,22,6,2,'DF','12');
-           $this->objpdf->rect($xcol+ 44,$xlin+24,98,6,2,'DF','12');
-           $this->objpdf->rect($xcol+142,$xlin+24,30,6,2,'DF','12');
-           $this->objpdf->rect($xcol+172,$xlin+24,30,6,2,'DF','12');
+          // Caixas dos label's
+          $this->objpdf->rect($xcol, $xlin + 24, 10, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 10, $xlin + 24, 12, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 22, $xlin + 24, 22, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 44, $xlin + 24, 98, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 142, $xlin + 24, 30, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 172, $xlin + 24, 30, 6, 2, 'DF', '12');
 
 
-           // Caixa dos itens
-           $this->objpdf->rect($xcol,    $xlin+30,10,262,2,'DF','34');
-           // Caixa da quantidade
-           $this->objpdf->rect($xcol+ 10,$xlin+30,12,262,2,'DF','34');
-           $this->objpdf->rect($xcol+ 22,$xlin+30,22,262,2,'DF','34');
-           // Caixa dos materiais ou servicos
-           $this->objpdf->rect($xcol+ 44,$xlin+30,98,262,2,'DF','34');
-           // Caixa dos valores unitario
-           $this->objpdf->rect($xcol+142,$xlin+30,30,262,2,'DF','');
-           // Caixa dos valores totais dos iten
-           $this->objpdf->rect($xcol+172,$xlin+30,30,262,2,'DF','34');
+          // Caixa dos itens
+          $this->objpdf->rect($xcol,    $xlin + 30, 10, 262, 2, 'DF', '34');
+          // Caixa da quantidade
+          $this->objpdf->rect($xcol + 10, $xlin + 30, 12, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 22, $xlin + 30, 22, 262, 2, 'DF', '34');
+          // Caixa dos materiais ou servicos
+          $this->objpdf->rect($xcol + 44, $xlin + 30, 98, 262, 2, 'DF', '34');
+          // Caixa dos valores unitario
+          $this->objpdf->rect($xcol + 142, $xlin + 30, 30, 262, 2, 'DF', '');
+          // Caixa dos valores totais dos iten
+          $this->objpdf->rect($xcol + 172, $xlin + 30, 30, 262, 2, 'DF', '34');
 
-           $this->objpdf->sety($xlin+66);
-           $alt = 4;
+          $this->objpdf->sety($xlin + 66);
+          $alt = 4;
 
-           $this->objpdf->Setfont('Arial','B',8);
-           $this->objpdf->text($xcol+   2,$xlin+28,'ITEM');
-           $this->objpdf->text($xcol+  11,$xlin+28,'QUANT');
-           $this->objpdf->text($xcol+  30,$xlin+28,'REF');
-           $this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVIÇO');
-           $this->objpdf->text($xcol+ 145,$xlin+28,'VALOR UNITÁRIO');
-           $this->objpdf->text($xcol+ 176,$xlin+28,'VALOR TOTAL');
+          $this->objpdf->Setfont('Arial', 'B', 8);
+          $this->objpdf->text($xcol +   2, $xlin + 28, 'ITEM');
+          $this->objpdf->text($xcol +  11, $xlin + 28, 'QUANT');
+          $this->objpdf->text($xcol +  30, $xlin + 28, 'REF');
+          $this->objpdf->text($xcol +  70, $xlin + 28, 'MATERIAL OU SERVIÇO');
+          $this->objpdf->text($xcol + 145, $xlin + 28, 'VALOR UNITÁRIO');
+          $this->objpdf->text($xcol + 176, $xlin + 28, 'VALOR TOTAL');
 
-           $maiscol = 0;
-           $xlin = 20;
-           // Seta altura nova para impressão dos dados
-           $this->objpdf->sety($xlin+11);
-           $this->objpdf->setleftmargin(3);
-           $x = true;
-           $this->objpdf->Setfont('Arial','',7);
-
+          $maiscol = 0;
+          $xlin = 20;
+          // Seta altura nova para impressão dos dados
+          $this->objpdf->sety($xlin + 11);
+          $this->objpdf->setleftmargin(3);
+          $x = true;
+          $this->objpdf->Setfont('Arial', '', 7);
         } else {
 
-          	// Caixas dos label's
-        	 $this->objpdf->rect($xcol    , $xlin + 32, 10, 6, 2, 'DF', '12');
-           $this->objpdf->rect($xcol +10, $xlin + 32, 30, 6, 2, 'DF', '12');
-           $this->objpdf->rect($xcol +40, $xlin + 32, 25, 6, 2, 'DF', '12');
-           $this->objpdf->rect($xcol +65, $xlin + 32, 107,6, 2, 'DF', '12');
-           $this->objpdf->rect($xcol +172,$xlin + 32, 30, 6, 2, 'DF', '12');
+          // Caixas dos label's
+          $this->objpdf->rect($xcol, $xlin + 32, 10, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 10, $xlin + 32, 30, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 40, $xlin + 32, 25, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 65, $xlin + 32, 107, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 172, $xlin + 32, 30, 6, 2, 'DF', '12');
 
-        	 $menos = 0;
-        	 $getdoy = 32;
+          $menos = 0;
+          $getdoy = 32;
 
-           $this->objpdf->rect($xcol     , $xlin + 32, 10, 262, 2, 'DF', '34');
-           $this->objpdf->rect($xcol +10 , $xlin + 32, 30, 262, 2, 'DF', '34');
-           $this->objpdf->rect($xcol +40 , $xlin + 32, 25, 262, 2, 'DF', '34');
-           $this->objpdf->rect($xcol +65 , $xlin + 32, 107, 262,2, 'DF', '34');
-           $this->objpdf->rect($xcol +172, $xlin + 32, 30, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol, $xlin + 32, 10, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 10, $xlin + 32, 30, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 40, $xlin + 32, 25, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 65, $xlin + 32, 107, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 172, $xlin + 32, 30, 262, 2, 'DF', '34');
 
-           $this->objpdf->sety($xlin +28);
+          $this->objpdf->sety($xlin + 28);
 
-           // Label das colunas
-           $this->objpdf->Setfont('Arial', 'B', 8);
-           $this->objpdf->text($xcol +2, $xlin + $getdoy +4, 'ITEM');
-           $this->objpdf->text($xcol +14, $xlin + $getdoy +4, 'QUANTIDADES');
-           $this->objpdf->text($xcol +50, $xlin + $getdoy +4, 'REF');
-           $this->objpdf->text($xcol +105, $xlin + $getdoy +4, 'MATERIAL OU SERVIÇO');
-           $this->objpdf->text($xcol +176, $xlin + $getdoy +4, 'VALOR TOTAL');
+          // Label das colunas
+          $this->objpdf->Setfont('Arial', 'B', 8);
+          $this->objpdf->text($xcol + 2, $xlin + $getdoy + 4, 'ITEM');
+          $this->objpdf->text($xcol + 14, $xlin + $getdoy + 4, 'QUANTIDADES');
+          $this->objpdf->text($xcol + 50, $xlin + $getdoy + 4, 'REF');
+          $this->objpdf->text($xcol + 105, $xlin + $getdoy + 4, 'MATERIAL OU SERVIÇO');
+          $this->objpdf->text($xcol + 176, $xlin + $getdoy + 4, 'VALOR TOTAL');
 
-           $maiscol = 0;
-           $xlin = 20;
-           // Seta altura nova para impressão dos dados
-           $this->objpdf->sety($xlin+20);
-           $this->objpdf->setleftmargin(3);
-           $x = true;
-           $this->objpdf->Setfont('Arial','',7);
-
+          $maiscol = 0;
+          $xlin = 20;
+          // Seta altura nova para impressão dos dados
+          $this->objpdf->sety($xlin + 20);
+          $this->objpdf->setleftmargin(3);
+          $x = true;
+          $this->objpdf->Setfont('Arial', '', 7);
         }
-
-      }else if(isset($fornec) && $fornec=="true"){
+      } else if (isset($fornec) && $fornec == "true") {
       }
-
     }
     return $x;
   }
 
-  function muda_pag2($pagina,$xlin,$xcol,&$contapagina,$mais=1,$linha){
+  function muda_pag2($pagina, $xlin, $xcol, &$contapagina, $mais = 1, $linha)
+  {
     global $resparag, $resparagpadrao, $db61_texto, $db02_texto, $maislin, $xtotal, $flag_rodape;
 
     $x = false;
 
     $valor_da_posicao_atual = $this->objpdf->gety();
-    $valor_da_posicao_atual+= ($mais);
+    $valor_da_posicao_atual += ($mais);
     $valor_da_posicao_atual = (int)$valor_da_posicao_atual;
 
 
     $valor_do_tamanho_pagin = $this->objpdf->h;
-    $valor_do_tamanho_pagin-= 60;
+    $valor_do_tamanho_pagin -= 60;
     $valor_do_tamanho_pagin = (int)$valor_do_tamanho_pagin;
 
     $valor_do_tamanho_mpagi = $this->objpdf->h;
-    $valor_do_tamanho_mpagi-= 30;
+    $valor_do_tamanho_mpagi -= 30;
     $valor_do_tamanho_mpagi = (int)$valor_do_tamanho_mpagi;
 
 
-    if ((($valor_da_posicao_atual > $valor_do_tamanho_pagin) && $contapagina == 1 ) ||  (($valor_da_posicao_atual > $valor_do_tamanho_mpagi) && $contapagina != 1)) {
+    if ((($valor_da_posicao_atual > $valor_do_tamanho_pagin) && $contapagina == 1) ||  (($valor_da_posicao_atual > $valor_do_tamanho_mpagi) && $contapagina != 1)) {
 
-    	$this->objpdf->text(111.2,$xlin+240,'Continua na Página '.($contapagina+1));
+      $this->objpdf->text(111.2, $xlin + 240, 'Continua na Página ' . ($contapagina + 1));
 
       if ($contapagina == 1) {
-        $this->objpdf->Setfont('Arial','B',7);
+        $this->objpdf->Setfont('Arial', 'B', 7);
         $sqlparag = "select db02_texto
                      from db_documento
                           inner join db_docparag on db03_docum = db04_docum
                           inner join db_tipodoc on db08_codigo  = db03_tipodoc
                           inner join db_paragrafo on db04_idparag = db02_idparag
-                     where db03_tipodoc = 1202 and db03_instit = cast(" . db_getsession("DB_instit")." as integer) order by db04_ordem ";
+                     where db03_tipodoc = 1202 and db03_instit = cast(" . db_getsession("DB_instit") . " as integer) order by db04_ordem ";
 
         $resparag = @db_query($sqlparag);
 
         if (@pg_numrows($resparag) > 0) {
-            db_fieldsmemory($resparag,0);
+          db_fieldsmemory($resparag, 0);
 
-            eval($db02_texto);
-            $flag_rodape = true;
+          eval($db02_texto);
+          $flag_rodape = true;
         } else {
-            $sqlparagpadrao = "select db61_texto
+          $sqlparagpadrao = "select db61_texto
                                from db_documentopadrao
                                     inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc
                                     inner join db_tipodoc         on db08_codigo   = db60_tipodoc
                                     inner join db_paragrafopadrao on db61_codparag = db62_codparag
-                               where-30 db60_tipodoc = 1202 and db60_instit = cast(" . db_getsession("DB_instit")." as integer) order by db62_ordem";
+                               where-30 db60_tipodoc = 1202 and db60_instit = cast(" . db_getsession("DB_instit") . " as integer) order by db62_ordem";
 
-            $resparagpadrao = @db_query($sqlparagpadrao);
+          $resparagpadrao = @db_query($sqlparagpadrao);
 
-            if (@pg_numrows($resparagpadrao) > 0) {
-                db_fieldsmemory($resparagpadrao,0);
+          if (@pg_numrows($resparagpadrao) > 0) {
+            db_fieldsmemory($resparagpadrao, 0);
 
-                eval($db61_texto);
-                $flag_rodape = true;
-            }
+            eval($db61_texto);
+            $flag_rodape = true;
+          }
         }
       }
       $pagina += 1;
@@ -1063,293 +1067,288 @@ var $lUtilizaModeloDefault = true;
       $dif = 0;
 
       $this->objpdf->setfillcolor(245);
-      $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
+      $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
 
       $getlogo = db_getnomelogo();
-      $logo    = ($getlogo==false?'':$getlogo);
+      $logo    = ($getlogo == false ? '' : $getlogo);
 
       // Imprime cabeï¿½alho com dados sobre a prefeitura se mudar de pï¿½gina
-      $this->objpdf->setfillcolor(255,255,255);
-      $this->objpdf->Setfont('Arial','B',9);
-      $this->objpdf->Image('imagens/files/'.$this->logo,15,$xlin-17,12);
-      $this->objpdf->text(130,$xlin-15,"ORÇAMENTO N".CHR(176));
-      $this->objpdf->text(185,$xlin-15,db_formatar($this->orccodigo,'s','0',6,'e'));
-      $this->objpdf->text(130,$xlin-11,$this->labdados.CHR(176));
-      $this->objpdf->text(185,$xlin-11,db_formatar($this->Snumero,'s','0',6,'e'));
-      $this->objpdf->Setfont('Arial','',7);
-      $this->objpdf->text(130,$xlin- 8,"Departamento");
-      $this->objpdf->text(130,$xlin- 5,"Fone / Ramal");
-      $this->objpdf->text(130,$xlin- 2,"Fax");
-      $this->objpdf->text(146,$xlin- 8,":".$this->coddepto);
-      $this->objpdf->text(151,$xlin- 8,"-".$this->Sdepart);
-      $this->objpdf->text(146,$xlin- 5,": ".$this->fonedepto." / ".$this->ramaldepto);
-      $this->objpdf->text(146,$xlin- 2,": ".$this->faxdepto);
-      $this->objpdf->text(130,$xlin+ 1,$this->emaildepto);
-      $this->objpdf->text(195,$xlin+ 1,"Página ".$this->objpdf->PageNo());
-      $this->objpdf->Setfont('Arial','B',9);
-      $this->objpdf->text( 40,$xlin-15,$this->prefeitura);
-      $this->objpdf->Setfont('Arial','',7);
-      $this->objpdf->text( 40,$xlin-11,$this->enderpref);
-      $this->objpdf->text( 40,$xlin- 7,$this->municpref);
-      $this->objpdf->text( 40,$xlin- 3,$this->emailpref);
-      $this->objpdf->text( 40,$xlin+ 1,"CNPJ:" .db_formatar($this->cgcpref,'cnpj'));
+      $this->objpdf->setfillcolor(255, 255, 255);
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->Image('imagens/files/' . $this->logo, 15, $xlin - 17, 12);
+      $this->objpdf->text(130, $xlin - 15, "ORÇAMENTO N" . CHR(176));
+      $this->objpdf->text(185, $xlin - 15, db_formatar($this->orccodigo, 's', '0', 6, 'e'));
+      $this->objpdf->text(130, $xlin - 11, $this->labdados . CHR(176));
+      $this->objpdf->text(185, $xlin - 11, db_formatar($this->Snumero, 's', '0', 6, 'e'));
+      $this->objpdf->Setfont('Arial', '', 7);
+      $this->objpdf->text(130, $xlin - 8, "Departamento");
+      $this->objpdf->text(130, $xlin - 5, "Fone / Ramal");
+      $this->objpdf->text(130, $xlin - 2, "Fax");
+      $this->objpdf->text(146, $xlin - 8, ":" . $this->coddepto);
+      $this->objpdf->text(151, $xlin - 8, "-" . $this->Sdepart);
+      $this->objpdf->text(146, $xlin - 5, ": " . $this->fonedepto . " / " . $this->ramaldepto);
+      $this->objpdf->text(146, $xlin - 2, ": " . $this->faxdepto);
+      $this->objpdf->text(130, $xlin + 1, $this->emaildepto);
+      $this->objpdf->text(195, $xlin + 1, "Página " . $this->objpdf->PageNo());
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+      $this->objpdf->Setfont('Arial', '', 7);
+      $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+      $this->objpdf->text(40, $xlin - 7, $this->municpref);
+      $this->objpdf->text(40, $xlin - 3, $this->emailpref);
+      $this->objpdf->text(40, $xlin + 1, "CNPJ:" . db_formatar($this->cgcpref, 'cnpj'));
 
-      $this->objpdf->Setfont('Arial','B',8);
+      $this->objpdf->Setfont('Arial', 'B', 8);
       $dif = 10;
 
       // Caixas dos label's
-      $this->objpdf->rect($xcol    ,22,12, 6,2,'DF','12');
-      $this->objpdf->rect($xcol+ 12,22,15, 6,2,'DF','12');
-      $this->objpdf->rect($xcol+ 27,22,113,6,2,'DF','12');
-      $this->objpdf->rect($xcol+140,22,24, 6,2,'DF','12');
-      $this->objpdf->rect($xcol+164,22,19, 6,2,'DF','12');
-      $this->objpdf->rect($xcol+183,22,19, 6,2,'DF','12');
+      $this->objpdf->rect($xcol, 22, 12, 6, 2, 'DF', '12');
+      $this->objpdf->rect($xcol + 12, 22, 15, 6, 2, 'DF', '12');
+      $this->objpdf->rect($xcol + 27, 22, 113, 6, 2, 'DF', '12');
+      $this->objpdf->rect($xcol + 140, 22, 24, 6, 2, 'DF', '12');
+      $this->objpdf->rect($xcol + 164, 22, 19, 6, 2, 'DF', '12');
+      $this->objpdf->rect($xcol + 183, 22, 19, 6, 2, 'DF', '12');
 
-      $this->objpdf->rect($xcol,    22,12 ,$linha-$dif,2,'DF','34');
-      $this->objpdf->rect($xcol+ 12,22,15 ,$linha-$dif,2,'DF','34');
-      $this->objpdf->rect($xcol+ 27,22,113,$linha-$dif,2,'DF','34');
-      $this->objpdf->rect($xcol+140,22,24 ,$linha-$dif,2,'DF','34');
-      $this->objpdf->rect($xcol+164,22,19 ,$linha-$dif,2,'DF','34');
-      $this->objpdf->rect($xcol+183,22,19 ,$linha-$dif,2,'DF','34');
+      $this->objpdf->rect($xcol,    22, 12, $linha - $dif, 2, 'DF', '34');
+      $this->objpdf->rect($xcol + 12, 22, 15, $linha - $dif, 2, 'DF', '34');
+      $this->objpdf->rect($xcol + 27, 22, 113, $linha - $dif, 2, 'DF', '34');
+      $this->objpdf->rect($xcol + 140, 22, 24, $linha - $dif, 2, 'DF', '34');
+      $this->objpdf->rect($xcol + 164, 22, 19, $linha - $dif, 2, 'DF', '34');
+      $this->objpdf->rect($xcol + 183, 22, 19, $linha - $dif, 2, 'DF', '34');
 
-      $this->objpdf->text($xcol+   2,$xlin+6,'SEQ');
-      $this->objpdf->text($xcol+  13,$xlin+6,'QUANT');
-      $this->objpdf->text($xcol+  56,$xlin+6,'MATERIAL OU SERVIÇO');
-      $this->objpdf->text($xcol+ 145,$xlin+6,'MARCA');
-      $this->objpdf->text($xcol+ 165,$xlin+6,'VLR UNIT.');
-      $this->objpdf->text($xcol+ 184,$xlin+6,'VLR TOT.');
+      $this->objpdf->text($xcol +   2, $xlin + 6, 'SEQ');
+      $this->objpdf->text($xcol +  13, $xlin + 6, 'QUANT');
+      $this->objpdf->text($xcol +  56, $xlin + 6, 'MATERIAL OU SERVIÇO');
+      $this->objpdf->text($xcol + 145, $xlin + 6, 'MARCA');
+      $this->objpdf->text($xcol + 165, $xlin + 6, 'VLR UNIT.');
+      $this->objpdf->text($xcol + 184, $xlin + 6, 'VLR TOT.');
 
       // Seta altura nova para impressão dos dados
-      $this->objpdf->sety($xlin+8);
+      $this->objpdf->sety($xlin + 8);
       $this->objpdf->setleftmargin(3);
       $x = true;
-      $this->objpdf->Setfont('Arial','',8);
+      $this->objpdf->Setfont('Arial', '', 8);
 
-    return $x;
+      return $x;
+    }
   }
- }
 
- function muda_pag3($pagina, $xlin, $xcol, $fornec="false", &$contapagina, $mais=1, $mod=1) {
-   global $resparag, $resparagpadrao, $db61_texto, $db02_texto, $maislin, $xtotal, $flag_rodape;
+  function muda_pag3($pagina, $xlin, $xcol, $fornec = "false", &$contapagina, $mais = 1, $mod = 1)
+  {
+    global $resparag, $resparagpadrao, $db61_texto, $db02_texto, $maislin, $xtotal, $flag_rodape;
 
-   $x = false;
+    $x = false;
 
-   $valor_da_posicao_atual = $this->objpdf->gety();
-   $valor_da_posicao_atual+= ($mais*5);
-   $valor_da_posicao_atual = (int)$valor_da_posicao_atual;
-
-
-   $valor_do_tamanho_pagin = $this->objpdf->h;
-   $valor_do_tamanho_pagin-= 58;
-   $valor_do_tamanho_pagin = (int)$valor_do_tamanho_pagin;
-
-   $valor_do_tamanho_mpagi = $this->objpdf->h;
-   $valor_do_tamanho_mpagi-= 30;
-   $valor_do_tamanho_mpagi = (int)$valor_do_tamanho_mpagi;
+    $valor_da_posicao_atual = $this->objpdf->gety();
+    $valor_da_posicao_atual += ($mais * 5);
+    $valor_da_posicao_atual = (int)$valor_da_posicao_atual;
 
 
-   if((($valor_da_posicao_atual > $valor_do_tamanho_pagin) && $contapagina == 1 ) ||  (($valor_da_posicao_atual > $valor_do_tamanho_mpagi) && $contapagina != 1)){
-     if($contapagina == 1){
-       $this->objpdf->Setfont('Arial','',9);
-       $this->objpdf->text(111.2,$xlin+224,'Continua na Página '.($contapagina+1));
-       $this->objpdf->setfillcolor(0,0,0);
+    $valor_do_tamanho_pagin = $this->objpdf->h;
+    $valor_do_tamanho_pagin -= 58;
+    $valor_do_tamanho_pagin = (int)$valor_do_tamanho_pagin;
 
-       $this->objpdf->SetFont('Arial','',4);
-       $this->objpdf->TextWithDirection(1.5,$xlin+60,$this->texto,'U'); // texto no canhoto do carne
-       $this->objpdf->setfont('Arial','',11);
-     }else{
-       $this->objpdf->Setfont('Arial','',9);
-       $this->objpdf->text(112.5,$xlin+271,'Continua na Página '.($contapagina+1));
-     }
+    $valor_do_tamanho_mpagi = $this->objpdf->h;
+    $valor_do_tamanho_mpagi -= 30;
+    $valor_do_tamanho_mpagi = (int)$valor_do_tamanho_mpagi;
 
-     if ($contapagina == 1) {
-       $this->objpdf->Setfont('Arial','B',7);
-       $sqlparag = "select db02_texto
+
+    if ((($valor_da_posicao_atual > $valor_do_tamanho_pagin) && $contapagina == 1) ||  (($valor_da_posicao_atual > $valor_do_tamanho_mpagi) && $contapagina != 1)) {
+      if ($contapagina == 1) {
+        $this->objpdf->Setfont('Arial', '', 9);
+        $this->objpdf->text(111.2, $xlin + 224, 'Continua na Página ' . ($contapagina + 1));
+        $this->objpdf->setfillcolor(0, 0, 0);
+
+        $this->objpdf->SetFont('Arial', '', 4);
+        $this->objpdf->TextWithDirection(1.5, $xlin + 60, $this->texto, 'U'); // texto no canhoto do carne
+        $this->objpdf->setfont('Arial', '', 11);
+      } else {
+        $this->objpdf->Setfont('Arial', '', 9);
+        $this->objpdf->text(112.5, $xlin + 271, 'Continua na Página ' . ($contapagina + 1));
+      }
+
+      if ($contapagina == 1) {
+        $this->objpdf->Setfont('Arial', 'B', 7);
+        $sqlparag = "select db02_texto
  	                   from db_documento
                   	   	    inner join db_docparag on db03_docum = db04_docum
                      	    inner join db_tipodoc on db08_codigo  = db03_tipodoc
                  	        inner join db_paragrafo on db04_idparag = db02_idparag
-                	     where db03_tipodoc = 1400 and db03_instit = cast(" . db_getsession("DB_instit")." as integer) order by db04_ordem ";
+                	     where db03_tipodoc = 1400 and db03_instit = cast(" . db_getsession("DB_instit") . " as integer) order by db04_ordem ";
 
-       $resparag = @db_query($sqlparag);
+        $resparag = @db_query($sqlparag);
 
-       if(@pg_numrows($resparag) > 0){
-         db_fieldsmemory($resparag,0);
+        if (@pg_numrows($resparag) > 0) {
+          db_fieldsmemory($resparag, 0);
 
-         eval($db02_texto);
-         $flag_rodape = true;
-       } else {
-         $sqlparagpadrao = "select db61_texto
+          eval($db02_texto);
+          $flag_rodape = true;
+        } else {
+          $sqlparagpadrao = "select db61_texto
  	                             from db_documentopadrao
                    	   	            inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc
                       	              inner join db_tipodoc         on db08_codigo   = db60_tipodoc
                   	                  inner join db_paragrafopadrao on db61_codparag = db62_codparag
-                	               where db60_tipodoc = 1400 and db60_instit = cast(" . db_getsession("DB_instit")." as integer) order by db62_ordem";
+                	               where db60_tipodoc = 1400 and db60_instit = cast(" . db_getsession("DB_instit") . " as integer) order by db62_ordem";
 
-         $resparagpadrao = @db_query($sqlparagpadrao);
+          $resparagpadrao = @db_query($sqlparagpadrao);
 
-         if(@pg_numrows($resparagpadrao) > 0){
-           db_fieldsmemory($resparagpadrao,0);
+          if (@pg_numrows($resparagpadrao) > 0) {
+            db_fieldsmemory($resparagpadrao, 0);
 
-           eval($db61_texto);
-           $flag_rodape = true;
-         }
-       }
-     }
-     $contapagina+=1;
-     $this->objpdf->addpage();
-     $pagina += 1;
-     $muda_pag = true;
+            eval($db61_texto);
+            $flag_rodape = true;
+          }
+        }
+      }
+      $contapagina += 1;
+      $this->objpdf->addpage();
+      $pagina += 1;
+      $muda_pag = true;
 
-     $this->objpdf->settopmargin(1);
-     $xlin = 20;
-     $xcol = 4;
-
-
-     $getlogo = db_getnomelogo();
-     $logo    = ($getlogo==false?'':$getlogo);
-
-     // Imprime cabeï¿½alho com dados sobre a prefeitura se mudar de pï¿½gina
-     $this->objpdf->setfillcolor(245);
-     $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
-     $this->objpdf->setfillcolor(255,255,255);
-     $this->objpdf->Setfont('Arial','B',9);
-     $this->objpdf->text(130,$xlin-13,'PROCESSO DE COMPRA N'.CHR(176));
-     $this->objpdf->text(185,$xlin-13,db_formatar($this->Snumero,'s','0',6,'e'));
-     $this->objpdf->Setfont('Arial','B',7);
-     $this->objpdf->text(130,$xlin-9,'ORGAO');
-     $this->objpdf->text(142,$xlin-9,': '.substr($this->Sorgao,0,35));
-     $this->objpdf->text(130,$xlin-5,'UNIDADE');
-     $this->objpdf->text(142,$xlin-5,': '.substr($this->Sunidade,0,35));
-     $this->objpdf->Setfont('Arial','B',9);
-     $this->objpdf->Image('imagens/files/'.$logo,15,$xlin-17,12);
-     $this->objpdf->Setfont('Arial','B',9);
-     $this->objpdf->text(40,$xlin-15,$this->prefeitura);
-     $this->objpdf->Setfont('Arial','',9);
-     $this->objpdf->text(40,$xlin-11,$this->enderpref);
-     $this->objpdf->text(40,$xlin-8,$this->municpref);
-     $this->objpdf->text(40,$xlin-5,$this->telefpref);
-     $this->objpdf->text(40,$xlin-2,$this->emailpref);
-     $this->objpdf->text(40,$xlin+ 1,db_formatar($this->cgcpref,'cnpj'));
-     //      $this->objpdf->text(40,$xlin+2,'Continuaï¿½ï¿½o da Pï¿½gina '.($contapagina-1));
-     $this->objpdf->text(130,$xlin+2,'Página '.$contapagina);
-
-     $xlin = 0;
-     if((isset($fornec) && $fornec=="false") || !isset($fornec)){
-       $this->objpdf->Setfont('Arial','B',8);
-
-       if ($mod == 1) {
-
-         // Caixas dos label's
-         $this->objpdf->rect($xcol    ,$xlin+24,10,6,2,'DF','12');
-         $this->objpdf->rect($xcol+ 10,$xlin+24,12,6,2,'DF','12');
-         $this->objpdf->rect($xcol+ 22,$xlin+24,22,6,2,'DF','12');
-         $this->objpdf->rect($xcol+ 44,$xlin+24,98,6,2,'DF','12');
-         $this->objpdf->rect($xcol+142,$xlin+24,30,6,2,'DF','12');
-         $this->objpdf->rect($xcol+172,$xlin+24,30,6,2,'DF','12');
+      $this->objpdf->settopmargin(1);
+      $xlin = 20;
+      $xcol = 4;
 
 
-         // Caixa dos itens
-         $this->objpdf->rect($xcol,    $xlin+30,10,262,2,'DF','34');
-         // Caixa da quantidade
-         $this->objpdf->rect($xcol+ 10,$xlin+30,12,262,2,'DF','34');
-         $this->objpdf->rect($xcol+ 22,$xlin+30,22,262,2,'DF','34');
-         // Caixa dos materiais ou servicos
-         $this->objpdf->rect($xcol+ 44,$xlin+30,98,262,2,'DF','34');
-         // Caixa dos valores unitario
-         $this->objpdf->rect($xcol+142,$xlin+30,30,262,2,'DF','');
-         // Caixa dos valores totais dos iten
-         $this->objpdf->rect($xcol+172,$xlin+30,30,262,2,'DF','34');
+      $getlogo = db_getnomelogo();
+      $logo    = ($getlogo == false ? '' : $getlogo);
 
-         $this->objpdf->sety($xlin+66);
-         $alt = 4;
+      // Imprime cabeï¿½alho com dados sobre a prefeitura se mudar de pï¿½gina
+      $this->objpdf->setfillcolor(245);
+      $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
+      $this->objpdf->setfillcolor(255, 255, 255);
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->text(130, $xlin - 13, 'PROCESSO DE COMPRA N' . CHR(176));
+      $this->objpdf->text(185, $xlin - 13, db_formatar($this->Snumero, 's', '0', 6, 'e'));
+      $this->objpdf->Setfont('Arial', 'B', 7);
+      $this->objpdf->text(130, $xlin - 9, 'ORGAO');
+      $this->objpdf->text(142, $xlin - 9, ': ' . substr($this->Sorgao, 0, 35));
+      $this->objpdf->text(130, $xlin - 5, 'UNIDADE');
+      $this->objpdf->text(142, $xlin - 5, ': ' . substr($this->Sunidade, 0, 35));
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->Image('imagens/files/' . $logo, 15, $xlin - 17, 12);
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+      $this->objpdf->Setfont('Arial', '', 9);
+      $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+      $this->objpdf->text(40, $xlin - 8, $this->municpref);
+      $this->objpdf->text(40, $xlin - 5, $this->telefpref);
+      $this->objpdf->text(40, $xlin - 2, $this->emailpref);
+      $this->objpdf->text(40, $xlin + 1, db_formatar($this->cgcpref, 'cnpj'));
+      //      $this->objpdf->text(40,$xlin+2,'Continuaï¿½ï¿½o da Pï¿½gina '.($contapagina-1));
+      $this->objpdf->text(130, $xlin + 2, 'Página ' . $contapagina);
 
-         $this->objpdf->Setfont('Arial','B',8);
-         $this->objpdf->text($xcol+   2,$xlin+28,'ITEM');
-         $this->objpdf->text($xcol+  11,$xlin+28,'QUANT');
-         $this->objpdf->text($xcol+  30,$xlin+28,'REF');
-         $this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVIÇO');
-         $this->objpdf->text($xcol+ 145,$xlin+28,'VALOR UNITÁRIO');
-         $this->objpdf->text($xcol+ 176,$xlin+28,'VALOR TOTAL');
+      $xlin = 0;
+      if ((isset($fornec) && $fornec == "false") || !isset($fornec)) {
+        $this->objpdf->Setfont('Arial', 'B', 8);
 
-         $maiscol = 0;
-         $xlin = 20;
-         // Seta altura nova para impressão dos dados
-         $this->objpdf->sety($xlin+11);
-         $this->objpdf->setleftmargin(3);
-         $x = true;
-         $this->objpdf->Setfont('Arial','',7);
+        if ($mod == 1) {
 
-       } else {
+          // Caixas dos label's
+          $this->objpdf->rect($xcol, $xlin + 24, 10, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 10, $xlin + 24, 12, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 22, $xlin + 24, 22, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 44, $xlin + 24, 98, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 142, $xlin + 24, 30, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 172, $xlin + 24, 30, 6, 2, 'DF', '12');
 
-         // Caixas dos label's
-         $this->objpdf->rect($xcol    , $xlin + 32, 10, 6, 2, 'DF', '12');
-         $this->objpdf->rect($xcol +10, $xlin + 32, 30, 6, 2, 'DF', '12');
-         $this->objpdf->rect($xcol +40, $xlin + 32, 25, 6, 2, 'DF', '12');
-         $this->objpdf->rect($xcol +65, $xlin + 32, 107,6, 2, 'DF', '12');
-         $this->objpdf->rect($xcol +172,$xlin + 32, 30, 6, 2, 'DF', '12');
 
-         $menos = 0;
-         $getdoy = 32;
+          // Caixa dos itens
+          $this->objpdf->rect($xcol,    $xlin + 30, 10, 262, 2, 'DF', '34');
+          // Caixa da quantidade
+          $this->objpdf->rect($xcol + 10, $xlin + 30, 12, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 22, $xlin + 30, 22, 262, 2, 'DF', '34');
+          // Caixa dos materiais ou servicos
+          $this->objpdf->rect($xcol + 44, $xlin + 30, 98, 262, 2, 'DF', '34');
+          // Caixa dos valores unitario
+          $this->objpdf->rect($xcol + 142, $xlin + 30, 30, 262, 2, 'DF', '');
+          // Caixa dos valores totais dos iten
+          $this->objpdf->rect($xcol + 172, $xlin + 30, 30, 262, 2, 'DF', '34');
 
-         $this->objpdf->rect($xcol     , $xlin + 32, 10, 262, 2, 'DF', '34');
-         $this->objpdf->rect($xcol +10 , $xlin + 32, 30, 262, 2, 'DF', '34');
-         $this->objpdf->rect($xcol +40 , $xlin + 32, 25, 262, 2, 'DF', '34');
-         $this->objpdf->rect($xcol +65 , $xlin + 32, 107, 262,2, 'DF', '34');
-         $this->objpdf->rect($xcol +172, $xlin + 32, 30, 262, 2, 'DF', '34');
+          $this->objpdf->sety($xlin + 66);
+          $alt = 4;
 
-         $this->objpdf->sety($xlin +28);
+          $this->objpdf->Setfont('Arial', 'B', 8);
+          $this->objpdf->text($xcol +   2, $xlin + 28, 'ITEM');
+          $this->objpdf->text($xcol +  11, $xlin + 28, 'QUANT');
+          $this->objpdf->text($xcol +  30, $xlin + 28, 'REF');
+          $this->objpdf->text($xcol +  70, $xlin + 28, 'MATERIAL OU SERVIÇO');
+          $this->objpdf->text($xcol + 145, $xlin + 28, 'VALOR UNITÁRIO');
+          $this->objpdf->text($xcol + 176, $xlin + 28, 'VALOR TOTAL');
 
-         // Label das colunas
-         $this->objpdf->Setfont('Arial', 'B', 8);
-         $this->objpdf->text($xcol +2, $xlin + $getdoy +4, 'ITEM');
-         $this->objpdf->text($xcol +14, $xlin + $getdoy +4, 'QUANTIDADES');
-         $this->objpdf->text($xcol +50, $xlin + $getdoy +4, 'REF');
-         $this->objpdf->text($xcol +105, $xlin + $getdoy +4, 'MATERIAL OU SERVIÇO');
-         $this->objpdf->text($xcol +176, $xlin + $getdoy +4, 'VALOR TOTAL');
+          $maiscol = 0;
+          $xlin = 20;
+          // Seta altura nova para impressão dos dados
+          $this->objpdf->sety($xlin + 11);
+          $this->objpdf->setleftmargin(3);
+          $x = true;
+          $this->objpdf->Setfont('Arial', '', 7);
+        } else {
 
-         $maiscol = 0;
-         $xlin = 20;
-         // Seta altura nova para impressão dos dados
-         $this->objpdf->sety($xlin+20);
-         $this->objpdf->setleftmargin(3);
-         $x = true;
-         $this->objpdf->Setfont('Arial','',7);
+          // Caixas dos label's
+          $this->objpdf->rect($xcol, $xlin + 32, 10, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 10, $xlin + 32, 30, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 40, $xlin + 32, 25, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 65, $xlin + 32, 107, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 172, $xlin + 32, 30, 6, 2, 'DF', '12');
 
-       }
+          $menos = 0;
+          $getdoy = 32;
 
-     }else if(isset($fornec) && $fornec=="true"){
-     }
+          $this->objpdf->rect($xcol, $xlin + 32, 10, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 10, $xlin + 32, 30, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 40, $xlin + 32, 25, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 65, $xlin + 32, 107, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 172, $xlin + 32, 30, 262, 2, 'DF', '34');
 
-   }
-   return $x;
- }
+          $this->objpdf->sety($xlin + 28);
 
- function imprime(){
+          // Label das colunas
+          $this->objpdf->Setfont('Arial', 'B', 8);
+          $this->objpdf->text($xcol + 2, $xlin + $getdoy + 4, 'ITEM');
+          $this->objpdf->text($xcol + 14, $xlin + $getdoy + 4, 'QUANTIDADES');
+          $this->objpdf->text($xcol + 50, $xlin + $getdoy + 4, 'REF');
+          $this->objpdf->text($xcol + 105, $xlin + $getdoy + 4, 'MATERIAL OU SERVIÇO');
+          $this->objpdf->text($xcol + 176, $xlin + $getdoy + 4, 'VALOR TOTAL');
 
- 	$sSqlConfig  = "select db21_codcli from db_config where prefeitura is true";
- 	$rsSqlConfig = db_query($sSqlConfig);
- 	$sCodCliente = pg_fetch_object($rsSqlConfig,0);
- 	$sCodCliente = $sCodCliente->db21_codcli;
- 	$sCodCliente = str_pad($sCodCliente,6,0,STR_PAD_LEFT);
- 	$sInstit     = str_pad(db_getsession("DB_instit"), 2,0,STR_PAD_LEFT);
-
-  /** Extensao : Inicio [guia-itbi-recibo-mensagem-modelo-codcli15] */
-  /** Extensao : Fim [guia-itbi-recibo-mensagem-modelo-codcli15] */
-
- 	/**
- 	 * Valida se existe modelo especifico
- 	 */
- 	if (file_exists("fpdf151/impmodelos/especificos/mod_imprime_especifico_{$this->impmodelo}_{$sCodCliente}{$sInstit}.php") ) {
- 		include (Modification::getFile("fpdf151/impmodelos/especificos/mod_imprime_especifico_{$this->impmodelo}_{$sCodCliente}{$sInstit}.php"));
+          $maiscol = 0;
+          $xlin = 20;
+          // Seta altura nova para impressão dos dados
+          $this->objpdf->sety($xlin + 20);
+          $this->objpdf->setleftmargin(3);
+          $x = true;
+          $this->objpdf->Setfont('Arial', '', 7);
+        }
+      } else if (isset($fornec) && $fornec == "true") {
+      }
+    }
+    return $x;
   }
 
- 	/**
- 	 * Valida se utiliza modelo default junto com especifico
- 	 */
- 	if ($this->lUtilizaModeloDefault) {
- 	  include(Modification::getFile("fpdf151/impmodelos/mod_imprime".$this->impmodelo.".php"));
- 	}
+  function imprime()
+  {
+    $sSqlConfig  = "select db21_codcli from db_config where prefeitura is true";
+    $rsSqlConfig = db_query($sSqlConfig);
+    $sCodCliente = pg_fetch_object($rsSqlConfig, 0);
+    $sCodCliente = $sCodCliente->db21_codcli;
+    $sCodCliente = str_pad($sCodCliente, 6, 0, STR_PAD_LEFT);
+    $sInstit     = str_pad(db_getsession("DB_instit"), 2, 0, STR_PAD_LEFT);
+    /** Extensao : Inicio [guia-itbi-recibo-mensagem-modelo-codcli15] */
+    /** Extensao : Fim [guia-itbi-recibo-mensagem-modelo-codcli15] */
 
- }
+    /**
+     * Valida se existe modelo especifico
+     */
+    if (file_exists("fpdf151/impmodelos/especificos/mod_imprime_especifico_{$this->impmodelo}_{$sCodCliente}{$sInstit}.php")) {
+      include(Modification::getFile("fpdf151/impmodelos/especificos/mod_imprime_especifico_{$this->impmodelo}_{$sCodCliente}{$sInstit}.php"));
+    }
+
+    /**
+     * Valida se utiliza modelo default junto com especifico
+     */
+    if ($this->lUtilizaModeloDefault) {
+      include(Modification::getFile("fpdf151/impmodelos/mod_imprime" . $this->impmodelo . ".php"));
+    }
+  }
 }

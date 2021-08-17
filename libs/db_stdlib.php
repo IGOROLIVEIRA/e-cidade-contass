@@ -1291,6 +1291,7 @@ function db_fieldsmemory($recordset, $indice, $formatar = "", $mostravar = false
   // }
   // exit;
   // }
+
   for ($i = 0; $i < $fm_numfields; $i++) {
     $matriz[$i] = pg_fieldname($recordset, $i);
     //if($fm_numrows==0){
@@ -1360,8 +1361,7 @@ function db_fieldsmemory($recordset, $indice, $formatar = "", $mostravar = false
           break;
       }
 
-    //          echo $matriz[$i] . " - " . pg_fieldtype($recordset,$i) . " - " . $aux . " - " . gettype(${$matriz[$i]}) . "<br>";
-
+    //echo $matriz[$i] . " - " . pg_fieldtype($recordset, $i) . " - " . $aux . " - " . gettype(${$matriz[$i]}) . "<br>";
   }
 }
 

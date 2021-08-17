@@ -1,4 +1,5 @@
 <?php
+
 global $db61_texto, $db02_texto;
 
 for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
@@ -11,6 +12,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
     //Inserindo usuario e data no rodape
     $this->objpdf->Setfont('Arial', 'I', 6);
+
     $this->objpdf->text($xcol + 3, $xlin + 276, "Emissor: " . db_getsession("DB_login") . "  Data: " . date("d/m/Y", db_getsession("DB_datausu")) . "");
 
     $this->objpdf->setfillcolor(245);
@@ -202,7 +204,9 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $retorna_obs = 0;
 
     for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
+
         $continuaProximaPagia = false;
+
         $this->objpdf->SetWidths(array(
             15,
             15,
@@ -217,9 +221,11 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             'R',
             'R'
         ));
+
         db_fieldsmemory($this->recorddositens, $ii);
 
         if ($retorna_obs == 0) {
+
             $this->objpdf->Setfont('Arial', 'B', 7);
 
             if ($ele != pg_result($this->recorddositens, $ii, $this->analitico)) {
@@ -248,6 +254,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
              * - nao encontra descricao do item, pcorcamval.pc23_obs
              * - busca descricao do item pela solicitacao ou registro de preco
              */
+
             if (empty($obsitem) && !empty($this->numcgm)) {
 
                 $iSolicitacao = pg_result($this->recorddositens, $ii, 'pc11_codigo');
@@ -308,6 +315,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             // Consulta o total de linhas que será utilizado no multicelll
             $iLinhasMulticell = $this->objpdf->NbLines($iWidthMulticell, $descricaoitem);
             // Verifica se o total de linhas utilizadas no multicell é maior que as linhas restantes
+
             if ($iLinhasMulticell > $iLinhasRestantes) {
 
                 // Total de carateres necessários para a impressão até o fim da página
