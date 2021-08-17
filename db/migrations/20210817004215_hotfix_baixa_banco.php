@@ -271,7 +271,7 @@ class HotfixBaixaBanco extends AbstractMigration
                                 perform fc_debug('  <BaixaBanco> - 276 - '||cod_ret||','||vcodcla,lRaise,false,false);
                             end if;
 
-                            insert into   tmp_classificaoesexecutadas("codigo_retorno", "codigo_classificacao")
+                            insert into   tmp_classificaoesexecutadas(\"codigo_retorno\", \"codigo_classificacao\")
                                     values (cod_ret, vcodcla);
 
                                 if lRaise is true then
@@ -575,7 +575,7 @@ class HotfixBaixaBanco extends AbstractMigration
                                     perform fc_debug('  <PgtoParcial>  - 2 - Data do Pagamento Bancário                : ' || rRecordDisbanco.dtpago);
                                     perform fc_debug('  <PgtoParcial>  ---------------------------------------------------------------');
                                     perform fc_debug('  <PgtoParcial>  - ');
-                                    perform fc_debug('  <PgtoParcial>  - Opção Default : "1" ');
+                                    perform fc_debug('  <PgtoParcial>  - Opção Default : \"1\" ');
                                     end if;
 
                                     if rRecordDisbanco.dtpago > fc_proximo_dia_util(dDataCalculoRecibo)  then -- Paguei Depois do Vencimento
@@ -583,7 +583,7 @@ class HotfixBaixaBanco extends AbstractMigration
                                     dDataCalculoRecibo := rRecordDisbanco.dtpago;
 
                                     if lRaise is true then
-                                        perform fc_debug('  <PgtoParcial>  - Alterando para Opção de Vencimento "2" ');
+                                        perform fc_debug('  <PgtoParcial>  - Alterando para Opção de Vencimento \"2\" ');
                                     end if;
                                     end if;
 
