@@ -295,6 +295,14 @@ if (isset($incluir)) {
           $oDaoPesMov->rh02_deficientefisico = str_replace("f","false",$oMovimento->rh02_deficientefisico);
           $oDaoPesMov->rh02_portadormolestia = str_replace("f","false",$oMovimento->rh02_portadormolestia);
           $oDaoPesMov->rh02_tipcatprof = $oMovimento->rh02_tipcatprof;
+          $oDaoPesMov->rh02_segatuacao = $oMovimento->rh02_segatuacao;
+          $oDaoPesMov->rh02_art61ldb1 = $oMovimento->rh02_art61ldb1;
+          $oDaoPesMov->rh02_art61ldb2 = $oMovimento->rh02_art61ldb2;
+          $oDaoPesMov->rh02_art61ldb3 = $oMovimento->rh02_art61ldb3;
+          $oDaoPesMov->rh02_art61ldb4 = $oMovimento->rh02_art61ldb4;
+          $oDaoPesMov->rh02_art61ldb5 = $oMovimento->rh02_art61ldb5;
+          $oDaoPesMov->rh02_art1leiprestpsiccologia = $oMovimento->rh02_art1leiprestpsiccologia;
+          $oDaoPesMov->rh02_art1leiprestservsocial = $oMovimento->rh02_art1leiprestservsocial;
           $oDaoPesMov->incluir(null,$oMovimento->rh02_instit);
           if ($oDaoPesMov->erro_status == 0) {
 

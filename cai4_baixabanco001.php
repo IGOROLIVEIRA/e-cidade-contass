@@ -1143,7 +1143,7 @@ if ($situacao == 2) {
 							    $sqlhlhrec    	= "select * from recibopaga where k00_numnov =  '".$iNumpreBoleto."' ";
 	                            $resulthlhrec 	= db_query($sqlhlhrec) or die($sqlhlhrec);
 	                            $orec= pg_fetch_array($resulthlhrec);
-	                            
+	                           	                            
 							    $sqlsomarecibo    	= "select sum(k00_valor) as soma from recibopaga where k00_numnov =  '".$iNumpreBoleto."' ";
 	                            $resultsomarecibo 	= db_query($sqlsomarecibo) or die($sqlsomarecibo);
 
@@ -1159,16 +1159,18 @@ if ($situacao == 2) {
 	                        	
 	                            $desconto = ($soma + $txexpediente) - $hlhvalor;
 	                            if( $desconto > 0 ){
+	                            	if ($lDebugAtivo == true) {echo 'tem desconto '.$desconto.' e recibo '.$iNumpreBoleto.'<br>';}
 	                            	//Adiciona desconto ao recibo
-								    $sSqlreceit = "select recibopaga.k00_receit as recdesconto from (
+								    $sSqlreceit = "select k00_receit as recdesconto from (
 													     select sum(recibopaga.k00_valor) as valor,recibopaga.k00_receit from recibopaga 
-													     inner join arrecad on (arrecad.k00_numpre,arrecad.k00_numpar) = (recibopaga.k00_numpre,recibopaga.k00_numpar)
+													     inner join arrecad on (arrecad.k00_numpre,arrecad.k00_numpar) = (recibopaga.k00_numpre,recibopaga.k00_numpar) 
 													     where recibopaga.k00_numnov = ".$iNumpreBoleto." 
 													     group by recibopaga.k00_receit order by 1 desc limit 1
 									                             ) as x";
-								    $resultSqlrecei = db_query($sSqlreceit);
+								    $resultSqlrecei = db_query($sSqlreceit) or die($sSqlreceit);
 								    db_fieldsmemory($resultSqlrecei, 0, true);
-
+									
+									if ($lDebugAtivo == true) {echo 'recdesconto '.$recdesconto.'<br>';}						    
 								    $sqlDescontoRec = "INSERT INTO recibopaga 								                                  
 								    							SELECT 
 																	k00_numcgm,k00_dtoper,k00_receit,918,round(".$desconto."::numeric/(select count(k00_numpar) FROM recibopaga 

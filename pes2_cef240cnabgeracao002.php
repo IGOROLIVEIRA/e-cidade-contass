@@ -34,6 +34,7 @@ include("classes/db_folha_classe.php");
 include("classes/db_pensao_classe.php");
 include("classes/db_rharqbanco_classe.php");
 include("classes/db_orctiporec_classe.php");
+include("classes/db_db_config_classe.php");
 require_once 'libs/db_utils.php';
 parse_str(base64_decode($HTTP_SERVER_VARS["QUERY_STRING"]));
 db_postmemory($_POST);
@@ -45,6 +46,7 @@ $clfolha       = new cl_folha;
 $clpensao      = new cl_pensao;
 $clrharqbanco  = new cl_rharqbanco;
 $clorctiporec  = new cl_orctiporec;
+$cldbconfig    = new cl_db_config;
 $clrotulo = new rotulocampo;
 $clrotulo->label("rh01_regist");
 $clrotulo->label("z01_numcgm");
@@ -55,6 +57,7 @@ $clrotulo->label("r38_banco");
 $clrotulo->label("r38_agenc");
 $clrotulo->label("r38_conta");
 $clrotulo->label("r70_descr");
+define(CNPJ_CISRUN, "11636961000103");
 
 $sqlerro = false;
 
@@ -77,7 +80,11 @@ if($clrharqbanco->numrows>0){
 
 
     $numparcelas = '01';
-    $finalidadedoc = '06';
+    $rsInstit = $cldbconfig->sql_record($cldbconfig->sql_query_file(db_getsession("DB_instit"), "cgc"));
+    $sCnpjInst = db_utils::fieldsMemory($rsInstit)->cgc;
+    if ($sCnpjInst != CNPJ_CISRUN) {
+      $finalidadedoc = '06';
+    }
     $idcaixa = "P";
     $idcliente = "P";
     $db90_codban = $rh34_codban;
@@ -249,7 +256,9 @@ if($sqlerro == false){
 
 
     $loteservic = 1;
-    $finalidadedoc = "06";
+    if ($sCnpjInst != CNPJ_CISRUN) {
+      $finalidadedoc = "06";
+    }
     $codigocompromisso = substr($conveniobanco,8,4);
     $tipocompromisso = substr($conveniobanco,6,2);
     $agencialote = $agenciaheader;

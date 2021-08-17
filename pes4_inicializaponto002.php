@@ -597,6 +597,7 @@ function init_130($opcao){
           // 6 - Afastado Doenca + 15 Dias
           // 5 - licenca maternidade
           // 7 - Licenca sem Vencimento, cessao sem onus
+          // 10 - Afastado doença -15 dias
           $condicaoaux  = " and r90_regist = ".db_sqlformat( $arquivo_rubricas[$Iind]["r90_regist"] );
           $condicaoaux .= " and r90_rubric = ".db_sqlformat( $arquivo_rubricas[$Iind]["r90_rubric"] );
           global $ponto;
@@ -606,8 +607,8 @@ function init_130($opcao){
           die;*/
           if( db_selectmax("ponto", "select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux)  &&
             ( db_at(db_str($situacao_130,1),"1-3-4") > 0  ||
-            ( db_at(db_str($situacao_130,1),"2-6-7-8") > 0 && !db_empty($dias_pagamento) ) ||
-            ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8") && !db_empty($rubrica_licenca_saude) ) ||
+            ( db_at(db_str($situacao_130,1),"2-6-7-8-10") > 0 && !db_empty($dias_pagamento) ) ||
+            ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8" || db_str($situacao_130,1) == "10") && !db_empty($rubrica_licenca_saude) ) ||
             ( db_str($situacao_130,1) == "5" && !db_empty($rubrica_licenca_maternidade) ) ) )
           {
 
@@ -649,7 +650,7 @@ function init_130($opcao){
           // e feito na geracao do calculo;
           if( !db_empty($dias_pagamento)){
             if( (   db_str($situacao_130,1) == "5" && db_empty($rubrica_licenca_maternidade) )
-              || ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8") && db_empty( $rubrica_licenca_saude     )  )
+              || ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8" || db_str($situacao_130,1) == "10") && db_empty( $rubrica_licenca_saude     )  )
               || db_str($situacao_130,1) == "2"
               || db_str($situacao_130,1) == "3"
               || db_str($situacao_130,1) == "7"

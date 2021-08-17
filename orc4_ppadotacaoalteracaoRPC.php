@@ -201,6 +201,7 @@ if ($oParam->exec == "getElementosFromAcao") {
                         AND p1.o08_projativ     = p2.o08_projativ
                         AND p1.o08_ppaversao    = p2.o08_ppaversao
                         AND p1.o08_elemento     = p2.o08_elemento
+                        AND p1.o08_recurso      = p2.o08_recurso
                     INNER JOIN ppaestimativadespesa on o07_coddot = p2.o08_sequencial
                     INNER JOIN ppaestimativa ON ppaestimativa.o05_sequencial = ppaestimativadespesa.o07_ppaestimativa
                 WHERE p1.o08_sequencial = {$oParam->o08_sequencial} ";
@@ -210,6 +211,7 @@ if ($oParam->exec == "getElementosFromAcao") {
     } else {
         $sSql .= " AND p2.o08_ano = {$oParam->o05_anoreferencia}";
     }
+    $sSql .= " ORDER BY o05_sequencial";
 
     $rsPpaAnos = db_query($sSql);
 
@@ -448,41 +450,41 @@ if ($oParam->exec == "getElementosFromAcao") {
 } else if ($oParam->exec == "incluirAcao") {
 
 
-  require("model/ppadespesa.model.php");
-  $oPPADespesa = new ppaDespesa($oParam->o08_ppaversao);
-  try {
+  	require("model/ppadespesa.model.php");
+    $oPPADespesa = new ppaDespesa($oParam->o08_ppaversao);
+    try {
 
-  	$oDaoppaVersao = db_utils::getDao("ppaversao");
-  	$sSqlVersao    = $oDaoppaVersao->sql_query($oParam->o08_ppaversao);
-  	$rsPPaVersao   = $oDaoppaVersao->sql_record($sSqlVersao);
-  	$oVersao       = db_utils::fieldsMemory($rsPPaVersao,0);
-    db_inicio_transacao();
-    for ($iAno = $oParam->oDotacao->iAno; $iAno <= $oVersao->o01_anofinal; $iAno++) {
+        $oDaoppaVersao = db_utils::getDao("ppaversao");
+        $sSqlVersao    = $oDaoppaVersao->sql_query($oParam->o08_ppaversao);
+        $rsPPaVersao   = $oDaoppaVersao->sql_record($sSqlVersao);
+        $oVersao       = db_utils::fieldsMemory($rsPPaVersao,0);
 
-    	$nValorParam   = ppa::getAcrescimosEstimativa($oParam->oDotacao->o08_elemento, $iAno);
-    	$nValor        = $oParam->oDotacao->nValor;
-    	if ($iAno >= $oVersao->o01_anoinicio) {
+        db_inicio_transacao();
+        for ($iAno = $oParam->oDotacao->iAno; $iAno <= $oVersao->o01_anofinal; $iAno++) {
 
-      	if ($nValorParam > 0) {
+            $nValorParam   = ppa::getAcrescimosEstimativa($oParam->oDotacao->o08_elemento, $iAno);
+            $nValor        = $oParam->oDotacao->nValor;
+    	    if ($iAno >= $oVersao->o01_anoinicio) {
+            
+                if ($nValorParam > 0 && $iAno > $oVersao->o01_anoinicio) {
+                    $nValor *= $nValorParam;
+                }
 
-      		$nValor *= $nValorParam;
+                $oParam->oDotacao->nValor = $nValor;
+                $oParam->oDotacao->iAno   = $iAno;
+                $oPPADespesa->adicionarEstimativa($oParam->oDotacao);
 
-      	}
-      	$oParam->oDotacao->nValor = $nValor;
-      	$oParam->oDotacao->iAno   = $iAno;
-      	$oPPADespesa->adicionarEstimativa($oParam->oDotacao);
+            }
+        }
+        db_fim_transacao(false);
 
-      }
+    } catch (Exception $eErroDotacao) {
+
+        $oRetorno->status = 2;
+        $oRetorno->message = urlencode($eErroDotacao->getMessage());
+        db_fim_transacao(true);
+
     }
-    db_fim_transacao(false);
-
-  } catch (Exception $eErroDotacao) {
-
-    $oRetorno->status = 2;
-    $oRetorno->message = urlencode($eErroDotacao->getMessage());
-    db_fim_transacao(true);
-
-  }
 }
 echo $oJson->encode($oRetorno);
 ?>

@@ -130,10 +130,10 @@ foreach ($aPeriodos as $oPeriodo) {
 
         <tr>
             <td><label><b>Cálculo com base nos valores:</b></label></td>
-            <? 
+            <?
                 $aTipo = array(
-                    '0' => 'Selecione', 
-                    '1' => 'Empenhados (TCE)',
+                    '0' => 'Selecione',
+                    '1' => 'Empenhados',
                     '2' => 'Liquidados'
                 );
             ?>

@@ -154,7 +154,7 @@ try {
     $sSqlConsultaAutonomos .= "        where retencaotiporec.e21_retencaotiporecgrupo = 1                                                                ";
     $sSqlConsultaAutonomos .= "          and retencaoreceitas.e23_ativo is true                                                                          ";
     $sSqlConsultaAutonomos .= "          and retencaotiporec.e21_retencaotipocalc in (1,2,3,7)                                                           ";
-    $sSqlConsultaAutonomos .= "          and retencaoreceitas.e23_dtcalculo > '{$sDataCompIni}'::date ";
+    $sSqlConsultaAutonomos .= "          and retencaoreceitas.e23_dtcalculo >= '{$sDataCompIni}'::date ";
     $sSqlConsultaAutonomos .= "          and length(trim(cgm.z01_cgccpf)) <= 11 																																				 ";
     $sSqlConsultaAutonomos .= "          AND e60_instit = ".db_getsession("DB_instit");
     $sSqlConsultaAutonomos .= "        group by e20_pagordem,                                                                                            ";

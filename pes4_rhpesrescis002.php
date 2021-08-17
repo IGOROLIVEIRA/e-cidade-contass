@@ -331,8 +331,9 @@ function cadastro_164 (){
 
 		// vai gerar o ponto de rescisao proporcional , baseado no ponto fixo
 		$condicaoaux = " and r90_regist = ".db_sqlformat( $matric );
+		$condicaoaux .= " and rh27_calc3 = 't'";
 		global $pontofx;
-		db_selectmax("pontofx", "select * from pontofx ".bb_condicaosubpes("r90_").$condicaoaux );
+		db_selectmax("pontofx", "select pontofx.* from pontofx join rhrubricas on r90_rubric = rh27_rubric ".bb_condicaosubpes("r90_").$condicaoaux );
 		$diasAviso = getQuantidadeDiasAviso($r01_recis,$pessoal[0]["r01_admiss"]);
 		for($Ipontofx=0;$Ipontofx<count($pontofx);$Ipontofx++){
 			$condicaoaux = " where rh27_instit = ". db_getsession("DB_instit") ." and rh27_rubric = ".db_sqlformat( $pontofx[$Ipontofx]["r90_rubric"] );
@@ -358,7 +359,7 @@ function cadastro_164 (){
 		insertRubricasEspeciaisAviso($matriz1, $matriz_aviso, $cfpess);
 
 	}
-	
+
 	$datafim = date("Y-m-d",db_mktime($r01_recis));
 	
 	// Tem 13 salario Proporcional

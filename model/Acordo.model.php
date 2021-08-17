@@ -3891,6 +3891,8 @@ class Acordo
         return $sPCtipocompraTribunal;
     }
 
+
+
     /**
      * Método que verifica se o acordo possui algum lançamento contábil vinculado.
      * @return bool
@@ -3943,6 +3945,28 @@ class Acordo
         }
         return $aItens;
 
+    }
+
+    public function getDotacoesAcordo(){
+        $sql = "select DISTINCT ac22_coddot AS ficha,
+                o15_codtri AS fonterecurso,
+                o58_projativ AS projetoativ,
+                o56_elemento as codorcamentario
+                from acordoposicao 
+            inner join acordoitem on ac20_acordoposicao = ac26_sequencial
+            inner join acordoitemdotacao on ac22_acordoitem = ac20_sequencial
+            INNER JOIN orcdotacao ON (orcdotacao.o58_anousu,orcdotacao.o58_coddot) = (acordoitemdotacao.ac22_anousu,acordoitemdotacao.ac22_coddot)
+            INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
+            INNER JOIN orcelemento on (orcelemento.o56_codele,orcelemento.o56_anousu) = (orcdotacao.o58_codele,orcdotacao.o58_anousu)
+            where ac26_acordo = {$this->getCodigo()}";
+
+        $rsDotacao = db_query($sql);
+
+        for ($iDot = 0; $iDot < pg_numrows($rsDotacao); $iDot++) {
+            $oDadosDotacoes = db_utils::fieldsMemory($rsDotacao, $iDot);
+            $aDotacoes[] = $oDadosDotacoes;
+        }
+            return $aDotacoes;
     }
 
     public function getSaldoItemPosicao($iPcmater,$iPosicao){
