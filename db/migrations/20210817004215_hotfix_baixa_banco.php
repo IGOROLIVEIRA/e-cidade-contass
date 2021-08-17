@@ -6,13 +6,13 @@ class HotfixBaixaBanco extends AbstractMigration
 {
     public function up()
     {
-        $sql = <<<SQL
+        $sql = "
 
             CREATE OR REPLACE FUNCTION fc_baixabanco(
                 cod_ret integer,
                 datausu date)
             RETURNS character varying AS
-            $BODY$
+            \$BODY$
                             declare
 
                             retorno                          boolean default false;
@@ -5809,13 +5809,11 @@ class HotfixBaixaBanco extends AbstractMigration
 
                             end;
 
-                            $BODY$
+                            \$BODY$
             LANGUAGE plpgsql VOLATILE
             COST 100;
             ALTER FUNCTION fc_baixabanco(integer, date)
-            OWNER TO dbportal;
-
-SQL;
+            OWNER TO dbportal;"
 
         $this->execute($sql);
     }
