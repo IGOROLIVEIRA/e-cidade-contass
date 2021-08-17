@@ -5813,7 +5813,7 @@ class HotfixBaixaBanco extends AbstractMigration
             LANGUAGE plpgsql VOLATILE
             COST 100;
             ALTER FUNCTION fc_baixabanco(integer, date)
-            OWNER TO dbportal;"
+            OWNER TO dbportal;";
 
         $this->execute($sql);
     }
