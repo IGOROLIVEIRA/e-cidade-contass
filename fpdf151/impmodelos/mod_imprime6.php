@@ -34,7 +34,9 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $this->objpdf->text(128, $xlin, 'PLANO');
         $this->objpdf->text(140, $xlin, ': ' . substr($this->iPlanoPacto . "-" . $this->SdescrPacto, 0, 40));
     }
+
     $this->objpdf->Image('imagens/files/' . $this->logo, 15, $xlin - 17, 12);
+
     $this->objpdf->Setfont('Arial', 'B', 9);
     $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
     $this->objpdf->Setfont('Arial', '', 7);

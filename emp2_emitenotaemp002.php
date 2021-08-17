@@ -706,7 +706,7 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
   $pdf1->texto            = "";
 
   $pdf1->imprime();
-
+  echo 'tesate1';exit;
 }
 //include("fpdf151/geraarquivo.php");
 
