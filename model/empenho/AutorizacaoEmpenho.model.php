@@ -33,7 +33,8 @@ require_once("std/DBDate.php");
  * @author Matheus Felini <matheus.felini@dbseller.com.br>
  * @version $Revision: 1.34 $
  */
-class AutorizacaoEmpenho {
+class AutorizacaoEmpenho
+{
 
     /**
      * Código da Autorização
@@ -216,7 +217,8 @@ class AutorizacaoEmpenho {
      */
     protected $sProcessoAdministrativo;
 
-    function __construct($iAutorizacao = null) {
+    function __construct($iAutorizacao = null)
+    {
 
         if (!empty($iAutorizacao)) {
 
@@ -255,7 +257,8 @@ class AutorizacaoEmpenho {
      * Retorna um array de itens
      * @return array
      */
-    public function getItens() {
+    public function getItens()
+    {
 
         if (count($this->aItens) == 0 && !empty($this->iAutorizacao)) {
 
@@ -290,7 +293,8 @@ class AutorizacaoEmpenho {
      * @access public
      * @return void
      */
-    public function setTelefone($sTelefone) {
+    public function setTelefone($sTelefone)
+    {
         $this->sTelefone = $sTelefone;
     }
 
@@ -299,7 +303,8 @@ class AutorizacaoEmpenho {
      * @access public
      * @return void
      */
-    public function getTelefone() {
+    public function getTelefone()
+    {
         return $this->sTelefone;
     }
 
@@ -309,7 +314,8 @@ class AutorizacaoEmpenho {
      * @access public
      * @return void
      */
-    public function setContato($sContato) {
+    public function setContato($sContato)
+    {
         $this->sContato = $sContato;
     }
 
@@ -318,7 +324,8 @@ class AutorizacaoEmpenho {
      * @access public
      * @return void
      */
-    public function getContato() {
+    public function getContato()
+    {
         return $this->sContato;
     }
 
@@ -328,7 +335,8 @@ class AutorizacaoEmpenho {
      * @access public
      * @return void
      */
-    public function setOutrasCondicoes($sOutrasCondicoes) {
+    public function setOutrasCondicoes($sOutrasCondicoes)
+    {
         $this->sOutrasCondicoes = $sOutrasCondicoes;
     }
 
@@ -337,7 +345,8 @@ class AutorizacaoEmpenho {
      * @access public
      * @return void
      */
-    public function getOutrasCondicoes() {
+    public function getOutrasCondicoes()
+    {
         return $this->sOutrasCondicoes;
     }
 
@@ -345,7 +354,8 @@ class AutorizacaoEmpenho {
      * Retorna o ano setado
      * @return integer
      */
-    public function getAno() {
+    public function getAno()
+    {
         return $this->iAno;
     }
 
@@ -353,7 +363,8 @@ class AutorizacaoEmpenho {
      * Retorna o ID da Autorização
      * @return integer
      */
-    public function getAutorizacao() {
+    public function getAutorizacao()
+    {
         return $this->iAutorizacao;
     }
 
@@ -361,12 +372,14 @@ class AutorizacaoEmpenho {
      * Retorna o Código da Reserva
      * @return integer
      */
-    public function getCodigoReserva() {
+    public function getCodigoReserva()
+    {
 
         return $this->iCodigoReserva;
     }
 
-    public function setCodigoReserva($iCodigoReserva) {
+    public function setCodigoReserva($iCodigoReserva)
+    {
         $this->iCodigoReserva = $iCodigoReserva;
     }
 
@@ -374,7 +387,8 @@ class AutorizacaoEmpenho {
      * Retorna o Desdobramento
      * @return integer
      */
-    public function getDesdobramento() {
+    public function getDesdobramento()
+    {
         return $this->iDesdobramento;
     }
 
@@ -382,7 +396,8 @@ class AutorizacaoEmpenho {
      * Seta o código do desdobramento
      * @param integer $iDesdobramento
      */
-    public function setDesdobramento($iDesdobramento) {
+    public function setDesdobramento($iDesdobramento)
+    {
         $this->iDesdobramento = $iDesdobramento;
     }
 
@@ -390,7 +405,8 @@ class AutorizacaoEmpenho {
      * Retorna a Dotação setada
      * @return integer
      */
-    public function getDotacao() {
+    public function getDotacao()
+    {
         return $this->iDotacao;
     }
 
@@ -398,7 +414,8 @@ class AutorizacaoEmpenho {
      * Seta a Dotação
      * @param integer $iDotacao
      */
-    public function setDotacao($iDotacao) {
+    public function setDotacao($iDotacao)
+    {
         $this->iDotacao = $iDotacao;
     }
 
@@ -407,7 +424,8 @@ class AutorizacaoEmpenho {
      * Define a contrapartida da Dotacao, que deve sempre ser um código de Recurso.
      * @param integer $iContraPartida Código da Contrapartida
      */
-    public function setContraPartida($iContraPartida) {
+    public function setContraPartida($iContraPartida)
+    {
         $this->iContraPartida = $iContraPartida;
     }
 
@@ -415,14 +433,16 @@ class AutorizacaoEmpenho {
      * Retorna a contrapartida do recurso
      * @return integer codigo da contrapartida
      */
-    public function getContraPartida() {
+    public function getContraPartida()
+    {
         return $this->iContraPartida;
     }
     /**
      * Retorna o código do tipo de compra
      * @return integer
      */
-    public function getTipoCompra() {
+    public function getTipoCompra()
+    {
         return $this->iTipoCompra;
     }
 
@@ -430,7 +450,8 @@ class AutorizacaoEmpenho {
      * Seta o código do tipo de compra
      * @param integer $iTipoCompra
      */
-    public function setTipoCompra($iTipoCompra) {
+    public function setTipoCompra($iTipoCompra)
+    {
         $this->iTipoCompra = $iTipoCompra;
     }
 
@@ -438,7 +459,8 @@ class AutorizacaoEmpenho {
      * Retorna o código do tipo de empenho
      * @return integer
      */
-    public function getTipoEmpenho() {
+    public function getTipoEmpenho()
+    {
         return $this->iTipoEmpenho;
     }
 
@@ -446,7 +468,8 @@ class AutorizacaoEmpenho {
      * Seta o código do tipo de empenho
      * @param integer $iTipoEmpenho
      */
-    public function setTipoEmpenho($iTipoEmpenho) {
+    public function setTipoEmpenho($iTipoEmpenho)
+    {
         $this->iTipoEmpenho = $iTipoEmpenho;
     }
 
@@ -454,7 +477,8 @@ class AutorizacaoEmpenho {
      * Retorna o valor setado
      * @return float
      */
-    public function getValor() {
+    public function getValor()
+    {
         return $this->nValor;
     }
 
@@ -462,7 +486,8 @@ class AutorizacaoEmpenho {
      * Seta o valor
      * @param float $nValor
      */
-    public function setValor($nValor) {
+    public function setValor($nValor)
+    {
         $this->nValor = $nValor;
     }
 
@@ -470,7 +495,8 @@ class AutorizacaoEmpenho {
      * Retorna um objeto com os dados do fornecedor
      * @return CgmBase
      */
-    public function getFornecedor() {
+    public function getFornecedor()
+    {
         return $this->oFornecedor;
     }
 
@@ -478,7 +504,8 @@ class AutorizacaoEmpenho {
      * Seta o fornecedor
      * @param object $oFornecedor
      */
-    public function setFornecedor(cgmbase $oFornecedor) {
+    public function setFornecedor(cgmbase $oFornecedor)
+    {
         $this->oFornecedor = $oFornecedor;
     }
 
@@ -486,7 +513,8 @@ class AutorizacaoEmpenho {
      * Retorna o Destino setado
      * @return string
      */
-    public function getDestino() {
+    public function getDestino()
+    {
         return $this->sDestino;
     }
 
@@ -494,7 +522,8 @@ class AutorizacaoEmpenho {
      * Seta o Destino
      * @param string $sDestino
      */
-    public function setDestino($sDestino) {
+    public function setDestino($sDestino)
+    {
         $this->sDestino = $sDestino;
     }
 
@@ -502,7 +531,8 @@ class AutorizacaoEmpenho {
      * Retorna o Resumo
      * @return string
      */
-    public function getResumo() {
+    public function getResumo()
+    {
         return $this->sResumo;
     }
 
@@ -510,14 +540,16 @@ class AutorizacaoEmpenho {
      * Seta o Resumo
      * @param string $sResumo
      */
-    public function setResumo($sResumo) {
+    public function setResumo($sResumo)
+    {
         $this->sResumo = $sResumo;
     }
     /**
      * Retorna o prazo de entregas
      * @return string
      */
-    public function getPrazoEntrega() {
+    public function getPrazoEntrega()
+    {
 
         return $this->sPrazoEntrega;
     }
@@ -526,7 +558,8 @@ class AutorizacaoEmpenho {
      * Define o prazo da entrega dos itens da Autorizacao
      * @param string $sPrazoEntrega
      */
-    public function setPrazoEntrega($sPrazoEntrega) {
+    public function setPrazoEntrega($sPrazoEntrega)
+    {
         $this->sPrazoEntrega = $sPrazoEntrega;
     }
 
@@ -534,7 +567,8 @@ class AutorizacaoEmpenho {
      * retorna o numero da licitação.
      * @return string
      */
-    public function getNumeroLicitacao() {
+    public function getNumeroLicitacao()
+    {
 
         return $this->sNumeroLicitacao;
     }
@@ -543,7 +577,8 @@ class AutorizacaoEmpenho {
      * Define o Número da Licitaççao que gerou a autorização
      * @param string $sNumeroLicitacao
      */
-    public function setNumeroLicitacao($sNumeroLicitacao) {
+    public function setNumeroLicitacao($sNumeroLicitacao)
+    {
         $this->sNumeroLicitacao = $sNumeroLicitacao;
     }
 
@@ -551,7 +586,8 @@ class AutorizacaoEmpenho {
      * retorna o tipo da licitação.
      * @return string
      */
-    public function getTipoLicitacao() {
+    public function getTipoLicitacao()
+    {
         return $this->sTipoLicitacao;
     }
 
@@ -559,14 +595,16 @@ class AutorizacaoEmpenho {
      * Define o tipo da Licitaçao ue gerou a autorização
      * @param string $sNumeroLicitacao
      */
-    public function setTipoLicitacao($sNumeroLicitacao) {
+    public function setTipoLicitacao($sNumeroLicitacao)
+    {
         $this->sTipoLicitacao = $sNumeroLicitacao;
     }
 
     /**
      * @return string
      */
-    public function getCodigoLicitacao() {
+    public function getCodigoLicitacao()
+    {
 
         return $this->sCodigoLicitacao;
     }
@@ -574,7 +612,8 @@ class AutorizacaoEmpenho {
     /**
      * @param string $sCodigoLicitacao
      */
-    public function setCodigoLicitacao($sCodigoLicitacao) {
+    public function setCodigoLicitacao($sCodigoLicitacao)
+    {
 
         $this->sCodigoLicitacao = $sCodigoLicitacao;
     }
@@ -664,7 +703,8 @@ class AutorizacaoEmpenho {
      *
      * @param stdClass $oItem objeto com os dados do item
      */
-    public function addItem($oItem) {
+    public function addItem($oItem)
+    {
         $this->aItens[] = $oItem;
     }
 
@@ -672,7 +712,8 @@ class AutorizacaoEmpenho {
      * Retorna a Característica Peculiar
      * @return string
      */
-    public function getCaracteristicaPeculiar() {
+    public function getCaracteristicaPeculiar()
+    {
         return $this->sCaracteristicaPeculiar;
     }
 
@@ -680,7 +721,8 @@ class AutorizacaoEmpenho {
      * Seta a Característica Peculiar
      * @param string $sCaracteristicaPeculiar
      */
-    public function setCaracteristicaPeculiar($sCaracteristicaPeculiar) {
+    public function setCaracteristicaPeculiar($sCaracteristicaPeculiar)
+    {
         $this->sCaracteristicaPeculiar = $sCaracteristicaPeculiar;
     }
 
@@ -688,7 +730,8 @@ class AutorizacaoEmpenho {
      * Seta valor em Condição de Pagamento
      * @param string $sCondicaoPagamento
      */
-    public function setCondicaoPagamento($sCondicaoPagamento) {
+    public function setCondicaoPagamento($sCondicaoPagamento)
+    {
         $this->sCondicaoPagamento = $sCondicaoPagamento;
     }
 
@@ -696,11 +739,13 @@ class AutorizacaoEmpenho {
      * Retorna a condição de pagamento.
      * @return string
      */
-    public function getCondicaoPagamento() {
+    public function getCondicaoPagamento()
+    {
         return $this->sCondicaoPagamento;
     }
 
-    public static function getServicoControladoQuantidade($iSolicitem) {
+    public static function getServicoControladoQuantidade($iSolicitem)
+    {
 
         if (empty($iSolicitem)) {
             return 'false';
@@ -722,10 +767,10 @@ class AutorizacaoEmpenho {
         }
 
         return $sControleServico;
-
     }
 
-    public static function getUnidadeItemSolicitacao($iSolicitem) {
+    public static function getUnidadeItemSolicitacao($iSolicitem)
+    {
 
         if (empty($iSolicitem)) {
             return 0;
@@ -738,13 +783,13 @@ class AutorizacaoEmpenho {
         $iUnidade = db_utils::fieldsMemory($rsUnidade, 0)->pc17_unid;
 
         return $iUnidade;
-
     }
 
     /**
      * Salva os dados de uma autorização
      */
-    public function salvar() {
+    public function salvar()
+    {
 
         /**
          * Geramos a autorizacao de empenho
@@ -864,7 +909,7 @@ class AutorizacaoEmpenho {
                     $oItem->solicitem = db_utils::fieldsMemory($rsBuscaSolicitem, 0)->pc11_codigo;
                 }
             }
-            if (!isset($oItem->solicitem)) {
+            if (empty($oItem->solicitem)) {
                 $lServicoQuantidade = $oItem->controlaquantidade;
                 $iUnidade           = $oItem->unidade;
             } else {
@@ -928,7 +973,8 @@ class AutorizacaoEmpenho {
      * Método responsável por reservar saldo de uma dotação.
      * @return true
      */
-    public function reservarSaldo() {
+    public function reservarSaldo()
+    {
 
         $oDaoOrcReserva = db_utils::getDao("orcreserva");
         $oDaoOrcReserva->o80_anousu = db_getsession("DB_anousu");
@@ -967,7 +1013,8 @@ class AutorizacaoEmpenho {
      * Remove a reserva de saldo da Autorização
      * @return AutorizacaoEmpenho
      */
-    public function excluirReservaSaldo() {
+    public function excluirReservaSaldo()
+    {
 
         if (!db_utils::inTransaction()) {
             throw new Exception('Operação cancelada. Não existe transação com o banco de dados.');
@@ -984,7 +1031,7 @@ class AutorizacaoEmpenho {
 
             $oDaoOrcReserva->excluir($this->getCodigoReserva());
             if ($oDaoOrcReserva->erro_status == 0) {
-                throw new Exception( "Erro ao cancelar Reserva de saldo da Autorizacao {$this->iAutorizacao}");
+                throw new Exception("Erro ao cancelar Reserva de saldo da Autorizacao {$this->iAutorizacao}");
             }
         }
         $this->iCodigoReserva = null;
@@ -999,7 +1046,8 @@ class AutorizacaoEmpenho {
      * @param  DBDate $oDataAnulacao
      * @return boolean true
      */
-    public function anularAutorizacaoEmpenho(DBDate $oDataAnulacao) {
+    public function anularAutorizacaoEmpenho(DBDate $oDataAnulacao)
+    {
 
         $oDaoOrcReservaAut = db_utils::getDao("orcreservaaut");
         $sSqlBuscaReserva  = $oDaoOrcReservaAut->sql_query_file(null, "1", null, "o83_autori = {$this->iAutorizacao}");
@@ -1027,7 +1075,8 @@ class AutorizacaoEmpenho {
      * @throws BusinessException
      * @throws DBException
      */
-    public static function bloqueioTabela() {
+    public static function bloqueioTabela()
+    {
 
         if (!db_utils::inTransaction()) {
 
@@ -1048,7 +1097,8 @@ class AutorizacaoEmpenho {
      * Retorna a licitação de origem
      * @return \licitacao
      */
-    public function getLicitacao() {
+    public function getLicitacao()
+    {
 
         if (empty($this->iAutorizacao)) {
             return null;
@@ -1056,10 +1106,10 @@ class AutorizacaoEmpenho {
 
         $oDaoEmpautitem = new cl_empautitem();
         $sSqlLicitacao  = $oDaoEmpautitem->sql_query_lic($this->getAutorizacao(), null, "l21_codliclicita");
-        $rsLicitacao    = $oDaoEmpautitem->sql_record( "{$sSqlLicitacao} limit 1" );
+        $rsLicitacao    = $oDaoEmpautitem->sql_record("{$sSqlLicitacao} limit 1");
 
         if ($oDaoEmpautitem->numrows > 0) {
-            return new licitacao( db_utils::fieldsMemory($rsLicitacao, 0)->l21_codliclicita );
+            return new licitacao(db_utils::fieldsMemory($rsLicitacao, 0)->l21_codliclicita);
         }
 
         return null;
@@ -1069,7 +1119,8 @@ class AutorizacaoEmpenho {
      * Retorna o processo de compras de origem
      * @return \ProcessoCompras
      */
-    public function getProcessoCompras() {
+    public function getProcessoCompras()
+    {
 
         if (empty($this->iAutorizacao)) {
             return null;
@@ -1077,10 +1128,10 @@ class AutorizacaoEmpenho {
 
         $oDaoEmpautitem = new cl_empautitem();
         $sSqlProcesso   = $oDaoEmpautitem->sql_query_processocompras($this->getAutorizacao(), null, "pc81_codproc");
-        $rsProcesso     = $oDaoEmpautitem->sql_record( "{$sSqlProcesso} limit 1" );
+        $rsProcesso     = $oDaoEmpautitem->sql_record("{$sSqlProcesso} limit 1");
 
         if ($oDaoEmpautitem->numrows > 0) {
-            return new ProcessoCompras( db_utils::fieldsMemory($rsProcesso, 0)->pc81_codproc );
+            return new ProcessoCompras(db_utils::fieldsMemory($rsProcesso, 0)->pc81_codproc);
         }
 
         return null;
@@ -1089,14 +1140,16 @@ class AutorizacaoEmpenho {
     /**
      * @return string
      */
-    public function getProcessoAdministrativo() {
+    public function getProcessoAdministrativo()
+    {
         return $this->sProcessoAdministrativo;
     }
 
     /**
      * @param string $sProcessoAdministrativo
      */
-    public function setProcessoAdministrativo($sProcessoAdministrativo) {
+    public function setProcessoAdministrativo($sProcessoAdministrativo)
+    {
         $this->sProcessoAdministrativo = $sProcessoAdministrativo;
     }
 
@@ -1106,7 +1159,8 @@ class AutorizacaoEmpenho {
      * @return boolean
      *
      */
-    public static function verificaItemAutorizado($iCodigoItem, $iDotacao = null, $iSolicitacao) {
+    public static function verificaItemAutorizado($iCodigoItem, $iDotacao = null, $iSolicitacao)
+    {
 
         // e55_item = $iCodigoItem
         // e56_coddot = $iDotacao
@@ -1124,14 +1178,12 @@ class AutorizacaoEmpenho {
         $sWhereSolicitem .= "and pc11_numero = {$iSolicitacao} ";
         $sWhereSolicitem .= "and e54_anulad is null            ";
 
-        $sSqlEmpAutItem = $oDaoSolicitem->sql_query_verificaItemAutorizado( null, "e55_autori", null, $sWhereSolicitem);
+        $sSqlEmpAutItem = $oDaoSolicitem->sql_query_verificaItemAutorizado(null, "e55_autori", null, $sWhereSolicitem);
 
         $rsEmpAutItem   = db_query($sSqlEmpAutItem);
         if (pg_numrows($rsEmpAutItem) > 0) {
             return true;
         }
         return false;
-
     }
 }
-?>
