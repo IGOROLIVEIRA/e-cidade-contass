@@ -14,8 +14,8 @@ include("dbforms/db_classesgenericas.php");
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <style type="text/css">
-    #MesReferencia, #ExibirHistoricoDoEmpenho, #ordenar, #iTipo {
-        width: 80px;
+    #MesReferencia, #ExibirHistoricoDoEmpenho, #ordenar, #iTipo, #iRestosPagar {
+        width: 100px;
     }
 </style>
 
@@ -89,7 +89,18 @@ include("dbforms/db_classesgenericas.php");
                     </select>
                 </td>
             </tr>
-
+            <tr>
+                <td>
+                    <strong>Restos a pagar:</strong>
+                </td>
+                <td>
+                    <select name="iRestosPagar" id="iRestosPagar">
+                        <option value="">Sim</option>
+                        <option value="1">Não</option>
+                        <option value="2">Somente RP</option>
+                    </select>
+                </td>
+            </tr>
             <tr>
              <!--  <td><b>Tipos de Pastas:</b></td>-->
              <td>
@@ -144,6 +155,7 @@ function js_abre(){
        query += "&ordenar="+obj.ordenar.value;
        query += "&iTipo="+obj.iTipo.value;
        query += "&filtros="+parent.iframe_filtro.js_atualiza_variavel_retorno();
+       query += "&iRestosPagar="+obj.iRestosPagar.value;
 
 	   jan = window.open('emp2_examearitmetico002.php?'+query,
 	                 '',
