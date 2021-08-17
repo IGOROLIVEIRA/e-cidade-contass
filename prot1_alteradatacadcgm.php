@@ -91,6 +91,8 @@ if (isset($oPost->incluir)) {
             }else{
                 $erro_msg = $cl_historicocgm->erro_msg;
             }
+
+            $datacadastro_original = '';
         }
     }
 
