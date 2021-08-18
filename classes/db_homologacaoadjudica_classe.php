@@ -28,10 +28,10 @@ class cl_homologacaoadjudica {
     var $l202_dataadjudicacao = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 l202_sequencial = int4 = Sequencial 
-                 l202_licitacao = int4 = Licitação 
-                 l202_datahomologacao = date = Data Homologação 
-                 l202_dataadjudicacao = date = Data Adjudicação 
+                 l202_sequencial = int4 = Sequencial
+                 l202_licitacao = int4 = Licitação
+                 l202_datahomologacao = date = Data Homologação
+                 l202_dataadjudicacao = date = Data Adjudicação
                  ";
     //funcao construtor da classe
     function cl_homologacaoadjudica() {
@@ -136,16 +136,16 @@ class cl_homologacaoadjudica {
             return false;
         }
         $sql = "insert into homologacaoadjudica(
-                                       l202_sequencial 
-                                      ,l202_licitacao 
-                                      ,l202_datahomologacao 
-                                      ,l202_dataadjudicacao 
+                                       l202_sequencial
+                                      ,l202_licitacao
+                                      ,l202_datahomologacao
+                                      ,l202_dataadjudicacao
                        )
                 values (
-                                $this->l202_sequencial 
-                               ,$this->l202_licitacao 
-                               ,".($this->l202_datahomologacao == "null" || $this->l202_datahomologacao == ""?"null":"'".$this->l202_datahomologacao."'")." 
-                               ,".($this->l202_dataadjudicacao == "null" || $this->l202_dataadjudicacao == ""?"null":"'".$this->l202_dataadjudicacao."'")." 
+                                $this->l202_sequencial
+                               ,$this->l202_licitacao
+                               ,".($this->l202_datahomologacao == "null" || $this->l202_datahomologacao == ""?"null":"'".$this->l202_datahomologacao."'")."
+                               ,".($this->l202_dataadjudicacao == "null" || $this->l202_dataadjudicacao == ""?"null":"'".$this->l202_dataadjudicacao."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -526,6 +526,9 @@ class cl_homologacaoadjudica {
         $sql .= "      left join pcorcamitemlic         on liclicitem.l21_codigo               = pcorcamitemlic.pc26_liclicitem";
         $sql .= "      left join pcorcamitem            on pcorcamitemlic.pc26_orcamitem       = pcorcamitem.pc22_orcamitem";
         $sql .= "      left join pcorcamjulg            on pcorcamitem.pc22_orcamitem          = pcorcamjulg.pc24_orcamitem";
+        $sql .= "      left join pcorcamval             on (pc24_orcamitem, pc24_orcamforne)   = (pc23_orcamitem, pc23_orcamforne)";
+        $sql .= "      left join pcorcamforne           on pc24_orcamforne                     = pc21_orcamforne";
+        $sql .= "      left join cgm cgmforncedor       on pcorcamforne.pc21_numcgm            = cgmforncedor.z01_numcgm";
         $sql2 = "";
 
         if($joinPrecoReferencia){
@@ -643,7 +646,7 @@ class cl_homologacaoadjudica {
     function itensHomologados($l202_licitacao=null) {
 
         $sql = "select * from homologacaoadjudica
-                  join itenshomologacao on l203_homologaadjudicacao = l202_sequencial 
+                  join itenshomologacao on l203_homologaadjudicacao = l202_sequencial
                   where l202_licitacao = ". $l202_licitacao;
 
         $rsItens = db_query($sql);
@@ -668,13 +671,13 @@ class cl_homologacaoadjudica {
     function verificaPrecoReferencia($l202_licitacao){
 
         $sql = "select distinct pc80_codproc, pc80_data, pc80_usuario, nome, pc80_depto, descrdepto, pc80_resumo
-      from liclicitem       
-      inner join pcprocitem  on  liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem      
-      inner join pcproc  on  pcproc.pc80_codproc = pcprocitem.pc81_codproc      
-      inner join solicitem  on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem      
-      inner join solicita  on  solicita.pc10_numero = solicitem.pc11_numero      
-      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto      
-      inner join db_usuarios  on  pcproc.pc80_usuario = db_usuarios.id_usuario 
+      from liclicitem
+      inner join pcprocitem  on  liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+      inner join pcproc  on  pcproc.pc80_codproc = pcprocitem.pc81_codproc
+      inner join solicitem  on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+      inner join solicita  on  solicita.pc10_numero = solicitem.pc11_numero
+      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto
+      inner join db_usuarios  on  pcproc.pc80_usuario = db_usuarios.id_usuario
       where l21_codliclicita=$l202_licitacao";
 
         $rsCodProc = db_query($sql);

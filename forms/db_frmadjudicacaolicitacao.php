@@ -38,6 +38,10 @@ $clrotulo->label("l20_codigo");
             </td>
         </tr>
     </table>
+    <fieldset>
+        <legend><b>Itens</b></legend>
+        <div id='cntgriditens'></div>
+    </fieldset>
 </form>
 <script>
     <?php
@@ -47,6 +51,21 @@ $clrotulo->label("l20_codigo");
      * @see ocorrência 2278
      */
     ?>
+    function js_showGrid() {
+        oGridItens = new DBGrid('gridItens');
+        oGridItens.nameInstance = 'oGridItens';
+        oGridItens.setCellAlign(new Array("center", "center", "left", 'right', 'right', 'right'));
+        oGridItens.setCellWidth(new Array("5%" , "20%"     , '20%'          ,   '5%'    , '5%'        , '5%'            ));
+        oGridItens.setHeader(new Array("Código", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
+        oGridItens.hasTotalizador = true;
+        oGridItens.show($('cntgriditens'));
+
+        var width = $('cntgriditens').scrollWidth - 30;
+        $("table" + oGridItens.sName + "header").style.width = width;
+        $(oGridItens.sName + "body").style.width = width;
+        $("table" + oGridItens.sName + "footer").style.width = width;
+    }
+
     function js_pesquisal202_licitacao(mostra){
         let opcao = "<?= $db_opcao?>";
 
@@ -60,11 +79,7 @@ $clrotulo->label("l20_codigo");
             }else{
                 document.form1.l202_licitacao.value = '';
                 document.form1.pc50_descr.value = '';
-                if(document.getElementById('processar')){
-                    document.getElementById('processar').disabled = true;
-                }else{
-                    document.getElementById('db_opcao').disabled = true;
-                }
+                js_init()
             }
         }
     }
@@ -77,11 +92,7 @@ $clrotulo->label("l20_codigo");
             document.form1.l202_licitacao.value = '';
         }else{
             iLicitacao = document.form1.l202_licitacao.value;
-            if(document.getElementById('processar')){
-                document.getElementById('processar').disabled = false;
-            }else{
-                document.getElementById('db_opcao').disabled = false;
-            }
+            js_init()
         }
     }
     /**
@@ -91,16 +102,65 @@ $clrotulo->label("l20_codigo");
      */
     function js_mostraliclicita1(chave1,chave2,chave3){
         iLicitacao = chave1;
-
         document.form1.l202_licitacao.value = chave1;
         document.form1.pc50_descr.value = chave2+' '+chave3;
-        if(document.getElementById('processar')){
-            document.getElementById('processar').disabled = false;
-        }else{
-            document.getElementById('db_opcao').disabled = false;
-        }
         db_iframe_liclicita.hide();
+        js_init()
     }
+
+    function js_init() {
+        js_getItens();
+    }
+
+    function js_getItens() {
+
+        var oParam = new Object();
+        oParam.iLicitacao = $F('l202_licitacao');
+        oParam.exec = "getItens";
+        js_divCarregando('Aguarde, pesquisando Itens', 'msgBox');
+        var oAjax = new Ajax.Request(
+            'lic1_homologacaoadjudica.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_retornoGetItens
+            }
+        );
+    }
+
+    function js_retornoGetItens(oAjax) {
+console.log('aaa1io')
+        js_removeObj('msgBox');
+        var oRetornoitens = JSON.parse(oAjax.responseText);
+
+        if (oRetornoitens.status == 1) {
+
+            oRetornoitens.itens.each(function(oLinha, id) {
+                console.log(oLinha);
+                with(oLinha) {
+                    var aLinha = new Array();
+                    aLinha[0] = ordem;
+                    aLinha[1] = codigomaterial;
+                    aLinha[2] = material.urlDecode();
+                    aLinha[3] = js_formatar(quantidade, 'f', 4);
+                    aLinha[4] = js_formatar(valorunitario, 'f', 4);
+                    aLinha[5] = js_formatar(valortotal, 'f');
+                    aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
+                    aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
+                    aLinha[8] = "<input type='button' value='Dotações' id='Dotacoes' onclick='js_adicionarDotacao(" + elementocodigo + "," + (ordem - 1) + "," + codigo + ");'>";
+                    aLinha[9] = "<input type='button' style='width:50%' value='A' onclick='js_editar(" + codigo + ", " + oRetorno.iTipoContrato + ")'>";
+                    if (oRetornoitens.iTipoContrato != 6) {
+                        aLinha[9] += "<input type='button' style='width:50%' value='E' onclick='js_excluir(" + codigo + ")'>";
+                    }
+
+                    oGridItens.addRow(aLinha);
+                }
+            });
+
+            oGridItens.renderRows();
+            $('TotalForCol5').innerHTML = js_formatar(nTotal.toFixed(2), 'f');
+        }
+    }
+
     function js_pesquisa(homologacao=false){
         if(!homologacao){
             js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&situacao=1&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
