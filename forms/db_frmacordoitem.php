@@ -615,17 +615,12 @@ db_app::load("estilos.css, grid.style.css");
         iTipoContrato = oRetorno.iTipoContrato;
         var iTipocompra = oRetorno.tipocompra;
 
-        if (iTipocompra === '103' || iTipocompra === '102') {
-            if (oRetorno.iTipoContrato == 2 || oRetorno.iTipoContrato == 1) {
+        if (iTipocompra === '103' && oRetorno.iTipoContrato == 2 || iTipocompra === '102' && oRetorno.iTipoContrato == 2) {
 
-                $('FormularioManual').style.display = '';
-                $('db_opcao').style.display = 'none';
-                if (oRetorno.itens.length == 0) {
-                    js_getItensOrigem();
-                }
-
-            } else {
-                $('FormularioManual').style.display = '';
+            $('FormularioManual').style.display = '';
+            $('db_opcao').style.display = 'none';
+            if (oRetorno.itens.length == 0) {
+                js_getItensOrigem();
             }
 
             if (oRetorno.status == 1) {
@@ -634,15 +629,6 @@ db_app::load("estilos.css, grid.style.css");
                 oRetorno.itens.each(function(oLinha, id) {
                     with(oLinha) {
                         var sCor = '';
-                        // if (valortotal == totaldotacoes) {
-                        //   var sCor = '';
-                        //   if (aPeriodosItem.length == 0) {
-                        //     var sCor = 'background-color: #fcd032;';
-                        //   }
-
-                        // } else {
-                        //   var sCor = 'background-color: red;';
-                        // }
 
                         var aLinha = new Array();
                         aLinha[0] = ordem;
