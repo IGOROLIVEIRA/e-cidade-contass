@@ -251,12 +251,12 @@ $clrotulo->label("o15_descr");
 sUrlRPC    = 'orc4_ppaRPC.php';
 function js_pesquisao06_codrec(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?funcao_js=parent.js_mostraorcfontes1|o57_codfon|o57_descr|o57_fonte|c61_codigo|o15_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?funcao_js=parent.js_mostraorcfontes1|o57_codfon|o57_descr|o57_fonte|c61_codigo|o15_descr&lBuscaRecAnoSeguinte=true','Pesquisa',true);
   }else{
      if(document.form1.o06_codrec.value != ''){
         js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes',
                             'func_orcfontes.php?lPesquisaCodigo=true&pesquisa_chave='+document.form1.o06_codrec.value+
-                            '&funcao_js=parent.js_mostraorcfontes&lBuscaFonte=true','Pesquisa',false);
+                            '&funcao_js=parent.js_mostraorcfontes&lBuscaFonte=true&lBuscaRecAnoSeguinte=true','Pesquisa',false);
      }else{
        document.form1.o57_descr.value = '';
        document.form1.o57_fonte.value = '';
@@ -269,7 +269,7 @@ function js_pesquisaoo57_fonte() {
     if(document.form1.o57_fonte.value != '') {
         js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes',
                             'func_orcfontes.php?lPesquisaCodigo=true&pesquisa_chave='+document.form1.o57_fonte.value+
-                            '&funcao_js=parent.js_mostraorcfontes&lBuscaFonte=true&lPesquisaEstrut=true','Pesquisa',false);
+                            '&funcao_js=parent.js_mostraorcfontes&lBuscaFonte=true&lPesquisaEstrut=true&lBuscaRecAnoSeguinte=true','Pesquisa',false);
     } else {
         document.form1.o06_codrec.value = '';
         document.form1.o57_descr.value  = '';
