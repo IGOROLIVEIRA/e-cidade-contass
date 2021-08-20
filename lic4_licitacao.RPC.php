@@ -905,14 +905,14 @@ switch ($oParam->exec) {
               $sWhereSolicitem .= ' AND pc11_seq = ' . $aItens[$count]->sequencial;
               $sWhereSolicitem .= ' AND pc81_codprocitem = ' . $aItens[$count]->codprocitem;
               $sSqlSolicitem = $oDaoSolicitemReservado->sql_query_pcmater('', 'distinct solicitem.*', '', $sWhereSolicitem);
-
+              //echo $sSqlSolicitem;
               $rsSolicitem = $oDaoSolicitemReservado->sql_record($sSqlSolicitem);
 
               if (pg_numrows($rsSolicitem)) {
 
                 if ($aItens[$count]->qtdexclusiva) {
 
-                  // db_criatabela($rsSolicitem);
+                  db_criatabela($rsSolicitem);
                   // echo $aItens[$count]->qtdexclusiva;
 
                   /**
@@ -942,7 +942,29 @@ switch ($oParam->exec) {
                   where
                   compilacao.pc11_codigo = $oItem->pc11_codigo");
 
-
+                  // echo "select
+                  // abertura.pc55_solicitempai as vinculopai,
+                  // abertura.pc55_solicitemfilho as vinculofilho,
+                  // itemdaabertura.pc11_codigo as itemdaabertura,
+                  // itemdaabertura.pc11_numero as itemdaaberturanumero,
+                  // itemdaestimativa.pc11_codigo as itemdaestimativa,
+                  // itemdaestimativa.pc11_numero as itemdaestimativanumero,
+                  // itemdaestimativa.pc11_quant as itemdaestimativaqtd,
+                  // vinculo.pc55_solicitempai,
+                  // vinculo.pc55_solicitemfilho
+                  // from solicitem as compilacao
+                  // join solicita as compsolicita on compsolicita.pc10_numero=compilacao.pc11_numero
+                  // left join solicitemvinculo as vinculo on vinculo.pc55_solicitemfilho = compilacao.pc11_codigo
+                  // left join solicitem as itemdaestimativa on itemdaestimativa.pc11_codigo = vinculo.pc55_solicitempai
+                  // left join solicita as estisolicita on estisolicita.pc10_numero = itemdaestimativa.pc11_numero
+                  // left join solicitemvinculo as abertura on abertura.pc55_solicitemfilho=vinculo.pc55_solicitempai
+                  // left join solicitem as itemdaabertura on itemdaabertura.pc11_codigo = abertura.pc55_solicitempai
+                  // left join solicita as solabertura on solabertura.pc10_numero = itemdaabertura.pc11_numero
+                  // left join solicitemregistropreco on pc57_solicitem=compilacao.pc11_codigo
+                  // where
+                  // compilacao.pc11_codigo = $oItem->pc11_codigo";
+                  // db_criatabela($rsSolicitemControle);
+                  // exit;
                   $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
 
                   $sql_ult_item  = "select pc11_seq ";
@@ -1072,7 +1094,7 @@ switch ($oParam->exec) {
 
                   //compilação
                   $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
-                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oItem->pc11_codigo;
+                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemEstimativa->pc11_codigo;
                   $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemReservado->pc11_codigo;
                   $oDaoSolicitemVinculo->incluir(null);
 
@@ -1084,8 +1106,8 @@ switch ($oParam->exec) {
 
                   //estimativa
                   $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
-                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oItemControle->pc55_solicitempai;
-                  $oDaoSolicitemVinculo->pc55_solicitemfilho = $oItemControle->pc55_solicitemfilho;
+                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemReservado->pc11_codigo;
+                  $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemEstimativa->pc11_codigo;
                   $oDaoSolicitemVinculo->incluir(null);
 
                   if (!$oDaoSolicitemVinculo->numrows_incluir) {
@@ -1095,16 +1117,16 @@ switch ($oParam->exec) {
                   }
 
                   //abertura
-                  $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
-                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oItemControle->vinculopai;
-                  $oDaoSolicitemVinculo->pc55_solicitemfilho = $oItemControle->vinculofilho;
-                  $oDaoSolicitemVinculo->incluir(null);
+                  // $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
+                  // $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemAbertura->pc11_codigo;
+                  // $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemEstimativa->pc11_codigo;
+                  // $oDaoSolicitemVinculo->incluir(null);
 
-                  if (!$oDaoSolicitemVinculo->numrows_incluir) {
-                    $erro_msg = $oDaoSolicitemVinculo->erro_msg;
-                    $sqlerro = true;
-                    break;
-                  }
+                  // if (!$oDaoSolicitemVinculo->numrows_incluir) {
+                  //   $erro_msg = $oDaoSolicitemVinculo->erro_msg;
+                  //   $sqlerro = true;
+                  //   break;
+                  // }
 
                   $clliclicita = db_utils::getDao('liclicita');
                   $sSqlLiclicita = $clliclicita->sql_query_file(null, "l20_usaregistropreco", null, "l20_codigo=$oParam->licitacao");
@@ -1191,15 +1213,33 @@ switch ($oParam->exec) {
                   $codprocitemreservado = $oDaopcprocitem->pc81_codprocitem;
 
                   /**
-                   * Busca o c?digo do material e insere as informa??es na tabela solicitempcmater
+                   * Busca o código do material e insere as informa??es na tabela solicitempcmater
                    */
 
                   $sSqlMaterial = "SELECT pc16_codmater from solicitempcmater where pc16_solicitem = " . $oItem->pc11_codigo;
                   $rsMaterial = db_query($sSqlMaterial);
                   $iMaterial = db_utils::fieldsMemory($rsMaterial, 0)->pc16_codmater;
-
+                  //Compilado
                   $oDaoSolicitempcmater = db_utils::getDao('solicitempcmater');
                   $oDaoSolicitempcmater->incluir($iMaterial, $oDaoSolicitemReservado->pc11_codigo);
+
+                  if (!$oDaoSolicitempcmater->numrows_incluir) {
+                    $erro_msg = $oDaoSolicitempcmater->erro_msg;
+                    $sqlerro = true;
+                    break;
+                  }
+                  //Estimativa
+                  $oDaoSolicitempcmater = db_utils::getDao('solicitempcmater');
+                  $oDaoSolicitempcmater->incluir($iMaterial, $oDaoSolicitemEstimativa->pc11_codigo);
+
+                  if (!$oDaoSolicitempcmater->numrows_incluir) {
+                    $erro_msg = $oDaoSolicitempcmater->erro_msg;
+                    $sqlerro = true;
+                    break;
+                  }
+                  //Abertura
+                  $oDaoSolicitempcmater = db_utils::getDao('solicitempcmater');
+                  $oDaoSolicitempcmater->incluir($iMaterial, $oDaoSolicitemAbertura->pc11_codigo);
 
                   if (!$oDaoSolicitempcmater->numrows_incluir) {
                     $erro_msg = $oDaoSolicitempcmater->erro_msg;
@@ -1265,11 +1305,37 @@ switch ($oParam->exec) {
                   $sSqlSolicitemUnid = "SELECT * from solicitemunid where pc17_codigo = " . $oItem->pc11_codigo;
                   $rsSolicitemUnid = db_query($sSqlSolicitemUnid);
                   $oSolicitemUnid = db_utils::fieldsMemory($rsSolicitemUnid, 0);
-
+                  //compilação
                   $oDaoSolicitemUnidReservado = db_utils::getDao('solicitemunid');
                   $oDaoSolicitemUnidReservado->pc17_unid = $oSolicitemUnid->pc17_unid;
                   $oDaoSolicitemUnidReservado->pc17_quant = $aItens[$count]->qtdexclusiva;
                   $oDaoSolicitemUnidReservado->pc17_codigo = $oDaoSolicitemReservado->pc11_codigo;
+                  $oDaoSolicitemUnidReservado->incluir();
+
+                  if (!$oDaoSolicitemUnidReservado->numrows_incluir) {
+                    $erro_msg = $oDaoSolicitemUnidReservado->erro_msg;
+                    $sqlerro = true;
+                    break;
+                  }
+
+                  //estimativa
+                  $oDaoSolicitemUnidReservado = db_utils::getDao('solicitemunid');
+                  $oDaoSolicitemUnidReservado->pc17_unid = $oSolicitemUnid->pc17_unid;
+                  $oDaoSolicitemUnidReservado->pc17_quant = $aItens[$count]->qtdexclusiva;
+                  $oDaoSolicitemUnidReservado->pc17_codigo = $oDaoSolicitemEstimativa->pc11_codigo;
+                  $oDaoSolicitemUnidReservado->incluir();
+
+                  if (!$oDaoSolicitemUnidReservado->numrows_incluir) {
+                    $erro_msg = $oDaoSolicitemUnidReservado->erro_msg;
+                    $sqlerro = true;
+                    break;
+                  }
+
+                  //abertura
+                  $oDaoSolicitemUnidReservado = db_utils::getDao('solicitemunid');
+                  $oDaoSolicitemUnidReservado->pc17_unid = $oSolicitemUnid->pc17_unid;
+                  $oDaoSolicitemUnidReservado->pc17_quant = $aItens[$count]->qtdexclusiva;
+                  $oDaoSolicitemUnidReservado->pc17_codigo = $oDaoSolicitemAbertura->pc11_codigo;
                   $oDaoSolicitemUnidReservado->incluir();
 
                   if (!$oDaoSolicitemUnidReservado->numrows_incluir) {
