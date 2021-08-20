@@ -1219,7 +1219,7 @@ function pesquisaIntervaloEmpenhos($emp_inicial, $dtinicio, $emp_final, $dtfim){
     }else $where .= " and e60_anousu = ".$emp_final[1]."::integer ";
   }
 
-  $campos = "empempenho.e60_numemp, empempenho.e60_codemp, empempenho.e60_anousu";
+  $campos = "distinct empempenho.e60_numemp, empempenho.e60_codemp, empempenho.e60_anousu";
 
   $sSql = $oEmpenhos->sql_query(null, $campos, ' e60_numemp, e60_anousu', $where,'', '100');
   $rsSql = $oEmpenhos->sql_record($sSql);
