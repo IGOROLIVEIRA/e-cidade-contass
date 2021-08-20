@@ -40,7 +40,15 @@ $clrotulo->label("l20_codigo");
     </table>
     <br>
     <div>
-        <input type="button" value="Incluir" onclick="js_salvaradjudicacao();">
+        <?php
+            if($db_opcao == "1"){
+            echo " <input type='button' value='Incluir' onclick='js_salvaradjudicacao();'>";
+            }elseif ($db_opcao == "2"){
+                echo " <input type='button' value='Alterar' onclick='js_alteraradjudicacao();'>";
+            }else{
+                echo " <input type='button' value='Excluir' onclick='js_excluiradjudicacao();'>";
+            }
+        ?>
         <input type="button" value="Pesquisar" onclick="js_pesquisal202_licitacao(true);">
     </div>
     <br>
@@ -169,6 +177,7 @@ $clrotulo->label("l20_codigo");
             js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&situacao=10&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
         }
     }
+
     function js_preenchepesquisa(chave){
         db_iframe_homologacaoadjudica.hide();
         <?
@@ -194,6 +203,64 @@ $clrotulo->label("l20_codigo");
     }
 
     function js_retornoAdjudicacao(oAjax){
+        js_removeObj('msgBox');
+        var oRetorno = JSON.parse(oAjax.responseText);
+        if(oRetorno.status == '1'){
+            alert(oRetorno.message.urlDecode());
+            oGridItens.clearAll(true);
+            document.getElementById('l202_licitacao').value = '';
+            document.getElementById('pc50_descr').value = '';
+            document.getElementById('l202_dataadjudicacao').value = '';
+        }else{
+            alert(oRetorno.message.urlDecode());
+        }
+    }
+
+    function js_alteraradjudicacao(){
+        var oParam = new Object();
+        oParam.iLicitacao = $F('l202_licitacao');
+        oParam.dtAdjudicacao = $F('l202_dataadjudicacao');
+        oParam.exec = "alteraradjudicarLicitacao";
+        js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
+        var oAjax = new Ajax.Request(
+            'lic1_homologacaoadjudica.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_retornoAlterarAdjudicacao
+            }
+        );
+    }
+
+    function js_retornoAlterarAdjudicacao(oAjax){
+        js_removeObj('msgBox');
+        var oRetorno = JSON.parse(oAjax.responseText);
+        if(oRetorno.status == '1'){
+            alert(oRetorno.message.urlDecode());
+            oGridItens.clearAll(true);
+            document.getElementById('l202_licitacao').value = '';
+            document.getElementById('pc50_descr').value = '';
+            document.getElementById('l202_dataadjudicacao').value = '';
+        }else{
+            alert(oRetorno.message.urlDecode());
+        }
+    }
+
+    function js_excluiradjudicacao(){
+        var oParam = new Object();
+        oParam.iLicitacao = $F('l202_licitacao');
+        oParam.dtAdjudicacao = $F('l202_dataadjudicacao');
+        oParam.exec = "alteraradjudicarLicitacao";
+        js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
+        var oAjax = new Ajax.Request(
+            'lic1_homologacaoadjudica.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_retornoExcluirAdjudicacao
+            }
+        );
+    }
+
+    function js_retornoExcluirAdjudicacao(oAjax){
         js_removeObj('msgBox');
         var oRetorno = JSON.parse(oAjax.responseText);
         if(oRetorno.status == '1'){

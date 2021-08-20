@@ -14,7 +14,7 @@ include("classes/db_licitemobra_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 $clhomologacaoadjudica = new cl_homologacaoadjudica;
-
+$db_opcao = "1";
 ?>
 <html>
 <head>
