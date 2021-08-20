@@ -85,7 +85,7 @@ class cl_homologacaoadjudica {
             $this->erro_status = "0";
             return false;
         }
-        if($this->l202_datahomologacao == null ){
+        /*if($this->l202_datahomologacao == null ){
             $this->erro_sql = " Campo Data Homologação nao Informado.";
             $this->erro_campo = "l202_datahomologacao_dia";
             $this->erro_banco = "";
@@ -93,7 +93,7 @@ class cl_homologacaoadjudica {
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
             return false;
-        }
+        }*/
         /*if($this->l202_dataadjudicacao == null ){
           $this->erro_sql = " Campo Data Adjudicação nao Informado.";
           $this->erro_campo = "l202_dataadjudicacao_dia";

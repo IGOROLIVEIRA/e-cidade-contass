@@ -38,6 +38,12 @@ $clrotulo->label("l20_codigo");
             </td>
         </tr>
     </table>
+    <br>
+    <div>
+        <input type="button" value="Incluir" onclick="js_salvaradjudicacao();">
+        <input type="button" value="Pesquisar" onclick="js_pesquisal202_licitacao(true);">
+    </div>
+    <br>
     <fieldset>
         <legend><b>Itens</b></legend>
         <div id='cntgriditens'></div>
@@ -65,6 +71,7 @@ $clrotulo->label("l20_codigo");
         $(oGridItens.sName + "body").style.width = width;
         $("table" + oGridItens.sName + "footer").style.width = width;
     }
+    js_showGrid()
 
     function js_pesquisal202_licitacao(mostra){
         let opcao = "<?= $db_opcao?>";
@@ -81,6 +88,7 @@ $clrotulo->label("l20_codigo");
                 document.form1.pc50_descr.value = '';
                 js_init()
             }
+
         }
     }
     function js_mostraliclicita(chave,erro){
@@ -109,6 +117,7 @@ $clrotulo->label("l20_codigo");
     }
 
     function js_init() {
+        js_showGrid()
         js_getItens();
     }
 
@@ -128,34 +137,26 @@ $clrotulo->label("l20_codigo");
     }
 
     function js_retornoGetItens(oAjax) {
-console.log('aaa1io')
+
         js_removeObj('msgBox');
+        oGridItens.clearAll(true);
+
         var oRetornoitens = JSON.parse(oAjax.responseText);
 
         if (oRetornoitens.status == 1) {
 
             oRetornoitens.itens.each(function(oLinha, id) {
-                console.log(oLinha);
                 with(oLinha) {
                     var aLinha = new Array();
-                    aLinha[0] = ordem;
-                    aLinha[1] = codigomaterial;
-                    aLinha[2] = material.urlDecode();
-                    aLinha[3] = js_formatar(quantidade, 'f', 4);
-                    aLinha[4] = js_formatar(valorunitario, 'f', 4);
-                    aLinha[5] = js_formatar(valortotal, 'f');
-                    aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
-                    aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
-                    aLinha[8] = "<input type='button' value='Dotações' id='Dotacoes' onclick='js_adicionarDotacao(" + elementocodigo + "," + (ordem - 1) + "," + codigo + ");'>";
-                    aLinha[9] = "<input type='button' style='width:50%' value='A' onclick='js_editar(" + codigo + ", " + oRetorno.iTipoContrato + ")'>";
-                    if (oRetornoitens.iTipoContrato != 6) {
-                        aLinha[9] += "<input type='button' style='width:50%' value='E' onclick='js_excluir(" + codigo + ")'>";
-                    }
-
+                    aLinha[0] = oLinha.pc01_codmater;
+                    aLinha[1] = oLinha.pc01_descrmater;
+                    aLinha[2] = oLinha.z01_nome;
+                    aLinha[3] = oLinha.m61_descr;
+                    aLinha[4] = oLinha.pc11_quant;
+                    aLinha[5] = oLinha.pc23_valor;
                     oGridItens.addRow(aLinha);
                 }
             });
-
             oGridItens.renderRows();
             $('TotalForCol5').innerHTML = js_formatar(nTotal.toFixed(2), 'f');
         }
@@ -175,5 +176,34 @@ console.log('aaa1io')
             echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
         }
         ?>
+    }
+
+    function js_salvaradjudicacao(){
+        var oParam = new Object();
+        oParam.iLicitacao = $F('l202_licitacao');
+        oParam.dtAdjudicacao = $F('l202_dataadjudicacao');
+        oParam.exec = "adjudicarLicitacao";
+        js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
+        var oAjax = new Ajax.Request(
+            'lic1_homologacaoadjudica.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_retornoAdjudicacao
+            }
+        );
+    }
+
+    function js_retornoAdjudicacao(oAjax){
+        js_removeObj('msgBox');
+        var oRetorno = JSON.parse(oAjax.responseText);
+        if(oRetorno.status == '1'){
+            alert(oRetorno.message.urlDecode());
+            oGridItens.clearAll(true);
+            document.getElementById('l202_licitacao').value = '';
+            document.getElementById('pc50_descr').value = '';
+            document.getElementById('l202_dataadjudicacao').value = '';
+        }else{
+            alert(oRetorno.message.urlDecode());
+        }
     }
 </script>
