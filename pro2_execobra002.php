@@ -53,6 +53,8 @@ if(!isset($codigo) || $codigo==''){
   db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
 }
 
+db_sel_instit(null, "db21_usadistritounidade");
+
 $borda   = 1; 
 $bordat  = 1;
 $preenc  = 0;
@@ -117,6 +119,19 @@ $result_obrasconstr=$clobrasconstr->sql_record($clobrasconstr->sql_query_file(nu
 " ob08_codobra=$codigo"));
 if($clobrasconstr->numrows>0){
   db_fieldsmemory($result_obrasconstr,0);
+}
+
+$sql = "select j34_distrito,j34_setor,j34_quadra,j34_lote,j01_unidade from iptubase 
+inner join lote on j01_idbql = j34_idbql
+where j01_matric = ".@$ob24_iptubase;
+
+$matriculaLote    = db_query($sql) or die($sql);
+$numMatriculaLote = pg_numrows($matriculaLote);
+
+if($numMatriculaLote > 0){
+
+  db_fieldsmemory($matriculaLote,0);
+  
 }
 
 $dia = date("d");
@@ -192,18 +207,41 @@ $pdf->Cell(35,$alt,"Local da obra: ","L",0,"L",0);
 $pdf->SetFont('Arial','',8);
 $pdf->Cell(0,$alt,"o mesmo","R",1,"L",0);
 
-$pdf->SetFont('Arial','B',8);
-$pdf->Cell(15,$alt,"Setor: ","L",0,"L",0);
-$pdf->SetFont('Arial','',8);
-$pdf->Cell(20,$alt,@$setor,0,0,"L",0);
-$pdf->SetFont('Arial','B',8);
-$pdf->Cell(15,$alt,"Quadra: ",0,0,"L",0);
-$pdf->SetFont('Arial','',8);
-$pdf->Cell(20,$alt,@$quadra,0,0,"L",0);
-$pdf->SetFont('Arial','B',8);
-$pdf->Cell(15,$alt,"Lote: ",0,0,"L",0);
-$pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,@$lote,"R",1,"L",0);
+if($db21_usadistritounidade == 't'){
+  $pdf->SetFont('Arial','B',8);
+  $pdf->Cell(15,$alt,"Distrito: ","L",0,"L",0);
+  $pdf->SetFont('Arial','',8);
+  $pdf->Cell(20,$alt,@$j34_distrito,0,0,"L",0);
+  $pdf->SetFont('Arial','B',8);
+  $pdf->Cell(15,$alt,"Setor: ",0,0,"L",0);
+  $pdf->SetFont('Arial','',8);
+  $pdf->Cell(20,$alt,@$j34_setor,0,0,"L",0);
+  $pdf->SetFont('Arial','B',8);
+  $pdf->Cell(15,$alt,"Quadra: ",0,0,"L",0);
+  $pdf->SetFont('Arial','',8);
+  $pdf->Cell(20,$alt,@$j34_quadra,0,0,"L",0);
+  $pdf->SetFont('Arial','B',8);
+  $pdf->Cell(15,$alt,"Lote: ",0,0,"L",0);
+  $pdf->SetFont('Arial','',8);
+  $pdf->Cell(20,$alt,@$j34_lote,0,0,"L",0);
+  $pdf->SetFont('Arial','B',8);
+  $pdf->Cell(15,$alt,"Unidade: ",0,0,"L",0);
+  $pdf->SetFont('Arial','',8);
+  $pdf->Cell(0,$alt,@$j01_unidade,"R",1,"L",0);
+}else{
+  $pdf->SetFont('Arial','B',8);
+  $pdf->Cell(15,$alt,"Setor: ","L",0,"L",0);
+  $pdf->SetFont('Arial','',8);
+  $pdf->Cell(20,$alt,@$setor,0,0,"L",0);
+  $pdf->SetFont('Arial','B',8);
+  $pdf->Cell(15,$alt,"Quadra: ",0,0,"L",0);
+  $pdf->SetFont('Arial','',8);
+  $pdf->Cell(20,$alt,@$quadra,0,0,"L",0);
+  $pdf->SetFont('Arial','B',8);
+  $pdf->Cell(15,$alt,"Lote: ",0,0,"L",0);
+  $pdf->SetFont('Arial','',8);
+  $pdf->Cell(20,$alt,@$lote,"R",1,"L",0);
+}
 
 $pdf->SetFont('Arial','B',8);
 $pdf->Cell(35,$alt,"Validade: ","L",0,"L",0);

@@ -92,7 +92,7 @@ class GerarLAO extends GerarAM
         $aCSVLAO20['si36_tiporegistro']       = $this->padLeftZero($aLAO20['si36_tiporegistro'], 2);
         $aCSVLAO20['si36_codorgao']           = $this->padLeftZero($aLAO20['si36_codorgao'], 2);
         $aCSVLAO20['si36_nroleialterorcam']   = substr($aLAO20['si36_nroleialterorcam'], 0, 6);
-        $aCSVLAO20['si36_dataleialterorcam']  = $this->sicomDate($aLAO10['si36_dataleialterorcam']);
+        $aCSVLAO20['si36_dataleialterorcam']  = $this->sicomDate($aLAO20['si36_dataleialterorcam']);
 
         $this->sLinha = $aCSVLAO20;
         $this->adicionaLinha();

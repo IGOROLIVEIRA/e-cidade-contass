@@ -1047,16 +1047,14 @@ function db_formatar($str, $tipo, $caracter = " ", $quantidade = 0, $TipoDePreen
       return str_pad($str, 4, "0", STR_PAD_LEFT);
     case "atividade":
       return str_pad($str, 4, "0", STR_PAD_LEFT);
-    case "cpf":
-      return substr($str, 0, 3) . "." . substr($str, 3, 3) . "." . substr($str, 6, 3) . "/" . substr($str, 9, 2);
-    case "CPF":
-      return substr($str, 0, 3) . "." . substr($str, 3, 3) . "." . substr($str, 6, 3) . "-" . substr($str, 9, 2);
-    case "cep":
-      return substr($str, 0, 2) . "." . substr($str, 2, 3) . "-" . substr($str, 5, 3);
-    case "cnpj":
-      return substr($str, 0, 2) . "." . substr($str, 2, 3) . "." . substr($str, 5, 3) . "/" . substr($str, 8, 4) . "-" . substr($str, 12, 2);
-      //90.832.619/0001-55
-    case "b":
+    case "cpf" :
+      return substr($str, 0, 3).".".substr($str, 3, 3).".".substr($str, 6, 3)."-".substr($str, 9, 2);
+    case "cep" :
+      return substr($str, 0, 2).".".substr($str, 2, 3)."-".substr($str, 5, 3);
+    case "cnpj" :
+      return substr($str, 0, 2).".".substr($str, 2, 3).".".substr($str, 5, 3)."/".substr($str, 8, 4)."-".substr($str, 12, 2);
+    //90.832.619/0001-55
+    case "b" :
       // boolean
       if ($str == false) {
         return 'N';
@@ -2185,7 +2183,10 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
           }
 
           $loop     .= $caracter . "'";
-          $loop     .= addslashes(str_replace('"', '', @pg_result($result, $i, (strlen($arrayFuncao[$cont]) < 4 ? (int) $arrayFuncao[$cont] : $arrayFuncao[$cont])))) . "'";
+          $loop     .= addslashes( str_replace( '"', '', @pg_result( $result, $i, ( strlen( $arrayFuncao[$cont] ) < 4 ? (int) $arrayFuncao[$cont] : $arrayFuncao[$cont] ) ) ) ) . "'";
+
+          // remove quebras de linhas que o usuário informa, mas causa o erro 'unescaped line break'
+          $loop      = preg_replace( "/\r|\n/", "", $loop );
           $caracter  = ",";
         }
 

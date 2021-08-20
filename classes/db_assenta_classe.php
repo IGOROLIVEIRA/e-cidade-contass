@@ -509,6 +509,8 @@ class cl_assenta {
      }
      $sql .= " where ";
      if($h16_codigo!=null){
+       $sql .= " h16_codigo = $h16_codigo";
+     }else if($this->h16_codigo!=null){
        $sql .= " h16_codigo = $this->h16_codigo";
      }
      $resaco = $this->sql_record($this->sql_query_file($this->h16_codigo));

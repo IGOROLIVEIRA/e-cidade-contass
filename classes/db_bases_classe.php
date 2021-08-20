@@ -709,5 +709,35 @@ class cl_bases {
      }
      return $sql;
   }
+
+ /**
+  * Retornar o valor total das rubricas marcadas em uma base
+  * para um determinado mes e ano e instituicao
+  */
+  public function getTotalBase($sBase, $iAno, $iMes, $iInstit) {
+
+    $sql = "SELECT SUM(valor) AS valor FROM (SELECT SUM(r14_valor) AS valor FROM gerfsal 
+    JOIN rhrubricas ON r14_rubric = rh27_rubric AND r14_instit = rh27_instit
+    JOIN basesr ON r09_base = '{$sBase}' AND r14_rubric = r09_rubric AND (r14_anousu,r14_mesusu,r14_instit) = (r09_anousu,r09_mesusu,r09_instit )
+    WHERE (r14_anousu,r14_mesusu,r14_instit) = ({$iAno},{$iMes},{$iInstit})
+    UNION
+    SELECT SUM(r20_valor) AS valor FROM gerfres 
+    JOIN rhrubricas ON r20_rubric = rh27_rubric AND r20_instit = rh27_instit
+    JOIN basesr ON r09_base = '{$sBase}' AND r20_rubric = r09_rubric AND (r20_anousu,r20_mesusu,r20_instit) = (r09_anousu,r09_mesusu,r09_instit )
+    WHERE (r20_anousu,r20_mesusu,r20_instit) = ({$iAno},{$iMes},{$iInstit})
+    UNION
+    SELECT SUM(r48_valor) AS valor FROM gerfcom
+    JOIN rhrubricas ON r48_rubric = rh27_rubric AND r48_instit = rh27_instit
+    JOIN basesr ON r09_base = '{$sBase}' AND r48_rubric = r09_rubric AND (r48_anousu,r48_mesusu,r48_instit) = (r09_anousu,r09_mesusu,r09_instit )
+    WHERE (r48_anousu,r48_mesusu,r48_instit) = ({$iAno},{$iMes},{$iInstit})
+    UNION
+    SELECT SUM(r35_valor) AS valor FROM gerfs13 
+    JOIN rhrubricas ON r35_rubric = rh27_rubric AND r35_instit = rh27_instit
+    JOIN basesr ON r09_base = '{$sBase}' AND r35_rubric = r09_rubric AND (r35_anousu,r35_mesusu,r35_instit) = (r09_anousu,r09_mesusu,r09_instit )
+    WHERE (r35_anousu,r35_mesusu,r35_instit) = ({$iAno},{$iMes},{$iInstit})) AS geral
+    ";
+
+    return db_utils::fieldsMemory(db_query($sql), 0)->valor;
+  }
 }
 ?>

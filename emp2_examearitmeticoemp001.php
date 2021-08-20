@@ -13,6 +13,11 @@ include("dbforms/db_classesgenericas.php");
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #MesReferencia, #ExibirHistoricoDoEmpenho, #ordenar, #iTipo, #iRestosPagar {
+        width: 100px;
+    }
+</style>
 
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
@@ -70,7 +75,32 @@ include("dbforms/db_classesgenericas.php");
                       </select>
                   </td>
               </tr>
-
+            <tr>
+                <td>
+                    <strong>Tipo:</strong>
+                </td>
+                <td>
+                    <select name="iTipo" id="iTipo">
+                        <option value="">Todos</option>
+                        <option value="1">Saúde</option>
+                        <option value="2">Educação</option>
+                        <option value="3">Fundeb</option>
+                        <option value="4">Geral</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Restos a pagar:</strong>
+                </td>
+                <td>
+                    <select name="iRestosPagar" id="iRestosPagar">
+                        <option value="">Sim</option>
+                        <option value="1">Não</option>
+                        <option value="2">Somente RP</option>
+                    </select>
+                </td>
+            </tr>
             <tr>
              <!--  <td><b>Tipos de Pastas:</b></td>-->
              <td>
@@ -123,6 +153,9 @@ function js_abre(){
 	   query += "&recursos="+js_campo_recebe_valores_recursos ();
        query += "&ExibirHistoricoDoEmpenho="+obj.ExibirHistoricoDoEmpenho.value;
        query += "&ordenar="+obj.ordenar.value;
+       query += "&iTipo="+obj.iTipo.value;
+       query += "&filtros="+parent.iframe_filtro.js_atualiza_variavel_retorno();
+       query += "&iRestosPagar="+obj.iRestosPagar.value;
 
 	   jan = window.open('emp2_examearitmetico002.php?'+query,
 	                 '',

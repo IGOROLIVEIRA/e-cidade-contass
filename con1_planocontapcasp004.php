@@ -133,7 +133,7 @@ $oGet   = db_utils::postMemory($_GET);
       oGridReduzido.sName        = 'oGridReduzido';
       oGridReduzido.setCellAlign = (new Array("center","center", "center", "left", "left", "left"));
       aHeaders                   = new Array("Código Conta", "Reduzido", "Instituição", "Recurso", "Código TCE", "Ação", "Instit", "Recurso");
-      oGridReduzido.aWidths      = new Array(10, 10, 30, 30, 10, 5);
+      oGridReduzido.aWidths      = new Array("10%", "10%", "30%", "30%", "10%", "5%");
       oGridReduzido.setHeader(aHeaders);
       oGridReduzido.aHeaders[6].lDisplayed = false;
       oGridReduzido.aHeaders[7].lDisplayed = false;

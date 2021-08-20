@@ -68,6 +68,7 @@ $oDaoPcProc = db_utils::getDao("pcproc");
 $sSqlProcessoCompras = $oDaoPcProc->sql_query_proc_solicita(null,
                                                             "distinct pc80_codproc,
                                                              pc80_data,
+                                                             pc80_criterioadjudicacao,
                                                              pc80_depto,
                                                              descrdepto,
                                                              pc80_resumo",

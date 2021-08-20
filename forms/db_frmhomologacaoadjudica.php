@@ -160,12 +160,13 @@ $clrotulo->label("l20_codigo");
 
             $sql_disabled = $clhomologacaoadjudica->sql_query_itens(null,
               "distinct
-                                                         pc81_codprocitem,
+                                                     pc81_codprocitem,
                                                          pc11_seq,
                                                          pc11_quant,
                                                          m61_descr,
                                                          pc01_codmater,
-                                                         obr06_sequencial
+                                                         pc01_descrmater,
+                                                         obr06_codigotabela,
                                                          pc01_descrmater,
                                                          pc11_resum",
               "pc11_seq",$sWhere
@@ -192,7 +193,8 @@ $clrotulo->label("l20_codigo");
                                                          pc11_quant,
                                                          m61_descr,
                                                          pc01_codmater,
-                                                         obr06_sequencial
+                                                         pc01_descrmater,
+                                                         obr06_codigotabela,
                                                          pc01_descrmater,
                                                          pc11_resum",
               "pc11_seq",$sWhere
@@ -216,7 +218,8 @@ $clrotulo->label("l20_codigo");
                                                          pc11_quant,
                                                          m61_descr,
                                                          pc01_codmater,
-                                                         obr06_sequencial
+                                                         pc01_descrmater,
+                                                         obr06_codigotabela,
                                                          pc01_descrmater,
                                                          pc11_resum",
             "pc11_seq",$sWhere
@@ -233,7 +236,8 @@ $clrotulo->label("l20_codigo");
                                                          pc11_quant,
                                                          m61_descr,
                                                          pc01_codmater,
-                                                         obr06_sequencial,
+                                                         pc01_descrmater,
+                                                         obr06_codigotabela,
                                                          pc01_descrmater,
                                                          pc11_resum",
           "pc11_seq"
@@ -241,7 +245,7 @@ $clrotulo->label("l20_codigo");
       }
 
       $cliframe_seleciona->sql=@$sql;
-      $cliframe_seleciona->campos  = "pc81_codprocitem,pc11_seq,pc11_quant,m61_descr,pc01_codmater,pc01_descrmater,obr06_sequencial,pc11_resum";
+      $cliframe_seleciona->campos  = "pc81_codprocitem,pc11_seq,pc11_quant,m61_descr,pc01_codmater,pc01_descrmater,obr06_codigotabela,pc11_resum";
       $cliframe_seleciona->legenda="Itens";
       if($db_opcao == 2){
         $cliframe_seleciona->sql_marca=@$sql_marca;

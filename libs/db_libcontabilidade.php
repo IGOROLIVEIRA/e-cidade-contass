@@ -5313,17 +5313,76 @@ function db_varPatrimoniaisRpps($anousu, $dataini, $datafin, $iInstit)
     }
   }
 
-  //
-  // Balancete de verificacao (db_planocontassaldo_matriz)
-  //
-  $sCondicaoConta = ' c61_instit = ' . $iInstit;
-  $rsContaSaldo = db_planocontassaldo_matriz($anousu, $dataini, $datafin, false, $sCondicaoConta);
-  $iNumRowsContaSaldo = pg_num_rows($rsContaSaldo);
-  //db_criatabela($rsContaSaldo); exit;
+    /**
+     * Busca valor liquidado pelo desdobramento, passando elemento em nível analítico
+     * @param $where
+     * @param $aAnousu
+     * @param $instit
+     * @param $dtIni
+     * @param $dtFim
+     * @param string $fonte
+     * @param $group
+     * @return array|stdClass[]
+     */
+    function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte="", $group) {
+
+        $aDatas = array();
+        $dt_inicial = "";
+        $dt_final   = "";
+        if (count($aAnousu) == 2) {
+            $aDatas[$aAnousu[0]] = $dtIni.'a'.$aAnousu[0].'-12-31';
+            $aDatas[$aAnousu[1]] = $aAnousu[1].'-01-01'.'a'.$dtFim;
+        }
+
+        $sql = " SELECT COALESCE(SUM(CASE 
+                                WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2) 
+                                WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1::FLOAT8),2) 
+                                ELSE 0::FLOAT8 
+                            END),0) AS liquidado,
+                        COALESCE(SUM(CASE
+                                WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
+                                WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1::FLOAT8),2)
+                                ELSE 0::FLOAT8
+                            END),0) AS empenhado
+					FROM (SELECT DISTINCT ON (c70_codlan) 
+							c53_tipo, 
+							c70_valor
+						FROM conlancamele
+							INNER JOIN conlancam ON c70_codlan = c67_codlan
+							INNER JOIN conlancamdoc ON c70_codlan = c71_codlan
+							INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+							INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c67_codele AND c61_anousu = c70_anousu
+							INNER JOIN conplanoorcamento ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+							INNER JOIN conlancamemp ON c70_codlan = c75_codlan
+							INNER JOIN empempenho ON e60_numemp = c75_numemp ";
+
+        if($fonte!="") {
+            $sql .= " INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu ";
+        }
 
   for ($i = 0; $i < $iNumRowsContaSaldo; $i++) {
 
-    $oContaSaldo = db_utils::fieldsMemory($rsContaSaldo, $i);
+        if (count($aAnousu) == 2) {
+            $sql .= " AND c70_anousu IN ({$aAnousu[0]}, {$aAnousu[1]})";
+        } else {
+            $sql .= " AND c70_anousu = {$aAnousu[0]}";
+        }
+        $sql .= " AND e60_instit = {$instit}";
+        $sql .= " AND c61_instit = {$instit}";
+        $sql .= " AND c53_tipo IN (10, 11, 20, 21)";
+        $sql .= " AND (";
+        $i = 1;
+        foreach($aAnousu as $anousu) {
+
+            if (count($aAnousu) == 2) {
+
+              $dt_inicial = explode("a", $aDatas[$anousu]);
+              $dt_final = explode("a", $aDatas[$anousu]);
+              $sql .= "(c70_data BETWEEN '{$dt_inicial[0]}' AND '{$dt_final[1]}') ";
+              if ($i < count($aAnousu)) {
+                  $sql .= " OR ";
+              }
+              $i++;
 
     if (substr($oContaSaldo->estrutural, 0, 15) == '612000000000000') {
       $aVariacoesAtivo['TransferenciasFinanceirasRecebidas'] += (float) $oContaSaldo->saldo_final;
@@ -5474,22 +5533,114 @@ function db_varPatrimoniaisRpps($anousu, $dataini, $datafin, $iInstit)
     (float) $nTotalAtivo = ($nSomaAtivo);
   }
 
-  if (($nSomaAtivo - $nSomaPassivo) > 0) {
-    $nSuperavitPatrimonial = ($nSomaAtivo - $nSomaPassivo);
-    (float) $nTotalPassivo = ($nSomaPassivo + abs($nSomaAtivo - $nSomaPassivo));
-  } else {
-    $nSuperavitPatrimonial = '-';
-    (float) $nTotalPassivo = ($nSomaPassivo);
-  }
-
-  $aRetorno['TotaisAtivo']['TotalAtivo'] = $nTotalAtivo;
-  $aRetorno['TotaisAtivo']['DeficitPatrimonial'] = $nDeficitPatrimonial;
+          $sql .= ")";
+          if($fonte!="") {
+              $sql .= " AND o58_codigo IN ({$fonte}) ";
+          }
+          $sql .= " {$group} ) AS x";
+          return db_utils::getColectionByRecord(db_query($sql));
 
   $aRetorno['TotaisPassivo']['TotalPassivo'] = $nTotalPassivo;
   $aRetorno['TotaisPassivo']['SuperavitPatrimonial'] = $nSuperavitPatrimonial;
 
-  return $aRetorno;
-}
+    /**
+     * Busca valor arrecado decorrente de emenda parlamentar (k81_emparlamentar in (1,2))
+     * @param $dtIni
+     * @param $dtFim
+     * @param $instit
+     * @return array|stdClass[]
+     */
+    function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $instit) {
+
+        $sql = "SELECT SUM( 
+                        CASE 
+                            WHEN ( C53_TIPO = 100 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR,2)::FLOAT8 
+                            WHEN ( C53_TIPO = 101 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
+                        ELSE 0::FLOAT8 END) AS ARRECADADO_EMENDA_PARLAMENTAR
+                FROM CONLANCAMREC
+                    INNER JOIN CONLANCAM ON C74_CODLAN = C70_CODLAN
+                    INNER JOIN CONLANCAMDOC ON C71_CODLAN = C74_CODLAN
+                    INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
+                    INNER JOIN CONLANCAMCORRENTE ON C86_CONLANCAM = C74_CODLAN
+                    INNER JOIN CORRENTE ON (C86_ID, C86_DATA, C86_AUTENT) = (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT)
+                    INNER JOIN CORPLACAIXA ON (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT) = (K82_ID, K82_DATA, K82_AUTENT)
+                    INNER JOIN PLACAIXAREC ON K82_SEQPLA = K81_SEQPLA
+                    INNER JOIN ORCRECEITA ON (O70_ANOUSU, O70_CODREC) = (C74_ANOUSU, C74_CODREC)
+                    INNER JOIN ORCFONTES ON (O70_CODFON, O70_ANOUSU) = (O57_CODFON, O57_ANOUSU)
+                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'
+                    AND O57_FONTE LIKE '41%'";
+        
+        return db_utils::getColectionByRecord(db_query($sql));
+
+    }
+
+    function getDespesaExercAnterior($dtIni, $instit, $sElemento) {
+
+          $sql = "SELECT 
+                    o58_elemento,
+                    o56_descr,
+                    SUM (CASE
+                        WHEN e50_compdesp IS NOT NULL THEN liquidado_compdesp
+                        ELSE liquidado
+                    END) AS liquidado,
+                    SUM (CASE
+                        WHEN e50_compdesp IS NOT NULL THEN empenhado_compdesp
+                        ELSE empenhado
+                    END) AS empenhado
+                    FROM
+                    (SELECT  
+                            o58_elemento,
+                          o56_descr,
+                          liquidado,
+                          empenhado,
+                          e50_compdesp,
+                          (SELECT SUM(
+                              CASE
+                                  WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR,2)::FLOAT8 
+                                  WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
+                              ELSE 0::FLOAT8 END) AS liquidado_compdesp
+                              FROM pagordem 
+                                INNER JOIN conlancamord ON c80_codord = e50_codord
+                                INNER JOIN conlancamemp ON c80_codlan = c75_codlan
+                                INNER JOIN conlancam ON c75_codlan = c70_codlan
+                                INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                                INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                              WHERE e50_numemp = e60_numemp 
+                                AND e50_compdesp < '{$dtIni}'
+                                AND e50_codord = x.e50_codord) as liquidado_compdesp,
+                           (SELECT SUM(
+                              CASE
+                                  WHEN C53_TIPO = 10 THEN ROUND(C70_VALOR,2)::FLOAT8 
+                                  WHEN C53_TIPO = 11 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
+                              ELSE 0::FLOAT8 END) AS empenhado_compdesp
+                              FROM pagordem 
+                                INNER JOIN conlancamord ON c80_codord = e50_codord
+                                INNER JOIN conlancamemp ON c80_codlan = c75_codlan
+                                INNER JOIN conlancam ON c75_codlan = c70_codlan
+                                INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                                INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                              WHERE e50_numemp = e60_numemp 
+                                AND e50_compdesp < '{$dtIni}'
+                                AND e50_codord = x.e50_codord) as empenhado_compdesp
+                    FROM
+                      (SELECT o58_elemento,
+                              o56_descr,
+                              e60_numemp,
+                              liquidado,
+                              empenhado,
+                              e50_compdesp,
+                              e50_codord
+                      FROM work_dotacao
+                      INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
+                      INNER JOIN empempenho ON o58_coddot = e60_coddot AND o58_anousu = e60_anousu
+                      INNER JOIN pagordem ON e50_numemp = e60_numemp
+                      WHERE o58_elemento LIKE '{$sElemento}'
+                          AND o58_instit = {$instit}
+                          AND (e60_datasentenca < '{$dtIni}' OR e50_compdesp < '{$dtIni}')) AS x) as xx GROUP BY 1, 2";
+        
+        return db_utils::getColectionByRecord(db_query($sql));
+        
+    }
 
 function duplicaReceitaaCorrenteLiquida($iAnoUsu, $iCodigoRelatorio)
 {

@@ -275,6 +275,8 @@ db_app::load("estilos.css");
           </span>
           <input type='button' onclick="js_gerarEmpenhos()"     id='empenhar'     value='Gerar Empenhos' disabled>
           <input type='button' onclick="js_gerarTotalizacoes()" id='totalizacoes' value='Totalizações' >
+          <input type='button' onclick="js_emiteRelatorioOrdemEmpenho()" id='relatorio' value='Imprimir' disabled>
+          <input type='hidden' name='empenhos_financeiros_gerados' id='empenhos_financeiros_gerados' value=''>
         </td>
        </tr>
    </table>
@@ -755,6 +757,42 @@ function js_retornoConsultaEmpenhos(oResponse) {
    $('valorbruto').innerHTML     = "&nbsp;&nbsp;"+js_formatar(nValorBruto, "f");
    $('valordescontos').innerHTML = "&nbsp;&nbsp;"+js_formatar(nValorDesconto, "f");
    $('valorliquido').innerHTML   = "&nbsp;&nbsp;"+js_formatar(nValorBruto - nValorDesconto, "f");
+
+   js_buscaEmpenhosFinanceiros();
+}
+
+function js_buscaEmpenhosFinanceiros() {
+    
+    oParametros.exec = 'getEmpenhosFinanceiros';
+
+    js_divCarregando('Aguarde!', 'msgbox');
+    
+    var oAjax  = new Ajax.Request(
+        sUrl,
+        {
+            method: 'post',
+            parameters: 'json='+Object.toJSON(oParametros),
+            onComplete: js_retornoBuscaEmpenhosFinanceiros
+        }
+    );
+
+}
+
+function js_retornoBuscaEmpenhosFinanceiros(oResponse) {
+
+    js_removeObj('msgbox');
+
+    oRetorno = eval("("+oResponse.responseText+")");
+    
+    if (oRetorno.status == 1) {
+
+        if (oRetorno.empenhos_financeiros != '') {
+            $('empenhos_financeiros_gerados').value = oRetorno.empenhos_financeiros;
+            $('relatorio').disabled = false;
+        }
+
+    }
+
 }
 
 function getEmpenhosFilhos(iSequencial, iProximoEmpenho) {
@@ -1845,6 +1883,7 @@ function js_gerarEmpenhos() {
   oParam.exec      = "gerarEmpenhos";
   oParam.iNumCgm   = $F('z01_numcgm');
   oParam.lOPporRecurso = $('opporrecurso').checked;
+  oParam.iTipo = oParametros.iTipo;
   oParam.aEmpenhos = new Array();
   aItens.each(function(oEmpenho, id) {
 
@@ -1880,11 +1919,36 @@ function js_retornoGerarEmpenhos(oRequest) {
   if (oRetorno.status == 1) {
 
     alert('Empenhos Gerados com sucesso\nOrdem Auxiliar Nº'+oRetorno.e42_sequencial);
+    
+    $('empenhos_financeiros_gerados').value = oRetorno.empenhos_financeiros_gerados;
+    $('relatorio').disabled = false;
+    
     js_init();
+
+    if(confirm("Deseja imprimir as ordens de pagamento e os empenhos?")) {        
+        js_emiteRelatorioOrdemEmpenho(oRetorno.empenhos_financeiros_gerados);
+    }
 
   } else {
     alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
   }
+
+}
+
+function js_emiteRelatorioOrdemEmpenho(sEmpenhosGerados = '') {
+
+    if (sEmpenhosGerados == '') {
+        sEmpenhosGerados = $('empenhos_financeiros_gerados').value;
+    }
+
+    if (sEmpenhosGerados != '') {
+
+        jan = window.open('pes2_rhempenhoordemcomprafolha002.php?sEmpenhosGerados='+sEmpenhosGerados,
+                            '',
+                            'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+        jan.moveTo(0,0);
+
+    }
 
 }
 

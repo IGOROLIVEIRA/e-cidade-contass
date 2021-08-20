@@ -115,7 +115,7 @@ class cl_conplano {
       $this->c60_naturezasaldo = ($this->c60_naturezasaldo == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_naturezasaldo"]:$this->c60_naturezasaldo);
       $this->c60_funcao = ($this->c60_funcao == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_funcao"]:$this->c60_funcao);
       $this->c60_tipolancamento = ($this->c60_tipolancamento == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_tipolancamento"]:$this->c60_tipolancamento);
-      $this->c60_subtipolancamento = ($this->c60_subtipolancamento == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_subtipolancamento"]:$this->ic60_subtipolancamento);
+      $this->c60_subtipolancamento = ($this->c60_subtipolancamento == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_subtipolancamento"]:$this->c60_subtipolancamento);
       $this->c60_desdobramneto = ($this->c60_desdobramneto == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_desdobramneto"]:$this->c60_desdobramneto);
       $this->c60_infcompmsc = ($this->c60_infcompmsc == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_infcompmsc"]:$this->c60_infcompmsc);
 
@@ -212,7 +212,7 @@ class cl_conplano {
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
-    } else if ((!in_array(substr($this->c60_estrut,0,7),$this->aContasCgmPessoa[0]) && !in_array(substr($this->c60_estrut,0,9),$this->aContasCgmPessoa[1])) || $iTipoConta == 0) {
+    } else if ((!in_array(substr($this->c60_estrut,0,7),$this->aContasCgmPessoa[0]) && !in_array(substr($this->c60_estrut,0,9),$this->aContasCgmPessoa[1])) || (isset($iTipoConta) && $iTipoConta == 0)) {
       $this->c60_cgmpessoa = 'null';
     }
     if($c60_codcon == "" || $c60_codcon == null ){
@@ -273,7 +273,7 @@ class cl_conplano {
       }
 
       if(($this->c60_tipolancamento != null) || ($this->c60_tipolancamento != "") ){
-        if($subtipo ==  " "){
+        if(isset($subtipo) && $subtipo == " "){
         $this->erro_sql = " Campo sub tipolancamento nao Informado.";
         $this->erro_campo = "c60_subtipolancamento";
         $this->erro_banco = "";
@@ -281,6 +281,8 @@ class cl_conplano {
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
+      } else {
+        $subtipo = $this->c60_subtipolancamento;
       }
         //a validação e realizada via javascript no arquivo de form   para  o c60_desdobramneto
       }
@@ -322,7 +324,7 @@ class cl_conplano {
     ,".($subtipo==''?'null':$subtipo)."
     ,".($this->c60_desdobramneto==''?'null':$this->c60_desdobramneto)."
     ,$this->c60_nregobrig
-    ,".($this->c60_cgmpessoa=='null'?'null':$this->c60_cgmpessoa)."
+    ,".($this->c60_cgmpessoa==''?'null':$this->c60_cgmpessoa)."
     ,".($this->c60_naturezadareceita==null?'null':$this->c60_naturezadareceita)."
     ,".($this->c60_infcompmsc==null || $this->c60_infcompmsc==''?'null':$this->c60_infcompmsc)."
     )";

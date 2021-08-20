@@ -41,24 +41,11 @@ if(isset($uploadfile)) {
         return false;
     }
 
-    if($licitacao == "true"){
-        $clpcorcamitem   = new cl_pcorcamitem();
-        $result_fornecedores = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"DISTINCT pc81_codproc",null,"pc20_codorc = $pc20_codorc  AND pc21_orcamforne = $pc21_orcamforne"));
-        db_fieldsmemory($result_fornecedores,0);
-        $nomepadrao = "licprc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
-    }else{
-        $clpcorcam   = new cl_pcorcam();
-        $result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc81_codproc",null,"pc20_codorc = $pc20_codorc  AND pc21_orcamforne = $pc21_orcamforne"));
-        db_fieldsmemory($result_fornecedores,0);
-        $nomepadrao = "prc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
-    }
-
-    //verificose o arquivo anexado e padrao do ecidade pelo nome
-    if($nomearq != $nomepadrao){
-        db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do padrão e-cidade");
-        unlink($nometmp);
-        $lFail = true;
-        return false;
+    $files = glob('libs/Pat_xls_import/*');
+    foreach($files as $file) {
+        if (is_file($file)){
+            unlink($file);
+        }
     }
 
     // Faz um upload do arquivo para o local especificado

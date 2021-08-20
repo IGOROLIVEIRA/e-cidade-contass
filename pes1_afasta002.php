@@ -39,6 +39,8 @@ include("classes/db_pontofx_classe.php");
 include("classes/db_pontofs_classe.php");
 include("classes/db_rhrubricas_classe.php");
 include("classes/db_inssirf_classe.php");
+require_once("classes/db_assenta_classe.php");
+require_once("classes/db_afastaassenta_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clafasta = new cl_afasta;
@@ -62,14 +64,49 @@ if(isset($alterar)){
   if(trim($r45_dtreto_dia) != "" && trim($r45_dtreto_mes) != "" && trim($r45_dtreto_ano) != ""){
     $clafasta->r45_dtreto = $r45_dtreto_ano."-".$r45_dtreto_mes."-".$r45_dtreto_dia;
   }
-  $clafasta->alterar($r45_codigo);
-  $erro_msg = $clafasta->erro_msg;
-  if($clafasta->erro_status == "0"){
-    $sqlerro = true;
+  $r45_dtafas = $r45_dtafas_ano."-".$r45_dtafas_mes."-".$r45_dtafas_dia;
+  $r45_dtreto = $r45_dtreto_ano."-".$r45_dtreto_mes."-".$r45_dtreto_dia;
+  $sWhereVerificaAfastamento = "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} ";
+  $sWhereVerificaAfastamento .= " and r45_codigo != '{$r45_codigo}' ";
+  $sWhereVerificaAfastamento .= " and (";
+  $sWhereVerificaAfastamento .= " ( r45_dtafas between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date or r45_dtreto between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date )";
+  $sWhereVerificaAfastamento .= " or ( '{$r45_dtafas}'::date between r45_dtafas and r45_dtreto or '{$r45_dtreto}'::date between r45_dtafas and r45_dtreto )";
+  $sWhereVerificaAfastamento .= " )";
+  
+  $sSqlVerificaAfastamento   = $clafasta->sql_query_file(null, "r45_codigo", null, $sWhereVerificaAfastamento);
+  $rsVerificaAfastamento     = $clafasta->sql_record($sSqlVerificaAfastamento);
+  $aVerificaAfastamento      = db_utils::getCollectionByRecord($rsVerificaAfastamento);
+  if(count($aVerificaAfastamento) > 0){
+    
+    $sqlerro  = true;
+    $erro_msg = "O Servidor já possui afastamento para o período selecionado \\n Verifique afastamentos Anteriores";
   }
+  if ($sqlerro == false) {
+    $clafasta->alterar($r45_codigo);
+    $erro_msg = $clafasta->erro_msg;
+    if($clafasta->erro_status == "0"){
+      $sqlerro = true;
+    }
+  }
+  if ($sqlerro == false) {
 
+    $clafastaassenta   = new cl_afastaassenta;
+    $classenta         = new cl_assenta;
+    $sSqlAfastaAssenta = $clafastaassenta->sql_query_file(null, "h81_assenta", null, " h81_afasta = {$r45_codigo}");
+    $rsAfastaAssenta   = db_query($sSqlAfastaAssenta);
+    if(pg_num_rows($rsAfastaAssenta) > 0){
+
+      $oAfastaAssenta = db_utils::fieldsmemory($rsAfastaAssenta, 0);
+      $classenta->h16_dtterm = $clafasta->r45_dtreto;
+      $classenta->alterar($oAfastaAssenta->h81_assenta);
+      if($classenta->erro_status == "0") {
+        $sqlerro  = true;
+        $erro_msg = $classenta->erro_msg;
+      }
+    }
+  }
   if($sqlerro == false){
-    $arr_possiveis = Array(2,3,4,5,6,7,8);
+    $arr_possiveis = Array(2,3,4,5,6,7,8,10,12);
     if(in_array($r45_situac,$arr_possiveis)){
 
       $result_pontofx = $clpontofx->sql_record($clpontofx->sql_query_file(db_anofolha(),db_mesfolha(),$r45_regist));
@@ -106,11 +143,13 @@ if(isset($alterar)){
           if(($dias_pagamento > 0 && 
 	      (
 	        ($r45_situac == 6 && $numrows_sau == 0) || 
+          ($r45_situac == 10 && $numrows_sau == 0) || 
+          ($r45_situac == 12 && $numrows_sau == 0) || 
 	        ($r45_situac == 5 && $numrows_mat == 0) ||
 	        ($r45_situac == 8 && $numrows_sau == 0) ||
             ($r45_situac == 3 && $numrows_aci == 0)
 	      ))
-	      || ($dias_pagamento > 0 && $r45_situac != 6 && $r45_situac != 5 && $r45_situac != 3 && $r45_situac != 8)
+	      || ($dias_pagamento > 0 && $r45_situac != 6 && $r45_situac != 10 && $r45_situac != 12 && $r45_situac != 5 && $r45_situac != 3 && $r45_situac != 8)
 	    ){
 //	  echo "<br><br>".'dias pagamento1  '.$dias_pagamento.' rubsau '.$numrows_sau.'  rubaci '.$numrows_aci;
             $result_procp = $clrhrubricas->sql_record($clrhrubricas->sql_query_file(null,db_getsession('DB_instit'),"rh27_propq","","rh27_rubric = '".$r90_rubric."' and rh27_calcp = 't'"));
@@ -155,6 +194,8 @@ if(isset($alterar)){
             }
           }else if( $r45_situac == 2 || $r45_situac == 7    || 
                    ($r45_situac == 6  && $numrows_sau == 0) ||
+                   ($r45_situac == 10  && $numrows_sau == 0) ||
+                   ($r45_situac == 12  && $numrows_sau == 0) ||
                    ($r45_situac == 5  && $numrows_mat == 0) ||  
                    ($r45_situac == 8  && $numrows_sau == 0) ||
                    ($r45_situac == 3  && $numrows_aci == 0)   ){
@@ -172,11 +213,22 @@ if(isset($alterar)){
 //exit;
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-//   die($clafasta->sql_query($chavepesquisa));
-   $result = $clafasta->sql_record($clafasta->sql_query($chavepesquisa));
-   db_fieldsmemory($result,0);
-   $db_botao = true;
+  $db_opcao = 2;
+  $result = $clafasta->sql_record($clafasta->sql_query($chavepesquisa));
+  db_fieldsmemory($result,0);
+  $sWhereVerificaAfastamento = "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} ";
+  $sWhereVerificaAfastamento .= " and r45_dtafas >= '{$r45_dtreto}' ";
+  $sWhereVerificaAfastamento .= " and r45_codigo != '{$r45_codigo}' ";
+
+  $sSqlVerificaAfastamento   = $clafasta->sql_query_file(null, "r45_codigo", null, $sWhereVerificaAfastamento);
+  $rsVerificaAfastamento     = $clafasta->sql_record($sSqlVerificaAfastamento);
+  if(pg_num_rows($rsVerificaAfastamento) > 0){
+    
+    db_msgbox("Este afastamento não pode ser alterado \\n Existem afastamentos posteriores  no mês para este servidor");
+    $db_opcao = 22;
+  } else {
+    $db_botao = true;
+  }
 }
 ?>
 <html>

@@ -581,7 +581,16 @@ if ($clempparametro->numrows > 0){
                                     echo "
                                     </td>
                                     <td align='center'  class='bordas_corp' width='15%'>";
-                                        db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_taxa == 'f') ? 1 : 3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
+                                    //Tabela = Valor total Desbloqueado;
+                                    // Se for Taxa = Valor Total Bloqueado;
+                                    // Se for Outros +Item quantidade = Valor total Bloqueado;
+                                    // Se for Outros +Item +serviço +Controlado por VALOR = Valor Total tbm bloqueado
+                                    // 23/04/2021
+                                    if($pc01_tabela == "t"){
+                                        db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',1,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
+                                    }else{
+                                        db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
+                                    }
                                     echo"
                                     </td>
                                 </tr>";

@@ -31,6 +31,9 @@ $clrotulo->label("j69_descr");
 $clrotulo->label("j01_numcgm");
 $clrotulo->label("j107_sequencial");
 $clrotulo->label("j107_nome");
+
+db_sel_instit(null, "db21_usadistritounidade");
+
 ?>
 <script>
 function js_verinome(){
@@ -101,6 +104,14 @@ function js_verinome(){
 	   db_input('j40_refant',20,$Ij40_refant,true,'text',$db_opcao,"")
 	   ?></td>
 			</tr>
+      <?if($db21_usadistritounidade == 't'){?>
+      <tr>
+        <td nowrap title="<?=@$Tj01_unidade?>"><?=@$Lj01_unidade?></td>
+        <td><?
+     db_input('j01_unidade',20,$Ij01_unidade,true,'text',$db_opcao,"")
+     ?></td>
+      </tr>
+      <?}?>
 			<tr>
 				<td>
 					<?

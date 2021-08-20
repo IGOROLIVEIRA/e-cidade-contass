@@ -143,10 +143,11 @@ if (isset($setor) && $setor != "") {
   $and   = " and ";
 }
 
-$sql  = "select distinct face.*, j14_nome                       ";
+$sql  = "select distinct face.*,facevalor.*, j14_nome                       ";
 $sql .= "  from face                                            ";
-$sql .= "       inner join carface  on j38_face   = j37_face    ";
-$sql .= "       inner join caracter on j31_codigo = j38_caract  ";
+$sql .= "       left join carface  on j38_face   = j37_face    ";
+$sql .= "       left join caracter on j31_codigo = j38_caract  ";
+$sql .= "       left JOIN facevalor on j81_face = j37_face and j81_anousu = ".db_getsession('DB_anousu');
 
 $testruas = "";
 if ($ruas != "") {
@@ -164,7 +165,7 @@ if ($ruas != "") {
   }
 }
 
-$sql   .= " inner join ruas on j37_codigo = j14_codigo ";
+$sql   .= " left join ruas on j37_codigo = j14_codigo ";
 $where  = " {$comcar} {$semcar} {$testruas} {$setor}";
 $where  = (trim($where) != "" ? " where " . $where : "");
 $sql   .= $where;
@@ -202,11 +203,11 @@ $sSql  = "select distinct * ";
 $sSql .= "  from (select * ";
 $sSql .= "          from (select * ";
 $sSql .= "                  from ({$sql}) as tudo ";
-$sSql .= "                       inner join (select j38_face, ";
+$sSql .= "                       left join (select j38_face, ";
 $sSql .= "                                          sum(j31_pontos) as j31_pontos ";
 $sSql .= "                                     from carface ";
-$sSql .= "                                          inner join face     on j37_face          = j38_face ";
-$sSql .= "                                          inner join caracter on j38_caract        = j31_codigo ";
+$sSql .= "                                          left join face     on j37_face          = j38_face ";
+$sSql .= "                                          left join caracter on j38_caract        = j31_codigo ";
 $sSql .= "                                    group by j38_face) as pontos ";
 $sSql .= "                               on tudo.j37_face = pontos.j38_face {$pontuacao} ";
 $sSql .= "               ) as ordem ";
@@ -239,7 +240,9 @@ if ($numrows > 0) {
   $pdf->Cell(22,  $tam, "QUADRA"     ,1 ,0 , "C" ,1);
   $pdf->Cell(20,  $tam, "COD.LOG"    ,1 ,0 , "C" ,1);
   $pdf->Cell($iLarguraLinhaRua, $tam, "LOGRADOURO" ,1 ,0 , "C" ,1);
-  $pdf->Cell(15,  $tam, "LADO"       ,1 ,0 , "C" ,1);
+  $pdf->Cell(15,  $tam, "Ano"       ,1 ,0 , "C" ,1);
+  $pdf->Cell(15,  $tam, "Val Terr"       ,1 ,0 , "C" ,1);
+  $pdf->Cell(15,  $tam, "Val Constr"       ,1 ,0 , "C" ,1);
   $pdf->Cell(20,  $tam, "PONTUAÇÃO"  ,1 ,0 , "C" ,1);
 
   if (isset($j32_descr) && $j32_descr != "") {
@@ -258,7 +261,9 @@ if ($numrows > 0) {
     $pdf->Cell(22, $tam, $j37_quadra ,1 ,0 ,"C" ,0);
     $pdf->Cell(20, $tam, $j37_codigo ,1 ,0 ,"C" ,0);
     $pdf->Cell($iLarguraLinhaRua, $tam, $j14_nome   ,1 ,0 ,"L" ,0);
-    $pdf->Cell(15, $tam, $j37_lado   ,1 ,0 ,"C" ,0);
+    $pdf->Cell(15, $tam, $j81_anousu   ,1 ,0 ,"C" ,0);
+    $pdf->Cell(15, $tam, $j81_valorterreno   ,1 ,0 ,"C" ,0);
+    $pdf->Cell(15, $tam, $j81_valorconstr   ,1 ,0 ,"C" ,0);
     $pdf->Cell(20, $tam, $j31_pontos, 1, 0, "C", 0);
 
     if (isset($j32_descr) && $j32_descr != "") {
@@ -276,7 +281,9 @@ if ($numrows > 0) {
       $pdf->Cell(22, $tam, "QUADRA"     ,1 ,0 , "C" ,1);
       $pdf->Cell(20, $tam, "COD.LOG"    ,1 ,0 , "C" ,1);
       $pdf->Cell($iLarguraLinhaRua, $tam, "LOGRADOURO" ,1 ,0 , "C" ,1);
-      $pdf->Cell(15, $tam, "LADO"       ,1 ,0 , "C" ,1);
+      $pdf->Cell(15, $tam, "Ano"       ,1 ,0 , "C" ,1);
+      $pdf->Cell(15,  $tam, "Val Terr"       ,1 ,0 , "C" ,1);
+      $pdf->Cell(15,  $tam, "Val Constr"       ,1 ,0 , "C" ,1);
       $pdf->Cell(20,  $tam, "PONTUAÇÃO"  ,1 ,0 , "C" ,1);
 
       if (isset($j32_descr) && $j32_descr != "") {

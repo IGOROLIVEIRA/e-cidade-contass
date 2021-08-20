@@ -102,4 +102,50 @@ if($db_opcao==1){
         }
         ?>
     }
+
+    function js_ValidaCampos(obj, tipo, nome) {
+
+        if (tipo == 1) {
+            
+            var expr = new RegExp("[^0-9]+");
+            
+            if (obj.value.match(expr)) {
+            
+                if (obj.value!= '') {
+                
+                    obj.disabled = true;
+                    alert(nome+" deve ser preenchido somente com números!");
+                    obj.disabled = false;
+                    obj.value = '';
+                    obj.focus();
+                    return false;
+
+                }
+
+            }
+
+        } else if (tipo == 4) {
+
+            if( js_countOccurs(obj.value, '.') > 1 ) {
+                obj.value = js_strToFloat(obj.value);
+            }
+
+            if( js_countOccurs(obj.value, ',') > 0 ) {
+                obj.value = obj.value.replace(',', '.');
+            }
+
+            var regDecimal = /^(-|)(|[0-9]+)(|(\.|,)(|[0-9]+))$/;
+
+            if ( !regDecimal.test(obj.value) ) {
+                obj.disabled = true;
+                alert( nome + " deve ser preenchido somente com números decimais!" );
+                obj.disabled = false;
+                obj.value = '';
+                obj.focus();
+                return false;
+            }
+
+        }
+
+    }
 </script>

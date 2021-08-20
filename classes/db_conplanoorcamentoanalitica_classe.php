@@ -647,6 +647,8 @@ class cl_conplanoorcamentoanalitica {
 
     $sSQl = "select conplanoorcamentoanalitica.* 																										";
     $sSQl .= "  from conplanoorcamentoanalitica																												";
+    $sSQl .= "       inner join conplanoorcamento on conplanoorcamentoanalitica.c61_codcon = conplanoorcamento.c60_codcon   ";
+    $sSQl .= "                                    and conplanoorcamentoanalitica.c61_anousu = conplanoorcamento.c60_anousu  ";
     $sSQl .= "       left join conplanoorcamentoanalitica  proximoexercicio   												";
     $sSQl .= "                    on proximoexercicio.c61_reduz  = conplanoorcamentoanalitica.c61_reduz         		";
     $sSQl .= "                   and proximoexercicio.c61_instit = conplanoorcamentoanalitica.c61_instit           ";
@@ -654,6 +656,7 @@ class cl_conplanoorcamentoanalitica {
     $sSQl .= " where conplanoorcamentoanalitica.c61_anousu = {$iAnoAtual}                                          ";
     $sSQl .= "   and conplanoorcamentoanalitica.c61_instit = {$iIntinst}                                           ";
     $sSQl .= "   and proximoexercicio.c61_anousu is null                                              ";
+    $sSQl .= "   and substr(conplanoorcamento.c60_estrut,1,1) in ('3','4')  ";
 
     return $sSQl;
   }

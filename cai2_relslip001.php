@@ -223,8 +223,12 @@ function js_emite(){
                                         "11"=>"Depósito de Diversos - Recebimento",
                                         "12"=>"Depósito de Diversos - Estorno Recebimento",
                                         "13"=>"Depósito de Diversos - Pagamento",
-                                        "14"=>"Depósito de Diversos - Estorno Pagamento");
-                                db_select("tiposlip",$tiposlip,true,2); ?>
+                                        "14"=>"Depósito de Diversos - Estorno Pagamento",
+                                        "15"=> "Reconhecimento de Perdas",
+                                        "16"=> "Reconhecimento de Perdas - Estorno",
+                                        "17"=> "Reconhecimento de Ganhos RPPS",
+                                        "18"=> "Reconhecimento de Ganhos RPPS - Estorno");
+                                                            db_select("tiposlip",$tiposlip,true,2); ?>
                                 <script>
                                     document.getElementById('tiposlip').style.width='99.7%';
                                 </script>

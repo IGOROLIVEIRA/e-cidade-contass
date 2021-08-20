@@ -98,6 +98,28 @@ if (isset($incluir) && !$lErro) {
   }
 
   if ($sqlerro == false) {
+    $oDaoRhlotavinc = db_utils::getDao('rhlotavinc');
+    $rsRhlotavinc = $oDaoRhlotavinc->sql_record($oDaoRhlotavinc->sql_query_file(null, "rh25_recurso", null, "rh25_codigo = {$rh02_lota} AND rh25_anousu = ".db_getsession("DB_anousu")));
+    if (in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118','1118','218','166', '266','119','1119','219','167', '267')) &&
+      ($rh02_tipcatprof == '0' || $rh02_segatuacao == '0') ) {
+      $sqlerro  = true;
+      $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuação devem ser preenchidos';
+    } else
+    if (in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118','1118','218','166', '266')) &&
+      $rh02_art61ldb1 == 'f' &&
+      $rh02_art61ldb2 == 'f' &&
+      $rh02_art61ldb3 == 'f' &&
+      $rh02_art61ldb4 == 'f' &&
+      $rh02_art61ldb5 == 'f' &&
+      $rh02_art1leiprestpsiccologia == 'f' &&
+      $rh02_art1leiprestservsocial == 'f') {
+      $sqlerro  = true;
+      $erro_msg = 'Pelo menos uma das opções do Siope deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
+';
+    }
+  }
+
+  if ($sqlerro == false) {
     $clrhpessoalmov->rh02_diasgozoferias = $rh02_diasgozoferias;
     $clrhpessoalmov->rh02_funcao         = $rh02_funcao;
     $clrhpessoalmov->rh02_instit         = db_getsession("DB_instit");
@@ -275,6 +297,28 @@ if (isset($incluir) && !$lErro) {
   } catch (Exception $oException) {
     $erro_msg = "Erro Laudo Portador de Moléstia: ".$oException->getMessage();
     $sqlerro=true;
+  }
+
+  if ($sqlerro == false) {
+    $oDaoRhlotavinc = db_utils::getDao('rhlotavinc');
+    $rsRhlotavinc = $oDaoRhlotavinc->sql_record($oDaoRhlotavinc->sql_query_file(null, "rh25_recurso", null, "rh25_codigo = {$rh02_lota} AND rh25_anousu = ".db_getsession("DB_anousu")));
+    if (in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118','1118','218','166','266','119','1119','219','167', '267')) &&
+      ($rh02_tipcatprof == '0' || $rh02_segatuacao == '0') ) {
+      $sqlerro  = true;
+      $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuação devem ser preenchidos';
+    } else
+    if (in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118','1118','218','166', '266')) &&
+      $rh02_art61ldb1 == 'f' &&
+      $rh02_art61ldb2 == 'f' &&
+      $rh02_art61ldb3 == 'f' &&
+      $rh02_art61ldb4 == 'f' &&
+      $rh02_art61ldb5 == 'f' &&
+      $rh02_art1leiprestpsiccologia == 'f' &&
+      $rh02_art1leiprestservsocial == 'f') {
+      $sqlerro  = true;
+      $erro_msg = ' Pelo menos uma das opções do Siope deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
+';
+    }
   }
 
   if ($sqlerro == false) {
@@ -655,9 +699,11 @@ $limparbanco = false;
 if(isset($rh02_regist)){
   $instit = db_getsession("DB_instit");
   $result = $clrhpessoalmov->sql_record($clrhpessoalmov->sql_query(null,null,"*","","rh02_regist=$rh02_regist and rh02_anousu=$rh02_anousu and rh02_mesusu=$rh02_mesusu and rh02_instit = $instit "));
-  if($clrhpessoalmov->numrows>0){
-    db_fieldsmemory($result,0);
+  if($clrhpessoalmov->numrows>0) {
     $opcao = "alterar";
+  }
+  if($clrhpessoalmov->numrows>0 && $sqlerro == false){
+    db_fieldsmemory($result,0);
     $result_banco = $clrhpesbanco->sql_record($clrhpesbanco->sql_query($rh02_seqpes));
     if($clrhpesbanco->numrows>0){
       db_fieldsmemory($result_banco,0);
@@ -792,6 +838,7 @@ if (isset($rh02_salari)) {
       db_app::load("dbmessageBoard.widget.js");
       db_app::load("dbcomboBox.widget.js");
       db_app::load("prototype.maskedinput.js");
+      db_app::load("DBToogle.widget.js");
     ?>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>

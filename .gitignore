@@ -35,3 +35,4 @@ extension/log/application.log
 .gitignore
 extension/log/error.log
 extension/log/error.log
+composer.lock

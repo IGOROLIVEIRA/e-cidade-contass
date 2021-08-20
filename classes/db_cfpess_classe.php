@@ -161,6 +161,8 @@ class cl_cfpess {
   var $r11_avisoprevioferias = null; 
   var $r11_avisoprevio13ferias = null; 
   var $r11_feriaspremio = null; 
+  var $r11_dtfechamento = null; 
+  var $r11_diasliberarcontracheque = null; 
 
   /**
    * Cria propriedade com as variáveis do arquivo.
@@ -259,6 +261,8 @@ class cl_cfpess {
     r11_avisoprevioferias = varchar(4) = Aviso Prévio Férias
     r11_avisoprevio13ferias = varchar(4) = Aviso Prévio 1/3 Férias
     r11_feriaspremio = varchar(4) = Férias Prêmio
+    r11_dtfechamento = date = Data fechamento da folha
+    r11_diasliberarcontracheque = int4 = Dias Liberação Contra-cheque
   ";
 
   /**
@@ -419,6 +423,7 @@ class cl_cfpess {
        $this->r11_avisoprevioferias = ($this->r11_avisoprevioferias == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_avisoprevioferias"]:$this->r11_avisoprevioferias);
        $this->r11_avisoprevio13ferias = ($this->r11_avisoprevio13ferias == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_avisoprevio13ferias"]:$this->r11_avisoprevio13ferias);
        $this->r11_feriaspremio = ($this->r11_feriaspremio == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_feriaspremio"]:$this->r11_feriaspremio);
+       $this->r11_diasliberarcontracheque = ($this->r11_diasliberarcontracheque == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_diasliberarcontracheque"]:$this->r11_diasliberarcontracheque);
      }else{
        $this->r11_instit = ($this->r11_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_instit"]:$this->r11_instit);
        $this->r11_anousu = ($this->r11_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_anousu"]:$this->r11_anousu);
@@ -520,6 +525,9 @@ class cl_cfpess {
      }
      if($this->r11_modanalitica == null ){ 
        $this->r11_modanalitica = "0";
+     }
+     if($this->r11_diasliberarcontracheque == null ){ 
+       $this->r11_diasliberarcontracheque = "0";
      }
      if($this->r11_viravalemes == null ){ 
        $this->erro_sql = " Campo Virada Mensal de Vales não informado.";
@@ -744,6 +752,7 @@ class cl_cfpess {
                                       ,r11_avisoprevioferias 
                                       ,r11_avisoprevio13ferias
                                       ,r11_feriaspremio
+                                      ,r11_diasliberarcontracheque
                        )
                 values (
                                 $this->r11_instit 
@@ -839,6 +848,7 @@ class cl_cfpess {
                                ,'$this->r11_avisoprevioferias' 
                                ,'$this->r11_avisoprevio13ferias' 
                                ,'$this->r11_feriaspremio' 
+                               ,$this->r11_diasliberarcontracheque
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -853,6 +863,15 @@ class cl_cfpess {
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
+       $this->erro_status = "0";
+       $this->numrows_incluir= 0;
+       return false;
+     }
+     $resultUpate = $this->updateDtFechamento();
+     if($resultUpate==false) { 
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg  .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_incluir= 0;
        return false;
@@ -1549,6 +1568,10 @@ class cl_cfpess {
      }
      if(trim($this->r11_feriaspremio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r11_feriaspremio"])){ 
        $sql  .= $virgula." r11_feriaspremio = '$this->r11_feriaspremio' ";
+       $virgula = ",";
+     }
+     if(trim($this->r11_diasliberarcontracheque)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r11_diasliberarcontracheque"])){ 
+       $sql  .= $virgula." r11_diasliberarcontracheque = '$this->r11_diasliberarcontracheque' ";
        $virgula = ",";
      }
      $sql .= " where ";
@@ -3139,6 +3162,15 @@ class cl_cfpess {
     $sSql .= "       r11_instit = {$oInstituicao->getCodigo()}                                          ";
     
     return $sSql;
+  }
+
+  /**
+   * Atualiza data fechamento do cfpess do mes anterior
+   */
+  public function updateDtFechamento($anousu, $mesusu, $instit)
+  {
+    $sql = "UPDATE cfpess SET r11_dtfechamento = '".date('Y-m-d')."' WHERE (r11_anousu,r11_mesusu,r11_instit) = ({$anousu},{$mesusu},{$instit})";
+    return db_query($sql);
   }
   
 }

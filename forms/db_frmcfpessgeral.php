@@ -348,6 +348,16 @@ $clrotulo->label("c50_descr");
               <?php endif; ?>
             </td>
           </tr>
+          <tr>
+            <td nowrap align="left" title="<?=@$Tr11_diasliberarcontracheque?>">
+              <?=@$Lr11_diasliberarcontracheque?>
+            </td>
+            <td> 
+              <?
+              db_input('r11_diasliberarcontracheque',4,$Ir11_diasliberarcontracheque,true,'text',$db_opcao,"")
+              ?>
+            </td>
+          </tr>
         </table>
       </fieldset>
     </td>

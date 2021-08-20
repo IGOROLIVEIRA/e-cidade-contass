@@ -80,10 +80,9 @@ procedimentos
 
 
   /*VALIDACOES NECESSÁRIAS*/
-  $rsNumSequenciaMes = db_query("SELECT rh44_seqpes
+  $rsNumSequenciaMes = db_query("SELECT rh02_seqpes AS rh44_seqpes
     FROM rhpesbanco
     RIGHT JOIN rhpessoalmov ON rh02_seqpes = rh44_seqpes
-    JOIN contabancaria ON  rh44_conta = db83_conta
     WHERE rh02_anousu = '$rh02_anousu'
     AND rh02_mesusu = '$rh02_mesusu'
     AND rh02_regist = '$rh02_regist' ");
@@ -104,53 +103,12 @@ procedimentos
 
   }
   $erro_msg = $clrhpesbanco->erro_msg;
-  $clrhpesbanco->rh44_seqpes;
   echo "<script>";
   echo "alert('$erro_msg')";
   echo "</script>";
 
   $rsContasDepoisUpdate = db_query($sContasCadastradas);
   $iContasDepoisUpdate = pg_num_rows($rsContasDepoisUpdate);
-
-  $sContaVinculada = "SELECT rh138_contabancaria,db83_bancoagencia
-  FROM rhpessoalmov
-  JOIN rhpesbanco ON rh02_seqpes = rh44_seqpes
-  JOIN contabancaria ON  rh44_conta = db83_conta
-  JOIN rhpessoalmovcontabancaria ON rh02_seqpes = rh138_rhpessoalmov AND rh138_contabancaria = db83_sequencial WHERE rh02_anousu = '$rh02_anousu'
-  AND rh02_mesusu = '$rh02_mesusu'
-  AND rh02_regist = '$rh02_regist'
-  ";
-  $rsContaVinculada = db_query($sContaVinculada);
-  $rsContaVinculada = db_utils::fieldsMemory($rsContaVinculada);
-
-  if($iContasDepoisUpdate>$iContasAntesUpdate){
-   $sUpdate = "UPDATE contabancaria SET
-   db83_conta = $HinputNumeroConta,
-   db83_dvconta = $HinputDvConta,
-   db83_identificador = '0',
-   db83_codigooperacao = $HinputOperacao,
-   db83_tipoconta = $HcboTipoConta
-   WHERE
-   db83_sequencial = $rsContaVinculada->rh138_contabancaria
-   ";
-
-
- }else {
-  $sUpdate = "UPDATE contabancaria SET
-  db83_conta = $HinputNumeroConta,
-  db83_dvconta = $HinputDvConta,
-  db83_identificador = '0',
-  db83_codigooperacao = $HinputOperacao,
-  db83_tipoconta = $HcboTipoConta
-  WHERE
-  db83_sequencial = $rsContaVinculada->rh138_contabancaria
-  ";
-
-}
-
-
-
-$sUpdateDigito = "UPDATE bancoagencia SET db89_digito = {$HinputDvAgencia} WHERE db89_sequencial = $rsContaVinculada->db83_bancoagencia";
 
     db_query($sUpdate);
     $sAtualizaRhmov = "UPDATE rhpessoalmov SET rh02_fpagto = {$rh02_fpagto}  WHERE rh02_regist = {$rh02_regist} AND rh02_anousu = {$rh02_anousu} AND rh02_mesusu = {$rh02_mesusu} ";

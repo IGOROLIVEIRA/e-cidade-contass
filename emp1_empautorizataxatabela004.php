@@ -292,6 +292,10 @@ $aCflicitas = db_utils::getCollectionByRecord($cflicitas);
 if(isset($incluir)) {
   if($sqlerro==true){
     db_msgbox($erro_msg);
+    echo "<script>
+        var codlicitacao = document.form1.e54_codlicitacao.value;
+        js_pesquisa_fornecedor(codlicitacao);
+    </script>";
     $db_botao=true;
     if(isset($incluir) && $clempautoriza->erro_campo!=""){
       echo "<script> document.form1.".$clempautoriza->erro_campo.".style.backgroundColor='#99A9AE';</script>";

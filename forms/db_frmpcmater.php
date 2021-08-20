@@ -69,13 +69,13 @@ function js_executaIframe(val) {
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tpc01_libaut?>">       <?=@$Lpc01_libaut?>    </td>
-    <td nowrap> <?
+    <!--<td nowrap title="<?//=@$Tpc01_libaut?>">       <?//=@$Lpc01_libaut?>    </td>
+    <td nowrap>--> <?
     $arrlibaut_truefalse = array('t'=>'Sim','f'=>'Não');
-    db_select("pc01_libaut",$arrlibaut_truefalse,true,$db_opcao);
+    db_select("pc01_libaut",$arrlibaut_truefalse,true,$db_opcao,"Hidden");
     ?>
-    <?=$Lpc01_ativo?>
-    <?
+    <td nowrap title="<?//=@$Tpc01_libaut?>"> <?=$Lpc01_ativo?> </td>
+    <td nowrap> <?
     $arr_truefalse = array('f'=>'Não','t'=>'Sim');
     db_select("pc01_ativo",$arr_truefalse,true,$db_opcao);
     ?>
@@ -92,53 +92,46 @@ function js_executaIframe(val) {
             db_select("pc01_servico", $x, true, $db_opcao);
         }
     ?>
-    <?=$Lpc01_veiculo?>
+    <?//=$Lpc01_veiculo?>
     <?
     $aVeic = array("f"=>"Não","t"=>"Sim");
-    db_select("pc01_veiculo",$aVeic,true,$db_opcao);
+    db_select("pc01_veiculo",$aVeic,true,$db_opcao,"hidden");
     ?>
-
-    </td>
-    <tr>
-      <td>
-        <?
+    <?
         echo $Lpc01_fraciona;
-        ?>
-      </td>
-      <td>
-        <?
+    ?>
+    <?
         $aFrac = array("f"=>"Não","t"=>"Sim");
         db_select("pc01_fraciona",$aFrac,true,$db_opcao);
         ?>
-      </td>
-    </tr>
+    </td>
 
     <tr>
       <td nowrap>
         <?
-        echo $Lpc01_validademinima;
+        //echo $Lpc01_validademinima;
         ?>
       </td>
       <td nowrap>
        <?
         $aValMin = array("f"=>"Não","t"=>"Sim");
-        db_select("pc01_validademinima",$aValMin,true,$db_opcao);
+        db_select("pc01_validademinima",$aValMin,true,$db_opcao,"hidden");
         ?>
 
 
         <?
-        echo $Lpc01_obrigatorio;
+        //echo $Lpc01_obrigatorio;
 
         $aPObrigatorio = array("f"=>"Não","t"=>"Sim");
-        db_select("pc01_obrigatorio", $aPObrigatorio ,true,$db_opcao);
+        db_select("pc01_obrigatorio", $aPObrigatorio ,true,$db_opcao,"hidden");
         ?>
 
         <?
-        echo $Lpc01_liberaresumo;
+        //echo $Lpc01_liberaresumo;
 
         $aLiberarResumo = array("t" => "Sim",
                                 "f" => "Não");
-        db_select("pc01_liberaresumo", $aLiberarResumo, true, $db_opcao);
+        db_select("pc01_liberaresumo", $aLiberarResumo, true, $db_opcao,"hidden");
         ?>
       </td>
 
@@ -234,7 +227,7 @@ function js_executaIframe(val) {
    <? endif;    ?>
 
   <!--OC3770-->
-    <tr>
+    <!--<tr>
       <td>
         <strong>
            Tabela
@@ -260,7 +253,7 @@ function js_executaIframe(val) {
         ?>
       </td>
     </tr>
-  <tr>
+  <tr> -->
     <td>
       <strong>Material Utilizado em Obras/serviços?</strong>
     </td>
@@ -269,8 +262,31 @@ function js_executaIframe(val) {
       $aObra = array("0"=>"Selecione","f"=>"Não","t"=>"Sim");
       db_select("pc01_obras",$aObra,true,$db_opcao,"");
       ?>
+      <strong>
+           Tabela
+        <strong>
+        <?
+        $aTabela = array("f"=>"Não","t"=>"Sim");
+        db_select("pc01_tabela",$aTabela,true,$db_opcao,"style=width:90px;");
+        ?>
+
+        <strong>
+           Taxa
+        <strong>
+        <?
+        $aTaxa = array("f"=>"Não","t"=>"Sim");
+        db_select("pc01_taxa",$aTaxa,true,$db_opcao,"style=width:90px;");
+        ?>
     </td>
   </tr>
+  <? if($db_opcao == 22 || $db_opcao == 2):?>
+    <tr>
+      <td><b>Justificativa da Alteração:</b></td>
+      <td>
+      <?= db_textarea('pc01_justificativa', 0, 75, '', true, 'text', $db_opcao, "onkeyup = 'return js_validaCaracteres(this.value, pc01_justificativa.id)';", '', '', '100'); ?>
+      </td>
+    </tr>
+  <? endif; ?>
     <!--FIM OC3770 -->
 
    <tr>
@@ -368,7 +384,13 @@ function js_mostrapcsubgrupo1(chave1,chave2){
   db_iframe_pcsubgrupo.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true','Pesquisa',true);
+  let filtra_atuais = false;
+  let opcao = <?=$db_opcao;?>;
+  
+  if(opcao != 1){
+      filtra_atuais = true;
+  } 
+  js_OpenJanelaIframe('top.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true&filtra_atuais='+filtra_atuais,'Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
 

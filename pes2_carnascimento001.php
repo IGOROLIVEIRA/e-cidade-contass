@@ -43,6 +43,9 @@ db_postmemory($HTTP_POST_VARS);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script src="scripts/strings.js"></script>
+<script src="scripts/prototype.js"></script>
+<script src="scripts/classes/DBViewTipoFiltrosFolha.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -100,6 +103,9 @@ db_postmemory($HTTP_POST_VARS);
 	</td>
       </tr>
   <tr>
+    <td colspan="2" id="containnerTipoFiltrosFolha"></td>
+  </tr>
+  <tr>
     <td colspan="2" align="center"> 
       <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
     </td>
@@ -113,10 +119,54 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </html>
 <script>
 function js_emite(){
+  var oQuery = {};
+  oQuery.iTipoRelatorio = $F('oCboTipoRelatorio');
+  oQuery.iTipoFiltro    = $F('oCboTipoFiltro');
+  var oTipoFiltro    = $F('oCboTipoFiltro');
+  /**
+   * Verifica se o tipo escolhido foi intervalo 
+   */
+  if (oTipoFiltro == 1) {
+     
+    oQuery.iIntervaloInicial = $F('InputIntervaloInicial');
+    oQuery.iIntervaloFinal   = $F('InputIntervaloFinal');
+  }
+
+  /**
+   * Verifica se o tipo escolhido foi seleção
+   */
+  if (oTipoFiltro == 2) {
+     
+    var aSelecionados = [];
+    var oTipoFiltros  = oTiposFiltrosFolha.getLancadorAtivo().getRegistros();
+
+    /**
+     * Percorre os itens selecionados no lancador
+     */
+    oTipoFiltros.each (function(oFiltro, iIndice) {
+      aSelecionados[iIndice] = oFiltro.sCodigo;
+    });
+     
+    oQuery.iRegistros = aSelecionados;
+  }
+
   query = "";
   query+='&data='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value;
-  query+='&data1='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value; 
+  query+='&data1='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value;
+  query+='&json=' + Object.toJSON(oQuery);
   jan = window.open('pes2_carnascimento002.php?ordem='+document.form1.ordem.value+'&ano='+document.form1.DBtxt23.value+'&mes='+document.form1.DBtxt25.value+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
+
+(function() {
+
+    /**
+     * Monta os componentes para o formulario
+     */
+    oTiposFiltrosFolha     = new DBViewFormularioFolha.DBViewTipoFiltrosFolha(<?=db_getsession("DB_instit")?>);
+    oTiposFiltrosFolha.sInstancia     = 'oTiposFiltrosFolha';
+
+    oTiposFiltrosFolha.show($('containnerTipoFiltrosFolha'));
+
+  })();
 </script>

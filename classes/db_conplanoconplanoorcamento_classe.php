@@ -511,5 +511,40 @@ class cl_conplanoconplanoorcamento {
         }
         return $sql;
     }
+
+    function sql_query_conplanoorcamento ( $c72_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from conplanoconplanoorcamento ";
+        $sql .= "      inner join conplanoorcamento  on  conplanoorcamento.c60_codcon = conplanoconplanoorcamento.c72_conplanoorcamento and  conplanoorcamento.c60_anousu = conplanoconplanoorcamento.c72_anousu";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($c72_sequencial!=null ){
+                $sql2 .= " where conplanoconplanoorcamento.c72_sequencial = $c72_sequencial ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
 }
 ?>

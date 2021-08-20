@@ -100,7 +100,7 @@ $oGet = db_utils::postMemory($_GET);
    	db_inicio_transacao();
 
    	if(!isset($oGet->codret) || $oGet->codret == ""){
-   		throw new Exception("CÛdigo do arquivo ({$oGet->codret}) de Retorno Inv·lido.");
+   		throw new Exception("C√≥digo do arquivo ({$oGet->codret}) de Retorno Inv√°lido.");
    	}
      $oInstit = new Instituicao(db_getsession('DB_instit'));
 
@@ -116,7 +116,7 @@ $oGet = db_utils::postMemory($_GET);
          throw new Exception(str_replace("\n", "", substr(pg_last_error(), 0, strpos(pg_last_error(), "CONTEXT"))));
        }
        /**
-        * Quando s„o importados as guias da JMS, as do ecidade ficam com numpre com tamanho < 6. Para n„o ficar lixo,
+        * Quando s√£o importados as guias da JMS, as do ecidade ficam com numpre com tamanho < 6. Para n√£o ficar lixo,
         * setamos o classi = true.
         */
        $sSqlIgnoraGuiasEcidade = "UPDATE disbanco
@@ -125,18 +125,6 @@ $oGet = db_utils::postMemory($_GET);
                                   AND disbanco.codret = {$oGet->codret}";
      }
 
-     if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO) {
-       $sSqlIntegracaoHLH = "UPDATE disbanco
-                              SET k00_numpre = debitos_jms.k00_numpre,
-                                  k00_numpar = debitos_jms.k00_numpar
-                              FROM debitos_hlh
-                              WHERE disbanco.k00_numpre = debitos_jms.k00_numpre_old
-                                  AND disbanco.k00_numpar = debitos_jms.k00_numpar_old
-                                  AND disbanco.codret = {$oGet->codret}";
-       if (!db_query($sSqlIntegracaoHLH)) {
-         throw new Exception(str_replace("\n", "", substr(pg_last_error(), 0, strpos(pg_last_error(), "CONTEXT"))));
-       }
-     }
    	$sSql = "select fc_executa_baixa_banco($oGet->codret,'".date("Y-m-d",db_getsession("DB_datausu"))."')";
    	$rsBaixaBanco = db_query($sSql);
    	if (!$rsBaixaBanco) {
@@ -156,7 +144,7 @@ $oGet = db_utils::postMemory($_GET);
    } catch (Exception $oErro) {
 
    	db_fim_transacao(true);
-   	$sMsgRetorno  = "Erro durante o processamento da ClassificaÁ„o da Baixa de Banco!\\n\\n{$oErro->getMessage()}";
+   	$sMsgRetorno  = "Erro durante o processamento da Classifica√ß√£o da Baixa de Banco!\\n\\n{$oErro->getMessage()}";
    	db_msgbox($sMsgRetorno);
 
    }

@@ -584,10 +584,17 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     foreach ($aEstimativas as $oEstimativa) {
 
       if ($oEstimativa->getCodigoDepartamento() == $iDepartamento) {
-        return $oEstimativa;
+        //return $oEstimativa;
+        $valor = $oEstimativa;
       }
     }
-    return false;
+    if($valor !=""){
+      return $valor;
+    }else{
+      return false;
+    }
+
+    
   }
 
   /**

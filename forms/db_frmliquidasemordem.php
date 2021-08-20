@@ -41,7 +41,6 @@ $clrotulo->label("e11_valoricms");
 $clrotulo->label("e12_descricao");
 $clrotulo->label("e10_descricao");
 $db_opcao = 1;
-$db_data  = date("d/m/Y");
 $clorctiporec->rotulo->label();
 $clempempenho->rotulo->label();
 $clorcdotacao->rotulo->label();
@@ -116,6 +115,16 @@ if (USE_PCASP) {
                 <td nowrap ><? db_input('e60_coddot', 13, $Ie60_coddot, true, 'text', 3); ?></td>
                 <td width="20"><?=db_ancora($Lo15_codigo,"",3)?></td>
                 <td nowrap><? db_input('o15_codigo', 5, $Io15_codigo, true, 'text', 3); db_input('o15_descr', 33, $Io15_descr, true, 'text', 3)?></td>
+              </tr>
+              <tr>
+                <td><?db_ancora("<b>Conta Pagadora:</b>","js_pesquisa_contapagadora(true);",1);?></td>
+                <td>
+                    <? 
+                    db_input("e83_conta",13,1,true,"text",4,"onchange='js_pesquisa_contapagadora(false);'"); 
+                    db_input("e83_codtipo",5,1,true,"hidden");
+                    ?>
+                </td>
+                <td colspan='3'><? db_input("e83_descr",50,"",true,"text",3); ?></td>
               </tr>
               <tr id='controlepit' style='display: <?=$iControlaPit==1?"":"none"?>'>
                 <td><b>Tipo da Entrada: </b></td>
@@ -397,8 +406,9 @@ if (USE_PCASP) {
     jan = window.open('emp2_emitenotaliq002.php?codordem='+codordem,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
     jan.moveTo(0,0);
   }
-  function js_pesquisa(){
-    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino','Pesquisa',true);
+  function js_pesquisa(){    
+    document.form1.reset();
+    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino','Pesquisa',true);
   }
   function js_preenchepesquisa(chave,chave2,chave3,chave4){
     r = true;
@@ -569,7 +579,6 @@ if (USE_PCASP) {
     $('historico').value   = obj.e60_resumo.urlDecode();
     $('saldodis').value    = obj.saldo_dis;
     $('e69_numnota').value = '';
-    $('e69_dtnota').value  = '<?=$db_data;?>';
     $('sEstrutElemento').value = obj.sEstrutural;
     saida = '';
     $('dados').innerHTML   = '';
@@ -960,6 +969,7 @@ if (USE_PCASP) {
       oParam.e03_numeroprocesso = encodeURIComponent($F('e03_numeroprocesso'));
       oParam.verificaChave = 1;
       oParam.e50_compdesp = $F('e50_compdesp');
+      oParam.e83_codtipo  = $F('e83_codtipo');  
 
 
       var oInfoNota                      = new Object();
@@ -1398,4 +1408,43 @@ if (USE_PCASP) {
     }
 
   }
+
+    function js_pesquisa_contapagadora(mostra) {
+	
+        if (mostra==true) {
+            js_OpenJanelaIframe('top.corpo','db_iframe_empagetipo','func_empagetipo.php?e60_numemp='+$('e60_numemp').value+'&funcao_js=parent.js_mostracontapagadora1|e83_codtipo|e83_conta|e83_descr','Pesquisa',true);
+        } else {
+        
+            if ($('e83_conta').value != '') { 
+                js_OpenJanelaIframe('top.corpo','db_iframe_empagetipo','func_empagetipo.php?pesquisa_chave='+$('e83_conta').value+'&e60_numemp='+$('e60_numemp').value+'&e83_conta='+$('e83_conta').value+'&funcao_js=parent.js_mostracontapagadora','Pesquisa',false);
+            } else {
+                $('e83_descr').value    = ''; 
+                $('e83_codtipo').value  = '';
+            }
+        }
+
+    }
+
+    function js_mostracontapagadora(chave1,chave2,erro) {
+        
+        $('e83_descr').value    = chave1; 
+        $('e83_codtipo').value  = chave2; 
+        if (erro == true) { 
+            
+            $('e83_codtipo').value  = ''; 
+            $('e83_conta').value    = '';
+            $('e83_codtipo').focus(); 
+
+        }
+    
+    }
+
+    function js_mostracontapagadora1(chave1,chave2,chave3) {
+            
+        $('e83_codtipo').value  = chave1;  
+        $('e83_conta').value    = chave2;  
+        $('e83_descr').value    = chave3;
+        db_iframe_empagetipo.hide();
+
+    }
 </script>

@@ -34,6 +34,7 @@ require_once("classes/db_empempitem_classe.php");
 require_once("classes/db_empparametro_classe.php");
 require_once("classes/db_cgmalt_classe.php");
 require_once("classes/db_pcforneconpad_classe.php");
+require_once("classes/db_emite_nota_empenho.php");
 
 /*
  * Configurações GED
@@ -61,6 +62,7 @@ $clempautitem       = new cl_empautitem;
 $clcgmalt           = new cl_cgmalt;
 $cldb_pcforneconpad = new cl_pcforneconpad;
 $clempempitem       = new cl_empempitem;
+$clemite_nota_emp   = new cl_emite_nota_empenho;
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //db_postmemory($HTTP_SERVER_VARS,2);
@@ -79,36 +81,37 @@ db_fieldsmemory($resultpref, 0);
 
 $anousu = db_getsession("DB_anousu");
 $dbwhere = '1=1';
-if (isset($e60_numemp) && $e60_numemp != '') {
-  $dbwhere     = " e60_numemp = $e60_numemp ";
-  $sql         = "select e60_anousu as anousu from empempenho where $dbwhere";
-  $res_empenho = @db_query($sql);
-  $numrows_empenho = @pg_numrows($res_empenho);
-  if ($numrows_empenho != 0) {
-    db_fieldsmemory($res_empenho, 0);
-  }
-} else if ((isset($e60_codemp) && $e60_codemp != '') && (isset($e60_codemp_fim) && $e60_codemp_fim != '')) {
-  $arr = explode("/", $e60_codemp);
-  $arr2 = explode("/", $e60_codemp_fim);
-  if (count($arr) == 2  && isset($arr[1]) && $arr[1] != '') {
-    $dbwhere_ano = " and e60_anousu = " . $arr[1];
-    $anousu = $arr[1];
-  } else {
-    $dbwhere_ano = " and e60_anousu = " . db_getsession("DB_anousu");
-  }
-  $dbwhere = "e60_codemp::integer >=" . $arr[0] . ". and e60_codemp::integer <='" . $arr2[0] . "'$dbwhere_ano";
-} else if (isset($e60_codemp) && $e60_codemp != '') {
-  $arr = explode("/", $e60_codemp);
-  if (count($arr) == 2  && isset($arr[1]) && $arr[1] != '') {
-    $dbwhere_ano = " and e60_anousu = " . $arr[1];
-    $anousu = $arr[1];
-  } else {
-    $dbwhere_ano = " and e60_anousu = " . db_getsession("DB_anousu");
-  }
-  $dbwhere = "e60_codemp='" . $arr[0] . "'$dbwhere_ano";
-} else {
-  if (isset($dtini_dia)) {
-    $dbwhere = " e60_emiss >= '$dtini_ano-$dtini_mes-$dtini_dia'";
+if(isset($e60_numemp) && $e60_numemp != ''){
+    $dbwhere     = " e60_numemp = $e60_numemp ";
+    $sql         = "select e60_anousu as anousu from empempenho where $dbwhere";
+    $res_empenho = @db_query($sql);
+    $numrows_empenho = @pg_numrows($res_empenho);
+    if ($numrows_empenho != 0){
+        db_fieldsmemory($res_empenho,0);
+    }
+} else if ((isset($e60_codemp) && $e60_codemp !='') && (isset($e60_codemp_fim) && $e60_codemp_fim !='')){
+    $arr = split("/",$e60_codemp);
+    $arr2 = split("/",$e60_codemp_fim);
+    if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
+        $dbwhere_ano = " and e60_anousu = ".$arr[1];
+        $anousu = $arr[1];
+    }else{
+        $dbwhere_ano = " and e60_anousu = ".db_getsession("DB_anousu");
+    }
+    $dbwhere = "e60_codemp::integer >=".$arr[0]." and e60_codemp::integer <=".$arr2[0]."$dbwhere_ano";
+}else if (isset($e60_codemp) && $e60_codemp !=''){
+    $arr = split("/",$e60_codemp);
+    if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
+        $dbwhere_ano = " and e60_anousu = ".$arr[1];
+        $anousu = $arr[1];
+    }else{
+        $dbwhere_ano = " and e60_anousu = ".db_getsession("DB_anousu");
+    }
+    $dbwhere = "e60_codemp='".$arr[0]."'$dbwhere_ano";
+
+}else{
+    if( isset($dtini_dia) ){
+        $dbwhere = " e60_emiss >= '$dtini_ano-$dtini_mes-$dtini_dia'";
 
     if (isset($dtfim_dia)) {
       $dbwhere .= " and e60_emiss <= '$dtfim_ano-$dtfim_mes-$dtfim_dia'";
@@ -123,92 +126,7 @@ if (isset($listacgm) && $listacgm != '') {
     $dbwhere .= "and cgm.z01_numcgm not in ($listacgm)";
 }
 
-$sqlemp  = " SELECT empempenho.*, ";
-$sqlemp .= "        cgm.*, ";
-$sqlemp .= "        o58_orgao, ";
-$sqlemp .= "        o40_descr, ";
-$sqlemp .= "        o58_unidade, ";
-$sqlemp .= "        o41_descr, ";
-$sqlemp .= "        o58_funcao, ";
-$sqlemp .= "        o52_descr, ";
-$sqlemp .= "        o58_subfuncao, ";
-$sqlemp .= "        o53_descr, ";
-$sqlemp .= "        o58_programa, ";
-$sqlemp .= "        o54_descr, ";
-$sqlemp .= "        o58_projativ, ";
-$sqlemp .= "        o55_descr, ";
-$sqlemp .= "        o58_coddot, ";
-$sqlemp .= "        o41_cnpj, ";
-$sqlemp .= "        o56_elemento AS sintetico, ";
-$sqlemp .= "        o56_descr AS descr_sintetico, ";
-$sqlemp .= "        o58_codigo, ";
-$sqlemp .= "        o15_descr, ";
-$sqlemp .= "        e61_autori, ";
-$sqlemp .= "        pc50_descr, ";
-$sqlemp .= "        fc_estruturaldotacao(o58_anousu,o58_coddot) AS estrutural, ";
-$sqlemp .= "        e41_descr, ";
-$sqlemp .= "        c58_descr, ";
-$sqlemp .= "        e56_orctiporec, ";
-$sqlemp .= "        e54_anousu, ";
-$sqlemp .= "        e54_praent, ";
-$sqlemp .= "        e54_tipoautorizacao, ";
-$sqlemp .= "        e54_tipoorigem, ";
-$sqlemp .= "        e54_nummodalidade, ";
-$sqlemp .= "        e54_licoutrosorgaos, ";
-$sqlemp .= "        e54_adesaoregpreco, ";
-$sqlemp .= "        e54_numerl, ";
-$sqlemp .= "        e54_codout, ";
-$sqlemp .= "        e54_conpag, ";
-$sqlemp .= "        e54_autori, ";
-/*OC4401*/
-$sqlemp .= "        e60_id_usuario, ";
-$sqlemp .= "        db_usuarios.nome, ";
-/*FIM - OC4401*/
-$sqlemp .= "        ordena.z01_numcgm AS cgmordenadespesa, ";
-$sqlemp .= "        ordena.z01_nome AS ordenadesp, ";
-$sqlemp .= "        liquida.z01_numcgm AS cgmliquida, ";
-$sqlemp .= "        liquida.z01_nome AS liquida, ";
-$sqlemp .= "        paga.z01_numcgm AS cgmpaga, ";
-$sqlemp .= "        paga.z01_nome AS ordenapaga, ";
-$sqlemp .= "        contador.z01_nome AS contador, ";
-$sqlemp .= "        contad.si166_crccontador AS crc, ";
-$sqlemp .= "        controleinterno.z01_nome AS controleinterno ";
-$sqlemp .= " FROM empempenho ";
-/*OC4401*/
-$sqlemp .= " LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e60_id_usuario";
-/*FIM - OC4401*/
-$sqlemp .= " LEFT JOIN pctipocompra ON pc50_codcom = e60_codcom ";
-$sqlemp .= " INNER JOIN orcdotacao ON o58_coddot = e60_coddot AND o58_instit = " . db_getsession("DB_instit") . " AND o58_anousu = e60_anousu ";
-$sqlemp .= " INNER JOIN orcorgao ON o58_orgao = o40_orgao AND o40_anousu = $anousu ";
-$sqlemp .= " INNER JOIN orcunidade ON o58_unidade = o41_unidade AND o58_orgao = o41_orgao AND o41_anousu = o58_anousu ";
-$sqlemp .= " INNER JOIN orcfuncao ON o58_funcao = o52_funcao ";
-$sqlemp .= " INNER JOIN orcsubfuncao ON o58_subfuncao = o53_subfuncao ";
-$sqlemp .= " INNER JOIN orcprograma ON o58_programa = o54_programa AND o54_anousu = o58_anousu ";
-$sqlemp .= " INNER JOIN orcprojativ ON o58_projativ = o55_projativ AND o55_anousu = o58_anousu ";
-$sqlemp .= " INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu ";
-$sqlemp .= " INNER JOIN orctiporec ON o58_codigo = o15_codigo ";
-$sqlemp .= " INNER JOIN cgm ON z01_numcgm = e60_numcgm ";
-$sqlemp .= " INNER JOIN concarpeculiar ON concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar ";
-$sqlemp .= " LEFT JOIN cgm AS ordena ON ordena.z01_numcgm = o41_orddespesa ";
-$sqlemp .= " LEFT JOIN cgm AS paga ON paga.z01_numcgm = o41_ordpagamento ";
-$sqlemp .= " LEFT JOIN cgm AS liquida ON liquida.z01_numcgm = o41_ordliquidacao ";
-$sqlemp .= " LEFT JOIN identificacaoresponsaveis contad ON contad.si166_instit= e60_instit ";
-$sqlemp .= " AND contad.si166_tiporesponsavel=2 ";
-$sqlemp .= " AND (contad.si166_dataini <=  e60_emiss ";
-$sqlemp .= " AND contad.si166_datafim >=  e60_emiss) ";
-$sqlemp .= " LEFT JOIN cgm AS contador ON contador.z01_numcgm = contad.si166_numcgm ";
-$sqlemp .= " LEFT JOIN identificacaoresponsaveis controle ON controle.si166_instit= e60_instit ";
-$sqlemp .= " AND controle.si166_tiporesponsavel=3 ";
-$sqlemp .= " AND (controle.si166_dataini <=  e60_emiss ";
-$sqlemp .= " AND controle.si166_datafim >=  e60_emiss) ";
-$sqlemp .= " LEFT JOIN cgm AS controleinterno ON controleinterno.z01_numcgm = controle.si166_numcgm ";
-$sqlemp .= " LEFT OUTER JOIN empempaut ON e60_numemp = e61_numemp ";
-$sqlemp .= " LEFT JOIN empautoriza ON e61_autori = e54_autori ";
-$sqlemp .= " LEFT JOIN empautidot ON e61_autori = e56_autori ";
-//$sqlemp .= "LEFT JOIN empautitem ON e55_autori = e56_autori";
-$sqlemp .= " LEFT OUTER JOIN emptipo ON e60_codtipo= e41_codtipo ";
-$sqlemp .= " WHERE $dbwhere ";
-$sqlemp .= " order by e60_codemp::bigint ";
+$sqlemp = $clemite_nota_emp->get_sql_empenho(db_getsession("DB_anousu"), db_getsession("DB_instit"), $dbwhere);
 
 $result = db_query($sqlemp);
 //die($sqlemp); db_criatabela($result);exit;
@@ -509,39 +427,116 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
     } else {
       $pdf1->resumo = $e60_resumo;
     }
-  } else {
-    $pdf1->resumo = $e60_resumo;
-  }
 
+    $sSqlPacto  = $clemite_nota_emp->get_sql_pacto($e61_autori);
+    $rsPacto    = db_query($sSqlPacto);
 
-  $Sresumo = $pdf1->resumo;
-  $vresumo = explode("\n", $Sresumo);
+    $o74_descricao       = null;
+    $o78_pactoplano      = null;
+    if (@pg_num_rows($rsPacto) > 0) {
 
-  if (count($vresumo) > 1) {
-    $Sresumo   = "";
-    $separador = "";
-    for ($x = 0; $x < count($vresumo); $x++) {
-      if (trim($vresumo[$x]) != "") {
-        $separador = ". ";
-        $Sresumo  .= $vresumo[$x] . $separador;
-      }
+        $oPacto              = db_utils::fieldsMemory($rsPacto, 0);
+        $o74_descricao       = $oPacto->o74_descricao;
+        $o78_pactoplano      = $oPacto->o74_sequencial;
     }
-  }
 
-  if (count($vresumo) == 0) {
-    $Sresumo = str_replace("\n", ". ", $Sresumo);
-  }
+    $sProcessoAdministrativo = $clemite_nota_emp->get_sql_processo_administrativo($e61_autori);
+    
+    $sCondtipos = "";
+    if (isset($tipos) && !empty($tipos)) {
+      $sCondtipos = " $tipos as tipos, ";
+    }
 
-  $Sresumo = str_replace("\r", "", $Sresumo);
+    $sqlitem    = $clemite_nota_emp->get_sql_item($sCondtipos, $e60_numemp);
+    $resultitem = db_query($sqlitem);
+    db_fieldsmemory($resultitem);
+    
+    $result_cgmalt=$clcgmalt->sql_record($clcgmalt->sql_query_file(null,"z05_numcgm as z01_numcgm,z05_nome as z01_nome,z05_telef as z01_telef,z05_ender as z01_ender,z05_numero as z01_numero,z05_munic as z01_munic,z05_cgccpf as z01_cgccpf,z05_cep as z01_cep"," abs(z05_data_alt - date '$e60_emiss') asc, z05_sequencia desc limit 1","z05_numcgm = $z01_numcgm and z05_data_alt > '$e60_emiss' "));
 
-  $pdf1->resumo = substr($Sresumo, 0, 730);
+    if ($clcgmalt->numrows>0) {
+        db_fieldsmemory($result_cgmalt,0);
+    }
 
+    /**
+     * Verificamos o cnpj da unidade. caso diferente de null, e diferente do xcnpj da instituição,
+     * mostramso a descrição e o cnpj da unidade
+     */
+    if ($o41_cnpj != "" && $o41_cnpj != $cgc) {
+        $nomeinst = $o41_descr;
+        $cgc      = $o41_cnpj;
+    }
 
-  /**
-   * Crio os campos PROCESSO/ANO,MODALIDADE/ANO e DESCRICAO MODALIDADE de acordo com solicitação
-   * @MarioJunior OC 7425
-   */
-  //tipo Direta
+    $sSqlFuncaoOrdenaPagamento = $clemite_nota_emp->get_sql_funcao_ordena_pagamento($cgmpaga, 
+                                                                                    date( 'Y',strtotime($e60_emiss)), 
+                                                                                    date('m',strtotime($e60_emiss)));
+
+    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
+
+    $sSqlFuncaoOrdenadespesa = $clemite_nota_emp->get_sql_funcao_ordena_despesa($cgmordenadespesa,
+                                                                                date( 'Y',strtotime($e60_emiss)),
+                                                                                date( 'm',strtotime($e60_emiss)));
+
+    $pdf1->cargoordenadespesa = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenadespesa),0)->cargoordenadespesa;
+
+    //assinaturas
+    $pdf1->ordenadespesa   =  $ordenadesp;
+    $pdf1->liquida         =  $liquida;
+    $pdf1->ordenapagamento =  $ordenapaga;
+    $pdf1->contador        =  $contador;
+    $pdf1->crccontador     =  $crc;
+    $pdf1->controleinterno =  $controleinterno;
+    $pdf1->emptipo              = $e41_descr;
+    $pdf1->prefeitura           = $nomeinst;
+    $pdf1->enderpref            = $ender.", ".$numero;
+    $pdf1->cgcpref              = $cgc;
+    $pdf1->municpref            = $munic;
+    $pdf1->telefpref            = $telef;
+    $pdf1->emailpref            = $email;
+
+    $pdf1->inscricaoestadualinstituicao    = '';
+    if ($db21_usasisagua == 't') {
+        $pdf1->inscricaoestadualinstituicao    = "- Inscrição Estadual: ".$inscricaoestadualinstituicao;
+    }
+
+    $pdf1->numcgm               = $z01_numcgm;
+    $pdf1->nome                 = $z01_nome;
+    $pdf1->telefone             = $z01_telef;
+    $pdf1->ender                = $z01_ender;
+    $pdf1->bairro               = $z01_bairro;
+    $pdf1->munic                = $z01_munic;
+    $pdf1->cnpj                 = $z01_cgccpf;
+    $pdf1->cep                  = $z01_cep;
+    $pdf1->ufFornecedor         = $z01_uf;
+    $pdf1->prazo_entrega        = $e54_praent;
+    $pdf1->condicao_pagamento   = $e54_conpag;
+    $pdf1->outras_condicoes     = $e54_codout;
+    $pdf1->iBancoFornecedor     = $oPcFornecOnPad->pc63_banco;
+    $pdf1->iAgenciaForncedor    = $oPcFornecOnPad->pc63_agencia."-".$oPcFornecOnPad->pc63_agencia_dig;
+    $pdf1->iContaForncedor      = $oPcFornecOnPad->pc63_conta."-".$oPcFornecOnPad->pc63_conta_dig;
+    $pdf1->dotacao              = $estrutural;
+    $pdf1->solicitacao          = $pc10_numero;
+    $pdf1->num_licitacao        = $e60_numerol;
+    $pdf1->cod_concarpeculiar   = $e60_concarpeculiar;
+    $pdf1->descr_concarpeculiar = substr($c58_descr,0,34);
+    $pdf1->logo                 = $logo;
+    $pdf1->SdescrPacto          = $o74_descricao;
+    $pdf1->iPlanoPacto          = $o78_pactoplano;
+    $pdf1->contrapartida        = $e56_orctiporec;
+    $pdf1->observacaoitem       = "pc23_obs";
+    $pdf1->Snumeroproc          = "pc81_codproc";
+    $pdf1->Snumero              = "pc11_numero";
+    $pdf1->marca                = "e55_marca";
+    $pdf1->processo_administrativo = $sProcessoAdministrativo;
+    $pdf1->coddot           = $o58_coddot;
+    $pdf1->destino          = $e60_destin;
+    $pdf1->licitacao        = $e60_codtipo;
+    $pdf1->recorddositens   = $resultitem;
+    $pdf1->linhasdositens   = pg_numrows($resultitem);
+    //Zera as variáveis
+    $pdf1->resumo = "";
+    $resumo_lic   = "";
+
+    $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null, null, "distinct l20_edital, l20_numero, l20_anousu, l20_objeto,l03_descr", null, "e55_autori = $e54_autori "));
 
   if ($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
     $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
@@ -563,42 +558,62 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
 
   //tipo licitacao de outros orgaos
 
-  if ($e54_tipoautorizacao == 2) {
-    $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
-    if ($clempautitem->numrows > 0) {
-      db_fieldsmemory($result_empaut, 0);
-      $arr_numerl = explode("/", $e54_numerl);
-      $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
-      $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
-      $pdf1->resumo     = $e60_resumo;
+    if (isset($resumo_lic) && $resumo_lic!=""){
+        if ($e30_impobslicempenho=='t') {
+            $pdf1->resumo = $resumo_lic."\n".$e60_resumo;
+        } else {
+            $pdf1->resumo = $e60_resumo;
+        }
+    } else {
+        $pdf1->resumo = $e60_resumo;
+    }
+
+
+    $Sresumo = $pdf1->resumo;
+    $vresumo = split("\n",$Sresumo);
+
+    if (count($vresumo) > 1){
+        $Sresumo   = "";
+        $separador = "";
+        for ($x = 0; $x < count($vresumo); $x++){
+            if (trim($vresumo[$x]) != ""){
+                $separador = ". ";
+                $Sresumo  .= $vresumo[$x].$separador;
+            }
+        }
+    }
+
+    if (count($vresumo) == 0){
+        $Sresumo = str_replace("\n",". ",$Sresumo);
+    }
+
+    $Sresumo = str_replace("\r","",$Sresumo);
+
+    $pdf1->resumo = substr($Sresumo,0,730);
+
+    if (in_array($e54_tipoautorizacao, array('0','1','2','3','4'))) {
+
+        $oAutoriza = $clemite_nota_emp->get_dados_licitacao($e54_tipoautorizacao, $e54_autori, $pc50_descr);
+
+        $pdf1->edital_licitacao = $oAutoriza->edital_licitacao;
+        $pdf1->modalidade       = $oAutoriza->modalidade;
+        $pdf1->resumo           = $e60_resumo;
+        $pdf1->descr_tipocompra = $oAutoriza->descr_tipocompra;
+        $pdf1->descr_modalidade = $oAutoriza->descr_modalidade;
+
     }
     $pdf1->descr_tipocompra = substr($pc50_descr, 0, 36);
     $pdf1->descr_modalidade = '';
   }
 
-  //tipo licitacao
-  if ($e54_tipoautorizacao == 3) {
-    $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
-    if ($clempautitem->numrows > 0) {
-      db_fieldsmemory($result_empaut, 0);
-      $arr_numerl = explode("/", $e54_numerl);
-      $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
-      $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
-      $pdf1->resumo     = $e60_resumo;
-    }
-    $pdf1->descr_tipocompra = $pc50_descr;
-    $pdf1->descr_modalidade = $pc50_descr;
-  }
+    $oAcordo = $clemite_nota_emp->get_acordo($e60_numemp);
 
-  //tipo Adesao regpreco
-  if ($e54_tipoautorizacao == 4) {
-    $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
-    if ($clempautitem->numrows > 0) {
-      db_fieldsmemory($result_empaut, 0);
-      $arr_numerl = explode("/", $e54_numerl);
-      $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
-      $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
-      $pdf1->resumo     = $e60_resumo;
+    $pdf1->resumo  = substr($pdf1->resumo, 0, 730);
+
+    if (!empty($e54_praent)) {
+        $pdf1->prazo_ent              = $e54_praent;
+    }else{
+        $pdf1->prazo_ent              = db_utils::fieldsMemory($resultitem, 0)->l20_prazoentrega;
     }
     $pdf1->descr_tipocompra = $pc50_descr;
     $pdf1->descr_modalidade = '';

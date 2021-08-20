@@ -48,11 +48,13 @@ class cl_cfpatriinstituicao {
    var $t59_dataimplanatacaodepreciacao_mes = null; 
    var $t59_dataimplanatacaodepreciacao_ano = null; 
    var $t59_dataimplanatacaodepreciacao = null; 
+   var $t59_termodeguarda = false;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  t59_sequencial = int4 = Sequencial 
                  t59_instituicao = int4 = Instituição 
                  t59_dataimplanatacaodepreciacao = date = Data 
+                 t59_termodeguarda = boolean = Termo de Guarda
                  ";
    //funcao construtor da classe 
    function cl_cfpatriinstituicao() { 
@@ -81,6 +83,7 @@ class cl_cfpatriinstituicao {
          if($this->t59_dataimplanatacaodepreciacao_dia != ""){
             $this->t59_dataimplanatacaodepreciacao = $this->t59_dataimplanatacaodepreciacao_ano."-".$this->t59_dataimplanatacaodepreciacao_mes."-".$this->t59_dataimplanatacaodepreciacao_dia;
          }
+         $this->t59_termodeguarda = ($this->t59_termodeguarda == ""?@$GLOBALS["HTTP_POST_VARS"]["t59_termodeguarda"]:$this->t59_termodeguarda);
        }
      }else{
        $this->t59_sequencial = ($this->t59_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["t59_sequencial"]:$this->t59_sequencial);
@@ -243,6 +246,9 @@ class cl_cfpatriinstituicao {
          }
        }
      }
+      if(trim($this->t59_termodeguarda)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t59_termodeguarda"]) &&  ($GLOBALS["HTTP_POST_VARS"]["t59_termodeguarda"] !="") ){ 
+          $sql  .= $virgula." t59_termodeguarda = '$this->t59_termodeguarda' ";
+      }
      $sql .= " where ";
      if($t59_sequencial!=null){
        $sql .= " t59_sequencial = $this->t59_sequencial";

@@ -26,6 +26,7 @@ db_postmemory($HTTP_POST_VARS);
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/classes/DBViewTipoFiltrosFolha.js"></script>
 <script>
 function js_filtra(){
   document.form1.submit();
@@ -84,6 +85,9 @@ function js_filtra(){
               <option value = 'adiantamento'  <?=((isset($folha)&&$folha=="adiantamento")?"selected":"")?>>Adiantamento
           </td>
         </tr>
+        <tr>
+          <td colspan="2" id="containnerTipoFiltrosFolha"></td>
+        </tr>
         <?
         if(isset($folha) && $folha == "complementar"){
           $result_semest = $clgerfcom->sql_record($clgerfcom->sql_query_file(null,null,null,null,"distinct r48_semest",null, " r48_anousu = $xano and r48_mesusu = $xmes and r48_instit = ".db_getsession('DB_instit')));
@@ -136,150 +140,6 @@ function js_filtra(){
 	  ?>
 	  </td>
 	</tr>
-	<tr>
-	  <td align="right" ><strong>Filtro:</strong></td>
-	  <td>
-	  <?
-    if(!isset($filtro)){
-      $filtro = 'M';
-    }
-	  $arr=array("N"=>"Nenhum","M"=>"Matrícula","L"=>"Lotação");
-	  db_select("filtro",$arr,true,2,"onchange='js_filtra();'");
-	  ?>
-	  </td>
-	</tr>
-	<?
-	if (isset($filtro)&&$filtro!=""&&$filtro!="N"){
-	?>
-	<tr>
-	  <td align="right" ><strong>Filtrar por:</strong></td>
-	  <td>
-	  <?
-    if(!isset($filtrar)){
-      $filtrar = 'S';
-    }
-	  $arr1=array("."=>"------------","I"=>"Intervalo","S"=>"Selecionados");
-	  db_select("filtrar",$arr1,true,2,"onchange='js_filtra();'");
-	  ?>
-	  </td>
-	</tr>
-	<?
-	}
-
-  if(isset($filtrar)&&isset($filtro)&&$filtro!="N"){
-    if($filtro=='M'){
-
-      $func='func_rhpessoal.php';
-      $info='Matrícula';
-      $cod='rh01_regist';
-      $descr='z01_nome';
-
-      if($filtrar=='I'){ ?>
-
-      <tr>
-          <td>
-            <strong><?=@$info?> de</strong>
-          </td>
-          <td>
-            <? db_input('cod_ini',8,'',true,'text',1," onchange='js_copiacampo();'","")  ?>
-            <strong> à </strong>
-            <? db_input('cod_fim',8,'',true,'text',1,"","")  ?>
-          </td>
-        </tr>
-    <?php
-      }
-    }else if ($filtro=='L'){
-
-      $func='func_rhlota.php';
-      $info='Lotação';
-      $cod='r70_codigo';
-      $descr='r70_descr';
-
-      if($filtrar=='I'){
-    ?>
-
-        <tr>
-          <td align="right">
-            <?php db_ancora('Lotação de: ', "js_pesquisar14_lotac(true, document.form1.cod_ini);", 1); ?>
-          </td>
-          <td>
-            <?php
-
-              db_input('cod_ini',8,'',true,'text',1," onchange='js_pesquisar14_lotac(false, document.form1.cod_ini);'","");
-              db_ancora('à', "js_pesquisar14_lotac(true, document.form1.cod_fim);", 1);
-              db_input('cod_fim',8,'',true,'text',1," onchange='js_pesquisar14_lotac(false, document.form1.cod_fim);'","");
-            ?>
-          </td>
-        </tr>
-<?php
-      }
-    }
-  }
-
-    if ($filtrar=='S'&&isset($filtro)&&$filtro!="N"){
-  ?>
-      <tr>
-        <td colspan="2" >
-        <?
-        $aux->cabecalho = "<strong>$info</strong>";
-        $aux->codigo = "$cod"; //chave de retorno da func
-        $aux->descr  = "$descr";   //chave de retorno
-        $aux->nomeobjeto = 'lista';
-        $aux->funcao_js = 'js_mostra';
-        $aux->funcao_js_hide = 'js_mostra1';
-        $aux->sql_exec  = "";
-        $aux->func_arquivo = "$func";  //func a executar
-        $aux->nomeiframe = "db_iframe_lista";
-        $aux->localjan = "";
-        $aux->onclick = "";
-        $aux->db_opcao = 2;
-        $aux->tipo = 2;
-        $aux->top = 0;
-        $aux->linhas = 5;
-        $aux->vwhidth = 520;
-        $aux->funcao_gera_formulario();
-        ?>
-        </td>
-      </tr>
-  <?php
-    }
-  ?>
-
-  <tr>
-    <td colspan="2">
-    <fieldset>
-      <legend>Local de Trabalho</legend>
-<table>
-    <tr>
-      <td nowrap title="<?=@$Trh56_localtrab?>" align="right">
-        <?
-        db_ancora("<b>Local de trabalho</b>","js_pesquisarh56_localtrab(true);",1);
-        ?>
-      </td>
-      <td>
-        <?
-        db_input('rh56_localtrab',6,$Irh56_localtrab,true,'text',1," onchange='js_pesquisarh56_localtrab(false);'")
-        ?>
-        <?
-        db_input('rh55_descr',40,$Irh55_descr,true,'text',3,'')
-        ?>
-      </td>
-    </tr>
-
-	<tr>
-	  <td align="left" ><strong>Tipo Local:</strong>
-    </td>
-    <td>
-	   <?
-	    $arr_local=array("s"=>"Somente o Local","e"=>"Exceto o Local");
-	    db_select("tipo_local",$arr_local,true,2);
-	   ?>
-	  </td>
-	</tr>
-  </table>
-  </fieldset>
-  </td>
-  </tr>
 
   <tr>
     <td colspan="2">
@@ -302,29 +162,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </body>
 </html>
 <script>
-function js_pesquisarh56_localtrab(mostra){
-  if(mostra==true){
-    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhlocaltrab','func_rhlocaltrab.php?funcao_js=parent.js_mostrarhlocaltrab1|rh55_codigo|rh55_descr','Pesquisa',true,'20');
-  }else{
-    if(document.form1.rh56_localtrab.value != ''){
-      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhlocaltrab','func_rhlocaltrab.php?pesquisa_chave='+document.form1.rh56_localtrab.value+'&funcao_js=parent.js_mostrarhlocaltrab','Pesquisa',false);
-    }else{
-      document.form1.rh55_descr.value = '';
-    }
-  }
-}
-function js_mostrarhlocaltrab(chave,erro){
-  document.form1.rh55_descr.value = chave;
-  if(erro==true){
-    document.form1.rh56_localtrab.focus();
-    document.form1.rh56_localtrab.value = '';
-  }
-}
-function js_mostrarhlocaltrab1(chave1,chave2){
-  document.form1.rh56_localtrab.value = chave1;
-  document.form1.rh55_descr.value = chave2;
-  db_iframe_rhlocaltrab.hide();
-}
+  var iInstit = <?=db_getsession("DB_instit") ?>;
 function js_tipofolha(){
   if(document.form1.folha.value == "complementar" || document.form1.r48_semest){
     document.form1.submit();
@@ -335,47 +173,10 @@ function js_anomes(){
     document.form1.submit();
   }
 }
-function js_copiacampo(){
-  if(document.form1.cod_fim.value== ""){
-    document.form1.cod_fim.value = document.form1.cod_ini.value;
-  }
-  document.form1.cod_fim.focus();
-}
-
-var oInputInicialFinal = null;
-
-function js_pesquisar14_lotac(mostra, oInput){
-
-  oInputInicialFinal = oInput;
-
-  if(mostra == true){
-    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframelotacao','func_rhlota.php?funcao_js=parent.js_mostrarhlota1|r70_codigo|r70_estrut','Pesquisa',true);
-  }else{
-    if(oInput.value != ''){
-      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframelotacao','func_rhlota.php?pesquisa_chave='+oInput.value+'&funcao_js=parent.js_mostrarhlota','Pesquisa',false);
-    }else{
-      oInput.value = '';
-    }
-  }
-}
-
-function js_mostrarhlota(chave,erro){
-
-  if ( erro==true ) {
-
-    alert(chave);
-    oInputInicialFinal.value = '';
-  }
-}
-function js_mostrarhlota1(chave1){
-
-  oInputInicialFinal.value = chave1;
-  db_iframelotacao.hide();
-}
 
 function js_emite(evt){
 
-  var aCampos = ['xano', 'xmes', 'cod_ini', 'cod_fim', 'rh56_localtrab'];
+  var aCampos = ['xano', 'xmes', 'cod_ini', 'cod_fim'];
   var aCampoNotNull = ['xano', 'xmes'];
   for (var iIndex = 0; iIndex < aCampos.length; iIndex++) {
     try {
@@ -400,35 +201,83 @@ function js_emite(evt){
     }
   };
 
+  var oQuery = {};
+  oQuery.iTipoRelatorio = $F('oCboTipoRelatorio');
+  oQuery.iTipoFiltro    = $F('oCboTipoFiltro');
+  /**
+   * Se o tipo de relatorio dif  rente de geral e tipo de filtro igual a selecionado,
+   * obrigar o lançamento de 1 registro no respectivo lançador.
+   */
+  var oTipoRelatorio = $F('oCboTipoRelatorio');
+  var oTipoFiltro    = $F('oCboTipoFiltro');
+
+  if (oTipoRelatorio != 0 && oTipoFiltro == 2) {
+    
+    var oLancadorSelecionado = oTiposFiltrosFolha.getLancadorAtivo().getRegistros();
+    if (oLancadorSelecionado.length == 0) {
+
+      alert('Por Favor, realize pelo menos o lançamento de 1 registro.');
+      return false 
+    }
+  }
+
+  /**
+   * Se o tipo de relatorio diferente de geral e tipo de filtro igual a Intervalo,
+   * obrigar o preenchimento de intervalo.
+   */
+  if (oTipoRelatorio != 0 && oTipoFiltro == 1) {
+
+    if ($F('InputIntervaloInicial') == '' || $F('InputIntervaloFinal') == '') {
+
+      alert('Por favor, informe o intervalo para geração do relatório.');
+      return false;
+    }
+  }
+
+  /**
+   * Verifica se o tipo escolhido foi intervalo 
+   */
+  if (oTipoFiltro == 1) {
+     
+    oQuery.iIntervaloInicial = $F('InputIntervaloInicial');
+    oQuery.iIntervaloFinal   = $F('InputIntervaloFinal');
+  }
+
+  /**
+   * Verifica se o tipo escolhido foi seleção
+   */
+  if (oTipoFiltro == 2) {
+     
+    var aSelecionados = [];
+    var oTipoFiltros  = oTiposFiltrosFolha.getLancadorAtivo().getRegistros();
+
+    /**
+     * Percorre os itens selecionados no lancador
+     */
+    oTipoFiltros.each (function(oFiltro, iIndice) {
+      aSelecionados[iIndice] = oFiltro.sCodigo;
+    });
+     
+    oQuery.iRegistros = aSelecionados;
+  }
+
   obj=document.form1;
-  vir="";
-  dados="";
   query="";
-  if (document.form1.lista){
-    for(x=0;x<document.form1.lista.length;x++){
-      dados+=vir+document.form1.lista.options[x].value;
-      vir=",";
-    }
-  }
-  if (document.form1.cod_ini){
-    if (document.form1.cod_fim.value==""){
-      document.form1.cod_fim.value=document.form1.cod_ini.value;
-    }
-    query='&codini='+document.form1.cod_ini.value+'&codfim='+document.form1.cod_fim.value;
-  }
-  if (dados!=""){
-    query+='&dados='+dados;
-  }
 
   if(document.form1.r48_semest){
     query+= "&semest="+document.form1.r48_semest.value;
   }
   query+="&selecao="+document.form1.selecao.value;
   query+="&ordem="+document.form1.ordem.value;
-  query+="&tipo_local="+document.form1.tipo_local.value;
   query+="&num_vias="+document.form1.num_vias.value;
-  query+="&local="+document.form1.rh56_localtrab.value;
-  jan = window.open('pes2_contra_cheque.php?opcao='+document.form1.folha.value+'&ano='+document.form1.xano.value+'&mes='+document.form1.xmes.value+'&filtro='+document.form1.filtro.value+'&msg='+document.form1.mensagem1.value+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan = window.open('pes2_contra_cheque.php?opcao='+document.form1.folha.value+'&ano='+document.form1.xano.value+'&mes='+document.form1.xmes.value+'&msg='+document.form1.mensagem1.value+query+'&json=' + Object.toJSON(oQuery),'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
+var oTiposFiltrosFolha;
+(function() {
+  console.log("aqui ");
+  oTiposFiltrosFolha     = new DBViewFormularioFolha.DBViewTipoFiltrosFolha(<?=db_getsession("DB_instit")?>);
+  oTiposFiltrosFolha.sInstancia     = 'oTiposFiltrosFolha';
+  oTiposFiltrosFolha.show($('containnerTipoFiltrosFolha'));
+})();
 </script>

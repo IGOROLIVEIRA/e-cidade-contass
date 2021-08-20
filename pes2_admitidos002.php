@@ -42,6 +42,8 @@ $clrotulo->label("rh37_descr");
 $clrotulo->label("r70_estrut");
 $clrotulo->label("r70_descr");
 $clrotulo->label("r70_codigo");
+$clrotulo->label("o40_orgao");
+$clrotulo->label("o40_descr");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
@@ -53,7 +55,10 @@ $mes = db_mesfolha();
 $camposQuebra = ", '' as quebrar";
 $labelFuncaoLotacao = $RLrh37_descr;
 $valorImprime = "rh37_descr";
-if($lota == "l"){
+if($tiporesumo == "l"){
+  $labelFuncaoLotacao = $RLr70_descr;
+  $valorImprime = "r70_descr";
+  $camposQuebra = ", r70_estrut as quebrar, r70_descr as descricao";
   $camposQuebra = ", r70_estrut as quebrar, r70_descr as descricao";
   if($ordem == "a"){
     $orderby = " r70_estrut,z01_nome ";
@@ -65,9 +70,9 @@ if($lota == "l"){
     $orderby = " r70_estrut,rh01_admiss ";
     $head6  = "ORDEM: ADMISSÃO";
   }
-}else if($lota == "c"){
-  $labelFuncaoLotacao = $RLr70_descr;
-  $valorImprime = "r70_descr";
+}else if($tiporesumo == "c"){
+  $labelFuncaoLotacao = $RLrh37_descr;
+  $valorImprime = "rh37_descr";
   $camposQuebra = ", rh37_funcao as quebrar, rh37_descr as descricao";
   if($ordem == "a"){
     $orderby = " rh37_descr,z01_nome ";
@@ -77,6 +82,20 @@ if($lota == "l"){
     $head6  = "ORDEM: MATRÍCULA";
   }else{
     $orderby = " rh37_descr,rh01_admiss ";
+    $head6  = "ORDEM: ADMISSÃO";
+  }
+}else if($tiporesumo == "o"){
+  $labelFuncaoLotacao = $RLo40_descr;
+  $valorImprime = "o40_descr";
+  $camposQuebra = ", o40_orgao as quebrar, o40_descr as descricao";
+  if($ordem == "a"){
+    $orderby = " o40_descr,z01_nome ";
+    $head6  = "ORDEM: ALFABÉTICA";
+  }else if($ordem == "n"){
+    $orderby = " o40_descr,rh01_regist ";
+    $head6  = "ORDEM: MATRÍCULA";
+  }else{
+    $orderby = " o40_descr,rh01_admiss ";
     $head6  = "ORDEM: ADMISSÃO";
   }
 }else{
@@ -89,6 +108,53 @@ if($lota == "l"){
   }else{
     $orderby = " rh01_admiss ";
     $head6  = "ORDEM: ADMISSÃO";
+  }
+}
+
+$sWhere = "";
+if($tiporesumo == 'c'){
+ if(isset($cai) && trim($cai) != "" && isset($caf) && trim($caf) != ""){
+    // Se for por intervalos e vier lotação inicial e final
+    $sWhere     .= " and rh37_funcao between '".$cai."' and '".$caf."' ";
+  }else if(isset($cai) && trim($cai) != ""){
+    // Se for por intervalos e vier somente lotação inicial
+    $sWhere    .= " and rh37_funcao >= '".$cai."' ";
+  }else if(isset($caf) && trim($caf) != ""){
+    // Se for por intervalos e vier somente lotação final
+    $sWhere    .= " and rh37_funcao <= '".$caf."' ";
+  }else if(isset($fca) && trim($fca) != ""){
+    // Se for por selecionados
+    $sWhere  .= " and rh37_funcao in ('".str_replace(",","','",$fca)."') ";
+  }
+}elseif($tiporesumo == 'l'){
+  if(isset($lti) && trim($lti) != "" && isset($ltf) && trim($ltf) != ""){
+    // Se for por intervalos e vier local inicial e final
+    $sWhere    .= " and r70_estrut between '".$lti."' and '".$ltf."' ";
+  }else if(isset($lti) && trim($lti) != ""){
+    // Se for por intervalos e vier somente local inicial
+    $sWhere    .= " and r70_estrut >= '".$lti."' ";
+  }else if(isset($ltf) && trim($ltf) != ""){
+    // Se for por intervalos e vier somente local final
+    $sWhere    .= " and r70_estrut <= '".$ltf."' ";
+  }else if(isset($flt) && trim($flt) != ""){
+    // Se for por selecionados
+    $sWhere  .= " and r70_estrut in ('".str_replace(",","','",$flt)."') ";
+  }
+
+}else{
+  if(isset($ori) && trim($ori) != "" && isset($orf) && trim($orf) != ""){
+    // Se for por intervalos e vier órgão inicial e final
+    $sWhere    .= " and o40_orgao between ".$ori." and ".$orf;
+    $sIntervalo.= " DE ".$ori." A ".$orf;
+  }else if(isset($ori) && trim($ori) != ""){
+    // Se for por intervalos e vier somente órgão inicial
+    $sWhere .= " and o40_orgao >= ".$ori;
+  }else if(isset($orf) && trim($orf) != ""){
+    // Se for por intervalos e vier somente órgão final
+    $sWhere    .= " and o40_orgao <= ".$orf;
+  }else if(isset($for) && trim($for) != ""){
+    // Se for por selecionados
+    $sWhere  .= " and o40_orgao in (".$for.") ";
   }
 }
 
@@ -138,11 +204,11 @@ if(isset($listarescis) || $adm_dem == 'd' ) {
 }
 
 
-$dbwhere .= $dbwhereinativo.$dbwhererescis;
+$dbwhere .= $dbwhereinativo.$dbwhererescis.$sWhere;
 
-$sql_dados = $clrhpessoal->sql_query_lotafuncres(null,"rh01_regist, z01_nome, rh01_admiss, r70_estrut, r70_descr, rh37_funcao, rh37_descr,rh03_padrao,rh05_recis".$camposQuebra,$orderby,$dbwhere);
+$sql_dados = $clrhpessoal->sql_query_lotafuncres(null,"rh01_regist, z01_nome, rh01_admiss, r70_estrut, r70_descr, rh37_funcao, rh37_descr,o40_orgao,o40_descr,rh03_padrao,rh05_recis".$camposQuebra,$orderby,$dbwhere);
 //echo $sql_dados;exit;
-$result_dados = $clrhpessoal->sql_record($sql_dados);
+$result_dados = $clrhpessoal->sql_record($sql_dados);//echo $sql_dados;db_criatabela($result_dados);exit;
 $numrows_dados = $clrhpessoal->numrows;
 if($numrows_dados == 0){
   db_redireciona("db_erros.php?fechar=true&db_erro=Não existem funcionários admitidos no período de ".db_formatar($datai,"d")." e ".db_formatar($dataf,"d").".");
@@ -172,11 +238,9 @@ $imprime_dados_quebra = true;
 for($x=0; $x<$numrows_dados; $x++){
   db_fieldsmemory($result_dados,$x);
 
-  if($lota != "n" && $lotacao_antes != $quebrar){
+  if($quebrapagina == "s" && $lotacao_antes != $quebrar){
     $lotacao_antes = $quebrar;
-    if($quebrapagina == "s"){
-      $troca = 1;
-    }
+    $troca = 1;
     $imprime_dados_quebra = true;
   }
 
@@ -203,7 +267,7 @@ for($x=0; $x<$numrows_dados; $x++){
     $pre = 1;
   }
 
-  if($lota != 'n' && $imprime_dados_quebra == true){
+  if($quebrapagina == "s" && $imprime_dados_quebra == true){
     $pdf->setfont("arial","b",8);
     $pdf->ln(2);
     $pdf->cell(0,$alt,$quebrar." - ".$descricao,0,1,"L",0);

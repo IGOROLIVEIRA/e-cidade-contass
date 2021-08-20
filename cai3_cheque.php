@@ -47,12 +47,12 @@ db_fieldsMemory($rsEmpenho);
 $texto1 = trim(strtoupper(db_extenso($valor_formatado, TRUE)));
 $text_transformado = ucfirst("$texto1");
 
-$emissao = preg_split('/\//',date('d/m/y'));
+$emissao = preg_split('/\-/',$dataemissao);
 
 $oDate = new DBDate(date('d/m/y'));
-$dia_emissao = $emissao[0];
+$dia_emissao = $emissao[2];
 $mes_emissao = $oDate->getMesExtenso($emissao[1]);
-$ano_emissao = substr($emissao[2], -2);
+$ano_emissao = substr($emissao[0], -2);
 
 $pdf_cabecalho = false;
 $pdf = new FPDF("P", "mm", array(175, 80));

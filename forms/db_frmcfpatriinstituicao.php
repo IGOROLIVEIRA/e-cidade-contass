@@ -76,6 +76,16 @@ $clrotulo->label("nomeinst");
           ?>
         </td>
       </tr>
+      <tr>
+        <td nowrap title="">
+          Termo de Guarda - Template Padrão:
+        </td>
+        <td>
+        <?
+          db_select('t59_termodeguarda', array("f"=>"Não","t"=>"Sim"), true, "", "");
+        ?>
+        </td>
+      </tr>
     </table>
   </fieldset>
   <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >

@@ -496,15 +496,15 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
 
         if(emrec == 't'){
 
-      if (k03_tipo != '18') {
+          if (k03_tipo != '18') {
 
-              parent.document.getElementById("enviar").disabled 	  = false;//botao emite recibo
             parent.document.getElementById("btcarne").disabled 	  = false;//botao carne
 
             if ( (agpar == 't' || agnum == 't') || (k03_tipo == 3) ) {
               parent.document.getElementById("geranotif").disabled 	  = false;
             }
           }
+          parent.document.getElementById("enviar").disabled     = false;//botao emite recibo
           parent.document.getElementById("emisscarne").disabled   = false;//select outros exercicios
           parent.document.getElementById("btnotifica").disabled   = false;
 
@@ -515,7 +515,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
           parent.document.getElementById("btjust").disabled 	    = true; // botao justifica
 
 
-          if (document.form1.k03_permparc.value == 't' && permissao_parcelamento == true && linha > 1 && k03_tipo != '18') {
+          if (document.form1.k03_permparc.value == 't' && permissao_parcelamento == true && linha > 1 ) {
             parent.document.getElementById("btparc").disabled = false; // botao parcelamento
           }
 
@@ -537,7 +537,6 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
 
           if (permissao_certidao == true && linha > 1 && ( k03_tipo == 15 || k03_tipo == 18 )) {
 
-            parent.document.getElementById("enviar").disabled 	    = true;//botao emite recibo
             parent.document.getElementById("btcarne").disabled 	    = true;//botao carne
             parent.document.getElementById("emisscarne").disabled   = true;//select outros exercicios
             parent.document.getElementById("btnotifica").disabled   = true;
@@ -546,7 +545,6 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
               parent.document.getElementById("geranotif").disabled    = true;
             }
 
-            parent.document.getElementById("btparc").disabled		    = true; // botao parcelamento
             parent.document.getElementById("btcda").disabled 	      = true; // botao certidao
             parent.document.getElementById("btcancela").disabled 	  = true; // botao cancela debitos
             parent.document.getElementById("btjust").disabled 	    = true; // botao justific
@@ -560,7 +558,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
 
           if((F.elements[i].type == "checkbox" || F.elements[i].type == "submit") && (F.elements[i].checked == true || linha == 1) && (F.elements[i].value.indexOf('unica_') == -1) ) {
             var indi   = js_parse_int(F.elements[i].id);
-//        alert(indi);
+
             if(document.getElementById('valor'+indi)){
               valor     += new Number(document.getElementById('valor'+indi).value.replace(",",""));
               valorcorr += new Number(document.getElementById('valorcorr'+indi).value.replace(",",""));
@@ -631,7 +629,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
           }
         }
 
-        if ( ( k03_tipo == 13 || k03_tipo == 18 ) && perfil_procuradoria == 0 ) {
+        if ( ( k03_tipo == 13  ) && perfil_procuradoria == 0 ) { 
           parent.document.getElementById("enviar").disabled = true;//botao emite recibo
           parent.document.getElementById("btparc").disabled = true;
           parent.document.getElementById("btcarne").disabled = true;

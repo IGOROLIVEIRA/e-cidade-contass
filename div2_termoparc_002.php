@@ -107,8 +107,6 @@ $sql .= "       left join termoprotprocesso  on v27_termo               = v07_pa
 $sql .= "                                   and k40_instit              = ".db_getsession('DB_instit');
 $sql .= "  where v07_parcel = $parcel and v07_instit = ".db_getsession('DB_instit');
 
-//die($sql);
-//pdf
 $result=db_query($sql);
 if ( pg_numrows($result) == 0 ) {
   db_redireciona('db_erros.php?fechar=true&db_erro=Parcelamento no. '.$parcel. ' não encontrado!');
@@ -117,6 +115,11 @@ if ( pg_numrows($result) == 0 ) {
 db_fieldsmemory($result,0);
 $responsavel = $z01_nome;
 $numprecerto = $v07_numpre;
+$situacao = '';
+if($v07_situacao == '2'){
+  $situacao = 'Anulado';
+}
+
 if ($leng == '14' ) {
   $cpf = db_formatar($z01_cgccpf,'cnpj');
 } else {
@@ -652,44 +655,98 @@ if (pg_numrows($result_reparc) > 0) {
       $sql .= "        left  join	arrecontr	  on arrecontr.k00_numpre   = contricalc.d09_numpre ";
       $sql .= " where parcel = $parcel";
     }else {
-      $sql  = " select  distinct ";
-      $sql .= "        coalesce(termodiv.vlrdesccor,0) + coalesce(termodiv.vlrdescjur,0) + coalesce(termodiv.vlrdescmul,0) + coalesce(desconto,0) as desconto,";
-      $sql .= "        divida.*, ";
-      $sql .= "		  	 divida.v01_numpre as k00_numpre, ";
-      $sql .= "		 	   divida.v01_numpar as k00_numpar, ";
-      $sql .= "        v03_descr, ";
-      $sql .= "        termodiv.*, ";
-      $sql .= "        arretipo.k00_descr, ";
-      $sql .= "        coalesce(arrematric.k00_matric,0) as matric, ";
-      $sql .= "        coalesce(arreinscr.k00_inscr,0) as inscr, ";
-      $sql .= "        coalesce(arrecontr.k00_contr,0) as contr, ";
-      $sql .= "        case when a.j01_numcgm is not null ";
-      $sql .= "             then (select z01_nome from cgm where z01_numcgm = a.j01_numcgm) ";
-      $sql .= "        end as nomematric, ";
-      $sql .= "        case when q02_numcgm is not null ";
-      $sql .= "             then (select z01_nome from cgm where z01_numcgm = q02_numcgm) ";
-      $sql .= "        end as nomeinscr, ";
-      $sql .= "        case when b.j01_numcgm is not null ";
-      $sql .= "             then (select z01_nome from cgm where z01_numcgm = b.j01_numcgm) ";
-      $sql .= "        end as nomecontr ";
-      $sql .= "   from termodiv  ";
-      $sql .= "        inner join	divida		on v01_coddiv = coddiv ";
-      $sql .= "                            and v01_instit = ".db_getsession('DB_instit');
-      $sql .= "        inner join	arreold		on v01_numpre = arreold.k00_numpre ";
-      $sql .= "                            and v01_numpar = arreold.k00_numpar ";
-      $sql .= "                            and arreold.k00_valor > 0 ";
-      $sql .= "        inner join arretipo  on arreold.k00_tipo = arretipo.k00_tipo ";
-      $sql .= "                            and arretipo.k00_instit = ".db_getsession('DB_instit');
-      $sql .= "        inner join	proced		on v01_proced = v03_codigo ";
-      $sql .= "        left outer join	arrematric on arrematric.k00_numpre = divida.v01_numpre ";
-      $sql .= "        left outer join	iptubase a on arrematric.k00_matric = a.j01_matric ";
-      $sql .= "        left outer join	arreinscr	 on arreinscr.k00_numpre  =  divida.v01_numpre ";
-      $sql .= "        left outer join	issbase		 on arreinscr.k00_inscr = issbase.q02_inscr ";
-      $sql .= "        left outer join	arrecontr	 on arrecontr.k00_numpre  =  divida.v01_numpre ";
-      $sql .= "        left outer join	contrib		 on arrecontr.k00_contr  =  contrib.d07_contri ";
-      $sql .= "        left outer join	iptubase b on b.j01_matric = contrib.d07_matric ";
-      $sql .= " where parcel = {$parcel} order by v01_dtvenc";
 
+      if($situacao == 1){
+        
+        //consulta do termo Ativo
+        $sql  = " select  distinct ";
+        $sql .= "        coalesce(termodiv.vlrdesccor,0) + coalesce(termodiv.vlrdescjur,0) + coalesce(termodiv.vlrdescmul,0) + coalesce(desconto,0) as desconto,";
+        $sql .= "        divida.*, ";
+        $sql .= "        divida.v01_numpre as k00_numpre, ";
+        $sql .= "        divida.v01_numpar as k00_numpar, ";
+        $sql .= "        v03_descr, ";
+        $sql .= "        termodiv.*, ";
+        $sql .= "        arretipo.k00_descr, ";
+        $sql .= "        coalesce(arrematric.k00_matric,0) as matric, ";
+        $sql .= "        coalesce(arreinscr.k00_inscr,0) as inscr, ";
+        $sql .= "        coalesce(arrecontr.k00_contr,0) as contr, ";
+        $sql .= "        case when a.j01_numcgm is not null ";
+        $sql .= "             then (select z01_nome from cgm where z01_numcgm = a.j01_numcgm) ";
+        $sql .= "        end as nomematric, ";
+        $sql .= "        case when q02_numcgm is not null ";
+        $sql .= "             then (select z01_nome from cgm where z01_numcgm = q02_numcgm) ";
+        $sql .= "        end as nomeinscr, ";
+        $sql .= "        case when b.j01_numcgm is not null ";
+        $sql .= "             then (select z01_nome from cgm where z01_numcgm = b.j01_numcgm) ";
+        $sql .= "        end as nomecontr ";
+        $sql .= "   from termodiv  ";
+        $sql .= "        inner join divida    on v01_coddiv = coddiv ";
+        $sql .= "                            and v01_instit = ".db_getsession('DB_instit');
+        $sql .= "        inner join  arreold   on v01_numpre = arreold.k00_numpre ";
+        $sql .= "                            and v01_numpar = arreold.k00_numpar ";
+        $sql .= "                            and arreold.k00_valor > 0 ";      
+        $sql .= "        inner join arretipo  on arreold.k00_tipo = arretipo.k00_tipo";
+        $sql .= "                            and arretipo.k00_instit = ".db_getsession('DB_instit');
+        $sql .= "        inner join proced    on v01_proced = v03_codigo ";
+        $sql .= "        left outer join  arrematric on arrematric.k00_numpre = divida.v01_numpre ";
+        $sql .= "        left outer join  iptubase a on arrematric.k00_matric = a.j01_matric ";
+        $sql .= "        left outer join  arreinscr  on arreinscr.k00_numpre  =  divida.v01_numpre ";
+        $sql .= "        left outer join  issbase    on arreinscr.k00_inscr = issbase.q02_inscr ";
+        $sql .= "        left outer join  arrecontr  on arrecontr.k00_numpre  =  divida.v01_numpre ";
+        $sql .= "        left outer join  contrib    on arrecontr.k00_contr  =  contrib.d07_contri ";
+        $sql .= "        left outer join  iptubase b on b.j01_matric = contrib.d07_matric ";
+        $sql .= " where parcel = {$parcel} order by v01_dtvenc";
+
+      }else{
+        
+        //consulta do termo Anulado
+        $sql  = " select  distinct ";
+        $sql .= "        coalesce(termodiv.vlrdesccor,0) + coalesce(termodiv.vlrdescjur,0) + coalesce(termodiv.vlrdescmul,0) + coalesce(desconto,0) as desconto,";
+        $sql .= "        divida.*, ";
+        $sql .= "		  	 divida.v01_numpre as k00_numpre, ";
+        $sql .= "		 	   divida.v01_numpar as k00_numpar, ";
+        $sql .= "        v03_descr, ";
+        $sql .= "        termodiv.*, ";
+        $sql .= "        arretipo.k00_descr, ";
+        $sql .= "        coalesce(arrematric.k00_matric,0) as matric, ";
+        $sql .= "        coalesce(arreinscr.k00_inscr,0) as inscr, ";
+        $sql .= "        coalesce(arrecontr.k00_contr,0) as contr, ";
+        $sql .= "        case when a.j01_numcgm is not null ";
+        $sql .= "             then (select z01_nome from cgm where z01_numcgm = a.j01_numcgm) ";
+        $sql .= "        end as nomematric, ";
+        $sql .= "        case when q02_numcgm is not null ";
+        $sql .= "             then (select z01_nome from cgm where z01_numcgm = q02_numcgm) ";
+        $sql .= "        end as nomeinscr, ";
+        $sql .= "        case when b.j01_numcgm is not null ";
+        $sql .= "             then (select z01_nome from cgm where z01_numcgm = b.j01_numcgm) ";
+        $sql .= "        end as nomecontr ";
+        $sql .= "   from termodiv  ";
+        $sql .= "        inner join	divida		on v01_coddiv = coddiv ";
+        $sql .= "                            and v01_instit = ".db_getsession('DB_instit');
+        $sql .= "        left join arreold		on v01_numpre = arreold.k00_numpre ";
+        $sql .= "                            and v01_numpar = arreold.k00_numpar ";
+        $sql .= "                            and arreold.k00_valor > 0 ";      
+        $sql .= "        left join arrecad   on v01_numpre = arrecad.k00_numpre ";
+        $sql .= "                            and v01_numpar = arrecad.k00_numpar ";
+        $sql .= "                            and arrecad.k00_valor > 0 ";
+        $sql .= "        left join arrecant   on v01_numpre = arrecant.k00_numpre ";
+        $sql .= "                            and v01_numpar = arrecant.k00_numpar ";
+        $sql .= "                            and arrecant.k00_valor > 0 ";
+        $sql .= "        left join arresusp   on v01_numpre = arresusp.k00_numpre ";
+        $sql .= "                            and v01_numpar = arresusp.k00_numpar ";
+        $sql .= "                            and arresusp.k00_valor > 0 ";        
+        $sql .= "        inner join arretipo  on (arreold.k00_tipo = arretipo.k00_tipo or arrecad.k00_tipo = arretipo.k00_tipo or arrecant.k00_tipo = arretipo.k00_tipo or arresusp.k00_tipo = arretipo.k00_tipo) ";
+        $sql .= "                            and arretipo.k00_instit = ".db_getsession('DB_instit');
+        $sql .= "        inner join	proced		on v01_proced = v03_codigo ";
+        $sql .= "        left outer join	arrematric on arrematric.k00_numpre = divida.v01_numpre ";
+        $sql .= "        left outer join	iptubase a on arrematric.k00_matric = a.j01_matric ";
+        $sql .= "        left outer join	arreinscr	 on arreinscr.k00_numpre  =  divida.v01_numpre ";
+        $sql .= "        left outer join	issbase		 on arreinscr.k00_inscr = issbase.q02_inscr ";
+        $sql .= "        left outer join	arrecontr	 on arrecontr.k00_numpre  =  divida.v01_numpre ";
+        $sql .= "        left outer join	contrib		 on arrecontr.k00_contr  =  contrib.d07_contri ";
+        $sql .= "        left outer join	iptubase b on b.j01_matric = contrib.d07_matric ";
+        $sql .= " where parcel = {$parcel} order by v01_dtvenc";
+      }
 
       $tipo = 0;
       if ( pg_result(db_query($sql),0,'matric') > 0 ) {
@@ -911,7 +968,7 @@ foreach ($parag as $chave ) {
 
   if(strtoupper($chave->db02_descr) == "TITULO_PARCELAMENTO"){
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->MultiCell(180, 6,"        ".$objteste->geratexto($chave->db02_texto),0,$alinhamento);
+    $pdf->MultiCell(180, 6,"        ".$objteste->geratexto($chave->db02_texto)." ".$situacao,0,$alinhamento);
     $pdf->cell(180, $alt,"",0, 1, "C", 0);
   }elseif(strtoupper($chave->db02_descr) == "TABELA_VALORES"){
 
@@ -1141,7 +1198,8 @@ foreach ($parag as $chave ) {
     $pdf->Cell(20,4," Vlr. Jur. "      ,1,0,"C",1);
     $pdf->Cell(20,4," Vlr. Desc. "     ,1,0,"C",1);
     $pdf->Cell(20,4," Total "          ,1,1,"C",1);
-    $pdf->SetFont('Arial','',7);
+
+
 
     $k00_descrnovo = "";
     $primeiro = true;
@@ -1156,11 +1214,10 @@ foreach ($parag as $chave ) {
     }
 
     $pdf->Cell(20,4,"",0,1,"C",0);
-
+        
     if($pdf->GetY() > ( $pdf->h - 40 )){
       $pdf->AddPage();
     }
-
 
   }elseif(strtoupper($chave->db02_descr) == "TABELA_PARCELA"){
     // terceira tabela
@@ -1213,8 +1270,17 @@ foreach ($parag as $chave ) {
       $linhasdesc = pg_num_rows($resultdesc);
       if($linhasdesc > 0 and $cgc != "29131075000193"){
         db_fieldsmemory($resultdesc,0);
+        
+        $honorarios = 0;
+        $oInstit = new Instituicao(db_getsession('DB_instit'));                    
+        if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
+          $rechonorarios = 718;
+          $honorarios = "select sum(k00_valor) as honorarios from arrecad where k00_receit = ".$rechonorarios." and k00_numpre = ".$v07_numpre ;
+          $resulthonorarios = db_query($honorarios);
+          db_fieldsmemory($resulthonorarios,0);
+        }
 
-        if($desconto > 0){
+        if($desconto > 0){  
           //com desconto
           $entradades    = round($entrada -    (($entrada * $desconto)/100),2);
           $v07_ultpardes = round($v07_ultpar - (($v07_ultpar * $desconto)/100),2);
@@ -1248,9 +1314,13 @@ foreach ($parag as $chave ) {
           $pdf->Cell(50,4,'Valor da entrada ',1,0,"L",0);
           $pdf->Cell(45,4,db_formatar($entrada,'f'),1,1,"R",0);
           $pdf->Cell(50,4,'Valor da ultima parcela','LRB',0,"L",0);
-          $pdf->Cell(45,4,$v07_ultpar,'LRB',1,"R",0);
+          $pdf->Cell(45,4,db_formatar($v07_ultpar,'f'),'LRB',1,"R",0);
           $pdf->Cell(50,4,'Valor das parcelas a partir de ',1,0,"L",0);
           $pdf->Cell(45,4,db_formatar($vlrpar,'f'),1,1,"R",0);
+          if($honorarios > 0){
+            $pdf->Cell(50,4,'Valor dos Honorários ',1,0,"L",0);
+            $pdf->Cell(45,4,db_formatar($honorarios,'f'),1,1,"R",0);  
+          }          
           $pdf->ln(10);
           //tem q calcular o desconto para cada parcela
 
@@ -1275,5 +1345,5 @@ foreach ($parag as $chave ) {
 
 if(!defined('DB_BIBLIOT'))
 
-  $pdf->Output();
+$pdf->Output();
 ?>

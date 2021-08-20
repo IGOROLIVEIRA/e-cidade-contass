@@ -592,7 +592,7 @@ function js_atualizaCampos (iNumRow) {
    */
 
   var aSelecionados                       = gridRetencoes.getSelection();
-  if (aSelecionados[0][7] == 1) {
+  if (aSelecionados[0][7] == 1 || aSelecionados[0][7] == 2) {
 
     $('e21_sequencial').value               = aSelecionados[0][0];//Codigo da retencao
     $('e21_sequencialdescr').value          = aSelecionados[0][0];//descricao da retencao
@@ -912,7 +912,7 @@ $sSQLRetencao = $oDaoRetencao->sql_query(null,
                                           e21_aliquota",
                                           "e21_sequencial",
                                           "e21_instit=".db_getsession("DB_instit")."
-                                          and e21_retencaotiporecgrupo = 1");
+                                          and e21_retencaotiporecgrupo in (1,2)");
 $rsRetencao   = $oDaoRetencao->sql_record($sSQLRetencao);
 if (strlen($oNota->z01_cgccpf) == 14) {
   $sPessoa  = "J";

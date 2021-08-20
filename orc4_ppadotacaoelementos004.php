@@ -50,6 +50,7 @@ $clrotulo->label("o54_anousu");
 $clrotulo->label("o55_descr");
 $clrotulo->label("o55_descr");
 $clrotulo->label("o56_codele");
+$clrotulo->label("o56_elemento");
 $clrotulo->label("o11_descricao");
 $clrotulo->label("o08_concarpeculiar");
 $clrotulo->label("c58_descr");
@@ -90,6 +91,14 @@ if ($oDaoPPALei->numrows == 1) {
 <script language="JavaScript" type="text/javascript"	src="scripts/datagrid.widget.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+#o56_descr {
+    width: 311px;
+}
+#o15_descr, #o11_descricao, #c58_descr {
+    width: 420px;
+}
+</style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <center>
@@ -101,54 +110,50 @@ if ($oDaoPPALei->numrows == 1) {
 		<table>
 			<tr>
 				<td nowrap title="<?=@$To08_elemento?>">
-       <?
-							db_ancora ( @$Lo08_elemento, "js_pesquisao08_elemento(true);", $db_opcao );
-							?>
-    </td>
-				<td>
-     <?
-					db_input ( 'o08_elemento', 10, $Io08_elemento, true, 'text', $db_opcao, " onchange='js_pesquisao08_elemento(false);'" );
-					db_input ( 'o56_elemento', 40, $Io56_codele, true, 'text', 3, '' )?>
-    </td>
+                    <? db_ancora ( @$Lo08_elemento, "js_pesquisao08_elemento(true);", $db_opcao ); ?>
+                </td>
+				<td> 
+                    <?
+					db_input ( 'o08_elemento', 10, $Io08_elemento, true, 'text', $db_opcao, " onchange='js_pesquisao08_elemento(false,this);'" );
+                    db_input(  'o56_elemento',13,$Io56_elemento,true,'text',$db_opcao," onchange='js_pesquisao08_elemento(false,this);'");
+					db_input ( 'o56_descr', 40, $Io56_codele, true, 'text', 3, '' )
+                    ?>
+                </td>
 			</tr>
 			<tr>
 				<td nowrap title="<?=@$To08_recurso?>">
-     <?
-					db_ancora ( @$Lo08_recurso, "js_pesquisac62_codrec(true);", $db_opcao );
-					?>
-    </td>
-				<td>
-    <?
-				db_input ( 'o15_codigo', 10, $Io08_recurso, true, 'text', $db_opcao, "onchange='js_pesquisac62_codrec(false);'" );
-				db_input ( 'o15_descr', 40, $Io08_recurso, true, 'text', 3, "" );
-				?>
-    </td>
-			</tr>
+                    <? db_ancora ( @$Lo08_recurso, "js_pesquisac62_codrec(true);", $db_opcao ); ?>  
+                </td>
+			    <td> 
+                    <?
+                    db_input ( 'o15_codigo', 10, $Io08_recurso, true, 'text', $db_opcao, "onchange='js_pesquisac62_codrec(false);'" );
+                    db_input ( 'o15_descr', 40, $Io08_recurso, true, 'text', 3, "" );
+                    ?>
+                </td>
+            </tr>
 			<tr>
 				<td nowrap title="<?=@$To08_localizadorgastos?>">
-       <?
-							db_ancora ( @$Lo08_localizadorgastos, "js_pesquisao08_localizadorgastos(true);", $db_opcao );
-							?>
-    </td>
-				<td>
-   <?
-			db_input ( 'o08_localizadorgastos', 10, $Io08_localizadorgastos, true, 'text', $db_opcao, " onchange='js_pesquisao08_localizadorgastos(false);'" );
-			db_input ( 'o11_descricao', 40, $Io11_descricao, true, 'text', 3, '' );
-			?>
-    </td>
-			</tr>
+                    <? db_ancora ( @$Lo08_localizadorgastos, "js_pesquisao08_localizadorgastos(true);", $db_opcao ); ?>
+                </td>
+				<td> 
+                    <?
+                    $o08_localizadorgastos = 3;
+			        db_input ( 'o08_localizadorgastos', 10, $Io08_localizadorgastos, true, 'text', $db_opcao, " onchange='js_pesquisao08_localizadorgastos(false);'" );
+			        db_input ( 'o11_descricao', 40, $Io11_descricao, true, 'text', 3, '' );
+			        ?>
+                </td>
+            </tr>
 			<tr>
 				<td nowrap title="<?=@$To08_concarpeculiar?>">
-      <?
-						db_ancora ( @$Lo08_concarpeculiar, "js_pesquisao08_concarpeculiar(true);", $db_opcao );
-						?>
-      </td>
-				<td>
-      <?
-						db_input ( 'o08_concarpeculiar', 10, $Io08_concarpeculiar, true, 'text', $db_opcao, " onchange='js_pesquisao08_concarpeculiar(false);'" );
-						db_input ( 'c58_descr', 40, $Ic58_descr, true, 'text', 3, '' );
-						?>
-      </td>
+                    <? db_ancora ( @$Lo08_concarpeculiar, "js_pesquisao08_concarpeculiar(true);", $db_opcao ); ?>
+                </td>
+				<td> 
+                    <?
+                    $o08_concarpeculiar = '000';
+					db_input ( 'o08_concarpeculiar', 10, $Io08_concarpeculiar, true, 'text', $db_opcao, " onchange='js_pesquisao08_concarpeculiar(false);'" );
+					db_input ( 'c58_descr', 40, $Ic58_descr, true, 'text', 3, '' );
+				    ?>
+                </td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
@@ -191,37 +196,65 @@ if ($oDaoPPALei->numrows == 1) {
 </html>
 <script>
 sUrlRPC    = 'orc4_ppaRPC.php';
-function js_pesquisao08_elemento(mostra){
-  if(mostra==true){
-    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_ppadotacaoele',
-                        'db_iframe_orcelemento',
-                        'func_orcelemento.php?funcao_js=parent.js_mostraorcelemento1|o56_codele|o56_descr&analitica=1',
-                        'Elementos da Despesa',
-                        true);
-  }else{
-     if(document.form1.o08_elemento.value != ''){
-        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_ppadotacaoele',
-                            'db_iframe_orcelemento',
-                            'func_orcelemento.php?pesquisa_chave='+document.form1.o08_elemento.value+
-                            '&funcao_js=parent.js_mostraorcelemento&tipo_pesquisa=1&analitica=1',
-                            'Pesquisa', false);
-     }else{
-       document.form1.o56_codele.value = '';
-     }
-  }
+function js_pesquisao08_elemento(mostra,elemento){
+    
+    let sUrl = '';
+
+    if (mostra==true) {
+
+        sUrl = 'func_orcelemento.php?funcao_js=parent.js_mostraorcelemento1|o56_codele|o56_descr|o56_elemento&analitica=1';
+        js_openJanela(sUrl, true);
+        
+    } else {
+
+        if (elemento.name == 'o08_elemento' && document.form1.o08_elemento.value != '') {
+
+            sUrl = 'func_orcelemento.php?pesquisa_chave='+document.form1.o08_elemento.value+
+                    '&funcao_js=parent.js_mostraorcelemento&tipo_pesquisa=1&analitica=1&busca_elemento=true';
+
+        } else if (elemento.name == 'o56_elemento' && document.form1.o56_elemento.value != '') {
+
+            sUrl = 'func_orcelemento.php?pesquisa_chave='+document.form1.o56_elemento.value+
+                    '&funcao_js=parent.js_mostraorcelemento&analitica=1&busca_elemento=true';
+
+        } else {
+            document.form1.o56_descr.value = '';
+        }
+
+        js_openJanela(sUrl, false);
+
+    }
 }
-function js_mostraorcelemento(chave,erro){
 
-  document.form1.o56_elemento.value = chave;
+function js_openJanela(sUrl = '', mostra = null) {
 
-  if(erro==true){
-    document.form1.o08_elemento.focus();
+    if (sUrl != '' && mostra != null) {
+
+        js_OpenJanelaIframe('top.corpo.iframe_ppadotacaoele',
+                            'db_iframe_orcelemento',
+                            sUrl,
+                            'Elementos da Despesa',
+                            mostra);
+    }
+}
+
+function js_mostraorcelemento(chave1,erro,chave2,chave3){
+
+  document.form1.o56_descr.value    = chave1;
+  document.form1.o56_elemento.value = chave2;
+  document.form1.o08_elemento.value = chave3;
+   
+  if(erro==true){ 
+    document.form1.o08_elemento.focus(); 
+    document.form1.o08_elemento.value = ''; 
+    document.form1.o56_elemento.value = '';
     document.form1.o08_elemento.value = '';
   }
 }
-function js_mostraorcelemento1(chave1,chave2){
+function js_mostraorcelemento1(chave1,chave2,chave3){
   document.form1.o08_elemento.value = chave1;
-  document.form1.o56_elemento.value = chave2;
+  document.form1.o56_descr.value    = chave2;
+  document.form1.o56_elemento.value = chave3;
   db_iframe_orcelemento.hide();
 }
 function js_pesquisao08_localizadorgastos(mostra){
@@ -427,13 +460,10 @@ function js_retornoAdicaoDotacao(oAjax) {
     } else {
 
       $('o08_elemento').value          = "";
-      $('o56_elemento').value          = "";
+      $('o56_descr').value             = "";
       $('o15_codigo').value            = "";
       $('o15_descr').value             = "";
-      $('o08_localizadorgastos').value = "";
-      $('o11_descricao').value         = "";
-      $('o08_concarpeculiar').value    = "";
-      $('c58_descr').value             = "";
+      $('o56_elemento').value             = "";      
       var aInputsValores = js_getElementbyClass(form1,"anovalor");
       for (var i = 0; i < aInputsValores.length; i++) {
          aInputsValores[i].value = "";
@@ -497,5 +527,9 @@ function js_mostraconcarpeculiar1(chave1,chave2){
   $("c58_descr").setValue(chave2);
   db_iframe_concarpeculiar.hide();
 }
+
+let eChange = new Event('change');
+$('o08_localizadorgastos').dispatchEvent(eChange);
+$('o08_concarpeculiar').dispatchEvent(eChange);
 
 </script>

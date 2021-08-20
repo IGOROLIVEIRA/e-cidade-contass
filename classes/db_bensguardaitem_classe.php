@@ -601,5 +601,50 @@ class cl_bensguardaitem {
      }
      return $sql;
   }
+    function sql_query_relatorio ( $t22_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from bensguardaitem ";
+        $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = bensguardaitem.t22_usuario";
+        $sql .= "      inner join bens  on  bens.t52_bem = bensguardaitem.t22_bem";
+        $sql .= "      inner join bensguarda  on  bensguarda.t21_codigo = bensguardaitem.t22_bensguarda";
+        $sql .= "      inner join cgm  on  cgm.z01_numcgm = bens.t52_numcgm";
+        $sql .= "      inner join db_depart  on  db_depart.coddepto = bens.t52_depart";
+        $sql .= "      inner join clabens  on  clabens.t64_codcla = bens.t52_codcla";
+        $sql .= "      inner join cgm  as a on   a.z01_numcgm = bensguarda.t21_numcgm";
+        $sql .= "      INNER JOIN histbem ON t56_histbem = (SELECT max(t56_histbem) FROM histbem WHERE t56_codbem = t52_bem)";
+        $sql .= "      INNER JOIN situabens ON t56_situac = t70_situac";
+        $sql .= "      INNER JOIN benstipoguarda on t20_codigo = t21_tipoguarda";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($t22_codigo!=null ){
+                $sql2 .= " where bensguardaitem.t22_codigo = $t22_codigo "; 
+            } 
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        
+        return $sql;
+
+    }
 }
 ?>

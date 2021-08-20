@@ -250,6 +250,21 @@ if(isset($alterar) && !$sqlerro ){
     }
   }
 
+  if ($e44_tipo == "4") {
+      $resultParamento = db_query("SELECT e30_controleprestacao FROM empparametro WHERE e39_anousu = " . date("Y", db_getsession("DB_datausu")));
+      db_fieldsmemory($resultParamento, 0)->e30_controleprestacao;
+
+      if ($e30_controleprestacao == 't') {
+          $resultPrestacaoContas = db_query("SELECT e60_numemp FROM empempenho e LEFT JOIN emppresta er ON e.e60_numemp = er.e45_numemp WHERE e60_numcgm = {$e54_numcgm} AND e45_acerta IS NULL AND er.e45_tipo = 4 LIMIT 1");
+          db_fieldsmemory($resultPrestacaoContas, 0)->e60_numemp;
+
+          if ($e60_numemp) {
+              $erro_msg = "Não é possível emitir Autorização de Empenho para credor que possua Prestação de Contas pendente!";
+              $sqlerro = true;
+          }
+      }
+  }
+
   db_fim_transacao($sqlerro);
 } else if(isset($chavepesquisa)) {
 
@@ -365,11 +380,11 @@ if(isset($chavepesquisa)){
 		  parent.document.formaba.prazos.disabled=false;\n
 		  parent.document.formaba.anulacao.disabled=false;\n
                   // parent.document.formaba.empautret.disabled=false;\n
-                  // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-		  CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
-		  CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
-		  CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
-		  CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
+                  // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+		  top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
+		  top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
+		  top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
+		  top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
 	       }
 	       js_libera();
            </script>

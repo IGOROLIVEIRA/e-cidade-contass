@@ -437,63 +437,70 @@ if (isset($data)) {
 <html>
 
 <head>
-  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta http-equiv="Expires" CONTENT="0">
-  <?php
-  db_app::load("scripts.js");
-  db_app::load("prototype.js");
-  db_app::load("datagrid.widget.js");
-  db_app::load("strings.js");
-  db_app::load("grid.style.css");
-  db_app::load("estilos.css");
-  db_app::load("AjaxRequest.js");
-  ?>
-  <style>
-    <? $cor = "#999999" ?>.bordas02 {
-      border: 2px solid #cccccc;
-      border-top-color: <?= $cor ?>;
-      border-right-color: <?= $cor ?>;
-      border-left-color: <?= $cor ?>;
-      border-bottom-color: <?= $cor ?>;
-      background-color: #999999;
-    }
-
-    .bordas {
-      border: 1px solid #cccccc;
-      border-top-color: <?= $cor ?>;
-      border-right-color: <?= $cor ?>;
-      border-left-color: <?= $cor ?>;
-      border-bottom-color: <?= $cor ?>;
-      background-color: #cccccc;
-    }
-
-    .configurada {
-      background-color: #d1f07c;
-    }
-
-    .ComMov {
-      background-color: rgb(222, 184, 135);
-    }
-
-    .naOPAuxiliar {
-      background-color: #ffff99;
-    }
-
-    .configuradamarcado {
-      background-color: #EFEFEF;
-    }
-
-    .ComMovmarcado {
-      background-color: #EFEFEF;
-    }
-
-    .naOPAuxiliarmarcado {
-      background-color: #EFEFEF;
-    }
-
-    .normalmarcado {
-      background-color: #EFEFEF
+<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" CONTENT="0">
+<?php
+db_app::load("scripts.js");
+db_app::load("prototype.js");
+db_app::load("datagrid.widget.js");
+db_app::load("strings.js");
+db_app::load("grid.style.css");
+db_app::load("estilos.css");
+db_app::load("AjaxRequest.js");
+db_app::load("widgets/windowAux.widget.js");
+?>
+<style>
+<?$cor="#999999"?>
+.bordas02{
+         border: 2px solid #cccccc;
+         border-top-color: <?=$cor?>;
+         border-right-color: <?=$cor?>;
+         border-left-color: <?=$cor?>;
+         border-bottom-color: <?=$cor?>;
+         background-color: #999999;
+}
+.bordas{
+         border: 1px solid #cccccc;
+         border-top-color: <?=$cor?>;
+         border-right-color: <?=$cor?>;
+         border-left-color: <?=$cor?>;
+         border-bottom-color: <?=$cor?>;
+         background-color: #cccccc;
+}
+.configurada {
+    background-color: #d1f07c;
+}
+.ComMov {
+    background-color: rgb(222, 184, 135);
+}
+.naOPAuxiliar {
+    background-color: #ffff99;
+}
+.configuradamarcado {
+    background-color: #EFEFEF;
+}
+.ComMovmarcado {
+    background-color: #EFEFEF;
+}
+.naOPAuxiliarmarcado {
+    background-color: #EFEFEF;
+}
+.normalmarcado{ background-color:#EFEFEF}
+</style>
+</head>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="450" align="left" valign="top" bgcolor="#CCCCCC">
+    <?
+    $oDaoEmpParametro = new cl_empparametro;
+    $rsParam  = $oDaoEmpParametro->sql_record($oDaoEmpParametro->sql_query_file(db_getsession("DB_anousu")));
+    $oParam   = db_utils::fieldsMemory($rsParam, 0);
+    if ($oParam->e30_agendaautomatico == "t") {
+      include("forms/db_frmmanutencaoagenda.php");
+    } else {
+      include("forms/db_frmempageforma.php");
     }
   </style>
 </head>

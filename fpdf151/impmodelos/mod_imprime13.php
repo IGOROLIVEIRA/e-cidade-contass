@@ -481,7 +481,7 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
     $this->objpdf->ln();
   }
 
-  $this->objpdf->Setfont('Arial','',5);
+  $this->objpdf->Setfont('Arial','',7);
 
   // TEXTO DOS ITENS
   if($volta_impressao == 0){

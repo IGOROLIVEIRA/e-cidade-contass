@@ -172,6 +172,43 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
       me.sParamContaDebito     = "getContaEventoContabil";
 
     break;
+
+    /**
+      * Reconhecimento de perdas
+      */
+    case 15: // Inclusão
+    case 16: // Estorno
+
+      me.iTipoInclusao      = 15;
+      me.lContaDebito       = true;
+      me.sTipoTransferencia = "Reconhecimento de Perdas RPPS";
+
+      me.sPesquisaContaCredito  = "Saltes";
+      me.sPesquisaContaDebito   = "EventoContabil";
+
+      me.sParamContaCredito     = "getContasSaltes";
+      me.sParamContaDebito      = "getContaEventoContabil";
+
+    break;
+
+    /**
+     * Reconhecimento de ganhos RPPS
+     */
+
+    case 17: // Inclusão
+    case 18: // Estorno
+
+      me.iTipoInclusao      = 17;
+      me.lContaCredito      = true;
+      me.sTipoTransferencia = "Reconhecimento de Ganhos RPPS";
+
+      me.sPesquisaContaCredito = "EventoContabil";
+      me.sPesquisaContaDebito  = "Saltes";
+
+      me.sParamContaCredito    = "getContaEventoContabil";
+      me.sParamContaDebito     = "getContasSaltes";
+    break;
+
   }
 
   /* [Extensão] - Filtro da Despesa - parte 1 */

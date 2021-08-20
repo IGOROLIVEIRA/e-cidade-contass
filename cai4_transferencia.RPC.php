@@ -203,7 +203,7 @@ switch ($oParam->exec) {
       $oTransferencia->salvar();
 
       // Operações que devem realizar lançamento contábil na inclusão
-      $aTipoOperacao = array(5,6,7,8,11,12);
+      $aTipoOperacao = array(5,6,7,8,11,12,17);
 
        // Faz lançamento contábil para os tipos de operação descritos acima
        // ou quando for um recebimento de pagamento de uma transferencia
@@ -850,6 +850,11 @@ function getDocumentoPorTipoInclusao($iTipoOperacao) {
     case 15:
     case 16:
       $iCodigoDocumento = 164;
+    break;
+
+    case 17:
+    case 18:
+        $iCodigoDocumento = 166;
     break;
   }
 

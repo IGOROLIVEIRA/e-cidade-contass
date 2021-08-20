@@ -830,12 +830,13 @@ if($x->consultarDataDoSistema == true){
 
             lDesativaLinha = false;
             if (nQtdeAut <= 0 ) {
+                lDesativaLinha = true; 
+            }
+            valor = parseInt(nValorAut);
+            if (valor <= 0){ 
                 lDesativaLinha = true;
             }
-
-            if (Number(nValorAut) <= 0){
-                lDesativaLinha = true;
-            }
+            
 
             var sTextEvent  = " ";
 

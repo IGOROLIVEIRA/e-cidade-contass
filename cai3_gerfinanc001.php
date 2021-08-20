@@ -1589,7 +1589,7 @@ if (isset($resultaux)) {
     if (pg_result($result, $i, "k00_tipo") == $v04_tipoinicial) {
       $nome_arquivo = 'cai3_gerfinanc050.php';
     } else if (pg_result($result, $i, "k00_tipo") == $v04_tipocertidao) {
-      $nome_arquivo = 'cai3_gerfinanc040.php';
+      $nome_arquivo = 'cai3_gerfinanc002';//'cai3_gerfinanc040.php';
     } else {
       $nome_arquivo = 'cai3_gerfinanc002.php';
     }

@@ -82,7 +82,7 @@ $clveiccadposto->rotulo->label("ve29_codigo");
            }
         }
         if(isset($chave_ve29_codigo) && (trim($chave_ve29_codigo)!="") ){
-	         $sql = $clveiccadposto->sql_query($chave_ve29_codigo,$campos,"ve29_codigo");
+	         $sql = $clveiccadposto->sql_query($chave_ve29_codigo,$campos,"ve29_codigo"); 
         }else{
            $sql = $clveiccadposto->sql_query("",$campos,"ve29_codigo","");
         }

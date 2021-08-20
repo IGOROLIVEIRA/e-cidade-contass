@@ -405,14 +405,13 @@ db_postmemory($HTTP_POST_VARS);
 						 update pagordemele set e53_vlrpag = 0 where e53_codord in(SELECT e50_codord FROM w_empordem);
 						 update empageconf set e86_data = (select e50_data from pagordem where e50_codord = {$e50_codord} limit 1)
 						  where e86_codmov in (select e82_codmov from empord where e82_codord = {$e50_codord});
-						 update empagemov set e81_codage = (select e80_codage from empage where e80_instit = ".db_getsession("DB_instit")." and e80_data = (select e50_data from pagordem where e50_codord = {$e50_codord} limit 1) )
-						  where e81_codmov in (select e82_codmov from empord where e82_codord = {$e50_codord});
 						DELETE FROM emppresta where e45_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empord where e82_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empageconf where e86_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empagemovforma  where e97_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empagepag where e85_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empageconcarpeculiar where e79_empagemov in (select e82_codmov from w_mov);
+                        DELETE FROM empagemovtipotransmissao where e25_empagemov in (select e82_codmov from w_mov);
 						DELETE FROM empagemov where e81_codmov	 in (select e82_codmov from w_mov);
 
 				";

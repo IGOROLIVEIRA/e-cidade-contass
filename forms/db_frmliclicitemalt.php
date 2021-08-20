@@ -87,6 +87,10 @@ $clrotulo->label("nome");
       db_input('licitacao',10,'',true,'hidden',3);
       db_input("tipojulg",1,"",true,"hidden",3);
       db_input('codprocesso' ,10, '', true, 'hidden', 3);
+      db_input('criterioadj_item' ,10, '', true, 'hidden', 3);
+      db_input('criterioadj_contrato' ,10, '', true, 'hidden', 3);
+      db_input('codTipoLicitacao' ,10, '', true, 'hidden', 3);
+
    ?>
 
   </tr>
@@ -96,9 +100,30 @@ $clrotulo->label("nome");
 <script>
 function js_inclui(){
 	itens.js_submit_form();
-	itens.document.form1.incluir.value='incluir';
-	itens.document.form1.submit();
-	procs.document.form1.submit();
+	
+  /**
+   Validando critrio de adjudicao para a licitao de acordo com o processo de compra
+   */
+  var criterioadj_item = document.form1.criterioadj_item.value;
+  var criterioadj_contrato = document.form1.criterioadj_contrato.value;
+  var codTipoLicitacao = document.form1.codTipoLicitacao.value;
+  if(codTipoLicitacao!=8 && codTipoLicitacao!=9 && codTipoLicitacao!=10){
+     if(criterioadj_item==criterioadj_contrato){
+
+      itens.document.form1.incluir.value='incluir';
+	    itens.document.form1.submit();
+	    procs.document.form1.submit();
+     }else{
+      alert("Critério de Adjudicação no corresponde com o processo de compra")
+     }
+    
+  }else{
+    
+    itens.document.form1.incluir.value='incluir';
+	  itens.document.form1.submit();
+	  procs.document.form1.submit();
+  }
+
 
 }
 

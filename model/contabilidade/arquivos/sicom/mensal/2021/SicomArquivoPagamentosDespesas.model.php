@@ -182,10 +182,14 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
     //$aCaracteres = array("Â°",chr(13),chr(10),"'",);
     // matriz de entrada
-    $what = array("Â°", chr(13), chr(10), 'Ã¤', 'Ã£', 'Ã ', 'Ã¡', 'Ã¢', 'Ãª', 'Ã«', 'Ã¨', 'Ã©', 'Ã¯', 'Ã¬', 'Ã­', 'Ã¶', 'Ãµ', 'Ã²', 'Ã³', 'Ã´', 'Ã¼', 'Ã¹', 'Ãº', 'Ã»', 'Ã€', 'Ã', 'Ãƒ', 'Ã‰', 'Ã', 'Ã“', 'Ãš', 'Ã±', 'Ã‘', 'Ã§', 'Ã‡', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'Âª', 'Âº');
+    $what = array( 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û',
+    'Ä','Ã','À','Á','Â','Ê','Ë','È','É','Ï','Ì','Í','Ö','Õ','Ò','Ó','Ô','Ü','Ù','Ú','Û',
+    'ñ','Ñ','ç','Ç','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','°', "°",chr(13),chr(10),"'");
 
     // matriz de saÃ­da
-    $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    $by = array( 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u',
+    'A','A','A','A','A','E','E','E','E','I','I','I','O','O','O','O','O','U','U','U','U',
+    'n','N','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', " "," "," "," ");
     $aInformado = array();
     for ($iCont = 0; $iCont < pg_num_rows($rsEmpenhosPagosGeral); $iCont++) {
 
@@ -383,7 +387,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                                 ELSE e96_descr
                             END desctipodocumentoop,
                             c23_conlancam AS codlan,
-                            e81_codmov
+                            e81_codmov,
+                            e81_numdoc
                      FROM empagemov
                      INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
                      INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
@@ -554,7 +559,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
-                              where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . ") as x order by contapag asc";
+                              where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . ") as x order by ano desc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste1");
 
             $ContaPag = db_utils::fieldsMemory($rsResultContaPag)->contapag;
@@ -564,13 +569,19 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_tiporegistro = $reg12->tiporegistro;
             $clops12->si134_codreduzidoop = $reg11->codreduzidoop;
             $clops12->si134_tipodocumentoop = $reg12->tipodocumentoop;
-            $clops12->si134_nrodocumento = $reg12->nrodocumento;
+            $clops12->si134_nrodocumento = ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') ? ' ' : $reg12->nrodocumento;
             $clops12->si134_codctb = $ContaPag;
             $clops12->si134_codfontectb = $reg11->codfontrecursos;
             if (in_array($clops12->si134_codfontectb, $this->aFontesEncerradas)) {
                 $clops12->si134_codfontectb = substr($clops12->si134_codfontectb, 0, 1).'59';
             }
-            $clops12->si134_desctipodocumentoop = $reg12->tipodocumentoop == "99" ? "TED" : ' ';
+            if ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') {
+				$clops12->si134_desctipodocumentoop = $reg12->e81_numdoc;
+            } elseif ($reg12->tipodocumentoop == '99') {
+				$clops12->si134_desctipodocumentoop = 'TED';
+			} else {
+				$clops12->si134_desctipodocumentoop = ' ';
+			}            
             $clops12->si134_dtemissao = $reg12->dtemissao;
             $clops12->si134_vldocumento = $nVolorOp;
             $clops12->si134_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -988,7 +999,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                              e50_data AS dtemissao,
                              k12_valor AS vldocumento,
                              c23_conlancam AS codlan,
-                             e81_codmov
+                             e81_codmov,
+                             e81_numdoc
                       FROM empagemov
                       INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
                       INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
@@ -1020,11 +1032,12 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
                       JOIN orctiporec ON o58_codigo = o15_codigo AND cg.k105_data = corrente.k12_data AND cg.k105_id = corrente.k12_id
                       JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = cg.k105_sequencial AND c23_conlancam = {$oEmpPago->lancamento}
-                      WHERE e80_instit = " . db_getsession("DB_instit") . "
+                      WHERE e60_instit = " . db_getsession("DB_instit") . "
                         AND k12_codord = {$oEmpPago->ordem}
                         AND e81_cancelado IS NULL";
 
           $rsPagOrd12 = db_query($sSql12) or die($sSql12);
+          $rsPagOrd12 = db_query($sSql12);
 
           $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
 
@@ -1173,13 +1186,19 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_tiporegistro = $reg12->tiporegistro;
             $clops12->si134_codreduzidoop = $reg11->codreduzidoop;
             $clops12->si134_tipodocumentoop = $reg12->tipodocumentoop;
-            $clops12->si134_nrodocumento = $reg12->nrodocumento;
+            $clops12->si134_nrodocumento = ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') ? ' ' : $reg12->nrodocumento;
             $clops12->si134_codctb = $ContaPag;
             $clops12->si134_codfontectb = $reg11->codfontrecursos;
             if (in_array($clops12->si134_codfontectb, $this->aFontesEncerradas)) {
                 $clops12->si134_codfontectb = substr($clops12->si134_codfontectb, 0, 1).'59';
             }
-            $clops12->si134_desctipodocumentoop = $reg12->tipodocumentoop == "99" ? "TED" : ' ';
+			if ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') {
+				$clops12->si134_desctipodocumentoop = $reg12->e81_numdoc;
+            } elseif ($reg12->tipodocumentoop == '99') {
+				$clops12->si134_desctipodocumentoop = 'TED';
+			} else {
+				$clops12->si134_desctipodocumentoop = ' ';
+			}
             $clops12->si134_dtemissao = $reg12->dtemissao;
             $clops12->si134_vldocumento = $nVolorOp;
             $clops12->si134_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];

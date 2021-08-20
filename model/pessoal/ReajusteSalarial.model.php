@@ -47,10 +47,10 @@ class ReajusteSalarial{
       $oDaoRhPessoalMov = db_utils::getDao('rhpessoalmov');
       $oDaoRhPessoalMov->rh02_seqpes = $oServidor->getCodigoMovimentacao();
       $oDaoRhPessoalMov->rh02_salari = $this->getNovoValor($oServidor->getSalario());
-      $oDaoRhPessoalMov->alterar($oServidor->getCodigoMovimentacao());
+      $oDaoRhPessoalMov->alterar($oServidor->getCodigoMovimentacao(), null, false);
 
       if ($oDaoRhPessoalMov->erro_status == '0'){
-        throw new DBException("Ocorreu um erro ao Efetuar o Reajuste");
+        throw new DBException("Ocorreu um erro ao Efetuar o Reajuste ".$oDaoRhPessoalMov->erro_msg);
       }
     }
 

@@ -40,6 +40,10 @@ $oGet        = db_utils::postMemory($_GET);
 $iDbOpcao    = 1;
 $lMostraMenu = true;
 
+$sSqlTermo = " SELECT t59_termodeguarda FROM cfpatriinstituicao ";
+$rsTermo = db_query($sSqlTermo);
+$iTermoGuarda = db_utils::fieldsMemory($rsTermo, 0)->t59_termodeguarda;
+
 /**
  * Se o programa for acessado por uma rotina de inclusão/alteracao de Termo/Devolucao de Termo
  * setmos a propriedade $iDbOpcao para bloquear os campos e o Codigo do termo no forumlario
@@ -68,7 +72,7 @@ $sSqlDocumentoTemplate = $oDaoDocumento->sql_query_file(null, $sCampos, null, "d
 $rsDocumentoTemplate   = $oDaoDocumento->sql_record($sSqlDocumentoTemplate);
 
 
-if ($oDaoDocumento->erro_status == "0") {
+if ($oDaoDocumento->erro_status == "0" && $iTermoGuarda == 't') {
   db_msgbox(_M("patrimonial.patrimonio.pat2_reltermoguarda001.nao_ha_templates"));
 }
 
@@ -115,7 +119,8 @@ if ($oDaoDocumento->erro_status == "0") {
 	            db_input('t21_codigo', 10, $It21_codigo, true, 'text', $iDbOpcao, "onchange='js_pesquisaBensGuarda(false);'");
 	          ?>
 			    </td>
-        </tr>
+        </tr>  
+        <?php if($iTermoGuarda == 't'){ ?>           
         <tr>
           <td>Responsável:</td>
           <td>
@@ -143,6 +148,16 @@ if ($oDaoDocumento->erro_status == "0") {
             ?>
           </td>
         </tr>
+        <?}else{?>
+          <tr title=''>
+            <td>Modelo: </td>
+            <td>
+              <?
+                db_select('modelo', array(0 => 'Selecione', 1 => 'Modelo 1'), $db_opcao, '');
+              ?>
+            </td>
+          </tr>
+        <?}?>
       </table>
     </fieldset >
     <input type="button" id="btnImprimir" value="Imprimir" onclick="js_imprime();"/>
@@ -154,6 +169,9 @@ if ($lMostraMenu) {
 }
 ?>
 <script type="text/javascript">
+termoGuarda = "<?=$iTermoGuarda;?>";
+document.getElementById('modelo').selectedIndex = 1;
+
 var oGet = js_urlToObject();
 /**
  * Função que chama a lookup dos Termos de Guarda
@@ -209,24 +227,34 @@ function js_pesquisaTermo(lMostra) {
 function js_bensGuardaOnChange(lErro, iTermo, iCgm, sResponsavel) {
 
   $('t21_codigo').value  = iTermo;
-  $('cgm').value         = iCgm;
-  $('responsavel').value = sResponsavel;
 
+  if(termoGuarda == 't'){
+      $('cgm').value         = iCgm;
+      $('responsavel').value = sResponsavel;
+  }
+  
   if (lErro) {
 
     $('t21_codigo').focus();
     $('t21_codigo').value  = '';
-    $('cgm').value         = '';
-    $('responsavel').value = '';
+
+    if(termoGuarda == 't'){
+        $('cgm').value         = '';
+        $('responsavel').value = '';
+    }
+
   }
 }
 function js_bensGuarda(iTermo, iCgm, sResponsavel, lErro) {
 
-  $("t21_codigo").value  = iTermo;
-  $("cgm").value         = iCgm;
-  $("responsavel").value = sResponsavel;
+    $("t21_codigo").value  = iTermo;
 
-  db_iframe_bensguarda.hide();
+    if(termoGuarda == 't'){
+        $("cgm").value         = iCgm;
+        $("responsavel").value = sResponsavel;
+    }
+
+    db_iframe_bensguarda.hide();
 }
 
 
@@ -250,38 +278,54 @@ if (oGet.iTermo != 'undefined') {
   js_pesquisaBensGuarda(false);
 }
 
-js_limpaForm();
+if(termoGuarda == 't'){
+    js_limpaForm();
+}
 
 /**
  * Função que emite o Termo de Guarda
  */
 function js_imprime() {
 
-  if ($F('t21_codigo') == "") {
+    if ($F('t21_codigo') == "") {
 
-    alert(_M("patrimonial.patrimonio.pat2_reltermoguarda001.selecione_termno_de_guarda"))
-    return false;
-  }
+      alert(_M("patrimonial.patrimonio.pat2_reltermoguarda001.selecione_termno_de_guarda"))
+      return false;
+    }
 
+    let sUrl  = '';
 
-  var sUrl  = '';
-  sUrl      = 'pat2_emitetermodeguarda002.php';
-  if (oGet.devolucao) {
-    sUrl  = 'pat2_emitedevolucaotermodeguarda002.php';
-  }
-  sUrl     += '?iModeloImpressao='+$F('documentotemplate');
-  sUrl     += '&iCodigoTermo='+$F('t21_codigo');
-  sUrl     += '&sFuncao='+$F('funcao');
+    if(termoGuarda == 't'){
+        sUrl      = 'pat2_emitetermodeguarda002.php';
+        if (oGet.devolucao) {
+          sUrl  = 'pat2_emitedevolucaotermodeguarda002.php';
+        }
+        sUrl     += '?iModeloImpressao='+$F('documentotemplate');
+        sUrl     += '&iCodigoTermo='+$F('t21_codigo');
+        sUrl     += '&sFuncao='+$F('funcao');
+    }else{
+        if(!document.form1.modelo.selectedIndex){
+            alert('Nenhum modelo selecionado. Verifique!');
+            return;
+        }
 
-  var jan = window.open(sUrl, '',
-                        'location=0, width='+(screen.availWidth - 5)+'width='+(screen.availWidth - 5)+', scrollbars=1');
-      jan.moveTo(0, 0);
+        if("<?=$oGet->devolucao?>" == 'true'){
+            sUrl = 'pat2_reltermoguardamodelodevolucao.php?iTermo='+$F('t21_codigo');
+        }else{
+            sUrl = 'pat2_reltermoguardamodelo.php?iTermo='+$F('t21_codigo');
+        }
+    }
+
+    var jan = window.open(sUrl, '', 'location=0, width='+(screen.availWidth - 5)+'width='+(screen.availWidth - 5)+', scrollbars=1');
+    jan.moveTo(0, 0);
 }
 </script>
 <script>
 
-$("t21_codigo").addClassName("field-size2");
-$("responsavel").addClassName("field-size9");
-$("funcao").addClassName("field-size9");
+if(termoGuarda == 't'){
+    $("t21_codigo").addClassName("field-size2");
+    $("responsavel").addClassName("field-size9");
+    $("funcao").addClassName("field-size9");
+}
 
 </script>

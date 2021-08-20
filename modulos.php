@@ -39,6 +39,31 @@ if(!session_is_registered("DB_instit")) {
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("dbforms/db_funcoes.php");
+require_once("classes/db_db_config_classe.php");
+
+$cldbconfig         = new cl_db_config();
+$codigo = db_getsession("DB_instit");
+$result = $cldbconfig->sql_record($cldbconfig->sql_query(null,"*",null,"codigo = {$codigo}"));
+
+
+
+
+if($cldbconfig->numrows>0){
+    $resultado = db_utils::fieldsMemory($result,0);
+    $valorOrde = $resultado->orderdepart;
+    
+    if($valorOrde==1){
+        $ordernar = "order by d.descrdepto";
+    }else if($valorOrde==2){
+        $ordernar = "order by d.coddepto ASC";
+    }else if($valorOrde==3){
+        $ordernar = "order by d.coddepto DESC";
+    }else if($valorOrde==4){
+        $ordernar = "order by u.db17_ordem ASC";
+    }else if($valorOrde==null){
+        $ordernar = "order by u.db17_ordem";
+    }
+}
 
 if(isset($modulo) and is_numeric($modulo)){
 
@@ -155,6 +180,10 @@ if(pg_numrows($result) == 0) {
     h2{
         color: red;
         text-align: center;
+        margin-top: 18px;
+        margin-bottom: 0px;
+        z-index: 1;
+        position: relative;
     }
 </style>
 <body class="body-default">
@@ -278,7 +307,7 @@ if(pg_numrows($result) == 0) {
                             $sSql .= "   where u.id_usuario = ".db_getsession("DB_id_usuario");
                             $sSql .= "     and o58_instit   = ".db_getsession("DB_instit");
                             $sSql .= "     and o58_anousu   = ".db_getsession("DB_anousu");
-                            $sSql .= "order by u.db17_ordem";
+                            $sSql .= $ordernar; 
 
                             /**
                              * Se o usuario tiver departamento, aparecem os departamentos
@@ -290,7 +319,7 @@ if(pg_numrows($result) == 0) {
                             $sSql  .= "   where instit       = ".db_getsession("DB_instit");
                             $sSql  .= "     and u.id_usuario = ".db_getsession("DB_id_usuario");
                             $sSql  .= "     and (d.limite is null or d.limite >= '" . date("Y-m-d",db_getsession("DB_datausu")) . "')";
-                            $sSql  .= "order by u.db17_ordem ";
+                            $sSql  .= $ordernar;
                             $result = db_query($sSql) or die($sSql);
 
                             if(pg_numrows($result) == 0){
@@ -342,9 +371,8 @@ if(pg_numrows($result) == 0) {
 
                                 echo "Departamento:&nbsp;&nbsp;</td><td>";
                                 $mostra_menu = true;
-                                $result      = db_query($sSql) or die($sSql);
+                                $result      = db_query($sSql) or die($sSql); // ordenar por $descrdepto
                                 db_selectrecord('coddepto',$result,true,2,'','','','','js_mostramodulo(document.form1.coddepto.value,document.form1.coddeptodescr.options.text)');
-
                                 if(!session_is_registered("DB_coddepto")){
 
                                     db_putsession("DB_coddepto",pg_result($result,0,0));
@@ -484,28 +512,88 @@ if(pg_numrows($result) == 0) {
                                 <tr>
                                     <hr style="color:#000; size: 25px;">
                                     <td>
-                                        <h2>Editais pendentes de envio</h2>
+                                        <h2 style="margin-bottom: 10px;">Editais pendentes de envio</h2>
                                         <iframe frameborder="0"  width="100%" id="licitacoes" name="licitacaoes" src="func_edital.php?aguardando_envio=true&module_licitacao=true" scrolling="auto"></iframe>
                                     </td>
                                 </tr>
                             <?php endif; ?>
+                            <?php if($modulo == 8251):
+                                
+                                $rsParametro = db_query('SELECT pc01_liberargerenciamentocontratos from parametroscontratos');
+                                $iLiberarContratos = db_utils::fieldsMemory($rsParametro, 0)->pc01_liberargerenciamentocontratos;
+                                
+                                $oDaoAcordo = db_utils::getDao('acordo');
+                                
+                                $sWhere = " cast((case WHEN ac16_datafim > ac26_data THEN ac16_datafim ELSE ac26_data END) AS date) - date '" . date("Y-m-d"). "' between 0 and 30 ";
+                                $sWhere .= " and  ac16_instit = ". db_getsession('DB_instit');
+                                $sWhere .= " and (ac16_providencia is null OR ac16_providencia in (1, 2)) ";
+                                $sWhere .= " and ac16_acordosituacao = 4 ";
+                                $sWhere .= " and ac16_coddepto = ". db_getsession('DB_coddepto');
+                                $sSqlAcordos = $oDaoAcordo->sql_query_completo(null, 'distinct acordo.ac16_sequencial', '', $sWhere);
+                                $rsAcordos = $oDaoAcordo->sql_record($sSqlAcordos);
+                                
+                                if($iLiberarContratos == 't' && $oDaoAcordo->numrows):
+                            ?>
+                            
+                                <tr>
+                                    <hr style="color:#000; size: 25px;">
+                                    <td>
+                                        <h2>Acordos a vencer</h2>
+                                        <iframe frameborder="0"  width="100%" height="130%" id="acordos" name="acordos" src="func_acordosavencer.php" scrolling="auto"></iframe>
+                                    </td>
+                                </tr>
+                                <?php endif; ?>
+                            <?php endif; ?>
                             <?php
-                            $sqlPermissao = "select m.id_item,m.descricao
-                                                from db_permissao p
-                            inner join db_itensmenu m on m.id_item = p .id_item
-                            where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
-                            $result = db_query($sqlPermissao);
+                            $liberarRecebimento = false;
+                            $sSqlPerfil  = "select db_permissao.id_usuario, anousu   ";
+                            $sSqlPerfil .= "from db_permissao       ";
+                            $sSqlPerfil .= "WHERE db_permissao.id_usuario IN";
+                            $sSqlPerfil .= "    (SELECT db_permherda.id_perfil";
+                            $sSqlPerfil .= "     FROM db_permherda";
+                            $sSqlPerfil .= "     WHERE db_permherda.id_usuario = ".db_getsession("DB_id_usuario").")";
+                            $sSqlPerfil .= "group by db_permissao.id_usuario, db_permissao.anousu ";
+                            $sSqlPerfil .= "order by db_permissao.anousu desc";
+                            $resultPerfil = db_query($sSqlPerfil);
+
+                            if(pg_numrows($resultPerfil) == 0) {
+                                $sqlPermissaoMenu = "select m.id_item,m.descricao
+                                                     from db_permissao p
+                                                     inner join db_itensmenu m on m.id_item = p .id_item
+                                                     where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
+                                $resultMenuRecebimento = db_query($sqlPermissaoMenu);
+                                if(pg_numrows($resultMenuRecebimento) > 0){
+                                    $liberarRecebimento = true;
+                                }
+                            }else{
+                                for($i = 0;$i < pg_numrows($resultPerfil);$i++) {
+                                    $codperfil = pg_result($resultPerfil,$i,0);
+                                    $sqlPermissaoPerfil = "select m.id_item,m.descricao
+                                                       from db_permissao p
+                                                       inner join db_itensmenu m on m.id_item = p .id_item
+                                                       where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = $codperfil";
+                                    $resultMenuRecebimento = db_query($sqlPermissaoPerfil);
+                                    if(pg_numrows($resultMenuRecebimento) > 0){
+                                        $liberarRecebimento = true;
+                                    }
+                                }
+
+                            }
                             $db_modulo = db_getsession("DB_modulo");
 
-                            if($db_modulo == 604 && pg_numrows($result) > 0):
+                            if($db_modulo == 604 && $liberarRecebimento = true):
                                 ?>
                                 <tr>
                                     <hr style="color:#000; size: 25px;">
                                     <td>
                                         <h2>Processos a receber no Departamento</h2>
-                                        <iframe frameborder="0"  width="100%" height="300%" id="processos" name="Processos" src="db_procreceber.php" scrolling="auto"></iframe>
                                     </td>
                                 </tr>
+                            <tr>
+                                <td>
+                                    <iframe width="100%" height="300%" frameborder="0" id="processos" name="Processos" src="db_procreceber.php" scrolling="auto"></iframe>
+                                </td>
+                            </tr>
                             <?php endif; ?>
                         </table>
                     </center>

@@ -54,6 +54,18 @@ db_select('pc01_libcontratodepart',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
+
+    <tr>
+        <td nowrap title="<?=@$pc01_liberargerenciamentocontratos?>">
+            <input name="oid" type="hidden" value="<?=@$oid?>">
+            Liberar gerenciamento de contratos:
+        </td>
+        <td>
+          <?php 
+            db_select('pc01_liberargerenciamentocontratos', array('f' => 'NAO', 't' => 'SIM'), true, $db_opcao);
+          ?>
+        </td>
+    </tr>
  </table>
 <table>
     <tr>

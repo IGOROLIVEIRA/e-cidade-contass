@@ -141,8 +141,11 @@ $cliframe_seleciona = new cl_iframe_seleciona;
 </form>
 <script>
 
-    BuscarCredenciamento(document.getElementById('l205_fornecedor').value);
-    getCredenciamento();
+    if(document.getElementById('l205_fornecedor').value){
+        BuscarCredenciamento(document.getElementById('l205_fornecedor').value);
+        getCredenciamento();
+    }
+
     /**
      * Retorna todos os itens
      */
@@ -285,7 +288,6 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     /*buscar credenciamento*/
 
     function BuscarCredenciamento(fornecedor) {
-
         try {
             BuscarCredAjax({
                 exec: 'getCredforne',
@@ -299,7 +301,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     }
 
     function BuscarCredAjax(params, onComplete) {
-        //js_divCarregando('Aguarde Buscando Informações', 'div_aguarde');
+        js_divCarregando('Aguarde Buscando Informações', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
@@ -421,12 +423,12 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     }
 
     function verificaCred(params, onComplete) {
-        // js_divCarregando('Aguarde julgando Licitação', 'div_aguarde');
+        js_divCarregando('Aguarde julgando Licitação', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
             onComplete: function(oRetornoitems) {
-                // js_removeObj('div_aguarde');
+                js_removeObj('div_aguarde');
                 onComplete(oRetornoitems);
             }
         });

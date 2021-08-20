@@ -52,6 +52,8 @@ class cl_bensguarda {
    var $t21_obs = null; 
    var $t21_instit = 0;
    var $t21_depart = 0;
+   var $t21_representante = 0;
+   var $t21_cpf = '';
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  t21_codigo = int4 = Cod. Guarda 
@@ -61,6 +63,8 @@ class cl_bensguarda {
                  t21_obs = text = Observação 
                  t21_instit = int4 = Instituição
                  t21_depart = int8 = Departamento
+                 t21_representante = int8 = Representante
+                 t21_cpf = varchar(11) = CPF
                  ";
    //funcao construtor da classe 
    function cl_bensguarda() { 
@@ -94,6 +98,8 @@ class cl_bensguarda {
        $this->t21_obs = ($this->t21_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_obs"]:$this->t21_obs);
        $this->t21_instit = ($this->t21_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_instit"]:$this->t21_instit);
        $this->t21_depart = ($this->t21_depart == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_depart"]:$this->t21_depart);
+       $this->t21_representante = ($this->t21_representante == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_representante"]:$this->t21_representante);
+       $this->t21_cpf = ($this->t21_cpf == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_cpf"]:$this->t21_cpf);
      }else{
        $this->t21_codigo = ($this->t21_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_codigo"]:$this->t21_codigo);
      }
@@ -186,6 +192,8 @@ class cl_bensguarda {
                                       ,t21_obs 
                                       ,t21_instit
                                       ,t21_depart
+                                      ,t21_representante
+                                      ,t21_cpf
                        )
                 values (
                                 $this->t21_codigo 
@@ -195,6 +203,8 @@ class cl_bensguarda {
                                ,'$this->t21_obs' 
                                ,$this->t21_instit
                                ,$this->t21_depart
+                               ,'$this->t21_representante'
+                               ,'$this->t21_cpf'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -336,6 +346,14 @@ class cl_bensguarda {
          return false;
        }
      }
+     if(trim($this->t21_representante)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t21_representante"])){
+      $sql  .= $virgula." t21_representante = '$this->t21_representante' ";
+      $virgula = ",";
+    }
+    if(trim($this->t21_cpf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t21_cpf"])){
+      $sql  .= $virgula." t21_cpf = '$this->t21_cpf' ";
+      $virgula = ",";
+    }
      $sql .= " where ";
      if($t21_codigo!=null){
        $sql .= " t21_codigo = $this->t21_codigo";

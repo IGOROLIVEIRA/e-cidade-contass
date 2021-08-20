@@ -373,7 +373,7 @@ class cl_naturrecsiope {
             $sql .= $campos;
         }
         $sql .= " from naturrecsiope ";
-        $sql .= ' inner join elerecsiope on substr(naturrecsiope.c224_natrecsiope, 1, 11) = elerecsiope.c225_elerececidade and naturrecsiope.c224_anousu = elerecsiope.c225_anousu';
+        $sql .= ' inner join elerecsiope on substr(naturrecsiope.c224_natrecsiope, 1, 11) = elerecsiope.c225_natrecsiope and naturrecsiope.c224_anousu = elerecsiope.c225_anousu';
         $sql2 = "";
         if ($dbwhere=="") {
             if ($c224_natrececidade!=null ) {

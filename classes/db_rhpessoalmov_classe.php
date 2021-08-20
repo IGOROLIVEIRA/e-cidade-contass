@@ -82,6 +82,14 @@ class cl_rhpessoalmov {
     var $rh02_desctipoparentescoinst = null;
     var $rh02_laudodeficiencia = 0;
     var $rh02_laudoportadormolestia = 0;
+    var $rh02_segatuacao = 0;
+    var $rh02_art61ldb1 = 'f';
+    var $rh02_art61ldb2 = 'f';
+    var $rh02_art61ldb3 = 'f';
+    var $rh02_art61ldb4 = 'f';
+    var $rh02_art61ldb5 = 'f';
+    var $rh02_art1leiprestpsiccologia = 'f';
+    var $rh02_art1leiprestservsocial = 'f';
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  rh02_instit = int4 = Cod. Instituição
@@ -118,6 +126,7 @@ class cl_rhpessoalmov {
                  rh02_desctipoparentescoinst = Text = Descrição do Tipo de Parentesco
                  rh02_laudodeficiencia = oid = Laudo Médico
                  rh02_laudoportadormolestia = oid = Laudo Médico
+                 rh02_segatuacao = oid = Segmento de Atuação
                  ";
     //funcao construtor da classe
     function cl_rhpessoalmov() {
@@ -185,13 +194,21 @@ class cl_rhpessoalmov {
             $this->rh02_desctipoparentescoinst = ($this->rh02_desctipoparentescoinst == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_desctipoparentescoinst"]:$this->rh02_desctipoparentescoinst);
             $this->rh02_laudodeficiencia = ($this->rh02_laudodeficiencia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_laudodeficiencia"]:$this->rh02_laudodeficiencia);
             $this->rh02_laudoportadormolestia = ($this->rh02_laudoportadormolestia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_laudoportadormolestia"]:$this->rh02_laudoportadormolestia);
+            $this->rh02_segatuacao = ($this->rh02_segatuacao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_segatuacao"]:$this->rh02_segatuacao);
+            $this->rh02_art61ldb1 = ($this->rh02_art61ldb1 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb1"]:$this->rh02_art61ldb1);
+            $this->rh02_art61ldb2 = ($this->rh02_art61ldb2 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb2"]:$this->rh02_art61ldb2);
+            $this->rh02_art61ldb3 = ($this->rh02_art61ldb3 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb3"]:$this->rh02_art61ldb3);
+            $this->rh02_art61ldb4 = ($this->rh02_art61ldb4 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb4"]:$this->rh02_art61ldb4);
+            $this->rh02_art61ldb5 = ($this->rh02_art61ldb5 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb5"]:$this->rh02_art61ldb5);
+            $this->rh02_art1leiprestpsiccologia = ($this->rh02_art1leiprestpsiccologia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestpsiccologia"]:$this->rh02_art1leiprestpsiccologia);
+            $this->rh02_art1leiprestservsocial = ($this->rh02_art1leiprestservsocial == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestservsocial"]:$this->rh02_art1leiprestservsocial);
         }else{
             $this->rh02_instit = ($this->rh02_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_instit"]:$this->rh02_instit);
             $this->rh02_seqpes = ($this->rh02_seqpes == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_seqpes"]:$this->rh02_seqpes);
         }
     }
     // funcao para Inclusão
-    function incluir ($rh02_seqpes,$rh02_instit){
+    function incluir ($rh02_seqpes,$rh02_instit, $bValida = true){
         $this->atualizacampos();
         if($this->rh02_anousu == null ){
             $this->erro_sql = " Campo Ano do Exercício não informado.";
@@ -370,6 +387,18 @@ class cl_rhpessoalmov {
         if($this->rh02_laudoportadormolestia == null ){
             $this->rh02_laudoportadormolestia = "null";
         }
+        if($this->rh02_segatuacao == null ){
+            $this->rh02_segatuacao = "null";
+            if((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0" && $bValida === true) {
+                $this->erro_sql = " Campo Segmento de Atuação não informado.";
+                $this->erro_campo = "rh02_segatuacao";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
         /*if($this->rh02_diasgozoferias == null ){
           $this->erro_sql = " Campo Dias padrão a Gozar não informado.";
           $this->erro_campo = "rh02_diasgozoferias";
@@ -379,6 +408,27 @@ class cl_rhpessoalmov {
           $this->erro_status = "0";
           return false;
         }*/
+        if($this->rh02_art61ldb1 == null ){
+            $this->rh02_art61ldb1 = "f";
+        }
+        if($this->rh02_art61ldb2 == null ){
+            $this->rh02_art61ldb2 = "f";
+        }
+        if($this->rh02_art61ldb3 == null ){
+            $this->rh02_art61ldb3 = "f";
+        }
+        if($this->rh02_art61ldb4 == null ){
+            $this->rh02_art61ldb4 = "f";
+        }
+        if($this->rh02_art61ldb5 == null ){
+            $this->rh02_art61ldb5 = "f";
+        }
+        if($this->rh02_art1leiprestpsiccologia == null ){
+            $this->rh02_art1leiprestpsiccologia = "f";
+        }
+        if($this->rh02_art1leiprestservsocial == null ){
+            $this->rh02_art1leiprestservsocial = "f";
+        }
         if($rh02_seqpes == "" || $rh02_seqpes == null ){
             $result = db_query("select nextval('rhpessoalmov_rh02_seqpes_seq')");
             if($result==false){
@@ -465,6 +515,14 @@ class cl_rhpessoalmov {
                                       ,rh02_desctipoparentescoinst
                                       ,rh02_laudodeficiencia
                                       ,rh02_laudoportadormolestia
+                                      ,rh02_segatuacao
+                                      ,rh02_art61ldb1
+                                      ,rh02_art61ldb2
+                                      ,rh02_art61ldb3
+                                      ,rh02_art61ldb4
+                                      ,rh02_art61ldb5
+                                      ,rh02_art1leiprestpsiccologia
+                                      ,rh02_art1leiprestservsocial
                        )
                 values (
                                 $this->rh02_instit
@@ -501,6 +559,14 @@ class cl_rhpessoalmov {
                                ,".($this->rh02_desctipoparentescoinst == "null" || $this->rh02_desctipoparentescoinst == ""?"null":"'".$this->rh02_desctipoparentescoinst."'")."
                                ,".($this->rh02_laudodeficiencia == "null" || $this->rh02_laudodeficiencia == ""?"null":"'".$this->rh02_laudodeficiencia."'")."
                                ,".($this->rh02_laudoportadormolestia == "null" || $this->rh02_laudoportadormolestia == ""?"null":"'".$this->rh02_laudoportadormolestia."'")."
+                               ,".($this->rh02_segatuacao == "null" || $this->rh02_segatuacao == ""?"null":"'".$this->rh02_segatuacao."'")."
+                               ,".($this->rh02_art61ldb1 == "null" || $this->rh02_art61ldb1 == ""?"f":"'".$this->rh02_art61ldb1."'")."
+                               ,".($this->rh02_art61ldb2 == "null" || $this->rh02_art61ldb2 == ""?"f":"'".$this->rh02_art61ldb2."'")."
+                               ,".($this->rh02_art61ldb3 == "null" || $this->rh02_art61ldb3 == ""?"f":"'".$this->rh02_art61ldb3."'")."
+                               ,".($this->rh02_art61ldb4 == "null" || $this->rh02_art61ldb4 == ""?"f":"'".$this->rh02_art61ldb4."'")."
+                               ,".($this->rh02_art61ldb5 == "null" || $this->rh02_art61ldb5 == ""?"f":"'".$this->rh02_art61ldb5."'")."
+                               ,".($this->rh02_art1leiprestpsiccologia == "null" || $this->rh02_art1leiprestpsiccologia == ""?"f":"'".$this->rh02_art1leiprestpsiccologia."'")."
+                               ,".($this->rh02_art1leiprestservsocial == "null" || $this->rh02_art1leiprestservsocial == ""?"f":"'".$this->rh02_art1leiprestservsocial."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -570,7 +636,7 @@ class cl_rhpessoalmov {
         return true;
     }
     // funcao para alteracao
-    public function alterar ($rh02_seqpes=null,$rh02_instit=null) {
+    public function alterar ($rh02_seqpes=null,$rh02_instit=null, $bValida = true) {
         $this->atualizacampos();
         $sql = " update rhpessoalmov set ";
         $virgula = "";
@@ -931,6 +997,24 @@ class cl_rhpessoalmov {
                 $virgula = ",";
             }
         }
+        if(trim($this->rh02_segatuacao)=="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_segatuacao"])) {
+            if($this->rh02_segatuacao == "") {
+                $sql  .= $virgula." rh02_segatuacao = null";
+                $virgula = ",";
+            } else {
+                $sql  .= $virgula." rh02_segatuacao = $this->rh02_segatuacao";
+                $virgula = ",";
+            }
+            if((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0" && $bValida === true) {
+                $this->erro_sql = " Campo Segmento de Atuação não informado.";
+                $this->erro_campo = "rh02_segatuacao";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
 
         if(trim($this->rh02_tipoparentescoinst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipoparentescoinst"])){
             $sql  .= $virgula." rh02_tipoparentescoinst = $this->rh02_tipoparentescoinst ";
@@ -949,6 +1033,34 @@ class cl_rhpessoalmov {
                 $this->rh02_desctipoparentescoinst = "";
             }
             $sql  .= $virgula." rh02_desctipoparentescoinst = ".($this->rh02_desctipoparentescoinst == "null" || $this->rh02_desctipoparentescoinst == ""?"null":"'".$this->rh02_desctipoparentescoinst."'");
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb1)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb1"])){
+            $sql  .= $virgula." rh02_art61ldb1 = '{$this->rh02_art61ldb1}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb2)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb2"])){
+            $sql  .= $virgula." rh02_art61ldb2 = '{$this->rh02_art61ldb2}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb3)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb3"])){
+            $sql  .= $virgula." rh02_art61ldb3 = '{$this->rh02_art61ldb3}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb4)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb4"])){
+            $sql  .= $virgula." rh02_art61ldb4 = '{$this->rh02_art61ldb4}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art61ldb5)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb5"])){
+            $sql  .= $virgula." rh02_art61ldb5 = '{$this->rh02_art61ldb5}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art1leiprestpsiccologia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestpsiccologia"])){
+            $sql  .= $virgula." rh02_art1leiprestpsiccologia = '{$this->rh02_art1leiprestpsiccologia}' ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_art1leiprestservsocial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestservsocial"])){
+            $sql  .= $virgula." rh02_art1leiprestservsocial = '{$this->rh02_art1leiprestservsocial}' ";
             $virgula = ",";
         }
         $sql .= " where ";
@@ -1676,6 +1788,72 @@ class cl_rhpessoalmov {
         return $sSql;
     }
 
+    /**
+     * Retorna informacoes dos servidores com dados do cgm OC14942
+     *
+     * @param  integer $iAno
+     * @param  integer $iMes
+     * @param  integer $iInstituicao
+     * @param  integer $iMatricula
+     * @param  string  $sCampos
+     * @access public
+     * @return string
+     */
+    public function sql_queryDadosServidoresCgm( $iAno, $iMes, $iInstituicao, $iMatricula, $sCampos = '' ) {
+
+        if ( empty($sCampos) ) {
+            $sCampos = "*";
+        }
+        $sSql  = " select $sCampos                                                                    \n";
+        $sSql .= "   from rhpessoal                                                                   \n";
+        $sSql .= "        left join rhpessoalmov on rhpessoalmov.rh02_regist = rhpessoal.rh01_regist  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_anousu = $iAno                  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_mesusu = $iMes                  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_instit = $iInstituicao          \n";
+        $sSql .= "        inner join cgm on rhpessoal.rh01_numcgm = cgm.z01_numcgm                    \n";
+        $sSql .= "        inner join rhfuncao on rhfuncao.rh37_funcao = rhpessoal.rh01_funcao         \n";
+        $sSql .= "        inner join rhlota on rhlota.r70_codigo = rhpessoalmov.rh02_lota             \n";
+        $sSql .= "        left join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes \n";
+        $sSql .= "                            and rhpessoalmov.rh02_anousu = {$iAno}                ";
+        $sSql .= "                            and rhpessoalmov.rh02_mesusu = {$iMes}                ";
+        $sSql .= "  where rh01_regist in ($iMatricula) and rh05_recis is null                     \n";
+
+        return $sSql;
+    }
+
+    /**
+     * Retorna informacoes de todos os servidores a partir do cargo OC14942
+     *
+     * @param  integer $iAno
+     * @param  integer $iMes
+     * @param  integer $iInstituicao
+     * @param  integer $iMatricula
+     * @param  string  $sCampos
+     * @access public
+     * @return string
+     */
+    public function sql_queryDadosServidoresCargo( $iAno, $iMes, $iInstituicao, $iCargo, $sCampos = '' ) {
+
+        if ( empty($sCampos) ) {
+            $sCampos = "*";
+        }
+        $sSql  = " select $sCampos                                                                    \n";
+        $sSql .= "   from rhpessoal                                                                   \n";
+        $sSql .= "        left join rhpessoalmov on rhpessoalmov.rh02_regist = rhpessoal.rh01_regist  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_anousu = $iAno                  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_mesusu = $iMes                  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_instit = $iInstituicao          \n";
+        $sSql .= "        inner join cgm on rhpessoal.rh01_numcgm = cgm.z01_numcgm                    \n";
+        $sSql .= "        inner join rhfuncao on rhfuncao.rh37_funcao = rhpessoal.rh01_funcao         \n";
+        $sSql .= "        inner join rhlota on rhlota.r70_codigo = rhpessoalmov.rh02_lota             \n";
+        $sSql .= "        left join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes \n";
+        $sSql .= "                            and rhpessoalmov.rh02_anousu = {$iAno}                ";
+        $sSql .= "                            and rhpessoalmov.rh02_mesusu = {$iMes}                ";
+        $sSql .= "  where rh37_funcao in ($iCargo) and rh05_recis is null                        \n";
+
+        return $sSql;
+    }
+
     public function sql_queryValorVariaveisCalculo( $iAnoFolha, $iMesFolha, $iMatricula, $iInstituicao ) {
 
         $sSql  = "select substr(valor_variaveis_calculo, 111, 11) as variavel_salario_base_progressao";
@@ -2264,6 +2442,39 @@ class cl_rhpessoalmov {
         return $sSql;
     }
 
+    function sql_getDadosServidoresTempoServicoCGM($sCampos = '*', $iAnoFolha, $iMesFolha, $iRegist){
+
+        $sSql  = "select $sCampos                                                                           ";
+        $sSql .= " from rhpessoalmov                                                                        ";
+        $sSql .= "      inner join rhpessoal      on rhpessoal.rh01_regist       = rhpessoalmov.rh02_regist ";
+        $sSql .= "      left  join rhpesdoc       on rh16_regist                 = rh01_regist              ";
+        $sSql .= "      inner join rhlota         on rhlota.r70_codigo           = rhpessoalmov.rh02_lota   ";
+        $sSql .= "                               and rhlota.r70_instit           = rhpessoalmov.rh02_instit ";
+        $sSql .= "      inner join cgm            on cgm.z01_numcgm              = rhpessoal.rh01_numcgm    ";
+        $sSql .= "      left join rhpesrescisao   on rhpesrescisao.rh05_seqpes   = rhpessoalmov.rh02_seqpes ";
+        $sSql .= "      left join rhpespadrao     on rhpespadrao.rh03_seqpes     = rhpessoalmov.rh02_seqpes ";
+        $sSql .= "      left join rhregime        on rhregime.rh30_codreg        = rhpessoalmov.rh02_codreg ";
+        $sSql .= "                               and rhregime.rh30_instit        = rhpessoalmov.rh02_instit ";
+        $sSql .= "      left join rhpesrubcalc    on rhpesrubcalc.rh65_seqpes    = rhpessoalmov.rh02_seqpes ";
+        $sSql .= "                               and (rh65_rubric = 'R927' or rh65_rubric = 'R929')         ";
+        $sSql .= "      left join rhpesfgts       on rhpesfgts.rh15_regist       = rhpessoalmov.rh02_regist ";
+        $sSql .= "      left join tpcontra        on tpcontra.h13_codigo         = rh02_tpcont              ";
+        $sSql .= "      left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes              ";
+        $sSql .= "      left join rhpesprop       on rh19_regist                 = rh02_regist              ";
+        $sSql .= "      left join rhfuncao        on rh37_funcao                 = rh01_funcao              ";
+        $sSql .= "                               and rh37_instit                 = rh02_instit              ";
+        $sSql .= "      left join padroes         on rh03_anousu                 = r02_anousu               ";
+        $sSql .= "                               and rh03_mesusu                 = r02_mesusu               ";
+        $sSql .= "                               and rh03_regime                 = r02_regime               ";
+        $sSql .= "                               and rh03_padrao                 = r02_codigo               ";
+        $sSql .= "                               and r02_instit                  = rh02_instit              ";
+        $sSql .= "where rh02_anousu = $iAnoFolha                                                            ";
+        $sSql .= "  and rh02_mesusu = $iMesFolha                                                            ";
+        $sSql .= "  and z01_numcgm = $iRegist                                                               ";
+
+        return $sSql;
+    }
+
     function sql_query_arquivo_iapep($sFolha, $sSigla, $sBase, $iAno, $iMes, $iTipo_Folha, $sRub_Permanencia, $sWhere) {
 
         $iInstit = db_getsession("DB_instit");
@@ -2600,6 +2811,26 @@ class cl_rhpessoalmov {
         JOIN gerfres ON e991_rubricas = r20_rubric 
         WHERE r20_anousu = {$anousu} AND r20_mesusu = {$mesusu} AND r20_regist = {$regist} AND 
         rubricasesocial.e990_sequencial = '{$base}' ";
+        return $sql;
+    }
+
+    /**
+     * Retorna sql de servidores ativos no mes
+     * @param integer $anousu
+     * @param integer $mesusu
+     * @param string $campos
+     * @return string $sql
+     */
+    public function sql_servidores_ativos_mes_caged($anousu, $mesusu, $campos = "*") {
+        $instit = db_getsession("DB_instit");
+        $primeirodia  = $anousu."-".$mesusu."-01";
+        $sql = "SELECT {$campos} FROM rhpessoal
+        INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
+        AND rhpessoalmov.rh02_anousu = {$anousu}
+        AND rhpessoalmov.rh02_mesusu = {$mesusu}
+        AND rhpessoalmov.rh02_instit = {$instit}
+        LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+        WHERE rh01_instit = {$instit} AND rh01_admiss <= '{$primeirodia}' AND (rh05_recis IS NULL OR rh05_recis >= '{$primeirodia}')";
         return $sql;
     }
 

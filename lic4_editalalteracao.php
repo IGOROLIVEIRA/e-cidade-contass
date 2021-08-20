@@ -34,7 +34,6 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclancedital_classe.php");
 require_once("classes/db_editaldocumento_classe.php");
-require_once("classes/db_obrasdadoscomplementares_classe.php");
 require_once("classes/db_cflicita_classe.php");
 include("dbforms/db_classesgenericas.php");
 
@@ -42,7 +41,6 @@ $clliclicita = new cl_liclicita;
 $clliclancedital = new cl_liclancedital;
 $clcflicita  = new cl_cflicita;
 $cleditaldocumento = new cl_editaldocumento;
-$clobrasdadoscomplementares = new cl_obrasdadoscomplementares;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -74,6 +72,11 @@ if(!isset($alterar)){
     $natureza_objeto = $oDados->l20_naturezaobjeto;
     $sequencial = $oDados->l47_sequencial;
     $codigolicitacao = $oDados->l20_codigo;
+    $anoLicitacao = $oDados->l20_anousu;
+    $iTipoJulgamento = $oDados->l20_tipojulg;
+
+    $tabela_base = $anoLicitacao >= 2021 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+    $clobrasdadoscomplementares = db_utils::getDao($tabela_base);
 }
 
 if(isset($alterar)){
@@ -84,51 +87,61 @@ if(isset($alterar)){
     $natureza_objeto = $oDadosEdital->l20_naturezaobjeto;
     $codigolicitacao = $oDadosEdital->l20_codigo;
 
-	$sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
-	$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
+	  $sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
+	  $rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
     if($natureza_objeto == 1){
-		$aTipos = db_utils::getCollectionByRecord($rsDocumentos);
-		$aSelecionados = array();
-		foreach ($aTipos as $tipo){
-			$aSelecionados[] = $tipo->l48_tipo;
-		}
 
-		if(in_array($tipo_tribunal, array(100, 101, 102, 103, 106))){
-			$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'td'));
-		}elseif(in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
-			$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
-		}
-        if($cleditaldocumento->numrows == 0){
-			$sqlerro = true;
-			$erro_msg = 'Nenhum documento anexo à licitação';
-		}else{
-			if(count($tiposCadastrados) < 5){
-				$sqlerro = true;
-				$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
-			}
-		}
+        $aTipos = db_utils::getCollectionByRecord($rsDocumentos);
+        $aSelecionados = array();
+		
+        foreach ($aTipos as $tipo){
+			      $aSelecionados[] = $tipo->l48_tipo;
+		    }
+
+      if(in_array($tipo_tribunal, array(100, 101, 102, 103, 106))){
+          $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'td'));
+      }elseif(in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
+          $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
+      }
+
+      if($cleditaldocumento->numrows == 0){
+          $sqlerro = true;
+          $erro_msg = 'Nenhum documento anexo à licitação';
+		  }else{
+        if(count($tiposCadastrados) < 5){
+          $sqlerro = true;
+          $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+        }
+	  	}
 
 		/* Verifica se tem dados complementares vinculados à licitação */
 		if(!$sqlerro){
-			$sSqlObras = $clobrasdadoscomplementares->sql_query_completo(null, '*', null, 'db151_liclicita = '.$licitacao);
-			$rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
-			if($clobrasdadoscomplementares->numrows == 0){
-				$sqlerro = true;
-				$erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
-			}
+        if(!trim($anoLicitacao)){
+            $anoLicitacao = explode('/', $data_referencia);
+            $tabela_base = $anoLicitacao >= 2021 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+            $clobrasdadoscomplementares = db_utils::getDao($tabela_base);
+        }
+        $sSqlObras = $clobrasdadoscomplementares->sql_query_completo(null, '*', null, 'db151_liclicita = '.$licitacao);
+        $rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
+        
+        if($clobrasdadoscomplementares->numrows == 0){
+            $sqlerro = true;
+            $erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
+        }
 		}
 
 	}else{
-        if(!$cleditaldocumento->numrows && !$sqlerro){
-			$sqlerro = true;
-			$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
-		}
+      if(!$cleditaldocumento->numrows && !$sqlerro){
+          $sqlerro = true;
+          $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+      }
 	}
 
+  
 	if(!$sqlerro){
 	    if(isset($oDadosEdital->l47_sequencial)){
-	        $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
+	          $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
             $clliclancedital->l47_linkpub = $links;
             $clliclancedital->l47_origemrecurso = $origem_recurso;
             $clliclancedital->l47_descrecurso = $descricao_recurso;
@@ -163,6 +176,7 @@ if(isset($alterar)){
   <script language="JavaScript" type="text/javascript" src="scripts/prototype.maskedinput.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/classes/dbViewCadDadosComplementares.classe.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/classes/DBViewLotesPendentesLicitacao.classe.js"></script>
 
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>

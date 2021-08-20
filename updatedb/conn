@@ -10,7 +10,7 @@ e-cidade			5432	pmsaojoaodaponte
 e-cidade			5432	cmuba
 e-cidade			5432	pmpirapora
 e-cidade			5432	cisaje
-e-cidade        		5432	prevmoc
+e-cidade        	5432	prevmoc
 e-cidade			5432	pmverdelandia
 e-cidade			5432	pmvarzelandia
 e-cidade			5432	pmclarodospocoes
@@ -19,11 +19,13 @@ e-cidade			5432	mctrans
 e-cidade            5432    cmarinos
 e-cidade            5432    pmlagoadospatos
 
+e-cidade            5432    pmsaoromao
+
 pmcapitaoeneas      5432    prefeituras
-pmsaoromao          5432    prefeituras
 pmcristalia         5432    prefeituras
 pmluislandia        5432    prefeituras
 pmitacambira        5432    prefeituras
+basemodeloppa       5432    prefeituras
 treinamento         5432    prefeituras
 
 pmburitizeiro          5432    prefeituras2
@@ -31,9 +33,10 @@ pmgraomogol            5432    prefeituras2
 pmnovaporteirinha      5432    prefeituras2
 pmsantafeminas         5432    prefeituras2
 pmsaojoaomissoes       5432    prefeituras2
-pmtaquaracuminas       5432    prefeituras2
-pmubai                 5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
+pmmontalvania          5432    prefeituras2
+pmjanuaria             5432    prefeituras2
+pmubai                 5432    prefeituras2
 
 e-cidade            5432    cmbhecid
 
@@ -81,10 +84,16 @@ cisaje              5432    e-cidade
 cmnavarro           5432    e-cidade
 cmluislandia        5432    e-cidade
 cisnorte            5432    e-cidade
+cisarp              5432    e-cidade
+hrjanauba           5432    e-cidade
+cmitacambira        5432    e-cidade
 
-pmubai              5432    e-cidadenovosclientes
 pmsaojoaomissoes    5432    e-cidadenovosclientes
 pmsantafeminas      5432    e-cidadenovosclientes
 pmnovaporteirinha   5432    e-cidadenovosclientes
 pmgraomogol         5432    e-cidadenovosclientes
 pmburitizeiro       5432    e-cidadenovosclientes
+
+e-cidade            5432    pmnovaporteirinha
+
+e-cidade            5432    pmburitizeiro

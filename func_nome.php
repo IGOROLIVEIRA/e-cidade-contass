@@ -91,7 +91,7 @@ if (isset($script) && $script != "" && !is_bool($script)) {
 }
 
 
-if (isset($testanome) && !isset($pesquisa_chave)) {
+if (isset($testanome) && $testanome=='true' && !isset($pesquisa_chave)) {
 
   $funmat			= explode("\|",$funcao_js);
   $func_antes = $funmat[0];

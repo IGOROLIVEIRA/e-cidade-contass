@@ -168,7 +168,7 @@ class cl_liclicita
                  l20_nomeveiculo1 = varchar(50) = Nome Veículo Divulgação 1
                  l20_datapublicacao1 = date = Data Publicação Edital Veiculo 1
                  l20_datadiario = date = Data de Publicação em Diário Oficial
-                 l20_recdocumentacao = date = Recebimento Documentação
+                 l20_recdocumentacao = date = Abertura das Propostas
                  l20_numeroconvidado = int8 = Número de convidados
                  l20_descontotab = int8 = Desconto Tabela
                  l20_regimexecucao = int8 = Regime da Execução
@@ -568,7 +568,7 @@ class cl_liclicita
             if ($tribunal != 50) {
                 if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
 
-                    $this->erro_sql = " A data informada no campo  Recebimento Documentação deve ser  superior a   Data Edital/Convite.";
+                    $this->erro_sql = " A data informada no campo  Abertura das Propostas deve ser  superior a   Data Edital/Convite.";
                     $this->erro_campo = "l20_recdocumentacao";
                     $this->erro_banco = "";
                     $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -619,7 +619,7 @@ class cl_liclicita
             }
 
         }
-        if ($this->l20_tipojulg == null) {
+        if ($this->l20_tipojulg == null || !$this->l20_tipojulg) {
             $this->erro_sql = " Campo Tipo de Julgamento não Informado.";
             $this->erro_campo = "l20_tipojulg";
             $this->erro_banco = "";
@@ -746,7 +746,7 @@ class cl_liclicita
         }
 
         if ($this->l20_recdocumentacao == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-            $this->erro_sql = " Campo Recebimento Documentação não Informado.";
+            $this->erro_sql = " Campo Abertura das Propostas não Informado.";
             $this->erro_campo = "l20_recdocumentacao";
             $this->erro_banco = "";
             $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -1470,7 +1470,7 @@ class cl_liclicita
                     $sql .= $virgula . " l20_recdocumentacao = null ";
                     $virgula = ",";
                 } else if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
-                    $this->erro_sql = " A data informada no campo  Recebimento Documentação deve ser  superior a   Data Edital/Convite.";
+                    $this->erro_sql = " A data informada no campo  Abertura das Propostas deve ser  superior a   Data Edital/Convite.";
                     $this->erro_campo = "l20_recdocumentacao";
                     $this->erro_banco = "";
                     $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -1538,7 +1538,7 @@ class cl_liclicita
         if (trim($this->l20_tipojulg != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipojulg"]))) {
             $sql .= $virgula . " l20_tipojulg = $this->l20_tipojulg ";
             $virgula = ",";
-            if (trim($this->l20_tipojulg) == null) {
+            if (trim($this->l20_tipojulg) == null || !trim($this->l20_tipojulg)) {
                 $this->erro_sql = " Campo Tipo de Julgamento nao Informado.";
                 $this->erro_campo = "l20_tipojulg";
                 $this->erro_banco = "";

@@ -702,7 +702,7 @@ DBViewManutencaoLocalTrabalho.prototype.salvarRegistros = function() {
     }
   }
   
-  if ( lExistePrincipal ) {
+  if ( lExistePrincipal || typeof this.aDadosLocaisTrabalho[0] === 'undefined') {
     var oInstancia = this;
     
     js_divCarregando('Salvando Alterações.', 'msgAjax');

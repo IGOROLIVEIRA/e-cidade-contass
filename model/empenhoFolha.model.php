@@ -162,6 +162,33 @@ class empenhoFolha {
    */
   protected $caracteristica;
 
+  /**
+   * Código do empenho financeiro gerado empempenho.e60_numemp
+   * @var integer
+   */
+  protected $iNumeroEmpenhoFinanceiro = null;
+
+  /**
+   * Tipo empenho resumo da folha
+   *
+   * @var integer
+   */
+  protected $tipoEmpenhoResumo = 0;
+
+  /**
+   * @param integer $iNumeroEmpenhoFinanceiro
+   */
+  function setNumeroEmpenhoFinanceiro($iNumeroEmpenhoFinanceiro) {
+    $this->iNumeroEmpenhoFinanceiro = $iNumeroEmpenhoFinanceiro;
+  }
+
+  /**
+   * @return integer
+   */
+  public function getNumeroEmpenhoFinanceiro() {
+    return $this->iNumeroEmpenhoFinanceiro;
+  }
+
 
   function __construct($iEmpenhoFolha) {
 
@@ -498,7 +525,7 @@ class empenhoFolha {
    * Retorna as retencoes lancadas para o empenho da folha
    *
    */
-  function getRetencoes() {
+  function getRetencoes($iTipoEmpenho = 1, $iPd = 2) {
 
     $sSqlDadosRetencao   = "SELECT rh72_sequencial, ";
     $sSqlDadosRetencao  .= "       rh72_coddot, ";
@@ -522,9 +549,9 @@ class empenhoFolha {
     $sSqlDadosRetencao  .= "                                                and rh73_instit                = rh02_instit ";
     $sSqlDadosRetencao  .= "       inner join  rhempenhofolharubricaretencao on rh78_rhempenhofolharubrica = rh73_sequencial ";
     $sSqlDadosRetencao  .= "   where rh72_sequencial  = {$this->empenhofolha}  ";
-    $sSqlDadosRetencao  .= "     and rh72_tipoempenho = 1";
+    $sSqlDadosRetencao  .= "     and rh72_tipoempenho = {$iTipoEmpenho}";
     $sSqlDadosRetencao  .= "     and rh73_tiporubrica = 2";
-    $sSqlDadosRetencao  .= "     and rh73_pd          = 2";
+    $sSqlDadosRetencao  .= "     and rh73_pd          = {$iPd}";
     $sSqlDadosRetencao  .= "   group by rh72_sequencial,  ";
     $sSqlDadosRetencao  .= "            rh72_coddot,  ";
     $sSqlDadosRetencao  .= "            rh72_codele, ";
@@ -548,7 +575,7 @@ class empenhoFolha {
   /**
    * Gera o empenho para esse empenho da folha
    */
-  function gerarEmpenho($iNumCgm) {
+  function gerarEmpenho($iNumCgm, $lPrevidencia = false) {
 
 
     /**
@@ -624,7 +651,7 @@ class empenhoFolha {
       $oDaoEmpAutoriza->e54_contat         = '';
       $oDaoEmpAutoriza->e54_telef          = '';
       $oDaoEmpAutoriza->e54_numsol         = '';
-      $oDaoEmpAutoriza->e54_resumo         = "Pagamento de {$this->tipofolha} {$this->mes}/{$this->anoFolha}";
+      $oDaoEmpAutoriza->e54_resumo         = $this->getResumo();
       $oDaoEmpAutoriza->e54_numcgm         = $iNumCgm;
       $oDaoEmpAutoriza->e54_login          = db_getsession("DB_id_usuario");
       $oDaoEmpAutoriza->e54_anulad         = null;
@@ -663,11 +690,12 @@ class empenhoFolha {
   	  $oDaoAutorizacaoItem->e55_vlrun  = $this->valorempenho;
   	  $oDaoAutorizacaoItem->e55_descr  = $oDaoEmpAutoriza->e54_resumo;
 	    $oDaoAutorizacaoItem->e55_codele = $this->elemento;
+      $oDaoAutorizacaoItem->e55_unid   = '0';
 	    $oDaoAutorizacaoItem->incluir($oDaoEmpAutoriza->e54_autori, 1);
 	    if ($oDaoAutorizacaoItem->erro_status == 0) {
 
 	      $sErroMsg  = "Não foi possivel gerar Autorização de empenho para empenho da folha ({$this->empenhofolha})\n";
-        $sErroMsg .= "Impossível incluir item da autorização";
+        $sErroMsg .= "Impossível incluir item da autorização \n {$oDaoAutorizacaoItem->erro_msg}";
         throw new DBException($sErroMsg);
 
 	    }
@@ -820,6 +848,9 @@ class empenhoFolha {
       $sErroMsg .= "Erro ao incluir empenho \n{$oDaoEmpenho->erro_msg}";
       throw new DBException($sErroMsg);
 	  }
+
+      $this->setNumeroEmpenhoFinanceiro($oDaoEmpenho->e60_numemp);
+
 	  /**
 	   * Incluimos o elemento do empenho
 	   */
@@ -969,6 +1000,13 @@ class empenhoFolha {
                                              true,
                                              date("d/m/Y", db_getsession("DB_datausu")),
                                              $oDaoEmpenho->e60_resumo,
+                                             false,
+                                             null,
+                                             null,
+                                             null,
+                                             null,
+                                             '',
+                                             null,
                                              false
                                            );
       require_once("libs/JSON.php");
@@ -998,7 +1036,13 @@ class empenhoFolha {
       $lGeraRetencao = db_utils::fieldsMemory($rsParam,0)->r11_geraretencaoempenho;
       if ( $lGeraRetencao == 't') {
 
-        $aRetencoes =  $this->getRetencoes();
+        
+        if ($lPrevidencia) {
+            $aRetencoes =  $this->getRetencoes(2, 1);
+        } else {
+            $aRetencoes =  $this->getRetencoes();
+        }   
+
         require_once("model/retencaoNota.model.php");
         $oRetencaoNota = new retencaoNota($oRetornoLiquidacao->iCodNota);
         $oRetencaoNota->setINotaLiquidacao($oRetornoLiquidacao->e50_codord);
@@ -1562,5 +1606,31 @@ class empenhoFolha {
     }
     return $nValorDesconto;
   }
+
+  /**
+   * @return string
+   */
+  function getResumo() {
+    
+    if ($this->tipoEmpenhoResumo == 2) {
+        return "Contribuição Patronal referente ao mês {$this->mes}/{$this->anoFolha}";
+    } 
+    
+    if ($this->tipoEmpenhoResumo == 3) {
+        return "FGTS referente ao mês {$this->mes}/{$this->anoFolha}";
+    }
+
+    return "Pagamento de {$this->tipofolha} {$this->mes}/{$this->anoFolha}";
+
+  }
+  
+  /**
+   * Atribui tipo do empenho para definição do resumo/histórico do empenho
+   * @param $iTipo Tipo informado
+   */
+  function setTipoEmpenhoResumo($iTipo) {
+    $this->tipoEmpenhoResumo = $iTipo;
+  }
+
 }
 ?>

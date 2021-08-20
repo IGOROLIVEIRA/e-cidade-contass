@@ -30,28 +30,25 @@
  */
 class Instituicao {
 
-  /**
-   * Caminho das mensagens
-   * @type string
-   */
-  const MENSAGEM = 'configuracao.configuracao.Instituicao.';
-
-  const TIPO_PREFEITURA                     = 1;
-  const TIPO_CAMARA                         = 2;
-  const TIPO_SECRETARIA_DA_EDUCACAO         = 3;
-  const TIPO_SECRETARIA_DA_SAUDE            = 4;
-  const TIPO_RPPS_EXCETO_AUTARQUIA          = 5;
-  const TIPO_AUTARQUIA_RPPS                 = 6;
-  const TIPO_AUTARQUIA_EXCETO_RPPS          = 7;
-  const TIPO_FUNDACAO                       = 8;
-  const TIPO_EMPRESA_ESTATAL_DEPENDENTE     = 9;
-  const TIPO_EMPRESA_ESTATAL_NAO_DEPENDENTE = 10;
-  const TIPO_CONSORCIO                      = 11;
-  const TIPO_OUTRAS                         = 12;
-  const TIPO_MINISTERIO_PUBLICO_ESTADUAL    = 101;
-  const TIPO_TRIBUNAL_DE_JUSTICA            = 13;
-  const TIPO_TRIBUNAL_DE_CONTAS_ESTADO      = 14;
-
+  const TIPO_INSTIT_PREFEITURA = 2;
+  const TIPO_INSTIT_CAMARA = 1;
+  const TIPO_INSTIT_AUTARQUIA = 3;
+  const TIPO_INSTIT_FUNDACAO = 4;
+  const TIPO_INSTIT_RPPS = 5;
+  const TIPO_INSTIT_RPPS_SAUDE = 6;
+  const TIPO_INSTIT_EMPRESA_PUBLICA = 8;
+  const TIPO_INSTIT_SOCIEDADE_ECONOMIA_MISTA = 9;
+  const COD_CLI_PMPIRAPORA = 58;
+  const COD_CLI_PREVMOC = 35;
+  const COD_CLI_PMLUISLANDIA = 48;
+  const COD_CLI_PMCAPITAOENEAS = 62;
+  const COD_CLI_PMUBAI = 9;
+  const COD_CLI_PMGRAOMOGOL = 90;
+  const COD_CLI_SANTAFEMINAS = 92;
+  const COD_CLI_SAOJOAOMISSOES = 94;
+  const COD_CLI_NOVAPORTEIRINHA = 93;
+  const COD_CLI_CURRAL_DE_DENTRO = 96;
+  const COD_CLI_BURITIZEIRO = 89;
 
   /**
    * Código da Instituicao

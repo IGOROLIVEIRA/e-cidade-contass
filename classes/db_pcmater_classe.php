@@ -61,6 +61,8 @@ class cl_pcmater {
    var $pc01_tabela = 'f';
    var $pc01_taxa   = 'f';
    var $pc01_obras = 'f';
+   var $pc01_justificativa = null;
+   var $pc01_dataalteracao = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc01_codmater = int4 = Código do Material
@@ -82,6 +84,8 @@ class cl_pcmater {
                  pc01_tabela = bool = Tabela
                  pc01_taxa = bool = Taxa
                  pc01_obras = boll = obras
+                 pc01_justificativa = varchar(100) = Justificativa da Alteração
+                 pc01_dataalteracao = date = Data da Alteração
                  ";
    //funcao construtor da classe
    function cl_pcmater() {
@@ -116,6 +120,8 @@ class cl_pcmater {
        $this->pc01_obrigatorio = ($this->pc01_obrigatorio == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_obrigatorio"]:$this->pc01_obrigatorio);
        $this->pc01_liberaresumo = ($this->pc01_liberaresumo == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_liberaresumo"]:$this->pc01_liberaresumo);
        $this->pc01_obras = ($this->pc01_obras == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_obras"]:$this->pc01_obras);
+       $this->pc01_justificativa = ($this->pc01_justificativa == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_justificativa"]:$this->pc01_justificativa);
+       $this->pc01_dataalteracao = ($this->pc01_dataalteracao == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_dataalteracao"]:$this->pc01_dataalteracao);
      }else{
        $this->pc01_codmater = ($this->pc01_codmater == ""?@$GLOBALS["HTTP_POST_VARS"]["pc01_codmater"]:$this->pc01_codmater);
      }
@@ -554,6 +560,33 @@ class cl_pcmater {
        $sql  .= $virgula." pc01_obras = '$this->pc01_obras' ";
        $virgula = ",";
      }
+
+     if(trim($this->pc01_justificativa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_justificativa"])){
+      $sql  .= $virgula." pc01_justificativa = '$this->pc01_justificativa' ";
+      $virgula = ",";
+//      if(trim($this->pc01_justificativa) == null ){
+//        $this->erro_sql = " Campo Justificativa Alteração não Informado.";
+//        $this->erro_campo = "pc01_justificativa";
+//        $this->erro_banco = "";
+//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//        $this->erro_status = "0";
+//        return false;
+//      }
+    }
+    if(trim($this->pc01_dataalteracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_dataalteracao"])){
+      $sql  .= $virgula." pc01_dataalteracao = '$this->pc01_dataalteracao' ";
+      $virgula = ",";
+      if(trim($this->pc01_dataalteracao) == null ){
+        $this->erro_sql = " Campo Data da Alteração não Informado.";
+        $this->erro_campo = "pc01_dataalteracao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      /*FIM - OC3770*/
      $sql .= " where ";
      if($pc01_codmater!=null){

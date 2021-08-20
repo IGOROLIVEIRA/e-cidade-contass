@@ -32,11 +32,15 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_rhregime_classe.php");
 include("classes/db_rhcadregime_classe.php");
+include("classes/db_rhfuncao_classe.php");
+include("dbforms/db_classesgenericas.php");
 $clrhregime = new cl_rhregime;
 $clrhcadregime = new cl_rhcadregime;
+$clrhfuncao = new cl_rhfuncao;
 $rotulocampo = new rotulocampo;
 $rotulocampo->label("k11_id");
 $rotulocampo->label("k13_conta");
+$gform       = new cl_formulario_rel_pes;
 if(!isset($datai_dia) && 
    !isset($datai_mes) &&
    !isset($datai_ano) ){
@@ -100,6 +104,60 @@ if(!isset($datai_dia) &&
             </td>
           </tr>
           <tr>
+            <td colspan="3" align="center">
+            <table class="form-container" style="width: 70%">
+              <tr>
+                <td>
+                <?
+                  if(!isset($tipo)){
+                    $tipo = "l";
+                  }
+                  if(!isset($filtro)){
+                    $filtro = "i";
+                  }
+                  
+                  $gform->tipores = true;
+                  $gform->usalota = true;               // PERMITIR SELEÇÃO DE LOTAÇÕES
+                  $gform->usaLotaFieldsetClass = true;  // PERMITIR SELEÇÃO DE LOTAÇÕES
+                  $gform->usaorga = true;               // PERMITIR SELEÇÃO DE ÓRGÃO
+                  $gform->usacarg = true;               // PERMITIR SELEÇÃO DE Cargo
+                  //$gform->mostaln = true;             // Removido campo tipo de ordem e carregado manualmente 
+                                                        
+                  $gform->masnome = "ordem";            
+                                                        
+                  $gform->ca1nome = "cargoi";           // NOME DO CAMPO DO CARGO INICIAL
+                  $gform->ca2nome = "cargof";           // NOME DO CAMPO DO CARGO FINAL
+                  $gform->ca3nome = "selcargo";         
+                  $gform->ca4nome = "Cargo";            
+                                                        
+                  $gform->lo1nome = "lotaci";           // NOME DO CAMPO DA LOTAÇÃO INICIAL
+                  $gform->lo2nome = "lotacf";           // NOME DO CAMPO DA LOTAÇÃO FINAL
+                  $gform->lo3nome = "sellot";           
+                                                        
+                  $gform->or1nome = "orgaoi";           // NOME DO CAMPO DO ÓRGÃO INICIAL
+                  $gform->or2nome = "orgaof";           // NOME DO CAMPO DO ÓRGÃO FINAL
+                  $gform->or3nome = "selorg";           // NOME DO CAMPO DE SELEÇÃO DE ÓRGÃOS
+                  $gform->or4nome = "Secretaria";       // NOME DO CAMPO DE SELEÇÃO DE ÓRGÃOS
+                                                        
+                  $gform->trenome = "tiporesumo";       // NOME DO CAMPO TIPO DE RESUMO
+                  $gform->tfinome = "filtro";           // NOME DO CAMPO TIPO DE FILTRO
+                                                        
+                  $gform->resumopadrao = "l";           // TIPO DE RESUMO PADRÃO
+                  $gform->filtropadrao = "i";           
+                  $gform->strngtipores = "loc";         // OPÇÕES PARA MOSTRAR NO TIPO DE RESUMO g - geral,
+                                                        
+                  $gform->selecao = false;               
+                  $gform->onchpad = true;               // MUDAR AS OPÇÕES AO SELECIONAR OS TIPOS DE FILTRO OU RESUMO
+              
+                  $gform->manomes = false;
+                  $gform->gera_form( db_anofolha(), db_mesfolha() );
+                  ?>
+                  </td>
+                </tr>
+            </table>
+            </td>
+          </tr>
+          <tr>
             <td align="right" nowrap title="Ordem para a emissão do relatório">
               <strong>Ordem:</strong>
             </td>
@@ -120,28 +178,6 @@ if(!isset($datai_dia) &&
             <td align="left">
     	      <input type="checkbox" name="listaponto" value="listaponto"<?=$chk_listaponto?>>Listar ponto fixo
            </td>
-          </tr>
-          <tr>
-            <td align="right" nowrap>
-              <strong>Quebrar por:</strong>
-            </td>
-            <td align="left">
-              <?
-              $arr_quebra = array("n"=>"Sem quebra","l"=>"Por lotação","c"=>"Por cargo");
-              if(!isset($lota)){
-                $lota = "n";
-              }
-              db_select('lota',$arr_quebra,true,4,"");
-              if(isset($listainativ)){
-                $chk_listainativ = "checked";
-              }else{
-                $chk_listainativ = "";
-              }
-              ?>
-            </td>
-            <td align="left">
-    	      <input type="checkbox" name="listainativ" value="listainativ"<?=$chk_listainativ?>>Listar inativos
-            </td>
           </tr>
           <tr>
             <td align="right" nowrap>
@@ -186,6 +222,13 @@ if(!isset($datai_dia) &&
               }
               ?>
             </td>
+            <td align="left">
+            <input type="checkbox" name="listainativ" value="listainativ"<?=$chk_listainativ?>>Listar inativos
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
             <td align="left">
         	      <input type="checkbox" name="listarescis" value="listarescis"<?=$chk_listarescis?>>Listar rescindidos
             </td>
@@ -257,7 +300,6 @@ function js_relatorio2(){
       qry+= "&listapens=s";
     }
     qry+= "&tipo="+F.tipo.value;
-    qry+= "&lota="+F.lota.value;
     qry+= "&quebrapagina="+F.quebra.value;
     selecionados = "";
     virgula_ssel = "";
@@ -266,6 +308,42 @@ function js_relatorio2(){
       virgula_ssel = ",";
     }
     qry+= "&regime="+selecionados;
+
+    qry += "&tiporesumo="+ document.form1.tiporesumo.value;
+    if(document.form1.selcargo){
+    if(document.form1.selcargo.length > 0){
+      faixacargo = js_campo_recebe_valores();
+      qry+= "&fca="+faixacargo;
+    }
+    }else if(document.form1.cargoi){
+      carini = document.form1.cargoi.value;
+      carfim = document.form1.cargof.value;
+      qry+= "&cai="+carini;
+      qry+= "&caf="+carfim;
+    }
+
+    if(document.form1.sellot){
+      if(document.form1.sellot.length > 0){
+        faixalot = js_campo_recebe_valores();
+        qry+= "&flt="+faixalot;
+      }
+    }else if(document.form1.lotaci){
+      lotini = document.form1.lotaci.value;
+      lotfim = document.form1.lotacf.value;
+      qry+= "&lti="+lotini;
+      qry+= "&ltf="+lotfim;
+    }
+    if(document.form1.selorg){
+      if(document.form1.selorg.length > 0){
+        faixaorg = js_campo_recebe_valores();
+        qry+= "&for="+faixaorg;
+      }
+    }else if(document.form1.orgaoi){
+      orgini = document.form1.orgaoi.value;
+      orgfim = document.form1.orgaof.value;
+      qry+= "&ori="+orgini;
+      qry+= "&orf="+orgfim;
+    }
     jan = window.open('pes2_admitidos002.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
   }

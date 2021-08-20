@@ -54,6 +54,7 @@ function js_emite(){
   let qry = '';
   qry += "&tipo="             + document.form1.tipo.value;
   qry += "&quebrar="          + document.form1.quebrar.value;
+  qry += "&ordem="          + document.form1.ordem.value;
   if(document.form1.selcargo){
     if(document.form1.selcargo.length > 0){
       faixacargo = js_campo_recebe_valores();
@@ -152,7 +153,7 @@ function js_emite(){
         $gform->usaLotaFieldsetClass = true;  // PERMITIR SELEÇÃO DE LOTAÇÕES
         $gform->usaorga = true;               // PERMITIR SELEÇÃO DE ÓRGÃO
         $gform->usacarg = true;               // PERMITIR SELEÇÃO DE Cargo
-        //$gform->mostaln = true;             // Removido campo tipo de ordem e carregado manualmente 
+        $gform->mostaln = true;             // Removido campo tipo de ordem e carregado manualmente 
                                               
         $gform->masnome = "ordem";            
                                               
@@ -240,11 +241,6 @@ function js_mostratabdesc1(chave1,chave2){
 
 
 <?
-if(isset($ordem)){
-  echo "<script>
-       js_emite();
-       </script>";  
-}
 $func_iframe = new janela('db_iframe','');
 $func_iframe->posX=1;
 $func_iframe->posY=20;

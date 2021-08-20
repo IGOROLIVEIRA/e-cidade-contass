@@ -51,6 +51,8 @@ $dbinstit=db_getsession("DB_instit");
 
 $rsLicitacao=$clliclicita->sql_record($clliclicita->sql_query(null,"*","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10)"));
 
+$rsLicitacaoPregao=$clliclicita->sql_record($clliclicita->sql_query_equipepregao(null,"l45_numatonomeacao ","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10)"));
+
 if ($clliclicita->numrows == 0){
     db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não Julgada, ou licitação revogada');
     exit;
@@ -79,6 +81,8 @@ if ( $oLibDocumento->lErro ){
 }
 
 db_fieldsmemory($rsLicitacao,0);
+
+db_fieldsmemory($rsLicitacaoPregao,0);
 
 /*pega a equipe de pregao*/
 
@@ -139,7 +143,7 @@ $oPDF->cell(0,8,"PROCESSO LICITATORIO : $l20_edital/$l20_datacria",0,1,"C",0);
 $oPDF->cell(0,8,"$l03_descr Nº $l20_numero/$l20_datacria",0,1,"C",0);
 $oPDF->setfont('arial','',8);
 $oPDF->ln();
-$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais adjudicou o julgamento proferido pela comissão de Licitação, do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." ".converte_charespeciais($l03_descr)." Nº ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências. Foi adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l30_portaria.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
+$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais adjudicou o julgamento proferido pela comissão de Licitação, do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." ".converte_charespeciais($l03_descr)." Nº ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências. Foi adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l45_numatonomeacao.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
 $result_munic=pg_exec("select * from db_config where codigo=$dbinstit");
 db_fieldsmemory($result_munic,0);
 
@@ -161,9 +165,31 @@ for($x = 0; $x < $numrows_forne;$x++){
     $result_itens=$clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"distinct l21_ordem,pc22_orcamitem,pc11_resum,pc01_descrmater","l21_ordem","pc22_codorc=$orcamento"));
     $numrows_itens=$clpcorcamitem->numrows;
 
+    /**
+     * Verifica se existe em algum item a descriçãi da Marca ou OBS
+     */
     for($w=0;$w<$numrows_itens;$w++){
         db_fieldsmemory($result_itens,$w);
-        $result_valor=$clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null,null,"pc23_valor,pc23_quant,pc24_pontuacao",null,"pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem and pc24_pontuacao=1"));
+        $result_valor=$clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null,null,"pc23_valor,pc23_quant,pc23_obs,pc23_vlrun,pc24_pontuacao",null,"pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem and pc24_pontuacao=1"));
+        if ($clpcorcamval->numrows>0){
+
+            $op = 1;
+            if($clpcorcamval->numrows>0){
+                
+                for($i=0;$i<$clpcorcamval->numrows;$i++){
+                    $result2 = db_utils::fieldsMemory($result_valor,$i);
+
+                    if($result2->pc23_obs != ""){
+                        $op = 2;
+                    }
+                }
+            }
+        }
+    }
+
+    for($w=0;$w<$numrows_itens;$w++){
+        db_fieldsmemory($result_itens,$w);
+        $result_valor=$clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null,null,"pc23_valor,pc23_quant,pc23_obs,pc24_pontuacao",null,"pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem and pc24_pontuacao=1"));    
         if ($clpcorcamval->numrows>0){
             db_fieldsmemory($result_valor,0);
             if ($oPDF->gety() > $oPDF->h - 30){
@@ -177,13 +203,26 @@ for($x = 0; $x < $numrows_forne;$x++){
                     $quant_forne = 0;
                     $val_forne = 0;
                 }
-                $oPDF->setfont('arial','b',9);
-                $z01_nomeant = $z01_nome;
-                $oPDF->cell(80,$alt,substr($z01_nome,0,40),0,1,"L",0);
-                $oPDF->cell(30,$alt,"Quant. Adjud.",0,0,"R",0);
-                $oPDF->cell(30,$alt,"Valor Adjud.",0,1,"R",0);
-                $oPDF->ln();
-                $oPDF->setfont('arial','',8);
+                if($op==2){
+
+                    $oPDF->setfont('arial','b',9);
+                    $z01_nomeant = $z01_nome;
+                    $oPDF->cell(80,$alt,substr($z01_nome,0,40),0,1,"L",0);
+                    $oPDF->cell(30,$alt,"Quant. Adjud.",0,0,"R",0);
+                    $oPDF->cell(50,$alt,"Marca",0,0,"C",0);
+                    $oPDF->cell(50,$alt,"Valor Adjud.",0,1,"R",0);
+                    $oPDF->ln();
+                    $oPDF->setfont('arial','',8);
+                }else{
+                    $oPDF->setfont('arial','b',9);
+                    $z01_nomeant = $z01_nome;
+                    $oPDF->cell(80,$alt,substr($z01_nome,0,40),0,1,"L",0);
+                    $oPDF->cell(30,$alt,"Quant. Adjud.",0,0,"R",0);
+                    $oPDF->cell(30,$alt,"Valor Adjud.",0,1,"R",0);
+                    $oPDF->ln();
+                    $oPDF->setfont('arial','',8);
+                }
+                
             }
 
             if ($cor == 0) {
@@ -191,9 +230,20 @@ for($x = 0; $x < $numrows_forne;$x++){
             } else {
                 $cor = 0;
             }
-            $oPDF->multicell(180,$alt,"Item ".$l21_ordem." - ".$pc01_descrmater . " - " . $pc11_resum,0,"J",$cor);
-            $oPDF->cell(30,$alt,$pc23_quant,0,0,"C",$cor);
-            $oPDF->cell(30,$alt,"R$".db_formatar(@$pc23_valor,'f'),0,1,"C",$cor);
+            if($op==2){
+
+
+                $oPDF->multicell(180,$alt,"Item ".$l21_ordem." - ".$pc01_descrmater . " - " . $pc11_resum,0,"J",$cor);
+                $oPDF->cell(30,$alt,$pc23_quant,0,0,"C",$cor);
+                $oPDF->cell(50,$alt,$pc23_obs,0,0,"C",$cor);
+                $oPDF->cell(80,$alt,"R$".db_formatar(@$pc23_valor,'f'),0,1,"C",$cor);
+            }else{
+
+                $oPDF->multicell(180,$alt,"Item ".$l21_ordem." - ".$pc01_descrmater . " - " . $pc11_resum,0,"J",$cor);
+                $oPDF->cell(30,$alt,$pc23_quant,0,0,"C",$cor);
+                $oPDF->cell(30,$alt,"R$".db_formatar(@$pc23_valor,'f'),0,1,"C",$cor);
+            }
+            
             $quant_tot += $pc23_quant;
             $val_tot += $pc23_valor;
             $quant_forne += $pc23_quant;

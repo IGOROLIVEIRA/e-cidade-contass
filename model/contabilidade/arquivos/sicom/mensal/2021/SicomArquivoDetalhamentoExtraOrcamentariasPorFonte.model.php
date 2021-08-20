@@ -106,7 +106,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
 	   db_fim_transacao();
 
-	   $sSqlRespPGTO = "select z01_cgccpf from identificacaoresponsaveis join cgm on si166_numcgm = z01_numcgm where si166_tiporesponsavel = 1";
+	   $sSqlRespPGTO = "select z01_cgccpf from identificacaoresponsaveis join cgm on si166_numcgm = z01_numcgm where si166_tiporesponsavel = 1 and si166_instit = ".db_getsession("DB_instit")." and ".db_getsession("DB_anousu")." between DATE_PART('YEAR',si166_dataini) AND DATE_PART('YEAR',si166_datafim)";
 	   $rsResponsalvelPgto = db_query($sSqlRespPGTO);
 	   $cpfRespPGTO = db_utils::fieldsMemory($rsResponsalvelPgto)->z01_cgccpf;;
   	    /*

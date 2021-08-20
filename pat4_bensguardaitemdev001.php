@@ -78,9 +78,8 @@ if (isset($incluir)) {
     }
     db_fim_transacao($sqlerro);
   } else {
-    
-    $sqlerro = true;
-    $erro_mgs = _M("patrimonial.patrimonio.db_frmbensguardaitemdev.devolucao_cancelada");
+      $sqlerro = true;
+      $erro_msg = _M("patrimonial.patrimonio.db_frmbensguardaitemdev.devolucao_cancelada");
   }
 } else if (isset($chavepesquisa)) {
   
@@ -94,6 +93,11 @@ if (isset($incluir)) {
     $t22_bensguarda = $t21_codigo;
   }
 }
+
+if($sqlerro){
+  $db_botao = true;
+}
+
 ?>
 <html>
 <head>
@@ -120,23 +124,38 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 <?
 if (isset($incluir)) {
   db_msgbox($erro_msg);
-  if ($clbensguardaitemdev->erro_campo != "" || $sqlerro == true) {
+  if ($clbensguardaitemdev->erro_campo != "" || $sqlerro) {
     echo "<script> document.form1." . $clbensguardaitemdev->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
     echo "<script> document.form1." . $clbensguardaitemdev->erro_campo . ".focus();</script>";
   }
-  //$sMsg = _M('patrimonial.patrimonio.db_frmbensguardaitemdev.deseja_imprimir');
-  echo "<script>";
-  echo "if (confirm(_M('patrimonial.patrimonio.db_frmbensguardaitemdev.deseja_imprimir'))) {";
-  echo "  jan = window.open('pat2_emitedevolucaotermodeguarda002.php?iModeloImpressao={$iCodigoTemplate}&devolucao=true&iCodigoTermo={$t22_bensguarda}', '',
-                        'location=0, width='+(screen.availWidth - 5)+'width='+(screen.availWidth - 5)+', scrollbars=1');";
-  echo "}";
-  echo "</script>";
+
+  $sSqlTermoGuarda = 'SELECT t59_termodeguarda FROM cfpatriinstituicao';
+  $rsTermoGuarda = db_query($sSqlTermoGuarda);
+  $iTermo = db_utils::fieldsMemory($rsTermoGuarda, 0)->t59_termodeguarda;
   
-  if ($sqlerro == false) {
-    echo "<script>location.href='pat4_bensguardaitemdev001.php';</script>";
+  if(!$sqlerro){
+      echo "<script>";
+      echo "if (confirm(_M('patrimonial.patrimonio.db_frmbensguardaitemdev.deseja_imprimir'))) {";
+    
+      if($iTermo == 't'){
+          echo "  jan = window.open('pat2_emitedevolucaotermodeguarda002.php?iModeloImpressao={$iCodigoTemplate}&devolucao=true&iCodigoTermo={$t22_bensguarda}', '',
+                              'location=0, width='+(screen.availWidth - 5)+'width='+(screen.availWidth - 5)+', scrollbars=1');";
+      }else{
+          echo "  jan = window.open('pat2_reltermoguardamodelodevolucao.php?iTermo={$t22_bensguarda}', '',
+                        'location=0, width='+(screen.availWidth - 5)+'width='+(screen.availWidth - 5)+', scrollbars=1');";
+      }
+    
+      echo "}";
+      echo "</script>";
+  }
+  
+  if (!$sqlerro) {
+    echo "<script>";
+    echo "location.href='pat4_bensguardaitemdev001.php';";
+    echo "</script>";
   }
 }
-if ($db_opcao == 22 || $db_opcao == 33) {
+if (($db_opcao == 22 || $db_opcao == 33) && !$sqlerro) {
   echo "<script>js_pesquisa();</script>";
 }
 ?>

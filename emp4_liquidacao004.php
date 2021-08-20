@@ -312,7 +312,7 @@ switch ($objJson->method) {
       }
 
       $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico);//addslashes(stripslashes(utf8_decode()))
-      $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp);
+      $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp, $objJson->e83_codtipo);
       $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
       if ($oRetorno !== false) {
 
@@ -380,7 +380,8 @@ switch ($objJson->method) {
       $objJson->e69_notafiscaleletronica,
       $objJson->e69_chaveacesso,
       $objJson->e69_nfserie,
-      $objJson->e50_compdesp
+      $objJson->e50_compdesp,
+      $objJson->e83_codtipo
     );
 
     if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2 && $objJson->e69_notafiscaleletronica != 3) {
@@ -716,6 +717,9 @@ switch ($objJson->method) {
         }
       }
     }
+
+    $objEmpenho->dadosEmpenho->isRestoPagar = $objEmpenho->isRestoPagar() || $objEmpenho->dadosEmpenho->e60_anousu < db_getsession("DB_anousu");
+
     echo $json->encode($objEmpenho->dadosEmpenho);
     break;
 

@@ -33,13 +33,17 @@ include("classes/db_pcmater_classe.php");
 include("classes/db_pcmaterele_classe.php");
 include("classes/db_pcgrupo_classe.php");
 include("classes/db_pcsubgrupo_classe.php");
+include("classes/db_historicoitem_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clpcmater = new cl_pcmater;
 $clpcmaterele = new cl_pcmaterele;
 $clpcgrupo = new cl_pcgrupo;
 $clpcsubgrupo = new cl_pcsubgrupo;
+$clhistoricoitem = new cl_historicoitem;
+$clcondataconf = new cl_condataconf;
 $db_opcao = 22;
 $db_botao = false;
 
@@ -58,23 +62,67 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
     $sqlerro  = true;
     db_msgbox($erro_msg);
   }
+  $result_pesquisa_material = $clpcmater->sql_record($clpcmater->sql_query(null,"pc01_descrmater as pc01_descrmateranterior,pc01_justificativa as pc01_justificativaanterior",null,"pc01_codmater = $pc01_codmater"));
+  db_fieldsmemory($result_pesquisa_material,0);
 
-  if($sqlerro == false){
-    $clpcmater->alterar($pc01_codmater);
+  if($pc01_descrmateranterior != $pc01_descrmater){
+      $dt_session = date("Y-m-d", db_getsession("DB_datausu"));
+      $anousu = db_getsession('DB_anousu');
+      $instituicao = db_getsession('DB_instit');
+      $result = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),"c99_datapat",null,null));
+      $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+
+      if (strtotime($dt_session) <= strtotime($c99_datapat)) {
+          $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+          $sqlerro  = true;
+          db_msgbox($erro_msg);
+      }
+
+      if($pc01_justificativaanterior == $pc01_justificativa){
+          $erro_msgg = "Campo Justificativa não Atualizado !";
+          $sqlerro  = true;
+          db_msgbox($erro_msgg);
+      }
   }
-  if($clpcmater->erro_status==0){
-    $sqlerro = true;
-  }else{
-    $codmater =  $clpcmater->pc01_codmater;
+
+  if(!$sqlerro){
+      $clpcmater->pc01_dataalteracao = date("Y-m-d", db_getsession("DB_datausu"));
+      $clpcmater->pc01_justificativa = $pc01_justificativa;
+      $clpcmater->alterar($pc01_codmater);
+
+      if($clpcmater->numrows_alterar){
+          $clhistoricoitem->pc96_codigomaterial = $pc01_codmater;
+          $clhistoricoitem->pc96_usuario = db_getsession('DB_id_usuario');
+          $clhistoricoitem->pc96_dataalteracao = date("Y-m-d", db_getsession("DB_datausu"));
+          $clhistoricoitem->pc96_dataservidor = date("Y-m-d");
+          $clhistoricoitem->pc96_horaalteracao = time();
+          $clhistoricoitem->pc96_descricaoanterior = $clpcmater->pc01_descrmater . " - " . $clpcmater->pc01_complmater;
+          
+          $clhistoricoitem->incluir();
+
+          if($clhistoricoitem->erro_status == 0){
+              $sqlerro = true;
+          }
+            
+      }
   }
+
+
+    if($clpcmater->erro_status==0){
+        $sqlerro = true;
+    }else{
+        
+        $codmater =  $clpcmater->pc01_codmater;
+
+    }
 
   //rotina que exclui todos os registros do pcmaterele
   if($sqlerro == false){
        $clpcmaterele->pc07_codmater = $codmater;
        $clpcmaterele->excluir($codmater);
        if($clpcmaterele->erro_status==0){
-	 db_msgbox($clpcmaterele->erro_msg);
-         $sqlerro = true;
+	        db_msgbox($clpcmaterele->erro_msg);
+          $sqlerro = true;
        }
   }
 
@@ -98,22 +146,27 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
 
   }
   db_fim_transacao($sqlerro);
-}else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $db_botao = true;
+}
 
-   $result = $clpcmater->sql_record($clpcmater->sql_query_file($chavepesquisa));
-   db_fieldsmemory($result,0);
+if(isset($chavepesquisa) || $pc01_codmater){
 
-   $result = $clpcmaterele->sql_record($clpcmaterele->sql_query_file($chavepesquisa));
-   $numrows = $clpcmaterele->numrows;
-   $coluna =  '';
-   $sep = '';
-   for($i=0; $i<$numrows; $i++){
-         db_fieldsmemory($result,$i);
+    $chavepesquisa = $chavepesquisa ? $chavepesquisa : $pc01_codmater;
+
+    $db_opcao = 2;
+    $db_botao = true;
+
+    $result = $clpcmater->sql_record($clpcmater->sql_query_file($chavepesquisa));
+    db_fieldsmemory($result,0);
+
+    $result = $clpcmaterele->sql_record($clpcmaterele->sql_query_file($chavepesquisa));
+    $numrows = $clpcmaterele->numrows;
+    $coluna =  '';
+    $sep = '';
+    for ($i = 0; $i < $numrows; $i++){
+        db_fieldsmemory($result,$i);
         $coluna .=  $sep.$pc07_codele;
-	$sep     = "XX";
-   }
+	      $sep     = "XX";
+    }
 
 }
 ?>

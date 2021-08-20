@@ -48,17 +48,9 @@ if(isset($salvar)){
 
   db_inicio_transacao();
   $clbaserubricasesocial->excluir(null,$e990_sequencial,db_getsession("DB_instit"));
-  $aBaseManter = null;
-  if ($e990_sequencial == '1000' || $e990_sequencial == '6000') {
-    $aBaseManter = array("'1000'","'6000'");
-  } else if ($e990_sequencial == '1020' || $e990_sequencial == '6006' || $e990_sequencial == '6007') {
-    $aBaseManter = array("'1020'","'6006'","'6007'");
-  }
   foreach($basesSelecionados as $cod){
-    //tira a rubrica de outra tabela exceto as rubricas 2000 e 4000 e base 1000
-    if ($cod[0] != '2' && $cod[0] != '4') {
-      $clbaserubricasesocial->excluir($cod,null,db_getsession("DB_instit"), $aBaseManter);
-    }
+
+    $clbaserubricasesocial->excluir($cod,null,db_getsession("DB_instit"), null);
     //insere na tabela pivô
     $clbaserubricasesocial->e991_rubricasesocial = $e990_sequencial;
     $clbaserubricasesocial->e991_rubricas = $cod;
@@ -66,7 +58,7 @@ if(isset($salvar)){
     $clbaserubricasesocial->incluir();
     if($clbaserubricasesocial->erro_status == 0){
       db_fim_transacao(true);
-      db_msgbox($clbaserubricasesocial->erro_banco);
+      db_msgbox($clbaserubricasesocial->erro_msg);
 
     }
   }
@@ -118,8 +110,8 @@ if(isset($chavepesquisa)){
  }
  $JSONaBasesEsocialOutras = json_encode($JSONaBasesEsocialOutras);
 
- $rubrica = $clrubricasesocial->sql_query($chavepesquisa);
- $orubrica = $clrubricasesocial->sql_record($rubrica);
+ $sSqlRubrica = $clrubricasesocial->sql_query_file($chavepesquisa);
+ $rsRubrica = $clrubricasesocial->sql_record($sSqlRubrica);
 
  $bases = array();
  $basesSelecionados = array();
@@ -133,9 +125,10 @@ if(isset($chavepesquisa)){
  }
  foreach ($aBasesEsocial as $b) {
    $basesSelecionados[$b->e991_rubricas] = $bases[$b->e991_rubricas];
+   unset($bases[$b->e991_rubricas]);
  }
 
- db_fieldsmemory($orubrica);
+ db_fieldsmemory($rsRubrica);
  $db_botao = true;
 }
 ?>

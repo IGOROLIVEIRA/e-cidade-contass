@@ -2,6 +2,9 @@
 include("fpdf151/pdf.php");
 include("classes/db_cgm_classe.php");
 require_once("libs/db_utils.php");
+include("libs/db_liborcamento.php");
+
+$clselorcdotacao = new cl_selorcdotacao();
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
@@ -11,6 +14,16 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 $iUltimoDiaMes = date("d", mktime(0, 0, 0, $MesReferencia + 1, 0, db_getsession("DB_anousu")));
 $sDataInicial = db_getsession("DB_anousu") . "-{$MesReferencia}-01";
 $sDataFinal = db_getsession("DB_anousu") . "-{$MesReferencia}-{$iUltimoDiaMes}";
+
+$sWhere = "";
+
+if (isset($filtros) && $filtros != '') {
+    
+    $clselorcdotacao->setDados($filtros);
+    $sql_filtro = $clselorcdotacao->getDados(false);
+    $sWhere .= $sql_filtro;
+
+}
 
 switch ($MesReferencia) {
     case "01":
@@ -57,9 +70,31 @@ if ($recursos != '') {
     $sTipoPasta = $recursos;
 } else {
     $sWhere .= '';
-    $sTipoPasta = "Geral";
+    $sTipoPasta = "Todos";
 }
 
+if (isset($iTipo) && $iTipo != '') {
+    
+    if ($iTipo == 1) {
+        
+        $sWhere .= " and o15_codigo in (102, 202) ";
+        $sTipoPasta = "Saúde (102, 202)";
+
+    } elseif ($iTipo == 2) {
+
+        $sWhere .= " and o15_codigo in (101, 201) ";
+        $sTipoPasta = "Educação (101, 201)";
+
+    } elseif ($iTipo == 3) {
+        
+        $sWhere .= " and o15_codigo in (118, 119, 218, 219) ";
+        $sTipoPasta = "Fundeb (118, 119, 218, 219)";
+
+    } elseif ($iTipo == 4) {
+        $sWhere .= " and o15_codigo not in (101, 102, 118, 119, 202, 201, 218, 219) ";
+    }
+
+}
 
 $head3 = "Exame Aritmético";
 
@@ -76,174 +111,178 @@ $pdf->SetFillColor(235);
 $pdf->SetFont('Arial', 'B', 8);
 $tam = '05';
 
-if($ordenar == 01) {
-    $sSql = "select * from
-	( select coremp.k12_empen, e60_numemp, e60_codemp, e60_emiss, e60_numerol,e60_tipol,
-		case when e49_numcgm is null then e60_numcgm
-			else e49_numcgm end as
-		e60_numcgm,
-		k12_codord as e50_codord,
-		case when e49_numcgm is null then cgm.z01_nome
-			else cgmordem.z01_nome end as z01_nome,
-		k12_valor,
-		k12_cheque,
-		e60_anousu,
-		coremp.k12_autent,
-		coremp.k12_data,
-		k13_conta,
-		k13_descr,
-		o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,
-		o58_funcao,o58_programa,
-		o55_descr,
-		o15_codtri,o15_descr,o15_tipo,
-		o56_elemento,
-                        o56_descr,
-                        e50_data,
-		case when e60_anousu < " . db_getsession("DB_anousu") . " then 'RP'
-			else 'Emp' end as tipo,
-			e50_obs
-	  from coremp
-		inner join empempenho on e60_numemp = k12_empen
-					and e60_instit = " . db_getsession("DB_instit") . "
-		inner join orcdotacao on e60_anousu = o58_anousu
-					and e60_coddot = o58_coddot
-		inner join orcprojativ on o58_anousu = o55_anousu
-					and o58_projativ = o55_projativ
-		inner join orctiporec on o58_codigo = o15_codigo
-		inner join orcelemento on o58_codele = o56_codele
-		and o58_anousu = o56_anousu
-		inner join pagordem on e50_codord = k12_codord
-		left join pagordemconta on e50_codord = e49_codord
-		inner join corrente on corrente.k12_id = coremp.k12_id
-					and corrente.k12_data=coremp.k12_data
-					and corrente.k12_autent= coremp.k12_autent
-		inner join cgm on cgm.z01_numcgm = e60_numcgm
-		left join cgm cgmordem on cgmordem.z01_numcgm = e49_numcgm
-		inner join saltes on saltes.k13_conta = corrente.k12_conta
-	  where coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' " . $sWhere . "
-	  order by o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento,e60_codemp) as xxxxx where 1 = 1";
-}else{
-    $sSql = "SELECT *
-FROM
-    (SELECT coremp.k12_empen,e60_numemp,e60_codemp,e60_emiss,e60_numerol,e60_tipol,
-            CASE
-                WHEN e49_numcgm IS NULL THEN e60_numcgm
-                ELSE e49_numcgm
-            END AS e60_numcgm,
-            k12_codord AS e50_codord,
-            CASE
-                WHEN e49_numcgm IS NULL THEN cgm.z01_nome
-                ELSE cgmordem.z01_nome
-            END AS z01_nome,
-            k12_valor,k12_cheque,e60_anousu,coremp.k12_autent,coremp.k12_data,k13_conta,
-            k13_descr,o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,o58_funcao,
-            o58_programa,o55_descr,o15_codtri,o15_descr,o15_tipo,o56_elemento,o56_descr,e50_data,
-            CASE
-                WHEN e60_anousu < " . db_getsession("DB_anousu") . " THEN 'RP'
-                ELSE 'Emp'
-            END AS tipo,
-            e50_obs
-     FROM coremp
-     INNER JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = " . db_getsession("DB_instit") . "
-     INNER JOIN orcdotacao ON e60_anousu = o58_anousu AND e60_coddot = o58_coddot
-     INNER JOIN orcprojativ ON o58_anousu = o55_anousu AND o58_projativ = o55_projativ
-     INNER JOIN orctiporec ON o58_codigo = o15_codigo
-     INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
-     INNER JOIN pagordem ON e50_codord = k12_codord
-     LEFT JOIN pagordemconta ON e50_codord = e49_codord
-     INNER JOIN corrente ON corrente.k12_id = coremp.k12_id AND corrente.k12_data=coremp.k12_data
-     AND corrente.k12_autent = coremp.k12_autent
-     INNER JOIN cgm ON cgm.z01_numcgm = e60_numcgm
-     LEFT JOIN cgm cgmordem ON cgmordem.z01_numcgm = e49_numcgm
-     INNER JOIN saltes ON saltes.k13_conta = corrente.k12_conta
-     WHERE coremp.k12_data BETWEEN '" . $sDataInicial . "' and '" . $sDataFinal . "' " . $sWhere . "
-     ORDER BY o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_funcao,o58_programa,o58_projativ,o56_elemento,e60_codemp) AS xxxxx
-WHERE 1 = 1";
-}
+if ($iRestosPagar != 2) {
 
-$rsResult = db_query($sSql);
-$aDadosAgrupados = array();
-for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-
-    $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-
-    $sHash = $oResult->e50_codord;
-    if (!isset($aDadosAgrupados[$sHash])) {
-
-        if ($oResult->tipo == 'Emp') {
-            $aDadosAgrupados[$sHash] = $oResult;
-        }
-
-    } else {
-        $aDadosAgrupados[$sHash]->k12_valor += $oResult->k12_valor;
+    if($ordenar == 01) {
+        $sSql = "select * from
+        ( select coremp.k12_empen, e60_numemp, e60_codemp, e60_emiss, e60_numerol,e60_tipol,
+            case when e49_numcgm is null then e60_numcgm
+                else e49_numcgm end as
+            e60_numcgm,
+            k12_codord as e50_codord,
+            case when e49_numcgm is null then cgm.z01_nome
+                else cgmordem.z01_nome end as z01_nome,
+            k12_valor,
+            k12_cheque,
+            e60_anousu,
+            coremp.k12_autent,
+            coremp.k12_data,
+            k13_conta,
+            k13_descr,
+            o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,
+            o58_funcao,o58_programa,
+            o55_descr,
+            o15_codtri,o15_descr,o15_tipo,
+            o56_elemento,
+                            o56_descr,
+                            e50_data,
+            case when e60_anousu < " . db_getsession("DB_anousu") . " then 'RP'
+                else 'Emp' end as tipo,
+                e50_obs
+        from coremp
+            inner join empempenho on e60_numemp = k12_empen
+                        and e60_instit = " . db_getsession("DB_instit") . "
+            inner join orcdotacao on e60_anousu = o58_anousu
+                        and e60_coddot = o58_coddot
+            inner join orcprojativ on o58_anousu = o55_anousu
+                        and o58_projativ = o55_projativ
+            inner join orctiporec on o58_codigo = o15_codigo
+            inner join orcelemento on o58_codele = o56_codele
+            and o58_anousu = o56_anousu
+            inner join pagordem on e50_codord = k12_codord
+            left join pagordemconta on e50_codord = e49_codord
+            inner join corrente on corrente.k12_id = coremp.k12_id
+                        and corrente.k12_data=coremp.k12_data
+                        and corrente.k12_autent= coremp.k12_autent
+            inner join cgm on cgm.z01_numcgm = e60_numcgm
+            left join cgm cgmordem on cgmordem.z01_numcgm = e49_numcgm
+            inner join saltes on saltes.k13_conta = corrente.k12_conta
+        where " . $sWhere . " and coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' 
+        order by o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento,e60_codemp) as xxxxx where 1 = 1";
+    }else{
+        $sSql = "SELECT *
+    FROM
+        (SELECT coremp.k12_empen,e60_numemp,e60_codemp,e60_emiss,e60_numerol,e60_tipol,
+                CASE
+                    WHEN e49_numcgm IS NULL THEN e60_numcgm
+                    ELSE e49_numcgm
+                END AS e60_numcgm,
+                k12_codord AS e50_codord,
+                CASE
+                    WHEN e49_numcgm IS NULL THEN cgm.z01_nome
+                    ELSE cgmordem.z01_nome
+                END AS z01_nome,
+                k12_valor,k12_cheque,e60_anousu,coremp.k12_autent,coremp.k12_data,k13_conta,
+                k13_descr,o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,o58_funcao,
+                o58_programa,o55_descr,o15_codtri,o15_descr,o15_tipo,o56_elemento,o56_descr,e50_data,
+                CASE
+                    WHEN e60_anousu < " . db_getsession("DB_anousu") . " THEN 'RP'
+                    ELSE 'Emp'
+                END AS tipo,
+                e50_obs
+        FROM coremp
+        INNER JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = " . db_getsession("DB_instit") . "
+        INNER JOIN orcdotacao ON e60_anousu = o58_anousu AND e60_coddot = o58_coddot
+        INNER JOIN orcprojativ ON o58_anousu = o55_anousu AND o58_projativ = o55_projativ
+        INNER JOIN orctiporec ON o58_codigo = o15_codigo
+        INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
+        INNER JOIN pagordem ON e50_codord = k12_codord
+        LEFT JOIN pagordemconta ON e50_codord = e49_codord
+        INNER JOIN corrente ON corrente.k12_id = coremp.k12_id AND corrente.k12_data=coremp.k12_data
+        AND corrente.k12_autent = coremp.k12_autent
+        INNER JOIN cgm ON cgm.z01_numcgm = e60_numcgm
+        LEFT JOIN cgm cgmordem ON cgmordem.z01_numcgm = e49_numcgm
+        INNER JOIN saltes ON saltes.k13_conta = corrente.k12_conta
+        WHERE " . $sWhere . " and coremp.k12_data BETWEEN '" . $sDataInicial . "' and '" . $sDataFinal . "'
+        ORDER BY o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_funcao,o58_programa,o58_projativ,o56_elemento,e60_codemp) AS xxxxx
+    WHERE 1 = 1";
     }
 
-}
+    $rsResult = db_query($sSql);
+    $aDadosAgrupados = array();
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-$pdf->SetFont("", "B", "");
-$pdf->Cell(282, $tam, "EMPENHOS DO MÊS", 1, 1, "C", 1);
-$nTotalizador = 0;
-foreach ($aDadosAgrupados as $oResult) {
+        $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-    if ($oResult->k12_valor > 0) {
+        $sHash = $oResult->e50_codord;
+        if (!isset($aDadosAgrupados[$sHash])) {
 
-        if ($oResult->o58_coddot != $sReduzido || $iCont == 0) {
+            if ($oResult->tipo == 'Emp') {
+                $aDadosAgrupados[$sHash] = $oResult;
+            }
 
-            $pdf->SetFont("", "B", "");
-            $pdf->Cell(25, $tam, "DOTAÇÃO:", 1, 0, "C", 1);
-            $pdf->Cell(25, $tam, "REDUZIDO: " . $oResult->o58_coddot, 1, 0, "C", 1);
-            $pdf->Cell(150, $tam, str_pad($oResult->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_unidade, 3, "0", STR_PAD_LEFT) .
-                str_pad($oResult->o58_funcao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_subfuncao, 3, "0", STR_PAD_LEFT) .
-                str_pad($oResult->o58_programa, 4, "0", STR_PAD_LEFT) . str_pad($oResult->o58_projativ, 4, "0", STR_PAD_LEFT) .
-                str_pad($oResult->o56_elemento, 6, "0", STR_PAD_LEFT) . " - " . $oResult->o56_descr, 1, 0, "C", 1);
-            $pdf->Cell(82, $tam, $oResult->o15_descr, 1, 1, "C", 1);
-
-            $pdf->Cell(20, $tam, "Empenho", 1, 0, "C", 1);
-            $pdf->Cell(17, $tam, "Data Emp", 1, 0, "C", 1);
-            $pdf->Cell(15, $tam, "OP", 1, 0, "C", 1);
-            $pdf->Cell(17, $tam, "Data Ordem", 1, 0, "C", 1);
-            $pdf->Cell(90, $tam, "Fornecedor", 1, 0, "C", 1);
-            $pdf->Cell(17, $tam, "Data Pag", 1, 0, "C", 1);
-            $pdf->Cell(35, $tam, "Valor", 1, 0, "C", 1);
-            $pdf->Cell(15, $tam, "Num Lic", 1, 0, "C", 1);
-            $pdf->Cell(15, $tam, "Mod Lic", 1, 0, "C", 1);
-            $pdf->Cell(41, $tam, "Nº DOC", 1, 1, "C", 1);
-            $sReduzido = $oResult->o58_coddot;
-            $pdf->SetFont("", "", "");
-
+        } else {
+            $aDadosAgrupados[$sHash]->k12_valor += $oResult->k12_valor;
         }
-        $pdf->Cell(20, $tam, $oResult->e60_codemp, 0, 0, "C", 0);
-        $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->e60_emiss))), 0, 0, "C", 0);
-        $pdf->Cell(15, $tam, $oResult->e50_codord, 0, 0, "C", 0);
-        $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->e50_data))), 0, 0, "C", 0);
-        $pdf->Cell(90, $tam, substr($oResult->z01_nome, 0, 50), 0, 0, "L", 0);
-        $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->k12_data))), 0, 0, "C", 0);
-        $pdf->Cell(35, $tam, number_format($oResult->k12_valor, "2", ",", "."), 0, 0, "R", 0);
-        $pdf->Cell(15, $tam, $oResult->e60_numerol, 0, 0, "C", 0);
-        $pdf->Cell(15, $tam, $oResult->e60_tipol, 0, 0, "C", 0);
-        $pdf->Cell(41, $tam, "", 0, 1, "C", 0);
-        $pdf->Cell(282, "0.1", "", 1, 1, "C", 0);
-        $pos_y = $pdf->y;
-        $pos_x = $pdf->x;
-
-        if($ExibirHistoricoDoEmpenho == 01){
-
-          $pdf->multicell(282, $tam, "Histórico: " . $oResult->e50_obs, 0,"L");
-          $pos_y = $pdf->y + 282;
-          $pos_x = $pdf->x;
-          $pdf->Cell(282, "0.1", "", 1, 1, "C", 0);
-
-        }
-
-        $nTotalizador += $oResult->k12_valor;
 
     }
 
+    $pdf->SetFont("", "B", "");
+    $pdf->Cell(282, $tam, "EMPENHOS DO MÊS", 1, 1, "C", 1);
+    $nTotalizador = 0;
+    foreach ($aDadosAgrupados as $oResult) {
+
+        if ($oResult->k12_valor > 0) {
+
+            if ($oResult->o58_coddot != $sReduzido || $iCont == 0) {
+
+                $pdf->SetFont("", "B", "");
+                $pdf->Cell(25, $tam, "DOTAÇÃO:", 1, 0, "C", 1);
+                $pdf->Cell(25, $tam, "REDUZIDO: " . $oResult->o58_coddot, 1, 0, "C", 1);
+                $pdf->Cell(135, $tam, str_pad($oResult->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_unidade, 3, "0", STR_PAD_LEFT) .
+                    str_pad($oResult->o58_funcao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_subfuncao, 3, "0", STR_PAD_LEFT) .
+                    str_pad($oResult->o58_programa, 4, "0", STR_PAD_LEFT) . str_pad($oResult->o58_projativ, 4, "0", STR_PAD_LEFT) .
+                    str_pad($oResult->o56_elemento, 6, "0", STR_PAD_LEFT) . " - " . $oResult->o56_descr, 1, 0, "C", 1);
+                $pdf->Cell(97, $tam, substr($oResult->o15_codtri.' - '.$oResult->o15_descr,0,55), 1, 1, "C", 1);
+
+                $pdf->Cell(20, $tam, "Empenho", 1, 0, "C", 1);
+                $pdf->Cell(17, $tam, "Data Emp", 1, 0, "C", 1);
+                $pdf->Cell(15, $tam, "OP", 1, 0, "C", 1);
+                $pdf->Cell(17, $tam, "Data Ordem", 1, 0, "C", 1);
+                $pdf->Cell(90, $tam, "Fornecedor", 1, 0, "C", 1);
+                $pdf->Cell(17, $tam, "Data Pag", 1, 0, "C", 1);
+                $pdf->Cell(35, $tam, "Valor", 1, 0, "C", 1);
+                $pdf->Cell(15, $tam, "Num Lic", 1, 0, "C", 1);
+                $pdf->Cell(15, $tam, "Mod Lic", 1, 0, "C", 1);
+                $pdf->Cell(41, $tam, "Nº DOC", 1, 1, "C", 1);
+                $sReduzido = $oResult->o58_coddot;
+                $pdf->SetFont("", "", "");
+
+            }
+            $pdf->Cell(20, $tam, $oResult->e60_codemp, 0, 0, "C", 0);
+            $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->e60_emiss))), 0, 0, "C", 0);
+            $pdf->Cell(15, $tam, $oResult->e50_codord, 0, 0, "C", 0);
+            $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->e50_data))), 0, 0, "C", 0);
+            $pdf->Cell(90, $tam, substr($oResult->z01_nome, 0, 50), 0, 0, "L", 0);
+            $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->k12_data))), 0, 0, "C", 0);
+            $pdf->Cell(35, $tam, number_format($oResult->k12_valor, "2", ",", "."), 0, 0, "R", 0);
+            $pdf->Cell(15, $tam, $oResult->e60_numerol, 0, 0, "C", 0);
+            $pdf->Cell(15, $tam, $oResult->e60_tipol, 0, 0, "C", 0);
+            $pdf->Cell(41, $tam, "", 0, 1, "C", 0);
+            $pdf->Cell(282, "0.1", "", 1, 1, "C", 0);
+            $pos_y = $pdf->y;
+            $pos_x = $pdf->x;
+
+            if($ExibirHistoricoDoEmpenho == 01){
+
+            $pdf->multicell(282, $tam, "Histórico: " . $oResult->e50_obs, 0,"L");
+            $pos_y = $pdf->y + 282;
+            $pos_x = $pdf->x;
+            $pdf->Cell(282, "0.1", "", 1, 1, "C", 0);
+
+            }
+
+            $nTotalizador += $oResult->k12_valor;
+
+        }
+
+    }
+    $pdf->SetFont("", "B", "");
+    $pdf->Cell(70, $tam, "Valor Total:", 1, 0, "C", 1);
+    $pdf->Cell(212, $tam, number_format($nTotalizador, "2", ",", "."), 1, 1, "L", 1);
+    $pdf->Ln();
+
 }
-$pdf->SetFont("", "B", "");
-$pdf->Cell(70, $tam, "Valor Total:", 1, 0, "C", 1);
-$pdf->Cell(212, $tam, number_format($nTotalizador, "2", ",", "."), 1, 1, "L", 1);
-$pdf->Ln();
 
 if ($tipoExame == 2) {
 
@@ -351,131 +390,135 @@ if ($tipoExame == 2) {
 
 }
 
-$sSql = "select * from
-	( select coremp.k12_empen, e60_numemp, e60_codemp, e60_emiss, e60_numerol,e60_tipol,
-		case when e49_numcgm is null then e60_numcgm
-			else e49_numcgm end as
-		e60_numcgm,
-		k12_codord as e50_codord,
-		case when e49_numcgm is null then cgm.z01_nome
-			else cgmordem.z01_nome end as z01_nome,
-		k12_valor,
-		k12_cheque,
-		e60_anousu,
-		coremp.k12_autent,
-		coremp.k12_data,
-		k13_conta,
-		k13_descr,
-		o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,
-		o58_funcao,o58_programa,
-		o55_descr,
-		o15_codtri,o15_descr,o15_tipo,
-		o56_elemento,
-                        o56_descr,
-                        e50_data,
-		case when e60_anousu < " . db_getsession("DB_anousu") . " then 'RP'
-			else 'Emp' end as tipo,
-			e50_obs
-	  from coremp
-		inner join empempenho on e60_numemp = k12_empen
-					and e60_instit = " . db_getsession("DB_instit") . "
-		inner join orcdotacao on e60_anousu = o58_anousu
-					and e60_coddot = o58_coddot
-		inner join orcprojativ on o58_anousu = o55_anousu
-					and o58_projativ = o55_projativ
-		inner join orctiporec on o58_codigo = o15_codigo
-		inner join orcelemento on o58_codele = o56_codele
-		and o58_anousu = o56_anousu
-		inner join pagordem on e50_codord = k12_codord
-		left join pagordemconta on e50_codord = e49_codord
-		inner join corrente on corrente.k12_id = coremp.k12_id
-					and corrente.k12_data=coremp.k12_data
-					and corrente.k12_autent= coremp.k12_autent
-		inner join cgm on cgm.z01_numcgm = e60_numcgm
-		left join cgm cgmordem on cgmordem.z01_numcgm = e49_numcgm
-		inner join saltes on saltes.k13_conta = corrente.k12_conta
-	  where coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' " . $sWhere . "
-	  order by o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento) as xxxxx
-	  where 1 = 1 and tipo = 'RP' order by z01_nome";
+if ($iRestosPagar != 1) {
 
-$rsResult = db_query($sSql);
-$aDadosAgrupados = array();
-for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+    $sSql = "select * from
+        ( select coremp.k12_empen, e60_numemp, e60_codemp, e60_emiss, e60_numerol,e60_tipol,
+            case when e49_numcgm is null then e60_numcgm
+                else e49_numcgm end as
+            e60_numcgm,
+            k12_codord as e50_codord,
+            case when e49_numcgm is null then cgm.z01_nome
+                else cgmordem.z01_nome end as z01_nome,
+            k12_valor,
+            k12_cheque,
+            e60_anousu,
+            coremp.k12_autent,
+            coremp.k12_data,
+            k13_conta,
+            k13_descr,
+            o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,
+            o58_funcao,o58_programa,
+            o55_descr,
+            o15_codtri,o15_descr,o15_tipo,
+            o56_elemento,
+                            o56_descr,
+                            e50_data,
+            case when e60_anousu < " . db_getsession("DB_anousu") . " then 'RP'
+                else 'Emp' end as tipo,
+                e50_obs
+        from coremp
+            inner join empempenho on e60_numemp = k12_empen
+                        and e60_instit = " . db_getsession("DB_instit") . "
+            inner join orcdotacao on e60_anousu = o58_anousu
+                        and e60_coddot = o58_coddot
+            inner join orcprojativ on o58_anousu = o55_anousu
+                        and o58_projativ = o55_projativ
+            inner join orctiporec on o58_codigo = o15_codigo
+            inner join orcelemento on o58_codele = o56_codele
+            and o58_anousu = o56_anousu
+            inner join pagordem on e50_codord = k12_codord
+            left join pagordemconta on e50_codord = e49_codord
+            inner join corrente on corrente.k12_id = coremp.k12_id
+                        and corrente.k12_data=coremp.k12_data
+                        and corrente.k12_autent= coremp.k12_autent
+            inner join cgm on cgm.z01_numcgm = e60_numcgm
+            left join cgm cgmordem on cgmordem.z01_numcgm = e49_numcgm
+            inner join saltes on saltes.k13_conta = corrente.k12_conta
+        where " . $sWhere . " and coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' 
+        order by o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento) as xxxxx
+        where 1 = 1 and tipo = 'RP' order by z01_nome";
 
-    $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-    $sHash = $oResult->e50_codord;
-    if (!isset($aDadosAgrupados[$sHash])) {
+    $rsResult = db_query($sSql);
+    $aDadosAgrupados = array();
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-        if ($oResult->tipo == 'RP') {
-            $aDadosAgrupados[$sHash] = $oResult;
+        $oResult = db_utils::fieldsMemory($rsResult, $iCont);
+        $sHash = $oResult->e50_codord;
+        if (!isset($aDadosAgrupados[$sHash])) {
+
+            if ($oResult->tipo == 'RP') {
+                $aDadosAgrupados[$sHash] = $oResult;
+            }
+
+        } else {
+            $aDadosAgrupados[$sHash]->k12_valor += $oResult->k12_valor;
         }
-
-    } else {
-        $aDadosAgrupados[$sHash]->k12_valor += $oResult->k12_valor;
-    }
-
-}
-$pdf->SetFont("", "B", "");
-$pdf->Ln();
-$pdf->Cell(282, $tam, "RESTOS A PAGAR", 1, 1, "C", 1);
-$nTotalizador = 0;
-foreach ($aDadosAgrupados as $oResult) {
-
-    if ($oResult->k12_valor > 0) {
-
-        if ($oResult->o58_coddot != $sReduzido || $iCont == 0) {
-
-            $pdf->SetFont("", "B", "");
-            $pdf->Cell(25, $tam, "DOTAÇÃO:", 1, 0, "C", 1);
-            $pdf->Cell(25, $tam, "REDUZIDO: " . $oResult->o58_coddot, 1, 0, "C", 1);
-            $pdf->Cell(150, $tam, str_pad($oResult->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_unidade, 3, "0", STR_PAD_LEFT) .
-                str_pad($oResult->o58_funcao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_subfuncao, 3, "0", STR_PAD_LEFT) .
-                str_pad($oResult->o58_programa, 4, "0", STR_PAD_LEFT) . str_pad($oResult->o58_projativ, 4, "0", STR_PAD_LEFT) .
-                str_pad($oResult->o56_elemento, 6, "0", STR_PAD_LEFT) . " - " . $oResult->o56_descr, 1, 0, "C", 1);
-            $pdf->Cell(82, $tam, $oResult->o15_descr, 1, 1, "C", 1);
-
-            $pdf->Cell(20, $tam, "Empenho", 1, 0, "C", 1);
-            $pdf->Cell(17, $tam, "Data Emp", 1, 0, "C", 1);
-            $pdf->Cell(15, $tam, "OP", 1, 0, "C", 1);
-            $pdf->Cell(17, $tam, "Data Ordem", 1, 0, "C", 1);
-            $pdf->Cell(90, $tam, "Fornecedor", 1, 0, "C", 1);
-            $pdf->Cell(17, $tam, "Data Pag", 1, 0, "C", 1);
-            $pdf->Cell(35, $tam, "Valor", 1, 0, "C", 1);
-            $pdf->Cell(15, $tam, "Num Lic", 1, 0, "C", 1);
-            $pdf->Cell(15, $tam, "Mod Lic", 1, 0, "C", 1);
-            $pdf->Cell(41, $tam, "Nº DOC", 1, 1, "C", 1);
-            $sReduzido = $oResult->o58_coddot;
-            $pdf->SetFont("", "", "");
-
-        }
-        $pdf->Cell(20, $tam, $oResult->e60_codemp, 0, 0, "C", 0);
-        $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->e60_emiss))), 0, 0, "C", 0);
-        $pdf->Cell(15, $tam, $oResult->e50_codord, 0, 0, "C", 0);
-        $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->e50_data))), 0, 0, "C", 0);
-        $pdf->Cell(90, $tam, substr($oResult->z01_nome, 0, 35), 0, 0, "L", 0);
-        $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->k12_data))), 0, 0, "C", 0);
-        $pdf->Cell(35, $tam, number_format($oResult->k12_valor, "2", ",", "."), 0, 0, "R", 0);
-        $pdf->Cell(15, $tam, $oResult->e60_numerol, 0, 0, "C", 0);
-        $pdf->Cell(15, $tam, $oResult->e60_tipol, 0, 0, "C", 0);
-        $pdf->Cell(41, $tam, "", 0, 1, "C", 0);
-        $pdf->Cell(282, "0.1", "", 1, 1, "C", 0);
-
-        if($ExibirHistoricoDoEmpenho == 01){
-
-          $pdf->Cell(282, $tam, "Histórico: " . substr($oResult->e50_obs, 0, 160), 0, 1, "L", 0);
-          $pdf->Cell(282, "0.1", "", 1, 1, "C", 0);
-
-        }
-
-        $nTotalizador += $oResult->k12_valor;
 
     }
+    $pdf->SetFont("", "B", "");
+    $pdf->Ln();
+    $pdf->Cell(282, $tam, "RESTOS A PAGAR", 1, 1, "C", 1);
+    $nTotalizador = 0;
+    foreach ($aDadosAgrupados as $oResult) {
+
+        if ($oResult->k12_valor > 0) {
+
+            if ($oResult->o58_coddot != $sReduzido || $iCont == 0) {
+
+                $pdf->SetFont("", "B", "");
+                $pdf->Cell(25, $tam, "DOTAÇÃO:", 1, 0, "C", 1);
+                $pdf->Cell(25, $tam, "REDUZIDO: " . $oResult->o58_coddot, 1, 0, "C", 1);
+                $pdf->Cell(135, $tam, str_pad($oResult->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_unidade, 3, "0", STR_PAD_LEFT) .
+                    str_pad($oResult->o58_funcao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_subfuncao, 3, "0", STR_PAD_LEFT) .
+                    str_pad($oResult->o58_programa, 4, "0", STR_PAD_LEFT) . str_pad($oResult->o58_projativ, 4, "0", STR_PAD_LEFT) .
+                    str_pad($oResult->o56_elemento, 6, "0", STR_PAD_LEFT) . " - " . $oResult->o56_descr, 1, 0, "C", 1);
+                $pdf->Cell(97, $tam, substr($oResult->o15_codtri.' - '.$oResult->o15_descr,0,55), 1, 1, "C", 1);
+
+                $pdf->Cell(20, $tam, "Empenho", 1, 0, "C", 1);
+                $pdf->Cell(17, $tam, "Data Emp", 1, 0, "C", 1);
+                $pdf->Cell(15, $tam, "OP", 1, 0, "C", 1);
+                $pdf->Cell(17, $tam, "Data Ordem", 1, 0, "C", 1);
+                $pdf->Cell(90, $tam, "Fornecedor", 1, 0, "C", 1);
+                $pdf->Cell(17, $tam, "Data Pag", 1, 0, "C", 1);
+                $pdf->Cell(35, $tam, "Valor", 1, 0, "C", 1);
+                $pdf->Cell(15, $tam, "Num Lic", 1, 0, "C", 1);
+                $pdf->Cell(15, $tam, "Mod Lic", 1, 0, "C", 1);
+                $pdf->Cell(41, $tam, "Nº DOC", 1, 1, "C", 1);
+                $sReduzido = $oResult->o58_coddot;
+                $pdf->SetFont("", "", "");
+
+            }
+            $pdf->Cell(20, $tam, $oResult->e60_codemp, 0, 0, "C", 0);
+            $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->e60_emiss))), 0, 0, "C", 0);
+            $pdf->Cell(15, $tam, $oResult->e50_codord, 0, 0, "C", 0);
+            $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->e50_data))), 0, 0, "C", 0);
+            $pdf->Cell(90, $tam, substr($oResult->z01_nome, 0, 35), 0, 0, "L", 0);
+            $pdf->Cell(17, $tam, implode("/", array_reverse(explode("-", $oResult->k12_data))), 0, 0, "C", 0);
+            $pdf->Cell(35, $tam, number_format($oResult->k12_valor, "2", ",", "."), 0, 0, "R", 0);
+            $pdf->Cell(15, $tam, $oResult->e60_numerol, 0, 0, "C", 0);
+            $pdf->Cell(15, $tam, $oResult->e60_tipol, 0, 0, "C", 0);
+            $pdf->Cell(41, $tam, "", 0, 1, "C", 0);
+            $pdf->Cell(282, "0.1", "", 1, 1, "C", 0);
+
+            if($ExibirHistoricoDoEmpenho == 01){
+
+            $pdf->Cell(282, $tam, "Histórico: " . substr($oResult->e50_obs, 0, 160), 0, 1, "L", 0);
+            $pdf->Cell(282, "0.1", "", 1, 1, "C", 0);
+
+            }
+
+            $nTotalizador += $oResult->k12_valor;
+
+        }
+
+    }
+
+    $pdf->SetFont("", "B", "");
+    $pdf->Cell(70, $tam, "Valor Total:", 1, 0, "C", 1);
+    $pdf->Cell(212, $tam, number_format($nTotalizador, "2", ",", "."), 1, 1, "L", 1);
 
 }
-$pdf->SetFont("", "B", "");
-$pdf->Cell(70, $tam, "Valor Total:", 1, 0, "C", 1);
-$pdf->Cell(212, $tam, number_format($nTotalizador, "2", ",", "."), 1, 1, "L", 1);
-
 
 $pdf->output();
 

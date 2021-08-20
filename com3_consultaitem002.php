@@ -62,6 +62,21 @@ if(isset($pc01_codmater)){
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+	.table__historicoitem{
+		border-collapse: collapse;
+	}
+
+	.table__historicoitem td{
+		border: 1px solid #2f2f2f;
+		padding: 4px;
+	}
+
+	.tr__conteudoitem{
+		background: #fff;
+	}
+
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#CCCCCC">
   <tr>
@@ -143,10 +158,50 @@ if(isset($pc01_codmater)){
   					   	</td>
   					</tr>
   				</table>
-  			</form>
+
+			</form>
 		    </center>
 		</td>
   	</tr>
+</table>
+<?php	
+	$sSql = "SELECT pc96_dataalteracao, pc96_descricaoanterior
+	 				FROM historicoitem where pc96_codigomaterial = " . $pc01_codmater . "
+					ORDER BY pc96_dataalteracao, pc96_horaalteracao ASC ";
+	$rsSql = db_query($sSql);
+	
+	if(pg_numrows($rsSql)){
+?>
+		<table style="width: 635px" class="table__historicoitem">
+		<tr>
+			<td colspan="2" style="text-align: center">
+				<b>Histórico de Alteração</b>
+			</td>  
+		</tr>
+		<tr class="tr__conteudoitem">
+			<td style="text-align: center; width: 20%">
+				<b>Data Alteração</b>
+			</td>
+			<td style="text-align: center; width: 80%">
+				<b>Descrição Anterior</b>
+			</td>
+		</tr>
+<?php
+		for($count = 0; $count < pg_numrows($rsSql); $count++){
+			$oHistorico = db_utils::fieldsMemory($rsSql, $count);
+?>
+			<tr class="tr__conteudoitem">
+				<td style="text-align: center; width: 20%">
+					<?= db_formatar($oHistorico->pc96_dataalteracao, 'd');?>
+				</td>
+				<td style="text-align: center; width: 80%">
+					<?=$oHistorico->pc96_descricaoanterior?>
+				</td>
+			</tr>	
+		<?php
+		}
+	}
+?>
 </table>
 </center>
 </body>

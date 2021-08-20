@@ -30,17 +30,17 @@ class cl_aberlic132021
   var $si49_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si49_sequencial = int8 = sequencial 
-                 si49_tiporegistro = int8 = Tipo do  registro 
-                 si49_codorgaoresp = varchar(2) = Código do órgão 
-                 si49_codunidadesubresp = varchar(8) = Código da unidade 
-                 si49_exerciciolicitacao = int8 = Exercício em que   foi instaurado 
-                 si49_nroprocessolicitatorio = varchar(12) = Número sequencial do processo 
-                 si49_nrolote = int8 = Número do Lote 
-                 si49_coditem = int8 = Código do Item 
-                 si49_mes = int8 = Mês 
-                 si49_reg10 = int8 = reg10 
-                 si49_instit = int8 = Instituição 
+                 si49_sequencial = int8 = sequencial
+                 si49_tiporegistro = int8 = Tipo do  registro
+                 si49_codorgaoresp = varchar(2) = Código do órgão
+                 si49_codunidadesubresp = varchar(8) = Código da unidade
+                 si49_exerciciolicitacao = int8 = Exercício em que   foi instaurado
+                 si49_nroprocessolicitatorio = varchar(12) = Número sequencial do processo
+                 si49_nrolote = int8 = Número do Lote
+                 si49_coditem = int8 = Código do Item
+                 si49_mes = int8 = Mês
+                 si49_reg10 = int8 = reg10
+                 si49_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -164,31 +164,31 @@ class cl_aberlic132021
 
       return false;
     }
-    $sql = "insert into aberlic132021
-                                       si49_sequencial 
-                                      ,si49_tiporegistro 
-                                      ,si49_codorgaoresp 
-                                      ,si49_codunidadesubresp 
-                                      ,si49_exerciciolicitacao 
-                                      ,si49_nroprocessolicitatorio 
-                                      ,si49_nrolote 
-                                      ,si49_coditem 
-                                      ,si49_mes 
-                                      ,si49_reg10 
-                                      ,si49_instit 
+    $sql = "insert into aberlic132021(
+                                       si49_sequencial
+                                      ,si49_tiporegistro
+                                      ,si49_codorgaoresp
+                                      ,si49_codunidadesubresp
+                                      ,si49_exerciciolicitacao
+                                      ,si49_nroprocessolicitatorio
+                                      ,si49_nrolote
+                                      ,si49_coditem
+                                      ,si49_mes
+                                      ,si49_reg10
+                                      ,si49_instit
                        )
                 values (
-                                $this->si49_sequencial 
-                               ,$this->si49_tiporegistro 
-                               ,'$this->si49_codorgaoresp' 
-                               ,'$this->si49_codunidadesubresp' 
-                               ,$this->si49_exerciciolicitacao 
-                               ,'$this->si49_nroprocessolicitatorio' 
-                               ,$this->si49_nrolote 
-                               ,$this->si49_coditem 
-                               ,$this->si49_mes 
-                               ,$this->si49_reg10 
-                               ,$this->si49_instit 
+                                $this->si49_sequencial
+                               ,$this->si49_tiporegistro
+                               ,'$this->si49_codorgaoresp'
+                               ,'$this->si49_codunidadesubresp'
+                               ,$this->si49_exerciciolicitacao
+                               ,'$this->si49_nroprocessolicitatorio'
+                               ,$this->si49_nrolote
+                               ,$this->si49_coditem
+                               ,$this->si49_mes
+                               ,$this->si49_reg10
+                               ,$this->si49_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {

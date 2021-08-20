@@ -35,6 +35,17 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("t21_codigo");
 $clrotulo->label("t52_descr");
 $clrotulo->label("nome");
+
+$sSqlItensDev = "
+      SELECT bensguardaitemdev
+        FROM bensguardaitemdev
+        INNER JOIN bensguardaitem ON bensguardaitem.t22_codigo = bensguardaitemdev.t23_guardaitem
+        INNER JOIN bensguarda ON t21_codigo = bensguardaitem.t22_bensguarda
+        where t22_bensguarda = $t22_bensguarda ";
+
+$rsSqlItensDev = db_query($sSqlItensDev);
+$iCountItens = pg_numrows($rsSqlItensDev);
+
 ?>
 <script>
 function js_submit_form() {
@@ -70,7 +81,7 @@ function js_submit_form() {
             	$t23_data_mes = date('m',db_getsession("DB_datausu"));
             	$t23_data_dia = date('d',db_getsession("DB_datausu"));
             }
-            db_inputdata('t23_data',@$t23_data_dia,@$t23_data_mes,@$t23_data_ano,true,'text',$db_opcao,"")
+            db_inputdata('t23_data',@$t23_data_dia,@$t23_data_mes,@$t23_data_ano,true,'text', 1,"")
           ?>
         </td>
       </tr>
@@ -93,7 +104,7 @@ function js_submit_form() {
           <fieldset class="separator">
             <legend><?=@$Lt23_obs?></legend>
             <?
-              db_textarea('t23_obs',0,50,$It23_obs,true,'text',$db_opcao,"")
+              db_textarea('t23_obs',0,50,$It23_obs,true,'text', 1,"")
             ?>
           </fieldset>
         </td>
@@ -104,9 +115,16 @@ function js_submit_form() {
          type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Devolver":"Excluir"))?>"
          <?=($db_botao==false?"disabled":"")?> Onclick='return js_submit_form();' />
   <input type="button" value="Imprimir" onClick="js_imprimir();" />
-  <table>
-    <tr>
-      <td valign="top"  align="center">
+  <?php
+    
+    $sSqlTermo = "SELECT t59_termodeguarda from cfpatriinstituicao where t59_instituicao = " . db_getsession('DB_instit');
+    $rsTermo = db_query($sSqlTermo);
+    $iTermo = db_utils::fieldsMemory($rsTermo, 0)->t59_termodeguarda;
+
+    if($iTermo == 'f'){
+        db_select('modelo', array(0 => 'Selecione', 1 => 'Modelo 1'), $db_opcao, '');
+    }?>
+    <td valign="top"  align="center">  
         <?
   	      $cliframe_seleciona->campos = "t22_bensguarda,t22_codigo,t22_bem,t52_descr,t22_dtini,t22_dtfim,t22_obs";
   	      $cliframe_seleciona->legenda = "Bens";
@@ -125,16 +143,39 @@ function js_submit_form() {
   </table>
 </form>
 <script type="text/javascript">
+document.getElementById('modelo').selectedIndex = 1;
 /**
  * Imprime
  */
 function js_imprimir() {
 
-  var sUrl  = 'pat2_reltermoguarda001.php?';
-      sUrl += 'iTermo='+$F('t22_bensguarda');
-      sUrl += '&devolucao=true';
+  let sUrl  = '';
+  let iTermo = "<?=$iTermo?>";
+  let codigo = "<?=$t21_codigo?>";
 
-  js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
+  if(iTermo == 'f'){
+      
+      if(!document.form1.modelo.selectedIndex){
+          alert('Nenhum modelo selecionado. Verifique!');
+          return;
+      }
+
+      if(!parseInt("<?=$iCountItens?>")){
+          alert('Nenhum item foi devolvido!');
+          return;
+      }
+       
+      sUrl = "pat2_reltermoguardamodelodevolucao.php?iTermo="+codigo;
+      let janela = window.open(sUrl, 'width='+(screen.availWidth-5)+', height='+(screen.availHeight-40)+', scrollbars=1, location=0');
+        janela.moveTo(0,0);
+      
+  }else{
+      sUrl  = 'pat2_reltermoguarda001.php?';
+      sUrl += 'iTermo='+codigo;
+      sUrl += '&devolucao=true';
+      js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
+  }
+
 }
 
 function js_pesquisa() {

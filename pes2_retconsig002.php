@@ -63,7 +63,7 @@ for($i=0; $i<6; $i++){
   }
   switch ( $valor ) {
     case "0" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "SalÃ¡rio";
+               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Salário";
                $varSQL .= (trim($varSQL) != "" ? " union all" : "") . " ( " . $clgerasql->gerador_sql(
                                                                                                    "r14", $ano, $mes, null, null,
                                                                                                    "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
@@ -83,7 +83,7 @@ for($i=0; $i<6; $i++){
                $sigla = (isset($sigla) ? $sigla : "r22");
                break;
     case "2" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "FÃ©rias";
+               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Férias";
                $varSQL .= (trim($varSQL) != "" ? " union all " : "") . " ( " . $clgerasql->gerador_sql(
                                                                                                    "r31", $ano, $mes, null, null,
                                                                                                    "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
@@ -93,7 +93,7 @@ for($i=0; $i<6; $i++){
                $sigla = (isset($sigla) ? $sigla : "r31");
                break;
     case "3" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "RescisÃ£o";
+               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Rescisão";
                $varSQL .= (trim($varSQL) != "" ? " union all " : "") . " ( " . $clgerasql->gerador_sql(
                                                                                                    "r20", $ano, $mes, null, null,
                                                                                                    "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
@@ -168,11 +168,11 @@ $sqlFinal = $clgerasql->gerador_sql("",
 
 $result = $clgerasql->sql_record($sqlFinal);
 if($result === false || ($result !== false && $clgerasql->numrows_exec == 0)){
-   db_redireciona('db_erros.php?fechar=true&db_erro=NÃ£o existem dados no perÃ­odo de '.$mes.' / '.$ano);
+   db_redireciona('db_erros.php?fechar=true&db_erro=Não existem dados no período de '.$mes.' / '.$ano);
 }
 
-$head3 = "RetenÃ§Ãµes e ConsignaÃ§Ãµes da Folha";
-$head5 = "PerÃ­odo : " . $mes . " / " . $ano;
+$head3 = "Retenções e Consignações da Folha";
+$head5 = "Período : " . $mes . " / " . $ano;
 $head7 = "Pontos: " . $headPontos;
 
 $pdf = new PDF();
@@ -196,7 +196,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
     $pdf->addpage();
     $pdf->setfont('arial','b',7);
     $pdf->cell(15,$alt,'RUBRICA',1,0,"C",1);
-    $pdf->cell(75,$alt,'DESCRIÃ‡ÃƒO',1,0,"C",1);
+    $pdf->cell(75,$alt,'DESCRIÇÃO',1,0,"C",1);
     $pdf->cell(75,$alt,'RECURSO',1,0,"C",1);
     $pdf->cell(25,$alt,'DESCONTO',1,1,"C",1);
     $troca = 0;

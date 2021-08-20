@@ -74,23 +74,55 @@ if($vinculo == 'A'){
 
 
 $rubric = 'R993';
-$arquivo = '';
+$aArquivo = array();
 if($folha == 'r14'){
   $head5 = "PATRONAL : ".$r33_ppatro."% - SALÁRIO";
-  $arquivo = 'gerfsal';
+  $aArquivo[$folha] = 'gerfsal';
 }elseif($folha == 'r35'){
   $head5 = "PATRONAL : ".$r33_ppatro."% - 13o. SALÁRIO";
-  $arquivo = 'gerfs13';
+  $aArquivo[$folha] = 'gerfs13';
 }elseif($folha == 'r48'){
   $head5 = "PATRONAL : ".$r33_ppatro."% - COMPLEMENTAR";
-  $arquivo = 'gerfcom';
+  $aArquivo[$folha] = 'gerfcom';
 }elseif($folha == 'r20'){
   $head5 = "PATRONAL : ".$r33_ppatro."% - RESCISÃO";
-  $arquivo = 'gerfres';
+  $aArquivo[$folha] = 'gerfres';
+}elseif($folha == 'todas'){
+  $head5 = "PATRONAL : ".$r33_ppatro."% - TODOS";
+  $aArquivo = array(
+    "r14" => "gerfsal",
+    "r35" => "gerfs13",
+    "r48" => "gerfcom",
+    "r20" => "gerfres"
+  );
 }
 
 $instit = db_getsession('DB_instit');
+$sJoinFolha = "(select r14_regist as r14_regist,
+           sum(proventos) as proventos,
+           sum(base) as base,
+           sum(segurado) as segurado
+           FROM
+(";
+$aJoinFolha = array();
+foreach ($aArquivo as $sigla => $arquivo) {
+  $aJoinFolha[] = " 
+   select ".$sigla."_regist as r14_regist,
+           sum( case when {$sigla}_pd = 1                            then {$sigla}_valor else 0 end ) as proventos,
+           sum( case when {$sigla}_rubric = 'R992'                   then {$sigla}_valor else 0 end ) as base,
+           sum( case when {$sigla}_rubric = '$rubric'                then {$sigla}_valor else 0 end ) as segurado
+   from    {$arquivo}
+   where   {$sigla}_anousu = $ano
+   and     {$sigla}_mesusu = $mes
+   and     {$sigla}_instit = $instit
+   group by {$sigla}_regist";
+}
+$sJoinFolha .= implode(" UNION ", $aJoinFolha).") AS valores group by r14_regist) AS x";
 
+$sAliquota = "";
+if (!empty($campoextra)) {
+  $sAliquota = "round(base/100*$campoextra,2) as aliquotacomp, ";
+}
    $sql = "
  
    select z01_nome,
@@ -99,19 +131,11 @@ $instit = db_getsession('DB_instit');
           round(base,2) as base, 
           round(segurado,2) as segurado ,
           round(base/100*$r33_ppatro,2) as patronal, 
+          {$sAliquota}
           round((base/100*$r33_ppatro) + segurado,2) as total
    from 
-   (
-   select ".$folha."_regist as r14_regist,
-           sum( case when ".$folha."_pd = 1                            then ".$folha."_valor else 0 end ) as proventos,
-           sum( case when ".$folha."_rubric = 'R992'                   then ".$folha."_valor else 0 end ) as base,
-           sum( case when ".$folha."_rubric = '$rubric'                then ".$folha."_valor else 0 end ) as segurado
-   from    ".$arquivo."
-   where   ".$folha."_anousu = $ano
-   and     ".$folha."_mesusu = $mes
-   and     ".$folha."_instit = $instit
-   group by ".$folha."_regist) as x
-   	inner join rhpessoal on r14_regist = rh01_regist
+   {$sJoinFolha}
+    inner join rhpessoal on r14_regist = rh01_regist
    	inner join rhpessoalmov on rh02_anousu = $ano
    	                       and rh02_mesusu = $mes
    			                   and rh02_regist = rh01_regist
@@ -147,6 +171,7 @@ $instit = db_getsession('DB_instit');
   $total_seg  = 0;
   $total_base = 0;
   $total_patro= 0;
+  $total_aliquotacomp = 0;
   $total_total= 0;
   
   for($x = 0; $x < pg_numrows($result);$x++){
@@ -160,6 +185,9 @@ $instit = db_getsession('DB_instit');
         $pdf->cell(20,$alt,'BASE',1,0,"C",1);
         $pdf->cell(20,$alt,'SEGURADO',1,0,"C",1);
         $pdf->cell(20,$alt,'PATRON',1,0,"C",1);
+        if (!empty($campoextra)) {
+          $pdf->cell(20,$alt,'ALÍQUOTA',1,0,"C",1);
+        }
         $pdf->cell(20,$alt,'TOTAL',1,1,"C",1);
         $troca = 0;
         $pre = 1;
@@ -176,12 +204,18 @@ $instit = db_getsession('DB_instit');
      $pdf->cell(20,$alt,db_formatar($base,'f'),0,0,"R",$pre);
      $pdf->cell(20,$alt,db_formatar($segurado,'f'),0,0,"R",$pre);
      $pdf->cell(20,$alt,db_formatar($patronal,'f'),0,0,"R",$pre);
+     if (!empty($campoextra)) {
+       $pdf->cell(20,$alt,db_formatar($aliquotacomp,'f'),0,0,"R",$pre);
+     }
      $pdf->cell(20,$alt,db_formatar($total,'f'),0,1,"R",$pre);
      $total_fun   += 1;
      $total_prov  += $proventos;
      $total_base  += $base ;
      $total_seg   += $segurado ;
      $total_patro += $patronal;
+     if (!empty($campoextra)) {
+       $total_aliquotacomp += $aliquotacomp;
+     }
      $total_total += $total;
   }
   $pdf->setfont('arial','b',8);
@@ -190,6 +224,9 @@ $instit = db_getsession('DB_instit');
   $pdf->cell(20,$alt,db_formatar($total_base,'f'),"T",0,"C",0);
   $pdf->cell(20,$alt,db_formatar($total_seg,'f'),"T",0,"C",0);
   $pdf->cell(20,$alt,db_formatar($total_patro,'f'),"T",0,"C",0);
+  if (!empty($campoextra)) {
+    $pdf->cell(20,$alt,db_formatar($total_aliquotacomp,'f'),"T",0,"C",0);
+  }
   $pdf->cell(20,$alt,db_formatar($total_total,'f'),"T",1,"C",0);
   $pdf->Output();
      

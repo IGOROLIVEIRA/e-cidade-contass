@@ -98,6 +98,7 @@ class cl_db_config {
    var $db21_tipopoder = 0;
    var $db21_codtj = 0;
    var $db21_habitantes = 0;
+   var $orderdepart = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  codigo = int4 = Cod. Instituição
@@ -1440,6 +1441,43 @@ class cl_db_config {
        }
      }
    }
+   // funcao para mudar ordenação
+   function alterarOrdenacao ($codigo) {
+    $sql = " update db_config set orderdepart = ".$this->orderdepart." where codigo = ".$codigo; 
+
+    $result = db_query($sql);
+     if($result==false){
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = " nao Alterado. Alteracao Abortada.\\n";
+         $this->erro_sql .= "Valores : ".$this->codigo;
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       $this->numrows_alterar = 0;
+       return false;
+     }else{
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = " nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql .= "Valores : ".$this->codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = 0;
+         return true;
+       }else{
+         $this->erro_banco = "";
+         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$this->codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = pg_affected_rows($result);
+         return true;
+       }
+     }
+
+   }
    // funcao para exclusao
    function excluir ($codigo=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
@@ -1586,7 +1624,7 @@ class cl_db_config {
      $sql .= " from db_config ";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
      $sql .= "      inner join db_tipoinstit  on  db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit";
-     $sql .= "      left join infocomplementaresinstit  on  si09_instit = cgm.z01_numcgm";
+     $sql .= "      left join infocomplementaresinstit  on  si09_instit = codigo";
      $sql2 = "";
      if($dbwhere==""){
        if($codigo!=null ){

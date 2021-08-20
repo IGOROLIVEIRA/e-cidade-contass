@@ -54,6 +54,7 @@ class cl_inssirf {
    var $r33_nome = null; 
    var $r33_tipo = null; 
    var $r33_rubmat = null; 
+   var $r33_rubmat13 = null; 
    var $r33_ppatro = 0; 
    var $r33_rubsau = null; 
    var $r33_rubaci = null; 
@@ -76,6 +77,7 @@ class cl_inssirf {
                  r33_nome = varchar(15) = Tabela 
                  r33_tipo = varchar(1) = Tipo 
                  r33_rubmat = varchar(4) = Rubrica salário maternidade 
+                 r33_rubmat13 = varchar(4) = Rubrica salário maternidade 13
                  r33_ppatro = float8 = Percentual Previdência Patronal 
                  r33_rubsau = varchar(4) = Rubrica Licença Saúde 
                  r33_rubaci = varchar(4) = Rubrica Acidente de Trabalho 
@@ -115,6 +117,7 @@ class cl_inssirf {
        $this->r33_nome = ($this->r33_nome == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_nome"]:$this->r33_nome);
        $this->r33_tipo = ($this->r33_tipo == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_tipo"]:$this->r33_tipo);
        $this->r33_rubmat = ($this->r33_rubmat == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_rubmat"]:$this->r33_rubmat);
+       $this->r33_rubmat13 = ($this->r33_rubmat13 == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_rubmat13"]:$this->r33_rubmat13);
        $this->r33_ppatro = ($this->r33_ppatro == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_ppatro"]:$this->r33_ppatro);
        $this->r33_rubsau = ($this->r33_rubsau == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_rubsau"]:$this->r33_rubsau);
        $this->r33_rubaci = ($this->r33_rubaci == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_rubaci"]:$this->r33_rubaci);
@@ -259,6 +262,7 @@ class cl_inssirf {
                                       ,r33_nome 
                                       ,r33_tipo 
                                       ,r33_rubmat 
+                                      ,r33_rubmat13 
                                       ,r33_ppatro 
                                       ,r33_rubsau 
                                       ,r33_rubaci 
@@ -281,6 +285,7 @@ class cl_inssirf {
                                ,'$this->r33_nome' 
                                ,'$this->r33_tipo' 
                                ,'$this->r33_rubmat' 
+                               ,'$this->r33_rubmat13' 
                                ,$this->r33_ppatro 
                                ,'$this->r33_rubsau' 
                                ,'$this->r33_rubaci' 
@@ -475,6 +480,10 @@ class cl_inssirf {
      }
      if(trim($this->r33_rubmat)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r33_rubmat"])){ 
        $sql  .= $virgula." r33_rubmat = '$this->r33_rubmat' ";
+       $virgula = ",";
+     }
+     if(trim($this->r33_rubmat13)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r33_rubmat13"])){ 
+       $sql  .= $virgula." r33_rubmat13 = '$this->r33_rubmat13' ";
        $virgula = ",";
      }
      if(trim($this->r33_ppatro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r33_ppatro"])){ 
@@ -837,6 +846,7 @@ function sql_query_dados ($r33_codigo = null, $campos = "*", $ordem = null, $dbw
                                                                                                                                                                    
 	$sql .= " from inssirf ";                                                                                                                                         
 	$sql .= "      left join rhrubricas a on a.rh27_rubric = inssirf.r33_rubmat and a.rh27_instit =  inssirf.r33_instit ";                                            
+  $sql .= "      left join rhrubricas f on f.rh27_rubric = inssirf.r33_rubmat13 and f.rh27_instit =  inssirf.r33_instit ";                                            
 	$sql .= "      left join rhrubricas b on b.rh27_rubric = inssirf.r33_rubsau and b.rh27_instit =  inssirf.r33_instit ";                                            
 	$sql .= "      left join rhrubricas c on c.rh27_rubric = inssirf.r33_rubaci and c.rh27_instit =  inssirf.r33_instit ";                                            
 	$sql .= "      left join bases      d on d.r08_codigo  = inssirf.r33_basfer                                         ";                                            

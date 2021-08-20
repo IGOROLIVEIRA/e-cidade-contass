@@ -43,7 +43,7 @@ if( !ini_get('safe_mode') ){
  */
 function tempoLimiteRelatorio() {
 
-  echo '<script>
+ echo '<script>
     location.href = "db_erros.php?fechar=true&db_erro=Tempo de execução do relatório excedido.";
   </script>';
 }
@@ -75,6 +75,8 @@ $sFiltroTotalizacao  = "Totalização: ";
 $sFiltroPeriodo      = "Período: ";
 $sFiltroValorInicial = "Valor: ";
 
+$FiltroComplementar_Matricula   = '';
+$FiltroComplementar_Cgm         = '';
 
 if ($oGet->cboTotalizacao == 1) {
   $sFiltroTotalizacao .= " Imprimir Dados e Totalizações ";  
@@ -241,7 +243,10 @@ $sAnd    = "";
 
 $sAnd = $sWhere != "" ? " and " : "";
 
-$sFrom = "arrepaga";
+$sFrom        = "arrepaga";
+
+$selectChave  = " arrepaga.k00_numpre, arrepaga.k00_numpar, arrepaga.k00_receit, ";
+$chave        = " k00_numpre, k00_numpar, k00_receit, ";
 
 //Verifica se foi escolhido a opção 1-Processamento
 if ($oGet->cboData == 1 && (trim($oGet->dtini) != "" || trim($oGet->dtfim) != "")){
@@ -263,11 +268,14 @@ if ($oGet->cboData == 1 && (trim($oGet->dtini) != "" || trim($oGet->dtfim) != ""
 //Verifica se foi escolhido a opção 2-Efetivo Pagamento    
 } else if ($oGet->cboData == 2 && (trim($oGet->dtini) != "" || trim($oGet->dtfim) != "")){
   
-	$sFrom  = "            disbanco                                                                      ";
+  $sFrom  = "            disbanco                                                                      ";
 	$sFrom .= "            inner join arreidret  on arreidret.idret       = disbanco.idret               ";
 	$sFrom .= "            inner join arrepaga   on arrepaga.k00_numpre   = arreidret.k00_numpre         ";
 	$sFrom .= "                                 and arrepaga.k00_numpar   = arreidret.k00_numpar         ";
-	
+
+	$selectChave = " disbanco.idret, ";
+  $chave       = " idret, ";
+
   $sFiltroData .= " Efetivo Pagamento";
   if (trim($oGet->dtini) != "" && trim($oGet->dtfim) != "") {
     $sFiltroPeriodo .= db_formatar($oGet->dtini, "d"). " à " . db_formatar($oGet->dtfim, "d");
@@ -325,12 +333,23 @@ $sAnd = $sWhere != "" ? " and " : "";
 
 if (trim($oGet->matric) != "") {
 
+  $resultComplementar_Matricula = db_query("select string_agg(trim('Matric.'||j01_matric||' => '||tipopri||'.'||nomepri||', nº '||j39_numero||', B. '||j13_descr)||'.', '; ') as endermatric 
+                                            from proprietario_ender where j01_matric in (".$oGet->matric.")");
+  db_fieldsmemory($resultComplementar_Matricula, 0);
+  $FiltroComplementar_Matricula = "Matrícula Selecionada: ".$endermatric;
+
   $sWhere .= $sAnd." EXISTS (SELECT 1 FROM arrematric where arrepaga.k00_numpre = arrematric.k00_numpre and arrematric.k00_matric = ".$oGet->matric.")";
 }
 
 $sAnd = $sWhere != "" ? " and " : "";
 
 if (trim($oGet->cgm) != "") {
+
+  
+  $resultComplementar_Cgm = db_query("select string_agg(trim(z01_numcgm||'-'||z01_nome), ',') as nomecgm 
+                                from cgm where z01_numcgm in (".$oGet->cgm.")");
+  db_fieldsmemory($resultComplementar_Cgm, 0);
+  $FiltroComplementar_Cgm = "CGM(s) Selecionado(s): ".$nomecgm."";
 
   $sWhere .= $sAnd." arrepaga.k00_numcgm in (".$oGet->cgm.")";
 }
@@ -358,7 +377,23 @@ if ($sWhere != "") {
   $sWhere = " where ". $sWhere;
 } 
 
-$sSql  = "select k02_codigo,                                                                         ";
+$sSql  = "SELECT k02_codigo,                                                                        ";
+$sSql .= "       $chave                                                                             ";
+$sSql .= "       k02_descr,                                                                         ";
+$sSql .= "       k00_tipo,                                                                          ";
+$sSql .= "       k00_descr,                                                                         ";
+$sSql .= "       k00_tipo_recibo,                                                                   ";
+$sSql .= "       k00_descr_recibo,                                                                  ";
+$sSql .= "       z01_numcgm,                                                                        ";
+$sSql .= "       z01_nome,                                                                          ";
+$sSql .= "       tipo_origem,                                                                       ";
+$sSql .= "       array_to_string(array_agg(distinct origem),',') AS origem,                         ";
+$sSql .= "       perc_origem,                                                                       ";
+$sSql .= "       valor_pago                                                                         ";
+$sSql .= "       FROM (                                                                             ";
+
+$sSql .= "select k02_codigo,                                                                        ";
+$sSql .= "        $chave                                                                            ";
 $sSql .= "        k02_descr,                                                                        ";
 $sSql .= "        k00_tipo,                                                                         ";
 $sSql .= "        k00_descr,                                                                        ";
@@ -371,7 +406,7 @@ $sSql .= "        origem,                                                       
 $sSql .= "        perc_origem,                                                                      ";
 $sSql .= "        sum((k00_valor * perc_origem)/100) as valor_pago                                  ";
 $sSql .= "   from (                                                                                 ";
-$sSql .= "     select tabrec.k02_codigo,                                                            ";
+$sSql .= "     select $selectChave tabrec.k02_codigo,                                               ";
 $sSql .= "            tabrec.k02_descr,                                                             ";
 $sSql .= "            ( select k00_tipo                                       ";
 $sSql .= "               from arrecant                                                              ";
@@ -417,9 +452,10 @@ $sSql .= "            inner join cgm        on cgm.z01_numcgm        = arrepaga.
 $sSql .= "            left join arrematric  on arrematric.k00_numpre = arrepaga.k00_numpre          ";
 $sSql .= "            left join arreinscr   on arreinscr.k00_numpre  = arrepaga.k00_numpre          ";
 
-$sGroup  = "        ) as pagamentos                                                                 ";
+$sGroup  = "        ) as xpagamentos                                                                ";
 $sGroup .= "  group                                                                                 ";
 $sGroup .= "     by k02_codigo,                                                                     ";
+$sGroup .= "        $chave                                                                          ";
 $sGroup .= "        k02_descr,                                                                      ";
 $sGroup .= "        k00_tipo,                                                                       ";
 $sGroup .= "        k00_descr,                                                                      ";
@@ -430,6 +466,20 @@ $sGroup .= "        z01_nome,                                                   
 $sGroup .= "        tipo_origem,                                                                    ";
 $sGroup .= "        origem,                                                                         ";
 $sGroup .= "        perc_origem                                                                     ";
+
+$sGroup .= "        ) as pagamentos                                                                 ";
+$sGroup .= "  group by k02_codigo,                                                                  ";
+$sGroup .= "        $chave                                                                          ";
+$sGroup .= "        k02_descr,                                                                      ";
+$sGroup .= "        k00_tipo,                                                                       ";
+$sGroup .= "        k00_descr,                                                                      ";
+$sGroup .= "        k00_tipo_recibo,                                                                ";
+$sGroup .= "        k00_descr_recibo,                                                               ";
+$sGroup .= "        z01_numcgm,                                                                     ";
+$sGroup .= "        z01_nome,                                                                       ";
+$sGroup .= "        tipo_origem,                                                                    ";
+$sGroup .= "        perc_origem,                                                                    ";
+$sGroup .= "        valor_pago                                                                      ";
 
 $sSql = $sSql . $sWhere . $sGroup . $sOrdenar;
 
@@ -830,10 +880,19 @@ if ($oGet->cboTotalizacao <> 2) {
   
       case 1:
         if ($lNovaPagina) {
-           $pdf->AddPage();    
+          $pdf->AddPage();    
           $lNovaPagina = false;
-           cabecalhoTipoDebito($pdf, $alt);
-           $pdf->ln(3);
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
+          cabecalhoTipoDebito($pdf, $alt);
+          $pdf->ln(3);
         }
         $pdf->setfont('arial','b',7);
         $pdf->cell(25, $alt, $oCgm->codigoTipoDebito    , 0, 0, "R", 0);
@@ -849,6 +908,15 @@ if ($oGet->cboTotalizacao <> 2) {
             
             $pdf->AddPage();    
             $lNovaPagina = false;
+            
+            if( trim($FiltroComplementar_Matricula) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+            }
+            if( trim($FiltroComplementar_Cgm) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+            }
+            $pdf->multicell(0,3,'',0,"J",0);
+            
             cabecalhoTipoDebito($pdf, $alt);
             $pdf->ln(3);
           }
@@ -883,6 +951,15 @@ if ($oGet->cboTotalizacao <> 2) {
           
           $pdf->AddPage();    
           $lNovaPagina = false;
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
           cabecalhoReceita($pdf, $alt);
           $pdf->ln(3);
         }
@@ -914,6 +991,15 @@ if ($oGet->cboTotalizacao <> 2) {
         if ($lNovaPagina) {
           $pdf->AddPage();    
           $lNovaPagina = false;
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
           cabecalhoMatricula($pdf, $alt);
           $pdf->ln(3);
         }
@@ -932,6 +1018,15 @@ if ($oGet->cboTotalizacao <> 2) {
           if ($lNovaPagina) {
             $pdf->AddPage();    
             $lNovaPagina = false;
+            
+            if( trim($FiltroComplementar_Matricula) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+            }
+            if( trim($FiltroComplementar_Cgm) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+            }
+            $pdf->multicell(0,3,'',0,"J",0);
+            
             cabecalhoTipoDebito($pdf, $alt);
             $pdf->ln(3);
           }
@@ -968,6 +1063,15 @@ if ($oGet->cboTotalizacao <> 2) {
         if ($lNovaPagina) {
           $pdf->AddPage();    
           $lNovaPagina = false;
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
           cabecalhoInscricao($pdf, $alt);
           $pdf->ln(3);
         }
@@ -986,6 +1090,15 @@ if ($oGet->cboTotalizacao <> 2) {
           if ($lNovaPagina) {
             $pdf->AddPage();    
             $lNovaPagina = false;
+            
+            if( trim($FiltroComplementar_Matricula) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+            }
+            if( trim($FiltroComplementar_Cgm) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+            }
+            $pdf->multicell(0,3,'',0,"J",0);
+            
             cabecalhoTipoDebito($pdf, $alt);
             $pdf->ln(3);
           }
@@ -1022,6 +1135,15 @@ if ($oGet->cboTotalizacao <> 2) {
         if ($lNovaPagina) {
           $pdf->AddPage();    
           $lNovaPagina = false;
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
           cabecalhoCGM($pdf, $alt);
           $pdf->ln(3);
         }
@@ -1040,6 +1162,15 @@ if ($oGet->cboTotalizacao <> 2) {
           if ($lNovaPagina) {
             $pdf->AddPage();    
             $lNovaPagina = false;
+            
+            if( trim($FiltroComplementar_Matricula) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+            }
+            if( trim($FiltroComplementar_Cgm) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+            }
+            $pdf->multicell(0,3,'',0,"J",0);
+          
             cabecalhoTipoDebito($pdf, $alt);
             $pdf->ln(3);
           }
@@ -1223,7 +1354,6 @@ function cabecalhoInscricao($pdf, $alt) {
 }
 
 function cabecalhoCGM($pdf, $alt) {
-  
   $pdf->setfont('arial','b',8);
   $pdf->cell(15, $alt, "CGM"            , 1, 0, "C", 1);
   $pdf->cell(57, $alt, "Nome do Contribuinte" , 1, 0, "C", 1);

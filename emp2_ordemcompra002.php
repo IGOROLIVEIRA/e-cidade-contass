@@ -32,6 +32,7 @@ require_once("libs/db_utils.php");
 require_once("classes/db_matordem_classe.php");
 require_once("classes/db_matordemitem_classe.php");
 require_once("classes/db_empparametro_classe.php");
+require_once("classes/db_empautitem_classe.php");
 require_once("classes/db_pcparam_classe.php");
 require_once("classes/db_db_depart_classe.php");
 
@@ -66,6 +67,7 @@ if ($oConfiguracaoGed->utilizaGED()) {
 
 $clmatordem     = new cl_matordem;
 $clmatordemitem = new cl_matordemitem;
+$clempautitem   = new cl_empautitem;
 $clempparametro = new cl_empparametro;
 $clpcparam      = new cl_pcparam;
 $oDaoDbDepart   = new cl_db_depart;
@@ -148,17 +150,18 @@ for($i = 0;$i < $num;$i++){
                                                               else  pcprocitem.pc81_codproc end as pc81_codproc,
                                                          case when solrp.pc11_numero is not null then solrp.pc11_numero
                                                               else  solicitem.pc11_numero end as pc11_numero,
-                                                         case WHEN e55_marca IS NOT NULL AND trim(e55_marca) != '' THEN e55_marca 
+                                                         case WHEN e55_marca IS NOT NULL AND trim(e55_marca) != '' THEN e55_marca
                                                          when pc10_solicitacaotipo = 5 then coalesce(trim(pcitemvalrp.pc23_obs), '')
                                                               when  pcorcamval.pc23_obs is null then coalesce(trim(pcorcamvalsl.pc23_obs),trim(pcorcamvalac.pc23_obs), '')
                                                               else  coalesce(trim(pcorcamval.pc23_obs),trim(pcorcamvalac.pc23_obs), '') end as pc23_obs,
-	                                                       pc50_descr",
+	                                                       pc50_descr,
+	                                                       e61_autori",
                                                          "m52_numemp, m52_sequen",
                                                          "m52_codordem = $m51_codordem");
 //echo($sqlItem);
   //die();
 	$resultitem = $clmatordemitem->sql_record($sqlItem);
-	//db_criatabela($resultitem); exit;
+//	db_criatabela($resultitem); exit;
 
 
 	$numrows=$clmatordemitem->numrows;
@@ -216,6 +219,7 @@ for($i = 0;$i < $num;$i++){
    $pdf1->unid           = 'm61_abrev';
    $pdf1->condpag        = 'e54_conpag';
    $pdf1->destino        = 'e54_destin';
+   $pdf1->autori        = 'e61_autori';
    $pdf1->obs_ordcom_orcamval = "e55_marca";
    $pdf1->sOrigem        = $iOrigem . " - " .$sOrigem;
    //$pdf1->iOrigem        = $iOrigem;

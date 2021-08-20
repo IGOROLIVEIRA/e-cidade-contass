@@ -115,15 +115,17 @@ if(isset($codtab) && $codigo_tab <= 2){
 	  if($alteraform == true){
 
 			$sSqlInssirf = $clinssirf->sql_query_dados(null,
-																								 "r33_nome,
-																									r33_tipo,
-																									r33_rubmat,
-																									a.rh27_descr as rh27_descrmat,
-																									r33_rubsau,
-																									b.rh27_descr as rh27_descrsau,
-																									r33_rubaci,
-																									c.rh27_descr as rh27_descraci,
-																									r33_basfer,
+																								 "r33_nome, 
+																									r33_tipo, 
+																									r33_rubmat, 
+																									a.rh27_descr as rh27_descrmat, 
+                                                  r33_rubmat13, 
+                                                  f.rh27_descr as rh27_descrmat13, 
+                                                  r33_rubsau, 
+																									b.rh27_descr as rh27_descrsau, 
+																									r33_rubaci, 
+																									c.rh27_descr as rh27_descraci, 
+																									r33_basfer, 
 																									d.r08_descr as rh32_descrfer,
 																									r33_basfet,
 																									e.r08_descr as rh32_descrfet,
@@ -238,6 +240,20 @@ if(isset($codtab) && $codigo_tab <= 2){
             <?
               db_input('r33_rubmat',5,$Ir33_rubmat,true,'text',$db_opcao,"onchange='js_pesquisarubricas(false,\"mat\");'");
               db_input('rh27_descr',30,$Irh27_descr,true,'text',3,"","rh27_descrmat");
+            ?>
+          </td>
+        </tr>
+
+        <tr>
+        <td nowrap title="<?=$Tr33_rubmat13?>" >
+          <?
+            db_ancora(@$Lr33_rubmat13, "js_pesquisarubricas(true,'mat13');", $db_opcao);
+          ?>
+        </td>
+          <td nowrap>
+            <?
+              db_input('r33_rubmat13',5,$Ir33_rubmat13,true,'text',$db_opcao,"onchange='js_pesquisarubricas(false,\"mat13\");'");
+              db_input('rh27_descr',30,$Irh27_descr,true,'text',3,"","rh27_descrmat13");
             ?>
           </td>
         </tr>
@@ -516,6 +532,18 @@ function js_mostrarubricasmat(chave,erro){
 function js_mostrarubricasmat1(chave1,chave2){
   document.form1.r33_rubmat.value  = chave1;
   document.form1.rh27_descrmat.value  = chave2;
+  db_iframe_rhrubricas.hide();
+}
+function js_mostrarubricasmat13(chave,erro){
+  document.form1.rh27_descrmat13.value  = chave;
+  if(erro==true){
+    document.form1.r33_rubmat13.value = '';
+    document.form1.r33_rubmat13.focus();
+  }
+}
+function js_mostrarubricasmat131(chave1,chave2){
+  document.form1.r33_rubmat13.value  = chave1;
+  document.form1.rh27_descrmat13.value  = chave2;
   db_iframe_rhrubricas.hide();
 }
 function js_mostrarubricasaci(chave,erro){

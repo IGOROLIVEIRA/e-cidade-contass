@@ -46,6 +46,7 @@ require_once("classes/db_rescisao_classe.php");
 require_once("classes/db_afasta_classe.php");
 require_once("classes/db_inssirf_classe.php");
 require_once("classes/db_rhlota_classe.php");
+require_once("classes/db_bases_classe.php");
 require_once("dbforms/db_funcoes.php");
 
 $oGet  = db_utils::postMemory($_GET);
@@ -66,6 +67,7 @@ $clafasta        = new cl_afasta;
 $clinssirf       = new cl_inssirf;
 $cllayout_SEFIP  = new cl_layout_SEFIP;
 $clrhlota        = new cl_rhlota;
+$clbases         = new cl_bases;
 $db_opcao        = 1;
 $db_botao        = true;
 $sFgts           = "1";
@@ -347,9 +349,6 @@ if ( isset($oPost->gerar) ) {
         $clgera_sql_folha->usar_tpc  = false;
         $clgera_sql_folha->usar_atv  = false;
 
-        $nTotalSalFamilia     = 0;
-        $nTotalSalMaternidade = 0;
-
         if ( !$lMes13 ) {
           $aSiglas = array("r14","r48","r35","r20");
         } else {
@@ -439,8 +438,6 @@ if ( isset($oPost->gerar) ) {
                     $oDadosGer = db_utils::fieldsMemory($rsDadosGer, $im);
 
                     if ( in_array($oDadosGer->rubri,array('R919','R921')) ) {
-
-                      $nTotalSalFamilia += $oDadosGer->valor;
                       $nSalarioFamilia  += $oDadosGer->valor;
                     }
 
@@ -505,7 +502,6 @@ if ( isset($oPost->gerar) ) {
 
                     if( $oDadosGer->rubri == $oPrev->r33_rubmat){
                       $nSalarioMaternidade  += $oDadosGer->valor;
-                      $nTotalSalMaternidade += $oDadosGer->valor;
                     }
 
                     if($oDadosGer->rubri == "R990"){
@@ -561,6 +557,11 @@ if ( isset($oPost->gerar) ) {
             }
           }
 
+          if (!empty($oPessoal->rh05_recis) && $nBaseINSS <= 0 
+            && (int) db_subdata($oPessoal->rh05_recis,"m") == $iMesUsu 
+            && (int) db_subdata($oPessoal->rh05_recis,"a") == $iAnoUsu) {
+            $nBaseINSS = 0.01;
+          }
           $aSalarioMaternidade[$oPessoal->rh01_regist] = $nSalarioMaternidade;
           $aSalarioFamilia    [$oPessoal->rh01_regist] = $nSalarioFamilia;
           $aBaseFGTS          [$oPessoal->rh01_regist] = $nBaseFGTS;
@@ -629,6 +630,8 @@ if ( isset($oPost->gerar) ) {
           $sAlteraCnae = $oPost->alteracnae;
         }
 
+        $nTotalSalFamilia = $clbases->getTotalBase('B500', $iAnoUsu, $iMesUsu, $iInstit);
+        $nTotalSalMaternidade = $clbases->getTotalBase('B501', $iAnoUsu, $iMesUsu, $iInstit);
         $cllayout_SEFIP->SFPRegistro10_004_017 = $oConfig->cgc;
         $cllayout_SEFIP->SFPRegistro10_054_093 = $oConfig->nomeinst;
         $cllayout_SEFIP->SFPRegistro10_094_143 = $oConfig->ender;
@@ -649,14 +652,17 @@ if ( isset($oPost->gerar) ) {
 
         $cllayout_SEFIP->geraRegist10SFP();
 
+        
+        $cllayout_SEFIP->SFPRegistro12_004_017 = $oConfig->cgc;
+        $nTotalSalMaternidade13 = $clbases->getTotalBase('B502', $iAnoUsu, $iMesUsu, $iInstit);
+        $cllayout_SEFIP->SFPRegistro12_054_068 = $nTotalSalMaternidade13;
         if (isset($oPost->gerarcompensacao) && $oPost->gerarcompensacao == 1) {
 
           $cllayout_SEFIP->SFPRegistro12_147_161 = $oPost->valorcompensacao;
-          $cllayout_SEFIP->SFPRegistro12_004_017 = $oConfig->cgc;
           $cllayout_SEFIP->SFPRegistro12_162_167 = $oPost->anocompeinicial.$oPost->mescompeinicial;
           $cllayout_SEFIP->SFPRegistro12_168_173 = $oPost->anocompefinal.$oPost->mescompefinal;
-          $cllayout_SEFIP->geraRegist12SFP();
         }
+        $cllayout_SEFIP->geraRegist12SFP();
         for( $i=0; $i < $clrhpessoal->numrows; $i++) {
 
           $oPessoal = db_utils::fieldsMemory($rsDados, $i);
@@ -775,7 +781,7 @@ if ( isset($oPost->gerar) ) {
               if(trim($oPessoal->rh05_recis) != "" || $lMes13){
                 if($recis_ano == (int)$iAnoUsu && $recis_mes == (int)$iMesUsu){
                   $valorrescis = $aBaseINSS13[$oPessoal->rh01_regist];
-                  if($aBaseINSS13[$oPessoal->rh01_regist] == 0 ){
+                  if($aBaseINSS13[$oPessoal->rh01_regist] == 0 && date_diff(date_create($oPessoal->rh05_recis), date_create($oPessoal->rh01_admiss))->format('%a') >= 15){
                     $valorrescis = 0.01;
                   }
                 }
@@ -1010,7 +1016,7 @@ if ( isset($oPost->gerar) ) {
                       $cllayout_SEFIP->SFPRegistro32_052_053 = $oPessoal->h13_tpcont;
                       $cllayout_SEFIP->SFPRegistro32_054_123 = $oPessoal->z01_nome;
                       $cllayout_SEFIP->SFPRegistro32_124_125 = $r45_codafa;
-                      $cllayout_SEFIP->SFPRegistro32_126_133 = db_formatar($dataafasta,'d');
+                      $cllayout_SEFIP->SFPRegistro32_126_133 = (in_array($r45_codafa, array('P1','P3')) ? date_create($r45_dtafas)->modify('-1 days')->format('dmY') : db_formatar($dataafasta,'d') );
                       $cllayout_SEFIP->SFPRegistro32_134_134 = $indfgts;
 
 
@@ -1026,7 +1032,7 @@ if ( isset($oPost->gerar) ) {
                     $cllayout_SEFIP->SFPRegistro32_052_053 = $oPessoal->h13_tpcont;
                     $cllayout_SEFIP->SFPRegistro32_054_123 = $oPessoal->z01_nome;
                     $cllayout_SEFIP->SFPRegistro32_124_125 = $codmov;
-                    $cllayout_SEFIP->SFPRegistro32_126_133 = db_formatar($datamov,'d');
+                    $cllayout_SEFIP->SFPRegistro32_126_133 = (in_array($codmov, array('P1','P3')) ? date_create($r45_dtafas)->modify('-1 days')->format('dmY') : db_formatar($datamov,'d') );
                     $cllayout_SEFIP->SFPRegistro32_134_134 = $indfgts;
 
 

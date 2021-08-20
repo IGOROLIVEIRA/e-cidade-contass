@@ -985,105 +985,165 @@ class cl_empempenho
     } else {
       $sql2 = $dbwhere;
     }
-    $result = db_query($sql . $sql2);
-    if ($result == false) {
-      $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Empenhos na prefeitura nao Excluído. Exclusão Abortada.\\n";
-      $this->erro_sql .= "Valores : " . $e60_numemp;
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      $this->numrows_excluir = 0;
-      return false;
-    } else {
-      if (pg_affected_rows($result) == 0) {
-        $this->erro_banco = "";
-        $this->erro_sql = "Empenhos na prefeitura nao Encontrado. Exclusão não Efetuada.\\n";
-        $this->erro_sql .= "Valores : " . $e60_numemp;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "1";
-        $this->numrows_excluir = 0;
-        return true;
-      } else {
-        $this->erro_banco = "";
-        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-        $this->erro_sql .= "Valores : " . $e60_numemp;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "1";
-        $this->numrows_excluir = pg_affected_rows($result);
-        return true;
-      }
+    // funcao do recordset
+    function sql_record($sql) {
+        $result = db_query($sql);
+        if($result==false){
+            $this->numrows    = 0;
+            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_sql   = "Erro ao selecionar os registros";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        $this->numrows = pg_numrows($result);
+        if($this->numrows==0){
+            $this->erro_banco = "";
+            $this->erro_sql   = "Record Vazio na Tabela:empempenho";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        return $result;
     }
-  }
-  // funcao do recordset
-  function sql_record($sql)
-  {
-    $result = db_query($sql);
-    if ($result == false) {
-      $this->numrows    = 0;
-      $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Erro ao selecionar os registros";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
+    // funcao do sql
+    function sql_query ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $filtroempelemento ="", $limit = ''){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from empempenho ";
+        $sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
+        $sql .= "      inner join empelemento  on  empempenho.e60_numemp = empelemento.e64_numemp";
+        if($filtroempelemento == 1) {
+            $sql .= "      inner join orcelemento elementoempenho  on  elementoempenho.o56_codele = empelemento.e64_codele  and elementoempenho.o56_anousu = empempenho.e60_anousu";
+        }
+        $sql .= "      inner join db_config  on  db_config.codigo = empempenho.e60_instit";
+        $sql .= "      inner join orcdotacao  on  orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot = empempenho.e60_coddot";
+        $sql .= "      inner join pctipocompra  on  pctipocompra.pc50_codcom = empempenho.e60_codcom";
+        $sql .= "      inner join emptipo  on  emptipo.e41_codtipo = empempenho.e60_codtipo";
+        $sql .= "      inner join concarpeculiar  on  concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar";
+        $sql .= "      inner join db_config  as a on   a.codigo = orcdotacao.o58_instit";
+        $sql .= "      inner join orctiporec  on  orctiporec.o15_codigo = orcdotacao.o58_codigo";
+        $sql .= "      inner join orcfuncao  on  orcfuncao.o52_funcao = orcdotacao.o58_funcao";
+        $sql .= "      inner join orcsubfuncao  on  orcsubfuncao.o53_subfuncao = orcdotacao.o58_subfuncao";
+        $sql .= "      inner join orcprograma  on  orcprograma.o54_anousu = orcdotacao.o58_anousu and  orcprograma.o54_programa = orcdotacao.o58_programa";
+        $sql .= "      inner join orcelemento  on  orcelemento.o56_codele = orcdotacao.o58_codele  and orcelemento.o56_anousu = orcdotacao.o58_anousu";
+        $sql .= "      inner join orcprojativ  on  orcprojativ.o55_anousu = orcdotacao.o58_anousu and  orcprojativ.o55_projativ = orcdotacao.o58_projativ";
+        $sql .= "      inner join orcorgao  on  orcorgao.o40_anousu = orcdotacao.o58_anousu and  orcorgao.o40_orgao = orcdotacao.o58_orgao";
+        $sql .= "      inner join orcunidade  on  orcunidade.o41_anousu = orcdotacao.o58_anousu and  orcunidade.o41_orgao = orcdotacao.o58_orgao and  orcunidade.o41_unidade = orcdotacao.o58_unidade";
+        $sql .= "      left  join empcontratos on si173_empenho::varchar = e60_codemp and e60_anousu = si173_anoempenho";
+        $sql .= "      left join contratos on si173_codcontrato = si172_sequencial";
+        $sql .= "      LEFT JOIN aditivoscontratos on extract(year from si174_dataassinaturacontoriginal) = si172_exerciciocontrato and (si174_nrocontrato = si172_nrocontrato)";
+        $sql .= "       left join empempaut            on empempenho.e60_numemp  = empempaut.e61_numemp   ";
+        $sql .= "       left join empautoriza          on empempaut.e61_autori   = empautoriza.e54_autori ";
+        $sql .= "       left join db_depart            on empautoriza.e54_autori = db_depart.coddepto ";
+        $sql .= "       left join empempenhocontrato   on empempenho.e60_numemp = empempenhocontrato.e100_numemp ";
+        $sql .= "       left join acordo   on empempenhocontrato.e100_acordo = acordo.ac16_sequencial ";
+        $sql .= "       left join convconvenios on convconvenios.c206_sequencial = empempenho.e60_numconvenio ";
+        $sql .= "       left join empresto on e91_numemp = e60_numemp";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($e60_numemp!=null ){
+                $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        if($limit){
+          $sql.=" limit $limit ";
+        }
+        return $sql;
     }
-    $this->numrows = pg_numrows($result);
-    if ($this->numrows == 0) {
-      $this->erro_banco = "";
-      $this->erro_sql   = "Record Vazio na Tabela:empempenho";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
+    // funcao do sql
+    function sql_query_file ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from empempenho ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($e60_numemp!=null ){
+                $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
     }
-    return $result;
-  }
-  // funcao do sql
-  function sql_query($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "", $filtroempelemento = "", $limit = '')
-  {
-    $sql = "select ";
-    if ($campos != "*") {
-      $campos_sql = split("#", $campos);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $campos;
-    }
-    $sql .= " from empempenho ";
-    $sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
-    $sql .= "      inner join empelemento  on  empempenho.e60_numemp = empelemento.e64_numemp";
-    if ($filtroempelemento == 1) {
-      $sql .= "      inner join orcelemento elementoempenho  on  elementoempenho.o56_codele = empelemento.e64_codele  and elementoempenho.o56_anousu = empempenho.e60_anousu";
-    }
-    $sql .= "      inner join db_config  on  db_config.codigo = empempenho.e60_instit";
-    $sql .= "      inner join orcdotacao  on  orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot = empempenho.e60_coddot";
-    $sql .= "      inner join pctipocompra  on  pctipocompra.pc50_codcom = empempenho.e60_codcom";
-    $sql .= "      inner join emptipo  on  emptipo.e41_codtipo = empempenho.e60_codtipo";
-    $sql .= "      inner join concarpeculiar  on  concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar";
-    $sql .= "      inner join db_config  as a on   a.codigo = orcdotacao.o58_instit";
-    $sql .= "      inner join orctiporec  on  orctiporec.o15_codigo = orcdotacao.o58_codigo";
-    $sql .= "      inner join orcfuncao  on  orcfuncao.o52_funcao = orcdotacao.o58_funcao";
-    $sql .= "      inner join orcsubfuncao  on  orcsubfuncao.o53_subfuncao = orcdotacao.o58_subfuncao";
-    $sql .= "      inner join orcprograma  on  orcprograma.o54_anousu = orcdotacao.o58_anousu and  orcprograma.o54_programa = orcdotacao.o58_programa";
-    $sql .= "      inner join orcelemento  on  orcelemento.o56_codele = orcdotacao.o58_codele  and orcelemento.o56_anousu = orcdotacao.o58_anousu";
-    $sql .= "      inner join orcprojativ  on  orcprojativ.o55_anousu = orcdotacao.o58_anousu and  orcprojativ.o55_projativ = orcdotacao.o58_projativ";
-    $sql .= "      inner join orcorgao  on  orcorgao.o40_anousu = orcdotacao.o58_anousu and  orcorgao.o40_orgao = orcdotacao.o58_orgao";
-    $sql .= "      inner join orcunidade  on  orcunidade.o41_anousu = orcdotacao.o58_anousu and  orcunidade.o41_orgao = orcdotacao.o58_orgao and  orcunidade.o41_unidade = orcdotacao.o58_unidade";
-    $sql .= "      left  join empcontratos on si173_empenho::varchar = e60_codemp and e60_anousu = si173_anoempenho";
-    $sql .= "      left join contratos on si173_codcontrato = si172_sequencial";
-    $sql .= "      LEFT JOIN aditivoscontratos on extract(year from si174_dataassinaturacontoriginal) = si172_exerciciocontrato and (si174_nrocontrato = si172_nrocontrato)";
-    $sql .= "       left join empempaut            on empempenho.e60_numemp  = empempaut.e61_numemp   ";
-    $sql .= "       left join empautoriza          on empempaut.e61_autori   = empautoriza.e54_autori ";
-    $sql .= "       left join db_depart            on empautoriza.e54_autori = db_depart.coddepto ";
-    $sql .= "       left join empempenhocontrato   on empempenho.e60_numemp = empempenhocontrato.e100_numemp ";
-    $sql .= "       left join acordo   on empempenhocontrato.e100_acordo = acordo.ac16_sequencial ";
-    $sql .= "       left join convconvenios on convconvenios.c206_sequencial = empempenho.e60_numconvenio ";
+    function sql_query_codord ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from empempenho ";
+        $sql .= "      inner join empempitem on e62_numemp = e60_numemp";
+        $sql .= "      left join matordemitem on m52_numemp          =  e60_numemp";
+        $sql .= "      left join matordem     on m51_codordem        = m52_codordem";
+        $sql .= "      inner join cgm          on matordem.m51_numcgm = cgm.z01_numcgm ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($e60_numemp!=null ){
+                $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
 
     $sql2 = "";
     if ($dbwhere == "") {

@@ -132,8 +132,13 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
             /*
              * selecionar informacoes registro 20
              */
-            $sSql = "select * from projecaoatuarial20 where si169_projecaoatuarial10 = ". $oDados10->si168_sequencial ."
-	                   and si169_instit = " . db_getsession("DB_instit") . " order by si169_exercicio limit 75";
+            $sSql = "select * from projecaoatuarial20 
+                        where si169_exercicio >= " . (db_getsession("DB_anousu") - 1) . "
+	                        and si169_tipoplano = $oDados10->si168_tipoplano
+                            and si169_instit = " . db_getsession("DB_instit") . "
+                            and si169_projecaoatuarial10 = $oDados10->si168_sequencial 
+                        order by si169_exercicio 
+                        limit 75";
             $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
 
             for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {

@@ -1073,225 +1073,210 @@ class cl_layout_SEFIP
   var  $SFPRegistro32_360_360 = null;
   /*
     REGISTRO TOTALIZADOR DO ARQUIVO - REGISTRO '90'
-*/
-  var  $SFPRegistro90_001_002 = null;
-  var  $SFPRegistro90_003_053 = null;
-  var  $SFPRegistro90_054_359 = null;
-  var  $SFPRegistro90_360_360 = null;
-  /***************************************************************************************************/
+*/ 
+    var  $SFPRegistro90_001_002 = null;
+    var  $SFPRegistro90_003_053 = null;
+    var  $SFPRegistro90_054_359 = null;
+    var  $SFPRegistro90_360_360 = null;
+/***************************************************************************************************/
 
-  var $arquivo  = null;
-  var $nomearq  = '/tmp/SEFIP.RE';
+   var $arquivo  = null;
+   var $nomearq  = '/tmp/SEFIP.RE';
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////      MÉTODOS LAYOUT DA SEFIP      /////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////      MÉTODOS LAYOUT DA SEFIP      /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  function geraRegist00SFP()
-  {
-    $this->arquivo = fopen($this->nomearq, "w");
-    fputs(
-      $this->arquivo,
-      "00"
-        . str_repeat(" ", 51)
-        . "1"
-        . "1"
-        . db_formatar(str_replace('.', '', str_replace('-', '', str_replace("/", '', $this->SFPRegistro00_056_069))), "s", "0", 14, "e", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_070_099), 0, 30)), "s", " ", 30, "d", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_100_119), 0, 20)), "s", " ", 20, "d", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_120_169), 0, 50)), "s", " ", 50, "d", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_170_189), 0, 20)), "s", " ", 20, "d", 0)
-        . db_formatar(str_replace('-', '', str_replace('.', '', substr($this->SFPRegistro00_190_197, 0, 8))), "s", "0", 8, "e", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_198_217), 0, 20)), "s", " ", 20, "d", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_218_219), 0, 2)), "s", " ", 2, "d", 0)
-        . db_formatar($this->SFPRegistro00_220_231, "s", "0", 12, "e", 0)
-        . db_formatar(strtolower(substr(db_translate($this->SFPRegistro00_232_291), 0, 60)), "s", " ", 60, "d", 0)
-        . db_formatar(strtolower(substr(db_translate(str_replace("/", '', $this->SFPRegistro00_292_297)), 0, 6)), "s", "0", 6, "e", 0)
-        . db_formatar($this->SFPRegistro00_298_300, "s", "0", 3, "e", 0)
-        . db_formatar($this->SFPRegistro00_301_301, "s", " ", 1, "d", 0)
-        . db_formatar($this->SFPRegistro00_302_302, "s", " ", 1, "d", 0)
-        . db_formatar(str_replace('-', '', str_replace("/", '', $this->SFPRegistro00_303_310)), "s", "0", 8, "e", 0)
-        . $this->SFPRegistro00_311_311
-        . db_formatar(str_replace('-', '', str_replace("/", '', $this->SFPRegistro00_312_319)), "s", "0", 8, "e", 0)
-        . db_formatar($this->SFPRegistro00_320_326, "s", " ", 7, "e", 0)
-        . "1"
-        . db_formatar(str_replace('.', '', str_replace('-', '', str_replace("/", '', $this->SFPRegistro00_328_341))), "s", "0", 14, "e", 0)
-        . str_repeat(" ", 18)
-        . "*"
-        . "\r\n"
-    );
-  }
-  function geraRegist10SFP()
-  {
-    fputs(
-      $this->arquivo,
-      "10"
-        . "1"
-        . db_formatar($this->SFPRegistro10_004_017, "s", "0", 14, "e", 0)
-        . str_repeat("0", 36)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_054_093), 0, 40)), "s", " ", 40, "d", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_094_143), 0, 50)), "s", " ", 50, "d", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_144_163), 0, 20)), "s", " ", 20, "d", 0)
-        . db_formatar(str_replace('-', '', str_replace('.', '', substr($this->SFPRegistro10_164_171, 0, 8))), "s", "0", 8, "e", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_172_191), 0, 20)), "s", " ", 20, "d", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_192_193), 0, 2)), "s", " ", 2, "d", 0)
-        . db_formatar($this->SFPRegistro10_194_205, "s", "0", 12, "e", 0)
-        . strtoupper($this->SFPRegistro10_206_206)
-        . db_formatar($this->SFPRegistro10_207_213, "s", "0", 7, "e", 0)
-        . strtoupper($this->SFPRegistro10_214_214)
-        . db_formatar($this->SFPRegistro10_215_216, "s", "0", 2, "d", 0)
-        . "0"
-        . "1"
-        . db_formatar($this->SFPRegistro10_219_221, "s", "0", 3, "e", 0)
-        . db_formatar($this->SFPRegistro10_222_225, "s", "0", 4, "e", 0)
-        . db_formatar($this->SFPRegistro10_226_229, "s", "0", 4, "e", 0)
-        . str_repeat(" ", 5)
-        . db_formatar(str_replace(',', '', str_replace('.', '', trim(db_formatar($this->SFPRegistro10_235_249, "f")))), "s", "0", 15, "e", 0)
-        . db_formatar(str_replace(',', '', str_replace('.', '', trim(db_formatar($this->SFPRegistro10_250_264, "f")))), "s", "0", 15, "e", 0)
-        . str_repeat("0", 30)
-        . str_repeat(" ", 16)
-        . str_repeat("0", 45)
-        . str_repeat(" ", 4)
-        . "*"
-        . "\r\n"
-    );
-  }
+   function geraRegist00SFP(){
+     $this->arquivo = fopen($this->nomearq,"w");
+     fputs($this->arquivo,
+           "00"
+           .str_repeat(" ",51)
+           ."1"
+           ."1"
+           .db_formatar(str_replace('.','',str_replace('-','',str_replace("/",'',$this->SFPRegistro00_056_069))),"s","0",14,"e",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_070_099),0,30)),"s"," ",30,"d",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_100_119),0,20)),"s"," ",20,"d",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_120_169),0,50)),"s"," ",50,"d",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_170_189),0,20)),"s"," ",20,"d",0)
+           .db_formatar(str_replace('-','',str_replace('.','',substr($this->SFPRegistro00_190_197,0,8))),"s","0",8,"e",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_198_217),0,20)),"s"," ",20,"d",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro00_218_219),0,2)),"s"," ",2,"d",0)
+           .db_formatar($this->SFPRegistro00_220_231,"s","0",12,"e",0)
+           .db_formatar(strtolower(substr(db_translate($this->SFPRegistro00_232_291),0,60)),"s"," ",60,"d",0)
+           .db_formatar(strtolower(substr(db_translate(str_replace("/",'',$this->SFPRegistro00_292_297)),0,6)),"s","0",6,"e",0)
+           .db_formatar($this->SFPRegistro00_298_300,"s","0",3,"e",0) 
+           .db_formatar($this->SFPRegistro00_301_301,"s"," ",1,"d",0)
+           .db_formatar($this->SFPRegistro00_302_302,"s"," ",1,"d",0)
+           .db_formatar(str_replace('-','',str_replace("/",'',$this->SFPRegistro00_303_310)),"s","0",8,"e",0)
+           .$this->SFPRegistro00_311_311
+           .db_formatar(str_replace('-','',str_replace("/",'',$this->SFPRegistro00_312_319)),"s","0",8,"e",0)
+           .db_formatar($this->SFPRegistro00_320_326,"s"," ",7,"e",0)
+           ."1"
+           .db_formatar(str_replace('.','',str_replace('-','',str_replace("/",'',$this->SFPRegistro00_328_341))),"s","0",14,"e",0)
+           .str_repeat(" ",18)
+           ."*"
+           ."\r\n"
+          );
+   }
+   function geraRegist10SFP(){
+     fputs($this->arquivo,
+           "10"
+           ."1"
+           .db_formatar($this->SFPRegistro10_004_017,"s","0",14,"e",0)
+           .str_repeat("0",36)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_054_093),0,40)),"s"," ",40,"d",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_094_143),0,50)),"s"," ",50,"d",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_144_163),0,20)),"s"," ",20,"d",0)
+           .db_formatar(str_replace('-','',str_replace('.','',substr($this->SFPRegistro10_164_171,0,8))),"s","0",8,"e",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_172_191),0,20)),"s"," ",20,"d",0)
+           .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro10_192_193),0,2)),"s"," ",2,"d",0)
+           .db_formatar($this->SFPRegistro10_194_205,"s","0",12,"e",0)
+           .strtoupper($this->SFPRegistro10_206_206)
+           .db_formatar($this->SFPRegistro10_207_213,"s","0",7,"e",0)
+           .strtoupper($this->SFPRegistro10_214_214)
+           .db_formatar($this->SFPRegistro10_215_216,"s","0",2,"d",0)
+	   ."0"
+	   ."1"
+           .db_formatar($this->SFPRegistro10_219_221,"s","0",3,"e",0)
+           .db_formatar($this->SFPRegistro10_222_225,"s","0",4,"e",0)
+           .db_formatar($this->SFPRegistro10_226_229,"s","0",4,"e",0)
+           .str_repeat(" ",5)
+           .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro10_235_249,"f")))),"s","0",15,"e",0)
+           .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro10_250_264,"f")))),"s","0",15,"e",0)
+           .str_repeat("0",30)
+           .str_repeat(" ",16)
+           .str_repeat("0",45)
+           .str_repeat(" ",4)
+           ."*"
+           ."\r\n"
+          );
+    }
+    
+    function geraRegist12SFP(){
+      fputs($this->arquivo,
+            "12"
+            ."1"
+            .db_formatar($this->SFPRegistro12_004_017,"s","0",14,"e",0)
+            .str_repeat("0", 36)
+            .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro12_054_068,"f")))),"s","0",15,"e",0)
+            .str_repeat("0", 15)
+            ." "
+            .trim(str_pad($this->SFPRegistro12_085_099, 15,"0", STR_PAD_LEFT))
+            .str_pad($this->SFPRegistro12_100_114, 15,"0", STR_PAD_LEFT)
+            .str_pad($this->SFPRegistro12_115_125 ,11, " ", STR_PAD_LEFT)
+            .str_pad($this->SFPRegistro12_126_129 ,4, " ", STR_PAD_LEFT)
+            .str_pad($this->SFPRegistro12_130_134 ,5, " ", STR_PAD_LEFT)
+            .str_pad($this->SFPRegistro12_135_140 ,6, " ", STR_PAD_LEFT)
+            .str_pad($this->SFPRegistro12_141_146 ,6, " ", STR_PAD_LEFT)
+            .db_formatar(str_replace('-','',str_replace('.','',substr($this->SFPRegistro12_147_161,0,15))),"s","0",15,"e",0)
+            .str_pad($this->SFPRegistro12_162_167 ,6, " ", STR_PAD_LEFT)
+            .str_pad($this->SFPRegistro12_168_173 ,6, " ", STR_PAD_LEFT)
+            .db_formatar($this->SFPRegistro12_174_188,"s","0",15,"e",0)
+            .db_formatar($this->SFPRegistro12_189_203,"s","0",15,"e",0)
+            .db_formatar($this->SFPRegistro12_204_218,"s","0",15,"e",0)
+            .db_formatar($this->SFPRegistro12_219_233,"s","0",15,"e",0)
+            .db_formatar($this->SFPRegistro12_234_248,"s","0",15,"e",0)
+            .db_formatar($this->SFPRegistro12_249_263,"s","0",15,"e",0)
+            .db_formatar($this->SFPRegistro12_264_278,"s","0",15,"e",0)
+            .db_formatar($this->SFPRegistro12_279_293,"s","0",15,"e",0)
+            .db_formatar($this->SFPRegistro12_294_308,"s","0",15,"e",0)
+            .str_repeat("0", 45)
+            .str_repeat(chr(32), 6)
+            ."*"
+            ."\r\n"
+           );
+    } 
+    function geraRegist14SFP(){
+      fputs($this->arquivo,
+            "14"
+            ."1"
+            .db_formatar($this->SFPRegistro14_004_017,"s","0",14,"e",0)
+            .str_repeat("0",36)
+            .db_formatar(str_replace('-','',str_replace("/",'',str_replace('.','',substr($this->SFPRegistro14_054_064,0,11)))),"s","0",11,"e",0)
+            .db_formatar(str_replace('-','',str_replace("/",'',$this->SFPRegistro14_065_072)),"s","0",8,"e",0)
+            .db_formatar($this->SFPRegistro14_073_074,"s","0",2,"e",0)
+            .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_075_144),0,70)),"s"," ",70,"d",0)
+            .db_formatar((((int)$this->SFPRegistro14_073_074 >= 12)?str_replace('-','',str_replace("/",'',str_replace('.','',substr($this->SFPRegistro14_145_151,0,7)))):str_repeat(" ",7)),"s","0",7,"e",0)
+            .db_formatar((((int)$this->SFPRegistro14_073_074 >= 12)?str_replace('-','',str_replace("/",'',str_replace('.','',substr($this->SFPRegistro14_152_156,0,5)))):str_repeat(" ",5)),"s","0",5,"e",0)
+            .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_157_206),0,50)),"s"," ",50,"d",0)
+            .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_207_226),0,20)),"s"," ",20,"d",0)
+            .db_formatar(str_replace('-','',str_replace('.','',substr($this->SFPRegistro14_227_234,0,8))),"s","0",8,"e",0)
+            .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_235_254),0,20)),"s"," ",20,"d",0)
+            .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_255_256),0,2)),"s"," ",2,"d",0)
+            .str_repeat(" ",103)
+            ."*"
+            ."\r\n"
+           );
+    }
+    function geraRegist30SFP(){
+      fputs($this->arquivo,
+            "30"
+            ."1"
+            .db_formatar($this->SFPRegistro30_004_017,"s","0",14,"e",0)
+            .str_repeat(" ",15)
+            .db_formatar(str_replace('-','',str_replace("/",'',str_replace('.','',substr($this->SFPRegistro30_033_043,0,11)))),"s","0",11,"e",0)
+            .db_formatar(str_replace('-','',str_replace("/",'',$this->SFPRegistro30_044_051)),"s","0",8,"e",0)
+            .db_formatar($this->SFPRegistro30_052_053,"s","0",2,"e",0)
+            .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro30_054_123),0,70)),"s"," ",70,"d",0)
+            .db_formatar($this->SFPRegistro30_124_134,"s","0",11,"e",0)
+            .$this->SFPRegistro30_135_141
+            .$this->SFPRegistro30_142_146
+            .db_formatar(str_replace('-','',str_replace("/",'',$this->SFPRegistro30_147_154)),"s","0",8,"e",0)
+            .db_formatar(str_replace('-','',str_replace("/",'',$this->SFPRegistro30_155_162)),"s","0",8,"e",0)
+            .db_formatar(str_replace('-','',str_replace("/",'',str_replace('.','',substr($this->SFPRegistro30_163_167,0,4)))),"s","0",5,"e",0)
+            .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro30_168_182,"f")))),"s","0",15,"e",0)
+            .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro30_183_197,"f")))),"s","0",15,"e",0)
+            .str_repeat(" ",2)
+            .db_formatar($this->SFPRegistro30_200_201,"s","0",2,"e",0)
+            .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro30_202_216,"f")))),"s","0",15,"e",0)
+            .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro30_217_231,"f")))),"s","0",15,"e",0)
+            .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro30_232_246,"f")))),"s","0",15,"e",0)
+            .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro30_247_261,"f")))),"s","0",15,"e",0)
+            .str_repeat(" ",98)
+            ."*"
+            ."\r\n"
+           );
+    }
+    function geraRegist32SFP(){
+      fputs($this->arquivo,
+            "32"
+            ."1"
+            .db_formatar($this->SFPRegistro32_004_017,"s","0",14,"e",0)
+            .str_repeat(" ",15)
+            .db_formatar(str_replace('-','',str_replace("/",'',str_replace('.','',substr($this->SFPRegistro32_033_043,0,11)))),"s","0",11,"e",0)
+            .db_formatar(str_replace('-','',str_replace("/",'',$this->SFPRegistro32_044_051)),"s","0",8,"e",0)
+            .db_formatar($this->SFPRegistro32_052_053,"s","0",2,"e",0)
+            .db_formatar(strtoupper(substr(db_translate($this->SFPRegistro32_054_123),0,70)),"s"," ",70,"d",0)
+            .db_formatar($this->SFPRegistro32_124_125,"s"," ",2,"d",0)
+            .db_formatar(str_replace('-','',str_replace("/",'',$this->SFPRegistro32_126_133)),"s","0",8,"e",0)
+            .db_formatar($this->SFPRegistro32_134_134,"s"," ",1,"e",0)
+            .str_repeat(" ",225)
+            ."*"
+            ."\r\n"
+           );
+    }
+    function geraRegist90SFP(){
+      fputs($this->arquivo,
+            "90"
+            .str_repeat("9",51)
+            .str_repeat(" ",306)
+            ."*"
+            ."\r\n"
+           );
+    }
 
-  function geraRegist12SFP()
-  {
-    fputs(
-      $this->arquivo,
-      "12"
-        . "1"
-        . db_formatar($this->SFPRegistro12_004_017, "s", "0", 14, "e", 0)
-        . str_repeat("0", 36)
-        . trim(str_pad($this->SFPRegistro12_054_068, 15, "0", STR_PAD_LEFT))
-        . str_repeat("0", 15)
-        . " "
-        . trim(str_pad($this->SFPRegistro12_085_099, 15, "0", STR_PAD_LEFT))
-        . str_pad($this->SFPRegistro12_100_114, 15, "0", STR_PAD_LEFT)
-        . str_pad($this->SFPRegistro12_115_125, 11, " ", STR_PAD_LEFT)
-        . str_pad($this->SFPRegistro12_126_129, 4, " ", STR_PAD_LEFT)
-        . str_pad($this->SFPRegistro12_130_134, 5, " ", STR_PAD_LEFT)
-        . str_pad($this->SFPRegistro12_135_140, 6, " ", STR_PAD_LEFT)
-        . str_pad($this->SFPRegistro12_141_146, 6, " ", STR_PAD_LEFT)
-        . db_formatar(str_replace('-', '', str_replace('.', '', substr($this->SFPRegistro12_147_161, 0, 15))), "s", "0", 15, "e", 0)
-        . str_pad($this->SFPRegistro12_162_167, 6, " ", STR_PAD_LEFT)
-        . str_pad($this->SFPRegistro12_168_173, 6, " ", STR_PAD_LEFT)
-        . db_formatar($this->SFPRegistro12_174_188, "s", "0", 15, "e", 0)
-        . db_formatar($this->SFPRegistro12_189_203, "s", "0", 15, "e", 0)
-        . db_formatar($this->SFPRegistro12_204_218, "s", "0", 15, "e", 0)
-        . db_formatar($this->SFPRegistro12_219_233, "s", "0", 15, "e", 0)
-        . db_formatar($this->SFPRegistro12_234_248, "s", "0", 15, "e", 0)
-        . db_formatar($this->SFPRegistro12_249_263, "s", "0", 15, "e", 0)
-        . db_formatar($this->SFPRegistro12_264_278, "s", "0", 15, "e", 0)
-        . db_formatar($this->SFPRegistro12_279_293, "s", "0", 15, "e", 0)
-        . db_formatar($this->SFPRegistro12_294_308, "s", "0", 15, "e", 0)
-        . str_repeat("0", 45)
-        . str_repeat(chr(32), 6)
-        . "*"
-        . "\r\n"
-    );
-  }
-  function geraRegist14SFP()
-  {
-    fputs(
-      $this->arquivo,
-      "14"
-        . "1"
-        . db_formatar($this->SFPRegistro14_004_017, "s", "0", 14, "e", 0)
-        . str_repeat("0", 36)
-        . db_formatar(str_replace('-', '', str_replace("/", '', str_replace('.', '', substr($this->SFPRegistro14_054_064, 0, 11)))), "s", "0", 11, "e", 0)
-        . db_formatar(str_replace('-', '', str_replace("/", '', $this->SFPRegistro14_065_072)), "s", "0", 8, "e", 0)
-        . db_formatar($this->SFPRegistro14_073_074, "s", "0", 2, "e", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_075_144), 0, 70)), "s", " ", 70, "d", 0)
-        . db_formatar((((int)$this->SFPRegistro14_073_074 >= 12) ? str_replace('-', '', str_replace("/", '', str_replace('.', '', substr($this->SFPRegistro14_145_151, 0, 7)))) : str_repeat(" ", 7)), "s", "0", 7, "e", 0)
-        . db_formatar((((int)$this->SFPRegistro14_073_074 >= 12) ? str_replace('-', '', str_replace("/", '', str_replace('.', '', substr($this->SFPRegistro14_152_156, 0, 5)))) : str_repeat(" ", 5)), "s", "0", 5, "e", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_157_206), 0, 50)), "s", " ", 50, "d", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_207_226), 0, 20)), "s", " ", 20, "d", 0)
-        . db_formatar(str_replace('-', '', str_replace('.', '', substr($this->SFPRegistro14_227_234, 0, 8))), "s", "0", 8, "e", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_235_254), 0, 20)), "s", " ", 20, "d", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro14_255_256), 0, 2)), "s", " ", 2, "d", 0)
-        . str_repeat(" ", 103)
-        . "*"
-        . "\r\n"
-    );
-  }
-  function geraRegist30SFP()
-  {
-    fputs(
-      $this->arquivo,
-      "30"
-        . "1"
-        . db_formatar($this->SFPRegistro30_004_017, "s", "0", 14, "e", 0)
-        . str_repeat(" ", 15)
-        . db_formatar(str_replace('-', '', str_replace("/", '', str_replace('.', '', substr($this->SFPRegistro30_033_043, 0, 11)))), "s", "0", 11, "e", 0)
-        . db_formatar(str_replace('-', '', str_replace("/", '', $this->SFPRegistro30_044_051)), "s", "0", 8, "e", 0)
-        . db_formatar($this->SFPRegistro30_052_053, "s", "0", 2, "e", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro30_054_123), 0, 70)), "s", " ", 70, "d", 0)
-        . db_formatar($this->SFPRegistro30_124_134, "s", "0", 11, "e", 0)
-        . $this->SFPRegistro30_135_141
-        . $this->SFPRegistro30_142_146
-        . db_formatar(str_replace('-', '', str_replace("/", '', $this->SFPRegistro30_147_154)), "s", "0", 8, "e", 0)
-        . db_formatar(str_replace('-', '', str_replace("/", '', $this->SFPRegistro30_155_162)), "s", "0", 8, "e", 0)
-        . db_formatar(str_replace('-', '', str_replace("/", '', str_replace('.', '', substr($this->SFPRegistro30_163_167, 0, 4)))), "s", "0", 5, "e", 0)
-        . db_formatar(str_replace(',', '', str_replace('.', '', trim(db_formatar($this->SFPRegistro30_168_182, "f")))), "s", "0", 15, "e", 0)
-        . db_formatar(str_replace(',', '', str_replace('.', '', trim(db_formatar($this->SFPRegistro30_183_197, "f")))), "s", "0", 15, "e", 0)
-        . str_repeat(" ", 2)
-        . db_formatar($this->SFPRegistro30_200_201, "s", "0", 2, "e", 0)
-        . db_formatar(str_replace(',', '', str_replace('.', '', trim(db_formatar($this->SFPRegistro30_202_216, "f")))), "s", "0", 15, "e", 0)
-        . db_formatar(str_replace(',', '', str_replace('.', '', trim(db_formatar($this->SFPRegistro30_217_231, "f")))), "s", "0", 15, "e", 0)
-        . db_formatar(str_replace(',', '', str_replace('.', '', trim(db_formatar($this->SFPRegistro30_232_246, "f")))), "s", "0", 15, "e", 0)
-        . db_formatar(str_replace(',', '', str_replace('.', '', trim(db_formatar($this->SFPRegistro30_247_261, "f")))), "s", "0", 15, "e", 0)
-        . str_repeat(" ", 98)
-        . "*"
-        . "\r\n"
-    );
-  }
-  function geraRegist32SFP()
-  {
-    fputs(
-      $this->arquivo,
-      "32"
-        . "1"
-        . db_formatar($this->SFPRegistro32_004_017, "s", "0", 14, "e", 0)
-        . str_repeat(" ", 15)
-        . db_formatar(str_replace('-', '', str_replace("/", '', str_replace('.', '', substr($this->SFPRegistro32_033_043, 0, 11)))), "s", "0", 11, "e", 0)
-        . db_formatar(str_replace('-', '', str_replace("/", '', $this->SFPRegistro32_044_051)), "s", "0", 8, "e", 0)
-        . db_formatar($this->SFPRegistro32_052_053, "s", "0", 2, "e", 0)
-        . db_formatar(strtoupper(substr(db_translate($this->SFPRegistro32_054_123), 0, 70)), "s", " ", 70, "d", 0)
-        . db_formatar($this->SFPRegistro32_124_125, "s", " ", 2, "d", 0)
-        . db_formatar(str_replace('-', '', str_replace("/", '', $this->SFPRegistro32_126_133)), "s", "0", 8, "e", 0)
-        . db_formatar($this->SFPRegistro32_134_134, "s", " ", 1, "e", 0)
-        . str_repeat(" ", 225)
-        . "*"
-        . "\r\n"
-    );
-  }
-  function geraRegist90SFP()
-  {
-    fputs(
-      $this->arquivo,
-      "90"
-        . str_repeat("9", 51)
-        . str_repeat(" ", 306)
-        . "*"
-        . "\r\n"
-    );
-  }
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////      FINAL MÉTODOS ARQUIVO DA SEFIP      /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////      FINAL MÉTODOS ARQUIVO DA SEFIP      /////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  ////////////////////////////////////////
-  //          FECHA O ARQUIVO           //
-  ////////////////////////////////////////
-  function gera()
-  {
-    fclose($this->arquivo);
-  }
-  ////////////////////////////////////////
+////////////////////////////////////////
+//          FECHA O ARQUIVO           //
+////////////////////////////////////////
+    function gera(){
+       fclose($this->arquivo);
+    }
+////////////////////////////////////////
 }
 
 

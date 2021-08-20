@@ -127,14 +127,7 @@ class cl_balancete162021
       return false;
     }
     if ($this->si183_codfontrecursos == null) {
-      $this->erro_sql = " Campo si183_codfontrecursos não informado.";
-      $this->erro_campo = "si183_codfontrecursos";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-      $this->erro_status = "0";
-      
-      return false;
+        $this->si183_codfontrecursos = 0;
     }
     if ($this->si183_saldoinicialfontsf == null) {
       $this->erro_sql = " Campo si183_saldoinicialfontsf não informado.";

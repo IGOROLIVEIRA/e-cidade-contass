@@ -1,3 +1,83 @@
+function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinatura) {
+
+    var me = this,
+        aItensPosicao = new Array();
+
+    this.lLiberaDotacoes = true;
+    this.lLiberaNovosItens = true;
+    this.sLabelBotao = '';
+    this.lDatas = false;
+    this.lBloqueiaItem = false;
+    this.lObrigaDescricao = false;
+    this.lTipoAlteracao = false;
+    this.lProvidencia = false;
+
+    switch (iTipoAditamento) {
+
+        case 2:
+
+            this.lLiberaDotacoes = true;
+            this.lDatas = false;
+            this.lLiberaNovosItens = false;
+            this.sLabelBotao = "Reequilíbrio";
+            this.lBloqueiaItem = false;
+            this.lObrigaDescricao = false;
+            this.lTipoAlteracao = false;
+            break;
+
+        case 4:
+
+            this.lLiberaDotacoes = true;
+            this.lDatas = false;
+            this.lLiberaNovosItens = false;
+            this.sLabelBotao = "Aditamento";
+            this.lBloqueiaItem = false;
+            this.lObrigaDescricao = false;
+            this.lTipoAlteracao = false;
+            break;
+
+        case 5:
+
+            this.lLiberaDotacoes = true;
+            this.lDatas = true;
+            this.lLiberaNovosItens = false;
+            this.sLabelBotao = "Renovação";
+            this.lBloqueiaItem = false;
+            this.lObrigaDescricao = false;
+            this.lTipoAlteracao = false;
+            break;
+
+        case 6:
+
+            this.lLiberaDotacoes = false;
+            this.lDatas = true;
+            this.lLiberaNovosItens = false;
+            this.sLabelBotao = "Prazo";
+            this.lBloqueiaItem = true;
+            this.lObrigaDescricao = false;
+            this.lTipoAlteracao = false;
+            break;
+
+        case 7:
+            this.lLiberaDotacoes = true;
+            this.lDatas = true;
+            this.lLiberaNovosItens = false;
+            this.sLabelBotao = "Aditamento";
+            this.lBloqueiaItem = false;
+            this.lObrigaDescricao = true;
+            this.lTipoAlteracao = true;
+            break;
+
+        case 8:
+            this.lLiberaDotacoes = false;
+            this.lDatas = false;
+            this.lLiberaNovosItens = false;
+            this.sLabelBotao = "Execução";
+            this.lBloqueiaItem = false;
+            this.lObrigaDescricao = false;
+            this.lTipoAlteracao = false;
+            break;
+    }
 
 function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
 
@@ -326,13 +406,22 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
 	       me.salvarInfoDotacoes(iLinha);
 	    });
 
-    }).setMessage("Aguarde, pesquisando acordos.")
-      .execute();
-  };
-  /**
-   * monta a tela principal do aditamento
-   */
-  this.main = function() {
+    this.pesquisaAcordoByCodigo = (acordo) => {
+        var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + acordo +
+            '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&ac16_acordosituacao=4';
+
+        js_OpenJanelaIframe('top.corpo',
+            'db_iframe_acordo',
+            sUrl,
+            'Pesquisa de Acordo',
+            false);
+
+    }
+
+    /**
+     * Retorno da pesquisa acordos
+     */
+    js_mostraacordo = function (chave1, chave2, chave3, erro) {
 
 	  me.oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', me.sInstance+'.oTxtCodigoAcordo','', 10);
 	  me.oTxtCodigoAcordo.addEvent("onChange",";"+me.sInstance+".pesquisaAcordo(false);");
@@ -554,8 +643,22 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
       nValorTotal += oDotacao.valor;
     });
 
-    $('TotalForCol1').innerHTML = js_formatar(nValorTotal, 'f');
-  };
+        /**
+         * Itens
+         */
+        me.oGridItens = new DBGrid('oGridItens');
+        me.oGridItens.nameInstance = me.sInstance + '.oGridItens';
+        me.oGridItens.setCheckbox(0);
+        me.oGridItens.setCellAlign(['center', 'left', "right", "right","right", "right", "center", "right", "center", "center", "center", "center", "center"]);
+        me.oGridItens.setCellWidth(["3%", '13%', "7%", "9%", "7%", "6%", "5%", "6%", "6%", "6%", "2%", "9%","9%"]);
+        me.oGridItens.setHeader(["Cód", "Item", "Qtd Atual", "Valor Atual", "Qtd Final", "Vl Final", "Vl Total", "Vl Aditado", "Qtd Aditada", "Dotações", "Seq", "Inicio Exec", "Fim Exec","Tipo"]);
+        me.oGridItens.aHeaders[11].lDisplayed = false;
+        me.oGridItens.setHeight(300);
+        me.oGridItens.show($('ctnGridItens'));
+
+        if(!me.lTipoAlteracao) {
+            me.oGridItens.aHeaders[13].lDisplayed = false;
+        }
 
   /**
    * Remove a Dotacao
@@ -770,6 +873,29 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
         oItemAdicionar.quantidade    = oSelecionados[iIndice].aCells[3].getValue().getNumber();
         oItemAdicionar.valorunitario = oSelecionados[iIndice].aCells[4].getValue().getNumber();
 
+            aItensPosicao[iLinha].dotacoes[iDot].valor = js_round(nValorDotacao, 2);
+            aItensPosicao[iLinha].dotacoes[iDot].quantidade = js_round(nQuantDotacao, 2);
+        });
+    }
+
+    me.show = function (acordo = null) {
+
+        me.main();
+
+        /**
+         *
+         */
+        if(acordo){
+            me.pesquisaAcordoByCodigo(acordo);
+            me.lProvidencia = true;
+        }else{
+            me.pesquisaAcordo(true);
+        }
+    }
+
+    this.aditar = function () {
+        var oSelecionados = {};
+        var iSelecionados = [];
         /**
          * Caso o aditamento seja de supressão de valores por supressão de itens sempre suprime o valor e quantidade total do item,
          * independente do que foi especificado pelo usuário
@@ -814,8 +940,25 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
               return alert("Os Valores das dotações para o item " + oItem.descricaoitem.urlDecode() + " não podem estar zeradas.");
             }
 
-            nValorDotacao += oDotacao.valor;
-          });
+        if (datafim1 == datafim2) {
+            vigenciaalterada = 'n';
+        }
+        var oParam = {
+            exec: "processarAditamento",
+            iAcordo: me.oTxtCodigoAcordo.getValue(),
+            datainicial: me.oTxtDataInicial.getValue(),
+            datafinal: me.oTxtDataFinal.getValue(),
+            dataassinatura: me.oTxtDataAssinatura.getValue(),
+            datapublicacao: me.oTxtDataPublicacao.getValue(),
+            descricaoalteracao: me.oTextAreaDescricaoAlteracao.getValue(),
+            veiculodivulgacao: me.oTxtVeiculoDivulgacao.getValue(),
+            tipoaditamento: me.iTipoAditamento,
+            sNumeroAditamento: me.oTxtNumeroAditamento.getValue(),
+            aItens: [],
+            aSelecionados: iSelecionados,
+            sVigenciaalterada: vigenciaalterada,
+            lProvidencia: me.lProvidencia
+        }
 
           if ((!lOrigemManual || (lOrigemManual && nValorDotacao != 0)) && lAditar && nValorDotacao.toFixed(2) != oItemAdicionar.valor.toFixed(2)) {
 
@@ -1058,7 +1201,168 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
     var dtDataInicial = oTxtDataInicialItem.getValue();
     var dtDataFinal   = oTxtDataFinalItem.getValue();
 
-    if (dtDataInicial == '' || dtDataFinal == '') {
+            aLinha[9]  = oBotaoDotacao.outerHTML;
+            aLinha[10] = new String(iSeq);
+
+            oInputPeriodoIni = new DBTextFieldData('periodoini' + iSeq, 'periodoini' + iSeq, js_formatar(oItem.periodoini, 'd'));
+            oInputPeriodoFim = new DBTextFieldData('periodofim' + iSeq, 'periodofim' + iSeq, js_formatar(oItem.periodofim, 'd'));
+
+            if(iTipoAditamento == 6 || iTipoAditamento == 7){
+                aLinha[11] = oInputPeriodoIni.toInnerHtml().replace("size    = '10'","size    = '8'");
+                aLinha[12] = oInputPeriodoFim.toInnerHtml().replace("size    = '10'","size    = '8'");
+            } else {
+                aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                aLinha[12] = js_formatar(oItem.periodofim, 'd');
+            }
+
+            if(iTipoAditamento == 7) {
+                aLinha[13] = new DBComboBox('tipoalteracaoitem' + iSeq, 'tipoalteracaoitem' + iSeq,null,'100%');
+                aLinha[13].addItem('0', 'Selecione');
+                aLinha[13].addItem('1', 'Acrésc');
+                aLinha[13].addItem('2', 'Decrésc');
+
+                /*
+                 * Condicoes adicionadas para bloquear os campos conforme
+                 * tipo de Aditivo selecionado na tela
+                 */
+
+                if ($('oCboTipoAditivo').value == 5 || $('oCboTipoAditivo').value == 2) {
+                    oInputQuantidade.setReadOnly(true);
+                    //oInputQuantidade.setValue( js_formatar(0, "f", 3));
+                    aLinha[4] = oInputQuantidade.toInnerHtml();
+                    aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                    aLinha[12] = js_formatar(oItem.periodofim, 'd');
+                    aLinha[13].setDisable(true);
+                } if ($('oCboTipoAditivo').value == 8 || $('oCboTipoAditivo').value == 13 || $('oCboTipoAditivo').value == 6 || $('oCboTipoAditivo').value == 7) {
+                    if ($('oCboTipoAditivo').value != 6 && $('oCboTipoAditivo').value != 13 && $('oCboTipoAditivo').value != 8) {
+                        oInputQuantidade.setReadOnly(true);
+                        oInputUnitario.setReadOnly(true);
+
+                    }
+                    if ($('oCboTipoAditivo').value != 7) {
+                        if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                            oInputUnitario.setReadOnly(false);
+                        } else {
+                            oInputUnitario.setReadOnly(true);
+                        }
+                    }
+                    aLinha[4] = oInputQuantidade.toInnerHtml();
+                    aLinha[5] = oInputUnitario.toInnerHtml();
+                    aLinha[13].setDisable(true);
+                    if ($('oCboTipoAditivo').value == 6) {
+                        aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                        aLinha[12] = js_formatar(oItem.periodofim, 'd');
+                    }
+                    if ($('oCboTipoAditivo').value == 7) {
+                        aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                        aLinha[12] = js_formatar(oItem.periodofim, 'd');
+                    }
+                }
+
+                else if ($('oCboTipoAditivo').value == 9) {
+
+                    oInputQuantidade.setValue( js_formatar(0, "f", 3));
+                    aLinha[4] = oInputQuantidade.toInnerHtml();
+
+                    if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                        oInputUnitario.setReadOnly(false);
+                    } else {
+                        oInputUnitario.setReadOnly(true);
+                    }
+                    aLinha[5] = oInputUnitario.toInnerHtml();
+                    aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                    aLinha[12] = js_formatar(oItem.periodofim, 'd');
+                    aLinha[13].setValue(1);
+                    aLinha[13].setDisable(true);
+                } else if ($('oCboTipoAditivo').value == 10) {
+
+                    oInputQuantidade.setValue( js_formatar(0, "f", 3));
+                    aLinha[4] = oInputQuantidade.toInnerHtml();
+
+                    if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                        oInputUnitario.setReadOnly(false);
+                    } else {
+                        oInputUnitario.setReadOnly(true);
+                    }
+                    aLinha[5] = oInputUnitario.toInnerHtml();
+                    aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                    aLinha[12] = js_formatar(oItem.periodofim, 'd');
+                    aLinha[13].setValue(2);
+                    aLinha[13].setDisable(true);
+                } else if ($('oCboTipoAditivo').value == 11) {
+
+                    oInputQuantidade.setValue( js_formatar(0, "f", 3));
+                    aLinha[4] = oInputQuantidade.toInnerHtml();
+
+                    if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                        oInputUnitario.setReadOnly(false);
+                    } else {
+                        oInputUnitario.setReadOnly(true);
+                    }
+                    aLinha[5] = oInputUnitario.toInnerHtml();
+                    aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                    aLinha[12] = js_formatar(oItem.periodofim, 'd');
+                    aLinha[13].setValue(0);
+                    aLinha[13].setDisable(true);
+                } else if ($('oCboTipoAditivo').value == 12) {
+                    if(oItem.novo){
+                        aLinha[11] = oItem.periodoini;
+                        aLinha[12] = oItem.periodofim;
+                    } else {
+                        aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                        aLinha[12] = js_formatar(oItem.periodofim, 'd');
+                    }
+                    aLinha[13].setValue(0);
+                    aLinha[13].setDisable(true);
+                } else if ($('oCboTipoAditivo').value == 14) {
+
+                    oInputQuantidade.setValue( js_formatar(0, "f", 3));
+                    aLinha[4] = oInputQuantidade.toInnerHtml();
+
+                    aLinha[13].setValue(0);
+                    aLinha[13].setDisable(true);
+                }
+                else if ($('oCboTipoAditivo').value == 0) {
+                    oInputQuantidade.setValue( js_formatar(0, "f", 3));
+                    aLinha[4] = oInputQuantidade.toInnerHtml();
+                }
+            }
+
+            /**
+             * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
+             */
+            if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                aLinha[2] = js_formatar(1, 'f', 2);
+                oInputQuantidade.setReadOnly(true);
+                oInputQuantidade.setValue( js_formatar(1, "f", 3));
+                aLinha[4] = oInputQuantidade.toInnerHtml();
+                if ($('oCboTipoAditivo').value == 9 || $('oCboTipoAditivo').value == 10 || $('oCboTipoAditivo').value == 11 || $('oCboTipoAditivo').value == 14) {
+                    oInputQtAditada.setValue(js_formatar(1, "f", 2));//OC5304
+                    aLinha[8] = oInputQtAditada.toInnerHtml();//OC5304
+                }
+
+            }
+
+            // if(!oItem.controlaquantidade){
+            //   if(oItem.servico == 't'){
+            //     oInputQuantidade.setReadOnly(false);
+            //     aLinha[4] = oInputQuantidade.toInnerHtml();
+            //     oInputUnitario.setReadOnly(true);
+            //     aLinha[5] = oInputUnitario.toInnerHtml();
+            //   }else{
+            //     oInputQuantidade.setReadOnly(true);
+            //     aLinha[4] = oInputQuantidade.toInnerHtml();
+            //     oInputUnitario.setReadOnly(false);
+            //     aLinha[5] = oInputUnitario.toInnerHtml();
+            //   }
+            // }
+
+            if(!oItem.periodoini && !oItem.periodofim){
+                let datainicio = $('oTxtDataInicial').value.replace('-', '');
+                let datafim = $('oTxtDataFinal').value.replace('-', '');
+                aLinha[11] = datainicio;
+                aLinha[12] = datafim;
+            }
 
       alert("Informe as datas de vigência do item.");
       return false;

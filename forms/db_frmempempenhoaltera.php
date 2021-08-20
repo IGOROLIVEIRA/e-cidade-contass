@@ -52,6 +52,7 @@ $clrotulo->label("e60_datasentenca");
                 <td>
                     <?
                     db_input('e60_numemp',10,'',true,'hidden',3);
+                    db_input('e60_emiss',10,'',true,'hidden',3);
                     db_input('e60_codemp',10,$Ie60_codemp,true,'text',3);
                     ?>
                 </td>

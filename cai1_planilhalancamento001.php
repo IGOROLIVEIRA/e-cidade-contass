@@ -405,7 +405,10 @@ if ($oInstit->db21_usasisagua == "t") {
 const CAMINHO_MENSAGEM = 'financeiro.caixa.cai1_planilhalancamento001.';
 sRPC                   = 'cai4_planilhaarrecadacao.RPC.php';
 
-document.getElementById("k81_emparlamentar").options[3].selected = true;
+if ($('anoUsu').value >= 2020) {
+    document.getElementById("k81_emparlamentar").options[3].selected = true;
+    let lEmendaParlamentarObrigatoria = false;
+}
 
 function js_pesquisak81_convenio(mostra) {
   if(mostra==true){
@@ -627,22 +630,8 @@ function js_mostrak81_convenio1(chave1,chave2){
   */
 function js_pesquisaConta(lMostra) {
 
-  if ($('recurso').value == '') {
-
-    alert('Receita não selecionada.');
-    return false;
-  }
-
-  if ($('estrutural').value.substr(0,3) == '211' || $('estrutural').value.substr(0,3) == '497' ) {
-    recurso = '0';
-  } else {
-
-    recurso ='0';
-  }
-
   var sFuncao   = 'funcao_js=parent.js_mostraSaltes|k13_conta|k13_descr|c61_codigo';
-  var sPesquisa = 'func_saltesrecurso.php?recurso='+recurso+'&'+sFuncao+'&data_limite=<?=date("Y-m-d",db_getsession("DB_datausu"))?>'
-
+  var sPesquisa = 'func_saltesrecurso.php?recurso=0&'+sFuncao+'&data_limite=<?=date("Y-m-d",db_getsession("DB_datausu"))?>'
 
   if (!lMostra){
 
@@ -684,7 +673,7 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
   $('k81_conta') .value = iCodigoConta;
   $('k13_descr') .value = sDescricao;
   $('c61_codigo').value = iCodigoRecurso;
-  iCodRecursoConta = $F('recurso');
+  iCodRecursoConta      = $F('c61_codigo').substr(-3);
 
   if( $('estrutural').value.substr(0,3) == '211' ) {
 
@@ -730,7 +719,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
   $('k81_conta').value = iCodigoConta;
   $('k13_descr').value = sDescricao;
   $('c61_codigo').value = iCodigoRecurso;
-  iCodRecursoConta = $F('recurso');
+  iCodRecursoConta      = $F('c61_codigo').substr(-3);
 
   if ( $F('estrutural').substr(0,3) == '211' ) {
 
@@ -816,7 +805,6 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
       $('z01_nome')   .value = '';
     }
    }else{
-       console.log($('estrutural').value.substr(0,4));
     js_getCgmConta($('k81_conta').value);
    }
 
@@ -847,7 +835,6 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
       $('z01_nome')   .value = '';
      }
    }else{
-       console.log($('estrutural').value.substr(0,4));
     js_getCgmConta($('k81_conta').value);
    }
 
@@ -1046,9 +1033,12 @@ function js_addReceita () {
 
 	if($('anoUsu').value >= 2020) {
 
-		aEstruts = ['41728011', '41728012', '41758011', '41728991'];
+		aEstruts    = ['41728011', '41728012', '41758011', '41728991'];
+        aEstrutsDed = ['4951728011', '4951728012', '4951758011', '4951728991'];
 
-		if (aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1 || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+		if (aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1
+            || aEstrutsDed.indexOf($('estrutural').value.substr(0, 10)) > -1
+            || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
 			if ($('k81_regrepasse').value == '') {
 				alert("É obrigatório informar o Regularização de Repasse.");
 				return false;
@@ -1063,11 +1053,9 @@ function js_addReceita () {
 			}
 		}
 
-		if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424') {
-			if ($('k81_emparlamentar').value == '') {
-				alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
-				return false;
-			}
+		if (lEmendaParlamentarObrigatoria && $('k81_emparlamentar').value == '') {
+            alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
+            return false;
 		}
 
 	}
@@ -1104,7 +1092,6 @@ function js_addReceita () {
 		case 122:
 		if (!$('k81_convenio').value) {
 			alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
-			console.log("sim");
 			$('k81_convenio').focus();
 			return false;
 		}
@@ -1179,7 +1166,7 @@ function js_addReceita () {
 
 	//Dados Adicionais
 	if (js_isReceitaFundeb()) {
-		oReceita.k81_valor = (new Number($F('k81_valor'))*0.70);
+		oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 118);
 	} else {
 		oReceita.k81_valor = $F('k81_valor');
 	}
@@ -1278,7 +1265,7 @@ function js_criaLinhaReceita(oAjax){
 
 		//Dados Adicionais
 		if (js_isReceitaFundeb()) {
-			oReceita.k81_valor = (new Number($F('k81_valor'))*0.30);
+			oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 119);
 		} else {
 			oReceita.k81_valor = (new Number($F('k81_valor'))*0.20)*(-1);
 		}
@@ -1391,7 +1378,7 @@ function js_salvarPlanilha() {
         oReceita.iCaracteriscaPeculiar = oReceitaTela.c58_sequencial;
         oReceita.iContaTesouraria      = oReceitaTela.k81_conta;
         oReceita.sObservacao           = encodeURIComponent(tagString(oReceitaTela.k81_obs));
-        oReceita.nValor                = oReceitaTela.k81_valor;
+        oReceita.nValor                = js_round(oReceitaTela.k81_valor,2);
         oReceita.iRecurso              = oReceitaTela.recurso;
         oReceita.iRegRepasse           = oReceitaTela.k81_regrepasse;
         oReceita.iExerc                = oReceitaTela.k81_exerc;
@@ -1540,8 +1527,6 @@ function js_completaImportar (oAjax) {
     $('k80_codpla').value = oRetorno.oPlanilha.iPlanilha;
     $('k80_data').value   = oRetorno.oPlanilha.dtDataCriacao;
   }
-
-  //console.log("aqui "+oRetorno.oPlanilha.k144_numeroprocesso);
 
   var oInputProcesso = $('k144_numeroprocesso');
   oInputProcesso.value = "";
@@ -1732,7 +1717,7 @@ function js_retornoAutenticacao (oAjax) {
 
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
-  console.log(oRetorno);
+
   if (oRetorno.status == 1) {
          alert("Planilha "+oRetorno.iPlanilha+" autenticada com sucesso");
          js_novaReceita();
@@ -1754,27 +1739,92 @@ function js_toogleRegRepasse(opcao) {
 
 function js_verificaEmendaParlamentar() {
 
-    var naoSeAplica = ( ($('estrutural').value.substr(0, 9) == '417189911' && $('recurso').value == '161')
-                    || ($('estrutural').value.substr(0, 9) == '417289911' && $('recurso').value == '106')
-                    || ($('estrutural').value.substr(0, 9) == '417181021' && $('recurso').value == '122')
-                    || ($('estrutural').value.substr(0, 9) == '417180311' && $('recurso').value == '159')
-                    || ($('estrutural').value.substr(0, 9) == '417180911')
-                    || ($('estrutural').value.substr(0, 9) == '417580111') );
+    let sReceita = $('estrutural').value.substr(0, 9);
+    let sRecurso = $('recurso').value;
 
+    lEmendaParlamentarObrigatoria = (
+        (sReceita == '417189911' && sRecurso == '100')
+        || (sReceita == '417189911' && sRecurso == '164')
+        || (sReceita == '424189911' && sRecurso == '100')
+        || (sReceita == '424189911' && sRecurso == '164')
+        || (sReceita == '417289911' && sRecurso == '100')
+        || (sReceita == '417289911' && sRecurso == '164')
+        || (sReceita == '424289911' && sRecurso == '100')
+        || (sReceita == '424289911' && sRecurso == '164')
+        || (sReceita == '417181011' && sRecurso == '123')
+        || (sReceita == '417181021' && sRecurso == '122')
+        || (sReceita == '417181031' && sRecurso == '142')
+        || (sReceita == '417181041' && sRecurso == '124')
+        || (sReceita == '417181051' && sRecurso == '124')
+        || (sReceita == '417181091' && sRecurso == '124')
+        || (sReceita == '424181011' && sRecurso == '123')
+        || (sReceita == '424181021' && sRecurso == '122')
+        || (sReceita == '424181051' && sRecurso == '124')
+        || (sReceita == '424181061' && sRecurso == '124')
+        || (sReceita == '424181071' && sRecurso == '124')
+        || (sReceita == '424181091' && sRecurso == '124')
+        || (sReceita == '424181091' && sRecurso == '142')
+        || (sReceita == '417281011' && sRecurso == '123')
+        || (sReceita == '417281021' && sRecurso == '122')
+        || (sReceita == '417281091' && sRecurso == '124')
+        || (sReceita == '417281091' && sRecurso == '142')
+        || (sReceita == '424281011' && sRecurso == '123')
+        || (sReceita == '424281021' && sRecurso == '122')
+        || (sReceita == '424281051' && sRecurso == '124')
+        || (sReceita == '424281061' && sRecurso == '124')
+        || (sReceita == '424281071' && sRecurso == '124')
+        || (sReceita == '424281091' && sRecurso == '124')
+        || (sReceita == '424281091' && sRecurso == '142')
+        || (sReceita == '417180311' && sRecurso == '159')
+        || (sReceita == '417180321' && sRecurso == '159')
+        || (sReceita == '417180331' && sRecurso == '159')
+        || (sReceita == '417180341' && sRecurso == '159')
+        || (sReceita == '417180351' && sRecurso == '159')
+        || (sReceita == '417180391' && sRecurso == '154')
+        || (sReceita == '417180411' && sRecurso == '153')
+        || (sReceita == '417180421' && sRecurso == '153')
+        || (sReceita == '417180431' && sRecurso == '153')
+        || (sReceita == '417180441' && sRecurso == '153')
+        || (sReceita == '417180451' && sRecurso == '153')
+        || (sReceita == '417180461' && sRecurso == '153')
+        || (sReceita == '417180461' && sRecurso == '154')
+        || (sReceita == '417181211' && sRecurso == '129')
+        || (sReceita == '424180311' && sRecurso == '159')
+        || (sReceita == '424180321' && sRecurso == '159')
+        || (sReceita == '424180331' && sRecurso == '159')
+        || (sReceita == '424180341' && sRecurso == '159')
+        || (sReceita == '424180351' && sRecurso == '159')
+        || (sReceita == '424180391' && sRecurso == '154')
+        || (sReceita == '424180411' && sRecurso == '153')
+        || (sReceita == '424180421' && sRecurso == '153')
+        || (sReceita == '424180431' && sRecurso == '153')
+        || (sReceita == '424180441' && sRecurso == '153')
+        || (sReceita == '424180451' && sRecurso == '153')
+        || (sReceita == '424180461' && sRecurso == '154')
+        || (sReceita == '424181211' && sRecurso == '129')
+        || (sReceita == '417280311' && sRecurso == '155')
+        || (sReceita == '417280711' && sRecurso == '156')
+        || (sReceita == '424280311' && sRecurso == '154')
+        || (sReceita == '424280311' && sRecurso == '155')
+    );
 
-    if (naoSeAplica) {
-        document.getElementById("k81_emparlamentar").options[3].selected = true;
-    } else if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424') {
+    if (lEmendaParlamentarObrigatoria) {
         document.getElementById("k81_emparlamentar").options[0].selected = true;
+    } else {
+        document.getElementById("k81_emparlamentar").options[3].selected = true;
     }
 
 }
 
 function js_verificaRegularizaRepasse() {
 
-    estruts = ['41728011', '41728012', '41758011', '41728991'];
+    aEstruts    = ['41728011', '41728012', '41758011', '41728991'];
+    aEstrutsDed = ['4951728011', '4951728012', '4951758011', '4951728991'];
 
-    if (estruts.indexOf($('estrutural').value.substr(0, 8)) > -1 || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+    if (aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1
+        || aEstrutsDed.indexOf($('estrutural').value.substr(0, 10)) > -1
+        || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+
         document.getElementById('regrepasse').style.display = "table-row";
         if ($('k81_regrepasse').value != '') {
             document.getElementById("k81_regrepasse").options[$('k81_regrepasse').value].selected = true;
@@ -1806,6 +1856,33 @@ function js_isReceitaFundeb() {
 	let iAno 		= $('anoUsu').value;
 
 	return ( iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911') ) ? true : false;
+
+}
+
+/**
+ * Em arrecadações do fundeb, a receita é desdobrada em duas fontes:
+ * 70% para fonte 118 e 30% para fonte 119.
+ * Em algumas situações a função js_round arredonda os valores causando diferença de 0.01 no valor total da arrecadação.
+ * Essa função verifica se há divergência no valor final, e, caso exista,
+ * a diferença é atribuída para fonte 118.
+ */
+function js_arredondamentoFundeb(fValor, iTipo) {
+
+    let fTotal  = js_round((new Number(fValor)),2);
+    let fVl118  = js_round((new Number(fValor)*0.70),2);
+    let fVl119  = js_round((new Number(fValor)*0.30),2);
+
+    let fDif = js_round((fTotal - (fVl118 + fVl119)),2);
+
+    if (fDif > 0) {
+        fVl118 += fDif;
+        fVl119 = js_round((fTotal - fVl118),2);
+    } else {
+        fVl119 += fDif;
+        fVl118 = js_round((fTotal - fVl119),2);
+    }
+
+    return iTipo == 118 ? fVl118 : fVl119;
 
 }
 
