@@ -1062,13 +1062,15 @@ switch ($oParam->exec) {
 			$rsSqlHistorico = $oHistoricoCgm->sql_record($sSqlHistorico);
 			$data_cadastro = db_utils::fieldsMemory($rsSqlHistorico, 0)->z09_datacadastro;
 
+            $sSql  = $oCgm->sql_query_file($oParam->numcgm, 'z01_cadast');
+			$rsSql = $oCgm->sql_record($sSql);
+			$data_cadastro_original = db_utils::fieldsMemory($rsSql, 0)->z01_cadast;
+
 			if(!$data_cadastro){
-				$sSql  = $oCgm->sql_query_file($oParam->numcgm, 'z01_cadast');
-				$rsSql = $oCgm->sql_record($sSql);
-				$data_cadastro = db_utils::fieldsMemory($rsSql, 0)->z01_cadast;
-				$data_cadastro = $data_cadastro ? $data_cadastro : '2019-12-31';
+				$data_cadastro = $data_cadastro_original ? $data_cadastro_original : '2019-12-31';
 			}
 
+            $oRetorno->z01_cadast   = $data_cadastro_original;
 			$oRetorno->z09_cadastro = $data_cadastro;
 			$oRetorno->status = 1;
 

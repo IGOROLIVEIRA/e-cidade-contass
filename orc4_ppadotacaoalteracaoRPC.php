@@ -236,14 +236,15 @@ if ($oParam->exec == "getElementosFromAcao") {
             $oDaoPPaDotacao->o08_localizadorgastos = $oParam->o08_localizadorgastos;
             $oDaoPPaDotacao->o08_elemento          = $oParam->o08_elemento;
             $oDaoPPaDotacao->o08_recurso           = $oParam->o08_recurso;
-            $oDaoPPaDotacao->o08_sequencial        = $oParam->o08_sequencial;
+            $oDaoPPaDotacao->o08_sequencial        = $oPPAano->o08_sequencial;
             $oDaoPPaDotacao->o08_concarpeculiar    = $oParam->o08_concarpeculiar;
             $oDaoPPaDotacao->alterar($oPPAano->o08_sequencial);
 
         } else {
 
+            $oDaoPPaDotacao->o08_recurso           = $oParam->o08_recurso;
             $oDaoPPaDotacao->o08_localizadorgastos = $oParam->o08_localizadorgastos;
-            $oDaoPPaDotacao->o08_sequencial        = $oParam->o08_sequencial;
+            $oDaoPPaDotacao->o08_sequencial        = $oPPAano->o08_sequencial;
             $oDaoPPaDotacao->o08_concarpeculiar    = $oParam->o08_concarpeculiar;
             $oDaoPPaDotacao->alterar($oPPAano->o08_sequencial);
 

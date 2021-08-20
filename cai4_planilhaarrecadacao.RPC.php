@@ -348,6 +348,7 @@ switch ($oParam->exec) {
       db_inicio_transacao();
 
       $oPlanilha = new PlanilhaArrecadacao($iPlanilha);
+      $oPlanilha->estornar();
       $oPlanilha->excluirAutenticacao();
 
       db_fim_transacao(false);
