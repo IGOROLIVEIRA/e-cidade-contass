@@ -75,7 +75,7 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS20['si204_exerciciocontrato'] = $aEXEOBRAS20['si204_exerciciocontrato'];
                 $aCSVEXEOBRAS20['si204_exercicioprocesso'] = $aEXEOBRAS20['si204_exercicioprocesso'];
                 $aCSVEXEOBRAS20['si204_nroprocesso'] = $aEXEOBRAS20['si204_nroprocesso'];
-                $aCSVEXEOBRAS20['si204_codunidadesubresp'] = substr($aEXEOBRAS20['si204_codunidadesubresp'], 0, 8);
+                $aCSVEXEOBRAS20['si204_codunidadesubresp'] = str_pad($aEXEOBRAS20['si204_codunidadesubresp'], 5, "0", STR_PAD_LEFT);
                 $aCSVEXEOBRAS20['si204_tipoprocesso'] = $aEXEOBRAS20['si204_tipoprocesso'];
                 $aCSVEXEOBRAS20['si204_codobra'] = $aEXEOBRAS20['si204_codobra'];
                 $aCSVEXEOBRAS20['si204_objeto'] = $aEXEOBRAS20['si204_objeto'];
