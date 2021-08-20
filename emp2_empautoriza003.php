@@ -47,6 +47,9 @@ db_postmemory($HTTP_POST_VARS);
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <style>
+    #param_autoriza, #ordem, #anula, #tipo, #listar {
+        width: 170px;
+    }
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
@@ -143,35 +146,38 @@ db_postmemory($HTTP_POST_VARS);
 		                            </script>
 	                            </td>
 	                        </tr>
-	                        <tr>
-	                            <td valign='center' nowrap align="right" colspan="1" title="<?=@$Te54_autori?>">
-	                                <strong>Autorizações de: </strong>
-		                        </td>
-		                        <td valign='center'>      
-		                            <? db_input('e54_autori',10,$Ie54_autori,true,'text',1,"onChange=\"js_testa('i',this.value)\"","e54_autoriINI",""); ?>
-		                            <strong>&nbsp;À:&nbsp;</strong>
-		                            <? db_input('e54_autori',10,$Ie54_autori,true,'text',1,"onChange=\"js_testa('f',this.value)\"","e54_autoriFIM",""); ?>
-		                        </td>
-	                        </tr>
-	                        <tr>
-		                        <td valign='center' nowrap align="right" title="<?=@$Te54_emiss?>">
-	                                <strong>Data de emissão:</strong>
-		                        </td>
-		                        <td valign='center'>
-			                        <? db_inputdata('e54_emiss',@$e54_emiss_dia,@$e54_emiss_mes,@$e54_emiss_ano,true,'text',1,"","e54_emissINI") ?>
-			                        <strong>&nbsp;À:&nbsp;</strong>
-			                        <? db_inputdata('e54_emiss',@$e54_emiss_dia,@$e54_emiss_mes,@$e54_emiss_ano,true,'text',1,"","e54_emissFIM") ?>
-                                </td>
-                            </tr>
                             <tr>
-                                <td align='right'>
-                                    <? db_ancora('Recurso: ','js_pesquisarRecurso(true)', 1); ?>
+                                <td colspan="3" align="center">
+                                    <center>
+                                        <table>
+                                            <tr>
+                                                <td valign='center' nowrap align="right" colspan="1" title="<?=@$Te54_autori?>">
+                                                    <strong>Autorizações de: </strong>
+                                                </td>
+                                                <td valign='center'>      
+                                                    <? db_input('e54_autori',10,$Ie54_autori,true,'text',1,"onChange=\"js_testa('i',this.value)\"","e54_autoriINI",""); ?>
+                                                </td>
+                                                <td>
+                                                    <strong>&nbsp;À:&nbsp;</strong>
+                                                    <? db_input('e54_autori',10,$Ie54_autori,true,'text',1,"onChange=\"js_testa('f',this.value)\"","e54_autoriFIM",""); ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign='center' nowrap align="right" title="<?=@$Te54_emiss?>">
+                                                    <strong>Data de emissão:</strong>
+                                                </td>
+                                                <td valign='center'>
+                                                    <? db_inputdata('e54_emiss',@$e54_emiss_dia,@$e54_emiss_mes,@$e54_emiss_ano,true,'text',1,"","e54_emissINI") ?>
+                                                </td>
+                                                <td>
+                                                    <strong>&nbsp;À:&nbsp;</strong>
+                                                    <? db_inputdata('e54_emiss',@$e54_emiss_dia,@$e54_emiss_mes,@$e54_emiss_ano,true,'text',1,"","e54_emissFIM") ?>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </center>
                                 </td>
-                                <td>
-                                    <? db_input('o15_codigo', 10, $Ir44_selec, true, 'text', 1, 'onchange="js_pesquisarRecurso(false)" class="field-size2"'); ?>
-                                    <? db_input('o15_descr', 40, $Ir44_descr, true, 'text', 3, 'class="field-size7"'); ?>
-                                </td>
-                            </tr>
+                            </tr>                           
                             <tr>
                                 <td colspan="3" align="center">
                                     <table>
@@ -201,6 +207,15 @@ db_postmemory($HTTP_POST_VARS);
                                     </table>
                                 </td>
                             </tr>
+                             <tr>
+                                <td align='right'>
+                                    <? db_ancora('Recurso: ','js_pesquisarRecurso(true)', 1); ?>
+                                </td>
+                                <td>&nbsp;&nbsp;&nbsp;
+                                    <? db_input('o15_codigo', 10, $Ir44_selec, true, 'text', 1, 'onchange="js_pesquisarRecurso(false)" class="field-size2"'); ?>
+                                    <? db_input('o15_descr', 40, $Ir44_descr, true, 'text', 3, 'class="field-size7"'); ?>
+                                </td>
+                            </tr>
                             <tr>
                                 <td align="right"> <strong>Opção de Seleção :<strong></td>
                                 <td align="left">&nbsp;&nbsp;&nbsp;
@@ -213,7 +228,7 @@ db_postmemory($HTTP_POST_VARS);
 	                        <tr>
                                 <td align="right"><strong>Ordem de seleção: </strong></td>
                                 <td align="left">&nbsp;&nbsp;&nbsp;
-                                    <select name="ordem">
+                                    <select name="ordem" id="ordem">
                                         <option  value="e54_autori">Autorização de empenho</option>
                                         <option   value="e54_emiss">Data da emissão</option>
                                         <option    value="z01_nome">Nome do credor</option>
