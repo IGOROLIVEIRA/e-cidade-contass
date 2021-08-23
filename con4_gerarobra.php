@@ -35,7 +35,7 @@ $clrotulo->label("o15_codigo");
 </head>
 <style>
     #debug{
-        color: red;
+        color: black;
     }
 </style>
 <body bgcolor="#cccccc" style="margin-top: 25px;">
