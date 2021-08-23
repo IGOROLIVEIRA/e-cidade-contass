@@ -942,29 +942,6 @@ switch ($oParam->exec) {
                   where
                   compilacao.pc11_codigo = $oItem->pc11_codigo");
 
-                  // echo "select
-                  // abertura.pc55_solicitempai as vinculopai,
-                  // abertura.pc55_solicitemfilho as vinculofilho,
-                  // itemdaabertura.pc11_codigo as itemdaabertura,
-                  // itemdaabertura.pc11_numero as itemdaaberturanumero,
-                  // itemdaestimativa.pc11_codigo as itemdaestimativa,
-                  // itemdaestimativa.pc11_numero as itemdaestimativanumero,
-                  // itemdaestimativa.pc11_quant as itemdaestimativaqtd,
-                  // vinculo.pc55_solicitempai,
-                  // vinculo.pc55_solicitemfilho
-                  // from solicitem as compilacao
-                  // join solicita as compsolicita on compsolicita.pc10_numero=compilacao.pc11_numero
-                  // left join solicitemvinculo as vinculo on vinculo.pc55_solicitemfilho = compilacao.pc11_codigo
-                  // left join solicitem as itemdaestimativa on itemdaestimativa.pc11_codigo = vinculo.pc55_solicitempai
-                  // left join solicita as estisolicita on estisolicita.pc10_numero = itemdaestimativa.pc11_numero
-                  // left join solicitemvinculo as abertura on abertura.pc55_solicitemfilho=vinculo.pc55_solicitempai
-                  // left join solicitem as itemdaabertura on itemdaabertura.pc11_codigo = abertura.pc55_solicitempai
-                  // left join solicita as solabertura on solabertura.pc10_numero = itemdaabertura.pc11_numero
-                  // left join solicitemregistropreco on pc57_solicitem=compilacao.pc11_codigo
-                  // where
-                  // compilacao.pc11_codigo = $oItem->pc11_codigo";
-                  // db_criatabela($rsSolicitemControle);
-                  // exit;
                   $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
 
                   $sql_ult_item  = "select pc11_seq ";
