@@ -110,6 +110,10 @@ $sWhereContratos = " and 1 = 1 ";
 
 			}
 
+			if(isset($adjudicacao) && trim($adjudicacao) != ''){
+			    $dbwhere .= "l202_dataadjudicacao is not null and";
+            }
+
 			$sWhereModalidade = "";
 
 			if (isset($iModalidadeLicitacao) && !empty($iModalidadeLicitacao)) {
@@ -149,7 +153,7 @@ $sWhereContratos = " and 1 = 1 ";
         }
 
 //        $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
-        $campos .= ', l08_descr as dl_Situação';
+        $campos .= ', l08_descr as dl_Situação,l202_dataadjudicacao';
         if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
 	         $sql = $clliclicita->sql_queryContratosContass(null," " . $campos,"l20_codigo","l20_codigo = $chave_l20_codigo $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
         }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){

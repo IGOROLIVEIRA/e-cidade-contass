@@ -273,6 +273,7 @@ class cl_homologacaoadjudica {
         if($l202_sequencial!=null){
             $sql .= " l202_sequencial = $l202_sequencial";
         }
+
         $resaco = $this->sql_record($this->sql_query_file($this->l202_sequencial));
         if($this->numrows>0){
             for($conresaco=0;$conresaco<$this->numrows;$conresaco++){

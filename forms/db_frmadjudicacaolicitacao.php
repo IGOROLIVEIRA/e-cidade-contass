@@ -19,7 +19,7 @@ $clrotulo->label("l20_codigo");
             </td>
             <td>
                 <?
-                db_input('l202_licitacao',10,$Il202_licitacao,true,'text',$db_opcao," onchange='js_pesquisal202_licitacao(false);'")
+                db_input('l202_licitacao',10,$Il202_licitacao,true,'text',3," onchange='js_pesquisal202_licitacao(false);'")
                 ?>
                 <?
                 $pc50_descr = $pc50_descr ." ".$l20_numero;
@@ -80,17 +80,22 @@ $clrotulo->label("l20_codigo");
         $("table" + oGridItens.sName + "footer").style.width = width;
     }
     js_showGrid()
-
+    js_pesquisal202_licitacao(true);
     function js_pesquisal202_licitacao(mostra){
         let opcao = "<?= $db_opcao?>";
-
+        var situacao = 0
+        if (opcao == 1){
+            situacao = 1
+        }else{
+            situacao = 13
+        }
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+(opcao == '1' ? '1' : '10')+
-                '&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
+                '&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero|l202_dataadjudicacao&validafornecedor=1&adjudicacao=1','Pesquisa',true);
         }else{
             if(document.form1.l202_licitacao.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+(opcao == '1' ? '1' : '10')+
-                    '&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
+                    '&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1adjudicacao=1','Pesquisa',false);
             }else{
                 document.form1.l202_licitacao.value = '';
                 document.form1.pc50_descr.value = '';
@@ -116,10 +121,13 @@ $clrotulo->label("l20_codigo");
      * Acrescentado o parametro chave3 que recebe o l20_numero vindo da linha 263.
      * Solicitado por danilo@contass e deborah@contass
      */
-    function js_mostraliclicita1(chave1,chave2,chave3){
+    function js_mostraliclicita1(chave1,chave2,chave3,chave4){
         iLicitacao = chave1;
+        aData = chave4.split('-');
+        let dataAdju =  aData[2]+'/'+aData[1]+'/'+aData[0];
         document.form1.l202_licitacao.value = chave1;
         document.form1.pc50_descr.value = chave2+' '+chave3;
+        document.form1.l202_dataadjudicacao.value = dataAdju;
         db_iframe_liclicita.hide();
         js_init()
     }
@@ -249,7 +257,7 @@ $clrotulo->label("l20_codigo");
         var oParam = new Object();
         oParam.iLicitacao = $F('l202_licitacao');
         oParam.dtAdjudicacao = $F('l202_dataadjudicacao');
-        oParam.exec = "alteraradjudicarLicitacao";
+        oParam.exec = "excluiradjudicarLicitacao";
         js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
         var oAjax = new Ajax.Request(
             'lic1_homologacaoadjudica.RPC.php', {

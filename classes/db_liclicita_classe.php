@@ -2634,6 +2634,7 @@ class cl_liclicita
         $sql .= "      inner join parecerlicitacao     on parecerlicitacao.l200_licitacao     = liclicita.l20_codigo ";
         $sql .= "      inner join liclicitasituacao     on liclicitasituacao.l11_liclicita     = liclicita.l20_codigo ";
         $sql .= "      left  join liclancedital         on liclancedital.l47_liclicita = liclicita.l20_codigo ";
+        $sql .= "      left  join homologacaoadjudica        on homologacaoadjudica.l202_licitacao = liclicita.l20_codigo ";
 
         $sql2 = "";
         if ($dbwhere == "") {
