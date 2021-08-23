@@ -25,6 +25,13 @@ class cl_licobras102021 {
   public $si195_objeto = null;
   public $si195_codobra = 0;
   public $si195_linkobra = null;
+  public $si195_nrolote = null;
+  public $si195_nrocontrato = null;
+  public $si195_exerciciocontrato = null;
+  public $si195_dataassinatura = null;
+  public $si195_vlcontrato = null;
+  public $si195_undmedidaprazoexecucao = null;
+  public $si195_prazoexecucao = null;
   public $si195_mes = 0;
   public $si195_instit = 0;
   // cria propriedade com as variaveis do arquivo
@@ -38,6 +45,13 @@ class cl_licobras102021 {
                  si195_objeto = text = objeto
                  si195_codobra = int8 = codigoobra
                  si195_linkobra = text = linkobra
+                 si195_nrolote = int8 = numero do lote
+                 si195_nrocontrato = int8 = numero do contrato
+                 si195_exerciciocontrato = int8 = execicio do contrato
+                 si195_dataassinatura = date = data de assinatura
+                 si195_vlcontrato = numeric = valor do contrato
+                 si195_undmedidaprazoexecucao = int8 = und de execucao
+                 si195_prazoexecucao = prazo de execucao
                  si195_mes = int4 = Mes
                  si195_instit = int4 = Instituição
                  ";
@@ -70,6 +84,13 @@ class cl_licobras102021 {
       $this->si195_nroprocessolicitatorio = ($this->si195_nroprocessolicitatorio == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_nroprocessolicitatorio"]:$this->si195_nroprocessolicitatorio);
       $this->si195_codobra = ($this->si195_codobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codobra"]:$this->si195_codobra);
       $this->si195_linkobra = ($this->si195_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_linkobra"]:$this->si195_linkobra);
+      $this->si195_nrolote = ($this->si195_nrolote == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_nrolote"]:$this->si195_nrolote);
+      $this->si195_nrocontrato = ($this->si195_nrocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_nrocontrato"]:$this->si195_nrocontrato);
+      $this->si195_exerciciocontrato = ($this->si195_exerciciocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_exerciciocontrato"]:$this->si195_exerciciocontrato);
+      $this->si195_dataassinatura = ($this->si195_dataassinatura == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dataassinatura"]:$this->si195_dataassinatura);
+      $this->si195_vlcontrato = ($this->si195_vlcontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_vlcontrato"]:$this->si195_vlcontrato);
+      $this->si195_undmedidaprazoexecucao = ($this->si195_undmedidaprazoexecucao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_undmedidaprazoexecucao"]:$this->si195_undmedidaprazoexecucao);
+      $this->si195_prazoexecucao = ($this->si195_prazoexecucao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_prazoexecucao"]:$this->si195_prazoexecucao);
       $this->si195_mes = ($this->si195_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_mes"]:$this->si195_mes);
       $this->si195_instit = ($this->si195_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_instit"]:$this->si195_instit);
     } else {
@@ -154,6 +175,77 @@ class cl_licobras102021 {
       $this->erro_status = "0";
       return false;
     }
+
+    if ($this->si195_nrolote == null ) {
+      $this->erro_sql = " Campo nrolote não informado.";
+      $this->erro_campo = "si195_nrolote";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->si195_nrocontrato == null ) {
+      $this->erro_sql = " Contrato não localizado. Codigo da Obra: $this->si195_codobra";
+      $this->erro_campo = "si195_nrocontrato";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->si195_exerciciocontrato == null ) {
+      $this->erro_sql = " Campo exercicio do contrato não informado.";
+      $this->erro_campo = "si195_exerciciocontrato";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->si195_dataassinatura == null ) {
+      $this->erro_sql = "Contrato Nº $this->si195_nrocontrato não assinado!";
+      $this->erro_campo = "si195_dataassinatura";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->si195_vlcontrato == null ) {
+      $this->erro_sql = "Contrato $this->si195_vlcontrato não informado!";
+      $this->erro_campo = "si195_vlcontrato";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->si195_undmedidaprazoexecucao == null ) {
+      $this->erro_sql = " Campo unidate prazo de execucao não informado.";
+      $this->erro_campo = "si195_undmedidaprazoexecucao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->si195_prazoexecucao == null ) {
+      $this->erro_sql = " Campo prazo de execucao não informado.";
+      $this->erro_campo = "si195_prazoexecucao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
     if ($this->si195_mes == null ) {
       $this->erro_sql = " Campo Mes não informado.";
       $this->erro_campo = "si195_mes";
@@ -172,6 +264,7 @@ class cl_licobras102021 {
       $this->erro_status = "0";
       return false;
     }
+
     $sql = "insert into licobras102021(
                                        si195_sequencial
                                       ,si195_tiporegistro
@@ -182,6 +275,13 @@ class cl_licobras102021 {
                                       ,si195_codobra
                                       ,si195_objeto
                                       ,si195_linkobra
+                                      ,si195_nrolote               
+                                      ,si195_nrocontrato           
+                                      ,si195_exerciciocontrato     
+                                      ,si195_dataassinatura
+                                      ,si195_vlcontrato        
+                                      ,si195_undmedidaprazoexecucao
+                                      ,si195_prazoexecucao         
                                       ,si195_mes
                                       ,si195_instit
                        )
@@ -195,6 +295,13 @@ class cl_licobras102021 {
                                ,$this->si195_codobra
                                ,'$this->si195_objeto'
                                ,'$this->si195_linkobra'
+                               ,$this->si195_nrolote         
+                               ,$this->si195_nrocontrato
+                               ,$this->si195_exerciciocontrato
+                               ,'$this->si195_dataassinatura'
+                               ,$this->si195_vlcontrato
+                               ,$this->si195_undmedidaprazoexecucao
+                               ,$this->si195_prazoexecucao
                                ,$this->si195_mes
                                ,$this->si195_instit
                       )";
