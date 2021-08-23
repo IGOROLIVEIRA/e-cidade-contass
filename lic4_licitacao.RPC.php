@@ -1034,7 +1034,7 @@ switch ($oParam->exec) {
                   $oDaoSolicitemAbertura = db_utils::getDao('solicitem');
                   $oDaoSolicitemAbertura->pc11_numero = $oItemControle->itemdaaberturanumero;
                   $oDaoSolicitemAbertura->pc11_seq   = $seqsolicitem;
-                  $oDaoSolicitemAbertura->pc11_quant = $aItens[$count]->qtdexclusiva;
+                  $oDaoSolicitemAbertura->pc11_quant = '0';
                   $oDaoSolicitemAbertura->pc11_vlrun = $oItem->pc11_vlrun;
                   $oDaoSolicitemAbertura->pc11_prazo = $oItem->pc11_prazo;
                   $oDaoSolicitemAbertura->pc11_pgto = $oItem->pc11_pgto;
@@ -1106,8 +1106,8 @@ switch ($oParam->exec) {
 
                   //estimativa
                   $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
-                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemReservado->pc11_codigo;
-                  $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemEstimativa->pc11_codigo;
+                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemEstimativa->pc11_codigo;
+                  $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemReservado->pc11_codigo;
                   $oDaoSolicitemVinculo->incluir(null);
 
                   if (!$oDaoSolicitemVinculo->numrows_incluir) {
