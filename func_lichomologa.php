@@ -110,7 +110,7 @@ $sWhereContratos = " and 1 = 1 ";
 
 			}
 
-			if(isset($adjudicacao) && trim($adjudicacao) != ''){
+			if(isset($adjudicacao) && trim($adjudicacao) == "1"){
 			    $dbwhere .= "l202_dataadjudicacao is not null and";
             }
 
@@ -182,6 +182,7 @@ $sWhereContratos = " and 1 = 1 ";
              $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere $whereHab");
            }
 	      }
+
         db_lovrot($sql.' desc ',15,"()","",$funcao_js);
 
 

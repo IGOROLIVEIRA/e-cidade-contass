@@ -86,16 +86,18 @@ $clrotulo->label("l20_codigo");
         var situacao = 0
         if (opcao == 1){
             situacao = 1
+            var adjudicacao = 2
         }else{
             situacao = 13
+            var adjudicacao = 1
         }
         if(mostra==true){
             js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
-                '&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero|l202_dataadjudicacao&validafornecedor=1&adjudicacao=1','Pesquisa',true);
+                '&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero|l202_dataadjudicacao&validafornecedor=1&adjudicacao='+adjudicacao,'Pesquisa',true);
         }else{
             if(document.form1.l202_licitacao.value != ''){
                 js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
-                    '&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1adjudicacao=1','Pesquisa',false);
+                    '&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1adjudicacao='+adjudicacao,'Pesquisa',false);
             }else{
                 document.form1.l202_licitacao.value = '';
                 document.form1.pc50_descr.value = '';
@@ -123,11 +125,14 @@ $clrotulo->label("l20_codigo");
      */
     function js_mostraliclicita1(chave1,chave2,chave3,chave4){
         iLicitacao = chave1;
-        aData = chave4.split('-');
-        let dataAdju =  aData[2]+'/'+aData[1]+'/'+aData[0];
         document.form1.l202_licitacao.value = chave1;
         document.form1.pc50_descr.value = chave2+' '+chave3;
-        document.form1.l202_dataadjudicacao.value = dataAdju;
+        let opcao = "<?= $db_opcao?>";
+        if(opcao != 1){
+            aData = chave4.split('-');
+            let dataAdju =  aData[2]+'/'+aData[1]+'/'+aData[0];
+            document.form1.l202_dataadjudicacao.value = dataAdju;
+        }
         db_iframe_liclicita.hide();
         js_init()
     }
