@@ -546,7 +546,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					                '00' as subelemento,
 					                o15_codtri as codfontrecursos, si08_orcmodalidadeaplic,
                                     case
-                                        when si09_tipoinstit IN (5,6) AND substr(o56_elemento,2,6) IN ({$aNaturDespTipoDespesa}) then e60_tipodespesa
+                                        when si09_tipoinstit IN (5,6) 
+                                            and substr(o56_elemento,2,6) in ({$aNaturDespTipoDespesa}) 
+                                            and $oContas10->nregobrig = 30 then e60_tipodespesa
                 	                    else 0
                                     end as e60_tipodespesa
 					  from orcdotacao
@@ -579,7 +581,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 								    o15_codtri as codfontrecursos,
 								    e60_numemp,
                                     case
-                                        when si09_tipoinstit IN (5,6) AND substr(o56_elemento,2,6) IN ({$aNaturDespTipoDespesa}) then e60_tipodespesa
+                                        when si09_tipoinstit IN (5,6) 
+                                            and substr(o56_elemento,2,6) in ({$aNaturDespTipoDespesa}) 
+                                            and $oContas10->nregobrig = 30 then e60_tipodespesa
                 	                    else 0
                                     end as e60_tipodespesa
 					  from conlancamval
@@ -617,7 +621,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 								    o15_codtri as codfontrecursos,
 					                e60_numemp,
                                     case
-                                        when si09_tipoinstit IN (5,6) AND substr(o56_elemento,2,6) IN ({$aNaturDespTipoDespesa}) then e60_tipodespesa
+                                        when si09_tipoinstit IN (5,6) 
+                                            and substr(o56_elemento,2,6) in ({$aNaturDespTipoDespesa}) 
+                                            and $oContas10->nregobrig = 30 then e60_tipodespesa
                 	                    else 0
                                     end as e60_tipodespesa
 					  from conlancamemp
