@@ -152,7 +152,7 @@ function js_mostra(chave,erro){
 	 </td>
       </tr>
 	<tr>
-		<td nowrap title="Decreto"><? db_ancora("Decreto:","js_projeto();",$db_opcao);  ?> </td>
+		<td nowrap title="Decreto"><? db_ancora("Código do Decreto:","js_projeto();",$db_opcao);  ?> </td>
       	<td nowrap> <? db_input('iCodProj',8,$Io39_codproj,true,'text',$db_opcao,"") ?>  </td>
 	</tr>
   <tr>
