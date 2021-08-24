@@ -480,6 +480,7 @@ if ($processar == "a") {
 					  x.e60_codcom,
 					  x.pc50_descr,
 					  empelemento.e64_codele,
+                      orcelemento.o56_elemento,
 					  orcelemento.o56_descr,
             x.e60_vlremp,
 					  x.e60_vlranu,
@@ -527,6 +528,7 @@ if ($processar == "a") {
 					      x.e60_codcom,
 					      x.pc50_descr,
 					      empelemento.e64_codele,
+                          orcelemento.o56_elemento,
 					      orcelemento.o56_descr,
                 x.e60_vlremp,
 					      x.e60_vlranu,
@@ -1590,7 +1592,7 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->SetFont('Arial', 'B', 8);
             $totalforne ++;
             if ($agrupar == "d") {
-                $pdf->Cell(45, $tam, "$e64_codele", $iBorda, 0, "C", 0);
+                $pdf->Cell(45, $tam, "$e64_codele - $o56_elemento", $iBorda, 0, "C", 0);
                 $pdf->Cell(105, $tam, "$o56_descr", $iBorda, 1, "L", 0);
             }
             $pdf->SetFont('Arial', '', 7);
