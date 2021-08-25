@@ -367,15 +367,6 @@ class cl_configdbpref {
        return false;
      }
 
-     if($this->w13_msg == null ){ 
-       $this->erro_sql = " Campo Mensagem não informado.";
-       $this->erro_campo = "w13_msg";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
        $this->w13_instit = $w13_instit; 
      if(($this->w13_instit == null) || ($this->w13_instit == "") ){ 
        $this->erro_sql = " Campo w13_instit nao declarado.";
@@ -845,15 +836,6 @@ class cl_configdbpref {
      if(trim($this->w13_msg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["w13_msg"])){ 
        $sql  .= $virgula." w13_msg = '$this->w13_msg' ";
        $virgula = ",";
-       if(trim($this->w13_msg) == null ){ 
-         $this->erro_sql = " Campo Mensagem não informado.";
-         $this->erro_campo = "w13_msg";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      $sql .= " where ";
      if($w13_instit!=null){
