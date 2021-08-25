@@ -73,7 +73,6 @@ if (isset($codprocesso) && $codprocesso != '') {
     " l20_codigo = $licitacao and pc21_orcamforne IS NOT NULL "
   );
   $rsFornec = $clliclicita->sql_record($sSqlFornec);
-
   if (pg_num_rows($rsFornec)) {
     $sqlerro = true;
   }
@@ -96,8 +95,9 @@ if (!$sqlerro && $codprocesso) {
     '',
     "pc81_codproc = " . $codprocesso . " and pc11_reservado = 't'"
   );
-  $rsSolicitem = db_query($sSqlSolicitem);
 
+  $rsSolicitem = db_query($sSqlSolicitem);
+  db_criatabela($rsSolicitem);
   for ($count = 0; $count < pg_numrows($rsSolicitem); $count++) {
     //db_criatabela($rsSolicitem);
     $oSolicitemReservado = db_utils::fieldsMemory($rsSolicitem, $count);
@@ -113,11 +113,13 @@ if (!$sqlerro && $codprocesso) {
     // echo $sSqlOrigem;
 
     db_inicio_transacao();
-
+    echo $sSqlOrigem;
+    db_criatabela($rsOrigem);
     $oItemOrigem = db_utils::fieldsMemory($rsOrigem, 0);
     //echo ' ' . floatval($oItemOrigem->pc11_quant);
     //exit;
     $nova_quantidade = floatval($oItemOrigem->pc11_quant) + floatval($oSolicitemReservado->pc11_quant);
+
     //echo $sSqlOrigem;
     //echo $sSqlSolicitem;
     //echo $codprocesso;
@@ -135,24 +137,37 @@ if (!$sqlerro && $codprocesso) {
       }
     }
     $oDaoSolicitemControle = db_utils::getDao('solicitem');
-    $rsSolicitemControle = $oDaoSolicitemControle->sql_record("select
-                  abertura.pc55_solicitempai as vinculopai,
-                  abertura.pc55_solicitemfilho as vinculofilho,
-                  itemdaabertura.pc11_codigo as itemdaabertura,
-                  itemdaestimativa.pc11_codigo as itemdaestimativa,
-                  vinculo.pc55_solicitempai,
-                  vinculo.pc55_solicitemfilho
-                  from solicitem as compilacao
-                  join solicita as compsolicita on compsolicita.pc10_numero=compilacao.pc11_numero
-                  left join solicitemvinculo as vinculo on vinculo.pc55_solicitemfilho = compilacao.pc11_codigo
-                  left join solicitem as itemdaestimativa on itemdaestimativa.pc11_codigo = vinculo.pc55_solicitempai
-                  left join solicita as estisolicita on estisolicita.pc10_numero = itemdaestimativa.pc11_numero
-                  left join solicitemvinculo as abertura on abertura.pc55_solicitemfilho=vinculo.pc55_solicitempai
-                  left join solicitem as itemdaabertura on itemdaabertura.pc11_codigo = abertura.pc55_solicitempai
-                  left join solicita as solabertura on solabertura.pc10_numero = itemdaabertura.pc11_numero
-                  left join solicitemregistropreco on pc57_solicitem=compilacao.pc11_codigo
-                  where
-                  compilacao.pc11_codigo = $oSolicitemReservado->pc11_codigo");
+    $rsSolicitemControle = $oDaoSolicitemControle->sql_record("select distinct
+    compsolicita.pc10_numero,
+    estisolicita.pc10_numero,
+    solabertura.pc10_numero
+    from solicitem as compilacao
+    join solicita as compsolicita on compsolicita.pc10_numero=compilacao.pc11_numero
+    left join solicitemvinculo as vinculo on vinculo.pc55_solicitemfilho = compilacao.pc11_codigo
+    left join solicitem as itemdaestimativa on itemdaestimativa.pc11_codigo = vinculo.pc55_solicitempai
+    left join solicita as estisolicita on estisolicita.pc10_numero = itemdaestimativa.pc11_numero
+    left join solicitemvinculo as abertura on abertura.pc55_solicitemfilho=vinculo.pc55_solicitempai
+    left join solicitem as itemdaabertura on itemdaabertura.pc11_codigo = abertura.pc55_solicitempai
+    left join solicita as solabertura on solabertura.pc10_numero = itemdaabertura.pc11_numero
+    left join solicitemregistropreco on pc57_solicitem=compilacao.pc11_codigo
+    where
+    compilacao.pc11_numero = $oSolicitemReservado->pc11_numero");
+    echo "select distinct
+    compsolicita.pc10_numero,
+    estisolicita.pc10_numero,
+    solabertura.pc10_numero
+    from solicitem as compilacao
+    join solicita as compsolicita on compsolicita.pc10_numero=compilacao.pc11_numero
+    left join solicitemvinculo as vinculo on vinculo.pc55_solicitemfilho = compilacao.pc11_codigo
+    left join solicitem as itemdaestimativa on itemdaestimativa.pc11_codigo = vinculo.pc55_solicitempai
+    left join solicita as estisolicita on estisolicita.pc10_numero = itemdaestimativa.pc11_numero
+    left join solicitemvinculo as abertura on abertura.pc55_solicitemfilho=vinculo.pc55_solicitempai
+    left join solicitem as itemdaabertura on itemdaabertura.pc11_codigo = abertura.pc55_solicitempai
+    left join solicita as solabertura on solabertura.pc10_numero = itemdaabertura.pc11_numero
+    left join solicitemregistropreco on pc57_solicitem=compilacao.pc11_codigo
+    where
+    compilacao.pc11_numero = $oSolicitemReservado->pc11_numero";
+    exit;
 
     $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
 
@@ -361,7 +376,7 @@ if (!$sqlerro && $codprocesso) {
 if ($codprocesso) {
   if ($sqlerro) {
     if (!$erro_msg) {
-      echo "<script>alert('Processo de Compra $codprocesso não pode ser excluído.');</script>";
+      echo "<script>alert('Processo de Compra $codprocesso não pode ser excluído leras.');</script>";
     } else {
       echo "<script>alert('$erro_msg');</script>";
     }
