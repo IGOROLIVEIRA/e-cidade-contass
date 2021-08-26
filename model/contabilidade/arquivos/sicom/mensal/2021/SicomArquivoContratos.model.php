@@ -1394,7 +1394,9 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
     AND si03_dataapostila >= '{$this->sDataInicial}'
     AND si03_instit = " . db_getsession("DB_instit");
         $rsResult30 = db_query($sSql);
-        //        echo $sSql; db_criatabela($rsResult30);
+        // echo $sSql;
+        // db_criatabela($rsResult30);
+        //exit;
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
@@ -1426,10 +1428,10 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
 
             $clcontratos30->si89_tiporegistro = 30;
             $clcontratos30->si89_codorgao = $sCodorgao;
-            if (empty($clcontratos30->manutac_codunidsubanterior)) {
+            if (empty($oDados30->manutac_codunidsubanterior)) {
                 $clcontratos30->si89_codunidadesub = $sCodUnidadeSub;
             } else {
-                $clcontratos30->si89_codunidadesub = $clcontratos30->manutac_codunidsubanterior;
+                $clcontratos30->si89_codunidadesub = $oDados30->manutac_codunidsubanterior;
             }
             $clcontratos30->si89_nrocontrato = $oDados30->ac16_numeroacordo;
             $clcontratos30->si89_dtassinaturacontoriginal = $oDados30->si03_dataassinacontrato;
