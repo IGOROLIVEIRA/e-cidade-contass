@@ -195,7 +195,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         ' '::char AS codorgaorespcontrato,
         ac16_acordosituacao,
 
-        CASE WHEN ac16_sequencial IS NULL OR ac16_acordosituacao != 4 THEN NULL ELSE (SELECT CASE
+        CASE WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL ELSE (SELECT CASE
         WHEN o41_subunidade != 0
         OR NOT NULL THEN lpad((CASE
         WHEN o40_codtri = '0'
@@ -226,16 +226,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         END AS codunidadesubrespcontrato,
 
         CASE
-        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao != 4 THEN NULL
+        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL
         WHEN ac16_numeroacordo IS NULL THEN ac16_numero
         ELSE ac16_numeroacordo
         END AS nrocontrato,
         CASE
-        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao != 4 THEN NULL
+        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL
         ELSE ac16_dataassinatura
         END AS dataassinaturacontrato,
         CASE
-        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao != 4 THEN NULL
+        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL
         ELSE ac26_numeroaditamento
         END AS nrosequencialtermoaditivo,
         ac35_dataassinaturatermoaditivo AS dataassinaturatermoaditivo,
