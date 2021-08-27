@@ -436,7 +436,7 @@ function js_validaCaracteres(texto, campo){
   temporario = texto.replace(/\n/g, ' ');
 
   /*Caracteres não permitidos na descrição e complemento material*/
-  let charBuscados = [";", "'", "\"", "\\", "*", ":", "."];
+  let charBuscados = [";", "'", "\"", "\\", "*", ":"];
   let novoTexto = temporario;
   let erro = '';
 
