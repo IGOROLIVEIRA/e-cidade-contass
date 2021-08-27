@@ -468,9 +468,9 @@ function js_validaCaracteres(texto, campo){
     }
   }
 
-  if(erro){
-    alert('Caractere não permitido para inclusão!');
-  }
+  // if(erro){
+  //   alert('Caractere não permitido para inclusão!');
+  // }
 
   novoTexto = novoTexto.join('');
 
