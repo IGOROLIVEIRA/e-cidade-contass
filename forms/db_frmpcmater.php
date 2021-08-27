@@ -456,7 +456,7 @@ function js_validaCaracteres(texto, campo){
   }
 
   /* Remove os caracteres contidos no array charBuscados */
-  novoTexto = novoTexto.match(/[^;\*\\\.:\"\']/gm);
+  novoTexto = novoTexto.match(/[^;\*\\\:\"\']/gm);
 
   for(let cont=0; cont < novoTexto.length; cont++){
 
