@@ -169,7 +169,7 @@ $sWhereContratos = " and 1 = 1 ";
                     }
                 }
 
-                $campos .= ', l08_descr as dl_Situação,l202_dataadjudicacao,l202_datahomologacao,l202_sequencial';
+                $campos .= ', l08_descr as dl_Situação,l202_dataadjudicacao,l202_datahomologacao';
                 if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
                     $sql = $clliclicita->sql_queryContratosContass(null," " . $campos,"l20_codigo","l20_codigo = $chave_l20_codigo $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
                 }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
@@ -198,8 +198,9 @@ $sWhereContratos = " and 1 = 1 ";
                         $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere $whereHab");
                     }
                 }
-
+                die($sql);
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js);
+
 
             } else {
 
