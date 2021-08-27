@@ -284,7 +284,7 @@ $clrotulo->label("l20_codigo");
         oParam.dtAdjudicacao = $F('l202_datahomologacao');
         oParam.iHomologacao  = $F('l202_sequencial');
         oParam.aItens        = new Array();
-        oParam.exec = "excluiradjudicarLicitacao";
+        oParam.exec = "excluirhomologacao";
 
         for (var i = 0; i < aItens.length; i++) {
 
@@ -313,6 +313,7 @@ $clrotulo->label("l20_codigo");
             document.getElementById('l202_licitacao').value = '';
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_datahomologacao').value = '';
+            document.getElementById('l202_sequencial').value = '';
         }else{
             alert(oRetorno.message.urlDecode());
         }
