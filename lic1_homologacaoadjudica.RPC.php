@@ -390,6 +390,29 @@ switch($oParam->exec) {
         $oRetorno->itens = $itens;
         break;
 
+    case 'getItensAdjudicacao':
+        $clhomologacaoadjudica = new cl_homologacaoadjudica();
+        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao";
+
+        $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
+        $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,null,$sWhere));
+
+        for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
+
+            $oItensLicitacao = db_utils::fieldsMemory($result, $iCont);
+            $oItem      = new stdClass();
+            $oItem->pc01_codmater                   = $oItensLicitacao->pc01_codmater;
+            $oItem->pc01_descrmater                 = urlencode($oItensLicitacao->pc01_descrmater);
+            $oItem->z01_nome                        = $oItensLicitacao->z01_nome;
+            $oItem->m61_descr                       = $oItensLicitacao->m61_descr;
+            $oItem->pc11_quant                      = $oItensLicitacao->pc11_quant;
+            $oItem->pc23_valor                      = $oItensLicitacao->pc23_valor;
+            $oItem->l203_homologaadjudicacao        = $oItensLicitacao->l203_homologaadjudicacao;
+            $itens[]                                = $oItem;
+        }
+        $oRetorno->itens = $itens;
+        break;
+
     case 'homologarLicitacao':
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
         $clliclicita           = new cl_liclicita();

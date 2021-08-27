@@ -14,7 +14,7 @@ include("classes/db_licitemobra_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 $clhomologacaoadjudica = new cl_homologacaoadjudica;
-
+$db_opcao = "3";
 ?>
 <html>
 <head>
@@ -35,7 +35,7 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
     <fieldset style="margin-top: 30px;">
         <legend>Adjudicação:</legend>
         <?
-        include("forms/db_frmadjudicacaolicitacao.php");
+        include("forms/db_frmadjudicacao.php");
         ?>
     </fieldset>
 </center>

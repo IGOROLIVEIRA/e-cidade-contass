@@ -103,26 +103,14 @@ $sWhereContratos = " and 1 = 1 ";
             /**
              * QUANDO FOR ADJUDICACAO NAO DEVE RETORNAR PROCESSO QUE SAO REGISTRO DE PRECO
              */
-            if(isset($homologacao) &&trim($homologacao) == "1") {
-                $dbwhere .= "((liclicita.l20_tipnaturezaproced = 2 and l20_licsituacao in (1,10)) or (l20_licsituacao in (13,10))) and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
-             and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
-
-            }else{
-                $dbwhere .= "l20_licsituacao = 10 and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
-             and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
-            }
-            /**
-             * QUANDO FOR ADJUDICACAO NAO DEVE RETORNAR PROCESSO QUE SAO REGISTRO DE PRECO
-             */
             if(isset($adjudicacao) &&trim($adjudicacao) != ""){
-                die("aqui2");
                 $dbwhere .= "l20_tipnaturezaproced != 2 AND ";
             }
             /**
              * INCLUSAO
              */
             if(isset($adjudicacao) && trim($adjudicacao) == "1"){
-                $dbwhere .= "l202_dataadjudicacao IS NULL AND l202_datahomologacao IS NULL AND ";
+                $dbwhere .= "l20_licsituacao = 1 and ";
             }
             /**
              * ALTERACAO
@@ -198,7 +186,7 @@ $sWhereContratos = " and 1 = 1 ";
                         $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere $whereHab");
                     }
                 }
-                die($sql);
+
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js);
 
 

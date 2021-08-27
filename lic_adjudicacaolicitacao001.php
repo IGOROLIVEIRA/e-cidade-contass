@@ -35,7 +35,7 @@ $db_opcao = "1";
     <fieldset style="margin-top: 30px;">
         <legend>Adjudicação:</legend>
         <?
-        include("forms/db_frmadjudicacaolicitacao.php");
+        include("forms/db_frmadjudicacao.php");
         ?>
     </fieldset>
 </center>
