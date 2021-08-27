@@ -354,6 +354,7 @@ switch($oParam->exec) {
         break;
 
     case 'getItens':
+
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
         $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao";
         $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial IS NULL";
