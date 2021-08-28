@@ -602,7 +602,7 @@ class cl_homologacaoadjudica {
         $sql .= "      left join pcorcamforne           on pc24_orcamforne                     = pc21_orcamforne";
         $sql .= "      left join cgm cgmforncedor       on pcorcamforne.pc21_numcgm            = cgmforncedor.z01_numcgm";
         $sql .= "      left join homologacaoadjudica    on l202_licitacao                      = l21_codliclicita";
-        $sql .= "      left join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial AND l203_item = pc01_codmater";
+        $sql .= "      left join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial AND l203_item = pc81_codprocitem";
         $sql2 = "";
 
         if($joinPrecoReferencia){
@@ -673,7 +673,7 @@ class cl_homologacaoadjudica {
         $sql .= "      left join pcorcamforne           on pc24_orcamforne                     = pc21_orcamforne";
         $sql .= "      left join cgm cgmforncedor       on pcorcamforne.pc21_numcgm            = cgmforncedor.z01_numcgm";
         $sql .= "      inner join homologacaoadjudica    on l202_licitacao                      = l21_codliclicita";
-        $sql .= "      inner join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial AND l203_item = pc01_codmater";
+        $sql .= "      inner join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial AND l203_item = pc81_codprocitem";
         $sql2 = "";
 
         if($joinPrecoReferencia){

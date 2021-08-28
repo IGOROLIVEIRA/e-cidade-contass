@@ -178,7 +178,7 @@ $clrotulo->label("l20_codigo");
 
             oRetornoitens.itens.each(function(oLinha, iLinha) {
                 var aLinha = new Array();
-                aLinha[0] = oLinha.pc01_codmater;
+                aLinha[0] = oLinha.pc81_codprocitem;
                 aLinha[1] = oLinha.pc01_descrmater.urlDecode();
                 aLinha[2] = oLinha.z01_nome;
                 aLinha[3] = oLinha.m61_descr;
