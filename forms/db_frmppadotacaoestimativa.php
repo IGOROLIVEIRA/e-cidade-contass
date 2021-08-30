@@ -176,10 +176,10 @@ db_input('o54_descr',40,$Io54_anousu,true,'text',3);
 <script>
 function js_pesquisao08_orgao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcorgao','func_orcorgaodespesa.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr','Pesquisa',true);
   }else{
      if(document.form1.o08_orgao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o08_orgao.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcorgao','func_orcorgaodespesa.php?pesquisa_chave='+document.form1.o08_orgao.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
      }else{
        document.form1.o40_descr.value = ''; 
      }
@@ -256,7 +256,7 @@ function js_pesquisao08_unidade(mostra) {
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo.iframe_ppadotacao',
                         'db_iframe_orcunidade',
-                        'func_orcunidade.php?funcao_js=parent.js_mostraorcunidade1|o41_unidade|o41_descr&'+sFiltro,
+                        'func_orcunidadedespesa.php?funcao_js=parent.js_mostraorcunidade1|o41_unidade|o41_descr&'+sFiltro,
                         'Unidades',
                         true
                        );
@@ -265,7 +265,7 @@ function js_pesquisao08_unidade(mostra) {
      if(document.form1.o08_unidade.value != ''){ 
         js_OpenJanelaIframe('top.corpo.iframe_ppadotacao',
                             'db_iframe_orcunidade',
-                            'func_orcunidade.php?pesquisa_chave='+
+                            'func_orcunidadedespesa.php?pesquisa_chave='+
                              document.form1.o08_unidade.value+'&funcao_js=parent.js_mostraorcunidade&'+sFiltro,
                             'Pesquisa',
                             false);
@@ -335,10 +335,10 @@ function js_mostraorcsubfuncao1(chave1,chave2){
 
 function js_pesquisao08_programa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprograma','func_orcprograma.php?funcao_js=parent.js_mostraorcprograma1|o54_programa|o54_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprograma','func_orcprogramadespesa.php?funcao_js=parent.js_mostraorcprograma1|o54_programa|o54_descr','Pesquisa',true);
   }else{
      if(document.form1.o08_programa.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprograma','func_orcprograma.php?pesquisa_chave='+document.form1.o08_programa.value+'&funcao_js=parent.js_mostraorcprograma','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprograma','func_orcprogramadespesa.php?pesquisa_chave='+document.form1.o08_programa.value+'&funcao_js=parent.js_mostraorcprograma','Pesquisa',false);
      }else{
        document.form1.o54_descr.value = ''; 
      }
@@ -381,10 +381,10 @@ function js_mostraorcprojativ1(chave1,chave2){
 }
 function js_pesquisao08_projativ(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprojativ','func_orcprojativ.php?funcao_js=parent.js_mostraorcprojativ1|o55_projativ|o55_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprojativ','func_orcprojativdespesa.php?funcao_js=parent.js_mostraorcprojativ1|o55_projativ|o55_descr','Pesquisa',true);
   }else{
      if(document.form1.o08_projativ.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprojativ','func_orcprojativ.php?pesquisa_chave='+document.form1.o08_projativ.value+'&funcao_js=parent.js_mostraorcprojativ','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprojativ','func_orcprojativdespesa.php?pesquisa_chave='+document.form1.o08_projativ.value+'&funcao_js=parent.js_mostraorcprojativ','Pesquisa',false);
      }else{
        document.form1.o55_descr.value = ''; 
      }
