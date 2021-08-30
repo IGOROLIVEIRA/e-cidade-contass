@@ -109,13 +109,12 @@ $sWhereContratos = " and 1 = 1 ";
 
             }else{
                 $dbwhere .= "l20_licsituacao = 10 and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
-             and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
+             and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and l202_datahomologacao is not null and ";
             }
             /**
              * QUANDO FOR ADJUDICACAO NAO DEVE RETORNAR PROCESSO QUE SAO REGISTRO DE PRECO
              */
             if(isset($adjudicacao) &&trim($adjudicacao) != ""){
-                die("aqui2");
                 $dbwhere .= "l20_tipnaturezaproced != 2 AND ";
             }
             /**

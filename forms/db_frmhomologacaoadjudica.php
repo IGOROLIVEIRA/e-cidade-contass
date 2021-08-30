@@ -76,9 +76,12 @@ $clrotulo->label("l20_codigo");
      */
     ?>
     function js_showGrid() {
+        let opcao = "<?= $db_opcao?>";
         oGridItens = new DBGrid('gridItens');
         oGridItens.nameInstance = 'oGridItens';
-        oGridItens.setCheckbox(0);
+        if(opcao != 2){
+            oGridItens.setCheckbox(0);
+        }
         oGridItens.setCellAlign(new Array("center", "center", "left", 'right', 'right', 'right'));
         oGridItens.setCellWidth(new Array("10%" , "25%"     , '25%'          ,   '15%'    , '15%'        , '15%'            ));
         oGridItens.setHeader(new Array("Código", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
@@ -141,8 +144,8 @@ $clrotulo->label("l20_codigo");
         let opcao = "<?= $db_opcao?>";
         if(opcao != 1){
             aData = chave4.split('-');
-            let dataAdju =  aData[2]+'/'+aData[1]+'/'+aData[0];
-            document.form1.l202_datahomologacao.value = dataAdju;
+            let dataHomo =  aData[2]+'/'+aData[1]+'/'+aData[0];
+            document.form1.l202_datahomologacao.value = dataHomo;
             document.form1.l202_sequencial.value = chave5;
         }
         db_iframe_liclicita.hide();
@@ -245,7 +248,7 @@ $clrotulo->label("l20_codigo");
     function js_alterarHomologacao(){
         var oParam = new Object();
         oParam.iLicitacao    = $F('l202_licitacao');
-        oParam.dtAdjudicacao = $F('l202_datahomologacao');
+        oParam.dtHomologacao = $F('l202_datahomologacao');
         oParam.iHomologacao  = $F('l202_sequencial');
         oParam.exec = "alterarHomologacao";
         js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
@@ -267,6 +270,7 @@ $clrotulo->label("l20_codigo");
             document.getElementById('l202_licitacao').value = '';
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_datahomologacao').value = '';
+            document.getElementById('l202_sequencial').value = '';
         }else{
             alert(oRetorno.message.urlDecode());
         }

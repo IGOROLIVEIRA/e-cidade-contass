@@ -360,7 +360,8 @@ switch($oParam->exec) {
 
         //Itens para Inclusao
         if($oParam->dbopcao == "1"){
-            $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
+            $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND pc81_codprocitem not in (select l203_item from homologacaoadjudica
+        inner join itenshomologacao on l203_homologaadjudicacao = l202_sequencial where l202_licitacao = {$oParam->iLicitacao})";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,null,$sWhere));
         }
         //Itens para Inclusao
@@ -599,7 +600,7 @@ switch($oParam->exec) {
         }
         break;
 
-    case 'alterarhomologacao':
+    case 'alterarHomologacao':
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
         $clliclicita           = new cl_liclicita();
         $cllicitemobra         = new cl_licitemobra();
@@ -666,7 +667,7 @@ switch($oParam->exec) {
              * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
              */
 
-            if(!empty($l202_dataAdjudicacao)){
+            if(!empty($l202_datahomologacao)){
                 $anousu = db_getsession('DB_anousu');
                 $instituicao = db_getsession('DB_instit');
                 $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
@@ -674,7 +675,7 @@ switch($oParam->exec) {
                 $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
                 $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
 
-                if ($l202_dataAdjudicacao <= $dtencerramento) {
+                if ($l202_datahomologacao <= $dtencerramento) {
                     throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                 }
             }
@@ -695,47 +696,21 @@ switch($oParam->exec) {
                     /**
                      * Incluindo HOMOLOGACAO
                      */
-                    if($l20_tipnaturezaproced == '1' || $l20_tipnaturezaproced == '3'){
 
-                        /*buscando o registro da adjudicação*/
-                        $rsGetAdjudicacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query(null,"*",null,"l202_licitacao = {$l202_licitacao}"));
-                        $l202_sequencial  = db_utils::fieldsMemory($rsGetAdjudicacao, 0)->l202_sequencial;
+                    /*inserindo a data de homologacao*/
+                    $clhomologacaoadjudica->l202_datahomologacao = $oParam->dtHomologacao;
+                    $clhomologacaoadjudica->alterar($oParam->iHomologacao);
 
-                        /*inserindo a data de homologacao*/
-                        $clhomologacaoadjudica->l202_datahomologacao = $oParam->dtHomologacao;
-                        $clhomologacaoadjudica->alterar($l202_sequencial);
-
-                        /*Salva os itens*/
-                        foreach ($oParam->aItens as $item) {
-                            $clitenshomologacao->l203_item = $item->codigo;
-                            $clitenshomologacao->l203_homologaadjudicacao = $l202_sequencial;
-                            $clitenshomologacao->incluir(null);
-                        }
-
-                        if ($clhomologacaoadjudica->erro_status == "0") {
-                            $erro = $clhomologacaoadjudica->erro_msg;
-                            $oRetorno->message = urlencode($erro);
-                            $oRetorno->status = 2;
-                        }else{
-                            $erro = "Homologação salva com sucesso!";
-                            $oRetorno->message = urlencode($erro);
-                            $oRetorno->status = 1;
-                        }
-                        /**
-                         * Incluindo nova situação a licitacao Homologada
-                         */
-                        $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 10);
-
-                        $clliclicitasituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
-                        $clliclicitasituacao->l11_hora        = db_hora();
-                        $clliclicitasituacao->l11_obs         = "Licitação Homologada";
-                        $clliclicitasituacao->l11_licsituacao = 10;
-                        $clliclicitasituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
-                        $clliclicitasituacao->l11_liclicita   = $l202_licitacao;
-                        $clliclicitasituacao->incluir(null);
+                    if ($clhomologacaoadjudica->erro_status == "0") {
+                        $erro = $clhomologacaoadjudica->erro_msg;
+                        $oRetorno->message = urlencode($erro);
+                        $oRetorno->status = 2;
                     }else{
-                        die("aqui");
+                        $erro = "Homologação salva com sucesso!";
+                        $oRetorno->message = urlencode($erro);
+                        $oRetorno->status = 1;
                     }
+
                     db_fim_transacao();
 
                 } else if ($parecer < 1 || empty($parecer)) {
@@ -819,22 +794,17 @@ switch($oParam->exec) {
                 /**
                  * verifico se existe outras homologacoes para a licitacao
                  */
-                $rsOutrasHomologacoes = pg_num_rows($clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"*",null,"l202_licitacao = {$oParam->iLicitacao}")));
+                $rsOutrasHomologacoes = pg_num_rows($clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"*",null,"l202_licitacao = {$oParam->iLicitacao} and l202_datahomologacao is not null")));
 
                 if($rsOutrasHomologacoes <= 0){
                     $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 13);
                     $clliclicitasituacao->excluir(null,"l11_licsituacao = 10 and l11_liclicita = {$oParam->iLicitacao}");
                 }
 
-                if ($clhomologacaoadjudica->erro_status == "0") {
-                    $erro = $clhomologacaoadjudica->erro_msg;
-                    $oRetorno->message = urlencode($erro);
-                    $oRetorno->status = 2;
-                }else{
                     $erro = "Homologação Excluida com sucesso!";
                     $oRetorno->message = urlencode($erro);
                     $oRetorno->status = 1;
-                }
+
             }else{
                 $erro = "Itens Excluidos com Sucesso!";
                 $oRetorno->message = urlencode($erro);
