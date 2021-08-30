@@ -109,17 +109,24 @@ $sele_work = $clselorcdotacao->getDados()." and w.o58_instit in ($instits)";
  //comprometido e automatico.
  $filtro = str_replace("1=1","",$sele_work);
  $filtro = " ".str_replace("w.","",$filtro);
-
-if (substr($nivel,1,1) == 'A'){
+$modalidade_aplicacao = false;
+if (substr($nivel,-1) == 'A'){
   $completo = false;
   $nivela = substr($nivel,0,1);
   if($nivela=="9"){
     $completo = true;
     $nivela = "8";
+  } elseif (substr($nivel,0,2) == "10") {
+      $modalidade_aplicacao = true;
+      $nivela = "8";
   }
   //db_criatabela(pg_exec("select * from t"));
-  $result = db_dotacaosaldo($nivela,1,2,true,$sele_work,$anousu,$dataini,$datafin);
   //db_criatabela($result);exit;
+  if ($modalidade_aplicacao) {
+      $result = getDotacaoSaldoModalidadeAplic($nivela,1,2,true,$sele_work,$anousu,$dataini,$datafin);
+  } else {
+      $result = db_dotacaosaldo($nivela,1,2,true,$sele_work,$anousu,$dataini,$datafin);
+  }
 
   pg_exec("commit");
 
@@ -899,13 +906,22 @@ if (substr($nivel,1,1) == 'A'){
 
 }else{
 
-  $nivela = substr($nivel,0,1);
+  if (substr($nivel,0,2) == "10") {
+    $modalidade_aplicacao = true;
+    $nivela = "8";
+  } else {
+    $nivela = substr($nivel,0,1);
+  }
 
   $anousu  = db_getsession("DB_anousu");
   //$dataini = db_getsession("DB_anousu")."-01-01";
   //$datafin = date("Y-m-d",db_getsession("DB_datausu"));
   //db_criatabela(pg_exec("select * from temporario"));
-  $result = db_dotacaosaldo($nivela,3,2,true,$sele_work,$anousu,$dataini,$datafin);
+  if ($modalidade_aplicacao) {
+    $result = getDotacaoSaldoModalidadeAplic($nivela,3,2,true,$sele_work,$anousu,$dataini,$datafin);
+  } else {
+    $result = db_dotacaosaldo($nivela,3,2,true,$sele_work,$anousu,$dataini,$datafin);
+  }
   //db_criatabela($result);exit;
   // funcao para gerar work
   //db_criatabela(pg_exec("select * from work w inner join temporario t on $sele_work "));exit;
@@ -1407,6 +1423,74 @@ function retornaSqlReservadoSoNivel($oData,$iNivel,$iAnousu,$dataini,$datafin){
   $sSql .= $sSqlWhere;
 
   return $sSql;
+
+}
+
+/**
+ * Função para agrupar os elementos na modalidade de aplicação
+ */
+function getDotacaoSaldoModalidadeAplic($nivela, $tipo_nivel, $tipo_saldo, $descr, $sele_work, $anousu, $dataini, $datafin) {
+
+    $sql    = db_dotacaosaldo($nivela, $tipo_nivel, $tipo_saldo, $descr, $sele_work, $anousu, $dataini, $datafin, 8, 0, true);
+    $sql2   = " SELECT o58_orgao,
+                    o58_unidade,
+                    o58_funcao,
+                    o58_subfuncao,
+                    o58_programa,
+                    o58_projativ,
+                    orcelementoanalitico.o56_elemento AS o58_elemento,
+                    o58_codigo,
+                    sum(dot_ini) as dot_ini,
+                    sum(saldo_anterior) as saldo_anterior,
+                    sum(empenhado) as empenhado,
+                    sum(anulado) as anulado,
+                    sum(liquidado) as liquidado,
+                    sum(pago) as pago,
+                    sum(suplementado) as suplementado,
+                    sum(reduzido) as reduzido,
+                    sum(atual) as atual,
+                    sum(reservado) as reservado,
+                    sum(atual_menos_reservado) as atual_menos_reservado,
+                    sum(atual_a_pagar) as atual_a_pagar,
+                    sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
+                    sum(empenhado_acumulado) as empenhado_acumulado,
+                    sum(anulado_acumulado) as anulado_acumulado,
+                    sum(liquidado_acumulado) as liquidado_acumulado,
+                    sum(pago_acumulado) as pago_acumulado,
+                    sum(suplementado_acumulado) as suplementado_acumulado,
+                    sum(reduzido_acumulado) as reduzido_acumulado,
+                    sum(proj) as proj,
+                    sum(ativ) as ativ,
+                    sum(oper) as oper,
+                    sum(ordinario) as ordinario,
+                    sum(vinculado) as vinculado,
+                    sum(suplemen) as suplemen,
+                    sum(suplemen_acumulado) as suplemen_acumulado,
+                    sum(especial) as especial,
+                    sum(especial_acumulado) as especial_acumulado,
+                    sum(reservado_manual_ate_data) as reservado_manual_ate_data,
+                    sum(reservado_automatico_ate_data) as reservado_automatico_ate_data,
+                    sum(reservado_ate_data) as reservado_ate_data
+                FROM ($sql) as xxxx
+            
+                        INNER JOIN orcelemento AS orcelementoanalitico ON substr(o58_elemento,1,5)||'00000000' = o56_elemento 
+                            AND o56_anousu = $anousu
+                GROUP by o58_orgao,
+                        o58_unidade,
+                        o58_funcao,
+                        o58_subfuncao,
+                        o58_programa,
+                        o58_projativ,
+                        orcelementoanalitico.o56_elemento,
+                        o58_codigo
+                ORDER BY o58_orgao,
+                        o58_unidade,
+                        o58_funcao,
+                        o58_subfuncao,
+                        o58_programa,
+                        o58_projativ,
+                        o58_elemento";
+    return db_query($sql2);
 
 }
 
