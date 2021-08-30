@@ -46,7 +46,9 @@ class Oc15328 extends AbstractMigration
 
                 /*Adicionando nova Situação Adjudicada a licitacao*/
                 insert into licsituacao values(13,'Adjudicacao','f');
-
+                
+                /*Alterado descricao do menu homologacao*/
+                update db_itensmenu set descricao = 'Homologação' where id_item in (select id_item from db_itensmenu where descricao like '%Homologação Adjudicação%');
 SQL;
         $this->execute($sql);
     }
