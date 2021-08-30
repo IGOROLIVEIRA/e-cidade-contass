@@ -263,9 +263,9 @@ if ($CnpjCliente == '17316563000196'){
   $pdf->Cell(10,"0.01","",0,0,"C",0);
   $pdf->Cell(80,$tam,"Diretor de Adm. e Finanças",0,1,"C",0);
 }else {
-  $pdf->Cell(80,$tam," ",0,0,"C",0);
+  $pdf->Cell(80,$tam,"Assinatura/Responsável",0,0,"C",0);
   $pdf->Cell(10,"0.01","",0,0,"C",0);
-  $pdf->Cell(80,$tam," ",0,1,"C",0);
+  $pdf->Cell(80,$tam,"Assinatura/Responsável",0,1,"C",0);
 }
 
 $pdf->output();
