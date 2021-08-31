@@ -6,7 +6,7 @@
       "email": "marcelo@contassconsultoria.com.br"
     }
   ],
-  
+
   "require": {
     "php": ">=5.3.9",
     "dbseller/legacy": "^1.0",
@@ -20,6 +20,7 @@
     "robmorgan/phinx": "^0.4.6",
     "dbseller/phinx_postgres": "^1.0",
     "league/fractal": "0.11.0",
+    "mpdf/mpdf": "6.0.0",
     "zendframework/zend-eventmanager": "2.2.10"
   },
 
