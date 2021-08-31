@@ -174,7 +174,7 @@ if (substr($nivel,-1) == 'A'){
     $nivela = "8";
   } elseif (substr($nivel,0,2) == "10") {
     $modalidade_aplicacao = true;
-    $nivela = "7";
+    $nivela = "8";
   }
   //db_criatabela(pg_exec("select * from t"));
   
@@ -717,8 +717,9 @@ if (substr($nivel,-1) == 'A'){
 	       	 $pdf->cell(80,$alt,substr($o15_descr,0,30),'B',0,"L",0);
 	       	 /*$pdf->cell(30,$alt,"",'B',0,"L",0);
 	      	 $pdf->cell(130,$alt,"",'B',1,"L",0);*/
-		    }
-        $pdf->cell(-10,$alt,$o58_coddot."-".db_CalculaDV($o58_coddot),'B',0,"R",0);
+		    }        
+        $o58_coddot = $o58_coddot != '' ? $o58_coddot."-".db_CalculaDV($o58_coddot) : '';
+        $pdf->cell(-10,$alt,$o58_coddot,'B',0,"R",0);
         $pdf->cell(80,$alt,db_formatar($dot_ini,'f'),'B',1,"R",0);
 
       }
@@ -955,7 +956,7 @@ if (substr($nivel,-1) == 'A'){
 
   if (substr($nivel,0,2) == "10") {
     $modalidade_aplicacao = true;
-    $nivela = "7";
+    $nivela = "8";
   } else {
     $nivela = substr($nivel,0,1);
   }
@@ -965,7 +966,7 @@ if (substr($nivel,-1) == 'A'){
   //$datafin = date("Y-m-d",db_getsession("DB_datausu"));
   //db_criatabela(pg_exec("select * from temporario"));
   if ($modalidade_aplicacao) {
-    $result = getDotacaoSaldoModalidadeAplic($nivela,3,2,true,$sele_work,$anousu,$dataini,$datafin);
+    $result = getDotacaoSaldoModalidadeAplic($nivela,1,2,true,$sele_work,$anousu,$dataini,$datafin);
   } else {
     $result = db_dotacaosaldo($nivela,3,2,true,$sele_work,$anousu,$dataini,$datafin);
   }
@@ -1256,35 +1257,57 @@ if (substr($nivel,-1) == 'A'){
 
       if ($nivela == 8) {
 
-      	$descr = $o56_descr;
+        if (substr($nivel,0,2) == "10" && $o58_codigo > 0) {
 
-       // $pdf->cell(27,$alt,$o58_elemento,0,0,"L",0);
-        //$pdf->cell(53,$alt,substr($descr,0,30),0,0,"L",0);
-        $pdf->cell(27,$alt,db_formatar($o58_codigo,'s','0',4,'e'),'B',0,"C",0);
-        $pdf->cell(80,$alt,substr($o15_descr,0,80),'B',0,"L",0);
-        $pdf->cell(30,$alt,$o58_coddot."-".db_CalculaDV($o58_coddot),'B',0,"R",0);
-        $pdf->cell(130,$alt,db_formatar($dot_ini,'f'),'B',1,"R",0);
-//        $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-        $nComprometido = $reservado - $nResevaAutomatica;
-  /*      $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
-        $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
-        $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);*/
-        $atual_menos_reservado = $atual - $reservado;
-//        $pdf->cell(20,$alt,db_formatar($atual_menos_reservado,'f'),0,1,"R",0);
-          //Totalizador do orgao
-        $totorgaoini      += $dot_ini;
-        $totorgaoanter    += $atual;
-        $totorgaocomp     += $nComprometido;
-        $totorgaoresauto  += $nResevaAutomatica;
-        $totorgaoreser    += $reservado;
-        $totorgaoatual    += $atual_menos_reservado;
-          //Totalizador da unidade
-        $totunidaini     += $dot_ini;
-        $totunidaanter   += $atual;
-        $totunidacomp    += $nComprometido;
-        $totunidaresauto += $nResevaAutomatica;
-        $totunidareser   += $reservado;
-        $totunidaatual   += $atual_menos_reservado;
+            $pdf->cell(27,$alt,$o58_elemento,'B',0,"L",0);
+            $pdf->cell(53,$alt,substr($descr,0,30),'B',0,"L",0);
+
+            $pdf->cell(27,$alt,db_formatar($o58_codigo,'s','0',4,'e'),'B',0,"C",0);
+            $pdf->cell(80,$alt,substr($o15_descr,0,80),'B',0,"L",0);
+            $o58_coddot = $o58_coddot != '' ? $o58_coddot."-".db_CalculaDV($o58_coddot) : '';
+            $pdf->cell(67,$alt,$o58_coddot,"B",0,"R",0);
+            $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),'B',1,"R",0);
+            $nComprometido = $reservado - $nResevaAutomatica;
+            $atual_menos_reservado = $atual - $reservado;
+            //Totalizador do orgao
+            $totorgaoini      += $dot_ini;
+            $totorgaoanter    += $atual;
+            $totorgaocomp     += $nComprometido;
+            $totorgaoresauto  += $nResevaAutomatica;
+            $totorgaoreser    += $reservado;
+            $totorgaoatual    += $atual_menos_reservado;
+            //Totalizador da unidade
+            $totunidaini     += $dot_ini;
+            $totunidaanter   += $atual;
+            $totunidacomp    += $nComprometido;
+            $totunidaresauto += $nResevaAutomatica;
+            $totunidareser   += $reservado;
+            $totunidaatual   += $atual_menos_reservado;
+        } elseif (substr($nivel,0,2) != "10") {
+            $descr = $o56_descr;
+
+            $pdf->cell(27,$alt,db_formatar($o58_codigo,'s','0',4,'e'),'B',0,"C",0);
+            $pdf->cell(80,$alt,substr($o15_descr,0,80),'B',0,"L",0);
+            $o58_coddot = $o58_coddot != '' ? $o58_coddot."-".db_CalculaDV($o58_coddot) : '';
+            $pdf->cell(30,$alt,$o58_coddot,"B",0,"R",0);
+            $pdf->cell(130,$alt,db_formatar($dot_ini,'f'),'B',1,"R",0);
+            $nComprometido = $reservado - $nResevaAutomatica;
+            $atual_menos_reservado = $atual - $reservado;
+            //Totalizador do orgao
+            $totorgaoini      += $dot_ini;
+            $totorgaoanter    += $atual;
+            $totorgaocomp     += $nComprometido;
+            $totorgaoresauto  += $nResevaAutomatica;
+            $totorgaoreser    += $reservado;
+            $totorgaoatual    += $atual_menos_reservado;
+            //Totalizador da unidade
+            $totunidaini     += $dot_ini;
+            $totunidaanter   += $atual;
+            $totunidacomp    += $nComprometido;
+            $totunidaresauto += $nResevaAutomatica;
+            $totunidareser   += $reservado;
+            $totunidaatual   += $atual_menos_reservado;
+        }
       }
   }
 
@@ -1420,7 +1443,7 @@ function retornaSqlReservadoSoNivel($oData,$iNivel,$iAnousu,$dataini,$datafin){
 function getDotacaoSaldoModalidadeAplic($nivela, $tipo_nivel, $tipo_saldo, $descr, $sele_work, $anousu, $dataini, $datafin) {
 
     $sql    = db_dotacaosaldo($nivela, $tipo_nivel, $tipo_saldo, $descr, $sele_work, $anousu, $dataini, $datafin, 8, 0, true);
-    $sql2   = " SELECT  o58_orgao,
+    $sql2   = " SELECT o58_orgao,
                         o40_descr,
                         o58_unidade,
                         o41_descr,
@@ -1435,66 +1458,83 @@ function getDotacaoSaldoModalidadeAplic($nivela, $tipo_nivel, $tipo_saldo, $desc
                         o55_finali,
                         o55_tipopasta,
                         o55_tipoensino,
-                        orcelementoanalitico.o56_elemento as o58_elemento,
+                        orcelementoanalitico.o56_elemento AS o58_elemento,
                         orcelementoanalitico.o56_descr,
                         o58_codigo,
                         o15_descr,
-                        o58_coddot,		
-                        sum(dot_ini) as dot_ini,
-                        sum(saldo_anterior) as saldo_anterior,
-                        sum(empenhado) as empenhado,
-                        sum(anulado) as anulado,
-                        sum(liquidado) as liquidado,
-                        sum(pago) as pago,
-                        sum(suplementado) as suplementado,
-                        sum(reduzido) as reduzido,
-                        sum(atual) as atual,
-                        sum(reservado) as reservado,
-                        sum(atual_menos_reservado) as atual_menos_reservado,
-                        sum(atual_a_pagar) as atual_a_pagar,
-                        sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
-                        sum(empenhado_acumulado) as empenhado_acumulado,
-                        sum(anulado_acumulado) as anulado_acumulado,
-                        sum(liquidado_acumulado) as liquidado_acumulado,
-                        sum(pago_acumulado) as pago_acumulado,
-                        sum(suplementado_acumulado) as suplementado_acumulado,
-                        sum(reduzido_acumulado) as reduzido_acumulado,
-                        sum(proj) as proj,
-                        sum(ativ) as ativ,
-                        sum(oper) as oper,
-                        sum(ordinario) as ordinario,
-                        sum(vinculado) as vinculado,
-                        sum(suplemen) as suplemen,
-                        sum(suplemen_acumulado) as suplemen_acumulado,
-                        sum(especial) as especial,
-                        sum(especial_acumulado) as especial_acumulado,
-                        sum(reservado_manual_ate_data) as reservado_manual_ate_data,
-                        sum(reservado_automatico_ate_data) as reservado_automatico_ate_data,
-                        sum(reservado_ate_data) as reservado_ate_data 
-                    FROM ($sql) as xxxx
+                        sum(dot_ini) AS dot_ini,
+                        sum(saldo_anterior) AS saldo_anterior,
+                        sum(empenhado) AS empenhado,
+                        sum(anulado) AS anulado,
+                        sum(liquidado) AS liquidado,
+                        sum(pago) AS pago,
+                        sum(suplementado) AS suplementado,
+                        sum(reduzido) AS reduzido,
+                        sum(atual) AS atual,
+                        sum(reservado) AS reservado,
+                        sum(atual_menos_reservado) AS atual_menos_reservado,
+                        sum(atual_a_pagar) AS atual_a_pagar,
+                        sum(atual_a_pagar_liquidado) AS atual_a_pagar_liquidado,
+                        sum(empenhado_acumulado) AS empenhado_acumulado,
+                        sum(anulado_acumulado) AS anulado_acumulado,
+                        sum(liquidado_acumulado) AS liquidado_acumulado,
+                        sum(pago_acumulado) AS pago_acumulado,
+                        sum(suplementado_acumulado) AS suplementado_acumulado,
+                        sum(reduzido_acumulado) AS reduzido_acumulado,
+                        sum(proj) AS proj,
+                        sum(ativ) AS ativ,
+                        sum(oper) AS oper,
+                        sum(ordinario) AS ordinario,
+                        sum(vinculado) AS vinculado,
+                        sum(suplemen) AS suplemen,
+                        sum(suplemen_acumulado) AS suplemen_acumulado,
+                        sum(especial) AS especial,
+                        sum(especial_acumulado) AS especial_acumulado,
+                        sum(reservado_manual_ate_data) AS reservado_manual_ate_data,
+                        sum(reservado_automatico_ate_data) AS reservado_automatico_ate_data,
+                        sum(reservado_ate_data) AS reservado_ate_data
+                FROM ($sql) as xxxx
             
-                        INNER JOIN orcelemento AS orcelementoanalitico ON substr(o58_elemento,1,5)||'00000000' = o56_elemento 
+                        LEFT JOIN orcelemento AS orcelementoanalitico ON substr(o58_elemento,1,5)||'00000000' = o56_elemento 
                             AND o56_anousu = $anousu
-                GROUP BY o58_orgao,
-                        o40_descr,
-                        o58_unidade,
-                        o41_descr,
-                        o58_funcao,
-                        o52_descr,
-                        o58_subfuncao,
-                        o53_descr,
-                        o58_programa,
-                        o54_descr,
-                        o58_projativ,
-                        o55_descr,
-                        o55_finali,
-                        o55_tipopasta,
-                        o55_tipoensino,
-                        orcelementoanalitico.o56_elemento,
-                        orcelementoanalitico.o56_descr,
-                        o58_codigo,
-                        o15_descr,
-                        o58_coddot";
+                GROUP by o58_orgao,
+                            o40_descr,
+                            o58_unidade,
+                            o41_descr,
+                            o58_funcao,
+                            o52_descr,
+                            o58_subfuncao,
+                            o53_descr,
+                            o58_programa,
+                            o54_descr,
+                            o58_projativ,
+                            o55_descr,
+                            o55_finali,
+                            o55_tipopasta,
+                            o55_tipoensino,
+                            orcelementoanalitico.o56_elemento,
+                            orcelementoanalitico.o56_descr,
+                            o58_codigo,
+                            o15_descr
+                ORDER BY o58_orgao,
+                            o40_descr,
+                            o58_unidade,
+                            o41_descr,
+                            o58_funcao,
+                            o52_descr,
+                            o58_subfuncao,
+                            o53_descr,
+                            o58_programa,
+                            o54_descr,
+                            o58_projativ,
+                            o55_descr,
+                            o55_finali,
+                            o55_tipopasta,
+                            o55_tipoensino,
+                            o58_elemento,
+                            o56_descr,
+                            o58_codigo,
+                            o15_descr";
     return db_query($sql2);
 
 }
