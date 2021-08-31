@@ -259,7 +259,7 @@ db_textarea('o54_estrategiaimp', 0, 75, $Io54_estrategiaimp, true, 'text', $db_o
 <?} else { ?>
   <input name="Fechar" type="button"  id="fechar" value="Fechar" onClick="parent.db_iframe_orcprograma.hide();">
 <?} ?>
-<input name="Novo" type="button" id="novo" value="Novo" onClick="location.href = 'orc4_ppadespesamanual001.php'">
+<input name="Novo" type="button" id="novo" value="Novo" onClick="location.href = 'orc1_orcprograma011.php'">
 </form>
 </center>
 <script>
