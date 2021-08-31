@@ -38,6 +38,7 @@ $clrotulo->label("e60_codemp");
 $db_opcao = 1;
 ?>
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -46,206 +47,230 @@ $db_opcao = 1;
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script>
-        function js_abre(){
+        function js_abre() {
             obj = document.form1;
 
-            query='';
-            vir="";
-            listacgm="";
+            query = '';
+            vir = "";
+            listacgm = "";
 
-            for(x=0;x<obj.lista.length;x++){
-                listacgm+=vir+obj.lista.options[x].value;
-                vir=",";
+            for (x = 0; x < obj.lista.length; x++) {
+                listacgm += vir + obj.lista.options[x].value;
+                vir = ",";
             }
 
-            query+="&listacgm="+listacgm;
-            query+="&ver="+obj.ver.value;
+            query += "&listacgm=" + listacgm;
+            query += "&ver=" + obj.ver.value;
 
-            if (obj.e60_numemp.value!=''){
-                query += "&e60_numemp="+obj.e60_numemp.value;
-            }else if (obj.e60_codemp.value!='' && obj.e60_codemp_fim.value!=''){
-                query += "&e60_codemp="+obj.e60_codemp.value;
-                if(Number(obj.e60_codemp.value) > Number(obj.e60_codemp_fim.value)) {
+            if (obj.e60_numemp.value != '') {
+                query += "&e60_numemp=" + obj.e60_numemp.value;
+            } else if (obj.e60_codemp.value != '' && obj.e60_codemp_fim.value != '') {
+                query += "&e60_codemp=" + obj.e60_codemp.value;
+                if (Number(obj.e60_codemp.value) > Number(obj.e60_codemp_fim.value)) {
                     alert("Empenho inicial maior que o empenho final. Verifique!");
                     return false;
                 }
-                query += "&e60_codemp_fim="+obj.e60_codemp_fim.value;
-            }else if (obj.e60_codemp.value!=''){
-                query += "&e60_codemp="+obj.e60_codemp.value;
-            }else{
-                if((obj.dtini_dia.value !='') && (obj.dtini_dia.value !='') && (obj.dtini_mes.value !='')){
-                    query +="&dtini_dia="+obj.dtini_dia.value+"&dtini_mes="+obj.dtini_mes.value+"&dtini_ano="+obj.dtini_ano.value;
+                query += "&e60_codemp_fim=" + obj.e60_codemp_fim.value;
+            } else if (obj.e60_codemp.value != '') {
+                query += "&e60_codemp=" + obj.e60_codemp.value;
+            } else {
+                if ((obj.dtini_dia.value != '') && (obj.dtini_dia.value != '') && (obj.dtini_mes.value != '')) {
+                    query += "&dtini_dia=" + obj.dtini_dia.value + "&dtini_mes=" + obj.dtini_mes.value + "&dtini_ano=" + obj.dtini_ano.value;
                 }
-                if((obj.dtfim_dia.value !='') && (obj.dtfim_mes.value !='') && (obj.dtfim_ano.value !='')){
-                    query +="&dtfim_dia="+obj.dtfim_dia.value+"&dtfim_mes="+obj.dtfim_mes.value+"&dtfim_ano="+obj.dtfim_ano.value;
+                if ((obj.dtfim_dia.value != '') && (obj.dtfim_mes.value != '') && (obj.dtfim_ano.value != '')) {
+                    query += "&dtfim_dia=" + obj.dtfim_dia.value + "&dtfim_mes=" + obj.dtfim_mes.value + "&dtfim_ano=" + obj.dtfim_ano.value;
                 }
             }
-            if(query==''){
+            if (query == '') {
                 alert("Selecione algum numero de empenho ou indique o período!");
-            }else{
+            } else {
 
-                query += "&dtInicial="+$F('dtini')+"&dtFinal="+$F('dtfim');
-                query += "&tipos="+$F('tipos');
+                query += "&dtInicial=" + $F('dtini') + "&dtFinal=" + $F('dtfim');
+                query += "&tipos=" + $F('tipos');
                 // console.log(query);
-                jan = window.open('emp2_emitenotaemp002.php?'+query,
+                jan = window.open('emp2_emitenotaemp002.php?' + query,
                     '',
-                    'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-                jan.moveTo(0,0);
+                    'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+                jan.moveTo(0, 0);
             }
         }
     </script>
     <style>
-        #e60_codemp{width: 99px;}#e60_codemp_fim{width: 99px;}#e60_numemp{width: 99px;}#dtfim {width: 70px;}#dtini{width: 68px;}
+        #e60_codemp {
+            width: 99px;
+        }
+
+        #e60_codemp_fim {
+            width: 99px;
+        }
+
+        #e60_numemp {
+            width: 99px;
+        }
+
+        #dtfim {
+            width: 70px;
+        }
+
+        #dtini {
+            width: 68px;
+        }
     </style>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
-<table valign="top" marginwidth="0" border="0" cellspacing="0" cellpadding="0" align="center">
-    <tr>
-        <td>&nbsp;</td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td>
-    </tr>
-    <tr>
-        <td align="center" valign="top">
-            <form name='form1'>
-                <fieldset>
-                    <legend><b>Emite Empenho</b></legend>
-                    <table>
-                        <tr>
-                            <td align="center">
-                                <strong>Opções:</strong>
-                                <select name="ver">
-                                    <option name="condicao" value="com">Com os CGM selecionados</option>
-                                    <option name="condicao" value="sem">Sem os CGM selecionadas</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td nowrap width="50%">
-                                <?
-                                // $aux = new cl_arquivo_auxiliar;
-                                $aux->cabecalho      = "<strong>CGM</strong>";
-                                $aux->codigo         = "z01_numcgm"; //chave de retorno da func
-                                $aux->descr          = "z01_nome";   //chave de retorno
-                                $aux->nomeobjeto     = 'lista';
-                                $aux->funcao_js      = 'js_mostra';
-                                $aux->funcao_js_hide = 'js_mostra1';
-                                $aux->sql_exec       = "";
-                                $aux->func_arquivo   = "func_nome.php";  //func a executar
-                                $aux->isfuncnome     = true;
-                                $aux->nomeiframe     = "db_iframe_cgm";
-                                $aux->localjan       = "";
-                                $aux->onclick        = "";
-                                $aux->db_opcao       = 2;
-                                $aux->tipo           = 2;
-                                $aux->top            = 0;
-                                $aux->linhas         = 10;
-                                $aux->vwhidth        = 400;
-                                $aux->funcao_gera_formulario();
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td >
-                                <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",1); ?>
-                            </td>
-                            <td>
-                                <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao," onchange='js_pesquisae60_codemp(false);'","e60_codemp")  ?>
-                                <strong> à </strong>
-                                <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao,"","e60_codemp_fim" )  ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td nowrap title="<?=@$Te60_numemp?>">
-                                <? db_ancora(@$Le60_numemp,"js_pesquisae60_numemp(true);",1); ?>
-                            </td>
-                            <td>
-                                <? db_input('e60_numemp',15,$Ie60_numemp,true,'text',$db_opcao," onchange='js_pesquisae60_numemp(false);'")  ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong> Período:</strong>
-                            </td>
-                            <td>
-                                <?
-                                db_inputdata('dtini',@$dia,@$mes,@$ano,true,'text',1,"");
-                                echo " à ";
-                                db_inputdata('dtfim',@$dia,@$mes,@$ano,true,'text',1,"");
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Tipo:</strong>
-                            </td>
-                            <td>
-                                <select id="tipos" name="tipos">
-                                    <option name="padrao" value="1">Padrão</option>
-                                    <option name="anexo" value="2">Com Anexos</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-            </form>
-        </td>
-    </tr>
-    <tr>
-        <td align='center'>
-            <input name='pesquisar' type='button' value='Consultar' onclick='js_abre();'>
-        </td>
-    </tr>
-</table>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+    <table valign="top" marginwidth="0" border="0" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td align="center" valign="top">
+                <form name='form1'>
+                    <fieldset>
+                        <legend><b>Emite Empenho</b></legend>
+                        <table>
+                            <tr>
+                                <td align="center">
+                                    <strong>Opções:</strong>
+                                    <select name="ver">
+                                        <option name="condicao" value="com">Com os CGM selecionados</option>
+                                        <option name="condicao" value="sem">Sem os CGM selecionadas</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap width="50%">
+                                    <?
+                                    // $aux = new cl_arquivo_auxiliar;
+                                    $aux->cabecalho      = "<strong>CGM</strong>";
+                                    $aux->codigo         = "z01_numcgm"; //chave de retorno da func
+                                    $aux->descr          = "z01_nome";   //chave de retorno
+                                    $aux->nomeobjeto     = 'lista';
+                                    $aux->funcao_js      = 'js_mostra';
+                                    $aux->funcao_js_hide = 'js_mostra1';
+                                    $aux->sql_exec       = "";
+                                    $aux->func_arquivo   = "func_nome.php";  //func a executar
+                                    $aux->isfuncnome     = true;
+                                    $aux->nomeiframe     = "db_iframe_cgm";
+                                    $aux->localjan       = "";
+                                    $aux->onclick        = "";
+                                    $aux->db_opcao       = 2;
+                                    $aux->tipo           = 2;
+                                    $aux->top            = 0;
+                                    $aux->linhas         = 10;
+                                    $aux->vwhidth        = 400;
+                                    $aux->funcao_gera_formulario();
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <? db_ancora(@$Le60_codemp, "js_pesquisae60_codemp(true);", 1); ?>
+                                </td>
+                                <td>
+                                    <? db_input('e60_codemp', 13, $Ie60_codemp, true, 'text', $db_opcao, " onchange='js_pesquisae60_codemp(false);'", "e60_codemp")  ?>
+                                    <strong> à </strong>
+                                    <? db_input('e60_codemp', 13, $Ie60_codemp, true, 'text', $db_opcao, "", "e60_codemp_fim")  ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap title="<?= @$Te60_numemp ?>">
+                                    <? db_ancora(@$Le60_numemp, "js_pesquisae60_numemp(true);", 1); ?>
+                                </td>
+                                <td>
+                                    <? db_input('e60_numemp', 15, $Ie60_numemp, true, 'text', $db_opcao, " onchange='js_pesquisae60_numemp(false);'")  ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong> Período:</strong>
+                                </td>
+                                <td>
+                                    <?
+                                    db_inputdata('dtini', @$dia, @$mes, @$ano, true, 'text', 1, "");
+                                    echo " à ";
+                                    db_inputdata('dtfim', @$dia, @$mes, @$ano, true, 'text', 1, "");
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Tipo:</strong>
+                                </td>
+                                <td>
+                                    <select id="tipos" name="tipos">
+                                        <option name="padrao" value="1">Padrão</option>
+                                        <option name="anexo" value="2">Com Anexos</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td align='center'>
+                <input name='pesquisar' type='button' value='Consultar' onclick='js_abre();'>
+            </td>
+        </tr>
+    </table>
+    <?
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+    ?>
 </body>
+
 </html>
 <script>
-    function js_pesquisae60_numemp(mostra){
-        if(mostra==true){
+    function js_pesquisae60_numemp(mostra) {
+        if (mostra == true) {
             var sUrl = 'func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp';
-            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',sUrl,'Pesquisa',true);
-        }else{
-            if(document.form1.e60_numemp.value != ''){
-                var sUrl = 'func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho';
-                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',sUrl,'Pesquisa',false);
-            }else{
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', sUrl, 'Pesquisa', true);
+        } else {
+            if (document.form1.e60_numemp.value != '') {
+                var sUrl = 'func_empempenho.php?pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenho';
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', sUrl, 'Pesquisa', false);
+            } else {
                 document.form1.e60_numemp.value = '';
             }
         }
     }
-    function js_mostraempempenho(chave,erro){
-        if(erro==true){
+
+    function js_mostraempempenho(chave, erro) {
+        if (erro == true) {
             document.form1.e60_numemp.focus();
             document.form1.e60_numemp.value = '';
         }
     }
-    function js_mostraempempenho1(chave1,x){
+
+    function js_mostraempempenho1(chave1, x) {
         document.form1.e60_numemp.value = chave1;
         db_iframe_empempenho.hide();
     }
-    function js_pesquisae60_codemp(mostra){
-        if(mostra==true){
-            var sUrl  = 'func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp';
-            var sUrl2 = 'func_empempenho.php?pesquisa_chave='+e60_codemp+'&funcao_js=parent.js_mostracodemp';
 
-            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',sUrl,'Pesquisa',true);
-        }else{
-            if(document.form1.e60_numemp.value != ''){
-                var sUrl = 'func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho';
-                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',sUrl,'Pesquisa',false);
-            }else{
+    function js_pesquisae60_codemp(mostra) {
+        if (mostra == true) {
+            var sUrl = 'func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp';
+            var sUrl2 = 'func_empempenho.php?pesquisa_chave=' + e60_codemp + '&funcao_js=parent.js_mostracodemp';
+
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', sUrl, 'Pesquisa', true);
+        } else {
+            if (document.form1.e60_numemp.value != '') {
+                var sUrl = 'func_empempenho.php?pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenho';
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', sUrl, 'Pesquisa', false);
+            } else {
                 document.form1.e60_numemp.value = '';
             }
         }
     }
-    function js_mostracodemp(chave,erro){
+
+    function js_mostracodemp(chave, erro) {
         var obj = document.form1;
 
-        if(erro==true){
+        if (erro == true) {
             obj.e60_codemp_ini.focus();
             obj.e60_codemp_ini.value = '';
         }
