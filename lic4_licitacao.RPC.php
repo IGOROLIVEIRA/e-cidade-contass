@@ -1083,8 +1083,8 @@ switch ($oParam->exec) {
 
                   //estimativa
                   $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
-                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemEstimativa->pc11_codigo;
-                  $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemReservado->pc11_codigo;
+                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemAbertura->pc11_codigo;
+                  $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemEstimativa->pc11_codigo;
                   $oDaoSolicitemVinculo->incluir(null);
 
                   if (!$oDaoSolicitemVinculo->numrows_incluir) {
@@ -1160,7 +1160,7 @@ switch ($oParam->exec) {
                     $oDaoSolicitemRegPreco->pc57_solicitem = $oDaoSolicitemReservado->pc11_codigo;
                     $oDaoSolicitemRegPreco->pc57_quantmax = $aItens[$count]->qtdexclusiva;
                     $oDaoSolicitemRegPreco->pc57_quantmin = 1;
-                    $oDaoSolicitemRegPreco->pc57_itemorigem = $oItemControle->itemdaabertura;
+                    $oDaoSolicitemRegPreco->pc57_itemorigem = $oDaoSolicitemAbertura->pc11_codigo;
                     $oDaoSolicitemRegPreco->pc57_ativo = 't';
                     $oDaoSolicitemRegPreco->pc57_quantidadeexecedente = 0;
 
