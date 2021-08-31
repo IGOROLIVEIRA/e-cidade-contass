@@ -1844,6 +1844,51 @@ function NbLines($w,$txt)
   return $nl;
  }
 
+ function Row($data,$altura=5,$borda=true,$espaco=5,$preenche=0,$naousaespaco=false )
+ {
+  //Calculate the height of the row
+   $nb=0;
+   for($i=0;$i<count($data);$i++)
+      $nb=max($nb,$this->NbLines($this->widths[$i],$data[$i]));
+      $h=$espaco*$nb;
+      //Issue a page break first if needed
+      // Carlos >>  $this->CheckPageBreak($h);
+      //Draw the cells of the row
+      $posinicial=$this->GetY();
+      $posfinal=0;
+      for($i=0;$i<count($data);$i++)
+      {
+        $w=$this->widths[$i];
+        $a=isset($this->aligns[$i]) ? $this->aligns[$i] : 'L';
+        //Save the current position
+        $x=$this->GetX();
+        $y=$this->GetY();
+        //Draw the border
+        if($borda == true)
+          $this->Rect($x,$y,$w,$h);
+        //Print the text
+        $this->MultiCell($w,$altura,$data[$i],0,$a,$preenche);
+        //Put the position to the right of the cell
+        if ($this->GetY() > $posfinal) {
+          $posfinal=$this->GetY();
+        }
+        $this->SetXY($x+$w,$y);
+      }
+
+      // Adicionado novo parâmetro:
+      // Parârametro: NAOUSAESPACO
+      // Se $naousaespaco não for setado ao chamar a função ROW ou for setado com FALSE, o ln() continuará
+      // usando a variável $h para pular para a próxima linha. Caso contrário, o ln() será a posição final
+      // do maior multicell menos a posição em que este começou a ser impresso...
+      if($naousaespaco==true){
+        //Go to the next line
+        $this->Ln($posfinal-$posinicial);
+      }else{
+        //Go to the next line
+        $this->Ln($h);
+      }
+ }
+
  ///FUNÇÃO PARA TESTAR O RETORNO DO RESTANTE DE UMA STRING AO QUEBRAR DE PÁGINA
 function Row_multicell($data,$altura=5, $borda=true, $espaco=5, $preenche=0, $naousaespaco=false, $usar_quebra=false,
 $campo_testar=null, $altpag=null, $lagurafixa=0, $aNegritos = null) {
@@ -1955,5 +2000,3 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT']=='contype')
 	header('Content-Type: application/pdf');
 	exit;
 }
-
-?>
