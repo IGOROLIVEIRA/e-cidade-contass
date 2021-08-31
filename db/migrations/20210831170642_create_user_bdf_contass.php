@@ -19,7 +19,7 @@ class CreateUserBdfContass extends PostgresMigration
     private function _run()
     {
         $data = array(
-            array('BRUNA DANIELLY FERREIRA DE SOUZA', 'NAO INFORMADO', '0', 'NAO INFORMADO', 'MONTES CLAROS', 'MG', '39400053', '2021-04-13 00:00:00.0', '1', '0', '1', '2', '0', '12386878651', 'M', '2021-04-13 00:00:00.0', '16:42', 'BRUNA DANIELLY FERREIRA DE SOUZA', 'true', '0', '0', 'null', 'user' => array('BRUNA DANIELLY FERREIRA DE SOUZA', 'rm.contass', 'd23231926825f2bf065ba286f0e1a9395381c88d', '1', 'bdf@contassconsultoria.com.br', '0', '1', '2021-04-13 00:00:00.0'))
+            array('BRUNA DANIELLY FERREIRA DE SOUZA', 'NAO INFORMADO', '0', 'NAO INFORMADO', 'MONTES CLAROS', 'MG', '39400053', '2021-04-13 00:00:00.0', '1', '0', '1', '2', '0', '12386878651', 'M', '2021-04-13 00:00:00.0', '16:42', 'BRUNA DANIELLY FERREIRA DE SOUZA', 'true', '0', '0', 'null', 'user' => array('BRUNA DANIELLY FERREIRA DE SOUZA', 'bdf.contass', 'd23231926825f2bf065ba286f0e1a9395381c88d', '1', 'bdf@contassconsultoria.com.br', '0', '1', '2021-04-13 00:00:00.0'))
         );
 
         foreach ($data as $cgm) {
