@@ -382,17 +382,17 @@ function db_multiploselect($valueobj, $descrobj, $objnsel = "", $objsel = "", $r
                             $numrows_recnsel = pg_numrows($recordnsel);
                             for ($i = 0; $i < $numrows_recnsel; $i++) {
                                 db_fieldsmemory($recordnsel, $i);
-                                global $valueobj;
-                                global $descrobj;
-                                echo "<option value='" . $valueobj . "'>" . $descrobj . "</option>\n";
+                                global ${$valueobj};
+                                global ${$descrobj};
+                                echo "<option value='" . ${$valueobj} . "'>" . ${$descrobj} . "</option>\n";
                             }
                         } else if (gettype($recordnsel) == "array") {
                             $numrows_recnsel = count($recordnsel);
                             reset($recordnsel);
                             for ($i = 0; $i < $numrows_recnsel; $i++) {
-                                $valueobj = key($recordnsel);
-                                $descrobj = $recordnsel[$valueobj];
-                                echo "<option value='" . $valueobj . "'>" . $descrobj . "</option>\n";
+                                ${$valueobj} = key($recordnsel);
+                                ${$descrobj} = $recordnsel[${$valueobj}];
+                                echo "<option value='" . ${$valueobj} . "'>" . ${$descrobj} . "</option>\n";
                                 next($recordnsel);
                             }
                         }
@@ -427,17 +427,17 @@ function db_multiploselect($valueobj, $descrobj, $objnsel = "", $objsel = "", $r
                             $numrows_recsel = pg_numrows($recordsel);
                             for ($i = 0; $i < $numrows_recsel; $i++) {
                                 db_fieldsmemory($recordsel, $i);
-                                global $valueobj;
-                                global $descrobj;
-                                echo "<option value='" . $valueobj . "'>" . $descrobj . "</option>\n";
+                                global ${$valueobj};
+                                global ${$descrobj};
+                                echo "<option value='" . ${$valueobj} . "'>" . ${$descrobj} . "</option>\n";
                             }
                         } else if (gettype($recordsel) == "array") {
                             $numrows_recsel = count($recordsel);
                             reset($recordsel);
                             for ($i = 0; $i < $numrows_recsel; $i++) {
-                                $valueobj = key($recordsel);
-                                $descrobj = $recordsel[$valueobj];
-                                echo "<option value='" . $valueobj . "'>" . $descrobj . "</option>\n";
+                                ${$valueobj} = key($recordsel);
+                                ${$descrobj} = $recordsel[${$valueobj}];
+                                echo "<option value='" . ${$valueobj} . "'>" . ${$descrobj} . "</option>\n";
                                 next($recordsel);
                             }
                         }
@@ -449,10 +449,10 @@ function db_multiploselect($valueobj, $descrobj, $objnsel = "", $objsel = "", $r
                 <?
                 if ($ordenarselect == false) {
                     echo "
-	        	      <img onClick='js_sobe();return false;' src='skins/img.php?file=Controles/seta_up.png' />
-                  <br/><br/>
-                 <img onClick='js_desce()' src='skins/img.php?file=Controles/seta_down.png' />
-	               ";
+                        <img onClick='js_sobe();return false;' src='skins/img.php?file=Controles/seta_up.png' />
+                    <br/><br/>
+                   <img onClick='js_desce()' src='skins/img.php?file=Controles/seta_down.png' />
+                     ";
                 }
                 ?>
             </td>

@@ -27,11 +27,11 @@
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
+include("dbforms/db_funcoes.php");
 include("libs/db_usuariosonline.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("classes/db_conlancamval_classe.php");
-include("dbforms/db_funcoes.php");
 include("classes/db_conlancam_classe.php");
 include("classes/db_conlancamcompl_classe.php");
 include("classes/db_conlancamdig_classe.php");
