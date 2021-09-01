@@ -166,10 +166,8 @@ $pdf->cell(30,$alt,db_formatar( abs($saldoFinal),'f')." ".$sSinalFinal,"TB",1,"R
 
 $pdf->Ln(15);
 
-assinaturas(&$pdf,&$classinatura,'BG');
+assinaturas($pdf,$classinatura,'BG');
 
 
 
 $pdf->Output();
-
-?>

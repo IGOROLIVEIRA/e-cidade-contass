@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/pdf.php");
@@ -66,7 +66,7 @@ elseif($tipo_emp == "L")
    $head1 = "COMPARATIVO DA DESPESA ORÇADA COM A REALIZADA - LIQUIDADO";
 else
    $head1 = "COMPARATIVO DA DESPESA ORÇADA COM A REALIZADA - PAGO";
-  
+
 $head2 = "EXERCÍCIO: ".db_getsession("DB_anousu");
 
 if ($flag_abrev == false){
@@ -86,15 +86,15 @@ if($nivela >= 1){
 if($nivela >= 2){
   $sele_work .= " and exists (select 1 from t where t.o58_unidade = w.o58_unidade) ";
 }
-  
+
 pg_exec("begin");
 pg_exec("create temp table t(o58_orgao int8,o58_unidade int8,o58_funcao int8,o58_subfuncao int8,o58_programa int8,o58_projativ int8,o58_elemento int8,o58_codigo int8)");
-  
+
 $xcampos = explode("-",$orgaos);
 
 for($i=0;$i < sizeof($xcampos);$i++){
    $where = '';
-   $virgula = ''; 
+   $virgula = '';
    $xxcampos = explode("_",$xcampos[$i]);
    for($ii=0;$ii<sizeof($xxcampos);$ii++){
       if($ii > 0){
@@ -119,15 +119,15 @@ $datafin = db_getsession("DB_anousu").'-'.$mes.'-'.date('t',mktime(0,0,0,$mes,'0
 //echo $dataini."<br>";
 //echo $datafin."<br>";
 $result = db_elementosaldo($tipo_agrupa,4,$sele_work,$anousu,$dataini,$datafin);
-					     
+
 // db_criatabela($result);exit;
 
 
 $fonte = 8;
 
-$pdf = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $total = 0;
 $pdf->setfillcolor(235);
 
@@ -167,7 +167,7 @@ if($tipo_agrupa > 0){
 for($x = 0; $x < pg_numrows($result);$x++){
   db_fieldsmemory($result,$x,true);
   $aux = $elemento;
-  
+
   if($tipo_emp == "E"){
     $empliq = $empenhado - $anulado;
   }elseif($tipo_emp == "L"){
@@ -175,7 +175,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
   }else{
     $empliq = $pago;
   }
-  
+
   if (substr($aux,1,11) == "00000000000"){
      $col = 1;
   }elseif (substr($aux,2,10) == "0000000000"){
@@ -185,18 +185,18 @@ for($x = 0; $x < pg_numrows($result);$x++){
      $tot3_orgao   += $dot_ini + $suplemen + $especial - $reduzido;
      $tot4_orgao   += $empliq;
      $tot5_orgao   += $dot_ini + $suplemen + $especial - $reduzido - $empliq;
-     
-     $tot1_unidade += $dot_ini + $suplemen - $reduzido;           
-     $tot2_unidade += $especial; // novo
-     $tot3_unidade += $dot_ini + $suplemen + $especial - $reduzido;           
-     $tot4_unidade += $empliq;                                        
-     $tot5_unidade += $dot_ini + $suplemen + $especial - $reduzido - $empliq; 
 
-     $tot1_geral   += $dot_ini + $suplemen - $reduzido;           
-     $tot2_geral   += $especial;    // novo                                         
-     $tot3_geral   += $dot_ini + $suplemen + $especial - $reduzido;           
-     $tot4_geral   += $empliq;                                        
-     $tot5_geral   += $dot_ini + $suplemen + $especial - $reduzido - $empliq; 
+     $tot1_unidade += $dot_ini + $suplemen - $reduzido;
+     $tot2_unidade += $especial; // novo
+     $tot3_unidade += $dot_ini + $suplemen + $especial - $reduzido;
+     $tot4_unidade += $empliq;
+     $tot5_unidade += $dot_ini + $suplemen + $especial - $reduzido - $empliq;
+
+     $tot1_geral   += $dot_ini + $suplemen - $reduzido;
+     $tot2_geral   += $especial;    // novo
+     $tot3_geral   += $dot_ini + $suplemen + $especial - $reduzido;
+     $tot4_geral   += $empliq;
+     $tot5_geral   += $dot_ini + $suplemen + $especial - $reduzido - $empliq;
   }elseif (substr($aux,3,9) == "000000000"){
      $col = '  ';
   }elseif (substr($aux,4,8) == "00000000"){
@@ -207,7 +207,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
      $col = '        ';
   }else{
      $col = '          ';
-  }   
+  }
 
   if($qualu != $o58_orgao.$o58_unidade && $tipo_agrupa == 2){
     $pagina = 2;
@@ -225,7 +225,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
     $tot4_unidade = 0;
     $tot5_unidade = 0;
   }
-  
+
   if($qualo != $o58_orgao && $tipo_agrupa == 1){
     $pagina = 2;
     $qualo = $o58_orgao;
@@ -242,7 +242,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
     $tot4_orgao   = 0;
     $tot5_orgao   = 0;
   }
-  
+
   if($pdf->gety()>$pdf->h-30 || $pagina > 0){
     $pagina = 0;
     $pdf->addpage();
@@ -267,25 +267,25 @@ for($x = 0; $x < pg_numrows($result);$x++){
     $pdf->cell(20,$alt,"","0",0,"R",0);
     $pdf->cell(20,$alt,"","0",0,"R",0);
     $pdf->cell(20,$alt,"","0",1,"R",0);
-    
+
     $pdf->cell(80,$alt,"","0",0,"L",0);
     $pdf->cell(25,$alt,"ORÇAMENTARIOS E","0",0,"C",0);
     $pdf->cell(25,$alt,"ESPECIAIS E","0",0,"C",0);
     $pdf->cell(20,$alt,"","0",0,"R",0);
     $pdf->cell(20,$alt,"","0",0,"R",0);
     $pdf->cell(20,$alt,"","0",1,"R",0);
-    
+
     $pdf->cell(80,$alt,"CATEGORIA ECONÔMICA","B",0,"L",0);
     $pdf->cell(25,$alt,"SUPLEMENTARES","B",0,"C",0);
     $pdf->cell(25,$alt,"EXTRAORDINÁRIOS","B",0,"C",0);
     $pdf->cell(20,$alt,"T O T A L","B",0,"R",0);
     $pdf->cell(20,$alt,"REALIZADO","B",0,"R",0);
-    $pdf->cell(20,$alt,"DIFERENÇA","B",1,"R",0);    
+    $pdf->cell(20,$alt,"DIFERENÇA","B",1,"R",0);
     $pdf->ln(3);
-    
-  
+
+
   }
-   
+
    $pdf->setfont('arial','',$fonte);
    $pdf->cell(80,$alt,($col==1?" ":$col).substr($descr,0,40),0,0,"L",0);
    $pdf->cell(25,$alt,db_formatar($dot_ini + $suplemen - $reduzido,'f'),0,0,"R",0);
@@ -327,11 +327,9 @@ $pdf->cell(20,$alt,db_formatar($tot5_geral,'f'),0,1,"R",0);
 
 $pdf->Ln(15);
 
-assinaturas(&$pdf,&$classinatura,'BG');
+assinaturas($pdf,$classinatura,'BG');
 
 
 
 
 $pdf->Output();
-   
-?>

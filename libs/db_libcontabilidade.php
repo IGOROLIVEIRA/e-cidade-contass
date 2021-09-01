@@ -3079,22 +3079,22 @@ class cl_estrutura_sistema
                 ?>
 
                 <input title="<?= @${$title} ?>" name="<?= $picture ?>" maxlength='<?= $tamanho ?>' size='<?= $this->size ?>' type="text" value="<?= @${$picture} ?>" onKeyPress="return js_mascara01_<?= $picture ?>(event,this.value);" <?= $funcao ?> <?= ($this->db_opcao == 22 || $this->db_opcao == 33 || $this->db_opcao == 3 ? "readonly style=\"background-color:#DEB887\" "
-                                                                                                                                                                                                                                                        : "") ?>>
+                                                                                                                                                                                                                                                                : "") ?>>
                 <?
 
                 if ($this->botao == true) {
                 ?>
                     <input name='verifica' type="button" value='Verificar' onclick="js_mascara02_<?= $picture ?>(document.<?= $this
                                                                                                                                 ->nomeform ?>.<?= $picture ?>.value);" <?= ($this
-                                                                                                                                                                ->db_opcao
-                                                                                                                                                                == 22
-                                                                                                                                                                || $this
-                                                                                                                                                                ->db_opcao
-                                                                                                                                                                == 33
-                                                                                                                                                                || $this
-                                                                                                                                                                ->db_opcao
-                                                                                                                                                                == 3 ? "disabled "
-                                                                                                                                                                : "") ?>>
+                                                                                                                                                                            ->db_opcao
+                                                                                                                                                                            == 22
+                                                                                                                                                                            || $this
+                                                                                                                                                                            ->db_opcao
+                                                                                                                                                                            == 33
+                                                                                                                                                                            || $this
+                                                                                                                                                                            ->db_opcao
+                                                                                                                                                                            == 3 ? "disabled "
+                                                                                                                                                                            : "") ?>>
                 <?
 
                 }
