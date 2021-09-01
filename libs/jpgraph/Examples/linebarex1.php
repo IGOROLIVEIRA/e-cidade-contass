@@ -1,7 +1,7 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_line.php");
-include ("../jpgraph_bar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph_bar.php");
 
 $month=array(
 "Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec");

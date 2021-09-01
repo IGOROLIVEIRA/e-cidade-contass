@@ -1,7 +1,7 @@
 <?php
 // $Id: balloonex1.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
-include ("../jpgraph.php");
-include ("../jpgraph_scatter.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_scatter.php");
 
 // Some data
 $datax = array(1,2,3,4,5,6,7,8);

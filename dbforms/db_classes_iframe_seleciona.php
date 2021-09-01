@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt 
  */
 
-chdir("../");
+chdir(__DIR__ . "/../");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 $clrotulo = new rotulocampo;

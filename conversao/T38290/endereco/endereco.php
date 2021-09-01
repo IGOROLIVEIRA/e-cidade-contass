@@ -3,7 +3,7 @@ die("\n\n Não rodar no cliente \n\n Ja foi migrado os dados no dump_correios.sql
 // Seta Nome do Script
 $sNomeScript = basename(__FILE__);
 
-include("../lib/db_conecta.php");
+include(__DIR__ . "/../lib/db_conecta.php");
 
 $bErro = false;
 

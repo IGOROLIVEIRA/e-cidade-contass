@@ -1,5 +1,5 @@
 <?
-require("../dbportal2_hoje/libs/db_conn.php");
+require(__DIR__ . "/../dbportal2_hoje/libs/db_conn.php");
 if(!($conn = @pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA"))) {
   echo "Não conectou!"; 
   exit;

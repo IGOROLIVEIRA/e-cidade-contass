@@ -5,7 +5,7 @@ $DB_BASE="capivari";
 $DB_USUARIO="postgres";
 $DB_SENHA="";
 $DB_PORTA="5432";*/
-include("../../../libs/db_conn.php");
+include(__DIR__ . "/../../../libs/db_conn.php");
 if(!($conn = pg_connect("host='$DB_SERVIDOR' dbname='$DB_BASE' user='$DB_USUARIO' password='$DB_SENHA' port='$DB_PORTA'"))) {
  echo "Erro ao conectar...\n\n";
  exit;

@@ -2,11 +2,11 @@
 ini_set("include_path", ini_get("include_path").".:../");
 ini_set("display_errors", "Off");
 ini_set("error_reporting", "");
-require_once("../libs/db_conn.php");
-require_once("../libs/db_utils.php");
-require_once("../libs/db_stdlib.php");
-require_once("../std/DBNumber.php");
-require_once("../model/educacao/ArredondamentoNota.model.php");
+require_once(__DIR__ . "/../libs/db_conn.php");
+require_once(__DIR__ . "/../libs/db_utils.php");
+require_once(__DIR__ . "/../libs/db_stdlib.php");
+require_once(__DIR__ . "/../std/DBNumber.php");
+require_once(__DIR__ . "/../model/educacao/ArredondamentoNota.model.php");
 
 /**
 $DB_SERVIDOR = 'dev10';

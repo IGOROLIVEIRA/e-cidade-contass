@@ -1,8 +1,8 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_line.php");
-include ("../jpgraph_error.php");
-include ("../jpgraph_bar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph_error.php");
+include (__DIR__ . "/../jpgraph_bar.php");
 
 $l1datay = array(11,9,2,4,3,13,17);
 $l2datay = array(23,12,5,19,17,10,15);

@@ -1,8 +1,8 @@
 <?php
 // $Id: piec_csimex1.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
 // Example of pie with center circle
-include ("../jpgraph.php");
-include ("../jpgraph_pie.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_pie.php");
 
 // Some data
 $data = array(50,28,25,27,31,20);

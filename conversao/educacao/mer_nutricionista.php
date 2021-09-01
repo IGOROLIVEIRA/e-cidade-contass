@@ -5,7 +5,7 @@ $DB_BASE="cmubai";
 $DB_USUARIO="dbportal";
 $DB_SENHA="";
 $DB_PORTA="5432";
-//include("../../../libs/db_conn.php");
+//include(__DIR__ . "/../../../libs/db_conn.php");
 if (!($conn = pg_connect("host='$DB_SERVIDOR' 
                           dbname='$DB_BASE' 
                           user='$DB_USUARIO' 

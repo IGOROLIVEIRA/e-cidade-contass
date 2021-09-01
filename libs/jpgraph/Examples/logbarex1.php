@@ -1,8 +1,8 @@
 <?php
 // $Id: logbarex1.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
-include ("../jpgraph.php");
-include ("../jpgraph_log.php");
-include ("../jpgraph_bar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_log.php");
+include (__DIR__ . "/../jpgraph_bar.php");
 
 $datay=array(4,13,30,28,12,45,30,12,55,3,0.5);
 $datax=array("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov");

@@ -26,13 +26,13 @@
  */
 
 
-require ("../libs/db_stdlib.php");
-require ("../libs/db_conecta.php");
-include ("../libs/db_sessoes.php");
-include ("../libs/db_usuariosonline.php");
-include ("../classes/db_matordem_classe.php");
-include ("../classes/db_matordemitem_classe.php");
-include ("../dbforms/db_funcoes.php");
+require (__DIR__ . "/../libs/db_stdlib.php");
+require (__DIR__ . "/../libs/db_conecta.php");
+include (__DIR__ . "/../libs/db_sessoes.php");
+include (__DIR__ . "/../libs/db_usuariosonline.php");
+include (__DIR__ . "/../classes/db_matordem_classe.php");
+include (__DIR__ . "/../classes/db_matordemitem_classe.php");
+include (__DIR__ . "/../dbforms/db_funcoes.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);

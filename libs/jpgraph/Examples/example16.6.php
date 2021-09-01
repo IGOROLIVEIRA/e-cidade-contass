@@ -1,7 +1,7 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_scatter.php");
-include ("../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_scatter.php");
+include (__DIR__ . "/../jpgraph_line.php");
 
 // Create some "fake" regression data
 $datay = array();

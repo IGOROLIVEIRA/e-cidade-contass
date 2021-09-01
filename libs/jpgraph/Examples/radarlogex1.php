@@ -1,7 +1,7 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_log.php");
-include ("../jpgraph_radar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_log.php");
+include (__DIR__ . "/../jpgraph_radar.php");
 
 // Some data to plot
 $data = array(242,58,1500,12,1397,810,373);

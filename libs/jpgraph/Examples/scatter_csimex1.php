@@ -1,6 +1,6 @@
 <?php
-include_once ("../jpgraph.php");
-include_once ("../jpgraph_scatter.php");
+include_once (__DIR__ . "/../jpgraph.php");
+include_once (__DIR__ . "/../jpgraph_scatter.php");
 
 // Some data for the points
 $datax = array(3.5,13.7,3,4,6.2,6,3.5,8,14,8,11.1,13.7);

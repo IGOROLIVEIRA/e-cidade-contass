@@ -46,7 +46,7 @@
   $result = pg_exec("select * from db_ordemimagens where codordem = $ordem");
   $num = pg_numrows($result);
   for ($i=0;$i<$num;$i++) {
-    $nomeTemporario = tempnam("../tmp/","");
+    $nomeTemporario = tempnam(__DIR__ . "/../tmp/","");
     $oid = pg_result($result,$i,"arquivo");
     chmod($nomeTemporario,0664);
     pg_loexport($oid,$nomeTemporario) or die("Erro (21). Carregando a imagem.");

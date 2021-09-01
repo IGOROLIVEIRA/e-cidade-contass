@@ -1,8 +1,8 @@
 <?php
 // Illustration of the different patterns for bands
 // $Id: smallstaticbandsex4.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
-include ("../jpgraph.php");
-include ("../jpgraph_bar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_bar.php");
 
 $datay=array(10,29,3,6);
 

@@ -2,7 +2,7 @@
 
 set_time_limit(0);
 
-//include("../libs/db_conn.php");
+//include(__DIR__ . "/../libs/db_conn.php");
 
 $DB_BASE ="auto_ita_20080307";
 

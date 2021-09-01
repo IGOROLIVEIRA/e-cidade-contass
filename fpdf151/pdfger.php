@@ -3,10 +3,10 @@ if(!defined('DB_BIBLIOT')){
 
   session_cache_limiter('none');
   session_start();
-  require("../libs/db_stdlib.php");
-  require("../libs/db_conecta.php");
-  include("../libs/db_sessoes.php");
-  include("../libs/db_usuariosonline.php");
+  require(__DIR__ . "/../libs/db_stdlib.php");
+  require(__DIR__ . "/../libs/db_conecta.php");
+  include(__DIR__ . "/../libs/db_sessoes.php");
+  include(__DIR__ . "/../libs/db_usuariosonline.php");
   db_postmemory($HTTP_POST_VARS);
   db_postmemory($HTTP_SERVER_VARS);
 

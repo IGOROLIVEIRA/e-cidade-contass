@@ -1,7 +1,7 @@
 <?php
 // Gantt hour example
-include ("../jpgraph.php");
-include ("../jpgraph_gantt.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_gantt.php");
 
 $graph = new GanttGraph();
 $graph->SetMarginColor('blue:1.7');

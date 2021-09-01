@@ -25,20 +25,20 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("../libs/db_stdlib.php");
-require_once("../libs/db_utils.php");
-require_once("../libs/db_conecta.php");
-include_once("../libs/db_sessoes.php");
-require_once("../std/label/rotulocampo.php");
-require_once("../std/label/RotuloCampoDB.php");
-require_once("../std/label/RotuloDB.php");
-require_once("../std/label/rotulo.php");
-include_once("../libs/db_usuariosonline.php");
-include_once("../classes/db_matordem_classe.php");
-include_once("../classes/db_matordemitem_classe.php");
-include_once("../classes/db_matestoqueitemoc_classe.php");
-include_once("../classes/db_empempitem_classe.php");
-include_once("../dbforms/db_funcoes.php");
+require_once(__DIR__ . "/../libs/db_stdlib.php");
+require_once(__DIR__ . "/../libs/db_utils.php");
+require_once(__DIR__ . "/../libs/db_conecta.php");
+include_once(__DIR__ . "/../libs/db_sessoes.php");
+require_once(__DIR__ . "/../std/label/rotulocampo.php");
+require_once(__DIR__ . "/../std/label/RotuloCampoDB.php");
+require_once(__DIR__ . "/../std/label/RotuloDB.php");
+require_once(__DIR__ . "/../std/label/rotulo.php");
+include_once(__DIR__ . "/../libs/db_usuariosonline.php");
+include_once(__DIR__ . "/../classes/db_matordem_classe.php");
+include_once(__DIR__ . "/../classes/db_matordemitem_classe.php");
+include_once(__DIR__ . "/../classes/db_matestoqueitemoc_classe.php");
+include_once(__DIR__ . "/../classes/db_empempitem_classe.php");
+include_once(__DIR__ . "/../dbforms/db_funcoes.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);

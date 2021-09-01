@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
  */
-chdir("../");
+chdir(__DIR__ . "/../");
 set_time_limit(0);
 require_once("./libs/db_stdlib.php");
 require_once("./libs/db_conecta.php");

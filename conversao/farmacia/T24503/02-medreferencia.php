@@ -1,7 +1,7 @@
 <?
 set_time_limit(0);
 // Esse é o padrão para conexao
-include("../../../libs/db_conn.php");
+include(__DIR__ . "/../../../libs/db_conn.php");
 
 
 /*NAO HÁ NECESSIDADE DE VARIÁVEIS LOCAIS PARA CONEXAO.

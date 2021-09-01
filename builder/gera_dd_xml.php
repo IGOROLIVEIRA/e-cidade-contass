@@ -37,7 +37,7 @@ if ($lProcessaCompleto) {
 
     $oTabela = db_utils::fieldsMemory($rsTabelas,$iTabelas);
 
-    $rsArq = fopen("../dd/tabelas/{$oTabela->nomearq}.dd.xml", "a+");
+    $rsArq = fopen(__DIR__ . "/../dd/tabelas/{$oTabela->nomearq}.dd.xml", "a+");
     $sXml  = "<?xml version=\"1.0\" standalone=\"yes\" ?>\n";
     // $sXml .= "<tabela codarq=\"{$oTabela->codarq}\" nomearq=\"{$oTabela->nomearq}\" descricao=\"".utf8_encode($oTabela->descricao)."\" sigla=\"{$oTabela->sigla}\" dataincl=\"{$oTabela->dataincl}\" rotulo=\"".utf8_encode($oTabela->rotulo)."\" tipotabela=\"{$oTabela->tipotabela}\" naolibclass=\"{$oTabela->naolibclass}\" naolibfunc=\"{$oTabela->naolibfunc}\" naolibprog=\"{$oTabela->naolibprog}\" naolibform=\"{$oTabela->naolibform}\">\n";
     $sXml .= "<table name=\"{$oTabela->nomearq}\" description=\"".tratamentoString($oTabela->descricao)."\" prefix=\"{$oTabela->sigla}\" label=\"".tratamentoString($oTabela->rotulo)."\" type=\"{$oTabela->tipotabela}\">\n";
@@ -217,7 +217,7 @@ $iNumRowsTabelas    = pg_num_rows($rsTabelas);
 $aSiglasProcessadas = array();
 $lPrimeiro          = true;
 
-$rsTabelaSigla      = fopen("../dd/table_wrappers.dd.xml", "a+");
+$rsTabelaSigla      = fopen(__DIR__ . "/../dd/table_wrappers.dd.xml", "a+");
 $sXmlTabelaSigla    = "<?xml version=\"1.0\" standalone=\"yes\" ?>\n";  
 $sXmlTabelaSigla   .= "  <prefixes>\n";
 

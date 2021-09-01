@@ -1,7 +1,7 @@
 <?php
 
-require("../libs/db_utils.php");
-require("../libs/db_conn.php");
+require(__DIR__ . "/../libs/db_utils.php");
+require(__DIR__ . "/../libs/db_conn.php");
 
 $DB_USUARIO         = "postgres";
 $DB_SENHA           = "";

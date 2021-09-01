@@ -2,7 +2,7 @@
 
 set_time_limit(0);
 
-include("../libs/db_conn.php");
+include(__DIR__ . "/../libs/db_conn.php");
 
 $conn = pg_connect("dbname=$DB_BASE user=postgres host=$DB_SERVIDOR port=$DB_PORTA") or die('ERRO AO CONECTAR NA BASE DE DADOS !!');
 

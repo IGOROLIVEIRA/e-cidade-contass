@@ -1,8 +1,8 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_log.php");
-include ("../jpgraph_line.php");
-include ("../jpgraph_scatter.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_log.php");
+include (__DIR__ . "/../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph_scatter.php");
 
 
 $ab2  = array( 1.5,  2.0,  2.5,  3.0,  4.0,  5.0,  6.0,  8.0, 10.0,

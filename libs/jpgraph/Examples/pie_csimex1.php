@@ -1,6 +1,6 @@
 <?php
-include_once ("../jpgraph.php");
-include_once ("../jpgraph_pie.php");
+include_once (__DIR__ . "/../jpgraph.php");
+include_once (__DIR__ . "/../jpgraph_pie.php");
 
 // Some data
 $data = array(40,21,17,14,23);

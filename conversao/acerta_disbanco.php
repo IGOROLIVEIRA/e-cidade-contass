@@ -2,8 +2,8 @@
 
 set_time_limit(0);
 
-include ("../libs/db_stdlib.php");
-include ("../libs/db_conn.php");
+include (__DIR__ . "/../libs/db_stdlib.php");
+include (__DIR__ . "/../libs/db_conn.php");
 
 $DB_BASE="bage";
 $DB_SERVIDOR="192.168.78.7";

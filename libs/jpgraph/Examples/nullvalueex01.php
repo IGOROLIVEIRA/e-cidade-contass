@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_line.php");
 
 // Some data
 $datax = array("2001-04-01","2001-04-02","2001-04-03","2001-04-04","2001-04-05","2001-04-06");

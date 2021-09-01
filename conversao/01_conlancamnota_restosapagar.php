@@ -3,7 +3,7 @@ if (!function_exists("pg_connect")) {
 
   dl("pgsql.so");
 }
-require("../libs/db_utils.php");
+require(__DIR__ . "/../libs/db_utils.php");
 $DB_USUARIO         = "postgres";
 $DB_SENHA           = "";
 $DB_SERVIDOR        = "192.168.0.25"; //ip do servidor.

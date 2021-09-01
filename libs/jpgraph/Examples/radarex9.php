@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php"); 
-include ("../jpgraph_radar.php");
+include (__DIR__ . "/../jpgraph.php"); 
+include (__DIR__ . "/../jpgraph_radar.php");
 
 $titles=array("N", '', "NW", '', "W", '', "SW", '', 'S', '', "SE", '', "E", '', "NE", '');
 $data=array(0, 0, 8, 10, 70, 90, 42, 0, 70, 60, 50, 40, 30, 40, 37.8, 72);

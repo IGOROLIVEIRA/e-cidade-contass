@@ -1,7 +1,7 @@
 <?php
 // $Id: barintex2.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
-include ("../jpgraph.php");
-include ("../jpgraph_bar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_bar.php");
 
 // Some data
 $datay=array(3,1,7,5,12,11,9,4,17);

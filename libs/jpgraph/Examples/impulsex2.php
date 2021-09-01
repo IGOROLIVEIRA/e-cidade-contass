@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_scatter.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_scatter.php");
 
 $datay = array(20,22,12,13,17,20,16,19,30,31,40,43);
 

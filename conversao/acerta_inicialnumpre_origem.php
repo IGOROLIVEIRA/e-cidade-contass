@@ -2,8 +2,8 @@
 
   set_time_limit(0);
 
-  require_once("../libs/db_utils.php");
-  require_once("../libs/db_conn.php");
+  require_once(__DIR__ . "/../libs/db_utils.php");
+  require_once(__DIR__ . "/../libs/db_conn.php");
   
   $DB_USUARIO     = "postgres";
   $DB_SENHA       = "";

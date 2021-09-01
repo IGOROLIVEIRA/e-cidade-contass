@@ -30,10 +30,10 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 if(@$vaite==true){
-  require("../libs/db_stdlib.php");
-  require("../libs/db_conecta.php");
-  include("../libs/db_sessoes.php");
-  include("../libs/db_usuariosonline.php");
+  require(__DIR__ . "/../libs/db_stdlib.php");
+  require(__DIR__ . "/../libs/db_conecta.php");
+  include(__DIR__ . "/../libs/db_sessoes.php");
+  include(__DIR__ . "/../libs/db_usuariosonline.php");
   echo "oal";
 //header("Location:con2_gerelatorio001.php");
 }

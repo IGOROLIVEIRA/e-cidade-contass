@@ -1,5 +1,5 @@
 <? 
-  include("../fpdf151/pdfger.php");
+  include(__DIR__ . "/../fpdf151/pdfger.php");
   // variaveis de cabeçalho;
   db_postmemory($HTTP_SERVER_VARS);
 if($limite==0||$limite=="" ){

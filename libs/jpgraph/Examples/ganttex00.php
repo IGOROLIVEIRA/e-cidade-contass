@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_gantt.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_gantt.php");
 
 // A new graph with automatic size
 $graph = new GanttGraph(0,0,"auto");

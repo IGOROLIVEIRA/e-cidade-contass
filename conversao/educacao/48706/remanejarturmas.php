@@ -1,6 +1,6 @@
 <?
 set_time_limit(0);
-include("../../../libs/db_conn.php");
+include(__DIR__ . "/../../../libs/db_conn.php");
 //$DB_SERVIDOR = "10.1.1.11";
 //$DB_BASE     = "bage";
 //$DB_USUARIO  = "postgres";
@@ -17,11 +17,11 @@ if (!($conn = pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=
 
 pg_query($conn,"select fc_startsession()");
 
-require_once("../../../libs/db_stdlib.php");
-require_once("../../../classes/db_turmalog_classe.php");
-require_once("../../../classes/db_regencia_classe.php");
-require_once("../../../classes/db_parecerturma_classe.php");
-require_once("../../../dbforms/db_funcoes.php");
+require_once(__DIR__ . "/../../../libs/db_stdlib.php");
+require_once(__DIR__ . "/../../../classes/db_turmalog_classe.php");
+require_once(__DIR__ . "/../../../classes/db_regencia_classe.php");
+require_once(__DIR__ . "/../../../classes/db_parecerturma_classe.php");
+require_once(__DIR__ . "/../../../dbforms/db_funcoes.php");
 $clturmalog     = new cl_turmalog;
 $clregencia     = new cl_regencia;
 $clparecerturma = new cl_parecerturma;

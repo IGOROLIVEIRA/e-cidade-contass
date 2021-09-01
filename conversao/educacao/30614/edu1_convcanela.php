@@ -1,6 +1,6 @@
 <?
 require ("conn.php");
-require ("../../../libs/db_utils.php");
+require (__DIR__ . "/../../../libs/db_utils.php");
 require ("libs/dataManager.php");
 
 system("clear");

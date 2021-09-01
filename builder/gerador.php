@@ -91,7 +91,7 @@ class BuildClass {
 					
 					file_put_contents($sPathClassFile,$sSource);
 					// echo file_get_contents($dir.$file)."\n";					
-		      //$rsArq = fopen("../dd/tabelas/{$oTabela->nomearq}.dd.xml", "a+");			
+		      //$rsArq = fopen(__DIR__ . "/../dd/tabelas/{$oTabela->nomearq}.dd.xml", "a+");			
 					
 				}
 				closedir ( $dh );

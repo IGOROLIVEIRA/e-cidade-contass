@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_radar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_radar.php");
 
 // Create the basic rtadar graph
 $graph = new RadarGraph(300,200,"auto");

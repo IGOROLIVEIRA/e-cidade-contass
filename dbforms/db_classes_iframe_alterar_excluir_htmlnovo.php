@@ -25,8 +25,8 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require("../libs/db_stdlib.php");
-require("../libs/db_conecta.php");
+require(__DIR__ . "/../libs/db_stdlib.php");
+require(__DIR__ . "/../libs/db_conecta.php");
 parse_str(base64_decode($HTTP_SERVER_VARS['QUERY_STRING']));
 if(file_exists(base64_decode($arquivo))){
   include(base64_decode($arquivo));

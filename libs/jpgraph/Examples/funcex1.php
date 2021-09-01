@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_line.php");
 
 $f = new FuncGenerator('cos($x)*$x');
 list($xdata,$ydata) = $f->E(-1.2*M_PI,1.2*M_PI);

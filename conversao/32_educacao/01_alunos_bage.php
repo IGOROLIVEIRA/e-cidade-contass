@@ -2,8 +2,8 @@
 
 set_time_limit(0);
 
-require("../db_fieldsmemory.php");
-require("../db_conn.php");
+require(__DIR__ . "/../db_fieldsmemory.php");
+require(__DIR__ . "/../db_conn.php");
 
 if(!($conn = pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA"))) {
 //if(!($conn = pg_connect("dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA"))) {

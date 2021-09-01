@@ -1,7 +1,7 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_line.php");
-include ("../jpgraph_error.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph_error.php");
 
 $errdatay = array(11,9,2,4,19,26,13,19,7,12);
 

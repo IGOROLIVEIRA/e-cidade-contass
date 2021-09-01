@@ -1,8 +1,8 @@
 <?php
 // Gantt example 30
 // $Id: ganttex30.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
-include ("../jpgraph.php");
-include ("../jpgraph_gantt.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_gantt.php");
 
 // Standard calls to create a new graph
 $graph = new GanttGraph(0,0,"auto");
