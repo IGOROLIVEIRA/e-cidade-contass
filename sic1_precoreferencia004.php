@@ -307,8 +307,8 @@ HTML;
     $oDadosDaLinha->seq = $iCont + 1;
     $oDadosDaLinha->item = $oResult->pc01_codmater;
 
-    if ($oResult->pc11_reservado == true)
-      $oDadosDaLinha->descricao = "<span style='font-size:10px; font-weight: bold;'>exclusivo</span> - " . $oResult->pc01_descrmater;
+    if ($oResult->pc11_reservado == 't')
+      $oDadosDaLinha->descricao = "ITEM ME/EPP - " . $oResult->pc01_descrmater;
     else
       $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
 
