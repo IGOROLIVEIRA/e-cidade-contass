@@ -294,6 +294,9 @@ switch ($_POST["action"]) {
 
       $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
+        $vlrunit = $item['vlrunit'];
+        $vlrunitdesc = ($vlrunit - ($vlrunit * $item['desc'] / 100));
+
       if (pg_numrows($rsItem) == 0) {
         $clempautitem->e55_codele = $_POST['codele'];
         $clempautitem->e55_item   = $item['id'];
@@ -302,7 +305,7 @@ switch ($_POST["action"]) {
         $clempautitem->e55_unid   = $item['unidade'];
         $clempautitem->e55_marca  = $item['marca'];
         $clempautitem->e55_servicoquantidade  = $item['servico'];
-        $clempautitem->e55_vlrun  = $item['vlrunit'];
+        $clempautitem->e55_vlrun  = $vlrunitdesc;
         $clempautitem->e55_vltot  = $item['total'];
         $clempautitem->e55_sequen = $Seq + 1;
 
@@ -319,7 +322,7 @@ switch ($_POST["action"]) {
         $clempautitem->e55_unid   = $item['unidade'];
         $clempautitem->e55_marca  = $item['marca'];
         $clempautitem->e55_servicoquantidade  = $item['servico'];
-        $clempautitem->e55_vlrun  = $item['vlrunit'];
+        $clempautitem->e55_vlrun  = $vlrunitdesc;
         $clempautitem->e55_vltot  = $item['total'];
 
         $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
