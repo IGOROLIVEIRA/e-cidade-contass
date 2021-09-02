@@ -362,7 +362,7 @@ class cl_conparametro
         return $result;
     }
     // funcao do sql
-    function sql_query($oid = null, $campos = "conparametro.oid,*", $ordem = null, $dbwhere = "")
+    function sql_query($oid = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
