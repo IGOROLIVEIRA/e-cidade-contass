@@ -92,7 +92,10 @@ class cl_iframe_seleciona
     {
         $arquivo = tempnam("/tmp", "iframe");
         $arquivo .= ".php";
+        // echo $arquivo;
+        // exit;
         umask(74);
+        print_r($arquivo);
         $fd = fopen($arquivo, "w") or die('Erro ao abrir!');
         fputs($fd, ' <?    ' . "\n");
         fputs($fd, ' $textocabec="' . $this->textocabec . '";' . "\n");
@@ -154,10 +157,8 @@ class cl_iframe_seleciona
         <script>";
         ################## quando for setado a propriedade chaves, sera gerado um input contendo todas as chaves#################
         if (isset($this->chaves)) {
-            $matriz01 = split(",", $this->chaves);
 
-
-
+            $matriz01 = explode(",", $this->chaves);
             echo "
           function js_gera_chaves(){
             tabela=" . $this->iframe_nome . ".document.getElementById('tabela_seleciona');\n
@@ -1643,15 +1644,15 @@ class cl_db_estrut
         if ($this->input == false) {
         ?>
             <tr>
-                <td nowrap title="<?= $$y ?>">
-                    <b> <?= @$$x ?></b>
+                <td nowrap title="<?= ${$y} ?>">
+                    <b> <?= @${$x} ?></b>
                 </td>
                 <td title="<?= $this->nome ?>">
                 <?
 
             }
                 ?>
-                <input title="<?= @$$title ?>" name="<?= $this->nome ?>" value="<?= @$$nome ?>" maxlength='<?= $tamanho ?>' size='<?= $this->size ?>' type="text" onKeyPress="return js_mascara01_<?= $nome ?>(event,this.value);" <?= $funcao ?> <?= ($this->db_opcao == 22 || $this->db_opcao == 33 || $this->db_opcao == 3 ? "readonly style=\"background-color:#DEB887\" " : "") ?>>
+                <input title="<?= @${$title} ?>" name="<?= $this->nome ?>" value="<?= @${$nome} ?>" maxlength='<?= $tamanho ?>' size='<?= $this->size ?>' type="text" onKeyPress="return js_mascara01_<?= $nome ?>(event,this.value);" <?= $funcao ?> <?= ($this->db_opcao == 22 || $this->db_opcao == 33 || $this->db_opcao == 3 ? "readonly style=\"background-color:#DEB887\" " : "") ?>>
                 <?
                 if ($this->input == false) {
                 ?>
