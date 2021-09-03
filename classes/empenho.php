@@ -1,6 +1,4 @@
 <?php
-//ini_set('display_errors', 'On');
-//error_reporting(E_ALL);
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -137,7 +135,7 @@ class empenho {
   }
 
 
-  function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='', 
+  function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='',
                     $iContaPagadora = null, $lVerificaContaPagadora = true) {
 
     /*
@@ -145,7 +143,7 @@ class empenho {
      * obriga informar a conta pagadora
      */
     if ($lVerificaContaPagadora) {
-        
+
         $clempparametro = $this->usarDao("empparametro", true);
         $rsParametros   = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"),"*"));
         if ($clempparametro->numrows > 0){
@@ -160,7 +158,7 @@ class empenho {
             $this->erro_msg    = "Conta pagadora não informada.";
             return false;
         }
-        
+
     }
 
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
@@ -2016,7 +2014,7 @@ class empenho {
    *  @return recordset;
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
-                            $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null, 
+                            $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null,
                             $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
@@ -2346,14 +2344,14 @@ class empenho {
     }
     if ($lLiquidar && !$this->lSqlErro){
 
-      $this->liquidar(  
-                $this->numemp, 
-                $objEmpElem->e64_codele, 
-                $objEmpNota->e69_codnota, 
-                $nTotal,$sHistorico, 
-                '', 
-                $iCompDesp, 
-                $iContaPagadora, 
+      $this->liquidar(
+                $this->numemp,
+                $objEmpElem->e64_codele,
+                $objEmpNota->e69_codnota,
+                $nTotal,$sHistorico,
+                '',
+                $iCompDesp,
+                $iContaPagadora,
                 $lVerificaContaPagadora);
       if ($this->erro_status == "0"){
 
@@ -2426,7 +2424,7 @@ class empenho {
    * @param   $nValorAnular valor total a ser anulado;
    * @returns   void;
    */
-  function anularEmpenho($aItens , $nValorAnular = 0,$sMotivo = null, $aSolicitacoes = null, $iTipoAnulacao, $lTransacao = true, $id_usuario){
+  function anularEmpenho($aItens , $nValorAnular = 0,$sMotivo = null, $aSolicitacoes = null, $iTipoAnulacao, $lTransacao = true, $id_usuario = null){
 
     if (!is_array($aItens)){
 
@@ -2462,13 +2460,12 @@ class empenho {
     $rsEmpElemento  = $clempelemento->sql_record($clempelemento->sql_query($this->numemp, null, "e64_vlranu,e64_vlremp,e64_codele"));
     $oElemento      = db_utils::fieldsMemory($rsEmpElemento, 0);
     $nTotalElemento = $oElemento->e64_vlranu + $nValorAnular;
-    if (bccomp($nTotalElemento,$oElemento->e64_vlremp) > 0){ // if $tot > $e64_vlremp
 
+    if (bccomp($nTotalElemento,$oElemento->e64_vlremp) > 0){ // if $tot > $e64_vlremp
       $this->lSqlErro = true;
       $this->sErroMsg = "Erro[12](Sem saldo no elemento para anular\nNão pode anular o valor digitado para o elemento $elemento do empenho. Verifique!";
       return false;
     }
-
     //classes utilizadas pelo metodo;
     require_once("libs/db_libcontabilidade.php");
     $clempparametro = $this->usarDao("empparametro", true);

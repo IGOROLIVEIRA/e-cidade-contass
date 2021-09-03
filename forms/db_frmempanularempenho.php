@@ -290,7 +290,7 @@ if (empty ($e60_numemp)) {
 
         if (obj.numnotas > 0){
             for (var i = 0; i < obj.data.length;i++){
-                console.log(obj);
+                // console.log(obj);
 
                 sClassName = "normal"
                 if (lDisabled == "disabled") {
