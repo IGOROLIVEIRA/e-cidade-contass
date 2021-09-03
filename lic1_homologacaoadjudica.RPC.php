@@ -262,16 +262,16 @@ switch($oParam->exec) {
                         $oRetorno->message = urlencode($erro);
                         $oRetorno->status = 1;
                     }
-//                    /**
-//                     * Alterado nova situação a licitacao ADJUDICADA
-//                     */
-//                    $clliclicitasituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
-//                    $clliclicitasituacao->l11_hora        = db_hora();
-//                    $clliclicitasituacao->l11_obs         = "Licitação Adjudicada";
-//                    $clliclicitasituacao->l11_licsituacao = 13;
-//                    $clliclicitasituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
-//                    $clliclicitasituacao->l11_liclicita   = $l202_licitacao;
-//                    $clliclicitasituacao->incluir(null);
+                    /**
+                     * Alterado nova situação a licitacao ADJUDICADA
+                     */
+                    $rsSituacao = $clliclicitasituacao->sql_record($clliclicitasituacao->sql_query_file(null,"l11_sequencial",null,"l11_liclicita = {$l202_licitacao} and l11_licsituacao = 13"));
+                    db_fieldsmemory($rsSituacao,0);
+
+                    $clliclicitasituacao->l11_sequencial  = $l11_sequencial;
+                    $clliclicitasituacao->l11_data        = $oParam->dtAdjudicacao;
+                    $clliclicitasituacao->l11_liclicita   = $l202_licitacao;
+                    $clliclicitasituacao->alterar($l11_sequencial);
                     db_fim_transacao();
 
                 } else if ($parecer < 1 || empty($parecer)) {
