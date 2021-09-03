@@ -107,7 +107,7 @@ $clrotulo->label("l20_codigo");
         }
         if(mostra==true){
             js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
-                '&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero|l202_datahomologacao|l202_sequencial&validafornecedor=1&homologacao='+homologacao,'Pesquisa',true);
+                '&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|l20_numero|l202_datahomologacao|l202_sequencial&validafornecedor=1&homologacao='+homologacao,'Pesquisa',true);
         }else{
             if(document.form1.l202_licitacao.value != ''){
                 js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
@@ -140,7 +140,7 @@ $clrotulo->label("l20_codigo");
     function js_mostraliclicita1(chave1,chave2,chave3,chave4,chave5){
         iLicitacao = chave1;
         document.form1.l202_licitacao.value = chave1;
-        document.form1.pc50_descr.value = chave2+' '+chave3;
+        document.form1.pc50_descr.value = chave2;
         let opcao = "<?= $db_opcao?>";
         if(opcao != 1){
             aData = chave4.split('-');
@@ -221,7 +221,7 @@ $clrotulo->label("l20_codigo");
             }
         }
 
-        js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
+        js_divCarregando('Aguarde, Homologando Licitacao', 'msgBox');
         var oAjax = new Ajax.Request(
             'lic1_homologacaoadjudica.RPC.php', {
                 method: 'post',
@@ -251,7 +251,7 @@ $clrotulo->label("l20_codigo");
         oParam.dtHomologacao = $F('l202_datahomologacao');
         oParam.iHomologacao  = $F('l202_sequencial');
         oParam.exec = "alterarHomologacao";
-        js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
+        js_divCarregando('Aguarde, alterando Homologando', 'msgBox');
         var oAjax = new Ajax.Request(
             'lic1_homologacaoadjudica.RPC.php', {
                 method: 'post',
@@ -299,7 +299,7 @@ $clrotulo->label("l20_codigo");
                 oParam.aItens.push(oItem);
             }
         }
-        js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
+        js_divCarregando('Aguarde, Excluindo homologacao', 'msgBox');
         var oAjax = new Ajax.Request(
             'lic1_homologacaoadjudica.RPC.php', {
                 method: 'post',
