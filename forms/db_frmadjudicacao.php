@@ -173,6 +173,7 @@ $clrotulo->label("l20_codigo");
         oGridItens.clearAll(true);
 
         var oRetornoitens = JSON.parse(oAjax.responseText);
+        var nTotal = new Number(0);
 
         if (oRetornoitens.status == 1) {
 
@@ -185,8 +186,11 @@ $clrotulo->label("l20_codigo");
                 aLinha[4] = oLinha.pc11_quant;
                 aLinha[5] = oLinha.pc23_valor;
                 oGridItens.addRow(aLinha);
+                nTotal = nTotal + Number(oLinha.pc23_valor);
             });
             oGridItens.renderRows();
+            oGridItens.oFooter.rows[0].cells[4].innerHTML = "Valor Total:";
+            oGridItens.oFooter.rows[0].cells[5].innerHTML = js_formatar(nTotal, "f");
         }
     }
 
