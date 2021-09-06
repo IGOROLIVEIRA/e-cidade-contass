@@ -52,7 +52,7 @@ db_input('id_usuario',10,$Iid_usuario,true,'text',3,"")
   <tr>
       <td><b>
       <?
-       db_ancora("Login",' js_cgmlogin(true); ',1);
+       db_ancora("Cgm",' js_cgmlogin(true); ',1);
       ?>
        </b></td>
        <td>

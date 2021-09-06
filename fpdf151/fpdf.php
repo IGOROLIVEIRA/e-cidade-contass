@@ -342,9 +342,9 @@ class FPDF
         $this->TextColor = $tc;
         $this->ColorFlag = $cf;
         // Page header
-        // $this->InHeader = true;
-        // $this->Header();
-        // $this->InHeader = false;
+        $this->InHeader = true;
+        $this->Header();
+        $this->InHeader = false;
 
         // Restore line width
         if ($this->LineWidth != $lw) {
@@ -1882,194 +1882,193 @@ class FPDF
         $this->aligns = $a;
     }
     function RoundedRect($x, $y, $w, $h, $r, $style = '', $angle = '1234')
- {
-   $k = $this->k;
-   $hp = $this->h;
-   if($style=='F')
-      $op='f';
-   elseif($style=='FD' or $style=='DF')
-      $op='B';
-   else
-      $op='S';
-   $MyArc = 4/3 * (sqrt(2) - 1);
-   $this->_out(sprintf('%.2f %.2f m',($x+$r)*$k,($hp-$y)*$k ));
-   $xc = $x+$w-$r;
-   $yc = $y+$r;
-   $this->_out(sprintf('%.2f %.2f l', $xc*$k,($hp-$y)*$k ));
-   if (strpos($angle, '2')===false)
-       $this->_out(sprintf('%.2f %.2f l', ($x+$w)*$k,($hp-$y)*$k ));
-   else
-       $this->_Arc($xc + $r*$MyArc, $yc - $r, $xc + $r, $yc - $r*$MyArc, $xc + $r, $yc);
-   $xc = $x+$w-$r;
-   $yc = $y+$h-$r;
-   $this->_out(sprintf('%.2f %.2f l',($x+$w)*$k,($hp-$yc)*$k));
-   if (strpos($angle, '3')===false)
-      $this->_out(sprintf('%.2f %.2f l',($x+$w)*$k,($hp-($y+$h))*$k));
-   else
-      $this->_Arc($xc + $r, $yc + $r*$MyArc, $xc + $r*$MyArc, $yc + $r, $xc, $yc + $r);
-   $xc = $x+$r;
-   $yc = $y+$h-$r;
-   $this->_out(sprintf('%.2f %.2f l',$xc*$k,($hp-($y+$h))*$k));
-   if (strpos($angle, '4')===false)
-       $this->_out(sprintf('%.2f %.2f l',($x)*$k,($hp-($y+$h))*$k));
-   else
-       $this->_Arc($xc - $r*$MyArc, $yc + $r, $xc - $r, $yc + $r*$MyArc, $xc - $r, $yc);
-   $xc = $x+$r ;
-   $yc = $y+$r;
-   $this->_out(sprintf('%.2f %.2f l',($x)*$k,($hp-$yc)*$k ));
-   if (strpos($angle, '1')===false)
-   {
-      $this->_out(sprintf('%.2f %.2f l',($x)*$k,($hp-$y)*$k ));
-      $this->_out(sprintf('%.2f %.2f l',($x+$w)*$k,($hp-$y)*$k ));
-   }else{
-      $this->_Arc($xc - $r, $yc - $r*$MyArc, $xc - $r*$MyArc, $yc - $r, $xc, $yc - $r);
-      $this->_out($op);
-   }
-
- }
- function _Arc($x1, $y1, $x2, $y2, $x3, $y3 )
     {
-            $h = $this->h;
-            $this->_out(sprintf('%.2f %.2f %.2f %.2f %.2f %.2f c',
-                    $x1*$this->k,
-                    ($h-$y1)*$this->k,
-                    $x2*$this->k,
-                    ($h-$y2)*$this->k,
-                    $x3*$this->k,
-                    ($h-$y3)*$this->k));
+        $k = $this->k;
+        $hp = $this->h;
+        if ($style == 'F')
+            $op = 'f';
+        elseif ($style == 'FD' or $style == 'DF')
+            $op = 'B';
+        else
+            $op = 'S';
+        $MyArc = 4 / 3 * (sqrt(2) - 1);
+        $this->_out(sprintf('%.2f %.2f m', ($x + $r) * $k, ($hp - $y) * $k));
+        $xc = $x + $w - $r;
+        $yc = $y + $r;
+        $this->_out(sprintf('%.2f %.2f l', $xc * $k, ($hp - $y) * $k));
+        if (strpos($angle, '2') === false)
+            $this->_out(sprintf('%.2f %.2f l', ($x + $w) * $k, ($hp - $y) * $k));
+        else
+            $this->_Arc($xc + $r * $MyArc, $yc - $r, $xc + $r, $yc - $r * $MyArc, $xc + $r, $yc);
+        $xc = $x + $w - $r;
+        $yc = $y + $h - $r;
+        $this->_out(sprintf('%.2f %.2f l', ($x + $w) * $k, ($hp - $yc) * $k));
+        if (strpos($angle, '3') === false)
+            $this->_out(sprintf('%.2f %.2f l', ($x + $w) * $k, ($hp - ($y + $h)) * $k));
+        else
+            $this->_Arc($xc + $r, $yc + $r * $MyArc, $xc + $r * $MyArc, $yc + $r, $xc, $yc + $r);
+        $xc = $x + $r;
+        $yc = $y + $h - $r;
+        $this->_out(sprintf('%.2f %.2f l', $xc * $k, ($hp - ($y + $h)) * $k));
+        if (strpos($angle, '4') === false)
+            $this->_out(sprintf('%.2f %.2f l', ($x) * $k, ($hp - ($y + $h)) * $k));
+        else
+            $this->_Arc($xc - $r * $MyArc, $yc + $r, $xc - $r, $yc + $r * $MyArc, $xc - $r, $yc);
+        $xc = $x + $r;
+        $yc = $y + $r;
+        $this->_out(sprintf('%.2f %.2f l', ($x) * $k, ($hp - $yc) * $k));
+        if (strpos($angle, '1') === false) {
+            $this->_out(sprintf('%.2f %.2f l', ($x) * $k, ($hp - $y) * $k));
+            $this->_out(sprintf('%.2f %.2f l', ($x + $w) * $k, ($hp - $y) * $k));
+        } else {
+            $this->_Arc($xc - $r, $yc - $r * $MyArc, $xc - $r * $MyArc, $yc - $r, $xc, $yc - $r);
+            $this->_out($op);
+        }
+    }
+    function _Arc($x1, $y1, $x2, $y2, $x3, $y3)
+    {
+        $h = $this->h;
+        $this->_out(sprintf(
+            '%.2f %.2f %.2f %.2f %.2f %.2f c',
+            $x1 * $this->k,
+            ($h - $y1) * $this->k,
+            $x2 * $this->k,
+            ($h - $y2) * $this->k,
+            $x3 * $this->k,
+            ($h - $y3) * $this->k
+        ));
     }
 
-    function PieChart($w, $h, $data, $format, $colors=null)  /// graficos tipo pizza
+    function PieChart($w, $h, $data, $format, $colors = null)  /// graficos tipo pizza
     {
-            $this->SetFont('Courier', '', 10);
-            $this->SetLegends($data,$format);
+        $this->SetFont('Courier', '', 10);
+        $this->SetLegends($data, $format);
 
-            $XPage = $this->GetX();
-            $YPage = $this->GetY();
-            $margin = 2;
-            $hLegend = 3;
-            $radius = min($w - $margin * 4 - $hLegend - $this->wLegend, $h - $margin * 2);
-            $radius = floor($radius / 2);
-            $XDiag = $XPage + $margin + $radius;
-            $YDiag = $YPage + $margin + $radius;
-            if($colors == null) {
-                    for($i = 0;$i < $this->NbVal; $i++) {
-                            $gray = $i * intval(255 / $this->NbVal);
-                            $colors[$i] = array($gray,$gray,$gray);
-                    }
+        $XPage = $this->GetX();
+        $YPage = $this->GetY();
+        $margin = 2;
+        $hLegend = 3;
+        $radius = min($w - $margin * 4 - $hLegend - $this->wLegend, $h - $margin * 2);
+        $radius = floor($radius / 2);
+        $XDiag = $XPage + $margin + $radius;
+        $YDiag = $YPage + $margin + $radius;
+        if ($colors == null) {
+            for ($i = 0; $i < $this->NbVal; $i++) {
+                $gray = $i * intval(255 / $this->NbVal);
+                $colors[$i] = array($gray, $gray, $gray);
             }
+        }
 
-            //Sectors
-            $this->SetLineWidth(0.2);
-            $angleStart = 0;
-            $angleEnd = 0;
-            $i = 0;
-            foreach($data as $val) {
-                    $angle = floor(($val * 360) / doubleval($this->sum));
-                    if ($angle != 0) {
-                            $angleEnd = $angleStart + $angle;
-                            @$this->SetFillColor($colors[$i][0],$colors[$i][1],$colors[$i][2]);
-                            $this->Sector($XDiag, $YDiag, $radius, $angleStart, $angleEnd);
-                            $angleStart += $angle;
-                    }
-                    $i++;
+        //Sectors
+        $this->SetLineWidth(0.2);
+        $angleStart = 0;
+        $angleEnd = 0;
+        $i = 0;
+        foreach ($data as $val) {
+            $angle = floor(($val * 360) / doubleval($this->sum));
+            if ($angle != 0) {
+                $angleEnd = $angleStart + $angle;
+                @$this->SetFillColor($colors[$i][0], $colors[$i][1], $colors[$i][2]);
+                $this->Sector($XDiag, $YDiag, $radius, $angleStart, $angleEnd);
+                $angleStart += $angle;
             }
-            if ($angleEnd != 360) {
-                    $this->Sector($XDiag, $YDiag, $radius, $angleStart - $angle, 360);
-            }
+            $i++;
+        }
+        if ($angleEnd != 360) {
+            $this->Sector($XDiag, $YDiag, $radius, $angleStart - $angle, 360);
+        }
 
-            //Legends
-            $this->SetFont('Courier', '', 8);
-            $x1 = $XPage + 2 * $radius + 4 * $margin;
-            $x2 = $x1 + $hLegend + $margin;
-            $y1 = $YDiag - $radius + (2 * $radius - $this->NbVal*($hLegend + $margin)) / 2;
-            for($i=0; $i<$this->NbVal; $i++) {
+        //Legends
+        $this->SetFont('Courier', '', 8);
+        $x1 = $XPage + 2 * $radius + 4 * $margin;
+        $x2 = $x1 + $hLegend + $margin;
+        $y1 = $YDiag - $radius + (2 * $radius - $this->NbVal * ($hLegend + $margin)) / 2;
+        for ($i = 0; $i < $this->NbVal; $i++) {
 
-              if ($this->getY() > $this->h - 20) {
+            if ($this->getY() > $this->h - 20) {
 
                 $this->AddPage();
                 $y1 = 40;
-              }
-                @$this->SetFillColor($colors[$i][0],$colors[$i][1],$colors[$i][2]);
-                $this->Rect($x1, $y1, $hLegend, $hLegend, 'DF');
-                $this->SetXY($x2,$y1);
-                $this->Cell(0,$hLegend,$this->legends[$i]);
-                $y1+=$hLegend + $margin;
             }
+            @$this->SetFillColor($colors[$i][0], $colors[$i][1], $colors[$i][2]);
+            $this->Rect($x1, $y1, $hLegend, $hLegend, 'DF');
+            $this->SetXY($x2, $y1);
+            $this->Cell(0, $hLegend, $this->legends[$i]);
+            $y1 += $hLegend + $margin;
+        }
     }
 
-    function BarDiagram($w, $h, $data, $format, $color=null, $maxVal=0, $nbDiv=4)  /// graficos tipo barra
+    function BarDiagram($w, $h, $data, $format, $color = null, $maxVal = 0, $nbDiv = 4)  /// graficos tipo barra
     {
-            $this->SetFont('Courier', '', 10);
-            $this->SetLegends($data,$format);
+        $this->SetFont('Courier', '', 10);
+        $this->SetLegends($data, $format);
 
-            $XPage = $this->GetX();
-            $YPage = $this->GetY();
-            $margin = 2;
-            $YDiag = $YPage + $margin;
-            $hDiag = floor($h - $margin * 2);
-            $XDiag = $XPage + $margin * 2 + $this->wLegend;
-            $lDiag = floor($w - $margin * 3 - $this->wLegend);
-            if($color == null)
-                    $color=array(155,155,155);
-            if ($maxVal == 0) {
-                    $maxVal = max($data);
+        $XPage = $this->GetX();
+        $YPage = $this->GetY();
+        $margin = 2;
+        $YDiag = $YPage + $margin;
+        $hDiag = floor($h - $margin * 2);
+        $XDiag = $XPage + $margin * 2 + $this->wLegend;
+        $lDiag = floor($w - $margin * 3 - $this->wLegend);
+        if ($color == null)
+            $color = array(155, 155, 155);
+        if ($maxVal == 0) {
+            $maxVal = max($data);
+        }
+        $valIndRepere = ceil($maxVal / $nbDiv);
+        $maxVal = $valIndRepere * $nbDiv;
+        $lRepere = floor($lDiag / $nbDiv);
+        $lDiag = $lRepere * $nbDiv;
+        $unit = $lDiag / $maxVal;
+        $hBar = floor($hDiag / ($this->NbVal + 1));
+        $hDiag = $hBar * ($this->NbVal + 1);
+        $eBaton = floor($hBar * 80 / 100);
+
+        $this->SetLineWidth(0.2);
+        $this->Rect($XDiag, $YDiag, $lDiag, $hDiag);
+
+        $this->SetFont('Courier', '', 10);
+
+        $i = 0;
+        $xcor = 0;
+
+        foreach ($data as $val) {
+            if ($xcor == 0 || count($color) == 3) {
+                $xcor = 1;
+                if (count($color) < 3) {
+                    $this->SetFillColor($color[0]);
+                } else {
+                    $this->SetFillColor($color[0], $color[1], $color[2]);
+                }
+            } else {
+                $xcor = 0;
+                if (count($color) < 3) {
+                    $this->SetFillColor($color[1]);
+                } else {
+                    $this->SetFillColor($color[3], $color[4], $color[5]);
+                }
             }
-            $valIndRepere = ceil($maxVal / $nbDiv);
-            $maxVal = $valIndRepere * $nbDiv;
-            $lRepere = floor($lDiag / $nbDiv);
-            $lDiag = $lRepere * $nbDiv;
-            $unit = $lDiag / $maxVal;
-            $hBar = floor($hDiag / ($this->NbVal + 1));
-            $hDiag = $hBar * ($this->NbVal + 1);
-            $eBaton = floor($hBar * 80 / 100);
+            //Bar
+            $xval = $XDiag;
+            $lval = (int)($val * $unit);
+            $yval = $YDiag + ($i + 1) * $hBar - $eBaton / 2;
+            $hval = $eBaton;
+            $this->Rect($xval, $yval, $lval, $hval, 'DF');
+            //Legend
+            $this->SetXY(0, $yval);
+            $this->Cell($xval - $margin, $hval, $this->legends[$i], 0, 0, 'R');
+            $i++;
+        }
 
-            $this->SetLineWidth(0.2);
-            $this->Rect($XDiag, $YDiag, $lDiag, $hDiag);
-
-            $this->SetFont('Courier', '', 10);
-
-            $i=0;
-            $xcor = 0;
-
-            foreach($data as $val) {
-                 if($xcor == 0 || count($color)==3 ){
-                  $xcor = 1;
-                    if(count($color)<3){
-                      $this->SetFillColor($color[0]);
-                    }else{
-                      $this->SetFillColor($color[0],$color[1],$color[2]);
-                    }
-                 }else{
-                  $xcor = 0;
-                    if(count($color)<3){
-                      $this->SetFillColor($color[1]);
-                    }else{
-                      $this->SetFillColor($color[3],$color[4],$color[5]);
-                    }
-                 }
-                    //Bar
-                    $xval = $XDiag;
-                    $lval = (int)($val * $unit);
-                    $yval = $YDiag + ($i + 1) * $hBar - $eBaton / 2;
-                    $hval = $eBaton;
-                    $this->Rect($xval, $yval, $lval, $hval, 'DF');
-                    //Legend
-                    $this->SetXY(0, $yval);
-                    $this->Cell($xval - $margin, $hval, $this->legends[$i],0,0,'R');
-                    $i++;
-
-            }
-
-            //Scales
-            for ($i = 0; $i <= $nbDiv; $i++) {
-                    $xpos = $XDiag + $lRepere * $i;
-                    $this->Line($xpos, $YDiag, $xpos, $YDiag + $hDiag);
-                    $val = $i * $valIndRepere;
-                    $xpos = $XDiag + $lRepere * $i - $this->GetStringWidth($val) / 2;
-                    $ypos = $YDiag + $hDiag - $margin;
-                    $this->Text($xpos, $ypos, $val);
-            }
+        //Scales
+        for ($i = 0; $i <= $nbDiv; $i++) {
+            $xpos = $XDiag + $lRepere * $i;
+            $this->Line($xpos, $YDiag, $xpos, $YDiag + $hDiag);
+            $val = $i * $valIndRepere;
+            $xpos = $XDiag + $lRepere * $i - $this->GetStringWidth($val) / 2;
+            $ypos = $YDiag + $hDiag - $margin;
+            $this->Text($xpos, $ypos, $val);
+        }
     }
     // End of class
 }

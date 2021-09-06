@@ -204,6 +204,15 @@ db_app::load("strings.js");
                             ?>
                         </td>
                     </tr>     
+                    <tr>
+                        <td><b>Nível: </b></td>
+                        <td colspan="2">
+                            <select name="iModalidadeAplicacao" id="iModalidadeAplicacao" style="width: 100%">
+                                <option value="">Elemento</option>
+                                <option value="1">Modalidade de Aplicação</option>
+                            </select>
+                        </td>
+                    </tr>
                 </table>
                 <center>
                     <? 

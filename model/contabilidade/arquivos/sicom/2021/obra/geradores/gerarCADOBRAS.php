@@ -52,6 +52,7 @@ class gerarCADOBRAS extends GerarAM
             $aCSVCADOBRAS10['si198_tiporesponsavel'] = $aCADORBRAS10['si198_tiporesponsavel'];
             $aCSVCADOBRAS10['si198_nrodocumento'] = $aCADORBRAS10['si198_nrodocumento'];
             $aCSVCADOBRAS10['si198_tiporegistroconselho'] = $aCADORBRAS10['si198_tiporegistroconselho'];
+            $aCSVCADOBRAS10['si198_dscoutroconselho'] = $aCADORBRAS10['si198_dscoutroconselho'];
             $aCSVCADOBRAS10['si198_nroregistroconseprof'] = $aCADORBRAS10['si198_nroregistroconseprof'];
             $aCSVCADOBRAS10['si198_numrt'] = $aCADORBRAS10['si198_numrt'] == "0" ? "" : $aCADORBRAS10['si198_numrt'];
             $aCSVCADOBRAS10['si198_dtinicioatividadeseng'] = $this->sicomDate($aCADORBRAS10['si198_dtinicioatividadeseng']);
@@ -98,7 +99,7 @@ class gerarCADOBRAS extends GerarAM
                             $aCSVCADOBRAS21['si200_dtparalisacao'] = $this->sicomDate($aCADORBRAS21['si200_dtparalisacao']);
                             $aCSVCADOBRAS21['si200_motivoparalisacap'] = str_pad($aCADORBRAS21['si200_motivoparalisacap'], 2, "0", STR_PAD_LEFT);
                             $aCSVCADOBRAS21['si200_descoutrosparalisacao'] = $aCADORBRAS21['si200_descoutrosparalisacao'];
-                            $aCSVCADOBRAS21['si200_dtretomada'] = $this->sicomDate($aCADORBRAS21['si200_dtretomada']) == "" ? " ;" : $this->sicomDate($aCADORBRAS21['si200_dtretomada']);
+//                            $aCSVCADOBRAS21['si200_dtretomada'] = $this->sicomDate($aCADORBRAS21['si200_dtretomada']) == "" ? " ;" : $this->sicomDate($aCADORBRAS21['si200_dtretomada']);
                             $this->sLinha = $aCSVCADOBRAS21;
                             $this->adicionaLinha();
                         }

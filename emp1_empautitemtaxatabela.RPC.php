@@ -20,24 +20,24 @@ $clempautitem      = new cl_empautitem;
 
 switch ($_POST["action"]) {
 
-  case 'buscaItens':
+    case 'buscaItens':
 
-    $autori = $_POST["autori"];
-    $cgm    = $_POST["cgm"];
-    $tabela = $_POST["tabela"];
-    $codele = $_POST["codele"];
+        $autori = $_POST["autori"];
+        $cgm    = $_POST["cgm"];
+        $tabela = $_POST["tabela"];
+        $codele = $_POST["codele"];
 
-    $iAnoSessao         = db_getsession('DB_anousu');
+        $iAnoSessao         = db_getsession('DB_anousu');
 
-    $result_unidade = array();
-    $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
-    $numrows_unid = $clmatunid->numrows;
-    for ($i = 0; $i < $numrows_unid; $i++) {
-      db_fieldsmemory($result_sql_unid, $i);
-      $result_unidade[$m61_codmatunid] = $m61_descr;
-    }
+        $result_unidade = array();
+        $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
+        $numrows_unid = $clmatunid->numrows;
+        for ($i = 0; $i < $numrows_unid; $i++) {
+            db_fieldsmemory($result_sql_unid, $i);
+            $result_unidade[$m61_codmatunid] = $m61_descr;
+        }
 
-    $sqlQueryTotal = "SELECT distinct pcmater.pc01_codmater,
+        $sqlQueryTotal = "SELECT distinct pcmater.pc01_codmater,
     pcmater.pc01_descrmater,
     z01_numcgm,
     matunid.m61_codmatunid,
@@ -76,14 +76,14 @@ switch ($_POST["action"]) {
       FROM empautoriza
       WHERE e54_autori = $autori)";
 
-    if (!empty($_POST["tabela"])) {
-      $sqlQueryTotal .= " and  pc94_sequencial = $tabela";
-    }
-    if ($_POST["codele"] != '...') {
-      $sqlQueryTotal .= " and  pc07_codele = $codele";
-    }
+        if (!empty($_POST["tabela"])) {
+            $sqlQueryTotal .= " and  pc94_sequencial = $tabela";
+        }
+        if ($_POST["codele"] != '...') {
+            $sqlQueryTotal .= " and  pc07_codele = $codele";
+        }
 
-    $sqlQuery = "SELECT *
+        $sqlQuery = "SELECT *
     FROM
       (SELECT distinct pcmater.pc01_codmater,
                         pcmater.pc01_descrmater,
@@ -125,16 +125,16 @@ switch ($_POST["action"]) {
             WHERE e54_autori = $autori)
          AND pc24_pontuacao=1";
 
-    if (!empty($_POST["tabela"])) {
-      $sqlQuery .= " and  pc94_sequencial = $tabela";
-    }
-    //if ($_POST["codele"] != '...') {
-    $sqlQuery .= " and  pc07_codele = $codele";
-    //}
-    if (!empty($_POST["search"]["value"])) {
-      $sqlQuery .= " and (pcmater.pc01_descrmater ILIKE '%" . $_POST["search"]["value"] . "%') ";
-    }
-    $sqlQuery .= "UNION SELECT distinct pcmater.pc01_codmater,
+        if (!empty($_POST["tabela"])) {
+            $sqlQuery .= " and  pc94_sequencial = $tabela";
+        }
+        //if ($_POST["codele"] != '...') {
+        $sqlQuery .= " and  pc07_codele = $codele";
+        //}
+        if (!empty($_POST["search"]["value"])) {
+            $sqlQuery .= " and (pcmater.pc01_descrmater ILIKE '%" . $_POST["search"]["value"] . "%') ";
+        }
+        $sqlQuery .= "UNION SELECT distinct pcmater.pc01_codmater,
                         pcmater.pc01_descrmater,
                         z01_numcgm,
                         matunid.m61_codmatunid,
@@ -171,16 +171,16 @@ switch ($_POST["action"]) {
             FROM empautoriza
             WHERE e54_autori = $autori)";
 
-    if (!empty($_POST["tabela"])) {
-      $sqlQuery .= " and  pc94_sequencial = $tabela";
-    }
-    //if ($_POST["codele"] != '...') {
-    $sqlQuery .= " and  pc07_codele = $codele";
-    //}
-    if (!empty($_POST["search"]["value"])) {
-      $sqlQuery .= " and (pcmater.pc01_descrmater ILIKE '%" . $_POST["search"]["value"] . "%') ";
-    }
-    $sqlQuery .= "
+        if (!empty($_POST["tabela"])) {
+            $sqlQuery .= " and  pc94_sequencial = $tabela";
+        }
+        //if ($_POST["codele"] != '...') {
+        $sqlQuery .= " and  pc07_codele = $codele";
+        //}
+        if (!empty($_POST["search"]["value"])) {
+            $sqlQuery .= " and (pcmater.pc01_descrmater ILIKE '%" . $_POST["search"]["value"] . "%') ";
+        }
+        $sqlQuery .= "
          AND (pcmater.pc01_tabela = 't'
               OR pcmater.pc01_taxa = 't')
          AND pcmater.pc01_codmater NOT IN
@@ -189,84 +189,100 @@ switch ($_POST["action"]) {
     WHERE fornecedores.z01_numcgm = $cgm
     ";
 
-    if ($_POST["length"] != -1) {
-      $sqlQuery .= 'LIMIT ' . $_POST['length'];
-    }
-
-    $rsDadosTotal = $oDaoSysArqCamp->sql_record($sqlQueryTotal);
-    $rsDados      = $oDaoSysArqCamp->sql_record($sqlQuery);
-
-    if ($oDaoSysArqCamp->numrows > 0) {
-      $employeeData = array();
-      for ($i = 0; $i < pg_numrows($rsDados); $i++) {
-
-        $oDados = db_utils::fieldsMemory($rsDados, $i);
-        $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", " e55_autori = $autori and e55_item = $oDados->pc01_codmater"));
-        $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, 0);
-
-        $itemRows  = array();
-
-        $selectunid = "";
-        $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
-        $selectunid .= "<option selected='selected'></option>";
-        foreach ($result_unidade as $key => $item) {
-          if ($key == $oDadosEmpAutItem->e55_unid)
-            $selectunid .= "<option value='$key' selected='selected'>$item</option>";
-          else
-            $selectunid .= "<option value='$key'>$item</option>";
+        if ($_POST["length"] != -1) {
+            $sqlQuery .= 'LIMIT ' . $_POST['length'];
         }
-        $selectunid .= "</select>";
 
-        $selectservico = "";
-        $selectservico = "<select id='servico_{$oDados->pc01_codmater}' onchange='js_servico(this)' >";
+        $rsDadosTotal = $oDaoSysArqCamp->sql_record($sqlQueryTotal);
+        $rsDados      = $oDaoSysArqCamp->sql_record($sqlQuery);
 
-        if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
-          $selectservico .= "<option value='1' selected='selected'>Sim</option>";
-          $selectservico .= "<option value='0'>" . utf8_encode('Não') . "</option>";
-        } else {
-          $selectservico .= "<option value='1'>Sim</option>";
-          $selectservico .= "<option value='0' selected='selected'>" . utf8_encode('Não') . "</option>";
+        if ($oDaoSysArqCamp->numrows > 0) {
+            $employeeData = array();
+            for ($i = 0; $i < pg_numrows($rsDados); $i++) {
+
+                $oDados = db_utils::fieldsMemory($rsDados, $i);
+                $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", " e55_autori = $autori and e55_item = $oDados->pc01_codmater"));
+                $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, 0);
+
+                $itemRows  = array();
+
+                $selectunid = "";
+                $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
+                $selectunid .= "<option selected='selected'></option>";
+                foreach ($result_unidade as $key => $item) {
+                    if ($key == $oDadosEmpAutItem->e55_unid)
+                        $selectunid .= "<option value='$key' selected='selected'>$item</option>";
+                    else
+                        $selectunid .= "<option value='$key'>$item</option>";
+                }
+                $selectunid .= "</select>";
+
+                $selectservico = "";
+                if($oDadosEmpAutItem->e55_vlrun != "") {
+                    $selectservico = "<select id='servico_{$oDados->pc01_codmater}' disabled onchange='js_servico(this)' >";
+                }else{
+                    $selectservico = "<select id='servico_{$oDados->pc01_codmater}' onchange='js_servico(this)' >";
+                }
+
+                if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
+                    $selectservico .= "<option value='1' selected='selected'>Sim</option>";
+                    $selectservico .= "<option value='0'>" . utf8_encode('Não') . "</option>";
+                } else {
+                    $selectservico .= "<option value='1'>Sim</option>";
+                    $selectservico .= "<option value='0' selected='selected'>" . utf8_encode('Não') . "</option>";
+                }
+                $selectservico .= "</select>";
+
+                if ($oDados->pc01_codmater == $oDadosEmpAutItem->e55_item)
+                    $itemRows[] = "<input type='checkbox' checked id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
+                else
+                    $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
+
+                $itemRows[] = $oDados->pc01_codmater;
+                $itemRows[] = "<input type='text' name ='{$oDados->pc01_descrmater}' title='{$oDados->pc01_descrmater}' style='background-color: #DEB887' readonly value='{$oDados->pc01_descrmater}'  />";
+                $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}'  />";
+                $itemRows[] = $selectunid;
+                $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}'  />";
+                $itemRows[] = $selectservico;
+
+                if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
+                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
+                } else {
+                    if($oDadosEmpAutItem->e55_vlrun != "") {
+                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
+                    }else{
+                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
+
+                    }
+                }
+                if($oDadosEmpAutItem->e55_vlrun != "") {
+                    $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' readonly onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='background-color: #DEB887; width: 80px' />";
+                }else{
+                    $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
+                }
+
+                if ($_POST['desconto'] == 'f')
+                    $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='0' onkeyup='js_calcula(this)' readonly maxlength='2' style='background-color: #DEB887; width: 80px' />";
+                else
+                    $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
+                if($oDadosEmpAutItem->e55_vlrun != "") {
+                    $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='background-color: #DEB887; width: 80px' />";
+                }else{
+                    $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='width: 80px' />";
+                }
+                $employeeData[] = $itemRows;
+            }
+
+            $oRetorno = array(
+                "draw"  =>  intval($_POST["draw"]),
+                "iTotalRecords"  =>   pg_numrows($rsDados),
+                "iTotalDisplayRecords"  =>  pg_numrows($rsDadosTotal),
+                "data"  =>   $employeeData
+            );
         }
-        $selectservico .= "</select>";
+        break;
 
-        if ($oDados->pc01_codmater == $oDadosEmpAutItem->e55_item)
-          $itemRows[] = "<input type='checkbox' checked id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
-        else
-          $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
-
-        $itemRows[] = $oDados->pc01_codmater;
-        $itemRows[] = "<input type='text' name ='{$oDados->pc01_descrmater}' title='{$oDados->pc01_descrmater}' style='background-color: #DEB887' readonly value='{$oDados->pc01_descrmater}'  />";
-        $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}'  />";
-        $itemRows[] = $selectunid;
-        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}'  />";
-        $itemRows[] = $selectservico;
-
-        if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
-          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
-        } else {
-          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
-        }
-        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
-
-        if ($_POST['desconto'] == 'f')
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='0' onkeyup='js_calcula(this)' readonly maxlength='2' style='background-color: #DEB887; width: 80px' />";
-        else
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
-
-        $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='width: 80px' />";
-        $employeeData[] = $itemRows;
-      }
-
-      $oRetorno = array(
-        "draw"  =>  intval($_POST["draw"]),
-        "iTotalRecords"  =>   pg_numrows($rsDados),
-        "iTotalDisplayRecords"  =>  pg_numrows($rsDadosTotal),
-        "data"  =>   $employeeData
-      );
-    }
-    break;
-
-  case 'getElementosTabela':
+    case 'getElementosTabela':
 
         $autori = $_POST["e55_autori"];
         $tabela = $_POST["tabela"];
@@ -279,105 +295,108 @@ switch ($_POST["action"]) {
         LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
         AND orcelemento.o56_anousu = $iAnoSessao
         where pc94_sequencial = $tabela";
-      $rsEleTabela = db_query($sqlElementosTabela);
+        $rsEleTabela = db_query($sqlElementosTabela);
 
-      $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
-      $oRetorno->elementos = $oElementos;
+        $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
+        $oRetorno->elementos = $oElementos;
 
-    break;
+        break;
 
-  case 'salvar':
+    case 'salvar':
 
-    db_inicio_transacao();
+        db_inicio_transacao();
 
-    foreach ($_POST['dados'] as $Seq => $item) :
+        foreach ($_POST['dados'] as $Seq => $item) :
 
-      $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
+            $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
-      if (pg_numrows($rsItem) == 0) {
-        $clempautitem->e55_codele = $_POST['codele'];
-        $clempautitem->e55_item   = $item['id'];
-        $clempautitem->e55_descr  = $item['descr'];
-        $clempautitem->e55_quant  = $item['qtd'];
-        $clempautitem->e55_unid   = $item['unidade'];
-        $clempautitem->e55_marca  = $item['marca'];
-        $clempautitem->e55_servicoquantidade  = $item['servico'];
-        $clempautitem->e55_vlrun  = $item['vlrunit'];
-        $clempautitem->e55_vltot  = $item['total'];
-        $clempautitem->e55_sequen = $Seq + 1;
+            $vlrunit = $item['vlrunit'];
+            $vlrunitdesc = ($vlrunit - ($vlrunit * $item['desc'] / 100));
 
-        $proximoSequen = db_utils::fieldsMemory($clempautitem->sql_record($clempautitem->sql_query(null, null, "case when max(e55_sequen)+ 1 is null then 1 else max(e55_sequen)+ 1 end as e55_sequen", null, "e55_autori = " . $_POST['autori'])), 0)->e55_sequen;
-        $clempautitem->incluir($_POST['autori'], $proximoSequen);
-      } else {
+            if (pg_numrows($rsItem) == 0) {
+                $clempautitem->e55_codele = $_POST['codele'];
+                $clempautitem->e55_item   = $item['id'];
+                $clempautitem->e55_descr  = $item['descr'];
+                $clempautitem->e55_quant  = $item['qtd'];
+                $clempautitem->e55_unid   = $item['unidade'];
+                $clempautitem->e55_marca  = $item['marca'];
+                $clempautitem->e55_servicoquantidade  = $item['servico'];
+                $clempautitem->e55_vlrun  = $vlrunitdesc;
+                $clempautitem->e55_vltot  = $item['total'];
+                $clempautitem->e55_sequen = $Seq + 1;
 
-        $clempautitem->e55_autori = $_POST['autori'];
-        $clempautitem->e55_codele = $_POST['codele'];
-        $clempautitem->e55_sequen = db_utils::fieldsMemory($rsItem, 0)->e55_sequen;
-        $clempautitem->e55_item   = $item['id'];
-        $clempautitem->e55_descr  = $item['descr'];
-        $clempautitem->e55_quant  = $item['qtd'];
-        $clempautitem->e55_unid   = $item['unidade'];
-        $clempautitem->e55_marca  = $item['marca'];
-        $clempautitem->e55_servicoquantidade  = $item['servico'];
-        $clempautitem->e55_vlrun  = $item['vlrunit'];
-        $clempautitem->e55_vltot  = $item['total'];
+                $proximoSequen = db_utils::fieldsMemory($clempautitem->sql_record($clempautitem->sql_query(null, null, "case when max(e55_sequen)+ 1 is null then 1 else max(e55_sequen)+ 1 end as e55_sequen", null, "e55_autori = " . $_POST['autori'])), 0)->e55_sequen;
+                $clempautitem->incluir($_POST['autori'], $proximoSequen);
+            } else {
 
-        $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
-      }
-    endforeach;
-    db_fim_transacao();
+                $clempautitem->e55_autori = $_POST['autori'];
+                $clempautitem->e55_codele = $_POST['codele'];
+                $clempautitem->e55_sequen = db_utils::fieldsMemory($rsItem, 0)->e55_sequen;
+                $clempautitem->e55_item   = $item['id'];
+                $clempautitem->e55_descr  = $item['descr'];
+                $clempautitem->e55_quant  = $item['qtd'];
+                $clempautitem->e55_unid   = $item['unidade'];
+                $clempautitem->e55_marca  = $item['marca'];
+                $clempautitem->e55_servicoquantidade  = $item['servico'];
+                $clempautitem->e55_vlrun  = $item['vlrunit'];
+                $clempautitem->e55_vltot  = $item['total'];
 
-    if ($clempautitem->erro_status == 0) {
-      $oRetorno          = new stdClass();
-      $oRetorno->status  = 0;
-      $oRetorno->message = urlencode(str_replace("\\n", "\n", $clempautitem->erro_msg));
-      break;
-    } else {
-      $oRetorno          = new stdClass();
-      $oRetorno->status  = 1;
-      $oRetorno->message = urlencode(str_replace("\\n", "\n", $clempautitem->erro_msg));
-      break;
-    }
+                $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
+            }
+        endforeach;
+        db_fim_transacao();
 
-    break;
+        if ($clempautitem->erro_status == 0) {
+            $oRetorno          = new stdClass();
+            $oRetorno->status  = 0;
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $clempautitem->erro_msg));
+            break;
+        } else {
+            $oRetorno          = new stdClass();
+            $oRetorno->status  = 1;
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $clempautitem->erro_msg));
+            break;
+        }
 
-  case "excluir":
+        break;
 
-    db_inicio_transacao();
-    foreach ($_POST['dados'] as $item) :
-      $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
+    case "excluir":
 
-      if (pg_numrows($rsItem) > 0)
-        $clempautitem->excluir(null, null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id']);
+        db_inicio_transacao();
+        foreach ($_POST['dados'] as $item) :
+            $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
-    endforeach;
-    db_fim_transacao();
+            if (pg_numrows($rsItem) > 0)
+                $clempautitem->excluir(null, null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id']);
 
-    if ($clempautitem->erro_status == 0) {
-      $oRetorno          = new stdClass();
-      $oRetorno->status  = 0;
-      $oRetorno->message = urlencode(str_replace("\\n", "\n", $clempautitem->erro_msg));
-      break;
-    } else {
-      $oRetorno          = new stdClass();
-      $oRetorno->status  = 1;
-      $oRetorno->message = utf8_encode('Excluído com sucesso');
-      break;
-    }
+        endforeach;
+        db_fim_transacao();
 
-    break;
+        if ($clempautitem->erro_status == 0) {
+            $oRetorno          = new stdClass();
+            $oRetorno->status  = 0;
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $clempautitem->erro_msg));
+            break;
+        } else {
+            $oRetorno          = new stdClass();
+            $oRetorno->status  = 1;
+            $oRetorno->message = utf8_encode('Excluído com sucesso');
+            break;
+        }
 
-  case "verificaSaldoCriterio":
+        break;
 
-    try {
-      $oRetorno->itens   = verificaSaldoCriterioDisponivel($_POST['e55_autori'],$_POST['tabela']);
+    case "verificaSaldoCriterio":
+
+        try {
+            $oRetorno->itens   = verificaSaldoCriterioDisponivel($_POST['e55_autori'],$_POST['tabela']);
 //      $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori']);
-    } catch (Exception $e) {
-      $oRetorno->erro = $e->getMessage();
-      $oRetorno->status   = 2;
-    }
+        } catch (Exception $e) {
+            $oRetorno->erro = $e->getMessage();
+            $oRetorno->status   = 2;
+        }
 
-    break;
+        break;
 }
 
 function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
@@ -446,7 +465,7 @@ function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
 
 function verificaSaldoCriterio($e55_autori)
 {
-  $sSQL = "
+    $sSQL = "
           SELECT DISTINCT
           case when e55_vltot is null then pc23_valor
               else pc23_valor-(select sum(e55_vltot) from empautoriza join liclicita on l20_codigo = e54_codlicitacao join empautitem on e55_autori=e54_autori where l20_codigo= (select e54_codlicitacao
@@ -516,23 +535,23 @@ group by empautoriza.e54_anulad) x) as utilizado
 
     ";
 
-  $rsConsulta = db_query($sSQL);
-  $oItens = db_utils::getCollectionByRecord($rsConsulta);
-  return $oItens;
+    $rsConsulta = db_query($sSQL);
+    $oItens = db_utils::getCollectionByRecord($rsConsulta);
+    return $oItens;
 }
 
 function verificaSaldoCriterioItemQuantidade($e55_autori)
 {
 
-  $sSQL = "
+    $sSQL = "
    select sum(e55_quant) as totalitensqt
     from empautitem
      inner join empautoriza on e54_autori = e55_autori
       where e54_codlicitacao = ( select e54_codlicitacao from empautoriza where e54_autori = {$e55_autori} )
   ";
-  $rsConsulta = db_query($sSQL);
-  $oItens = db_utils::getCollectionByRecord($rsConsulta);
-  return $oItens;
+    $rsConsulta = db_query($sSQL);
+    $oItens = db_utils::getCollectionByRecord($rsConsulta);
+    return $oItens;
 }
 
 echo $oJson->encode($oRetorno);

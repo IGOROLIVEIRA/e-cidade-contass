@@ -94,7 +94,27 @@ function js_emite(){
 	  <?
 
 
-$xy = array ('1A' => 'Órgão Até o Nível', '1B' => 'Órgão só o Nível', '2A' => 'Unidade Até o Nível', '2B' => 'Unidade só o Nível', '3A' => 'Função Até o Nível', '3B' => 'Função só o Nível', '4A' => 'Subfunção Até o Nível', '4B' => 'Subfunção só o Nível', '5A' => 'Programa Até o Nível', '5B' => 'Programa só o Nível', '6A' => 'Proj/Ativ Até o Nível', '6B' => 'Proj/Ativ só o Nível', '7A' => 'Elemento Até o Nível', '7B' => 'Elemento só o Nível', '8A' => 'Recurso Até o Nível', '9A' => 'Recurso Até o Nível - Completo', '8B' => 'Recurso só o Nível');
+$xy = array (
+    '1A' => 'Órgão Até o Nível', 
+    '1B' => 'Órgão só o Nível', 
+    '2A' => 'Unidade Até o Nível', 
+    '2B' => 'Unidade só o Nível', 
+    '3A' => 'Função Até o Nível', 
+    '3B' => 'Função só o Nível', 
+    '4A' => 'Subfunção Até o Nível', 
+    '4B' => 'Subfunção só o Nível', 
+    '5A' => 'Programa Até o Nível', 
+    '5B' => 'Programa só o Nível', 
+    '6A' => 'Proj/Ativ Até o Nível', 
+    '6B' => 'Proj/Ativ só o Nível',
+    '10A' => 'Modalidade de Aplicação até o Nível',
+    '10B' => 'Modalidade de Aplicação só o Nível', 
+    '7A' => 'Elemento Até o Nível', 
+    '7B' => 'Elemento só o Nível', 
+    '8A' => 'Recurso Até o Nível', 
+    '9A' => 'Recurso Até o Nível - Completo', 
+    '8B' => 'Recurso só o Nível'
+);
 db_select('nivel', $xy, true, 2, "");
 ?>
         </td>
