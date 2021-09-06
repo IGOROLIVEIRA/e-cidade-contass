@@ -156,7 +156,7 @@ if (!$sqlerro && $codprocesso) {
                   left join solicita as solabertura on solabertura.pc10_numero = itemdaabertura.pc11_numero
                   left join solicitemregistropreco on pc57_solicitem=compilacao.pc11_codigo
                   where
-                  compilacao.pc11_numero = $oSolicitemReservado->pc11_numero");
+                  compilacao.pc11_codigo = $oSolicitemReservado->pc11_codigo");
 
       $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
     }
