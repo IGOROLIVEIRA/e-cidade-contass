@@ -3580,7 +3580,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
 
         $pdf->setfillcolor(245);
         $pdf->cell(15,05,"ANO",      1,0,"C",1);
-        $pdf->cell(40,05,"HISTORICO",      1,0,"C",1);
+        $pdf->cell(40,05,"TRIBUTO",      1,0,"C",1);
         $pdf->cell(30,05,"VLR CORRIGIDO",  1,0,"C",1);
         $pdf->cell(25,05,"JUROS",          1,0,"C",1);
         $pdf->cell(25,05,"MULTA",          1,0,"C",1);

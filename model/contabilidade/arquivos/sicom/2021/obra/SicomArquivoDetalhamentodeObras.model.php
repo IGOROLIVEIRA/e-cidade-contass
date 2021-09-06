@@ -174,6 +174,11 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras102021->si198_tiporesponsavel = $oDados10->obr05_tiporesponsavel;
       $clcadobras102021->si198_nrodocumento = $oDados10->z01_cgccpf;
       $clcadobras102021->si198_tiporegistroconselho = $oDados10->obr05_tiporegistro;
+      if($oDados10->obr05_tiporegistro == "3"){
+          $clcadobras102021->si198_dscoutroconselho = $oDados10->obr05_dscoutroconselho;
+      }else{
+          $clcadobras102021->si198_dscoutroconselho = "";
+      }
       $clcadobras102021->si198_nroregistroconseprof = $oDados10->obr05_numregistro;
       $clcadobras102021->si198_numrt = $oDados10->obr05_numartourrt;
       $clcadobras102021->si198_dtinicioatividadeseng = $oDados10->obr05_dtcadastrores;

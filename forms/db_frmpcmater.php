@@ -436,7 +436,7 @@ function js_validaCaracteres(texto, campo){
   temporario = texto.replace(/\n/g, ' ');
 
   /*Caracteres não permitidos na descrição e complemento material*/
-  let charBuscados = [";", "'", "\"", "\\", "*", ":", "."];
+  let charBuscados = [";", "'", "\"", "\\", "*", ":"];
   let novoTexto = temporario;
   let erro = '';
 
@@ -456,7 +456,7 @@ function js_validaCaracteres(texto, campo){
   }
 
   /* Remove os caracteres contidos no array charBuscados */
-  novoTexto = novoTexto.match(/[^;\*\\\.:\"\']/gm);
+  novoTexto = novoTexto.match(/[^;\*\\\:\"\']/gm);
 
   for(let cont=0; cont < novoTexto.length; cont++){
 
@@ -468,9 +468,9 @@ function js_validaCaracteres(texto, campo){
     }
   }
 
-  if(erro){
-    alert('Caractere não permitido para inclusão!');
-  }
+  // if(erro){
+  //   alert('Caractere não permitido para inclusão!');
+  // }
 
   novoTexto = novoTexto.join('');
 
