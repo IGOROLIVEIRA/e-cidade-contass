@@ -95,7 +95,7 @@ class cl_iframe_seleciona
         // echo $arquivo;
         // exit;
         umask(74);
-        print_r($arquivo);
+        //print_r($arquivo);
         $fd = fopen($arquivo, "w") or die('Erro ao abrir!');
         fputs($fd, ' <?    ' . "\n");
         fputs($fd, ' $textocabec="' . $this->textocabec . '";' . "\n");
