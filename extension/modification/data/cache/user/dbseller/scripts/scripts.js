@@ -3860,7 +3860,7 @@ function janela(janP,cFt,Iframe) {
   this.jan        = Iframe;
   this.janFrame   = Iframe.frameElement;
   this.nomeJanela = janP.id.substr(3);
-  this.titulo     = new String(cFt.firstChild.innerHTML);
+  this.titulo     = new String(cFt.firstElementChild.innerHTML);
   this.onJanHide  = null;                  //@TODO onHide
   document.cookie = "modulo=" + janP.id;
   netscape        = navigator.appName == "Netscape" ? 1 : 0; //@TODO Remove THIS
@@ -3888,10 +3888,10 @@ function janela(janP,cFt,Iframe) {
   this.largura                = janP.style.width;
   this.altura                 = janP.style.height;
   this.corFundoTitulo         = cFt.style.backgroundColor;
-  this.corTitulo              = cFt.firstChild.style.color;
-  this.fonteTitulo            = cFt.firstChild.style.fontFamily;
-  this.tamTitulo              = cFt.firstChild.style.fontSize;
-  this.titulo                 = new String(cFt.firstChild.innerHTML);
+  this.corTitulo              = cFt.firstElementChild.style.color;
+  this.fonteTitulo            = cFt.firstElementChild.style.fontFamily;
+  this.tamTitulo              = cFt.firstElementChild.style.fontSize;
+  this.titulo                 = new String(cFt.firstElementChild.innerHTML);
 
   /**
    * Métodos
@@ -3940,7 +3940,7 @@ function janela(janP,cFt,Iframe) {
    */
   function setTitulo(t) {
 
-    cFt.firstChild.innerHTML = '&nbsp;' + t;
+    cFt.firstElementChild.innerHTML = '&nbsp;' + t;
     this.titulo = new String('&nbsp;' + t);
   }
 
@@ -3966,7 +3966,7 @@ function janela(janP,cFt,Iframe) {
    */
   function setCorTitulo(cor) {
 
-    cFt.firstChild.style.color = cor;
+    cFt.firstElementChild.style.color = cor;
     this.corTitulo = cor;
   }
 
@@ -3978,7 +3978,7 @@ function janela(janP,cFt,Iframe) {
    * @return void
    */
   function setFonteTitulo(f) {
-    cFt.firstChild.style.fontFamily = f;
+    cFt.firstElementChild.style.fontFamily = f;
     this.fonteTitulo = f;
   }
 
@@ -3990,7 +3990,7 @@ function janela(janP,cFt,Iframe) {
    * @return void
    */
   function setTamTitulo(t) {
-    cFt.firstChild.style.fontSize = t;
+    cFt.firstElementChild.style.fontSize = t;
     this.tamTitulo = t;
   }
 
