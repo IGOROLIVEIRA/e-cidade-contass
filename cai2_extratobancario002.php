@@ -459,7 +459,11 @@ union all
                   select
 	                      corrente.k12_id as caixa,
                         corrente.k12_data as data,
-		                    cornump.k12_valor as valor_debito,
+		                    (cornump.k12_valor::float - round(coalesce((select sum(vlrrec) from disrec_desconto_integral  a
+								inner join discla d on d.codcla  =  a.codcla  
+								where dtaute = corrente.k12_data and a.k00_receit = cornump.k12_receit 
+								and a.codcla = discla.codcla 
+								),0),2)::float) as  valor_debito,
 		                    0 as valor_credito,
 	                      ('Baixa da banco ')::text as tipo_movimentacao,
 		                     discla.codret as codigo,
@@ -506,7 +510,7 @@ union all
                   and corplacaixa.k82_data is null
                   and corplacaixa.k82_autent is null
 
-              ) as x
+              ) as x where valor_debito <> 0
 		group by
 		           caixa,
 		      	   data,
