@@ -178,6 +178,9 @@ $clrotulo->label("l20_codigo");
 
         js_removeObj('msgBox');
         oGridItens.clearAll(true);
+        var aEventsIn  = ["onmouseover"];
+        var aEventsOut = ["onmouseout"];
+        aDadosHintGrid = new Array();
 
         var oRetornoitens = JSON.parse(oAjax.responseText);
 
@@ -195,10 +198,33 @@ $clrotulo->label("l20_codigo");
                     aLinha[5] = oLinha.pc23_valor;
                     oGridItens.addRow(aLinha);
                 nTotal = nTotal + Number(oLinha.pc23_valor);
+
+                var sTextEvent  = " ";
+
+                if (aLinha[1] !== '') {
+                    sTextEvent += "<b>Material: </b>"+aLinha[1];
+                } else {
+                    sTextEvent += "<b>Nenhum dado à mostrar</b>";
+                }
+
+                var oDadosHint           = new Object();
+                oDadosHint.idLinha   = `gridItensrowgridItens${iLinha}`;
+                oDadosHint.sText     = sTextEvent;
+                aDadosHintGrid.push(oDadosHint);
             });
             oGridItens.renderRows();
             oGridItens.oFooter.rows[0].cells[5].innerHTML = "Valor Total:";
             oGridItens.oFooter.rows[0].cells[6].innerHTML = js_formatar(nTotal, "f");
+
+            aDadosHintGrid.each(function(oHint, id) {
+                var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
+                oDBHint.setText(oHint.sText);
+                oDBHint.setShowEvents(aEventsIn);
+                oDBHint.setHideEvents(aEventsOut);
+                oDBHint.setPosition('B', 'L');
+                oDBHint.setUseMouse(true);
+                oDBHint.make($(oHint.idLinha), 2);
+            });
         }
     }
 
