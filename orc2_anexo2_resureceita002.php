@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/pdf.php");
@@ -70,9 +70,9 @@ if($origem == "O"){
 $head3 = "RESUMO DA RECEITA ";
 $head4 = "ANEXO (2) EXERCÍCIO: ".db_getsession("DB_anousu")." - ".$xtipo;
 $head5 = "INSTITUIÇÕES : ".$descr_inst;
-$pdf = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $total = 0;
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',8);
@@ -98,13 +98,13 @@ for($i=0;$i<pg_numrows($result);$i++){
   db_fieldsmemory($result,$i);
   $elemento = $o57_fonte;
   $descr    = $o57_descr;
-  
+
   if($origem == "O") {
     $valor = $saldo_inicial;
   } else {
     $valor = $saldo_arrecadado;
   }
-	
+
   $sSqlConplanoGrupo = "select fc_conplano_grupo(".db_getsession("DB_anousu").",'".$o57_fonte."',9004) as lconplanogrupo ";
   $rsConplanoGrupo   = db_query($sSqlConplanoGrupo);
   $oConplanoGrupo    = db_utils::fieldsMemory($rsConplanoGrupo,0);
@@ -128,7 +128,7 @@ for($i=0;$i<pg_numrows($result);$i++){
     $pdf->cell(20,$alt,"ECONÔMICA",0,1,"R",0);
     $pdf->cell(0,$alt,'',"T",1,"C",0);
     $pdf->ln(3);
-  
+
   }
 
   $pdf->setfont('arial','',6);
@@ -195,7 +195,7 @@ $descrm = "";
 $pagina = 0;
 $pdf->addpage();
 $pdf->setfont('arial','b',8);
-    
+
 $pdf->cell(45,$alt,'',0,0,"L",0);
 $pdf->cell(40,$alt,"Resumo",0,1,"L",0);
 
@@ -219,7 +219,7 @@ for($i=0;$i<pg_numrows($result);$i++){
     $pdf->cell(20,$alt,"",0,0,"R",0);
     $pdf->cell(20,$alt,db_formatar($valor,'f'),0,0,"R",0);
     $pdf->cell(20,$alt,"",0,1,"R",0);
-    $rec_cor += $valor; 
+    $rec_cor += $valor;
   }
 }
 
@@ -240,10 +240,10 @@ for($i=0;$i<pg_numrows($result);$i++){
      $valor = $saldo_inicial;
   else
      $valor = $saldo_arrecadado;
-  
-  if(substr($o57_fonte,3,10) == "0000000000" 
+
+  if(substr($o57_fonte,3,10) == "0000000000"
       && substr($o57_fonte,2,1) != "0"
-      && $valor != 0 
+      && $valor != 0
       && substr($o57_fonte,1,1) == "2" ){
     $xx = 3;
     $pdf->cell($xx,$alt,"",0,0,"R",0);
@@ -252,7 +252,7 @@ for($i=0;$i<pg_numrows($result);$i++){
     $pdf->cell(20,$alt,"",0,0,"R",0);
     $pdf->cell(20,$alt,db_formatar($valor,'f'),0,0,"R",0);
     $pdf->cell(20,$alt,"",0,1,"R",0);
-    $rec_cap += $valor; 
+    $rec_cap += $valor;
   }
 }
 $pdf->ln(3);
@@ -274,7 +274,7 @@ $pdf->cell(20,$alt,"",0,1,"R",0);
 $pdf->ln(14);
 
 if($origem != "O"){
-  assinaturas(&$pdf,&$classinatura,'BG');
+  assinaturas($pdf,$classinatura,'BG');
 }
 
 $pdf->Output();

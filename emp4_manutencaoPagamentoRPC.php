@@ -355,7 +355,7 @@ switch ($oParam->exec) {
 		  }
 
           if ( $oTransferencia->getContaCredito() != "" ) {
-              
+
               $oContaTesouraria = new contaTesouraria($oTransferencia->getContaCredito());
               $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
 
@@ -475,11 +475,11 @@ switch ($oParam->exec) {
 				} else {
 					$oOrdemPagamento->setCheque(null);
 				}
-				
+
 				if (isset($oMovimento->iCodCheque) && trim($oMovimento->iCodCheque) != '') {
 					$oOrdemPagamento->setChequeAgenda($oMovimento->iCodCheque);
 				}
-				
+
 				$oOrdemPagamento->setConta($oMovimento->iContaSaltes); // temos que verificar esses parametros
 				$oOrdemPagamento->setValorPago($oMovimento->nValor);
 				$oOrdemPagamento->setMovimentoAgenda($oMovimento->iCodMov);
@@ -519,14 +519,14 @@ switch ($oParam->exec) {
     $oAgenda->setUrlEncode(true);
     $sWhere  = " s.k17_instit = ".db_getsession("DB_instit");
     $sWhere .= " and e81_cancelado is null ";
-    
+
     if (!isset($oParam->params[0]->lBuscaCheque) && $oParam->params[0]->lBuscaCheque != 1) {
 
       	$sWhere .= " and e91_codmov is null    ";
     	$sWhere .= " and (e90_cancelado is true or e90_cancelado is null)";
 
     }
-    
+
     $sWhere .= "and k17_situacao in(1,3)   ";
     if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim == "") {
       $sWhere .= " and s.k17_codigo = {$oParam->params[0]->iOrdemIni}";
@@ -642,24 +642,24 @@ switch ($oParam->exec) {
                 $oDaoPagOrdem   = db_utils::getDao("pagordem");
                 $sWhere         = " e81_codmov = {$oParam->iCodMov}";
                 $rsOrdem        = $oDaoPagOrdem->sql_record($oDaoPagOrdem->sql_query_pagordemagenda(null, "pagordem.*", null, $sWhere));
-                
+
                 if ($oDaoPagOrdem->numrows > 0) {
 
                     $oPagOrdem = db_utils::fieldsMemory($rsOrdem,0);
-                    
+
                     if ($oParam->iConta != $oPagOrdem->e50_contapag) {
-                        
+
                         $oDaoPagOrdem->e50_codord   = $oPagOrdem->e50_codord;
                         $oDaoPagOrdem->e50_contapag = $oParam->iConta;
                         $oDaoPagOrdem->alterar($oPagOrdem->e50_codord);
 
                         if ($oDaoPagOrdem->erro_status == 0) {
                             throw new Exception("Erro ao alterar a conta pagadora da ordem de pagamento ($oPagOrdem->e50_codord).");
-                        }                    
+                        }
                     }
-                }        
+                }
             }
-            
+
             $oRetorno           = new stdClass();
             $oRetorno->status   = 1;
             $oRetorno->message  = 'Conta Pagadora alterada.';
@@ -667,7 +667,7 @@ switch ($oParam->exec) {
             db_fim_transacao(false);
 
         } catch (Exception $eErro) {
-            
+
             db_fim_transacao(true);
 
             $oRetorno->status   = 2;

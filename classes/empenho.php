@@ -54,7 +54,7 @@ class empenho {
   private $iCodigoMovimento = null;
   public  $iCompDesp        = null;
   public $sMsgErro = '';
-  function empenho() {
+  function __construct(){
 
     //$this->setNumEmp($iEmpenho);
     if (!class_exists("cl_empempenho")){

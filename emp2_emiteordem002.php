@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
 require_once("libs/db_sql.php");
@@ -393,8 +392,12 @@ for ($i = 0; $i < $clpagordem->numrows; $i++) {
 }
 
 //include("fpdf151/geraarquivo.php");
-
-if (USA_GED) {
+/**
+ *   autor IGOR RUAS
+ *  VERIFICAR COMO FUNCIONA ESSE GERENCIADOR ELETRONICO.
+ */
+$USA_GED = false;
+if ($USA_GED) {
     try {
 
         require_once("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");

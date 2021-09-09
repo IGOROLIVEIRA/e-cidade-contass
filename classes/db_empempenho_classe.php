@@ -74,6 +74,12 @@ class cl_empempenho
     var $e60_convenio = null;
     var $e60_numconvenio = null;
     var $e60_dataconvenio = null;
+    var $e60_dataconvenio_dia = null;
+    var $e60_dataconvenio_mes = null;
+    var $e60_dataconvenio_ano = null;
+    var $e60_datasentenca_dia = null;
+    var $e60_datasentenca_mes = null;
+    var $e60_datasentenca_ano = null;
     /*OC4604 - LQD*/
     var $e60_datasentenca = null;
     var $e60_tipodespesa = null;

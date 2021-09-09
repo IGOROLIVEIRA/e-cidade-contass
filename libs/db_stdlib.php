@@ -2873,9 +2873,11 @@ function db_extenso($valor = 0, $maiusculas = false)
                   Rodrigo Cerqueira, rodrigobc@fte.com.br
                   */
         if ($rt)
-            $rt = ereg_replace(" E ", " e ", ucwords($rt));
+            $rt = preg_replace(" E ", " e ", ucwords($rt));
+
         return (($rt) ? ($rt) : "Zero");
     }
+
 }
 function db_permissaomenu($ano, $modulo, $item)
 {

@@ -69,7 +69,7 @@ class cl_matrequi {
                  m40_dtfinalizado = date = Data da finalização
                  ";
    //funcao construtor da classe
-   function cl_matrequi() {
+   function __construct(){
      //classes dos rotulos dos campos
      $this->rotulo = new rotulo("matrequi");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
@@ -686,7 +686,7 @@ class cl_matrequi {
         $aAuxiliar["codatenditem"]     = $oAtendRequiItem->m43_codigo;
         $aAuxiliar["codmatestoqueini"] = $oMatEstoqueIni->m80_codigo;
         $lErro = $oMatEstoque->atualizaEstoque($iCodMater, $iCodDepto, 17, $aItens[$i]["quantatend"], $dData,
-                              null, $aAuxiliar, &$sErro,$iCodMatestoqueitem , $iCodEstoque);
+                              null, $aAuxiliar, $sErro,$iCodMatestoqueitem , $iCodEstoque);
 
         if($lErro) {
           break;

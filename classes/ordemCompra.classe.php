@@ -21,7 +21,7 @@ class ordemCompra {
 
   private $isRestoPagar = false;
 
-  function ordemCompra($iCodOrdem) {
+  function __construct($iCodOrdem) {
 
     $this->setOrdem((int) $iCodOrdem);
     //instanciamos as classes do db_portal referentes a ordem de compra
