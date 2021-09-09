@@ -451,10 +451,10 @@ function js_addRetencao() {
 
    }
    if ( nValorRetencao <= 0 ) {
-	
+
 	  alert("O valor da retenção deve ser maior que zero!");
 	  return false;
-	  
+
    }
    isSave = true;
    oRetencao.iCodigoRetencao = $F('e21_sequencial');
@@ -469,7 +469,7 @@ function js_addRetencao() {
    if (typeof(aBaseDeCalculo[$F('e21_sequencial')]) != "undefined") {
      oRetencao.aMovimentos = aBaseDeCalculo[$F('e21_sequencial')];
    }
-   var soRetencaojson        = oRetencao.toSource();
+   var soRetencaojson        = JSON.stringify(oRetencao);
    soRetencaojson            = soRetencaojson.replace("(","");
    soRetencaojson            = soRetencaojson.replace(")","");
    js_divCarregando("Aguarde, Calculando retenção","msgBox");
@@ -665,7 +665,7 @@ function js_alterarRetencao() {
       oRetencao.aMovimentos = aBaseDeCalculo[$F('e21_sequencial')];
 
    }
-   var soRetencaojson        = oRetencao.toSource();
+   var soRetencaojson        = JSON.stringify(oRetencao);
    soRetencaojson            = soRetencaojson.replace("(","");
    soRetencaojson            = soRetencaojson.replace(")","");
    js_divCarregando("Aguarde, Calculando retenção","msgBox");
@@ -690,7 +690,7 @@ function js_confirmar() {
 
   js_divCarregando("Aguarde, salvando modificações","msgBox");
   var sJson   = '{"exec":"saveRetencoes","params":[{"iCodNota":'+$F('e69_codnota')+',';
-  sJson      += '"iCodOrd":'+($F('e50_codord'))+',"iCodMov":'+$F('e81_codmov')+',"aMovimentos":'+aBaseDeCalculo.toSource()+'}]}';
+  sJson      += '"iCodOrd":'+($F('e50_codord'))+',"iCodMov":'+$F('e81_codmov')+',"aMovimentos":'+JSON.stringify(aBaseDeCalculo)+'}]}';
   var url     = 'emp4_retencaonotaRPC.php';
   console.log(sJson);
   var oAjax   = new Ajax.Request(
@@ -818,7 +818,7 @@ function js_calculaRetencao() {
 
     var sJson   = '{"exec":"calculaRetencao","params":';
     sJson      += '[{"iTipoCalc":'+iTipoCalc+',"iCpfCnpj":"'+sCpfCnpj+'","nAliquota":'+nAliquota+',"dtPagamento":"'+dtPagamento+'",';
-    sJson      += '"aMovimentos":'+aMovimentos.toSource()+',';
+    sJson      += '"aMovimentos":'+JSON.stringify(aMovimentos)+',';
     sJson      += '"nValorDeducao":'+nDeducao+',"nValorBase":'+nValorBase+',"iCodNota":'+$F('e69_codnota')+',"nValorNota":'+nValorNota+'}]}';
     url         = 'emp4_retencaonotaRPC.php';
     js_divCarregando("Aguarde, calculando..","msgBox");
@@ -862,7 +862,7 @@ function js_confirmarPagamento() {
   }
   js_divCarregando("Aguarde, salvando modificações","msgBox");
   var sJson   = '{"exec":"configurarRetencoes","params":[{"iCodNota":'+$F('e69_codnota')+',';
-  sJson      += '"iCodOrd":'+($F('e50_codord'))+',"iCodMov":'+$F('e81_codmov')+',"aMovimentos":'+aBaseDeCalculo.toSource()+'}]}';
+  sJson      += '"iCodOrd":'+($F('e50_codord'))+',"iCodMov":'+$F('e81_codmov')+',"aMovimentos":'+JSON.stringify(aBaseDeCalculo)+'}]}';
   var url     = 'emp4_retencaonotaRPC.php';
   var oAjax   = new Ajax.Request(
                          url,

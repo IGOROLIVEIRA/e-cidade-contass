@@ -29,7 +29,7 @@
 //CLASSE DA ENTIDADE pagordem
 class cl_pagordem
 {
-    // cria variaveis de erro 
+    // cria variaveis de erro
     var $rotulo     = null;
     var $query_sql  = null;
     var $numrows    = 0;
@@ -42,7 +42,7 @@ class cl_pagordem
     var $erro_msg   = null;
     var $erro_campo = null;
     var $pagina_retorno = null;
-    // cria variaveis do arquivo 
+    // cria variaveis do arquivo
     var $e50_codord = 0;
     var $e50_numemp = 0;
     var $e50_data_dia = null;
@@ -57,15 +57,15 @@ class cl_pagordem
     var $e50_compdesp_mes = null;
     var $e50_compdesp_ano = null;
     var $e50_contapag = null;
-    // cria propriedade com as variaveis do arquivo 
+    // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 e50_codord = int4 = Ordem 
-                 e50_numemp = int4 = Empenho 
-                 e50_data = date = Emissão 
-                 e50_obs = text = Observação 
-                 e50_id_usuario = int4 = Usuario 
-                 e50_hora = char(5) = Hora 
-                 e50_anousu = int4 = Ano da Ordem 
+                 e50_codord = int4 = Ordem
+                 e50_numemp = int4 = Empenho
+                 e50_data = date = Emissão
+                 e50_obs = text = Observação
+                 e50_id_usuario = int4 = Usuario
+                 e50_hora = char(5) = Hora
+                 e50_anousu = int4 = Ano da Ordem
                  e50_compdesp = date = Competencia da Despesa
                  e50_contapag = int4 = Conta Pagadora
                  ";
@@ -86,6 +86,7 @@ class cl_pagordem
             }
         }
     }
+
     // funcao para atualizar campos
     function atualizacampos($exclusao = false)
     {
@@ -100,43 +101,190 @@ class cl_pagordem
                     $this->e50_data = $this->e50_data_ano . "-" . $this->e50_data_mes . "-" . $this->e50_data_dia;
                 }
             }
+            $this->e50_obs = ($this->e50_obs == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_obs"] : $this->e50_obs);
+            $this->e50_id_usuario = ($this->e50_id_usuario == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_id_usuario"] : $this->e50_id_usuario);
+            $this->e50_hora = ($this->e50_hora == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_hora"] : $this->e50_hora);
+            $this->e50_anousu = ($this->e50_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_anousu"] : $this->e50_anousu);
+            if ($this->e50_compdesp == "") {
+                $this->e50_compdesp_dia = ($this->e50_compdesp_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"] : $this->e50_compdesp_dia);
+                $this->e50_compdesp_mes = ($this->e50_compdesp_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_mes"] : $this->e50_compdesp_mes);
+                $this->e50_compdesp_ano = ($this->e50_compdesp_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_ano"] : $this->e50_compdesp_ano);
+                if ($this->e50_compdesp_dia != "") {
+                    $this->e50_compdesp = $this->e50_compdesp_ano . "-" . $this->e50_compdesp_mes . "-" . $this->e50_compdesp_dia;
+                }
+            }
+            $this->e50_contapag = ($this->e50_contapag == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_contapag"] : $this->e50_contapag);
+        } else {
+            $this->e50_codord = ($this->e50_codord == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_codord"] : $this->e50_codord);
         }
-        // funcao para atualizar campos
-        function atualizacampos($exclusao = false)
-        {
-            if ($exclusao == false) {
-                $this->e50_codord = ($this->e50_codord == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_codord"] : $this->e50_codord);
-                $this->e50_numemp = ($this->e50_numemp == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_numemp"] : $this->e50_numemp);
-                if ($this->e50_data == "") {
-                    $this->e50_data_dia = ($this->e50_data_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_data_dia"] : $this->e50_data_dia);
-                    $this->e50_data_mes = ($this->e50_data_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_data_mes"] : $this->e50_data_mes);
-                    $this->e50_data_ano = ($this->e50_data_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_data_ano"] : $this->e50_data_ano);
-                    if ($this->e50_data_dia != "") {
-                        $this->e50_data = $this->e50_data_ano . "-" . $this->e50_data_mes . "-" . $this->e50_data_dia;
-                    }
-                }
-                $this->e50_obs = ($this->e50_obs == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_obs"] : $this->e50_obs);
-                $this->e50_id_usuario = ($this->e50_id_usuario == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_id_usuario"] : $this->e50_id_usuario);
-                $this->e50_hora = ($this->e50_hora == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_hora"] : $this->e50_hora);
-                $this->e50_anousu = ($this->e50_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_anousu"] : $this->e50_anousu);
-                if ($this->e50_compdesp == "") {
-                    $this->e50_compdesp_dia = ($this->e50_compdesp_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"] : $this->e50_compdesp_dia);
-                    $this->e50_compdesp_mes = ($this->e50_compdesp_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_mes"] : $this->e50_compdesp_mes);
-                    $this->e50_compdesp_ano = ($this->e50_compdesp_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_ano"] : $this->e50_compdesp_ano);
-                    if ($this->e50_compdesp_dia != "") {
-                        $this->e50_compdesp = $this->e50_compdesp_ano . "-" . $this->e50_compdesp_mes . "-" . $this->e50_compdesp_dia;
-                    }
-                }
-                $this->e50_contapag = ($this->e50_contapag == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_contapag"] : $this->e50_contapag);
+    }
+
+    // funcao para inclusao
+    function incluir($e50_codord)
+    {
+        $this->atualizacampos();
+        if ($this->e50_numemp == null) {
+            $this->erro_sql = " Campo Empenho nao Informado.";
+            $this->erro_campo = "e50_numemp";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->e50_data == null) {
+            $this->erro_sql = " Campo Emissão nao Informado.";
+            $this->erro_campo = "e50_data_dia";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->e50_id_usuario == null) {
+            $this->erro_sql = " Campo Usuario nao Informado.";
+            $this->erro_campo = "e50_id_usuario";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->e50_hora == null) {
+            $this->erro_sql = " Campo Hora nao Informado.";
+            $this->erro_campo = "e50_hora";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->e50_anousu == null) {
+            $this->erro_sql = " Campo Ano da Ordem nao Informado.";
+            $this->erro_campo = "e50_anousu";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($e50_codord == "" || $e50_codord == null) {
+            $result = db_query("select nextval('pagordem_e50_codord_seq')");
+            if ($result == false) {
+                $this->erro_banco = str_replace("\n", "", @pg_last_error());
+                $this->erro_sql   = "Verifique o cadastro da sequencia: pagordem_e50_codord_seq do campo: e50_codord";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+            $this->e50_codord = pg_result($result, 0, 0);
+        } else {
+            $result = db_query("select last_value from pagordem_e50_codord_seq");
+            if (($result != false) && (pg_result($result, 0, 0) < $e50_codord)) {
+                $this->erro_sql = " Campo e50_codord maior que último número da sequencia.";
+                $this->erro_banco = "Sequencia menor que este número.";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
             } else {
-                $this->e50_codord = ($this->e50_codord == "" ? @$GLOBALS["HTTP_POST_VARS"]["e50_codord"] : $this->e50_codord);
+                $this->e50_codord = $e50_codord;
             }
         }
-        // funcao para inclusao
-        function incluir($e50_codord)
-        {
-            $this->atualizacampos();
-            if ($this->e50_numemp == null) {
+        if (($this->e50_codord == null) || ($this->e50_codord == "")) {
+            $this->erro_sql = " Campo e50_codord nao declarado.";
+            $this->erro_banco = "Chave Primaria zerada.";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        $sql = "insert into pagordem(
+                                    e50_codord
+                                    ,e50_numemp
+                                    ,e50_data
+                                    ,e50_obs
+                                    ,e50_id_usuario
+                                    ,e50_hora
+                                    ,e50_anousu
+                                    ,e50_compdesp
+                                    ,e50_contapag
+                    )
+            values (
+                            $this->e50_codord
+                            ,$this->e50_numemp
+                            ," . ($this->e50_data == "null" || $this->e50_data == "" ? "null" : "'" . $this->e50_data . "'") . "
+                            ,'$this->e50_obs'
+                            ,$this->e50_id_usuario
+                            ,'$this->e50_hora'
+                            ,$this->e50_anousu
+                            ," . ($this->e50_compdesp == "null" || $this->e50_compdesp == "" ? "null" : "'" . $this->e50_compdesp . "'") . "
+                            ," . ($this->e50_contapag == "null" || $this->e50_contapag == "" ? "null" : $this->e50_contapag) . "
+                    )";
+        $result = db_query($sql);
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
+                $this->erro_sql   = "Ordens de pagamento ($this->e50_codord) nao Incluído. Inclusao Abortada.";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_banco = "Ordens de pagamento já Cadastrado";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            } else {
+                $this->erro_sql   = "Ordens de pagamento ($this->e50_codord) nao Incluído. Inclusao Abortada.";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            }
+            $this->erro_status = "0";
+            $this->numrows_incluir = 0;
+            return false;
+        }
+        $this->erro_banco = "";
+        $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
+        $this->erro_sql .= "Valores : " . $this->e50_codord;
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "1";
+        $this->numrows_incluir = pg_affected_rows($result);
+        $resaco = $this->sql_record($this->sql_query_file($this->e50_codord));
+        if (($resaco != false) || ($this->numrows != 0)) {
+            $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+            $acount = pg_result($resac, 0, 0);
+            $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+            $resac = db_query("insert into db_acountkey values($acount,5437,'$this->e50_codord','I')");
+            $resac = db_query("insert into db_acount values($acount,808,5437,'','" . AddSlashes(pg_result($resaco, 0, 'e50_codord')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,808,5438,'','" . AddSlashes(pg_result($resaco, 0, 'e50_numemp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,808,5439,'','" . AddSlashes(pg_result($resaco, 0, 'e50_data')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,808,5441,'','" . AddSlashes(pg_result($resaco, 0, 'e50_obs')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,808,9190,'','" . AddSlashes(pg_result($resaco, 0, 'e50_id_usuario')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,808,9191,'','" . AddSlashes(pg_result($resaco, 0, 'e50_hora')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,808,11134,'','" . AddSlashes(pg_result($resaco, 0, 'e50_anousu')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        }
+        return true;
+    }
+    // funcao para alteracao
+    function alterar($e50_codord = null, $o56_elemento = null)
+    {
+        $this->atualizacampos();
+        $sql = " update pagordem set ";
+        $virgula = "";
+        if (trim($this->e50_codord) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_codord"])) {
+            $sql  .= $virgula . " e50_codord = $this->e50_codord ";
+            $virgula = ",";
+            if (trim($this->e50_codord) == null) {
+                $this->erro_sql = " Campo Ordem nao Informado.";
+                $this->erro_campo = "e50_codord";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->e50_numemp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_numemp"])) {
+            $sql  .= $virgula . " e50_numemp = $this->e50_numemp ";
+            $virgula = ",";
+            if (trim($this->e50_numemp) == null) {
                 $this->erro_sql = " Campo Empenho nao Informado.";
                 $this->erro_campo = "e50_numemp";
                 $this->erro_banco = "";
@@ -145,7 +293,11 @@ class cl_pagordem
                 $this->erro_status = "0";
                 return false;
             }
-            if ($this->e50_data == null) {
+        }
+        if (trim($this->e50_data) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_data_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e50_data_dia"] != "")) {
+            $sql  .= $virgula . " e50_data = '$this->e50_data' ";
+            $virgula = ",";
+            if (trim($this->e50_data) == null) {
                 $this->erro_sql = " Campo Emissão nao Informado.";
                 $this->erro_campo = "e50_data_dia";
                 $this->erro_banco = "";
@@ -154,161 +306,9 @@ class cl_pagordem
                 $this->erro_status = "0";
                 return false;
             }
-            if ($this->e50_id_usuario == null) {
-                $this->erro_sql = " Campo Usuario nao Informado.";
-                $this->erro_campo = "e50_id_usuario";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-            if ($this->e50_hora == null) {
-                $this->erro_sql = " Campo Hora nao Informado.";
-                $this->erro_campo = "e50_hora";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-            if ($this->e50_anousu == null) {
-                $this->erro_sql = " Campo Ano da Ordem nao Informado.";
-                $this->erro_campo = "e50_anousu";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-            if ($e50_codord == "" || $e50_codord == null) {
-                $result = db_query("select nextval('pagordem_e50_codord_seq')");
-                if ($result == false) {
-                    $this->erro_banco = str_replace("\n", "", @pg_last_error());
-                    $this->erro_sql   = "Verifique o cadastro da sequencia: pagordem_e50_codord_seq do campo: e50_codord";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-                $this->e50_codord = pg_result($result, 0, 0);
-            } else {
-                $result = db_query("select last_value from pagordem_e50_codord_seq");
-                if (($result != false) && (pg_result($result, 0, 0) < $e50_codord)) {
-                    $this->erro_sql = " Campo e50_codord maior que último número da sequencia.";
-                    $this->erro_banco = "Sequencia menor que este número.";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                } else {
-                    $this->e50_codord = $e50_codord;
-                }
-            }
-            if (($this->e50_codord == null) || ($this->e50_codord == "")) {
-                $this->erro_sql = " Campo e50_codord nao declarado.";
-                $this->erro_banco = "Chave Primaria zerada.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-            $sql = "insert into pagordem(
-                                       e50_codord 
-                                      ,e50_numemp 
-                                      ,e50_data 
-                                      ,e50_obs 
-                                      ,e50_id_usuario 
-                                      ,e50_hora 
-                                      ,e50_anousu 
-                                      ,e50_compdesp 
-                                      ,e50_contapag
-                       )
-                values (
-                                $this->e50_codord 
-                               ,$this->e50_numemp 
-                               ," . ($this->e50_data == "null" || $this->e50_data == "" ? "null" : "'" . $this->e50_data . "'") . " 
-                               ,'$this->e50_obs' 
-                               ,$this->e50_id_usuario 
-                               ,'$this->e50_hora' 
-                               ,$this->e50_anousu 
-                               ," . ($this->e50_compdesp == "null" || $this->e50_compdesp == "" ? "null" : "'" . $this->e50_compdesp . "'") . " 
-                               ," . ($this->e50_contapag == "null" || $this->e50_contapag == "" ? "null" : $this->e50_contapag) . " 
-                      )";
-            $result = db_query($sql);
-            if ($result == false) {
-                $this->erro_banco = str_replace("\n", "", @pg_last_error());
-                if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-                    $this->erro_sql   = "Ordens de pagamento ($this->e50_codord) nao Incluído. Inclusao Abortada.";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_banco = "Ordens de pagamento já Cadastrado";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                } else {
-                    $this->erro_sql   = "Ordens de pagamento ($this->e50_codord) nao Incluído. Inclusao Abortada.";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                }
-                $this->erro_status = "0";
-                $this->numrows_incluir = 0;
-                return false;
-            }
-            $this->erro_banco = "";
-            $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-            $this->erro_sql .= "Valores : " . $this->e50_codord;
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "1";
-            $this->numrows_incluir = pg_affected_rows($result);
-            $resaco = $this->sql_record($this->sql_query_file($this->e50_codord));
-            if (($resaco != false) || ($this->numrows != 0)) {
-                $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac, 0, 0);
-                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                $resac = db_query("insert into db_acountkey values($acount,5437,'$this->e50_codord','I')");
-                $resac = db_query("insert into db_acount values($acount,808,5437,'','" . AddSlashes(pg_result($resaco, 0, 'e50_codord')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,808,5438,'','" . AddSlashes(pg_result($resaco, 0, 'e50_numemp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,808,5439,'','" . AddSlashes(pg_result($resaco, 0, 'e50_data')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,808,5441,'','" . AddSlashes(pg_result($resaco, 0, 'e50_obs')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,808,9190,'','" . AddSlashes(pg_result($resaco, 0, 'e50_id_usuario')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,808,9191,'','" . AddSlashes(pg_result($resaco, 0, 'e50_hora')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,808,11134,'','" . AddSlashes(pg_result($resaco, 0, 'e50_anousu')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            }
-            return true;
-        }
-        // funcao para alteracao
-        function alterar($e50_codord = null, $o56_elemento = null)
-        {
-            $this->atualizacampos();
-            $sql = " update pagordem set ";
-            $virgula = "";
-            if (trim($this->e50_codord) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_codord"])) {
-                $sql  .= $virgula . " e50_codord = $this->e50_codord ";
-                $virgula = ",";
-                if (trim($this->e50_codord) == null) {
-                    $this->erro_sql = " Campo Ordem nao Informado.";
-                    $this->erro_campo = "e50_codord";
-                    $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            }
-            if (trim($this->e50_numemp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_numemp"])) {
-                $sql  .= $virgula . " e50_numemp = $this->e50_numemp ";
-                $virgula = ",";
-                if (trim($this->e50_numemp) == null) {
-                    $this->erro_sql = " Campo Empenho nao Informado.";
-                    $this->erro_campo = "e50_numemp";
-                    $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            }
-            if (trim($this->e50_data) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_data_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e50_data_dia"] != "")) {
-                $sql  .= $virgula . " e50_data = '$this->e50_data' ";
+        } else {
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e50_data_dia"])) {
+                $sql  .= $virgula . " e50_data = null ";
                 $virgula = ",";
                 if (trim($this->e50_data) == null) {
                     $this->erro_sql = " Campo Emissão nao Informado.";
@@ -318,187 +318,6 @@ class cl_pagordem
                     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
-                }
-            } else {
-                if (isset($GLOBALS["HTTP_POST_VARS"]["e50_data_dia"])) {
-                    $sql  .= $virgula . " e50_data = null ";
-                    $virgula = ",";
-                    if (trim($this->e50_data) == null) {
-                        $this->erro_sql = " Campo Emissão nao Informado.";
-                        $this->erro_campo = "e50_data_dia";
-                        $this->erro_banco = "";
-                        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                        $this->erro_status = "0";
-                        return false;
-                    }
-                }
-            }
-            if (trim($this->e50_obs) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_obs"])) {
-                $sql  .= $virgula . " e50_obs = '$this->e50_obs' ";
-                $virgula = ",";
-            }
-            if (trim($this->e50_id_usuario) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_id_usuario"])) {
-                $sql  .= $virgula . " e50_id_usuario = $this->e50_id_usuario ";
-                $virgula = ",";
-                if (trim($this->e50_id_usuario) == null) {
-                    $this->erro_sql = " Campo Usuario nao Informado.";
-                    $this->erro_campo = "e50_id_usuario";
-                    $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            }
-            if (trim($this->e50_hora) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_hora"])) {
-                $sql  .= $virgula . " e50_hora = '$this->e50_hora' ";
-                $virgula = ",";
-                if (trim($this->e50_hora) == null) {
-                    $this->erro_sql = " Campo Hora nao Informado.";
-                    $this->erro_campo = "e50_hora";
-                    $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            }
-            if (trim($this->e50_anousu) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_anousu"])) {
-                $sql  .= $virgula . " e50_anousu = $this->e50_anousu ";
-                $virgula = ",";
-                if (trim($this->e50_anousu) == null) {
-                    $this->erro_sql = " Campo Ano da Ordem nao Informado.";
-                    $this->erro_campo = "e50_anousu";
-                    $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            }
-            if (trim($this->e50_compdesp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"] != "")) {
-                $sql  .= $virgula . " e50_compdesp = '$this->e50_compdesp' ";
-                $virgula = ",";
-                if (trim($this->e50_compdesp) == null) {
-                    $this->erro_sql = " Campo Competência da Despesa nao Informado.";
-                    $this->erro_campo = "e50_compdesp_dia";
-                    $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            } else {
-                if (isset($GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"])) {
-                    $sql  .= $virgula . " e50_compdesp = null ";
-                    $virgula = ",";
-                    if (trim($this->e50_compdesp) == null && in_array(substr($o56_elemento, 0, 7), array("3319092", "3319192", "3319592", "3319692"))) {
-                        $this->erro_sql = " Campo Competência da Despesa nao Informado.";
-                        $this->erro_campo = "e50_compdesp_dia";
-                        $this->erro_banco = "";
-                        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                        $this->erro_status = "0";
-                        return false;
-                    }
-                }
-            }
-            if (trim($this->e50_contapag) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_contapag"])) {
-                $sql  .= $virgula . " e50_contapag = $this->e50_contapag ";
-                $virgula = ",";
-            }
-            $sql .= " where ";
-            if ($e50_codord != null) {
-                $sql .= " e50_codord = $this->e50_codord";
-            }
-            $resaco = $this->sql_record($this->sql_query_file($this->e50_codord));
-            if ($this->numrows > 0) {
-                for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-                    $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                    $acount = pg_result($resac, 0, 0);
-                    $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                    $resac = db_query("insert into db_acountkey values($acount,5437,'$this->e50_codord','A')");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["e50_codord"]) || $this->e50_codord != "")
-                        $resac = db_query("insert into db_acount values($acount,808,5437,'" . AddSlashes(pg_result($resaco, $conresaco, 'e50_codord')) . "','$this->e50_codord'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["e50_numemp"]) || $this->e50_numemp != "")
-                        $resac = db_query("insert into db_acount values($acount,808,5438,'" . AddSlashes(pg_result($resaco, $conresaco, 'e50_numemp')) . "','$this->e50_numemp'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["e50_data"]) || $this->e50_data != "")
-                        $resac = db_query("insert into db_acount values($acount,808,5439,'" . AddSlashes(pg_result($resaco, $conresaco, 'e50_data')) . "','$this->e50_data'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["e50_obs"]) || $this->e50_obs != "")
-                        $resac = db_query("insert into db_acount values($acount,808,5441,'" . AddSlashes(pg_result($resaco, $conresaco, 'e50_obs')) . "','$this->e50_obs'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["e50_id_usuario"]) || $this->e50_id_usuario != "")
-                        $resac = db_query("insert into db_acount values($acount,808,9190,'" . AddSlashes(pg_result($resaco, $conresaco, 'e50_id_usuario')) . "','$this->e50_id_usuario'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["e50_hora"]) || $this->e50_hora != "")
-                        $resac = db_query("insert into db_acount values($acount,808,9191,'" . AddSlashes(pg_result($resaco, $conresaco, 'e50_hora')) . "','$this->e50_hora'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["e50_anousu"]) || $this->e50_anousu != "")
-                        $resac = db_query("insert into db_acount values($acount,808,11134,'" . AddSlashes(pg_result($resaco, $conresaco, 'e50_anousu')) . "','$this->e50_anousu'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                }
-            }
-            $result = db_query($sql);
-            if ($result == false) {
-                $this->erro_banco = str_replace("\n", "", @pg_last_error());
-                $this->erro_sql   = "Ordens de pagamento nao Alterado. Alteracao Abortada.\\n";
-                $this->erro_sql .= "Valores : " . $this->e50_codord;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                $this->numrows_alterar = 0;
-                return false;
-            } else {
-                if (pg_affected_rows($result) == 0) {
-                    $this->erro_banco = "";
-                    $this->erro_sql = "Ordens de pagamento nao foi Alterado. Alteracao Executada.\\n";
-                    $this->erro_sql .= "Valores : " . $this->e50_codord;
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "1";
-                    $this->numrows_alterar = 0;
-                    return true;
-                } else {
-                    $this->erro_banco = "";
-                    $this->erro_sql = "Alteração efetuada com Sucesso\\n";
-                    $this->erro_sql .= "Valores : " . $this->e50_codord;
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "1";
-                    $this->numrows_alterar = pg_affected_rows($result);
-                    return true;
-                }
-            }
-        }
-        // funcao para exclusao 
-        function excluir($e50_codord = null, $dbwhere = null)
-        {
-            if ($dbwhere == null || $dbwhere == "") {
-                $resaco = $this->sql_record($this->sql_query_file($e50_codord));
-            } else {
-                $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
-            }
-            if (($resaco != false) || ($this->numrows != 0)) {
-                for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-                    $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                    $acount = pg_result($resac, 0, 0);
-                    $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                    $resac = db_query("insert into db_acountkey values($acount,5437,'$e50_codord','E')");
-                    $resac = db_query("insert into db_acount values($acount,808,5437,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e50_codord')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac = db_query("insert into db_acount values($acount,808,5438,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e50_numemp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac = db_query("insert into db_acount values($acount,808,5439,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e50_data')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac = db_query("insert into db_acount values($acount,808,5441,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e50_obs')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac = db_query("insert into db_acount values($acount,808,9190,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e50_id_usuario')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac = db_query("insert into db_acount values($acount,808,9191,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e50_hora')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac = db_query("insert into db_acount values($acount,808,11134,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e50_anousu')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                }
-            }
-            $sql = " delete from pagordem
-                    where ";
-            $sql2 = "";
-            if ($dbwhere == null || $dbwhere == "") {
-                if ($e50_codord != "") {
-                    if ($sql2 != "") {
-                        $sql2 .= " and ";
-                    }
-                    $sql2 .= " e50_codord = $e50_codord ";
                 }
             }
         }
@@ -571,6 +390,10 @@ class cl_pagordem
                     return false;
                 }
             }
+        }
+        if (trim($this->e50_contapag) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e50_contapag"])) {
+            $sql  .= $virgula . " e50_contapag = $this->e50_contapag ";
+            $virgula = ",";
         }
         $sql .= " where ";
         if ($e50_codord != null) {
