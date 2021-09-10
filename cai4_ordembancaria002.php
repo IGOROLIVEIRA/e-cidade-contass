@@ -207,10 +207,10 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     $pdf->Cell(30, $tam, "Agência: " . $oResult->pc63_agencia . "-" . $oResult->pc63_agencia_dig, 0, 0, "C", 0);
     $pdf->Cell(22, $tam, "C.C: " . $oResult->pc63_conta . "-" . $oResult->pc63_conta_dig, 0, 1, "C", 0);
 
-    $sSQL = "SELECT k29_exibeobservacao FROM caiparametro WHERE k29_instit = " . db_getsession('DB_instit');
-    $rsResult = db_query($sSQL);
+    $sqlObservacao = "SELECT k29_exibeobservacao FROM caiparametro WHERE k29_instit = " . db_getsession('DB_instit');
+    $rsObservacao = db_query($sqlObservacao);
 
-    if (db_utils::fieldsMemory($rsResult, 0)->k29_exibeobservacao == 't') {
+    if (db_utils::fieldsMemory($rsObservacao, 0)->k29_exibeobservacao == 't') {
         $pos_x = $pdf->x;
         $pos_y = $pdf->y;
         $pdf->SetFont("", "B", "");
