@@ -95,7 +95,7 @@
             qry += '&retornadepart=true';
             qry += '&pactoplano=<?= $iPactoPlano ?>';
             if (mostra == true) {
-                qry += '&funcao_js=parent.lanc_dotac.js_mostraorcdotacao1|o58_coddot';
+                qry += '&funcao_js=parent.lanc_dotac.js_mostraorcdotacao1';
                 js_OpenJanelaIframe('top.corpo.iframe_solicitem', 'db_iframe_orcdotacao',
                     'func_permorcdotacao.php?' + qry, 'Pesquisa', true, '0');
             } else {
@@ -851,10 +851,9 @@
         */
         function js_mostraorcdotacao1(chave1, chave2) {
             document.form1.pc13_coddot.value = chave1;
-            js_divCarregando("Aguarde, efetuando operação", "msgbox", false);
             document.form1.pc13_depto.value = chave2;
             js_dot();
-            top.corpo.iframe_solicitem.db_iframe_orcdotacao.hide();
+            (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_solicitem.db_iframe_orcdotacao.hide();
         }
 
         function js_mostraorcdotacao(chave1) {

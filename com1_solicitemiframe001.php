@@ -689,7 +689,7 @@ if (isset($incluir) || isset($alterar) || isset($excluir)) {
     db_fim_transacao($sqlerro);
 
     if ($sqlerro == false) {
-        echo "<script>  top.corpo.iframe_solicitem.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&pc11_codigo=$pc13_codigo&pc13_codele=" . @$pc13_codele . "$parametro'; </script>";
+        echo "<script>  (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_solicitem.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&pc11_codigo=$pc13_codigo&pc13_codele=" . @$pc13_codele . "$parametro'; </script>";
     }
 }
 
