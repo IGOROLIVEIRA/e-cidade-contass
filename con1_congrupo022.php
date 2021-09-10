@@ -40,63 +40,66 @@ $clcongrupo = new cl_congrupo;
 $db_opcao = 22;
 $db_botao = false;
 $anousu   = db_getsession("DB_anousu");
-if(isset($alterar)){
-  db_inicio_transacao();
-  $db_opcao = 2;
-  $clcongrupo->alterar($c20_sequencial);
-  db_fim_transacao();
-}else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $result   = $clcongrupo->sql_record($clcongrupo->sql_query($chavepesquisa));
-   if ($clcongrupo->numrows > 0){
-     db_fieldsmemory($result,0);
-     $db_botao = true;
+if (isset($alterar)) {
+    db_inicio_transacao();
+    $db_opcao = 2;
+    $clcongrupo->alterar($c20_sequencial);
+    db_fim_transacao();
+} else if (isset($chavepesquisa)) {
+    $db_opcao = 2;
+    $result   = $clcongrupo->sql_record($clcongrupo->sql_query($chavepesquisa));
+    if ($clcongrupo->numrows > 0) {
+        db_fieldsmemory($result, 0);
+        $db_botao = true;
 
-     echo "<script>
-               CurrentWindow.corpo.document.formaba.conta.style.visibility='visible';
-               CurrentWindow.corpo.iframe_conta.disable='false';
-               CurrentWindow.corpo.iframe_conta.location.href = 'con1_conplanogrupoconta004.php?c21_anousu=$anousu&c21_congrupo=$c20_sequencial';
+        echo "<script>
+               (window.CurrentWindow || parent.CurrentWindow).corpo.document.formaba.conta.style.visibility='visible';
+               (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_conta.disable='false';
+               (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_conta.location.href = 'con1_conplanogrupoconta004.php?c21_anousu=$anousu&c21_congrupo=$c20_sequencial';
   	       </script>";
-   }
+    }
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
-	<?
-	include("forms/db_frmcongrupo.php");
-	?>
-    </center>
-	</td>
-  </tr>
-</table>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+    <table width="790" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+                <center>
+                    <?
+                    include("forms/db_frmcongrupo.php");
+                    ?>
+                </center>
+            </td>
+        </tr>
+    </table>
 </body>
+
 </html>
 <?
-if(isset($alterar)){
-  if($clcongrupo->erro_status=="0"){
-    $clcongrupo->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($clcongrupo->erro_campo!=""){
-      echo "<script> document.form1.".$clcongrupo->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clcongrupo->erro_campo.".focus();</script>";
+if (isset($alterar)) {
+    if ($clcongrupo->erro_status == "0") {
+        $clcongrupo->erro(true, false);
+        $db_botao = true;
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if ($clcongrupo->erro_campo != "") {
+            echo "<script> document.form1." . $clcongrupo->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $clcongrupo->erro_campo . ".focus();</script>";
+        }
+    } else {
+        $clcongrupo->erro(true, true);
     }
-  }else{
-    $clcongrupo->erro(true,true);
-  }
 }
-if($db_opcao==22){
-  echo "<script>document.form1.pesquisar.click();</script>";
+if ($db_opcao == 22) {
+    echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>
