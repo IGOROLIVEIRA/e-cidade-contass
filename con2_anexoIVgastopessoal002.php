@@ -671,7 +671,8 @@ $fCPRPPS = $aDespesasReceitas['fCPRPPS'];
 $fRRCSACOPSJ = $aDespesasReceitas['fRRCSACOPSJ'];
 $fRRCSICOPSJ = $aDespesasReceitas['fRRCSICOPSJ'];
 $fRRCPPSJ = $aDespesasReceitas['fRRCPPSJ'];
-$fCFRP = $aDespesasReceitas['fCFRP'];
+$fCFRP = 0;
+$fCFRPB = 0;
 
 $sWhereDespesa = " o58_instit in({$instits})";
 $sWhereReceita = "o70_instit in ({$iInstituicoes})";
@@ -685,6 +686,7 @@ if (getImplantacao()) {
     criaWorkDotacao($sWhereDespesa, array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $dtini, $dtfim);
     criarWorkReceita($sWhereReceita, array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $dtini, $dtfim);
 }
+
 /**
  * mPDF
  * @param string $mode | padrão: BLANK
@@ -701,17 +703,21 @@ if (getImplantacao()) {
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', '', 0, '', 15, 15, 23.5, 15, 5, 11);
-
-
-$header = <<<HEADER
+if ($tipoEmissao == 1) {
+    $mPDF = new mpdf('', '', 0, '', 15, 15, 23.5, 15, 5, 11);
+} else {
+    $mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 23.5, 15, 5, 11);
+}
+if ($tipoEmissao == 1) {
+    $valorEsperadoUC = ucfirst($valoresperado);
+    $header = <<<HEADER
 <header>
   <table style="width:100%;text-align:center;font-family:sans-serif;border-bottom:1px solid #000;padding-bottom:6px;">
     <tr>
       <th>{$oInstit->getDescricao()}</th>
     </tr>
-    <tr>
-      <th>ANEXO IV</th>
+    <tr >
+      <th>ANEXO IV - DEMONSTRATIVO DOS GASTOS COM PESSOAL</th>
     </tr>
     <tr>
       <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De {$oDataIni->getDate("d/m/Y")} a {$oDataFim->getDate("d/m/Y")}</td>
@@ -719,18 +725,51 @@ $header = <<<HEADER
   </table>
 </header>
 HEADER;
+} else {
+    $header = "
+    <header>
+    <div style=\"font-family:Arial\">
+        <div style=\"width:33%;float:left;padding:5px;font-size:10px;\">
+            <b><i>{$oInstit->getDescricao()}</i></b>
+            <br/>
+            <i>{$oInstit->getLogradouro()}, {$oInstit->getNumero()}</i>
+            <br/>
+            <i>{$oInstit->getMunicipio()} - {$oInstit->getUf()}</i>
+            <br/>
+            <i>{$oInstit->getTelefone()} - CNPJ: " . db_formatar($oInstit->getCNPJ(), "cnpj") . "</i>
+            <br/>
+            <i>{$oInstit->getSite()}</i>
+        </div>
+        <div style=\"width:25%;float:right\" class=\"box\">
+        <b>ANEXO IV - DEMONSTRATIVO DE GASTO COM PESSOAL</b>
+        <br/>
+    <b>INSTITUIÇÕES:</b> ";
+    foreach ($aInstits as $iInstit) {
+        $oInstituicao = new Instituicao($iInstit);
+        $header .= "(" . trim($oInstituicao->getCodigo()) . ") " . $oInstituicao->getDescricao() . " ";
+    }
+    $header .= "
+                <br/>
+                <b>PERÍODO:</b> {$oDataIni->getDate("d/m/Y")} A {$oDataFim->getDate("d/m/Y")}
+                <br/>
+                <b>CALCULO:</b> " . strtoupper($valoresperado) . "
+          </div>
+    </header>";
+}
 
-$footer = <<<FOOTER
+$valorEsperadoUC = ucfirst($valoresperado) . "s";
+$footer = "<footer>
 <div style='border-top:1px solid #000;width:100%;font-family:sans-serif;font-size:10px;height:10px;'>
-    <div style='text-align:left;font-style:italic;width:50%;float:left;'>
-        Cálculo da despesa com base nos valores {$valoresperado}s
-    </div>
-    <div style='text-align:right;float:right;width:50%;'>
+    <div style='text-align:left;font-style:italic;width:90%;float:left;'>
+        Financeiro>Contabilidade>Relatórios de Acompanhamento>ANEXO IV - Gasto com Pessoal
+        Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data:" . date("d/m/Y H:i:s", db_getsession("DB_datausu"))  . "
+        Cálculo com base nos valores: {$valorEsperadoUC}</div>
+
+    <div style='text-align:right;float:right;width:10%;'>
         {PAGENO}
     </div>
 
-</div>
-FOOTER;
+</div></footer>";
 
 
 $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
@@ -738,7 +777,6 @@ $mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
 $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
 
 ob_start();
-
 ?>
 
 <html>
@@ -909,34 +947,160 @@ ob_start();
 
 <body>
     <div class="ritz grid-container" dir="ltr">
-        <table class="waffle" cellspacing="0" cellpadding="0">
+        <br />
+        <?php if ($tipoEmissao != 1) { ?>
+            <span style="font-size:8px;font-family:Arial">Art. 55, inciso I, alínea 'a" da LRF</span>
+        <? } ?>
+        <table class="waffle" cellspacing="0" cellpadding="0" style="border-top: 1px #000">
             <tbody>
-                <tr>
-                    <th id="1606692746C0" style="width:463px" class="bdtop bdleft column-headers-background">&nbsp;</th>
-                    <th id="1606692746C1" style="width:92px" class="bdtop  column-headers-background">&nbsp;</th>
-                    <th id="1606692746C2" style="width:106px" class="bdtop bdright column-headers-background">&nbsp;</th>
-                </tr>
-                <tr style='height:19px; border-top: 1px solid black'>
-                    <td class="s0 bdleft" colspan="3">ANEXO IV</td>
-                </tr>
-                <tr style='height:19px;'>
-                    <td class="s0 bdleft" colspan="3">Demonstrativo dos Gastos com Pessoal</td>
-                </tr>
-                <tr style='height:19px;'>
-                    <td class="s0 bdleft" colspan="3">Incluída a Remuneração dos Agentes Políticos</td>
-                </tr>
-                <tr style='height:19px;'>
-                    <td class="s0 bdleft" colspan="3">(Face ao Disposto pela Lei Complementar nº101, de 04/05/2000)</td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="s1 bdleft" colspan="3">&nbsp;</td>
-                </tr>
-                <tr style='height:19px;'>
-                    <td class="s2" colspan="3">&nbsp;</td>
-                </tr>
-                <tr style='height:19px;'>
-                    <td class="s1 bdleft" colspan="3">I) DESPESA</td>
-                </tr>
+                <?php if ($tipoEmissao == 1) { ?>
+                    <tr>
+                        <th id="1606692746C0" style="width:463px" class="bdtop bdleft column-headers-background">&nbsp;</th>
+                        <th id="1606692746C1" style="width:92px" class="bdtop  column-headers-background">&nbsp;</th>
+                        <th id="1606692746C2" style="width:106px" class="bdtop bdright column-headers-background">&nbsp;</th>
+                    </tr>
+                    <tr style='height:19px; border-top: 1px solid black'>
+                        <td class="s0 bdleft" colspan="3">ANEXO IV</td>
+                    </tr>
+                    <tr style='height:19px;'>
+                        <td class="s0 bdleft" colspan="3">Demonstrativo dos Gastos com Pessoal</td>
+                    </tr>
+                    <tr style='height:19px;'>
+                        <td class="s0 bdleft" colspan="3">Incluída a Remuneração dos Agentes Políticos</td>
+                    </tr>
+                    <tr style='height:19px;'>
+                        <td class="s0 bdleft" colspan="3">(Face ao Disposto pela Lei Complementar nº101, de 04/05/2000)</td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s1 bdleft" colspan="3">&nbsp;</td>
+                    </tr>
+                    <tr style='height:19px;'>
+                        <td class="s2" colspan="3">&nbsp;</td>
+                    </tr>
+                    <tr style='height:19px;'>
+                        <td class="s1 bdleft" colspan="3">I) DESPESA</td>
+                    </tr>
+                <?php } else { ?>
+                    <tr>
+                        <td class="bdleft bdtop s0">DESPESA COM PESSOAL</td>
+                        <?
+                        $dataAtual = $dtini;
+                        $dataFinal = $dtfim;
+                        $subtotalmes = array();
+                        $meses = array();
+                        $mesesExtenso = array(
+                            "01" => 'JAN',
+                            "02" => 'FEV',
+                            "03" => 'MAR',
+                            "04" => 'ABR',
+                            "05" => 'MAI',
+                            "06" => 'JUN',
+                            "07" => 'JUL',
+                            "08" => 'AGO',
+                            "09" => 'SET',
+                            "10" => 'OUT',
+                            "11" => 'NOV',
+                            "12" => 'DEZ',
+                        );
+                        while ($dataFinal > $dataAtual) {
+
+                            $chaveMes = $mesesExtenso[date("m", strtotime($dataAtual))] . "/" . date("Y", strtotime($dataAtual));
+                            $meses[] = $chaveMes;
+
+                            if (!array_key_exists($chaveMes, $subtotalmes))
+                                $subtotalmes[$chaveMes] = 0;
+                            if ($dataAtual >= getImplantacao() or !getImplantacao()) {
+                                $inicio = !getImplantacao() ? $dataAtual : getImplantacao();
+                                foreach (getDespesaMensal($inicio, date('Y-m-t', strtotime($inicio)), $aInstits) as $data) {
+                                    $chave = $data->o58_elemento;
+                                    if (array_key_exists($chaveMes, $despesa[$chave])) {
+                                        $despesa[$chave][$chaveMes] += $data->$valoresperado;
+                                        $despesa[$chave]['descricao'] = $data->o56_descr;
+                                    } else {
+                                        $despesa[$chave][$chaveMes] = $data->$valoresperado;
+                                        $despesa[$chave]['descricao'] = $data->o56_descr;
+                                    }
+                                }
+                            } else {
+                                foreach (getDespesaMensalInformada($dataAtual, date('Y-m-t', strtotime($dataAtual)), $aInstits, $dtini) as $data) {
+                                    $chave = $data->o58_elemento;
+                                    if (array_key_exists($chaveMes, $despesa[$chave])) {
+                                        $despesa[$chave][$chaveMes] += $data->$valoresperado;
+                                        $despesa[$chave]['descricao'] = $data->o56_descr;
+                                    } else {
+                                        $despesa[$chave][$chaveMes] = $data->$valoresperado;
+                                        $despesa[$chave]['descricao'] = $data->o56_descr;
+                                    }
+                                }
+                            }
+                            $dataAtual = date('Y-m-01', strtotime($dataAtual . ' +1 month'));
+                        }
+
+                        ?>
+                        <? for ($i = 0; $i <= 11; $i++) { ?>
+                            <td class="bdleft bdtop s0"><?= $meses[$i] ?></td>
+                        <? } ?>
+                        <td class="bdleft bdtop s0">TOTAL GERAL</td>
+                    </tr>
+                    <?php ksort($despesa); ?>
+                    <tr>
+                        <td class="s3 bdleft bdtop">3.1.00.00.00 - PESSOAL E ENCARGOS SOCIAIS</td>
+                        <? for ($i = 0; $i <= 12; $i++) { ?>
+                            <td class="bdleft bdtop s6"></td>
+                        <? } ?>
+                    </tr>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
+                        <?php $subtotal = 0; ?>
+                        <?php if (substr($elemento, 1, 2) == "31") { ?>
+                            <tr>
+                                <td class="bdleft bdtop"> <?= substr(db_formatar($elemento, "elemento"), 0, 10) . " - " . $despesa[$elemento]['descricao']; ?></td>
+                                <? for ($i = 0; $i <= 11; $i++) { ?>
+                                    <td class="bdleft bdtop s6">
+                                        <?php
+                                        if (array_key_exists($meses[$i], $datas)) {
+                                            echo db_formatar($datas[$meses[$i]], "f");
+                                            $subtotalmes[$meses[$i]] += $datas[$meses[$i]];
+                                            $subtotal += $datas[$meses[$i]];
+                                        } else {
+                                            echo "0,00";
+                                        }
+                                        ?></td>
+                                <? } ?>
+                                <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+                            </tr>
+                        <? } ?>
+                    <? } ?>
+
+                    <tr>
+                        <td class="s3 bdleft bdtop">3.3.00.00.00 - OUTRAS DESPESAS CORRENTES</td>
+                        <? for ($i = 0; $i <= 12; $i++) { ?>
+                            <td class="bdleft bdtop s6"></td>
+                        <? } ?>
+                    </tr>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
+                        <?php $subtotal = 0; ?>
+                        <?php if (substr($elemento, 1, 7) == "3339034") { ?>
+                            <tr>
+                                <td class="bdleft bdtop"><?= db_formatar($elemento, "elemento") . " - " . $despesa[$elemento]['descricao'];; ?></td>
+                                <? for ($i = 0; $i <= 11; $i++) { ?>
+                                    <td class="bdleft bdtop s6">
+                                        <?php
+                                        if (array_key_exists($meses[$i], $datas)) {
+                                            echo db_formatar($datas[$meses[$i]], "f");
+                                            $subtotalmes[$meses[$i]] += $datas[$meses[$i]];
+                                            $subtotal += $datas[$meses[$i]];
+                                        } else {
+                                            echo "0,00";
+                                        }
+                                        ?></td>
+                                <? } ?>
+                                <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+                            </tr>
+                        <? } ?>
+                    <? } ?>
+
+                <?php } ?>
+
 
                 <?php
                 /**
@@ -947,158 +1111,213 @@ ob_start();
                 foreach ($aInstits as $iInstit) :
 
                     $oInstit = new Instituicao($iInstit);
-
+                    if ($tipoEmissao == 1) {
                 ?>
-                    <tr style='height:19px;'>
-                        <td class="s3 bdleft" colspan="2">I-<?= $i++; ?>) DESPESA
-                            - <?php echo $oInstit->getDescricao(); ?></td>
-                        <td class="s4"></td>
-                    </tr>
+                        <tr style='height:19px;'>
+                            <td class="s3 bdleft" colspan="2">I-<?= $i++; ?>) DESPESA
+                                - <?php echo $oInstit->getDescricao(); ?></td>
+                            <td class="s4"></td>
+                        </tr>
 
-                    <tr style='height:19px;'>
-                        <td class="s3 bdleft" colspan="2">3.1.00.00.00 - PESSOAL E ENCARGOS SOCIAIS</td>
-                        <td class="s4"></td>
-                    </tr>
+                        <tr style='height:19px;'>
+                            <td class="s3 bdleft" colspan="2">3.1.00.00.00 - PESSOAL E ENCARGOS SOCIAIS</td>
+                            <td class="s4"></td>
+                        </tr>
 
-                    <?php
+                        <?php
+                    }
+
                     $fSubTotal = 0;
                     $aDespesas = array();
                     $aDespesas2 = array();
-                    if (getImplantacao()) {
-                        foreach (getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331', $valorcalculoManual, $oInstit) as $oDespesa) {
-                            $chave = $oDespesa->o58_elemento;
-                            if ($oDespesa->$valoresperado <> 0) {
-                                if (array_key_exists($chave, $aDespesas)) {
-                                    $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
-                                } else {
-                                    $aDespesas[$chave] = $oDespesa;
+                    if ($tipoEmissao == 1) {
+                        if (getImplantacao()) {
+                            foreach (getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331', $valorcalculoManual, $oInstit) as $oDespesa) {
+
+                                $chave = $oDespesa->o58_elemento;
+                                if ($oDespesa->$valoresperado <> 0) {
+                                    if (array_key_exists($chave, $aDespesas)) {
+                                        $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
+                                    } else {
+                                        $aDespesas[$chave] = $oDespesa;
+                                    }
                                 }
                             }
-                        }
-                        foreach (getSaldoDespesa(null, "o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
-                            $chave = $oDespesa->o58_elemento;
-                            if ($oDespesa->$valoresperado <> 0) {
-                                if (array_key_exists($chave, $aDespesas)) {
-                                    $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
-                                } else {
-                                    $aDespesas[$chave] = $oDespesa;
+                            foreach (getSaldoDespesa(null, "o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
+                                $chave = $oDespesa->o58_elemento;
+                                if ($oDespesa->$valoresperado <> 0) {
+                                    if (array_key_exists($chave, $aDespesas)) {
+                                        $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
+                                    } else {
+                                        $aDespesas[$chave] = $oDespesa;
+                                    }
                                 }
                             }
+                        } else {
+                            $aDespesas = getSaldoDespesa(null, "o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
                         }
-                    } else {
-                        $aDespesas = getSaldoDespesa(null, "o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                    }
-                    ksort($aDespesas);
-                    foreach ($aDespesas as $oDespesa) :
+                        ksort($aDespesas);
+                        foreach ($aDespesas as $oDespesa) :
 
-                        if ($oDespesa->o58_elemento == '3317170000000') {
-                            /**
-                             * Solicitado por Wesley@contass em 28/03/2017
-                             */
-                            //$oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
-                            $oDespesa->liquidado = $oDespesa->liquidado;
-                        }
-                        $fSubTotal += $oDespesa->$valoresperado;
-                    ?>
+                            if ($oDespesa->o58_elemento == '3317170000000') {
+                                /**
+                                 * Solicitado por Wesley@contass em 28/03/2017
+                                 */
+                                //$oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
+                                $oDespesa->liquidado = $oDespesa->liquidado;
+                            }
+                            $fSubTotal += $oDespesa->$valoresperado;
+                        ?>
+                            <tr style='height:19px;'>
+                                <td class="s3 bdleft" colspan="2">
+
+                                    <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
+                                </td>
+                                <td class="s5">
+                                    <?php echo db_formatar($oDespesa->$valoresperado, "f"); ?>
+                                </td>
+                            </tr>
+                        <?php endforeach;
+
+                        ?>
                         <tr style='height:19px;'>
-                            <td class="s3 bdleft" colspan="2">
+                            <td class="s3 bdleft" colspan="2">3.3.00.00.00 - OUTRAS DESPESAS CORRENTES</td>
+                            <td class="s4"></td>
+                        </tr>
+                        <?php
+                        if (getImplantacao()) {
+                            foreach (getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '3339034', $valorcalculoManual, $oInstit) as $oDespesa) {
+                                $chave = $oDespesa->o58_elemento;
+                                if (array_key_exists($chave, $aDespesas)) {
+                                    $aDespesas2[$chave]->$valoresperado += $oDespesa->$valoresperado;
+                                } else {
+                                    $aDespesas2[$chave] = $oDespesa;
+                                }
+                            }
 
-                                <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
-                            </td>
-                            <td class="s5">
-                                <?php echo db_formatar($oDespesa->$valoresperado, "f"); ?>
+                            foreach (getSaldoDespesa(null, "o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
+                                $chave = $oDespesa->o58_elemento;
+                                if (array_key_exists($chave, $aDespesas)) {
+                                    $aDespesas2[$chave]->$valoresperado += $oDespesa->$valoresperado;
+                                } else {
+                                    $aDespesas2[$chave] = $oDespesa;
+                                }
+                            }
+                        } else {
+                            $aDespesas2 = getSaldoDespesa(null, "o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        }
+
+                        foreach ($aDespesas2 as $oDespesa) :
+                            $fSubTotal += $oDespesa->$valoresperado;
+                        ?>
+
+                            <tr style='height:19px;'>
+                                <td class="s3 bdleft" colspan="2">
+                                    <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
+                                </td>
+                                <td class="s5">
+                                    <?php echo db_formatar($oDespesa->$valoresperado, "f"); ?>
+                                </td>
+                            </tr>
+                    <?php endforeach;
+                    } else {
+                    }
+                    ?>
+                    <?php if ($tipoEmissao == 1) { ?>
+                        <tr style='height:19px;'>
+                            <td class="s2 bdleft bdtop" colspan="2">SUB-TOTAL</td>
+                            <td class="s6 bdtop">
+                                <?php echo db_formatar($fSubTotal, "f");
+                                $fTotalDespesas += $fSubTotal; ?>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
-                    <tr style='height:19px;'>
-                        <td class="s3 bdleft" colspan="2">3.3.00.00.00 - OUTRAS DESPESAS CORRENTES</td>
-                        <td class="s4"></td>
-                    </tr>
-                    <?php
-                    if (getImplantacao()) {
-                        foreach (getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '3339034', $valorcalculoManual, $oInstit) as $oDespesa) {
-                            $chave = $oDespesa->o58_elemento;
-                            if (array_key_exists($chave, $aDespesas)) {
-                                $aDespesas2[$chave]->$valoresperado += $oDespesa->$valoresperado;
-                            } else {
-                                $aDespesas2[$chave] = $oDespesa;
-                            }
-                        }
-
-                        foreach (getSaldoDespesa(null, "o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
-                            $chave = $oDespesa->o58_elemento;
-                            if (array_key_exists($chave, $aDespesas)) {
-                                $aDespesas2[$chave]->$valoresperado += $oDespesa->$valoresperado;
-                            } else {
-                                $aDespesas2[$chave] = $oDespesa;
-                            }
-                        }
-                    } else {
-                        $aDespesas2 = getSaldoDespesa(null, "o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                    }
-
-                    foreach ($aDespesas2 as $oDespesa) :
-                        $fSubTotal += $oDespesa->$valoresperado;
-                    ?>
-
-                        <tr style='height:19px;'>
-                            <td class="s3 bdleft" colspan="2">
-                                <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
-                            </td>
-                            <td class="s5">
-                                <?php echo db_formatar($oDespesa->$valoresperado, "f"); ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <tr style='height:19px;'>
-                        <td class="s2 bdleft bdtop" colspan="2">SUB-TOTAL</td>
-                        <td class="s6 bdtop">
-                            <?php echo db_formatar($fSubTotal, "f");
-                            $fTotalDespesas += $fSubTotal; ?>
-                        </td>
-                    </tr>
+                    <? } ?>
                 <?php endforeach; ?>
 
+
                 <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">TOTAL DAS DESPESAS COM PESSOAL NO MUNICÍPIO</td>
-                    <td class="s5"><?= db_formatar($fTotalDespesas, "f") ?></td>
+                    <? if ($tipoEmissao == 1) { ?>
+                        <td class="s3 bdleft" colspan="2">TOTAL DAS DESPESAS COM PESSOAL NO MUNICÍPIO</td>
+                        <td class="s5"><?= db_formatar($fTotalDespesas, "f") ?></td>
+                    <? } else { ?>
+                        <td class="s7 bdleft bdtop" colspan="1">TOTAL DAS DESPESAS COM PESSOAL NO MUNICÍPIO</td>
+                        <? $subtotalmesfinal = 0; ?>
+                        <? for ($i = 0; $i <= 11; $i++) { ?>
+                            <td class="bdleft bdtop s6"><?= db_formatar($subtotalmes[$meses[$i]], "f") ?></td>
+                            <? $subtotalmesfinal += $subtotalmes[$meses[$i]] ?>
+                        <? } ?>
+                        <td class="bdleft bdtop s6"><?= db_formatar($subtotalmesfinal, "f") ?></td>
+                    <? } ?>
                 </tr>
 
                 <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">(-) Inativos e Pensionistas com Fonte de Custeio Próprio</td>
-                    <td class="s5">
-                        <?php
-                        $fSaldoIntaivosPensionistasProprio = 0;
-                        foreach ($aInstits as $iInstit) {
-                            $oInstit = new Instituicao($iInstit);
-                            if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
-                                if (getImplantacao()) {
-                                    $aSaldoEstrut1 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900101', $valorcalculoManual, $oInstit);
-                                    $aSaldoEstrut2 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900301', $valorcalculoManual, $oInstit);
-                                    $aSaldoEstrut3 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900501', $valorcalculoManual, $oInstit);
-                                    $aSaldoEstrut4 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900502', $valorcalculoManual, $oInstit);
+                    <? if ($tipoEmissao == 1) { ?>
+                        <td class="s3 bdleft" colspan="2">(-) Inativos e Pensionistas com Fonte de Custeio Próprio</td>
+                        <td class="s5">
+                            <?php
+                            $fSaldoIntaivosPensionistasProprio = 0;
+                            foreach ($aInstits as $iInstit) {
+                                $oInstit = new Instituicao($iInstit);
+                                if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
+                                    if (getImplantacao()) {
+                                        $aSaldoEstrut1 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900101', $valorcalculoManual, $oInstit);
+                                        $aSaldoEstrut2 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900301', $valorcalculoManual, $oInstit);
+                                        $aSaldoEstrut3 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900501', $valorcalculoManual, $oInstit);
+                                        $aSaldoEstrut4 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900502', $valorcalculoManual, $oInstit);
 
+                                        $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->$valoresperado + $aSaldoEstrut2[0]->$valoresperado + $aSaldoEstrut3[0]->$valoresperado + $aSaldoEstrut4[0]->$valoresperado;
+
+                                        $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331900101%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
+                                        $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331900301%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
+                                        $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331900501%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
+                                        $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331900502%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
+                                    } else {
+                                        $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331900101%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
+                                        $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331900301%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
+                                        $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331900501%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
+                                        $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331900502%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
+                                    }
                                     $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->$valoresperado + $aSaldoEstrut2[0]->$valoresperado + $aSaldoEstrut3[0]->$valoresperado + $aSaldoEstrut4[0]->$valoresperado;
-
-                                    $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331900101%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
-                                    $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331900301%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
-                                    $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331900501%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
-                                    $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331900502%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
-                                } else {
-                                    $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331900101%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
-                                    $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331900301%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
-                                    $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331900501%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
-                                    $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331900502%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "103, 203", "");
                                 }
-                                $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->$valoresperado + $aSaldoEstrut2[0]->$valoresperado + $aSaldoEstrut3[0]->$valoresperado + $aSaldoEstrut4[0]->$valoresperado;
                             }
-                        }
-                        echo db_formatar($fSaldoIntaivosPensionistasProprio, "f");
-                        ?>
-                    </td>
+                            echo db_formatar($fSaldoIntaivosPensionistasProprio, "f");
+                            ?>
+                        </td>
                 </tr>
+            <? } else { ?>
+                <td class="s3 bdleft bdtop" colspan="1">(-) Inativos e Pensionistas com Fonte de Custeio Próprio</td>
+                <?php $encontrouElemento = 0; ?>
+                <? foreach ($despesa as $elemento => $datas) { ?>
+                    <?php $subtotal = 0; ?>
 
-                <tr style='height:19px;'>
+                    <?php if (in_array(substr($elemento, 1, 9), array("331900101", "331900301", "331900501", "331900502"))) { ?>
+                        <? $encontrouElemento = 1; ?>
+
+                        <? for ($i = 0; $i <= 11; $i++) { ?>
+                            <td class="bdleft bdtop s6">
+                                <?php
+                                    if (array_key_exists($meses[$i], $datas)) {
+                                        echo db_formatar($datas[$meses[$i]], "f");
+                                        $subtotal += $datas[$meses[$i]];
+                                        $fSaldoIntaivosPensionistasProprio[$meses[$i]] += $datas[$meses[$i]];;
+                                    } else {
+                                        echo "0,00";
+                                    }
+                                ?></td>
+                        <? } ?>
+                        <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+
+                    <? } ?>
+                <? } ?>
+                <? if (!$encontrouElemento) { ?>
+                    <? for ($i = 0; $i <= 12; $i++) { ?>
+                        <td class="bdleft bdtop s6">0,00</td>
+                    <? } ?>
+                <? } ?>
+            <? } ?>
+
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2">(-) Sentenças Judiciais Anteriores</td>
                     <td class="s5">
                         <?php
@@ -1154,9 +1373,41 @@ ob_start();
                         echo db_formatar($fSaldoSentencasJudAnt == null ? 0 : $fSaldoSentencasJudAnt, "f");
                         ?>
                     </td>
-                </tr>
+                <? } else { ?>
+                    <td class="s3 bdleft" colspan="1">(-) Sentenças Judiciais Anteriores</td>
+                    <?php $encontrouElemento = 0; ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
+                        <?php $subtotal = 0; ?>
 
-                <tr style='height:19px;'>
+                        <?php if (in_array(substr($elemento, 1, 7), array("3319091", "3319191", "3319691"))) { ?>
+                            <? $encontrouElemento = 1; ?>
+
+                            <? for ($i = 0; $i <= 11; $i++) { ?>
+                                <td class="bdleft bdtop s6">
+                                    <?php
+                                    if (array_key_exists($meses[$i], $datas)) {
+                                        echo db_formatar($datas[$meses[$i]], "f");
+                                        $subtotal += $datas[$meses[$i]];
+                                        $fSaldoSentencasJudAnt[$meses[$i]] += $datas[$meses[$i]];
+                                    } else {
+                                        echo "0,00";
+                                    }
+                                    ?></td>
+                            <? } ?>
+                            <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+
+                        <? } ?>
+                    <? } ?>
+                    <? if (!$encontrouElemento) { ?>
+                        <? for ($i = 0; $i <= 12; $i++) { ?>
+                            <td class="bdleft bdtop s6">0,00</td>
+                        <? } ?>
+                    <? } ?>
+                <? } ?>
+            </tr>
+
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2">(-) Despesa de Exercícios Anteriores</td>
                     <td class="s5">
                         <?php
@@ -1183,9 +1434,41 @@ ob_start();
                         echo db_formatar($fSaldoDespesasAnteriores, "f");
                         ?>
                     </td>
-                </tr>
+                <? } else { ?>
+                    <td class="s3 bdleft" colspan="1">(-) Despesa de Exercícios Anteriores</td>
+                    <?php $encontrouElemento = 0; ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
+                        <?php $subtotal = 0; ?>
 
-                <tr style='height:19px;'>
+                        <?php if (in_array(substr($elemento, 1, 7), array("3319092", "3319192", "3319692"))) { ?>
+                            <? $encontrouElemento = 1; ?>
+
+                            <? for ($i = 0; $i <= 11; $i++) { ?>
+                                <td class="bdleft bdtop s6">
+                                    <?php
+                                    if (array_key_exists($meses[$i], $datas)) {
+                                        echo db_formatar($datas[$meses[$i]], "f");
+                                        $subtotal += $datas[$meses[$i]];
+                                        $fSaldoDespesasAnteriores[$meses[$i]] += $datas[$meses[$i]];
+                                    } else {
+                                        echo "0,00";
+                                    }
+                                    ?></td>
+                            <? } ?>
+                            <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+
+                        <? } ?>
+                    <? } ?>
+                    <? if (!$encontrouElemento) { ?>
+                        <? for ($i = 0; $i <= 12; $i++) { ?>
+                            <td class="bdleft bdtop s6">0,00</td>
+                        <? } ?>
+                    <? } ?>
+                <? } ?>
+            </tr>
+
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
                     <td class="s5">
                         <?php
@@ -1220,9 +1503,41 @@ ob_start();
                         echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
                         ?>
                     </td>
-                </tr>
+                <? } else { ?>
+                    <td class="s3 bdleft" colspan="1">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
+                    <?php $encontrouElemento = 0; ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
+                        <?php $subtotal = 0; ?>
 
-                <tr style='height:19px;'>
+                        <?php if (in_array(substr($elemento, 1, 7), array("3319001", "3319003", "3319005"))) { ?>
+                            <? $encontrouElemento = 1; ?>
+
+                            <? for ($i = 0; $i <= 11; $i++) { ?>
+                                <td class="bdleft bdtop s6">
+                                    <?php
+                                    if (array_key_exists($meses[$i], $datas)) {
+                                        echo db_formatar($datas[$meses[$i]], "f");
+                                        $subtotal += $datas[$meses[$i]];
+                                        $fSaldoAposentadoriaPensoesTesouro[$meses[$i]] += $datas[$meses[$i]];
+                                    } else {
+                                        echo "0,00";
+                                    }
+                                    ?></td>
+                            <? } ?>
+                            <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+
+                        <? } ?>
+                    <? } ?>
+                    <? if (!$encontrouElemento) { ?>
+                        <? for ($i = 0; $i <= 12; $i++) { ?>
+                            <td class="bdleft bdtop s6">0,00</td>
+                        <? } ?>
+                    <? } ?>
+                <? } ?>
+            </tr>
+
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2">(-) Indenização por demissão de servidores ou empregados</td>
                     <td class="s5">
                         <?php
@@ -1258,8 +1573,40 @@ ob_start();
                         echo db_formatar($fSaldoIndenizacaoDemissaoServidores, "f");
                         ?>
                     </td>
-                </tr>
-                <tr style='height:19px;'>
+                <? } else { ?>
+                    <td class="s3 bdleft" colspan="1">(-) Indenização por demissão de servidores ou empregados</td>
+                    <?php $encontrouElemento = 0; ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
+                        <?php $subtotal = 0; ?>
+
+                        <?php if (in_array(substr($elemento, 1, 9), array("331909401", "331909403", "331919401", "331919403", "331969401", "331969403"))) { ?>
+                            <? $encontrouElemento = 1; ?>
+
+                            <? for ($i = 0; $i <= 11; $i++) { ?>
+                                <td class="bdleft bdtop s6">
+                                    <?php
+                                    if (array_key_exists($meses[$i], $datas)) {
+                                        echo db_formatar($datas[$meses[$i]], "f");
+                                        $subtotal += $datas[$meses[$i]];
+                                        $fSaldoIndenizacaoDemissaoServidores[$meses[$i]] += $datas[$meses[$i]];
+                                    } else {
+                                        echo "0,00";
+                                    }
+                                    ?></td>
+                            <? } ?>
+                            <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+
+                        <? } ?>
+                    <? } ?>
+                    <? if (!$encontrouElemento) { ?>
+                        <? for ($i = 0; $i <= 12; $i++) { ?>
+                            <td class="bdleft bdtop s6">0,00</td>
+                        <? } ?>
+                    <? } ?>
+                <? } ?>
+            </tr>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s2 bdleft" colspan="2">(-) Incentivos a demissão voluntária</td>
                     <td class="s6">
                         <?php
@@ -1286,8 +1633,40 @@ ob_start();
                         echo db_formatar($fSaldoIncentivosDemissaoVoluntaria, "f");
                         ?>
                     </td>
-                </tr>
-                <tr style='height:19px;'>
+                <? } else { ?>
+                    <td class="s3 bdleft" colspan="1">(-) Incentivos a demissão voluntária</td>
+                    <?php $encontrouElemento = 0; ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
+                        <?php $subtotal = 0; ?>
+
+                        <?php if (in_array(substr($elemento, 1, 9), array("331909402", "331919402", "331969402"))) { ?>
+                            <? $encontrouElemento = 1; ?>
+
+                            <? for ($i = 0; $i <= 11; $i++) { ?>
+                                <td class="bdleft bdtop s6">
+                                    <?php
+                                    if (array_key_exists($meses[$i], $datas)) {
+                                        echo db_formatar($datas[$meses[$i]], "f");
+                                        $subtotal += $datas[$meses[$i]];
+                                        $fSaldoIndenizacaoDemissaoServidores[$meses[$i]] += $datas[$meses[$i]];
+                                    } else {
+                                        echo "0,00";
+                                    }
+                                    ?></td>
+                            <? } ?>
+                            <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+
+                        <? } ?>
+                    <? } ?>
+                    <? if (!$encontrouElemento) { ?>
+                        <? for ($i = 0; $i <= 12; $i++) { ?>
+                            <td class="bdleft bdtop s6">0,00</td>
+                        <? } ?>
+                    <? } ?>
+                <? } ?>
+            </tr>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s7 bdleft" colspan="2">TOTAL DAS DESPESAS COM PESSOAL = BASE DE CÁLCULO</td>
                     <td class="s8">
                         <?php
@@ -1295,24 +1674,42 @@ ob_start();
                         echo db_formatar($fTotalDespesaPessoal, "f");
                         ?>
                     </td>
-                </tr>
+                <? } else { ?>
+                    <td class="s7 bdleft bdtop" colspan="1">Total da Despesa com Pessoal para Fins de apuração de Limite</td>
+                    <? $subtotalmesfinal = 0; ?>
+                    <? for ($i = 0; $i <= 11; $i++) { ?>
+                        <? $fTotalDespesaPessoal = $subtotalmes[$meses[$i]] - ($fSaldoIntaivosPensionistasProprio[$meses[$i]] + $fSaldoSentencasJudAnt[$meses[$i]] + $fSaldoAposentadoriaPensoesTesouro[$meses[$i]] + $fSaldoDespesasAnteriores[$meses[$i]] + $fSaldoIndenizacaoDemissaoServidores[$meses[$i]] + $fSaldoIncentivosDemissaoVoluntaria[$meses[$i]]); ?>
+                        <td class="bdleft bdtop s8"><?= db_formatar($fTotalDespesaPessoal, "f") ?></td>
+                        <? $subtotalmesfinal += $subtotalmes[$meses[$i]] ?>
+                    <? } ?>
+                    <td class="bdleft bdtop s8"><?= db_formatar($subtotalmesfinal, "f") ?></td>
+                <? } ?>
+            </tr>
 
-                <tr style='height:19px;'>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s1 bdleft" colspan="3">II) RECEITA</td>
-                </tr>
+                <? } else { ?>
+                    <td class="s1 bdleft" colspan="15">II) RECEITA</td>
+                <? } ?>
+            </tr>
 
-                <tr style='height:19px;'>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s7 bdleft" colspan="2">Receita Corrente do Município</td>
-                    <td class="s8">
-                        <?php
-                        $fValorManualRCL = getValorManual($codigorelatorio, 1, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
-                        $fRCL += $fValorManualRCL == NULL ? $fTotalReceitasArrecadadas : $fValorManualRCL;
-                        echo db_formatar($fTotalReceitasArrecadadas, "f");
-                        //echo db_formatar($fRCL, "f");
-                        ?>
-                    </td>
-                </tr>
-                <!--
+                <? } else { ?>
+                    <td class="s9 bdleft" colspan="13"><b>RECEITA CORRENTE DO MUNICÍPIO</b></td>
+                <? } ?>
+                <td class="s8">
+                    <?php
+                    $fValorManualRCL = getValorManual($codigorelatorio, 1, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
+                    $fRCL += $fValorManualRCL == NULL ? $fTotalReceitasArrecadadas : $fValorManualRCL;
+                    echo db_formatar($fTotalReceitasArrecadadas, "f");
+                    //echo db_formatar($fRCL, "f");
+                    ?>
+                </td>
+            </tr>
+            <!--
                       <tr style='height:19px;'>
                         <td class="s3 bdleft" colspan="2">(-) Receita Corrente Intraorçamentária</td>
                         <td class="s5">
@@ -1324,136 +1721,231 @@ ob_start();
                         </td>
                       </tr>
                     -->
-                <tr style='height:19px;'>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2">(-) Deduções da Receita Corrente (Exceto FUNDEB)</td>
                     <td class="s5">
-                        <?php
+                    <? } else { ?>
+                    <td class="s9 bdleft" colspan="13">(-) Deduções da Receita Corrente (Exceto FUNDEB)</td>
+                    <td class="s6">
+                    <? } ?>
 
-                        echo db_formatar(abs($fCSACRPPS), "f");
-                        ?>
+                    <?php
+                    echo db_formatar(abs($fCSACRPPS), "f");
+                    ?>
                     </td>
-                </tr>
+            </tr>
 
-                <tr style='height:19px;'>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2">(-) Deduções de Receita para formação do FUNDEB</td>
                     <td class="s5">
-                        <?php
 
-                        echo db_formatar(abs($fCSICRPPS), "f");
-                        ?>
+                    <? } else { ?>
+                    <td class="s9 bdleft" colspan="13">(-) Deduções de Receita para formação do FUNDEB</td>
+                    <td class="s6">
+                    <? } ?>
+
+                    <?php
+                    echo db_formatar(abs($fCSICRPPS), "f");
+                    ?>
                     </td>
-                </tr>
+            </tr>
 
-                <tr style='height:19px;'>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2">(-) Receitas Corrente Intraorçamentária</td>
                     <td class="s5">
-                        <?php
-                        echo db_formatar($fCPRPPS, "f");
-                        ?>
-                    </td>
-                </tr>
+                    <? } else { ?>
+                    <td class="s9 bdleft" colspan="13">(-) Receitas Corrente Intraorçamentária</td>
+                    <td class="s6">
+                    <? } ?>
 
-                <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">(-) Contribuição dos Servidores para o Sistema Próprio de Previdência
+                    <?php
+                    echo db_formatar($fCPRPPS, "f");
+                    ?>
                     </td>
+            </tr>
+
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
+                    <td class="s3 bdleft" colspan="2">(-) Contribuição dos Servidores para o Sistema Próprio de Previdência</td>
                     <td class="s5">
-                        <?php
+                    <? } else { ?>
+                    <td class="s9 bdleft" colspan="13">(-) Contribuição dos Servidores para o Sistema Próprio de Previdência</td>
+                    <td class="s6">
+                    <? } ?>
 
-                        echo db_formatar($fRRCSACOPSJ, "f");
-                        ?>
-                    </td>
-                </tr>
 
-                <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">(-) Compensação entre Regimes de Previdência
+                    <?php
+
+                    echo db_formatar($fRRCSACOPSJ, "f");
+                    ?>
                     </td>
+            </tr>
+
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
+                    <td class="s3 bdleft" colspan="2">(-) Compensação entre Regimes de Previdência</td>
                     <td class="s5">
-                        <?php
+                    <? } else { ?>
+                    <td class="s9 bdleft" colspan="13">(-) Compensação entre Regimes de Previdência</td>
+                    <td class="s6">
+                    <? } ?>
 
-                        echo db_formatar($fRRCSICOPSJ, "f");
-                        ?>
+
+                    <?php
+
+                    echo db_formatar($fRRCSICOPSJ, "f");
+                    ?>
                     </td>
-                </tr>
+            </tr>
 
-                <tr style='height:19px;'>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2"><b>RECEITA CORRENTE LÍQUIDA</b></td>
                     <td class="s5">
-                        <?php
-                        $fRecCorrLiq = $fTotalReceitasArrecadadas - abs($fCSACRPPS) - abs($fCSICRPPS) - $fCPRPPS - $fRRCSACOPSJ - $fRRCSICOPSJ;
-                        echo db_formatar($fRecCorrLiq, "f");
-                        ?>
-                    </td>
-                </tr>
+                    <? } else { ?>
+                    <td class="s9 bdleft" colspan="13"><b>RECEITA CORRENTE LÍQUIDA</b></td>
+                    <td class="s6">
+                    <? } ?>
 
-                <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">(-) Transferências Advindas de Emendas Parlamentares (Art. 166, §13 da CF)</td>
+
+                    <?php
+                    $fRecCorrLiq = $fTotalReceitasArrecadadas - abs($fCSACRPPS) - abs($fCSICRPPS) - $fCPRPPS - $fRRCSACOPSJ - $fRRCSICOPSJ;
+                    echo db_formatar($fRecCorrLiq, "f");
+                    ?>
+                    </td>
+            </tr>
+
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
+                    <td class="s3 bdleft" colspan="2" style='font-size: 13px'>(-) Transferências obrigatórias da União relativas às emendas individuais (art. 166-A, § 1o, da CF)</td>
                     <td class="s5">
-                        <?php
-
-                        if ($oDataFim->getAno() >= 2020) {
-                            if (getImplantacao()) {
-                                $aSaldoArrecadadoEmenda = getValorReceitaEmendaInformado($dtini, getImplantacao(), $iInstituicoes);
-                                $fCFRP += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
-                                $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar(getImplantacao(), $dtfim);
-                                $fCFRP += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
-                            } else {
-                                $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar($dtini, $dtfim);
-                                $fCFRP += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
-                            }
+                    <? } else { ?>
+                    <td class="s9 bdleft" colspan="13">(-) Transferências obrigatórias da União relativas às emendas individuais (art. 166-A, § 1o, da CF)</td>
+                    <td class="s6">
+                    <? } ?>
+                    <?php
+                    if ($oDataFim->getAno() >= 2020) {
+                        if (getImplantacao()) {
+                            $aSaldoArrecadadoEmenda = getValorReceitaEmendaInformado($dtini, getImplantacao(), $iInstituicoes, array(1, 4));
+                            $fCFRP += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
+                            $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar(getImplantacao(), $dtfim, array(1, 4));
+                            $fCFRP += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
+                        } else {
+                            $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar($dtini, $dtfim, array(1, 4));
+                            $fCFRP += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
                         }
+                    }
 
-                        echo db_formatar($fCFRP, "f");
-                        ?>
+                    echo db_formatar($fCFRP, "f");
+                    ?>
                     </td>
-                </tr>
+            </tr>
 
-                <tr style='height:20px;'>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
+                    <td class="s3 bdleft" colspan="2" style='font-size: 13px'>(-) Transferências obrigatórias da União relativas às emendas de bancada (art. 166, § 16, da CF)</td>
+                    <td class="s5">
+                    <? } else { ?>
+                    <td class="s9 bdleft" colspan="13">(-) Transferências obrigatórias da União relativas às emendas de bancada (art. 166, § 16, da CF)</td>
+                    <td class="s6">
+                    <? } ?>
+                    <?php
+                    if ($oDataFim->getAno() >= 2020) {
+                        if (getImplantacao()) {
+                            $aSaldoArrecadadoEmenda = getValorReceitaEmendaInformado($dtini, getImplantacao(), $iInstituicoes, array(3));
+                            $fCFRPB += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
+                            $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar(getImplantacao(), $dtfim, array(3));
+                            $fCFRPB += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
+                        } else {
+                            $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar($dtini, $dtfim, array(3));
+                            $fCFRPB += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
+                        }
+                    }
+
+                    echo db_formatar($fCFRPB, "f");
+                    ?>
+                    </td>
+            </tr>
+
+            <tr style='height:20px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s7 bdleft" colspan="2">RECEITA CORRENTE LÍQUIDA AJUSTADA = BASE DE CÁLCULO</td>
-                    <td class="s8">
-                        <?php
-                        $fRCLBase = $fRecCorrLiq - $fCFRP;
-                        echo db_formatar($fRCLBase, "f");
-                        ?>
-                    </td>
-                </tr>
+                <? } else { ?>
+                    <td class="s9 bdleft" colspan="13"><b>RECEITA CORRENTE LÍQUIDA AJUSTADA = BASE DE CÁLCULO</b></td>
+                <? } ?>
 
-                <tr style='height:19px;'>
+                <td class="s8">
+                    <?php
+                    $fRCLBase = $fRecCorrLiq - $fCFRP;
+                    echo db_formatar($fRCLBase, "f");
+                    ?>
+                </td>
+            </tr>
+
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s9 bdleft" colspan="3">III) PERCENTUAIS MONETÁRIOS DE APLICAÇÃO</td>
-                </tr>
+                <? } else { ?>
+                    <td class="s9 bdleft" colspan="14">III) PERCENTUAIS MONETÁRIOS DE APLICAÇÃO</td>
+                <? } ?>
+
+            </tr>
 
 
-                <tr style='height:19px;'>
+            <tr style='height:19px;'>
+                <? if ($tipoEmissao == 1) { ?>
                     <td class="s1 bdleft">Aplicação no Exercício</td>
                     <td class="s10"><?php echo db_formatar(($fTotalDespesaPessoal / $fRCLBase) * 100, "f"); ?>%</td>
                     <td class="s10"><?php echo db_formatar($fTotalDespesaPessoal, "f") ?></td>
+                <? } else { ?>
+                    <td class="s1 bdleft" colspan="12">APLICAÇÃO NO EXERCÍCIO</td>
+                    <td class="s10"><?php echo db_formatar(($subtotalmesfinal / $fRCLBase) * 100, "f"); ?>%</td>
+                    <td class="s10"><?php echo db_formatar($subtotalmesfinal, "f") ?></td>
+                <? } ?>
+            </tr>
+            <?
+            if ($iVerifica == 1) :
+            ?>
+                <tr style='height:20px;'>
+                    <? if ($tipoEmissao == 1) { ?>
+                        <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
+                    <? } else { ?>
+                        <td class="s9 bdleft" colspan="12">Permitido pela Lei Complementar 101/00</td>
+                    <? } ?>
+
+                    <td class="s6">6%</td>
+                    <td class="s6"><?php echo db_formatar($fRCLBase * 0.06, "f") ?></td>
                 </tr>
-                <?
-                if ($iVerifica == 1) :
-                ?>
-                    <tr style='height:20px;'>
+            <?
+            elseif ($iVerifica == 2) :
+            ?>
+                <tr style='height:20px;'>
+                    <? if ($tipoEmissao == 1) { ?>
                         <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-                        <td class="s6">6%</td>
-                        <td class="s6"><?php echo db_formatar($fRCLBase * 0.06, "f") ?></td>
-                    </tr>
-                <?
-                elseif ($iVerifica == 2) :
-                ?>
-                    <tr style='height:20px;'>
+                    <? } else { ?>
+                        <td class="s9 bdleft" colspan="12">Permitido pela Lei Complementar 101/00</td>
+                    <? } ?>
+                    <td class="s6">54%</td>
+                    <td class="s6"><?php echo db_formatar($fRCLBase * 0.54, "f") ?></td>
+                </tr>
+            <?
+            else :
+            ?>
+                <tr style='height:20px;'>
+                    <? if ($tipoEmissao == 1) { ?>
                         <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-                        <td class="s6">54%</td>
-                        <td class="s6"><?php echo db_formatar($fRCLBase * 0.54, "f") ?></td>
-                    </tr>
-                <?
-                else :
-                ?>
-                    <tr style='height:20px;'>
-                        <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-                        <td class="s6">60%</td>
-                        <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
-                    </tr>
-                <?
-                endif;
-                ?>
+                    <? } else { ?>
+                        <td class="s9 bdleft" colspan=12>Permitido pela Lei Complementar 101/00</td>
+                    <? } ?>
+                    <td class="s6">60%</td>
+                    <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
+                </tr>
+            <?
+            endif;
+            ?>
             </tbody>
         </table>
     </div>
@@ -1522,7 +2014,6 @@ function getValorDespesaInformado($inicio, $fim, $elemento, $valorcalculo, $oIns
     $where = " AND ((c233_mes >= " . date('m', strtotime($inicio)) . " AND c233_ano = " . date('Y', strtotime($inicio)) . ") OR (c233_mes <= " . date('m', strtotime($fim)) . " AND c233_ano = " . date('Y', strtotime($fim)) . "))";
     $whereCompetencia = " AND ((c233_competencia IS NOT NULL AND c233_competencia < '{$inicio}') OR (c233_competencia IS NULL)) ";
     $sql = "SELECT o56_elemento as o58_elemento, o56_descr, c233_ano as o58_anousu, {$valorcalculo} FROM despesaexercicioanterior left join orcelemento on substring(c233_elemento::text, 1, 13) = o56_elemento and c233_ano = o56_anousu WHERE c233_elemento like '{$elemento}%' and c233_orgao = {$oInstit->getCodigo()} {$where} {$whereCompetencia} group by 1,2,3";
-
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
@@ -1535,9 +2026,10 @@ function getValorReceitaInformado($inicio, $fim, $oInstit)
 }
 
 
-function getValorReceitaEmendaInformado($inicio, $fim, $oInstit)
+function getValorReceitaEmendaInformado($inicio, $fim, $oInstit, $emenda)
 {
     $where = " AND ((c234_mes >= " . date('m', strtotime($inicio)) . " AND c234_ano = " . date('Y', strtotime($inicio)) . ") OR (c234_mes <= " . date('m', strtotime($fim)) . " AND c234_ano = " . date('Y', strtotime($fim)) . "))";
+    $where .= " AND c234_tipoemenda IN (" . implode(",", $emenda) . ") ";
     $sql = "SELECT c234_receita as o57_fonte, c234_valorarrecadado as arrecadado_emenda_parlamentar FROM receitaexercicioanterior WHERE c234_orgao in ({$oInstit})  {$where} AND c234_tipoemenda <> 3";
 
     return db_utils::getColectionByRecord(db_query($sql));
@@ -1549,5 +2041,57 @@ function getImplantacao()
     $sSQL = "SELECT c90_dataimplantacao FROM conparametro";
     $rsResult = db_query($sSQL);
     return db_utils::fieldsMemory($rsResult, 0)->c90_dataimplantacao;
+}
+
+function getDespesaMensal($inicio, $fim, $instituicao)
+{
+    $ano = date("Y", strtotime($inicio));
+    $instituicao = implode(",", $instituicao);
+
+    $sql = "SELECT *
+    FROM
+        (
+            SELECT
+                o56_elemento AS o58_elemento,
+                o56_descr AS o56_descr,
+                substr(fc_dotacaosaldo, 29, 12) :: float8 - substr(fc_dotacaosaldo,42,12)::float8 AS empenhado,
+                substr(fc_dotacaosaldo, 55, 12) :: float8 AS liquidado
+            from
+                (
+                    SELECT
+                        *,
+                        fc_dotacaosaldo({$ano}, o58_coddot, 2, '{$inicio}', '{$fim}')
+                    FROM
+                        orcdotacao w
+                        INNER JOIN orcelemento e ON w.o58_codele = e.o56_codele
+                        AND e.o56_anousu = w.o58_anousu
+                        AND e.o56_orcado IS TRUE
+                        INNER JOIN orcprojativ ope ON w.o58_projativ = ope.o55_projativ
+                        AND ope.o55_anousu = w.o58_anousu
+                        INNER JOIN orctiporec ON orctiporec.o15_codigo = w.o58_codigo
+                    WHERE
+                        o58_anousu = {$ano}
+                        AND o58_instit in ({$instituicao})
+                    ORDER BY
+                        o56_elemento
+                ) AS x
+        ) AS xxx
+    WHERE
+        empenhado + liquidado > 0";
+
+    return db_utils::getColectionByRecord(db_query($sql));
+}
+
+
+function getDespesaMensalInformada($inicio, $fim, $instituicao, $compentencia)
+{
+    $ano = date("Y", strtotime($inicio));
+    $instituicao = implode(",", $instituicao);
+
+    $where = " AND (c233_mes = " . date('m', strtotime($inicio)) . " AND c233_ano = {$ano}) ";
+    $whereCompetencia = " AND ((c233_competencia IS NOT NULL AND c233_competencia < '{$compentencia}') OR (c233_competencia IS NULL)) ";
+    $sql = "SELECT c233_elemento as o58_elemento, c233_valorempenhado as empenhado, c233_valorliquidado as liquidado FROM despesaexercicioanterior left join orcelemento on substring(c233_elemento::text, 1, 13) = o56_elemento and c233_ano = o56_anousu WHERE c233_orgao IN ({$instituicao}) {$where} {$whereCompetencia}";
+
+    return db_utils::getColectionByRecord(db_query($sql));
 }
 ?>
