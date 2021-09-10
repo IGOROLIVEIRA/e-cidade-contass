@@ -66,11 +66,28 @@ $sqlerro=false;
 if (isset($incluir)) {
 
   $medida = $ve62_medida;
+  $ultimamedida1 = $ultimamedida;
+  $ve62_veiccadtiposervico = $ve62_veiccadtiposervico;
   $horaManutencao = $ve62_hora;
   $oDataManutencao = new DBDate($ve62_dtmanut);
   $datahoraManutencao = strtotime($oDataManutencao->getDate() . " " . $ve62_hora);
   $dataManutencao = $oDataManutencao->getDate();
   $retirada = $ve65_veicretirada;
+
+    if($medida<$ultimamedida1){
+        db_msgbox("Medida de manutenção menor que Medida de manutenção anterior.");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+        
+    }
+    if($ve62_veiccadtiposervico==""){
+      db_msgbox("Tipo de serviço não selecionado");
+      $sqlerro=true;
+      $erro_msg="Não foi possível incluir.";
+      echo "<script> document.form1.ve62_veiccadtiposervico.style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.ve62_veiccadtiposervicofocus();</script>";
+      
+  }
 
     if($retirada == "" || $retirada == null){
         db_msgbox("Campo: Retirada não informado");
@@ -146,11 +163,11 @@ if (isset($incluir)) {
       db_msgbox("Medida de manutenção menor que Medida de manutenção anterior.");
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
-    } else if (!empty($ve62_medida3) && $medida > $ve62_medida3) {
-      db_msgbox("Medida de manutenção maior que Medida de manutenção posterior.");
+    } /*else if (!empty($ve62_medida3) && $medida > $ve62_medida3) {
+      db_msgbox("Medida de manutenção2 maior que Medida de manutenção posterior.".$ve62_medida3." - ".$medida);
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
-    } else if (!empty($ve70_medida1) && $medida < $ve70_medida1) {
+    }*/ else if (!empty($ve70_medida1) && $medida < $ve70_medida1) {
       db_msgbox("Medida de manutenção menor que Medida de abastecimento anterior.");
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
@@ -219,7 +236,7 @@ if (isset($incluir)) {
       }
       db_fim_transacao($sqlerro);
     }
-
+    
   }
   $ve62_codigo = $clveicmanut->ve62_codigo;
   $db_opcao = 1;
@@ -269,17 +286,23 @@ if (isset($incluir)) {
 
     if($sqlerro==true){
       db_msgbox($erro_msg);
+      echo "<script> document.getElementById('itensLancados').style.display = 'block';</script>";
       if($clveicmanut->erro_campo!=""){
         echo "<script> document.form1.".$clveicmanut->erro_campo.".style.backgroundColor='#99A9AE';</script>";
         echo "<script> document.form1.".$clveicmanut->erro_campo.".focus();</script>";
+        echo "<script> document.getElementById('itensLancados').style.display = 'block';</script>";
       };
     }else{
+      $what = array("Â°", chr(13), chr(10), 'Ã¤', 'Ã£', 'Ã ', 'Ã¡', 'Ã¢', 'Ãª', 'Ã«', 'Ã¨', 'Ã©', 'Ã¯', 'Ã¬', 'Ã­', 'Ã¶', 'Ãµ', 'Ã²', 'Ã³', 'Ã´', 'Ã¼', 'Ã¹', 'Ãº', 'Ã»', 'Ã€', 'Ã', 'Ãƒ', 'Ã‰', 'Ã', 'Ã“', 'Ãš', 'Ã±', 'Ã‘', 'Ã§', 'Ã‡', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'Âª', 'Âº');
+      $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
-
+     
      foreach (json_decode(str_replace("\\",'',utf8_encode($itens)), true ) as $item) {
+      $valor = str_replace($what, $by, $item["ve63_descr"]); 
+      $item["ve63_descr"] = $valor;
       if($item!=null){
 
-        if($sqlerro==false){
+        if($sqlerro==false){  
           db_inicio_transacao();
           $clveicmanutitem->incluir("",$item,$ve62_codigo);
           $erro_msg = $clveicmanutitem->erro_msg;
@@ -302,9 +325,10 @@ if (isset($incluir)) {
     }
 
 
-
+    
     db_msgbox($erro_msg);
-    db_redireciona("vei1_veicmanut005.php?liberaaba=true&chavepesquisa=$ve62_codigo");
+    //db_redireciona("vei1_veicmanut005.php?liberaaba=true&chavepesquisa=$ve62_codigo");
+    db_redireciona("vei1_veicmanut004.php");
 
   }
 }
