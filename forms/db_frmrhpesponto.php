@@ -421,7 +421,7 @@ function js_carregaGridRubricas(aRubricas){
 		sLinhasRubricas += '  </td>';
 		sLinhasRubricas += '  <td class="linhagrid">';
 		sLinhasRubricas += '    <input type="button" name="excluir" value="Excluir" onClick="js_telaAlterarExcluir(\'linha'+aRubricas[iInd].r90_rubric.urlDecode()+'\',\'Excluir\')">';
-    sLinhasRubricas += "    <input type='hidden' id='obj"+aRubricas[iInd].r90_rubric.urlDecode()+"'  value='"+aRubricas[iInd].toSource()+"'";
+    sLinhasRubricas += "    <input type='hidden' id='obj"+aRubricas[iInd].r90_rubric.urlDecode()+"'  value='"+JSON.stringify(aRubricas[iInd])+"'";
 		sLinhasRubricas += '  </td>';
 		sLinhasRubricas += '</tr>';
 
@@ -439,7 +439,7 @@ function js_telaAlterarExcluir(sId,sAcao){
 
   var doc          = document.form1;
   var sIdObj       = sId.replace('linha','obj');
-  var oDadosRubric = eval($(sIdObj).value);
+  var oDadosRubric = JSON.parse($(sIdObj).value);
 
   doc.r90_rubric.value    = oDadosRubric.r90_rubric;
   doc.rh27_descr.value    = oDadosRubric.rh27_descr;
@@ -485,7 +485,7 @@ function js_validaRubrica(){
 
     var sQuery  = 'sMethod=validarRubricas';
         sQuery += '&sTipoPonto='+sTipoPonto;
-        sQuery += '&oDadosRubrica='+oDadosRubrica.toSource();
+        sQuery += '&oDadosRubrica='+JSON.stringify(oDadosRubrica);
     var oAjax   = new Ajax.Request( sUrl, {
                                             method: 'post',
                                             parameters: sQuery,
@@ -540,7 +540,7 @@ function js_incluirRubricas(){
 
 	  var sQuery  = 'sMethod=incluirRubricas';
 	      sQuery += '&sTipoPonto='+sTipoPonto;
-	      sQuery += '&oDadosRubrica='+oDadosRubrica.toSource();
+	      sQuery += '&oDadosRubrica='+JSON.stringify(oDadosRubrica);
 	  var oAjax   = new Ajax.Request( sUrl, {
 	                                          method: 'post',
 	                                          parameters: sQuery,
@@ -583,7 +583,7 @@ function js_repassarValores(){
 
     var sQuery  = 'sMethod=repassarValores';
         sQuery += '&sTipoPonto='+sTipoPonto;
-        sQuery += '&oDadosRubrica='+oDadosPonto.toSource();
+        sQuery += '&oDadosRubrica='+JSON.stringify(oDadosPonto);
         sQuery += '&dtDataAdm='+document.form1.data_de_admissao.value;
     var oAjax   = new Ajax.Request( sUrl, {
                                             method: 'post',
@@ -662,7 +662,7 @@ function js_alterarRubrica(lSoma){
 
     var sQuery  = 'sMethod=alterarRubricas';
         sQuery += '&sTipoPonto='+sTipoPonto;
-        sQuery += '&oDadosRubrica='+oDadosRubrica.toSource();
+        sQuery += '&oDadosRubrica='+JSON.stringify(oDadosRubrica);
         sQuery += '&lSoma='+lSoma;
     var oAjax   = new Ajax.Request( sUrl, {
                                             method: 'post',
@@ -753,7 +753,7 @@ function js_excluirRubrica(sRubric){
 
     var sQuery  = 'sMethod=excluirRubricas';
         sQuery += '&sTipoPonto='+sTipoPonto;
-        sQuery += '&oDadosRubrica='+oDadosRubrica.toSource();
+        sQuery += '&oDadosRubrica='+JSON.stringify(oDadosRubrica);
     var oAjax   = new Ajax.Request( sUrl, {
                                             method: 'post',
                                             parameters: sQuery,
@@ -798,7 +798,7 @@ function js_repassarExclusao(){
 
     var sQuery  = 'sMethod=excluirRubricas';
         sQuery += '&sTipoPonto='+sValorTipoPonto;
-        sQuery += '&oDadosRubrica='+oDadosRubrica.toSource();
+        sQuery += '&oDadosRubrica='+JSON.stringify(oDadosRubrica);
     var oAjax   = new Ajax.Request( sUrl, {
                                             method: 'post',
                                             parameters: sQuery,
@@ -914,7 +914,7 @@ function js_incluirRubricasAutomaticas(aListaRubricas,lRepasse){
         sQuery += '&iLotac='+$F('r90_lotac');
         sQuery += '&lRepasse='+lRepasse;
         sQuery += '&dtDataAdm='+document.form1.data_de_admissao.value;
-        sQuery += '&aObjListaRubricas='+aListaRubricas.toSource();
+        sQuery += '&aObjListaRubricas='+JSON.stringify(aListaRubricas);
 
     var oAjax   = new Ajax.Request( sUrl, {
                                             method: 'post',
