@@ -610,10 +610,9 @@ switch ($oParam->exec) {
                 $lAcordoValido = false;
                 $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
             }
-
             if ($lAcordoValido) {
                 $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->contrato->iContratado} and z09_tipo = 1");
-                db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+                db_utils::fieldsMemory($result_dtcadcgm, 0)->z09_datacadastro;
                 $dtsession = date("Y-m-d", db_getsession("DB_datausu"));
 
                 if ($dtsession < $z09_datacadastro) {
@@ -633,7 +632,6 @@ switch ($oParam->exec) {
                     $lAcordoValido = true;
                 }
             }
-
             $oLicitacao = db_utils::getDao('liclicita');
             $rsLicitacao   = $oLicitacao->sql_record($oLicitacao->sql_query_file($oParam->contrato->iLicitacao, 'l20_naturezaobjeto'));
             $iNatureza     = db_utils::fieldsMemory($rsLicitacao, 0)->l20_naturezaobjeto;
@@ -648,7 +646,6 @@ switch ($oParam->exec) {
             }
 
             if ($lAcordoValido) {
-
                 $oParam->contrato->nValorContrato = str_replace(',', '.', str_replace(".", "", $oParam->contrato->nValorContrato));
                 if ($oParam->contrato->iContratado != "" && $oParam->contrato->iContratado != null) {
                     $oDaoAcordo = db_utils::getDao('acordo');
@@ -663,7 +660,6 @@ switch ($oParam->exec) {
                     $oDaoAcordo->ac16_sequencial = $oParam->contrato->iContratado;
                     $oDaoAcordo->alterar($oParam->contrato->iContratado);
                 }
-
                 $oContratado = CgmFactory::getInstanceByCgm($oParam->contrato->iContratado);
                 $oContrato = new Acordo($oParam->contrato->iCodigo);
                 $oContrato->setAno($oParam->contrato->iAnousu != "" ? $oParam->contrato->iAnousu : db_getsession("DB_anousu"));
@@ -676,6 +672,7 @@ switch ($oParam->exec) {
                 } else {
                     $oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
                 }
+
                 $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
                 $oContrato->setDataInicial($oParam->contrato->dtInicio);
                 $oContrato->setDataFinal($oParam->contrato->dtTermino);
@@ -713,7 +710,6 @@ switch ($oParam->exec) {
                 $oContrato->setDataInclusao(date("Y-m-d"));
                 $oContrato->setITipocadastro(1);
                 $oContrato->save();
-
                 /*
                * verificamos se existe empenhos a serem vinculados na seção
                */
@@ -832,8 +828,9 @@ switch ($oParam->exec) {
                 $oRetorno->iCodigoContrato = $oContrato->getCodigoAcordo();
                 $oRetorno->sDataInclusao = $oContrato->getDataInclusao();
                 $oRetorno->iAnousu = $oContrato->getAno();
+                //$oRetorno->message = urlencode('Incluido com sucesso');
+                //$oRetorno->status  = 2;
             } else {
-
                 db_fim_transacao(true);
                 $oRetorno->status  = 2;
                 $oRetorno->message = urlencode(str_replace("\\n", "\n", $sMessagemInvalido));
@@ -950,6 +947,7 @@ switch ($oParam->exec) {
         break;
 
     case "getItensAcordo":
+
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
 
             $oContrato                = $_SESSION["oContrato"];
@@ -1390,7 +1388,7 @@ switch ($oParam->exec) {
 
         if (isset($_SESSION["aItensOrigem"])) {
 
-            foreach ($_SESSION["aItensOrigem"] as &$oItem) {
+            foreach ($_SESSION["aItensOrigem"] as $oItem) {
 
                 if ($oItem->codigo == $oParam->iItem) {
 

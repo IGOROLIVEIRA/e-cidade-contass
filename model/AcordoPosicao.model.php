@@ -1028,8 +1028,6 @@ class AcordoPosicao
             }
         }
 
-
-
         /**
          * incluimos e excluimos novamente das tabela acordovigência
          */

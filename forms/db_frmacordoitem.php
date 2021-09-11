@@ -334,13 +334,13 @@ db_app::load("estilos.css, grid.style.css");
 
         if (mostra == true) {
 
-            js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
+            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordoitem',
                 'db_iframe_acordo',
                 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_sequencial',
                 'Pesquisa', true, '0', '1', '775', '390');
         } else {
             if (document.form1.ac20_acordo.value != '') {
-                js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
+                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordoitem',
                     'db_iframe_acordo',
                     'func_acordo.php?pesquisa_chave=' + document.form1.ac20_acordo.value +
                     '&funcao_js=parent.js_mostraacordo', 'Pesquisa', false);
@@ -367,7 +367,7 @@ db_app::load("estilos.css, grid.style.css");
     function js_pesquisaac20_pcmater(mostra) {
 
         if (mostra) {
-            js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
+            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordoitem',
                 'db_iframe_pcmater',
                 'func_pcmatercontratos.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc01_servico',
                 'Pesquisar Materiais',
@@ -375,7 +375,7 @@ db_app::load("estilos.css, grid.style.css");
             );
         } else {
             if (document.form1.ac20_pcmater.value != '') {
-                js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
+                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordoitem',
                     'db_iframe_pcmater',
                     'func_pcmatercontratos.php?pesquisa_chave=' + document.form1.ac20_pcmater.value +
                     '&funcao_js=parent.js_mostrapcmater2',
@@ -483,7 +483,7 @@ db_app::load("estilos.css, grid.style.css");
     function js_pesquisaMaterial(mostra) {
         if (mostra) {
 
-            js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
+            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordoitem',
                 'db_iframe_pcmater',
                 'func_pcmater.php?funcao_js=parent.js_mostraMaterial|pc01_codmater|pc01_descrmater|pc01_servico',
                 'Pesquisar Materiais',
@@ -492,7 +492,7 @@ db_app::load("estilos.css, grid.style.css");
         } else {
 
             if (document.form1.ac20_pcmater.value != '') {
-                js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
+                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordoitem',
                     'db_iframe_pcmater',
                     'func_pcmater.php?pesquisa_chave=' + document.form1.ac20_pcmater.value +
                     '&funcao_js=parent.js_mostrapcmater',
@@ -532,7 +532,7 @@ db_app::load("estilos.css, grid.style.css");
         }
 
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
+            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordoitem',
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'funcao_js=parent.js_mostraorcdotacao1|o58_coddot',
                 'Pesquisar Dotações',
@@ -540,7 +540,7 @@ db_app::load("estilos.css, grid.style.css");
 
             $('Jandb_iframe_orcdotacao').style.zIndex = '100000000';
         } else {
-            js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
+            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordoitem',
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'pesquisa_chave=' + document.form1.o47_coddot.value +
                 '&funcao_js=parent.js_mostraorcdotacao',
@@ -675,7 +675,7 @@ db_app::load("estilos.css, grid.style.css");
 
                 if (oRetorno.itens.length > 0) {
 
-                    with(top.corpo.iframe_acordo) {
+                    with((window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo) {
 
                         $('ac16_origem').disabled = true;
                         $('ac16_contratado').readOnly = true;
@@ -684,7 +684,7 @@ db_app::load("estilos.css, grid.style.css");
 
                 } else {
 
-                    with(top.corpo.iframe_acordo) {
+                    with((window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo) {
 
                         $('ac16_origem').disabled = true;
                         $('ac16_contratado').readOnly = false;

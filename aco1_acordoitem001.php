@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 require("libs/db_stdlib.php");
 require("libs/db_utils.php");
 require("std/db_stdClass.php");
@@ -34,7 +33,7 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_acordoitem_classe.php");
-require_once ("classes/db_acordoitemperiodo_classe.php");
+require_once("classes/db_acordoitemperiodo_classe.php");
 include("classes/db_acordo_classe.php");
 include("dbforms/db_funcoes.php");
 require_once("classes/db_acordoaux_classe.php");
@@ -45,7 +44,7 @@ db_postmemory($_POST);
 
 $oParam = new cl_parametroscontratos;
 
-$oParam = $oParam->sql_query(null,'*');
+$oParam = $oParam->sql_query(null, '*');
 $oParam = db_query($oParam);
 $oParam = db_utils::fieldsMemory($oParam);
 $oParam = $oParam->pc01_liberarcadastrosemvigencia;
@@ -53,12 +52,12 @@ $oParam = $oParam->pc01_liberarcadastrosemvigencia;
 $clacordoitemperiodo = new cl_acordoitemperiodo;
 $clacordoitem        = new cl_acordoitem;
 
-if(isset($ac20_acordo)){
-  $clacordo = new cl_acordo;
-  $oAcordoVigencia = $clacordo->sql_query($ac20_acordo, 'ac16_semvigencia as vigencia');
-  $oAcordoVigencia = $clacordo->sql_record($oAcordoVigencia);
-  $oAcordoVigencia = db_utils::fieldsMemory($oAcordoVigencia);
-  $vigente = $oAcordoVigencia->vigencia;
+if (isset($ac20_acordo)) {
+    $clacordo = new cl_acordo;
+    $oAcordoVigencia = $clacordo->sql_query($ac20_acordo, 'ac16_semvigencia as vigencia');
+    $oAcordoVigencia = $clacordo->sql_record($oAcordoVigencia);
+    $oAcordoVigencia = db_utils::fieldsMemory($oAcordoVigencia);
+    $vigente = $oAcordoVigencia->vigencia;
 }
 
 
@@ -67,24 +66,27 @@ $db_botao = false;
 unset($_SESSION["aItensOrigem"]);
 ?>
 <html>
+
 <head>
-  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta http-equiv="Expires" CONTENT="0">
-  <?
-  db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js, DBHint.widget.js");
-  db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js,dbtextFieldData.widget.js");
-  db_app::load("time.js");
-  db_app::load("estilos.css, grid.style.css");
-  ?>
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <?
+    db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js, DBHint.widget.js");
+    db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js,dbtextFieldData.widget.js");
+    db_app::load("time.js");
+    db_app::load("estilos.css, grid.style.css");
+    ?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-  <?
-  if($oParam == 't' && $vigente == 't'){
-    include("forms/db_frmacordoitemaux.php");
-  }else{
-    include("forms/db_frmacordoitem.php");
-  }
-  ?>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+    <?
+    if ($oParam == 't' && $vigente == 't') {
+        include("forms/db_frmacordoitemaux.php");
+    } else {
+        include("forms/db_frmacordoitem.php");
+    }
+    ?>
 </body>
+
 </html>
