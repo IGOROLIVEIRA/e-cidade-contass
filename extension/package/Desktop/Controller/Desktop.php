@@ -29,7 +29,7 @@ class Desktop extends Controller {
     // Destroe sessoes ja criadas
     Session::destroyAll();
 
-    $this->view->document->setTitle('DBSeller Informática Ltda - e-cidade - 3.0');
+    $this->view->document->setTitle('Contass TI LTDA - e-cidade - 3.0');
     $this->view->document->setCharset($this->response->getCharset());
 
     $styles = array(

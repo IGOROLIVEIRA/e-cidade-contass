@@ -583,9 +583,9 @@ function someFrame(evt) {
     return false;
 }
 if(CurrentWindow.corpo==null){
-  
+
 }else{
-  
+
 }
 
 
@@ -2118,7 +2118,7 @@ if(mostraJanela==undefined)
 
       CurrentWindow.fixSize.divIframe[boxJanela.id] = boxJanela;
     }
-        
+
 
   }
 
@@ -4481,7 +4481,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   var tab2Coluna2 = tab2Linha1.insertCell(1);
 
   tab2Linha1.setAttribute("id","CF" + nomeJan);
-  tab2Linha1.style.backgroundColor = '#326094';
+  tab2Linha1.style.backgroundColor = '#316648';
   tab1Linha1.style.backgroundColor = '#c0c0c0';
   tab2Coluna1.style.whiteSpace = "nowrap";
   tab2Coluna1.onmousedown = function(event) { js_engage(document.getElementById('Jan' + nomeJan),event);};
@@ -4495,7 +4495,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   tab2Coluna1.className  = 'DBJanelaIframeTitulo';
   tab2Coluna1.style.fontFamily = 'Arial, Helvetica, sans-serif';
   tab2Coluna1.style.fontSize = '11px';
-  tab2Coluna1.innerHTML =  (typeof(cabecalho)=="undefined" || cabecalho=="")?'&nbsp; DBSeller Informática Ltda':('&nbsp;' + cabecalho);
+  tab2Coluna1.innerHTML =  (typeof(cabecalho)=="undefined" || cabecalho=="")?'&nbsp; Contass TI LTDA':('&nbsp;' + cabecalho);
 
   tab2Coluna1.setAttribute("nowrap","1");
   tab2Coluna2.setAttribute("nowrap","1");
@@ -4523,7 +4523,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   document.body.appendChild(camada);
 
   eval(nomeJan + " = new janela(document.getElementById('Jan" + nomeJan + "'),document.getElementById('CF" + nomeJan + "'),IF" + nomeJan + ")");
-  
+
   CurrentWindow.createLoading(document.getElementById('IF' + nomeJan), tab1Linha2);
 
   document.getElementById('IF' + nomeJan).src = arquivo;

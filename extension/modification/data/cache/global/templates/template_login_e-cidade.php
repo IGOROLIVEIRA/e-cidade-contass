@@ -49,7 +49,7 @@
 
     <div class="container">
 
-      <a href="http://www.softwarepublico.gov.br/ver-comunidade?community_id=15315976" title="Entre na comunidade e-Cidade no Portal do Software Público." target="_blank"><img class="logo-ecidade" src="imagens/ecidade/login/logotipo_ecidade.png"/></a>
+      <a href="http://www.contassconsultoria.com.br/" title="Contass Consultoria LTDA." target="_blank"><img class="logo-ecidade" src="imagens/ecidade/login/logotipo_ecidade.png"/></a>
 
       <form method="post" name="form1">
 
@@ -97,7 +97,7 @@
 
         <span id="testaLogin"></span>
 
-        <img class="logo-db" src="imagens/files.proper/contass.png" style="width: 345px; height: 120px;">
+        <!-- <img class="logo-db" src="imagens/files.proper/contass.png" style="width: 345px; height: 120px;"> -->
 
 
       <!-- <div class="social-midia">
@@ -230,6 +230,6 @@
       });
     }
   })
-  
+
   </script>
 </html>

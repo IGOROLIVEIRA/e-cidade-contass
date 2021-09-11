@@ -161,7 +161,7 @@ div.input::first-child {
 
 .btn-primary {
   border: none;
-  background: #4a789c;
+  background: #316648;
   color: #fff;
 }
 
@@ -170,7 +170,7 @@ div.input::first-child {
 }
 
 .btn-link {
-  color: #4a789c;
+  color: #316648;
   background-color: transparent;
   text-decoration: underline;
   cursor: pointer;
@@ -274,7 +274,7 @@ table.table tr > td.actions {
 }
 
 table.table tr > td.actions a {
-  color: #6c9abe;
+  color: #316648;
   cursor: pointer;
 }
 

@@ -404,7 +404,7 @@ if (pg_numrows($result) == 0 or pg_numrows($result1) == 0) {
   <html>
 
   <head>
-    <title>DBSeller Inform&aacute;tica Ltda - Abrindo E-cidade...</title>
+    <title>Contass TI LTDA</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <link href="estilos.css" rel="stylesheet" type="text/css">
