@@ -5905,7 +5905,7 @@ class cl_estrutura_sistema {
         if ($emenda)
             $sql .= " AND k81_emparlamentar IN (" . implode(",", $emenda) . ") AND O57_FONTE LIKE '4171%' " ;
         else
-            $sql .= " AND O57_FONTE LIKE '41%' ";
+            $sql .= " AND O57_FONTE LIKE '4171%' ";
 
 
         return db_utils::getColectionByRecord(db_query($sql));

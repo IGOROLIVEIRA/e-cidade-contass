@@ -1820,7 +1820,7 @@ ob_start();
 
             <tr style='height:19px;'>
                 <? if ($tipoEmissao == 1) { ?>
-                    <td class="s3 bdleft" colspan="2" style='font-size: 13px'>(-) Transferências obrigatórias da União relativas às emendas individuais (art. 166-A, § 1o, da CF)</td>
+                    <td class="s3 bdleft" colspan="2">(-) Transferências obrigatórias da União relativas às emendas individuais</td>
                     <td class="s5">
                     <? } else { ?>
                     <td class="s9 bdleft" colspan="13">(-) Transferências obrigatórias da União relativas às emendas individuais (art. 166-A, § 1o, da CF)</td>
@@ -1846,7 +1846,7 @@ ob_start();
 
             <tr style='height:19px;'>
                 <? if ($tipoEmissao == 1) { ?>
-                    <td class="s3 bdleft" colspan="2" style='font-size: 13px'>(-) Transferências obrigatórias da União relativas às emendas de bancada (art. 166, § 16, da CF)</td>
+                    <td class="s3 bdleft" colspan="2">(-) Transferências obrigatórias da União relativas às emendas de bancada</td>
                     <td class="s5">
                     <? } else { ?>
                     <td class="s9 bdleft" colspan="13">(-) Transferências obrigatórias da União relativas às emendas de bancada (art. 166, § 16, da CF)</td>
@@ -2030,7 +2030,7 @@ function getValorReceitaEmendaInformado($inicio, $fim, $oInstit, $emenda)
 {
     $where = " AND ((c234_mes >= " . date('m', strtotime($inicio)) . " AND c234_ano = " . date('Y', strtotime($inicio)) . ") OR (c234_mes <= " . date('m', strtotime($fim)) . " AND c234_ano = " . date('Y', strtotime($fim)) . "))";
     $where .= " AND c234_tipoemenda IN (" . implode(",", $emenda) . ") ";
-    $sql = "SELECT c234_receita as o57_fonte, c234_valorarrecadado as arrecadado_emenda_parlamentar FROM receitaexercicioanterior WHERE c234_orgao in ({$oInstit})  {$where} AND c234_tipoemenda <> 3";
+    $sql = "SELECT c234_receita as o57_fonte, c234_valorarrecadado as arrecadado_emenda_parlamentar FROM receitaexercicioanterior WHERE c234_orgao in ({$oInstit})  {$where}";
 
     return db_utils::getColectionByRecord(db_query($sql));
 }
