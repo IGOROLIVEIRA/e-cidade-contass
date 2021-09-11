@@ -20,7 +20,7 @@ if(isset($incluir)){
       echo "<script> alert('Já existe registro para este ano'); </script>";
       $db_opcao = 1;
       echo "<script>
-      CurrentWindow.corpo.iframe_db_anexo.location.href='orc1_mtfis_ldo001.php';
+      (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_db_anexo.location.href='orc1_mtfis_ldo001.php';
       </script>";
   }else {
       db_inicio_transacao();
@@ -41,7 +41,7 @@ if(isset($incluir)){
           echo "<script> alert('Incluído com sucesso'); </script>";
 
           echo "<script>
-      CurrentWindow.corpo.iframe_db_anexo.location.href='orc1_mtfis_anexo001.php?mtfisanexo_ldo=" . $mtfis_sequencial . "&mtfis_anoinicialldo=" . $mtfis_anoinicialldo . "';
+      (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_db_anexo.location.href='orc1_mtfis_anexo001.php?mtfisanexo_ldo=" . $mtfis_sequencial . "&mtfis_anoinicialldo=" . $mtfis_anoinicialldo . "';
       parent.document.formaba.db_anexo.disabled=false;
       parent.mo_camada('db_anexo');
       </script>";
@@ -74,7 +74,7 @@ if(isset($incluir)){
   $db_botao = true;
 
   echo "<script>
-    CurrentWindow.corpo.iframe_db_anexo.location.href='orc1_mtfis_anexo001.php?mtfisanexo_ldo=".$chavepesquisa."&mtfis_anoinicialldo=".$mtfis_anoinicialldo."';
+    (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_db_anexo.location.href='orc1_mtfis_anexo001.php?mtfisanexo_ldo=".$chavepesquisa."&mtfis_anoinicialldo=".$mtfis_anoinicialldo."';
     parent.document.formaba.db_anexo.disabled=false;
     //parent.mo_camada('db_anexo');
   </script>";

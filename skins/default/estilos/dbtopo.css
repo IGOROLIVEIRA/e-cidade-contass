@@ -168,9 +168,9 @@ header nav ul li{
  * Tabela de Informações hover Preferencias
  */
 #tabelaInformacoesUsuario {
-    background-color: #E1DEDE;
-    color: #326094;
-    border: 1px solid #326094;
+    background-color: #463e3e;
+    color: #429566;
+    border: 1px solid #429566;
     font-family: arial;
     font-size: 10px;
     padding:2px;
@@ -184,7 +184,7 @@ header nav ul li{
  * Informações da prefeitura
  */
 #bTopo {
-    color: #326094;
+    color: #429566;
     display: block;
     font-family: arial;
     font-size: 10px;

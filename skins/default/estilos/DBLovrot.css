@@ -46,7 +46,7 @@
 }
 
 .DBLovrotInputRodape {
-  background-color: #E6E4F1;
+  background-color: #fdfdfd;
 }
 
 .DBLovrotDivText {
@@ -90,17 +90,17 @@ table.DBLovrotTable td {
 }
 
 .DBLovrotTdCabecalho, .DBLovrotInputCabecalho {
-  background-color: #E1E1E1 !important;
+  background-color: #3CA980 !important;
 }
 
 table.DBLovrotTable tr td.DBLovrotRegistrosRetornados[bgcolor="#97B5E6"] {
 }
 table.DBLovrotTable tr td.DBLovrotRegistrosRetornados[bgcolor="#97B5E6"] {
-  background-color: #FFFFFF !important;
+  background-color: #A7D6C4 !important;
 }
 
 table.DBLovrotTable tr td.DBLovrotRegistrosRetornados[bgcolor="#E796A4"] {
-  background-color: #EFEFEF !important;
+  background-color: #EDFFF8 !important;
 }
 table.DBLovrotTable td {
     border: 1px solid #808080 !important;

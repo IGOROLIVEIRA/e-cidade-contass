@@ -2379,7 +2379,7 @@ function js_ajax_msg(mensagem){
    var camada = document.createElement("DIV");
    camada.setAttribute("id",'id_ajax_msg');
    camada.setAttribute("align","center");
-   camada.style.backgroundColor = "#c0c0c0";
+   camada.style.backgroundColor = "#EBF3F0";
    camada.style.layerBackgroundColor = "black";
    camada.style.position = "absolute";
    if (tipo_msg == 0) {
@@ -4380,8 +4380,8 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   var tab2Coluna2 = tab2Linha1.insertCell(1);
 
   tab2Linha1.setAttribute("id","CF" + nomeJan);
-  tab2Linha1.style.backgroundColor = '#326094';
-  tab1Linha1.style.backgroundColor = '#c0c0c0';
+  tab2Linha1.style.backgroundColor = '#316648';
+  tab1Linha1.style.backgroundColor = '#EBF3F0';
   tab2Coluna1.style.whiteSpace = "nowrap";
   tab2Coluna1.onmousedown = function(event) { js_engage(document.getElementById('Jan' + nomeJan),event);};
   tab2Coluna1.onmouseup = function(event) { js_release(document.getElementById('Jan' + nomeJan),event);};
@@ -4394,7 +4394,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   tab2Coluna1.className  = 'DBJanelaIframeTitulo';
   tab2Coluna1.style.fontFamily = 'Arial, Helvetica, sans-serif';
   tab2Coluna1.style.fontSize = '11px';
-  tab2Coluna1.innerHTML =  (typeof(cabecalho)=="undefined" || cabecalho=="")?'&nbsp; DBSeller Informática Ltda':('&nbsp;' + cabecalho);
+  tab2Coluna1.innerHTML =  (typeof(cabecalho)=="undefined" || cabecalho=="")?'&nbsp; Contass TI LTDA':('&nbsp;' + cabecalho);
 
   tab2Coluna1.setAttribute("nowrap","1");
   tab2Coluna2.setAttribute("nowrap","1");
@@ -4404,8 +4404,8 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
 
   tab1Coluna2.setAttribute("width","100%");
   tab1Coluna2.setAttribute("height","100%");
-  camada.style.backgroundColor      = "#c0c0c0";
-  camada.style.layerBackgroundColor = "#c0c0c0";
+  camada.style.backgroundColor      = "#EBF3F0";
+  camada.style.layerBackgroundColor = "#EBF3F0";
   camada.style.border               = "0px outset #666666";
   camada.style.position             = "absolute";
   camada.style.left                 = esquerda;

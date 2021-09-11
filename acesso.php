@@ -116,7 +116,7 @@ if(!isset($trocaip) && !isset($atualiza)){
 ?>
 <html>
   <head>
-    <title>DBSeller Informática Ltda - Página Inicial</title>
+    <title>Contass TI LTDA</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script type="text/javascript" src="scripts/prototype.js"></script>

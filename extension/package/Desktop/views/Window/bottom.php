@@ -8,7 +8,7 @@
 }
 
 #content > * {
-  background:#ddd;
+  background:#EEFAF5;
   color: #545454;
 }
 
@@ -25,7 +25,7 @@
 #content .left {
   float: left;
   margin-left: 10px;
-  background:#ddd;
+  background:#EEFAF5;
   left: 0;
 }
 

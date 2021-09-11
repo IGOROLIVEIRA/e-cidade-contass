@@ -4,9 +4,9 @@
 }
 
 .topbar {
-  background-image: -webkit-linear-gradient(to bottom, #FFF, #EFEFEF 50%);
-  background-image:    -moz-linear-gradient(to bottom, #FFF, #EFEFEF 50%);
-  background-image:         linear-gradient(to bottom, #FFF, #EFEFEF 50%);
+  background-image: -webkit-linear-gradient(to bottom, #FFF, #EDFFF8 50%);
+  background-image:    -moz-linear-gradient(to bottom, #FFF, #EDFFF8 50%);
+  background-image:         linear-gradient(to bottom, #FFF, #EDFFF8 50%);
   width: 100%;
   box-shadow: 0px 0px 3px -1px #000;
   font-family: "DejaVu Sans";
@@ -44,7 +44,7 @@
 .topbar .user-nav .user .user-name {
   line-height: 2;
   font-size: 14px;
-  color: #426c8c;
+  color: #316648;
 }
 
 /** DROPDOWN CSS **/

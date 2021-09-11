@@ -217,7 +217,7 @@ legend {
 body.body-default {
   margin: 0;
   margin-top: 0px !important;
-  background: #e1dede;
+  background: #F5FFFB;
 }
 
 body.abas {
@@ -226,7 +226,7 @@ body.abas {
 body.no-menu, body.body-default {
   margin-top: 0px !important;
 }
-  
+
 
 table.table-default {
   width: 100%;
@@ -256,7 +256,7 @@ body, table[bgcolor="#cccccc"], td[bgcolor="#CCCCCC"], tr[bgcolor="#CCCCCC"], in
  * FORMULARIO
  */
 input[type="button"], input[type="submit"], input[type="reset"] {
-  background-color:#d9d5d5;
+  background-color:#3CA980;
   border-radius: 2px;
 }
 
@@ -337,7 +337,7 @@ progress::-moz-progress-bar {
 .db-tooltip {
   position: absolute;
   top: 0;
-  right: 0;  
+  right: 0;
 }
 
 /** Botão de release */
