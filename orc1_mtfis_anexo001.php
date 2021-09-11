@@ -11,7 +11,6 @@ $db_opcao = 1;
 $db_botao = true;
 $aEspecificacoes = array('Receita Total','Receitas Primárias (I)','Receitas Primárias Correntes','Receitas de Impostos, Taxas e Contribuições de Melhoria','Receitas de Contribuições','Receitas de Transferências Correntes','Demais Receitas Primárias Correntes','Receitas Primárias de Capital','Despesa Total','Despesas Primárias (II)','Despesas Primárias Correntes','Despesas de  Pessoal e Encargos Sociais','Outras Despesas Correntes','Despesas Primárias de Capital','Pagamento de Restos a Pagar de Despesas Primárias','Resultado Primário (III) = (I - II)','Juros, Encargos e Variáveis Monetárias Ativos (IV)','Juros, Encargos e Variáveis Monetárias Passivos (V)','Resultado Nominal (VI) = (III + (IV -V)','Dívida Pública Consolidada','Dívida Consolidada Líquida','Receita primária advindas de PPP','Despesas primária geradas por PPP','Impacto do saldo das PPPs (IX) = (VII - VIII)');
 if(isset($incluir)){
-    die('entrou');
   db_inicio_transacao();
   $clmtfis_anexo->sql_record($clmtfis_anexo->sql_query(null,'*','',"mtfisanexo_ldo = $mtfisanexo_ldo"));
   if($clmtfis_anexo->numrows > 0) {

@@ -529,7 +529,6 @@ class cl_mtfis_anexo {
   // funcao do recordset
   function sql_record($sql) {
      $result = db_query($sql);
-     die('erro');
      if ($result==false) {
        $this->numrows    = 0;
        $this->erro_banco = str_replace("\n","",@pg_last_error());

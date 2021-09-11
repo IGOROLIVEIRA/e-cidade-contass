@@ -585,76 +585,138 @@ class FPDF
         return $this->AutoPageBreak;
     }
 
-    function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
+    function Cell($w,$h=0,$txt='',$border=0,$ln=0,$align='',$fill=0,$link='',$preenc='')
+//#00#//cell
+//#10#//Imprime uma célula (área retangular) com bordas opcionais, cor de fundo e  texto. O  canto  superior-esquerdo da
+//#10#//célula corresponde à posição atual. O texto pode ser alinhado ou  centralizado.  Depois de  chamada,   a posição
+//#10#//atual se move para a direita ou para a linha seguinte. É possível pôr um link no texto.
+//#10#//Se a quebra de página automática está habilitada e a pilha for além do limite,  uma  quebra  de  página é  feita
+//#10#//antes da impressão.
+//#15#//cell($w,$h=0,$txt='',$border=0,$ln=0,$align='',$fill=0,$link='')
+//#20#//w            : Largura da célula. Se 0, a célula se extende até a margem direita.
+//#20#//h            : Altura da célula. Valor padrão: 0.
+//#20#//txt          : Texto a ser impresso. Valor padrão: texto vazio.
+//#20#//border       : Indica se as bordas devem ser desenhadas em volta da célula. O valor deve ser um número:
+//#20#//                  - 0: sem borda
+//#20#//                  - 1: com borda
+//#20#//         ou um texto contendo alguns ou todos os seguintes caracteres (em qualquer ordem):
+//#20#//            - L: esquerda
+//#20#//      - T: acima
+//#20#//            - R: direita
+//#20#//      - B: abaixo
+//#20#//               Valor padrão: 0.
+//#20#//ln           : Indica onde a posição corrente deve ficar depois que a função for chamada. Os  valores  possíveis
+//#20#//               são:
+//#20#//                  - 0: a direita
+//#20#//                  - 1: no início da próxima linha
+//#20#//      - 2: abaixo
+//#20#//               Usar o valor 1 é equivalente a usar 0 e chamar a função Ln() logo após. Valor padrão: 0.
+//#20#//align        : Permite centralizar ou alinhar o texto. Os valores possíveis são:
+//#20#//                  - L ou um texto vazio: alinhado à esquerda (valor padrão)
+//#20#//            - C: centralizado
+//#20#//      - R: alinhado à direita
+//#20#//fill         : Indica se o fundo da célula deve ser preenchido (1) ou transparente (0). Valor padrão: 0.
+//#20#//link         : URL ou identificador retornado por |addlink|.
+//#20#//preenc       : indica se a célula terá preenchimento a esquerda.
+//#20#//         Ex.: $pdf->Cell(20,10,'Title',1,1,'C','','.')
+//#20#//               preenche com (.) a direita do 'Title' até alcançar o tamanho da célula (20).
+//#99#//Exemplo:
+//#99#//  - Escolhe a fonte
+//#99#//      $pdf->SetFont('Arial','B',16);
+//#99#//  - Move para 8 cm a direita
+//#99#//      $pdf->Cell(80);
+//#99#//  - Texto centralizado em uma célula de 20*10 mm com borda e quebra de linha
+//#99#//  -   $pdf->Cell(20,10,'Title',1,1,'C');
+{
+  //Output a cell
+  $k=$this->k;
+  if($this->y+$h>$this->PageBreakTrigger and !$this->InFooter and $this->AcceptPageBreak())
+  {
+    $x=$this->x;
+    $ws=$this->ws;
+    if($ws>0)
     {
-        // Output a cell
-        $k = $this->k;
-        if ($this->y + $h > $this->PageBreakTrigger && !$this->InHeader && !$this->InFooter && $this->AcceptPageBreak()) {
-            // Automatic page break
-            $x = $this->x;
-            $ws = $this->ws;
-            if ($ws > 0) {
-                $this->ws = 0;
-                $this->_out('0 Tw');
-            }
-            $this->AddPage($this->CurOrientation, $this->CurPageSize);
-            $this->x = $x;
-            if ($ws > 0) {
-                $this->ws = $ws;
-                $this->_out(sprintf('%.3F Tw', $ws * $k));
-            }
-        }
-        if ($w == 0)
-            $w = $this->w - $this->rMargin - $this->x;
-        $s = '';
-        if ($fill || $border == 1) {
-            if ($fill)
-                $op = ($border == 1) ? 'B' : 'f';
-            else
-                $op = 'S';
-            $s = sprintf('%.2F %.2F %.2F %.2F re %s ', $this->x * $k, ($this->h - $this->y) * $k, $w * $k, -$h * $k, $op);
-        }
-        if (is_string($border)) {
-            $x = $this->x;
-            $y = $this->y;
-            if (strpos($border, 'L') !== false)
-                $s .= sprintf('%.2F %.2F m %.2F %.2F l S ', $x * $k, ($this->h - $y) * $k, $x * $k, ($this->h - ($y + $h)) * $k);
-            if (strpos($border, 'T') !== false)
-                $s .= sprintf('%.2F %.2F m %.2F %.2F l S ', $x * $k, ($this->h - $y) * $k, ($x + $w) * $k, ($this->h - $y) * $k);
-            if (strpos($border, 'R') !== false)
-                $s .= sprintf('%.2F %.2F m %.2F %.2F l S ', ($x + $w) * $k, ($this->h - $y) * $k, ($x + $w) * $k, ($this->h - ($y + $h)) * $k);
-            if (strpos($border, 'B') !== false)
-                $s .= sprintf('%.2F %.2F m %.2F %.2F l S ', $x * $k, ($this->h - ($y + $h)) * $k, ($x + $w) * $k, ($this->h - ($y + $h)) * $k);
-        }
-        if ($txt !== '') {
-            if ($align == 'R')
-                $dx = $w - $this->cMargin - $this->GetStringWidth($txt);
-            elseif ($align == 'C')
-                $dx = ($w - $this->GetStringWidth($txt)) / 2;
-            else
-                $dx = $this->cMargin;
-            if ($this->ColorFlag)
-                $s .= 'q ' . $this->TextColor . ' ';
-            $txt2 = str_replace(')', '\\)', str_replace('(', '\\(', str_replace('\\', '\\\\', $txt)));
-            $s .= sprintf('BT %.2F %.2F Td (%s) Tj ET', ($this->x + $dx) * $k, ($this->h - ($this->y + .5 * $h + .3 * $this->FontSize)) * $k, $txt2);
-            if ($this->underline)
-                $s .= ' ' . $this->_dounderline($this->x + $dx, $this->y + .5 * $h + .3 * $this->FontSize, $txt);
-            if ($this->ColorFlag)
-                $s .= ' Q';
-            if ($link)
-                $this->Link($this->x + $dx, $this->y + .5 * $h - .5 * $this->FontSize, $this->GetStringWidth($txt), $this->FontSize, $link);
-        }
-        if ($s)
-            $this->_out($s);
-        $this->lasth = $h;
-        if ($ln > 0) {
-            // Go to next line
-            $this->y += $h;
-            if ($ln == 1)
-                $this->x = $this->lMargin;
-        } else
-            $this->x += $w;
+      $this->ws=0;
+      $this->_out('0 Tw');
     }
+    $this->AddPage($this->CurOrientation);
+    $this->x=$x;
+    if($ws>0)
+    {
+      $this->ws=$ws;
+      $this->_out(sprintf('%.3f Tw',$ws*$k));
+    }
+  }
+  if($w==0)
+    $w=$this->w-$this->rMargin-$this->x;
+  $s='';
+  if($fill==1 or $border==1)
+  {
+    if($fill==1)
+      $op=($border==1) ? 'B' : 'f';
+    else
+      $op='S';
+    $s=sprintf('%.2f %.2f %.2f %.2f re %s ',$this->x*$k,($this->h-$this->y)*$k,$w*$k,-$h*$k,$op);
+  }
+  if(is_string($border))
+  {
+    $x=$this->x;
+    $y=$this->y;
+    if(is_int(strpos($border,'L')))
+      $s.=sprintf('%.2f %.2f m %.2f %.2f l S ',$x*$k,($this->h-$y)*$k,$x*$k,($this->h-($y+$h))*$k);
+    if(is_int(strpos($border,'T')))
+      $s.=sprintf('%.2f %.2f m %.2f %.2f l S ',$x*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-$y)*$k);
+    if(is_int(strpos($border,'R')))
+      $s.=sprintf('%.2f %.2f m %.2f %.2f l S ',($x+$w)*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
+    if(is_int(strpos($border,'B')))
+      $s.=sprintf('%.2f %.2f m %.2f %.2f l S ',$x*$k,($this->h-($y+$h))*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
+  }
+  if($txt!='')
+  {
+    if($align=='R')
+      $dx=$w-$this->cMargin-$this->GetStringWidth($txt);
+    elseif($align=='C')
+      $dx=($w-$this->GetStringWidth($txt))/2;
+    else
+      $dx=$this->cMargin;
+    $txt=str_replace(')','\\)',str_replace('(','\\(',str_replace('\\','\\\\',$txt)));
+    $xdots='';
+                if($preenc != ''){
+
+                   $ww    = $this->GetStringWidth($txt);
+                   if ($ww < $w ){
+                       $quant   = ($w-$ww)/$this->GetStringWidth($preenc);
+                       $xdots = str_repeat($preenc,$quant);
+                   }else{
+                       $xdots = '';
+                   }
+
+    }
+    $txt = $txt.$xdots;
+
+    if($this->ColorFlag)
+      $s.='q '.$this->TextColor.' ';
+    $s.=sprintf('BT %.2f %.2f Td (%s) Tj ET',($this->x+$dx)*$k,($this->h-($this->y+.5*$h+.3*$this->FontSize))*$k,$txt);
+    if($this->underline)
+      $s.=' '.$this->_dounderline($this->x+$dx,$this->y+.5*$h+.3*$this->FontSize,$txt);
+    if($this->ColorFlag)
+      $s.=' Q';
+    if($link)
+      $this->Link($this->x+$dx,$this->y+.5*$h-.5*$this->FontSize,$this->GetStringWidth($txt),$this->FontSize,$link);
+  }
+  if($s)
+    $this->_out($s);
+  $this->lasth=$h;
+  if($ln>0)
+  {
+    //Go to next line
+    $this->y+=$h;
+    if($ln==1)
+      $this->x=$this->lMargin;
+  }
+  else
+    $this->x+=$w;
+}
 
     function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false)
     {
