@@ -203,7 +203,7 @@ db_selectrecord("rh16_ctps_uf",$result_uf,true,$db_opcao,"","","","0-Nenhum...")
 			$rh16_emissao_val_dia = '';
 
 			if( isset($rh16_emissao) && $rh16_emissao != ""){
-				list( $rh16_emissao_val_ano, $rh16_emissao_val_mes, $rh16_emissao_val_dia ) = explode( "[-]", $rh16_emissao );
+				list( $rh16_emissao_val_ano, $rh16_emissao_val_mes, $rh16_emissao_val_dia ) = explode( "-", $rh16_emissao );
 			}
 			db_inputdata('rh16_emissao',$rh16_emissao_val_dia,$rh16_emissao_val_mes,$rh16_emissao_val_ano,true,'text',$db_opcao,"")
 			?>
