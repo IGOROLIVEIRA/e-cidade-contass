@@ -266,7 +266,7 @@ function db_anofolha()
 {
 
     global $max;
-    require_once modification("model/pessoal/std/DBPessoal.model.php");
+    require_once "model/pessoal/DBPessoal.model.php";
 
     try {
 
@@ -297,7 +297,7 @@ function db_mesfolha()
 {
 
     global $max;
-    require_once modification("model/pessoal/std/DBPessoal.model.php");
+    require_once "model/pessoal/DBPessoal.model.php";
 
     try {
 

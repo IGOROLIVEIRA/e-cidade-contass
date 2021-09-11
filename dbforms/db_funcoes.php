@@ -235,8 +235,8 @@ function db_input($nome, $dbsize, $dbvalidatipo, $dbcadastro, $dbhidden = 'text'
 
                                                                                                                                                                                                                                                                                                                                                                                                             if (($db_opcao != 3) && ($db_opcao != 5)) {
                                                                                                                                                                                                                                                                                                                                                                                                             ?> onblur="js_ValidaMaiusculo(this,'<?= @$GLOBALS['G' . $nome] ?>',event);" onInput="js_ValidaCampos(this,<?= ($dbvalidatipo == '' ? 0 : $dbvalidatipo) ?>,'<?= @$GLOBALS['S' . $nome] ?>','<?= ($db_opcao == 4 ? "t" : @$GLOBALS['U' . $nome]) ?>','<?= @$GLOBALS['G' . $nome] ?>',event);" onKeyDown="return js_controla_tecla_enter(this,event);" <?
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ?> autocomplete='<?= @$GLOBALS['A' . $nome] ?>'>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ?> autocomplete='<?= @$GLOBALS['A' . $nome] ?>'>
 <?
 
 
@@ -449,10 +449,10 @@ function db_multiploselect($valueobj, $descrobj, $objnsel = "", $objsel = "", $r
                 <?
                 if ($ordenarselect == false) {
                     echo "
-                        <img onClick='js_sobe();return false;' src='skins/img.php?file=Controles/seta_up.png' />
-                    <br/><br/>
-                   <img onClick='js_desce()' src='skins/img.php?file=Controles/seta_down.png' />
-                     ";
+	        	      <img onClick='js_sobe();return false;' src='skins/img.php?file=Controles/seta_up.png' />
+                  <br/><br/>
+                 <img onClick='js_desce()' src='skins/img.php?file=Controles/seta_down.png' />
+	               ";
                 }
                 ?>
             </td>
@@ -816,8 +816,8 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
             for ($sqli = 0; $sqli < pg_numrows($record); $sqli++) {
                 if (pg_result($record, $sqli, 0) == @$GLOBALS[$nome]) {
                     $nomec = pg_fieldname($record, 1);
-                    global $nomec;
-                    $nomec = pg_result($record, $sqli, 1);
+                    global ${$nomec};
+                    ${$nomec} = pg_result($record, $sqli, 1);
                     $clrot->label($nomec);
                     $tamm = "M" . trim($nomec);
                     break;
@@ -1011,29 +1011,29 @@ function db_select($nome, $db_matriz, $dbcadastro, $db_opcao = 3, $js_script = "
     } else {
 
         $nome_select_descr = $nome . "_select_descr";
-        global $nome_select_descr, $nome;
-        $nome = $GLOBALS[$nome];
+        global ${$nome_select_descr}, ${$nome};
+        ${$nome} = $GLOBALS[$nome];
 
         reset($db_matriz);
         for ($matsel = 0; $matsel < sizeof($db_matriz); $matsel++) {
-            if (key($db_matriz) == $nome) {
-                $nome_select_descr = $db_matriz[key($db_matriz)];
-                $nome = key($db_matriz);
+            if (key($db_matriz) == ${$nome}) {
+                ${$nome_select_descr} = $db_matriz[key($db_matriz)];
+                ${$nome} = key($db_matriz);
             }
             next($db_matriz);
         }
-        if (strlen($nome_select_descr) > 8) {
-            if (strlen($nome_select_descr) > 40) {
+        if (strlen(${$nome_select_descr}) > 8) {
+            if (strlen(${$nome_select_descr}) > 40) {
                 $tamanho = 60;
             } else {
-                $tamanho = strlen($nome_select_descr);
+                $tamanho = strlen(${$nome_select_descr});
             }
         } else {
-            $tamanho = strlen($nome_select_descr);
+            $tamanho = strlen(${$nome_select_descr});
         }
         $Mtam = "M$nome";
-        global $Mtam;
-        $Mtam = $tamanho;
+        global ${$Mtam};
+        ${$Mtam} = $tamanho;
         db_input($nome_select_descr, $tamanho + 4, '', $dbcadastro, 'text', 3, "", "", "");
         db_input($nome, $tamanho + 4, '', $dbcadastro, 'hidden', 3, "", "", "");
     }
@@ -1558,7 +1558,7 @@ function datas_quadrimestre($quadrimestre, $ano)
 /////////////////////////////////////////////////////////////////////////////////
 
 
-function assinaturas($pdf, $classinatura, $tipo = 'LRF', $lVerificaQuebra = true, $lOutPut = true)
+function assinaturas(&$pdf, &$classinatura, $tipo = 'LRF', $lVerificaQuebra = true, $lOutPut = true)
 {
     //#10#// assinaturas dos relatorios da LRF
     //#10#// e de gestão fiscal

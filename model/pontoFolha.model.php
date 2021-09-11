@@ -845,6 +845,7 @@ class pontoFolha {
 //      		}
 //          $aListaRubricas[] = $oRetornoRubrica;		
 
+      		$oRubrica->rh27_descr = utf8_encode($oRubrica->rh27_descr);
       		$aListaRubricas[] = $oRubrica;
       		
       	}

@@ -318,7 +318,7 @@ class cl_parametroscontratos {
   }
 
   // funcao do sql
-  function sql_query ( $oid = null,$campos="parametroscontratos.oid,*",$ordem=null,$dbwhere="") {
+  function sql_query ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -384,4 +384,3 @@ class cl_parametroscontratos {
     return $sql;
   }
 }
-?>

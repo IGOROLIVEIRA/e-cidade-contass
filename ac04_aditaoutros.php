@@ -37,49 +37,54 @@ $oGet = db_utils::postMemory($_GET);
 $clacordo = new cl_acordo;
 $clparametroscontratos = new cl_parametroscontratos;
 $result = $clparametroscontratos->sql_record($clparametroscontratos->sql_query());
-if($result!=false && $clparametroscontratos->numrows>0){
-  db_fieldsmemory($result,0);
+if ($result != false && $clparametroscontratos->numrows > 0) {
+    db_fieldsmemory($result, 0);
 }
 ?>
 <html>
+
 <head>
-  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta http-equiv="Expires" CONTENT="0">
-  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBHint.widget.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/classes/dbAditamentosContratosView.classe.js"></script>
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBHint.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/classes/dbAditamentosContratosView.classe.js"></script>
 
-  <link href="estilos.css" rel="stylesheet" type="text/css">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+
 </head>
-<body class="body-default">
-  <div class="container">
-    <div id="aditamento"></div>
-  </div>
-  <script type="text/javascript">
-    <?php
-      //VERIFICA SE É PERMITIDO CRIAR ADITIVOS SEM A NECESSIDADE DE INSERIR TODOS OS CAMPOS
-    if($pc01_liberarsemassinaturaaditivo == 't'){
-      echo " var oAditamento = new dbViewAditamentoContrato(7, 'oAditamento', $('aditamento'), false); ";
-    }else{
-      echo " var oAditamento = new dbViewAditamentoContrato(7, 'oAditamento', $('aditamento'), true); ";
-    }
-    ?>
 
-    let acordo = "<?= $oGet->acordo?>";
-    
-    oAditamento.show(acordo);
-  </script>
-  <?php db_menu(); ?>
+<body class="body-default">
+    <div class="container">
+        <div id="aditamento"></div>
+    </div>
+    <script type="text/javascript">
+        <?php
+        //VERIFICA SE É PERMITIDO CRIAR ADITIVOS SEM A NECESSIDADE DE INSERIR TODOS OS CAMPOS
+        if ($pc01_liberarsemassinaturaaditivo == 't') {
+            echo " var oAditamento = new dbViewAditamentoContrato(7, 'oAditamento', $('aditamento'), false); ";
+        } else {
+            echo " var oAditamento = new dbViewAditamentoContrato(7, 'oAditamento', $('aditamento'), true); ";
+        }
+        ?>
+
+        let acordo = "<?= $oGet->acordo ?>";
+
+        oAditamento.show(acordo);
+    </script>
+
+    <?php db_menu(); ?>
 </body>
+
 </html>

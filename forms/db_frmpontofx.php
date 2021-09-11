@@ -1163,15 +1163,15 @@ function js_pesquisar90_rubric(mostra){
     }
   }
 }
-
+<? if(!empty($r90_regist)) { ?>
 const js_verificaBaseDasRubricas = () => {
   const rubrica = document.querySelector('#r90_rubric')
   const oParam = new Object()
   oParam.exec = 'verificarPermissaoDaRubricaNoContexto'
-  oParam.rubrica = rubrica.value
-  oParam.regist = <?=$r90_regist?>
-  oParam.anousu = <?=$r90_anousu?>
-  oParam.mesusu = <?=$r90_mesusu?>
+  oParam.rubrica = rubrica.value;
+  oParam.regist = <?=$r90_regist?>;
+  oParam.anousu = <?=$r90_anousu?>;
+  oParam.mesusu = <?=$r90_mesusu?>;
   var oAjax = new Ajax.Request(
     'pes4_gerafolha.RPC.php',
     { method:'post',
@@ -1180,7 +1180,7 @@ const js_verificaBaseDasRubricas = () => {
     }
     )
 }
-
+<? } ?>
 const js_emiteAlertaParaRubricasNaoPermitidas = oResposta => {
 
   const oRetorno = JSON.parse(oResposta.responseText)
