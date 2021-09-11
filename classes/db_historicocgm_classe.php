@@ -126,7 +126,7 @@ class cl_historicocgm
 	}
 
 	// funcao para inclusao aqui
-	function incluir($z09_sequencial)
+	function incluir($z09_sequencial = null)
 	{
 		$this->atualizacampos();
 
