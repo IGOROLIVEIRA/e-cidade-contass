@@ -56,7 +56,7 @@ class cl_orcfontes {
                  o57_finali = text = Finalidade
                  ";
    //funcao construtor da classe
-   function cl_orcfontes() {
+   function __construct() {
      //classes dos rotulos dos campos
      $this->rotulo = new rotulo("orcfontes");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
@@ -394,7 +394,7 @@ class cl_orcfontes {
    function sql_query ( $o57_codfon=null,$o57_anousu=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -428,7 +428,7 @@ class cl_orcfontes {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -440,7 +440,7 @@ class cl_orcfontes {
    function sql_query_file ( $o57_codfon=null,$o57_anousu=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -469,7 +469,7 @@ class cl_orcfontes {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -481,7 +481,7 @@ class cl_orcfontes {
    function sql_query_previsao ( $o57_codfon=null,$o57_anousu=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -519,7 +519,7 @@ class cl_orcfontes {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -530,7 +530,7 @@ class cl_orcfontes {
   }
    function db_verifica_fonte_exclusao($elemento,$anousu=null){
    	if ($anousu==null){
-   	     $anousu = db_getsessoin("DB_anousu");
+   	     $anousu = db_getsession("DB_anousu");
    	}
     $nivel = db_le_mae_rec($elemento,true);
     $cod_mae = db_le_mae_rec($elemento,false);
@@ -582,7 +582,7 @@ class cl_orcfontes {
 
    function db_verifica_fonte($elemento,$anousu=null){
    	if ($anousu==null){
-   		  $anousu = db_getsesson("DB_anousu");
+   		  $anousu = db_getsession("DB_anousu");
    	}
     $nivel = db_le_mae_rec($elemento,true);
     if($nivel == 1){
@@ -642,7 +642,7 @@ class cl_orcfontes {
 
     $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -687,7 +687,7 @@ class cl_orcfontes {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];

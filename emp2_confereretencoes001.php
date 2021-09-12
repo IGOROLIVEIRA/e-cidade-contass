@@ -585,7 +585,7 @@ function js_emitir() {
   oParametro.sRecursos   = js_campo_recebe_valores_recursos ();
   oParametro.sRetencoes  = js_campo_recebe_valores_retencoes();
 
-  var sFiltros = oParametro.toSource();
+  var sFiltros = JSON.stringify(oParametro);
   sFiltros     = sFiltros.replace("(","");
   sFiltros     = sFiltros.replace(")","");
 
