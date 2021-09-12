@@ -62,7 +62,7 @@ if (!isset($oPost->incluir) && !isset($oPost->alterar)){
   <script>
       function js_db_libera(){
          parent.document.formaba.ppadotacaoele.disabled=false;
-         CurrentWindow.corpo.iframe_ppadotacaoele.location.href='orc4_ppadotacaoelementos004.php';
+         (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_ppadotacaoele.location.href='orc4_ppadotacaoelementos004.php';
      ";
       echo "  parent.mo_camada('ppadotacaoele');";
  echo"}\n

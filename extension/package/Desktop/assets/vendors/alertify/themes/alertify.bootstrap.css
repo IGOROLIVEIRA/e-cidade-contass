@@ -70,7 +70,7 @@
 			}
 			.alertify-button:focus {
 				outline: none;
-				box-shadow: 0 0 5px #2B72D5;
+				box-shadow: 0 0 5px #316648;
 			}
 			.alertify-button:active {
 				position: relative;
@@ -116,7 +116,7 @@
         .alertify-button::focus, :active {
           outline: 0;
         }
-        
+
         .alertify-button::-moz-focus-inner {
           border:0;
         }
@@ -126,7 +126,7 @@
 	background: rgba(0,0,0,.9);
 	padding: 8px;
 	border-radius: 4px;
-  cursor:default; 
+  cursor:default;
 	color: #FFF;
 	text-shadow: -1px -1px 0 rgba(0,0,0,.5);
 }
