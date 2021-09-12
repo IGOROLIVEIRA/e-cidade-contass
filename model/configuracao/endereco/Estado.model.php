@@ -181,4 +181,26 @@ class Estado {
     
     return $this->aMunicipios;
   }
+
+  public function getMunicipiosByEstado($estado){
+    $oDaoCadEnderMunicipio    = new cl_cadendermunicipio();
+    $sWhere           = " cadenderestado.db71_descricao = '". $estado ."' ";
+    $sqlCodigo        = $oDaoCadEnderMunicipio->sql_queryCodIbge(null, 'db72_descricao, db72_sequencial', 'db72_descricao ASC', $sWhere);
+    $resultSql        = $oDaoCadEnderMunicipio->sql_record($sqlCodigo);
+    $totalMunicipios  = $oDaoCadEnderMunicipio->numrows;
+    $listaMunicipios  = array();
+
+    if($totalMunicipios > 1){
+      for ($cont = 0; $cont < $totalMunicipios; $cont++) {
+        $rs = db_utils::fieldsMemory($resultSql, $cont);
+        $listaMunicipios[$cont]['sequencial'] = db_utils::fieldsMemory($resultSql, $cont)->db72_sequencial;
+        $listaMunicipios[$cont]['descricao']  = utf8_encode(db_utils::fieldsMemory($resultSql, $cont)->db72_descricao);
+      }
+      return $listaMunicipios;
+    }
+
+    $listaMunicipios[0]['sequencial'] = db_utils::fieldsMemory($resultSql, 0)->db72_sequencial;
+    $listaMunicipios[0]['descricao']  = db_utils::fieldsMemory($resultSql, 0)->db72_descricao;
+    return $listaMunicipios;
+  }
 }

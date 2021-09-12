@@ -488,7 +488,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             me.oTextAreaDescricaoAlteracao.setReadOnly(true);
         }
 
-        me.oTextAreaDescricaoAlteracao.setRequired(true);
+        //me.oTextAreaDescricaoAlteracao.setRequired(true);
         me.oTextAreaDescricaoAlteracao.setMaxLength(250);
         me.oTxtVeiculoDivulgacao.setMaxLength(50);
 

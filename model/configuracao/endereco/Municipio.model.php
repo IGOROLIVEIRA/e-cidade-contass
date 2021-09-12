@@ -226,4 +226,53 @@ class Municipio {
   
     return $this->aBairros;
   }
+
+  /**
+   * Retorna uma string contendo o código do IBGE do Município
+   * @return string Ibge
+   */
+  public function getCodigoIbge($estado, $cidade){
+    $oDaoCadEnderMunicipio    = new cl_cadendermunicipio();
+
+    $replace = array('/É/','/Ê/', '/Í/','/Ó/','/Õ/','/Ô/','/Á/','/Ã/', '/Â/', '/Ñ/', '/Ú/', '/Ü/', '/Ç/');
+    $with = array('E','E','I','O','O', 'O', 'A', 'A', 'A', 'N', 'U', 'U', 'Ç');
+    $cidadeTratada = preg_replace($replace, $with, $cidade);
+    $cidadeTratada = preg_replace('/[^A-Za-z 0-9\-]/', '', $cidadeTratada); // Remove caracteres especiais.
+
+    if(isset($cidadeTratada)){
+      $sWhere = "to_ascii(db72_descricao) = '".$cidadeTratada."'";
+
+      if(isset($estado)){
+        $sWhere .= " and cadenderestado.db71_descricao = '$estado'";
+      }
+    }
+
+    if($estado == 'DISTRITO FEDERAL'){
+      $sWhere = "cadenderestado.db71_descricao = 'DISTRITO FEDERAL'";
+    }
+
+    $sqlCodigo        = $oDaoCadEnderMunicipio->sql_queryCodIbge(null, 'db125_codigosistema', 'db72_sequencial ASC', $sWhere);
+    $resultSql        = $oDaoCadEnderMunicipio->sql_record($sqlCodigo);
+    $codigoIbge = db_utils::fieldsMemory($resultSql, 0)->db125_codigosistema;
+
+
+    return $codigoIbge;
+  }
+
+  /**
+   * Retorna um array contendo o descrição da cidade e UF
+   * @return array municipio
+   */
+  public function getDescrUf($ibge){
+    $oDaoCadEnderMunicipio = new cl_cadendermunicipio();
+    $sWhere = " db125_codigosistema = '".$ibge."' ";
+
+    $sqlBusca         = $oDaoCadEnderMunicipio->sql_queryCodIbge(null, 'db72_descricao, db71_sigla', null, $sWhere);
+    $resultSql        = $oDaoCadEnderMunicipio->sql_record($sqlBusca);
+
+    $descricao  = utf8_encode(db_utils::fieldsMemory($resultSql, 0)->db72_descricao);
+    $sigla      = db_utils::fieldsMemory($resultSql, 0)->db71_sigla;
+
+    return array($descricao, $sigla);
+  }
 }
