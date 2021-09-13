@@ -79,7 +79,8 @@ $clrotulo->label("o05_valor");
     <td> 
       <?
       db_input('o08_orgao',10,$Io08_orgao,true,'text',$db_opcao," onchange='js_pesquisao08_orgao(false);'");
-      db_input('o40_descr',40,$Io40_descr,true,'text',3,'')
+      db_input("o08_orgao_original",30,0,true,"hidden",1);
+      db_input('o40_descr',40,$Io40_descr,true,'text',3,'');
        ?>
     </td>
   </tr>
@@ -94,7 +95,8 @@ $clrotulo->label("o05_valor");
     <td> 
       <?
       db_input('o08_unidade',10,$Io08_unidade,true,'text',$db_opcao," onchange='js_pesquisao08_unidade(false);'");
-      db_input('o41_descr',40,$Io41_descr,true,'text',3,'')
+      db_input("o08_unidade_original",30,0,true,"hidden",1);
+      db_input('o41_descr',40,$Io41_descr,true,'text',3,'');
       ?>
     </td>
   </tr>
@@ -106,7 +108,8 @@ $clrotulo->label("o05_valor");
     </td>
     <td> 
 <?
-db_input('o08_funcao',10,$Io08_funcao,true,'text',$db_opcao," onchange='js_pesquisao08_funcao(false);'")
+db_input('o08_funcao',10,$Io08_funcao,true,'text',$db_opcao," onchange='js_pesquisao08_funcao(false);'");
+db_input("o08_funcao_original",30,0,true,"hidden",1);
 ?>
        <?
 db_input('o52_descr',40,$Io52_descr,true,'text',3,'')
@@ -121,7 +124,8 @@ db_input('o52_descr',40,$Io52_descr,true,'text',3,'')
     </td>
     <td> 
 <?
-db_input('o08_subfuncao',10,$Io08_subfuncao,true,'text',$db_opcao," onchange='js_pesquisao08_subfuncao(false);'")
+db_input('o08_subfuncao',10,$Io08_subfuncao,true,'text',$db_opcao," onchange='js_pesquisao08_subfuncao(false);'");
+db_input("o08_subfuncao_original",30,0,true,"hidden",1);
 ?>
        <?
 db_input('o53_descr',40,$Io53_descr,true,'text',3,'')
@@ -136,7 +140,8 @@ db_input('o53_descr',40,$Io53_descr,true,'text',3,'')
     </td>
     <td> 
 <?
-db_input('o08_programa',10,$Io08_programa,true,'text',$db_opcao," onchange='js_pesquisao08_programa(false);'")
+db_input('o08_programa',10,$Io08_programa,true,'text',$db_opcao," onchange='js_pesquisao08_programa(false);'");
+db_input("o08_programa_original",30,0,true,"hidden",1);
 ?>
        <?
 db_input('o54_descr',40,$Io54_anousu,true,'text',3);
@@ -151,7 +156,8 @@ db_input('o54_descr',40,$Io54_anousu,true,'text',3);
     </td>
     <td> 
       <?
-      db_input('o08_projativ',10,$Io08_projativ,true,'text',$db_opcao," onchange='js_pesquisao08_projativ(false);'") 
+      db_input('o08_projativ',10,$Io08_projativ,true,'text',$db_opcao," onchange='js_pesquisao08_projativ(false);'");
+      db_input("o08_projativ_original",30,0,true,"hidden",1);
       ?>
        <?
        db_input('o55_descr',40,$Io55_descr,true,'text',3,'')
@@ -496,7 +502,7 @@ function js_retornoPesquisa(oRequest) {
   var oRetorno = eval("("+oRequest.responseText+")");
   if (oRetorno.status == 1) {
     
-    var a = $$('input[type=text],select');
+    var a = $$('input[type=text],select,input[type=hidden]');
     a.each(function(input,id) {
        
        var valor   = eval("oRetorno."+input.id);
@@ -605,18 +611,17 @@ function js_reload(){
 function js_alterarDotacoes() {
   
   var iTotalDotacoes  = top.corpo.iframe_ppadotacaoele.oGridPPA.getElementsByClass('dotacaonormal').length;
-  if (iTotalDotacoes == 0) {
-  
-    alert('Não há dotações que podem ser modificadas. todas as dotações foram estimadas automaticamente!');
-    return false;
+
+  if (iTotalDotacoes > 0) {
     
-  }
-  var sMsg  = 'As modificações realizadas refletiram em '+iTotalDotacoes+' dotações.\n';
-      sMsg += 'Confirmar as modificações?';
-      
-  if (!confirm(sMsg)) {
-    return false;   
-  }   
+    var sMsg  = 'As modificações realizadas refletiram em '+iTotalDotacoes+' dotações.\n';
+    sMsg += 'Confirmar as modificações?';
+
+    if (!confirm(sMsg)) {
+        return false;   
+    }
+
+  }      
   
   oParam = new Object();
   js_divCarregando('Aguarde, Carregando estimativas','msgbox');
