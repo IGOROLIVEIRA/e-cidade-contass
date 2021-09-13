@@ -25,7 +25,11 @@
  *                                licenca/licenca_pt.txt
  */
 $arrQueryString = [];
-parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $arrQueryString);
+if (empty($HTTP_SERVER_VARS["QUERY_STRING"])) {
+  $arrQueryString = $_GET;
+} else {
+  parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $arrQueryString);
+}
 if(isset($arrQueryString['fechar'])){
   $retorno = 'window.close()';
 }else{
