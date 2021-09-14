@@ -241,7 +241,7 @@ div.action-buttons-container {
  * Cores do fundo
  */
 body, table[bgcolor="#cccccc"], td[bgcolor="#CCCCCC"], tr[bgcolor="#CCCCCC"], input.input-abas, .abaAtiva {
-  background-color:#e1dede !important;
+  background-color:#EEFAF5 !important;
 }
 
 .boxAtualizacoesBackground * {

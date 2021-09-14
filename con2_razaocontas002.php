@@ -33,7 +33,7 @@
  * default - analitico
  *
  */
-//require_once("fpdf151/pdf.php");
+require_once("fpdf151/pdf.php");
 require_once("classes/db_empempenho_classe.php");
 require_once("classes/db_cgm_classe.php");
 require_once("classes/db_orctiporec_classe.php");
@@ -52,7 +52,7 @@ require_once("classes/db_conlancamdot_classe.php");
 require_once("classes/db_conlancamdig_classe.php");
 require_once("libs/db_libcontabilidade.php");
 require_once("classes/db_conplano_classe.php");
-require_once("fpdf151/PDFDocument.php");
+//require_once("fpdf151/PDFDocument.php");
 
 db_postmemory($_GET);
 
@@ -117,9 +117,10 @@ $res = db_query($sql_analitico);
 $head2 = "RAZÃO POR CONTA";
 $head5 = "PERÍODO : " . db_formatar($data1, 'd') . " à " . db_formatar($data2, 'd');
 
-$pdf = new PDFDocument(); // abre a classe
-$pdf->addHeaderDescription("\n".$head2);
-$pdf->addHeaderDescription("\n\n".$head5);
+$pdf = new PDF(); // abre a classe
+// $pdf->clearHeaderDescription();
+// $pdf->addHeaderDescription("\n".$head2);
+// $pdf->addHeaderDescription("\n\n".$head5);
 $pdf->Open();          // abre o relatorio
 $pdf->AliasNbPages();  // gera alias para as paginas
 $pdf->AddPage('L'); // adiciona uma pagina
@@ -129,7 +130,6 @@ $tam = '4';
 $imprime_header = true;
 $contador = 0;
 $pdf->SetFont('Arial', '', 7);
-
 if (!empty($sDocumentos)) {
   $txt_where .= " and c53_coddoc in ($sDocumentos)     ";
 }
@@ -453,7 +453,7 @@ for($contas = 0; $contas < pg_numrows($res); $contas ++) {
 
 
         $sHistorico = "HISTORICO: {$c50_descr} {$c72_complem} {$txt}";
-        $nMulticellHeight = $pdf->getMultiCellHeight(233, $tam, $sHistorico);
+        // $nMulticellHeight = $pdf->getMultiCellHeight(233, $tam, $sHistorico);
         if (!empty($planilha)) {
 
           $pdf->Cell(40, $tam, "", 0, 0, "L", $iCor);
@@ -463,7 +463,7 @@ for($contas = 0; $contas < pg_numrows($res); $contas ++) {
           $pdf->Cell(40, $tam, "", 0, 0, "L", $iCor);
           $pdf->Cell(233, $tam, "SLIP:  {$slip}", 0, 1, "L", $iCor);
         }
-        $pdf->Cell(40, $nMulticellHeight, "", 0, 0, "L", $iCor);
+        // $pdf->Cell(40, $nMulticellHeight, "", 0, 0, "L", $iCor);
         $pdf->multicell(233, $tam, $sHistorico, 0, 1, $iCor); // recurso
       }
 

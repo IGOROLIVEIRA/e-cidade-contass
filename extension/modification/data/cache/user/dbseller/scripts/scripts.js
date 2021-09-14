@@ -4158,7 +4158,7 @@ function janela(janP,cFt,Iframe) {
     try {
       ObjRet.appendChild(camada);
       var elem = Iframe.document.getElementById("mensagem");
-      elem.style.background = '#e1dede';
+      elem.style.background = '#EEFAF5';
       elem.style.position = "absolute";
       elem.style.left = "0px";
       elem.style.top = "0px";

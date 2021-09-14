@@ -543,7 +543,7 @@
 
       var imgUrl = ECIDADE_REQUEST_PATH + 'extension/desktop/assets/img/Window/loader.gif';
       var node = parentNode.ownerDocument.createElement('div');
-      node.style.background = 'no-repeat center center url("'+ imgUrl +'") #e1dede';
+      node.style.background = 'no-repeat center center url("'+ imgUrl +'") #EEFAF5';
       node.style.height = '100%';
       node.style.width = '100%';
       node.style.webkitOpacity = '0.6';

@@ -171,7 +171,7 @@ if (isset($e60_numemp) and $e60_numemp != "") {
         }
         .modalidade{
             padding-right: 10px;
-            background: #e1dede;
+            background: #EEFAF5;
         }
     </style>
 </head>

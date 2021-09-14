@@ -120,7 +120,7 @@ $oResult = db_utils::getColectionByRecord($oResult);
                 <tr>
                     <td colspan="10" style="height:10px; width:100%;"><hr></td>
                 </tr>
-                <tr style="margin-top:5px; background: #e1dede; height:10px;">
+                <tr style="margin-top:5px; background: #EEFAF5; height:10px;">
                     <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
                     <td ><?php echo $aResult->pc01_descrmater; ?> </td>
                     <td align="center"><?php echo $aResult->ac20_valorunitario; ?> </td>

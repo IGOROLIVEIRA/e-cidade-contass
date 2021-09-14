@@ -118,7 +118,7 @@ parent.parent.Desktop.Session.updateGlobal({
       <search><![CDATA[body.body-default {
   margin: 0;
   margin-top: 30px;
-  background: #e1dede;
+  background: #EEFAF5;
 }
 
 body.abas {
@@ -127,7 +127,7 @@ body.abas {
       <add><![CDATA[body.body-default {
   margin: 0;
   margin-top: 0px !important;
-  background: #e1dede;
+  background: #EEFAF5;
 }
 
 body.abas {
@@ -487,7 +487,7 @@ this.document.addEventListener("mousedown", Menu_events);]]>
       elem.style.width = Larg;
       elem.style.height = Alt;]]></search>
       <add><![CDATA[var elem = Iframe.document.getElementById("mensagem");
-      elem.style.background = '#e1dede';
+      elem.style.background = '#EEFAF5';
       elem.style.position = "absolute";
       elem.style.left = "0px";
       elem.style.top = "0px";
