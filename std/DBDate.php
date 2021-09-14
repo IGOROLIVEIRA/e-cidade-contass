@@ -644,4 +644,37 @@ class DBDate {
 
     return self::$aMesesAbreviatura[ (int) $iMes];
   }
+
+  /* [2] => Array
+   * (
+   * [0] => 2016-1-21
+   * [1] => 2016-1-31
+   * )
+   * @param $mes
+   * @param $ano
+   * @return array
+   */
+  public static function getDecendio($mes, $ano)
+  {
+    $nUltimo  = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+    $aRetorno = array();
+    $aRetorno[] = array(date("{$ano}-{$mes}-01"), date("{$ano}-{$mes}-10"));
+    $aRetorno[] = array(date("{$ano}-{$mes}-11"), date("{$ano}-{$mes}-20"));
+    $aRetorno[] = array(date("{$ano}-{$mes}-21"), date("{$ano}-{$mes}-{$nUltimo}"));
+    return $aRetorno;
+  }
+
+  /**
+   * Returns the difference between two DateTime objects
+   * @param DBDate $oDtFim The date to compare to.
+   * @param boolean $absolute [optional] Whether to return absolute difference.
+   * @return DateInterval|boolean The DateInterval object representing the difference between the two dates or FALSE on failure.
+   */
+  public function diff(DBDate $oDtFim, $absolute = false)
+  {
+    $oDateTimeInicio = new DateTime($this->getDate());
+    $oDateTimeFim = new DateTime($oDtFim->getDate());
+
+    return $oDateTimeInicio->diff($oDateTimeFim, $absolute);
+  }
 }

@@ -167,6 +167,14 @@
   background-position: -409px -70px;
 }
 
+/** PRESTACAO DE CONTASS **/
+.menu-list .area_2000000::after {
+    background-position: -147px -70px;
+  }
+  .menu-list .active.area_2000000::after {
+    background-position: -376px -70px;
+  }
+
 /** RECURSOS HUMANOS **/
 .menu-list .area_3::after {
   background-position: -19px -135px;
@@ -195,6 +203,15 @@
 /**
  * MODULOS
  */
+/** STN **/
+#modulos span.modulo_2000025::after {
+    background-position: -115px -38px;
+  }
+
+/** TCE **/
+#modulos span.modulo_2000018::after {
+    background-position: -115px -38px;
+  }
 
 /** HABITACAO **/
 #modulos span.modulo_8527::after {
@@ -288,7 +305,7 @@
 /** CONTABILIDADE **/
 #modulos span.modulo_209::after {
   background-position: -19px -70px;
-}''
+}
 #modulos span.active.modulo_209::after {
   background-position: -248px -70px;
 }
@@ -300,6 +317,14 @@
 #modulos span.active.modulo_7029::after {
   background-position: -279px -70px;
 }
+
+/** CONTROLE INTERNO **/
+#modulos span.modulo_4001283::after {
+    background-position: -50px -70px;
+  }
+  #modulos span.active.modulo_4001283::after {
+    background-position: -279px -70px;
+  }
 
 /** EMPENHO **/
 #modulos span.modulo_398::after {
@@ -388,6 +413,14 @@
 #modulos span.active.modulo_633::after {
   background-position: -442px -103px;
 }
+
+/** OBRAS **/
+#modulos span.modulo_4001223::after {
+    background-position: -83px -232px;
+  }
+  #modulos span.active.modulo_4001223::after {
+    background-position: -312px -232px;
+  }
 
 /** ESTAGIO PROBATORIO **/
 #modulos span.modulo_7065::after {
