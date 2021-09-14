@@ -2691,9 +2691,9 @@ function db_menu($usuario = null, $modulo = null, $anousu = null, $instit = null
     // Variavel de controle do elemento para os questionarios internos
     $iTop = 0;
 
-    if ($idItem != 0 && $modulo != 10216) {
+    /*if ($idItem != 0 && $modulo != 10216) {
         $sHtmlTooltipAviso = DBTooltipAvisoEsocial::getInstance('e-Social', 'modalPreenchimentoEsocial()')->render();
-    }
+    }*/
 
     if (!empty($sHtmlTooltipAviso)) {
 

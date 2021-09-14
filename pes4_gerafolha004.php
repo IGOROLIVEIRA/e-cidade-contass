@@ -2004,8 +2004,6 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
 
          if( $r14_valor > 0){
 
-            verfgts($anomes,$datai,$dataf,&$fgtp1,&$fgtp2,&$fgtv0,&$fgtv1,&$fgtv2);
-
             if( $fgtv0 > 0 ){
                $matriz2[1] = $r110_regist;
                $matriz2[2] = "R991";
