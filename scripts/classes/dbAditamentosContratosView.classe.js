@@ -720,6 +720,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
 
         var nValor = oTxtValorDotacao.getValue().getNumber();
+        var nQuantidade = oTxtQuantidade.getValue().getNumber();
 
         if (nValor == 0) {
 
@@ -730,7 +731,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         var oDotacao = {
             dotacao: oTxtDotacao.getValue(),
-            quantidade: 1,
+            quantidade: nQuantidade,
             valor: nValor,
             valororiginal: nValor
         };
@@ -861,6 +862,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.aditar = function () {
+
         var oSelecionados = {};
         var iSelecionados = [];
         /**
@@ -983,6 +985,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
             oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
 
+            //alert(oItem.ServicoQuantidade);
+
 
             // console.log('Qtde anterior: ', oItem.qtdeanterior);
             // /*comentado para atender a OC 6387*/
@@ -1028,7 +1032,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[13].getValue();
                 oItemAdicionar.tipoalteracaoitem = oSelecionados[iIndice].aCells[14].getValue();
                 oItemAdicionar.servico = oItem.servico;
-                oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
+                oItemAdicionar.controlaServico = oItem.servico;
+                //alert(oItemAdicionar.servico);
 
                 var qtanter = oSelecionados[iIndice].aCells[3].getValue().getNumber();
                 var vlranter = oSelecionados[iIndice].aCells[4].getValue().getNumber();

@@ -25,14 +25,14 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("classes/db_bensguarda_classe.php");
-require_once ("classes/db_bensguardaitem_classe.php");
-require_once ("libs/db_app.utils.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("dbforms/db_funcoes.php");
+require_once("classes/db_bensguarda_classe.php");
+require_once("classes/db_bensguardaitem_classe.php");
+require_once("libs/db_app.utils.php");
 $clbensguarda = new cl_bensguarda;
 /*
 $clbensguardaitem = new cl_bensguardaitem;
@@ -45,25 +45,25 @@ if (isset($alterar)) {
     $sqlerro = false;
     db_inicio_transacao();
 
-    if($t21_numcgm){
+    if ($t21_numcgm) {
         $sSql = "SELECT z01_cgccpf from cgm where z01_numcgm = " . $t21_numcgm;
         $rsSql = db_query($sSql);
         $iCnpj = db_utils::fieldsMemory($rsSql, 0)->z01_cgccpf;
     }
-  
-    if(!$t21_cpf && strlen($iCnpj) == 14){
+
+    if (!$t21_cpf && strlen($iCnpj) == 14) {
         $sqlerro = true;
         $erro_msg = 'Campo CPF não Informado. Verifique!';
         $clbensguarda->erro_campo = 't21_cpf';
     }
 
-    if(!$t21_representante && strlen($iCnpj) == 14){
+    if (!$t21_representante && strlen($iCnpj) == 14) {
         $sqlerro = true;
         $erro_msg = 'Campo Representante não Informado. Verifique!';
         $clbensguarda->erro_campo = 't21_representante';
     }
 
-    if(!$sqlerro){
+    if (!$sqlerro) {
         $clbensguarda->t21_cpf = str_replace('-', '', str_replace('.', '', $t21_cpf));
         $clbensguarda->alterar($t21_codigo);
         $erro_msg = $clbensguarda->erro_msg;
@@ -72,7 +72,7 @@ if (isset($alterar)) {
     if (!$clbensguarda->numrows_alterar) {
         $sqlerro = true;
     }
-  
+
     db_fim_transacao($sqlerro);
     $db_opcao = 2;
     $db_botao = true;
@@ -84,55 +84,57 @@ if (isset($alterar)) {
 }
 ?>
 <html>
+
 <head>
-  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta http-equiv="Expires" CONTENT="0">
-  <?php
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <?php
     db_app::load("scripts.js, prototype.js, strings.js, datagrid.widget.js, webseller.js");
     db_app::load("estilos.css, grid.style.css");
-  ?>
+    ?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-  <center>
-    <div style="margin-top: 35px; width: 500px;">
-  	  <?
-      include("forms/db_frmbensguarda.php");
-      ?>
-    </div>
-  </center>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+    <center>
+        <div style="margin-top: 35px; width: 500px;">
+            <?
+            include("forms/db_frmbensguarda.php");
+            ?>
+        </div>
+    </center>
 </body>
+
 </html>
 <?
 if (isset($alterar)) {
-  if ($sqlerro == true) {
-    db_msgbox($erro_msg);
-    if ($clbensguarda->erro_campo != "") {
-      echo "<script> document.form1." . $clbensguarda->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1." . $clbensguarda->erro_campo . ".focus();</script>";
+    if ($sqlerro == true) {
+        db_msgbox($erro_msg);
+        if ($clbensguarda->erro_campo != "") {
+            echo "<script> document.form1." . $clbensguarda->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $clbensguarda->erro_campo . ".focus();</script>";
+        };
+    } else {
+        db_msgbox($erro_msg);
     }
-    ;
-  } else {
-    db_msgbox($erro_msg);
-  }
 }
 if (isset($chavepesquisa)) {
-  echo "
+    echo "
   <script>
       function js_db_libera(){
          parent.document.formaba.bensguardaitem.disabled=false;
-         top.corpo.iframe_bensguardaitem.location.href='pat1_bensguardaitem001.php?t22_bensguarda=" . @$t21_codigo . "';
+         (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_bensguardaitem.location.href='pat1_bensguardaitem001.php?t22_bensguarda=" . @$t21_codigo . "';
          js_aplicaMascara(document.form1.t21_cpf);
      ";
-  if (isset($liberaaba)) {
-    echo "  parent.mo_camada('bensguardaitem');";
-  }
-  echo "}\n
+    if (isset($liberaaba)) {
+        echo "  parent.mo_camada('bensguardaitem');";
+    }
+    echo "}\n
     js_db_libera();
   </script>\n
  ";
 }
 if ($db_opcao == 22 || $db_opcao == 33) {
-  echo "<script>document.form1.pesquisar.click();</script>";
+    echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>
