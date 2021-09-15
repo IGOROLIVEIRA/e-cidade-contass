@@ -8466,9 +8466,9 @@ function le_var_bxxx($formula=null, $area0=null, $area1=null, $sigla=null, $sigl
                     /**
                      * Caso não tenha salário, não calcular valor_ para base irf para incluir apenas valor da licença
                      */
-                    if (empty($transacao)) {
+                    /*if (empty($transacao)) {
                        continue;
-                    }
+                    }*/
                     $valor_ = round($campo_quant * $valor_ ,2);
                     if ($campo_pd == "1") {
                       $valor += $valor_;
