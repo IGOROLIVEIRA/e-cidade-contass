@@ -4574,7 +4574,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
       // Normal
     }
 
-    echo "<BR> Situacao funcionario -> $situacao_funcionario  Dias pagamento -> $dias_pagamento";
+    // echo "<BR> Situacao funcionario -> $situacao_funcionario  Dias pagamento -> $dias_pagamento";
 
     if ($opcao_geral == 1 ) {
       //echo "<BR> 010-Carrega FXXX salario";
