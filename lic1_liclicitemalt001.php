@@ -99,7 +99,7 @@ if (!$sqlerro && $codprocesso) {
   );
 
   $rsSolicitem = db_query($sSqlSolicitem);
-  db_criatabela($rsSolicitem);
+  //db_criatabela($rsSolicitem);
 
   for ($count = 0; $count < pg_numrows($rsSolicitem); $count++) {
 
@@ -113,7 +113,7 @@ if (!$sqlerro && $codprocesso) {
     $rsOrigem = $oDaoItemOrigem->sql_record($sSqlOrigem);
 
     db_inicio_transacao();
-    db_criatabela($rsOrigem);
+    //db_criatabela($rsOrigem);
     $oItemOrigem = db_utils::fieldsMemory($rsOrigem, 0);
     // $nova_quantidade = floatval($oItemOrigem->pc11_quant) + floatval($oSolicitemReservado->pc11_quant);
 
@@ -155,39 +155,26 @@ if (!$sqlerro && $codprocesso) {
                   compilacao.pc11_codigo = $oSolicitemReservado->pc11_codigo");
 
       $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
-      db_criatabela($rsSolicitemControle);
+      //db_criatabela($rsSolicitemControle);
       //exit;
     }
 
-    $rsSolicitemControle2 = $oDaoSolicitemControle->sql_record("select pc11_codigo,pc11_reservado,pc11_quant,pc16_codmater from solicitem
-      join solicitempcmater on pc16_solicitem=pc11_codigo
-      join pcprocitem on pc81_solicitem=pc11_codigo
-      join liclicitem on l21_codpcprocitem =pc81_codprocitem
-      where pc11_numero=$oSolicitemReservado->pc11_numero and pc16_codmater in (select
-      pc16_codmater
-      from liclicitem
-      join pcprocitem on pc81_codprocitem=l21_codpcprocitem
-      join solicitem on pc11_codigo=pc81_solicitem
-      join solicitempcmater on pc16_solicitem=pc11_codigo
-      where pc16_codmater=$oSolicitemReservado->pc16_codmater and pc11_reservado='t' order by pc11_reservado asc)");
-    echo "select pc11_codigo,pc11_reservado,pc11_quant,pc16_codmater from solicitem
-    join solicitempcmater on pc16_solicitem=pc11_codigo
-    join pcprocitem on pc81_solicitem=pc11_codigo
-    join liclicitem on l21_codpcprocitem =pc81_codprocitem
-    where pc11_numero=$oSolicitemReservado->pc11_numero and pc16_codmater in (select
-    pc16_codmater
-    from liclicitem
-    join pcprocitem on pc81_codprocitem=l21_codpcprocitem
-    join solicitem on pc11_codigo=pc81_solicitem
-    join solicitempcmater on pc16_solicitem=pc11_codigo
-    where pc16_codmater=$oSolicitemReservado->pc16_codmater and pc11_reservado='t' order by pc11_reservado asc)";
-    db_criatabela($rsSolicitemControle2);
+    $rsSolicitemControle2 = $oDaoSolicitemControle->sql_record("select pc11_codigo,pc11_reservado,pc11_quant,
+          pc16_codmater,pc11_seq
+        from solicitem
+        join solicitempcmater on pc16_solicitem = pc11_codigo
+        where
+          pc11_numero = $oSolicitemReservado->pc11_numero
+          and pc16_codmater = $oSolicitemReservado->pc16_codmater order by pc11_reservado asc");
+
+    //db_criatabela($rsSolicitemControle2);
     // exit;
     $nova_quantidade2 = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_quant + db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_quant;
-    $codReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_codigo;
-    $codNReservado    = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_codigo;
-    echo $codNReservado . ' ';
-    echo $codReservado;
+    $codReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_codigo;
+    $codNReservado    = db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_codigo;
+    //echo $codNReservado . ' ';
+    //echo $codReservado;
+    //exit;
     if ($l20_usaregistropreco != 't') {
 
       $oDaoPcDotacOrigem = db_utils::getDao('pcdotac');
@@ -278,7 +265,7 @@ if (!$sqlerro && $codprocesso) {
 
     if (!$sqlerro) {
       $oDaoSolicitemPcMater = db_utils::getDao('solicitempcmater');
-      $oDaoSolicitemPcMater->excluir('', $oSolicitemReservado->pc11_codigo);
+      $oDaoSolicitemPcMater->excluir($oSolicitemReservado->pc16_codmater, $codReservado);
       $sqlerro = $oDaoSolicitemPcMater->erro_status == '0' ? true : false;
     }
 
@@ -286,13 +273,13 @@ if (!$sqlerro && $codprocesso) {
       //estimativa
       if (!$sqlerro) {
         $oDaoSolicitemPcMater = db_utils::getDao('solicitempcmater');
-        $oDaoSolicitemPcMater->excluir('', $oItemControle->itemdaestimativa);
+        $oDaoSolicitemPcMater->excluir($oSolicitemReservado->pc16_codmater, $oItemControle->itemdaestimativa);
         $sqlerro = $oDaoSolicitemPcMater->erro_status == '0' ? true : false;
       }
       //abertura
       if (!$sqlerro) {
         $oDaoSolicitemPcMater = db_utils::getDao('solicitempcmater');
-        $oDaoSolicitemPcMater->excluir('', $oItemControle->itemdaabertura);
+        $oDaoSolicitemPcMater->excluir($oSolicitemReservado->pc16_codmater, $oItemControle->itemdaabertura);
         $sqlerro = $oDaoSolicitemPcMater->erro_status == '0' ? true : false;
       }
     }
