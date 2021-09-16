@@ -5907,7 +5907,6 @@ class cl_estrutura_sistema {
         else
             $sql .= " AND O57_FONTE LIKE '4171%' ";
 
-
         return db_utils::getColectionByRecord(db_query($sql));
 
     }
