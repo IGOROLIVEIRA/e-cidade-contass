@@ -68,7 +68,7 @@ if ( $oLibDocumento->lErro ){
     die($oLibDocumento->sMsgErro);
 }
 
-$rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query(null,"l20_numero,l20_edital,l20_anousu,l20_objeto,l03_descr,l20_justificativa,cgmfornecedor.z01_nome,sum(pc23_valor) as total","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and pc24_pontuacao = 1","l20_codigo,l20_numero,l20_edital,l20_anousu,l20_objeto,l03_descr,l20_justificativa,cgmfornecedor.z01_nome"));
+$rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query(null,"l20_numero,l20_edital,l20_anousu,l20_objeto,l03_descr,l20_justificativa,cgmfornecedor.z01_nome,sum(pc23_valor) as total","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit","l20_codigo,l20_numero,l20_edital,l20_anousu,l20_objeto,l03_descr,l20_justificativa,cgmfornecedor.z01_nome"));
 
 if ($clliclicita->numrows == 0){
     db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não julgada, ou licitação revogada');
@@ -99,7 +99,7 @@ $oLibDocumento->l20_numero = $olicitacao->l20_numero;
 $oLibDocumento->l20_anousu = $olicitacao->l20_anousu;
 $oLibDocumento->l20_justificativa = $olicitacao->l20_justificativa;
 $oLibDocumento->z01_nome = $olicitacao->z01_nome;
-$oLibDocumento->total = $olicitacao->total;
+$oLibDocumento->total = trim(db_formatar(@$olicitacao->total, "f"));
 $oLibDocumento->dia = date ('d',db_getsession("DB_datausu"));
 $mes = date ('m',db_getsession("DB_datausu"));
 $oLibDocumento->mes = db_mes($mes);
