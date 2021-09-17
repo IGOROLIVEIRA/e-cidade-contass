@@ -41,7 +41,7 @@ db_input('z01_nomeorg',40,$Iz01_nome,true,'text',3,'')
             <b><?="Edital:"?></b>
         </td>
         <td>
-            <?= db_input('si06_edital', 10, $Isi06_edital, true, 'text', $db_opcao, '', '', '', '', 10);?>
+            <?= db_input('si06_edital', 10, $Isi06_edital, true, 'text', $db_opcao, 'onkeypress="return onlynumber();"', '', '', '', 10);?>
         </td>
     </tr>
   <tr>
@@ -189,7 +189,7 @@ db_inputdata('si06_publicacaoaviso',@$si06_publicacaoaviso_dia,@$si06_publicacao
     <fieldset><legend><?=@$Lsi06_objetoadesao?></legend>
 
 <?
-db_textarea('si06_objetoadesao','10','80',$Isi06_objetoadesao,true,'text',$db_opcao,"","","",500)
+db_textarea('si06_objetoadesao','10','80',$Isi06_objetoadesao,true,'text',$db_opcao,"onkeypress= 'travarEnter()' onmouseout='travarEnter()'","","",500)
 ?>
     </fieldset>
     </td>
@@ -266,6 +266,52 @@ function js_pesquisasi06_orgaogerenciador(mostra){
      }
   }
 }
+function travarEnter() {
+      var  va = document.getElementById("si06_objetoadesao").value;
+      var valo = va.split("\n");
+      var msg = "";
+      for(i=0;i<valo.length;i++){
+        if(i==0){
+          msg += valo[i];
+        }else{
+          msg += " "+valo[i];
+        }
+         
+      }
+      if(valo.length>0){
+        document.getElementById("si06_objetoadesao").value = "";
+        document.getElementById("si06_objetoadesao").value = msg;
+      }
+      var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+      
+      if( keyCode == 13 ) {
+
+
+      if(!e) var e = window.event;
+
+      e.cancelBubble = true;
+      e.returnValue = false;
+
+      if (e.stopPropagation) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    } 
+
+}
+
+function onlynumber(evt) {
+   var theEvent = evt || window.event;
+   var key = theEvent.keyCode || theEvent.which;
+   key = String.fromCharCode( key );
+   //var regex = /^[0-9.,]+$/;
+   var regex = /^[0-9.]+$/;
+   if( !regex.test(key) ) {
+      theEvent.returnValue = false;
+      if(theEvent.preventDefault) theEvent.preventDefault();
+   }
+}
+
 function js_mostracgmorgao(erro,chave){
   document.form1.z01_nomeorg.value = chave;
   if(erro==true){
