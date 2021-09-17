@@ -271,7 +271,7 @@ db_selectrecord("rh16_ctps_uf",$result_uf,true,$db_opcao,"","","","0-Nenhum...")
       </td>
 
       <td nowrap title="<?= @$Trh16_cnh_exp?>">
-        <?=utf8_decode(@$Lrh16_cnh_exp)?>
+        <?=@$Lrh16_cnh_exp?>
       </td>
       <td colspan='3'>
         <?
