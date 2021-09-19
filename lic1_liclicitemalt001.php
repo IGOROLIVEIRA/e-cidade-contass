@@ -99,7 +99,7 @@ if (!$sqlerro && $codprocesso) {
   );
 
   $rsSolicitem = db_query($sSqlSolicitem);
-  //db_criatabela($rsSolicitem);
+  db_criatabela($rsSolicitem);
 
   for ($count = 0; $count < pg_numrows($rsSolicitem); $count++) {
 
@@ -113,7 +113,7 @@ if (!$sqlerro && $codprocesso) {
     $rsOrigem = $oDaoItemOrigem->sql_record($sSqlOrigem);
 
     db_inicio_transacao();
-    //db_criatabela($rsOrigem);
+    db_criatabela($rsOrigem);
     $oItemOrigem = db_utils::fieldsMemory($rsOrigem, 0);
     // $nova_quantidade = floatval($oItemOrigem->pc11_quant) + floatval($oSolicitemReservado->pc11_quant);
 
@@ -136,10 +136,11 @@ if (!$sqlerro && $codprocesso) {
     if ($l20_usaregistropreco == "t") {
 
       $rsSolicitemControle = $oDaoSolicitemControle->sql_record("select distinct
-    abertura.pc55_solicitempai as vinculopai,
+                  abertura.pc55_solicitempai as vinculopai,
                   abertura.pc55_solicitemfilho as vinculofilho,
                   itemdaabertura.pc11_codigo as itemdaabertura,
                   itemdaestimativa.pc11_codigo as itemdaestimativa,
+                  itemdaestimativa.pc11_numero as itemdaestimativanumero,
                   vinculo.pc55_solicitempai,
                   vinculo.pc55_solicitemfilho
                   from solicitem as compilacao
@@ -155,7 +156,7 @@ if (!$sqlerro && $codprocesso) {
                   compilacao.pc11_codigo = $oSolicitemReservado->pc11_codigo");
 
       $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
-      //db_criatabela($rsSolicitemControle);
+      db_criatabela($rsSolicitemControle);
       //exit;
     }
 
@@ -167,13 +168,33 @@ if (!$sqlerro && $codprocesso) {
           pc11_numero = $oSolicitemReservado->pc11_numero
           and pc16_codmater = $oSolicitemReservado->pc16_codmater order by pc11_reservado asc");
 
-    //db_criatabela($rsSolicitemControle2);
+    db_criatabela($rsSolicitemControle2);
     // exit;
     $nova_quantidade2 = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_quant + db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_quant;
-    $codReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_codigo;
-    $codNReservado    = db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_codigo;
-    //echo $codNReservado . ' ';
-    //echo $codReservado;
+    $codNReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_codigo;
+    $codReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_codigo;
+    echo $codNReservado . ' ';
+    echo $codReservado;
+
+
+    if ($l20_usaregistropreco == 't') {
+
+      $rsSolicitemControle3 = $oDaoSolicitemControle->sql_record("select pc11_codigo,pc11_reservado,pc11_quant,
+      pc16_codmater,pc11_seq
+    from solicitem
+    join solicitempcmater on pc16_solicitem = pc11_codigo
+    where
+      pc11_numero = $oItemControle->itemdaestimativanumero
+      and pc16_codmater = $oSolicitemReservado->pc16_codmater order by pc11_reservado asc");
+
+      $nova_quantidade3 = db_utils::fieldsMemory($rsSolicitemControle3, 0)->pc11_quant + db_utils::fieldsMemory($rsSolicitemControle3, 1)->pc11_quant;
+      $codNReservado2    = db_utils::fieldsMemory($rsSolicitemControle3, 0)->pc11_codigo;
+      $codReservado2     = db_utils::fieldsMemory($rsSolicitemControle3, 1)->pc11_codigo;
+      echo $nova_quantidade3 . ' ';
+      echo $codNReservado2 . ' ';
+      echo $codReservado2;
+    }
+    //echo ' Aki: ' . $oSolicitemReservado->pc11_codigo;
     //exit;
     if ($l20_usaregistropreco != 't') {
 
@@ -232,23 +253,29 @@ if (!$sqlerro && $codprocesso) {
       }
 
       if ($l20_usaregistropreco == 't') {
-
         $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
-        $oDaoSolicitemRegPreco->excluir('', "pc57_solicitem = $oSolicitemReservado->pc11_codigo");
-
-        $sSqlSolicitemRegPreco = "select * from solicitemregistropreco left join solicitem on pc11_codigo = pc57_solicitem where pc11_numero = $oItemOrigem->pc11_numero and pc11_reservado = true";
-        $rsSolicitemRegPreco = $oDaoSolicitemRegPreco->sql_record($sSqlSolicitemRegPreco);
-
-        $sSqlSolicitemRegPreco = "select pc57_sequencial from solicitemregistropreco where pc57_solicitem = $oItemOrigem->pc11_codigo";
+        $sSqlSolicitemRegPreco = "select pc57_sequencial from solicitemregistropreco where pc57_solicitem = $codNReservado";
         $rsSolicitemRegPreco = $oDaoSolicitemRegPreco->sql_record($sSqlSolicitemRegPreco);
 
         $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
-
+        $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
         $oDaoSolicitemRegPreco->pc57_quantmax = $nova_quantidade2;
         $oDaoSolicitemRegPreco->pc57_sequencial = $oSolicitemRegPreco->pc57_sequencial;
         $oDaoSolicitemRegPreco->alterar($oSolicitemRegPreco->pc57_sequencial);
 
+        $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
+        $oDaoSolicitemRegPreco->excluir('', "pc57_solicitem = $oSolicitemReservado->pc11_codigo");
         //estimativa
+        $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
+        $sSqlSolicitemRegPreco = "select pc57_sequencial from solicitemregistropreco where pc57_solicitem = $codNReservado2";
+        $rsSolicitemRegPreco = $oDaoSolicitemRegPreco->sql_record($sSqlSolicitemRegPreco);
+
+        $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
+        $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
+        $oDaoSolicitemRegPreco->pc57_quantmax = $nova_quantidade3;
+        $oDaoSolicitemRegPreco->pc57_sequencial = $oSolicitemRegPreco->pc57_sequencial;
+        $oDaoSolicitemRegPreco->alterar($oSolicitemRegPreco->pc57_sequencial);
+
         $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
         $oDaoSolicitemRegPreco->excluir('', "pc57_solicitem = $oItemControle->itemdaestimativa");
         //abertura
@@ -332,14 +359,14 @@ if (!$sqlerro && $codprocesso) {
       $oDaoPcProcItem->excluir('', 'pc81_solicitem = ' . $oSolicitemReservado->pc11_codigo);
       $sqlerro = $oDaoPcProcItem->erro_status == '0' ? true : false;
     }
-
-    if (!$sqlerro) {
-      $oDaoVinculo = db_utils::getDao('solicitemvinculo');
-      $oDaoVinculo->excluir(null, "pc55_solicitempai = $oItemControle->itemdaestimativa and pc55_solicitemfilho = $oSolicitemReservado->pc11_codigo");
-      $sqlerro = $oDaoVinculo->erro_status == '0' ? true : false;
-    }
-
     if ($l20_usaregistropreco == 't') {
+
+      if (!$sqlerro) {
+        $oDaoVinculo = db_utils::getDao('solicitemvinculo');
+        $oDaoVinculo->excluir(null, "pc55_solicitempai = $oItemControle->itemdaestimativa and pc55_solicitemfilho = $oSolicitemReservado->pc11_codigo");
+        $sqlerro = $oDaoVinculo->erro_status == '0' ? true : false;
+      }
+
       //estimativa
       if (!$sqlerro) {
         $oDaoVinculo = db_utils::getDao('solicitemvinculo');
@@ -373,9 +400,22 @@ if (!$sqlerro && $codprocesso) {
 
       if ($l20_usaregistropreco == "t") {
         //estimativa
+
         $oDaoReservado = db_utils::getDao('solicitem');
-        $oDaoReservado->excluir($oItemControle->itemdaestimativa);
+        $oDaoReservado->pc11_quant = $nova_quantidade3;
+        $oDaoReservado->pc11_codigo = $codNReservado2;
+        $oDaoReservado->alterar($codNReservado2);
+
+        if (!$oDaoReservado->numrows_alterar) {
+          $erro_msg = $oDaoReservado->erro_msg;
+          $sqlerro = true;
+          break;
+        }
+
+        $oDaoReservado = db_utils::getDao('solicitem');
+        $oDaoReservado->excluir($codReservado2);
         $sqlerro = $oDaoReservado->erro_status == '0' ? true : false;
+
         //abertura
         $oDaoReservado = db_utils::getDao('solicitem');
         $oDaoReservado->excluir($oItemControle->itemdaabertura);
