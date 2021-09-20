@@ -215,7 +215,7 @@ $clrotulo->label("l20_codigo");
                 oDBHint.setHideEvents(aEventsOut);
                 oDBHint.setPosition('B', 'L');
                 oDBHint.setUseMouse(true);
-                oDBHint.make($(oHint.idLinha), 2);
+                oDBHint.make($(oHint.idLinha),1);
             });
         }
     }
