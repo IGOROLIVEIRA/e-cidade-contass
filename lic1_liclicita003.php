@@ -46,6 +46,8 @@ include("classes/db_obrascodigos_classe.php");
 include("classes/db_cflicita_classe.php");
 include("classes/db_liccomissaocgm_classe.php");
 include("classes/db_licobras_classe.php");
+include("classes/db_credenciamentosaldo_classe.php");
+include("classes/db_credenciamento_classe.php");
 require_once("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -66,6 +68,8 @@ $cleditaldocumentos  = new cl_editaldocumento;
 $clobrasdadoscompl   = new cl_obrasdadoscomplementares;
 $clobrascodigos      = new cl_obrascodigos;
 $cllicobras          = new cl_licobras;
+$clcredenciamento    = new cl_credenciamento();
+$clcredenciamentosaldo = new cl_credenciamentosaldo();
 $erro_msg = '';
 $db_botao = false;
 $db_opcao = 33;
@@ -99,6 +103,22 @@ if(isset($excluir)){
             }
         }
 	}
+
+    if(!$sqlerro) {
+	    $sqlCred = $clcredenciamento->sql_query_file(null,"*",null,'l205_licitacao = '. $l20_codigo);
+	    $rsCred = $clcredenciamento->sql_record($sqlCred);
+        $sqlCredSaldo = $clcredenciamentosaldo->sql_query_file(null,"*",null,'l213_licitacao = '. $l20_codigo);
+        $rsCredSaldo = $clcredenciamentosaldo->sql_record($sqlCredSaldo);
+
+        if($clcredenciamentosaldo->numrows){
+            $clcredenciamentosaldo->excluir(null,'l213_licitacao = '. $l20_codigo);
+        }
+
+        if($clcredenciamento->numrows){
+            $clcredenciamento->excluir(null,null,$l20_codigo);
+        }
+
+    }
 
 	if(!$sqlerro) {
 		$sqlCodigo = $clobrascodigos->sql_query('', 'db151_codigoobra', '', 'db151_liclicita = ' . $l20_codigo);
