@@ -5906,9 +5906,7 @@ class cl_estrutura_sistema {
             $sql .= " AND k81_emparlamentar IN (" . implode(",", $emenda) . ") AND O57_FONTE LIKE '4171%' " ;
         else
             $sql .= " AND O57_FONTE LIKE '4171%' ";
-
         return db_utils::getColectionByRecord(db_query($sql));
-
     }
 
     function getDespesaExercAnterior($dtIni, $instit, $sElemento) {

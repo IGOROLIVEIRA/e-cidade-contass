@@ -1010,7 +1010,7 @@ ob_start();
                             if (!array_key_exists($chaveMes, $subtotalmes))
                                 $subtotalmes[$chaveMes] = 0;
                             if ($dataAtual >= getImplantacao() or !getImplantacao()) {
-                                $inicio = !getImplantacao() ? $dataAtual : getImplantacao();
+                                $inicio = ($dataAtual >= getImplantacao() or !getImplantacao()) ? $dataAtual : getImplantacao();
                                 foreach (getDespesaMensal($inicio, date('Y-m-t', strtotime($inicio)), $aInstits) as $data) {
                                     $chave = $data->o58_elemento;
                                     if (array_key_exists($chaveMes, $despesa[$chave])) {
@@ -1855,12 +1855,12 @@ ob_start();
                     <?php
                     if ($oDataFim->getAno() >= 2020) {
                         if (getImplantacao()) {
-                            $aSaldoArrecadadoEmenda = getValorReceitaEmendaInformado($dtini, getImplantacao(), $iInstituicoes, array(3));
+                            $aSaldoArrecadadoEmenda = getValorReceitaEmendaInformado($dtini, getImplantacao(), $iInstituicoes, array(2));
                             $fCFRPB += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
-                            $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar(getImplantacao(), $dtfim, array(3));
+                            $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar(getImplantacao(), $dtfim, array(2));
                             $fCFRPB += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
                         } else {
-                            $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar($dtini, $dtfim, array(3));
+                            $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar($dtini, $dtfim, array(2));
                             $fCFRPB += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
                         }
                     }
