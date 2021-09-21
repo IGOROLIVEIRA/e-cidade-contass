@@ -35,7 +35,6 @@ $oGet = db_utils::postMemory($_GET);
 
 
 $clorccenarioeconomicoparam = new cl_orccenarioeconomicoparam;
-$ano = 2021;
 
 $sWhere               = "o03_instit = " . db_getsession("DB_instit");
 
@@ -90,13 +89,15 @@ $pdf->setfont('arial', '', 8);
 foreach ($aDadosCenario as $sDescricao => $aDadosTipoVal) {
 
     foreach ($aDadosTipoVal as $sTipoVal => $aDadosVal) {
-        $pdf->Cell(65, $alt, $sDescricao, "BR", 0, "L", 0);
-        $pdf->Cell(25, $alt, $sTipoVal, "BRL", 0, "C", 0);
-        $pdf->Cell(25, $alt, $aDadosVal[$ano]["nValor"], "TBL", 0, "C", 0);
-        $pdf->Cell(25, $alt, $aDadosVal[$ano + 1]["nValor"], "TBL", 0, "C", 0);
-        $pdf->Cell(25, $alt, $aDadosVal[$ano + 2]["nValor"], "TBL", 0, "C", 0);
-        $pdf->Cell(25, $alt, $aDadosVal[$ano + 3]["nValor"], "TBL", 0, "C", 0);
-        $pdf->ln();
+        if (($aDadosVal[$ano]["nValor"] + $aDadosVal[$ano + 1]["nValor"] + $aDadosVal[$ano + 2]["nValor"] + $aDadosVal[$ano + 3]["nValor"]) > 0) {
+            $pdf->Cell(65, $alt, $sDescricao, "BR", 0, "L", 0);
+            $pdf->Cell(25, $alt, $sTipoVal, "BRL", 0, "C", 0);
+            $pdf->Cell(25, $alt, $aDadosVal[$ano]["nValor"], "TBL", 0, "C", 0);
+            $pdf->Cell(25, $alt, $aDadosVal[$ano + 1]["nValor"], "TBL", 0, "C", 0);
+            $pdf->Cell(25, $alt, $aDadosVal[$ano + 2]["nValor"], "TBL", 0, "C", 0);
+            $pdf->Cell(25, $alt, $aDadosVal[$ano + 3]["nValor"], "TBL", 0, "C", 0);
+            $pdf->ln();
+        }
     }
 }
 
