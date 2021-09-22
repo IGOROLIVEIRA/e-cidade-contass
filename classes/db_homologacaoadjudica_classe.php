@@ -885,5 +885,13 @@ class cl_homologacaoadjudica {
         $oResult = db_query($sSqlJulg);
         return db_utils::getColectionByRecord($oResult);
     }
+
+    function getdataAdjudicacao($iLicitacao){
+        $sSql = "SELECT l202_dataadjudicacao
+                        FROM homologacaoadjudica
+                        WHERE l202_licitacao = {$iLicitacao}";
+        $oResultdt = db_query($sSql);
+        return db_utils::getColectionByRecord($oResultdt);
+    }
 }
 ?>

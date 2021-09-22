@@ -408,5 +408,17 @@ class cl_itenshomologacao {
      return $sql;
   }
 
+    function getItensContratos($iLicitacao){
+        $sqlItensContrato = "SELECT DISTINCT l21_codpcprocitem
+            FROM acordo
+            INNER JOIN acordoposicao ON ac26_acordo = ac16_sequencial
+            INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+            INNER JOIN liclicita ON l20_codigo = ac16_licitacao
+            INNER JOIN liclicitem ON l21_codliclicita = l20_codigo
+            WHERE ac16_licitacao = {$iLicitacao}";
+        $oResultItens = db_query($sqlItensContrato);
+        return db_utils::getColectionByRecord($oResultItens);
+    }
+
 }
 ?>

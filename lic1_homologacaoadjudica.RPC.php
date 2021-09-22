@@ -46,16 +46,12 @@ switch($oParam->exec) {
         try {
             //Verifica se os fornecedores vencedores estão habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
-                $erro = "Procedimento abortado. Verifique os fornecedores habilitados.";
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 2;
+                throw new Exception( "Procedimento abortado. Verifique os fornecedores habilitados.");
             }
 
             //Verifica data de julgamento da licitação
             if ($dataJulgamentoLicitacao > $l202_dataAdjudicacao) {
-                $erro = "Data de julgamento maior que data de adjudicacao";
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 2;
+                throw new Exception( "Data de julgamento maior que data de adjudicacao");
             }
 
             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
@@ -76,9 +72,7 @@ switch($oParam->exec) {
 
             if ($l20_naturezaobjeto == "1") {
                 if ($itens != null || $itens != "") {
-                    $erro = "Itens obras não cadastrados. Codigos:" . $itens;
-                    $oRetorno->message = urlencode($erro);
-                    $oRetorno->status = 2;
+                    throw new Exception( "Itens obras não cadastrados. Codigos:" . $itens);
                 }
             }
 
@@ -176,16 +170,12 @@ switch($oParam->exec) {
         try {
             //Verifica se os fornecedores vencedores estão habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
-                $erro = "Procedimento abortado. Verifique os fornecedores habilitados.";
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 2;
+                throw new Exception( "Procedimento abortado. Verifique os fornecedores habilitados.");
             }
 
             //Verifica data de julgamento da licitação
             if ($dataJulgamentoLicitacao > $l202_dataAdjudicacao) {
-                $erro = "Data de julgamento maior que data de adjudicacao";
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 2;
+                throw new Exception( "Data de julgamento maior que data de adjudicacao");
             }
 
             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
@@ -206,7 +196,7 @@ switch($oParam->exec) {
 
             if ($l20_naturezaobjeto == "1") {
                 if ($itens != null || $itens != "") {
-                    $erro = "Itens obras não cadastrados. Codigos:" . $itens;
+                    throw new Exception( "Itens obras não cadastrados. Codigos:" . $itens);
                     $oRetorno->message = urlencode($erro);
                     $oRetorno->status = 2;
                 }
@@ -432,6 +422,9 @@ switch($oParam->exec) {
         $dataJulgamentoLicitacao = DateTime::createFromFormat('d/m/Y', $dtjulglic);
         $data = (implode("/",(array_reverse(explode("-",$oParam->dtHomologacao)))));
         $l202_datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
+        $rsDataAdjudica = $clhomologacaoadjudica->getdataAdjudicacao($l202_licitacao);
+        $dtadjudicaca = (implode("/",(array_reverse(explode("-",$rsDataAdjudica[0]->l202_dataadjudicacao)))));
+        $datadeAdjudicacao = DateTime::createFromFormat('d/m/Y', $dtadjudicaca);
 
         /**
          * VERIFICA SE E REGISTRO DE PREÇO
@@ -443,16 +436,17 @@ switch($oParam->exec) {
         try {
             //Verifica se os fornecedores vencedores estão habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
-                $erro = "Procedimento abortado. Verifique os fornecedores habilitados.";
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 2;
+                throw new Exception( "ERRO ! Procedimento abortado. Verifique os fornecedores habilitados.");
             }
 
             //Verifica data de julgamento da licitação
-            if ($dataJulgamentoLicitacao > $l202_datahomologacao) {
-                $erro = "Data de julgamento maior que data de adjudicacao";
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 2;
+            if ($l202_datahomologacao < $dataJulgamentoLicitacao) {
+                throw new Exception("ERRO ! Data de julgamento maior que data de adjudicacao.");
+            }
+
+            //Verifica data de adjudicacao da licitação
+            if($l202_datahomologacao < $datadeAdjudicacao) {
+                throw new Exception("ERRO ! Data de Homologação menor que data de adjudicacao.");
             }
 
             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
@@ -473,9 +467,7 @@ switch($oParam->exec) {
 
             if ($l20_naturezaobjeto == "1") {
                 if ($itens != null || $itens != "") {
-                    $erro = "Itens obras não cadastrados. Codigos:" . $itens;
-                    $oRetorno->message = urlencode($erro);
-                    $oRetorno->status = 2;
+                    throw new Exception( "Itens obras não cadastrados. Codigos:" . $itens);
                 }
             }
 
@@ -504,9 +496,7 @@ switch($oParam->exec) {
                     $tipoparecer = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null, '*', null, "l200_licitacao = $l202_licitacao")));
 
                     if ($tipoparecer < 1) {
-                        $erro = "Licitação sem Parecer Cadastrado.";
-                        $oRetorno->message = urlencode($erro);
-                        $oRetorno->status = 2;
+                        throw new Exception( "Licitação sem Parecer Cadastrado.");
                     }
                     db_inicio_transacao();
                     /**
@@ -627,16 +617,12 @@ switch($oParam->exec) {
         try {
             //Verifica se os fornecedores vencedores estão habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
-                $erro = "Procedimento abortado. Verifique os fornecedores habilitados.";
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 2;
+                throw new Exception( "Procedimento abortado. Verifique os fornecedores habilitados.");
             }
 
             //Verifica data de julgamento da licitação
             if ($dataJulgamentoLicitacao > $l202_datahomologacao) {
-                $erro = "Data de julgamento maior que data de adjudicacao";
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 2;
+                throw new Exception( "Data de julgamento maior que data de adjudicacao");
             }
 
             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
@@ -657,9 +643,7 @@ switch($oParam->exec) {
 
             if ($l20_naturezaobjeto == "1") {
                 if ($itens != null || $itens != "") {
-                    $erro = "Itens obras não cadastrados. Codigos:" . $itens;
-                    $oRetorno->message = urlencode($erro);
-                    $oRetorno->status = 2;
+                    throw new Exception( "Itens obras não cadastrados. Codigos:" . $itens);
                 }
             }
 
@@ -742,22 +726,22 @@ switch($oParam->exec) {
         $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
 
         try {
-//            /**
-//             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
-//             */
-//
-//            if(!empty($l202_dataAdjudicacao)){
-//                $anousu = db_getsession('DB_anousu');
-//                $instituicao = db_getsession('DB_instit');
-//                $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
-//                db_fieldsmemory($result);
-//                $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
-//                $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
-//
-//                if ($l202_dataAdjudicacao <= $dtencerramento) {
-//                    throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
-//                }
-//            }
+            /**
+             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
+             */
+
+            if(!empty($l202_dataAdjudicacao)){
+                $anousu = db_getsession('DB_anousu');
+                $instituicao = db_getsession('DB_instit');
+                $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+                db_fieldsmemory($result);
+                $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
+                $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
+
+                if ($l202_dataAdjudicacao <= $dtencerramento) {
+                    throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+                }
+            }
 
             /**
              * BUSCO O REGISTRO DA SITUACAO A SER EXCLUIDA
@@ -766,6 +750,16 @@ switch($oParam->exec) {
             db_fieldsmemory($liclicitasituacao,0);
 
             db_inicio_transacao();
+
+            /**
+             * get Itens Contrato
+             */
+            $rsItensContrato = $clitenshomologacao->getItensContratos($oParam->iLicitacao);
+
+            if($rsItensContrato){
+                throw new Exception ("ERRO! Existe Contrato para itens dessa Homologação.");
+            }
+
             /**
              * Excluir Itens Homologacao
              */
