@@ -105,22 +105,6 @@ if(isset($excluir)){
     }
 
     if(!$sqlerro) {
-        $sqlCred = $clcredenciamento->sql_query_file(null,"*",null,'l205_licitacao = '. $l20_codigo);
-        $rsCred = $clcredenciamento->sql_record($sqlCred);
-        $sqlCredSaldo = $clcredenciamentosaldo->sql_query_file(null,"*",null,'l213_licitacao = '. $l20_codigo);
-        $rsCredSaldo = $clcredenciamentosaldo->sql_record($sqlCredSaldo);
-
-        if($clcredenciamentosaldo->numrows){
-            $clcredenciamentosaldo->excluir(null,'l213_licitacao = '. $l20_codigo);
-        }
-
-        if($clcredenciamento->numrows){
-            $clcredenciamento->excluir(null,null,$l20_codigo);
-        }
-
-    }
-
-    if(!$sqlerro) {
         $sqlCodigo = $clobrascodigos->sql_query('', 'db151_codigoobra', '', 'db151_liclicita = ' . $l20_codigo);
         $rsCodigo = $clobrascodigos->sql_record($sqlCodigo);
         $codigoObra = db_utils::fieldsMemory($rsCodigo, 0)->db151_codigoobra;
@@ -181,6 +165,30 @@ if(isset($excluir)){
             $erro_msg=$clliccomissaocgm->erro_msg;
         }
     }
+    if ($sqlerro==false) {
+
+        $sqlCredSaldo = $clcredenciamentosaldo->sql_query_file(null, "*", null, 'l213_licitacao = ' . $l20_codigo);
+        $rsCredSaldo = $clcredenciamentosaldo->sql_record($sqlCredSaldo);
+
+        if ($clcredenciamentosaldo->numrows) {
+            $clcredenciamentosaldo->excluir(null, 'l213_licitacao = ' . $l20_codigo);
+            if ($clcredenciamentosaldo->erro_status==0){
+                $sqlerro=true;
+                $erro_msg=$clcredenciamentosaldo->erro_msg;
+            }
+        }
+
+        $sqlCred = $clcredenciamento->sql_query_file(null, "*", null, 'l205_licitacao = ' . $l20_codigo);
+        $rsCred = $clcredenciamento->sql_record($sqlCred);
+
+        if ($clcredenciamento->numrows) {
+            $clcredenciamento->excluir_cred_licitacao($l20_codigo);
+            if ($clcredenciamento->erro_status==0){
+                $sqlerro=true;
+                $erro_msg=$clcredenciamento->erro_msg;
+            }
+        }
+    }
 
     $result_item = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo",null,"l21_codliclicita=$l20_codigo"));
     $numrows_item = $clliclicitem->numrows;
@@ -216,10 +224,12 @@ if(isset($excluir)){
     }
 
     if ($sqlerro==false){
-        $clliclicitem->excluir(null,"l21_codliclicita=$l20_codigo");
-        if ($clliclicitem->erro_status==0){
-            $sqlerro=true;
-            $erro_msg = $clliclicitem->erro_msg;
+        if($numrows_item){
+            $clliclicitem->excluir(null,"l21_codliclicita=$l20_codigo");
+            if ($clliclicitem->erro_status==0){
+                $sqlerro=true;
+                $erro_msg = $clliclicitem->erro_msg;
+            }
         }
     }
 
@@ -231,23 +241,6 @@ if(isset($excluir)){
         }
     }
 
-//  /*
-//   * Verificar Encerramento Periodo Contabil
-//   */
-//  $dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
-//  if (!empty($dtpubratificacao)) {
-//    $clcondataconf = new cl_condataconf;
-//    if (!$clcondataconf->verificaPeriodoContabil($dtpubratificacao)) {
-//      $erro_msg = $clcondataconf->erro_msg;
-//      $sqlerro  = true;
-//    }
-//  }
-
-    /*
-     * Verificar Encerramento Periodo Patrimonial
-     */
-//    die("die: ".$l20_dtpubratificacao);
-    //$dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
     if (!empty($l20_dtpubratificacao)) {
         $clcondataconf = new cl_condataconf;
         if (!$clcondataconf->verificaPeriodoPatrimonial($l20_dtpubratificacao)) {
@@ -272,8 +265,8 @@ if(isset($excluir)){
     if ($sqlerro==false){
         $clliclicita->excluir($l20_codigo);
         $erro_msg = $clliclicita->erro_msg;
-        if ($clliclicita->erro_status==0){
-            $sqlerro=true;
+        if ($clliclicita->erro_status==0) {
+            $sqlerro = true;
         }
     }
 
