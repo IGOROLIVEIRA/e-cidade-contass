@@ -184,7 +184,7 @@ $clrotulo->label("l20_codigo");
                 var aLinha = new Array();
                 aLinha[0] = oLinha.pc81_codprocitem;
                 aLinha[1] = oLinha.pc01_descrmater.urlDecode();
-                aLinha[2] = oLinha.z01_nome;
+                aLinha[2] = oLinha.z01_nome.urlDecode();
                 aLinha[3] = oLinha.m61_descr;
                 aLinha[4] = oLinha.pc11_quant;
                 aLinha[5] = oLinha.pc23_valor;
