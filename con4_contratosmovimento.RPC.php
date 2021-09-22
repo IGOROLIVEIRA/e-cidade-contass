@@ -57,466 +57,454 @@ $oParam   = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $
 $oRetorno->status  = 1;
 
 if (isset($oParam->observacao)) {
-	$sObservacao = utf8_decode($oParam->observacao);
+    $sObservacao = utf8_decode($oParam->observacao);
 }
 
-switch($oParam->exec) {
+switch ($oParam->exec) {
 
-  /*
+        /*
    * Pesquisa homologação para o contrato
    */
-  case "getDadosHomologacao":
+    case "getDadosHomologacao":
 
-      try {
+        try {
 
-        $oHomologacao        = new AcordoHomologacao($oParam->codigo);
-        $oAcordo             = new Acordo($oHomologacao->getAcordo());
-        $oRetorno->codigo    = $oHomologacao->getCodigo();
-        $oRetorno->acordo    = $oAcordo->getCodigoAcordo();
-        $oRetorno->descricao = urlencode($oAcordo->getResumoObjeto());
+            $oHomologacao        = new AcordoHomologacao($oParam->codigo);
+            $oAcordo             = new Acordo($oHomologacao->getAcordo());
+            $oRetorno->codigo    = $oHomologacao->getCodigo();
+            $oRetorno->acordo    = $oAcordo->getCodigoAcordo();
+            $oRetorno->descricao = urlencode($oAcordo->getResumoObjeto());
+        } catch (Exception $eExeption) {
 
-      } catch (Exception $eExeption){
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+        }
 
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
+        break;
 
-      break;
-
-  /*
+        /*
    * Incluir homologação para o contrato
    */
-  case "homologarContrato":
+    case "homologarContrato":
 
-      try {
+        try {
 
-        db_inicio_transacao();
+            db_inicio_transacao();
 
-        $oHomologacao = new AcordoHomologacao();
-        $oHomologacao->setAcordo($oParam->acordo);
-        $oHomologacao->setObservacao($sObservacao);
-        $oHomologacao->save();
+            $oHomologacao = new AcordoHomologacao();
+            $oHomologacao->setAcordo($oParam->acordo);
+            $oHomologacao->setObservacao($sObservacao);
+            $oHomologacao->save();
 
-        db_fim_transacao(false);
-      } catch (Exception $eExeption){
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+        }
 
-      break;
+        break;
 
-  /*
+        /*
    * Cancelar homologação para o contrato
    */
-  case "cancelarHomologacao":
+    case "cancelarHomologacao":
 
-      try {
+        try {
 
-        db_inicio_transacao();
+            db_inicio_transacao();
 
-        $oHomologacao = new AcordoHomologacao($oParam->codigo);
-        $oHomologacao->setObservacao($sObservacao);
-        $oHomologacao->cancelar();
+            $oHomologacao = new AcordoHomologacao($oParam->codigo);
+            $oHomologacao->setObservacao($sObservacao);
+            $oHomologacao->cancelar();
 
-        db_fim_transacao(false);
-      } catch (Exception $eExeption){
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+        }
 
-      break;
+        break;
 
-  /*
+        /*
    * Pesquisa dados da assinatura
    */
-  case "getDadosAssinatura":
+    case "getDadosAssinatura":
 
-      try {
+        try {
 
-        $oAssinatura             = new AcordoAssinatura($oParam->codigo);
-        $oAcordo                 = new Acordo($oAssinatura->getAcordo());
-        $oRetorno->codigo        = $oAssinatura->getCodigo();
-        $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
-        $oRetorno->datamovimento = date("Y-m-d",db_getsession("DB_datausu"));
-        $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+            $oAssinatura             = new AcordoAssinatura($oParam->codigo);
+            $oAcordo                 = new Acordo($oAssinatura->getAcordo());
+            $oRetorno->codigo        = $oAssinatura->getCodigo();
+            $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
+            $oRetorno->datamovimento = date("Y-m-d", db_getsession("DB_datausu"));
+            $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+        } catch (Exception $eExeption) {
 
-      } catch (Exception $eExeption){
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+        }
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
+        break;
 
-      break;
-
-  /*
+        /*
    * Incluir assinatura para o contrato
    */
-  case "assinarContrato":
+    case "assinarContrato":
 
-      try {
+        try {
 
-          $clAcordoItem = new cl_acordoitem;
-          $sSqlSomaItens = $clAcordoItem->sql_query('', 'sum(ac20_valortotal) as soma', '', 'ac16_sequencial = '.$oParam->acordo);
-          $rsSomaItens = $clAcordoItem->sql_record($sSqlSomaItens);
-          $iSoma = db_utils::fieldsMemory($rsSomaItens, 0)->soma;
+            $clAcordoItem = new cl_acordoitem;
+            $sSqlSomaItens = $clAcordoItem->sql_query('', 'sum(ac20_valortotal) as soma', '', 'ac16_sequencial = ' . $oParam->acordo);
+            $rsSomaItens = $clAcordoItem->sql_record($sSqlSomaItens);
+            $iSoma = db_utils::fieldsMemory($rsSomaItens, 0)->soma;
 
-          $clAcordo = new cl_acordo;
-          $sSqlAcordo = $clAcordo->sql_query('', 'ac16_valor', '', 'ac16_sequencial = '.$oParam->acordo);
-          $rsAcordo   = $clAcordo->sql_record($sSqlAcordo);
-          $iTotalAcordo = db_utils::fieldsMemory($rsAcordo, 0)->ac16_valor;
+            $clAcordo = new cl_acordo;
+            $clAcordo->ac16_valor = $iSoma;
+            $clAcordo->alterar($oParam->acordo);
 
-          if(floatval($iSoma) != floatval($iTotalAcordo)){
-              throw new Exception("Gentileza conferir o valor total do contrato!");
-          }
+            $oDataMovimentacao = new DBDate($oParam->dtmovimentacao);
+            $oDataPublicacao = new DBDate($oParam->dtpublicacao);
 
-        $oDataMovimentacao = new DBDate($oParam->dtmovimentacao);
-        $oDataPublicacao = new DBDate($oParam->dtpublicacao);
+            db_inicio_transacao();
+            $oAssinatura = new AcordoAssinatura();
+            $oAssinatura->setAcordo($oParam->acordo);
+            $oAssinatura->setDataMovimento($oDataMovimentacao->getDate());
+            $oAssinatura->setDataPublicacao($oDataPublicacao->getDate());
+            $oAssinatura->setVeiculoDivulgacao($oParam->veiculodivulgacao);
+            $oAssinatura->setObservacao($sObservacao);
+            $oAcordo = new Acordo($oParam->acordo);
 
-        db_inicio_transacao();
-        $oAssinatura = new AcordoAssinatura();
-        $oAssinatura->setAcordo($oParam->acordo);
-        $oAssinatura->setDataMovimento($oDataMovimentacao->getDate());
-        $oAssinatura->setDataPublicacao($oDataPublicacao->getDate());
-        $oAssinatura->setVeiculoDivulgacao($oParam->veiculodivulgacao);
-      	$oAssinatura->setObservacao($sObservacao);
-        $oAcordo = new Acordo($oParam->acordo);
-
-        if (!$oAssinatura->verificaPeriodoPatrimonial()) {
-          $lAcordoValido = false;
-        }
-
-          if($oAcordo->getNaturezaAcordo($oParam->acordo) == "1"){
-              if($oAcordo->getObras($oParam->acordo) == null){
-                $iLicitacao = $oAcordo->getLicitacao();
-                $oLicitacao = new licitacao($iLicitacao);
-                $iAnousu     = $oLicitacao->getAno();
-                $iModalidade = $oLicitacao->getNumeroLicitacao();
-                $iProcesso   = $oLicitacao->getEdital();
-                $oModalidade = $oLicitacao->getModalidade();
-                $sDescricaoMod = $oModalidade->getDescricao();
-                throw new Exception("Contrato de Natureza OBRAS E SERVIÇOS DE ENGENHARIA, sem Obra informada. Solicitar cadastro no módulo Obras para o processo Nº $iProcesso/$iAnousu $sDescricaoMod Nº $iModalidade/$iAnousu");
+            if (!$oAssinatura->verificaPeriodoPatrimonial()) {
+                $lAcordoValido = false;
             }
-        }
 
-        if ($oDataPublicacao->getTimeStamp() < $oDataMovimentacao->getTimeStamp()) {
-          throw new Exception("A data de assinatura do contrato não pode ser menor que a data de publicação.");
-        }
+            if ($oAcordo->getNaturezaAcordo($oParam->acordo) == "1") {
+                if ($oAcordo->getObras($oParam->acordo) == null) {
+                    $iLicitacao = $oAcordo->getLicitacao();
+                    $oLicitacao = new licitacao($iLicitacao);
+                    $iAnousu     = $oLicitacao->getAno();
+                    $iModalidade = $oLicitacao->getNumeroLicitacao();
+                    $iProcesso   = $oLicitacao->getEdital();
+                    $oModalidade = $oLicitacao->getModalidade();
+                    $sDescricaoMod = $oModalidade->getDescricao();
+                    throw new Exception("Contrato de Natureza OBRAS E SERVIÇOS DE ENGENHARIA, sem Obra informada. Solicitar cadastro no módulo Obras para o processo Nº $iProcesso/$iAnousu $sDescricaoMod Nº $iModalidade/$iAnousu");
+                }
+            }
+
+            if ($oDataPublicacao->getTimeStamp() < $oDataMovimentacao->getTimeStamp()) {
+                throw new Exception("A data de assinatura do contrato não pode ser menor que a data de publicação.");
+            }
 
 
-      /*
+            /*
        * Validações caso a origem do contrato seja Licitação
        * O sistema não deve permitir a inclusão de acordos quando a data de assinatura do acordo for anterior a data de homologação da licitação.
        * Para dispensa/inexigibilidade deve se validar a data de ratificação presente no cadastro de licitação
        */
-        if($oAcordo->getOrigem() == 2){
-            foreach ($oAcordo->getLicitacoes() as $oLicitacao){
-                $bValidaDispensa = in_array($oLicitacao->getModalidade()->getCodigo(), array(9, 10)) ? true : false;
-                if (!$oAcordo->validaDataAssinatura($oLicitacao->getCodigo(), $oParam->dtmovimentacao, $bValidaDispensa)) {
-                    $lAcordoValido = false;
-                     throw new Exception("A data de assinatura do acordo não pode ser anterior a data de homologação da licitação.");
+            if ($oAcordo->getOrigem() == 2) {
+                foreach ($oAcordo->getLicitacoes() as $oLicitacao) {
+                    $bValidaDispensa = in_array($oLicitacao->getModalidade()->getCodigo(), array(9, 10)) ? true : false;
+                    if (!$oAcordo->validaDataAssinatura($oLicitacao->getCodigo(), $oParam->dtmovimentacao, $bValidaDispensa)) {
+                        $lAcordoValido = false;
+                        throw new Exception("A data de assinatura do acordo não pode ser anterior a data de homologação da licitação.");
+                    }
                 }
             }
+
+            if (strtotime($dtMovimento) > strtotime(str_replace("/", "-", $oAcordo->getDataFinal()))) {
+                $lAcordoValido = false;
+                throw new Exception("A data de assinatura do acordo {$oParam->dtmovimentacao} não pode ser posterior ao período de vigência do contrato {$oAcordo->getDataFinal()}.");
+            }
+
+            /**
+             * Validação solicitada: não seja possível incluir assinatura de acordos que não tenha as penalidades e garantias cadastradas.?
+             * @see OC 3495, 4408
+             */
+
+            if (count($oAcordo->getPenalidades()) < 2 || count($oAcordo->getGarantias()) == 0) {
+                $lAcordoValido = false;
+                throw new Exception("Não é permitido assinar um acordos que não tenha as penalidades e garantias cadastradas.");
+            }
+
+            /**
+             * Validação soliciatada: Validar o sistema para que não seja possível assinar acordos de origem Manual que não tenha itens vinculados.
+             * @see OC 3499
+             */
+
+            if ($oAcordo->getOrigem() == Acordo::ORIGEM_MANUAL && count($oAcordo->getItens()) == 0) {
+                $lAcordoValido = false;
+                throw new Exception("Acordo sem itens Cadastrados.");
+            } else {
+                $itens = $oAcordo->getItens();
+                foreach ($itens as $item) {
+
+                    if ($item->getPeriodosItem() == null) {
+                        $lAcordoValido = false;
+                        throw new Exception("Preencha as datas de previsão de execução dos ítens.");
+                    }
+                }
+            }
+
+            $oAssinatura->save();
+
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
-        if(strtotime($dtMovimento) > strtotime(str_replace("/","-",$oAcordo->getDataFinal()))){
-            $lAcordoValido = false;
-            throw new Exception("A data de assinatura do acordo {$oParam->dtmovimentacao} não pode ser posterior ao período de vigência do contrato {$oAcordo->getDataFinal()}.");
-        }
+        break;
 
-        /**
-         * Validação solicitada: não seja possível incluir assinatura de acordos que não tenha as penalidades e garantias cadastradas.?
-         * @see OC 3495, 4408
-         */
-
-        if(count($oAcordo->getPenalidades()) < 2 || count($oAcordo->getGarantias()) == 0){
-            $lAcordoValido = false;
-            throw new Exception("Não é permitido assinar um acordos que não tenha as penalidades e garantias cadastradas.");
-        }
-
-          /**
-           * Validação soliciatada: Validar o sistema para que não seja possível assinar acordos de origem Manual que não tenha itens vinculados.
-           * @see OC 3499
-           */
-
-          if($oAcordo->getOrigem() == Acordo::ORIGEM_MANUAL && count($oAcordo->getItens()) == 0){
-              $lAcordoValido = false;
-              throw new Exception("Acordo sem itens Cadastrados.");
-          }else{
-              $itens = $oAcordo->getItens();
-              foreach ($itens as $item) {
-
-                 if($item->getPeriodosItem() == null){
-                  $lAcordoValido = false;
-                  throw new Exception("Preencha as datas de previsão de execução dos ítens.");
-                 }
-              }
-          }
-
-      	$oAssinatura->save();
-
-        db_fim_transacao(false);
-
-      } catch (Exception $eExeption){
-
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
-      }
-
-      break;
-
-  /*
+        /*
    * Cancelamento da assinatura para o contrato
    */
-  case "cancelarAssinatura":
+    case "cancelarAssinatura":
 
-      try {
+        try {
 
-        db_inicio_transacao();
+            db_inicio_transacao();
 
-        $oAssinatura = new AcordoAssinatura($oParam->codigo);
+            $oAssinatura = new AcordoAssinatura($oParam->codigo);
 
-        if (!$oAssinatura->verificaPeriodoPatrimonial()) {
-          $lAcordoValido = false;
+            if (!$oAssinatura->verificaPeriodoPatrimonial()) {
+                $lAcordoValido = false;
+            }
+            $oAssinatura->setDataMovimento();
+            $oAssinatura->setObservacao($sObservacao);
+            $oAssinatura->cancelar();
+
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
-        $oAssinatura->setDataMovimento();
-        $oAssinatura->setObservacao($sObservacao);
-        $oAssinatura->cancelar();
 
-        db_fim_transacao(false);
-      } catch (Exception $eExeption){
+        break;
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
-
-      break;
-
-  /*
+        /*
    * Pesquisa recisão para o contrato
    */
-  case "getDadosRescisao":
+    case "getDadosRescisao":
 
-      try {
+        try {
 
-        $oRecisao                = new AcordoRescisao($oParam->codigo);
-        $oAcordo                 = new Acordo($oRecisao->getAcordo());
-        $oRetorno->codigo        = $oRecisao->getCodigo();
-        $oRetorno->valorrescisao = $oAcordo->getValorRescisao();
-        $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
+            $oRecisao                = new AcordoRescisao($oParam->codigo);
+            $oAcordo                 = new Acordo($oRecisao->getAcordo());
+            $oRetorno->codigo        = $oRecisao->getCodigo();
+            $oRetorno->valorrescisao = $oAcordo->getValorRescisao();
+            $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
 
-        $oRetorno->datamovimento = date("Y-m-d",db_getsession("DB_datausu"));
-        $oRetorno->datamovimentoantiga = $oRecisao->getDataMovimento();
-        $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+            $oRetorno->datamovimento = date("Y-m-d", db_getsession("DB_datausu"));
+            $oRetorno->datamovimentoantiga = $oRecisao->getDataMovimento();
+            $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+        } catch (Exception $eExeption) {
 
-      } catch (Exception $eExeption){
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+        }
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
+        break;
 
-      break;
-
-  /*
+        /*
    * Incluir recisão para o contrato
    */
-  case "rescindirContrato":
+    case "rescindirContrato":
 
-      try {
+        try {
 
-        db_inicio_transacao();
+            db_inicio_transacao();
 
-        $oAcordo = new Acordo($oParam->acordo);
+            $oAcordo = new Acordo($oParam->acordo);
 
-        $oRecisao = new AcordoRescisao();
-        $oRecisao->setAcordo($oParam->acordo);
-        $nValorRescisao = str_replace(',', '.', $oParam->valorrescisao);
-        $dtMovimento = implode("-", array_reverse(explode("/", $oParam->dtmovimentacao)));
-        $oRecisao->setDataMovimento($dtMovimento);
-        $oRecisao->setObservacao($sObservacao);
-        $oRecisao->setValorRescisao($nValorRescisao);
+            $oRecisao = new AcordoRescisao();
+            $oRecisao->setAcordo($oParam->acordo);
+            $nValorRescisao = str_replace(',', '.', $oParam->valorrescisao);
+            $dtMovimento = implode("-", array_reverse(explode("/", $oParam->dtmovimentacao)));
+            $oRecisao->setDataMovimento($dtMovimento);
+            $oRecisao->setObservacao($sObservacao);
+            $oRecisao->setValorRescisao($nValorRescisao);
 
-        if (!$oRecisao->verificaPeriodoPatrimonial()) {
-          $lAcordoValido = false;
+            if (!$oRecisao->verificaPeriodoPatrimonial()) {
+                $lAcordoValido = false;
+            }
+
+            if ($oRecisao->getValorRescisao() > $oAcordo->getValorContrato()) {
+                throw new Exception("O valor rescindido não pode ser maior que o valor do acordo.");
+            }
+
+            $oRecisao->save();
+
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
-        if ($oRecisao->getValorRescisao() > $oAcordo->getValorContrato()) {
-          throw new Exception("O valor rescindido não pode ser maior que o valor do acordo.");
-        }
+        break;
 
-        $oRecisao->save();
-
-        db_fim_transacao(false);
-
-      } catch (Exception $eExeption){
-
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
-      }
-
-      break;
-
-  /*
+        /*
    * Cancelamento de recisão para o contrato
    */
-  case "cancelarRescisao":
+    case "cancelarRescisao":
 
-      try {
+        try {
 
-        db_inicio_transacao();
+            db_inicio_transacao();
 
-        $oRecisao = new AcordoRescisao($oParam->codigo);
+            $oRecisao = new AcordoRescisao($oParam->codigo);
 
-        if (!$oRecisao->verificaPeriodoPatrimonial()) {
-          $lAcordoValido = false;
+            if (!$oRecisao->verificaPeriodoPatrimonial()) {
+                $lAcordoValido = false;
+            }
+            $oRecisao->setDataMovimento();
+            $oRecisao->setValorRescisao(0);
+            $oRecisao->setObservacao($sObservacao);
+            $oRecisao->cancelar();
+
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
-        $oRecisao->setDataMovimento();
-        $oRecisao->setValorRescisao(0);
-        $oRecisao->setObservacao($sObservacao);
-        $oRecisao->cancelar();
 
-        db_fim_transacao(false);
-      } catch (Exception $eExeption){
+        break;
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
-
-      break;
-
-  /*
+        /*
    * Cancela cancelamento de recisão para o contrato
    */
-  case "desfazerCancelarRecisao":
+    case "desfazerCancelarRecisao":
 
-      try {
+        try {
 
-        db_inicio_transacao();
+            db_inicio_transacao();
 
-        $oRecisao = new AcordoRescisao($oParam->codigo);
-        if (!$oRecisao->verificaPeriodoPatrimonial()) {
-          $lAcordoValido = false;
+            $oRecisao = new AcordoRescisao($oParam->codigo);
+            if (!$oRecisao->verificaPeriodoPatrimonial()) {
+                $lAcordoValido = false;
+            }
+            $oRecisao->setObservacao($sObservacao);
+            $oRecisao->setDataMovimento();
+            $oRecisao->desfazerCancelamento();
+
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
-        $oRecisao->setObservacao($sObservacao);
-        $oRecisao->setDataMovimento();
-        $oRecisao->desfazerCancelamento();
 
-        db_fim_transacao(false);
-      } catch (Exception $eExeption){
+        break;
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
-
-      break;
-
-  /*
+        /*
    * Pesquisa anulação de contrato
    */
-  case "getDadosAnulacao":
+    case "getDadosAnulacao":
 
-      try {
+        try {
 
-        $oAnulacao = new AcordoAnulacao($oParam->codigo);
-      	$oAcordo   = new Acordo($oAnulacao->getAcordo());
-        $oRetorno->codigo        = $oAnulacao->getCodigo();
-        $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
-        $oRetorno->datamovimento = date("Y-m-d",db_getsession("DB_datausu"));
-        $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+            $oAnulacao = new AcordoAnulacao($oParam->codigo);
+            $oAcordo   = new Acordo($oAnulacao->getAcordo());
+            $oRetorno->codigo        = $oAnulacao->getCodigo();
+            $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
+            $oRetorno->datamovimento = date("Y-m-d", db_getsession("DB_datausu"));
+            $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+        } catch (Exception $eExeption) {
 
-      } catch (Exception $eExeption){
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+        }
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
+        break;
 
-      break;
-
-  /*
+        /*
    * Incluir anulação de contrato
    */
-  case "anularContrato":
+    case "anularContrato":
 
-      try {
+        try {
 
-        db_inicio_transacao();
+            db_inicio_transacao();
 
-        $oAnulacao = new AcordoAnulacao();
-        $oAnulacao->setAcordo($oParam->acordo);
-        $dtMovimento = implode("-", array_reverse(explode("/", $oParam->dtmovimentacao)));
-        $oAnulacao->setDataMovimento($dtMovimento);
-        $oAnulacao->setObservacao($sObservacao);
-        $oAnulacao->save();
+            $oAnulacao = new AcordoAnulacao();
+            $oAnulacao->setAcordo($oParam->acordo);
+            $dtMovimento = implode("-", array_reverse(explode("/", $oParam->dtmovimentacao)));
+            $oAnulacao->setDataMovimento($dtMovimento);
+            $oAnulacao->setObservacao($sObservacao);
+            $oAnulacao->save();
 
-        db_fim_transacao(false);
-      } catch (Exception $eExeption){
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+        }
 
-      break;
+        break;
 
-  /*
+        /*
    * Cancelamento de anulação de contrato
    */
-  case "cancelarAnulacao":
+    case "cancelarAnulacao":
 
-      try {
+        try {
 
-        db_inicio_transacao();
+            db_inicio_transacao();
 
-        $oAnulacao = new AcordoAnulacao($oParam->codigo);
-        $oAnulacao->setDataMovimento();
-        $oAnulacao->setObservacao($sObservacao);
-        $oAnulacao->cancelar();
+            $oAnulacao = new AcordoAnulacao($oParam->codigo);
+            $oAnulacao->setDataMovimento();
+            $oAnulacao->setObservacao($sObservacao);
+            $oAnulacao->cancelar();
 
-        db_fim_transacao(false);
-      } catch (Exception $eExeption){
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+        }
 
-      break;
+        break;
 
-  /*
+        /*
    * Cancela cancelamento de anulação de contrato
    */
-  case "desfazerCancelarAnulacao":
+    case "desfazerCancelarAnulacao":
 
-      try {
+        try {
 
-        db_inicio_transacao();
+            db_inicio_transacao();
 
-        $oAnulacao = new AcordoAnulacao($oParam->codigo);
-        $oAnulacao->setObservacao($sObservacao);
-        $oAnulacao->setDataMovimento();
-        $oAnulacao->desfazerCancelamento();
+            $oAnulacao = new AcordoAnulacao($oParam->codigo);
+            $oAnulacao->setObservacao($sObservacao);
+            $oAnulacao->setDataMovimento();
+            $oAnulacao->desfazerCancelamento();
 
-        db_fim_transacao(false);
-      } catch (Exception $eExeption){
+            db_fim_transacao(false);
+        } catch (Exception $eExeption) {
 
-        db_fim_transacao(true);
-        $oRetorno->status = 2;
-        $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
-      }
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+        }
 
-      break;
+        break;
 }
 
 echo $oJson->encode($oRetorno);
-?>

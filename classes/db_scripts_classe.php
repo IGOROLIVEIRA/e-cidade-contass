@@ -561,6 +561,11 @@ class cl_scripts {
             (SELECT e60_numemp
              FROM w_empenhos);
 
+    DELETE FROM empenhocotamensal
+    WHERE e05_numemp IN
+        (SELECT e60_numemp
+         FROM w_empenhos);
+
     DELETE FROM empempenho
     WHERE e60_numemp IN
         (SELECT e60_numemp

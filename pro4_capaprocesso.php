@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("fpdf151/pdf1.php");
+require_once("fpdf151/pdf1capaprocesso.php");
 require_once("fpdf151/impcarne.php");
 require_once("libs/db_sql.php");
 require_once("libs/db_utils.php");
@@ -152,7 +152,7 @@ if ($oProtParam->p90_modelcapaproc != 3) {
   }
 
 
-  $pdf = new pdf1();
+  $pdf = new pdf1capaprocesso();
   $pdf->Open();
   $result_param = $clprotparam->sql_record($clprotparam->sql_query_file(null,"*",null,"p90_instit = ".db_getsession("DB_instit")));
   if ($clprotparam->numrows>0){
@@ -171,6 +171,7 @@ if ($oProtParam->p90_modelcapaproc != 3) {
   $pdf1->telefinstit = pg_result(db_query("select telef from db_config where codigo = ".db_getsession("DB_instit")),0,0);
   $pdf1->enderfinstit = pg_result(db_query("select ender||' - '||bairro||' nº '||numero from db_config where codigo = ".db_getsession("DB_instit")),0,0);
   $pdf1->emailfinstit = pg_result(db_query("select email from db_config where codigo = ".db_getsession("DB_instit")),0,0);
+  $pdf1->cgcinstit = pg_result(db_query("select cgc from db_config where codigo = ".db_getsession("DB_instit")),0,0);
 
   for($w=0;$w<$numrows;$w++){
     db_fieldsmemory($result,$w);

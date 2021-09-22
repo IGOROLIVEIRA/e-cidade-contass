@@ -472,12 +472,6 @@ function setReadOnly(lReadOnly) {
     $('o08_elemento').style.backgroundColor          = "#DEB887";
     $('o08_elemento').readOnly                       = true;
     $('o08_elementoancora').onclick                  ='return false';
-    $('o08_recurso').style.backgroundColor           = "#DEB887";
-    $('o08_recurso').readOnly                        = true;
-    $('o08_recursoancora').onclick                   ='return false';  
-    //$('o08_localizadorgastos').style.backgroundColor = "#DEB887";
-    //$('o08_localizadorgastos').readOnly              = true;
-    //$('o08_gastosancora').onclick                    ='return false';
      
   } else {
   
@@ -486,11 +480,7 @@ function setReadOnly(lReadOnly) {
     $('o08_elementoancora').onclick                  = function (){js_pesquisao08_elemento(true)};
     $('o08_recurso').style.backgroundColor           = "#FFFFFF";
     $('o08_recurso').readOnly                        = false;
-    $('o08_recursoancora').onclick                   = function (){js_pesquisac62_codrec(true)};  
-    //$('o08_localizadorgastos').style.backgroundColor = "#FFFFFF";
-    //$('o08_localizadorgastos').readOnly              = false;
-    //$('o08_gastosancora').onclick                    = function (){js_pesquisao08_localizadorgastos(true)}; 
-    
+    $('o08_recursoancora').onclick                   = function (){js_pesquisac62_codrec(true)};      
     
   }
 }

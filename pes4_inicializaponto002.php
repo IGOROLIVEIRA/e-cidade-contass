@@ -603,7 +603,7 @@ function init_130($opcao){
           global $ponto;
           /*echo "<pre>";
           print_r("select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux);
-          db_criatabela("select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux);
+          db_criatabela(db_query("select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux));
           die;*/
           if( db_selectmax("ponto", "select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux)  &&
             ( db_at(db_str($situacao_130,1),"1-3-4") > 0  ||
@@ -794,7 +794,7 @@ function init_130($opcao){
               $condicaoaux  = " and r10_regist = ".db_sqlformat( $arquivo_rubricas[$Iind]["r90_regist"] );
               $condicaoaux .= " and r10_rubric = ".db_sqlformat( $arquivo_rubricas[$Iind]["rh27_rubric"] );
               if( db_boolean( $arquivo_rubricas[$Iind]["rh27_calcp"])){
-                $valor_descontar = bb_round( ( $valor_descontar / 30 ) * (30-$F019),2 );
+                $valor_descontar = bb_round( ( $valor_descontar / 30 ) * ((30-$F019)-(30-$dias_pagamento)),2 );
               }
               $matriz2[1] = $valor_descontar;
               db_update( "pontofs", $matriz1,$matriz2,bb_condicaosubpes("r10_").$condicaoaux );
@@ -808,7 +808,7 @@ function init_130($opcao){
               $condicaoaux .= " and r10_rubric = ".db_sqlformat( $arquivo_rubricas[$Iind]["rh27_rubric"]);
               if( db_boolean( $arquivo_rubricas[$Iind]["rh27_calcp"])){
                 if( db_boolean( $arquivo_rubricas[$Iind]["rh27_propq"]) ){
-                  $quantidade = bb_round( ( $quantidade / 30 ) * (30-$F019),2);
+                  $quantidade = bb_round( ( $quantidade / 30 ) * ((30-$F019)-(30-$dias_pagamento)),2);
                 }
               }
               $matriz2[1] = $quantidade;

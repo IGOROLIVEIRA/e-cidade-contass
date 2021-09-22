@@ -61,6 +61,7 @@ class cl_veicmanut {
     var $ve62_hora = null;
     var $ve62_medida = 0;
     var $ve62_observacao = null;
+    var $ve62_itensempenho = 0;
     //Campos para o db_frmveicmanutcts.php
     var $ve62_origemgasto = null;
     var $ve62_tipogasto = null;
@@ -87,6 +88,7 @@ class cl_veicmanut {
                  ve62_atestado = int4 = Atestado do Controle Interno
                  ve62_numemp = int = Numero do Empenho
                  ve62_valor = int = Numero do Empenho
+                 ve62_itensempenho = int = Itens do Empenho
                  ";
     //funcao construtor da classe
     function cl_veicmanut() {
@@ -138,6 +140,7 @@ class cl_veicmanut {
             $this->ve62_atestado = ($this->ve62_atestado == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_atestado"]:$this->ve62_atestado);
             $this->ve62_numemp = ($this->ve62_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_numemp"]:$this->ve62_numemp);
             $this->ve62_observacao = ($this->ve62_observacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_observacao"]:$this->ve62_observacao);
+            $this->ve62_itensempenho = ($this->ve62_itensempenho == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_itensempenho"]:$this->ve62_itensempenho);
         }else{
             $this->ve62_codigo = ($this->ve62_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_codigo"]:$this->ve62_codigo);
         }
@@ -218,6 +221,9 @@ class cl_veicmanut {
          */
         if($this->ve62_veiccadtiposervico == null ){
             $this->ve62_veiccadtiposervico = 0;
+        }
+        if($this->ve62_itensempenho == null ){
+            $this->ve62_itensempenho = 0;
         }
         if($this->ve62_usuario == null ){
             $this->erro_sql = " Campo Usuário nao Informado.";
@@ -309,6 +315,7 @@ class cl_veicmanut {
                                       ,ve62_atestado
                                       ,ve62_numemp
                                       ,ve62_valor
+                                      ,ve62_itensempenho
                        )
                 values (
                                 $this->ve62_codigo 
@@ -329,6 +336,7 @@ class cl_veicmanut {
                                ,".($this->ve62_atestado == "null" || $this->ve62_atestado == ""?"null":$this->ve62_atestado)."
                                ,".($this->ve62_numemp == "null" || $this->ve62_numemp == ""?"null":$this->ve62_numemp)."
                                ,".($this->ve62_valor == "null" || $this->ve62_valor == ""?"null":$this->ve62_valor)."
+                               ,$this->ve62_itensempenho
                       )";
 
 

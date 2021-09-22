@@ -50,6 +50,7 @@ l20_anousu, l20_nroedital, l03_pctipocompratribunal,
 CASE WHEN l20_usaregistropreco=TRUE THEN 'SIM' ELSE 'NAO' end as usaregistropreco,
 CASE WHEN l20_descontotab=1 THEN 'SIM' ELSE 'NAO' end as descontotabela,
 l20_datacria as abertura,
+extract(year from l20_datacria) l00_anocria,
 l20_objeto as objeto ";
 $sWhere .= $sAnd . " l20_instit = " . db_getsession("DB_instit");
 $sAnd = ' and ';
@@ -80,7 +81,7 @@ if($status){
 
 }
 
-$sSqlLicLicita = $clliclicita->sql_query(null, $sCampos, "4,2", $sWhere);
+$sSqlLicLicita = $clliclicita->sql_query(null, $sCampos, "l00_anocria,l20_edital,l20_datacria", $sWhere);
 $result = $clliclicita->sql_record($sSqlLicLicita);
 $numrows = $clliclicita->numrows;
 

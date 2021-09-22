@@ -92,7 +92,12 @@ function js_limpa(){
   <tr>
     <td align="center" valign="top">
       <?
-      $dbwhere = "o57_anousu = ".db_getsession("DB_anousu") ;
+      if (isset($lBuscaRecAnoSeguinte)) {
+        $dbwhere = "o57_anousu = ".(db_getsession("DB_anousu") + 1);
+      } else {
+        $dbwhere = "o57_anousu = ".db_getsession("DB_anousu");
+      }
+      
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_orcfontes.php")==true){

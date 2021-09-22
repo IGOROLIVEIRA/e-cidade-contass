@@ -967,18 +967,22 @@ ob_start();
                     if (getImplantacao()) {
                         foreach (getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331', $valorcalculoManual, $oInstit) as $oDespesa) {
                             $chave = $oDespesa->o58_elemento;
-                            if (array_key_exists($chave, $aDespesas)) {
-                                $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
-                            } else {
-                                $aDespesas[$chave] = $oDespesa;
+                            if ($oDespesa->$valoresperado <> 0) {
+                                if (array_key_exists($chave, $aDespesas)) {
+                                    $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
+                                } else {
+                                    $aDespesas[$chave] = $oDespesa;
+                                }
                             }
                         }
                         foreach (getSaldoDespesa(null, "o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
                             $chave = $oDespesa->o58_elemento;
-                            if (array_key_exists($chave, $aDespesas)) {
-                                $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
-                            } else {
-                                $aDespesas[$chave] = $oDespesa;
+                            if ($oDespesa->$valoresperado <> 0) {
+                                if (array_key_exists($chave, $aDespesas)) {
+                                    $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
+                                } else {
+                                    $aDespesas[$chave] = $oDespesa;
+                                }
                             }
                         }
                     } else {

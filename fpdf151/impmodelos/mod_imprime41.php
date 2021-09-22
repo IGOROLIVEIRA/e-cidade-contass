@@ -3,15 +3,26 @@ $this->objpdf->AliasNbPages();
 $this->objpdf->Setfont("Times", "B", 14);
 $this->objpdf->AddPage();
 
+$this->objpdf->sety(20);
+$this->objpdf->setx(85);
+$this->objpdf->Setfont("times", "b", 9);
+
+if($this->telefinstit){
+	$padrao = '(%%) %%%% - %%%%';
+	$telefone = vsprintf(str_replace('%', "%s", $padrao), str_split($this->telefinstit));
+	$this->objpdf->cell(40, 5,"TELEFONE: ".$telefone, 0, 1, 'C');
+}
+
+if($this->cgcinstit){
+	$padrao1 = '%%%%%%%%/%%%%-%%';
+	$cgc = vsprintf(str_replace('%', "%s",$padrao1), str_split($this->cgcinstit));
+    	$this->objpdf->cell(190, 4, "CNPJ: ".$cgc, 0, 1, 'C');
+}
+
 /**
  * Configura a variável NUMERO + ANO
  */
 $sNumeroProtocolo = $this->p58_numero."/".$this->p58_ano;
-
-$this->objpdf->sety(20);
-$this->objpdf->setx(80);
-$this->objpdf->Setfont("Times", "", 10);
-$this->objpdf->cell(40, 5, "TELEFONE: ".$this->telefinstit, 0, 0, 'R');
 
 $this->objpdf->Setfont("Times", "B", 14);
 $this->objpdf->SetLeftMargin(15);

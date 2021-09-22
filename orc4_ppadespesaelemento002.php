@@ -143,7 +143,7 @@ foreach ($aElementos as $aElementos) {
   if ($sWhereElemento != "") {
     $sOr = " or "; 
   }
-  $sWhereElemento .= "{$sOr} o56_elemento like '".trim($aElementos)."%' ";
+  $sWhereElemento .= "{$sOr} orcelemento.o56_elemento like '".trim($aElementos)."%' ";
 }
 
 $aLinhasRelatorio = array();
@@ -153,15 +153,27 @@ if ($iNumRows > 0) {
     
     $oLinhaAdicionar  = $oLinhaAcao; 
     $sSqlElemento     = "select distinct o08_elemento,                                                ";
-    $sSqlElemento    .= "       o56_elemento,                                                         ";
-    $sSqlElemento    .= "       trim(o56_descr) as o56_descr,                                         "; 
+    $sSqlElemento    .= "       orcelemento.o56_elemento,                                             ";
+    $sSqlElemento    .= "       trim(orcelemento.o56_descr) as o56_descr,                             "; 
     $sSqlElemento    .= "       o08_recurso,                                                          "; 
     $sSqlElemento    .= "       trim(o15_descr) as o15_descr                                          "; 
+    
+    if (isset($iModalidadeAplicacao) && $iModalidadeAplicacao == 1) {
+        $sSqlElemento    .= "       ,orecele.o56_elemento as o56_elementoanalitico,                   ";
+        $sSqlElemento    .= "       trim(orecele.o56_descr) as o56_descranalitico                     "; 
+    }
+    
     $sSqlElemento    .= "  from ppaestimativa                                                         "; 
     $sSqlElemento    .= "       inner join ppaestimativadespesa on o05_sequencial = o07_ppaestimativa "; 
     $sSqlElemento    .= "       inner join ppadotacao           on o08_sequencial = o07_coddot        ";
     $sSqlElemento    .= "       inner join orcelemento          on o08_elemento   = o56_codele        ";
     $sSqlElemento    .= "                                      and o08_ano        = o56_anousu        ";
+    
+    if (isset($iModalidadeAplicacao) && $iModalidadeAplicacao == 1) {
+        $sSqlElemento    .= "       left join orcelemento orecele on orecele.o56_elemento = substr(orcelemento.o56_elemento,1,5)||'00000000'";
+        $sSqlElemento    .= "                                       and orecele.o56_anousu = o08_ano  ";
+    }
+
     $sSqlElemento    .= "       inner join orctiporec           on o08_recurso    = o15_codigo        ";
     $sSqlElemento    .= " where o08_ppaversao = {$oPost->o05_ppaversao}                               ";
     $sSqlElemento    .= "   and o05_ppaversao = {$oPost->o05_ppaversao}                               ";
@@ -181,7 +193,7 @@ if ($iNumRows > 0) {
         $sSqlElemento  .= "   and o08_recurso = {$o15_codigo}                                         ";
     }
     $sSqlElemento    .= "   and o08_instit in ({$instits})                                            ";
-    $sSqlElemento    .= "   order by o56_elemento                                                     ";
+    $sSqlElemento    .= "   order by orcelemento.o56_elemento                                         ";
     $rsElemento       = db_query($sSqlElemento);
         
     $iNumRowsElemento = pg_num_rows($rsElemento);
@@ -213,7 +225,24 @@ if ($iNumRows > 0) {
         $oElemento->valor[$iAno] = db_utils::fieldsMemory($rsValor, 0)->valor; 
         
       }
-      $oLinhaAdicionar->elementos[] = $oElemento;
+      
+      if (isset($iModalidadeAplicacao) && $iModalidadeAplicacao == 1) {
+        $sHash = substr($oElemento->o56_elemento,0,5).$oElemento->o08_recurso;
+
+        if (!isset($oLinhaAdicionar->elementos[$sHash])) {
+            $oElemento->o56_elemento = $oElemento->o56_elementoanalitico;
+            $oElemento->o56_descr = $oElemento->o56_descranalitico;
+            $oLinhaAdicionar->elementos[$sHash] = $oElemento;
+        } else {
+            $oLinhaAdicionar->elementos[$sHash]->o56_elemento = $oElemento->o56_elementoanalitico;
+            $oLinhaAdicionar->elementos[$sHash]->o56_descr = $oElemento->o56_descranalitico;
+            foreach($oElemento->valor as $ano => $valor) {
+            $oLinhaAdicionar->elementos[$sHash]->valor[$ano] += $valor;
+            }
+        }
+      } else {
+        $oLinhaAdicionar->elementos[] = $oElemento;
+      }
     }
     $aLinhasRelatorio[] = $oLinhaAdicionar;
   }
@@ -426,7 +455,7 @@ if ($iNumRows > 0) {
   	     }
   	       
   	     $pdf->SetFont($sFonte,"",7);
-  	     $pdf->cell(25, $iAlt, $oElemento->o56_elemento, 0 , 0, "R" );
+  	     $pdf->cell(25, $iAlt, substr($oElemento->o56_elemento,1,12), 0 , 0, "R" );
   	     $pdf->SetFont($sFonte,"",5);
   	     $pdf->cell(65, $iAlt, "{$oElemento->o56_descr} - Rec: {$oElemento->o08_recurso}", 0 , 0, "L" );
   	     $nTotal = 0;
