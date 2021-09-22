@@ -381,7 +381,7 @@ switch($oParam->exec) {
             $oItem      = new stdClass();
             $oItem->pc01_codmater                   = $oItensLicitacao->pc01_codmater;
             $oItem->pc01_descrmater                 = urlencode($oItensLicitacao->pc01_descrmater);
-            $oItem->z01_nome                        = $oItensLicitacao->z01_nome;
+            $oItem->z01_nome                        = urlencode($oItensLicitacao->z01_nome);
             $oItem->m61_descr                       = $oItensLicitacao->m61_descr;
             $oItem->pc11_quant                      = $oItensLicitacao->pc11_quant;
             $oItem->pc23_valor                      = $oItensLicitacao->pc23_valor;
