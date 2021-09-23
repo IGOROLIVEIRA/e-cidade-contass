@@ -536,7 +536,6 @@ if (count($aParametrosEmpenho) > 0) {
                 </td>
             </tr>
         </table>
-        <input type="hidden" name="lObrigaContaPagadora" id="lObrigaContaPagadora" value="<?= $oParam->e30_obrigactapagliq ?>" />
 </form>
 </center>
 <div style='position:absolute;top: 200px; left:15px;
@@ -2233,12 +2232,12 @@ if (count($aParametrosEmpenho) > 0) {
         iContaSelecionada       = elemento.getElementsByTagName("div")[0].textContent;
         sDescConta              = elemento.getElementsByTagName("span")[0].textContent
 
-        if (iContaPagadoraPadrao != '' && $('lObrigaContaPagadora').value == 't') {
+        if (iContaPagadoraPadrao != '') {
             
             if (iContaSelecionada != iContaPagadoraPadrao) {
 
-                sMsgConfirm = 'A conta selecionada é diferente da Conta Pagadora informada na liquidação. '; 
-                sMsgConfirm += 'Essa alteração substitui a conta informada anteriormente. \n \nDeseja prosseguir?';
+                sMsgConfirm = 'A conta selecionada é diferente da Conta Pagadora informada anteriormente. '; 
+                sMsgConfirm += 'Essa ação substituirá os dados. \n \nDeseja prosseguir?';
                 
                 if (!confirm(sMsgConfirm)){
                     return false;
