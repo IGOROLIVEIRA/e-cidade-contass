@@ -21,7 +21,8 @@ if (isset($alterar)) {
     for ($iContMes = $rh171_mes; $iContMes <= 13; $iContMes++) {
         
         $clrhvinculodotpatronais->alterar(null, $rh171_orgaoorig, $rh171_unidadeorig, $rh171_projativorig,
-                                            $rh171_recursoorig, $iContMes, $iAnoUsu, $iInstit);
+                                            $rh171_recursoorig, $rh171_programaorig, $rh171_funcaoorig, $rh171_subfuncaoorig,
+                                            $iContMes, $iAnoUsu, $iInstit);
         
         if ($clrhvinculodotpatronais->erro_status == 0) {
             $sql_erro = true;
@@ -45,7 +46,13 @@ if (isset($alterar)) {
                 orcprojativorig.o55_descr   as o55_descr_orig,
                 orcprojativnov.o55_descr    as o55_descr_nov,
                 orctiporecorig.o15_descr    as o15_descr_orig,
-                orctiporecnov.o15_descr     as o15_descr_nov";
+                orctiporecnov.o15_descr     as o15_descr_nov,
+                orcprogramaorig.o54_descr   as o54_descr_orig,
+                orcprogramanov.o54_descr    as o54_descr_nov,
+                orcfuncaoorig.o52_descr     as o52_descr_orig,
+                orcfuncaonov.o52_descr      as o52_descr_nov,
+                orcsubfuncaoorig.o53_descr  as o53_descr_orig,
+                orcsubfuncaonov.o53_descr   as o53_descr_nov";
     $result = $clrhvinculodotpatronais->sql_record($clrhvinculodotpatronais->sql_query($chavepesquisa, $sCampos)); 
     db_fieldsmemory($result,0);
     $db_botao = true;
@@ -56,7 +63,10 @@ if (isset($alterar)) {
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
+<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

@@ -1852,7 +1852,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
   unset($pdf1->arrayvalreceitas);
 
   $nTotalDebito = 0;
-  $vlrhonorarios += 0;
+  $vlrhonorarios = 0;
   for ($x = 0; $x < $intnumrows; $x ++) {
 
     db_fieldsmemory($rsReceitas, $x);

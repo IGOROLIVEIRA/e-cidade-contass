@@ -273,7 +273,7 @@ class cl_conplano {
       }
 
       if(($this->c60_tipolancamento != null) || ($this->c60_tipolancamento != "") ){
-        if(isset($subtipo) || $subtipo == " "){
+        if(isset($subtipo) && $subtipo == " "){
         $this->erro_sql = " Campo sub tipolancamento nao Informado.";
         $this->erro_campo = "c60_subtipolancamento";
         $this->erro_banco = "";

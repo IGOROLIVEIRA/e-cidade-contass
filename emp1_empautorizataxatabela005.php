@@ -231,8 +231,8 @@ if (isset($alterar) && !$sqlerro) {
       }
     }
   }
-
-  db_fim_transacao($sqlerro);
+    db_fim_transacao($sqlerro);
+    db_redireciona("emp1_empautorizataxatabela005.php");
 } else if (isset($chavepesquisa)) {
   $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
   db_fieldsmemory($result, 0);
@@ -367,7 +367,7 @@ if (isset($e54_numcgm) && !empty($e54_numcgm)) {
 <?
 if (isset($erro_msg)) {
   db_msgbox($erro_msg);
-  db_redireciona("emp1_empautorizataxatabela005.php");
+//  db_redireciona("emp1_empautorizataxatabela005.php");
 }
 //////////////////////////////////////////////////
 

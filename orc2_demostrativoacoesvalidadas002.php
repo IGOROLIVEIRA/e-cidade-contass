@@ -98,6 +98,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
                               WHEN o55_tipo = 1 THEN 'Projeto'
                               WHEN o55_tipo = 2 THEN 'Atividade'
                               WHEN o55_tipo = 3 THEN 'Operações Especiais'
+                              WHEN o55_tipo = 9 THEN 'Reserva de Contigência'
                           END AS tipo,
                           round(CASE
                                     WHEN ppadotacao.o08_projativ IS NULL THEN sum(o58_valor)
@@ -137,6 +138,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
                               WHEN o55_tipo = 1 THEN 'Projeto'
                               WHEN o55_tipo = 2 THEN 'Atividade'
                               WHEN o55_tipo = 3 THEN 'Operações Especiais'
+                              WHEN o55_tipo = 9 THEN 'Reserva de Contigência'
                           END AS tipo,
                           round(sum(o05_valor),0) AS valor
                    FROM ppadotacao

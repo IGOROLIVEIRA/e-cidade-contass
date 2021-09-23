@@ -198,7 +198,7 @@ $clrotulo->label("pc01_descrmater");
     </table>
 
     <center>
-      <input type="submit" value="Salvar">
+      <input type="submit" value="Salvar" id="salvar">
     </center>
   </form>
 </div>
@@ -389,6 +389,12 @@ function validaForm(fORM) {
       itens: itensEnviar
 
     }, retornoAjax);
+
+    let botao = $('salvar');
+
+      if(botao != null){
+          botao.disabled = true;
+      }
 
   } catch(e) {
 

@@ -38,6 +38,18 @@ $clrhvinculodotpatronais->rotulo->label();
                     <td>Recurso Dotação Original:</td>
                     <td><? db_input('rh171_recursoorig', 10, $Irh171_recursoorig, true, "text", 4, "", "chave_rh171_recursoorig"); ?></td>
                 </tr>
+                <tr>
+                    <td>Programa Dotação Original:</td>
+                    <td><? db_input('rh171_programaorig', 10, $Irh171_programaorig, true, "text", 4, "", "chave_rh171_programaorig"); ?></td>
+                </tr>
+                <tr>
+                    <td>Função Dotação Original:</td>
+                    <td><? db_input('rh171_funcaoorig', 10, $Irh171_funcaoorig, true, "text", 4, "", "chave_rh171_funcaoorig"); ?></td>
+                </tr>
+                <tr>
+                    <td>Subfuncao Dotação Original:</td>
+                    <td><? db_input('rh171_subfuncaoorig', 10, $Irh171_subfuncaoorig, true, "text", 4, "", "chave_rh171_subfuncaoorig"); ?></td>
+                </tr>
             </table>
         </fieldset>
         <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
@@ -55,6 +67,12 @@ $clrhvinculodotpatronais->rotulo->label();
                     rh171_projativnov as dl_Proj_Ativ_Novo,
                     rh171_recursoorig as dl_Recurso_Original,
                     rh171_recursonov as dl_Recurso_Novo,
+                    rh171_programaorig as dl_Programa_Original,
+                    rh171_programanov as dl_Programa_Novo,
+                    rh171_funcaoorig as dl_Funcao_Original,
+                    rh171_funcaonov as dl_Funcao_Novo,
+                    rh171_subfuncaoorig as dl_Subfuncao_Original,
+                    rh171_subfuncaonov as dl_Subfuncao_Novo,
                     rh171_mes";
         
         $sWhere = null;
@@ -74,6 +92,18 @@ $clrhvinculodotpatronais->rotulo->label();
 
         if (isset($chave_rh171_recursoorig) && !empty($chave_rh171_recursoorig)) {
             $aWhere[] = " rh171_recursoorig = {$chave_rh171_recursoorig} ";
+        }
+
+        if (isset($chave_rh171_programaorig) && !empty($chave_rh171_programaorig)) {
+            $aWhere[] = " rh171_programaorig = {$chave_rh171_programaorig} ";
+        }
+
+        if (isset($chave_rh171_funcaoorig) && !empty($chave_rh171_funcaoorig)) {
+            $aWhere[] = " rh171_funcaoorig = {$chave_rh171_funcaoorig} ";
+        }
+
+        if (isset($chave_rh171_subfuncaoorig) && !empty($chave_rh171_subfuncaoorig)) {
+            $aWhere[] = " rh171_subfuncaoorig = {$chave_rh171_subfuncaoorig} ";
         }
 
         $aWhere[] = " rh171_anousu = ".db_getsession("DB_anousu");

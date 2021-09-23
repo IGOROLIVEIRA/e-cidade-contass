@@ -42,6 +42,11 @@ ini_set("error_reporting","E_ALL & ~NOTICE");
 
 $clagata = new cl_dbagata("projetos/modelo_habite.agt");
 
+$oInstit = new Instituicao(db_getsession('DB_instit'));
+if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO) {
+    $clagata = new cl_dbagata("projetos/modelo_habite_buritizeiro.agt");
+}
+
 $api     = $clagata->api;
 
 $sCaminhoSalvoSxw = "tmp/carta_habite_" . date('YmdHis') . db_getsession("DB_id_usuario") . ".sxw";

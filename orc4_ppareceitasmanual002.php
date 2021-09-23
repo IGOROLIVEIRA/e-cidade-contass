@@ -75,7 +75,7 @@ if(isset($alterar)){
    //busca valores dos outros anos
    $aValores = array();
    $oDaoPpaEstimativa   = db_utils::getdao('ppaestimativareceita');
-   $sWhere              = "o06_codrec = $o06_codrec AND o06_ppaversao = $o06_ppaversao AND o05_base = '$o05_base'";
+   $sWhere              = "o06_codrec = $o06_codrec AND o06_ppaversao = $o06_ppaversao AND o05_base = '$o05_base' AND c61_instit = ".db_getsession("DB_instit");
    $sSqlPpaEstimativa   = $oDaoPpaEstimativa->sql_query_analitica(null, "o05_sequencial, o05_valor, o06_anousu", 'o06_anousu', $sWhere);
    $rsPpaEstimativa     = $oDaoPpaEstimativa->sql_record($sSqlPpaEstimativa);
    $aValores            = db_utils::getcollectionbyrecord($rsPpaEstimativa);

@@ -189,11 +189,13 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
         CASE
         WHEN ac16_sequencial IS NULL THEN 2
+        WHEN ac16_dataassinatura IS NULL THEN 4
         ELSE 1
         END AS despdeccontrato,
         ' '::char AS codorgaorespcontrato,
+        ac16_acordosituacao,
 
-        CASE WHEN ac16_sequencial IS NULL THEN NULL ELSE (SELECT CASE
+        CASE WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL ELSE (SELECT CASE
         WHEN o41_subunidade != 0
         OR NOT NULL THEN lpad((CASE
         WHEN o40_codtri = '0'
@@ -224,16 +226,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         END AS codunidadesubrespcontrato,
 
         CASE
-        WHEN ac16_sequencial IS NULL THEN NULL
+        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL
         WHEN ac16_numeroacordo IS NULL THEN ac16_numero
         ELSE ac16_numeroacordo
         END AS nrocontrato,
         CASE
-        WHEN ac16_sequencial IS NULL THEN NULL
+        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL
         ELSE ac16_dataassinatura
         END AS dataassinaturacontrato,
         CASE
-        WHEN ac16_sequencial IS NULL THEN NULL
+        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL
         ELSE ac26_numeroaditamento
         END AS nrosequencialtermoaditivo,
         ac35_dataassinaturatermoaditivo AS dataassinaturatermoaditivo,
@@ -346,7 +348,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         LEFT JOIN acordoitemexecutado on ac29_sequencial = ac19_acordoitemexecutado
         LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
         LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
-        LEFT JOIN acordo on ac26_acordo = ac16_sequencial AND ac16_acordosituacao = 4
+        LEFT JOIN acordo on ac26_acordo = ac16_sequencial
         LEFT JOIN acordoposicaoaditamento ON ac35_acordoposicao = ac26_sequencial
 
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
@@ -485,7 +487,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
 
 
-        if ($oEmpenho10->despdeccontrato == 1) {
+        if ($oEmpenho10->despdeccontrato == 1 && $oEmpenho10->ac16_acordosituacao == 2) {
+            $oDadosEmpenho10->si106_despdeccontrato = 1; // campo 17
+        } else if ($oEmpenho10->despdeccontrato == 1 || $oEmpenho10->despdeccontrato == 4) {
           $oDadosEmpenho10->si106_despdeccontrato = 4; // campo 17
         } else {
           $oDadosEmpenho10->si106_despdeccontrato = 2; // campo 17

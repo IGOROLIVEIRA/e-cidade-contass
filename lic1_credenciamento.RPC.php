@@ -227,9 +227,10 @@ try{
                 //Verifica itens obra
                 $aPcmater = $clliclicita->getPcmaterObras($oParam->licitacao);
                 foreach ($aPcmater as $item){
+
                   $rsverifica = $cllicitemobra->sql_record($cllicitemobra->sql_query(null,"*",null,"obr06_pcmater = $item->pc16_codmater"));
                   if(pg_num_rows($rsverifica) == 0){
-                    throw new Exception ("Itens obras não cadastrados");
+                    throw new Exception ("Itens $item->pc16_codmater obras não cadastrados");
                   }
                 }
               }

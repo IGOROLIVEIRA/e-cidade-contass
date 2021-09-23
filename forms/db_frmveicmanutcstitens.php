@@ -572,6 +572,37 @@ db_app::load("estilos.css, grid.style.css");
         }
     }
     ?>
+    <?php
+    if(isset($itens)){
+        
+        foreach (json_decode(str_replace("\\","",utf8_encode($itens))) as $item) {
+
+            $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+            $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+            $valor = str_replace($what, $by, $item->ve63_descr);
+            $valorDescr = $valor; 
+            if($item->ve62_veiculos!=""){
+                echo "incluir_item_php('".$item->ve62_veiculos."',";
+                echo "'".$valorDescr."',";
+                echo "'".$item->ve63_quant."',";
+                echo "'".$item->ve63_vlruni."',";
+                echo "'".$item->ve64_pcmater."',";
+                echo "'".$item->pc01_descrmater."'); ";
+            }
+            
+            
+        }
+    }
+    ?>
+
+    function mostrarCadastro(){
+        var valItem = document.getElementById("ve62_itensempenho").value;
+        if(valItem==2){
+            document.getElementById("itensCadastro").style.display = "block";  
+        }
+        if(valItem==1){
+            document.getElementById("itensCadastro").style.display = "none";  
+        }
 
     function mostrarCadastro(){
         var valItem = document.getElementById("ve62_itensempenho").value;

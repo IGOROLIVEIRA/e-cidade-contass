@@ -38,7 +38,7 @@ contrato = function () {
         oParam.credenciamento = $F('tipodispenca');
         oParam.addNegation    = negation;
         oParam.tipoCompras = tipoCompras;
-        js_divCarregando("Aguarde, carregando as licitações...", "msgBox");
+        js_divCarregando("Aguarde, carregando as licita??es...", "msgBox");
         var oAjax   = new Ajax.Request(
             sURL,
             {
@@ -57,7 +57,7 @@ contrato = function () {
         if ($F('ac16_origem') == 1) {
             sTitulo = "Processo de compras";
         } else {
-            sTitulo = "Licitações";
+            sTitulo = "Licita??es";
         }
         var iLarguraJanela = 1200;
         var iAlturaJanela  = document.body.clientHeight;
@@ -76,7 +76,7 @@ contrato = function () {
         oJanela.setContent(sContent);
         oMessageBoard = new DBMessageBoard('messageboardlicitacao',
             sTitulo +" vencidas por "+$F('nomecontratado'),
-            'Escolha as licitações que farão parte do contrato',
+            'Escolha as licita??es que far?o parte do contrato',
             $('windowwndLicitacoesVencidas_content')
         );
         oJanela.setShutDownFunction(function() {
@@ -99,7 +99,7 @@ contrato = function () {
         oGridDados.selectAll = function(idObjeto, sClasse, sLinha) {}; //reeinscrita a funcao selecionar todos, pois somente um sera permitido
 
         /**
-         * reescrita função selectSingle para permitir somente um item selecionados
+         * reescrita fun??o selectSingle para permitir somente um item selecionados
          */
         oGridDados.selectSingle = function (oCheckbox,sRow,oRow) {
 
@@ -362,8 +362,8 @@ contrato = function () {
         var iQtdRenovacao             = $F('ac16_qtdrenovacao');
         var iUnidRenovacao            = $F('ac16_tipounidtempo');
         var sProcesso                 = encodeURIComponent($F('ac16_numeroprocesso'));
-        var sFormaFornecimento        = encodeURIComponent($F('ac16_formafornecimento'));
-        var sFormaPagamento           = encodeURIComponent($F('ac16_formapagamento'));
+        var sFormaFornecimento        = $F('ac16_formafornecimento');
+        var sFormaPagamento           = $F('ac16_formapagamento');
         var lEmergencial              = $F('ac26_emergencial')=='f'?false:true;
         var lPeriodoComercial         = $F('ac16_periodocomercial');
         var iCategoriaAcordo          = $F('ac50_sequencial');
@@ -391,7 +391,7 @@ contrato = function () {
             }
 
             if(['5', '6', '7', '8', '9'].includes(iTipoOrigem) && !iLicoutroorgao){
-                alert('Informe uma Licitação por Outro Órgão.');
+                alert('Informe uma Licitação por Outro orgão.');
                 $('ac16_licoutroorgao').focus();
                 return false;
             }
@@ -429,25 +429,13 @@ contrato = function () {
             $('ac16_contratado').focus();
             return false;
         }
-        // if (iContratdo_Nat == 0 && iOrigem == 2) {
 
-        //     alert('Natureza do contrato divergente da natureza do objeto da Licitação');
-        //     $('ac16_contratado').focus();
-        //     $('ac16_acordogrupo').focus();
-        //     return false;
-        // }
         if (iDepartamentoResponsavel == "") {
 
             alert('Informe o Departamento Responsável.');
             $('ac16_deptoresponsavel').focus();
             return false;
         }
-        // if (iComissao == "") {
-
-        //     alert('Informe a comissão de vistoria do acordo.');
-        //     $('ac16_acordocomissão').focus();
-        //     return false;
-        // }
 
         if (iAnousu == "") {
 
@@ -579,8 +567,6 @@ contrato = function () {
         $("ac16_datafim").style.backgroundColor    = "#DEB887";
         $("ac16_anousu").style.backgroundColor    = "#DEB887";
 
-
-
         //Desabilita o botao "D" do calendario
         //getByName do prototype
         var btDataInicio = $$('[name="dtjs_ac16_datainicio"]')[0];
@@ -599,7 +585,7 @@ contrato = function () {
 
         for (var iAncora = 0; iAncora < aAncoras.length; iAncora++) {
 
-            //iAncora 4 é referente a âncora Categoria.
+            //iAncora 4 ? referente a ancora Categoria.
             if (iAncora != 0) {
 
                 aAncoras[iAncora].setAttribute("onclick", "");

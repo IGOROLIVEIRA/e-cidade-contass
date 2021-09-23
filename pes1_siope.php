@@ -406,7 +406,14 @@ translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119
 '0,00' || ';' ||
 translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,118,1118,218,219,166, 266,167, 267) then -x.valor 
                    when x.pd=1 and x.rh25_recurso in (119,1119,118,1118,218,219,166, 266,167, 267) then x.valor 
-                   else 0 end ),2))::varchar),'.',',') 
+                   else 0 end ),2))::varchar),'.',',') || ';' ||
+CASE WHEN rh02_art61ldb1 = 't' THEN 'S' ELSE 'N' END  || ';' ||
+CASE WHEN rh02_art61ldb2 = 't' THEN 'S' ELSE 'N' END || ';' ||
+CASE WHEN rh02_art61ldb3 = 't' THEN 'S' ELSE 'N' END || ';' ||
+CASE WHEN rh02_art61ldb4 = 't' THEN 'S' ELSE 'N' END || ';' ||
+CASE WHEN rh02_art61ldb5 = 't' THEN 'S' ELSE 'N' END || ';' ||
+CASE WHEN rh02_art1leiprestpsiccologia = 't' THEN 'S' ELSE 'N' END || ';' ||
+CASE WHEN rh02_art1leiprestservsocial = 't' THEN 'S' ELSE 'N' END 
 
 
 AS dado  from
@@ -426,6 +433,13 @@ AS dado  from
             rh02_seqpes,
             rh02_hrssem,
             rh02_tipcatprof,
+            rh02_art61ldb1,
+            rh02_art61ldb2,
+            rh02_art61ldb3,
+            rh02_art61ldb4,
+            rh02_art61ldb5,
+            rh02_art1leiprestpsiccologia,
+            rh02_art1leiprestservsocial,
             h13_tipocargo,
             rh02_segatuacao,
             rh02_salari,
@@ -478,6 +492,13 @@ AS dado  from
               rh02_seqpes,
               rh02_hrssem,
               rh02_tipcatprof,
+              rh02_art61ldb1,
+              rh02_art61ldb2,
+              rh02_art61ldb3,
+              rh02_art61ldb4,
+              rh02_art61ldb5,
+              rh02_art1leiprestpsiccologia,
+              rh02_art1leiprestservsocial,
               h13_tipocargo,
               rh02_segatuacao,
               rh02_salari,
@@ -502,6 +523,13 @@ SELECT
             rh02_seqpes,
             rh02_hrssem,
             rh02_tipcatprof,
+            rh02_art61ldb1,
+            rh02_art61ldb2,
+            rh02_art61ldb3,
+            rh02_art61ldb4,
+            rh02_art61ldb5,
+            rh02_art1leiprestpsiccologia,
+            rh02_art1leiprestservsocial,
             h13_tipocargo,
             rh02_segatuacao,
             rh02_salari,
@@ -553,6 +581,13 @@ SELECT
               rh02_seqpes,
               rh02_hrssem,
               rh02_tipcatprof,
+              rh02_art61ldb1,
+              rh02_art61ldb2,
+              rh02_art61ldb3,
+              rh02_art61ldb4,
+              rh02_art61ldb5,
+              rh02_art1leiprestpsiccologia,
+              rh02_art1leiprestservsocial,
               h13_tipocargo,
               rh02_segatuacao,
               rh02_salari,
@@ -577,6 +612,13 @@ SELECT
             rh02_seqpes,
             rh02_hrssem,
             rh02_tipcatprof,
+            rh02_art61ldb1,
+            rh02_art61ldb2,
+            rh02_art61ldb3,
+            rh02_art61ldb4,
+            rh02_art61ldb5,
+            rh02_art1leiprestpsiccologia,
+            rh02_art1leiprestservsocial,
             h13_tipocargo,
             rh02_segatuacao,
             rh02_salari,
@@ -628,6 +670,13 @@ SELECT
               rh02_seqpes,
               rh02_hrssem,
               rh02_tipcatprof,
+              rh02_art61ldb1,
+              rh02_art61ldb2,
+              rh02_art61ldb3,
+              rh02_art61ldb4,
+              rh02_art61ldb5,
+              rh02_art1leiprestpsiccologia,
+              rh02_art1leiprestservsocial,
               h13_tipocargo,
               rh02_segatuacao,
               rh02_salari,
@@ -653,6 +702,13 @@ SELECT
             rh02_seqpes,
             rh02_hrssem,
             rh02_tipcatprof,
+            rh02_art61ldb1,
+            rh02_art61ldb2,
+            rh02_art61ldb3,
+            rh02_art61ldb4,
+            rh02_art61ldb5,
+            rh02_art1leiprestpsiccologia,
+            rh02_art1leiprestservsocial,
             h13_tipocargo,
             rh02_segatuacao,
             rh02_salari,
@@ -704,6 +760,13 @@ SELECT
               rh02_seqpes,
               rh02_hrssem,
               rh02_tipcatprof,
+              rh02_art61ldb1,
+              rh02_art61ldb2,
+              rh02_art61ldb3,
+              rh02_art61ldb4,
+              rh02_art61ldb5,
+              rh02_art1leiprestpsiccologia,
+              rh02_art1leiprestservsocial,
               h13_tipocargo,
               rh02_segatuacao,
               rh02_salari,
@@ -714,7 +777,7 @@ SELECT
               ) as x
 
 
-group by x.rh02_mesusu,x.z01_cgccpf,x.rh01_regist,x.z01_nome,x.rh55_inep,x.rh55_descr,x.rh02_hrssem,x.rh02_tipcatprof,x.h13_tipocargo,x.rh02_segatuacao,x.rh02_salari;
+group by x.rh02_mesusu,x.z01_cgccpf,x.rh01_regist,x.z01_nome,x.rh55_inep,x.rh55_descr,x.rh02_hrssem,x.rh02_tipcatprof,x.rh02_art61ldb1,x.rh02_art61ldb2,x.rh02_art61ldb3,x.rh02_art61ldb4,x.rh02_art61ldb5,x.rh02_art1leiprestpsiccologia,x.rh02_art1leiprestservsocial,x.h13_tipocargo,x.rh02_segatuacao,x.rh02_salari;
 
 ";
 }

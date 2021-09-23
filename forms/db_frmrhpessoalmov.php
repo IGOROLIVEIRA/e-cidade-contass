@@ -77,7 +77,7 @@ if(isset($db_opcaoal)){
 
     $db_opcao = 1;
     $db_botao=true;
-    if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro == false && !$lErro ) ){
+    if(isset($novo) || (isset($alterar) && $sqlerro == false) ||   isset($excluir) || (isset($incluir) && $sqlerro == false ) ){
 
         $rh02_anousu   = "";
         $rh02_mesusu   = "";
@@ -165,52 +165,6 @@ if(isset($db_opcaoal)){
                                     <?
                                     db_input('rh02_mesusu',2,$Irh02_mesusu,true,'text',3,"")
                                     ?>
-                                </td>
-
-                                <td nowrap title="Categoria Profissional SIOPE" align="right">
-                                    <strong>C.P Siope: </strong>
-                                </td>
-                                <td nowrap title="Cadastrar somente servidores da educação">
-                                    <?
-                                    $tipcatprof = array(
-                                        0 => 'Nenhum',
-                                        1 => 'Docente habilitado em curso de nível médio',
-                                        2 => 'Docente habilitado em curso de pedagogia',
-                                        3 => 'Docente habilitado em curso de licenciatura plena',
-                                        4 => 'Docente habilitado em programa especial de formação pedagógica de docentes',
-                                        5 => 'Docente pós-graduado em cursos de especialização para formação de docentes para educação profissional técnica de nível médio',
-                                        6 => 'Docente graduado bacharel e tecnólogo com diploma de mestrado ou doutorado na área do componente curricular da educação profissional técnica de nível médio',
-                                        7 => 'Docente professor indígena sem prévia formação pedagógica',
-                                        8 => 'Docente instrutor, tradutor e intérprete de libras.',
-                                        9 => 'Docente professor de comunidade quilombola',
-                                        10 => 'Profissionais não habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.',
-                                        11 => 'Profissionais graduados, bacharéis e tecnólogos autorizados a atuar como docentes, em caráter precário e provisório, nos anos finais do ensino fundamental e no ensino médio e médio integrado à educação.',
-                                        12 => 'Profissionais experientes, não graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.',
-                                        13 => 'Profissionais em efetivo exercício no âmbito da educação infantil e ensino fundamental.',
-                                        14 => 'Auxiliar/Assistente Educacional',
-                                        15 => 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.',
-                                        16 => 'Profissionais que atuam na realização das atividades requeridos nos ambientes de secretaria, de manutenção em geral.',
-                                    );
-                                    db_select("rh02_tipcatprof",$tipcatprof,true,$db_opcao, "onchange='js_mostrar_segatuacao();'");
-                                    ?>
-                                    <span id="divSegatuacao">
-                                        <strong><?=@$Lrh02_segatuacao ?> </strong>
-                                        <?
-                                        $segatuacao = array(
-                                            0 => 'Selecione',
-                                            1 => 'Creche',
-                                            2 => 'Pré-escola',
-                                            3 => 'Fundamental 1',
-                                            4 => 'Fundamental 2',
-                                            5 => 'Médio',
-                                            6 => 'Profissional',
-                                            7 => 'Administrativo',
-                                            8 => 'EJA',
-                                            9 => 'Especial',
-                                        );
-                                        db_select("rh02_segatuacao",$segatuacao,true,$db_opcao);
-                                        ?>
-                                    </span>
                                 </td>
                             </tr>
                             <tr>
@@ -709,8 +663,8 @@ if(isset($db_opcaoal)){
             </tr>
             <tr>
                 <td align="center">
-                    <fieldset>
-                        <legend align="left"><b>RESCISÃO</b></legend>
+                    <fieldset id="ctnRescisao">
+                        <legend align="left"><b>Rescisão</b></legend>
                         <center>
                             <table width="100%">
                                 <tr>
@@ -819,6 +773,126 @@ if(isset($db_opcaoal)){
                                 </tr>
                             </table>
                         </center>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <fieldset id="ctnSiope">
+                        <legend align="left"><b>Siope</b></legend>
+                        <center>
+                            <table width="100%">
+                                <tr>
+                                <td nowrap title="Categoria Profissional SIOPE" align="left" colspan="2">
+                                    <strong><?=@$Lrh02_tipcatprof ?> </strong>
+                                    <?
+                                    $tipcatprof = array(
+                                        0 => 'Nenhum',
+                                        1 => 'Docente habilitado em curso de nível médio',
+                                        2 => 'Docente habilitado em curso de pedagogia',
+                                        3 => 'Docente habilitado em curso de licenciatura plena',
+                                        4 => 'Docente habilitado em programa especial de formação pedagógica de docentes',
+                                        5 => 'Docente pós-graduado em cursos de especialização para formação de docentes para educação profissional técnica de nível médio',
+                                        6 => 'Docente graduado bacharel e tecnólogo com diploma de mestrado ou doutorado na área do componente curricular da educação profissional técnica de nível médio',
+                                        7 => 'Docente professor indígena sem prévia formação pedagógica',
+                                        8 => 'Docente instrutor, tradutor e intérprete de libras.',
+                                        9 => 'Docente professor de comunidade quilombola',
+                                        10 => 'Profissionais não habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.',
+                                        11 => 'Profissionais graduados, bacharéis e tecnólogos autorizados a atuar como docentes, em caráter precário e provisório, nos anos finais do ensino fundamental e no ensino médio e médio integrado à educação.',
+                                        12 => 'Profissionais experientes, não graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.',
+                                        13 => 'Profissionais em efetivo exercício no âmbito da educação infantil e ensino fundamental.',
+                                        14 => 'Auxiliar/Assistente Educacional',
+                                        15 => 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.',
+                                        16 => 'Profissionais que atuam na realização das atividades requeridos nos ambientes de secretaria, de manutenção em geral.',
+                                    );
+                                    db_select("rh02_tipcatprof",$tipcatprof,true,$db_opcao, "");
+                                    ?>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <strong><?=@$Lrh02_segatuacao ?> </strong>
+                                    <?
+                                    $segatuacao = array(
+                                        0 => 'Selecione',
+                                        1 => 'Creche',
+                                        2 => 'Pré-escola',
+                                        3 => 'Fundamental 1',
+                                        4 => 'Fundamental 2',
+                                        5 => 'Médio',
+                                        6 => 'Profissional',
+                                        7 => 'Administrativo',
+                                        8 => 'EJA',
+                                        9 => 'Especial',
+                                    );
+                                    db_select("rh02_segatuacao",$segatuacao,true,$db_opcao);
+                                    ?>
+                                </td>
+                                </tr>
+                                <?
+                                $aArtSiopeOpcao = array(
+                                    'f' => 'Não',
+                                    't' => 'Sim',
+                                );
+                                $cldbsyscampo = db_utils::getDao('db_syscampo');
+                                $rsArtSiopeCampos = $cldbsyscampo->sql_record($cldbsyscampo->sql_query_file(null, "descricao", null, "nomecam in ('rh02_art61ldb1','rh02_art61ldb2','rh02_art61ldb3','rh02_art61ldb4','rh02_art61ldb5','rh02_art1leiprestpsiccologia','rh02_art1leiprestservsocial')"));
+                                $aArtSiopeCampos = db_utils::getColectionByRecord($rsArtSiopeCampos);
+                                ?>
+                                <tr>
+                                    <td nowrap="nowrap" title="<?php echo $aArtSiopeCampos[0]->descricao; ?>" align="left" colspan="2">
+                                        <?
+                                        db_select("rh02_art61ldb1",$aArtSiopeOpcao,true,$db_opcao);
+                                        ?>
+                                        <strong><?=@substr($aArtSiopeCampos[0]->descricao, 0, 140) ?> </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap="nowrap" title="<?php echo $aArtSiopeCampos[1]->descricao; ?>" align="left" colspan="2">
+                                        <?
+                                        db_select("rh02_art61ldb2",$aArtSiopeOpcao,true,$db_opcao);
+                                        ?>
+                                        <strong><?=@substr($aArtSiopeCampos[1]->descricao, 0, 140) ?> </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap="nowrap" title="<?php echo $aArtSiopeCampos[2]->descricao; ?>" align="left" colspan="2">
+                                        <?
+                                        db_select("rh02_art61ldb3",$aArtSiopeOpcao,true,$db_opcao);
+                                        ?>
+                                        <strong><?=@substr($aArtSiopeCampos[2]->descricao, 0, 140) ?> </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap="nowrap" title="<?php echo $aArtSiopeCampos[3]->descricao; ?>" align="left" colspan="2">
+                                        <?
+                                        db_select("rh02_art61ldb4",$aArtSiopeOpcao,true,$db_opcao);
+                                        ?>
+                                        <strong><?=@substr($aArtSiopeCampos[3]->descricao, 0, 140) ?> </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap="nowrap" title="<?php echo $aArtSiopeCampos[4]->descricao; ?>" align="left" colspan="2">
+                                        <?
+                                        db_select("rh02_art61ldb5",$aArtSiopeOpcao,true,$db_opcao);
+                                        ?>
+                                        <strong><?=@substr($aArtSiopeCampos[4]->descricao, 0, 140) ?> </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap="nowrap" title="<?php echo $Trh02_art1leiprestpsiccologia; ?>" align="left" colspan="2">
+                                        <?
+                                        db_select("rh02_art1leiprestpsiccologia",$aArtSiopeOpcao,true,$db_opcao);
+                                        ?>
+                                        <strong><?=@substr($aArtSiopeCampos[5]->descricao, 0, 140) ?> </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap="nowrap" title="<?php echo $Trh02_art1leiprestservsocial; ?>" align="left" colspan="2">
+                                        <?
+                                        db_select("rh02_art1leiprestservsocial",$aArtSiopeOpcao,true,$db_opcao);
+                                        ?>
+                                        <strong><?=@substr($aArtSiopeCampos[6]->descricao, 0, 140) ?> </strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        <center>
                     </fieldset>
                 </td>
             </tr>
@@ -994,12 +1068,15 @@ if(isset($db_opcaoal)){
                 if(erro==true){
                     document.form1.rh02_lota.focus();
                     document.form1.rh02_lota.value = '';
+                } else {
+                    js_verifica_lotacao();
                 }
             }
             function js_mostrarhlota1(chave1,chave2){
                 document.form1.rh02_lota.value = chave1;
                 document.form1.r70_descr.value = chave2;
                 db_iframerhlota.hide();
+                js_verifica_lotacao();
             }
             function js_pesquisarh21_regpri(mostra){
 
@@ -1660,15 +1737,30 @@ if(isset($db_opcaoal)){
                 jan.moveTo(0,0);
             }
 
-            function js_mostrar_segatuacao() {
-                if($('rh02_tipcatprof').value != '0') {
-                    $('divSegatuacao').show();
-                } else {
-                    $('rh02_segatuacao').value = '0';
-                    $('divSegatuacao').hide();
-                }
+            document.getElementById("ctnContaBancariaServidor").firstElementChild.setAttribute("id", "ctnContaBancaria");
+            var oToogleContaBancaria = new DBToogle('ctnContaBancaria', true);
+            var oToogleRescisao = new DBToogle('ctnRescisao', true);
+            var oToogleSiope = new DBToogle('ctnSiope', false);
+
+            function js_verifica_lotacao() {
+                let oParam = new Object();
+                oParam.sMethod = 'consultaLotacaoRecurso';
+                oParam.iLotacao = $('rh02_lota').value;
+                var oAjax   = new Ajax.Request(
+                    'pes1_rhpessoalmov.RPC.php', 
+                    {
+                        method: 'post', 
+                        parameters: 'json='+Object.toJSON(oParam), 
+                        onComplete: js_retornoVerificaLotacao
+                    }
+                );
             }
-            js_mostrar_segatuacao();
+
+            function js_retornoVerificaLotacao(oAjax) {
+                var oRetorno = eval("("+oAjax.responseText+")");
+                oToogleSiope.show(oRetorno.lShow);
+            }
+            js_verifica_lotacao();
         </script>
         <?
 

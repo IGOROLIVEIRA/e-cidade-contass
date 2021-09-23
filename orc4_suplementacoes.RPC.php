@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -80,14 +80,14 @@ switch ($oParam->exec) {
         $oDaoPPAReceita   = db_utils::getDao("ppaestimativareceita");
         $sSqlDadosReceita = $oDaoPPAReceita->sql_query_analitica(null,
             "fc_estruturalreceitappa(o06_anousu,
-                                                                                   o06_sequencial, 
+                                                                                   o06_sequencial,
                                                                                     c61_instit) as estrutural,
                                                                o06_sequencial,
                                                                c61_codigo,
                                                                o57_descr,
                                                                o15_descr",
             null,
-            "o06_sequencial = {$oParam->iEstimativa} 
+            "o06_sequencial = {$oParam->iEstimativa}
                                                              and c61_instit=".db_getsession("DB_instit")
         );
         $rsDadosReceita = db_query($sSqlDadosReceita);
@@ -104,7 +104,7 @@ switch ($oParam->exec) {
         $sSqlSuplementacoes = $oDaoSuplementacao->sql_query_sup(null,
             "o46_codsup",
             null,
-            "o46_codlei={$oParam->iProjeto} 
+            "o46_codlei={$oParam->iProjeto}
                                                               and o49_codsup is null "
         );
         $rsSuplementacoes = $oDaoSuplementacao->sql_record($sSqlSuplementacoes);
@@ -159,7 +159,6 @@ switch ($oParam->exec) {
             $sSqlUsaLimite   = $clorcprojeto->sql_query_file($oParam->iProjeto, $campos = "o39_usalimite,o39_data", null,null);
             $rsUsaLimete     = $clorcprojeto->sql_record($sSqlUsaLimite);
             db_fieldsmemory ($rsUsaLimete);
-
             if ($o39_usalimite == 't') {
 
                 foreach ($aSuplementacao as $oSuplem) {
@@ -170,8 +169,7 @@ switch ($oParam->exec) {
 
                 if( $valorutilizado > $limiteloa ){
                     $oRetorno->status  = 2;
-                    $oRetorno->message = urlencode($eErro->getMessage());
-                    throw new BusinessException( "Valor Total SUPLEMENTADO R$".db_formatar($valorutilizado,'f')." maior que o AUTORIZADO R$".db_formatar($limiteloa,'f') );
+                    throw new BusinessException( "Processamento não permitido. O valor total suplementado ( R$".db_formatar($valorutilizado,'f')." ) é maior que o valor autorizado na Lei Orçamentária Anual ( R$".db_formatar($limiteloa,'f')." )");
                 }
 
             }

@@ -316,6 +316,7 @@ function imprimeSaldoExtratoBancario($pdf, $valor) {
     $pdf->Cell(20,5,"","TB",0,"R",1);
     $pdf->Cell(209,5, "SALDO DO EXTRATO BANCÁRIO (1):" ,"TB",0,"R",1);
     $pdf->Cell(25,5,"","TLB",0,"R",1);
+    $valor = (float) number_format($valor, 2, ".", "") == 0 ? abs($valor) : $valor;
     $pdf->Cell(25,5,db_formatar($valor,'f'),"TB",0,"R",1);
     $pdf->ln();
     $pdf->SetFont('Arial','',7);
@@ -336,6 +337,7 @@ function imprimeTotalMovContabilidade($pdf, $valor) {
     $pdf->Cell(20,5,"","TB",0,"R",1);
     $pdf->Cell(209,5,"SALDO NA CONTABILIDADE (6) = (1) + (2) + (3) - (4) - (5):" ,"TB",0,"R",1);
     $pdf->Cell(25,5,"","TLB",0,"R",1);
+    $valor = (float) number_format($valor, 2, ".", "") == 0 ? abs($valor) : $valor;
     $pdf->Cell(25,5,db_formatar($valor,'f')	,"TB",0,"R",1);
     $pdf->ln();
     $pdf->SetFont('Arial','',7);

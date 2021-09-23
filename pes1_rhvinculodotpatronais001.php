@@ -24,6 +24,9 @@ if (isset($incluir)) {
     $sWhere     .= " and rh171_unidadeorig = {$rh171_unidadeorig} ";
     $sWhere     .= " and rh171_projativorig = {$rh171_projativorig} ";
     $sWhere     .= " and rh171_recursoorig = {$rh171_recursoorig} ";
+    $sWhere     .= " and rh171_programaorig = {$rh171_programaorig} ";
+    $sWhere     .= " and rh171_funcaoorig = {$rh171_funcaoorig} ";
+    $sWhere     .= " and rh171_subfuncaoorig = {$rh171_subfuncaoorig} ";
     $sWhere     .= " and rh171_anousu = {$iAnoUsu} ";
     $sWhere     .= " and rh171_instit = {$iInstit} ";
     
@@ -64,7 +67,10 @@ if (isset($incluir)) {
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
+<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
