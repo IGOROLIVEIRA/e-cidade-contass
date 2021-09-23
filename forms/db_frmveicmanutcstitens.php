@@ -572,6 +572,37 @@ db_app::load("estilos.css, grid.style.css");
         }
     }
     ?>
+    <?php
+    if(isset($itens)){
+        
+        foreach (json_decode(str_replace("\\","",utf8_encode($itens))) as $item) {
+
+            $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+            $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+            $valor = str_replace($what, $by, $item->ve63_descr);
+            $valorDescr = $valor; 
+            if($item->ve62_veiculos!=""){
+                echo "incluir_item_php('".$item->ve62_veiculos."',";
+                echo "'".$valorDescr."',";
+                echo "'".$item->ve63_quant."',";
+                echo "'".$item->ve63_vlruni."',";
+                echo "'".$item->ve64_pcmater."',";
+                echo "'".$item->pc01_descrmater."'); ";
+            }
+            
+            
+        }
+    }
+    ?>
+
+    function mostrarCadastro(){
+        var valItem = document.getElementById("ve62_itensempenho").value;
+        if(valItem==2){
+            document.getElementById("itensCadastro").style.display = "block";  
+        }
+        if(valItem==1){
+            document.getElementById("itensCadastro").style.display = "none";  
+        }
 
     function mostrarCadastro(){
         var valItem = document.getElementById("ve62_itensempenho").value;
@@ -741,9 +772,9 @@ db_app::load("estilos.css, grid.style.css");
         var cell4 = document.form1.ve63_vlruni.value;
         var cell5 = document.form1.ve64_pcmater.value;
         var cell6 = document.form1.pc01_descrmater.value;
-        var result = document.form1.ve63_vlruni.value * document.form1.ve63_quant.value;
+        var result = parseFloat(document.form1.ve63_vlruni.value) * parseFloat(document.form1.ve63_quant.value);
         
-        var regex = /^[0-9.]+$/;
+        var regex = /^[\d,.?!]+$/;
         if( !regex.test(result) ) {
             alert('Usu�rio: Verificar os valores');
             return false;
@@ -1176,10 +1207,24 @@ var opSalva1 = 0;
       }else if(valUti==""){
          document.getElementById("result"+valor).value = "";
       }else{
-            var vlr =   document.getElementById("vrl"+valor).value;
+            var vlr =  document.getElementById("vrl"+valor).value;
+            
             const myArr = vlr.split(",");
-            vlr = myArr[0]+"."+myArr[1];
-            var resul = (quant*vlr);
+            if(myArr[1]==00){
+                vlr = myArr[0];
+                const myArr1 = vlr.split(".");
+                vlr = myArr1[0]+""+myArr1[1];
+            }else{
+                
+                valo1 = myArr[0];
+                retorno1 = valo1.split(".");
+                valo1 = retorno1[0]+""+retorno1[1];
+                vlr = valo1+"."+myArr[1];
+            }
+            
+            
+            resul = quant*parseFloat(vlr);
+            
             resul = js_formatar(resul.toFixed(2), "f",2);;
             document.getElementById("result"+valor).value = resul;
             opSalvar = 1;
@@ -1243,10 +1288,24 @@ var opSalva1 = 0;
                         oItem.quant      = aCells[5].getValue();       
                         oItem.quantUti   = aCells[6].getValue();
                         oItem.valor      = aCells[7].getValue();
-                        retorno          = oItem.valor.split(",");  
-                        oItem.valor      = retorno[0]+"."+retorno[1];
+                       
+                        retorno          = oItem.valor.split(",");
+                        if(retorno[1]==00){
+                            oItem.valor = retorno[0];
+                            retorno     = oItem.valor.split(".");
+                            if(retorno[1]==undefined){
+                                oItem.valor = retorno[0];
+                            }else{
+                                oItem.valor = retorno[0]+""+retorno[1];
+                            }
+                        }else{
+                            valor = retorno[0];
+                            retorno1 = valor.split(".");
+                            valor = retorno1[0]+""+retorno1[1];
+                            oItem.valor = valor+"."+retorno[1];
+                        }  
+                        
                         oItem.precoTo    = aCells[8].getValue();
-
                         document.getElementById("ve63_descr").value = oItem.descr;
                         document.getElementById("ve63_quant").value = oItem.quantUti;
                         document.getElementById("ve63_vlruni").value = oItem.valor;
