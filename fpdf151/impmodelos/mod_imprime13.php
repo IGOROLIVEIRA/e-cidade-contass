@@ -486,7 +486,7 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
   // TEXTO DOS ITENS
   if($volta_impressao == 0){
     $this->objpdf->Row(array(pg_result($this->recorddositens,$ii,$this->item),
-      pg_result($this->recorddositens,$ii,$this->codmater),
+      pg_result($this->recorddositens,$ii,$this->sequencial),
       pg_result($this->recorddositens,$ii,$this->quantitem),
       $unid,
       stripslashes($descricaoitem)."\n",
