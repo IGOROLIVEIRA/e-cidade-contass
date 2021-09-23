@@ -81,7 +81,7 @@ $clrotulo->label("l20_codigo");
         oGridItens.setCellAlign(new Array("center", "center", "left", 'right', 'right', 'right'));
         oGridItens.setCellWidth(new Array("10%" , "25%"     , '25%'          ,   '15%'    , '15%'        , '15%'            ));
         oGridItens.setHeader(new Array("Código", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
-        oGridItens.hasTotalizador = true;
+        oGridItens.hasTotalValue = true;
         oGridItens.show($('cntgriditens'));
 
         var width = $('cntgriditens').scrollWidth - 30;
@@ -204,9 +204,8 @@ $clrotulo->label("l20_codigo");
                 oDadosHint.sText     = sTextEvent;
                 aDadosHintGrid.push(oDadosHint);
             });
+            document.getElementById('gridItenstotalValue').innerText = js_formatar(nTotal, 'f');
             oGridItens.renderRows();
-            oGridItens.oFooter.rows[0].cells[4].innerHTML = "Valor Total:";
-            oGridItens.oFooter.rows[0].cells[5].innerHTML = js_formatar(nTotal, "f");
 
             aDadosHintGrid.each(function(oHint, id) {
                 var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
