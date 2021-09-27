@@ -255,8 +255,8 @@ cmnavarro:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@cmnavarro.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
-        - 'ssh -p22 contass@cmnavarro.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.4 "cd /var/www/e-cidade-git && git pull origin master "'
+        - 'ssh -p22 contass@10.251.27.4 "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
     environment: production
     only:
         - master
@@ -435,8 +435,8 @@ prefeituras:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@prefeituras "cd /var/www/e-cidade-git && git pull origin master "'
-        - 'ssh -p22 contass@prefeituras "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+        - 'ssh -o StrictHostKeyChecking=no contass@prefeituras.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
+        - 'ssh -p22 contass@prefeituras.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
     environment: production
     only:
         - master
@@ -445,8 +445,8 @@ cmpirapora:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@cmpirapora "cd /var/www/e-cidade-git && git pull origin master "'
-        - 'ssh -p22 contass@cmpirapora "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+        - 'ssh -o StrictHostKeyChecking=no contass@cmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
+        - 'ssh -p22 contass@cmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
     environment: production
     only:
         - master
@@ -455,8 +455,8 @@ pmlagoadospatos:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmlagoadospatos "cd /var/www/e-cidade-git && git pull origin master "'
-        - 'ssh -p22 contass@pmlagoadospatos "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmlagoadospatos.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
+        - 'ssh -p22 contass@pmlagoadospatos.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
     environment: production
     only:
         - master
@@ -475,8 +475,8 @@ pmsaoromao:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmsaoromao "cd /var/www/e-cidade-git && git pull origin master "'
-        - 'ssh -p22 contass@pmsaoromao "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmsaoromao.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
+        - 'ssh -p22 contass@pmsaoromao.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
     environment: production
     only:
         - master
@@ -485,8 +485,8 @@ pmnovaporteirinha:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmnovaporteirinha "cd /var/www/e-cidade && git pull origin master "'
-        - 'ssh -p22 contass@pmnovaporteirinha "cd /var/www/e-cidade && php deploy_git.php && ./updatedb/update.sh "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmnovaporteirinha.contassconsultoria.com.br "cd /var/www/e-cidade && git pull origin master "'
+        - 'ssh -p22 contass@pmnovaporteirinha.contassconsultoria.com.br "cd /var/www/e-cidade && php deploy_git.php && ./updatedb/update.sh "'
     environment: production
     only:
         - master
@@ -495,8 +495,8 @@ pmburitizeiro:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmburitizeiro "cd /var/www/e-cidade && git pull origin master "'
-        - 'ssh -p22 contass@pmburitizeiro "cd /var/www/e-cidade && php deploy_git.php && ./updatedb/update.sh "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.95 "cd /var/www/e-cidade && git pull origin master "'
+        - 'ssh -p22 contass@10.251.27.95 "cd /var/www/e-cidade && php deploy_git.php && ./updatedb/update.sh "'
     environment: production
     only:
         - master
