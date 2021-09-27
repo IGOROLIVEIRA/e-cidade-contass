@@ -3151,8 +3151,8 @@ class Acordo
                     $sNovaDtExecucaoInicio = DateTime::createFromFormat('d/m/Y', $oItem->dtexecucaoinicio);
                     $sNovaDtExecucaoFim = DateTime::createFromFormat('d/m/Y', $oItem->dtexecucaofim);
                     if (($sNovaDtExecucaoInicio != $aPeriodosItem[0]->dtDataInicial) || ($sNovaDtExecucaoFim != $aPeriodosItem[0]->dtDataFinal)) {
-                        $aPeriodosItem[0]->dtDataInicial = $sNovaDtExecucaoInicio;
-                        $aPeriodosItem[0]->dtDataFinal   = $sNovaDtExecucaoFim;
+                        $aPeriodosItem[0]->dtDataInicial = $oItem->dtexecucaoinicio;
+                        $aPeriodosItem[0]->dtDataFinal   = $oItem->dtexecucaofim;
                         $aTiposAlteracao[]               = 8;
                     }
                 }
