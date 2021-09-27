@@ -2700,13 +2700,13 @@ function db_menu($usuario = null, $modulo = null, $anousu = null, $instit = null
         $iTop = 1;
     }
 
-    $sHtmlTooltipAviso2 = DBTooltipAvisoQuestionario::getInstanceQuestionario('Questionário', 'modalPreenchimentoQuestionario()', $idItem, $modulo)->renderQuestionario($idItem, $modulo, $iTop);
+    // $sHtmlTooltipAviso2 = DBTooltipAvisoQuestionario::getInstanceQuestionario('Questionário', 'modalPreenchimentoQuestionario()', $idItem, $modulo)->renderQuestionario($idItem, $modulo, $iTop);
 
     $sHtmlAvisos  = '<div id="db-tooltip" class="db-tooltip">';
     $sHtmlAvisos .= $sHtmlReleaseNote;
     $sHtmlAvisos .= $sHtmlReleaseNotePrevia;
     $sHtmlAvisos .= $sHtmlTooltipAviso;
-    $sHtmlAvisos .= $sHtmlTooltipAviso2;
+    // $sHtmlAvisos .= $sHtmlTooltipAviso2;
     $sHtmlAvisos .= '</div>';
 
     $sHtmlHelp = DBHelpInline::render();

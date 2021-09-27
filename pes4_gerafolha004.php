@@ -475,7 +475,7 @@ function calculos_especificos_itaqui_ajuste($registro_, $lotac_){
             }else{
               $$valor_liquido = $pontofs_[$Ipontofs_]["r10_valor"];
             }
-            $tot_valor_liquido += $$valor_liquido;
+            $tot_valor_liquido += ${$valor_liquido};
 
           }
         }
@@ -512,13 +512,13 @@ function calculos_especificos_itaqui_ajuste($registro_, $lotac_){
      $calcula_valor = "calcula_valor_".$rubrica_varia;
      $valor_liquido = "valor_liquido".$rubrica_varia;
 
-     if( $$calcula_valor ){
-       if(  $$valor_liquido > 0){
+     if( ${$calcula_valor} ){
+       if(  ${$valor_liquido} > 0){
           $proporcao = 0;
           if( $rateio > 0){
-            $proporcao = ( $rateio * ( ( $$valor_liquido*100 )/ $tot_valor_liquido) )/100;
+            $proporcao = ( $rateio * ( ( ${$valor_liquido}*100 )/ $tot_valor_liquido) )/100;
           }
-          $valor_a_gravar = ( $$valor_liquido - $proporcao );
+          $valor_a_gravar = ( ${$valor_liquido} - $proporcao );
           if( $valor_a_gravar < 0 ){
             $valor_a_gravar = 0;
           }
@@ -907,7 +907,7 @@ function calculos_desconto_liquido_generico_ajuste($registro_, $lotac_){
      for($Ipontofs_=0;$Ipontofs_< count($pontofs_);$Ipontofs_++){
   $rubrica_ = $pontofs_[$Ipontofs_]["r10_rubric"] ;
   $calcula_valor = "calcula_valor_".$rubrica_;
-  global $$calcula_valor;
+  global ${$calcula_valor};
   $$calcula_valor = true;
      }
   }else{
@@ -965,8 +965,8 @@ function calculos_desconto_liquido_generico_ajuste($registro_, $lotac_){
   for($I=0;$I < strlen($rubricas_);$I+=4){
      $rubrica_varia = substr("#". $rubricas_,$I,4 );
      $verifica_calcula_valor = "calcula_valor_".$rubrica_varia;
-     global $$verifica_calcula_valor;
-     if( ( $$verifica_calcula_valor )){
+     global ${$verifica_calcula_valor};
+     if( ( ${$verifica_calcula_valor} )){
   $condicaoaux  = " and rh27_instit = $DB_instit and rh27_rubric = ".db_sqlformat( $rubrica_varia );
   global $rubr_;
   db_selectmax( "rubr_", "select rh27_pd from rhrubricas ".$condicaoaux );
@@ -1632,9 +1632,9 @@ if( $opcao_tipo == 2){
                                     $r110_lotacf,$faixa_regis,$faixa_lotac);
 
 //      db_delete( $chamada_geral_arquivo, bb_condicaosubpes( $siglag ).$condicaoaux );
-      global $$chamada_geral_arquivo;
+      global ${$chamada_geral_arquivo};
       if( db_selectmax( $chamada_geral_arquivo, "select * from ".$chamada_geral_arquivo." ".bb_condicaosubpes( $siglag ).$condicaoaux )){
-         $arquivo = $$chamada_geral_arquivo;
+         $arquivo = ${$chamada_geral_arquivo};
          for($Iarquivo=0;$Iarquivo< count($arquivo);$Iarquivo++){
             deleta_para_ajustes( $arquivo[$Iarquivo]["r31_rubric"], $arquivo[$Iarquivo]["r31_regist"], "F");
 
@@ -2669,10 +2669,10 @@ if( $opcao_tipo == 2){
 
       $condicaoaux = db_condicaoaux($opcao_filtro,$opcao_gml,$siglag,$r110_regisi,$r110_regisf,$r110_lotaci,
                                     $r110_lotacf,$faixa_regis,$faixa_lotac);
-      global $$chamada_geral_arquivo;
+      global ${$chamada_geral_arquivo};
 
       if( db_selectmax( $chamada_geral_arquivo, "select * from ".$chamada_geral_arquivo." ".bb_condicaosubpes( $siglag ).$condicaoaux )){
-         $arquivo = $$chamada_geral_arquivo;
+         $arquivo = ${$chamada_geral_arquivo};
 
          for($Iarquivo=0;$Iarquivo< count($arquivo);$Iarquivo++){
 
@@ -3737,9 +3737,9 @@ if( $opcao_tipo == 2){
 
       $condicaoaux = db_condicaoaux($opcao_filtro,$opcao_gml,$siglag,$r110_regisi,$r110_regisf,$r110_lotaci,
                                     $r110_lotacf,$faixa_regis,$faixa_lotac);
-      global $$chamada_geral_arquivo;
+      global ${$chamada_geral_arquivo};
       if( db_selectmax( $chamada_geral_arquivo, "select * from ".$chamada_geral_arquivo." ".bb_condicaosubpes( $siglag ).$condicaoaux )){
-         $arquivo = $$chamada_geral_arquivo;
+         $arquivo = ${$chamada_geral_arquivo};
          for($Iarquivo=0;$Iarquivo< count($arquivo);$Iarquivo++){
             deleta_para_ajustes( $arquivo[$Iarquivo]["r35_rubric"], $arquivo[$Iarquivo]["r35_regist"], "3");
 
@@ -4216,10 +4216,10 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
       $r110_lotacf,$faixa_regis,$faixa_lotac);
 
 
-      global $$chamada_geral_arquivo;
+      global ${$chamada_geral_arquivo};
 
       if (db_selectmax($chamada_geral_arquivo, "select * from ".$chamada_geral_arquivo." ".bb_condicaosubpes($siglag ).$condicaoaux )) {
-        $arq_ = $$chamada_geral_arquivo;
+        $arq_ = ${$chamada_geral_arquivo};
 
         if ($opcao_geral == 1 ) {
           //echo "<BR> Apagar registro do gerfsal";
@@ -4611,7 +4611,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
         //private calcula_valor_&rubrica_desconto            ;
         //public calcula_xvalor_&rubrica_desconto;
         $calcula_yvalor = "calcula_xvalor_".$rubrica_desconto;
-        global $$calcula_yvalor;
+        global ${$calcula_yvalor};
         $$calcula_yvalor = false;
 
         $rubricas_calculos_especiais .= "'".$rubrica_desconto."',";
@@ -4887,7 +4887,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
         if (db_at($pontofs[$Iponto]["r10_rubric"],$rubricas_calculos_especiais) > 0 && $pontofs[$Iponto]["r10_valor"] <= 0 ) {
           $rub = $pontofs[$Iponto]["r10_rubric"] ;
           $calcula_xvalor = "calcula_xvalor_".$rub;
-          global $$calcula_xvalor;
+          global ${$calcula_xvalor};
           $$calcula_xvalor = true;
           continue;
         }
@@ -5112,7 +5112,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           $matriz2[10] = $DB_instit;
 
           if ($db_debug == true) {
-            echo "<BR> rubrica 23 -->".$pontofs[$Iponto]["r10_rubric"]."  valor --> $r14_valor quant --> $r14_quant" ;
+            echo "<BR> rubrica 23 -->".$pontofs[$Iponto]["r10_rubric"]."  valor --> $r14_valor quant --> $r14_quant <br>" ;
             echo "[gerfsal] 5 - Insert: Gerfsal<br>";
             echo "Dados: <br>";
             echo "r14_regist: ".$matriz2[1]."<br>";
@@ -5734,7 +5734,7 @@ function ajusta_previdencia($arquivo, $rubrica_base, $sequencia, $sigla_ajuste)
 
 
   global $previden,$inssirf,$Iinssirf,$previden_,$campos_pessoal,$opcao_geral,$d08_carnes,$subpes,$perc_inss;
-  global $$arquivo,$cfpess, $pessoal, $db_debug;
+  global ${$arquivo},$cfpess, $pessoal, $db_debug;
   global $anousu, $mesusu, $DB_instit, $F023,$F019;
 
   $matriz1 = array();
@@ -6106,7 +6106,7 @@ function ajusta_previdencia($arquivo, $rubrica_base, $sequencia, $sigla_ajuste)
             //echo "<BR> ajusta_dif --> ".$ajusta_dif." = round($mat_r60_novods[$nro]-$mat_r60_novodf[$nro],2);";
 
             if (db_selectmax($arquivo, "select * from ".$arquivo." ".bb_condicaosubpes($sigla_ajuste ).$condicaoaux )) {
-              $arq_ = $$arquivo;
+              $arq_ = ${$arquivo};
               //if(($ajusta_dif <= 0 && $atingiu_o_teto_tbprev == false ) || $atingiu_o_teto_tbprev == true){
               if(($ajusta_dif <= 0 && $atingiu_o_teto_tbprev == false ) || $atingiu_o_teto_tbprev == true){
                 //echo "<BR> passou aqui 3 condicaoaux --> ".bb_condicaosubpes($sigla_ajuste).$condicaoaux;
@@ -6186,7 +6186,7 @@ function ajusta_previdencia($arquivo, $rubrica_base, $sequencia, $sigla_ajuste)
             $condicaoaux .= " and ".$sigla_ajuste."rubric = 'R993'";
             //echo "<BR> select * from ".$arquivo." ".bb_condicaosubpes($sigla_ajuste ).$condicaoaux ;
             if (db_selectmax($arquivo, "select * from ".$arquivo." ".bb_condicaosubpes($sigla_ajuste ).$condicaoaux )) {
-              $arq_ = $$arquivo;
+              $arq_ = ${$arquivo};
               if ($mat_r60_novods[$nro] > 0) {
                 $matriz1 = array();
                 $matriz2 = array();
@@ -6254,7 +6254,7 @@ function ajusta_previdencia($arquivo, $rubrica_base, $sequencia, $sigla_ajuste)
           $salario_esposa = 0;
           $condicaoaux  = " and ".$sigla_ajuste."regist = ".db_sqlformat($mat_r60_regist[$nro] );
           db_selectmax($arquivo, "select * from ".$arquivo." ".bb_condicaosubpes($sigla_ajuste ).$condicaoaux );
-          $arq_ = $$arquivo;
+          $arq_ = ${$arquivo};
           for ($Iarquivo=0; $Iarquivo<count($arq_); $Iarquivo++) {
             if (substr("#". $arq_[$Iarquivo][$sigla_ajuste."rubric"],1,1) != "R") {
               if ($d08_carnes == "riogrande" && $arq_[$Iarquivo][$sigla_ajuste."rubric"] == "0045" ) {
@@ -6669,10 +6669,10 @@ function ajusta_irrf($arquivo, $rubrica_base, $sequencia, $sigla_ajuste) {
           $tot_liq = 0;
           $salario_esposa = 0;
 
-          global $$arquivo;
+          global ${$arquivo};
           $condicaoaux = " and ".$sigla_ajuste."regist = ".db_sqlformat($ajusteir_[$Iajusteir_]["r61_regist"]);
           db_selectmax($arquivo, "select * from ".$arquivo." ".bb_condicaosubpes($sigla_ajuste ).$condicaoaux );
-          $arq_ = $$arquivo;
+          $arq_ = ${$arquivo};
           for ($Iarquivo=0; $Iarquivo <count($arq_); $Iarquivo++) {
 
             //echo "<BR> rubrica 71 -->".$arq_[$Iarquivo][$sigla_ajuste."rubric"]."  valor --> ".$arq_[$Iarquivo][$sigla_ajuste."valor"]." tipo --> ".$arq_[$Iarquivo][$sigla_ajuste."pd"];
@@ -7776,7 +7776,7 @@ function carrega_r9xx($area, $sigla, $sigla2, $nro_do_registro,$opcao_tipo) {
 /// calc_rubrica ///
 
 function calc_rubrica($rubrica, $area0, $sigla, $sigla2, $nro_do_registro, $operacao,$formq=null,$valor_=0,$recursivo=0) {
-  global $carregarubricas_geral,$rubricas,$r110_lotac,$$area0,$r110_regist;
+  global $carregarubricas_geral,$rubricas,$r110_lotac,${$area0},$r110_regist;
   global $anousu, $mesusu, $DB_instit, $db_debug ;
 
   global $F001, $F002, $F004, $F005, $F006,
@@ -7918,7 +7918,7 @@ function le_var_bxxx($formula=null, $area0=null, $area1=null, $sigla=null, $sigl
   global $cadferia,$pontofe,$pontofr;
   global $anousu, $mesusu, $DB_instit;
 
-  global $$area0,$inssirf_base_ferias;
+  global ${$area0},$inssirf_base_ferias;
   global $opcao_tipo,$opcao_geral;
 
   if ($db_debug == true) {
@@ -8182,7 +8182,7 @@ function le_var_bxxx($formula=null, $area0=null, $area1=null, $sigla=null, $sigl
           $proc_ler_var_bxxx = true;
         }
         if ($proc_ler_var_bxxx ) {
-          $arq_ = $$area0;
+          $arq_ = ${$area0};
      //echo "<BR> area0 --> $area0  area1--> $area1";
           // Percorre o Ponto (pontofs, pontofx,pontocom, etc..)
 
@@ -9284,7 +9284,7 @@ function rle_var_bxxx ($formula=null, $area0=null, $area1=null, $sigla=null, $si
 
  global $r110_regist;
 
- global $$area0,$inssirf_base_ferias;
+ global ${$area0},$inssirf_base_ferias;
  global $opcao_tipo;
 
 
@@ -9478,7 +9478,7 @@ function rle_var_bxxx ($formula=null, $area0=null, $area1=null, $sigla=null, $si
         }
      }else{
 //echo "<BR> base 1.3 --> $base";
-        for($i=0;$i<count($$area0);$i++){
+        for($i=0;$i<count(${$area0});$i++){
 
                  eval('$campo_rubrica = $'.$area0."[$i]['".$sigla."_rubric'];");
 //echo "<BR> campo_rubrica --> $campo_rubrica";
@@ -10314,9 +10314,9 @@ function calculos_especificos($r110_regist,$r110_lotac){
     //echo "<BR><BR>IIIIII *--- $Ii";
      $rub = substr("#". trim($cfpess[0]["r11_desliq"]), $Ii+1, 4 ) ;
      $variavel = "calcula_xvalor_".$rub;
-     global $$variavel;
-     //echo "<BR><BR>$variavel --- ".($$variavel==true?"true":"false");
-     $calcula_xvalor = ($$variavel == true);
+     global ${$variavel};
+     //echo "<BR><BR>$variavel --- ".(${$variavel}==true?"true":"false");
+     $calcula_xvalor = (${$variavel} == true);
      if( $calcula_xvalor){
   $condicaoaux  = " and r10_regist = ".db_sqlformat( $r110_regist );
   $condicaoaux .= " and r10_rubric = ".db_sqlformat( $rub );
@@ -13239,7 +13239,7 @@ function calc_pensao($icalc, $opcao_geral, $opcao_tipo, $chamada_geral_arquivo=n
   eval($quais_diversos);
   global $anousu, $mesusu, $DB_instit;
   global $siglap, $d08_carnes, $cfpess, $subpes,$r110_regisi,$pensao;
-  global $$chamada_geral_arquivo,$minha_calcula_pensao,$campos_pessoal;
+  global ${$chamada_geral_arquivo},$minha_calcula_pensao,$campos_pessoal;
 
   global $opcao_filtro,$opcao_gml,$r110_regisf,$r110_lotaci, $r110_lotacf,$faixa_regis,$faixa_lotac;
 
@@ -13695,7 +13695,7 @@ function calc_pensao($icalc, $opcao_geral, $opcao_tipo, $chamada_geral_arquivo=n
         $qual_tpp = $sigla1."tpp";
       }
 
-      $chamada_geral_ = $$chamada_geral_arquivo;
+      $chamada_geral_ = ${$chamada_geral_arquivo};
       for ($Igeral=0; $Igeral<count($chamada_geral_); $Igeral++) {
 
         if( $chamada_geral_[$Igeral][$qual_rub] == "R993" ){
@@ -13882,7 +13882,7 @@ function calc_pensao($icalc, $opcao_geral, $opcao_tipo, $chamada_geral_arquivo=n
             $condicaoaux  = " and ".$siglag."regist = ".db_sqlformat($pensao[$Ipensao]["r52_regist"] );
             $condicaoaux .= " and ".$siglag."rubric = ".db_sqlformat($rubricas_[$Irubricas]["rh27_rubric"] );
             if (db_selectmax($chamada_geral_arquivo, "select * from ".$chamada_geral_arquivo." ".bb_condicaosubpes($siglag ).$condicaoaux )) {
-              $arq_ = $$chamada_geral_arquivo;
+              $arq_ = ${$chamada_geral_arquivo};
               $vararq = $arq_[0][$sigla1."valor"] ;
               $formpensao = db_strtran($formpensao,$rubricas_[$Irubricas]["rh27_rubric"],db_strtran(db_str($vararq,15,2),",","."));
               //echo "<BR> formula da pensao 3 ->  $formpensao";
@@ -14017,7 +14017,7 @@ function calc_pensao($icalc, $opcao_geral, $opcao_tipo, $chamada_geral_arquivo=n
       $condicaoaux  = " and ".$siglap."regist = ".db_sqlformat($pensao[$Ipensao]["r52_regist"] );
       $condicaoaux .= " and ".$siglap."rubric = ".db_sqlformat($rubrica_pensao );
 
-      global $$qual_ponto;
+      global ${$qual_ponto};
       if (db_selectmax($qual_ponto, "select * from ".$qual_ponto." ".bb_condicaosubpes($siglap ).$condicaoaux )) {
         $acao = "altera";
       } else {
@@ -14035,7 +14035,7 @@ function calc_pensao($icalc, $opcao_geral, $opcao_tipo, $chamada_geral_arquivo=n
         }
       }
 
-      $ponto = $$qual_ponto;
+      $ponto = ${$qual_ponto};
 
       $qual_val = $sigla."valor";
       $qual_rep = $sigla;
