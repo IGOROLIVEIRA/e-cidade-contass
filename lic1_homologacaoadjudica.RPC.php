@@ -51,7 +51,7 @@ switch($oParam->exec) {
 
             //Verifica data de julgamento da licitação
             if ($dataJulgamentoLicitacao > $l202_dataAdjudicacao) {
-                throw new Exception( "Data de julgamento maior que data de adjudicacao");
+                throw new Exception( "Data de Julgamento maior que a Data de Adjudicação");
             }
 
             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));

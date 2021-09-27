@@ -78,7 +78,7 @@ $clrotulo->label("l20_codigo");
     function js_showGrid() {
         oGridItens = new DBGrid('gridItens');
         oGridItens.nameInstance = 'oGridItens';
-        oGridItens.setCellAlign(new Array("center", "center", "left", 'right', 'right', 'right'));
+        oGridItens.setCellAlign(new Array("center", "center", "center", 'center', 'center', 'center'));
         oGridItens.setCellWidth(new Array("10%" , "25%"     , '25%'          ,   '15%'    , '15%'        , '15%'            ));
         oGridItens.setHeader(new Array("Código", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
         oGridItens.hasTotalValue = true;
