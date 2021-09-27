@@ -199,15 +199,25 @@ input[type=submit][disabled]:not(rel='DBInputData') {
  * DB Âncora
  */
 .DBAncora {
-  text-decoration: underline;
+  text-decoration: none;
   font-weight: bold;
+  color: #338C63;
+
+}
+
+.dbancora-img{
+  height: 17px;
 }
 
 legend {
   font-weight: bold;
   text-align: left;
 }
-
+.dbancora-content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 /**
  * Estilos padrões do sistema
  */
@@ -257,7 +267,7 @@ input[type="text"]:not(.input-abas),
 textarea, select {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset !important;
   transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s !important;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 input[type="text"]:not([readonly]):not(.input-abas):focus, select:focus, textarea:focus {

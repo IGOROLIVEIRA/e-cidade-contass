@@ -196,47 +196,56 @@ function db_input($nome, $dbsize, $dbvalidatipo, $dbcadastro, $dbhidden = 'text'
     }
 ?>
 
-    <input title="<?= @$GLOBALS['T' . $nome] ?>" name="<?= ($nomevar == "" ? $nome : $nomevar) ?>" type="<?= $dbhidden ?>" <?= ($dbhidden == "checkbox" ? (@$GLOBALS[($nomevar == "" ? $nome : $nomevar)] == "t" ? "checked" : "") : "") ?> id="<?= ($nomevar == "" ? $nome : $nomevar) ?>" value="<?= @$GLOBALS[($nomevar == "" ? $nome : $nomevar)] ?>" size="<?= $dbsize ?>" maxlength="<?= @$iMax ?>" <?
+    <input title="<?= @$GLOBALS['T' . $nome] ?>"
+           name="<?= ($nomevar == "" ? $nome : $nomevar) ?>"
+           type="<?= $dbhidden ?>" <?= ($dbhidden == "checkbox" ? (@$GLOBALS[($nomevar == "" ? $nome : $nomevar)] == "t" ? "checked" : "") : "") ?>
+           id="<?= ($nomevar == "" ? $nome : $nomevar) ?>"
+           value="<?= @$GLOBALS[($nomevar == "" ? $nome : $nomevar)] ?>"
+           size="<?= $dbsize ?>"
+           maxlength="<?= @$iMax ?>" <?
 
-                                                                                                                                                                                                                                                                                                                                                                                                            echo $js_script;
-                                                                                                                                                                                                                                                                                                                                                                                                            if ($dbcadastro == true) {
+            echo $js_script;
+            if ($dbcadastro == true) {
 
-                                                                                                                                                                                                                                                                                                                                                                                                                if ($db_opcao == 3 || $db_opcao == 22 || $db_opcao == 33 || $db_opcao == 11) {
-                                                                                                                                                                                                                                                                                                                                                                                                                    echo " readonly ";
-                                                                                                                                                                                                                                                                                                                                                                                                                    if ($bgcolor == "")
-                                                                                                                                                                                                                                                                                                                                                                                                                        $bgcolor = "#DEB887";
-                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                                if ($db_opcao == 5) {
-                                                                                                                                                                                                                                                                                                                                                                                                                    echo " disabled ";
-                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                                                                                                                            $db_style = '';
-                                                                                                                                                                                                                                                                                                                                                                                                            if ($bgcolor == "") {
-                                                                                                                                                                                                                                                                                                                                                                                                                echo " " . @$GLOBALS['N' . $nome] . " ";
-                                                                                                                                                                                                                                                                                                                                                                                                            } else {
-                                                                                                                                                                                                                                                                                                                                                                                                                $db_style .= "background-color:$bgcolor;";
-                                                                                                                                                                                                                                                                                                                                                                                                            }
+                if ($db_opcao == 3 || $db_opcao == 22 || $db_opcao == 33 || $db_opcao == 11) {
+                    echo " readonly ";
+                    if ($bgcolor == "")
+                        $bgcolor = "#DEB887";
+                }
+                if ($db_opcao == 5) {
+                    echo " disabled ";
+                }
+            }
+            $db_style = '';
+            if ($bgcolor == "") {
+                echo " " . @$GLOBALS['N' . $nome] . " ";
+            } else {
+                $db_style .= "background-color:$bgcolor;";
+            }
 
-                                                                                                                                                                                                                                                                                                                                                                                                            if (isset($GLOBALS['G' . $nome]) && $GLOBALS['G' . $nome] == 't') {
-                                                                                                                                                                                                                                                                                                                                                                                                                $db_style .= "text-transform:uppercase;";
-                                                                                                                                                                                                                                                                                                                                                                                                            }
+            if (isset($GLOBALS['G' . $nome]) && $GLOBALS['G' . $nome] == 't') {
+                $db_style .= "text-transform:uppercase;";
+            }
 
-                                                                                                                                                                                                                                                                                                                                                                                                            if ($db_style != '') {
-                                                                                                                                                                                                                                                                                                                                                                                                                if ($css != "") {
-                                                                                                                                                                                                                                                                                                                                                                                                                    echo " style=\"$db_style;$css\" ";
-                                                                                                                                                                                                                                                                                                                                                                                                                } else {
-                                                                                                                                                                                                                                                                                                                                                                                                                    echo " style=\"$db_style\" ";
-                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                            } else {
-                                                                                                                                                                                                                                                                                                                                                                                                                if ($css != "") {
-                                                                                                                                                                                                                                                                                                                                                                                                                    echo " style=\"$css\" ";
-                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                            }
+            if ($db_style != '') {
+                if ($css != "") {
+                    echo " style=\"$db_style;$css\" ";
+                } else {
+                    echo " style=\"$db_style\" ";
+                }
+            } else {
+                if ($css != "") {
+                    echo " style=\"$css\" ";
+                }
+            }
 
-                                                                                                                                                                                                                                                                                                                                                                                                            if (($db_opcao != 3) && ($db_opcao != 5)) {
-                                                                                                                                                                                                                                                                                                                                                                                                            ?> onblur="js_ValidaMaiusculo(this,'<?= @$GLOBALS['G' . $nome] ?>',event);" onInput="js_ValidaCampos(this,<?= ($dbvalidatipo == '' ? 0 : $dbvalidatipo) ?>,'<?= @$GLOBALS['S' . $nome] ?>','<?= ($db_opcao == 4 ? "t" : @$GLOBALS['U' . $nome]) ?>','<?= @$GLOBALS['G' . $nome] ?>',event);" onKeyDown="return js_controla_tecla_enter(this,event);" <?
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ?> autocomplete='<?= @$GLOBALS['A' . $nome] ?>'>
+            if (($db_opcao != 3) && ($db_opcao != 5)) {
+            ?>
+            onblur="js_ValidaMaiusculo(this,'<?= @$GLOBALS['G' . $nome] ?>',event);"
+            onInput="js_ValidaCampos(this,<?= ($dbvalidatipo == '' ? 0 : $dbvalidatipo) ?>,'<?= @$GLOBALS['S' . $nome] ?>','<?= ($db_opcao == 4 ? "t" : @$GLOBALS['U' . $nome]) ?>','<?= @$GLOBALS['G' . $nome] ?>',event);"
+            onKeyDown="return js_controla_tecla_enter(this,event);" <?
+        }
+            ?> autocomplete='<?= @$GLOBALS['A' . $nome] ?>'>
 <?
 
 
@@ -328,11 +337,19 @@ function db_ancora($nome, $js_script, $db_opcao, $style = "", $varnome = "")
     if (($db_opcao < 3) || ($db_opcao == 4)) {
         if ($varnome    != "") {
     ?>
-            <a href='#' id="<?= $varnome ?>" class='dbancora' style='text-decoration:underline;<?= trim($style) != "" ? ";$style" : "" ?>' onclick="<?= $js_script ?>"><?= $nome ?></a>
+            <div class='dbancora-content'>
+                <a href='#' id="<?= $varnome ?>" class='dbancora' style='text-decoration:none;<?= trim($style) != "" ? ";$style" : "" ?>' onclick="<?= $js_script ?>"><?= $nome ?></a>
+                <!-- <div class='dbancora-img'></div> -->
+                <img class="dbancora-img" src="/skins/default/img/search.png" alt="">
+            </div>
         <?
         } else {
         ?>
-            <a href='#' class='dbancora' style='text-decoration:underline;<?= trim($style) != "" ? ";$style" : "" ?>' onclick="<?= $js_script ?>"><?= $nome ?></a>
+            <div class='dbancora-content'>
+                <a href='#' class='dbancora' style='text-decoration:none;<?= trim($style) != "" ? ";$style" : "" ?>' onclick="<?= $js_script ?>"><?= $nome ?></a>
+                <!-- <div class='dbancora-img'></div> -->
+                <img class="dbancora-img" src="/skins/default/img/search.png" alt="">
+            </div>
     <?
         }
     } else {
