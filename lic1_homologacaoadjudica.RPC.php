@@ -346,7 +346,7 @@ switch($oParam->exec) {
     case 'getItens':
 
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
-        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem";
+        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem";
 
         //Itens para Inclusao
         if($oParam->dbopcao == "1"){
@@ -354,7 +354,7 @@ switch($oParam->exec) {
                         inner join itenshomologacao on l203_homologaadjudicacao = l202_sequencial where l202_licitacao = {$oParam->iLicitacao})";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"z01_nome",$sWhere));
         }
-        //Itens para Inclusao
+        //Itens para alteração
         if($oParam->dbopcao == "2"){
             $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$oParam->iHomologacao}";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"z01_nome",$sWhere));
@@ -371,6 +371,7 @@ switch($oParam->exec) {
             $oItem      = new stdClass();
             $oItem->pc01_codmater                   = $oItensLicitacao->pc01_codmater;
             $oItem->pc01_descrmater                 = urlencode($oItensLicitacao->pc01_descrmater);
+            $oItem->z01_numcgm                      = $oItensLicitacao->z01_numcgm;
             $oItem->z01_nome                        = urlencode($oItensLicitacao->z01_nome);
             $oItem->m61_descr                       = $oItensLicitacao->m61_descr;
             $oItem->pc11_quant                      = $oItensLicitacao->pc11_quant;
@@ -433,20 +434,29 @@ switch($oParam->exec) {
         $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
         $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
 
+        /**
+         * VALIDAÇÃO COM EDITAL
+         */
+        $l20_cadinicial  = db_utils::fieldsMemory($result, 0)->l20_cadinicial;
+
         try {
             //Verifica se os fornecedores vencedores estão habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
-                throw new Exception( "ERRO ! Procedimento abortado. Verifique os fornecedores habilitados.");
+                throw new Exception( "Procedimento abortado. Verifique os fornecedores habilitados.");
             }
 
             //Verifica data de julgamento da licitação
             if ($l202_datahomologacao < $dataJulgamentoLicitacao) {
-                throw new Exception("ERRO ! Data de julgamento maior que data de adjudicacao.");
+                throw new Exception("Data de julgamento maior que data de adjudicacao.");
+            }
+
+            if($l20_cadinicial != "3" || $l20_cadinicial != "4"){
+                throw new Exception("Usuário: Edital não cadastrado ou com o status de Aguardando envio. Gentileza verificar!");
             }
 
             //Verifica data de adjudicacao da licitação
             if($l202_datahomologacao < $datadeAdjudicacao) {
-                throw new Exception("ERRO ! Data de Homologação menor que data de adjudicacao.");
+                throw new Exception("Data de homologação menor que a data de adjudicação.");
             }
 
             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
@@ -512,8 +522,9 @@ switch($oParam->exec) {
 
                         /*Salva os itens*/
                         foreach ($oParam->aItens as $item) {
-                            $clitenshomologacao->l203_item = $item->codigo;
+                            $clitenshomologacao->l203_item                = $item->codigo;
                             $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
+                            $clitenshomologacao->l203_fornecedor          = $item->fornecedor;
                             $clitenshomologacao->incluir(null);
                         }
 
@@ -543,13 +554,31 @@ switch($oParam->exec) {
                         /*inserindo a data de homologacao*/
                         $clhomologacaoadjudica->l202_sequencial      = null;
                         $clhomologacaoadjudica->l202_datahomologacao = $oParam->dtHomologacao;
+                        $clhomologacaoadjudica->l202_licitacao       = $l202_licitacao;
                         $clhomologacaoadjudica->l202_dataadjudicacao = null;
                         $clhomologacaoadjudica->incluir(null);
+
+                        /**
+                         * Incluindo nova situação a licitacao Homologada
+                         */
+                        $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 10);
+
+                        /**
+                         * Incluindo nova situação a licitacao Homologada
+                         */
+                        $clliclicitasituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
+                        $clliclicitasituacao->l11_hora        = db_hora();
+                        $clliclicitasituacao->l11_obs         = "Licitação Homologada";
+                        $clliclicitasituacao->l11_licsituacao = 10;
+                        $clliclicitasituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
+                        $clliclicitasituacao->l11_liclicita   = $l202_licitacao;
+                        $clliclicitasituacao->incluir(null);
 
                         /*Salva os itens*/
                         foreach ($oParam->aItens as $item) {
                             $clitenshomologacao->l203_item = $item->codigo;
-                            $clitenshomologacao->l203_homologaadjudicacao = $l202_sequencial;
+                            $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
+                            $clitenshomologacao->l203_fornecedor          = $item->fornecedor;
                             $clitenshomologacao->incluir(null);
                         }
 
@@ -725,6 +754,13 @@ switch($oParam->exec) {
         $data = (implode("/",(array_reverse(explode("-",$oParam->dtAdjudicacao)))));
         $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
 
+        /**
+         * VERIFICA SE E REGISTRO DE PREÇO
+         */
+
+        $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
+        $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
+
         try {
             /**
              * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
@@ -742,67 +778,130 @@ switch($oParam->exec) {
                     throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                 }
             }
-
-            /**
-             * BUSCO O REGISTRO DA SITUACAO A SER EXCLUIDA
-             */
-            $liclicitasituacao = $clliclicitasituacao->sql_record($clliclicitasituacao->sql_query_file(null,"l11_sequencial",null,"l11_liclicita = {$oParam->iLicitacao} and l11_licsituacao = 10"));
-            db_fieldsmemory($liclicitasituacao,0);
-
-            db_inicio_transacao();
-
-            /**
-             * get Itens Contrato
-             */
-            $rsItensContrato = $clitenshomologacao->getItensContratos($oParam->iLicitacao);
-
-            if($rsItensContrato){
-                throw new Exception ("ERRO! Existe Contrato para itens dessa Homologação.");
-            }
-
-            /**
-             * Excluir Itens Homologacao
-             */
-            foreach ($oParam->aItens as $Item){
-
-                $clitenshomologacao->excluir(null,"l203_homologaadjudicacao = {$oParam->iHomologacao} and l203_item = {$Item->codigo}");
-                if ($clitenshomologacao->erro_status == "0") {
-                    $erro = $clhomologacaoadjudica->erro_msg;
-                    $oRetorno->message = urlencode($erro);
-                    $oRetorno->status = 2;
-                }
-            }
-
-            /**
-             * verifico se ainda existem itens
-             */
-            $ItensHomologacao = pg_num_rows($clitenshomologacao->sql_record($clitenshomologacao->sql_query_file(null,"*",null,"l203_homologaadjudicacao = {$oParam->iHomologacao}")));
-
-            if($ItensHomologacao <= 0){
+            if($l20_tipnaturezaproced == '1' || $l20_tipnaturezaproced == '3') {
                 /**
-                 * Excluir Homologacao caso nao tenha mais itens
+                 * BUSCO O REGISTRO DA SITUACAO A SER EXCLUIDA
                  */
+                $liclicitasituacao = $clliclicitasituacao->sql_record($clliclicitasituacao->sql_query_file(null, "l11_sequencial", null, "l11_liclicita = {$oParam->iLicitacao} and l11_licsituacao = 10"));
+                db_fieldsmemory($liclicitasituacao, 0);
 
-                $clhomologacaoadjudica->excluir($oParam->iHomologacao);
+                db_inicio_transacao();
 
                 /**
-                 * verifico se existe outras homologacoes para a licitacao
+                 * get Itens Contrato
                  */
-                $rsOutrasHomologacoes = pg_num_rows($clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"*",null,"l202_licitacao = {$oParam->iLicitacao} and l202_datahomologacao is not null")));
+                $rsItensContrato = $clitenshomologacao->getItensContratos($oParam->iLicitacao);
 
-                if($rsOutrasHomologacoes <= 0){
-                    $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 13);
-                    $clliclicitasituacao->excluir(null,"l11_licsituacao = 10 and l11_liclicita = {$oParam->iLicitacao}");
+                if ($rsItensContrato) {
+                    throw new Exception ("ERRO! Existe Contrato para itens dessa Homologação.");
                 }
+
+                /**
+                 * Excluir Itens Homologacao
+                 */
+                foreach ($oParam->aItens as $Item) {
+
+                    $clitenshomologacao->excluir(null, "l203_homologaadjudicacao = {$oParam->iHomologacao} and l203_item = {$Item->codigo}");
+                    if ($clitenshomologacao->erro_status == "0") {
+                        $erro = $clhomologacaoadjudica->erro_msg;
+                        $oRetorno->message = urlencode($erro);
+                        $oRetorno->status = 2;
+                    }
+                }
+
+                /**
+                 * verifico se ainda existem itens
+                 */
+                $ItensHomologacao = pg_num_rows($clitenshomologacao->sql_record($clitenshomologacao->sql_query_file(null, "*", null, "l203_homologaadjudicacao = {$oParam->iHomologacao}")));
+
+                if ($ItensHomologacao <= 0) {
+                    /**
+                     * Excluir Homologacao caso nao tenha mais itens
+                     */
+
+                    $clhomologacaoadjudica->excluir($oParam->iHomologacao);
+
+                    /**
+                     * verifico se existe outras homologacoes para a licitacao
+                     */
+                    $rsOutrasHomologacoes = pg_num_rows($clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null, "*", null, "l202_licitacao = {$oParam->iLicitacao} and l202_datahomologacao is not null")));
+
+                    if ($rsOutrasHomologacoes <= 0) {
+                        $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 13);
+                        $clliclicitasituacao->excluir(null, "l11_licsituacao = 10 and l11_liclicita = {$oParam->iLicitacao}");
+                    }
 
                     $erro = "Homologação Excluida com sucesso!";
                     $oRetorno->message = urlencode($erro);
                     $oRetorno->status = 1;
 
+                } else {
+                    $erro = "Itens Excluidos com Sucesso!";
+                    $oRetorno->message = urlencode($erro);
+                    $oRetorno->status = 1;
+                }
             }else{
-                $erro = "Itens Excluidos com Sucesso!";
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 1;
+                /**
+                 * BUSCO O REGISTRO DA SITUACAO A SER EXCLUIDA
+                 */
+                $liclicitasituacao = $clliclicitasituacao->sql_record($clliclicitasituacao->sql_query_file(null, "l11_sequencial", null, "l11_liclicita = {$oParam->iLicitacao} and l11_licsituacao = 10"));
+                db_fieldsmemory($liclicitasituacao, 0);
+
+                db_inicio_transacao();
+
+                /**
+                 * get Itens Contrato
+                 */
+                $rsItensContrato = $clitenshomologacao->getItensContratos($oParam->iLicitacao);
+
+                if ($rsItensContrato) {
+                    throw new Exception ("ERRO! Existe Contrato para itens dessa Homologação.");
+                }
+
+                /**
+                 * Excluir Itens Homologacao
+                 */
+                foreach ($oParam->aItens as $Item) {
+
+                    $clitenshomologacao->excluir(null, "l203_homologaadjudicacao = {$oParam->iHomologacao} and l203_item = {$Item->codigo}");
+                    if ($clitenshomologacao->erro_status == "0") {
+                        $erro = $clhomologacaoadjudica->erro_msg;
+                        $oRetorno->message = urlencode($erro);
+                        $oRetorno->status = 2;
+                    }
+                }
+
+                /**
+                 * verifico se ainda existem itens
+                 */
+                $ItensHomologacao = pg_num_rows($clitenshomologacao->sql_record($clitenshomologacao->sql_query_file(null, "*", null, "l203_homologaadjudicacao = {$oParam->iHomologacao}")));
+
+                if ($ItensHomologacao <= 0) {
+                    /**
+                     * Excluir Homologacao caso nao tenha mais itens
+                     */
+
+                    $clhomologacaoadjudica->excluir($oParam->iHomologacao);
+
+                    /**
+                     * verifico se existe outras homologacoes para a licitacao
+                     */
+                    $rsOutrasHomologacoes = pg_num_rows($clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null, "*", null, "l202_licitacao = {$oParam->iLicitacao} and l202_datahomologacao is not null")));
+
+                    if ($rsOutrasHomologacoes <= 0) {
+                        $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 1);
+                        $clliclicitasituacao->excluir(null, "l11_licsituacao = 10 and l11_liclicita = {$oParam->iLicitacao}");
+                    }
+
+                    $erro = "Homologação Excluida com sucesso!";
+                    $oRetorno->message = urlencode($erro);
+                    $oRetorno->status = 1;
+
+                } else {
+                    $erro = "Itens Excluidos com Sucesso!";
+                    $oRetorno->message = urlencode($erro);
+                    $oRetorno->status = 1;
+                }
             }
             db_fim_transacao();
         }catch (Exception $eErro){

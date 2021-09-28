@@ -82,9 +82,9 @@ $clrotulo->label("l20_codigo");
         if(opcao != 2){
             oGridItens.setCheckbox(0);
         }
-        oGridItens.setCellAlign(new Array("center", "center", "center", 'center', 'center', 'center'));
-        oGridItens.setCellWidth(new Array("10%" , "25%"     , '25%'          ,   '15%'    , '15%'        , '15%'            ));
-        oGridItens.setHeader(new Array("Código", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
+        oGridItens.setCellAlign(new Array("center", "center","center", "center", 'center', 'center', 'center'));
+        oGridItens.setCellWidth(new Array("10%" , "25%"     ,'25%', '25%'          ,   '15%'    , '15%'        , '15%'            ));
+        oGridItens.setHeader(new Array("Código", "Material","CGM","Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
         oGridItens.hasTotalValue = true;
         oGridItens.show($('cntgriditens'));
 
@@ -192,10 +192,11 @@ $clrotulo->label("l20_codigo");
                     var aLinha = new Array();
                     aLinha[0] = oLinha.pc81_codprocitem;
                     aLinha[1] = oLinha.pc01_descrmater.urlDecode();
-                    aLinha[2] = oLinha.z01_nome.urlDecode();
-                    aLinha[3] = oLinha.m61_descr;
-                    aLinha[4] = oLinha.pc11_quant;
-                    aLinha[5] = oLinha.pc23_valor;
+                    aLinha[2] = oLinha.z01_numcgm;
+                    aLinha[3] = oLinha.z01_nome.urlDecode();
+                    aLinha[4] = oLinha.m61_descr;
+                    aLinha[5] = oLinha.pc11_quant;
+                    aLinha[6] = oLinha.pc23_valor;
                     oGridItens.addRow(aLinha);
                 nTotal = nTotal + Number(oLinha.pc23_valor);
 
@@ -248,6 +249,7 @@ $clrotulo->label("l20_codigo");
             with (aItens[i]) {
                 var oItem        = new Object();
                 oItem.codigo     = aCells[0].getValue();
+                oItem.fornecedor = aCells[3].getValue();
                 oParam.aItens.push(oItem);
             }
         }
