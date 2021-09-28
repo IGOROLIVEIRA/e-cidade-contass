@@ -44,7 +44,7 @@ function splitCondHigh($text)
         $cond_high['function'] = trim(str_replace('"', '', $pieces1[0]));
         $cond_high['result']   = trim(str_replace('"', '', $pieces1[1]));
         $cond_high['operator'] = trim($chosen);
-        
+
         $pieces2 = explode(',', $pieces1[2]);
         foreach ($pieces2 as $fontpiece)
         {
@@ -78,22 +78,22 @@ function MyExplode($string, $pretext = false, $posAs = false)
     $parentesis   = 0;
     $quotes       = false;
     $doublequotes = false;
-    
+
     for ($n=0; $n <= strlen($string); $n++)
     {
         $char = substr($string,$n,1);
         $estoque .= $char;
-        
+
         if ($char == "'")
         {
             $quotes = !$quotes;
         }
-        
+
         if ($char == '"')
         {
             $doublequotes = !$doublequotes;
         }
-        
+
         if ($char == '(')
         {
             $parentesis ++;
@@ -102,7 +102,7 @@ function MyExplode($string, $pretext = false, $posAs = false)
         {
             $parentesis --;
         }
-        
+
         if (($char == ',') and ($parentesis == 0) and ($quotes == false) and ($doublequotes == false))
         {
             $i++;
@@ -117,12 +117,12 @@ function MyExplode($string, $pretext = false, $posAs = false)
                 $estoques = explode(' AS ', $estoque);
                 $estoque = $estoques[1];
             }
-            
+
             $retorno[$i] = $text . trim(substr($estoque, 0, -1));
             $estoque = '';
         }
     }
-    
+
     $i++;
     if (strlen($estoque) >0)
     {
@@ -137,7 +137,7 @@ function MyExplode($string, $pretext = false, $posAs = false)
             $estoques = explode(' AS ', $estoque);
             $estoque = $estoques[1];
         }
-        
+
         $retorno[$i] = $text . trim($estoque);
     }
 
@@ -163,7 +163,7 @@ function WordExplode($separator = ' and ', $string)
             $retorno[$i] = trim(substr($estoque, 0, -$len));
             $estoque = $char;
             $i++;
-        }   
+        }
 
 
         if ($char == '(')
@@ -200,13 +200,13 @@ function ArrayEreg($array, $string)
 function getSimpleDirArray($sPath, $only_files = true, $filter = '')
 {
     $handle=opendir($sPath);
-    
+
     while (($file = readdir($handle)) !== false)
     {
         $nPath   = "$sPath/$file";
         $is_dir  = is_dir($nPath);
         $addchar = ($is_dir ? ' ' : '');
-        
+
         if ( ($file != '.') and ($file != '..') and ($file != 'CVS')
            and (substr($file, -1) != '~') and (substr($entry,0,1) != '.') )
         {
@@ -244,7 +244,7 @@ function TreatFont($font, $color)
     $face   = $fontset[0];
     $styles = $fontset[1];
     $size   = $fontset[2];
-    
+
     for ($n=0; $n<strlen($styles); $n++)
     {
         $style  .= '<' . substr($styles,$n,1) . '>';
@@ -304,7 +304,7 @@ function RemoveExtension($FileName)
 function GetPath($Path)
 {
     $tmp = strrev($Path);
-    
+
     for ($n=0; $n<strlen($tmp); $n++)
     {
         if ((substr($tmp,$n,1) == '/') || (substr($tmp,$n,1) == '\\'))
@@ -335,7 +335,7 @@ function GetParameters($sql, $exclude_vars = false)
         {
             $nonstop = false;
         }
-        
+
         if ($nonstop)
         {
             $Parameters[$paramcount] .= $caracter;
@@ -375,12 +375,12 @@ function extractFunctions($Expression)
         $aTree = array('sum','avg','max','min', 'var', 'dev');
         $aFour = array('gavg', 'gmax', 'gmin', 'dist');
         $aFive = array('count');
-        
+
         $tree = substr($Expression,$x,3);
         $four = substr($Expression,$x,4);
         $five = substr($Expression,$x,5);
         $rest = substr($Expression,$x);
-        
+
         if (in_array($tree, $aTree))
         {
             $pos = strpos($rest, ')');
@@ -426,13 +426,13 @@ function HandlerFile($extras = null)
         $Mask = array($Mask);
     }
 
-    $FileSelection = &new FileDialog($Title, $Mask, $Buttons, $Path, $Action, $Parameter);
+    $FileSelection = new FileDialog($Title, $Mask, $Buttons, $Path, $Action, $Parameter);
 }
 
 function FormatMonetary($number, $precision, $thousep, $decsep)
 {
     $zeros = '000000000000';
-    
+
     if (strstr($number, '.'))
     {
         $a = explode('.', $number);
@@ -449,9 +449,9 @@ function FormatMonetary($number, $precision, $thousep, $decsep)
     $part2 = substr($a[1],0,$precision);
     if (!$part2)
     $part2 = substr($zeros, 0, $precision);
-    
+
     $tmp = strrev($part1);
-    
+
     for ($n=0; $n<strlen($tmp); $n++)
     {
         if ($i==3)
@@ -473,7 +473,7 @@ function rgb2int($rgb)
     $hex_red   = substr($rgb,1,2);
     $hex_green = substr($rgb,3,2);
     $hex_blue  = substr($rgb,5,2);
-    
+
     $dec_red = hexdec($hex_red);
     $dec_green = hexdec($hex_green);
     $dec_blue = hexdec($hex_blue);
@@ -505,7 +505,7 @@ function invcolor($rgb)
     $red   = dechex($c_red);
     $green = dechex($c_green);
     $blue  = dechex($c_blue);
-    
+
     $red   = substr('00', 0, 2-strlen($red)) . $red;
     $green = substr('00', 0, 2-strlen($green)) . $green;
     $blue  = substr('00', 0, 2-strlen($blue)) . $blue;
@@ -613,7 +613,7 @@ function darkbox($widget, $width, $height, $color)
 
 function frame_title($text, $image)
 {
-    $box = &new GtkHBox;
+    $box = new GtkHBox;
     $dock1 = new GtkPixmap($image[0], $image[1]);
     $dock2 = new GtkLabel($text);
     $box->pack_start($dock1, false, false, 4);
@@ -665,7 +665,7 @@ function remove_table_from($string, $table)
     $joinkinds[] = 'NATURAL OUTER JOIN';
     $joinkinds[] = 'NATURAL LEFT OUTER JOIN';
     $joinkinds[] = 'NATURAL RIGHT OUTER JOIN';
-    
+
     $pieces = explode(',', $string);
     foreach ($pieces as $piece)
     {
@@ -802,14 +802,14 @@ function FormatMask($mask, $Conteudo)
                 $suffix = substr($mask, $suffix_pos + 1);
                 $mask   = substr($mask, 0, $suffix_pos);
             }
-            
+
             $Currency   = substr($mask, 1, 2);
             $Negative   = substr($mask, 3, 1);
             $Negative_  = substr($mask, strlen($mask) -1, 1);
             $ThousandSep= substr($mask, 5, 1);
             $DecimalSep = substr($mask, 9, 1);
             $Precision  = strlen(substr($mask,10));
-            
+
             if ($Negative != '-')
             {
                 $Precision --;
@@ -824,7 +824,7 @@ function FormatMask($mask, $Conteudo)
             {
                 $Conteudo = number_format($Conteudo, $Precision, $DecimalSep, $ThousandSep);
             }
-            
+
             if ($Currency)
             {
                 $Conteudo = $Currency . ' ' . $Conteudo;
@@ -849,7 +849,7 @@ function UnMask($text, $mask)
     {
         $splitters = array_merge($splitters, array(' '));
     }
-    
+
     # run over the typed text
     for ($n=0; $n <= strlen($text); $n++)
     {
@@ -870,13 +870,13 @@ function UnMask($text, $mask)
 function Mask($mask, $text)
 {
     $z = 0;
-    
+
     # run over the mask chars
     for ($n=0; $n < strlen($mask); $n++)
     {
         $mask_char = substr($mask, $n, 1);
         $text_char = substr($text, $z, 1);
-        
+
         # check when needs to concatenate a splitter
         if (in_array($mask_char, array('-', '_', '.', '/', '\\', ':', '|', '(', ')', '[', ']', '{', '}', ' ')))
         {
@@ -885,7 +885,7 @@ function Mask($mask, $text)
         }
         else
         {
-            
+
             if ($mask_char == '9')
             {
                 if (is_numeric($text_char))
@@ -899,7 +899,7 @@ function Mask($mask, $text)
                 # 'A/C ZZZZ'
                 # 'PAULO'
                 //if (is_string($text_char))
-                
+
                 {
                     $result .= $text_char;
                     $z ++;
@@ -911,7 +911,7 @@ function Mask($mask, $text)
                 //$z ++;
             }
         }
-        
+
     }
     return $result;
 }
@@ -966,25 +966,25 @@ function recursive_remove_directory($directory, $empty=FALSE)
     {
         $directory = substr($directory,0,-1);
     }
- 
+
     // if the path is not valid or is not a directory ...
     if(!file_exists($directory) || !is_dir($directory))
     {
         // ... we return false and exit the function
         return FALSE;
- 
+
     // ... if the path is not readable
     }elseif(!is_readable($directory))
     {
         // ... we return false and exit the function
         return FALSE;
- 
+
     // ... else if the path is readable
     }else{
- 
+
         // we open the directory
         $handle = opendir($directory);
- 
+
         // and scan through the items inside
         while (FALSE !== ($item = readdir($handle)))
         {
@@ -994,13 +994,13 @@ function recursive_remove_directory($directory, $empty=FALSE)
             {
                 // we build the new path to delete
                 $path = $directory.'/'.$item;
- 
+
                 // if the new path is a directory
-                if(is_dir($path)) 
+                if(is_dir($path))
                 {
                     // we call this function with the new path
                     recursive_remove_directory($path);
- 
+
                 // if the new path is a file
                 }else{
                     // we remove the file
@@ -1010,7 +1010,7 @@ function recursive_remove_directory($directory, $empty=FALSE)
         }
         // close the directory
         closedir($handle);
- 
+
         // if the option to empty is not set to true
         if($empty == FALSE)
         {
@@ -1025,4 +1025,3 @@ function recursive_remove_directory($directory, $empty=FALSE)
         return TRUE;
     }
 }
-?>

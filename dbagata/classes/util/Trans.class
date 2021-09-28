@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /***********************************************************/
@@ -38,10 +38,10 @@
 /***********************************************************/
 class Trans
 {
-    
+
     var $messages = array(
-    
-    
+
+
     'en' => array(
     'Tables',
     'Field Names',
@@ -106,7 +106,7 @@ class Trans
     'List Edition',
     'New Item',
     'Edit Item',
-    
+
     'Up',
     'Down',
     'Write',
@@ -157,7 +157,7 @@ class Trans
     'this variables above will be converted into SubQuery results',
     'This line with SubQuery variables will be replicated according with SubSql results',
     'Insert EndOfSubQuery',
-    
+
     'Configuration',
     'Precision',
     'Thousand Separator',
@@ -230,7 +230,7 @@ class Trans
     'Tools',
     'Import',
     'Type',
-    
+
     'Tables Structure',
     'About',
     'Common Functions',
@@ -254,7 +254,7 @@ class Trans
     'Insert',
     'Parameters',
     'Type the query parameters above',
-    
+
     'DB Error: syntax error',
     'Report Description',
     'General',
@@ -627,7 +627,7 @@ class Trans
     'Holiday',
     'Add Holiday',
     'List Holidays',
-    'Total Pages', 
+    'Total Pages',
     'Template Report',
     'Reports Directory',
     'Temp Directory',
@@ -653,11 +653,11 @@ class Trans
     'not found',
     'Resources Directory'
     ),//aquip
-    
+
     //
     // brazilian portuguese messages
     //
-    
+
     'pt' => array(
     'Tabelas',
     'Nome dos campos',
@@ -722,7 +722,7 @@ class Trans
     'Edição de Lista',
     'Novo Item',
     'Edita Item',
-    
+
     'Cima',
     'Baixo',
     'Grava',
@@ -773,7 +773,7 @@ class Trans
     'As variaveis acima serao convertidas por resultados da SubPesquisa',
     'Essa linha com as variaveis da SubPesquisa sera replicada de acordo com os resultados',
     'Insira EndOfSubQuery',
-    
+
     'Configuração',
     'Precisão',
     'Separador de Milhar',
@@ -846,7 +846,7 @@ class Trans
     'Ferramentas',
     'Importar',
     'Tipo',
-    
+
     'Estrutura das Tabelas',
     'Sobre',
     'Funções Comuns',
@@ -870,7 +870,7 @@ class Trans
     'Inserir',
     'Parâmetros',
     'Digite acima os parâmetros da consulta',
-    
+
     'Erro de sintáxe',
     'Descrição do Relatório',
     'Geral',
@@ -1243,7 +1243,7 @@ class Trans
     'Feriado',
     'Novo Feriado',
     'Lista Feriados',
-    'Total de Páginas', 
+    'Total de Páginas',
     'Relatório Padrão',
     'Diretório dos Relatórios',
     'Diretório Temporário',
@@ -1269,11 +1269,11 @@ class Trans
     'não encontrada',
     'Pasta de recursos'
     ), //aquip
-    
+
     //
     //  default spanish messages
     //
-    
+
     'es' => array(
     'Tablas',
     'Nombre de campos',
@@ -1338,7 +1338,7 @@ class Trans
     'Edición de lista',
     'Nuevo ítem',
     'Editar ítem',
-    
+
     'Arriba',
     'Abajo',
     'Escribir',
@@ -1389,7 +1389,7 @@ class Trans
     'Las variables de arriba serán convertidas a resultados de la subconsulta',
     'La línea con las variables de la subconsulta será replicada de acuerdo con los resultados de la subconsulta',
     'Ingresar fin de subconsulta',
-    
+
     'Configuración',
     'Precisión',
     'Separador de miles',
@@ -1462,7 +1462,7 @@ class Trans
     'Herramientas',
     'Importar',
     'Tipo',
-    
+
     'Estructura de las tablas',
     'Sobre',
     'Funciones comunes',
@@ -1487,11 +1487,11 @@ class Trans
     'Parámetros',
     'Ingrese arriba los parámetros de la consulta'
     ),
-    
+
     //
     // german messages
     //
-    
+
     'de' => array(
     	'Tabellen',
 	'Feldnamen',
@@ -1972,11 +1972,11 @@ class Trans
 	'Label-Vorlagen',
 	'Keine Verknüpfungen'
     ),
-    
+
     //
     // french messages
     //
-    
+
     'fr' => array(
 	'Tables',
 	'Noms des Champs',
@@ -2462,7 +2462,7 @@ class Trans
 	'Pouces',
 	'Convertir'
     ),
-    
+
     'it' => array(
 	'Tabelle',
 	'Nomi dei Campi',
@@ -2948,7 +2948,7 @@ class Trans
 	'Pollici',
 	'Converti'
     ),
-    
+
     'se' => array(
     'Tabeller',
     'Fältnamn',
@@ -3013,7 +3013,7 @@ class Trans
     'Lista Upplaga',
     'Ny post',
     'Editera post',
-    
+
     'Upp',
     'Ner',
     'Skriv',
@@ -3064,7 +3064,7 @@ class Trans
     'variablerna ovan kommer bli konverterade till underfrågsresultat',
     'Denna rad med underfrågsvariabler kommer bli replikerad enligt SubSql-resultaten.',
     'Infoga EndOfSubQuery',
-    
+
     'Konfiguration',
     'Precision',
     'Thousand Separator',
@@ -3137,7 +3137,7 @@ class Trans
     'Verktyg',
     'Importera',
     'typ',
-    
+
     'Tabellstruktur',
     'om',
     'Vanliga funktioner',
@@ -3161,7 +3161,7 @@ class Trans
     'Insert',
     'Parametrar',
     'Skriv förfrågninsparametrarna ovan',
-    
+
     'DB Error: felaktig syntax',
     'Välj beskrivning',
     'allmänt',
@@ -3295,8 +3295,8 @@ class Trans
     'Delfält ^1',
     'Inte tillåtet'
     ),
-    
-    
+
+
     'tk' => array(
     'Tablolar',
     'Alan Ýsimleri',
@@ -3810,10 +3810,10 @@ class Trans
     'Grup ortalamasý')
 
     );
-    
-    
+
+
     var $language = 'en';
-    
+
     /**
     *  A common used technique is, to keep a default instance
     *  for shared classes. In this case, the global variable
@@ -3831,15 +3831,15 @@ class Trans
     function & GetDefaultInstance()
     {
         global $__default_trans_instance;
-        
+
         if ( ! $__default_trans_instance )
         {
             $__default_trans_instance = new Trans();
         }
-        
+
         return $__default_trans_instance;
     }
-    
+
     /**
     *  The translate method takes a string $msg and three
     *  optional positional parameters ($p1,$p2,$p3). The
@@ -3855,65 +3855,65 @@ class Trans
     function Translate($msg,$p1=null,$p2=null,$p3=null)
     {
         $inst = & Trans::GetDefaultInstance();
-        
+
         //
         // $nls will become our localized message, if one would
         // be found. Otherwise, it will become the original message
         // prepended by an underscore to notify, that a localized
         // message is missing.
         //
-        
+
         $nls = $msg;
-        
+
         if ( $inst->language != 'en' )
         {
             $nls = $msg;
-            
+
             if ( is_array($inst->messages[$inst->language]) )
             {
                 $i = 0;
-                
+
                 foreach ( $inst->messages['en'] as $m )
                 {
                     if ( $m == $msg )
                     {
                         $m = $inst->messages[$inst->language][$i];
-                        
+
                         if ( $m )
                         {
                             $nls = $m;
                             break;
                         }
                     }
-                    
+
                     $i++;
                 }
             }
         }
-        
+
         //
         // substitute positional parameters if necessary
         //
-        
+
         if ( $p1 != null )
         $nls = str_replace('^1',$p1,$nls);
-        
+
         if ( $p2 != null )
         $nls = str_replace('^2',$p2,$nls);
-        
+
         if ( $p3 != null )
         $nls = str_replace('^3',$p3,$nls);
-        
+
         return $nls;
     }
-    
+
     /***********************************************************/
     /* returns the currently selected language identifier
     /***********************************************************/
     function GetLanguage()
     {
         $inst = & Trans::GetDefaultInstance();
-        
+
         return $inst->language;
     }
 
@@ -3924,7 +3924,7 @@ class Trans
     function SetLanguage($lang, $showMsg = true)
     {
         $inst = & Trans::GetDefaultInstance();
-        
+
         if ( ! $inst->messages[$lang] )
         {
             if ($showMsg)
@@ -3933,7 +3933,7 @@ class Trans
             }
             return false;
         }
-        
+
         $inst->language = $lang;
         return true;
     }
@@ -3944,7 +3944,7 @@ class Trans
     function Dump()
     {
         $inst = & Trans::GetDefaultInstance();
-        
+
         $old_lang = Trans::GetLanguage();
 
         // dumps mapping of all available messages except the default ones
@@ -3952,50 +3952,50 @@ class Trans
         {
             if ( $l == 'en' )
             continue;
-            
+
             $inst->language = $l;
-            
+
             echo "<table bgcolor=#999999 cellspacing=1 cellpadding=2 width=100%>\n";
             echo "<tr><td colspan=3 align=center><font color=white><b>Current language is '$l'</b></font></td></tr>\n";
-            
+
             foreach ( $inst->messages['en'] as $m )
             echo "<tr><td width=50% bgcolor=#efefef><i>$m</i></td>"
             ."<td align=center bgcolor=#ffefef>&nbsp;=&gt;&nbsp;</td>"
             ."<td width=50% bgcolor=#ffffef>" . Trans::Translate($m) . "</td></tr>\n";
-            
+
             echo "</table>\n";
             echo "<br>\n";
         }
-        
+
         Trans::SetLanguage($old_lang);
-        
+
         //
         // positional parameters test
         //
-        
+
         $samples = array(
         array( 'The numbers are ^1, ^2 and ^3', array('one','two','three') ),
         array( 'Little boys like ^2 and little girls like ^1 ...', array('dolls','cars') ),
         array( '... and when they become older, ^1 like ^2 and ^2 like ^1', array('boys','girls') )
         );
-        
+
         echo "<table bgcolor=#999999 cellspacing=1 cellpadding=2 width=100%>\n";
         echo "<tr><td colspan=3 align=center><font color=white><b>Postional Parameters</b></font></td></tr>\n";
-        
+
         foreach ( $samples as $s )
         {
             $m = $s[0];
-            
+
             list ( $p1, $p2, $p3 ) = $s[1];
-            
+
             echo "<tr><td width=50% bgcolor=#efefef><i>$m</i></td>"
             ."<td align=center bgcolor=#ffefef>&nbsp;=&gt;&nbsp;</td>"
             ."<td width=50% bgcolor=#ffffef>" . Trans::Translate($m,$p1,$p2,$p3) . "</td></tr>\n";
         }
-        
+
         echo "</table>\n";
         echo "<br>\n";
-        
+
         Trans::SetLanguage('xyz');
     }
 }
