@@ -38,7 +38,7 @@ $oDaoEmpParametro = db_utils::getDao("empparametro");
 $oPost = db_utils::postMemory($_POST);
 $oGet  = db_utils::postMemory($_GET);
 
-$sSqlCasasDecimais = $oDaoEmpParametro->sql_query_file(db_getsession("DB_anousu"),"e30_numdec as casadec");
+$sSqlCasasDecimais = $oDaoEmpParametro->sql_query_file(db_getsession("DB_anousu"), "e30_numdec as casadec");
 $rsCasasDecimais   = $oDaoEmpParametro->sql_record($sSqlCasasDecimais);
 if ($oDaoEmpParametro->numrows > 0) {
   $casadec = db_utils::fieldsMemory($rsCasasDecimais, 0)->casadec;
@@ -60,17 +60,17 @@ $dtFimCrg = implode("-", array_reverse(explode("/", $oGet->dtfimcrg)));
 
 if ((trim($dtIniCrg) != "") && (trim($dtFimCrg) != "")) {
 
-	$sHeaderDtCriacao = "Criação do Registro: ".$oGet->dtinicrg." até ".$oGet->dtfimcrg;
+  $sHeaderDtCriacao = "Criação do Registro: " . $oGet->dtinicrg . " até " . $oGet->dtfimcrg;
   $sWhere          .= "{$sAnd} solicita.pc10_data  between '{$oGet->dtinicrg}' and '{$oGet->dtfimcrg}' ";
   $sAnd             = " and ";
 } else if (trim($oGet->dtinicrg) != "") {
 
-	$sHeaderDtCriacao = "Criação do Registro: ".$oGet->dtinicrg;
+  $sHeaderDtCriacao = "Criação do Registro: " . $oGet->dtinicrg;
   $sWhere .= "{$sAnd} ( solicita.pc10_data >= '{$oGet->dtinicrg}' ) ";
   $sAnd    = " and ";
 } else if (trim($oGet->dtfimcrg) != "") {
 
-	$sHeaderDtCriacao = "Criação do Registro: ".$oGet->dtfimcrg;
+  $sHeaderDtCriacao = "Criação do Registro: " . $oGet->dtfimcrg;
   $sWhere .= "{$sAnd} ( solicita.pc10_data <= '{$oGet->dtfimcrg}' ) ";
   $sAnd    = " and ";
 }
@@ -83,17 +83,17 @@ $dtFimVlrg = implode("-", array_reverse(explode("/", $oGet->dtfimvlrg)));
 
 if ((trim($dtIniVlrg) != "") && (trim($dtFimVlrg) != "")) {
 
-	$sHeaderDtVal = "Validade do Registro: ".$dtIniVlrg." até ".$dtFimVlrg;
+  $sHeaderDtVal = "Validade do Registro: " . $dtIniVlrg . " até " . $dtFimVlrg;
   $sWhere      .= "{$sAnd} ( pc54_datainicio >= '{$dtIniVlrg}' and pc54_datatermino <= '{$dtFimVlrg}' )  ";
   $sAnd         = " and ";
 } else if (trim($dtIniVlrg) != "") {
 
-	$sHeaderDtVal = "Validade do Registro: ".$dtIniVlrg;
+  $sHeaderDtVal = "Validade do Registro: " . $dtIniVlrg;
   $sWhere      .= "{$sAnd} ( pc54_datainicio >= '{$dtIniVlrg}' ) ";
   $sAnd         = " and ";
 } else if (trim($dtFimVlrg) != "") {
 
-	$sHeaderDtVal = "Validade do Registro: ".$dtFimVlrg;
+  $sHeaderDtVal = "Validade do Registro: " . $dtFimVlrg;
   $sWhere .= "{$sAnd} ( pc54_datatermino <= '{$dtFimVlrg}' ) ";
   $sAnd    = " and ";
 }
@@ -103,17 +103,17 @@ if ((trim($dtIniVlrg) != "") && (trim($dtFimVlrg) != "")) {
  */
 if ((trim($oGet->numini) != "") && (trim($oGet->numfim) != "")) {
 
-	$sHeaderNum = "Compilação: ".$oGet->numini." á ".$oGet->numfim;
+  $sHeaderNum = "Compilação: " . $oGet->numini . " á " . $oGet->numfim;
   $sWhere    .= "{$sAnd} solicita.pc10_numero between '{$oGet->numini}' and '{$oGet->numfim}' ";
   $sAnd       = " and ";
 } else if (trim($oGet->numini) != "") {
 
-	$sHeaderNum = "Compilação: ".$oGet->numini;
+  $sHeaderNum = "Compilação: " . $oGet->numini;
   $sWhere .= "{$sAnd} ( solicita.pc10_numero >= '{$oGet->numini}' ) ";
   $sAnd    = " and ";
 } else if (trim($oGet->numfim) != "") {
 
-	$sHeaderNum = "Compilação: ".$oGet->numfim;
+  $sHeaderNum = "Compilação: " . $oGet->numfim;
   $sWhere .= "{$sAnd} ( solicita.pc10_numero <= '{$oGet->numfim}' ) ";
   $sAnd    = " and ";
 }
@@ -121,9 +121,9 @@ if ((trim($oGet->numini) != "") && (trim($oGet->numfim) != "")) {
 /**
  * Verifica os itens selecionados no formulario.
  */
-if(trim($oGet->itens) != "") {
+if (trim($oGet->itens) != "") {
 
-	$sHeaderItens = "Itens: ( ".$oGet->itens." )";
+  $sHeaderItens = "Itens: ( " . $oGet->itens . " )";
   $sWhere      .= "{$sAnd} pc01_codmater in ($oGet->itens) ";
   $sAnd         = " and ";
 }
@@ -156,12 +156,11 @@ $sSql .= "         inner join matunid                on solicitemunid.pc17_unid 
 $sSql .= "         inner join solicitempcmater       on solicitem.pc11_codigo          = solicitempcmater.pc16_solicitem           ";
 $sSql .= "         inner join pcmater                on solicitempcmater.pc16_codmater = pcmater.pc01_codmater                     ";
 
-if($oGet->lQuebraFornecedor == 't'){
-	$aCgms = array();
+if ($oGet->lQuebraFornecedor == 't') {
+  $aCgms = array();
 }
 
 $sSql .= "   where {$sWhere} {$sOrder}";
-
 $rsSql   = db_query($sSql);
 
 $iRsSql  = pg_num_rows($rsSql);
@@ -189,7 +188,7 @@ $lUltimoControle = null;
 /**
  * Agrupa os registros do record set retornado pelo sql
  */
-for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
+for ($iInd = 0; $iInd  < $iRsSql; $iInd++) {
 
   $oSolicita   = db_utils::fieldsMemory($rsSql, $iInd);
   $oCompilacao = new compilacaoRegistroPreco($oSolicita->pc11_numero);
@@ -217,11 +216,11 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
   $oDadosEstimativa->sCompl         = $oSolicita->pc11_resum;
   $oDadosEstimativa->sUnidade       = $oSolicita->m61_descr;
   $oDadosEstimativa->sFornecedor    = $oSolicita->oDadosFornecedor->vencedor;
-  $oDadosEstimativa->iCgm    		= $oSolicita->oDadosFornecedor->codigocgm;
+  $oDadosEstimativa->iCgm        = $oSolicita->oDadosFornecedor->codigocgm;
 
-	if(!in_array($oSolicita->oDadosFornecedor->codigocgm, explode(',', $oGet->fornecedores)) && strlen($oGet->fornecedores)){
-		continue;
-	}
+  if (!in_array($oSolicita->oDadosFornecedor->codigocgm, explode(',', $oGet->fornecedores)) && strlen($oGet->fornecedores)) {
+    continue;
+  }
 
   $oDadosEstimativa->iEmpenhada     = $oSolicita->empenhada;
   $oDadosEstimativa->iSolicitada    = $oSolicita->solicitada;
@@ -245,6 +244,7 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
 
   $aDadosPosRegPreco[$oSolicita->pc10_numero]['oAbertura']      = $oCompilacao->getCodigoAbertura();
   $aDadosPosRegPreco[$oSolicita->pc10_numero]['oCompilacao']    = $oSolicita->pc11_numero;
+  $aDadosPosRegPreco[$oSolicita->pc10_numero]['reservado']      = $oSolicita->pc11_reservado;
   $aDadosPosRegPreco[$oSolicita->pc10_numero]['lControlaValor'] = $oDadosEstimativa->lControlaValor;
   $aDadosPosRegPreco[$oSolicita->pc10_numero]['sLicitacao']     = $sLicitacao;
 
@@ -253,35 +253,34 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
    * e agrupamos as estimativas por departamentos
    */
 
-	if ( !isset($aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]) ) {
+  if (!isset($aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq])) {
 
-		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['oDados']          = $oDadosEstimativa;
-		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntMin']    = $nQuantMin;
-		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntMax']    = $nQuantMax;
-		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalVlrUnid']   = $nVlrUnitario;
-		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntSolic']  = $oSolicita->pc11_quant;
-	} else {
+    $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['oDados']          = $oDadosEstimativa;
+    $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntMin']    = $nQuantMin;
+    $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntMax']    = $nQuantMax;
+    $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalVlrUnid']   = $nVlrUnitario;
+    $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntSolic']  = $oSolicita->pc11_quant;
+  } else {
 
-		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntMin']   += $nQuantMin;
-		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntMax']   += $nQuantMax;
-		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalVlrUnid']  += $nVlrUnitario;
-		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntSolic'] += $oSolicita->pc11_quant;
-	}
+    $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntMin']   += $nQuantMin;
+    $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntMax']   += $nQuantMax;
+    $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalVlrUnid']  += $nVlrUnitario;
+    $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntSolic'] += $oSolicita->pc11_quant;
+  }
 
-    if(strlen($oGet->fornecedores) || $oGet->lQuebraFornecedor == 't'){
+  if (strlen($oGet->fornecedores) || $oGet->lQuebraFornecedor == 't') {
 
-		if(!in_array($oSolicita->oDadosFornecedor->codigocgm, array_keys($aCgms))){
-			$aCgms[$oSolicita->oDadosFornecedor->codigocgm]['itens'] = array();
-			$aCgms[$oSolicita->oDadosFornecedor->codigocgm]['oAbertura']      = $oCompilacao->getCodigoAbertura();
-			$aCgms[$oSolicita->oDadosFornecedor->codigocgm]['oCompilacao']    = $oSolicita->pc11_numero;
-			$aCgms[$oSolicita->oDadosFornecedor->codigocgm]['lControlaValor'] = $oDadosEstimativa->lControlaValor;
-			$aCgms[$oSolicita->oDadosFornecedor->codigocgm]['sLicitacao'] 	  = $sLicitacao;
-			array_push($aCgms[$oSolicita->oDadosFornecedor->codigocgm]['itens'], $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]);
-		}else{
-			array_push($aCgms[$oSolicita->oDadosFornecedor->codigocgm]['itens'], $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]);
-		}
-
-	}
+    if (!in_array($oSolicita->oDadosFornecedor->codigocgm, array_keys($aCgms))) {
+      $aCgms[$oSolicita->oDadosFornecedor->codigocgm]['itens'] = array();
+      $aCgms[$oSolicita->oDadosFornecedor->codigocgm]['oAbertura']      = $oCompilacao->getCodigoAbertura();
+      $aCgms[$oSolicita->oDadosFornecedor->codigocgm]['oCompilacao']    = $oSolicita->pc11_numero;
+      $aCgms[$oSolicita->oDadosFornecedor->codigocgm]['lControlaValor'] = $oDadosEstimativa->lControlaValor;
+      $aCgms[$oSolicita->oDadosFornecedor->codigocgm]['sLicitacao']     = $sLicitacao;
+      array_push($aCgms[$oSolicita->oDadosFornecedor->codigocgm]['itens'], $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]);
+    } else {
+      array_push($aCgms[$oSolicita->oDadosFornecedor->codigocgm]['itens'], $aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]);
+    }
+  }
 
   if ($lUltimoControle != null && $lUltimoControle != $oDadosEstimativa->lControlaValor) {
     $lTotalGeral = false;
@@ -299,178 +298,178 @@ $nTotalGeralEmpenhar    = 0;
 /**
  * Percore o array $aDadosPosRegPreco agrupando pelo departamento
  */
-if(!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
+if (!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
 
-	foreach ($aDadosPosRegPreco as $iNroSolicitacao => $aDados) {
+  foreach ($aDadosPosRegPreco as $iNroSolicitacao => $aDados) {
 
-		$nTotalRegistros = 0;
-		$nTotalSolicitada = 0;
-		$nTotalEmpenhada = 0;
-		$nTotalSolicitar = 0;
-		$nTotalEmpenhar = 0;
+    $nTotalRegistros = 0;
+    $nTotalSolicitada = 0;
+    $nTotalEmpenhada = 0;
+    $nTotalSolicitar = 0;
+    $nTotalEmpenhar = 0;
 
-		imprimeCabecalho($oPdf, $alt, $aDados['oAbertura'], $aDados['oCompilacao'], $aDados['sLicitacao'], $aDados['lControlaValor']);
-		$lPreenchimento = 1;
+    imprimeCabecalho($oPdf, $alt, $aDados['oAbertura'], $aDados['oCompilacao'], $aDados['sLicitacao'], $aDados['lControlaValor']);
+    $lPreenchimento = 1;
 
-		/**
-		 * Percorre os registros por dados compilação
-		 */
-		foreach ($aDados as $iIndice => $aDadosCompilacao) {
+    /**
+     * Percorre os registros por dados compilação
+     */
+    foreach ($aDados as $iIndice => $aDadosCompilacao) {
 
-			if (is_array($aDadosCompilacao)) {
+      if (is_array($aDadosCompilacao)) {
 
-				foreach ($aDadosCompilacao as $sIndice => $aDadosSolicita) {
+        foreach ($aDadosCompilacao as $sIndice => $aDadosSolicita) {
 
-					if ($oPdf->gety() > $oPdf->h - 30) {
+          if ($oPdf->gety() > $oPdf->h - 30) {
 
-						imprimeCabecalho($oPdf, $alt, $aDados['oAbertura'], $aDados['oCompilacao'], $aDados['sLicitacao'], $aDados['lControlaValor']);
-						$lPreenchimento = 1;
-					}
+            imprimeCabecalho($oPdf, $alt, $aDados['oAbertura'], $aDados['oCompilacao'], $aDados['sLicitacao'], $aDados['lControlaValor']);
+            $lPreenchimento = 1;
+          }
 
-					$lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
-					$oPdf->setfont('arial', '', 6);
+          $lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
+          $oPdf->setfont('arial', '', 6);
 
-					$oPdf->cell(15, $alt, $aDadosSolicita['oDados']->iSeq, 0, 0, "C", $lPreenchimento);
-					$oPdf->cell(15, $alt, $aDadosSolicita['oDados']->iCodItem, 0, 0, "C", $lPreenchimento);
-					$oPdf->cell(28, $alt, substr($aDadosSolicita['oDados']->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
-					$oPdf->cell(39, $alt, str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)), 0, 0, "L", $lPreenchimento);
-					$oPdf->cell(16, $alt, $aDadosSolicita['oDados']->sUnidade, 0, 0, "C", $lPreenchimento);
-					$oPdf->cell(16, $alt, db_formatar($aDadosSolicita['nTotalVlrUnid'], 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
-					$oPdf->cell(($aDadosSolicita['oDados']->lControlaValor ? 50 : 32), $alt, substr($aDadosSolicita['oDados']->sFornecedor, 0, ($aDadosSolicita['oDados']->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
+          $oPdf->cell(15, $alt, $aDadosSolicita['oDados']->iSeq, 0, 0, "C", $lPreenchimento);
+          $oPdf->cell(15, $alt, $aDadosSolicita['oDados']->iCodItem, 0, 0, "C", $lPreenchimento);
+          if ($aDados['reservado'] == 't') {
+            $oPdf->cell(28, $alt, '[ITEM ME/EPP] - ' . substr($aDadosSolicita['oDados']->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
+          } else {
+            $oPdf->cell(28, $alt, substr($aDadosSolicita['oDados']->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
+          }
+          $oPdf->cell(39, $alt, str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)), 0, 0, "L", $lPreenchimento);
+          $oPdf->cell(16, $alt, $aDadosSolicita['oDados']->sUnidade, 0, 0, "C", $lPreenchimento);
+          $oPdf->cell(16, $alt, db_formatar($aDadosSolicita['nTotalVlrUnid'], 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
+          $oPdf->cell(($aDadosSolicita['oDados']->lControlaValor ? 50 : 32), $alt, substr($aDadosSolicita['oDados']->sFornecedor, 0, ($aDadosSolicita['oDados']->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
 
-					if (!$aDadosSolicita['oDados']->lControlaValor) {
-						$oPdf->cell(18, $alt, $aDadosSolicita['nTotalQntMin'] . '/' . $aDadosSolicita['nTotalQntMax'], 0, 0, "R", $lPreenchimento);
-					}
+          if (!$aDadosSolicita['oDados']->lControlaValor) {
+            $oPdf->cell(18, $alt, $aDadosSolicita['nTotalQntMin'] . '/' . $aDadosSolicita['nTotalQntMax'], 0, 0, "R", $lPreenchimento);
+          }
 
-					$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->iSolicitada, 'v', " ", $casadec) : $aDadosSolicita['oDados']->iSolicitada), 0, 0, "R", $lPreenchimento);
-					$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->iEmpenhada, 'v', " ", $casadec) : $aDadosSolicita['oDados']->iEmpenhada), 0, 0, "R", $lPreenchimento);
-					$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->nSolicitar, 'v', " ", $casadec) : $aDadosSolicita['oDados']->nSolicitar), 0, 0, "R", $lPreenchimento);
-					$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->nEmpenhar, 'v', " ", $casadec) : $aDadosSolicita['oDados']->nEmpenhar), 0, 1, "R", $lPreenchimento);
+          $oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->iSolicitada, 'v', " ", $casadec) : $aDadosSolicita['oDados']->iSolicitada), 0, 0, "R", $lPreenchimento);
+          $oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->iEmpenhada, 'v', " ", $casadec) : $aDadosSolicita['oDados']->iEmpenhada), 0, 0, "R", $lPreenchimento);
+          $oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->nSolicitar, 'v', " ", $casadec) : $aDadosSolicita['oDados']->nSolicitar), 0, 0, "R", $lPreenchimento);
+          $oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->nEmpenhar, 'v', " ", $casadec) : $aDadosSolicita['oDados']->nEmpenhar), 0, 1, "R", $lPreenchimento);
 
-					/**
-					 * Total de cada numero de solicitacao
-					 */
-					$iCodigoCompilacao = $aDados['oCompilacao'];
-					$nTotalSolicitada += $aDadosSolicita['oDados']->iSolicitada;
-					$nTotalEmpenhada += $aDadosSolicita['oDados']->iEmpenhada;
-					$nTotalSolicitar += $aDadosSolicita['oDados']->nSolicitar;
-					$nTotalEmpenhar += $aDadosSolicita['oDados']->nEmpenhar;
-					$nTotalRegistros++;
+          /**
+           * Total de cada numero de solicitacao
+           */
+          $iCodigoCompilacao = $aDados['oCompilacao'];
+          $nTotalSolicitada += $aDadosSolicita['oDados']->iSolicitada;
+          $nTotalEmpenhada += $aDadosSolicita['oDados']->iEmpenhada;
+          $nTotalSolicitar += $aDadosSolicita['oDados']->nSolicitar;
+          $nTotalEmpenhar += $aDadosSolicita['oDados']->nEmpenhar;
+          $nTotalRegistros++;
+        }
+      }
+    }
 
-				}
-			}
-		}
+    $oPdf->setfont('arial', 'b', 8);
+    $oPdf->cell(279, 1, '', "T", 1, "L", 0);
+    $oPdf->cell(113, $alt, 'TOTAL DO REGISTRO DE PRECO:', 0, 0, "R", 0);
+    $oPdf->cell(16, $alt, $iCodigoCompilacao, 0, 0, "R", 0);
+    $oPdf->cell(32, $alt, $nTotalRegistros, 0, 0, "R", 0);
+    $oPdf->cell(18, $alt, '', 0, 0, "R", 0);
+    $oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($nTotalSolicitada, 'v', " ", $casadec) : $nTotalSolicitada), 0, 0, "R", 0);
+    $oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($nTotalEmpenhada, 'v', " ", $casadec) : $nTotalEmpenhada), 0, 0, "R", 0);
+    $oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($nTotalSolicitar, 'v', " ", $casadec) : $nTotalSolicitar), 0, 0, "R", 0);
+    $oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($nTotalEmpenhar, 'v', " ", $casadec) : $nTotalEmpenhar), 0, 1, "R", 0);
 
-		$oPdf->setfont('arial', 'b', 8);
-		$oPdf->cell(279, 1, '', "T", 1, "L", 0);
-		$oPdf->cell(113, $alt, 'TOTAL DO REGISTRO DE PRECO:', 0, 0, "R", 0);
-		$oPdf->cell(16, $alt, $iCodigoCompilacao, 0, 0, "R", 0);
-		$oPdf->cell(32, $alt, $nTotalRegistros, 0, 0, "R", 0);
-		$oPdf->cell(18, $alt, '', 0, 0, "R", 0);
-		$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($nTotalSolicitada, 'v', " ", $casadec) : $nTotalSolicitada), 0, 0, "R", 0);
-		$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($nTotalEmpenhada, 'v', " ", $casadec) : $nTotalEmpenhada), 0, 0, "R", 0);
-		$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($nTotalSolicitar, 'v', " ", $casadec) : $nTotalSolicitar), 0, 0, "R", 0);
-		$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($nTotalEmpenhar, 'v', " ", $casadec) : $nTotalEmpenhar), 0, 1, "R", 0);
+    /**
+     * Total Geral soma os totais de cada solicitacao
+     */
 
-		/**
-		 * Total Geral soma os totais de cada solicitacao
-		 */
+    $nTotalGeralRegistros += $nTotalRegistros;
+    $nTotalGeralSolicitada += $nTotalSolicitada;
+    $nTotalGeralEmpenhada += $nTotalEmpenhada;
+    $nTotalGeralSolicitar += $nTotalSolicitar;
+    $nTotalGeralEmpenhar += $nTotalEmpenhar;
+  }
+} else {
 
-		$nTotalGeralRegistros += $nTotalRegistros;
-		$nTotalGeralSolicitada += $nTotalSolicitada;
-		$nTotalGeralEmpenhada += $nTotalEmpenhada;
-		$nTotalGeralSolicitar += $nTotalSolicitar;
-		$nTotalGeralEmpenhar += $nTotalEmpenhar;
-
-	}
-
-}else{
-
-	/*
+  /*
 	 * Percorre o array agrupando pelo Fornecedor vencedor
 	 * */
 
-	foreach ($aCgms as $index => $oFornecedor){
+  foreach ($aCgms as $index => $oFornecedor) {
 
-			$nTotalRegistros = 0;
-			$nTotalSolicitada = 0;
-			$nTotalEmpenhada = 0;
-			$nTotalSolicitar = 0;
-			$nTotalEmpenhar = 0;
+    $nTotalRegistros = 0;
+    $nTotalSolicitada = 0;
+    $nTotalEmpenhada = 0;
+    $nTotalSolicitar = 0;
+    $nTotalEmpenhar = 0;
 
-			imprimeCabecalho($oPdf, $alt, $oFornecedor['oAbertura'], $oFornecedor['oCompilacao'], $oFornecedor['sLicitacao'], $oFornecedor['lControlaValor']);
-			$lPreenchimento = 1;
+    imprimeCabecalho($oPdf, $alt, $oFornecedor['oAbertura'], $oFornecedor['oCompilacao'], $oFornecedor['sLicitacao'], $oFornecedor['lControlaValor']);
+    $lPreenchimento = 1;
 
-			foreach ($oFornecedor['itens'] as $iNroSolicitacao => $oItem) {
+    foreach ($oFornecedor['itens'] as $iNroSolicitacao => $oItem) {
 
-				if ($oPdf->gety() > $oPdf->h - 30) {
-					imprimeCabecalho($oPdf, $alt, $oFornecedor['oAbertura'], $oFornecedor['oCompilacao'], $oFornecedor['sLicitacao'], $oFornecedor['lControlaValor']);
-					$lPreenchimento = 1;
-				}
+      if ($oPdf->gety() > $oPdf->h - 30) {
+        imprimeCabecalho($oPdf, $alt, $oFornecedor['oAbertura'], $oFornecedor['oCompilacao'], $oFornecedor['sLicitacao'], $oFornecedor['lControlaValor']);
+        $lPreenchimento = 1;
+      }
 
-				$lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
-				$oPdf->setfont('arial', '', 6);
+      $lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
+      $oPdf->setfont('arial', '', 6);
 
-				$oPdf->cell(15, $alt, $oItem['oDados']->iSeq, 0, 0, "C", $lPreenchimento);
-				$oPdf->cell(15, $alt, $oItem['oDados']->iCodItem, 0, 0, "C", $lPreenchimento);
-				$oPdf->cell(28, $alt, substr($oItem['oDados']->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
-				$oPdf->cell(39, $alt, str_replace("\\n", "\n", substr(trim($oItem['oDados']->sCompl), 0, 20)), 0, 0, "L", $lPreenchimento);
-				$oPdf->cell(16, $alt, $oItem['oDados']->sUnidade, 0, 0, "C", $lPreenchimento);
-				$oPdf->cell(16, $alt, db_formatar($oItem['nTotalVlrUnid'], 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
-				$oPdf->cell(($oItem['oDados']->lControlaValor ? 50 : 32), $alt, substr($oItem['oDados']->sFornecedor, 0, ($oItem['oDados']->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
+      $oPdf->cell(15, $alt, $oItem['oDados']->iSeq, 0, 0, "C", $lPreenchimento);
+      $oPdf->cell(15, $alt, $oItem['oDados']->iCodItem, 0, 0, "C", $lPreenchimento);
+      $oPdf->cell(28, $alt, substr($oItem['oDados']->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
+      $oPdf->cell(39, $alt, str_replace("\\n", "\n", substr(trim($oItem['oDados']->sCompl), 0, 20)), 0, 0, "L", $lPreenchimento);
+      $oPdf->cell(16, $alt, $oItem['oDados']->sUnidade, 0, 0, "C", $lPreenchimento);
+      $oPdf->cell(16, $alt, db_formatar($oItem['nTotalVlrUnid'], 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
+      $oPdf->cell(($oItem['oDados']->lControlaValor ? 50 : 32), $alt, substr($oItem['oDados']->sFornecedor, 0, ($oItem['oDados']->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
 
-				if (!$oItem['oDados']->lControlaValor) {
-					$oPdf->cell(18, $alt, $oItem['nTotalQntMin'] . '/' . $oItem['nTotalQntMax'], 0, 0, "R", $lPreenchimento);
-				}
+      if (!$oItem['oDados']->lControlaValor) {
+        $oPdf->cell(18, $alt, $oItem['nTotalQntMin'] . '/' . $oItem['nTotalQntMax'], 0, 0, "R", $lPreenchimento);
+      }
 
-				$oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->iSolicitada, 'v', " ", $casadec) : $oItem['oDados']->iSolicitada), 0, 0, "R", $lPreenchimento);
-				$oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->iEmpenhada, 'v', " ", $casadec) : $oItem['oDados']->iEmpenhada), 0, 0, "R", $lPreenchimento);
-				$oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->nSolicitar, 'v', " ", $casadec) : $oItem['oDados']->nSolicitar), 0, 0, "R", $lPreenchimento);
-				$oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->nEmpenhar, 'v', " ", $casadec) : $oItem['oDados']->nEmpenhar), 0, 1, "R", $lPreenchimento);
+      $oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->iSolicitada, 'v', " ", $casadec) : $oItem['oDados']->iSolicitada), 0, 0, "R", $lPreenchimento);
+      $oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->iEmpenhada, 'v', " ", $casadec) : $oItem['oDados']->iEmpenhada), 0, 0, "R", $lPreenchimento);
+      $oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->nSolicitar, 'v', " ", $casadec) : $oItem['oDados']->nSolicitar), 0, 0, "R", $lPreenchimento);
+      $oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->nEmpenhar, 'v', " ", $casadec) : $oItem['oDados']->nEmpenhar), 0, 1, "R", $lPreenchimento);
 
-				/**
-				 * Total de cada numero de solicitacao
-				 */
-				$iCodigoCompilacao = $oFornecedor['oCompilacao'];
-				$nTotalSolicitada += $oItem['oDados']->iSolicitada;
-				$nTotalEmpenhada += $oItem['oDados']->iEmpenhada;
-				$nTotalSolicitar += $oItem['oDados']->nSolicitar;
-				$nTotalEmpenhar += $oItem['oDados']->nEmpenhar;
-				$nTotalRegistros++;
+      /**
+       * Total de cada numero de solicitacao
+       */
+      $iCodigoCompilacao = $oFornecedor['oCompilacao'];
+      $nTotalSolicitada += $oItem['oDados']->iSolicitada;
+      $nTotalEmpenhada += $oItem['oDados']->iEmpenhada;
+      $nTotalSolicitar += $oItem['oDados']->nSolicitar;
+      $nTotalEmpenhar += $oItem['oDados']->nEmpenhar;
+      $nTotalRegistros++;
+    }
 
-			}
+    $oPdf->setfont('arial', 'b', 8);
+    $oPdf->cell(279, 1, '', "T", 1, "L", 0);
+    $oPdf->cell(113, $alt, 'TOTAL DO REGISTRO DE PRECO:', 0, 0, "R", 0);
+    $oPdf->cell(16, $alt, $iCodigoCompilacao, 0, 0, "R", 0);
+    $oPdf->cell(32, $alt, $nTotalRegistros, 0, 0, "R", 0);
+    $oPdf->cell(18, $alt, '', 0, 0, "R", 0);
+    $oPdf->cell(25, $alt, ($oFornecedor['lControlaValor'] ? db_formatar($nTotalSolicitada, 'v', " ", $casadec) : $nTotalSolicitada), 0, 0, "R", 0);
+    $oPdf->cell(25, $alt, ($oFornecedor['lControlaValor'] ? db_formatar($nTotalEmpenhada, 'v', " ", $casadec) : $nTotalEmpenhada), 0, 0, "R", 0);
+    $oPdf->cell(25, $alt, ($oFornecedor['lControlaValor'] ? db_formatar($nTotalSolicitar, 'v', " ", $casadec) : $nTotalSolicitar), 0, 0, "R", 0);
+    $oPdf->cell(25, $alt, ($oFornecedor['lControlaValor'] ? db_formatar($nTotalEmpenhar, 'v', " ", $casadec) : $nTotalEmpenhar), 0, 1, "R", 0);
 
-			$oPdf->setfont('arial', 'b', 8);
-			$oPdf->cell(279, 1, '', "T", 1, "L", 0);
-			$oPdf->cell(113, $alt, 'TOTAL DO REGISTRO DE PRECO:', 0, 0, "R", 0);
-			$oPdf->cell(16, $alt, $iCodigoCompilacao, 0, 0, "R", 0);
-			$oPdf->cell(32, $alt, $nTotalRegistros, 0, 0, "R", 0);
-			$oPdf->cell(18, $alt, '', 0, 0, "R", 0);
-			$oPdf->cell(25, $alt, ($oFornecedor['lControlaValor'] ? db_formatar($nTotalSolicitada, 'v', " ", $casadec) : $nTotalSolicitada), 0, 0, "R", 0);
-			$oPdf->cell(25, $alt, ($oFornecedor['lControlaValor'] ? db_formatar($nTotalEmpenhada, 'v', " ", $casadec) : $nTotalEmpenhada), 0, 0, "R", 0);
-			$oPdf->cell(25, $alt, ($oFornecedor['lControlaValor'] ? db_formatar($nTotalSolicitar, 'v', " ", $casadec) : $nTotalSolicitar), 0, 0, "R", 0);
-			$oPdf->cell(25, $alt, ($oFornecedor['lControlaValor'] ? db_formatar($nTotalEmpenhar, 'v', " ", $casadec) : $nTotalEmpenhar), 0, 1, "R", 0);
+    /**
+     * Total Geral soma os totais de cada solicitacao
+     */
 
-			/**
-			 * Total Geral soma os totais de cada solicitacao
-			 */
-
-			$nTotalGeralRegistros += $nTotalRegistros;
-			$nTotalGeralSolicitada += $nTotalSolicitada;
-			$nTotalGeralEmpenhada += $nTotalEmpenhada;
-			$nTotalGeralSolicitar += $nTotalSolicitar;
-			$nTotalGeralEmpenhar += $nTotalEmpenhar;
-	}
+    $nTotalGeralRegistros += $nTotalRegistros;
+    $nTotalGeralSolicitada += $nTotalSolicitada;
+    $nTotalGeralEmpenhada += $nTotalEmpenhada;
+    $nTotalGeralSolicitar += $nTotalSolicitar;
+    $nTotalGeralEmpenhar += $nTotalEmpenhar;
+  }
 }
 if ($lTotalGeral) {
-  $oPdf->cell(113, $alt, 'TOTAL GERAL:'                                                                 , 0, 0, "R", 0);
-  $oPdf->cell(16,  $alt, ''                                                                             , 0, 0, "R", 0);
-  $oPdf->cell(32,  $alt, $nTotalGeralRegistros                                                          , 0, 0, "R", 0);
-  $oPdf->cell(18,  $alt, ''                                                                             , 0, 0, "R", 0);
-  $oPdf->cell(25,  $alt, $nTotalGeralSolicitada                                                         , 0, 0, "R", 0);
-  $oPdf->cell(25,  $alt, $nTotalGeralEmpenhada                                                          , 0, 0, "R", 0);
-  $oPdf->cell(25,  $alt, $nTotalGeralSolicitar                                                          , 0, 0, "R", 0);
-  $oPdf->cell(25,  $alt, $nTotalGeralEmpenhar                                                           , 0, 1, "R", 0);
+  $oPdf->cell(113, $alt, 'TOTAL GERAL:', 0, 0, "R", 0);
+  $oPdf->cell(16,  $alt, '', 0, 0, "R", 0);
+  $oPdf->cell(32,  $alt, $nTotalGeralRegistros, 0, 0, "R", 0);
+  $oPdf->cell(18,  $alt, '', 0, 0, "R", 0);
+  $oPdf->cell(25,  $alt, $nTotalGeralSolicitada, 0, 0, "R", 0);
+  $oPdf->cell(25,  $alt, $nTotalGeralEmpenhada, 0, 0, "R", 0);
+  $oPdf->cell(25,  $alt, $nTotalGeralSolicitar, 0, 0, "R", 0);
+  $oPdf->cell(25,  $alt, $nTotalGeralEmpenhar, 0, 1, "R", 0);
 }
 
 Header("Content-disposition: inline; filename=posicao_registro_preco_" . time() . ".pdf");
@@ -484,7 +483,8 @@ $oPdf->Output();
  * @param $sLicitacao
  * @param $lControlaValor
  */
-function imprimeCabecalho(&$oPdf, $alt, $iAbertura, $iCompilacao, $sLicitacao, $lControlaValor) {
+function imprimeCabecalho(&$oPdf, $alt, $iAbertura, $iCompilacao, $sLicitacao, $lControlaValor)
+{
 
   $oPdf->addpage("L");
   $oPdf->setfont('arial', 'b', 8);
@@ -508,22 +508,22 @@ function imprimeCabecalho(&$oPdf, $alt, $iAbertura, $iCompilacao, $sLicitacao, $
 
   $oPdf->setfont('arial', 'b', 8);
   $oPdf->cell(($lControlaValor ? 50 : 68), $alt, ($lControlaValor ? "Valor" : "Quantidade"), 1, 0, "C", 1);
-  $oPdf->cell(50, $alt, "Saldos"    , 1, 1, "C", 1);
+  $oPdf->cell(50, $alt, "Saldos", 1, 1, "C", 1);
 
-  $oPdf->cell(15, $alt, "Seq."       , 1, 0, "C", 1);
-  $oPdf->cell(15, $alt, "Item"       , 1, 0, "C", 1);
-  $oPdf->cell(28, $alt, "Descrição"  , 1, 0, "C", 1);
+  $oPdf->cell(15, $alt, "Seq.", 1, 0, "C", 1);
+  $oPdf->cell(15, $alt, "Item", 1, 0, "C", 1);
+  $oPdf->cell(28, $alt, "Descrição", 1, 0, "C", 1);
   $oPdf->cell(39, $alt, "Complemento", 1, 0, "C", 1);
-  $oPdf->cell(16, $alt, "Unidade"    , 1, 0, "C", 1);
-  $oPdf->cell(16, $alt, ($lControlaValor ? "Valor" : "Vlr Uni.")   , 1, 0, "C", 1);
-  $oPdf->cell(($lControlaValor ? 50 : 32), $alt, "Fornecedor" , 1, 0, "C", 1);
+  $oPdf->cell(16, $alt, "Unidade", 1, 0, "C", 1);
+  $oPdf->cell(16, $alt, ($lControlaValor ? "Valor" : "Vlr Uni."), 1, 0, "C", 1);
+  $oPdf->cell(($lControlaValor ? 50 : 32), $alt, "Fornecedor", 1, 0, "C", 1);
 
   if (!$lControlaValor) {
-    $oPdf->cell(18, $alt, "Min/Máx"    , 1, 0, "C", 1);
+    $oPdf->cell(18, $alt, "Min/Máx", 1, 0, "C", 1);
   }
 
-  $oPdf->cell(25, $alt, ($lControlaValor ? "Solicitado" : "Solicitada") , 1, 0, "C", 1);
-  $oPdf->cell(25, $alt, ($lControlaValor ? "Empenhado" : "Empenhada")  , 1, 0, "C", 1);
-  $oPdf->cell(25, $alt, "Solicitar"  , 1, 0, "C", 1);
-  $oPdf->cell(25, $alt, "Empenhar"   , 1, 1, "C", 1);
+  $oPdf->cell(25, $alt, ($lControlaValor ? "Solicitado" : "Solicitada"), 1, 0, "C", 1);
+  $oPdf->cell(25, $alt, ($lControlaValor ? "Empenhado" : "Empenhada"), 1, 0, "C", 1);
+  $oPdf->cell(25, $alt, "Solicitar", 1, 0, "C", 1);
+  $oPdf->cell(25, $alt, "Empenhar", 1, 1, "C", 1);
 }

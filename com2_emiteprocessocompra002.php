@@ -41,16 +41,18 @@ require_once("classes/db_empparametro_classe.php");
 /*
  * Configurações GED
 */
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
-require_once ("libs/exceptions/BusinessException.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
+require_once("libs/exceptions/BusinessException.php");
 
 $oGet = db_utils::postMemory($_GET);
 $oConfiguracaoGed = GerenciadorEletronicoDocumentoConfiguracao::getInstance();
 if ($oConfiguracaoGed->utilizaGED()) {
 
-  if ( !empty($oGet->pc80_data_inicial) || !empty($oGet->pc80_data_final) ||
-        $oGet->pc80_codproc_inicial != $oGet->pc80_codproc_final) {
+  if (
+    !empty($oGet->pc80_data_inicial) || !empty($oGet->pc80_data_final) ||
+    $oGet->pc80_codproc_inicial != $oGet->pc80_codproc_final
+  ) {
 
     $sMsgErro  = "O parâmetro para utilização do GED (Gerenciador Eletrônico de Documentos) está ativado.<br><br>";
     $sMsgErro .= "Neste não é possível informar interválos de códigos ou datas.<br><br>";
@@ -65,9 +67,9 @@ $oDaoPcProcItem   = db_utils::getDao("pcprocitem");
 $oDaoDbDepartOrg  = db_utils::getDao("db_departorg");
 $oDaoSolicitem    = db_utils::getDao("solicitem");
 $classinatura     = new cl_assinatura();
-$sqlpref    = "select * from db_config where codigo = ".db_getsession("DB_instit");
+$sqlpref    = "select * from db_config where codigo = " . db_getsession("DB_instit");
 $resultpref = db_query($sqlpref);
-db_fieldsmemory($resultpref,0);
+db_fieldsmemory($resultpref, 0);
 
 $iNumeroViasDocumento              = 1;
 $iNumeroCasasDecimaisValorUnitario = 2;
@@ -93,7 +95,7 @@ if (!empty($oGet->pc80_codproc_final)) {
   $aWhereProcessoCompras[] = " pc80_codproc <= {$oGet->pc80_codproc_final} ";
 }
 
-if ( !empty($oGet->pc80_data_inicial) ) {
+if (!empty($oGet->pc80_data_inicial)) {
   $oGet->pc80_data_inicial = new DBDate($oGet->pc80_data_inicial);
   $aWhereProcessoCompras[] = " pc80_data >= '{$oGet->pc80_data_inicial->getDate()}'";
 }
@@ -104,8 +106,9 @@ if (!empty($oGet->pc80_data_final)) {
 }
 
 $sWhereProcessoCompras  = implode(' and ', $aWhereProcessoCompras);
-$sSqlProcessoCompras    = $oDaoPcProc->sql_query(null,
-                                               "distinct pc80_codproc,
+$sSqlProcessoCompras    = $oDaoPcProc->sql_query(
+  null,
+  "distinct pc80_codproc,
                                                 pc80_data,
                                                 pc80_resumo,
                                                 descrdepto,
@@ -113,9 +116,9 @@ $sSqlProcessoCompras    = $oDaoPcProc->sql_query(null,
                                                 nomeresponsavel,
                                                 pc80_usuario,
                                                 nome",
-                                                'pc80_codproc',
-                                                $sWhereProcessoCompras
-                                              );
+  'pc80_codproc',
+  $sWhereProcessoCompras
+);
 
 $rsDadosProcessoCompras        = $oDaoPcProc->sql_record($sSqlProcessoCompras);
 $iTotalLinhasProcessoDeCompras = $oDaoPcProc->numrows;
@@ -127,22 +130,22 @@ if ($iTotalLinhasProcessoDeCompras == 0) {
 $pdf = new scpdf();
 $pdf->Open();
 $pdf1 = new db_impcarne($pdf, '93');
-$pdf1->objpdf->SetTextColor(0,0,0);
+$pdf1->objpdf->SetTextColor(0, 0, 0);
 $pdf1->Snumero_ant = "";
 $pdf1->logo        = $logo;
 
-for ($iContador = 0;$iContador < $iTotalLinhasProcessoDeCompras; $iContador++) {
+for ($iContador = 0; $iContador < $iTotalLinhasProcessoDeCompras; $iContador++) {
 
   $oDadosProcessoDeCompras = db_utils::fieldsMemory($rsDadosProcessoCompras, $iContador);
   $pdf1->prefeitura = $nomeinst;
-  $pdf1->enderpref  = trim($ender).",".$numero;
+  $pdf1->enderpref  = trim($ender) . "," . $numero;
   $pdf1->municpref  = $munic;
   $pdf1->telefpref  = $telef;
   $pdf1->emailpref  = $email;
   $pdf1->emissao    = date("Y-m-d", db_getsession("DB_datausu"));
   $pdf1->cgcpref    = $cgc;
-  $sec  = "______________________________"."\n"."Secretaria da Fazenda";
-  $pref = "______________________________"."\n"."Prefeito";
+  $sec  = "______________________________" . "\n" . "Secretaria da Fazenda";
+  $pref = "______________________________" . "\n" . "Prefeito";
 
 
   $pdf1->casadec     = $iNumeroCasasDecimaisValorUnitario;
@@ -152,14 +155,15 @@ for ($iContador = 0;$iContador < $iTotalLinhasProcessoDeCompras; $iContador++) {
   $pdf1->Snumero     = $oDadosProcessoDeCompras->pc80_codproc;
   $pdf1->Sdata       = $oDadosProcessoDeCompras->pc80_data;
   $pdf1->Sresumo     = substr(stripslashes(addslashes($oDadosProcessoDeCompras->pc80_resumo)), 0, 735);
-  $pdf1->Sdepart     = $oDadosProcessoDeCompras->coddepto.' - '.$oDadosProcessoDeCompras->descrdepto;
+  $pdf1->Sdepart     = $oDadosProcessoDeCompras->coddepto . ' - ' . $oDadosProcessoDeCompras->descrdepto;
   $pdf1->Srespdepart = $oDadosProcessoDeCompras->nomeresponsavel;
   $pdf1->Susuarioger = $oDadosProcessoDeCompras->nome;
 
-  $sSqlOrgaDoDepartamento = $oDaoDbDepartOrg->sql_query_orgunid($oDadosProcessoDeCompras->coddepto,
-                                                               db_getsession('DB_anousu'),
-                                                               "o40_descr,o41_descr"
-                                                              );
+  $sSqlOrgaDoDepartamento = $oDaoDbDepartOrg->sql_query_orgunid(
+    $oDadosProcessoDeCompras->coddepto,
+    db_getsession('DB_anousu'),
+    "o40_descr,o41_descr"
+  );
   $rsOrgaoDoDepartamento  = $oDaoDbDepartOrg->sql_record($sSqlOrgaDoDepartamento);
   $pdf1->Sorgao     = '';
   $pdf1->Sunidade   = '';
@@ -207,18 +211,21 @@ for ($iContador = 0;$iContador < $iTotalLinhasProcessoDeCompras; $iContador++) {
   $sCamposItem .= "              else ";
   $sCamposItem .= "                pc11_vlrun ";
   $sCamposItem .= "              end as pc11_vlrun,";
-  $sCamposItem .= "          o56_descr as descrele";
+  $sCamposItem .= "          o56_descr as descrele,";
+  $sCamposItem .= "          pc11_reservado";
 
-  $sSqlItensDoProcessoDeCompras = $oDaoSolicitem->sql_query_item_processo_compras(null,
-                                                                                  $sCamposItem,
-                                                                                   'pc11_seq',
-                                                                                   "pc81_codproc = {$oDadosProcessoDeCompras->pc80_codproc}");
+  $sSqlItensDoProcessoDeCompras = $oDaoSolicitem->sql_query_item_processo_compras(
+    null,
+    $sCamposItem,
+    'pc11_seq',
+    "pc81_codproc = {$oDadosProcessoDeCompras->pc80_codproc}"
+  );
 
   $rsDadosItem                   = $oDaoSolicitem->sql_record($sSqlItensDoProcessoDeCompras);
   $iTotalLinhasItens             = $oDaoSolicitem->numrows;
   $pdf1->recorddositens          = $rsDadosItem;
   $pdf1->linhasdositens          = $iTotalLinhasItens;
-  $pdf1->item	                   = 'pc11_seq';
+  $pdf1->item                     = 'pc11_seq';
   $pdf1->quantitem               = 'pc11_quant';
   $pdf1->valoritem               = 'pc11_vlrun';
   $pdf1->descricaoitem           = 'pc01_descrmater';
@@ -239,7 +246,7 @@ for ($iContador = 0;$iContador < $iTotalLinhasProcessoDeCompras; $iContador++) {
   $pdf1->sdelemento              = 'descrele';
 
   $oDaoPcParam    = db_utils::getDao('pcparam');
-  $result_emissao = $oDaoPcParam->sql_record($oDaoPcParam->sql_query_file(db_getsession("DB_instit"),"pc30_tipoemiss"));
+  $result_emissao = $oDaoPcParam->sql_record($oDaoPcParam->sql_query_file(db_getsession("DB_instit"), "pc30_tipoemiss"));
   if ($oDaoPcParam->numrows > 0) {
     db_fieldsmemory($result_emissao, 0);
   }
@@ -248,8 +255,8 @@ for ($iContador = 0;$iContador < $iTotalLinhasProcessoDeCompras; $iContador++) {
   if ($pc30_tipoemiss == "t") {
 
     $sSqlDotacoesItens = $oDaoPcProcItem->sql_query_dotacao_reserva(
-                                                               null,
-                                                               "pc13_codigo,
+      null,
+      "pc13_codigo,
                                                                 pc13_anousu,
                                                                 pc13_coddot,
                                                                 pc13_quant,
@@ -262,9 +269,9 @@ for ($iContador = 0;$iContador < $iTotalLinhasProcessoDeCompras; $iContador++) {
                                                                 o55_projativ,
                                                                 o55_descr,
                                                                 o56_descr as descrestrutural",
-                                                                'pc13_codigo',
-                                                                "pc81_codproc = {$oDadosProcessoDeCompras->pc80_codproc}"
-                                                               );
+      'pc13_codigo',
+      "pc81_codproc = {$oDadosProcessoDeCompras->pc80_codproc}"
+    );
     $rsDotacoesItens      = $oDaoPcProcItem->sql_record($sSqlDotacoesItens);
 
     $iTotalDotacoesItens  = $oDaoPcProcItem->numrows;
@@ -287,8 +294,7 @@ for ($iContador = 0;$iContador < $iTotalLinhasProcessoDeCompras; $iContador++) {
 
 
   $pdf1->imprime();
-	$pdf1->Snumero_ant = $oDadosProcessoDeCompras->pc80_codproc;
-
+  $pdf1->Snumero_ant = $oDadosProcessoDeCompras->pc80_codproc;
 }
 
 
@@ -306,13 +312,10 @@ if ($oConfiguracaoGed->utilizaGED()) {
     $oStdDadosGED->valor = $pc80_codproc_inicial;
     $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$pc80_codproc_inicial}.pdf");
     $oGerenciador->moverArquivo(array($oStdDadosGED));
-
   } catch (Exception $eErro) {
 
-    db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
+    db_redireciona("db_erros.php?fechar=true&db_erro=" . $eErro->getMessage());
   }
-
 } else {
   $pdf1->objpdf->Output();
 }
-?>
