@@ -505,6 +505,8 @@ class cl_credenciamentotermo {
             $sql .= $campos;
         }
         $sql .= " from credenciamentotermo ";
+        $sql .= " inner join liclicita on liclicita.l20_codigo = credenciamentotermo.l212_licitacao ";
+
         $sql2 = "";
         if ($dbwhere=="") {
             if ( $l212_sequencial != "" && $l212_sequencial != null) {

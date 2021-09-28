@@ -1,0 +1,3 @@
+<?
+$campos = "credenciamentotermo.l212_sequencial,credenciamentotermo.l212_licitacao,credenciamentotermo.l212_fornecedor,credenciamentotermo.l212_numerotermo,credenciamentotermo.l212_dtinicio,credenciamentotermo.l212_dtfim,credenciamentotermo.l212_dtpublicacao,credenciamentotermo.l212_veiculodepublicacao,credenciamentotermo.l212_observacao,credenciamentotermo.l212_instit";
+?>
