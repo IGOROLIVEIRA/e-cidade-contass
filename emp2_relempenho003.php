@@ -1,45 +1,45 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
-include ("fpdf151/pdf.php");
-include ("libs/db_liborcamento.php");
-include ("classes/db_empempenho_classe.php");
-include ("classes/db_cgm_classe.php");
-include ("classes/db_orctiporec_classe.php");
-include ("classes/db_orcdotacao_classe.php");
-include ("classes/db_orcorgao_classe.php");
-include ("classes/db_empemphist_classe.php");
-include ("classes/db_emphist_classe.php");
-include ("classes/db_orcelemento_classe.php");
-include ("classes/db_conlancamemp_classe.php");
-include ("classes/db_conlancamdoc_classe.php");
-include ("classes/db_empempitem_classe.php");
-include ("classes/db_empresto_classe.php");
-include ("classes/db_empelemento_classe.php");
+include("fpdf151/pdf.php");
+include("libs/db_liborcamento.php");
+include("classes/db_empempenho_classe.php");
+include("classes/db_cgm_classe.php");
+include("classes/db_orctiporec_classe.php");
+include("classes/db_orcdotacao_classe.php");
+include("classes/db_orcorgao_classe.php");
+include("classes/db_empemphist_classe.php");
+include("classes/db_emphist_classe.php");
+include("classes/db_orcelemento_classe.php");
+include("classes/db_conlancamemp_classe.php");
+include("classes/db_conlancamdoc_classe.php");
+include("classes/db_empempitem_classe.php");
+include("classes/db_empresto_classe.php");
+include("classes/db_empelemento_classe.php");
 
 //db_postmemory($HTTP_POST_VARS,2);exit;
 db_postmemory($HTTP_POST_VARS);
@@ -81,22 +81,22 @@ $tipo = "a"; // sempre analitico
 
 $clselorcdotacao->setDados($filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
 
-$instits = str_replace('-',', ',$db_selinstit);
+$instits = str_replace('-', ', ', $db_selinstit);
 
 $sele_work = $clselorcdotacao->getDados(false);
 
-$sele_desdobramentos="";
+$sele_desdobramentos = "";
 $desdobramentos = $clselorcdotacao->getDesdobramento(); // coloca os codele dos desdobramntos no formato (x,y,z)
 if ($desdobramentos != "") {
-    $sele_desdobramentos = " and empelemento.e64_codele in ".$desdobramentos; // adiciona desdobramentos
+    $sele_desdobramentos = " and empelemento.e64_codele in " . $desdobramentos; // adiciona desdobramentos
 }
 
 //////////////////////////////////////////////////////////////////
 
-$resultinst = pg_exec("select munic from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
-db_fieldsmemory($resultinst,0);
+$resultinst = pg_exec("select munic from db_config where codigo in (" . str_replace('-', ', ', $db_selinstit) . ") ");
+db_fieldsmemory($resultinst, 0);
 
-$head1 = "MUNICÍPIO DE ".strtoupper($munic);
+$head1 = "MUNICÍPIO DE " . strtoupper($munic);
 
 //////////////////////////////////////////////////////////////////
 
@@ -114,10 +114,10 @@ $sCamposPosicaoAtual .= ", pc50_descr,e60_concarpeculiar,e60_numerol,e54_gestaut
 // monta sql
 $sWhereSQL = "e60_instit in ( $instits )";
 if ($listaitem != "") {
-    if (isset ($veritem) and $veritem == "com") {
-        $sWhereSQL = $sWhereSQL." and e62_item in  ($listaitem)";
+    if (isset($veritem) and $veritem == "com") {
+        $sWhereSQL = $sWhereSQL . " and e62_item in  ($listaitem)";
     } else {
-        $sWhereSQL = $sWhereSQL." and e62_item not in  ($listaitem)";
+        $sWhereSQL = $sWhereSQL . " and e62_item not in  ($listaitem)";
     }
 }
 $sValoresEmpenho = "";
@@ -135,71 +135,71 @@ if ($nValorEmpenhoFinal != "") {
 if ($listasub != "") {
     $resultado = pg_exec("select pc01_codmater from pcmater where pc01_codsubgrupo in ($listasub)");
 
-    if (pg_numrows($resultado) > 0){
+    if (pg_numrows($resultado) > 0) {
         $virgula = "";
         $listar  = "";
-        for ($i = 0; $i < pg_numrows($resultado); $i++){
+        for ($i = 0; $i < pg_numrows($resultado); $i++) {
             db_fieldsmemory($resultado, $i);
-            $listar  .= $virgula.$pc01_codmater;
+            $listar  .= $virgula . $pc01_codmater;
             $virgula  = ", ";
         }
 
-        if (isset ($veritem) and $veritem == "com") {
-            $sWhereSQL = $sWhereSQL." and e62_item in  ($listar)";
+        if (isset($veritem) and $veritem == "com") {
+            $sWhereSQL = $sWhereSQL . " and e62_item in  ($listar)";
         } else {
-            $sWhereSQL = $sWhereSQL." and e62_item not in  ($listar)";
+            $sWhereSQL = $sWhereSQL . " and e62_item not in  ($listar)";
         }
     } else {
         $listasub = "";
     }
 }
 if ($listacredor != "") {
-    if (isset ($ver) and $ver == "com") {
-        $sWhereSQL = $sWhereSQL." and e60_numcgm in  ($listacredor)";
+    if (isset($ver) and $ver == "com") {
+        $sWhereSQL = $sWhereSQL . " and e60_numcgm in  ($listacredor)";
     } else {
-        $sWhereSQL = $sWhereSQL." and e60_numcgm not in  ($listacredor)";
+        $sWhereSQL = $sWhereSQL . " and e60_numcgm not in  ($listacredor)";
     }
 }
 if ($listahist != "") {
-    if (isset ($verhist) and $verhist == "com") {
-        $sWhereSQL = $sWhereSQL." and e63_codhist in  ($listahist)";
+    if (isset($verhist) and $verhist == "com") {
+        $sWhereSQL = $sWhereSQL . " and e63_codhist in  ($listahist)";
     } else {
-        $sWhereSQL = $sWhereSQL." and e63_codhist not in  ($listahist)";
+        $sWhereSQL = $sWhereSQL . " and e63_codhist not in  ($listahist)";
     }
 }
-if ($listaevento != ""){
-    if (isset($verhist) && $verhist == "com"){
-        $sWhereSQL = $sWhereSQL." and e60_codtipo in ($listaevento)";
+if ($listaevento != "") {
+    if (isset($verhist) && $verhist == "com") {
+        $sWhereSQL = $sWhereSQL . " and e60_codtipo in ($listaevento)";
     } else {
-        $sWhereSQL = $sWhereSQL." and e60_codtipo not in ($listaevento)";
+        $sWhereSQL = $sWhereSQL . " and e60_codtipo not in ($listaevento)";
     }
 }
-if ($listatipoanulacao != ""){
-    if (isset($verhist) && $verhist == "com"){
-        $sWhereSQL = $sWhereSQL." and e94_empanuladotipo in ($listatipoanulacao)";
+if ($listatipoanulacao != "") {
+    if (isset($verhist) && $verhist == "com") {
+        $sWhereSQL = $sWhereSQL . " and e94_empanuladotipo in ($listatipoanulacao)";
     }
 }
 
-if ($listacom != "" ) {
-    if (isset ($vercom) and $vercom == "com") {
-        $sWhereSQL = $sWhereSQL." and e60_codcom in  ($listacom)";
+if ($listacom != "") {
+    if (isset($vercom) and $vercom == "com") {
+        $sWhereSQL = $sWhereSQL . " and e60_codcom in  ($listacom)";
     } else {
-        $sWhereSQL = $sWhereSQL." and e60_codcom not in  ($listacom)";
+        $sWhereSQL = $sWhereSQL . " and e60_codcom not in  ($listacom)";
     }
 }
 
-if ($listalicita != "" ) {
-    if (isset ($vercom) and $vercom == "com") {
-        $sWhereSQL = $sWhereSQL." and empempenho.e60_numerol IN (select l20_numero::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo in  ($listalicita))";
+if ($listalicita != "") {
+    if (isset($vercom) and $vercom == "com") {
+        $sWhereSQL = $sWhereSQL . " and empempenho.e60_numerol IN (select l20_numero::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo in  ($listalicita))";
 
-        $sWhereSQL = $sWhereSQL." AND empempenho.e60_codcom IN
+        $sWhereSQL = $sWhereSQL . " AND empempenho.e60_codcom IN
     (SELECT l03_codcom
      FROM liclicita join cflicita on l03_codigo = l20_codtipocom
      WHERE l20_codigo IN ($listalicita))";
     } else {
-        $sWhereSQL = $sWhereSQL." and empempenho.e60_numerol IN (select l20_numero::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo not in  ($listalicita))";
+        $sWhereSQL = $sWhereSQL . " and empempenho.e60_numerol IN (select l20_numero::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo not in  ($listalicita))";
 
-        $sWhereSQL = $sWhereSQL." AND empempenho.e60_codcom IN
+        $sWhereSQL = $sWhereSQL . " AND empempenho.e60_codcom IN
     (SELECT l03_codcom
      FROM liclicita join cflicita on l03_codigo = l20_codtipocom
      WHERE l20_codigo NOT IN ($listalicita))";
@@ -207,73 +207,56 @@ if ($listalicita != "" ) {
 }
 
 if (($datacredor != "--") && ($datacredor1 != "--")) {
-    $sWhereSQL = $sWhereSQL." and e60_emiss between '$datacredor' and '$datacredor1'  ";
-    $info = "De ".db_formatar($datacredor, "d")." até ".db_formatar($datacredor1, "d").".";
+    $sWhereSQL = $sWhereSQL . " and e60_emiss between '$datacredor' and '$datacredor1'  ";
+    $info = "De " . db_formatar($datacredor, "d") . " até " . db_formatar($datacredor1, "d") . ".";
 } else
     if ($datacredor != "--") {
-        $sWhereSQL = $sWhereSQL." and e60_emiss >= '$datacredor'  ";
-        $info = "Apartir de ".db_formatar($datacredor, "d").".";
-    } else
+    $sWhereSQL = $sWhereSQL . " and e60_emiss >= '$datacredor'  ";
+    $info = "Apartir de " . db_formatar($datacredor, "d") . ".";
+} else
         if ($datacredor1 != "--") {
-            $sWhereSQL = $sWhereSQL."    e60_emiss <= '$datacredor1'   ";
-            $info = "Até ".db_formatar($datacredor1, "d").".";
-        }
+    $sWhereSQL = $sWhereSQL . "    e60_emiss <= '$datacredor1'   ";
+    $info = "Até " . db_formatar($datacredor1, "d") . ".";
+}
 
 if ($tipoemp == "todos") {
-    $sWhereSQL = $sWhereSQL." ";
-}
-elseif ($tipoemp == "somemp") {
-    $sWhereSQL = $sWhereSQL." and (round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2) > 0) and round(yyy.e60_vlrliq,2) = 0 ";
-}
-elseif ($tipoemp == "saldo") {
+    $sWhereSQL = $sWhereSQL . " ";
+} elseif ($tipoemp == "somemp") {
+    $sWhereSQL = $sWhereSQL . " and (round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2) > 0) and round(yyy.e60_vlrliq,2) = 0 ";
+} elseif ($tipoemp == "saldo") {
     // com saldo a pagar geral
-    $sWhereSQL = $sWhereSQL." and (round(round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2),2) - round(yyy.e60_vlrpag,2) > 0 ) ";
-}
-elseif ($tipoemp == "saldoliq") {
-    $sWhereSQL = $sWhereSQL." and (round(yyy.e60_vlrliq,2) - round(yyy.e60_vlrpag,2) > 0) and round(yyy.e60_vlrliq,2) > 0";
-}
-elseif ($tipoemp == "saldonaoliq") {
-//	$sWhereSQL = $sWhereSQL." and (round(yyy.e60_vlrliq,2) - round(yyy.e60_vlrpag,2) > 0) and round(yyy.e60_vlrliq,2) = 0";
-    $sWhereSQL = $sWhereSQL." and (round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2) - round(yyy.e60_vlrliq,2) > 0)";
-}
-elseif ($tipoemp == "anul") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlranu,2) > 0 ";
-}
-elseif ($tipoemp == "anultot") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlremp,2) = round(yyy.e60_vlranu,2)";
-}
-elseif ($tipoemp == "anulparc") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlranu,2) > 0 and round(yyy.e60_vlremp,2) <> round(yyy.e60_vlranu,2)";
-}
-elseif ($tipoemp == "anulsem") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlranu,2) = 0";
-}
-elseif ($tipoemp == "liq") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlrliq,2) > 0";
-}
-elseif ($tipoemp == "liqtot") {
-    $sWhereSQL = $sWhereSQL." and ((round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2)) = round(yyy.e60_vlrliq,2))";
-}
-elseif ($tipoemp == "liqparc") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlrliq,2) > 0 and ((round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2)) <> round(yyy.e60_vlrliq,2))";
-}
-elseif ($tipoemp == "liqsem") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlrliq,2) = 0";
-}
-elseif ($tipoemp == "pag") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlrpag,2) > 0 ";
-}
-elseif ($tipoemp == "pagtot") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlrpag,2) > 0 and (round(yyy.e60_vlrliq,2) = round(yyy.e60_vlrpag,2))";
-}
-elseif ($tipoemp == "pagparc") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlrpag,2) > 0 and (round(yyy.e60_vlrliq,2) <> round(yyy.e60_vlrpag,2))";
-}
-elseif ($tipoemp == "pagsem") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlrpag,2) = 0";
-}
-elseif ($tipoemp == "pagsemcomliq") {
-    $sWhereSQL = $sWhereSQL." and round(yyy.e60_vlrpag,2) = 0 and round(yyy.e60_vlrliq,2) > 0";
+    $sWhereSQL = $sWhereSQL . " and (round(round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2),2) - round(yyy.e60_vlrpag,2) > 0 ) ";
+} elseif ($tipoemp == "saldoliq") {
+    $sWhereSQL = $sWhereSQL . " and (round(yyy.e60_vlrliq,2) - round(yyy.e60_vlrpag,2) > 0) and round(yyy.e60_vlrliq,2) > 0";
+} elseif ($tipoemp == "saldonaoliq") {
+    //	$sWhereSQL = $sWhereSQL." and (round(yyy.e60_vlrliq,2) - round(yyy.e60_vlrpag,2) > 0) and round(yyy.e60_vlrliq,2) = 0";
+    $sWhereSQL = $sWhereSQL . " and (round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2) - round(yyy.e60_vlrliq,2) > 0)";
+} elseif ($tipoemp == "anul") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlranu,2) > 0 ";
+} elseif ($tipoemp == "anultot") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlremp,2) = round(yyy.e60_vlranu,2)";
+} elseif ($tipoemp == "anulparc") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlranu,2) > 0 and round(yyy.e60_vlremp,2) <> round(yyy.e60_vlranu,2)";
+} elseif ($tipoemp == "anulsem") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlranu,2) = 0";
+} elseif ($tipoemp == "liq") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlrliq,2) > 0";
+} elseif ($tipoemp == "liqtot") {
+    $sWhereSQL = $sWhereSQL . " and ((round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2)) = round(yyy.e60_vlrliq,2))";
+} elseif ($tipoemp == "liqparc") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlrliq,2) > 0 and ((round(yyy.e60_vlremp,2) - round(yyy.e60_vlranu,2)) <> round(yyy.e60_vlrliq,2))";
+} elseif ($tipoemp == "liqsem") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlrliq,2) = 0";
+} elseif ($tipoemp == "pag") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlrpag,2) > 0 ";
+} elseif ($tipoemp == "pagtot") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlrpag,2) > 0 and (round(yyy.e60_vlrliq,2) = round(yyy.e60_vlrpag,2))";
+} elseif ($tipoemp == "pagparc") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlrpag,2) > 0 and (round(yyy.e60_vlrliq,2) <> round(yyy.e60_vlrpag,2))";
+} elseif ($tipoemp == "pagsem") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlrpag,2) = 0";
+} elseif ($tipoemp == "pagsemcomliq") {
+    $sWhereSQL = $sWhereSQL . " and round(yyy.e60_vlrpag,2) = 0 and round(yyy.e60_vlrliq,2) > 0";
 }
 
 if ($emptipo != 0) {
@@ -281,14 +264,14 @@ if ($emptipo != 0) {
 }
 
 
-if (isset($listaconcarpeculiar) && $listaconcarpeculiar != ""){
+if (isset($listaconcarpeculiar) && $listaconcarpeculiar != "") {
 
-    $listaconcarpeculiar = "'".str_replace(",", "','",$listaconcarpeculiar)."'" ;
+    $listaconcarpeculiar = "'" . str_replace(",", "','", $listaconcarpeculiar) . "'";
 
-    if (isset($verconcarpeculiar) && $verconcarpeculiar == "com"){
-        $sWhereSQL = $sWhereSQL." and e60_concarpeculiar in ($listaconcarpeculiar)";
+    if (isset($verconcarpeculiar) && $verconcarpeculiar == "com") {
+        $sWhereSQL = $sWhereSQL . " and e60_concarpeculiar in ($listaconcarpeculiar)";
     } else {
-        $sWhereSQL = $sWhereSQL." and e60_concarpeculiar not in ($listaconcarpeculiar)";
+        $sWhereSQL = $sWhereSQL . " and e60_concarpeculiar not in ($listaconcarpeculiar)";
     }
 }
 
@@ -310,26 +293,25 @@ if ($agrupar == "a") { // fornecedor
     $sOrderSQL = "o15_codigo, e60_emiss";
 } elseif ($agrupar == "d") {
     // desdobramento
-} elseif ($agrupar == "ta"){
+} elseif ($agrupar == "ta") {
     $sOrderSQL = "e94_empanuladotipo,e60_emiss";
 } elseif ($agrupar == "do") {
     $sOrderSQL = "e60_coddot, e60_emiss";
 } else {
-
 }
-if ($agrupar !="orgao" && $agrupar!="r" && $agrupar!="d"){
-    if ($chk_ordem != "0"){
-        if ($chk_ordem== "E") {
+if ($agrupar != "orgao" && $agrupar != "r" && $agrupar != "d") {
+    if ($chk_ordem != "0") {
+        if ($chk_ordem == "E") {
             $sOrderSQL = "e60_vlremp desc ";
-        }elseif ($chk_ordem== "L"){
+        } elseif ($chk_ordem == "L") {
             $sOrderSQL = "e60_vlrliq desc ";
-        }elseif ($chk_ordem== "P"){
+        } elseif ($chk_ordem == "P") {
             $sOrderSQL = "e60_vlrpag desc ";
         }
     }
 }
 
-if ($agrupar == "oo"){
+if ($agrupar == "oo") {
     // $sOrderSQL = " e60_emiss, z01_nome, e60_anousu, e60_codemp ";
     $sOrderSQL = " e60_numemp, to_number(e60_codemp::text,'9999999999') ";
 }
@@ -341,10 +323,10 @@ if ($lSepararGestor) {
 }
 
 // para tipos de anulacao
-if($agrupar == "ta"){
+if ($agrupar == "ta") {
     $sSqlAnulado .= " INNER JOIN empanulado on e94_numemp = empempenho.e60_numemp ";
     $sSqlAnulado .= " INNER JOIN empanuladotipo ON e38_sequencial = e94_empanuladotipo ";
-}else{
+} else {
     $sSqlAnulado .= " LEFT JOIN empanulado on e94_numemp = empempenho.e60_numemp ";
     $sSqlAnulado .= " LEFT JOIN empanuladotipo ON e38_sequencial = e94_empanuladotipo ";
 }
@@ -394,7 +376,7 @@ if ($processar == "a") {
             x.e54_gestaut,
             x.descrdepto
 				  from ($sqlrelemp) as x
-			               inner join empelemento on x.e60_numemp = e64_numemp  ".$sele_desdobramentos."
+			               inner join empelemento on x.e60_numemp = e64_numemp  " . $sele_desdobramentos . "
 				       inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
 
 				       group by
@@ -437,7 +419,7 @@ if ($processar == "a") {
                 x.descrdepto,
                 e94_empanuladotipo,
             	e38_descr";
-    }elseif($agrupar == "ta"){
+    } elseif ($agrupar == "ta") {
         $sqlrelemp = "select 	  x.e60_resumo,
 					  x.e60_numemp,
 					  x.e60_codemp,
@@ -478,7 +460,7 @@ if ($processar == "a") {
             e94_empanuladotipo,
             e38_descr
 				  from ($sqlrelemp) as x
-			               inner join empelemento on x.e60_numemp = e64_numemp  ".$sele_desdobramentos."
+			               inner join empelemento on x.e60_numemp = e64_numemp  " . $sele_desdobramentos . "
 				       inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
 
 				       group by
@@ -521,7 +503,7 @@ if ($processar == "a") {
                 x.descrdepto,
                 e94_empanuladotipo,
             	e38_descr";
-    }else{
+    } else {
         $sqlrelemp = "select distinct  x.e60_resumo,
 					  x.e60_numemp,
 					  x.e60_codemp,
@@ -560,7 +542,7 @@ if ($processar == "a") {
             x.e54_gestaut,
             x.descrdepto
 				  from ($sqlrelemp) as x
-			               inner join empelemento on x.e60_numemp = e64_numemp  ".$sele_desdobramentos."
+			               inner join empelemento on x.e60_numemp = e64_numemp  " . $sele_desdobramentos . "
 				       inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
 
 				       group by
@@ -605,21 +587,18 @@ if ($processar == "a") {
             	e38_descr";
     }
 
-    $sqlrelemp = "select * from ($sqlrelemp) as x " . (
-        $agrupar == "d"
-            ? " order by e64_codele, e60_emiss "
-            : " order by $sOrderSQL "
-        );
+    $sqlrelemp = "select * from ($sqlrelemp) as x " . ($agrupar == "d"
+        ? " order by e64_codele, e60_emiss "
+        : " order by $sOrderSQL ");
 
     $res = $clempempenho->sql_record($sqlrelemp);
-//	echo $sqlrelemp;db_criatabela($res);die();
+    // echo $sqlrelemp;db_criatabela($res);die();
 
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
     } else {
         db_redireciona('db_erros.php?fechar=true&db_erro=Não existem dados para gerar a consulta (A21) !');
     }
-
 } else {
 
     $sqlperiodo = "
@@ -679,7 +658,7 @@ if ($processar == "a") {
 					  inner join orcelemento 		on  orcelemento.o56_codele = orcdotacao.o58_codele
 									       and  orcelemento.o56_anousu = orcdotacao.o58_anousu
 					      inner join conlancamemp 	on c75_numemp = xxx.e60_numemp
-					      inner join conlancam	    on c70_codlan = c75_codlan 
+					      inner join conlancam	    on c70_codlan = c75_codlan
 					      inner join conlancamdoc 	on c71_codlan = c70_codlan
 					      inner join conhistdoc 	on c53_coddoc = c71_coddoc and c53_tipo in (10,11,20,21,30,31)
 					      inner join conlancamdot   on c73_codlan = c75_codlan
@@ -712,17 +691,17 @@ if ($processar == "a") {
           INNER JOIN db_depart ON e54_gestaut = coddepto
 		  {$sSqlAnulado}";
     if ($listaitem != "" or $listasub != "") {
-        if ($listaitem != ""){
-            $sqlperiodo .="  inner join empempitem on e62_numemp=empempenho.e60_numemp and e62_item in ($listaitem) ";
+        if ($listaitem != "") {
+            $sqlperiodo .= "  inner join empempitem on e62_numemp=empempenho.e60_numemp and e62_item in ($listaitem) ";
         }
 
         if ($listasub != "") {
-            $sqlperiodo .="  left join empempitem on e62_numemp=empempenho.e60_numemp and e62_item in ($listar) ";
+            $sqlperiodo .= "  left join empempitem on e62_numemp=empempenho.e60_numemp and e62_item in ($listar) ";
         }
     }
-    $sqlperiodo .=" where $sWhereSQL ";
+    $sqlperiodo .= " where $sWhereSQL ";
 
-    if ($listaitem != ""){
+    if ($listaitem != "") {
         $sqlperiodo .= " group by empempenho.e60_numemp,  empempenho.e60_resumo, empempenho.e60_codemp,
 		                            empempenho.e60_emiss,   empempenho.e60_numcgm,
 			                    cgm.z01_nome,           cgm.z01_cgccpf,        cgm.z01_munic,
@@ -732,9 +711,8 @@ if ($processar == "a") {
 					    orcdotacao.o58_orgao,   orcorgao.o40_orgao,    orcorgao.o40_descr,
 					    orcdotacao.o58_unidade, orcunidade.o41_descr,  orctiporec.o15_codigo,
 					    orctiporec.o15_descr,   empempenho.e60_codcom, pctipocompra.pc50_descr,empempenho.e60_concarpeculiar ";
-
     }
-    $sqlperiodo .=" group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31  ";
+    $sqlperiodo .= " group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31  ";
 
     if ($agrupar == "d" || $sele_desdobramentos != "") {
         $sqlperiodo =  "
@@ -772,7 +750,7 @@ if ($processar == "a") {
 		      from ($sqlperiodo) as x
 			    /* inner join empelemento on x.e60_numemp = e64_numemp */
 
-	 	      inner join empelemento on x.e60_numemp = e64_numemp  ".$sele_desdobramentos."
+	 	      inner join empelemento on x.e60_numemp = e64_numemp  " . $sele_desdobramentos . "
 			  inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
 		      group by  e60_numemp,
 					e60_resumo,
@@ -805,23 +783,21 @@ if ($processar == "a") {
 					orcelemento.o56_descr,
           e60_concarpeculiar,
           e60_numerol";
-        if ($agrupar == "d" ) {
+        if ($agrupar == "d") {
             $sqlperiodo .= "
                         group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
                          order by  e60_emiss
   			    ";
-        }else{
+        } else {
             $sqlperiodo .= "
                          group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
                          order by  e60_emiss
   			    ";
-
         }
-
     }
 
     $res = $clempempenho->sql_record($sqlperiodo);
-	//echo $sqlperiodo;db_criatabela($res);die();
+    //echo $sqlperiodo;db_criatabela($res);die();
 
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
@@ -835,7 +811,7 @@ header("Content-type: application/csv");
 header("Content-Disposition: attachment; filename=file.csv");
 header("Pragma: no-cache");
 
-if($agrupar == 'gest') {
+if ($agrupar == 'gest') {
 
     $departAnt = '';
     $contEmpenhos = 0;
@@ -846,14 +822,18 @@ if($agrupar == 'gest') {
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
     }
     if ($mostraritem == "m") {
-        echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        if ($instits != db_getsession("DB_instit")) {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        } else {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;SALDO;COMPLEMENTO;;;;;;\n";
+        }
     }
 
     for ($x = 0; $x < $rows; $x++) {
 
         $objeto = db_utils::fieldsMemory($res, $x, true);
 
-        if ( empty($departAnt) &&  $departAnt == null  ) {
+        if (empty($departAnt) &&  $departAnt == null) {
             echo ";;;GESTOR : ;{$objeto->e54_gestaut} :: {$objeto->descrdepto};\n";
             $departAnt = "{$objeto->e54_gestaut}";
         }
@@ -882,7 +862,6 @@ if($agrupar == 'gest') {
 
             $departAnt = "{$objeto->e54_gestaut}";
             $contEmpenhos = 0;
-
         }
 
         $TotalEmpenhado    += $objeto->e60_vlremp;
@@ -907,28 +886,59 @@ if($agrupar == 'gest') {
         echo "\n";
 
         if ($mostraritem == "m") {
+            if ($instits != db_getsession("DB_instit")) {
+                $dbwhere = "e62_numemp = $objeto->e60_numemp ";
+                if ($listaitem != "" or $listasub != "") {
+                    if ($listaitem != "") {
+                        $dbwhere .= "and e62_item in ($listaitem) ";
+                    }
 
-            $dbwhere = "e62_numemp = $objeto->e60_numemp ";
-            if ($listaitem != "" or $listasub != "") {
-                if ($listaitem != ""){
-                    $dbwhere .= "and e62_item in ($listaitem) ";
+                    if ($listasub != "") {
+                        $dbwhere .= "and e62_item in ($listar) ";
+                    }
                 }
 
-                if ($listasub != "") {
-                    $dbwhere .= "and e62_item in ($listar) ";
+                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
+                $rows_item = $clempempitem->numrows;
+
+                for ($item = 0; $item < $rows_item; $item++) {
+                    db_fieldsmemory($resitem, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
                 }
-            }
+            } else {
+                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
+                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
+                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
+                $sCamposEmpenho .= "         ,e62_descr";
+                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
+                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
+                $sCamposEmpenho .= "         ,rnvaloruni";
+                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
+                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
+                $sCamposEmpenho .= "         ,o56_descr";
+                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
+                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
+                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
+                $sCamposEmpenho .= "         end as observacao";
+                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
 
-            $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr",null,$dbwhere));
-            $rows_item = $clempempitem->numrows;
+                $oDaoEmpenho      = db_utils::getDao("empempenho");
+                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
+                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
 
-            for ($item = 0; $item < $rows_item; $item ++) {
-                db_fieldsmemory($resitem, $item, true);
+                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
+                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
 
-                echo "$e62_item;$pc01_descrmater;";
-                echo db_formatar($e62_quant, 'f').";";
-                echo db_formatar($e62_vltot, 'f').";";
-                echo substr($e62_descr, 0, 100).";\n";
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo db_formatar($saldo_valor, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
+                }
             }
         }
         if ($mostrarobs == "m") {
@@ -936,9 +946,9 @@ if($agrupar == 'gest') {
         }
         if (1 == 1) {
 
-            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
+            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
             $rows_lancamemp = $clconlancamemp->numrows;
-            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp ++) {
+            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp++) {
                 db_fieldsmemory($reslancam, $lancemp, true);
                 $reslancamdoc = $clconlancamdoc->sql_record($clconlancamdoc->sql_query($c70_codlan, "*"));
                 db_fieldsmemory($reslancamdoc, 0, true);
@@ -947,36 +957,29 @@ if($agrupar == 'gest') {
                     echo ";;;$c70_data;";
                     echo "$c70_codlan;";
                     echo "$c53_descr;";
-                    echo db_formatar($c70_valor, 'f').";\n";
+                    echo db_formatar($c70_valor, 'f') . ";\n";
                 }
 
                 if ($c53_tipo == 10) {
                     $lanctotemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 11) {
+                } elseif ($c53_tipo == 11) {
                     $lanctotanuemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 20) {
+                } elseif ($c53_tipo == 20) {
                     $lanctotliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 21) {
+                } elseif ($c53_tipo == 21) {
                     $lanctotanuliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 30) {
+                } elseif ($c53_tipo == 30) {
                     $lanctotpag += $c70_valor;
-                }
-                elseif ($c53_tipo == 31) {
+                } elseif ($c53_tipo == 31) {
                     $lanctotanupag += $c70_valor;
                 }
-
             }
         }
         $contEmpenhos++;
 
-        if($x == $rows-1){
+        if ($x == $rows - 1) {
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
         }
-
     }
 
     echo "TOTAL DE EMPENHOS: $rows;;;;;TOTAL GERAL;$GeralTotalEmpenhado;$GeralTotalAnulado;$GeralTotalLiquidado;$GeralTotalPago;$GeralTotalLiquidado2;$GeralTotalNaoLiquidado;$GeralTotalGeral;\n";
@@ -984,27 +987,24 @@ if($agrupar == 'gest') {
     if ($processar == "a") {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";"
-            .db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p').";"
-            .db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p').";"
-            .db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p').";";
-
-    }else{
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";"
+            . db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p') . ";"
+            . db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p') . ";"
+            . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
+    } else {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";";
-
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";";
     }
-
 }
 
-if($agrupar == 'oo'){
+if ($agrupar == 'oo') {
 
     $departAnt = '';
     $contEmpenhos = 0;
@@ -1014,7 +1014,11 @@ if($agrupar == 'oo'){
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
     }
     if ($mostraritem == "m") {
-        echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        if ($instits != db_getsession("DB_instit")) {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        } else {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;SALDO;COMPLEMENTO;;;;;;\n";
+        }
     }
 
     for ($x = 0; $x < $rows; $x++) {
@@ -1052,28 +1056,59 @@ if($agrupar == 'oo'){
         echo "\n";
 
         if ($mostraritem == "m") {
+            if ($instits != db_getsession("DB_instit")) {
+                $dbwhere = "e62_numemp = $objeto->e60_numemp ";
+                if ($listaitem != "" or $listasub != "") {
+                    if ($listaitem != "") {
+                        $dbwhere .= "and e62_item in ($listaitem) ";
+                    }
 
-            $dbwhere = "e62_numemp = $objeto->e60_numemp ";
-            if ($listaitem != "" or $listasub != "") {
-                if ($listaitem != ""){
-                    $dbwhere .= "and e62_item in ($listaitem) ";
+                    if ($listasub != "") {
+                        $dbwhere .= "and e62_item in ($listar) ";
+                    }
                 }
 
-                if ($listasub != "") {
-                    $dbwhere .= "and e62_item in ($listar) ";
+                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
+                $rows_item = $clempempitem->numrows;
+
+                for ($item = 0; $item < $rows_item; $item++) {
+                    db_fieldsmemory($resitem, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
                 }
-            }
+            } else {
+                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
+                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
+                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
+                $sCamposEmpenho .= "         ,e62_descr";
+                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
+                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
+                $sCamposEmpenho .= "         ,rnvaloruni";
+                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
+                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
+                $sCamposEmpenho .= "         ,o56_descr";
+                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
+                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
+                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
+                $sCamposEmpenho .= "         end as observacao";
+                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
 
-            $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr",null,$dbwhere));
-            $rows_item = $clempempitem->numrows;
+                $oDaoEmpenho      = db_utils::getDao("empempenho");
+                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
+                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
 
-            for ($item = 0; $item < $rows_item; $item ++) {
-                db_fieldsmemory($resitem, $item, true);
+                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
+                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
 
-                echo "$e62_item;$pc01_descrmater;";
-                echo db_formatar($e62_quant, 'f').";";
-                echo db_formatar($e62_vltot, 'f').";";
-                echo substr($e62_descr, 0, 100).";\n";
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo db_formatar($saldo_valor, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
+                }
             }
         }
         if ($mostrarobs == "m") {
@@ -1081,9 +1116,9 @@ if($agrupar == 'oo'){
         }
         if (1 == 1) {
 
-            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
+            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
             $rows_lancamemp = $clconlancamemp->numrows;
-            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp ++) {
+            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp++) {
                 db_fieldsmemory($reslancam, $lancemp, true);
                 $reslancamdoc = $clconlancamdoc->sql_record($clconlancamdoc->sql_query($c70_codlan, "*"));
                 db_fieldsmemory($reslancamdoc, 0, true);
@@ -1092,36 +1127,29 @@ if($agrupar == 'oo'){
                     echo ";;;$c70_data;";
                     echo "$c70_codlan;";
                     echo "$c53_descr;";
-                    echo db_formatar($c70_valor, 'f').";\n";
+                    echo db_formatar($c70_valor, 'f') . ";\n";
                 }
 
                 if ($c53_tipo == 10) {
                     $lanctotemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 11) {
+                } elseif ($c53_tipo == 11) {
                     $lanctotanuemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 20) {
+                } elseif ($c53_tipo == 20) {
                     $lanctotliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 21) {
+                } elseif ($c53_tipo == 21) {
                     $lanctotanuliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 30) {
+                } elseif ($c53_tipo == 30) {
                     $lanctotpag += $c70_valor;
-                }
-                elseif ($c53_tipo == 31) {
+                } elseif ($c53_tipo == 31) {
                     $lanctotanupag += $c70_valor;
                 }
-
             }
         }
         $contEmpenhos++;
 
-        if($x == $rows-1){
+        if ($x == $rows - 1) {
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
         }
-
     }
 
     echo "TOTAL DE EMPENHOS: $rows;;;;;TOTAL GERAL;$GeralTotalEmpenhado;$GeralTotalAnulado;$GeralTotalLiquidado;$GeralTotalPago;$GeralTotalLiquidado2;$GeralTotalNaoLiquidado;$GeralTotalGeral;\n";
@@ -1129,22 +1157,20 @@ if($agrupar == 'oo'){
     if ($processar == "a") {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";"
-            .db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p').";"
-            .db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p').";"
-            .db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p').";";
-
-    }else{
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";"
+            . db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p') . ";"
+            . db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p') . ";"
+            . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
+    } else {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";";
-
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";";
     }
 
     if ($hist == "h") {
@@ -1166,7 +1192,7 @@ if($agrupar == 'oo'){
 														                       	left join emphist on emphist.e40_codhist = empemphist.e63_codhist
 																where 	$sWhereSQL
 														                      ";
-            $sql = $sql." group by e63_codhist,e40_descr order by e63_codhist) as x";
+            $sql = $sql . " group by e63_codhist,e40_descr order by e63_codhist) as x";
         } else {
             $sql = "select case when x.e63_codhist is null then 0               else x.e63_codhist end as e63_codhist,
 																       case when x.e40_descr   is null then 'SEM HISTORICO' else x.e40_descr   end as e40_descr,
@@ -1183,14 +1209,13 @@ if($agrupar == 'oo'){
             $imprime_header = true;
             $rows = $clempempenho->numrows;
 
-            for ($x = 0; $x < $rows; $x ++) {
+            for ($x = 0; $x < $rows; $x++) {
                 db_fieldsmemory($result, $x, true);
 
                 if ($imprime_header == true) {
                     echo "\n";
                     echo ";;;;TOTALIZAÇÃO DOS HISTÓRICOS;;;SALDO A PAGAR;\n";
                     echo "$RLe63_codhist;$RLe40_descr;$RLe60_vlremp;$RLe60_vlranu;$RLe60_vlrliq;$RLe60_vlrpag;LIQUIDADO;NAO LIQUIDADO;GERAL;\n";
-
                 }
 
                 echo "$e63_codhist;$e40_descr;$e60_vlremp;$e60_vlranu;$e60_vlrliq;$e60_vlrpag;";
@@ -1208,7 +1233,7 @@ if($agrupar == 'oo'){
                 $t_total1 += $total;
                 $imprime_header = false;
 
-                if ($x == ($rows-1)) {
+                if ($x == ($rows - 1)) {
 
                     $emp1      = db_formatar($t_emp1, 'p');
                     $anu1      = db_formatar($t_anu1, 'p');
@@ -1218,19 +1243,13 @@ if($agrupar == 'oo'){
                     $empanuliq = db_formatar($t_emp1 - $t_anu1 - $t_liq1, 'p');
                     $empanupag = db_formatar($t_emp1 - $t_anu1 - $t_pag1, 'p');
                     echo ";TOTAL;$emp1;$anu1;$liq1;$pag1;$liqpag;$empanuliq;$empanupag";
-
                 }
-
             }
-
         }
-
     }
-
-
 }
 
-if($agrupar == 'a') {
+if ($agrupar == 'a') {
 
     $fornAnt = '';
     $municAnt = '';
@@ -1241,7 +1260,11 @@ if($agrupar == 'a') {
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
     }
     if ($mostraritem == "m") {
-        echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        if ($instits != db_getsession("DB_instit")) {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        } else {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;SALDO;COMPLEMENTO;;;;;;\n";
+        }
     }
 
     for ($x = 0; $x < $rows; $x++) {
@@ -1277,7 +1300,6 @@ if($agrupar == 'a') {
 
             $fornAnt = "{$objeto->e60_numcgm}";
             $contEmpenhos = 0;
-
         }
 
         $TotalEmpenhado    += $objeto->e60_vlremp;
@@ -1296,10 +1318,10 @@ if($agrupar == 'a') {
         $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
         $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
 
-        if(empty($municAnt)){
+        if (empty($municAnt)) {
             echo "$objeto->z01_cgccpf;$objeto->z01_munic;\n";
             $municAnt = "{$objeto->z01_munic}";
-        }else if($municAnt != "{$objeto->z01_munic}"){
+        } else if ($municAnt != "{$objeto->z01_munic}") {
             echo "$objeto->z01_cgccpf;$objeto->z01_munic;\n";
             $municAnt = "{$objeto->z01_munic}";
         }
@@ -1308,28 +1330,58 @@ if($agrupar == 'a') {
         echo "\n";
 
         if ($mostraritem == "m") {
+            if ($instits != db_getsession("DB_instit")) {
+                $dbwhere = "e62_numemp = $objeto->e60_numemp ";
+                if ($listaitem != "" or $listasub != "") {
+                    if ($listaitem != "") {
+                        $dbwhere .= "and e62_item in ($listaitem) ";
+                    }
 
-            $dbwhere = "e62_numemp = $objeto->e60_numemp ";
-            if ($listaitem != "" or $listasub != "") {
-                if ($listaitem != ""){
-                    $dbwhere .= "and e62_item in ($listaitem) ";
+                    if ($listasub != "") {
+                        $dbwhere .= "and e62_item in ($listar) ";
+                    }
                 }
 
-                if ($listasub != "") {
-                    $dbwhere .= "and e62_item in ($listar) ";
+                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
+                $rows_item = $clempempitem->numrows;
+
+                for ($item = 0; $item < $rows_item; $item++) {
+                    db_fieldsmemory($resitem, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
                 }
-            }
+            } else {
+                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
+                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
+                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
+                $sCamposEmpenho .= "         ,e62_descr";
+                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
+                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
+                $sCamposEmpenho .= "         ,rnvaloruni";
+                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
+                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
+                $sCamposEmpenho .= "         ,o56_descr";
+                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
+                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
+                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
+                $sCamposEmpenho .= "         end as observacao";
+                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
 
-            $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr",null,$dbwhere));
-            $rows_item = $clempempitem->numrows;
+                $oDaoEmpenho      = db_utils::getDao("empempenho");
+                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
+                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
+                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
+                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
 
-            for ($item = 0; $item < $rows_item; $item ++) {
-                db_fieldsmemory($resitem, $item, true);
-
-                echo "$e62_item;$pc01_descrmater;";
-                echo db_formatar($e62_quant, 'f').";";
-                echo db_formatar($e62_vltot, 'f').";";
-                echo substr($e62_descr, 0, 100).";\n";
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo db_formatar($saldo_valor, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
+                }
             }
         }
         if ($mostrarobs == "m") {
@@ -1337,9 +1389,9 @@ if($agrupar == 'a') {
         }
         if (1 == 1) {
 
-            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
+            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
             $rows_lancamemp = $clconlancamemp->numrows;
-            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp ++) {
+            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp++) {
                 db_fieldsmemory($reslancam, $lancemp, true);
                 $reslancamdoc = $clconlancamdoc->sql_record($clconlancamdoc->sql_query($c70_codlan, "*"));
                 db_fieldsmemory($reslancamdoc, 0, true);
@@ -1348,36 +1400,29 @@ if($agrupar == 'a') {
                     echo ";;;$c70_data;";
                     echo "$c70_codlan;";
                     echo "$c53_descr;";
-                    echo db_formatar($c70_valor, 'f').";\n";
+                    echo db_formatar($c70_valor, 'f') . ";\n";
                 }
 
                 if ($c53_tipo == 10) {
                     $lanctotemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 11) {
+                } elseif ($c53_tipo == 11) {
                     $lanctotanuemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 20) {
+                } elseif ($c53_tipo == 20) {
                     $lanctotliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 21) {
+                } elseif ($c53_tipo == 21) {
                     $lanctotanuliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 30) {
+                } elseif ($c53_tipo == 30) {
                     $lanctotpag += $c70_valor;
-                }
-                elseif ($c53_tipo == 31) {
+                } elseif ($c53_tipo == 31) {
                     $lanctotanupag += $c70_valor;
                 }
-
             }
         }
         $contEmpenhos++;
 
-        if($x == $rows-1){
+        if ($x == $rows - 1) {
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
         }
-
     }
 
     echo "TOTAL DE EMPENHOS: $rows;;;;;TOTAL GERAL;$GeralTotalEmpenhado;$GeralTotalAnulado;$GeralTotalLiquidado;$GeralTotalPago;$GeralTotalLiquidado2;$GeralTotalNaoLiquidado;$GeralTotalGeral;\n";
@@ -1385,27 +1430,24 @@ if($agrupar == 'a') {
     if ($processar == "a") {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";"
-            .db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p').";"
-            .db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p').";"
-            .db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p').";";
-
-    }else{
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";"
+            . db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p') . ";"
+            . db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p') . ";"
+            . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
+    } else {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";";
-
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";";
     }
-
 }
 
-if($agrupar == 'orgao'){
+if ($agrupar == 'orgao') {
 
     $orgaoAnt = '';
     $contEmpenhos = 0;
@@ -1415,7 +1457,11 @@ if($agrupar == 'orgao'){
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
     }
     if ($mostraritem == "m") {
-        echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        if ($instits != db_getsession("DB_instit")) {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        } else {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;SALDO;COMPLEMENTO;;;;;;\n";
+        }
     }
 
     for ($x = 0; $x < $rows; $x++) {
@@ -1452,7 +1498,6 @@ if($agrupar == 'orgao'){
 
             $orgaoAnt = "{$objeto->o40_orgao}";
             $contEmpenhos = 0;
-
         }
 
         $TotalEmpenhado    += $objeto->e60_vlremp;
@@ -1477,28 +1522,58 @@ if($agrupar == 'orgao'){
         echo "\n";
 
         if ($mostraritem == "m") {
+            if ($instits != db_getsession("DB_instit")) {
+                $dbwhere = "e62_numemp = $objeto->e60_numemp ";
+                if ($listaitem != "" or $listasub != "") {
+                    if ($listaitem != "") {
+                        $dbwhere .= "and e62_item in ($listaitem) ";
+                    }
 
-            $dbwhere = "e62_numemp = $objeto->e60_numemp ";
-            if ($listaitem != "" or $listasub != "") {
-                if ($listaitem != ""){
-                    $dbwhere .= "and e62_item in ($listaitem) ";
+                    if ($listasub != "") {
+                        $dbwhere .= "and e62_item in ($listar) ";
+                    }
                 }
 
-                if ($listasub != "") {
-                    $dbwhere .= "and e62_item in ($listar) ";
+                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
+                $rows_item = $clempempitem->numrows;
+
+                for ($item = 0; $item < $rows_item; $item++) {
+                    db_fieldsmemory($resitem, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
                 }
-            }
+            } else {
+                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
+                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
+                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
+                $sCamposEmpenho .= "         ,e62_descr";
+                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
+                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
+                $sCamposEmpenho .= "         ,rnvaloruni";
+                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
+                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
+                $sCamposEmpenho .= "         ,o56_descr";
+                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
+                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
+                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
+                $sCamposEmpenho .= "         end as observacao";
+                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
 
-            $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr",null,$dbwhere));
-            $rows_item = $clempempitem->numrows;
+                $oDaoEmpenho      = db_utils::getDao("empempenho");
+                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
+                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
+                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
+                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
 
-            for ($item = 0; $item < $rows_item; $item ++) {
-                db_fieldsmemory($resitem, $item, true);
-
-                echo "$e62_item;$pc01_descrmater;";
-                echo db_formatar($e62_quant, 'f').";";
-                echo db_formatar($e62_vltot, 'f').";";
-                echo substr($e62_descr, 0, 100).";\n";
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo db_formatar($saldo_valor, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
+                }
             }
         }
         if ($mostrarobs == "m") {
@@ -1506,9 +1581,9 @@ if($agrupar == 'orgao'){
         }
         if (1 == 1) {
 
-            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
+            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
             $rows_lancamemp = $clconlancamemp->numrows;
-            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp ++) {
+            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp++) {
                 db_fieldsmemory($reslancam, $lancemp, true);
                 $reslancamdoc = $clconlancamdoc->sql_record($clconlancamdoc->sql_query($c70_codlan, "*"));
                 db_fieldsmemory($reslancamdoc, 0, true);
@@ -1517,37 +1592,30 @@ if($agrupar == 'orgao'){
                     echo ";;;$c70_data;";
                     echo "$c70_codlan;";
                     echo "$c53_descr;";
-                    echo db_formatar($c70_valor, 'f').";\n";
+                    echo db_formatar($c70_valor, 'f') . ";\n";
                 }
 
                 if ($c53_tipo == 10) {
                     $lanctotemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 11) {
+                } elseif ($c53_tipo == 11) {
                     $lanctotanuemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 20) {
+                } elseif ($c53_tipo == 20) {
                     $lanctotliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 21) {
+                } elseif ($c53_tipo == 21) {
                     $lanctotanuliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 30) {
+                } elseif ($c53_tipo == 30) {
                     $lanctotpag += $c70_valor;
-                }
-                elseif ($c53_tipo == 31) {
+                } elseif ($c53_tipo == 31) {
                     $lanctotanupag += $c70_valor;
                 }
-
             }
         }
 
         $contEmpenhos++;
 
-        if($x == $rows-1){
+        if ($x == $rows - 1) {
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
         }
-
     }
 
     echo "TOTAL DE EMPENHOS: $rows;;;;;TOTAL GERAL;$GeralTotalEmpenhado;$GeralTotalAnulado;$GeralTotalLiquidado;$GeralTotalPago;$GeralTotalLiquidado2;$GeralTotalNaoLiquidado;$GeralTotalGeral;\n";
@@ -1555,27 +1623,24 @@ if($agrupar == 'orgao'){
     if ($processar == "a") {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";"
-            .db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p').";"
-            .db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p').";"
-            .db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p').";";
-
-    }else{
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";"
+            . db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p') . ";"
+            . db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p') . ";"
+            . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
+    } else {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";";
-
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";";
     }
-
 }
 
-if($agrupar == 'r'){
+if ($agrupar == 'r') {
 
     $recursoAnt = '';
     $contEmpenhos = 0;
@@ -1585,7 +1650,11 @@ if($agrupar == 'r'){
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
     }
     if ($mostraritem == "m") {
-        echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        if ($instits != db_getsession("DB_instit")) {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        } else {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;SALDO;COMPLEMENTO;;;;;;\n";
+        }
     }
 
     for ($x = 0; $x < $rows; $x++) {
@@ -1621,7 +1690,6 @@ if($agrupar == 'r'){
 
             $recursoAnt = "{$objeto->o15_codigo}";
             $contEmpenhos = 0;
-
         }
 
         $TotalEmpenhado    += $objeto->e60_vlremp;
@@ -1646,28 +1714,58 @@ if($agrupar == 'r'){
         echo "\n";
 
         if ($mostraritem == "m") {
+            if ($instits != db_getsession("DB_instit")) {
+                $dbwhere = "e62_numemp = $objeto->e60_numemp ";
+                if ($listaitem != "" or $listasub != "") {
+                    if ($listaitem != "") {
+                        $dbwhere .= "and e62_item in ($listaitem) ";
+                    }
 
-            $dbwhere = "e62_numemp = $objeto->e60_numemp ";
-            if ($listaitem != "" or $listasub != "") {
-                if ($listaitem != ""){
-                    $dbwhere .= "and e62_item in ($listaitem) ";
+                    if ($listasub != "") {
+                        $dbwhere .= "and e62_item in ($listar) ";
+                    }
                 }
 
-                if ($listasub != "") {
-                    $dbwhere .= "and e62_item in ($listar) ";
+                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
+                $rows_item = $clempempitem->numrows;
+
+                for ($item = 0; $item < $rows_item; $item++) {
+                    db_fieldsmemory($resitem, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
                 }
-            }
+            } else {
+                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
+                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
+                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
+                $sCamposEmpenho .= "         ,e62_descr";
+                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
+                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
+                $sCamposEmpenho .= "         ,rnvaloruni";
+                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
+                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
+                $sCamposEmpenho .= "         ,o56_descr";
+                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
+                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
+                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
+                $sCamposEmpenho .= "         end as observacao";
+                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
 
-            $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr",null,$dbwhere));
-            $rows_item = $clempempitem->numrows;
+                $oDaoEmpenho      = db_utils::getDao("empempenho");
+                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
+                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
+                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
+                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
 
-            for ($item = 0; $item < $rows_item; $item ++) {
-                db_fieldsmemory($resitem, $item, true);
-
-                echo "$e62_item;$pc01_descrmater;";
-                echo db_formatar($e62_quant, 'f').";";
-                echo db_formatar($e62_vltot, 'f').";";
-                echo substr($e62_descr, 0, 100).";\n";
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo db_formatar($saldo_valor, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
+                }
             }
         }
         if ($mostrarobs == "m") {
@@ -1675,9 +1773,9 @@ if($agrupar == 'r'){
         }
         if (1 == 1) {
 
-            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
+            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
             $rows_lancamemp = $clconlancamemp->numrows;
-            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp ++) {
+            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp++) {
                 db_fieldsmemory($reslancam, $lancemp, true);
                 $reslancamdoc = $clconlancamdoc->sql_record($clconlancamdoc->sql_query($c70_codlan, "*"));
                 db_fieldsmemory($reslancamdoc, 0, true);
@@ -1686,37 +1784,30 @@ if($agrupar == 'r'){
                     echo ";;;$c70_data;";
                     echo "$c70_codlan;";
                     echo "$c53_descr;";
-                    echo db_formatar($c70_valor, 'f').";\n";
+                    echo db_formatar($c70_valor, 'f') . ";\n";
                 }
 
                 if ($c53_tipo == 10) {
                     $lanctotemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 11) {
+                } elseif ($c53_tipo == 11) {
                     $lanctotanuemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 20) {
+                } elseif ($c53_tipo == 20) {
                     $lanctotliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 21) {
+                } elseif ($c53_tipo == 21) {
                     $lanctotanuliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 30) {
+                } elseif ($c53_tipo == 30) {
                     $lanctotpag += $c70_valor;
-                }
-                elseif ($c53_tipo == 31) {
+                } elseif ($c53_tipo == 31) {
                     $lanctotanupag += $c70_valor;
                 }
-
             }
         }
 
         $contEmpenhos++;
 
-        if($x == $rows-1){
+        if ($x == $rows - 1) {
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
         }
-
     }
 
     echo "TOTAL DE EMPENHOS: $rows;;;;;TOTAL GERAL;$GeralTotalEmpenhado;$GeralTotalAnulado;$GeralTotalLiquidado;$GeralTotalPago;$GeralTotalLiquidado2;$GeralTotalNaoLiquidado;$GeralTotalGeral;\n";
@@ -1724,27 +1815,24 @@ if($agrupar == 'r'){
     if ($processar == "a") {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";"
-            .db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p').";"
-            .db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p').";"
-            .db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p').";";
-
-    }else{
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";"
+            . db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p') . ";"
+            . db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p') . ";"
+            . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
+    } else {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";";
-
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";";
     }
-
 }
 
-if($agrupar == 'd'){
+if ($agrupar == 'd') {
 
     $desdobraAnt = '';
     $contEmpenhos = 0;
@@ -1754,7 +1842,11 @@ if($agrupar == 'd'){
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
     }
     if ($mostraritem == "m") {
-        echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        if ($instits != db_getsession("DB_instit")) {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        } else {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;SALDO;COMPLEMENTO;;;;;;\n";
+        }
     }
 
     for ($x = 0; $x < $rows; $x++) {
@@ -1790,7 +1882,6 @@ if($agrupar == 'd'){
 
             $desdobraAnt = "{$objeto->e64_codele}";
             $contEmpenhos = 0;
-
         }
 
         $TotalEmpenhado    += $objeto->e60_vlremp;
@@ -1815,28 +1906,58 @@ if($agrupar == 'd'){
         echo "\n";
 
         if ($mostraritem == "m") {
+            if ($instits != db_getsession("DB_instit")) {
+                $dbwhere = "e62_numemp = $objeto->e60_numemp ";
+                if ($listaitem != "" or $listasub != "") {
+                    if ($listaitem != "") {
+                        $dbwhere .= "and e62_item in ($listaitem) ";
+                    }
 
-            $dbwhere = "e62_numemp = $objeto->e60_numemp ";
-            if ($listaitem != "" or $listasub != "") {
-                if ($listaitem != ""){
-                    $dbwhere .= "and e62_item in ($listaitem) ";
+                    if ($listasub != "") {
+                        $dbwhere .= "and e62_item in ($listar) ";
+                    }
                 }
 
-                if ($listasub != "") {
-                    $dbwhere .= "and e62_item in ($listar) ";
+                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
+                $rows_item = $clempempitem->numrows;
+
+                for ($item = 0; $item < $rows_item; $item++) {
+                    db_fieldsmemory($resitem, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
                 }
-            }
+            } else {
+                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
+                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
+                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
+                $sCamposEmpenho .= "         ,e62_descr";
+                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
+                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
+                $sCamposEmpenho .= "         ,rnvaloruni";
+                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
+                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
+                $sCamposEmpenho .= "         ,o56_descr";
+                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
+                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
+                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
+                $sCamposEmpenho .= "         end as observacao";
+                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
 
-            $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr",null,$dbwhere));
-            $rows_item = $clempempitem->numrows;
+                $oDaoEmpenho      = db_utils::getDao("empempenho");
+                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
+                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
+                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
+                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
 
-            for ($item = 0; $item < $rows_item; $item ++) {
-                db_fieldsmemory($resitem, $item, true);
-
-                echo "$e62_item;$pc01_descrmater;";
-                echo db_formatar($e62_quant, 'f').";";
-                echo db_formatar($e62_vltot, 'f').";";
-                echo substr($e62_descr, 0, 100).";\n";
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo db_formatar($saldo_valor, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
+                }
             }
         }
         if ($mostrarobs == "m") {
@@ -1844,9 +1965,9 @@ if($agrupar == 'd'){
         }
         if (1 == 1) {
 
-            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
+            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
             $rows_lancamemp = $clconlancamemp->numrows;
-            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp ++) {
+            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp++) {
                 db_fieldsmemory($reslancam, $lancemp, true);
                 $reslancamdoc = $clconlancamdoc->sql_record($clconlancamdoc->sql_query($c70_codlan, "*"));
                 db_fieldsmemory($reslancamdoc, 0, true);
@@ -1855,37 +1976,30 @@ if($agrupar == 'd'){
                     echo ";;;$c70_data;";
                     echo "$c70_codlan;";
                     echo "$c53_descr;";
-                    echo db_formatar($c70_valor, 'f').";\n";
+                    echo db_formatar($c70_valor, 'f') . ";\n";
                 }
 
                 if ($c53_tipo == 10) {
                     $lanctotemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 11) {
+                } elseif ($c53_tipo == 11) {
                     $lanctotanuemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 20) {
+                } elseif ($c53_tipo == 20) {
                     $lanctotliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 21) {
+                } elseif ($c53_tipo == 21) {
                     $lanctotanuliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 30) {
+                } elseif ($c53_tipo == 30) {
                     $lanctotpag += $c70_valor;
-                }
-                elseif ($c53_tipo == 31) {
+                } elseif ($c53_tipo == 31) {
                     $lanctotanupag += $c70_valor;
                 }
-
             }
         }
 
         $contEmpenhos++;
 
-        if($x == $rows-1){
+        if ($x == $rows - 1) {
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
         }
-
     }
 
     echo "TOTAL DE EMPENHOS: $rows;;;;;TOTAL GERAL;$GeralTotalEmpenhado;$GeralTotalAnulado;$GeralTotalLiquidado;$GeralTotalPago;$GeralTotalLiquidado2;$GeralTotalNaoLiquidado;$GeralTotalGeral;\n";
@@ -1893,27 +2007,24 @@ if($agrupar == 'd'){
     if ($processar == "a") {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";"
-            .db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p').";"
-            .db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p').";"
-            .db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p').";";
-
-    }else{
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";"
+            . db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p') . ";"
+            . db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p') . ";"
+            . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
+    } else {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";";
-
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";";
     }
-
 }
 
-if($agrupar == 'ta'){
+if ($agrupar == 'ta') {
     $recursoAnt = '';
     $contEmpenhos = 0;
     echo "TP COMPRA;LICI;EMP;EMISSAO;DOTACAO;EMPENHADO;ANULADO;LIQUIDADO;PAGO;LIQUIDADO;NAO LIQUID;GERAL;\n";
@@ -1921,16 +2032,20 @@ if($agrupar == 'ta'){
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
     }
     if ($mostraritem == "m") {
-        echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        if ($instits != db_getsession("DB_instit")) {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        } else {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;SALDO;COMPLEMENTO;;;;;;\n";
+        }
     }
 
     for ($x = 0; $x < $rows; $x++) {
-//        db_criatabela($res);exit;
+        //        db_criatabela($res);exit;
         $objeto = db_utils::fieldsMemory($res, $x, true);
 
         if (empty($tipoanterior)) {
             $tipoanterior = "{$objeto->e94_empanuladotipo}";
-//            echo ";;;;$objeto->e94_empanuladotipo - $objeto->e38_descr;\n";
+            //            echo ";;;;$objeto->e94_empanuladotipo - $objeto->e38_descr;\n";
         }
 
         $dotacao = str_pad($objeto->e60_coddot, 4, '0', STR_PAD_LEFT);
@@ -1957,7 +2072,6 @@ if($agrupar == 'ta'){
 
             $recursoAnt = "{$objeto->o15_codigo}";
             $contEmpenhos = 0;
-
         }
 
         $TotalEmpenhado    += $objeto->e60_vlremp;
@@ -1982,28 +2096,58 @@ if($agrupar == 'ta'){
         echo "\n";
 
         if ($mostraritem == "m") {
+            if ($instits != db_getsession("DB_instit")) {
+                $dbwhere = "e62_numemp = $objeto->e60_numemp ";
+                if ($listaitem != "" or $listasub != "") {
+                    if ($listaitem != "") {
+                        $dbwhere .= "and e62_item in ($listaitem) ";
+                    }
 
-            $dbwhere = "e62_numemp = $objeto->e60_numemp ";
-            if ($listaitem != "" or $listasub != "") {
-                if ($listaitem != ""){
-                    $dbwhere .= "and e62_item in ($listaitem) ";
+                    if ($listasub != "") {
+                        $dbwhere .= "and e62_item in ($listar) ";
+                    }
                 }
 
-                if ($listasub != "") {
-                    $dbwhere .= "and e62_item in ($listar) ";
+                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
+                $rows_item = $clempempitem->numrows;
+
+                for ($item = 0; $item < $rows_item; $item++) {
+                    db_fieldsmemory($resitem, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
                 }
-            }
+            } else {
+                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
+                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
+                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
+                $sCamposEmpenho .= "         ,e62_descr";
+                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
+                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
+                $sCamposEmpenho .= "         ,rnvaloruni";
+                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
+                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
+                $sCamposEmpenho .= "         ,o56_descr";
+                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
+                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
+                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
+                $sCamposEmpenho .= "         end as observacao";
+                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
 
-            $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr",null,$dbwhere));
-            $rows_item = $clempempitem->numrows;
+                $oDaoEmpenho      = db_utils::getDao("empempenho");
+                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
+                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
+                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
+                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
 
-            for ($item = 0; $item < $rows_item; $item ++) {
-                db_fieldsmemory($resitem, $item, true);
-
-                echo "$e62_item;$pc01_descrmater;";
-                echo db_formatar($e62_quant, 'f').";";
-                echo db_formatar($e62_vltot, 'f').";";
-                echo substr($e62_descr, 0, 100).";\n";
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo db_formatar($saldo_valor, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
+                }
             }
         }
         if ($mostrarobs == "m") {
@@ -2011,9 +2155,9 @@ if($agrupar == 'ta'){
         }
         if (1 == 1) {
 
-            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
+            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
             $rows_lancamemp = $clconlancamemp->numrows;
-            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp ++) {
+            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp++) {
                 db_fieldsmemory($reslancam, $lancemp, true);
                 $reslancamdoc = $clconlancamdoc->sql_record($clconlancamdoc->sql_query($c70_codlan, "*"));
                 db_fieldsmemory($reslancamdoc, 0, true);
@@ -2021,26 +2165,21 @@ if($agrupar == 'ta'){
 
                     echo ";;;$c70_data;";
                     echo "$c70_codlan;";
-//                    echo "$c53_descr;";
-                    echo db_formatar($c70_valor, 'f').";\n";
+                    //                    echo "$c53_descr;";
+                    echo db_formatar($c70_valor, 'f') . ";\n";
                 }
 
                 if ($c53_tipo == 10) {
                     $lanctotemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 11) {
+                } elseif ($c53_tipo == 11) {
                     $lanctotanuemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 20) {
+                } elseif ($c53_tipo == 20) {
                     $lanctotliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 21) {
+                } elseif ($c53_tipo == 21) {
                     $lanctotanuliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 30) {
+                } elseif ($c53_tipo == 30) {
                     $lanctotpag += $c70_valor;
-                }
-                elseif ($c53_tipo == 31) {
+                } elseif ($c53_tipo == 31) {
                     $lanctotanupag += $c70_valor;
                 }
             }
@@ -2048,10 +2187,9 @@ if($agrupar == 'ta'){
 
         $contEmpenhos++;
 
-        if($x == $rows-1){
+        if ($x == $rows - 1) {
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
         }
-
     }
 
     echo "TOTAL DE EMPENHOS: $rows;;;TOTAL GERAL;$GeralTotalEmpenhado;$GeralTotalAnulado;$GeralTotalLiquidado;$GeralTotalPago;$GeralTotalLiquidado2;$GeralTotalNaoLiquidado;$GeralTotalGeral;\n";
@@ -2059,27 +2197,24 @@ if($agrupar == 'ta'){
     if ($processar == "a") {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";"
-            .db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p').";"
-            .db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p').";"
-            .db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p').";";
-
-    }else{
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";"
+            . db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p') . ";"
+            . db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p') . ";"
+            . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
+    } else {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";";
-
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";";
     }
-
 }
 
-if($agrupar == 'do'){
+if ($agrupar == 'do') {
 
     $dotOrcAnt = '';
     $contEmpenhos = 0;
@@ -2089,14 +2224,18 @@ if($agrupar == 'do'){
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
     }
     if ($mostraritem == "m") {
-        echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        if ($instits != db_getsession("DB_instit")) {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
+        } else {
+            echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;SALDO;COMPLEMENTO;;;;;;\n";
+        }
     }
 
     for ($x = 0; $x < $rows; $x++) {
 
         $objeto = db_utils::fieldsMemory($res, $x, true);
 
-        if(empty($dotOrcAnt)) {
+        if (empty($dotOrcAnt)) {
             $dotOrcAnt = "{$objeto->e60_coddot}";
             echo "$dotOrcAnt;;;;$objeto->dl_estrutural\n";
         }
@@ -2125,7 +2264,6 @@ if($agrupar == 'do'){
 
             $dotOrcAnt = "{$objeto->e60_coddot}";
             $contEmpenhos = 0;
-
         }
 
         $TotalEmpenhado    += $objeto->e60_vlremp;
@@ -2150,28 +2288,58 @@ if($agrupar == 'do'){
         echo "\n";
 
         if ($mostraritem == "m") {
+            if ($instits != db_getsession("DB_instit")) {
+                $dbwhere = "e62_numemp = $objeto->e60_numemp ";
+                if ($listaitem != "" or $listasub != "") {
+                    if ($listaitem != "") {
+                        $dbwhere .= "and e62_item in ($listaitem) ";
+                    }
 
-            $dbwhere = "e62_numemp = $objeto->e60_numemp ";
-            if ($listaitem != "" or $listasub != "") {
-                if ($listaitem != ""){
-                    $dbwhere .= "and e62_item in ($listaitem) ";
+                    if ($listasub != "") {
+                        $dbwhere .= "and e62_item in ($listar) ";
+                    }
                 }
 
-                if ($listasub != "") {
-                    $dbwhere .= "and e62_item in ($listar) ";
+                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
+                $rows_item = $clempempitem->numrows;
+
+                for ($item = 0; $item < $rows_item; $item++) {
+                    db_fieldsmemory($resitem, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
                 }
-            }
+            } else {
+                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
+                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
+                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
+                $sCamposEmpenho .= "         ,e62_descr";
+                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
+                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
+                $sCamposEmpenho .= "         ,rnvaloruni";
+                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
+                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
+                $sCamposEmpenho .= "         ,o56_descr";
+                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
+                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
+                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
+                $sCamposEmpenho .= "         end as observacao";
+                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
 
-            $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr",null,$dbwhere));
-            $rows_item = $clempempitem->numrows;
+                $oDaoEmpenho      = db_utils::getDao("empempenho");
+                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
+                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
+                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
+                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
 
-            for ($item = 0; $item < $rows_item; $item ++) {
-                db_fieldsmemory($resitem, $item, true);
-
-                echo "$e62_item;$pc01_descrmater;";
-                echo db_formatar($e62_quant, 'f').";";
-                echo db_formatar($e62_vltot, 'f').";";
-                echo substr($e62_descr, 0, 100).";\n";
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo db_formatar($saldo_valor, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
+                }
             }
         }
         if ($mostrarobs == "m") {
@@ -2179,9 +2347,9 @@ if($agrupar == 'do'){
         }
         if (1 == 1) {
 
-            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
+            $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $objeto->e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$objeto->dataesp11' and '$objeto->dataesp22'")));
             $rows_lancamemp = $clconlancamemp->numrows;
-            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp ++) {
+            for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp++) {
                 db_fieldsmemory($reslancam, $lancemp, true);
                 $reslancamdoc = $clconlancamdoc->sql_record($clconlancamdoc->sql_query($c70_codlan, "*"));
                 db_fieldsmemory($reslancamdoc, 0, true);
@@ -2190,37 +2358,30 @@ if($agrupar == 'do'){
                     echo ";;;$c70_data;";
                     echo "$c70_codlan;";
                     echo "$c53_descr;";
-                    echo db_formatar($c70_valor, 'f').";\n";
+                    echo db_formatar($c70_valor, 'f') . ";\n";
                 }
 
                 if ($c53_tipo == 10) {
                     $lanctotemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 11) {
+                } elseif ($c53_tipo == 11) {
                     $lanctotanuemp += $c70_valor;
-                }
-                elseif ($c53_tipo == 20) {
+                } elseif ($c53_tipo == 20) {
                     $lanctotliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 21) {
+                } elseif ($c53_tipo == 21) {
                     $lanctotanuliq += $c70_valor;
-                }
-                elseif ($c53_tipo == 30) {
+                } elseif ($c53_tipo == 30) {
                     $lanctotpag += $c70_valor;
-                }
-                elseif ($c53_tipo == 31) {
+                } elseif ($c53_tipo == 31) {
                     $lanctotanupag += $c70_valor;
                 }
-
             }
         }
 
         $contEmpenhos++;
 
-        if($x == $rows-1){
+        if ($x == $rows - 1) {
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
         }
-
     }
 
     echo "TOTAL DE EMPENHOS: $rows;;;;;TOTAL GERAL;$GeralTotalEmpenhado;$GeralTotalAnulado;$GeralTotalLiquidado;$GeralTotalPago;$GeralTotalLiquidado2;$GeralTotalNaoLiquidado;$GeralTotalGeral;\n";
@@ -2228,23 +2389,19 @@ if($agrupar == 'do'){
     if ($processar == "a") {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";"
-            .db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p').";"
-            .db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p').";"
-            .db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p').";";
-
-    }else{
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";"
+            . db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'p') . ";"
+            . db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'p') . ";"
+            . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
+    } else {
 
         echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
-            .db_formatar($lanctotemp, 'p').";"
-            .db_formatar($lanctotanuemp, 'p').";"
-            .db_formatar($lanctotliq - $lanctotanuliq, 'p').";"
-            .db_formatar($lanctotpag - $lanctotanupag, 'p').";";
-
+            . db_formatar($lanctotemp, 'p') . ";"
+            . db_formatar($lanctotanuemp, 'p') . ";"
+            . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
+            . db_formatar($lanctotpag - $lanctotanupag, 'p') . ";";
     }
-
 }
-?>
