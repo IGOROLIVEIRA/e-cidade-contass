@@ -1178,6 +1178,7 @@ var opSalva1 = 0;
       }else{
             var vlr =   document.getElementById("vrl"+valor).value;
             const myArr = vlr.split(",");
+            
             if(myArr[1]==00){
                 vlr = myArr[0];
                 const myArr1 = vlr.split(".");
@@ -1185,8 +1186,13 @@ var opSalva1 = 0;
             }else{
                 valo1 = myArr[0];
                 retorno1 = valo1.split(".");
-                valo1 = retorno1[0]+""+retorno1[1];
-                vlr = valo1+"."+myArr[1];
+                if(retorno1[1]==undefined){
+                    vlr = valo1+"."+myArr[1];
+                }else{
+                    valo1 = retorno1[0]+""+retorno1[1];
+                    vlr = valo1+"."+myArr[1];
+                }
+                
             }
             var resul = (quant*vlr);
             resul = js_formatar(resul.toFixed(2), "f",2);;
@@ -1267,8 +1273,16 @@ var opSalva1 = 0;
                         }else{
                             valor = retorno[0];
                             retorno1 = valor.split(".");
-                            valor = retorno1[0]+""+retorno1[1];
-                            oItem.valor = valor+"."+retorno[1];
+                            if(retorno1[1]==undefined){
+                                oItem.valor = valor+"."+retorno[1];
+                            }else{
+                                valor = retorno1[0]+""+retorno1[1];
+                                oItem.valor = valor+"."+retorno[1];
+                            }
+                            
+
+                            
+                
                         } 
 
                         document.getElementById("ve63_descr").value = oItem.descr;
