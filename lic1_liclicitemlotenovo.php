@@ -45,295 +45,307 @@ $clliclicitemlote->rotulo->label();
 
 $erro_msg  = "";
 
-if (!isset($db_tranca) && trim(@$db_tranca) == ""){
-     $db_tranca = 1;
+if (!isset($db_tranca) && trim(@$db_tranca) == "") {
+    $db_tranca = 1;
 }
 
-if (!isset($flag_auto) && trim(@$flag_auto) == ""){
-     $flag_auto = false;  // Inicializado antes do submit
+if (!isset($flag_auto) && trim(@$flag_auto) == "") {
+    $flag_auto = false;  // Inicializado antes do submit
 }
 
-if (isset($incluir)&&trim($incluir)!=""){
-     $vetor_itens = split(",",$l04_liclicitem);
-     $sqlerro     = false;
-     $flag_auto   = false;
-     $auto_descr  = "";
+if (isset($incluir) && trim($incluir) != "") {
+    $vetor_itens = split(",", $l04_liclicitem);
+    $sqlerro     = false;
+    $flag_auto   = false;
+    $auto_descr  = "";
 
-//     db_msgbox("Antes ".$db_tranca);
+    //     db_msgbox("Antes ".$db_tranca);
 
-     db_inicio_transacao();
+    db_inicio_transacao();
 
-// Verifica descricao vazia
-     if (isset($l04_descricao)      &&
-         trim($l04_descricao) == "" &&
-         substr(trim($l04_descricao),0,9) != "AUTO_LOTE"){
-          $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null,"substr(l04_descricao,11,5) as sequencial","l04_codigo desc limit 1","l21_codliclicita = $licitacao"));
-          if ($clliclicitemlote->numrows > 0){
-               db_fieldsmemory($res_licitacao,0);
+    // Verifica descricao vazia
+    if (
+        isset($l04_descricao)      &&
+        trim($l04_descricao) == "" &&
+        substr(trim($l04_descricao), 0, 9) != "AUTO_LOTE"
+    ) {
+        $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null, "substr(l04_descricao,11,5) as sequencial", "l04_codigo desc limit 1", "l21_codliclicita = $licitacao"));
+        if ($clliclicitemlote->numrows > 0) {
+            db_fieldsmemory($res_licitacao, 0);
 
-               if (trim($sequencial) == ""){
-                    $flag_auto = true;  // Caso, positivo gera descricao automaticamente
-               }
-          }
-     } else {
-          if (substr(trim($l04_descricao),0,9) == "AUTO_LOTE"){  // Verifica se usuario nao digitou AUTO_LOTE(tentativa de gerar lote automatico)
-               $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null,"substr(l04_descricao,11,5) as sequencial","l04_codigo desc limit 1","l21_codliclicita = $licitacao and l04_descricao like 'AUTO_LOTE_%'"));
-               if ($clliclicitemlote->numrows == 0){
-                    $erro_msg  = "Descriçao inválida.";
+            if (trim($sequencial) == "") {
+                $flag_auto = true;  // Caso, positivo gera descricao automaticamente
+            }
+        }
+    } else {
+        if (substr(trim($l04_descricao), 0, 9) == "AUTO_LOTE") {  // Verifica se usuario nao digitou AUTO_LOTE(tentativa de gerar lote automatico)
+            $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null, "substr(l04_descricao,11,5) as sequencial", "l04_codigo desc limit 1", "l21_codliclicita = $licitacao and l04_descricao like 'AUTO_LOTE_%'"));
+            if ($clliclicitemlote->numrows == 0) {
+                $erro_msg  = "Descriçao inválida.";
+                $sqlerro   = true;
+            } else {
+                if ($db_tranca == 3) {
+                    $flag_auto = true;
+                } else {
+                    $erro_msg  = "Descrição inválida!";
                     $sqlerro   = true;
-               } else {
-                    if ($db_tranca == 3){
-                         $flag_auto = true;
-                    } else {
-                         $erro_msg  = "Descrição inválida!";
-                         $sqlerro   = true;
-                    }
-               }
-          } else {
-               $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null,"substr(l04_descricao,11,5) as sequencial","l04_codigo desc limit 1","l21_codliclicita = $licitacao and l04_descricao like '$l04_descricao'"));
+                }
+            }
+        } else {
+            $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null, "substr(l04_descricao,11,5) as sequencial", "l04_codigo desc limit 1", "l21_codliclicita = $licitacao and l04_descricao like '$l04_descricao'"));
 
-               if ($clliclicitemlote->numrows > 0){
-                    $erro_msg = "Descrição já cadastrada.";
-                    $sqlerro  = true;
-               }
+            if ($clliclicitemlote->numrows > 0) {
+                $erro_msg = "Descrição já cadastrada.";
+                $sqlerro  = true;
+            }
 
-               if ($sqlerro == false){
-                    $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null,"substr(l04_descricao,11,5) as sequencial","l04_codigo desc limit 1","l21_codliclicita = $licitacao and l04_descricao like 'AUTO_LOTE_%'"));
+            if ($sqlerro == false) {
+                $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null, "substr(l04_descricao,11,5) as sequencial", "l04_codigo desc limit 1", "l21_codliclicita = $licitacao and l04_descricao like 'AUTO_LOTE_%'"));
 
-                    if ($clliclicitemlote->numrows > 0){
-                         $erro_msg  = 'Foram gerados descrições automáticas.\nDeixe a descrição vazia para gerar automaticamente.';
-                         $sqlerro   = true;
-                    }
-               }
-          }
-     }
+                if ($clliclicitemlote->numrows > 0) {
+                    $erro_msg  = 'Foram gerados descrições automáticas.\nDeixe a descrição vazia para gerar automaticamente.';
+                    $sqlerro   = true;
+                }
+            }
+        }
+    }
 
-     if ($flag_auto == false){
-          if (isset($l04_descricao) && trim($l04_descricao) != ""){
-               $clliclicitemlote->l04_descricao = strtoupper(trim($l04_descricao));
-          } else {
-               $erro_msg = "Falta a descrição do lote.";
-               $sqlerro  = true;
-          }
-     }
+    if ($flag_auto == false) {
+        if (isset($l04_descricao) && trim($l04_descricao) != "") {
+            $clliclicitemlote->l04_descricao = strtoupper(trim($l04_descricao));
+        } else {
+            $erro_msg = "Falta a descrição do lote.";
+            $sqlerro  = true;
+        }
+    }
 
-     if ($flag_auto == true){
-          $auto_descr    = "AUTO_LOTE_";
-          $sequencial    = 1;
+    if ($flag_auto == true) {
+        $auto_descr    = "AUTO_LOTE_";
+        $sequencial    = 1;
 
-          $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null,"substr(l04_descricao,11,5) as sequencial","l04_codigo desc limit 1","l21_codliclicita = $licitacao and l04_descricao like 'AUTO_LOTE_%'"));
-          if ($clliclicitemlote->numrows > 0){
-               db_fieldsmemory($res_licitacao,0);
-               $sequencial = intval($sequencial) + 1;
-          }
+        $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null, "substr(l04_descricao,11,5) as sequencial", "l04_codigo desc limit 1", "l21_codliclicita = $licitacao and l04_descricao like 'AUTO_LOTE_%'"));
+        if ($clliclicitemlote->numrows > 0) {
+            db_fieldsmemory($res_licitacao, 0);
+            $sequencial = intval($sequencial) + 1;
+        }
 
-          $auto_descr   .= db_formatar($sequencial,"s","0",5,"e",0);
-     }
+        $auto_descr   .= db_formatar($sequencial, "s", "0", 5, "e", 0);
+    }
 
-     if ($sqlerro == false){
-          $clliclicitemlote->l04_descricao = strtoupper(trim($l04_descricao));
-          for($i = 0; $i < sizeof($vetor_itens); $i++){
-               $clliclicitemlote->l04_liclicitem = trim($vetor_itens[$i]);
+    if ($sqlerro == false) {
+        $clliclicitemlote->l04_descricao = strtoupper(trim($l04_descricao));
+        $sequenciallote = 0;
+        for ($i = 0; $i < sizeof($vetor_itens); $i++) {
+            $clliclicitemlote->l04_liclicitem = trim($vetor_itens[$i]);
 
-               if ($flag_auto == true){
-                    $l04_descricao = $auto_descr;
-                    $clliclicitemlote->l04_descricao = strtoupper(trim($l04_descricao));
-               }
+            if ($flag_auto == true) {
+                $l04_descricao = $auto_descr;
+                $clliclicitemlote->l04_descricao = strtoupper(trim($l04_descricao));
+            }
+            $sequenciallote++;
+            $clliclicitemlote->l04_seq = $sequenciallote;
+            $clliclicitemlote->incluir(null);
 
-               $clliclicitemlote->incluir(null);
+            if ($clliclicitemlote->erro_status == 0) {
+                $erro_msg = $clliclicitemlote->erro_msg;
+                $sqlerro  = true;
+                break;
+            }
+        }
+    }
 
-               if ($clliclicitemlote->erro_status == 0){
-                    $erro_msg = $clliclicitemlote->erro_msg;
-                    $sqlerro  = true;
-                    break;
-               }
-          }
-     }
+    if ($sqlerro == false) {
+        $erro_msg   = $clliclicitemlote->erro_msg;
+        $l04_codigo = $clliclicitemlote->l04_codigo;
 
-     if ($sqlerro == false){
-          $erro_msg   = $clliclicitemlote->erro_msg;
-          $l04_codigo = $clliclicitemlote->l04_codigo;
+        if ($flag_auto == true) {
+            if (isset($auto_descr) && trim($auto_descr) != "") {
+                $db_tranca = 3;
+            }
+            $l04_descricao = "AUTO_LOTE_" . db_formatar(($sequencial + 1), "s", "0", 5, "e", 0);
+        }
+    }
 
-          if ($flag_auto == true){
-               if (isset($auto_descr) && trim($auto_descr)!=""){
-                    $db_tranca = 3;
-               }
-               $l04_descricao = "AUTO_LOTE_".db_formatar(($sequencial+1),"s","0",5,"e",0);
-          }
-     }
+    db_fim_transacao($sqlerro);
 
-     db_fim_transacao($sqlerro);
-
-//     db_msgbox("Depois ".$db_tranca);
+    //     db_msgbox("Depois ".$db_tranca);
 }
 ?>
 <html>
+
 <head>
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+
 <body bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<center>
-<?
-if (isset($licitacao)&&trim($licitacao)!=""){
-   $sql_marca    = "";
-   $campos       = "l21_codigo,pc81_codprocitem,pc01_descrmater,l04_codigo,l04_descricao";
-   $sql          = $clliclicitemlote->sql_query_licitacao(null,"distinct $campos","pc81_codprocitem","l21_codliclicita = $licitacao and l21_situacao = 0");
-   $sql_disabled = $clliclicitemlote->sql_query_licitacao(null,"distinct $campos","pc81_codprocitem","l21_codliclicita = $licitacao and l21_situacao = 0 and l04_codigo is not null");
+    <center>
+        <?
+        if (isset($licitacao) && trim($licitacao) != "") {
+            $sql_marca    = "";
+            $campos       = "l21_codigo,pc81_codprocitem,pc01_descrmater,l04_codigo,l04_descricao";
+            $sql          = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0");
+            $sql_disabled = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0 and l04_codigo is not null");
 
-   $res_itenslote_desab = $clliclicitemlote->sql_record($sql_disabled);
-   $numrows_desab       = $clliclicitemlote->numrows;
-   $res_itenslote       = $clliclicitemlote->sql_record($sql);
-   $numrows             = $clliclicitemlote->numrows;
+            $res_itenslote_desab = $clliclicitemlote->sql_record($sql_disabled);
+            $numrows_desab       = $clliclicitemlote->numrows;
+            $res_itenslote       = $clliclicitemlote->sql_record($sql);
+            $numrows             = $clliclicitemlote->numrows;
 
-   $cliframe_seleciona_lote->campos    = $campos;
-   $cliframe_seleciona_lote->legenda   = "";
-   $cliframe_seleciona_lote->sql       = $sql;
-   $cliframe_seleciona_lote->sql_disabled = $sql_disabled;
-   $cliframe_seleciona_lote->sql_marca = $sql_marca;
-   $cliframe_seleciona_lote->iframe_height = "300";
-   $cliframe_seleciona_lote->iframe_width  = "600";
-   $cliframe_seleciona_lote->iframe_nome   = "lote";
-   $cliframe_seleciona_lote->chaves        = "l21_codigo";
-   $cliframe_seleciona_lote->js_marcador   = "";
-   $cliframe_seleciona_lote->dbscript      = "";
-   $cliframe_seleciona_lote->iframe_seleciona(1);
+            $cliframe_seleciona_lote->campos    = $campos;
+            $cliframe_seleciona_lote->legenda   = "";
+            $cliframe_seleciona_lote->sql       = $sql;
+            $cliframe_seleciona_lote->sql_disabled = $sql_disabled;
+            $cliframe_seleciona_lote->sql_marca = $sql_marca;
+            $cliframe_seleciona_lote->iframe_height = "300";
+            $cliframe_seleciona_lote->iframe_width  = "600";
+            $cliframe_seleciona_lote->iframe_nome   = "lote";
+            $cliframe_seleciona_lote->chaves        = "l21_codigo";
+            $cliframe_seleciona_lote->js_marcador   = "";
+            $cliframe_seleciona_lote->dbscript      = "";
+            $cliframe_seleciona_lote->iframe_seleciona(1);
 
-   if ($numrows == $numrows_desab){
-        $db_opcao  = 3;
-        $db_tranca = 3;
-   } else {
-        $db_opcao = 1;
-   }
-
-   $db_opcao = $db_tranca;
-?>
-<form name="form2" method="post" action="lic1_liclicitemlotenovo.php">
-<table border="0" cellspacing="2" cellpadding="0" align="center">
-<tr><td colspan="2">&nbsp;</td></tr>
-<?
-   db_input("licitacao",10,"",true,"hidden",3);
-   db_input("l04_liclicitem",50,"",true,"hidden",3);
-   db_input("db_tranca",1,"",true,"hidden",3);
-?>
-<tr>
-  <td nowrap align="right" title="<?=@$Tl04_codigo?>"><?=@$Ll04_codigo?></td>
-  <td nowrap align="left">
-  <?
-      db_input("l04_codigo",10,$Il04_codigo,true,"text",3);
-  ?>
-  </td>
-</tr>
-<tr>
-  <td nowrap align="right" title="<?=@$Tl04_descricao?>"><?=@$Ll04_descricao?></td>
-  <td nowrap align="left">
-  <?
-      db_input("l04_descricao",40,$Il04_descricao,true,"text",$db_opcao);
-  ?>
-  </td>
-</tr>
-<tr><td colspan="2">&nbsp;</td></tr>
-<tr>
-  <td nowrap align="center" colspan="2">
-    <input type="submit" name="incluir" value="Incluir" onClick="return js_valida_dados();">
-    <input type="button" name="fechar"  value="Fechar" onClick="js_fechar();"></td>
-</tr>
-</table>
-<script>
-   function js_valida_dados(){
-       var contador = 0;
-/*
-       if (document.form2.l04_descricao.value == ""){
-            alert("Falta a descricao do lote");
-            document.form2.l04_descricao.select();
-            document.form2.l04_descricao.style.backgroundColor='#99A9AE';
-            document.form2.l04_descricao.focus();
-            return false;
-       }
-*/
-       var lista_itens = "";
-       var separador   = "";
-       for(i = 0; i < lote.document.form1.elements.length; i++){
-            if (lote.document.form1.elements[i].type == "checkbox"){
-                 if (lote.document.form1.elements[i].checked == true ){
-                      lista_itens += separador+lote.document.form1.elements[i].value;
-                      separador    = ", ";
-                      contador++;
-                 }
+            if ($numrows == $numrows_desab) {
+                $db_opcao  = 3;
+                $db_tranca = 3;
+            } else {
+                $db_opcao = 1;
             }
-       }
 
-       if (contador == 0){
-            alert("Selecione um item.");
-            return false;
-       } else {
-            document.form2.l04_liclicitem.value = lista_itens;
-       }
+            $db_opcao = $db_tranca;
+        ?>
+            <form name="form2" method="post" action="lic1_liclicitemlotenovo.php">
+                <table border="0" cellspacing="2" cellpadding="0" align="center">
+                    <tr>
+                        <td colspan="2">&nbsp;</td>
+                    </tr>
+                    <?
+                    db_input("licitacao", 10, "", true, "hidden", 3);
+                    db_input("l04_liclicitem", 50, "", true, "hidden", 3);
+                    db_input("db_tranca", 1, "", true, "hidden", 3);
+                    ?>
+                    <tr>
+                        <td nowrap align="right" title="<?= @$Tl04_codigo ?>"><?= @$Ll04_codigo ?></td>
+                        <td nowrap align="left">
+                            <?
+                            db_input("l04_codigo", 10, $Il04_codigo, true, "text", 3);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap align="right" title="<?= @$Tl04_descricao ?>"><?= @$Ll04_descricao ?></td>
+                        <td nowrap align="left">
+                            <?
+                            db_input("l04_descricao", 40, $Il04_descricao, true, "text", $db_opcao);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td nowrap align="center" colspan="2">
+                            <input type="submit" name="incluir" value="Incluir" onClick="return js_valida_dados();">
+                            <input type="button" name="fechar" value="Fechar" onClick="js_fechar();">
+                        </td>
+                    </tr>
+                </table>
+                <script>
+                    function js_valida_dados() {
+                        var contador = 0;
+                        /*
+                               if (document.form2.l04_descricao.value == ""){
+                                    alert("Falta a descricao do lote");
+                                    document.form2.l04_descricao.select();
+                                    document.form2.l04_descricao.style.backgroundColor='#99A9AE';
+                                    document.form2.l04_descricao.focus();
+                                    return false;
+                               }
+                        */
+                        var lista_itens = "";
+                        var separador = "";
+                        for (i = 0; i < lote.document.form1.elements.length; i++) {
+                            if (lote.document.form1.elements[i].type == "checkbox") {
+                                if (lote.document.form1.elements[i].checked == true) {
+                                    lista_itens += separador + lote.document.form1.elements[i].value;
+                                    separador = ", ";
+                                    contador++;
+                                }
+                            }
+                        }
 
-       document.form2.submit();
-       return true;
-   }
+                        if (contador == 0) {
+                            alert("Selecione um item.");
+                            return false;
+                        } else {
+                            document.form2.l04_liclicitem.value = lista_itens;
+                        }
 
-   function js_fechar(){
-       parent.db_iframe_lotenovo.hide();
-       parent.itens_lote.location.href = 'lic1_liclicitemlote011.php?licitacao=<?=$licitacao?>';
-   }
-</script>
-</center>
-</form>
+                        document.form2.submit();
+                        return true;
+                    }
+
+                    function js_fechar() {
+                        parent.db_iframe_lotenovo.hide();
+                        parent.itens_lote.location.href = 'lic1_liclicitemlote011.php?licitacao=<?= $licitacao ?>';
+                    }
+                </script>
+    </center>
+    </form>
 </body>
+
 </html>
 <?
-}
+        }
 
-if (isset($db_opcao)&&$db_opcao==3){
-     if ($numrows == 0 && trim(@$incluir)==""){
-          $erro_msg = "Nenhum item cadastrado para esta licitação.";
-          echo "<script>
+        if (isset($db_opcao) && $db_opcao == 3) {
+            if ($numrows == 0 && trim(@$incluir) == "") {
+                $erro_msg = "Nenhum item cadastrado para esta licitação.";
+                echo "<script>
                    document.form2.incluir.disabled = true;
                 </script>";
-     } else {
-          if ($numrows == $numrows_desab){
-               $erro_msg = 'Todos os itens desta licitação já possuem lote.\nPara incluir novo lote, excluir lote(s).';
-               echo "<script>
+            } else {
+                if ($numrows == $numrows_desab) {
+                    $erro_msg = 'Todos os itens desta licitação já possuem lote.\nPara incluir novo lote, excluir lote(s).';
+                    echo "<script>
                         document.form2.incluir.disabled = true;
                      </script>";
-          }
-     }
-}
+                }
+            }
+        }
 
-if (isset($erro_msg)&&trim($erro_msg)!="") {
-     db_msgbox($erro_msg);
+        if (isset($erro_msg) && trim($erro_msg) != "") {
+            db_msgbox($erro_msg);
 
-     /**
-      * Se todos os itens foram vinculados a algum lote redireciona para a rotina de editais
-      */
+            /**
+             * Se todos os itens foram vinculados a algum lote redireciona para a rotina de editais
+             */
 
-      $sSqlCodigos = "SELECT distinct l21_codigo FROM liclicitem WHERE l21_codliclicita = $licitacao";
-      $rsCodigos   = db_query($sSqlCodigos);
+            $sSqlCodigos = "SELECT distinct l21_codigo FROM liclicitem WHERE l21_codliclicita = $licitacao";
+            $rsCodigos   = db_query($sSqlCodigos);
 
-      $sSqlLotes = "SELECT distinct liclicitemlote.*
+            $sSqlLotes = "SELECT distinct liclicitemlote.*
                     FROM liclicitemlote
                     WHERE l04_liclicitem IN
                          (SELECT l21_codigo
                          FROM liclicitem
                          WHERE l21_codliclicita = $licitacao)";
-      $rsLotes = db_query($sSqlLotes);
+            $rsLotes = db_query($sSqlLotes);
 
-      $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital, l47_sequencial', '', 'l20_codigo = '.$licitacao);
-      $rsSql = $clliclancedital->sql_record($sSql);
+            $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital, l47_sequencial', '', 'l20_codigo = ' . $licitacao);
+            $rsSql = $clliclancedital->sql_record($sSql);
 
-      $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
-      //db_criatabela($rsSql);exit;
-     if(!$sqlerro && $incluir && pg_numrows($rsLotes) == pg_numrows($rsCodigos)){
-      if(in_array(intval($natureza_objeto), array(1, 7))){
-          echo"<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
-      }
-     }
+            $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
+            //db_criatabela($rsSql);exit;
+            if (!$sqlerro && $incluir && pg_numrows($rsLotes) == pg_numrows($rsCodigos)) {
+                if (in_array(intval($natureza_objeto), array(1, 7))) {
+                    echo "<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
+                }
+            }
 
-     echo "<script>
+            echo "<script>
               document.form2.l04_descricao.select();
               document.form2.l04_descricao.focus();
            </script>";
-}
+        }
 ?>
