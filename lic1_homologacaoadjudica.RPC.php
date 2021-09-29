@@ -450,9 +450,6 @@ switch($oParam->exec) {
                 throw new Exception("Data de julgamento maior que data de adjudicacao.");
             }
 
-            if($l20_cadinicial != "3" || $l20_cadinicial != "4"){
-                throw new Exception("Usuário: Edital não cadastrado ou com o status de Aguardando envio. Gentileza verificar!");
-            }
 
             //Verifica data de adjudicacao da licitação
             if($l202_datahomologacao < $datadeAdjudicacao) {
@@ -465,6 +462,12 @@ switch($oParam->exec) {
             //Verifica itens obra
             $aPcmater = $clliclicita->getPcmaterObras($l202_licitacao);
             $aPcmaterverificado = array();
+
+            if($l20_naturezaobjeto == "1") {
+                if($l20_cadinicial != "3" || $l20_cadinicial != "4"){
+                    throw new Exception("Usuário: Edital não cadastrado ou com o status de Aguardando envio. Gentileza verificar!");
+                }
+            }
 
             foreach ($aPcmater as $item) {
                 $rsverifica = $cllicitemobra->sql_record($cllicitemobra->sql_query(null, "*", null, "obr06_pcmater = $item->pc16_codmater"));
