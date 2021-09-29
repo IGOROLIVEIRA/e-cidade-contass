@@ -357,7 +357,7 @@ if (isset($e54_numcgm) && !empty($e54_numcgm)) {
 <center>
     <div style="margin-top: 25px; width: 600px;">
         <?
-        include("forms/db_frmempautorizataxatabela.php");
+        include("forms/db_frmempautorizacredenciamento.php");
         ?>
     </div>
 </center>

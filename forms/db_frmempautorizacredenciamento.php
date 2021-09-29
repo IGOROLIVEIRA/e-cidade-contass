@@ -37,11 +37,11 @@ $clrotulo->label("c58_descr");
 $clrotulo->label("e150_numeroprocesso");
 $clrotulo->label("e54_codlicitacao");
 if ($db_opcao == 1) {
-    $ac = "emp1_empautorizataxatabela004.php";
+    $ac = "lic1_gerarempautorizacredenciamento004.php";
 } else if ($db_opcao == 2 || $db_opcao == 22) {
-    $ac = "emp1_empautorizataxatabela005.php";
+    $ac = "lic1_gerarempautorizacredenciamento005.php";
 } else if ($db_opcao == 3) {
-    $ac = "emp1_empautorizataxatabela006.php";
+    $ac = "lic1_gerarempautorizacredenciamento006.php";
 }
 if (isset($db_opcaoal)) {
     $db_opcao = 3;
@@ -100,6 +100,8 @@ db_app::load("DBFormCache.js");
                 <td>
                     <?
                     db_input('l03_descr', 37, $Il03_descr, true, '', 3);
+                    db_input('e54_codcom', 37, $Il03_descr, true, 'hidden', 3);
+                    db_input('e54_codlicitacao', 10, $Ie54_codlicitacao, true, 'hidden', 3);
                     ?>
                 </td>
             </tr>
@@ -254,7 +256,7 @@ db_app::load("DBFormCache.js");
 
             js_OpenJanelaIframe('top.corpo.iframe_empautoriza',
                 'db_iframe_credenciamentotermo',
-                'func_credenciamentotermo.php?virgente=true&funcao_js=parent.js_preenchertermocredenciamento|l212_numerotermo|l20_edital|l20_numero|l20_anousu|z01_numcgm|z01_nome|l03_descr',
+                'func_credenciamentotermo.php?virgente=true&funcao_js=parent.js_preenchertermocredenciamento|l212_numerotermo|l20_edital|l20_numero|l20_anousu|z01_numcgm|z01_nome|l03_descr|l20_codigo|pc50_codcom',
                 'Pesquisa Termo Credenciamento',true, '0', '1');
         }
     }
@@ -262,7 +264,7 @@ db_app::load("DBFormCache.js");
     /**
      * funcao para preencher termo de credenciamento da ancora
      */
-    function js_preenchertermocredenciamento(codigo,edital,numero,ano,cgm,nome,tipocompra)
+    function js_preenchertermocredenciamento(codigo,edital,numero,ano,cgm,nome,tipocompra,codlicitacao,codtipocom)
     {
         document.form1.l212_numerotermo.value = codigo;
         document.form1.e54_numerll.value = edital+'/'+ano;
@@ -270,6 +272,8 @@ db_app::load("DBFormCache.js");
         document.form1.e54_numcgm.value = cgm;
         document.form1.z01_nome.value = nome;
         document.form1.l03_descr.value = tipocompra;
+        document.form1.e54_codlicitacao.value = codlicitacao;
+        document.form1.e54_codcom.value = codtipocom;
 
         document.form1.e54_concarpeculiar.value = '000';
         document.form1.c58_descr.value = 'NÃO SE APLICA';
