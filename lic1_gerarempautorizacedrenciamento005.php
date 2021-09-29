@@ -232,7 +232,7 @@ if (isset($alterar) && !$sqlerro) {
         }
     }
     db_fim_transacao($sqlerro);
-    db_redireciona("emp1_empautorizataxatabela005.php");
+    db_redireciona("lic1_gerarempautorizacedrenciamento005.php");
 } else if (isset($chavepesquisa)) {
     $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
     db_fieldsmemory($result, 0);
@@ -367,7 +367,7 @@ if (isset($e54_numcgm) && !empty($e54_numcgm)) {
 <?
 if (isset($erro_msg)) {
     db_msgbox($erro_msg);
-//  db_redireciona("emp1_empautorizataxatabela005.php");
+//  db_redireciona("lic1_gerarempautorizacedrenciamento005.php");
 }
 //////////////////////////////////////////////////
 
@@ -378,8 +378,8 @@ if (isset($chavepesquisa)) {
 	      function js_libera(recar){
 		      parent.document.formaba.empautitem.disabled=false;\n
 		      parent.document.formaba.empautidot.disabled=false;\n
-		      top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
-		      top.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
+		      top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?e55_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
+		      top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?e56_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
 	      }
 	      js_libera();
       </script>
@@ -391,8 +391,8 @@ if (isset($chavepesquisa)) {
               function js_bloqueia(recar){
                 parent.document.formaba.empautitem.disabled=false;\n
                 parent.document.formaba.empautidot.disabled=false;\n
-                top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&db_opcaoal=33&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
-                top.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&anulacao=true&db_opcao=33&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
+                top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=33&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
+                top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
               }
               js_bloqueia();
             </script>
@@ -403,8 +403,8 @@ if (isset($chavepesquisa)) {
               function js_bloqueia(recar){
                 parent.document.formaba.empautitem.disabled=false;\n
                 parent.document.formaba.empautidot.disabled=false;\n
-                top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&db_opcaoal=33&e55_autori=$e54_autori';\n
-                top.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=33&e55_autori=$e54_autori';\n
+                top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
               }
               js_bloqueia();
             </script>
