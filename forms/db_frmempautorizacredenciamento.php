@@ -81,18 +81,15 @@ db_app::load("DBFormCache.js");
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?= @$Te54_codcom ?>">
+                <td nowrap title="<?= @$Te54_numcgm ?>">
                     <strong>Nome/Razão Social:</strong>
                 </td>
                 <td>
-                    <?php
-                    if (isset($e54_numcgm) && !empty($e54_numcgm)) {
-                        $cgm = array($aCgm->z01_numcgm => $aCgm->z01_nome);
-                        db_select('e54_numcgm', $cgm, true, $db_opcao, " style='width:370;' ");
-                    } else {
-                        db_select('e54_numcgm', '', true, $db_opcao, " style='width:370;' ");
-                    }
-
+                    <?
+                    db_input('e54_numcgm', 10, $Ie54_numcgm, true, '', 3);
+                    ?>
+                    <?
+                    db_input('z01_nome', 37, $Iz01_nome, true, '', 3);
                     ?>
                 </td>
             </tr>
@@ -101,15 +98,9 @@ db_app::load("DBFormCache.js");
                     <strong>Tipo de Compra:</strong>
                 </td>
                 <td>
-                    <? db_input('e54_codcom', 8, 1, true, 'hidden'); ?>
-                    <select name="e54_codcomS" id="e54_codcomS" style="width:370;" disabled="true">
-                        <option value="">Selecione</option>
-                        <?php foreach ($aPctipocompras as $aPctipocompra) : ?>
-                            <option <?= ($aPctipocompra->pc50_codcom == $e54_codcom ? 'selected' : '')  ?> value="<?= $aPctipocompra->pc50_codcom ?>">
-                                <?= $aPctipocompra->pc50_codcom . " - " . $aPctipocompra->pc50_descr ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                    <?
+                    db_input('l03_descr', 37, $Il03_descr, true, '', 3);
+                    ?>
                 </td>
             </tr>
             <tr>
@@ -133,7 +124,7 @@ db_app::load("DBFormCache.js");
                 </td>
                 <td>
                     <? db_input('e54_numerll', 51, "", true, 'text', 3, '', "", "", "", 16); ?>
-                    <? db_input('e54_numerl', 8, 1, true, 'hidden', ""); ?>
+                    <? db_input('e54_numerl', 10, 1, true, 'hidden', ""); ?>
                 </td>
             </tr>
             <tr>
@@ -141,7 +132,7 @@ db_app::load("DBFormCache.js");
                     <strong>Número Modalidade:</strong>
                 </td>
                 <td>
-                    <? db_input('e54_nummodalidade', 8, 1, true, '', 3, ''); ?>
+                    <? db_input('e54_nummodalidade', 10, 1, true, '', 3, ''); ?>
                 </td>
             </tr>
             <?
@@ -156,8 +147,8 @@ db_app::load("DBFormCache.js");
                     </td>
                     <td nowrap="nowrap">
                         <?
-                        db_input("e54_concarpeculiar", 9, $Ie54_concarpeculiar, true, "text", ($db_opcao == 1) ? $db_opcao : 3, "onChange='js_pesquisae54_concarpeculiar(false);'");
-                        db_input("c58_descr", 40, 0, true, "text", 3);
+                        db_input("e54_concarpeculiar", 10, $Ie54_concarpeculiar, true, "text", ($db_opcao == 1) ? $db_opcao : 3, "onChange='js_pesquisae54_concarpeculiar(false);'");
+                        db_input("c58_descr", 37, 0, true, "text", 3);
                         ?>
                     </td>
                 </tr>
@@ -263,7 +254,7 @@ db_app::load("DBFormCache.js");
 
             js_OpenJanelaIframe('top.corpo.iframe_empautoriza',
                 'db_iframe_credenciamentotermo',
-                'func_credenciamentotermo.php?virgente=true&funcao_js=parent.js_preenchertermocredenciamento|l212_numerotermo|l20_edital|l20_numero|l20_anousu',
+                'func_credenciamentotermo.php?virgente=true&funcao_js=parent.js_preenchertermocredenciamento|l212_numerotermo|l20_edital|l20_numero|l20_anousu|z01_numcgm|z01_nome|l03_descr',
                 'Pesquisa Termo Credenciamento',true, '0', '1');
         }
     }
@@ -271,11 +262,14 @@ db_app::load("DBFormCache.js");
     /**
      * funcao para preencher termo de credenciamento da ancora
      */
-    function js_preenchertermocredenciamento(codigo,edital,numero,ano)
+    function js_preenchertermocredenciamento(codigo,edital,numero,ano,cgm,nome,tipocompra)
     {
         document.form1.l212_numerotermo.value = codigo;
         document.form1.e54_numerll.value = edital+'/'+ano;
         document.form1.e54_nummodalidade.value = numero;
+        document.form1.e54_numcgm.value = cgm;
+        document.form1.z01_nome.value = nome;
+        document.form1.l03_descr.value = tipocompra;
 
         document.form1.e54_concarpeculiar.value = '000';
         document.form1.c58_descr.value = 'NÃO SE APLICA';

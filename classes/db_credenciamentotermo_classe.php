@@ -506,6 +506,8 @@ class cl_credenciamentotermo {
         }
         $sql .= " from credenciamentotermo ";
         $sql .= " inner join liclicita on liclicita.l20_codigo = credenciamentotermo.l212_licitacao ";
+        $sql .= " inner join cgm on cgm.z01_numcgm = l212_fornecedor ";
+        $sql .= " inner join cflicita on l03_codigo = l20_codtipocom ";
 
         $sql2 = "";
         if ($dbwhere=="") {
