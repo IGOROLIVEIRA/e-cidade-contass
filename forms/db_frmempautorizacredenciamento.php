@@ -216,12 +216,7 @@ db_app::load("DBFormCache.js");
 
     function js_preenchepesquisa(chave) {
         db_iframe_<?= $iframe ?>.hide();
-        <?
-        if ($db_opcao != 1) {
-            echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
-        }
-        ?>
-
+        location.href = 'lic1_gerarempautorizacedrenciamento005.php?chavepesquisa='+chave;
     }
 
 
