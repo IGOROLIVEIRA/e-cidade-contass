@@ -646,6 +646,8 @@ switch($oParam->exec) {
         $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
         $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
 
+        $ac16_sequencial = db_utils::fieldsMemory($result, 0)->ac16_sequencial;
+
         try {
             //Verifica se os fornecedores vencedores estão habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
@@ -655,6 +657,10 @@ switch($oParam->exec) {
             //Verifica data de julgamento da licitação
             if ($dataJulgamentoLicitacao > $l202_datahomologacao) {
                 throw new Exception( "Data de julgamento maior que data de adjudicacao");
+            }
+
+            if($ac16_sequencial != ""){
+                throw new Exception( "Não e Permitida alteração de Homologação com Contrato lançado!");
             }
 
             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
