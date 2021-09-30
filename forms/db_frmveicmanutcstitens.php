@@ -742,6 +742,14 @@ db_app::load("estilos.css, grid.style.css");
         var cell5 = document.form1.ve64_pcmater.value;
         var cell6 = document.form1.pc01_descrmater.value;
         var result = document.form1.ve63_vlruni.value * document.form1.ve63_quant.value;
+
+        quantidade = 50;
+        total = cell2.length;
+
+        if(total > quantidade) {
+            cell2 = cell2.substr(0, quantidade);
+            total = cell2.length;
+        }
         
         var regex = /^[0-9.]+$/;
         if( !regex.test(result) ) {
