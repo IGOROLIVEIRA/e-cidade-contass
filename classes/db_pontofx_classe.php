@@ -834,6 +834,13 @@ class cl_pontofx {
      $sql .= "      inner join rhlota  on  rhlota.r70_codigo::char(12) = pontofx.r90_lotac
 		                                  and  rhlota.r70_instit = pontofx.r90_instit ";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = rhpessoal.rh01_numcgm";
+     $sql .= "      LEFT JOIN rhlotaexe ON rh26_codigo = r70_codigo    ";
+     $sql .= "      AND rh26_anousu = r90_anousu                       ";
+     $sql .= "      AND rh26_codigo = r90_lotac::integer               ";
+     $sql .= "      LEFT JOIN orcorgao ON o40_orgao = rh26_orgao       ";
+     $sql .= "      AND o40_anousu = r90_anousu                        ";
+     $sql .= "      AND o40_instit = rh02_instit                       ";
+
      $sql2 = "";
      if($dbwhere==""){
        if($r90_anousu!=null ){

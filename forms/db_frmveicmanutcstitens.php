@@ -755,7 +755,7 @@ db_app::load("estilos.css, grid.style.css");
         if( !regex.test(result) ) {
             alert('Usuário: Verificar os valores');
             return false;
-        }
+        }*/
         if(result==0){
             alert('Usuário: Verificar os valores');
             return false;
@@ -1186,11 +1186,27 @@ var opSalva1 = 0;
       }else{
             var vlr =   document.getElementById("vrl"+valor).value;
             const myArr = vlr.split(",");
-            vlr = myArr[0]+"."+myArr[1];
+            
+            if(myArr[1]==00){
+                vlr = myArr[0];
+                const myArr1 = vlr.split(".");
+                vlr = myArr1[0]+""+myArr1[1];
+            }else{
+                valo1 = myArr[0];
+                retorno1 = valo1.split(".");
+                if(retorno1[1]==undefined){
+                    vlr = valo1+"."+myArr[1];
+                }else{
+                    valo1 = retorno1[0]+""+retorno1[1];
+                    vlr = valo1+"."+myArr[1];
+                }
+                
+            }
             var resul = (quant*vlr);
             resul = js_formatar(resul.toFixed(2), "f",2);;
             document.getElementById("result"+valor).value = resul;
             opSalvar = 1;
+   
       }
       
     }
@@ -1251,9 +1267,31 @@ var opSalva1 = 0;
                         oItem.quant      = aCells[5].getValue();       
                         oItem.quantUti   = aCells[6].getValue();
                         oItem.valor      = aCells[7].getValue();
-                        retorno          = oItem.valor.split(",");  
-                        oItem.valor      = retorno[0]+"."+retorno[1];
                         oItem.precoTo    = aCells[8].getValue();
+
+                        retorno = oItem.valor.split(",");
+                        if(retorno[1]==00){
+                            oItem.valor = retorno[0];
+                            retorno = oItem.valor.split(".");
+                            if(retorno[1]==undefined){
+                                oItem.valor = retorno[0];
+                            }else{
+                                oItem.valor = retorno[0]+""+retorno[1];
+                            }
+                        }else{
+                            valor = retorno[0];
+                            retorno1 = valor.split(".");
+                            if(retorno1[1]==undefined){
+                                oItem.valor = valor+"."+retorno[1];
+                            }else{
+                                valor = retorno1[0]+""+retorno1[1];
+                                oItem.valor = valor+"."+retorno[1];
+                            }
+                            
+
+                            
+                
+                        } 
 
                         document.getElementById("ve63_descr").value = oItem.descr;
                         document.getElementById("ve63_quant").value = oItem.quantUti;
