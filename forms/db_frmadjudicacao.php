@@ -78,9 +78,9 @@ $clrotulo->label("l20_codigo");
     function js_showGrid() {
         oGridItens = new DBGrid('gridItens');
         oGridItens.nameInstance = 'oGridItens';
-        oGridItens.setCellAlign(new Array("center", "center", "center", 'center', 'center', 'center'));
-        oGridItens.setCellWidth(new Array("10%" , "25%"     , '25%'          ,   '15%'    , '15%'        , '15%'            ));
-        oGridItens.setHeader(new Array("Código", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
+        oGridItens.setCellAlign(new Array("center","center", "center", "center", 'center', 'center', 'center'));
+        oGridItens.setCellWidth(new Array("10%" , "5%"     , "25%"     , '25%'          ,   '15%'    , '15%'        , '15%'            ));
+        oGridItens.setHeader(new Array("Código","Ordem", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
         oGridItens.hasTotalValue = true;
         oGridItens.show($('cntgriditens'));
 
@@ -89,7 +89,9 @@ $clrotulo->label("l20_codigo");
         $(oGridItens.sName + "body").style.width = width;
         $("table" + oGridItens.sName + "footer").style.width = width;
     }
+
     js_pesquisal202_licitacao(true);
+
     function js_pesquisal202_licitacao(mostra){
         let opcao = "<?= $db_opcao?>";
         var situacao = 0;
@@ -116,6 +118,7 @@ $clrotulo->label("l20_codigo");
 
         }
     }
+
     function js_mostraliclicita(chave,erro){
 
         document.form1.pc50_descr.value = chave;
@@ -177,24 +180,27 @@ $clrotulo->label("l20_codigo");
 
         var oRetornoitens = JSON.parse(oAjax.responseText);
         var nTotal = new Number(0);
+        var seq = 0;
 
         if (oRetornoitens.status == 1) {
 
             oRetornoitens.itens.each(function(oLinha, iLinha) {
                 var aLinha = new Array();
+                seq ++;
                 aLinha[0] = oLinha.pc81_codprocitem;
-                aLinha[1] = oLinha.pc01_descrmater.urlDecode();
-                aLinha[2] = oLinha.z01_nome.urlDecode();
-                aLinha[3] = oLinha.m61_descr;
-                aLinha[4] = oLinha.pc11_quant;
-                aLinha[5] = oLinha.pc23_valor;
+                aLinha[1] = seq;
+                aLinha[2] = oLinha.pc01_descrmater.urlDecode();
+                aLinha[3] = oLinha.z01_nome.urlDecode();
+                aLinha[4] = oLinha.m61_descr;
+                aLinha[5] = oLinha.pc11_quant;
+                aLinha[6] = oLinha.pc23_valor;
                 oGridItens.addRow(aLinha);
                 nTotal = nTotal + Number(oLinha.pc23_valor);
 
                 var sTextEvent  = " ";
 
-                if (aLinha[1] !== '') {
-                    sTextEvent += "<b>Material: </b>"+aLinha[1];
+                if (aLinha[3] !== '') {
+                    sTextEvent += "<b>Material: </b>"+aLinha[3];
                 } else {
                     sTextEvent += "<b>Nenhum dado à mostrar</b>";
                 }
@@ -214,7 +220,7 @@ $clrotulo->label("l20_codigo");
                 oDBHint.setHideEvents(aEventsOut);
                 oDBHint.setPosition('B', 'L');
                 oDBHint.setUseMouse(true);
-                oDBHint.make($(oHint.idLinha),1);
+                oDBHint.make($(oHint.idLinha),2);
             });
         }
     }
