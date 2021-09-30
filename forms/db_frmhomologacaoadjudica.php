@@ -82,9 +82,9 @@ $clrotulo->label("l20_codigo");
         if(opcao != 2){
             oGridItens.setCheckbox(0);
         }
-        oGridItens.setCellAlign(new Array("center","center", "center","center", "center", 'center', 'center', 'center'));
-        oGridItens.setCellWidth(new Array("5%" , "5%"     , "25%"     ,'5%', '25%'          ,   '15%'    , '15%'        , '15%'            ));
-        oGridItens.setHeader(new Array("Código", "Ordem","Material","CGM","Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
+        oGridItens.setCellAlign(new Array("center","center", "center","center", "center", 'center', 'center', 'center', 'center'));
+        oGridItens.setCellWidth(new Array("5%" , "5%"     , "25%"     ,'5%', '25%'          ,   '15%'    , '15%'        , '15%' , '15%'));
+        oGridItens.setHeader(new Array("Código", "Ordem","Material","CGM","Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado", "Lote"));
         oGridItens.hasTotalValue = true;
         oGridItens.show($('cntgriditens'));
 
@@ -200,6 +200,7 @@ $clrotulo->label("l20_codigo");
                     aLinha[5] = oLinha.m61_descr;
                     aLinha[6] = oLinha.pc11_quant;
                     aLinha[7] = oLinha.pc23_valor;
+                    aLinha[8] = oLinha.l04_descricao.urlDecode();
                     oGridItens.addRow(aLinha);
                 nTotal = nTotal + Number(oLinha.pc23_valor);
 

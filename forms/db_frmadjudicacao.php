@@ -78,9 +78,9 @@ $clrotulo->label("l20_codigo");
     function js_showGrid() {
         oGridItens = new DBGrid('gridItens');
         oGridItens.nameInstance = 'oGridItens';
-        oGridItens.setCellAlign(new Array("center","center", "center", "center", 'center', 'center', 'center'));
-        oGridItens.setCellWidth(new Array("10%" , "5%"     , "25%"     , '25%'          ,   '15%'    , '15%'        , '15%'            ));
-        oGridItens.setHeader(new Array("Código","Ordem", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
+        oGridItens.setCellAlign(new Array("center","center", "center", "center", 'center', 'center', 'center', 'center'));
+        oGridItens.setCellWidth(new Array("10%" , "5%"     , "25%"     , '25%'          ,   '15%'    , '15%'        , '15%'            , '15%'            ));
+        oGridItens.setHeader(new Array("Código","Ordem", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado", "Lote"));
         oGridItens.hasTotalValue = true;
         oGridItens.show($('cntgriditens'));
 
@@ -194,6 +194,7 @@ $clrotulo->label("l20_codigo");
                 aLinha[4] = oLinha.m61_descr;
                 aLinha[5] = oLinha.pc11_quant;
                 aLinha[6] = oLinha.pc23_valor;
+                aLinha[7] = oLinha.l04_descricao.urlDecode();
                 oGridItens.addRow(aLinha);
                 nTotal = nTotal + Number(oLinha.pc23_valor);
 

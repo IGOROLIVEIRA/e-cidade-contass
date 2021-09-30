@@ -346,7 +346,9 @@ switch($oParam->exec) {
     case 'getItens':
 
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
-        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem";
+        $clliclicita           = new cl_liclicita();
+
+        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao";
 
         //Itens para Inclusao
         if($oParam->dbopcao == "1"){
@@ -365,6 +367,12 @@ switch($oParam->exec) {
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"z01_nome",$sWhere));
         }
 
+        /**
+         * VERIFICO SE A LICITACAO E LOTE
+         */
+        $rsTipoJulg = $clliclicita->sql_record($clliclicita->sql_query($oParam->iLicitacao));
+        $l20_tipojulg  = db_utils::fieldsMemory($rsTipoJulg, 0)->l20_tipojulg;
+
         for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
 
             $oItensLicitacao = db_utils::fieldsMemory($result, $iCont);
@@ -378,6 +386,11 @@ switch($oParam->exec) {
             $oItem->pc23_valor                      = $oItensLicitacao->pc23_valor;
             $oItem->l203_homologaadjudicacao        = $oItensLicitacao->l203_homologaadjudicacao;
             $oItem->pc81_codprocitem                = $oItensLicitacao->pc81_codprocitem;
+            if($l20_tipojulg == "3"){
+                $oItem->l04_descricao               = urlencode($oItensLicitacao->l04_descricao);
+            }else{
+                $oItem->l04_descricao               = "";
+            }
             $itens[]                                = $oItem;
         }
         $oRetorno->itens = $itens;
@@ -385,10 +398,18 @@ switch($oParam->exec) {
 
     case 'getItensAdjudicacao':
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
-        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem";
+        $clliclicita           = new cl_liclicita();
+
+        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao";
 
         $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
         $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"z01_nome",$sWhere));
+
+        /**
+         * VERIFICO SE A LICITACAO E LOTE
+         */
+        $rsTipoJulg = $clliclicita->sql_record($clliclicita->sql_query($oParam->iLicitacao));
+        $l20_tipojulg  = db_utils::fieldsMemory($rsTipoJulg, 0)->l20_tipojulg;
 
         for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
 
@@ -402,6 +423,11 @@ switch($oParam->exec) {
             $oItem->pc23_valor                      = $oItensLicitacao->pc23_valor;
             $oItem->l203_homologaadjudicacao        = $oItensLicitacao->l203_homologaadjudicacao;
             $oItem->pc81_codprocitem                = $oItensLicitacao->pc81_codprocitem;
+            if($l20_tipojulg == "3"){
+                $oItem->l04_descricao               = urlencode($oItensLicitacao->l04_descricao);
+            }else{
+                $oItem->l04_descricao               = "";
+            }
             $itens[]                                = $oItem;
         }
         $oRetorno->itens = $itens;
