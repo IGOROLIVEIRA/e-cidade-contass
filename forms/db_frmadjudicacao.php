@@ -79,8 +79,8 @@ $clrotulo->label("l20_codigo");
         oGridItens = new DBGrid('gridItens');
         oGridItens.nameInstance = 'oGridItens';
         oGridItens.setCellAlign(new Array("center","center", "center", "center", 'center', 'center', 'center', 'center'));
-        oGridItens.setCellWidth(new Array("10%" , "5%"     , "25%"     , '25%'          ,   '15%'    , '15%'        , '15%'            , '15%'            ));
-        oGridItens.setHeader(new Array("Código","Ordem", "Material", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado", "Lote"));
+        oGridItens.setCellWidth(new Array("10%" , "5%"     , "25%"     , '5%'          ,   '25%'    , '15%'        , '15%', '15%'));
+        oGridItens.setHeader(new Array("Código","Ordem", "Material", "Lote", "Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
         oGridItens.hasTotalValue = true;
         oGridItens.show($('cntgriditens'));
 
@@ -190,18 +190,18 @@ $clrotulo->label("l20_codigo");
                 aLinha[0] = oLinha.pc81_codprocitem;
                 aLinha[1] = seq;
                 aLinha[2] = oLinha.pc01_descrmater.urlDecode();
-                aLinha[3] = oLinha.z01_nome.urlDecode();
-                aLinha[4] = oLinha.m61_descr;
-                aLinha[5] = oLinha.pc11_quant;
-                aLinha[6] = oLinha.pc23_valor;
-                aLinha[7] = oLinha.l04_descricao.urlDecode();
+                aLinha[3] = oLinha.l04_descricao.urlDecode();
+                aLinha[4] = oLinha.z01_nome.urlDecode();
+                aLinha[5] = oLinha.m61_descr;
+                aLinha[6] = oLinha.pc11_quant;
+                aLinha[7] = oLinha.pc23_valor;
                 oGridItens.addRow(aLinha);
                 nTotal = nTotal + Number(oLinha.pc23_valor);
 
                 var sTextEvent  = " ";
 
-                if (aLinha[3] !== '') {
-                    sTextEvent += "<b>Material: </b>"+aLinha[3];
+                if (aLinha[2] !== '') {
+                    sTextEvent += "<b>Material: </b>"+aLinha[2];
                 } else {
                     sTextEvent += "<b>Nenhum dado à mostrar</b>";
                 }

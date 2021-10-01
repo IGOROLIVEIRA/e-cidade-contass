@@ -83,8 +83,8 @@ $clrotulo->label("l20_codigo");
             oGridItens.setCheckbox(0);
         }
         oGridItens.setCellAlign(new Array("center","center", "center","center", "center", 'center', 'center', 'center', 'center'));
-        oGridItens.setCellWidth(new Array("5%" , "5%"     , "25%"     ,'5%', '25%'          ,   '15%'    , '15%'        , '15%' , '15%'));
-        oGridItens.setHeader(new Array("Código", "Ordem","Material","CGM","Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado", "Lote"));
+        oGridItens.setCellWidth(new Array("5%" , "5%"     , "25%"     ,'5%', '5%'          ,   '25%'    , '15%'        , '15%' , '15%'));
+        oGridItens.setHeader(new Array("Código", "Ordem","Material", "Lote","CGM","Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
         oGridItens.hasTotalValue = true;
         oGridItens.show($('cntgriditens'));
 
@@ -195,12 +195,12 @@ $clrotulo->label("l20_codigo");
                     aLinha[0] = oLinha.pc81_codprocitem;
                     aLinha[1] = seq;
                     aLinha[2] = oLinha.pc01_descrmater.urlDecode();
-                    aLinha[3] = oLinha.z01_numcgm;
-                    aLinha[4] = oLinha.z01_nome.urlDecode();
-                    aLinha[5] = oLinha.m61_descr;
-                    aLinha[6] = oLinha.pc11_quant;
-                    aLinha[7] = oLinha.pc23_valor;
-                    aLinha[8] = oLinha.l04_descricao.urlDecode();
+                    aLinha[3] = oLinha.l04_descricao.urlDecode();
+                    aLinha[4] = oLinha.z01_numcgm;
+                    aLinha[5] = oLinha.z01_nome.urlDecode();
+                    aLinha[6] = oLinha.m61_descr;
+                    aLinha[7] = oLinha.pc11_quant;
+                    aLinha[8] = oLinha.pc23_valor;
                     oGridItens.addRow(aLinha);
                 nTotal = nTotal + Number(oLinha.pc23_valor);
 
@@ -228,7 +228,7 @@ $clrotulo->label("l20_codigo");
                 oDBHint.setHideEvents(aEventsOut);
                 oDBHint.setPosition('B', 'L');
                 oDBHint.setUseMouse(true);
-                oDBHint.make($(oHint.idLinha), 2);
+                oDBHint.make($(oHint.idLinha), 3);
             });
         }
     }
@@ -253,7 +253,7 @@ $clrotulo->label("l20_codigo");
             with (aItens[i]) {
                 var oItem        = new Object();
                 oItem.codigo     = aCells[0].getValue();
-                oItem.fornecedor = aCells[3].getValue();
+                oItem.fornecedor = aCells[5].getValue();
                 oParam.aItens.push(oItem);
             }
         }

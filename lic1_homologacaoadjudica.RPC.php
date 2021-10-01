@@ -490,7 +490,7 @@ switch($oParam->exec) {
             $aPcmaterverificado = array();
 
             if($l20_naturezaobjeto == "1") {
-                if($l20_cadinicial != "3" || $l20_cadinicial != "4"){
+                if($l20_cadinicial != "3" && $l20_cadinicial !="4"){
                     throw new Exception("Usuário: Edital não cadastrado ou com o status de Aguardando envio. Gentileza verificar!");
                 }
             }
