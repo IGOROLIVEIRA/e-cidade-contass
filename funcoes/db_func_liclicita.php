@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "liclicita.l20_codigo,
+$campos = "distinct liclicita.l20_codigo,
 					liclicita.l20_edital,
 					l20_anousu,
 					pctipocompra.pc50_descr,
