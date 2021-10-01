@@ -30,49 +30,61 @@ require_once("classes/db_empparametro_classe.php");
 require_once("dbforms/db_classesgenericas.php");
 require_once("classes/db_pcmaterele_classe.php");
 require_once("classes/db_empautitem_classe.php");
+require_once("classes/db_credenciamentotermo_classe.php");
+
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
-$clempparametro = new cl_empparametro;
-$clpctabelaitem = new cl_pctabelaitem;
-$clpcmaterele   = new cl_pcmaterele;
-$clempautitem   = new cl_empautitem;
+$clempparametro         = new cl_empparametro;
+$clpctabelaitem         = new cl_pctabelaitem;
+$clpcmaterele           = new cl_pcmaterele;
+$clempautitem           = new cl_empautitem;
+$clcredenciamentotermo  = new cl_credenciamentotermo;
 
 $clempautitem->rotulo->label();
 $clrotulo = new rotulocampo;
 //solicitemunid
 $clrotulo->label("pc17_unid");
-
 $clrotulo->label("e54_anousu");
 $clrotulo->label("o56_elemento");
 $clrotulo->label("pc01_descrmater");
 
+
+if(!empty($e55_autori)) {
+
+    $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, si02_vlprecoreferencia, ";
+
+    $sWhere   = "l21_codliclicita = {$l20_codigo} ";
+    $sSqlItemLicitacao = $clliclicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere);
+    $sResultitens = $clliclicitem->sql_record($sSqlItemLicitacao);
+    $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
+    $numrows = $clliclicitem->numrows;
+    if ($numrows > 0) {
+        $sWhere   = "l21_codliclicita = {$l20_codigo} and l205_fornecedor = {$l205_fornecedor} and l205_licitacao = {$l20_codigo}";
+        $sql     = $clcredenciamento->itensCredenciados(null, $sCampos, $sOrdem, $sWhere);
+        $result  = $clcredenciamento->sql_record($sql);
+        $numrows = $clcredenciamento->numrows;
+    }
+}
 ?>
 
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
 <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
-
-<!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
-<script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script> -->
-
 <form name="form1" method="post" action="">
     <center>
-                <table>
-                    <thead>
-                    <tr>
-                        <th data-orderable="false"></th>
-                        <th data-orderable="false">Ordem</th>
-                        <th data-orderable="false">Item</th>
-                        <th data-orderable="false">Descrição item</th>
-                        <th data-orderable="false">Unidade</th>
-                        <th data-orderable="false">Quantidade Disponivel</th>
-                        <th data-orderable="false">Vl. Unitaário</th>
-                        <th data-orderable="false">Quantidade Solicitada</th>
-                        <th data-orderable="false">Vl. Total</th>
-                    </tr>
-                    </thead>
-                </table>
+        <table class="DBgrid">
+            <tr>
+                <th class="table_header">M</th>
+                <th class="table_header">Ordem</th>
+                <th class="table_header">Item</th>
+                <th class="table_header">Descrição item</th>
+                <th class="table_header">Unidade</th>
+                <th class="table_header">Quantidade Disponivel</th>
+                <th class="table_header">Vl. Unitaário</th>
+                <th class="table_header">Quantidade Solicitada</th>
+                <th class="table_header">Vl. Total</th>
+            </tr>
+        </table>
         <br />
         <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
         <input name="Salvar" type="button" id="salvar" value="Salvar" onclick="js_salvar();">

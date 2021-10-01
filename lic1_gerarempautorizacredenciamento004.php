@@ -308,7 +308,7 @@ if(isset($incluir)) {
         parent.mo_camada('empautitem');
 	    </script>
          ";
-        db_redireciona("lic1_gerarempautorizacedrenciamento005.php?chavepesquisa=$e54_autori&fornecedor=$e54_numcgm");
+        db_redireciona("lic1_gerarempautorizacedrenciamento005.php?chavepesquisa=$e54_autori&fornecedor=$e54_numcgm&licitacao=$e54_codlicitacao");
     }
 }
 ?>

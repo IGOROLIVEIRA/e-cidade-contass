@@ -39,9 +39,9 @@ $clrotulo->label("e54_codlicitacao");
 if ($db_opcao == 1) {
     $ac = "lic1_gerarempautorizacredenciamento004.php";
 } else if ($db_opcao == 2 || $db_opcao == 22) {
-    $ac = "lic1_gerarempautorizacredenciamento005.php";
+    $ac = "lic1_gerarempautorizacedrenciamento005.php";
 } else if ($db_opcao == 3) {
-    $ac = "lic1_gerarempautorizacredenciamento006.php";
+    $ac = "lic1_gerarempautorizacedrenciamento006.php";
 }
 if (isset($db_opcaoal)) {
     $db_opcao = 3;
