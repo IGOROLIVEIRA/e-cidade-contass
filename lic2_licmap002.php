@@ -42,7 +42,7 @@ $clempparametro = new cl_empparametro();
 $clrotulo = new rotulocampo();
 $clrotulo->label('');
 
-parse_str($HTTP_SERVER_VARS ['QUERY_STRING']);
+parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $iAnoUsu = db_getsession('DB_anousu');
 $sSqlEmpParam = $clempparametro->sql_query($iAnoUsu, "e30_numdec");
@@ -141,7 +141,7 @@ if ($modelo == 1) {
     $max_itens = 0;
     $max = false;
     $quant_imp = 0;
-    for($x = 0; $x < $numrows_forne; $x ++) {
+    for ($x = 0; $x < $numrows_forne; $x++) {
         db_fieldsmemory($result_forne, $x);
         if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
 
@@ -165,16 +165,14 @@ if ($modelo == 1) {
 
                 $max_itens = $max_itens + 11;
                 $max = true;
-
             } else {
 
                 $max = false;
                 $max_itens = $numrows_itens;
-
             }
 
             $t = 0;
-            for($w = $quant_imp; $w < $max_itens; $w ++) {
+            for ($w = $quant_imp; $w < $max_itens; $w++) {
 
                 db_fieldsmemory($result_itens, $w);
                 if ($w == ($max_itens - 1)) {
@@ -189,7 +187,7 @@ if ($modelo == 1) {
         $pdf->cell(60, $alt, substr($z01_nome, 0, 40), 0, 0, "L", $p);
         $t = 0;
         $cont_quant = 0;
-        for($w = $quant_imp; $w < $max_itens; $w ++) {
+        for ($w = $quant_imp; $w < $max_itens; $w++) {
             db_fieldsmemory($result_itens, $w);
 
             $lControlaRegistroPrecoValor = ($pc54_formacontrole == aberturaRegistroPreco::CONTROLA_VALOR);
@@ -208,14 +206,14 @@ if ($modelo == 1) {
             } else {
                 $pdf->cell(20, $alt, "0,00", 0, $t, "R", $p);
             }
-            $cont_quant ++;
+            $cont_quant++;
         }
         if ($x == $numrows_forne - 1 && $max == true) {
             $quant_imp = $cont_quant + $quant_imp;
         }
         if ($x == $numrows_forne - 1 && $max == true) {
 
-            $x = - 1;
+            $x = -1;
             $troca = 1;
             $total = 0;
             $pdf->setfont('arial', 'b', 8);
@@ -227,7 +225,7 @@ if ($modelo == 1) {
         } else {
             $p = 0;
         }
-        $total ++;
+        $total++;
     }
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(60 + 20 * $cont_quant, $alt, 'TOTAL DE FORNECEDORES  :  ' . $numrows_forne, "T", 1, "L", 0);
@@ -239,7 +237,7 @@ if ($modelo == 1) {
     $alt = 4;
     $valor_tot = 0;
 
-    for($x = 0; $x < $numrows_itens; $x ++) {
+    for ($x = 0; $x < $numrows_itens; $x++) {
 
         db_fieldsmemory($result_itens, $x);
 
@@ -250,7 +248,6 @@ if ($modelo == 1) {
             if ($pdf->gety() > $pdf->h - 30) {
 
                 $pdf->addpage('L');
-
             }
 
             $pdf->setfont('arial', 'b', 8);
@@ -261,7 +258,6 @@ if ($modelo == 1) {
 
             $p = 0;
             $troca = 0;
-
         }
 
         $pdf->setfont('arial', '', 7);
@@ -279,7 +275,6 @@ if ($modelo == 1) {
             if ($pc24_pontuacao == 1) {
                 $pdf->cell(21, $alt, db_formatar(@${$sCampoValor}, 'f'), 0, 1, "R", $p);
                 $valor_tot += ${$sCampoValor};
-
             } else {
                 $pdf->cell(21, $alt, db_formatar(@${$pc23_valor}, 'f'), 0, 1, "R", $p);
             }
@@ -299,7 +294,6 @@ if ($modelo == 1) {
         $pdf->cell(140, $alt, 'TOTAL :', "T", 0, "R", 0);
         $pdf->cell(20, $alt, db_formatar(@$valor_tot, 'f'), "T", 1, "R", 0);
     }
-
 } else if ($modelo == 2) {
 
     //-----------------------------  MODELO 2  -----------------------------------------------------------------------------------------------------------------//
@@ -328,42 +322,40 @@ if ($modelo == 1) {
     $quant_imp = 0;
     $valor_total = 0;
 
-    $arr_subtotganhoun = array ();
-    $arr_subtotcotadoun = array ();
+    $arr_subtotganhoun = array();
+    $arr_subtotcotadoun = array();
 
-    $arr_subtotganhovlr = array ();
-    $arr_subtotcotadovlr = array ();
+    $arr_subtotganhovlr = array();
+    $arr_subtotcotadovlr = array();
 
-    $arr_totalganho = array ();
-    $arr_totalcotado = array ();
+    $arr_totalganho = array();
+    $arr_totalcotado = array();
 
     /*PEGA FORNECEDOR*/
     $result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento"));
     $numrows_forne = $clpcorcamforne->numrows;
 
-    for($i = 0; $i < $numrows_forne; $i ++) {
+    for ($i = 0; $i < $numrows_forne; $i++) {
         db_fieldsmemory($result_forne, $i);
 
-        $arr_subtotganhoun [$i] = 0;
-        $arr_subtotcotadoun [$i] = 0;
+        $arr_subtotganhoun[$i] = 0;
+        $arr_subtotcotadoun[$i] = 0;
 
-        $arr_subtotganhovlr [$i] = 0;
-        $arr_subtotcotadovlr [$i] = 0;
+        $arr_subtotganhovlr[$i] = 0;
+        $arr_subtotcotadovlr[$i] = 0;
 
-        $arr_totalganho [$pc21_orcamforne] = 0;
-        $arr_totalcotado [$pc21_orcamforne] = 0;
+        $arr_totalganho[$pc21_orcamforne] = 0;
+        $arr_totalcotado[$pc21_orcamforne] = 0;
     }
 
     $total_quant = 0;
-    for($i = 0; $i < $numrows_itens; $i ++) {
+    for ($i = 0; $i < $numrows_itens; $i++) {
         db_fieldsmemory($result_itens, $i);
 
         $total_quant += $pc11_quant;
-
-
     }
 
-    for($x = 0; $x < $numrows_itens; $x ++) {
+    for ($x = 0; $x < $numrows_itens; $x++) {
 
         db_fieldsmemory($result_itens, $x);
         if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
@@ -371,7 +363,6 @@ if ($modelo == 1) {
             if ($pdf->gety() > $pdf->h - 30 || $max == false) {
 
                 $pdf->addpage('L');
-
             }
 
             $p = 0;
@@ -382,7 +373,7 @@ if ($modelo == 1) {
             $alt = 6;
             $pdf->setfont('arial', 'b', 9);
             $pdf->cell(7, $alt, "Seq", 1, 0, "C", 1);
-            if(!$l20_criterioadjudicacao == 2 || !$l20_criterioadjudicacao == 1) {
+            if (!$l20_criterioadjudicacao == 2 || !$l20_criterioadjudicacao == 1) {
                 $pdf->cell(16, $alt, "Solic.", 1, 0, "C", 1);
             }
             $pdf->cell(54, $alt, "Descr. Produto", 1, 0, "C", 1);
@@ -396,53 +387,47 @@ if ($modelo == 1) {
                 if ($numrows_forne > $max_forne + 2) {
                     $max_forne = $max_forne + 2;
                     $max = true;
-
                 } else {
 
                     $max = false;
                     $max_forne = $numrows_forne;
-
                 }
             }
 
             $t = 0;
 
-            for($w = $quant_imp; $w < $max_forne; $w ++) {
+            for ($w = $quant_imp; $w < $max_forne; $w++) {
 
                 db_fieldsmemory($result_forne, $w);
 
                 if ($pdf->gety() > $pdf->h - 30) {
 
                     $t = 1;
-
                 }
 
                 if ($w == ($max_forne - 1)) {
 
                     $t = 1;
-
                 }
 
                 if ($imp_vlrun == "S") {
 
                     $pdf->cell(20, $alt, "Vlr. Un.", 1, 0, "C", 1);
-                    if($l20_criterioadjudicacao == 2 || $l20_criterioadjudicacao == 1){
+                    if ($l20_criterioadjudicacao == 2 || $l20_criterioadjudicacao == 1) {
                         $pdf->cell(23, $alt, "Taxa/Tabela", 1, 0, "C", 1);
                     }
                 }
 
                 $pdf->cell(54, $alt, substr($z01_nome, 0, 26), 1, $t, "C", 1);
-
             }
 
             $troca = 0;
-
         }
 
         $alt = 4;
         $pdf->setfont('arial', '', 7);
         $pdf->cell(7, $alt, $l21_ordem, 1, 0, "C", 0);
-        if(!$l20_criterioadjudicacao == 2 || !$l20_criterioadjudicacao == 1) {
+        if (!$l20_criterioadjudicacao == 2 || !$l20_criterioadjudicacao == 1) {
             $pdf->cell(16, $alt, $pc11_numero, 1, 0, "C", 0);
         }
         $pdf->cell(54, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 27), 1, 0, "L", 0);
@@ -452,7 +437,7 @@ if ($modelo == 1) {
         $t = 0;
         $cont_quant = 0;
 
-        for($w = $quant_imp; $w < $max_forne; $w ++) {
+        for ($w = $quant_imp; $w < $max_forne; $w++) {
 
             db_fieldsmemory($result_forne, $w);
 
@@ -461,7 +446,6 @@ if ($modelo == 1) {
             if ($w == ($max_forne - 1)) {
 
                 $t = 1;
-
             }
             $result_valor = $clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc23_vlrun,pc24_pontuacao,pc23_percentualdesconto,pc23_perctaxadesctabela", null, "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem"));
             if ($clpcorcamval->numrows > 0) {
@@ -469,26 +453,26 @@ if ($modelo == 1) {
                 if ($pc24_pontuacao == 1) {
                     $pdf->setfont('arial', 'b', 8);
                     $fundo = 1;
-                    $arr_subtotganhoun [$w] += $pc23_vlrun;
-                    $arr_subtotganhovlr [$w] += $pc23_valor;
-                    $arr_totalganho [$pc21_orcamforne] += $pc23_valor;
+                    $arr_subtotganhoun[$w] += $pc23_vlrun;
+                    $arr_subtotganhovlr[$w] += $pc23_valor;
+                    $arr_totalganho[$pc21_orcamforne] += $pc23_valor;
                 } else {
                     $fundo = 0;
                 }
 
 
-                $arr_subtotcotadoun [$w] += $pc23_vlrun;
-                $arr_subtotcotadovlr [$w] += $pc23_valor;
-                $arr_totalcotado [$pc21_orcamforne] += $pc23_valor;
+                $arr_subtotcotadoun[$w] += $pc23_vlrun;
+                $arr_subtotcotadovlr[$w] += $pc23_valor;
+                $arr_totalcotado[$pc21_orcamforne] += $pc23_valor;
 
                 if ($imp_vlrun == "S") {
                     $pdf->cell(20, $alt, db_formatar(@$pc23_vlrun, 'f', ' ', 0, 'd', $iCasasDecimais), 1, 0, "R", $fundo);
 
-                    if($l20_criterioadjudicacao == 1){
+                    if ($l20_criterioadjudicacao == 1) {
                         $pdf->cell(23, $alt, $pc23_perctaxadesctabela == 0 ? "" : $pc23_perctaxadesctabela . "%", 1, 0, "C", $fundo);
                     }
 
-                    if($l20_criterioadjudicacao == 2){
+                    if ($l20_criterioadjudicacao == 2) {
                         $pdf->cell(23, $alt, $pc23_percentualdesconto == 0 ? "" : $pc23_percentualdesconto . "%", 1, 0, "C", $fundo);
                     }
                 }
@@ -496,8 +480,8 @@ if ($modelo == 1) {
                 $pdf->cell(54, $alt, db_formatar(@$pc23_valor, 'f'), 1, $t, "R", $fundo);
 
                 if ($imp_vlrtotal == "S") {
-                    if (isset($arr_valor [$w]) && trim(@$arr_valor [$w]) != "") {
-                        $arr_valor [$w] += @$pc23_valor;
+                    if (isset($arr_valor[$w]) && trim(@$arr_valor[$w]) != "") {
+                        $arr_valor[$w] += @$pc23_valor;
                     }
 
                     $valor_total += $pc23_valor;
@@ -506,26 +490,26 @@ if ($modelo == 1) {
                 if ($imp_vlrun == "S") {
                     $pdf->cell(20, $alt, "0,00", 1, 0, "R", 0);
                 }
-                if($l20_criterioadjudicacao == 1 || $l20_criterioadjudicacao == 2) {
+                if ($l20_criterioadjudicacao == 1 || $l20_criterioadjudicacao == 2) {
                     $pdf->cell(23, $alt, "", 1, 0, "C", 0);
                 }
                 $pdf->cell(54, $alt, "0,00", 1, $t, "R", 0);
             }
 
-            $cont_quant ++;
+            $cont_quant++;
         }
 
         if ($x == $numrows_itens - 1 && $max == true) {
             $quant_imp = $cont_quant + $quant_imp;
-            $x = - 1;
+            $x = -1;
             $troca = 1;
             $total = 0;
 
             $pdf->setfont('arial', 'b', 8);
-            if($l20_criterioadjudicacao == 2 || $l20_criterioadjudicacao == 1) {
+            if ($l20_criterioadjudicacao == 2 || $l20_criterioadjudicacao == 1) {
                 $pdf->cell(86, $alt, db_formatar($total_quant, "f"), 1, 0, "R", 0);
                 $pdf->cell(194, $alt, "", 1, 1, "R", 0);
-            }else{
+            } else {
                 $pdf->cell(102, $alt, db_formatar($total_quant, "f"), 1, 0, "R", 0);
                 $pdf->cell(148, $alt, "", 1, 1, "R", 0);
             }
@@ -536,7 +520,7 @@ if ($modelo == 1) {
             } else {
                 $ind = $w - 2; // posicoes 2 em diante dos arrays de subtotais, sempre de 2 em 2
             }
-            if($l20_criterioadjudicacao == 2 || $l20_criterioadjudicacao == 1) {
+            if ($l20_criterioadjudicacao == 2 || $l20_criterioadjudicacao == 1) {
                 for ($xx = $ind; $xx < $w; $xx++) {
                     if (($xx % 2) == 0) {
                         $tam = 106;
@@ -552,8 +536,8 @@ if ($modelo == 1) {
                         $br = 0;
                     }
 
-                    $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotganhoun [$xx], "f"), 1, 0, "R", 0);
-                    $pdf->cell(77, $alt, db_formatar($arr_subtotganhovlr [$xx], "f"), 1, $br, "R", 0);
+                    $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotganhoun[$xx], "f"), 1, 0, "R", 0);
+                    $pdf->cell(77, $alt, db_formatar($arr_subtotganhovlr[$xx], "f"), 1, $br, "R", 0);
                 }
 
                 if ($w == 2) {
@@ -577,10 +561,10 @@ if ($modelo == 1) {
                         $br = 0;
                     }
 
-                    $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotcotadoun [$xx], "f"), 1, 0, "R", 0);
-                    $pdf->cell(77, $alt, db_formatar($arr_subtotcotadovlr [$xx], "f"), 1, $br, "R", 0);
+                    $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotcotadoun[$xx], "f"), 1, 0, "R", 0);
+                    $pdf->cell(77, $alt, db_formatar($arr_subtotcotadovlr[$xx], "f"), 1, $br, "R", 0);
                 }
-            }else{
+            } else {
                 for ($xx = $ind; $xx < $w; $xx++) {
                     if (($xx % 2) == 0) {
                         $tam = 122;
@@ -596,8 +580,8 @@ if ($modelo == 1) {
                         $br = 0;
                     }
 
-                    $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotganhoun [$xx], "f"), 1, 0, "R", 0);
-                    $pdf->cell(54, $alt, db_formatar($arr_subtotganhovlr [$xx], "f"), 1, $br, "R", 0);
+                    $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotganhoun[$xx], "f"), 1, 0, "R", 0);
+                    $pdf->cell(54, $alt, db_formatar($arr_subtotganhovlr[$xx], "f"), 1, $br, "R", 0);
                 }
 
                 if ($w == 2) {
@@ -621,8 +605,8 @@ if ($modelo == 1) {
                         $br = 0;
                     }
 
-                    $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotcotadoun [$xx], "f"), 1, 0, "R", 0);
-                    $pdf->cell(54, $alt, db_formatar($arr_subtotcotadovlr [$xx], "f"), 1, $br, "R", 0);
+                    $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotcotadoun[$xx], "f"), 1, 0, "R", 0);
+                    $pdf->cell(54, $alt, db_formatar($arr_subtotcotadovlr[$xx], "f"), 1, $br, "R", 0);
                 }
             }
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -634,32 +618,31 @@ if ($modelo == 1) {
         } else {
             $p = 0;
         }
-        $total ++;
-
+        $total++;
     }
 
     $pdf->setfont('arial', 'b', 8);
 
     // Ficou pendente valores a serem impressos
     if ($quant_imp < $max_forne) {
-        if($l20_criterioadjudicacao == 2 || $l20_criterioadjudicacao == 1) {
+        if ($l20_criterioadjudicacao == 2 || $l20_criterioadjudicacao == 1) {
             $pdf->cell(106, $alt, "QUANT. TOTAL " . db_formatar($total_quant, "f"), 1, 0, "R", 0);
             $pdf->cell(77, $alt, "", 1, 1, "R", 0);
 
-            $pdf->cell(106, $alt, "SUBTOTAL GANHO " . db_formatar($arr_subtotganhoun [$quant_imp], "f"), 1, 0, "R", 0);
-            $pdf->cell(77, $alt, db_formatar($arr_subtotganhovlr [$quant_imp], "f"), 1, 1, "R", 0);
+            $pdf->cell(106, $alt, "SUBTOTAL GANHO " . db_formatar($arr_subtotganhoun[$quant_imp], "f"), 1, 0, "R", 0);
+            $pdf->cell(77, $alt, db_formatar($arr_subtotganhovlr[$quant_imp], "f"), 1, 1, "R", 0);
 
-            $pdf->cell(106, $alt, "SUBTOTAL COTADO " . db_formatar($arr_subtotcotadoun [$quant_imp], "f"), 1, 0, "R", 0);
-            $pdf->cell(77, $alt, db_formatar($arr_subtotcotadovlr [$quant_imp], "f"), 1, 1, "R", 0);
-        }else{
+            $pdf->cell(106, $alt, "SUBTOTAL COTADO " . db_formatar($arr_subtotcotadoun[$quant_imp], "f"), 1, 0, "R", 0);
+            $pdf->cell(77, $alt, db_formatar($arr_subtotcotadovlr[$quant_imp], "f"), 1, 1, "R", 0);
+        } else {
             $pdf->cell(102, $alt, "QUANT. TOTAL " . db_formatar($total_quant, "f"), 1, 0, "R", 0);
             $pdf->cell(74, $alt, "", 1, 1, "R", 0);
 
-            $pdf->cell(122, $alt, "SUBTOTAL GANHO " . db_formatar($arr_subtotganhoun [$quant_imp], "f"), 1, 0, "R", 0);
-            $pdf->cell(54, $alt, db_formatar($arr_subtotganhovlr [$quant_imp], "f"), 1, 1, "R", 0);
+            $pdf->cell(122, $alt, "SUBTOTAL GANHO " . db_formatar($arr_subtotganhoun[$quant_imp], "f"), 1, 0, "R", 0);
+            $pdf->cell(54, $alt, db_formatar($arr_subtotganhovlr[$quant_imp], "f"), 1, 1, "R", 0);
 
-            $pdf->cell(122, $alt, "SUBTOTAL COTADO " . db_formatar($arr_subtotcotadoun [$quant_imp], "f"), 1, 0, "R", 0);
-            $pdf->cell(54, $alt, db_formatar($arr_subtotcotadovlr [$quant_imp], "f"), 1, 1, "R", 0);
+            $pdf->cell(122, $alt, "SUBTOTAL COTADO " . db_formatar($arr_subtotcotadoun[$quant_imp], "f"), 1, 0, "R", 0);
+            $pdf->cell(54, $alt, db_formatar($arr_subtotcotadovlr[$quant_imp], "f"), 1, 1, "R", 0);
         }
         $pdf->ln();
     }
@@ -677,14 +660,14 @@ if ($modelo == 1) {
 
     $result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento"));
     $numrows_forne = $clpcorcamforne->numrows;
-    for($i = 0; $i < $numrows_forne; $i ++) {
+    for ($i = 0; $i < $numrows_forne; $i++) {
         db_fieldsmemory($result_forne, $i);
         $cont = $i;
-        $cont ++;
+        $cont++;
 
         $pdf->cell(65, $alt, substr($z01_nome, 0, 25) . " (" . $cont . ")", 0, 0, "L", $p);
-        $pdf->cell(30, $alt, db_formatar($arr_totalganho [$pc21_orcamforne], "f"), 0, 0, "R", $p);
-        $pdf->cell(30, $alt, db_formatar($arr_totalcotado [$pc21_orcamforne], "f"), 0, 1, "R", $p);
+        $pdf->cell(30, $alt, db_formatar($arr_totalganho[$pc21_orcamforne], "f"), 0, 0, "R", $p);
+        $pdf->cell(30, $alt, db_formatar($arr_totalcotado[$pc21_orcamforne], "f"), 0, 1, "R", $p);
 
         if ($p == 0) {
             $p = 1;
@@ -692,8 +675,8 @@ if ($modelo == 1) {
             $p = 0;
         }
 
-        $total_ganho += $arr_totalganho [$pc21_orcamforne];
-        $total_cotado += $arr_totalcotado [$pc21_orcamforne];
+        $total_ganho += $arr_totalganho[$pc21_orcamforne];
+        $total_cotado += $arr_totalcotado[$pc21_orcamforne];
     }
     if ($numrows_forne > 0) {
         $pdf->cell(125, 1, "", "T", 1, "R", 0);
@@ -710,6 +693,198 @@ if ($modelo == 1) {
         }
 
         $pdf->cell(60, $alt, "TOTAL GERAL " . db_formatar($valor_total, "f"), 0, 1, "R", 0);
+    }
+} else if ($modelo == 3) {
+    //-----------------------------  MODELO 1  -----------------------------------------------------------------------------------------------------------------//
+    //-----------------------------  MODELO 1  -----------------------------------------------------------------------------------------------------------------//
+    //-----------------------------  MODELO 1  -----------------------------------------------------------------------------------------------------------------//
+    $result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento"));
+    $numrows_forne = $clpcorcamforne->numrows;
+    if ($numrows_forne == 0) {
+        db_redireciona('db_erros.php?fechar=true&db_erro=Não existem Fornecedores cadastrados.');
+    }
+    $pdf = new PDF();
+    $pdf->Open();
+    $pdf->AliasNbPages();
+    $total = 0;
+    $pdf->setfillcolor(235);
+    $pdf->setfont('arial', 'b', 8);
+    $troca = 1;
+    $alt = 6;
+    $total = 0;
+    $p = 0;
+    $max_itens = 0;
+    $max = false;
+    $quant_imp = 0;
+    for ($x = 0; $x < $numrows_forne; $x++) {
+        db_fieldsmemory($result_forne, $x);
+        if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
+
+            if ($pdf->gety() > $pdf->h - 30 || $max == false) {
+                $pdf->addpage('L');
+                if ($max) {
+
+                    $max_itens -= 11;
+                }
+            }
+
+            $p = 0;
+            $pdf->setfont('arial', 'b', 9);
+            $pdf->cell(60, $alt, "Fornecedor", 1, 0, "C", 1);
+            $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,
+	                                          pc22_orcamitem,
+	                                          pc01_descrmater,
+                                            pc54_formacontrole", "l21_ordem", "pc22_codorc=$orcamento"));
+            $numrows_itens = $clpcorcamitem->numrows;
+            if ($numrows_itens > $max_itens + 11) {
+
+                $max_itens = $max_itens + 11;
+                $max = true;
+            } else {
+
+                $max = false;
+                $max_itens = $numrows_itens;
+            }
+
+            $t = 0;
+            for ($w = $quant_imp; $w < $max_itens; $w++) {
+
+                db_fieldsmemory($result_itens, $w);
+                if ($w == ($max_itens - 1)) {
+                    $t = 1;
+                }
+                $pdf->cell(20, $alt, $l21_ordem, 1, $t, "C", 1);
+            }
+            $troca = 0;
+        }
+        $alt = 4;
+        $pdf->setfont('arial', '', 7);
+        $pdf->cell(60, $alt, substr($z01_nome, 0, 40), 0, 0, "L", $p);
+        $t = 0;
+        $cont_quant = 0;
+        for ($w = $quant_imp; $w < $max_itens; $w++) {
+            db_fieldsmemory($result_itens, $w);
+
+            $lControlaRegistroPrecoValor = ($pc54_formacontrole == aberturaRegistroPreco::CONTROLA_VALOR);
+
+            $pdf->setfont('arial', '', 7);
+            if ($w == ($max_itens - 1)) {
+                $t = 1;
+            }
+            $result_valor = $clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc24_pontuacao, pc23_percentualdesconto", null, "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem"));
+            if ($clpcorcamval->numrows > 0) {
+                db_fieldsmemory($result_valor, 0);
+                if ($pc24_pontuacao == 1) {
+                    $pdf->setfont('arial', 'b', 8);
+                }
+                $pdf->cell(20, $alt, db_formatar(($lControlaRegistroPrecoValor ? @$pc23_percentualdesconto : @$pc23_valor), 'f'), 0, $t, "R", $p);
+            } else {
+                $pdf->cell(20, $alt, "0,00", 0, $t, "R", $p);
+            }
+            $cont_quant++;
+        }
+        if ($x == $numrows_forne - 1 && $max == true) {
+            $quant_imp = $cont_quant + $quant_imp;
+        }
+        if ($x == $numrows_forne - 1 && $max == true) {
+
+            $x = -1;
+            $troca = 1;
+            $total = 0;
+            $pdf->setfont('arial', 'b', 8);
+            $pdf->cell(280, $alt, '	', "T", 1, "L", 0);
+        }
+
+        if ($p == 0) {
+            $p = 1;
+        } else {
+            $p = 0;
+        }
+        $total++;
+    }
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(60 + 20 * $cont_quant, $alt, 'TOTAL DE FORNECEDORES  :  ' . $numrows_forne, "T", 1, "L", 0);
+    $pdf->ln();
+    // echo $clpcorcamitem->sql_query_pcmaterlic(null, "distinct l04_descricao", null, "pc22_codorc=$orcamento");
+    // exit;
+    $result_lotes = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct l04_descricao", null, "pc22_codorc=$orcamento"));
+
+    for ($x = 0; $x < $result_lotes; $x++) {
+
+        db_fieldsmemory($result_lotes, $x);
+        // echo $clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_descrmater,pc11_resum, pc11_numero,l04_seq", "l21_ordem", "pc22_codorc=$orcamento and l04_descricao=$l04_descricao");
+        // exit;
+        $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_descrmater,pc11_resum, pc11_numero,l04_seq", "l21_ordem", "pc22_codorc=$orcamento and l04_descricao='$l04_descricao'"));
+        $numrows_itens = $clpcorcamitem->numrows;
+
+        if ($numrows_itens == 0)
+            continue;
+
+        $p = 0;
+        $troca = 1;
+        $alt = 4;
+        $valor_tot = 0;
+        $pdf->setfont('arial', 'b', 8);
+        $pdf->cell(20, $alt, $l04_descricao, 1, 0, "C", 1);
+        $pdf->ln();
+        for ($y = 0; $y < $numrows_itens; $y++) {
+
+            db_fieldsmemory($result_itens, $y);
+
+            $lControlaRegistroPrecoValor = ($pc54_formacontrole == aberturaRegistroPreco::CONTROLA_VALOR);
+
+            if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
+
+                if ($pdf->gety() > $pdf->h - 30) {
+
+                    $pdf->addpage('L');
+                }
+
+                $pdf->setfont('arial', 'b', 8);
+                $pdf->cell(20, $alt, "ITEM", 1, 0, "C", 1);
+                $pdf->cell(20, $alt, "SEQ", 1, 0, "C", 1);
+                $pdf->cell(100, $alt, "MATERIAL", 1, 0, "C", 1);
+                $pdf->cell(20, $alt, "SOLICITAÇÃO", 1, 0, "C", 1);
+                $pdf->cell(21, $alt, ($lControlaRegistroPrecoValor ? "DESCONTO %" : "VALOR"), 1, 1, "C", 1);
+
+                $p = 0;
+                $troca = 0;
+            }
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(20, $alt, $l21_ordem, 0, 0, "C", $p);
+            $pdf->cell(20, $alt, $l04_seq, 0, 0, "C", $p);
+            $pdf->cell(100, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 65), 0, 0, "L", $p);
+            $result_valor = $clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc24_pontuacao, pc23_percentualdesconto", null, "pc23_orcamitem=$pc22_orcamitem
+	                                                                          and pc24_pontuacao=1"));
+
+            $pdf->cell(20, $alt, $pc11_numero, 0, 0, "C", $p);
+
+            $sCampoValor = ($lControlaRegistroPrecoValor ? "pc23_percentualdesconto" : "pc23_valor");
+
+            if ($clpcorcamval->numrows > 0) {
+                db_fieldsmemory($result_valor, 0);
+                if ($pc24_pontuacao == 1) {
+                    $pdf->cell(21, $alt, db_formatar(@${$sCampoValor}, 'f'), 0, 1, "R", $p);
+                    $valor_tot += ${$sCampoValor};
+                } else {
+                    $pdf->cell(21, $alt, db_formatar(@${$pc23_valor}, 'f'), 0, 1, "R", $p);
+                }
+            } else {
+                $pdf->cell(21, $alt, db_formatar("0", 'f'), 0, 1, "R", $p);
+            }
+
+            if ($p == 0) {
+                $p = 1;
+            } else {
+                $p = 0;
+            }
+        }
+        if (!$lControlaRegistroPrecoValor) {
+            $pdf->setfont('arial', 'b', 8);
+            $pdf->cell(161, $alt, 'TOTAL :', "T", 0, "R", 0);
+            $pdf->cell(20, $alt, db_formatar(@$valor_tot, 'f'), "T", 1, "R", 0);
+        }
     }
 } else {
     db_redireciona('db_erros.php?fechar=true&db_erro=Modelo não foi selecionado.');
@@ -741,7 +916,7 @@ if (isset($imp_descla) && $imp_descla == "S") {
         $pdf->cell($tam_justifica, $alt, "Justificativa", 1, 1, "C", 1);
 
         $p = 0;
-        for($i = 0; $i < $clpcorcamdescla->numrows; $i ++) {
+        for ($i = 0; $i < $clpcorcamdescla->numrows; $i++) {
             db_fieldsmemory($res_descla, $i);
             if ($pdf->gety() > $pdf->h - 30) {
                 $pdf->addpage("L");
@@ -796,7 +971,7 @@ if (isset($imp_troca) && $imp_troca == "S") {
 
         $p = 0;
         $lote = "";
-        for($i = 0; $i < $clpcorcamtroca->numrows; $i ++) {
+        for ($i = 0; $i < $clpcorcamtroca->numrows; $i++) {
             db_fieldsmemory($res_troca, $i);
             if ($pdf->gety() > $pdf->h - 30) {
                 $pdf->addpage("L");
@@ -858,7 +1033,7 @@ if (isset($imp_lote) && $imp_lote == "S") {
 
         $p = 0;
         $descrmater = "";
-        for($i = 0; $i < $clliclicitemanu->numrows; $i ++) {
+        for ($i = 0; $i < $clliclicitemanu->numrows; $i++) {
             db_fieldsmemory($res_lote, $i);
             if ($pdf->gety() > $pdf->h - 30) {
                 $pdf->addpage("L");
@@ -899,4 +1074,3 @@ if (isset($imp_lote) && $imp_lote == "S") {
 }
 
 $pdf->Output();
-?>
