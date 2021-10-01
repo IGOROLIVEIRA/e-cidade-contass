@@ -32,7 +32,7 @@
                         left join processocompralote on
                             pc68_sequencial = pc69_processocompralote
                         where
-                            pc80_codproc = {$codigo_preco}");
+                            pc80_codproc = {$codigo_preco} order by pc68_sequencial asc");
 
 
     $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
