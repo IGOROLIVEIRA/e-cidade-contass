@@ -46,24 +46,6 @@ $clrotulo->label("pc17_unid");
 $clrotulo->label("e54_anousu");
 $clrotulo->label("o56_elemento");
 $clrotulo->label("pc01_descrmater");
-
-
-if(!empty($e55_autori)) {
-
-    $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, si02_vlprecoreferencia, ";
-
-    $sWhere   = "l21_codliclicita = {$l20_codigo} ";
-    $sSqlItemLicitacao = $clliclicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere);
-    $sResultitens = $clliclicitem->sql_record($sSqlItemLicitacao);
-    $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
-    $numrows = $clliclicitem->numrows;
-    if ($numrows > 0) {
-        $sWhere   = "l21_codliclicita = {$l20_codigo} and l205_fornecedor = {$l205_fornecedor} and l205_licitacao = {$l20_codigo}";
-        $sql     = $clcredenciamento->itensCredenciados(null, $sCampos, $sOrdem, $sWhere);
-        $result  = $clcredenciamento->sql_record($sql);
-        $numrows = $clcredenciamento->numrows;
-    }
-}
 ?>
 
 
@@ -72,19 +54,26 @@ if(!empty($e55_autori)) {
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
 <form name="form1" method="post" action="">
     <center>
-        <table class="DBgrid">
-            <tr>
-                <th class="table_header">M</th>
-                <th class="table_header">Ordem</th>
-                <th class="table_header">Item</th>
-                <th class="table_header">Descrição item</th>
-                <th class="table_header">Unidade</th>
-                <th class="table_header">Quantidade Disponivel</th>
-                <th class="table_header">Vl. Unitaário</th>
-                <th class="table_header">Quantidade Solicitada</th>
-                <th class="table_header">Vl. Total</th>
-            </tr>
-        </table>
+        <div class="container">
+            <span id="textocontainer"><strong>Selecione uma tabela.</strong></span>
+            <div>
+                <table style="display: none" id="myTable" class="display nowrap">
+                    <thead>
+                    <tr>
+                        <th data-orderable="false"></th>
+                        <th data-orderable="false">Ordem</th>
+                        <th data-orderable="false">Item</th>
+                        <th data-orderable="false">Descrição Item</th>
+                        <th data-orderable="false">Unidade</th>
+                        <th data-orderable="false">Quantidade Disponivel</th>
+                        <th data-orderable="false">Vl. Unitário</th>
+                        <th data-orderable="false">Qtd. Solicitada</th>
+                        <th data-orderable="false">Vlr. Total.</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
         <br />
         <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
         <input name="Salvar" type="button" id="salvar" value="Salvar" onclick="js_salvar();">
@@ -93,5 +82,61 @@ if(!empty($e55_autori)) {
 </form>
 <script>
 
+    function js_loadTable() {
 
+        $('#myTable').DataTable().clear().destroy();
+        var table = $('#myTable').DataTable({
+            bAutoWidth: false,
+            bInfo: false,
+            searchable: false,
+            paging: false,
+            processing: true,
+            serverSide: true,
+            scrollY: "200px",
+            language: {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "Último"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                buttons: {
+                    pageLength: {
+                        _: "Mostrar %d linhas",
+                        '-1': "Mostrar todo"
+                    }
+                },
+                select: {
+                    rows: "%d linhas selecionadas"
+                },
+            },
+            ajax: {
+                url: "emp1_empautitemcredenciamentotermo.RPC.php",
+                type: "POST",
+                data: {
+                    action: 'buscaItens',
+                    autori: <?php echo $e55_autori ?>,
+                    licitacao: <?php echo $e54_codlicitacao ?>,
+                    fornecedor: <?php echo $z01_numcgm ?>,
+                    dataType: "json"
+                }
+            },
+        });
+    };
+    js_loadTable();
 </script>
