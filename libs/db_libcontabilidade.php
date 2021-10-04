@@ -5608,7 +5608,7 @@ class cl_estrutura_sistema {
 
         $nSaldoInicialAno = db_utils::fieldsMemory($rsInicAno, 0)->saldoinicialano;
 
-        $sTotalCreditoAno = "select coalesce((SELECT sum(c69_valor) 
+        $sTotalCreditoAno = "select coalesce((SELECT sum(c69_valor)
                    FROM conlancamval
                           INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
                      AND conlancam.c70_anousu = conlancamval.c69_anousu
@@ -5809,18 +5809,18 @@ class cl_estrutura_sistema {
             $aDatas[$aAnousu[1]] = $aAnousu[1].'-01-01'.'a'.$dtFim;
         }
 
-        $sql = " SELECT COALESCE(SUM(CASE 
-                                WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2) 
-                                WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1::FLOAT8),2) 
-                                ELSE 0::FLOAT8 
+        $sql = " SELECT COALESCE(SUM(CASE
+                                WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2)
+                                WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1::FLOAT8),2)
+                                ELSE 0::FLOAT8
                             END),0) AS liquidado,
                         COALESCE(SUM(CASE
                                 WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
                                 WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1::FLOAT8),2)
                                 ELSE 0::FLOAT8
                             END),0) AS empenhado
-					FROM (SELECT DISTINCT ON (c70_codlan) 
-							c53_tipo, 
+					FROM (SELECT DISTINCT ON (c70_codlan)
+							c53_tipo,
 							c70_valor
 						FROM conlancamele
 							INNER JOIN conlancam ON c70_codlan = c67_codlan
@@ -5880,14 +5880,15 @@ class cl_estrutura_sistema {
      * @param $dtIni
      * @param $dtFim
      * @param $instit
+     * @param $emenda
      * @return array|stdClass[]
      */
-    function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $instit) {
+    function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $emenda = NULL) {
 
-        $sql = "SELECT SUM( 
-                        CASE 
-                            WHEN ( C53_TIPO = 100 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR,2)::FLOAT8 
-                            WHEN ( C53_TIPO = 101 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
+        $sql = "SELECT SUM(
+                        CASE
+                            WHEN ( C53_TIPO = 100 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR,2)::FLOAT8
+                            WHEN ( C53_TIPO = 101 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR*-1,2)::FLOAT8
                         ELSE 0::FLOAT8 END) AS ARRECADADO_EMENDA_PARLAMENTAR
                 FROM CONLANCAMREC
                     INNER JOIN CONLANCAM ON C74_CODLAN = C70_CODLAN
@@ -5899,16 +5900,18 @@ class cl_estrutura_sistema {
                     INNER JOIN PLACAIXAREC ON K82_SEQPLA = K81_SEQPLA
                     INNER JOIN ORCRECEITA ON (O70_ANOUSU, O70_CODREC) = (C74_ANOUSU, C74_CODREC)
                     INNER JOIN ORCFONTES ON (O70_CODFON, O70_ANOUSU) = (O57_CODFON, O57_ANOUSU)
-                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'
-                    AND O57_FONTE LIKE '41%'";
-        
-        return db_utils::getColectionByRecord(db_query($sql));
+                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'";
 
+        if ($emenda)
+            $sql .= " AND k81_emparlamentar IN (" . implode(",", $emenda) . ") AND O57_FONTE LIKE '4171%' " ;
+        else
+            $sql .= " AND O57_FONTE LIKE '4171%' ";
+        return db_utils::getColectionByRecord(db_query($sql));
     }
 
     function getDespesaExercAnterior($dtIni, $instit, $sElemento) {
 
-          $sql = "SELECT 
+          $sql = "SELECT
                     o58_elemento,
                     o56_descr,
                     SUM (CASE
@@ -5920,7 +5923,7 @@ class cl_estrutura_sistema {
                         ELSE empenhado
                     END) AS empenhado
                     FROM
-                    (SELECT  
+                    (SELECT
                             o58_elemento,
                           o56_descr,
                           liquidado,
@@ -5928,30 +5931,30 @@ class cl_estrutura_sistema {
                           e50_compdesp,
                           (SELECT SUM(
                               CASE
-                                  WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR,2)::FLOAT8 
-                                  WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
+                                  WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR,2)::FLOAT8
+                                  WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
                               ELSE 0::FLOAT8 END) AS liquidado_compdesp
-                              FROM pagordem 
+                              FROM pagordem
                                 INNER JOIN conlancamord ON c80_codord = e50_codord
                                 INNER JOIN conlancamemp ON c80_codlan = c75_codlan
                                 INNER JOIN conlancam ON c75_codlan = c70_codlan
                                 INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
                                 INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
-                              WHERE e50_numemp = e60_numemp 
+                              WHERE e50_numemp = e60_numemp
                                 AND e50_compdesp < '{$dtIni}'
                                 AND e50_codord = x.e50_codord) as liquidado_compdesp,
                            (SELECT SUM(
                               CASE
-                                  WHEN C53_TIPO = 10 THEN ROUND(C70_VALOR,2)::FLOAT8 
-                                  WHEN C53_TIPO = 11 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
+                                  WHEN C53_TIPO = 10 THEN ROUND(C70_VALOR,2)::FLOAT8
+                                  WHEN C53_TIPO = 11 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
                               ELSE 0::FLOAT8 END) AS empenhado_compdesp
-                              FROM pagordem 
+                              FROM pagordem
                                 INNER JOIN conlancamord ON c80_codord = e50_codord
                                 INNER JOIN conlancamemp ON c80_codlan = c75_codlan
                                 INNER JOIN conlancam ON c75_codlan = c70_codlan
                                 INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
                                 INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
-                              WHERE e50_numemp = e60_numemp 
+                              WHERE e50_numemp = e60_numemp
                                 AND e50_compdesp < '{$dtIni}'
                                 AND e50_codord = x.e50_codord) as empenhado_compdesp
                     FROM
@@ -5969,9 +5972,9 @@ class cl_estrutura_sistema {
                       WHERE o58_elemento LIKE '{$sElemento}'
                           AND o58_instit = {$instit}
                           AND (e60_datasentenca < '{$dtIni}' OR e50_compdesp < '{$dtIni}')) AS x) as xx GROUP BY 1, 2";
-        
+
         return db_utils::getColectionByRecord(db_query($sql));
-        
+
     }
 
     /**
