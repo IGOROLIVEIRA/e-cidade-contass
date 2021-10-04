@@ -841,7 +841,7 @@ if ($modelo == 1) {
                 }
 
                 $pdf->setfont('arial', 'b', 8);
-                $pdf->cell(20, $alt, "ITEM lOTE", 1, 0, "C", 1);
+                $pdf->cell(20, $alt, "ITEM LOTE", 1, 0, "C", 1);
                 $pdf->cell(20, $alt, "CODIGO", 1, 0, "C", 1);
                 $pdf->cell(100, $alt, "MATERIAL", 1, 0, "C", 1);
                 $pdf->cell(20, $alt, "SOLICITAÇÃO", 1, 0, "C", 1);
