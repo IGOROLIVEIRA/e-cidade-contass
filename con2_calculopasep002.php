@@ -903,7 +903,7 @@ ob_start();
 
                             <td class="s4">
                                 <?php
-                                echo db_formatar($fTRCI, "f");
+                                echo db_formatar($fRCI, "f");
                                 ?>
                         </tr>
 
@@ -922,7 +922,7 @@ ob_start();
                         <td class="s1 bdleft">Total das exclusões da Receita (II) </td>
                         <td class="s5">
                             <?php
-                            $fTotalExclusaoReceitaII = array_sum(array($fTotalTC, $fCRICOD, $fTOEDPI, $fTEUEDM, $fTEIMN, $fTCons, $fRIRPPS, $fTRCI));
+                            $fTotalExclusaoReceitaII = array_sum(array($fTotalTC, $fCRICOD, $fTOEDPI, $fTEUEDM, $fTEIMN, $fTCons, $fRIRPPS, $fRCI));
                             echo db_formatar($fTotalExclusaoReceitaII, "f");
                             ?>
                         </td>
