@@ -83,7 +83,7 @@ $clrotulo->label("l20_codigo");
             oGridItens.setCheckbox(0);
         }
         oGridItens.setCellAlign(new Array("center","center", "center","center", "center", 'center', 'center', 'center', 'center'));
-        oGridItens.setCellWidth(new Array("5%" , "5%"     , "25%"     ,'5%', '5%'          ,   '25%'    , '15%'        , '15%' , '15%'));
+        oGridItens.setCellWidth(new Array("5%" , "5%"     , "35%"     ,'5%', '5%'          ,   '25%'    , '15%'        , '5%' , '5%'));
         oGridItens.setHeader(new Array("Código", "Ordem","Material", "Lote","CGM","Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
         oGridItens.hasTotalValue = true;
         oGridItens.show($('cntgriditens'));
