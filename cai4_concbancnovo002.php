@@ -1083,7 +1083,7 @@ function query_baixa_total($conta, $inicio, $fim, $implantacao) {
     credor
     ";
     $sql .= " ) as xx ";
-    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = k12_conta ";
+    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = conta ";
     $sql .= "        AND conc.k172_data = data ";
     $sql .= "        AND conc.k172_coddoc = cod_doc ";
     $sql .= "        AND conc.k172_codigo = codigo::text ";
