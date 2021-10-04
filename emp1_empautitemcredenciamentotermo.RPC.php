@@ -25,101 +25,56 @@ switch ($_POST["action"]) {
         $licitacao  = $_POST["licitacao"];
         $fornecedor = $_POST["fornecedor"];
 
-        /**
-         * Buscando Licitação
-         */
-
-//        $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
-//        $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
-
-        /**
-         * VALIDAÇÃO COM EDITAL
-         */
-//        $l20_cadinicial  = db_utils::fieldsMemory($result, 0)->l20_cadinicial;
+        $sqlItens = "SELECT    pc11_seq,
+                               pc01_codmater,
+                               pc01_descrmater,
+                               m61_descr,
+                               pc23_vlrun,
+                               pc23_quant
+                    FROM liclicita
+                    INNER JOIN liclicitem ON l21_codliclicita=l20_codigo
+                    INNER JOIN pcorcamitemlic ON pc26_liclicitem=l21_codigo
+                    INNER JOIN pcorcamitem ON pc22_orcamitem=pc26_orcamitem
+                    INNER JOIN pcorcamjulg ON pc24_orcamitem=pc22_orcamitem
+                    INNER JOIN pcorcamforne ON pc21_orcamforne=pc24_orcamforne
+                    INNER JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
+                    AND pc23_orcamforne = pc21_orcamforne
+                    INNER JOIN pcprocitem ON l21_codpcprocitem = pc81_codprocitem
+                    INNER JOIN solicitem ON pc81_solicitem = pc11_codigo
+                    INNER JOIN solicitempcmater ON pc11_codigo= pc16_solicitem
+                    INNER JOIN pcmater ON pc01_codmater = pc16_codmater
+                    INNER JOIN solicitemunid ON pc17_codigo = pc11_codigo
+                    INNER JOIN matunid ON pc17_unid = m61_codmatunid
+                    INNER JOIN cgm ON z01_numcgm=pc21_numcgm
+                    WHERE l20_codigo=$licitacao
+                        AND pc21_numcgm=$fornecedor
+                        AND pc24_pontuacao=1;";
 
         $iAnoSessao         = db_getsession('DB_anousu');
+        $rsDados      = $oDaoSysArqCamp->sql_record($sqlItens);
 
         if ($oDaoSysArqCamp->numrows > 0) {
             $employeeData = array();
             for ($i = 0; $i < pg_numrows($rsDados); $i++) {
 
                 $oDados = db_utils::fieldsMemory($rsDados, $i);
-                $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", " e55_autori = $autori and e55_item = $oDados->pc01_codmater"));
-                $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, 0);
-
                 $itemRows  = array();
 
-                $selectunid = "";
-                $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
-                $selectunid .= "<option selected='selected'></option>";
-                foreach ($result_unidade as $key => $item) {
-                    if ($key == $oDadosEmpAutItem->e55_unid)
-                        $selectunid .= "<option value='$key' selected='selected'>$item</option>";
-                    else
-                        $selectunid .= "<option value='$key'>$item</option>";
-                }
-                $selectunid .= "</select>";
-
-                $selectservico = "";
-                if($oDadosEmpAutItem->e55_vlrun != "") {
-                    $selectservico = "<select id='servico_{$oDados->pc01_codmater}' disabled onchange='js_servico(this)' >";
-                }else{
-                    $selectservico = "<select id='servico_{$oDados->pc01_codmater}' onchange='js_servico(this)' >";
-                }
-
-                if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
-                    $selectservico .= "<option value='1' selected='selected'>Sim</option>";
-                    $selectservico .= "<option value='0'>" . utf8_encode('Não') . "</option>";
-                } else {
-                    $selectservico .= "<option value='1'>Sim</option>";
-                    $selectservico .= "<option value='0' selected='selected'>" . utf8_encode('Não') . "</option>";
-                }
-                $selectservico .= "</select>";
-
-                if ($oDados->pc01_codmater == $oDadosEmpAutItem->e55_item)
-                    $itemRows[] = "<input type='checkbox' checked id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
-                else
-                    $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
-
+                $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
+                $itemRows[] = $oDados->pc11_seq;
                 $itemRows[] = $oDados->pc01_codmater;
-                $itemRows[] = "<input type='text' name ='{$oDados->pc01_descrmater}' title='{$oDados->pc01_descrmater}' style='background-color: #DEB887' readonly value='{$oDados->pc01_descrmater}'  />";
-                $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}'  />";
-                $itemRows[] = $selectunid;
-                $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}'  />";
-                $itemRows[] = $selectservico;
-
-                if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
-                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
-                } else {
-                    if($oDadosEmpAutItem->e55_vlrun != "") {
-                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
-                    }else{
-                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
-
-                    }
-                }
-                if($oDadosEmpAutItem->e55_vlrun != "") {
-                    $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' readonly onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='background-color: #DEB887; width: 80px' />";
-                }else{
-                    $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
-                }
-
-                if ($_POST['desconto'] == 'f')
-                    $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='0' onkeyup='js_calcula(this)' readonly maxlength='2' style='background-color: #DEB887; width: 80px' />";
-                else
-                    $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
-                if($oDadosEmpAutItem->e55_vlrun != "") {
-                    $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='background-color: #DEB887; width: 80px' />";
-                }else{
-                    $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='width: 80px' />";
-                }
+                $itemRows[] = $oDados->pc01_descrmater;
+                $itemRows[] = $oDados->m61_descr;
+                $itemRows[] = $oDados->pc23_quant;
+                $itemRows[] = $oDados->pc23_vlrun;
+                $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value=''  />";
+                $itemRows[] = $oDados->pc23_vlrun;
                 $employeeData[] = $itemRows;
             }
 
             $oRetorno = array(
                 "draw"  =>  intval($_POST["draw"]),
                 "iTotalRecords"  =>   pg_numrows($rsDados),
-                "iTotalDisplayRecords"  =>  pg_numrows($rsDadosTotal),
                 "data"  =>   $employeeData
             );
         }

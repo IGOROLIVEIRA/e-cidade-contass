@@ -52,12 +52,12 @@ $clrotulo->label("pc01_descrmater");
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
 <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+
 <form name="form1" method="post" action="">
     <center>
         <div class="container">
-            <span id="textocontainer"><strong>Selecione uma tabela.</strong></span>
             <div>
-                <table style="display: none" id="myTable" class="display nowrap">
+                <table id="myTable" class="display nowrap">
                     <thead>
                     <tr>
                         <th data-orderable="false"></th>
