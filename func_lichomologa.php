@@ -144,7 +144,7 @@ $sWhereContratos = " and 1 = 1 ";
                 $sWhereContratos .= " and ac24_sequencial is null ";
             }
 
-                $sWhereContratos .= " AND liclicita.l20_codigo IN (SELECT DISTINCT liclicitem.l21_codliclicita
+            $sWhereContratos .= " AND liclicita.l20_codigo IN (SELECT DISTINCT liclicitem.l21_codliclicita
                      FROM pcprocitem
                      INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
                      INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
@@ -189,8 +189,8 @@ $sWhereContratos = " and 1 = 1 ";
                               INNER JOIN itenshomologacao ON l203_homologaadjudicacao = l202_sequencial
                               WHERE l202_licitacao = liclicita.l20_codigo))";
 
-//            $sWhereContratos .= " and (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
-//                                      else true end) ";
+            //            $sWhereContratos .= " and (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
+            //                                      else true end) ";
 
             /**
              * ValidaFornecedor:
@@ -212,8 +212,11 @@ $sWhereContratos = " and 1 = 1 ";
                         $campos = "liclicita.*, liclicitasituacao.l11_sequencial";
                     }
                 }
-
-                $campos .= ', l08_descr as dl_Situação,l202_dataadjudicacao,l202_datahomologacao,l202_sequencial';
+                if(isset($homologacao) &&trim($homologacao) == "1") {
+                    $campos .= ', l08_descr as dl_Situação';
+                }else{
+                    $campos .= ', l08_descr as dl_Situação,l202_dataadjudicacao,l202_datahomologacao,l202_sequencial';
+                }
                 if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
                     $sql = $clliclicita->sql_queryContratosContass(null," " . $campos,"l20_codigo","l20_codigo = $chave_l20_codigo $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
                 }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
