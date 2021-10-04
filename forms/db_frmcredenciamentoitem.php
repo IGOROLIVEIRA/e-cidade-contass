@@ -144,68 +144,11 @@ $clrotulo->label("pc01_descrmater");
 
         const item = origem.id.split('_');
         const id = item[1];
-        const desc = new Number($('#desc_' + id).val());
         const quant = new Number($('#qtd_' + id).val());
-        const uni = new Number($('#vlrunit_' + id).val());
-        //const tot = new Number($('#total_' + id).val()).toFixed(2);
-
-
-        if ($('#e54_desconto').val() == 't') {
-            t = new Number((uni - (uni * desc / 100)) * quant);
-            $('#total_' + id).val(t.toFixed(2));
-        } else {
-            t = new Number(uni * quant);
-            $('#total_' + id).val(t.toFixed(2));
-        }
-
-
-        if (item[0] == 'qtd' && quant != '') {
-            if (isNaN(quant)) {
-                $('#qtd_' + id).focus();
-                return false;
-            }
-            if ($('#e54_desconto').val() == 't') {
-                // alert((desc / 100));
-                // alert(uni);
-                // alert((uni - (desc / 100)));
-                // alert(quant);
-                // alert((uni - (desc / 100)) * quant);
-                t = new Number((uni - (uni * desc / 100)) * quant);
-                $('#total_' + id).val(t.toFixed(2));
-            } else {
-                t = new Number(uni * quant);
-                $('#total_' + id).val(t.toFixed(2));
-            }
-        }
-
-        if (item[0] == 'desc' && desc != '') {
-            if (isNaN(quant)) {
-                $('#desc_' + id).focus();
-                return false;
-            }
-            if ($('#e54_desconto').val() == 't') {
-                t = new Number((uni - (uni * desc / 100)) * quant);
-                $('#total_' + id).val(t.toFixed(2));
-            } else {
-                t = new Number(uni * quant);
-                $('#total_' + id).val(t.toFixed(2));
-            }
-        }
-
-        if (item[0] == "vlrunit") {
-            if (isNaN(uni)) {
-                //alert("Valor unico inváido!");
-                $('#vlrunit_' + id).focus();
-                return false;
-            }
-            if ($('#e54_desconto').val() == 't') {
-                t = new Number((uni - (uni * desc / 100)) * quant);
-                $('#total_' + id).val(t.toFixed(2));
-            } else {
-                t = new Number(uni * quant);
-                $('#total_' + id).val(t.toFixed(2));
-            }
-        }
-        consultaLancar();
+        const vlun = new Number($('#vlr_' + id).val());
+        // $('checkbox_'+ id).attr("checked",true);
+        t = new Number(vlun * quant);
+        $('#total_' + id).val(t.toFixed(2));
     }
+
 </script>

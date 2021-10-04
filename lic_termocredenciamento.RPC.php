@@ -17,17 +17,11 @@ switch ($_POST["action"]) {
         $licitacao       = $_POST["l212_licitacao"];
         $iAnoSessao      = db_getsession('DB_anousu');
 
-        $sqlFornecedor = "SELECT DISTINCT z01_numcgm,
-                                          z01_nome
-                        FROM liclicita
-                        INNER JOIN liclicitem ON l21_codliclicita=l20_codigo
-                        INNER JOIN pcorcamitemlic ON pc26_liclicitem=l21_codigo
-                        INNER JOIN pcorcamitem ON pc22_orcamitem=pc26_orcamitem
-                        INNER JOIN pcorcamjulg ON pc24_orcamitem=pc22_orcamitem
-                        INNER JOIN pcorcamforne ON pc21_orcamforne=pc24_orcamforne
-                        INNER JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
-                        INNER JOIN cgm ON z01_numcgm=pc21_numcgm
-                        WHERE l20_codigo={$licitacao} and pc24_pontuacao=1;";
+        $sqlFornecedor = "SELECT z01_numcgm,
+                                 z01_nome
+            FROM credenciamento
+            INNER JOIN cgm ON z01_numcgm = l205_fornecedor
+            WHERE l205_licitacao ={$licitacao}";
         $rsFornecedor  = db_query($sqlFornecedor);
 
         $oFornecedor = db_utils::getCollectionByRecord($rsFornecedor);

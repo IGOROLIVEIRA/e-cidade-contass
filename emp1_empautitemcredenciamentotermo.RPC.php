@@ -25,31 +25,53 @@ switch ($_POST["action"]) {
         $licitacao  = $_POST["licitacao"];
         $fornecedor = $_POST["fornecedor"];
 
-        $sqlItens = "SELECT    pc11_seq,
-                               pc01_codmater,
-                               pc01_descrmater,
-                               m61_descr,
-                               pc23_vlrun,
-                               pc23_quant,
-                               pc11_servicoquantidade
-                    FROM liclicita
-                    INNER JOIN liclicitem ON l21_codliclicita=l20_codigo
-                    INNER JOIN pcorcamitemlic ON pc26_liclicitem=l21_codigo
-                    INNER JOIN pcorcamitem ON pc22_orcamitem=pc26_orcamitem
-                    INNER JOIN pcorcamjulg ON pc24_orcamitem=pc22_orcamitem
-                    INNER JOIN pcorcamforne ON pc21_orcamforne=pc24_orcamforne
-                    INNER JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
-                    AND pc23_orcamforne = pc21_orcamforne
-                    INNER JOIN pcprocitem ON l21_codpcprocitem = pc81_codprocitem
-                    INNER JOIN solicitem ON pc81_solicitem = pc11_codigo
-                    INNER JOIN solicitempcmater ON pc11_codigo= pc16_solicitem
-                    INNER JOIN pcmater ON pc01_codmater = pc16_codmater
-                    INNER JOIN solicitemunid ON pc17_codigo = pc11_codigo
-                    INNER JOIN matunid ON pc17_unid = m61_codmatunid
-                    INNER JOIN cgm ON z01_numcgm=pc21_numcgm
-                    WHERE l20_codigo=$licitacao
-                        AND pc21_numcgm=$fornecedor
-                        AND pc24_pontuacao=1;";
+        $sqlItens = "SELECT pc11_seq,
+                       pc01_codmater,
+                       pc01_descrmater,
+                       m61_descr,
+                
+                    (SELECT si02_vlprecoreferencia
+                     FROM itemprecoreferencia
+                     WHERE si02_itemproccompra = pcorcamitemproc.pc31_orcamitem) AS pc23_vlrun,
+                       pc23_quant,
+                       pc11_servicoquantidade,
+                       sum(l213_qtdcontratada) AS l213_qtdcontratada
+                FROM credenciamento
+                INNER JOIN liclicita ON l20_codigo = l205_licitacao
+                INNER JOIN liclicitem ON (l21_codliclicita,
+                                          l21_codpcprocitem) = (l20_codigo,
+                                                                l205_item)
+                INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                INNER JOIN pcorcamitemproc ON pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem
+                INNER JOIN pcorcamitem ON pcorcamitem.pc22_orcamitem = pcorcamitemproc.pc31_orcamitem
+                INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
+                INNER JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
+                INNER JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
+                AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
+                INNER JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
+                AND pcorcamjulg.pc24_orcamforne = pcorcamforne.pc21_orcamforne
+                LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
+                LEFT JOIN credenciamentosaldo ON credenciamentosaldo.l213_licitacao = liclicita.l20_codigo
+                AND l21_codigo = l213_itemlicitacao
+                WHERE l20_codigo = {$licitacao}
+                    AND l205_fornecedor = {$fornecedor}
+                    AND pc24_pontuacao = 1
+                GROUP BY pc11_seq,
+                         pc01_codmater,
+                         pc23_vlrun,
+                         pc18_codele,
+                         pc23_quant,
+                         pc11_servicoquantidade,
+                         matunid.m61_descr,
+                         matunid.m61_descr,
+                         pcorcamitemproc.pc31_orcamitem";
 
         $iAnoSessao         = db_getsession('DB_anousu');
         $rsDados      = $oDaoSysArqCamp->sql_record($sqlItens);
@@ -64,31 +86,29 @@ switch ($_POST["action"]) {
                 $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, 0);
 
                 $itemRows  = array();
-
-                if ($oDados->pc01_codmater == $oDadosEmpAutItem->e55_item){
-                    $itemRows[] = "<input type='checkbox' checked id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
-                }else{
-                    $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
-                }
+                $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}'>";
                 $itemRows[] = $oDados->pc11_seq;
                 $itemRows[] = $oDados->pc01_codmater;
                 $itemRows[] = $oDados->pc01_descrmater;
                 $itemRows[] = $oDados->m61_descr;
                 if($oDados->pc11_servicoquantidade == "t"){
-                    $itemRows[] = "<input type='text' onkeyup='js_calcula(this)' id='marca_{$oDados->pc01_codmater}' value=''  />";
-                    $itemRows[] = $oDados->pc23_vlrun;
-                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
-                }else{
-                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
-                    $itemRows[] = $oDados->pc23_vlrun;
+                    $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='10' readonly style='background-color: #DEB887; width: 80px' />";
+                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
                     if($oDadosEmpAutItem->e55_vlrun != "") {
                         $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
                     }else{
-                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
-
+                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
+                    }
+                }else{
+                    $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='10' readonly style='background-color: #DEB887; width: 80px' />";
+                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
+                    if($oDadosEmpAutItem->e55_vlrun != "") {
+                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
+                    }else{
+                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
                     }
                 }
-                $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='' readonly style='background-color: #DEB887; width: 80px' />";
+                $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='' readonly style='background-color: #DEB887; width: 80px' />";
                 $employeeData[] = $itemRows;
             }
 
