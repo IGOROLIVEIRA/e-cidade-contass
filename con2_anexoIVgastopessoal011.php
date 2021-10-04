@@ -50,6 +50,7 @@ foreach ($aPeriodos as $oPeriodo) {
 ?>
 
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -58,6 +59,7 @@ foreach ($aPeriodos as $oPeriodo) {
 
     <script>
         variavel = 1;
+
         function js_emite(tipo) {
             sel_instit = new Number(document.form1.db_selinstit.value);
             if (sel_instit == 0) {
@@ -75,6 +77,11 @@ foreach ($aPeriodos as $oPeriodo) {
                 return false;
             }
 
+            if (document.form1.tipoEmissao.value == 0) {
+                alert("Você não escolheu um tipo de emissão. Verifique!");
+                return false;
+            }
+
             if (document.form1.tipoCalculo.value == 0) {
                 alert("Você não escolheu um cálculo com base nos valores. Verifique!");
                 return false;
@@ -89,72 +96,89 @@ foreach ($aPeriodos as $oPeriodo) {
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
     <style type="text/css">
-        #o116_periodo, #tipoCalculo {
+        #o116_periodo,
+        #tipoCalculo {
+            width: 130px;
+        }
+        #tipoEmissao {
             width: 130px;
         }
     </style>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
-<table align="center">
-    <form name="form1" method="post" action="con2_anexoIVgastopessoal002.php">
-        <input type=hidden name="filtra_despesa" value="">
-        <input type=hidden name="anousu" value="<?= $anousu ?>">
-        <input type=hidden name="codigorelatorio" value="<?= $codigoRelatorio ?>">
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td colspan=3  class='table_header'>
-                Anexo IV - Gasto com Pessoal
-            </td>
-        </tr>
-        <tr>
-            <td align="center" colspan="3">
+    <table align="center">
+        <form name="form1" method="post" action="con2_anexoIVgastopessoal002.php">
+            <input type=hidden name="filtra_despesa" value="">
+            <input type=hidden name="anousu" value="<?= $anousu ?>">
+            <input type=hidden name="codigorelatorio" value="<?= $codigoRelatorio ?>">
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan=3 class='table_header'>
+                    Anexo IV - Gasto com Pessoal
+                </td>
+            </tr>
+            <tr>
+                <td align="center" colspan="3">
+                    <?
+                    db_selinstit('parent.js_limpa', 300, 100);
+                    // ja tem instituição na aba filtros
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>&nbsp;</td>
+            </tr>
+
+            <tr>
+                <td><label for="o116_periodo"><b>Período:</b></label></td>
+                <td><?php db_select("o116_periodo", $aListaPeriodos, true, 1); ?></td>
+            </tr>
+
+            <tr>
+                <td><label><b>Emissão:</b></label></td>
                 <?
-                db_selinstit('parent.js_limpa', 300, 100);
-                // ja tem instituição na aba filtros
+                $aEmissao = array(
+                    '0' => 'Selecione',
+                    '1' => 'Publicação Oficial',
+                    '2' => 'Detalhamento Mensal'
+                );
                 ?>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2"
-            </td>
-            <td>&nbsp;</td>
-        </tr>
+                <td><?php db_select("tipoEmissao", $aEmissao, true, 1); ?></td>
+            </tr>
 
-        <tr>
-            <td><label for="o116_periodo"><b>Período:</b></label></td>
-            <td><?php db_select("o116_periodo", $aListaPeriodos, true, 1); ?></td>
-        </tr>
-
-        <tr>
-            <td><label><b>Cálculo com base nos valores:</b></label></td>
-            <?
+            <tr>
+                <td><label><b>Cálculo com base nos valores:</b></label></td>
+                <?
                 $aTipo = array(
                     '0' => 'Selecione',
                     '1' => 'Empenhados',
                     '2' => 'Liquidados'
                 );
-            ?>
-            <td><?php db_select("tipoCalculo", $aTipo, true, 1); ?></td>
-        </tr>
+                ?>
+                <td><?php db_select("tipoCalculo", $aTipo, true, 1); ?></td>
+            </tr>
 
 
-        <tr>
-            <td>&nbsp; </td>
-        </tr>
+            <tr>
+                <td>&nbsp; </td>
+            </tr>
 
 
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input name="emiterel" value="Gera Relatório" type="button" onclick="js_emite(1);">
-                <!--<input name="emiterelcsv" value="Gera CSV" type="button" onclick="js_emite(2);">-->
-            </td>
-        </tr>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input name="emiterel" value="Gera Relatório" type="button" onclick="js_emite(1);">
+                    <!--<input name="emiterelcsv" value="Gera CSV" type="button" onclick="js_emite(2);">-->
+                </td>
+            </tr>
 
-    </form>
-</table>
+        </form>
+    </table>
 </body>
+
 </html>
