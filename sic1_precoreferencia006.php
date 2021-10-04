@@ -175,11 +175,12 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
         div {
             font-size: 14px;
             text-align: center;
-            /*border: 1px solid black;*/
+            border: 1px solid black;
         }
 
         table {
             font-size: 12px;
+            border: 1px solid black;
         }
     </style>
 
@@ -237,7 +238,7 @@ HTML;
                 $oDadosDaLinha->seq = $iCont + 1;
                 $oDadosDaLinha->item = $oResult->pc01_codmater;
                 $oDadosDaLinha->pc80_codproc = $oResult->pc80_codproc;
-                $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+                $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
                 if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
                     $oDadosDaLinha->valorUnitario = "-";
                     $oDadosDaLinha->quantidade = "-";
@@ -362,11 +363,12 @@ HTML;
         div {
             font-size: 14px;
             text-align: center;
-            /*border: 1px solid black;*/
+            border: 1px solid black;
         }
 
         table {
             font-size: 12px;
+            border: 1px solid black;
         }
     </style>
 
@@ -469,38 +471,39 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
                 $rsResult = db_query($sSql) or die(pg_last_error());
 
                 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
+                $oLotes->pc68_nome = strtoupper($oLotes->pc68_nome);
                 if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
                     echo <<<HTML
         <table>
-            <tr>
-                <td><strong>SEQ LOTE</strong></td>
-                <td><strong>ITEM</strong></td>
-                <td><strong>DESCRI플O DO ITEM</strong></td>
-                <td><strong>TAXA/TABELA</strong></td>
-                <td><strong>VALOR UN</strong></td>
-                <td><strong>QUANT</strong></td>
-                <td><strong>UN</strong></td>
-                <td><strong>TOTAL/VLR ESTIMADO</strong></td>
-            </tr>
-            <tr>
-                <td><strong>{$oLotes->pc68_nome}</strong></td>
-            </tr>
 
+            <tr>
+                <th colspan="7"><strong>{$oLotes->pc68_nome}</strong></th>
+            </tr>
+            <tr>
+                <td align= "left"><strong>ITEM LOTE</strong></td>
+                <td align= "left"><strong>CODIGO</strong></td>
+                <td align= "left"><strong>DESCRI플O DO ITEM</strong></td>
+                <td align= "left"><strong>TAXA/TABELA</strong></td>
+                <td align= "left"><strong>VALOR UN</strong></td>
+                <td align= "left"><strong>QUANT</strong></td>
+                <td align= "left"><strong>UN</strong></td>
+                <td align= "left"><strong>TOTAL/VLR ESTIMADO</strong></td>
+            </tr>
 HTML;
                 } else {
                     echo <<<HTML
         <table>
             <tr>
-                <td><strong>SEQ LOTE</strong></td>
-                <td><strong>ITEM</strong></td>
-                <td><strong>DESCRI플O DO ITEM</strong></td>
-                <td><strong>VALOR UN</strong></td>
-                <td><strong>QUANT</strong></td>
-                <td><strong>UN</strong></td>
-                <td><strong>TOTAL</strong></td>
+            <th colspan="7"><strong>{$oLotes->pc68_nome}</strong></th>
             </tr>
             <tr>
-                <td><strong>{$oLotes->pc68_nome}</strong></td>
+                <td align= "left"><strong>ITEM LOTE</strong></td>
+                <td align= "left"><strong>CODIGO</strong></td>
+                <td align= "left"><strong>DESCRI플O DO ITEM</strong></td>
+                <td align= "left"><strong>VALOR UN</strong></td>
+                <td align= "left"><strong>QUANT</strong></td>
+                <td align= "left"><strong>UN</strong></td>
+                <td align= "left"><strong>TOTAL</strong></td>
             </tr>
 HTML;
                 }
@@ -515,9 +518,9 @@ HTML;
                     $nTotalItens += $lTotal;
                     $oDadosDaLinha = new stdClass();
                     $oDadosDaLinha->seq = $iCont + 1;
-                    $oDadosDaLinha->item = $oResult->pc11_seq;
+                    $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
                     $oDadosDaLinha->pc80_codproc = $oResult->pc80_codproc;
-                    $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+                    $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
                     if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
                         $oDadosDaLinha->valorUnitario = "-";
                         $oDadosDaLinha->quantidade = "-";
@@ -566,7 +569,7 @@ HTML;
             <td> {$oDadosDaLinha->unidadeDeMedida} </td>
             <td> {$oDadosDaLinha->total}           </td>
         </tr>
-        </table>
+
 HTML;
                     }
                 }
@@ -580,6 +583,7 @@ HTML;
     </html>
 <?php
 }
+
 header("Content-type: application/vnd.ms-word; charset=UTF-8");
-header("Content-Disposition: attachment; Filename=precoreferencia_prc" . $oDadosDaLinha->pc80_codproc . ".doc");
+header("Content-Disposition: attachment; Filename=Preco_de_Referencia_PRC_" . $codigo_preco . ".doc");
 ?>

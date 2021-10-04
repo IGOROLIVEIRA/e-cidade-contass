@@ -100,7 +100,7 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
 
     header("Content-type: text/plain");
     header("Content-type: application/csv");
-    header("Content-Disposition: attachment; filename=file.csv");
+    header("Content-Disposition: attachment; filename=Preco_de_Referencia_PRC_" . $codigo_preco . ".csv");
     header("Pragma: no-cache");
 
     echo "Preço de Referência \n";
@@ -131,7 +131,7 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
         $oDadosDaLinha = new stdClass();
         $oDadosDaLinha->seq = $iCont + 1;
         $oDadosDaLinha->item = $oResult->pc01_codmater;
-        $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+        $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
         $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
         $oDadosDaLinha->quantidade = $oResult->pc11_quant;
         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
@@ -173,7 +173,7 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
 
     header("Content-type: text/plain");
     header("Content-type: application/csv");
-    header("Content-Disposition: attachment; filename=file.csv");
+    header("Content-Disposition: attachment; filename=Preco_de_Referencia_PRC_" . $codigo_preco . ".csv");
     header("Pragma: no-cache");
 
     echo "Preço de Referência \n";
@@ -184,14 +184,14 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
 
         $oLotes = db_utils::fieldsMemory($rsLotes, $i);
 
-        echo "SEQ LOTE;";
-        echo "ITEM;";
+        echo "$oLotes->pc68_nome;\n";
+        echo "ITEM LOTE;";
+        echo "CODIGO;";
         echo "DESCRICAO DO ITEM;";
         echo "VALOR UN;";
         echo "QUANT;";
         echo "UN;";
         echo "TOTAL;\n";
-        echo "$oLotes->pc68_nome;\n";
 
         $sSql = "select * from (SELECT
         pc01_codmater,
@@ -286,8 +286,8 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
 
             $oDadosDaLinha = new stdClass();
             $oDadosDaLinha->seq = $iCont + 1;
-            $oDadosDaLinha->item = $oResult->pc11_seq;
-            $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+            $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
+            $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
             $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
             $oDadosDaLinha->quantidade = $oResult->pc11_quant;
             $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;

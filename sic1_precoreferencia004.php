@@ -115,6 +115,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                 background: url("imagens/px_preto.jpg") repeat center;
                 background-repeat: repeat-y;
                 background-position: 0 50px;
+                height: 30px;
             }
 
             .col-item {
@@ -300,8 +301,11 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
 
     <table class="table">
         <tr class="">
-            <td class="item-menu item-menu-color" style="width:50px">SEQ LOTE</td>
-            <td class="item-menu item-menu-color">ITEM</td>
+            <td class="item-menu item-menu-color">{$oLotes->pc68_nome}</td>
+        </tr>
+        <tr class="">
+            <td class="item-menu item-menu-color" style="width:50px">ITEM LOTE</td>
+            <td class="item-menu item-menu-color">CODIGO</td>
             <td class="item-menu item-menu-color">DESCRIÇÃO DO ITEM</td>
             <td class="item-menu item-menu-color"><strong>TAXA/TABELA</strong></td>
             <td class="item-menu item-menu-color">VALOR UN</td>
@@ -309,24 +313,21 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
             <td class="item-menu item-menu-color">UN</td>
             <td class="item-menu item-menu-color">TOTAL/VLR ESTIMADO</td>
         </tr>
-        <tr class="">
-            <td class="item-menu item-menu-color">{$oLotes->pc68_nome}</td>
-        </tr>
 HTML;
                 } else {
                     echo <<<HTML
   <div class="table" autosize="1">
     <div class="tr bg_eb">
-      <div class="th col-item align-center" style="width:49px">SEQ LOTE</div>
-      <div class="th col-item align-center">ITEM</div>
-      <div class="th col-descricao_item align-center">DESCRIÇÃO DO ITEM</div>
-      <div class="th col-valor_un align-right">VALOR UN</div>
-      <div class="th col-quant align-center">QUANT</div>
-      <div class="th col-un align-center">UN</div>
-      <div class="th col-total align-right">TOTAL</div>
+      <div class="th">{$oLotes->pc68_nome}</div>
     </div>
     <div class="tr bg_eb">
-      <div class="th">{$oLotes->pc68_nome}</div>
+      <div class="th col-item align-center" style="width:55px">ITEM LOTE</div>
+      <div class="th col-item align-center" style="width:49px">CODIGO</div>
+      <div class="th col-descricao_item align-center" style="width:620px">DESCRIÇÃO DO ITEM</div>
+      <div class="th col-valor_un align-center" style="margin-left:20px">VALOR UN</div>
+      <div class="th col-quant align-center">QUANT</div>
+      <div class="th col-un align-center">UN</div>
+      <div class="th col-total align-center">TOTAL</div>
     </div>
 HTML;
                 }
@@ -349,7 +350,7 @@ HTML;
                     $nTotalItens += $lTotal;
                     $oDadosDaLinha = new stdClass();
                     $oDadosDaLinha->seq = $iCont + 1;
-                    $oDadosDaLinha->item = $oResult->pc11_seq;
+                    $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
                     $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
                     if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
                         $oDadosDaLinha->valorUnitario = "-";
@@ -376,10 +377,10 @@ HTML;
                     if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
                         echo <<<HTML
         <tr class="">
-          <td class="item-text">{$oDadosDaLinha->seq}</td>
+          <td class="item-text" style="width:55px">{$oDadosDaLinha->seq}</td>
           <td class="item-text">{$oDadosDaLinha->item}</td>
-          <td class="item-text-descricao">{$oDadosDaLinha->descricao}</td>
-          <td class="item-text">{$oDadosDaLinha->mediapercentual}</td>
+          <td class="item-text-descricao" >{$oDadosDaLinha->descricao}</td>
+          <td class="item-text" >{$oDadosDaLinha->mediapercentual}</td>
           <td class="item-text">{$oDadosDaLinha->valorUnitario}</td>
           <td class="item-text">{$oDadosDaLinha->quantidade}</td>
           <td class="item-text">{$oDadosDaLinha->unidadeDeMedida}</td>
@@ -390,7 +391,7 @@ HTML;
                     } else {
                         echo <<<HTML
          <div class="tr row">
-          <div class="td col-item align-center">
+          <div class="td col-item align-center" style="width:50px">
             {$oDadosDaLinha->seq}
           </div>
           <div class="td col-item align-center">
@@ -399,7 +400,7 @@ HTML;
           <div class="td col-descricao_item align-justify">
             {$oDadosDaLinha->descricao}
           </div>
-          <div class="td col-valor_un align-right">
+          <div class="td col-valor_un align-center">
             R$ {$oDadosDaLinha->valorUnitario}
           </div>
           <div class="td col-quant align-center">
@@ -408,7 +409,7 @@ HTML;
           <div class="td col-un align-center">
             {$oDadosDaLinha->unidadeDeMedida}
           </div>
-          <div class="td col-total align-right">
+          <div class="td col-total align-center">
             R$ {$oDadosDaLinha->total}
           </div>
         </div>

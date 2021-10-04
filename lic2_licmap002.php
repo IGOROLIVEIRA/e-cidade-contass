@@ -695,9 +695,9 @@ if ($modelo == 1) {
         $pdf->cell(60, $alt, "TOTAL GERAL " . db_formatar($valor_total, "f"), 0, 1, "R", 0);
     }
 } else if ($modelo == 3) {
-    //-----------------------------  MODELO 1  -----------------------------------------------------------------------------------------------------------------//
-    //-----------------------------  MODELO 1  -----------------------------------------------------------------------------------------------------------------//
-    //-----------------------------  MODELO 1  -----------------------------------------------------------------------------------------------------------------//
+    //-----------------------------  MODELO 3  -----------------------------------------------------------------------------------------------------------------//
+    //-----------------------------  MODELO 3  -----------------------------------------------------------------------------------------------------------------//
+    //-----------------------------  MODELO 3  -----------------------------------------------------------------------------------------------------------------//
     $result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento"));
     $numrows_forne = $clpcorcamforne->numrows;
     if ($numrows_forne == 0) {
@@ -814,7 +814,7 @@ if ($modelo == 1) {
         db_fieldsmemory($result_lotes, $x);
         // echo $clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_descrmater,pc11_resum, pc11_numero,l04_seq", "l21_ordem", "pc22_codorc=$orcamento and l04_descricao=$l04_descricao");
         // exit;
-        $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_descrmater,pc11_resum, pc11_numero,l04_seq", "l21_ordem", "pc22_codorc=$orcamento and l04_descricao='$l04_descricao'"));
+        $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_codmater,pc01_descrmater,pc11_resum, pc11_numero,l04_seq", "l04_seq", "pc22_codorc=$orcamento and l04_descricao='$l04_descricao'"));
         $numrows_itens = $clpcorcamitem->numrows;
 
         if ($numrows_itens == 0)
@@ -825,7 +825,7 @@ if ($modelo == 1) {
         $alt = 4;
         $valor_tot = 0;
         $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(20, $alt, $l04_descricao, 1, 0, "C", 1);
+        $pdf->cell(181, $alt, $l04_descricao, 1, 0, "C", 1);
         $pdf->ln();
         for ($y = 0; $y < $numrows_itens; $y++) {
 
@@ -841,8 +841,8 @@ if ($modelo == 1) {
                 }
 
                 $pdf->setfont('arial', 'b', 8);
-                $pdf->cell(20, $alt, "ITEM", 1, 0, "C", 1);
-                $pdf->cell(20, $alt, "SEQ", 1, 0, "C", 1);
+                $pdf->cell(20, $alt, "ITEM lOTE", 1, 0, "C", 1);
+                $pdf->cell(20, $alt, "CODIGO", 1, 0, "C", 1);
                 $pdf->cell(100, $alt, "MATERIAL", 1, 0, "C", 1);
                 $pdf->cell(20, $alt, "SOLICITAÇÃO", 1, 0, "C", 1);
                 $pdf->cell(21, $alt, ($lControlaRegistroPrecoValor ? "DESCONTO %" : "VALOR"), 1, 1, "C", 1);
@@ -852,8 +852,8 @@ if ($modelo == 1) {
             }
 
             $pdf->setfont('arial', '', 7);
-            $pdf->cell(20, $alt, $l21_ordem, 0, 0, "C", $p);
             $pdf->cell(20, $alt, $l04_seq, 0, 0, "C", $p);
+            $pdf->cell(20, $alt, $pc01_codmater, 0, 0, "C", $p);
             $pdf->cell(100, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 65), 0, 0, "L", $p);
             $result_valor = $clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc24_pontuacao, pc23_percentualdesconto", null, "pc23_orcamitem=$pc22_orcamitem
 	                                                                          and pc24_pontuacao=1"));
