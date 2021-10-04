@@ -144,6 +144,51 @@ $sWhereContratos = " and 1 = 1 ";
                 $sWhereContratos .= " and ac24_sequencial is null ";
             }
 
+                $sWhereContratos .= " AND liclicita.l20_codigo IN (SELECT DISTINCT liclicitem.l21_codliclicita
+                     FROM pcprocitem
+                     INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                     INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                     INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+                     INNER JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+                     LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                     LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                     LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+                     LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                     LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                     LEFT JOIN licitemobra ON licitemobra.obr06_pcmater = pcmater.pc01_codmater
+                     LEFT JOIN pcsubgrupo ON pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo
+                     LEFT JOIN pctipo ON pctipo.pc05_codtipo = pcsubgrupo.pc04_codtipo
+                     LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
+                     LEFT JOIN orcelemento ON orcelemento.o56_codele = solicitemele.pc18_codele
+                     AND orcelemento.o56_anousu = 2021
+                     LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
+                     LEFT JOIN empautitem ON empautitem.e55_autori = empautitempcprocitem.e73_autori
+                     AND empautitem.e55_sequen = empautitempcprocitem.e73_sequen
+                     LEFT JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+                     LEFT JOIN cgm ON empautoriza.e54_numcgm = cgm.z01_numcgm
+                     LEFT JOIN empempaut ON empempaut.e61_autori = empautitem.e55_autori
+                     LEFT JOIN empempenho ON empempenho.e60_numemp = empempaut.e61_numemp
+                     LEFT JOIN liclicitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                     LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+                     LEFT JOIN pcorcamitemlic ON liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem
+                     LEFT JOIN pcorcamitem ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
+                     LEFT JOIN pcorcamjulg ON pcorcamitem.pc22_orcamitem = pcorcamjulg.pc24_orcamitem
+                     LEFT JOIN pcorcamval ON (pc24_orcamitem,
+                                              pc24_orcamforne) = (pc23_orcamitem,
+                                                                  pc23_orcamforne)
+                     LEFT JOIN pcorcamforne ON pc24_orcamforne = pc21_orcamforne
+                     LEFT JOIN cgm cgmforncedor ON pcorcamforne.pc21_numcgm = cgmforncedor.z01_numcgm
+                     LEFT JOIN homologacaoadjudica ON l202_licitacao = l21_codliclicita
+                     LEFT JOIN itenshomologacao ON l203_homologaadjudicacao = l202_sequencial
+                     AND l203_item = pc81_codprocitem
+                     WHERE liclicitem.l21_codliclicita = liclicita.l20_codigo
+                         AND pc24_pontuacao = 1
+                         AND pc81_codprocitem NOT IN
+                             (SELECT l203_item
+                              FROM homologacaoadjudica
+                              INNER JOIN itenshomologacao ON l203_homologaadjudicacao = l202_sequencial
+                              WHERE l202_licitacao = liclicita.l20_codigo))";
+
 //            $sWhereContratos .= " and (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
 //                                      else true end) ";
 

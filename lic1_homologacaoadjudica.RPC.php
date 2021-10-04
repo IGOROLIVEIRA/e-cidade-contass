@@ -888,11 +888,13 @@ switch($oParam->exec) {
                 db_inicio_transacao();
 
                 /**
-                 * get Itens Contrato
+                 * get Pcmater do Pcprocitem
                  */
-                $rsItensContrato = $clitenshomologacao->getItensContratos($oParam->iLicitacao);
+                $pc01_codmater = $clitenshomologacao->getitensPcmater($oParam->iLicitacao,$Item->codigo);
 
-                if ($rsItensContrato) {
+                $rsItensContrato = $clitenshomologacao->getItensContratos($oParam->iLicitacao,$pc01_codmater[0]->pc01_codmater);
+
+                if (!empty($rsItensContrato)) {
                     throw new Exception ("ERRO! Existe Contrato para itens dessa Homologação.");
                 }
 
