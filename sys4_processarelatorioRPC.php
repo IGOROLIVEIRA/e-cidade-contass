@@ -42,7 +42,7 @@ include("model/dbVariaveisRelatorio.php");
 include("model/dbGeradorRelatorio.model.php");
 include("model/dbOrdemRelatorio.model.php");
 include("model/dbPropriedadeRelatorio.php");
-ini_set("error_reporting","E_ALL & ~NOTICE");
+
 
 
 $oPost   		   			           = db_utils::postMemory($_POST);
@@ -54,6 +54,7 @@ $lSqlErro = false;
 $lErro    = false;
 
 try {
+
   $oGeradorRelatorio = new dbGeradorRelatorio($oPost->iCodRelatorio);
 } catch (Exception $eException){
 	$lErro = true;
@@ -235,7 +236,7 @@ if ( !$lErro ) {
 
 	  	$ok = $api->generateReport();
 
-	    if(!$ok){
+        if(!$ok){
 
 	      ob_end_clean();
 

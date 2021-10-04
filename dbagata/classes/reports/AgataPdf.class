@@ -90,7 +90,7 @@ class AgataPdf extends AgataReport
         $this->FooterHeight= $this->XmlArray['Report']['PageSetup']['FooterHeight']? $this->XmlArray['Report']['PageSetup']['FooterHeight']   : NULL;
         
         $FileName = $this->FileName;
-        $this->PDF = &new MyPdf($this->Orientation, 'pt', $this->PageFormat, array(&$this, 'printHeader'));
+        $this->PDF = new MyPdf($this->Orientation, 'pt', $this->PageFormat, array($this, 'printHeader'));
         
         $this->PDF->SetMargins($this->LeftMargin, $this->TopMargin, $this->RightMargin);
         $this->PDF->SetCreator('Agata Report');
