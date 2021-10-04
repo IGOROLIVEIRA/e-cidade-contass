@@ -30,7 +30,8 @@ switch ($_POST["action"]) {
                                pc01_descrmater,
                                m61_descr,
                                pc23_vlrun,
-                               pc23_quant
+                               pc23_quant,
+                               pc11_servicoquantidade
                     FROM liclicita
                     INNER JOIN liclicitem ON l21_codliclicita=l20_codigo
                     INNER JOIN pcorcamitemlic ON pc26_liclicitem=l21_codigo
@@ -58,17 +59,36 @@ switch ($_POST["action"]) {
             for ($i = 0; $i < pg_numrows($rsDados); $i++) {
 
                 $oDados = db_utils::fieldsMemory($rsDados, $i);
+
+                $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", " e55_autori = $autori and e55_item = $oDados->pc01_codmater"));
+                $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, 0);
+
                 $itemRows  = array();
 
-                $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
+                if ($oDados->pc01_codmater == $oDadosEmpAutItem->e55_item){
+                    $itemRows[] = "<input type='checkbox' checked id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
+                }else{
+                    $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
+                }
                 $itemRows[] = $oDados->pc11_seq;
                 $itemRows[] = $oDados->pc01_codmater;
                 $itemRows[] = $oDados->pc01_descrmater;
                 $itemRows[] = $oDados->m61_descr;
-                $itemRows[] = $oDados->pc23_quant;
-                $itemRows[] = $oDados->pc23_vlrun;
-                $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value=''  />";
-                $itemRows[] = $oDados->pc23_vlrun;
+                if($oDados->pc11_servicoquantidade == "t"){
+                    $itemRows[] = "<input type='text' onkeyup='js_calcula(this)' id='marca_{$oDados->pc01_codmater}' value=''  />";
+                    $itemRows[] = $oDados->pc23_vlrun;
+                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
+                }else{
+                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
+                    $itemRows[] = $oDados->pc23_vlrun;
+                    if($oDadosEmpAutItem->e55_vlrun != "") {
+                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
+                    }else{
+                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
+
+                    }
+                }
+                $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='' readonly style='background-color: #DEB887; width: 80px' />";
                 $employeeData[] = $itemRows;
             }
 
