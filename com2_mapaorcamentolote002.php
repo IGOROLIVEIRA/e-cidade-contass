@@ -60,7 +60,7 @@ if ($oDaoPcorcamforne->numrows == 0) {
 
 $sSqlItens = $oDaoPcorcamitem->sql_query_pcmaterproc(
     null,
-    "distinct pc11_seq, pc22_orcamitem, pc01_descrmater, pc80_tipoprocesso, pc68_nome, pc68_sequencial, pc80_codproc, pc69_seq, \n"
+    "distinct pc11_seq, pc22_orcamitem,pc01_codmater, pc01_descrmater, pc80_tipoprocesso, pc68_nome, pc68_sequencial, pc80_codproc, pc69_seq, \n"
         . "(select coalesce(sum(val.pc23_valor), 0) / case when count(val.*) > 0 then count(val.*) else 1 end             \n"
         . "   from pcorcamval as val                                                                                      \n"
         . "        inner join pcorcamjulg on pc24_orcamitem = pc23_orcamitem and pc24_orcamforne = pc23_orcamforne        \n"
@@ -135,8 +135,8 @@ for ($iRow = 0; $iRow < pg_num_rows($rsItens); $iRow++) {
         //$oPdf->setfont('arial', 'b', 11);
         $oPdf->setfont('arial', 'b', $iFont);
         $oPdf->cell(192, $iLine, "Lote {$oItem->pc68_nome} - Valor Médio: R$ {$nValorMedioLote}", 1, 1, 'L', 1);
-        $oPdf->cell(15, $iLine, "Item", 1, 0, 'C', 0);
-        $oPdf->cell(15, $iLine, "Seq. Lote", 1, 0, 'C', 0);
+        $oPdf->cell(15, $iLine, "Item Lote", 1, 0, 'C', 0);
+        $oPdf->cell(15, $iLine, "Código", 1, 0, 'C', 0);
         $oPdf->cell(130, $iLine, "Material / Serviço", 1, 0, 'C', 0);
         $oPdf->cell(32, $iLine, "Valor Unitário Médio", 1, 0, 'C', 0);
         $oPdf->ln();
@@ -149,8 +149,8 @@ for ($iRow = 0; $iRow < pg_num_rows($rsItens); $iRow++) {
     $iLote = $oItem->pc68_sequencial;
 
     $nValorMedioItem = number_format($oItem->valor_medio_item, 2, ',', '.');
-    $oPdf->cell(15, $iLine, "{$oItem->pc11_seq}", 1, 0, 'C');
     $oPdf->cell(15, $iLine, "{$oItem->pc69_seq}", 1, 0, 'C');
+    $oPdf->cell(15, $iLine, "{$oItem->pc01_codmater}", 1, 0, 'C');
     $oPdf->cell(130, $iLine, "{$oItem->pc01_descrmater}", 1);
     $oPdf->cell(32, $iLine, "R$ {$nValorMedioItem}", 1, 0, 'R');
     $oPdf->ln();
