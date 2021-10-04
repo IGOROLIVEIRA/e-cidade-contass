@@ -814,6 +814,7 @@ switch($oParam->exec) {
                 }
             }
             if($l20_tipnaturezaproced == '1' || $l20_tipnaturezaproced == '3') {
+
                 /**
                  * BUSCO O REGISTRO DA SITUACAO A SER EXCLUIDA
                  */
@@ -823,18 +824,20 @@ switch($oParam->exec) {
                 db_inicio_transacao();
 
                 /**
-                 * get Itens Contrato
-                 */
-                $rsItensContrato = $clitenshomologacao->getItensContratos($oParam->iLicitacao);
-
-                if ($rsItensContrato) {
-                    throw new Exception ("ERRO! Existe Contrato para itens dessa Homologação.");
-                }
-
-                /**
                  * Excluir Itens Homologacao
                  */
                 foreach ($oParam->aItens as $Item) {
+
+                    /**
+                     * get Pcmater do Pcprocitem
+                     */
+                    $pc01_codmater = $clitenshomologacao->getitensPcmater($oParam->iLicitacao,$Item->codigo);
+
+                    $rsItensContrato = $clitenshomologacao->getItensContratos($oParam->iLicitacao,$pc01_codmater[0]->pc01_codmater);
+
+                    if (!empty($rsItensContrato)) {
+                        throw new Exception ("ERRO! Existe Contrato para itens dessa Homologação.");
+                    }
 
                     $clitenshomologacao->excluir(null, "l203_homologaadjudicacao = {$oParam->iHomologacao} and l203_item = {$Item->codigo}");
                     if ($clitenshomologacao->erro_status == "0") {
