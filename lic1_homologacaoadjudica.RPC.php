@@ -348,7 +348,7 @@ switch($oParam->exec) {
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
         $clliclicita           = new cl_liclicita();
 
-        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao";
+        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
 
         //Itens para Inclusao
         if($oParam->dbopcao == "1"){
@@ -386,6 +386,7 @@ switch($oParam->exec) {
             $oItem->pc23_valor                      = $oItensLicitacao->pc23_valor;
             $oItem->l203_homologaadjudicacao        = $oItensLicitacao->l203_homologaadjudicacao;
             $oItem->pc81_codprocitem                = $oItensLicitacao->pc81_codprocitem;
+            $oItem->pc11_seq                        = $oItensLicitacao->pc11_seq;
             if($l20_tipojulg == "3"){
                 $oItem->l04_descricao               = urlencode($oItensLicitacao->l04_descricao);
             }else{
@@ -543,10 +544,16 @@ switch($oParam->exec) {
                      */
                     if($l20_tipnaturezaproced == '1' || $l20_tipnaturezaproced == '3'){
 
+                        /*busco adjudicacao*/
+                        $rsDtAdjudicacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query(null,"l202_dataadjudicacao",null,"l202_licitacao = {$l202_licitacao} and l202_dataadjudicacao is not null and l202_datahomologacao is null"));
+                        $l202_dataadjudicacao  = db_utils::fieldsMemory($rsDtAdjudicacao, 0)->l202_dataadjudicacao;
+
+
                         /*inserindo a data de homologacao*/
                         $clhomologacaoadjudica->l202_sequencial = null;
                         $clhomologacaoadjudica->l202_datahomologacao = $oParam->dtHomologacao;
                         $clhomologacaoadjudica->l202_licitacao       = $l202_licitacao;
+                        $clhomologacaoadjudica->l202_dataadjudicacao = $l202_dataadjudicacao;
                         $clhomologacaoadjudica->incluir(null);
 
                         /*Salva os itens*/

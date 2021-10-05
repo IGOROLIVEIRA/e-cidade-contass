@@ -83,7 +83,7 @@ $clrotulo->label("l20_codigo");
             oGridItens.setCheckbox(0);
         }
         oGridItens.setCellAlign(new Array("center","center", "center","center", "center", 'center', 'center', 'center', 'center'));
-        oGridItens.setCellWidth(new Array("5%" , "5%"     , "35%"     ,'5%', '5%'          ,   '25%'    , '15%'        , '5%' , '5%'));
+        oGridItens.setCellWidth(new Array("5%" , "5%"     , "35%"     ,'15%', '5%'          ,   '25%'    , '15%'        , '8%' , '8%'));
         oGridItens.setHeader(new Array("Código", "Ordem","Material", "Lote","CGM","Fornecedores","Unidade", "Qtde Licitada", "Valor Licitado"));
         oGridItens.hasTotalValue = true;
         oGridItens.show($('cntgriditens'));
@@ -181,6 +181,7 @@ $clrotulo->label("l20_codigo");
         var aEventsIn  = ["onmouseover"];
         var aEventsOut = ["onmouseout"];
         aDadosHintGrid = new Array();
+        aDadosHintGridlote = new Array();
 
         var oRetornoitens = JSON.parse(oAjax.responseText);
 
@@ -193,7 +194,7 @@ $clrotulo->label("l20_codigo");
                     seq ++;
                     var aLinha = new Array();
                     aLinha[0] = oLinha.pc81_codprocitem;
-                    aLinha[1] = seq;
+                    aLinha[1] = oLinha.pc11_seq;
                     aLinha[2] = oLinha.pc01_descrmater.urlDecode();
                     aLinha[3] = oLinha.l04_descricao.urlDecode();
                     aLinha[4] = oLinha.z01_numcgm;
@@ -216,6 +217,20 @@ $clrotulo->label("l20_codigo");
                 oDadosHint.idLinha   = `gridItensrowgridItens${iLinha}`;
                 oDadosHint.sText     = sTextEvent;
                 aDadosHintGrid.push(oDadosHint);
+
+                /*LOTE*/
+                var sTextEventlote = " ";
+
+                if (aLinha[3] !== '') {
+                    sTextEventlote += "<b>Lote: </b>"+aLinha[3];
+                } else {
+                    sTextEventlote += "<b>Nenhum dado à mostrar</b>";
+                }
+
+                var oDadosHintlote       = new Object();
+                oDadosHintlote.idLinha   = `gridItensrowgridItens${iLinha}`;
+                oDadosHintlote.sTextlote = sTextEventlote;
+                aDadosHintGridlote.push(oDadosHintlote);
             });
             document.getElementById('gridItenstotalValue').innerText = js_formatar(nTotal, 'f');
 
@@ -230,6 +245,17 @@ $clrotulo->label("l20_codigo");
                 oDBHint.setUseMouse(true);
                 oDBHint.make($(oHint.idLinha), 3);
             });
+
+            aDadosHintGridlote.each(function(oHintlote, id) {
+                var oDBHintlote    = eval("oDBHintlote_"+id+" = new DBHint('oDBHintlote_"+id+"')");
+                oDBHintlote.setText(oHintlote.sTextlote);
+                oDBHintlote.setShowEvents(aEventsIn);
+                oDBHintlote.setHideEvents(aEventsOut);
+                oDBHintlote.setPosition('B', 'L');
+                oDBHintlote.setUseMouse(true);
+                oDBHintlote.make($(oHintlote.idLinha), 4);
+            });
+
         }
     }
 

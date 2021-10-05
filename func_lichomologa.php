@@ -110,6 +110,7 @@ $sWhereContratos = " and 1 = 1 ";
             }else{
                 $dbwhere .= "l20_licsituacao = 10 and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
              and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and l202_datahomologacao is not null and ";
+                $dbwhere .= "liclicita.l20_codigo not in (select ac16_licitacao from acordo where ac16_licitacao = liclicita.l20_codigo) and ";
             }
             /**
              * QUANDO FOR ADJUDICACAO NAO DEVE RETORNAR PROCESSO QUE SAO REGISTRO DE PRECO
