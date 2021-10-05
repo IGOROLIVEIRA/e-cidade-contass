@@ -35,12 +35,11 @@ switch ($_POST["action"]) {
                      WHERE si02_itemproccompra = pcorcamitemproc.pc31_orcamitem) AS pc23_vlrun,
                        pc23_quant,
                        pc11_servicoquantidade,
-                       sum(l213_qtdcontratada) AS l213_qtdcontratada
+                       sum(l213_qtdcontratada) AS l213_qtdcontratada,
+                       pc01_servico
                 FROM credenciamento
                 INNER JOIN liclicita ON l20_codigo = l205_licitacao
-                INNER JOIN liclicitem ON (l21_codliclicita,
-                                          l21_codpcprocitem) = (l20_codigo,
-                                                                l205_item)
+                INNER JOIN liclicitem ON (l21_codliclicita,l21_codpcprocitem) = (l20_codigo,l205_item)
                 INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
                 INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
                 INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
@@ -91,22 +90,12 @@ switch ($_POST["action"]) {
                 $itemRows[] = $oDados->pc01_codmater;
                 $itemRows[] = $oDados->pc01_descrmater;
                 $itemRows[] = $oDados->m61_descr;
-                if($oDados->pc11_servicoquantidade == "t"){
-                    $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='10' readonly style='background-color: #DEB887; width: 80px' />";
-                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
-                    if($oDadosEmpAutItem->e55_vlrun != "") {
-                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
-                    }else{
-                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
-                    }
+                $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='10' readonly style='background-color: #DEB887; width: 80px' />";
+                $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
+                if($oDadosEmpAutItem->e55_vlrun != "") {
+                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
                 }else{
-                    $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='10' readonly style='background-color: #DEB887; width: 80px' />";
-                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
-                    if($oDadosEmpAutItem->e55_vlrun != "") {
-                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
-                    }else{
-                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
-                    }
+                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
                 }
                 $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='' readonly style='background-color: #DEB887; width: 80px' />";
                 $employeeData[] = $itemRows;
