@@ -101,24 +101,31 @@ if ($oParam->exec == "getElementosFromAcao") {
                                                       $sWhere
                                                       );
   $rsDotacao  = $oDaoPPaDotacao->sql_record(analiseQueryPlanoOrcamento($sSqlDotacao));
+//   db_criatabela($rsDotacao);die;
   $oDotacao   = db_utils::fieldsMemory($rsDotacao, 0, false, false, true);
-  $oRetorno->o08_orgao          = $oDotacao->o08_orgao;
-  $oRetorno->o40_descr          = $oDotacao->o40_descr;
-  $oRetorno->o08_unidade        = $oDotacao->o08_unidade;
-  $oRetorno->o41_descr          = $oDotacao->o41_descr;
-  $oRetorno->o08_funcao         = $oDotacao->o08_funcao;
-  $oRetorno->o52_descr          = $oDotacao->o52_descr;
-  $oRetorno->o08_subfuncao      = $oDotacao->o08_subfuncao;
-  $oRetorno->o53_descr          = $oDotacao->o53_descr;
-  $oRetorno->o08_programa       = $oDotacao->o08_programa;
-  $oRetorno->o54_descr          = $oDotacao->o54_descr;
-  $oRetorno->o08_projativ       = $oDotacao->o08_projativ;
-  $oRetorno->o55_descr          = $oDotacao->o55_descr;
-  $oRetorno->o05_ppaversao      = $oDotacao->o05_ppaversao;
-  $oRetorno->o01_descricao      = $oDotacao->o01_descricao;
-  $oRetorno->o01_anoinicio      = $oDotacao->o01_anoinicio;
-  $oRetorno->o01_anofinal       = $oDotacao->o01_anofinal;
-  $oRetorno->o08_concarpeculiar = $oDotacao->o08_concarpeculiar;
+  $oRetorno->o08_orgao              = $oDotacao->o08_orgao;
+  $oRetorno->o08_orgao_original     = $oDotacao->o08_orgao;
+  $oRetorno->o40_descr              = $oDotacao->o40_descr;
+  $oRetorno->o08_unidade            = $oDotacao->o08_unidade;
+  $oRetorno->o08_unidade_original   = $oDotacao->o08_unidade;
+  $oRetorno->o41_descr              = $oDotacao->o41_descr;
+  $oRetorno->o08_funcao             = $oDotacao->o08_funcao;
+  $oRetorno->o08_funcao_original    = $oDotacao->o08_funcao;
+  $oRetorno->o52_descr              = $oDotacao->o52_descr;
+  $oRetorno->o08_subfuncao          = $oDotacao->o08_subfuncao;
+  $oRetorno->o08_subfuncao_original = $oDotacao->o08_subfuncao;
+  $oRetorno->o53_descr              = $oDotacao->o53_descr;
+  $oRetorno->o08_programa           = $oDotacao->o08_programa;
+  $oRetorno->o08_programa_original  = $oDotacao->o08_programa;
+  $oRetorno->o54_descr              = $oDotacao->o54_descr;
+  $oRetorno->o08_projativ           = $oDotacao->o08_projativ;
+  $oRetorno->o08_projativ_original  = $oDotacao->o08_projativ;
+  $oRetorno->o55_descr              = $oDotacao->o55_descr;
+  $oRetorno->o05_ppaversao          = $oDotacao->o05_ppaversao;
+  $oRetorno->o01_descricao          = $oDotacao->o01_descricao;
+  $oRetorno->o01_anoinicio          = $oDotacao->o01_anoinicio;
+  $oRetorno->o01_anofinal           = $oDotacao->o01_anofinal;
+  $oRetorno->o08_concarpeculiar     = $oDotacao->o08_concarpeculiar;
   /**
    * Retornamos todos os elementos dessa dotacao;s
    *
@@ -394,7 +401,9 @@ if ($oParam->exec == "getElementosFromAcao") {
   $sCampos          .= "o08_localizadorgastos,";
   $sCampos          .= "o11_descricao,";
   $sCampos          .= "round(o05_valor,2) as o05_valor, ";
-  $sCampos          .= "o19_coddot";
+  $sCampos          .= "o19_sequencial,";
+  $sCampos          .= "o19_coddot,";
+  $sCampos          .= "o19_anousu";  
   $oDaoPPaDotacao    = db_utils::getDao("ppaestimativadespesa");
   $sWhere       =  " o08_instit=".db_getsession("DB_instit");
   $sWhere      .=  " and o08_orgao          = {$oParam->o40_orgao}";
@@ -404,12 +413,11 @@ if ($oParam->exec == "getElementosFromAcao") {
   $sWhere      .=  " and o08_programa       = {$oParam->o54_programa}";
   $sWhere      .=  " and o08_projativ       = {$oParam->o55_projativ}";
   $sWhere      .=  " and o08_ppaversao      = {$oParam->o08_ppaversao}";
-  ///$sWhere      .=  " and o08_concarpeculiar = {$oParam->o08_concarpeculiar}";
-  $sWhere      .=  " and o19_coddot         is null ";
+
   $sSqlDotacaoItens  = $oDaoPPaDotacao->sql_query_conplano(
                                                              null,
                                                              $sCampos,
-                                                             null,
+                                                             'o05_sequencial',
                                                              $sWhere
                                                            );
   $rsDotacaoItens  = $oDaoPPaDotacao->sql_record($sSqlDotacaoItens);
@@ -441,6 +449,80 @@ if ($oParam->exec == "getElementosFromAcao") {
       $oRetorno->message = urlencode($oDaoPPaDotacao->erro_msg);
       break;
     }
+
+    //Verifica se existe a nova dotação
+    $oDaoDotacao    = db_utils::getDao("orcdotacao");
+    $sWhere         = " o58_orgao = {$oParam->oAlterar->o08_orgao} ";
+    $sWhere        .= " and o58_unidade = {$oParam->oAlterar->o08_unidade} ";
+    $sWhere        .= " and o58_funcao = {$oParam->oAlterar->o08_funcao} ";
+    $sWhere        .= " and o58_subfuncao = {$oParam->oAlterar->o08_subfuncao} ";
+    $sWhere        .= " and o58_programa = {$oParam->oAlterar->o08_programa} ";
+    $sWhere        .= " and o58_projativ = {$oParam->oAlterar->o08_projativ} ";
+    $sWhere        .= " and o58_codele = {$oDotacao->o08_elemento} ";
+    if ($oDotacao->o19_anousu != '') {
+        $sWhere    .= " and o58_anousu = {$oDotacao->o19_anousu} ";
+    } else {
+        $sWhere    .= " and o58_anousu = ";
+        $sWhere    .= $oDotacao->o05_anoreferencia > db_getsession("DB_anousu") ? db_getsession("DB_anousu") : $oDotacao->o05_anoreferencia;
+    }
+    
+    $sSqlDotacao    = $oDaoDotacao->sql_query_file(null, null, "o58_coddot", null, $sWhere);    
+    $rsDotacao      = $oDaoDotacao->sql_record($sSqlDotacao);
+    
+    if ($oDaoDotacao->numrows > 0) {
+        
+        $oOrcDotacao = db_utils::fieldsMemory($rsDotacao, 0);
+        
+        /**
+         * Caso não exista vinculo na ppadotacaoorcdotacao, cria
+         */
+        if ($oDotacao->o19_coddot == '') {
+
+            $oDaoPPaOrcDotacao = db_utils::getDao("ppadotacaoorcdotacao");
+            $oDaoPPaOrcDotacao->o19_ppadotacao = $oDotacao->o08_sequencial;
+            $oDaoPPaOrcDotacao->o19_coddot = $oOrcDotacao->o58_coddot;
+            $oDaoPPaOrcDotacao->o19_anousu = $oDotacao->o05_anoreferencia < db_getsession("DB_anousu") ? $oDotacao->o05_anoreferencia : db_getsession("DB_anousu");
+            $oDaoPPaOrcDotacao->incluir();
+            
+            if ($oDaoPPaOrcDotacao->erro_status == 0) {
+                $oRetorno->status = 2;echo $oDaoPPaOrcDotacao->erro_msg;die;
+                $oRetorno->message = urlencode("Não foi possível alterar a dotação.\n{$oDaoPPaOrcDotacao->erro_msg}");
+                break;
+            }
+
+        } elseif ($oOrcDotacao->o58_coddot != $oDotacao->o19_coddot) {
+
+            /**
+            * Caso exista e o cod dotação seja diferente do existente na ppadotacaoorcdotacao,
+            * atualiza a ppadotacaoorcdotacao
+            */
+            
+            $oDaoPPaOrcDotacao = db_utils::getDao("ppadotacaoorcdotacao");
+            $oDaoPPaOrcDotacao->o19_sequencial = $oDotacao->o19_sequencial;
+            $oDaoPPaOrcDotacao->o19_coddot = $oOrcDotacao->o58_coddot;
+            $oDaoPPaOrcDotacao->alterar($oDotacao->o19_sequencial);
+            if ($oDaoPPaOrcDotacao->erro_status == 0) {
+                $oRetorno->status = 2;
+                $oRetorno->message = urlencode("Não foi possível alterar a dotação.\n{$oDaoPPaOrcDotacao->erro_msg}");
+                break;
+            }
+
+        }
+   
+    } else {
+        
+        //Exclui o registro da ppadotacaoorcdotacao        
+        if ($oDotacao->o19_sequencial != '') {
+            $oDaoPPaOrcDotacao = db_utils::getDao("ppadotacaoorcdotacao");
+            $oDaoPPaOrcDotacao->excluir(null, "o19_sequencial={$oDotacao->o19_sequencial}");
+            if ($oDaoPPaOrcDotacao->erro_status == 0) {
+
+                $oRetorno->status = 2;
+                $oRetorno->message = urlencode("Não foi possível alterar a dotação.\n{$oDaoPPaOrcDotacao->erro_msg}");
+            }
+        }
+    }
+
   }
 
   if ($oRetorno->status == 1) {
