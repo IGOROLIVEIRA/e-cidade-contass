@@ -632,6 +632,23 @@ switch ($oParam->exec) {
                     $sMessagemInvalido = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
                     $lAcordoValido = true;
                 }
+
+            }
+
+            /**
+             * Controle de cadastro de fornecedor
+             */
+
+            $result_tipoparticipacao1 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 1");
+
+            if(pg_num_rows($result_tipoparticipacao1) == 0){
+                throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
+            }
+
+            $result_tipoparticipacao2 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 2");
+
+            if(pg_num_rows($result_tipoparticipacao2) == 0){
+                throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
             }
 
             $oLicitacao = db_utils::getDao('liclicita');

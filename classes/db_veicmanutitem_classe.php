@@ -51,7 +51,7 @@ class cl_veicmanutitem {
    var $campos = "
                  ve63_codigo = int4 = Código Seq.
                  ve63_veicmanut = int4 = Manutenção
-                 ve63_descr = varchar(40) = Descrição da Peça
+                 ve63_descr = varchar(50) = Descrição da Peça
                  ve63_quant = int4 = Quantidade
                  ve63_vlruni = float8 = Valor Unitário
                  ";

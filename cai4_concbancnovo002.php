@@ -392,9 +392,24 @@ function query_baixa($conta, $inicio, $fim, $condicao, $implantacao) {
     $sql .= "           AND corplacaixa.k82_data IS NULL ";
     $sql .= "           AND corplacaixa.k82_autent IS NULL ";
     $sql .= "           {$condicao} ";
-    $sql .= "       GROUP BY corrente.k12_conta, corrente.k12_data, discla.codret, c53_tipo, c71_coddoc, z01_numcgm ";
+   // $sql .= "       GROUP BY corrente.k12_conta, corrente.k12_data, discla.codret, c53_tipo, c71_coddoc, z01_numcgm ";
     $sql .= "    ) as x ";
-    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = k12_conta ";
+
+    $sql .= "
+    group by
+    data,
+    cod_doc,
+    valor_credito,
+    codigo,
+    tipo,
+    k12_conta,
+    tipo_doc,
+    numcgm,
+    ordem,
+    credor
+    ";
+    $sql .= " ) as xx ";
+    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = conta ";
     $sql .= "        AND conc.k172_data = data ";
     $sql .= "        AND conc.k172_coddoc = cod_doc ";
     $sql .= "        AND conc.k172_codigo = codigo::text ";
@@ -403,7 +418,6 @@ function query_baixa($conta, $inicio, $fim, $condicao, $implantacao) {
     $sql .= "        ((data between '{$inicio}' AND '{$fim}' AND k172_dataconciliacao IS NULL) ";
     $sql .= "            {$condicao_implantacao}  OR (k172_dataconciliacao > '{$fim}' ";
     $sql .= "            AND data < '{$fim}')) ";
-    $sql .= " ) as xx ";
 
     return $sql;
 }
@@ -968,7 +982,7 @@ function query_baixa_padrao() {
     $sql = " SELECT ";
     $sql .= "     0 as tipo_lancamento, ";
     $sql .= "     data, ";
-    $sql .= "     data_conciliacao, ";
+    $sql .= "        k172_dataconciliacao data_conciliacao, ";
     $sql .= "     cod_doc::text cod_doc, ";
     $sql .= "     valor_debito, ";
     $sql .= "     valor_credito, ";
@@ -982,8 +996,8 @@ function query_baixa_padrao() {
     $sql .= " FROM ( ";
     $sql .= "    SELECT ";
     $sql .= "        data, ";
-    $sql .= "        valor_debito, ";
-    $sql .= "        k172_dataconciliacao data_conciliacao, ";
+    $sql .= "        SUM(valor_debito) valor_debito, ";
+    $sql .= "            k12_conta as conta, ";
     $sql .= "        valor_credito, ";
     $sql .= "        codigo :: text, ";
     $sql .= "        tipo :: text, ";
@@ -996,14 +1010,23 @@ function query_baixa_padrao() {
     $sql .= "       SELECT ";
     $sql .= "            corrente.k12_conta, ";
     $sql .= "            corrente.k12_data as data, ";
-    $sql .= "            SUM(c70_valor) as valor_debito, ";
+    $sql .= "            CASE ";
+    $sql .= "               WHEN conlancamdoc.c71_coddoc = 418 THEN -1 * c70_valor ";
+    $sql .= "               ELSE c70_valor ";
+    $sql .= "            END as valor_debito, ";
     $sql .= "            0 as valor_credito, ";
     $sql .= "            discla.codret as codigo, ";
     $sql .= "            'baixa' :: text as tipo, ";
     $sql .= "            0 as ordem, ";
     $sql .= "            z01_nome credor, ";
-    $sql .= "            conhistdoc.c53_tipo tipo_doc, ";
-    $sql .= "            c71_coddoc cod_doc, ";
+    $sql .= "             CASE
+    WHEN conlancamdoc.c71_coddoc = 418
+    THEN 100
+    ELSE conhistdoc.c53_tipo END as tipo_doc, ";
+    $sql .= "             CASE
+    WHEN conlancamdoc.c71_coddoc = 418
+    THEN 100
+    ELSE c71_coddoc END as cod_doc, ";
     $sql .= "            z01_numcgm numcgm ";
     $sql .= "       FROM corrente ";
     $sql .= "       LEFT JOIN corhist on corhist.k12_id = corrente.k12_id ";
@@ -1043,9 +1066,24 @@ function query_baixa_total($conta, $inicio, $fim, $implantacao) {
     $sql .= "           AND corplacaixa.k82_id IS NULL ";
     $sql .= "           AND corplacaixa.k82_data IS NULL ";
     $sql .= "           AND corplacaixa.k82_autent IS NULL ";
-    $sql .= "       GROUP BY corrente.k12_conta, corrente.k12_data, discla.codret, c53_tipo, c71_coddoc, z01_numcgm ";
+    //$sql .= "       GROUP BY corrente.k12_conta, corrente.k12_data, discla.codret, c53_tipo, c71_coddoc, z01_numcgm ";
     $sql .= "    ) as x ";
-    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = k12_conta ";
+
+    $sql .= "
+    group by
+    data,
+    cod_doc,
+    valor_credito,
+    codigo,
+    tipo,
+    k12_conta,
+    tipo_doc,
+    numcgm,
+    ordem,
+    credor
+    ";
+    $sql .= " ) as xx ";
+    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = conta ";
     $sql .= "        AND conc.k172_data = data ";
     $sql .= "        AND conc.k172_coddoc = cod_doc ";
     $sql .= "        AND conc.k172_codigo = codigo::text ";
@@ -1054,7 +1092,6 @@ function query_baixa_total($conta, $inicio, $fim, $implantacao) {
     $sql .= "        ((data between '{$inicio}' AND '{$fim}' AND k172_dataconciliacao IS NULL) ";
     $sql .= "            {$condicao_implantacao} OR (k172_dataconciliacao > '{$fim}' ";
     $sql .= "            AND data < '{$fim}')) ";
-    $sql .= " ) as xx ";
 
     return $sql;
 }

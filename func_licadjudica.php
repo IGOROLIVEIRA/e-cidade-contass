@@ -103,18 +103,6 @@ $sWhereContratos = " and 1 = 1 ";
             /**
              * QUANDO FOR ADJUDICACAO NAO DEVE RETORNAR PROCESSO QUE SAO REGISTRO DE PRECO
              */
-            if(isset($homologacao) &&trim($homologacao) == "1") {
-                $dbwhere .= "((liclicita.l20_tipnaturezaproced = 2 and l20_licsituacao in (1,10)) or (l20_licsituacao in (13,10))) and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
-             and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
-
-            }else{
-                $dbwhere .= "l20_licsituacao = 10 and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
-             and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and l202_datahomologacao is not null and ";
-                $dbwhere .= "liclicita.l20_codigo not in (select ac16_licitacao from acordo where ac16_licitacao = liclicita.l20_codigo) and ";
-            }
-            /**
-             * QUANDO FOR ADJUDICACAO NAO DEVE RETORNAR PROCESSO QUE SAO REGISTRO DE PRECO
-             */
             if(isset($adjudicacao) &&trim($adjudicacao) != ""){
                 $dbwhere .= "l20_tipnaturezaproced != 2 AND ";
             }
@@ -122,13 +110,13 @@ $sWhereContratos = " and 1 = 1 ";
              * INCLUSAO
              */
             if(isset($adjudicacao) && trim($adjudicacao) == "1"){
-                $dbwhere .= "l202_dataadjudicacao IS NULL AND l202_datahomologacao IS NULL AND ";
+                $dbwhere .= "l20_licsituacao = 1 and ";
             }
             /**
              * ALTERACAO
              */
             if(isset($adjudicacao) && trim($adjudicacao) == "2"){
-                $dbwhere .= "l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NULL AND ";
+                $dbwhere .= "l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NULL AND l20_licsituacao = 13 AND";
             }
 
             $sWhereModalidade = "";
@@ -145,53 +133,8 @@ $sWhereContratos = " and 1 = 1 ";
                 $sWhereContratos .= " and ac24_sequencial is null ";
             }
 
-            $sWhereContratos .= " AND liclicita.l20_codigo IN (SELECT DISTINCT liclicitem.l21_codliclicita
-                     FROM pcprocitem
-                     INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-                     INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-                     INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-                     INNER JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
-                     LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-                     LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-                     LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
-                     LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-                     LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-                     LEFT JOIN licitemobra ON licitemobra.obr06_pcmater = pcmater.pc01_codmater
-                     LEFT JOIN pcsubgrupo ON pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo
-                     LEFT JOIN pctipo ON pctipo.pc05_codtipo = pcsubgrupo.pc04_codtipo
-                     LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
-                     LEFT JOIN orcelemento ON orcelemento.o56_codele = solicitemele.pc18_codele
-                     AND orcelemento.o56_anousu = 2021
-                     LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
-                     LEFT JOIN empautitem ON empautitem.e55_autori = empautitempcprocitem.e73_autori
-                     AND empautitem.e55_sequen = empautitempcprocitem.e73_sequen
-                     LEFT JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
-                     LEFT JOIN cgm ON empautoriza.e54_numcgm = cgm.z01_numcgm
-                     LEFT JOIN empempaut ON empempaut.e61_autori = empautitem.e55_autori
-                     LEFT JOIN empempenho ON empempenho.e60_numemp = empempaut.e61_numemp
-                     LEFT JOIN liclicitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
-                     LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
-                     LEFT JOIN pcorcamitemlic ON liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem
-                     LEFT JOIN pcorcamitem ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
-                     LEFT JOIN pcorcamjulg ON pcorcamitem.pc22_orcamitem = pcorcamjulg.pc24_orcamitem
-                     LEFT JOIN pcorcamval ON (pc24_orcamitem,
-                                              pc24_orcamforne) = (pc23_orcamitem,
-                                                                  pc23_orcamforne)
-                     LEFT JOIN pcorcamforne ON pc24_orcamforne = pc21_orcamforne
-                     LEFT JOIN cgm cgmforncedor ON pcorcamforne.pc21_numcgm = cgmforncedor.z01_numcgm
-                     LEFT JOIN homologacaoadjudica ON l202_licitacao = l21_codliclicita
-                     LEFT JOIN itenshomologacao ON l203_homologaadjudicacao = l202_sequencial
-                     AND l203_item = pc81_codprocitem
-                     WHERE liclicitem.l21_codliclicita = liclicita.l20_codigo
-                         AND pc24_pontuacao = 1
-                         AND pc81_codprocitem NOT IN
-                             (SELECT l203_item
-                              FROM homologacaoadjudica
-                              INNER JOIN itenshomologacao ON l203_homologaadjudicacao = l202_sequencial
-                              WHERE l202_licitacao = liclicita.l20_codigo))";
-
-            //            $sWhereContratos .= " and (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
-            //                                      else true end) ";
+//            $sWhereContratos .= " and (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
+//                                      else true end) ";
 
             /**
              * ValidaFornecedor:
@@ -213,11 +156,8 @@ $sWhereContratos = " and 1 = 1 ";
                         $campos = "liclicita.*, liclicitasituacao.l11_sequencial";
                     }
                 }
-                if(isset($homologacao) &&trim($homologacao) == "1") {
-                    $campos .= ', l08_descr as dl_Situação';
-                }else{
-                    $campos .= ', l08_descr as dl_Situação,l202_dataadjudicacao,l202_datahomologacao,l202_sequencial';
-                }
+
+                $campos .= ', l08_descr as dl_Situação,l202_dataadjudicacao,l202_datahomologacao';
                 if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
                     $sql = $clliclicita->sql_queryContratosContass(null," " . $campos,"l20_codigo","l20_codigo = $chave_l20_codigo $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
                 }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
@@ -248,6 +188,7 @@ $sWhereContratos = " and 1 = 1 ";
                 }
 
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js);
+
 
             } else {
 

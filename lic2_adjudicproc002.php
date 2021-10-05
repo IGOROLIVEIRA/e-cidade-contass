@@ -49,9 +49,9 @@ db_postmemory($HTTP_SERVER_VARS);
 
 $dbinstit=db_getsession("DB_instit");
 
-$rsLicitacao=$clliclicita->sql_record($clliclicita->sql_query(null,"*","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10)"));
+$rsLicitacao=$clliclicita->sql_record($clliclicita->sql_query(null,"*","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10,13)"));
 
-$rsLicitacaoPregao=$clliclicita->sql_record($clliclicita->sql_query_equipepregao(null,"l45_numatonomeacao ","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10)"));
+$rsLicitacaoPregao=$clliclicita->sql_record($clliclicita->sql_query_equipepregao(null,"l45_numatonomeacao ","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10,13)"));
 
 if ($clliclicita->numrows == 0){
     db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não Julgada, ou licitação revogada');

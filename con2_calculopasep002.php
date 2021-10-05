@@ -821,7 +821,7 @@ ob_start();
               <td class="s5"><?=db_formatar(floatval(number_format($fPASEPRETIDO,2,'.','')),"f")?></td>
             </tr>
             <tr style=''>
-              <td class="s7 bdleft">RESULTADO DO CÁLCULO (b-c)</td>              
+              <td class="s7 bdleft">RESULTADO DO CÁLCULO (b-c)</td>
               <td class="s8"><?=db_formatar(floatval(number_format(($fTotalRecLiqIII*0.01),2,'.',''))-floatval(number_format($fPASEPRETIDO,2,'.','')),'f')?></td>
             </tr>
           </tbody>
