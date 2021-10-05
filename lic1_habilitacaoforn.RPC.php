@@ -22,7 +22,7 @@ switch ($oParam->exec) {
         $rsTipoCompra = $clliclicita->sql_record($clliclicita->getTipocomTribunal($oParam->l20_codigo));
         db_fieldsmemory($rsTipoCompra, 0)->l03_pctipocompratribunal;
 
-        if($l03_pctipocompratribunal == "100" || $l03_pctipocompratribunal == "101" || $l03_pctipocompratribunal == "103" || $l03_pctipocompratribunal == "104"){
+        if($l03_pctipocompratribunal == "100" || $l03_pctipocompratribunal == "101" || $l03_pctipocompratribunal == "102" || $l03_pctipocompratribunal == "103" || $l03_pctipocompratribunal == "104"){
             $rsfornecedor = $clcgm->sql_record($clcgm->sql_query_file($oParam->fornecedor));
             db_fieldsmemory($rsfornecedor, 0)->z01_cgccpf;
             if(strlen($z01_cgccpf) == 11){

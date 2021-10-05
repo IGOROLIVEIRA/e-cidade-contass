@@ -100,8 +100,8 @@ if ($oGet->iEmiteRetornados == "0") {
    * Pega todos que tenho data de retorno até o último dia do mês da data selecionada acima,
    * Ou todos que não possuam data de retorno
    */
-  $sWhere .= " and (r45_dtreto is null ) ";
-  //$sWhere .= " and (r45_dtreto is null ) /*or r45_dtreto >= ( '{$iAnoRetorno}' || '-' || {$iMesRetorno} || '-' || ndias({$iAnoRetorno}, {$iMesRetorno}) )::date )*/";
+  $dtRetorno = implode('-', array_reverse(explode('/', $iAfastadosFim)));var_dump($dtRetorno);
+  $sWhere .= " and (r45_dtreto is null  or r45_dtreto >= '$dtRetorno' )";
 
 }
 
