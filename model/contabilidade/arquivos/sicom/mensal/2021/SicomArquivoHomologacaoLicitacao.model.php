@@ -219,12 +219,13 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
     	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
     	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
     	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
-      LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
-      INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
+        LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
+        INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
     	INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
     	LEFT JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
     	LEFT JOIN aberlic112021 on (liclicitemlote.l04_descricao = aberlic112021.si47_dsclote  and aberlic112021.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
     	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+    	INNER JOIN itenshomologacao ON itenshomologacao.l203_homologaadjudicacao = homologacaoadjudica.l202_sequencial and l203_item = pc81_codprocitem
     	WHERE db_config.codigo =" . db_getsession("DB_instit") . "
     	AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao) =" . db_getsession("DB_anousu") . "
     	AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao) =" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
