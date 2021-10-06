@@ -493,7 +493,9 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	WHERE db_config.codigo= " . db_getsession("DB_instit") . "
 	AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")
-	and l202_datahomologacao is not null";
+	and l202_datahomologacao is not null
+	AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao) =" . db_getsession("DB_anousu") . "
+          AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao) =" . $this->sDataFinal['5'] . $this->sDataFinal['6'] ;
 
 
 		$rsResult40 = db_query($sSql);
