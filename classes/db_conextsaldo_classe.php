@@ -1,46 +1,46 @@
 <?
 //MODULO: contabilidade
 //CLASSE DA ENTIDADE conextsaldo
-class cl_conextsaldo { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $ces01_sequencial = 0; 
-   var $ces01_codcon = 0; 
-   var $ces01_reduz = 0; 
-   var $ces01_fonte = 0; 
-   var $ces01_valor = 0; 
-   var $ces01_anousu = 0; 
-   var $ces01_inst = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_conextsaldo {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $ces01_sequencial = 0;
+   var $ces01_codcon = 0;
+   var $ces01_reduz = 0;
+   var $ces01_fonte = 0;
+   var $ces01_valor = 0;
+   var $ces01_anousu = 0;
+   var $ces01_inst = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 ces01_sequencial = int8 = ces01_sequencial 
-                 ces01_codcon = int8 = Plano de contas 
-                 ces01_reduz = int8 = Reduzido 
-                 ces01_fonte = int8 = Fonte 
-                 ces01_valor = float8 = Valor 
-                 ces01_anousu = int8 = ces01_anousu 
-                 ces01_inst = int8 = ces01_inst 
+                 ces01_sequencial = int8 = ces01_sequencial
+                 ces01_codcon = int8 = Plano de contas
+                 ces01_reduz = int8 = Reduzido
+                 ces01_fonte = int8 = Fonte
+                 ces01_valor = float8 = Valor
+                 ces01_anousu = int8 = ces01_anousu
+                 ces01_inst = int8 = ces01_inst
                  ";
-   //funcao construtor da classe 
-   function cl_conextsaldo() { 
+   //funcao construtor da classe
+   function __construct() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("conextsaldo"); 
+     $this->rotulo = new rotulo("conextsaldo");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -63,9 +63,9 @@ class cl_conextsaldo {
      }
    }
    // funcao para inclusao
-   function incluir ($ces01_sequencial){ 
+   function incluir ($ces01_sequencial){
       $this->atualizacampos();
-     if($this->ces01_codcon == null ){ 
+     if($this->ces01_codcon == null ){
        $this->erro_sql = " Campo Plano de contas não informado.";
        $this->erro_campo = "ces01_codcon";
        $this->erro_banco = "";
@@ -74,7 +74,7 @@ class cl_conextsaldo {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ces01_reduz == null ){ 
+     if($this->ces01_reduz == null ){
        $this->erro_sql = " Campo Reduzido não informado.";
        $this->erro_campo = "ces01_reduz";
        $this->erro_banco = "";
@@ -83,7 +83,7 @@ class cl_conextsaldo {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ces01_fonte == null ){ 
+     if($this->ces01_fonte == null ){
        $this->erro_sql = " Campo Fonte não informado.";
        $this->erro_campo = "ces01_fonte";
        $this->erro_banco = "";
@@ -92,7 +92,7 @@ class cl_conextsaldo {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ces01_valor == null ){ 
+     if($this->ces01_valor == null ){
        $this->erro_sql = " Campo Valor não informado.";
        $this->erro_campo = "ces01_valor";
        $this->erro_banco = "";
@@ -101,7 +101,7 @@ class cl_conextsaldo {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ces01_anousu == null ){ 
+     if($this->ces01_anousu == null ){
        $this->erro_sql = " Campo ces01_anousu não informado.";
        $this->erro_campo = "ces01_anousu";
        $this->erro_banco = "";
@@ -110,7 +110,7 @@ class cl_conextsaldo {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ces01_inst == null ){ 
+     if($this->ces01_inst == null ){
        $this->erro_sql = " Campo ces01_inst não informado.";
        $this->erro_campo = "ces01_inst";
        $this->erro_banco = "";
@@ -120,16 +120,16 @@ class cl_conextsaldo {
        return false;
      }
      if($ces01_sequencial == "" || $ces01_sequencial == null ){
-       $result = db_query("select nextval('conextsaldo_ces01_sequencial_seq')"); 
+       $result = db_query("select nextval('conextsaldo_ces01_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: conextsaldo_ces01_sequencial_seq do campo: ces01_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: conextsaldo_ces01_sequencial_seq do campo: ces01_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->ces01_sequencial = pg_result($result,0,0); 
+       $this->ces01_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from conextsaldo_ces01_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $ces01_sequencial)){
@@ -140,10 +140,10 @@ class cl_conextsaldo {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->ces01_sequencial = $ces01_sequencial; 
+         $this->ces01_sequencial = $ces01_sequencial;
        }
      }
-     if(($this->ces01_sequencial == null) || ($this->ces01_sequencial == "") ){ 
+     if(($this->ces01_sequencial == null) || ($this->ces01_sequencial == "") ){
        $this->erro_sql = " Campo ces01_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -152,25 +152,25 @@ class cl_conextsaldo {
        return false;
      }
      $sql = "insert into conextsaldo(
-                                       ces01_sequencial 
-                                      ,ces01_codcon 
-                                      ,ces01_reduz 
-                                      ,ces01_fonte 
-                                      ,ces01_valor 
-                                      ,ces01_anousu 
-                                      ,ces01_inst 
+                                       ces01_sequencial
+                                      ,ces01_codcon
+                                      ,ces01_reduz
+                                      ,ces01_fonte
+                                      ,ces01_valor
+                                      ,ces01_anousu
+                                      ,ces01_inst
                        )
                 values (
-                                $this->ces01_sequencial 
-                               ,$this->ces01_codcon 
-                               ,$this->ces01_reduz 
-                               ,$this->ces01_fonte 
-                               ,$this->ces01_valor 
-                               ,$this->ces01_anousu 
-                               ,$this->ces01_inst 
+                                $this->ces01_sequencial
+                               ,$this->ces01_codcon
+                               ,$this->ces01_reduz
+                               ,$this->ces01_fonte
+                               ,$this->ces01_valor
+                               ,$this->ces01_anousu
+                               ,$this->ces01_inst
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "conExtSaldo ($this->ces01_sequencial) nao Incluído. Inclusao Abortada.";
@@ -214,16 +214,16 @@ class cl_conextsaldo {
        }
      }*/
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($ces01_sequencial=null) { 
+   function alterar ($ces01_sequencial=null) {
       $this->atualizacampos();
      $sql = " update conextsaldo set ";
      $virgula = "";
-     if(trim($this->ces01_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_sequencial"])){ 
+     if(trim($this->ces01_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_sequencial"])){
        $sql  .= $virgula." ces01_sequencial = $this->ces01_sequencial ";
        $virgula = ",";
-       if(trim($this->ces01_sequencial) == null ){ 
+       if(trim($this->ces01_sequencial) == null ){
          $this->erro_sql = " Campo ces01_sequencial não informado.";
          $this->erro_campo = "ces01_sequencial";
          $this->erro_banco = "";
@@ -233,10 +233,10 @@ class cl_conextsaldo {
          return false;
        }
      }
-     if(trim($this->ces01_codcon)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_codcon"])){ 
+     if(trim($this->ces01_codcon)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_codcon"])){
        $sql  .= $virgula." ces01_codcon = $this->ces01_codcon ";
        $virgula = ",";
-       if(trim($this->ces01_codcon) == null ){ 
+       if(trim($this->ces01_codcon) == null ){
          $this->erro_sql = " Campo Plano de contas não informado.";
          $this->erro_campo = "ces01_codcon";
          $this->erro_banco = "";
@@ -246,10 +246,10 @@ class cl_conextsaldo {
          return false;
        }
      }
-     if(trim($this->ces01_reduz)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_reduz"])){ 
+     if(trim($this->ces01_reduz)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_reduz"])){
        $sql  .= $virgula." ces01_reduz = $this->ces01_reduz ";
        $virgula = ",";
-       if(trim($this->ces01_reduz) == null ){ 
+       if(trim($this->ces01_reduz) == null ){
          $this->erro_sql = " Campo Reduzido não informado.";
          $this->erro_campo = "ces01_reduz";
          $this->erro_banco = "";
@@ -259,10 +259,10 @@ class cl_conextsaldo {
          return false;
        }
      }
-     if(trim($this->ces01_fonte)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_fonte"])){ 
+     if(trim($this->ces01_fonte)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_fonte"])){
        $sql  .= $virgula." ces01_fonte = $this->ces01_fonte ";
        $virgula = ",";
-       if(trim($this->ces01_fonte) == null ){ 
+       if(trim($this->ces01_fonte) == null ){
          $this->erro_sql = " Campo Fonte não informado.";
          $this->erro_campo = "ces01_fonte";
          $this->erro_banco = "";
@@ -272,10 +272,10 @@ class cl_conextsaldo {
          return false;
        }
      }
-     if(trim($this->ces01_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_valor"])){ 
+     if(trim($this->ces01_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_valor"])){
        $sql  .= $virgula." ces01_valor = $this->ces01_valor ";
        $virgula = ",";
-       if(trim($this->ces01_valor) == null ){ 
+       if(trim($this->ces01_valor) == null ){
          $this->erro_sql = " Campo Valor não informado.";
          $this->erro_campo = "ces01_valor";
          $this->erro_banco = "";
@@ -285,10 +285,10 @@ class cl_conextsaldo {
          return false;
        }
      }
-     if(trim($this->ces01_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_anousu"])){ 
+     if(trim($this->ces01_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_anousu"])){
        $sql  .= $virgula." ces01_anousu = $this->ces01_anousu ";
        $virgula = ",";
-       if(trim($this->ces01_anousu) == null ){ 
+       if(trim($this->ces01_anousu) == null ){
          $this->erro_sql = " Campo ces01_anousu não informado.";
          $this->erro_campo = "ces01_anousu";
          $this->erro_banco = "";
@@ -298,10 +298,10 @@ class cl_conextsaldo {
          return false;
        }
      }
-     if(trim($this->ces01_inst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_inst"])){ 
+     if(trim($this->ces01_inst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ces01_inst"])){
        $sql  .= $virgula." ces01_inst = $this->ces01_inst ";
        $virgula = ",";
-       if(trim($this->ces01_inst) == null ){ 
+       if(trim($this->ces01_inst) == null ){
          $this->erro_sql = " Campo ces01_inst não informado.";
          $this->erro_campo = "ces01_inst";
          $this->erro_banco = "";
@@ -346,7 +346,7 @@ class cl_conextsaldo {
        }
      }*/
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "conExtSaldo nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->ces01_sequencial;
@@ -374,11 +374,11 @@ class cl_conextsaldo {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($ces01_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($ces01_sequencial=null,$dbwhere=null) {
 
      /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
@@ -387,7 +387,7 @@ class cl_conextsaldo {
        if ($dbwhere==null || $dbwhere=="") {
 
          $resaco = $this->sql_record($this->sql_query_file($ces01_sequencial));
-       } else { 
+       } else {
          $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
        }
        if (($resaco != false) || ($this->numrows!=0)) {
@@ -422,7 +422,7 @@ class cl_conextsaldo {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "conExtSaldo nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$ces01_sequencial;
@@ -450,11 +450,11 @@ class cl_conextsaldo {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -476,8 +476,8 @@ class cl_conextsaldo {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $ces01_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $ces01_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -497,8 +497,8 @@ class cl_conextsaldo {
      $sql2 = "";
      if($dbwhere==""){
        if($ces01_sequencial!=null ){
-         $sql2 .= " where conextsaldo.ces01_sequencial = $ces01_sequencial "; 
-       } 
+         $sql2 .= " where conextsaldo.ces01_sequencial = $ces01_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -514,8 +514,8 @@ class cl_conextsaldo {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $ces01_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $ces01_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -531,8 +531,8 @@ class cl_conextsaldo {
      $sql2 = "";
      if($dbwhere==""){
        if($ces01_sequencial!=null ){
-         $sql2 .= " where conextsaldo.ces01_sequencial = $ces01_sequencial "; 
-       } 
+         $sql2 .= " where conextsaldo.ces01_sequencial = $ces01_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
