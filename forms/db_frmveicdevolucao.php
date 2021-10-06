@@ -217,7 +217,13 @@ db_app::load("prototype.js");
           }
           ?>
           </td>
-        </tr>
+        </tr>   
+        
+                <?
+                $x = array("f" => "Não", "t" => "Sim");
+                db_select('ve61_importado', $x, true, 1, 'hidden'); 
+                ?>
+        
       </table>
     </fieldset>
   </td>
