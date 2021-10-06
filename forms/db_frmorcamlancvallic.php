@@ -178,6 +178,30 @@ $clrotulo = new rotulocampo;
         width: 252px;
     }
 
+    .bensDesclassificados{
+        background-color: #E4F471;
+    }
+
+    .bensMeEpp{
+        background-color: #c0bfff;
+    }
+
+    .bensSemCotacao{
+        background-color: red;
+    }
+
+    .bensDesclassificados, .bensMeEpp, .bensSemCotacao{
+        font-size: 9px;
+    }
+
+    .table__legenda td{
+        font-family: 'Arial, Helvetica, sans-serif';
+    }
+
+    #form2{
+        margin-bottom: 0px;
+    }
+
 </style>
 <form name="form1" method="post">
     <center>
@@ -384,10 +408,23 @@ $clrotulo = new rotulocampo;
                     </tr>\n";
                     echo "
                     <tr>
-                        <td colspan='2' height='30'>&nbsp;
-                        
-                        </td>
                     </tr>\n
+                    <tr>
+                        <td>
+                            <div style='width: 100%; margin-bottom: 12px;'>
+                                <fieldset style='width: 340px'>
+                                    <legend>Legenda</legend>
+                                    <table colspan='0' class='table__legenda'>
+                                        <tr>
+                                        <td align='center' class='bensDesclassificados' height='15px' width='120px'><b>Itens desclassificados</b></td>
+                                        <td align='center' class='bensSemCotacao' height='15px' width='120px'><b>Itens sem cotação</b></td>
+                                        <td align='center' class='bensMeEpp' height='15px' width='100px'><b>Itens ME/EPP</b></td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan='2' align='center'>
                         <input name='".($db_opcao==1?"incluir":"alterar")."' type='submit' id='db_opcao' value='".($db_opcao==1?"Incluir":"Alterar")."' ".($db_botao==false?"disabled":"")." onclick='return  js_buscarcod();'>

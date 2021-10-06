@@ -212,7 +212,7 @@ function js_liberaexclusao(value){
                                            "(e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))
                                              and pc10_instit = ".db_getsession("DB_instit")." {$sWhere}");
     }
-//    echo $sSqlProc;
+    // echo $sSqlProc;
     $result_pcproc=$clpcproc->sql_record($sSqlProc);
     if (isset($codproc)&&$codproc!=""){
       $couni="codproc";

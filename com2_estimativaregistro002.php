@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("fpdf151/scpdf.php");
@@ -37,46 +37,46 @@ include("classes/db_solicitaregistropreco_classe.php");
 include("classes/db_db_departorg_classe.php");
 include("classes/db_solicita_classe.php");
 
-$clsolicita							 = new cl_solicita;
-$clsolicitem 						 = new cl_solicitem;
-$classinatura 					 = new cl_assinatura;
-$clpcparam  						 = new cl_pcparam;
-$clpcsugforn 						 = new cl_pcsugforn;
-$clempparametro	  			 = new cl_empparametro;
+$clsolicita               = new cl_solicita;
+$clsolicitem              = new cl_solicitem;
+$classinatura            = new cl_assinatura;
+$clpcparam               = new cl_pcparam;
+$clpcsugforn              = new cl_pcsugforn;
+$clempparametro           = new cl_empparametro;
 $clsolicitaregistropreco = new cl_solicitaregistropreco;
 $cldb_departorg          = new cl_db_departorg;
 
-$sqlpref = "select * from db_config where codigo = ".db_getsession("DB_instit");
+$sqlpref = "select * from db_config where codigo = " . db_getsession("DB_instit");
 
 $resultpref = db_query($sqlpref);
-db_fieldsmemory($resultpref,0);
+db_fieldsmemory($resultpref, 0);
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 // die($clpcparam->sql_query_file(null,"pc30_comsaldo,pc30_permsemdotac,pc30_gerareserva,pc30_libdotac"));
-$result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_comsaldo,pc30_permsemdotac,pc30_gerareserva,pc30_libdotac"));
-db_fieldsmemory($result_pcparam,0);
+$result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_comsaldo,pc30_permsemdotac,pc30_gerareserva,pc30_libdotac"));
+db_fieldsmemory($result_pcparam, 0);
 
 // die($clempparametro->sql_query_file(db_getsession("DB_anousu"),"e30_numdec"));
-$result02 = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"),"e30_numdec"));
-if($clempparametro->numrows>0){
-  db_fieldsmemory($result02,0);
+$result02 = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"), "e30_numdec"));
+if ($clempparametro->numrows > 0) {
+  db_fieldsmemory($result02, 0);
 }
 
 $where_solicita = "";
-if(isset($ini) && trim($ini)!=""){
+if (isset($ini) && trim($ini) != "") {
   $where_solicita = " pc10_numero >= $ini";
 }
-if(isset($fim) && trim($fim)!=""){
-  if($where_solicita == ""){
+if (isset($fim) && trim($fim) != "") {
+  if ($where_solicita == "") {
     $where_solicita = " pc10_numero <= $fim";
-  }else{
+  } else {
     $where_solicita = " pc10_numero between $ini and $fim";
   }
 }
 
 $and = "";
-if($where_solicita!=""){
+if ($where_solicita != "") {
   $and = " and ";
 }
 
@@ -90,58 +90,59 @@ $sCampos .= "(select pc53_solicitapai";
 $sCampos .= "   from solicita s inner join solicitavinculo on pc53_solicitafilho = s.pc10_numero";
 $sCampos .= "  where s.pc10_numero = solicita.pc10_numero) as codigosolicitacaopai";
 
-$where_solicita .= $and ." pc10_solicitacaotipo = 4 ";
+$where_solicita .= $and . " pc10_solicitacaotipo = 4 ";
 
-$result_pesq_solicita = $clsolicita->sql_record($clsolicita->sql_query_estregistro(null,$sCampos,null,$where_solicita));
+$result_pesq_solicita = $clsolicita->sql_record($clsolicita->sql_query_estregistro(null, $sCampos, null, $where_solicita));
 $numrows_solicita = $clsolicita->numrows;
 
-if($numrows_solicita == 0){
-	db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum Registro Encontrado! ");
+if ($numrows_solicita == 0) {
+  db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum Registro Encontrado! ");
 }
 $pdf = new scpdf();
 $pdf->Open();
-$pdf1 = new db_impcarne($pdf,'17');
-$pdf1->objpdf->SetTextColor(0,0,0);
+$pdf1 = new db_impcarne($pdf, '17');
+$pdf1->objpdf->SetTextColor(0, 0, 0);
 $pdf1->Snumero_ant = "";
 
 $pdf1->casadec    = $e30_numdec;
 
-for($contador=0;$contador<$numrows_solicita;$contador++){
-  db_fieldsmemory($result_pesq_solicita,$contador);
+for ($contador = 0; $contador < $numrows_solicita; $contador++) {
+  db_fieldsmemory($result_pesq_solicita, $contador);
   $pdf1->prefeitura = $nomeinst;
-  $pdf1->logo			  = $logo;
+  $pdf1->logo        = $logo;
   $pdf1->enderpref  = $ender;
   $pdf1->municpref  = $munic;
-  $pdf1->telefpref  = $telef; 
+  $pdf1->telefpref  = $telef;
   $pdf1->emailpref  = $email;
-  $pdf1->emissao    = date("Y-m-d",db_getsession("DB_datausu"));
+  $pdf1->emissao    = date("Y-m-d", db_getsession("DB_datausu"));
   $pdf1->cgcpref    = $cgc;
-  $sec  = "______________________________"."\n"."Secretaria da Fazenda";
-  $pref = "______________________________"."\n"."Prefeito";
+  $sec  = "______________________________" . "\n" . "Secretaria da Fazenda";
+  $pref = "______________________________" . "\n" . "Prefeito";
 
   $pdf1->secfaz           = $classinatura->assinatura(1002);
   $pdf1->nompre           = $classinatura->assinatura(1000);
-    
+
   $pdf1->Snumero          = $pc10_numero;
   $pdf1->Sdata            = $pc10_data;
   $pdf1->Svalor           = 0; //$pc12_vlrap;
   $pdf1->Sresumo          = $pc10_resumo;
-  $pdf1->Stipcom          = ''; //$pc50_descr;  
+  $pdf1->Stipcom          = ''; //$pc50_descr;
   $pdf1->Sdepart          = $descrdepto;
   $pdf1->Srespdepart      = $nomeresponsavel;
   $pdf1->Susuarioger      = $nome;
-	$pdf1->StipoSolicitacao = $pc52_sequencial.$pc52_descricao;
-	$pdf1->Stiposolicitacaopai   = $tiposolicitacaopai;
-	$pdf1->Scodigosolicitacaopai = $codigosolicitacaopai;
-	  
-  $result_orgunid   = $cldb_departorg->sql_record($cldb_departorg->sql_query_orgunid($coddepto,db_getsession('DB_anousu'),"o40_descr,o41_descr"));
-  db_fieldsmemory($result_orgunid,0);  
+  $pdf1->StipoSolicitacao = $pc52_sequencial . $pc52_descricao;
+  $pdf1->Stiposolicitacaopai   = $tiposolicitacaopai;
+  $pdf1->Scodigosolicitacaopai = $codigosolicitacaopai;
+
+  $result_orgunid   = $cldb_departorg->sql_record($cldb_departorg->sql_query_orgunid($coddepto, db_getsession('DB_anousu'), "o40_descr,o41_descr"));
+  db_fieldsmemory($result_orgunid, 0);
   $pdf1->Sorgao     = $o40_descr;
   $pdf1->Sunidade   = $o41_descr;
 
   $result_pesq_pcdotac = $clsolicitem->sql_record(
-  														$clsolicitem->sql_query_relmod2(null,
-  																			"distinct '' as estrutural,
+    $clsolicitem->sql_query_relmod2(
+      null,
+      "distinct '' as estrutural,
   																								'' as o55_projativ,
   																								'' as o55_descr,
   																								'' as o15_codigo,
@@ -172,11 +173,14 @@ for($contador=0;$contador<$numrows_solicita;$contador++){
   																								0 as m61_usaquant,
   																								'' as so56_elemento,
   																								'' as descrele,
-  																								'' as o41_descr",
-  																								'pc11_seq,
+  																								'' as o41_descr,
+                                                  pc11_reservado",
+      'pc11_seq,
   																								pc13_codigo',
-  																								"pc11_numero=$pc10_numero"));
-  
+      "pc11_numero=$pc10_numero"
+    )
+  );
+
   $numrows_pcdotac = $clsolicitem->numrows;
   $pdf1->recorddasdotac  = $result_pesq_pcdotac;
   $pdf1->linhasdasdotac  = $numrows_pcdotac;
@@ -195,7 +199,7 @@ for($contador=0;$contador<$numrows_solicita;$contador++){
   $pdf1->dtiporec        = 'o15_descr';
   $pdf1->ddescrest       = 'descrestrutural';
 
-  $pdf1->item	           = 'pc11_seq';
+  $pdf1->item             = 'pc11_seq';
   $pdf1->quantitem       = 'pc11_quant';
   $pdf1->valoritem       = 'pc11_vlrun';
   $pdf1->descricaoitem   = 'pc01_descrmater';
@@ -213,7 +217,7 @@ for($contador=0;$contador<$numrows_solicita;$contador++){
   $pdf1->selemento       = 'so56_elemento';
   $pdf1->sdelemento      = 'descrele';
 
-  $result_pesq_pcsugforn = $clpcsugforn->sql_record($clpcsugforn->sql_query($pc10_numero,null,"distinct z01_numcgm,z01_nome,z01_ender,z01_numero,z01_munic,z01_telef,z01_cgccpf",'z01_numcgm'));
+  $result_pesq_pcsugforn = $clpcsugforn->sql_record($clpcsugforn->sql_query($pc10_numero, null, "distinct z01_numcgm,z01_nome,z01_ender,z01_numero,z01_munic,z01_telef,z01_cgccpf", 'z01_numcgm'));
   $numrows_pcsugforn = $clpcsugforn->numrows;
   $pdf1->recorddosfornec = $result_pesq_pcsugforn;
   $pdf1->linhasdosfornec = $numrows_pcsugforn;
@@ -227,9 +231,8 @@ for($contador=0;$contador<$numrows_solicita;$contador++){
   $pdf1->imprime();
   $pdf1->Snumero_ant = $pc10_numero;
 }
-if(isset($argv[1])){
+if (isset($argv[1])) {
   $pdf1->objpdf->Output("/tmp/teste.pdf");
-}else{
+} else {
   $pdf1->objpdf->Output();
 }
-?>

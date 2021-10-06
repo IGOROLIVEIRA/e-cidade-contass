@@ -176,8 +176,14 @@ function js_calcvaltot(valor,param,nome){
       document.getElementById("valor_"+param).value = valortotal.toFixed(2);
 
       if(valortotal==0){
-      eval("document.form1."+nome+".value='0.00'");
-    }
+          eval("document.form1."+nome+".value='0.00'");
+      }
+
+      let elemento = document.getElementById('vlrun_'+param);
+      let oLinha = elemento.parentElement.parentElement;
+
+      js_insereBordasItens(oLinha);
+      
   }else{
     eval("document.form1.vlrun_"+param+".value=''");
   }
@@ -342,6 +348,31 @@ function js_calcvaltaxa(valor,param,nome){
          border-bottom-color: <?=$cor?>;
          background-color: <?=$corfundo?>;
        }
+<?$corfundomeepp="c0bfff"?>
+.bordas_corp_meepp{
+         border: 1px solid #cccccc;
+         border-right-color: <?=$cor?>;
+         border-bottom-color: <?=$cor?>;
+         background-color: <?=$corfundomeepp?>;
+       }
+
+.bordas_orcamento td{
+    border-left: 0px;
+    border-right: 0px;
+    border-color: red;
+}       
+
+.bordas_orcamento input{
+    border-color: red;
+}
+
+.bensDesclassificados{
+  background-color: <?=$corfundo?>;
+}
+
+.bensMeEpp{
+  background-color: <?=$corfundomeepp?>;
+}
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -420,7 +451,8 @@ function js_calcvaltaxa(valor,param,nome){
                                                            pc23_perctaxadesctabela,
                                                            pc23_percentualdesconto,
                                                            pc01_tabela,
-                                                           pc01_taxa",
+                                                           pc01_taxa,
+                                                           pc11_reservado",
                                                            $ordem,
                                                            "pc20_codorc={$pc20_codorc}
                                                             and pc21_orcamforne = {$pc21_orcamforne}
@@ -457,10 +489,10 @@ function js_calcvaltaxa(valor,param,nome){
           <td class='bordas_corp' colspan='$cols' align='left' nowrap ><b> Processo de Compras Nº $pc81_codproc </b></td>
         </tr>
         <tr class='bordas'>
-          <td nowrap class='bordas' align='center'><a href='#' onClick='js_pcorcamdescla();' title='Desclassificar itens'>M</a></td>
-          <td nowrap class='bordas' align='center'>Item</td>
-          <td nowrap class='bordas' align='center'>Seq. Item</td>
-          <td nowrap class='bordas' align='center'><b>Descrição</b></td>";
+          <td nowrap class='bordas' width='10%' align='center'><a href='#' onClick='js_pcorcamdescla();' title='Desclassificar itens'>M</a></td>
+          <td nowrap class='bordas' width='10%' align='center'>Item</td>
+          <td nowrap class='bordas' width='10%' align='center'>Seq. Item</td>
+          <td nowrap class='bordas' width='55%' align='center'><b>Descrição</b></td>";
 
           if ($mostra_lote == true){
                echo "<td nowrap class='bordas' align='center'><b>Lote</b></td>";
@@ -512,27 +544,32 @@ function js_calcvaltaxa(valor,param,nome){
            $disabled = "disabled";
            $class    = "bordas_corp_descla";
       } else {
-           $disabled = "";
-           $class    = "bordas_corp";
+            // if($pc11_reservado == 't'){
+            //     $disabled = "";
+            //     $class    = "bordas_corp_meepp";
+            // }else{
+            $disabled = "";
+            $class    = "bordas_corp";
+            // }
       }
-
+      
         $check = "chk_".$pc22_orcamitem."_".$descr_lote;
 
         echo "
-        <tr class='$class' width='15%'>
-          <td align='center'  class='$class' width='15%'>
+        <tr class='$class " . ($pc11_reservado == 't' ? 'bordas_corp_meepp' : '') . "' width='15%'>
+          <td align='center'  class='$class' width='10%'>
            <input name='chk_$pc22_orcamitem' type='checkbox' value='$check' onClick='js_desclassifica(\"$descr_lote\");' $disabled>
           </td>
 
-          <td align='left'    class='$class' width='15%'>
+          <td align='left'    class='$class' width='10%'>
             $pc81_codprocitem
           </td>
 
-          <td align='center' class='$class' width='15%'>
+          <td align='center' class='$class' width='10%'>
             $l21_ordem
           </td>
 
-          <td align='left' nowrap class='$class' width='55%' onMouseOver=\"js_mostra_text(true,'div_text_$pc22_orcamitem',event,this);\" onMouseOut=\"js_mostra_text(false,'div_text_$pc22_orcamitem',event,this);\">
+          <td align='left' class='$class' style='padding-left: 10px;' width='55%' onMouseOver=\"js_mostra_text(true,'div_text_$pc22_orcamitem',event,this);\" onMouseOut=\"js_mostra_text(false,'div_text_$pc22_orcamitem',event,this);\">
             $pc01_descrmater
           </td>";
 
@@ -541,15 +578,15 @@ function js_calcvaltaxa(valor,param,nome){
               db_fieldsmemory($res_liclicitemlote,$ii);
 
               if ($l04_liclicitem == $l21_codigo){
-                   echo "<td align='center' class='bordas_corp' width='55%'>".$l04_descricao."</td>";
+                   echo "<td align='center' class='bordas_corp' width='80%'>".$l04_descricao."</td>";
                    break;
               }
          }
     }
 
     echo "
-    <td align='center'  class='$class'>";
-    db_input("obs_$pc22_orcamitem",30,$Ipc23_obs,true,'text',$db_opcao,"onchange='document.form1.vlrun_$pc22_orcamitem.select();' $disabled");
+    <td align='center'  class='$class' width='30%'>";
+    db_input("obs_$pc22_orcamitem",20,$Ipc23_obs,true,'text',$db_opcao,"onchange='document.form1.vlrun_$pc22_orcamitem.select();' $disabled");
         echo "
           </td>
 <td align='center' nowrap  class='$class'>";
@@ -803,6 +840,58 @@ function js_desclassifica(lote){
 function js_cancdescla(orcamento,licitacao){
   js_OpenJanelaIframe('top.corpo','db_iframe_cancdescla','lic1_pcorcamdesclacanc001.php?pc20_codorc='+orcamento+'&l20_codigo='+licitacao,'Cancelamento da desclassificacao',true);
 }
+
+
+function js_insereBordasItens(objeto){
+    
+    let aItens = document.querySelectorAll('tr.bordas_corp');
+    let registro_preco = "<?=$l20_usaregistropreco?>";
+    let indexVlUnitario  =  registro_preco == 't' ? 11 : 9 ;
+
+    for(let count = 2; count < aItens.length; count++){
+        
+        // Ignora as linhas que contém a informação do processo de compras 
+        if(!aItens[count].cells[indexVlUnitario]){
+            continue;
+        }
+
+        let valorUnit = aItens[count].cells[indexVlUnitario].children[0].value;
+
+        if(!objeto && valorUnit == ''){
+            aItens[count].cells[4].classList.add('bordas_orcamento');
+
+            if(registro_preco == 't'){
+                if(aItens[count].cells[11].children[0].readOnly){
+                  aItens[count].cells[10].classList.add('bordas_orcamento');    
+                }else{
+                    aItens[count].cells[11].classList.add('bordas_orcamento');
+                }
+
+                if(!aItens[count].cells[12].children[0].readOnly){
+                    aItens[count].cells[12].classList.add('bordas_orcamento');
+                }
+                
+            }else{
+                aItens[count].cells[9].classList.add('bordas_orcamento');
+                aItens[count].cells[10].classList.add('bordas_orcamento');
+            }
+        }
+
+        if(objeto){
+            if(objeto.cells[1].innerText == aItens[count].cells[1].innerText){
+                if(valorUnit){
+                    aItens[count].classList.remove('bordas_orcamento');
+                }else{
+                    aItens[count].classList.add('bordas_orcamento');
+                }
+            }
+        }
+            
+    }
+}
+
+js_insereBordasItens();
+
 </script>
 
 <script src="scripts/roundDecimal.js"></script>

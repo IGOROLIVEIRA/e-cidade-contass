@@ -222,6 +222,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                 sum(pc11_quant) as pc11_quant,
                 pc69_seq,
                 pc11_seq
+                pc11_reservado
 from (
 SELECT DISTINCT pc01_servico,
                 pc11_codigo,
@@ -241,6 +242,7 @@ SELECT DISTINCT pc01_servico,
                 (pc11_quant * pc11_vlrun) AS pc11_valtot,
                 m61_usaquant,
                 pc69_seq
+                pc11_reservado
 FROM solicitem
 INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
 LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
@@ -262,7 +264,7 @@ WHERE pc81_codproc = {$codigo_preco}
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
                 pc11_seq,
-                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq ) as matquan join
+                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq,pc11_reservado ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
                 {$tipoReferencia} as si02_vlprecoreferencia,
@@ -294,6 +296,26 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
                 //die($sSql);
                 $rsResult = db_query($sSql) or die(pg_last_error());
                 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
+                // die($sSql);
+                $rsResult = db_query($sSql) or die(pg_last_error());
+                $oLinha = null;
+
+                $sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
+                //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+                $sWhere .= " AND db03_instit = db02_instit ";
+                $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
+
+                $cl_docparag = new cl_db_docparag;
+
+                $sAssinatura = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
+                $rs = $cl_docparag->sql_record($sAssinatura);
+                $oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
+
+
+                $sWhere  = " db02_descr like 'RESPONSÁVEL PELA COTAÇÃO' ";
+                //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+                $sWhere .= " AND db03_instit = db02_instit ";
+                $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
 
                 if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
 

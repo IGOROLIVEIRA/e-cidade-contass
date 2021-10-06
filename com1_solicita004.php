@@ -518,7 +518,9 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 						db_fieldsmemory($result_solicitemunid, 0);
 						$clsolicitemunid->pc17_unid = $pc17_unid;
 						$clsolicitemunid->pc17_quant = $pc17_quant;
+						$clsolicitemunid->pc17_codigo = $pc11_codigo;
 						$clsolicitemunid->incluir($pc11_codigo);
+
 						if ($clsolicitemunid->erro_status == 0) {
 
 							$sqlerro = true;

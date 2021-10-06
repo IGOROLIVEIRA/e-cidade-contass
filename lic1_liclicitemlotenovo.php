@@ -316,6 +316,12 @@ if (isset($incluir) && trim($incluir) != "") {
 
         if (isset($erro_msg) && trim($erro_msg) != "") {
             db_msgbox($erro_msg);
+            if ($erro_msg && !$sqlerro && $db_opcao != 3) {
+                echo "
+                       <script>
+                            parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';
+                       </script>";
+            }
 
             /**
              * Se todos os itens foram vinculados a algum lote redireciona para a rotina de editais
