@@ -153,7 +153,7 @@ db_postmemory($HTTP_POST_VARS);
 				<td colspan="2" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Com Quebra :</strong>
                <?
                  $x = array("f"=>"NÃO","t"=>"SIM");
-                 db_select('com_quebra',$x,true,4,"");
+                 db_select('com_quebra',$x,true,4,"onchange='js_mostrarFicha();'");
                ?>
 				</td>
       </tr>
@@ -163,6 +163,14 @@ db_postmemory($HTTP_POST_VARS);
           db_input('com_quebra', 3, 0, true, 'hidden', 3);
         }
       ?>
+      <tr>
+        <td id="row_ficha" colspan="2" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Mostrar Ficha :</strong>
+               <?
+                 $x = array("f"=>"NÃO","t"=>"SIM");
+                 db_select('com_ficha',$x,true,4,"");
+               ?>
+        </td>
+      </tr>
   <tr>
     <td colspan="2" align = "center"> 
       <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
@@ -191,6 +199,7 @@ function js_emite(){
   qry+= "&previdencia="+document.form1.previdencia.value;
   qry+= "&vinc="+document.form1.atinpen.value;
   qry+= "&com_quebra="+document.form1.com_quebra.value;
+  qry+= "&com_ficha="+document.form1.com_ficha.value;
   if(document.form1.complementar){
     qry+= "&semest="+document.form1.complementar.value;
   }
@@ -257,4 +266,13 @@ function js_emite(){
   jan.moveTo(0,0);
 
 }
+function js_mostrarFicha() {
+  if (document.form1.com_quebra.value == 't') {
+    $('row_ficha').show();
+  } else {
+    $('com_ficha').value = 'f';
+    $('row_ficha').hide();
+  }
+}
+js_mostrarFicha();
 </script>  
