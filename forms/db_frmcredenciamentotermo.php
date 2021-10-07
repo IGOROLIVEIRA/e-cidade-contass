@@ -144,33 +144,24 @@ $clcredenciamentotermo->rotulo->label();
      */
     function js_pesquisa_liclicita(mostra){
 
-        if(mostra==true){
+        if(mostra==true) {
 
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_licobras',
-                'func_liclicita.php?situacao=10&funcao_js=parent.js_preencheLicitacao|l20_codigo',
-                'Pesquisa Licitações',true);
-        }else{
-
-            if(document.form1.l212_licitacao.value != ''){
-
-                js_OpenJanelaIframe('top.corpo',
-                    'db_iframe_licobras',
-                    'func_liclicita.php?situacao=10&pesquisa_chave='+
-                    document.form1.l212_licitacao.value+'&funcao_js=parent.js_preencheLicitacao2',
-                    'Pesquisa',false);
-            }else{
-                document.form1.l212_licitacao.value = '';
-            }
+                'func_liclicita.php?situacao=10&credenciamentotermo=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_dtpubratificacao|l20_veicdivulgacao',
+                'Pesquisa Licitações', true);
         }
-
     }
     /**
      * funcao para preencher licitacao  da ancora
      */
-    function js_preencheLicitacao(codigo)
+    function js_preencheLicitacao(codigo,dtpublica,veicpublica)
     {
+        var aDate = dtpublica.split('-');
+
         document.form1.l212_licitacao.value = codigo;
+        document.form1.l212_dtpublicacao.value = aDate[2]+'/'+aDate[1]+'/'+aDate[0];
+        document.form1.l212_veiculodepublicacao.value = veicpublica;
         db_iframe_licobras.hide();
         mostrarFornecedores();
     }

@@ -261,6 +261,7 @@ $sWhereContratos = " and 1 = 1 ";
 						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
                                         liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
                                         liclicita.l20_dtpublic as dl_Data_Publicação_DO,
+                                        liclicita.l20_objeto,
                                         liclicita.l20_objeto";
 					}else{
 						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
@@ -272,6 +273,9 @@ $sWhereContratos = " and 1 = 1 ";
 //                $campos .= ", l03_codcom as tipcom";
 //                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
                 $campos .= ', l08_descr as dl_Situação';
+                if($credenciamentotermo == "true"){
+                    $campos .= ',liclicita.l20_dtpubratificacao,liclicita.l20_veicdivulgacao';
+                }
                 if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
                     $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
                 }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){

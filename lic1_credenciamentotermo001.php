@@ -11,7 +11,14 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
     db_inicio_transacao();
-    $clcredenciamentotermo->l212_instit = db_getsession('DB_instit');;
+    $clcredenciamentotermo->l212_licitacao    = $l212_licitacao;
+    $clcredenciamentotermo->l212_numerotermo  = $l212_numerotermo;
+    $clcredenciamentotermo->l212_fornecedor   = $l212_fornecedor;
+    $clcredenciamentotermo->l212_dtinicio     = $l212_dtinicio;
+    $clcredenciamentotermo->l212_dtpublicacao = $l212_dtpublicacao;
+    $clcredenciamentotermo->l212_veiculodepublicacao = $l212_veiculodepublicacao;
+    $clcredenciamentotermo->l212_observacao   = $l212_observacao;
+    $clcredenciamentotermo->l212_instit = db_getsession('DB_instit');
     $clcredenciamentotermo->incluir();
     db_fim_transacao();
 }
