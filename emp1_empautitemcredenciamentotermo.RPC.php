@@ -25,6 +25,14 @@ switch ($_POST["action"]) {
         $licitacao  = $_POST["licitacao"];
         $fornecedor = $_POST["fornecedor"];
 
+        $result_unidade = array();
+        $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_codmatunid"));
+        $numrows_unid = $clmatunid->numrows;
+        for ($i = 0; $i < $numrows_unid; $i++) {
+            db_fieldsmemory($result_sql_unid, $i);
+            $result_unidade[$m61_codmatunid] = $m61_descr;
+        }
+
         $sqlItens = "SELECT pc11_seq,
                        pc01_codmater,
                        pc01_descrmater,
@@ -70,7 +78,8 @@ switch ($_POST["action"]) {
                          pc11_servicoquantidade,
                          matunid.m61_descr,
                          matunid.m61_descr,
-                         pcorcamitemproc.pc31_orcamitem";
+                         pcorcamitemproc.pc31_orcamitem
+                order by pc11_seq";
 
         $iAnoSessao         = db_getsession('DB_anousu');
         $rsDados      = $oDaoSysArqCamp->sql_record($sqlItens);
@@ -81,6 +90,17 @@ switch ($_POST["action"]) {
 
                 $oDados = db_utils::fieldsMemory($rsDados, $i);
 
+                $selectunid = "";
+                $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
+                $selectunid .= "<option selected='selected'></option>";
+                foreach ($result_unidade as $key => $item) {
+                    if ($key == $oDadosEmpAutItem->e55_unid)
+                        $selectunid .= "<option value='$key' selected='selected'>$item</option>";
+                    else
+                        $selectunid .= "<option value='$key'>$item</option>";
+                }
+                $selectunid .= "</select>";
+
                 $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", " e55_autori = $autori and e55_item = $oDados->pc01_codmater"));
                 $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, 0);
 
@@ -89,7 +109,7 @@ switch ($_POST["action"]) {
                 $itemRows[] = $oDados->pc11_seq;
                 $itemRows[] = $oDados->pc01_codmater;
                 $itemRows[] = $oDados->pc01_descrmater;
-                $itemRows[] = $oDados->m61_descr;
+                $itemRows[] = $selectunid;
                 $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='10' readonly style='background-color: #DEB887; width: 80px' />";
                 $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
                 if($oDadosEmpAutItem->e55_vlrun != "") {
@@ -130,7 +150,7 @@ switch ($_POST["action"]) {
         break;
 
     case 'salvar':
-
+echo "<pre>"; print_r($_POST);exit;
         db_inicio_transacao();
 
         foreach ($_POST['dados'] as $Seq => $item) :
@@ -138,7 +158,7 @@ switch ($_POST["action"]) {
             $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
             $vlrunit = $item['vlrunit'];
-            $vlrunitdesc = ($vlrunit - ($vlrunit * $item['desc'] / 100));
+//            $vlrunitdesc = ($vlrunit - ($vlrunit * $item['desc'] / 100));
 
             if (pg_numrows($rsItem) == 0) {
                 $clempautitem->e55_codele = $_POST['codele'];

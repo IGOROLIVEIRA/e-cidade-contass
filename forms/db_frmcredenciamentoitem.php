@@ -75,7 +75,6 @@ $clrotulo->label("pc01_descrmater");
             </div>
         </div>
         <br />
-        <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
         <input name="Salvar" type="button" id="salvar" value="Salvar" onclick="js_salvar();">
         <input name="Excluir" type="button" id="excluir" value="Excluir" onclick="js_excluir();">
     </center>
@@ -149,6 +148,64 @@ $clrotulo->label("pc01_descrmater");
         // $('checkbox_'+ id).attr("checked",true);
         t = new Number(vlun * quant);
         $('#total_' + id).val(t.toFixed(2));
+    }
+
+    function js_salvar() {
+
+        if (!$("input[type='checkbox']").is(':checked')) {
+            alert("É necessário marcar algum item");
+            return false;
+        }
+
+        // let rsDisponivel;
+        // rsDisponivel = Number($('#disponivel').val()) - Number($('#utilizado').val());
+        //
+        // if (Number($('#totalad').val()) > Number($('#disponivel').val())) {
+        //     alert("Não há valor disponível");
+        //     return false;
+        // }
+
+        var oParam = new Object();
+        oParam.action = "salvar";
+        oParam.autori = <?= $e55_autori?>;
+        // oParam.codele = $('#pc07_codele').val();
+        // oParam.descr = $('#e55_descr').val();
+        var oDados = {};
+        var aDados = [];
+
+        $("#mytable tr").each(function() {
+
+            if ($(this).find("input[type='checkbox']").is(":checked")) {
+
+                oDados.id = $(this).find("td").eq(2).html();
+                oDados.unidade = $(this).find("td").eq(4).find("select").val();
+                oDados.vlrunit = $(this).find("td").eq(6).find("input").val();
+                oDados.qtd = $(this).find("td").eq(7).find("input").val();
+                oDados.total = $(this).find("td").eq(8).find("input").val();
+
+                aDados.push(oDados);
+                oDados = {};
+            }
+        });
+
+        oParam.dados = aDados;
+        $.ajax({
+            type: "POST",
+            url: "emp1_empautitemcredenciamentotermo.RPC.php",
+            data: oParam,
+            success: function(data) {
+                let response = JSON.parse(data);
+                if (response.status == 0) {
+                    alert(response.message.urlDecode());
+                    return false;
+                } else {
+                    //js_loadTable();
+                    alert(response.message.urlDecode());
+                    // top.corpo.iframe_empautidot.location.reload();
+                    // window.location.reload();
+                }
+            }
+        });
     }
 
 </script>
