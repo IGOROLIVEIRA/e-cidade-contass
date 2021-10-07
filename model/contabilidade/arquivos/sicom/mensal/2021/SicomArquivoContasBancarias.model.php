@@ -163,12 +163,12 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
     $sSqlGeral = "select  10 as tiporegistro,
 					     k13_reduz as codctb,
-					     c61_codtce as codtce, 
+					     c61_codtce as codtce,
 					     si09_codorgaotce,
-				             c63_banco, 
-				             c63_agencia, 
-				             c63_conta, 
-				             c63_dvconta, 
+				             c63_banco,
+				             c63_agencia,
+				             c63_conta,
+				             c63_dvconta,
 				             c63_dvagencia,
 				             case when db83_tipoconta in (2,3) then 2 else 1 end as tipoconta,
 				             case when (select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit") . " ) = 5 and db83_tipoconta in (2,3)
@@ -180,15 +180,15 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				             CASE WHEN db83_numconvenio is null then ' ' else  c206_nroconvenio end as nroconvenio,
 				             CASE WHEN db83_numconvenio is null then null else  c206_dataassinatura end as dataassinaturaconvenio,
                      		 o15_codtri as recurso,
-							 CASE WHEN substr(c60_estrut, 1, 3) = '111' 
-								  	AND substr(c60_estrut, 1, 7) != '1111101' 
-								  	AND substr(c60_estrut, 1, 7) != '1111102' 
-								  	AND substr(c60_estrut, 1, 6) != '111113' 
-								  	AND substr(c60_estrut, 1, 7) != '1112101' 
+							 CASE WHEN substr(c60_estrut, 1, 3) = '111'
+								  	AND substr(c60_estrut, 1, 7) != '1111101'
+								  	AND substr(c60_estrut, 1, 7) != '1111102'
+								  	AND substr(c60_estrut, 1, 6) != '111113'
+								  	AND substr(c60_estrut, 1, 7) != '1112101'
 								  THEN 1
 								ELSE 2
 							 END AS saldocec
-				       from saltes 
+				       from saltes
 				       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
 				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
 					   join conplano on c60_codcon = c61_codcon and c60_anousu = c61_anousu
@@ -198,11 +198,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				  left join convconvenios on db83_numconvenio = c206_sequencial
 				  left join infocomplementaresinstit on si09_instit = c61_instit ";
     if( db_getsession("DB_anousu") == 2021 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1 ) {
-        $sSqlGeral .= " where (k13_limite is null or k13_limite >= '" . $this->sDataFinal . "') 
+        $sSqlGeral .= " where (k13_limite is null or k13_limite >= '" . $this->sDataFinal . "')
     				     and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
     }else {
-        $sSqlGeral .= " where (k13_limite is null or k13_limite >= '" . $this->sDataFinal . "') 
-				    and (date_part('MONTH',k13_dtimplantacao) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " 
+        $sSqlGeral .= " where (k13_limite is null or k13_limite >= '" . $this->sDataFinal . "')
+				    and (date_part('MONTH',k13_dtimplantacao) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 				    or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
     }
@@ -261,84 +261,84 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb10->contas = array();
 
           $sSqlVerifica = "SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio FROM ctb102021 ";
-          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce
                               AND si95_banco = '$oRegistro10->c63_banco'
-                              AND si95_agencia = '$oRegistro10->c63_agencia' 
-                              AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                              AND si95_agencia = '$oRegistro10->c63_agencia'
+                              AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
                               AND si95_contabancaria = '$oRegistro10->c63_conta'
-                              AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
-                              AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                              AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
+                              AND si95_tipoconta::int = $oRegistro10->tipoconta
                               AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
                               AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102020' AS ano, si95_codctb, si95_nroconvenio FROM ctb102020 ";
-          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce
                                AND si95_banco = '$oRegistro10->c63_banco'
-                               AND si95_agencia = '$oRegistro10->c63_agencia' 
-                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_agencia = '$oRegistro10->c63_agencia'
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
-                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
-                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta
                                AND si95_instit = " . db_getsession('DB_instit');
 		  $sSqlVerifica .= " UNION ";
 		  $sSqlVerifica .= " SELECT 'ctb102019' AS ano, si95_codctb, si95_nroconvenio FROM ctb102019 ";
-          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce
                                AND si95_banco = '$oRegistro10->c63_banco'
-                               AND si95_agencia = '$oRegistro10->c63_agencia' 
-                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_agencia = '$oRegistro10->c63_agencia'
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
-                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
-                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102018' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102018 ";
-          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
-                               AND si95_banco = '$oRegistro10->c63_banco' 
-                               AND si95_agencia = '$oRegistro10->c63_agencia' 
-                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
-                               AND si95_contabancaria = '$oRegistro10->c63_conta' 
-                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
-                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce
+                               AND si95_banco = '$oRegistro10->c63_banco'
+                               AND si95_agencia = '$oRegistro10->c63_agencia'
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
+                               AND si95_contabancaria = '$oRegistro10->c63_conta'
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102017' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102017 ";
-          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
-                               AND si95_banco = '$oRegistro10->c63_banco' 
-                               AND si95_agencia = '$oRegistro10->c63_agencia' 
-                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
-                               AND si95_contabancaria = '$oRegistro10->c63_conta' 
-                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
-                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce
+                               AND si95_banco = '$oRegistro10->c63_banco'
+                               AND si95_agencia = '$oRegistro10->c63_agencia'
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
+                               AND si95_contabancaria = '$oRegistro10->c63_conta'
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102016' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102016 ";
-          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce
                                AND si95_banco = '$oRegistro10->c63_banco'
-                               AND si95_agencia = '$oRegistro10->c63_agencia' 
-                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_agencia = '$oRegistro10->c63_agencia'
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
-                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
-                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102015' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102015 ";
-          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce
                                AND si95_banco = '$oRegistro10->c63_banco'
-                               AND si95_agencia = '$oRegistro10->c63_agencia' 
-                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
-                               AND si95_contabancaria = '$oRegistro10->c63_conta' 
-                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
-                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_agencia = '$oRegistro10->c63_agencia'
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
+                               AND si95_contabancaria = '$oRegistro10->c63_conta'
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102014' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102014 ";
-          $sSqlVerifica .= " WHERE si95_codorgao::int = '$oRegistro10->si09_codorgaotce' 
-                               AND si95_banco = '$oRegistro10->c63_banco' 
-                               AND si95_agencia = '$oRegistro10->c63_agencia' 
-                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
-                               AND si95_contabancaria = '$oRegistro10->c63_conta' 
-                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
-                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+          $sSqlVerifica .= " WHERE si95_codorgao::int = '$oRegistro10->si09_codorgaotce'
+                               AND si95_banco = '$oRegistro10->c63_banco'
+                               AND si95_agencia = '$oRegistro10->c63_agencia'
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
+                               AND si95_contabancaria = '$oRegistro10->c63_conta'
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta
                                AND si95_instit = " . db_getsession('DB_instit');
 
           $rsResultVerifica = db_query($sSqlVerifica);
@@ -352,16 +352,16 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                    WHEN c61_codtce = 0 OR c61_codtce IS NULL THEN c61_reduz
                                    ELSE c61_codtce
                                END AS codctb
-                        FROM conplanoconta 
-                        JOIN conplanoreduz ON (c61_codcon, c61_anousu) = (c63_codcon, c63_anousu) 
+                        FROM conplanoconta
+                        JOIN conplanoreduz ON (c61_codcon, c61_anousu) = (c63_codcon, c63_anousu)
                         JOIN saltes ON (k13_reduz) = (c61_reduz)
-                        LEFT JOIN infocomplementaresinstit on si09_instit = c61_instit 
-                        WHERE si09_codorgaotce = $oRegistro10->si09_codorgaotce 
+                        LEFT JOIN infocomplementaresinstit on si09_instit = c61_instit
+                        WHERE si09_codorgaotce = $oRegistro10->si09_codorgaotce
                           AND c63_banco = '$oRegistro10->c63_banco'
-                          AND c63_agencia = '$oRegistro10->c63_agencia' 
-                          AND c63_dvagencia = '$oRegistro10->c63_dvagencia' 
+                          AND c63_agencia = '$oRegistro10->c63_agencia'
+                          AND c63_dvagencia = '$oRegistro10->c63_dvagencia'
                           AND c63_conta = '$oRegistro10->c63_conta'
-                          AND c63_dvconta = '$oRegistro10->c63_dvconta' 
+                          AND c63_dvconta = '$oRegistro10->c63_dvconta'
                           AND (($oRegistro10->tipoconta IN (2,3) AND c63_tipoconta IN (2,3)) OR ($oRegistro10->tipoconta = 1 AND c63_tipoconta = 1))
                           AND c61_instit = " . db_getsession('DB_instit') ."
                           AND c61_anousu = " . db_getsession('DB_anousu');
@@ -407,7 +407,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 		  $oConta = new stdClass();
 		  $oConta->codctb 	= $oRegistro10->codctb;
 		  $oConta->saldocec = $oRegistro10->saldocec;
-		  
+
 		  $cCtb10->contas[] = $oConta;
           $aBancosAgrupados[$aHash] = $cCtb10;
 
@@ -439,7 +439,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
       foreach ($oContaAgrupada->contas as $oConta) {
 
 
-        $sSql20Fonte = "select distinct codctb, 
+        $sSql20Fonte = "select distinct codctb,
                                 fontemovimento
                                 from (
 									select c61_reduz  as codctb, o15_codtri  as fontemovimento
@@ -503,7 +503,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								 where DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . "
 								   and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 								   and conlancamval.c69_debito in ({$oConta->codctb})
-                union all 
+                union all
               select ces02_reduz,ces02_fonte::varchar from conctbsaldo where ces02_reduz in ({$oConta->codctb}) and ces02_anousu = " . db_getsession("DB_anousu") . "
               ) as xx";
         $rsReg20Fonte = db_query($sSql20Fonte) or die($sSql20Fonte);//db_criatabela($rsReg20Fonte);
@@ -560,7 +560,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                      (bancodebito.c63_conta||bancodebito.c63_dvconta)AS bancodebito_c63_conta,
                                      bancodebito.c63_tipoconta AS bancodebito_c63_tipoconta,
                                      (bancocredito.c63_conta||bancocredito.c63_dvconta) AS bancocredito_c63_conta,
-                                     bancocredito.c63_tipoconta AS bancocredito_c63_tipoconta,       
+                                     bancocredito.c63_tipoconta AS bancocredito_c63_tipoconta,
                                      CASE
                                          WHEN c71_coddoc IN (101, 116)
                                               AND substr(o57_fonte,0,3) = '49' THEN 2
@@ -578,7 +578,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                                        AND c70_data <= '" . $this->sDataFinal . "'
                                                        AND c80_codord = (SELECT c80_codord FROM conlancamord
                                                                          WHERE c80_codlan=c69_codlan
-                                                                         LIMIT 1)) >= 0 
+                                                                         LIMIT 1)) >= 0
                                          OR c71_coddoc = 5
                                               AND (SELECT sum(CASE
                                                                   WHEN c53_tipo = 31 THEN -1 * c70_valor
@@ -607,7 +607,9 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                                    JOIN conlancamdoc ON c71_codlan = c84_conlancam
                                                    WHERE c71_codlan=c69_codlan
                                                        AND c71_coddoc IN (120)
-                                                   LIMIT 1) = 2 THEN 13
+                                                   LIMIT 1) = 2  THEN 13
+                                         WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3)
+                                              AND k131_concarpeculiar = '095' THEN 95
                                          WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
                                          WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
                                          WHEN c71_coddoc IN (141, 140) THEN 6
@@ -634,7 +636,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 									 CASE
     									WHEN c71_coddoc IN (140, 141) THEN CASE
                                       		WHEN substr(conplanodebito.c60_estrut, 1, 3) = '111'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111101'	
+                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111101'
                                            		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111102'
                                            		AND substr(conplanodebito.c60_estrut, 1, 6) != '111113'
                                            		AND substr(conplanodebito.c60_estrut, 1, 7) != '1112101' THEN 1
@@ -653,7 +655,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                          WHEN c72_complem ILIKE 'Referente%'
                                               AND c71_coddoc IN (5,35,37,6,36,38) THEN 1
                                          ELSE 0
-                                     END AS retencao
+                                     END AS retencao, k131_concarpeculiar
                              FROM conlancamdoc
                              INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
                              INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
@@ -675,6 +677,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                              LEFT JOIN orcfontes receita ON receita.o57_codfon = orcreceita.o70_codfon AND receita.o57_anousu = orcreceita.o70_anousu
                              LEFT JOIN orctiporec fontereceita ON fontereceita.o15_codigo = orcreceita.o70_codigo
                              LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan
+                             LEFT JOIN conlancamslip ON c71_codlan=c84_conlancam
+                             LEFT JOIN slipconcarpeculiar on k131_slip=c84_slip and k131_tipo=2
                              WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . "
                                AND DATE_PART('MONTH',conlancamdoc.c71_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                                AND conlancamval.c69_credito = {$oConta->codctb}
@@ -697,6 +701,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                         WHEN c71_coddoc IN (6,36,38,121,153,163) THEN 17
                                         WHEN c71_coddoc IN (131,152,162) THEN 10
                                         WHEN c71_coddoc IN (130) THEN 12
+                                        WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3)
+                                        AND k131_concarpeculiar = '096' THEN 96
                                         WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
                                         WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
                                         WHEN c71_coddoc IN (141, 140) THEN 5
@@ -723,7 +729,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 									CASE
     									WHEN c71_coddoc IN (140, 141) THEN CASE
                                       		WHEN substr(conplanodebito.c60_estrut, 1, 3) = '111'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111101'	
+                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111101'
                                            		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111102'
                                            		AND substr(conplanodebito.c60_estrut, 1, 6) != '111113'
                                            		AND substr(conplanodebito.c60_estrut, 1, 7) != '1112101' THEN 1
@@ -743,7 +749,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                         WHEN c72_complem ILIKE 'Referente%'
                                              AND c71_coddoc IN (5,35,37,6,36,38) THEN 1
                                         ELSE 0
-                                    END AS retencao
+                                    END AS retencao, '0' as k131_concarpeculiar
                              FROM conlancamdoc
                              INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
 							 INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
@@ -764,7 +770,9 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                              LEFT JOIN orcreceita ON orcreceita.o70_codrec = conlancamrec.c74_codrec AND orcreceita.o70_anousu = conlancamrec.c74_anousu
                              LEFT JOIN orcfontes receita ON receita.o57_codfon = orcreceita.o70_codfon AND receita.o57_anousu = orcreceita.o70_anousu
                              LEFT JOIN orctiporec fontereceita ON fontereceita.o15_codigo = orcreceita.o70_codigo
-                             LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . " 
+                             LEFT JOIN conlancamslip ON c71_codlan=c84_conlancam
+                             LEFT JOIN slipconcarpeculiar on k131_slip=c84_slip and k131_tipo=1
+                             LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . "
                                   AND DATE_PART('MONTH',conlancamdoc.c71_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " AND conlancamval.c69_debito = {$oConta->codctb} ) AS xx
                         WHERE fontemovimento::integer = $iFonteMovimento";
 
@@ -845,7 +853,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                */
 
 			  if ( ($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 2 ) {
-				$iTipoEntrSaida = '11';  
+				$iTipoEntrSaida = '11';
 			  } elseif ( ($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 1 ) {
 				$iTipoEntrSaida = '18';
 			  } elseif (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) {
@@ -870,13 +878,13 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				$oDadosMovi21->si97_tipoentrsaida = $iTipoEntrSaida;
 				$oDadosMovi21->si97_valorentrsaida = $nValor;
 				$oDadosMovi21->si97_saldocec = $oMovi->saldocec;
-                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' : 
+                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' :
                     ($iTipoEntrSaida == 10 ? 'Estorno de recebimentos' : ' '));
-                $oDadosMovi21->si97_codctbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigConta) 
+                $oDadosMovi21->si97_codctbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigConta)
 					&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
-                $oDadosMovi21->si97_codfontectbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
+                $oDadosMovi21->si97_codfontectbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte)
 					&& ($iCodSis != 5 || ($iCodSis == 5 && ($iTipoEntrSaida == 11 || $iTipoEntrSaida == 18))) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
-				$oDadosMovi21->si97_saldocectransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
+				$oDadosMovi21->si97_saldocectransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte)
 					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11 && $oMovi->tipomovimentacao != 2) ) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
                 $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $oDadosMovi21->si97_instit = db_getsession("DB_instit");
@@ -906,7 +914,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                         JOIN conlancam ON c70_codlan = c74_codlan AND c70_anousu = c74_anousu
                         LEFT JOIN orcreceita ON c74_codrec = o70_codrec AND o70_anousu = " . db_getsession("DB_anousu") . "
                         LEFT JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
-                        LEFT JOIN orctiporec ON o15_codigo = o70_codigo 
+                        LEFT JOIN orctiporec ON o15_codigo = o70_codigo
                         WHERE c74_codlan = {$oMovi->codreduzido}";
 
               $rsReceita = db_query($sSql);//echo $sSql;db_criatabela($rsReceita);
@@ -1004,11 +1012,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
 		  $cCtb21->si97_saldocec = $oCtb21agrupado->si97_saldocec;
           $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
-          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' : 
+          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' :
             ($cCtb21->si97_tipoentrsaida == 10 ? $oCtb21agrupado->si97_dscoutrasmov : ' '));
           $cCtb21->si97_codctbtransf = $oCtb21agrupado->si97_codctbtransf;
           $cCtb21->si97_codfontectbtransf = $oCtb21agrupado->si97_codfontectbtransf;
-		  $cCtb21->si97_saldocectransf = $oCtb21agrupado->si97_saldocectransf; 
+		  $cCtb21->si97_saldocectransf = $oCtb21agrupado->si97_saldocectransf;
 		  $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
           $cCtb21->si97_reg20 = $cCtb20->si96_sequencial;
           $cCtb21->si97_instit = $oCtb21agrupado->si97_instit;
@@ -1070,16 +1078,16 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                    WHEN c61_codtce = 0 OR c61_codtce IS NULL THEN c61_reduz
                                    ELSE c61_codtce
                                END AS codctb
-                        FROM conplanoconta 
-                        JOIN conplanoreduz ON (c61_codcon, c61_anousu) = (c63_codcon, c63_anousu) 
+                        FROM conplanoconta
+                        JOIN conplanoreduz ON (c61_codcon, c61_anousu) = (c63_codcon, c63_anousu)
                         JOIN saltes ON (k13_reduz) = (c61_reduz)
-                        LEFT JOIN infocomplementaresinstit on si09_instit = c61_instit 
+                        LEFT JOIN infocomplementaresinstit on si09_instit = c61_instit
                         WHERE si09_codorgaotce = $oMovi40->si09_codorgaotce
                           AND c63_banco = '$oMovi40->c63_banco'
-                          AND c63_agencia = '$oMovi40->c63_agencia' 
-                          AND c63_dvagencia = '$oMovi40->c63_dvagencia' 
+                          AND c63_agencia = '$oMovi40->c63_agencia'
+                          AND c63_dvagencia = '$oMovi40->c63_dvagencia'
                           AND c63_conta = '$oMovi40->c63_conta'
-                          AND c63_dvconta = '$oMovi40->c63_dvconta' 
+                          AND c63_dvconta = '$oMovi40->c63_dvconta'
                           AND (($oMovi40->tipoconta IN (2,3) AND c63_tipoconta IN (2,3)) OR ($oMovi40->tipoconta = 1 AND c63_tipoconta = 1))
                           AND c61_instit = " . db_getsession('DB_instit') ."
                           AND c61_anousu = " . db_getsession('DB_anousu');
@@ -1088,84 +1096,84 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         $oDtCad = db_utils::fieldsMemory($rsResultDtCad, 0);
 
         $sSqlVerifica = "SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio FROM ctb102021 ";
-        $sSqlVerifica .= "WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+        $sSqlVerifica .= "WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce
                             AND si95_banco = '$oMovi40->c63_banco'
-                            AND si95_agencia = '$oMovi40->c63_agencia' 
-                            AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                            AND si95_agencia = '$oMovi40->c63_agencia'
+                            AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia'
                             AND si95_contabancaria = '$oMovi40->c63_conta'
-                            AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
-                            AND si95_tipoconta::int = $oMovi40->tipoconta 
+                            AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta'
+                            AND si95_tipoconta::int = $oMovi40->tipoconta
                             AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
                             AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
         $sSqlVerifica .= " SELECT 'ctb102020' AS ano, si95_codctb, si95_nroconvenio FROM ctb102020 ";
-        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce
                              AND si95_banco = '$oMovi40->c63_banco'
-                             AND si95_agencia = '$oMovi40->c63_agencia' 
-                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                             AND si95_agencia = '$oMovi40->c63_agencia'
+                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia'
                              AND si95_contabancaria = '$oMovi40->c63_conta'
-                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
-                             AND si95_tipoconta::int = $oMovi40->tipoconta 
+                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta'
+                             AND si95_tipoconta::int = $oMovi40->tipoconta
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
         $sSqlVerifica .= " SELECT 'ctb102019' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102019 ";
-        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
-                             AND si95_banco = '$oMovi40->c63_banco' 
-                             AND si95_agencia = '$oMovi40->c63_agencia' 
-                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
-                             AND si95_contabancaria = '$oMovi40->c63_conta' 
-                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
-                             AND si95_tipoconta::int = $oMovi40->tipoconta 
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce
+                             AND si95_banco = '$oMovi40->c63_banco'
+                             AND si95_agencia = '$oMovi40->c63_agencia'
+                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia'
+                             AND si95_contabancaria = '$oMovi40->c63_conta'
+                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta'
+                             AND si95_tipoconta::int = $oMovi40->tipoconta
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
         $sSqlVerifica .= " SELECT 'ctb102018' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102018 ";
-        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
-                             AND si95_banco = '$oMovi40->c63_banco' 
-                             AND si95_agencia = '$oMovi40->c63_agencia' 
-                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
-                             AND si95_contabancaria = '$oMovi40->c63_conta' 
-                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
-                             AND si95_tipoconta::int = $oMovi40->tipoconta 
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce
+                             AND si95_banco = '$oMovi40->c63_banco'
+                             AND si95_agencia = '$oMovi40->c63_agencia'
+                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia'
+                             AND si95_contabancaria = '$oMovi40->c63_conta'
+                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta'
+                             AND si95_tipoconta::int = $oMovi40->tipoconta
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
         $sSqlVerifica .= " SELECT 'ctb102017' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102017 ";
-        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce
                              AND si95_banco = '$oMovi40->c63_banco'
-                             AND si95_agencia = '$oMovi40->c63_agencia' 
-                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                             AND si95_agencia = '$oMovi40->c63_agencia'
+                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia'
                              AND si95_contabancaria = '$oMovi40->c63_conta'
-                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
-                             AND si95_tipoconta::int = $oMovi40->tipoconta 
+                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta'
+                             AND si95_tipoconta::int = $oMovi40->tipoconta
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
         $sSqlVerifica .= " SELECT 'ctb102016' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102016 ";
-        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce
                              AND si95_banco = '$oMovi40->c63_banco'
-                             AND si95_agencia = '$oMovi40->c63_agencia' 
-                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
-                             AND si95_contabancaria = '$oMovi40->c63_conta' 
-                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
-                             AND si95_tipoconta::int = $oMovi40->tipoconta 
+                             AND si95_agencia = '$oMovi40->c63_agencia'
+                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia'
+                             AND si95_contabancaria = '$oMovi40->c63_conta'
+                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta'
+                             AND si95_tipoconta::int = $oMovi40->tipoconta
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
         $sSqlVerifica .= " SELECT 'ctb102015' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102015 ";
-        $sSqlVerifica .= " WHERE si95_codorgao::int = '$oMovi40->si09_codorgaotce' 
-                             AND si95_banco = '$oMovi40->c63_banco' 
-                             AND si95_agencia = '$oMovi40->c63_agencia' 
-                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
-                             AND si95_contabancaria = '$oMovi40->c63_conta' 
-                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
-                             AND si95_tipoconta::int = $oMovi40->tipoconta 
+        $sSqlVerifica .= " WHERE si95_codorgao::int = '$oMovi40->si09_codorgaotce'
+                             AND si95_banco = '$oMovi40->c63_banco'
+                             AND si95_agencia = '$oMovi40->c63_agencia'
+                             AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia'
+                             AND si95_contabancaria = '$oMovi40->c63_conta'
+                             AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta'
+                             AND si95_tipoconta::int = $oMovi40->tipoconta
 							 AND si95_instit = " . db_getsession('DB_instit') . " LIMIT 1";
 		$sSqlVerifica .= " UNION ";
 		$sSqlVerifica .= " SELECT 'ctb102014' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102014 ";
-		$sSqlVerifica .= " WHERE si95_codorgao::int = '$oMovi40->si09_codorgaotce' 
-							AND si95_banco = '$oMovi40->c63_banco' 
-							AND si95_agencia = '$oMovi40->c63_agencia' 
-							AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
-							AND si95_contabancaria = '$oMovi40->c63_conta' 
-							AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
-							AND si95_tipoconta::int = $oMovi40->tipoconta 
+		$sSqlVerifica .= " WHERE si95_codorgao::int = '$oMovi40->si09_codorgaotce'
+							AND si95_banco = '$oMovi40->c63_banco'
+							AND si95_agencia = '$oMovi40->c63_agencia'
+							AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia'
+							AND si95_contabancaria = '$oMovi40->c63_conta'
+							AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta'
+							AND si95_tipoconta::int = $oMovi40->tipoconta
 							AND si95_instit = " . db_getsession('DB_instit') . " LIMIT 1";
 
         $rsResultVerifica40 = db_query($sSqlVerifica);
@@ -1234,7 +1242,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 							     case when c61_codtce <> 0 then c61_codtce else k13_reduz end as codctb,
 							     'E' as situacaoconta,
 							     k13_limite as dataencerramento
-						       from saltes 
+						       from saltes
 						       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
 						       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
 						  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
