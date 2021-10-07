@@ -272,7 +272,7 @@ db_app::load("widgets/windowAux.widget.js");
                         <input name="pesquisar" id='pesquisar' type="button"  value="Pesquisar" onclick='js_pesquisar_lancamentos_conciliacao();' />
                         <input name="atualizar" id='atualizar' type="button"  value="Conciliar" onclick="js_processar()" />
                         <input name="desprocessar" id='desprocessar' type="button" value='Desprocessar' onclick='js_desprocessar()' />
-                        <input name="emitir_capa" id='emitir_capa' type="button" value='Emitir Capa'/>
+                        <input name="emitir_capa" id='emitir_capa' type="button" value='Emitir Conciliação'/>
                         <input name="incluir_pendencias" id='incluir_pendencias' type="button" value='Incluir Pendências' onclick='js_janelaPendencia()' />
                         <input name="nova_conciliacao" id='nova_conciliacao' type="button" value='Nova Conciliação' onclick="js_reset()" />
                     </fieldset>
