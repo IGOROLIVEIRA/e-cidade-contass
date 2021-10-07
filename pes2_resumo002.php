@@ -605,6 +605,9 @@ if ($tipo == "l" || $tipo == "o" || $tipo == "s" || $tipo == "t"){
      }
    }  
    $pdf->cell(145,5,$r70_estrut." - ".$lota." - ".strtoupper($r70_descr),1,1,"L",1);
+   if ($com_ficha == 't') {
+     $sqlficha = getSqlFicha($lota,$ano,$mes,$folha);
+   }
 }
 for($x = 0;$x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x);
@@ -761,6 +764,9 @@ for($x = 0;$x < pg_numrows($result);$x++){
       $pdf->cell(45,$alt,'BASE F.G.T.S. :'.db_formatar($basefgts,'f'),0,0,"L",0);
       $pdf->cell(45,$alt,'F.G.T.S. EMPR :'.db_formatar($fgts,'f'),0,1,"L",0);
 
+      if ($com_ficha == 't') {
+        imprimirFicha($pdf, $sqlficha);
+      }
       
       $vencimentos = 0;
       $descontos = 0;
@@ -788,6 +794,9 @@ for($x = 0;$x < pg_numrows($result);$x++){
       $pdf->cell(20,$alt,'DESCONTOS',1,1,"C",1);
       if($tipo == "l" || $tipo == "o" || $tipo == "s" || $tipo == "t" ){
         $pdf->cell(145,5,$r70_estrut." - ".$lota." - ".strtoupper($r70_descr),1,1,"L",1);
+      }
+      if ($com_ficha == 't') {
+        $sqlficha = getSqlFicha($lota,$ano,$mes,$folha);
       }
    }
    $pdf->setfont('arial','',8);
@@ -985,6 +994,9 @@ if ($tipo == "l" || $tipo == "o" || $tipo == "s" || $tipo == "t"){
    $pdf->cell(45,$alt,'BASE PREV 4   :'.db_formatar($prev4,'f'),0,1,"L",0);
    $pdf->cell(45,$alt,'BASE F.G.T.S. :'.db_formatar($basefgts,'f'),0,0,"L",0);
    $pdf->cell(45,$alt,'F.G.T.S. EMPR :'.db_formatar($fgts,'f'),0,1,"L",0);
+   if ($com_ficha == 't') {
+     imprimirFicha($pdf, getSqlFicha($lota,$ano,$mes,$folha));
+   }
    $vencimentos = 0;
    $descontos = 0;
    $baseprev = 0;
@@ -1138,5 +1150,47 @@ if ($tipo == "l" || $tipo == "o" || $tipo == "s" || $tipo == "t"){
 
 }
 $pdf->Output();
-//exit;
+
+
+function getSqlFicha($lota,$ano,$mes,$folha) {
+
+  return "SELECT rh72_coddot,
+      rh72_codele,
+      orcelemento.o56_elemento,
+      rh26_orgao,rh26_unidade,rh25_funcao,rh25_subfuncao,rh25_programa,
+      sum(CASE WHEN rh73_pd = 1 THEN rh73_valor ELSE 0 END) AS rh73_valor
+      FROM rhlota 
+      JOIN rhlotaexe ON rh26_codigo = r70_codigo AND rh26_anousu = {$ano}
+      JOIN rhlotavinc on r70_codigo = rh25_codigo AND rh25_anousu = {$ano}
+      LEFT JOIN rhlotavincativ ON rh39_codlotavinc = rh25_codlotavinc AND rh39_anousu = rh25_anousu
+      LEFT JOIN rhlotavincrec ON rh25_codlotavinc = rh43_codlotavinc
+      JOIN rhempenhofolha on ( (coalesce(rh72_projativ, -1),coalesce(rh72_programa, -1),coalesce(rh72_funcao, -1),coalesce(rh72_subfuncao, -1),coalesce(rh72_recurso, -1)) = (coalesce(rh25_projativ, -1),coalesce(rh25_programa, -1),coalesce(rh25_funcao, -1),coalesce(rh25_subfuncao, -1),coalesce(rh25_recurso, -1)) 
+      OR  (coalesce(rh72_projativ,-1),coalesce(rh72_programa,-1),coalesce(rh72_funcao,-1),coalesce(rh72_subfuncao,-1),coalesce(rh72_recurso,-1)) = 
+      (coalesce(rh39_projativ, -1),coalesce(rh39_programa, -1),coalesce(rh39_funcao, -1),coalesce(rh39_subfuncao, -1),coalesce(rh43_recurso, -1)))
+      AND (rh72_anousu,rh72_mesusu) = ({$ano},{$mes})
+      JOIN rhempenhofolharhemprubrica        on rh81_rhempenhofolha = rh72_sequencial
+      JOIN rhempenhofolharubrica on rh73_sequencial     = rh81_rhempenhofolharubrica
+      JOIN rhpessoalmov          on rh73_seqpes     = rh02_seqpes AND rh02_lota = r70_codigo
+      JOIN orcelemento on o56_codele = rh72_codele AND o56_anousu = rh25_anousu
+      WHERE r70_codigo = {$lota} AND rh72_siglaarq = '{$folha}' AND rh73_tiporubrica = 1 AND rh72_tipoempenho = 1
+      GROUP BY rh72_coddot,rh72_codele,orcelemento.o56_elemento,rh26_orgao,rh26_unidade,rh25_funcao,rh25_subfuncao,rh25_programa";
+}
+
+function imprimirFicha($pdf, $sqlficha) {
+
+  $resultficha  = db_query($sqlficha);
+  if (pg_numrows($resultficha) == 0) {
+    return;
+  }
+  for ($iCont = 0; $iCont < pg_num_rows($resultficha); $iCont++) {
+    $oFicha = db_utils::fieldsMemory($resultficha, $iCont);
+    $pdf->ln(4);
+    $pdf->cell(25,$alt,"DOTAÇÃO: {$oFicha->rh72_coddot}",0,0,"L",0);
+    $pdf->cell(30,$alt,(db_formatar($oFicha->rh26_orgao,'orgao').db_formatar($oFicha->rh26_unidade,'unidade').db_formatar($oFicha->rh25_funcao,'funcao').".".db_formatar($oFicha->rh25_subfuncao,'s','0',3,'e').".".db_formatar($oFicha->rh25_programa,'programa')),0,0,"L",0);
+    $pdf->cell(10,$alt,"ELEMENTO: ",0,0,"L",0);
+    $pdf->cell(42,$alt,"{$oFicha->rh72_codele} - {$oFicha->o56_elemento}",0,0,"R",0);
+    $pdf->cell(25,$alt,"VALOR: ",0,0,"R",0);
+    $pdf->cell(22,$alt,db_formatar($oFicha->rh73_valor, 'f'),0,1,"R",0);
+  }
+}
 ?>
