@@ -500,6 +500,16 @@ pmburitizeiro:
     environment: production
     only:
         - master
+
+pmubai:
+    stage: deploy
+    script:
+        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmubai "cd /var/www/e-cidade && git pull origin master "'
+        - 'ssh -p22 contass@pmubai "cd /var/www/e-cidade && php deploy_git.php && ./updatedb/update.sh "'
+    environment: production
+    only:
+        - master
         
 teste:
     stage: deploy
