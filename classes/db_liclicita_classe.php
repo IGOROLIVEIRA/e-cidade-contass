@@ -2268,6 +2268,7 @@ class cl_liclicita
         $sql .= "       left join pcorcamforne on pc21_orcamforne=pc24_orcamforne";
         $sql .= "       left join pcorcamval on pc23_orcamitem = pc22_orcamitem and pc23_orcamforne = pc21_orcamforne";
         $sql .= "       left join pcorcam on pc20_codorc = pc22_codorc";
+        $sql .= "       left join acordo on ac16_licitacao = l20_codigo";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l20_codigo != null) {
@@ -2634,6 +2635,7 @@ class cl_liclicita
         $sql .= "      inner join parecerlicitacao     on parecerlicitacao.l200_licitacao     = liclicita.l20_codigo ";
         $sql .= "      inner join liclicitasituacao     on liclicitasituacao.l11_liclicita     = liclicita.l20_codigo ";
         $sql .= "      left  join liclancedital         on liclancedital.l47_liclicita = liclicita.l20_codigo ";
+        $sql .= "      left  join homologacaoadjudica        on homologacaoadjudica.l202_licitacao = liclicita.l20_codigo ";
 
         $sql2 = "";
         if ($dbwhere == "") {

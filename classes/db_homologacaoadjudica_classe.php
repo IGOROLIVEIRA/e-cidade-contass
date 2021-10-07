@@ -28,10 +28,10 @@ class cl_homologacaoadjudica {
     var $l202_dataadjudicacao = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 l202_sequencial = int4 = Sequencial 
-                 l202_licitacao = int4 = Licitação 
-                 l202_datahomologacao = date = Data Homologação 
-                 l202_dataadjudicacao = date = Data Adjudicação 
+                 l202_sequencial = int4 = Sequencial
+                 l202_licitacao = int4 = Licitação
+                 l202_datahomologacao = date = Data Homologação
+                 l202_dataadjudicacao = date = Data Adjudicação
                  ";
     //funcao construtor da classe
     function cl_homologacaoadjudica() {
@@ -85,7 +85,7 @@ class cl_homologacaoadjudica {
             $this->erro_status = "0";
             return false;
         }
-        if($this->l202_datahomologacao == null ){
+        /*if($this->l202_datahomologacao == null ){
             $this->erro_sql = " Campo Data Homologação nao Informado.";
             $this->erro_campo = "l202_datahomologacao_dia";
             $this->erro_banco = "";
@@ -93,7 +93,7 @@ class cl_homologacaoadjudica {
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
             return false;
-        }
+        }*/
         /*if($this->l202_dataadjudicacao == null ){
           $this->erro_sql = " Campo Data Adjudicação nao Informado.";
           $this->erro_campo = "l202_dataadjudicacao_dia";
@@ -136,16 +136,16 @@ class cl_homologacaoadjudica {
             return false;
         }
         $sql = "insert into homologacaoadjudica(
-                                       l202_sequencial 
-                                      ,l202_licitacao 
-                                      ,l202_datahomologacao 
-                                      ,l202_dataadjudicacao 
+                                       l202_sequencial
+                                      ,l202_licitacao
+                                      ,l202_datahomologacao
+                                      ,l202_dataadjudicacao
                        )
                 values (
-                                $this->l202_sequencial 
-                               ,$this->l202_licitacao 
-                               ,".($this->l202_datahomologacao == "null" || $this->l202_datahomologacao == ""?"null":"'".$this->l202_datahomologacao."'")." 
-                               ,".($this->l202_dataadjudicacao == "null" || $this->l202_dataadjudicacao == ""?"null":"'".$this->l202_dataadjudicacao."'")." 
+                                $this->l202_sequencial
+                               ,$this->l202_licitacao
+                               ,".($this->l202_datahomologacao == "null" || $this->l202_datahomologacao == ""?"null":"'".$this->l202_datahomologacao."'")."
+                               ,".($this->l202_dataadjudicacao == "null" || $this->l202_dataadjudicacao == ""?"null":"'".$this->l202_dataadjudicacao."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -273,6 +273,7 @@ class cl_homologacaoadjudica {
         if($l202_sequencial!=null){
             $sql .= " l202_sequencial = $l202_sequencial";
         }
+
         $resaco = $this->sql_record($this->sql_query_file($this->l202_sequencial));
         if($this->numrows>0){
             for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
@@ -514,10 +515,10 @@ class cl_homologacaoadjudica {
         $sql .= "      left  join pctipo                 on pctipo.pc05_codtipo                 = pcsubgrupo.pc04_codtipo";
         $sql .= "      left  join solicitemele           on solicitemele.pc18_solicitem         = solicitem.pc11_codigo";
         $sql .= "      left  join orcelemento            on orcelemento.o56_codele              = solicitemele.pc18_codele";
-        $sql .= "                                       and orcelemento.o56_anousu              = ".db_getsession("DB_anousu");
+        $sql .= "                                        and orcelemento.o56_anousu             = ".db_getsession("DB_anousu");
         $sql .= "      left  join empautitempcprocitem   on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
         $sql .= "      left  join empautitem             on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
-        $sql .= "                                       and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
+        $sql .= "                                        and empautitem.e55_sequen              = empautitempcprocitem.e73_sequen";
         $sql .= "      left  join empautoriza            on empautoriza.e54_autori              = empautitem.e55_autori ";
         $sql .= "      left  join cgm                    on empautoriza.e54_numcgm              = cgm.z01_numcgm ";
         $sql .= "      left  join empempaut              on empempaut.e61_autori                = empautitem.e55_autori ";
@@ -526,6 +527,155 @@ class cl_homologacaoadjudica {
         $sql .= "      left join pcorcamitemlic         on liclicitem.l21_codigo               = pcorcamitemlic.pc26_liclicitem";
         $sql .= "      left join pcorcamitem            on pcorcamitemlic.pc26_orcamitem       = pcorcamitem.pc22_orcamitem";
         $sql .= "      left join pcorcamjulg            on pcorcamitem.pc22_orcamitem          = pcorcamjulg.pc24_orcamitem";
+        $sql .= "      left join pcorcamval             on (pc24_orcamitem, pc24_orcamforne)   = (pc23_orcamitem, pc23_orcamforne)";
+        $sql .= "      left join pcorcamforne           on pc24_orcamforne                     = pc21_orcamforne";
+        $sql .= "      left join cgm cgmforncedor       on pcorcamforne.pc21_numcgm            = cgmforncedor.z01_numcgm";
+        $sql .= "      left join homologacaoadjudica    on l202_licitacao                      = l21_codliclicita";
+        $sql .= "      left join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial";
+        $sql2 = "";
+
+        if($joinPrecoReferencia){
+            $sql .= " LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem ";
+            $sql .= " LEFT JOIN itemprecoreferencia ON si02_itemproccompra = pcorcamitemproc.pc31_orcamitem ";
+        }
+
+        if($dbwhere==""){
+            if($l202_licitacao!= null && $l202_licitacao!= "" ){
+                $sql2 .= " where liclicitem.l21_codliclicita = $l202_licitacao ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
+    function sql_query_itens_semhomologacao ( $l202_licitacao=null, $campos="*", $ordem=null, $dbwhere="", $joinPrecoReferencia = false){
+        $sql = "select ";
+        if($campos != "*" ) {
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from pcprocitem ";
+        $sql .= "      inner join pcproc                 on pcproc.pc80_codproc                 = pcprocitem.pc81_codproc";
+        $sql .= "      inner join solicitem              on solicitem.pc11_codigo               = pcprocitem.pc81_solicitem";
+        $sql .= "      inner join solicita               on solicita.pc10_numero                = solicitem.pc11_numero";
+        $sql .= "      inner join db_depart              on db_depart.coddepto                  = solicita.pc10_depto";
+        $sql .= "      left  join solicitemunid          on solicitemunid.pc17_codigo           = solicitem.pc11_codigo";
+        $sql .= "      left  join matunid                on matunid.m61_codmatunid              = solicitemunid.pc17_unid";
+        $sql .= "      left  join db_usuarios            on pcproc.pc80_usuario                 = db_usuarios.id_usuario";
+        $sql .= "      left  join solicitempcmater       on solicitempcmater.pc16_solicitem     = solicitem.pc11_codigo";
+        $sql .= "      left  join pcmater                on pcmater.pc01_codmater               = solicitempcmater.pc16_codmater";
+        $sql .= "      left  join licitemobra            on licitemobra.obr06_pcmater           = pcmater.pc01_codmater";
+        $sql .= "      left  join pcsubgrupo             on pcsubgrupo.pc04_codsubgrupo         = pcmater.pc01_codsubgrupo";
+        $sql .= "      left  join pctipo                 on pctipo.pc05_codtipo                 = pcsubgrupo.pc04_codtipo";
+        $sql .= "      left  join solicitemele           on solicitemele.pc18_solicitem         = solicitem.pc11_codigo";
+        $sql .= "      left  join orcelemento            on orcelemento.o56_codele              = solicitemele.pc18_codele";
+        $sql .= "                                        and orcelemento.o56_anousu             = ".db_getsession("DB_anousu");
+        $sql .= "      left  join empautitempcprocitem   on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
+        $sql .= "      left  join empautitem             on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
+        $sql .= "                                        and empautitem.e55_sequen              = empautitempcprocitem.e73_sequen";
+        $sql .= "      left  join empautoriza            on empautoriza.e54_autori              = empautitem.e55_autori ";
+        $sql .= "      left  join cgm                    on empautoriza.e54_numcgm              = cgm.z01_numcgm ";
+        $sql .= "      left  join empempaut              on empempaut.e61_autori                = empautitem.e55_autori ";
+        $sql .= "      left  join empempenho             on empempenho.e60_numemp               = empempaut.e61_numemp ";
+        $sql .= "      left join liclicitem              on liclicitem.l21_codpcprocitem        = pcprocitem.pc81_codprocitem";
+        $sql .= "      left join liclicitemlote         on liclicitemlote.l04_liclicitem        = liclicitem.l21_codigo";
+        $sql .= "      left join pcorcamitemlic         on liclicitem.l21_codigo               = pcorcamitemlic.pc26_liclicitem";
+        $sql .= "      left join pcorcamitem            on pcorcamitemlic.pc26_orcamitem       = pcorcamitem.pc22_orcamitem";
+        $sql .= "      left join pcorcamjulg            on pcorcamitem.pc22_orcamitem          = pcorcamjulg.pc24_orcamitem";
+        $sql .= "      left join pcorcamval             on (pc24_orcamitem, pc24_orcamforne)   = (pc23_orcamitem, pc23_orcamforne)";
+        $sql .= "      left join pcorcamforne           on pc24_orcamforne                     = pc21_orcamforne";
+        $sql .= "      left join cgm cgmforncedor       on pcorcamforne.pc21_numcgm            = cgmforncedor.z01_numcgm";
+        $sql .= "      left join homologacaoadjudica    on l202_licitacao                      = l21_codliclicita";
+        $sql .= "      left join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial AND l203_item = pc81_codprocitem";
+        $sql2 = "";
+
+        if($joinPrecoReferencia){
+            $sql .= " LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem ";
+            $sql .= " LEFT JOIN itemprecoreferencia ON si02_itemproccompra = pcorcamitemproc.pc31_orcamitem ";
+        }
+
+        if($dbwhere==""){
+            if($l202_licitacao!= null && $l202_licitacao!= "" ){
+                $sql2 .= " where liclicitem.l21_codliclicita = $l202_licitacao ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
+    function sql_query_itens_comhomologacao ( $l202_licitacao=null, $campos="*", $ordem=null, $dbwhere="", $joinPrecoReferencia = false){
+        $sql = "select ";
+        if($campos != "*" ) {
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from pcprocitem ";
+        $sql .= "      inner join pcproc                 on pcproc.pc80_codproc                 = pcprocitem.pc81_codproc";
+        $sql .= "      inner join solicitem              on solicitem.pc11_codigo               = pcprocitem.pc81_solicitem";
+        $sql .= "      inner join solicita               on solicita.pc10_numero                = solicitem.pc11_numero";
+        $sql .= "      inner join db_depart              on db_depart.coddepto                  = solicita.pc10_depto";
+        $sql .= "      left  join solicitemunid          on solicitemunid.pc17_codigo           = solicitem.pc11_codigo";
+        $sql .= "      left  join matunid                on matunid.m61_codmatunid              = solicitemunid.pc17_unid";
+        $sql .= "      left  join db_usuarios            on pcproc.pc80_usuario                 = db_usuarios.id_usuario";
+        $sql .= "      left  join solicitempcmater       on solicitempcmater.pc16_solicitem     = solicitem.pc11_codigo";
+        $sql .= "      left  join pcmater                on pcmater.pc01_codmater               = solicitempcmater.pc16_codmater";
+        $sql .= "      left  join licitemobra            on licitemobra.obr06_pcmater           = pcmater.pc01_codmater";
+        $sql .= "      left  join pcsubgrupo             on pcsubgrupo.pc04_codsubgrupo         = pcmater.pc01_codsubgrupo";
+        $sql .= "      left  join pctipo                 on pctipo.pc05_codtipo                 = pcsubgrupo.pc04_codtipo";
+        $sql .= "      left  join solicitemele           on solicitemele.pc18_solicitem         = solicitem.pc11_codigo";
+        $sql .= "      left  join orcelemento            on orcelemento.o56_codele              = solicitemele.pc18_codele";
+        $sql .= "                                        and orcelemento.o56_anousu             = ".db_getsession("DB_anousu");
+        $sql .= "      left  join empautitempcprocitem   on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
+        $sql .= "      left  join empautitem             on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
+        $sql .= "                                        and empautitem.e55_sequen              = empautitempcprocitem.e73_sequen";
+        $sql .= "      left  join empautoriza            on empautoriza.e54_autori              = empautitem.e55_autori ";
+        $sql .= "      left  join cgm                    on empautoriza.e54_numcgm              = cgm.z01_numcgm ";
+        $sql .= "      left  join empempaut              on empempaut.e61_autori                = empautitem.e55_autori ";
+        $sql .= "      left  join empempenho             on empempenho.e60_numemp               = empempaut.e61_numemp ";
+        $sql .= "      left join liclicitem              on liclicitem.l21_codpcprocitem        = pcprocitem.pc81_codprocitem";
+        $sql .= "      left join liclicitemlote         on liclicitemlote.l04_liclicitem        = liclicitem.l21_codigo";
+        $sql .= "      left join pcorcamitemlic         on liclicitem.l21_codigo               = pcorcamitemlic.pc26_liclicitem";
+        $sql .= "      left join pcorcamitem            on pcorcamitemlic.pc26_orcamitem       = pcorcamitem.pc22_orcamitem";
+        $sql .= "      left join pcorcamjulg            on pcorcamitem.pc22_orcamitem          = pcorcamjulg.pc24_orcamitem";
+        $sql .= "      left join pcorcamval             on (pc24_orcamitem, pc24_orcamforne)   = (pc23_orcamitem, pc23_orcamforne)";
+        $sql .= "      left join pcorcamforne           on pc24_orcamforne                     = pc21_orcamforne";
+        $sql .= "      left join cgm cgmforncedor       on pcorcamforne.pc21_numcgm            = cgmforncedor.z01_numcgm";
+        $sql .= "      inner join homologacaoadjudica    on l202_licitacao                      = l21_codliclicita";
+        $sql .= "      inner join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial AND l203_item = pc81_codprocitem";
         $sql2 = "";
 
         if($joinPrecoReferencia){
@@ -643,7 +793,7 @@ class cl_homologacaoadjudica {
     function itensHomologados($l202_licitacao=null) {
 
         $sql = "select * from homologacaoadjudica
-                  join itenshomologacao on l203_homologaadjudicacao = l202_sequencial 
+                  join itenshomologacao on l203_homologaadjudicacao = l202_sequencial
                   where l202_licitacao = ". $l202_licitacao;
 
         $rsItens = db_query($sql);
@@ -668,13 +818,13 @@ class cl_homologacaoadjudica {
     function verificaPrecoReferencia($l202_licitacao){
 
         $sql = "select distinct pc80_codproc, pc80_data, pc80_usuario, nome, pc80_depto, descrdepto, pc80_resumo
-      from liclicitem       
-      inner join pcprocitem  on  liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem      
-      inner join pcproc  on  pcproc.pc80_codproc = pcprocitem.pc81_codproc      
-      inner join solicitem  on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem      
-      inner join solicita  on  solicita.pc10_numero = solicitem.pc11_numero      
-      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto      
-      inner join db_usuarios  on  pcproc.pc80_usuario = db_usuarios.id_usuario 
+      from liclicitem
+      inner join pcprocitem  on  liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+      inner join pcproc  on  pcproc.pc80_codproc = pcprocitem.pc81_codproc
+      inner join solicitem  on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+      inner join solicita  on  solicita.pc10_numero = solicitem.pc11_numero
+      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto
+      inner join db_usuarios  on  pcproc.pc80_usuario = db_usuarios.id_usuario
       where l21_codliclicita=$l202_licitacao";
 
         $rsCodProc = db_query($sql);
@@ -736,6 +886,14 @@ class cl_homologacaoadjudica {
                      AND l11_liclicita = {$iLicitacao})";
         $oResult = db_query($sSqlJulg);
         return db_utils::getColectionByRecord($oResult);
+    }
+
+    function getdataAdjudicacao($iLicitacao){
+        $sSql = "SELECT l202_dataadjudicacao
+                        FROM homologacaoadjudica
+                        WHERE l202_licitacao = {$iLicitacao}";
+        $oResultdt = db_query($sSql);
+        return db_utils::getColectionByRecord($oResultdt);
     }
 }
 ?>
