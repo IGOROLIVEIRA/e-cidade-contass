@@ -36,6 +36,7 @@ switch ($_POST["action"]) {
         $sqlItens = "SELECT pc11_seq,
                        pc01_codmater,
                        pc01_descrmater,
+                       m61_codmatunid,
                        m61_descr,
                 
                     (SELECT si02_vlprecoreferencia
@@ -72,6 +73,7 @@ switch ($_POST["action"]) {
                     AND pc24_pontuacao = 1
                 GROUP BY pc11_seq,
                          pc01_codmater,
+                         m61_codmatunid,
                          pc23_vlrun,
                          pc18_codele,
                          pc23_quant,
@@ -90,19 +92,19 @@ switch ($_POST["action"]) {
 
                 $oDados = db_utils::fieldsMemory($rsDados, $i);
 
+                $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", " e55_autori = $autori and e55_item = $oDados->pc01_codmater"));
+                $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, 0);
+
                 $selectunid = "";
                 $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
                 $selectunid .= "<option selected='selected'></option>";
                 foreach ($result_unidade as $key => $item) {
-                    if ($key == $oDadosEmpAutItem->e55_unid)
+                    if ($key == $oDados->m61_codmatunid)
                         $selectunid .= "<option value='$key' selected='selected'>$item</option>";
                     else
                         $selectunid .= "<option value='$key'>$item</option>";
                 }
                 $selectunid .= "</select>";
-
-                $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", " e55_autori = $autori and e55_item = $oDados->pc01_codmater"));
-                $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, 0);
 
                 $itemRows  = array();
                 $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}'>";
@@ -129,19 +131,44 @@ switch ($_POST["action"]) {
         }
         break;
 
-    case 'getElementosTabela':
+    case 'getElementos':
 
-        $autori = $_POST["e55_autori"];
-        $tabela = $_POST["tabela"];
-        $codele = $_POST["codele"];
+        $autori             = $_POST["e55_autori"];
+        $e54_numcgm         = $_POST["e54_numcgm"];
+        $e54_codlicitacao   = $_POST["e54_codlicitacao"];
         $iAnoSessao         = db_getsession('DB_anousu');
 
-        $sqlElementosTabela = "select distinct pc07_codele,o56_descr from pctabela 
-        inner join pctabelaitem on pc95_codtabela = pc94_sequencial
-        inner join pcmaterele on pc07_codmater = pc95_codmater
-        LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
-        AND orcelemento.o56_anousu = $iAnoSessao
-        where pc94_sequencial = $tabela";
+        $sqlElementosTabela = "SELECT DISTINCT pc07_codele,
+                                               o56_descr
+                    FROM credenciamento
+                    INNER JOIN liclicita ON l20_codigo = l205_licitacao
+                    INNER JOIN liclicitem ON (l21_codliclicita,l21_codpcprocitem) = (l20_codigo,l205_item)
+                    INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                    INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                    INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                    INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                    INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                    INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                    INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                    INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                    INNER JOIN pcmaterele ON pc07_codmater = pcmater.pc01_codmater
+                    LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+                    AND orcelemento.o56_anousu = {$iAnoSessao}
+                    INNER JOIN pcorcamitemproc ON pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem
+                    INNER JOIN pcorcamitem ON pcorcamitem.pc22_orcamitem = pcorcamitemproc.pc31_orcamitem
+                    INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
+                    INNER JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
+                    INNER JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
+                    AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
+                    INNER JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
+                    AND pcorcamjulg.pc24_orcamforne = pcorcamforne.pc21_orcamforne
+                    LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
+                    LEFT JOIN credenciamentosaldo ON credenciamentosaldo.l213_licitacao = liclicita.l20_codigo
+                    AND l21_codigo = l213_itemlicitacao
+                    WHERE l20_codigo = {$e54_codlicitacao}
+                        AND l205_fornecedor = {$e54_numcgm}
+                        AND pc24_pontuacao = 1";
+
         $rsEleTabela = db_query($sqlElementosTabela);
 
         $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
@@ -150,7 +177,7 @@ switch ($_POST["action"]) {
         break;
 
     case 'salvar':
-echo "<pre>"; print_r($_POST);exit;
+//echo "<pre>"; print_r($_POST);exit;
         db_inicio_transacao();
 
         foreach ($_POST['dados'] as $Seq => $item) :
@@ -171,9 +198,11 @@ echo "<pre>"; print_r($_POST);exit;
                 $clempautitem->e55_vlrun  = $vlrunitdesc;
                 $clempautitem->e55_vltot  = $item['total'];
                 $clempautitem->e55_sequen = $Seq + 1;
-
+echo "<pre>";
+print_r($clempautitem);
+die();
                 $proximoSequen = db_utils::fieldsMemory($clempautitem->sql_record($clempautitem->sql_query(null, null, "case when max(e55_sequen)+ 1 is null then 1 else max(e55_sequen)+ 1 end as e55_sequen", null, "e55_autori = " . $_POST['autori'])), 0)->e55_sequen;
-                $clempautitem->incluir($_POST['autori'], $proximoSequen);
+//                $clempautitem->incluir($_POST['autori'], $proximoSequen);
             } else {
 
                 $clempautitem->e55_autori = $_POST['autori'];
@@ -188,7 +217,7 @@ echo "<pre>"; print_r($_POST);exit;
                 $clempautitem->e55_vlrun  = $item['vlrunit'];
                 $clempautitem->e55_vltot  = $item['total'];
 
-                $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
+//                $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
             }
         endforeach;
         db_fim_transacao();
