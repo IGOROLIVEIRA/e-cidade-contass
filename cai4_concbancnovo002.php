@@ -425,7 +425,7 @@ function query_baixa($conta, $inicio, $fim, $condicao, $implantacao) {
 function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao) {
     $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
     if ($data_implantacao) {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data BETWEEN '{$data_implantacao}' AND '{$data_inicial}') ";
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data BETWEEN '{$data_implantacao}' AND '{$data_final}') ";
     } else {
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data < '{$data_inicial}') ";
     }
@@ -443,7 +443,7 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
 function query_transferencias_debito($conta, $inicio, $fim, $condicao, $implantacao) {
     $inicio = $inicio < $implantacao ? $implantacao : $inicio;
     if ($implantacao) {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corlanc.k12_data BETWEEN '{$implantacao}' AND '{$inicio}') ";
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corlanc.k12_data BETWEEN '{$implantacao}' AND '{$fim}') ";
     } else {
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corlanc.k12_data < '{$inicio}') ";
     }
@@ -461,7 +461,7 @@ function query_transferencias_debito($conta, $inicio, $fim, $condicao, $implanta
 function query_transferencias_credito($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao) {
     $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
     if ($data_implantacao) {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data BETWEEN '{$data_implantacao}' AND '{$data_inicial}') ";
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data BETWEEN '{$data_implantacao}' AND '{$data_final}') ";
     } else {
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data < '{$data_inicial}') ";
     }
@@ -1083,7 +1083,7 @@ function query_baixa_total($conta, $inicio, $fim, $implantacao) {
     credor
     ";
     $sql .= " ) as xx ";
-    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = k12_conta ";
+    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = conta ";
     $sql .= "        AND conc.k172_data = data ";
     $sql .= "        AND conc.k172_coddoc = cod_doc ";
     $sql .= "        AND conc.k172_codigo = codigo::text ";

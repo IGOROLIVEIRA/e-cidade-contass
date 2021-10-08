@@ -1,4 +1,4 @@
-<?
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -14,8 +14,7 @@ include("classes/db_licitemobra_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 $clhomologacaoadjudica = new cl_homologacaoadjudica;
-$db_opcao = "3";
-
+$db_opcao = "1";
 ?>
 <html>
 <head>
@@ -34,9 +33,9 @@ $db_opcao = "3";
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <center>
     <fieldset style="margin-top: 30px;">
-        <legend>Homologação</legend>
+        <legend>Adjudicação:</legend>
         <?
-        include("forms/db_frmhomologacaoadjudica.php");
+        include("forms/db_frmadjudicacao.php");
         ?>
     </fieldset>
 </center>

@@ -755,7 +755,7 @@ db_app::load("estilos.css, grid.style.css");
         if( !regex.test(result) ) {
             alert('Usuário: Verificar os valores');
             return false;
-        }*/
+        }
         if(result==0){
             alert('Usuário: Verificar os valores');
             return false;
