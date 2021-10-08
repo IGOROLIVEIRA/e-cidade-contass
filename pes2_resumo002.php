@@ -1158,7 +1158,7 @@ function getSqlFicha($lota,$ano,$mes,$folha) {
       rh72_codele,
       orcelemento.o56_elemento,
       rh26_orgao,rh26_unidade,rh25_funcao,rh25_subfuncao,rh25_programa,
-      sum(CASE WHEN rh73_pd = 1 THEN rh73_valor ELSE 0 END) AS rh73_valor
+      sum(CASE WHEN rh73_pd = 2 THEN rh73_valor*-1 ELSE rh73_valor END) AS rh73_valor
       FROM rhlota 
       JOIN rhlotaexe ON rh26_codigo = r70_codigo AND rh26_anousu = {$ano}
       JOIN rhlotavinc on r70_codigo = rh25_codigo AND rh25_anousu = {$ano}
