@@ -75,58 +75,58 @@ if (isset($confirmar)) {
     $res = pg_query($sql);
 
     $sqlerro = false;
-    $sSQLitenstabela = "
-  SELECT sum(pc23_valor) as totalitenstabela
-  FROM pcorcamitem
-    INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
-    LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
-    INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
-    INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
-    INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
-    INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
-    INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-    INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-    LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
-    LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-    LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-    LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-    LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-    LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
-      AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
-    LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
-      AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
-    LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
-    LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
-    LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-    LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
-      AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
-    WHERE l21_codliclicita = (select e54_codlicitacao from empautoriza where e54_autori = {$e56_autori})
-        AND pc21_numcgm = (select e54_numcgm from empautoriza where e54_autori = {$e56_autori})
-  ";
+//    $sSQLitenstabela = "
+//  SELECT sum(pc23_valor) as totalitenstabela
+//  FROM pcorcamitem
+//    INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
+//    LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
+//    INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
+//    INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
+//    INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+//    INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+//    INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+//    INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+//    LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
+//    LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+//    LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+//    LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+//    LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+//    LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
+//      AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
+//    LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
+//      AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
+//    LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+//    LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
+//    LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+//    LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
+//      AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
+//    WHERE l21_codliclicita = (select e54_codlicitacao from empautoriza where e54_autori = {$e56_autori})
+//        AND pc21_numcgm = (select e54_numcgm from empautoriza where e54_autori = {$e56_autori})
+//  ";
+//
+//    $sSQLitensautorizacao = "
+//      select sum(e55_vltot) as totalitensautorizacao
+//      from empautitem
+//       inner join empautoriza on e54_autori = e55_autori
+//        where e54_codlicitacao = (
+//                                  select e54_codlicitacao
+//                                   from empautoriza
+//                                    where e54_autori = {$e56_autori}
+//                                  )
+//              AND e54_autori = {$e56_autori}
+//  ";
 
-    $sSQLitensautorizacao = "
-      select sum(e55_vltot) as totalitensautorizacao
-      from empautitem
-       inner join empautoriza on e54_autori = e55_autori
-        where e54_codlicitacao = (
-                                  select e54_codlicitacao
-                                   from empautoriza
-                                    where e54_autori = {$e56_autori}
-                                  )
-              AND e54_autori = {$e56_autori}
-  ";
-
-    $rsConsultaT       = db_query($sSQLitenstabela);
-    $rsConsultaA       = db_query($sSQLitensautorizacao);
-    $oItensTabela      = db_utils::fieldsMemory($rsConsultaT, 0)->totalitenstabela;
-    $oItensAutorizacao = db_utils::fieldsMemory($rsConsultaA, 0)->totalitensautorizacao;
+//    $rsConsultaT       = db_query($sSQLitenstabela);
+//    $rsConsultaA       = db_query($sSQLitensautorizacao);
+//    $oItensTabela      = db_utils::fieldsMemory($rsConsultaT, 0)->totalitenstabela;
+//    $oItensAutorizacao = db_utils::fieldsMemory($rsConsultaA, 0)->totalitensautorizacao;
 
     $sqlerro = false;
-    if ($oItensTabela < $oItensAutorizacao) {
-        $sqlerro = true;
-        $clempautidot->erro_status = 0;
-        $clempautidot->erro_msg = "O valor total dos itens da autorização não pode ser maior que o valor total Adjudicado!";
-    } else {
+//    if ($oItensTabela < $oItensAutorizacao) {
+//        $sqlerro = true;
+//        $clempautidot->erro_status = 0;
+//        $clempautidot->erro_msg = "O valor total dos itens da autorização não pode ser maior que o valor total Adjudicado!";
+//    } else {
 
         //rotina para verificar o saldo
         $result = $clempautitem->sql_record($clempautitem->sql_query_file($e56_autori, null, "sum(e55_vltot) as e54_valor"));
@@ -223,7 +223,7 @@ if (isset($confirmar)) {
         }
         //fim
         $db_botao_c = true;
-    }
+//    }
     //db_fim_transacao($sqlerro);
 } else if (isset($cancelar)) {
     $sqlerro = false;
@@ -267,7 +267,7 @@ if (isset($confirmar)) {
             if ($clorcreservaaut->numrows > 0) {
                 echo "
         <script>
-          top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=3&e55_autori=$e56_autori&z01_numcgm=$z01_numcgm';\n
+          top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=3&e55_autori=$e56_autori&z01_numcgm=$z01_numcgm';\n
           parent.document.formaba.empautret.disabled=false;
         </script>
           ";
@@ -343,7 +343,7 @@ if (isset($confirmar) || isset($cancelar)) {
         if (isset($confirmar)) {
             echo "
            <script>
-    top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=3&e55_autori=$e56_autori';\n
+    top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=3&e55_autori=$e56_autori';\n
     parent.document.formaba.empautret.disabled=false;
                 top.corpo.iframe_empautret.setValorNota($e54_valor);
      </script>
@@ -357,7 +357,7 @@ if (isset($confirmar) || isset($cancelar)) {
           document.form1.atudo.value='';
           document.form1.e54_valor.value='';
           document.form1.atudo.value='';
-    top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?e55_autori=$e56_autori';\n
+    top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?e55_autori=$e56_autori';\n
     parent.document.formaba.empautret.disabled=true;
                 top.corpo.iframe_empautret.setValorNota($e54_valor);
      </script>

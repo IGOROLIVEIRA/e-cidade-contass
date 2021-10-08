@@ -378,8 +378,8 @@ if (isset($chavepesquisa)) {
 	      function js_libera(recar){
 		      parent.document.formaba.empautitem.disabled=false;\n
 		      parent.document.formaba.empautidot.disabled=false;\n
-		      top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
-		      top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?e56_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
+		      top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao&z01_numcgm=$e54_numcgm';\n
+		      top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
 	      }
 	      js_libera();
       </script>
@@ -391,8 +391,8 @@ if (isset($chavepesquisa)) {
               function js_bloqueia(recar){
                 parent.document.formaba.empautitem.disabled=false;\n
                 parent.document.formaba.empautidot.disabled=false;\n
-                top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=33&e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
-                top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm&e54_desconto=$e54_desconto';\n
+                top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=33&e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao&z01_numcgm=$e54_numcgm';\n
+                top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
               }
               js_bloqueia();
             </script>
