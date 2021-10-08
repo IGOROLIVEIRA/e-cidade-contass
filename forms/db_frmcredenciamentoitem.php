@@ -145,6 +145,7 @@ $clrotulo->label("pc01_descrmater");
                     action: 'buscaItens',
                     autori: <?php echo $e55_autori ?>,
                     licitacao: <?php echo $e54_codlicitacao ?>,
+                    codele: document.getElementById('pc07_codele').value,
                     fornecedor: <?php echo $z01_numcgm ?>,
                     dataType: "json"
                 }
@@ -244,8 +245,9 @@ $clrotulo->label("pc01_descrmater");
         var oParam = new Object();
         oParam.action = "salvar";
         oParam.autori = <?= $e55_autori?>;
-        // oParam.codele = $('#pc07_codele').val();
-        // oParam.descr = $('#e55_descr').val();
+        oParam.fornecedor = <?= $z01_numcgm?>;
+        oParam.licitacao = <?= $e54_codlicitacao?>;
+        oParam.codele = $('#pc07_codele').val();
         var oDados = {};
         var aDados = [];
 
@@ -275,11 +277,49 @@ $clrotulo->label("pc01_descrmater");
                     alert(response.message.urlDecode());
                     return false;
                 } else {
-                    //js_loadTable();
                     alert(response.message.urlDecode());
-                    // top.corpo.iframe_empautidot.location.reload();
-                    // window.location.reload();
                 }
+            }
+        });
+    }
+
+    function js_excluir() {
+
+        if (!$("input[type='checkbox']").is(':checked')) {
+            alert("É necessário marcar algum item");
+            return false;
+        }
+
+        var oParam = new Object();
+        oParam.action = "excluir";
+        oParam.autori = <?= $e55_autori?>;
+        oParam.fornecedor = <?= $z01_numcgm?>;
+        oParam.licitacao = <?= $e54_codlicitacao?>;
+        oParam.codele = $('#pc07_codele').val();
+        var oDados = {};
+        var aDados = [];
+
+        $("#mytable tr").each(function() {
+
+            if ($(this).find("input[type='checkbox']").is(":checked")) {
+
+                oDados.id = $(this).find("td").eq(2).html();
+                aDados.push(oDados);
+                oDados = {};
+            }
+        });
+
+        oParam.dados = aDados;
+
+        $.ajax({
+            type: "POST",
+            url: "emp1_empautitemcredenciamentotermo.RPC.php",
+            data: oParam,
+            success: function(data) {
+
+                let response = JSON.parse(data);
+                alert(response.message);
+                top.corpo.iframe_empautoriza.location.reload();
             }
         });
     }

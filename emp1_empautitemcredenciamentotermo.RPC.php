@@ -9,13 +9,15 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_db_sysarqcamp_classe.php");
 require_once("classes/db_matunid_classe.php");
 require_once("classes/db_empautitem_classe.php");
+require_once("classes/db_liclicitem_classe.php");
+require_once("classes/db_credenciamentosaldo_classe.php");
 
 $oJson                = new services_json();
 $oParam               = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 
-$oDaoSysArqCamp    = new cl_db_sysarqcamp();
-$clmatunid         = new cl_matunid;
-$clempautitem      = new cl_empautitem;
+$oDaoSysArqCamp         = new cl_db_sysarqcamp();
+$clmatunid              = new cl_matunid;
+$clempautitem           = new cl_empautitem;
 
 
 switch ($_POST["action"]) {
@@ -24,6 +26,8 @@ switch ($_POST["action"]) {
         $autori     = $_POST["autori"];
         $licitacao  = $_POST["licitacao"];
         $fornecedor = $_POST["fornecedor"];
+        $codele = $_POST["codele"];
+        $iAnoSessao = db_getsession('DB_anousu');
 
         $result_unidade = array();
         $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_codmatunid"));
@@ -57,6 +61,9 @@ switch ($_POST["action"]) {
                 INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
                 INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
                 INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                INNER JOIN pcmaterele ON pc07_codmater = pcmater.pc01_codmater
+                LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+                AND orcelemento.o56_anousu = {$iAnoSessao}
                 INNER JOIN pcorcamitemproc ON pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem
                 INNER JOIN pcorcamitem ON pcorcamitem.pc22_orcamitem = pcorcamitemproc.pc31_orcamitem
                 INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
@@ -70,6 +77,7 @@ switch ($_POST["action"]) {
                 AND l21_codigo = l213_itemlicitacao
                 WHERE l20_codigo = {$licitacao}
                     AND l205_fornecedor = {$fornecedor}
+                    AND pc07_codele = {$codele}
                     AND pc24_pontuacao = 1
                 GROUP BY pc11_seq,
                          pc01_codmater,
@@ -105,21 +113,25 @@ switch ($_POST["action"]) {
                         $selectunid .= "<option value='$key'>$item</option>";
                 }
                 $selectunid .= "</select>";
-
+                $qtd_disponivel = $oDados->pc23_quant - $oDados->l213_qtdcontratada;
                 $itemRows  = array();
                 $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}'>";
                 $itemRows[] = $oDados->pc11_seq;
                 $itemRows[] = $oDados->pc01_codmater;
                 $itemRows[] = $oDados->pc01_descrmater;
                 $itemRows[] = $selectunid;
-                $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='10' readonly style='background-color: #DEB887; width: 80px' />";
+                $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
                 $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
                 if($oDadosEmpAutItem->e55_vlrun != "") {
                     $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
                 }else{
                     $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
                 }
-                $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='' readonly style='background-color: #DEB887; width: 80px' />";
+                if($oDadosEmpAutItem->e55_vltot != ""){
+                    $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='background-color: #DEB887; width: 80px' />";
+                }else{
+                    $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='' readonly style='background-color: #DEB887; width: 80px' />";
+                }
                 $employeeData[] = $itemRows;
             }
 
@@ -177,32 +189,63 @@ switch ($_POST["action"]) {
         break;
 
     case 'salvar':
-//echo "<pre>"; print_r($_POST);exit;
+
+        $licitacao  = $_POST["licitacao"];
+        $fornecedor = $_POST["fornecedor"];
         db_inicio_transacao();
 
         foreach ($_POST['dados'] as $Seq => $item) :
 
+            /**
+             * get Codigo do item na liclicitem
+             */
+            $sSqlItemlic = "
+                        SELECT l21_codigo,pc01_descrmater,pc11_quant
+                        FROM liclicitem
+                        INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                        INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+                        LEFT  JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                        LEFT  JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                        LEFT  JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                        LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                        where l21_codliclicita = $licitacao and pc01_codmater =".$item['id'];
+            $rsDadosItemLiclicitem      = $oDaoSysArqCamp->sql_record($sSqlItemlic);
+            $oDadositem = db_utils::fieldsMemory($rsDadosItemLiclicitem, 0);
+
             $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
             $vlrunit = $item['vlrunit'];
-//            $vlrunitdesc = ($vlrunit - ($vlrunit * $item['desc'] / 100));
 
             if (pg_numrows($rsItem) == 0) {
+
                 $clempautitem->e55_codele = $_POST['codele'];
                 $clempautitem->e55_item   = $item['id'];
                 $clempautitem->e55_descr  = $item['descr'];
                 $clempautitem->e55_quant  = $item['qtd'];
                 $clempautitem->e55_unid   = $item['unidade'];
                 $clempautitem->e55_marca  = $item['marca'];
-                $clempautitem->e55_servicoquantidade  = $item['servico'];
-                $clempautitem->e55_vlrun  = $vlrunitdesc;
+                $clempautitem->e55_servicoquantidade  = 'f';
+                $clempautitem->e55_vlrun  = $item['vlrunit'];
                 $clempautitem->e55_vltot  = $item['total'];
                 $clempautitem->e55_sequen = $Seq + 1;
-echo "<pre>";
-print_r($clempautitem);
-die();
+
                 $proximoSequen = db_utils::fieldsMemory($clempautitem->sql_record($clempautitem->sql_query(null, null, "case when max(e55_sequen)+ 1 is null then 1 else max(e55_sequen)+ 1 end as e55_sequen", null, "e55_autori = " . $_POST['autori'])), 0)->e55_sequen;
-//                $clempautitem->incluir($_POST['autori'], $proximoSequen);
+                $clempautitem->incluir($_POST['autori'], $proximoSequen);
+
+                /**
+                 * inserindo na tabela de saldos do credenciamento
+                 */
+                $cl_credenciamentosaldo = new cl_credenciamentosaldo();
+                $cl_credenciamentosaldo->l213_licitacao = $licitacao;
+                $cl_credenciamentosaldo->l213_item = $item['id'];
+                $cl_credenciamentosaldo->l213_qtdcontratada = $item['qtd'];
+                $cl_credenciamentosaldo->l213_contratado = $fornecedor;
+                $cl_credenciamentosaldo->l213_itemlicitacao = $oDadositem->l21_codigo;
+                $cl_credenciamentosaldo->l213_qtdlicitada = $oDadositem->pc11_quant;
+                $cl_credenciamentosaldo->incluir();
+
             } else {
 
                 $clempautitem->e55_autori = $_POST['autori'];
@@ -213,11 +256,29 @@ die();
                 $clempautitem->e55_quant  = $item['qtd'];
                 $clempautitem->e55_unid   = $item['unidade'];
                 $clempautitem->e55_marca  = $item['marca'];
-                $clempautitem->e55_servicoquantidade  = $item['servico'];
+                $clempautitem->e55_servicoquantidade  = 'f';
                 $clempautitem->e55_vlrun  = $item['vlrunit'];
                 $clempautitem->e55_vltot  = $item['total'];
 
-//                $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
+                $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
+
+                $cl_credenciamentosaldo = new cl_credenciamentosaldo();
+
+
+                /**
+                 * getcredenciamento saldo
+                 */
+                $rsCredenciamentoSaldo = $cl_credenciamentosaldo->sql_record($cl_credenciamentosaldo->sql_query(null,"l213_sequencial",null,"l213_licitacao = {$licitacao} and l213_contratado = {$fornecedor} and l213_item = ".$item['id']));
+
+                $oDadosCredenciamentoSaldo = db_utils::fieldsMemory($rsCredenciamentoSaldo, 0);
+
+                $cl_credenciamentosaldo->l213_licitacao = $licitacao;
+                $cl_credenciamentosaldo->l213_item = $item['id'];
+                $cl_credenciamentosaldo->l213_qtdcontratada = $item['qtd'];
+                $cl_credenciamentosaldo->l213_contratado = $fornecedor;
+                $cl_credenciamentosaldo->l213_itemlicitacao = $oDadositem->l21_codigo;
+                $cl_credenciamentosaldo->l213_qtdlicitada = $oDadositem->pc11_quant;
+                $cl_credenciamentosaldo->alterar($oDadosCredenciamentoSaldo->l213_sequencial);
             }
         endforeach;
         db_fim_transacao();
@@ -238,12 +299,27 @@ die();
 
     case "excluir":
 
+        $licitacao  = $_POST["licitacao"];
+        $fornecedor = $_POST["fornecedor"];
+
         db_inicio_transacao();
         foreach ($_POST['dados'] as $item) :
             $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
-            if (pg_numrows($rsItem) > 0)
+            if (pg_numrows($rsItem) > 0){
                 $clempautitem->excluir(null, null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id']);
+            }
+
+            /**
+             * getcredenciamento saldo
+             */
+            $cl_credenciamentosaldo = new cl_credenciamentosaldo();
+
+            $rsCredenciamentoSaldo = $cl_credenciamentosaldo->sql_record($cl_credenciamentosaldo->sql_query(null,"l213_sequencial",null,"l213_licitacao = {$licitacao} and l213_contratado = {$fornecedor} and l213_item = ".$item['id']));
+
+            $oDadosCredenciamentoSaldo = db_utils::fieldsMemory($rsCredenciamentoSaldo, 0);
+
+            $cl_credenciamentosaldo->excluir($oDadosCredenciamentoSaldo->l213_sequencial);
 
         endforeach;
         db_fim_transacao();

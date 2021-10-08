@@ -81,6 +81,8 @@ class Oc15700 extends AbstractMigration
                     
                     INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Gerar Autorização','Gerar Autorização','lic1_gerarempautorizacedrenciamento001.php',1,1,'Gerar Autorização','t');
                     INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Termo de Credenciamento%'),(select max(id_item) from db_itensmenu),4,381);
+                    
+                    ALTER table credenciamentosaldo alter COLUMN l213_acordo DROP NOT NULL;
                     ";
         $this->execute($sql);
     }
