@@ -302,6 +302,7 @@ if ( isset($oPost->gerar) ) {
       $sSqlAutonomos .= "  left join rhcbo     on rh70_sequencial = z04_rhcbo   ";
       $sSqlAutonomos .= " where rh89_anousu = {$iAnoUsu}                        ";
       $sSqlAutonomos .= "   and rh89_mesusu = {$iMesUsu}                        ";
+      $sSqlAutonomos .= "   and rh89_instit = {$iInstit}                        ";
       $sSqlAutonomos .= " order by rh16_pis asc, rh01_admiss asc                ";
       
       $rsDados = $clrhpessoal->sql_record($sSqlDados." union $sSqlAutonomos");
