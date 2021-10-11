@@ -42,6 +42,14 @@ db_postmemory($HTTP_POST_VARS);
 $db_botao = true;
 if(isset($incluir)){
     $sqlerro=false;
+    
+
+    if($pc60_orgaoreg==0){
+      $sqlerro=true;
+      db_msgbox("Campo Órgão Registro não Selecionado!");
+    }
+  
+    
     db_inicio_transacao();
 
     if($sqlerro==false){
@@ -66,7 +74,7 @@ if(isset($incluir)){
             db_msgbox("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
             $sqlerro = true;
         }
-    }
+    } 
     if($sqlerro == false){
         $clpcforne->pc60_usuario=db_getsession("DB_id_usuario");
         $clpcforne->pc60_hora=db_hora();

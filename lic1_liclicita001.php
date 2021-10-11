@@ -73,15 +73,17 @@ if(isset($incluir)){
 
     $erro_msg = '';
 
+
   /*
     Verifica se os Campos "Tipo de Licitao", "Natureza do Procedimento" no foram selecionados.
   */
   if(in_array($iTipoCompraTribunal,$aTipoLicNatProc)){
-
-    if( $oPost->l20_tipliticacao == '0' || empty($oPost->l20_tipliticacao) ){
-        $erro_msg .= 'Campo Tipo de Licitacao nao informado\n\n';
-        $sqlerro = true;
-    }
+	if($oPost->modalidade_tribunal != 51){
+		if( $oPost->l20_tipliticacao == '0' || empty($oPost->l20_tipliticacao) ){
+			$erro_msg .= 'Campo Tipo de Licitacao nao informado\n\n';
+			$sqlerro = true;
+		}
+	}
     if( $oPost->l20_tipnaturezaproced == '0' || empty($oPost->l20_tipnaturezaproced) ){
         $erro_msg .= 'Campo Natureza do Procedimento nao informado\n\n';
         $sqlerro = true;
@@ -92,10 +94,13 @@ if(isset($incluir)){
   /*
     Verifica se o Campo "Natureza do Objeto" no foi selecionado.
   */
-  if( $oPost->l20_naturezaobjeto == '0' || empty($oPost->l20_naturezaobjeto) ){
-      $erro_msg .= 'Campo Natureza do Objeto nao informado\n\n';
-      $sqlerro = true;
+  if($oPost->modalidade_tribunal != 51){
+	if( $oPost->l20_naturezaobjeto == '0' || empty($oPost->l20_naturezaobjeto) ){
+		$erro_msg .= 'Campo Natureza do Objeto nao informado\n\n';
+		$sqlerro = true;
+	}
   }
+  
 
   db_inicio_transacao();
 
