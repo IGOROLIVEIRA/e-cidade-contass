@@ -53,7 +53,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('l212_numerotermo',19,$Il212_numerotermo,true,'text',3,"")
+                    db_input('l212_numerotermo',19,$Il212_numerotermo,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -87,7 +87,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_inputdata('l212_dtpublicacao',@$l212_dtpublicacao_dia,@$l212_dtpublicacao_mes,@$l212_dtpublicacao_ano,true,'text',3,"")
+                    db_inputdata('l212_dtpublicacao',@$l212_dtpublicacao_dia,@$l212_dtpublicacao_mes,@$l212_dtpublicacao_ano,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -97,7 +97,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_textarea('l212_veiculodepublicacao',0,0,$Il212_veiculodepublicacao,true,'text',3,"")
+                    db_textarea('l212_veiculodepublicacao',0,0,$Il212_veiculodepublicacao,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -144,24 +144,33 @@ $clcredenciamentotermo->rotulo->label();
      */
     function js_pesquisa_liclicita(mostra){
 
-        if(mostra==true) {
+        if(mostra==true){
 
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_licobras',
-                'func_liclicita.php?situacao=10&credenciamentotermo=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_dtpubratificacao|l20_veicdivulgacao',
-                'Pesquisa Licitações', true);
+                'func_liclicita.php?situacao=10&funcao_js=parent.js_preencheLicitacao|l20_codigo',
+                'Pesquisa Licitações',true);
+        }else{
+
+            if(document.form1.l212_licitacao.value != ''){
+
+                js_OpenJanelaIframe('top.corpo',
+                    'db_iframe_licobras',
+                    'func_liclicita.php?situacao=10&pesquisa_chave='+
+                    document.form1.l212_licitacao.value+'&funcao_js=parent.js_preencheLicitacao2',
+                    'Pesquisa',false);
+            }else{
+                document.form1.l212_licitacao.value = '';
+            }
         }
+
     }
     /**
      * funcao para preencher licitacao  da ancora
      */
-    function js_preencheLicitacao(codigo,dtpublica,veicpublica)
+    function js_preencheLicitacao(codigo)
     {
-        var aDate = dtpublica.split('-');
-
         document.form1.l212_licitacao.value = codigo;
-        document.form1.l212_dtpublicacao.value = aDate[2]+'/'+aDate[1]+'/'+aDate[0];
-        document.form1.l212_veiculodepublicacao.value = veicpublica;
         db_iframe_licobras.hide();
         mostrarFornecedores();
     }
@@ -205,22 +214,13 @@ $clcredenciamentotermo->rotulo->label();
                 }
             }
         });
-        mostrarNumeroTermo();
-    }
 
-    function mostrarNumeroTermo() {
+        // Libera a Selecao do Elemento
+        let tabela = $('#l212_fornecedor').val();
 
-        var oParam = new Object();
-        oParam.action = "getNumeroTermo";
-        $.ajax({
-            type: "POST",
-            url: "emp1_empautitemcredenciamentotermo.RPC.php",
-            data: oParam,
-            success: function(data) {
-                let response = JSON.parse(data);
-                document.form1.l212_numerotermo.value = response.numerotermo;
-            }
-        });
+        if(tabela != ""){
+            $('#l212_fornecedor').show();
+        }
     }
 
 </script>

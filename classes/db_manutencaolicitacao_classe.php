@@ -18,7 +18,7 @@ class cl_manutencaolicitacao
   var $pagina_retorno = null;
   // cria variaveis do arquivo
   var $manutlic_sequencial = 0;
-  var $manutlic_codunidsubanterior = 0;
+  var $manutlic_codunidsubanterior = null;
   var $manutlic_licitacao = 0;
 
   // cria propriedade com as variaveis do arquivo
@@ -92,7 +92,7 @@ class cl_manutencaolicitacao
                        )
                 values (
                          $this->manutlic_sequencial
-                ,$this->manutlic_codunidsubanterior
+                ,'$this->manutlic_codunidsubanterior'
                 ,$this->manutlic_licitacao
                       )";
 

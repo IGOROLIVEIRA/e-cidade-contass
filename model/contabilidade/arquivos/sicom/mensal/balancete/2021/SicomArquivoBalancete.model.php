@@ -2067,108 +2067,159 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  * Com novas exigencias do TCE/MG, sera necessario informar todas as fontes destas contas bancarias,
                  * tal informaçao so temos no Acompanhamento Mensal no arquivo CTB.
                  * Desta maneira, sera necessario gerar o saldo das contas por fonte de acordo com os dados do registro 20 e 21 do arquivo CTB.
+                 * 
+                 * Caso seja RPPS, descrever as regras que barbara me passou
                  */
 
-                $sSqlCtb = "    SELECT DISTINCT 17 AS tiporegistro,
-                                        contacontabil,
-                                        atributosf,
-                                        codctb,
-                                        codfontrecursos,
-                                        CASE
-                                            WHEN contasagrupadas AND atributos_diferentes THEN saldoanteriorbalancete
-                                            ELSE saldoinicialctb
-                                        END AS saldoinicial,
-                                        CASE
-                                            WHEN contasagrupadas AND atributos_diferentes THEN naturezasaldoinicialbalancete
-                                            ELSE natursaldoinictb
-                                        END AS natursaldoinicial,
-                                        coalesce(CASE
-                                                    WHEN contasagrupadas AND atributos_diferentes THEN debitos
-                                                    WHEN tipoentrsaida = 1 THEN vlentrsaida
-                                                    ELSE 0
-                                                END,0) AS debitos,
-                                        coalesce(CASE
-                                                    WHEN contasagrupadas AND atributos_diferentes THEN creditos
-                                                    WHEN tipoentrsaida = 2 THEN vlentrsaida
-                                                    ELSE 0
-                                                END,0) AS creditos,
-                                        CASE
-                                            WHEN contasagrupadas AND atributos_diferentes THEN saldofinalbalancete
-                                            ELSE saldofinalctb
-                                        END AS saldofinal,
-                                        CASE
-                                            WHEN contasagrupadas AND atributos_diferentes THEN naturezasaldofinalbalancete
-                                            ELSE natursaldofinctb
-                                        END AS natursaldofinal
-                                    FROM
-                                        (SELECT contacontabil,
-                                                atributosf,
-                                                codctb,
-                                                codfontrecursos,
-                                                saldoinicialctb,
-                                                CASE
-                                                    WHEN saldoinicialctb < 0 THEN 'C'
-                                                    ELSE 'D'
-                                                END AS natursaldoinictb,
-                                                round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoanteriorbalancete,
-                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialbalancete,
-                                                round(substr(fc_planosaldonovo,17,14)::float8,2)::float8 AS debitos,
-                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
-                                                coalesce(si97_tipomovimentacao,0) AS tipoentrsaida,
-                                                si97_valorentrsaida AS vlentrsaida,
-                                                saldofinalctb,
-                                                CASE
-                                                    WHEN saldofinalctb < 0 THEN 'C'
-                                                    ELSE 'D'
-                                                END AS natursaldofinctb,
-                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldofinalbalancete,
-                                                substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalbalancete,
-                                                (
-                                                    (SELECT count(*)
-                                                    FROM conplano
-                                                    INNER JOIN conplanoreduz ON c61_codcon = c60_codcon
-                                                    AND c61_anousu = c60_anousu
-                                                    WHERE c61_anousu = ".db_getsession('DB_anousu')."
-                                                        AND c61_instit = ".db_getsession("DB_instit")."
-                                                        AND (c61_reduz = codctb
-                                                            OR c61_codtce = codctb) ) > 1) AS contasagrupadas,
-                                                (
-                                                    (SELECT count(*)
-                                                    FROM
-                                                        (SELECT DISTINCT c60_identificadorfinanceiro
-                                                            FROM conplano
-                                                            INNER JOIN conplanoreduz ON c61_codcon = c60_codcon
-                                                                AND c61_anousu = c60_anousu
-                                                            WHERE c61_anousu = ".db_getsession('DB_anousu')."
+                $bIsRPPS = $this->getTipoinstit(db_getsession("DB_instit")) == 5;
+                
+                if ($bIsRPPS) {
+                    
+                    $sSqlCtb = "    SELECT DISTINCT 17 AS tiporegistro,
+                                            contacontabil,
+                                            atributosf,
+                                            codctb,
+                                            codfontrecursos,
+                                            CASE
+                                                WHEN contasagrupadas AND atributos_diferentes THEN saldoanteriorbalancete
+                                                ELSE saldoinicialctb
+                                            END AS saldoinicial,
+                                            CASE
+                                                WHEN contasagrupadas AND atributos_diferentes THEN naturezasaldoinicialbalancete
+                                                ELSE natursaldoinictb
+                                            END AS natursaldoinicial,
+                                            coalesce(CASE
+                                                        WHEN contasagrupadas AND atributos_diferentes THEN debitos
+                                                        WHEN tipoentrsaida = 1 THEN vlentrsaida
+                                                        ELSE 0
+                                                    END,0) AS debitos,
+                                            coalesce(CASE
+                                                        WHEN contasagrupadas AND atributos_diferentes THEN creditos
+                                                        WHEN tipoentrsaida = 2 THEN vlentrsaida
+                                                        ELSE 0
+                                                    END,0) AS creditos,
+                                            CASE
+                                                WHEN contasagrupadas AND atributos_diferentes THEN saldofinalbalancete
+                                                ELSE saldofinalctb
+                                            END AS saldofinal,
+                                            CASE
+                                                WHEN contasagrupadas AND atributos_diferentes THEN naturezasaldofinalbalancete
+                                                ELSE natursaldofinctb
+                                            END AS natursaldofinal
+                                        FROM
+                                            (SELECT contacontabil,
+                                                    atributosf,
+                                                    codctb,
+                                                    codfontrecursos,
+                                                    saldoinicialctb,
+                                                    CASE
+                                                        WHEN saldoinicialctb < 0 THEN 'C'
+                                                        ELSE 'D'
+                                                    END AS natursaldoinictb,
+                                                    round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoanteriorbalancete,
+                                                    substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialbalancete,
+                                                    round(substr(fc_planosaldonovo,17,14)::float8,2)::float8 AS debitos,
+                                                    round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
+                                                    coalesce(si97_tipomovimentacao,0) AS tipoentrsaida,
+                                                    si97_valorentrsaida AS vlentrsaida,
+                                                    saldofinalctb,
+                                                    CASE
+                                                        WHEN saldofinalctb < 0 THEN 'C'
+                                                        ELSE 'D'
+                                                    END AS natursaldofinctb,
+                                                    round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldofinalbalancete,
+                                                    substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalbalancete,
+                                                    (
+                                                        (SELECT count(*)
+                                                        FROM conplano
+                                                        INNER JOIN conplanoreduz ON c61_codcon = c60_codcon
+                                                        AND c61_anousu = c60_anousu
+                                                        WHERE c61_anousu = ".db_getsession('DB_anousu')."
                                                             AND c61_instit = ".db_getsession("DB_instit")."
                                                             AND (c61_reduz = codctb
-                                                                OR c61_codtce = codctb) ) AS atributo) > 1) AS atributos_diferentes
+                                                                OR c61_codtce = codctb) ) > 1) AS contasagrupadas,
+                                                    (
+                                                        (SELECT count(*)
+                                                        FROM
+                                                            (SELECT DISTINCT c60_identificadorfinanceiro
+                                                                FROM conplano
+                                                                INNER JOIN conplanoreduz ON c61_codcon = c60_codcon
+                                                                    AND c61_anousu = c60_anousu
+                                                                WHERE c61_anousu = ".db_getsession('DB_anousu')."
+                                                                AND c61_instit = ".db_getsession("DB_instit")."
+                                                                AND (c61_reduz = codctb
+                                                                    OR c61_codtce = codctb) ) AS atributo) > 1) AS atributos_diferentes
+                                            FROM
+                                                (SELECT si96_sequencial,
+                                                        CASE
+                                                            WHEN c209_tceestrut IS NULL THEN substr(c60_estrut,1,9)
+                                                            ELSE c209_tceestrut
+                                                        END AS contacontabil,
+                                                        c60_identificadorfinanceiro AS atributosf,
+                                                        si96_codctb AS codctb,
+                                                        si96_codfontrecursos AS codfontrecursos,
+                                                        c61_reduz,
+                                                        si96_vlsaldoinicialfonte AS saldoinicialctb,
+                                                        fc_planosaldonovo(".db_getsession('DB_anousu').",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
+                                                        si96_vlsaldofinalfonte AS saldofinalctb
+                                                FROM ctb202021
+                                                INNER JOIN conplanoreduz ON c61_instit = si96_instit
+                                                AND c61_anousu = ".db_getsession('DB_anousu')."
+                                                AND (c61_codtce = si96_codctb
+                                                    OR c61_reduz = si96_codctb)
+                                                INNER JOIN conplano ON c60_codcon = c61_codcon
+                                                AND c60_anousu = c61_anousu
+                                                LEFT JOIN vinculopcasptce ON substr(c60_estrut,1,9) = c209_pcaspestrut
+                                                WHERE si96_mes = ".$this->sDataFinal['5'] . $this->sDataFinal['6']."
+                                                    AND si96_instit = ".db_getsession("DB_instit")." ) AS x
+                                            LEFT JOIN ctb212021 ON si96_sequencial = si97_reg20 ) AS xx
+                                        ORDER BY codctb,
+                                                codfontrecursos ";
+                } else {
+                    
+                    $sSqlCtb = "    SELECT  17 AS tiporegistro,
+                                            (SELECT CASE
+                                                WHEN c209_tceestrut IS NULL THEN substr(c60_estrut,1,9)
+                                                ELSE c209_tceestrut
+                                            END
+                                            FROM conplano
+                                                INNER JOIN conplanoreduz ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                                                LEFT JOIN vinculopcasptce ON substr(c60_estrut,1,9) = c209_pcaspestrut
+                                            WHERE c61_anousu =".db_getsession('DB_anousu')."
+                                                AND (c61_reduz = si96_codctb OR c61_codtce = si96_codctb)
+                                            ORDER BY c60_estrut
+                                            LIMIT 1) AS contacontabil,
+                                            (SELECT c60_identificadorfinanceiro
+                                                FROM conplano
+                                                INNER JOIN conplanoreduz ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                                                WHERE c61_anousu =".db_getsession('DB_anousu')."
+                                                    AND (c61_reduz = si96_codctb OR c61_codtce = si96_codctb)
+                                                ORDER BY c60_estrut
+                                                LIMIT 1) AS atributosf,
+                                            si96_codctb AS codctb,
+                                            si96_codfontrecursos AS codfontrecursos,
+                                            si96_vlsaldoinicialfonte AS saldoinicial,
+                                            CASE
+                                                WHEN si96_vlsaldoinicialfonte < 0 THEN 'C'
+                                                ELSE 'D'
+                                            END AS natursaldoinicial,
+                                            si97_tipomovimentacao AS tipoentrsaida,
+                                            si97_valorentrsaida AS vlentrsaida,
+                                            si96_vlsaldofinalfonte AS saldofinal,
+                                            CASE
+                                                WHEN si96_vlsaldofinalfonte < 0 THEN 'C'
+                                                ELSE 'D'
+                                            END AS natursaldofinal
                                         FROM
-                                            (SELECT si96_sequencial,
-                                                    CASE
-                                                        WHEN c209_tceestrut IS NULL THEN substr(c60_estrut,1,9)
-                                                        ELSE c209_tceestrut
-                                                    END AS contacontabil,
-                                                    c60_identificadorfinanceiro AS atributosf,
-                                                    si96_codctb AS codctb,
-                                                    si96_codfontrecursos AS codfontrecursos,
-                                                    c61_reduz,
-                                                    si96_vlsaldoinicialfonte AS saldoinicialctb,
-                                                    fc_planosaldonovo(".db_getsession('DB_anousu').",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                    si96_vlsaldofinalfonte AS saldofinalctb
-                                            FROM ctb202021
-                                            INNER JOIN conplanoreduz ON c61_instit = si96_instit
-                                            AND c61_anousu = ".db_getsession('DB_anousu')."
-                                            AND (c61_codtce = si96_codctb
-                                                OR c61_reduz = si96_codctb)
-                                            INNER JOIN conplano ON c60_codcon = c61_codcon
-                                            AND c60_anousu = c61_anousu
-                                            LEFT JOIN vinculopcasptce ON substr(c60_estrut,1,9) = c209_pcaspestrut
-                                            WHERE si96_mes = ".$this->sDataFinal['5'] . $this->sDataFinal['6']."
-                                                AND si96_instit = ".db_getsession("DB_instit")." ) AS x
-                                        LEFT JOIN ctb212021 ON si96_sequencial = si97_reg20 ) AS xx
-                                    ORDER BY codctb,
-                                            codfontrecursos ";
+                                            (SELECT *
+                                                FROM ctb202021
+                                                LEFT JOIN ctb212021 ON si96_sequencial = si97_reg20
+                                                WHERE si96_mes = ".$this->sDataFinal['5'] . $this->sDataFinal['6']."
+                                                    AND si96_instit = ".db_getsession("DB_instit").") AS xx
+                                        ORDER BY codctb";
+
+                }
+
                 $rsCtb = db_query($sSqlCtb) or die($sSqlCtb);
 
                 if (pg_num_rows($rsCtb) == 0) {
@@ -2202,6 +2253,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $obalancete17->si184_naturezasaldoinicialctb = $objContasctb->natursaldoinicial;
                             $obalancete17->si184_totaldebitosctb = $objContasctb->debitos;
                             $obalancete17->si184_totalcreditosctb = $objContasctb->creditos;
+                            $obalancete17->si184_totaldebitosctb = $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
+                            $obalancete17->si184_totalcreditosctb = $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
+
                             $obalancete17->si184_saldofinalctb = $objContasctb->saldofinal;
                             $obalancete17->si184_naturezasaldofinalctb = $objContasctb->natursaldofinal;
                             $obalancete17->si184_instit = db_getsession("DB_instit");
@@ -2210,17 +2264,17 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $aContasReg10[$reg10Hash]->reg17[$sHash17] = $obalancete17;
 
                             $aContasReg10[$reg10Hash]->si177_saldoinicial += $objContasctb->saldoinicial;
-                            $aContasReg10[$reg10Hash]->si177_totaldebitos += $objContasctb->debitos;
-                            $aContasReg10[$reg10Hash]->si177_totalcreditos += $objContasctb->creditos;
+                            $aContasReg10[$reg10Hash]->si177_totaldebitos += $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
+                            $aContasReg10[$reg10Hash]->si177_totalcreditos += $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
                             $aContasReg10[$reg10Hash]->si177_saldofinal += $objContasctb->saldofinal;
 
                         } else {
 
-                            $aContasReg10[$reg10Hash]->reg17[$sHash17]->si184_totaldebitosctb += $objContasctb->debitos;
-                            $aContasReg10[$reg10Hash]->reg17[$sHash17]->si184_totalcreditosctb += $objContasctb->creditos;
+                            $aContasReg10[$reg10Hash]->reg17[$sHash17]->si184_totaldebitosctb += $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
+                            $aContasReg10[$reg10Hash]->reg17[$sHash17]->si184_totalcreditosctb += $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
 
-                            $aContasReg10[$reg10Hash]->si177_totaldebitos += $objContasctb->debitos;
-                            $aContasReg10[$reg10Hash]->si177_totalcreditos += $objContasctb->creditos;
+                            $aContasReg10[$reg10Hash]->si177_totaldebitos += $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
+                            $aContasReg10[$reg10Hash]->si177_totalcreditos += $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
 
                         }
 

@@ -201,7 +201,7 @@ class cl_credenciamentotermo {
                                 $this->l212_sequencial 
                                ,$this->l212_licitacao 
                                ,$this->l212_fornecedor 
-                               ,'$this->l212_numerotermo' 
+                               ,$this->l212_numerotermo 
                                ,".($this->l212_dtinicio == "null" || $this->l212_dtinicio == ""?"null":"'".$this->l212_dtinicio."'")." 
                                ,".($this->l212_dtfim == "null" || $this->l212_dtfim == ""?"null":"'".$this->l212_dtfim."'")." 
                                ,".($this->l212_dtpublicacao == "null" || $this->l212_dtpublicacao == ""?"null":"'".$this->l212_dtpublicacao."'")." 

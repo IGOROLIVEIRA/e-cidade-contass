@@ -302,6 +302,7 @@ if ( isset($oPost->gerar) ) {
       $sSqlAutonomos .= "  left join rhcbo     on rh70_sequencial = z04_rhcbo   ";
       $sSqlAutonomos .= " where rh89_anousu = {$iAnoUsu}                        ";
       $sSqlAutonomos .= "   and rh89_mesusu = {$iMesUsu}                        ";
+      $sSqlAutonomos .= "   and rh89_instit = {$iInstit}                        ";
       $sSqlAutonomos .= " order by rh16_pis asc, rh01_admiss asc                ";
       
       $rsDados = $clrhpessoal->sql_record($sSqlDados." union $sSqlAutonomos");
@@ -909,7 +910,13 @@ if ( isset($oPost->gerar) ) {
               $cllayout_SEFIP->SFPRegistro30_183_197 = $remuneracao13;
               $cllayout_SEFIP->SFPRegistro30_200_201 = $ocorrencia;
               $cllayout_SEFIP->SFPRegistro30_202_216 = $desconto_seguro;
-              $cllayout_SEFIP->SFPRegistro30_217_231 = (($situacao_funcionario == 3 || $situacao_funcionario == 4)?$aBaseINSS[$oPessoal->rh01_regist]:0);
+              $lValorBaseContribPrevid = false;
+              if ($situacao_funcionario == cl_afasta::SITUACAO_DOENCAO_MAIS_15) {
+                $lValorBaseContribPrevid = $clafasta->checkSituacao($oPessoal->rh01_regist, $iAnoUsu, $iMesUsu, cl_afasta::SITUACAO_DOENCA_MENOS_15);
+              }
+              $cllayout_SEFIP->SFPRegistro30_217_231 = (in_array($situacao_funcionario, array(cl_afasta::SITUACAO_ACID_TRABALHO_MAIS_15,
+                cl_afasta::SITUACAO_SERVICO_MILITAR,cl_afasta::SITUACAO_LICENCA_GESTANTE,cl_afasta::SITUACAO_DOENCA_MENOS_15)) 
+                || $lValorBaseContribPrevid ? $aBaseINSS[$oPessoal->rh01_regist]:0);
               $cllayout_SEFIP->SFPRegistro30_232_246 = $valorrescis;
 
               $aListaGerados[$oPessoal->rh01_regist]['Nome']            = $oPessoal->z01_nome;

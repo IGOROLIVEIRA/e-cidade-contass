@@ -55,23 +55,9 @@ $clrotulo->label("pc01_descrmater");
 
 <form name="form1" method="post" action="">
     <center>
-        <fieldset style="margin-top:5px; width:45%;">
-            <legend><b>Elemento dos Itens</b></legend>
-            <table border="0" cellpadding='0' cellspacing='0'>
-                <tr id = "trelemento" style="height: 20px; display: none">
-                    <td nowrap title="">
-                        <b>Elemento dos item:  </b>
-                    </td>
-                    <td>
-                        <select id="pc07_codele" onchange="js_troca();">
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
         <div class="container">
             <div>
-                <table id="myTable" style="display: none" class="display nowrap">
+                <table id="myTable" class="display nowrap">
                     <thead>
                     <tr>
                         <th data-orderable="false"></th>
@@ -89,6 +75,7 @@ $clrotulo->label("pc01_descrmater");
             </div>
         </div>
         <br />
+        <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
         <input name="Salvar" type="button" id="salvar" value="Salvar" onclick="js_salvar();">
         <input name="Excluir" type="button" id="excluir" value="Excluir" onclick="js_excluir();">
     </center>
@@ -145,76 +132,13 @@ $clrotulo->label("pc01_descrmater");
                     action: 'buscaItens',
                     autori: <?php echo $e55_autori ?>,
                     licitacao: <?php echo $e54_codlicitacao ?>,
-                    codele: document.getElementById('pc07_codele').value,
                     fornecedor: <?php echo $z01_numcgm ?>,
                     dataType: "json"
                 }
             },
         });
     };
-
-    function mostrarElemento() {
-
-        let select = $('#pc07_codele');
-        select.html('');
-
-        // Cria option "default"
-        let defaultOpt = document.createElement('option');
-        defaultOpt.textContent = 'Selecione uma opção';
-        select.append(defaultOpt);
-
-        //Busco Elementos de acordo com a tabela
-        let params = {
-            action: 'getElementos',
-            e55_autori: <?= $e55_autori?>,
-            e54_numcgm: <?= $z01_numcgm?>,
-            e54_codlicitacao: <?= $e54_codlicitacao?>,
-        };
-
-        $.ajax({
-            type: "POST",
-            url: "emp1_empautitemcredenciamentotermo.RPC.php",
-            data: params,
-            success: function(data) {
-
-                let elementos = JSON.parse(data);
-
-                if(elementos.elementos.length != 0){
-                    elementos.elementos.forEach(function (oElementos, ele) {
-                        let option = document.createElement('option');
-                        option.value = oElementos.pc07_codele;
-                        option.text = oElementos.o56_descr;
-                        select.append(option);
-                    })
-                }else{
-                    top.corpo.iframe_empautoriza.location.reload();
-                }
-            }
-        });
-
-        // Libera a Selecao do Elemento
-        let tabela = $('#chave_tabela').val();
-
-        if(tabela != ""){
-            $('#trelemento').show();
-        }
-    }
-    mostrarElemento();
-    function js_troca() {
-        if (document.getElementById('pc07_codele').value == '...') {
-            $('#textocontainer').css("display", "inline");
-            $('#myTable').DataTable().clear().destroy();
-            $('#myTable').css("display", "none");
-            $('#salvar').css("display", "none");
-            $('#excluir').css("display", "none");
-        } else {
-            $('#textocontainer').css("display", "none");
-            $('#myTable').css("display", "inline");
-            $('#salvar').css("display", "inline");
-            $('#excluir').css("display", "inline");
-            js_loadTable();
-        }
-    }
+    js_loadTable();
 
     function js_calcula(origem) {
 
@@ -225,103 +149,6 @@ $clrotulo->label("pc01_descrmater");
         // $('checkbox_'+ id).attr("checked",true);
         t = new Number(vlun * quant);
         $('#total_' + id).val(t.toFixed(2));
-    }
-
-    function js_salvar() {
-
-        if (!$("input[type='checkbox']").is(':checked')) {
-            alert("É necessário marcar algum item");
-            return false;
-        }
-
-        // let rsDisponivel;
-        // rsDisponivel = Number($('#disponivel').val()) - Number($('#utilizado').val());
-        //
-        // if (Number($('#totalad').val()) > Number($('#disponivel').val())) {
-        //     alert("Não há valor disponível");
-        //     return false;
-        // }
-
-        var oParam = new Object();
-        oParam.action = "salvar";
-        oParam.autori = <?= $e55_autori?>;
-        oParam.fornecedor = <?= $z01_numcgm?>;
-        oParam.licitacao = <?= $e54_codlicitacao?>;
-        oParam.codele = $('#pc07_codele').val();
-        var oDados = {};
-        var aDados = [];
-
-        $("#mytable tr").each(function() {
-
-            if ($(this).find("input[type='checkbox']").is(":checked")) {
-
-                oDados.id = $(this).find("td").eq(2).html();
-                oDados.unidade = $(this).find("td").eq(4).find("select").val();
-                oDados.vlrunit = $(this).find("td").eq(6).find("input").val();
-                oDados.qtd = $(this).find("td").eq(7).find("input").val();
-                oDados.total = $(this).find("td").eq(8).find("input").val();
-
-                aDados.push(oDados);
-                oDados = {};
-            }
-        });
-
-        oParam.dados = aDados;
-        $.ajax({
-            type: "POST",
-            url: "emp1_empautitemcredenciamentotermo.RPC.php",
-            data: oParam,
-            success: function(data) {
-                let response = JSON.parse(data);
-                if (response.status == 0) {
-                    alert(response.message.urlDecode());
-                    return false;
-                } else {
-                    alert(response.message.urlDecode());
-                }
-            }
-        });
-    }
-
-    function js_excluir() {
-
-        if (!$("input[type='checkbox']").is(':checked')) {
-            alert("É necessário marcar algum item");
-            return false;
-        }
-
-        var oParam = new Object();
-        oParam.action = "excluir";
-        oParam.autori = <?= $e55_autori?>;
-        oParam.fornecedor = <?= $z01_numcgm?>;
-        oParam.licitacao = <?= $e54_codlicitacao?>;
-        oParam.codele = $('#pc07_codele').val();
-        var oDados = {};
-        var aDados = [];
-
-        $("#mytable tr").each(function() {
-
-            if ($(this).find("input[type='checkbox']").is(":checked")) {
-
-                oDados.id = $(this).find("td").eq(2).html();
-                aDados.push(oDados);
-                oDados = {};
-            }
-        });
-
-        oParam.dados = aDados;
-
-        $.ajax({
-            type: "POST",
-            url: "emp1_empautitemcredenciamentotermo.RPC.php",
-            data: oParam,
-            success: function(data) {
-
-                let response = JSON.parse(data);
-                alert(response.message);
-                top.corpo.iframe_empautoriza.location.reload();
-            }
-        });
     }
 
 </script>
