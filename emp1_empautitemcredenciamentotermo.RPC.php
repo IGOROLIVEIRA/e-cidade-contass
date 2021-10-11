@@ -349,6 +349,25 @@ switch ($_POST["action"]) {
         }
 
         break;
+
+    case 'getNumeroTermo':
+        $iAnoSessao      = db_getsession('DB_anousu');
+
+        $sql = "select max(l212_numerotermo) as numeromaximo from credenciamentotermo";
+        $rsNumTermo  = db_query($sql);
+        $iNumTermo = db_utils::fieldsMemory($rsNumTermo, 0)->numeromaximo;
+        if($iNumTermo == ""){
+            $iNum = 1;
+        }else{
+            $ultimonum = explode("/", $iNumTermo);
+            $iNum = $ultimonum[0] + 1;
+        }
+
+        $iNumTermoAno = $iNum.'/'.$iAnoSessao;
+
+        $oRetorno->numerotermo = $iNumTermoAno;
+
+        break;
 }
 
 function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){

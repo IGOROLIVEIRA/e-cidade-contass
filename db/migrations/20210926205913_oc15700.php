@@ -14,7 +14,7 @@ class Oc15700 extends AbstractMigration
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_sequencial    ', 'int8 ', 'Sequencial'                   ,'Sequencial', 'Sequencial', 19, false, false, false, 1, 'text', 'Sequencial');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_licitacao     ', 'int8 ', 'Licitacao'                    ,'Licitacao', 'Licitacao'  , 19, false, false, false, 1, 'text', 'Licitacao');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_fornecedor    ', 'int8 ', 'Fornecedor'                   ,'0', 'Fornecedor'         , 19, false, false, false, 1, 'text', 'Fornecedor');
-                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_numerotermo   ', 'int8 ', 'Número do Termo'              ,'0', 'Número do Termo'    , 19, false, false, false, 1, 'text', 'Número do Termo');
+                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_numerotermo   ', 'text ', 'Número do Termo'              ,'0', 'Número do Termo'    , 19, false, false, false, 1, 'text', 'Número do Termo');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_dtinicio      ', 'date' , 'Vigência'                     ,'', 'Vigência'            , 16, false, false, false, 0, 'date', 'Vigência');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_dtfim         ', 'date' , 'Vigência Final'               ,'', 'Vigência Final'      , 16, false, false, false, 0, 'date', 'Vigência Final');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_dtpublicacao  ', 'date' , 'Data da Publicação'           ,'', 'Data da Publicação'  , 16, false, false, false, 0, 'date', 'Data da Publicação');
@@ -48,7 +48,7 @@ class Oc15700 extends AbstractMigration
                     l212_sequencial          int8,
                     l212_licitacao           int8,
                     l212_fornecedor          int8,
-                    l212_numerotermo         int8,
+                    l212_numerotermo         text,
                     l212_dtinicio            date,
                     l212_dtfim               date,
                     l212_dtpublicacao        date,
@@ -83,6 +83,8 @@ class Oc15700 extends AbstractMigration
                     INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Termo de Credenciamento%'),(select max(id_item) from db_itensmenu),4,381);
                     
                     ALTER table credenciamentosaldo alter COLUMN l213_acordo DROP NOT NULL;
+                    
+                    
                     ";
         $this->execute($sql);
     }

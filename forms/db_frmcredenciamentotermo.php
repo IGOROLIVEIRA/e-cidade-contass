@@ -53,7 +53,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('l212_numerotermo',19,$Il212_numerotermo,true,'text',$db_opcao,"")
+                    db_input('l212_numerotermo',19,$Il212_numerotermo,true,'text',3,"")
                     ?>
                 </td>
             </tr>
@@ -87,7 +87,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_inputdata('l212_dtpublicacao',@$l212_dtpublicacao_dia,@$l212_dtpublicacao_mes,@$l212_dtpublicacao_ano,true,'text',$db_opcao,"")
+                    db_inputdata('l212_dtpublicacao',@$l212_dtpublicacao_dia,@$l212_dtpublicacao_mes,@$l212_dtpublicacao_ano,true,'text',3,"")
                     ?>
                 </td>
             </tr>
@@ -97,7 +97,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_textarea('l212_veiculodepublicacao',0,0,$Il212_veiculodepublicacao,true,'text',$db_opcao,"")
+                    db_textarea('l212_veiculodepublicacao',0,0,$Il212_veiculodepublicacao,true,'text',3,"")
                     ?>
                 </td>
             </tr>
@@ -205,13 +205,22 @@ $clcredenciamentotermo->rotulo->label();
                 }
             }
         });
+        mostrarNumeroTermo();
+    }
 
-        // Libera a Selecao do Elemento
-        let tabela = $('#l212_fornecedor').val();
+    function mostrarNumeroTermo() {
 
-        if(tabela != ""){
-            $('#l212_fornecedor').show();
-        }
+        var oParam = new Object();
+        oParam.action = "getNumeroTermo";
+        $.ajax({
+            type: "POST",
+            url: "emp1_empautitemcredenciamentotermo.RPC.php",
+            data: oParam,
+            success: function(data) {
+                let response = JSON.parse(data);
+                document.form1.l212_numerotermo.value = response.numerotermo;
+            }
+        });
     }
 
 </script>

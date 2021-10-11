@@ -17,8 +17,8 @@ switch ($_POST["action"]) {
         $licitacao       = $_POST["l212_licitacao"];
         $iAnoSessao      = db_getsession('DB_anousu');
 
-        $sqlFornecedor = "SELECT z01_numcgm,
-                                 z01_nome
+        $sqlFornecedor = "SELECT DISTINCT z01_numcgm,
+                                          z01_nome
             FROM credenciamento
             INNER JOIN cgm ON z01_numcgm = l205_fornecedor
             WHERE l205_licitacao ={$licitacao}";
