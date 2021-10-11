@@ -50,6 +50,12 @@ if (isset($db_opcaoal)) {
 db_app::load("DBFormCache.js");
 
 ?>
+<script>
+    function js_relatorio() {
+        jan = window.open('emp2_emiteautori002.php?e54_autori=<?= $e54_autori ?>&instit=<?= db_getsession("DB_instit") ?>', '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+        jan.moveTo(0, 0);
+    }
+</script>
 
 <form name="form1" method="post" onsubmit="<?php ($db_opcao == 1) ? 'return js_salvaCache();' : ''; ?>" action="<?= $ac ?>">
     <fieldset>
