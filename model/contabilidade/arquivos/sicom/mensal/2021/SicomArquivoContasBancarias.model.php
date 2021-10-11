@@ -608,8 +608,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                                    WHERE c71_codlan=c69_codlan
                                                        AND c71_coddoc IN (120)
                                                    LIMIT 1) = 2  THEN 13
-                                         WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3)
-                                              AND k131_concarpeculiar = '095' THEN 95
+                                         WHEN c71_coddoc IN (141, 140) AND k131_concarpeculiar = '095' THEN 95
                                          WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
                                          WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
                                          WHEN c71_coddoc IN (141, 140) THEN 6
@@ -701,8 +700,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                         WHEN c71_coddoc IN (6,36,38,121,153,163) THEN 17
                                         WHEN c71_coddoc IN (131,152,162) THEN 10
                                         WHEN c71_coddoc IN (130) THEN 12
-                                        WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3)
-                                        AND k131_concarpeculiar = '096' THEN 96
+                                        WHEN c71_coddoc IN (141, 140) AND k131_concarpeculiar = '096' THEN 96
                                         WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
                                         WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
                                         WHEN c71_coddoc IN (141, 140) THEN 5
@@ -749,7 +747,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                         WHEN c72_complem ILIKE 'Referente%'
                                              AND c71_coddoc IN (5,35,37,6,36,38) THEN 1
                                         ELSE 0
-                                    END AS retencao, '0' as k131_concarpeculiar
+                                    END AS retencao, k131_concarpeculiar
                              FROM conlancamdoc
                              INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
 							 INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
@@ -777,7 +775,6 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                         WHERE fontemovimento::integer = $iFonteMovimento";
 
           $rsMovi21 = db_query($sSqlReg21);
-
 
             if (pg_num_rows($rsMovi21) != 0) {
 
