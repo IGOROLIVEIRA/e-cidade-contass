@@ -36,15 +36,15 @@ if(!isset($pesquisa_chave)){
         }
     }
 
-    $dataDoSistema = date("Y-m-d", db_getsession('DB_datausu'));
-    $Where = "l212_dtinicio >= '{$dataDoSistema}' and l212_dtfim <= '{$dataDoSistema}'";
+//    $dataDoSistema = date("Y-m-d", db_getsession('DB_datausu'));
+//    $Where = "l212_dtinicio >= '{$dataDoSistema}' and l212_dtfim <= '{$dataDoSistema}'";
 
     $sql = $clcredenciamentotermo->sql_query(null,"*",null,$Where);
     $repassa = array();
     echo '<div class="container">';
     echo '  <fieldset>';
     echo '    <legend>Resultado da Pesquisa</legend>';
-
+//die($sql);
     db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
     echo '  </fieldset>';
     echo '</div>';

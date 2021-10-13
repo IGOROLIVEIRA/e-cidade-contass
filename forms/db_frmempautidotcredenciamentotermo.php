@@ -313,8 +313,9 @@ if (isset($tot) && $tot < 0 && empty($cancelar) && isset($pesquisa_dot)) {
     }
 
     function js_pesquisao47_coddot(mostra) {
-        elemento = top.corpo.iframe_empautitem.document.form1.pc07_codele.value;
+        elemento = '';
         query = '';
+        // console.log(elemento);
         if (elemento != '') {
             query = "elemento=" + elemento + "&";
         }

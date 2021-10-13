@@ -205,7 +205,9 @@ $clcredenciamentotermo->rotulo->label();
                 }
             }
         });
-        mostrarNumeroTermo();
+        if(db_opcao == 1){
+            mostrarNumeroTermo();
+        }
     }
 
     function mostrarNumeroTermo() {

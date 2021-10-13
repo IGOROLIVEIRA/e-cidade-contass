@@ -257,7 +257,7 @@ db_app::load("DBFormCache.js");
 
             js_OpenJanelaIframe('top.corpo.iframe_empautoriza',
                 'db_iframe_credenciamentotermo',
-                'func_credenciamentotermo.php?vigente=true&funcao_js=parent.js_preenchertermocredenciamento|l212_numerotermo|l20_edital|l20_numero|l20_anousu|z01_numcgm|z01_nome|l03_descr|l20_codigo|pc50_codcom',
+                'func_credenciamentotermo.php?virgente=true&funcao_js=parent.js_preenchertermocredenciamento|l212_numerotermo|l20_edital|l20_numero|l20_anousu|z01_numcgm|z01_nome|l03_descr|l20_codigo|pc50_codcom',
                 'Pesquisa Termo Credenciamento',true, '0', '1');
         }
     }
