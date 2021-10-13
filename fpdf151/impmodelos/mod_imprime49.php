@@ -46,7 +46,7 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->sety($xlin + 3);
     $this->objpdf->setx($xlin + 19);
     $this->objpdf->Setfont('Arial', 'B', 10);
-    $this->objpdf->cell(121, 5, "NOTA FISCAL DE SERVICOS ELETRÔNICA - AVULSA", 0, 1, "C");
+    $this->objpdf->cell(121, 5, "NOTA FISCAL DE SERVIÇOS ELETRÔNICA - AVULSA", 0, 1, "C");
 
     //Descricao VIA
     $this->objpdf->Setfont('Arial', '', 7);
@@ -87,66 +87,66 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->rect(10, $xlin + 10, 190, 20);
     //Nome
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text(12, $xlin + 12, 'NOME/RAZAO SOCIAL');
+    $this->objpdf->text(12, $xlin + 12, 'NOME/RAZÃO SOCIAL');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text(14, $xlin + 14, $this->dadosPrestador->z01_nome);
+    $this->objpdf->text(14, $xlin + 14.3, $this->dadosPrestador->z01_nome);
     $this->objpdf->line(10, $xlin + 15, 200, $xlin + 15);
     //Endereco
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text(12, $xlin + 17, 'ENDERECO');
+    $this->objpdf->text(12, $xlin + 17, 'ENDEREÇO');
     $this->objpdf->Setfont('Arial', '', 7);
     $this->dadosPrestador->z01_ender = trim($this->dadosPrestador->z01_ender);
-    $this->objpdf->text(14, $xlin + 19, "{$this->dadosPrestador->z01_ender}, {$this->dadosPrestador->z01_numero}");
+    $this->objpdf->text(14, $xlin + 19.3, "{$this->dadosPrestador->z01_ender}, {$this->dadosPrestador->z01_numero}");
     $this->objpdf->line(10, $xlin + 20, 200, $xlin + 20);
+    //BAIRRO
+    $this->objpdf->Setfont('Arial', 'B', 5);
+    $this->objpdf->text($xcol + 132, $xlin + 17, 'BAIRRO');
+    $this->objpdf->Setfont('Arial', '', 7);
+    $this->objpdf->text($xcol + 134, $xlin + 19.3, $this->dadosPrestador->z01_bairro);
+    $this->objpdf->line($xcol + 130, $xlin + 15, $xcol + 130, $xlin + 25);
     //Municipio
     $this->objpdf->Setfont('Arial', 'B', 5);
     $this->objpdf->text(12, $xlin + 22, 'MUNICIPIO');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text(14, $xlin + 24, $this->dadosPrestador->z01_munic);
-    $this->objpdf->line($xcol + 50, $xlin + 20, $xcol + 50, $xlin + 25);
+    $this->objpdf->text(14, $xlin + 24.3, $this->dadosPrestador->z01_munic);
+    $this->objpdf->line(10, $xlin + 20, 200, $xlin + 20);    
     //UF
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text($xcol + 52, $xlin + 22, 'UF');
+    $this->objpdf->text($xcol + 122, $xlin + 22, 'UF');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 54, $xlin + 24, $this->dadosPrestador->z01_uf);
-    $this->objpdf->line($xcol + 60, $xlin + 20, $xcol + 60, $xlin + 25);
-    //CPF/CNPF
-    $this->objpdf->Setfont('Arial', 'b', 5);
-    $this->objpdf->text($xcol + 62, $xlin + 22, 'CPF/CNPJ');
+    $this->objpdf->text($xcol + 124, $xlin + 24.3, $this->dadosPrestador->z01_uf);
+    //CEP
+    $this->objpdf->Setfont('Arial', 'B', 5);
+    $this->objpdf->text($xcol + 132, $xlin + 22, 'CEP');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 64, $xlin + 24, $this->dadosPrestador->z01_cgccpf);
-    $this->objpdf->line($xcol + 100, $xlin + 20, $xcol + 100, $xlin + 25);
-    //INSCRICAO
-    $this->objpdf->Setfont('Arial', 'b', 5);
-    $this->objpdf->text($xcol + 102, $xlin + 22, 'INSCRICAO MUNICIPAL');
-    $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 104, $xlin + 24, $this->dadosPrestador->q02_inscr);
-    $this->objpdf->line($xcol + 160, $xlin + 20, $xcol + 160, $xlin + 25);
+    $this->objpdf->text($xcol + 134, $xlin + 24.3, $this->dadosPrestador->z01_cep);
+    //$this->objpdf->line($xcol + 130, $xlin + 20, $xcol + 130, $xlin + 25);
     //Fone
     $this->objpdf->Setfont('Arial', 'b', 5);
     $this->objpdf->text($xcol + 162, $xlin + 22, 'TELEFONE');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 164, $xlin + 24, $this->dadosPrestador->z01_telef);
-
-    $this->objpdf->line(10, $xlin + 25, 200, $xlin + 25);
+    $this->objpdf->text($xcol + 164, $xlin + 24.3, $this->dadosPrestador->z01_telef);
+    $this->objpdf->line($xcol + 160, $xlin + 20, $xcol + 160, $xlin + 25);    
+    //CPF/CNPJ
+    $this->objpdf->Setfont('Arial', 'b', 5);
+    $this->objpdf->text(12, $xlin + 27, 'CPF/CNPJ');
+    $this->objpdf->Setfont('Arial', '', 7);
+    $this->objpdf->text(14, $xlin + 29, $this->dadosPrestador->z01_cgccpf);
+    $this->objpdf->line(10, $xlin + 30, 200, $xlin + 30);
+    //INSCRICAO
+    $this->objpdf->Setfont('Arial', 'b', 5);
+    $this->objpdf->text($xcol + 82, $xlin + 27, 'INSCRIÇÃO MUNICIPAL');
+    $this->objpdf->Setfont('Arial', '', 7);
+    $this->objpdf->text($xcol + 84, $xlin + 29.3, $this->dadosPrestador->q02_inscr);
+    $this->objpdf->line($xcol + 80, $xlin + 25, $xcol + 80, $xlin + 30);
     //Email
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text(12, $xlin + 27, 'EMAIL');
+    $this->objpdf->text($xcol + 132, $xlin + 27, 'EMAIL');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text(14, $xlin + 29, $this->dadosPrestador->z01_email);
-    $this->objpdf->line($xcol + 75, $xlin + 25, $xcol + 75, $xlin + 30);
-    //CEP
-    $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text($xcol + 77, $xlin + 27, 'CEP');
-    $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 79, $xlin + 29, $this->dadosPrestador->z01_cep);
-    $this->objpdf->line($xcol + 120, $xlin + 25, $xcol + 120, $xlin + 30);
-    //BAIRRO
-    $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text($xcol + 122, $xlin + 27, 'BAIRRO');
-    $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 125, $xlin + 29, $this->dadosPrestador->z01_bairro);
-
+    $this->objpdf->text($xcol + 134, $xlin + 29.3, $this->dadosPrestador->z01_email);
+    $this->objpdf->line($xcol + 130, $xlin + 25, $xcol + 130, $xlin + 30);
+   
+    $this->objpdf->line(10, $xlin + 25, 200, $xlin + 25);
     $xlin = 60;
     $this->objpdf->sety($xlin + 5);
     //Dados do TOMADOR
@@ -155,73 +155,80 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->rect(10, $xlin + 10, 190, 20);
     //Nome
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text(12, $xlin + 12, 'NOME/RAZAO SOCIAL');
+    $this->objpdf->text(12, $xlin + 12, 'NOME/RAZÃO SOCIAL');
     $this->objpdf->Setfont('Arial', '', 7);
     $this->dadosTomador->z01_nomecomple = trim($this->dadosTomador->z01_nomecomple);
     $nometomador = empty($this->dadosTomador->z01_nomecomple) ? $this->dadosTomador->z01_nome : $this->dadosTomador->z01_nomecomple;
-    $this->objpdf->text(14, $xlin + 14.2, $nometomador);
+    $this->objpdf->text(14, $xlin + 14.3, $nometomador);
     $this->objpdf->line(10, $xlin + 15, 200, $xlin + 15);
     //Endereco
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text(12, $xlin + 17, 'ENDERECO');
+    $this->objpdf->text(12, $xlin + 17, 'ENDEREÇO');
     $this->objpdf->Setfont('Arial', '', 7);
     $this->dadosTomador->z01_ender = trim($this->dadosTomador->z01_ender);
-    $this->objpdf->text(14, $xlin + 19.2, "{$this->dadosTomador->z01_ender}, {$this->dadosTomador->z01_numero}");
+    $this->objpdf->text(14, $xlin + 19.3, "{$this->dadosTomador->z01_ender}, {$this->dadosTomador->z01_numero}");
     $this->objpdf->line(10, $xlin + 20, 200, $xlin + 20);
+    //BAIRRO
+    $this->objpdf->Setfont('Arial', 'B', 5);
+    $this->objpdf->text($xcol + 132, $xlin + 17, 'BAIRRO');
+    $this->objpdf->Setfont('Arial', '', 7);
+    $this->objpdf->text($xcol + 134, $xlin + 19.3, $this->dadosTomador->z01_bairro);
+    $this->objpdf->line($xcol + 130, $xlin + 15, $xcol + 130, $xlin + 25);
     //Municipio
     $this->objpdf->Setfont('Arial', 'B', 5);
     $this->objpdf->text(12, $xlin + 22, 'MUNICIPIO');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text(14, $xlin + 24.2, $this->dadosTomador->z01_munic);
-    $this->objpdf->line($xcol + 50, $xlin + 20, $xcol + 50, $xlin + 25);
+    $this->objpdf->text(14, $xlin + 24.3, $this->dadosTomador->z01_munic);
+    $this->objpdf->line(10, $xlin + 25, 200, $xlin + 25);
     //UF
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text($xcol + 52, $xlin + 22, 'UF');
+    $this->objpdf->text($xcol + 122, $xlin + 22, 'UF');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 54, $xlin + 24, $this->dadosTomador->z01_uf);
-    $this->objpdf->line($xcol + 60, $xlin + 20, $xcol + 60, $xlin + 25);
-    //CPF/CNPF
-    $this->objpdf->Setfont('Arial', 'b', 5);
-    $this->objpdf->text($xcol + 62, $xlin + 22, 'CPF/CNPJ');
+    $this->objpdf->text($xcol + 124, $xlin + 24.3, $this->dadosTomador->z01_uf);
+    $this->objpdf->line($xcol + 120, $xlin + 25, $xcol + 120, $xlin + 25);
+    //CEP
+    $this->objpdf->Setfont('Arial', 'B', 5);
+    $this->objpdf->text($xcol + 132, $xlin + 22, 'CEP');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 64, $xlin + 24, $this->dadosTomador->z01_cgccpf);
-    $this->objpdf->line($xcol + 100, $xlin + 20, $xcol + 100, $xlin + 25);
-    //INSCRICAO
-    $this->objpdf->Setfont('Arial', 'b', 5);
-    $this->objpdf->text($xcol + 102, $xlin + 22, 'INSCRICAO MUNICIPAL');
-    $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 104, $xlin + 24, $this->dadosTomador->q02_inscr);
-    $this->objpdf->line($xcol + 160, $xlin + 20, $xcol + 160, $xlin + 25);
+    $this->objpdf->text($xcol + 134, $xlin + 24.3, $this->dadosTomador->z01_cep);
+    $this->objpdf->line($xcol + 120, $xlin + 20, $xcol + 120, $xlin + 25);
     //Fone
     $this->objpdf->Setfont('Arial', 'b', 5);
     $this->objpdf->text($xcol + 162, $xlin + 22, 'TELEFONE');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 164, $xlin + 24, $this->dadosTomador->z01_telef);
-    // $this->objpdf->line($xcol+100,$xlin+20,$xcol+100,$xlin+25);
-    $this->objpdf->line(10, $xlin + 25, 200, $xlin + 25);
+    $this->objpdf->text($xcol + 164, $xlin + 24.3, $this->dadosTomador->z01_telef);
+    $this->objpdf->line($xcol + 160,$xlin + 20,$xcol + 160,$xlin + 25);
+    //CPF/CNPJ
+    $this->objpdf->Setfont('Arial', 'b', 5);
+    $this->objpdf->text(12, $xlin + 27, 'CPF/CNPJ');
+    $this->objpdf->Setfont('Arial', '', 7);
+    $this->objpdf->text(14, $xlin + 29.3, $this->dadosTomador->z01_cgccpf);
+    //$this->objpdf->line(10, $xlin + 30, 200, $xlin + 30);
+    //INSCRICAO
+    $this->objpdf->Setfont('Arial', 'b', 5);
+    $this->objpdf->text($xcol + 52, $xlin + 27, 'INSCRIÇÃO MUNICIPAL');
+    $this->objpdf->Setfont('Arial', '', 7);
+    $this->objpdf->text($xcol + 54, $xlin + 29.3, $this->dadosTomador->q02_inscr);
+    $this->objpdf->line($xcol + 50, $xlin + 25, $xcol + 50, $xlin + 30);
+    //INSCRICAO ESTADUAL
+    $this->objpdf->Setfont('Arial', 'b', 5);
+    $this->objpdf->text($xcol + 92, $xlin + 27, 'INSCRIÇÃO ESTADUAL');
+    $this->objpdf->Setfont('Arial', '', 7);
+    $this->objpdf->text($xcol + 94, $xlin + 29.3, $this->dadosTomador->z01_incest);
+    $this->objpdf->line($xcol + 90, $xlin + 25, $xcol + 90, $xlin + 30);
     //Email
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text(12, $xlin + 27, 'EMAIL');
+    $this->objpdf->text($xcol + 132, $xlin + 27, 'EMAIL');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text(14, $xlin + 29, $this->dadosTomador->z01_email);
-    $this->objpdf->line($xcol + 75, $xlin + 30.2, $xcol + 75, $xlin + 25);
-    //CEP
-    $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text($xcol + 77, $xlin + 27, 'CEP');
-    $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 79, $xlin + 29, $this->dadosTomador->z01_cep);
-    $this->objpdf->line($xcol + 120, $xlin + 30, $xcol + 120, $xlin + 25);
-    //BAIRRO
-    $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text($xcol + 122, $xlin + 27, 'BAIRRO');
-    $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 125, $xlin + 29, $this->dadosTomador->z01_bairro);
+    $this->objpdf->text($xcol + 134, $xlin + 29.3, $this->dadosTomador->z01_email);
+    $this->objpdf->line($xcol + 130, $xlin + 25, $xcol + 130, $xlin + 30);
+
     $this->objpdf->sety($xlin + 33);
 
     $this->objpdf->cell(15, 5, "QUANT", 1, 0, "C");
-    $this->objpdf->cell(100, 5, "DISCRIMINACAO DOS SERVICOS", 1, 0, "C");
-    $this->objpdf->cell(30, 5, "VALOR UNITARIO", 1, 0, "C");
-    $this->objpdf->cell(15, 5, "ALIQ", 1, 0, "C");
+    $this->objpdf->cell(100, 5, "DISCRIMINAÇÃO DOS SERVIÇOS", 1, 0, "C");
+    $this->objpdf->cell(30, 5, "VALOR UNITÁRIO", 1, 0, "C");
+    $this->objpdf->cell(15, 5, "ALIQ (%)", 1, 0, "C");
     $this->objpdf->cell(30, 5, "VALOR TOTAL", 1, 1, "C");
 
 
@@ -247,7 +254,10 @@ for ($j = 0; $j < $confNumRows; $j++) {
         $sDescitemservico = $oItensServico->db121_estrutural . " - " . $oItensServico->db121_descricao;
         $fAliquota = $oItensServico->q62_aliquota;
 
-        $this->objpdf->cell(15, 3, $oItensServico->q62_qtd, "LR", 0, "R");
+
+        //$this->objpdf->cell(30, 20,"Avisos", "LTB", 0, "C");
+
+        $this->objpdf->cell(15, 3, $oItensServico->q62_qtd, "LTB", 0, "C");
         $cellYold = $this->objpdf->getY();
         $this->objpdf->multiCell(100, 3, $oItensServico->q62_discriminacao, "LR", "L");
         $cellYnew = $this->objpdf->getY();
@@ -255,13 +265,15 @@ for ($j = 0; $j < $confNumRows; $j++) {
         $this->objpdf->setx(125);
         $vlUniMostra = $oItensServico->q62_vlruni != '' ? number_format($oItensServico->q62_vlruni, 2, ",", ".") : null;
         $this->objpdf->cell(30, 3, $vlUniMostra, "LR", 0, "R");
-        $this->objpdf->cell(15, 3, $oItensServico->q62_aliquota, "LR", 0, "R");
+        $vlAliquota = $oItensServico->q62_aliquota != '' ? number_format($oItensServico->q62_aliquota, 2, ",", ".") : null;
+        $this->objpdf->cell(15, 3, $vlAliquota, "LR", 0, "R");
+        //$this->objpdf->cell(15, 3, $oItensServico->q62_aliquota, "LR", 0, "R");
         $vlTotalMostra = $totalLinha != null ? number_format($totalLinha, 2, ".", ",") : null;
         $this->objpdf->cell(30, 3, $vlTotalMostra, "LR", 1, "R");
     }
     //echo $totalLetras
     $this->objpdf->sety(220);
-    $iYFinal = $this->objpdf->getY() - 10;
+    $iYFinal = $this->objpdf->getY() - 15;
 
     $this->objpdf->line(10, $iYinicio, 10, $iYFinal);
     $this->objpdf->line(25, $iYinicio, 25, $iYFinal);
@@ -270,8 +282,18 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->line(170, $iYinicio, 170, $iYFinal);
     $this->objpdf->line(200, $iYinicio, 200, $iYFinal);
 
+    //Código da Atividade
+    $this->yOld = $this->objpdf->getY() - 15;
+    $this->objpdf->rect(10, $this->yOld, 190, 20);
+    $this->objpdf->Setfont('Arial', 'B', 7);
+    $this->objpdf->sety($this->yOld);
+    $this->objpdf->cell(190, 5, "CÓDIGO DO SERVIÇO - ATIVIDADE", 1, 1, "C", true);
+    $this->objpdf->Setfont('Arial', '', 7);      
+    $this->objpdf->multiCell(190, 5, $sDescitemservico, "", "J");
+    $this->objpdf->Setfont('Arial', '', 8);
+
     //box com o total devido de imposto
-    $this->yOld = $this->objpdf->getY() - 10;
+    $this->yOld = $this->objpdf->getY() + 10;
     $this->objpdf->rect(10, $this->yOld, 115, 25);
     $this->objpdf->Setfont('Arial', '', 10);
     $this->objpdf->sety($this->yOld + 2);
@@ -283,7 +305,6 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->Setfont('Arial', '', 10);
 
     //valores totais da nota
-
     $this->objpdf->sety($this->yOld);
     $this->objpdf->setX(125);
     $this->objpdf->Setfont('Arial', '', 10);
@@ -313,11 +334,11 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->cell(40, 5, "Valor Total da Nota", 1, 0);
     $this->objpdf->Setfont('Arial', '', 10);
     $this->objpdf->cell(35, 5, "R$ " . number_format(($fTotalNota), 2, ",", "."), 1, 1, "R");
-
-    $this->objpdf->sety(250);
+   
+    $this->objpdf->sety(255);
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->cell(30, 20,"Avisos", "LTB", 0, "C");
     $this->objpdf->Setfont('Arial', '', 8);
-    $this->objpdf->rect(40, $this->yOld+40, 160, 20);
-    $this->objpdf->MultiCell(160, 5,$this->texto_aviso, 0, "L");
+    $this->objpdf->rect(40, $this->yOld + 30, 160, 20);
+    $this->objpdf->MultiCell(165, 5,$this->texto_aviso, 0, "L");
 }
