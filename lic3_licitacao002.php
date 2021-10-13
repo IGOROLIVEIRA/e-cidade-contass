@@ -62,9 +62,9 @@ if ($oDaoLicitacao->numrows == 0) {
 $dtSituacao            = "";
 $oDaoLicitacaoSituacao = db_utils::getDao("liclicitasituacao");
 $sWhere                = " l11_liclicita       = " . $oLicitatacao->l20_codigo;
-$sWhere               .= " and l11_licsituacao = " . $oLicitatacao->l08_sequencial;
+$sWhere               .= " and l11_licsituacao = " . $oLicitatacao->l20_licsituacao;
 $sOrder                = " l11_sequencial desc limit 1 ";
-$sSqlDataSituacao      = $oDaoLicitacaoSituacao->sql_query(null, "l11_data", $sOrder, $sWhere);
+$sSqlDataSituacao      = $oDaoLicitacaoSituacao->sql_query(null, "l11_data,l08_descr", $sOrder, $sWhere);
 $rsDataSituacao        = $oDaoLicitacaoSituacao->sql_record($sSqlDataSituacao);
 if ($oDaoLicitacaoSituacao->numrows > 0) {
     $dtSituacao = db_formatar(db_utils::fieldsMemory($rsDataSituacao, 0)->l11_data, 'd');
@@ -214,7 +214,7 @@ if (!empty($oProcessoProtocolo)) {
                     <b>Situação:</b>
                 </td>
                 <td nowrap="nowrap" class="valor" style="text-align: left;" colspan="3">
-                    <?php echo $oLicitatacao->l08_descr; ?>
+                    <?php echo db_utils::fieldsMemory($rsDataSituacao, 0)->l08_descr; ?>
                 </td>
             </tr>
 
