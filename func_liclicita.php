@@ -218,6 +218,14 @@ $sWhereContratos = " and 1 = 1 ";
 				$dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND ";
 			}
 
+            if($credenciamentotermo == 'true'){
+                $dbwhere .= " l03_pctipocompratribunal IN (102,103) 
+                    AND l20_codigo NOT IN
+                    (SELECT ac16_licitacao
+                     FROM acordo
+                     WHERE ac16_licitacao = l20_codigo) AND ";
+            }
+
             if($listacred == 'false'){
                 $dbwhere .= " l03_pctipocompratribunal NOT IN (102, 103) AND ";
             }
@@ -411,6 +419,7 @@ $sWhereContratos = " and 1 = 1 ";
           ";
                 }
                 $aRepassa = array();
+
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
 
             } else {

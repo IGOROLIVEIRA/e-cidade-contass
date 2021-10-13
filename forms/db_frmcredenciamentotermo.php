@@ -13,13 +13,13 @@ $clcredenciamentotermo->rotulo->label();
     #fornecedores{
         width: 243px;
     }
-    #l212_veiculodepublicacao{
-        width: 552px;
+    #l212_veiculodepublicacao {
+        width: 452px;
         height: 18px;
     }
 </style>
 <form name="form1" method="post" action="">
-    <fieldset style="align-items: center; width: 50%; margin-top: 30px; margin-left: 30%">
+    <fieldset style="align-items: center; width: 50%; margin-top: 30px; margin-left: 20%">
         <legend>
             Termo de Credenciamento
         </legend>
