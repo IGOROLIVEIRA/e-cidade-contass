@@ -330,9 +330,35 @@ try{
             /**
              * incluir itens na homologação
              */
+
+            //getTipoCompra
+            $sqlTipoCompra = "SELECT l44_sequencial
+                                FROM liclicita
+                                INNER JOIN cflicita ON l03_codigo = l20_codtipocom
+                                INNER JOIN pctipocompratribunal ON l44_sequencial = l03_pctipocompratribunal
+                                WHERE l20_codigo = $oParam->licitacao";
+            $rsSqlTipoCompra = db_query($sqlTipoCompra);
+            $l44_sequencial = db_utils::fieldsMemory($rsSqlTipoCompra, 0)->l44_sequencial;
+
+            if($l44_sequencial == "100" || $l44_sequencial == "101"){
+                $sqlVencedor = "select z01_numcgm
+                                    from liclicita
+                                    inner join liclicitem on l21_codliclicita=l20_codigo
+                                    inner join pcorcamitemlic on pc26_liclicitem=l21_codigo
+                                    inner join pcorcamitem on pc22_orcamitem=pc26_orcamitem
+                                    inner join pcorcamjulg on pc24_orcamitem=pc22_orcamitem
+                                    inner join pcorcamforne on pc21_orcamforne=pc24_orcamforne
+                                    inner join pcorcamval on pc23_orcamitem=pc22_orcamitem
+                                    inner join cgm on z01_numcgm=pc21_numcgm
+                                    where l20_codigo=$oParam->licitacao and pc24_pontuacao=1";
+                $rsSqlVencedor = db_query($sqlVencedor);
+                $fornecedor = db_utils::fieldsMemory($rsSqlVencedor, 0)->z01_numcgm;
+            }
+
             foreach ($oParam->itens as $iten) {
-                $clitenshomologacao->l203_item = $iten->l205_item;
-                $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
+                $clitenshomologacao->l203_item                  = $iten->l205_item;
+                $clitenshomologacao->l203_homologaadjudicacao   = $clhomologacaoadjudica->l202_sequencial;
+                $clitenshomologacao->l203_fornecedor            = $fornecedor;
                 $clitenshomologacao->incluir(null);
             }
 
