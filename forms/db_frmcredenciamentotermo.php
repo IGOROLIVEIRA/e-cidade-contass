@@ -4,10 +4,10 @@ $clcredenciamentotermo->rotulo->label();
 ?>
 <style>
     #l212_observacao {
-        width: 926px;
-        height: 126px;
+        width: 580px;
+        height: 72px;
     }
-    #l212_sequencial, #l212_numerotermo{
+    #l212_sequencial, #l212_numerotermo, #l212_numerotermo{
         width: 93px;
     }
     #fornecedores{
@@ -53,7 +53,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('l212_numerotermo',19,$Il212_numerotermo,true,'text',3,"")
+                    db_input('l212_numerotermo',19,$Il212_numerotermo,true,'text',1,"")
                     ?>
                 </td>
             </tr>
@@ -97,7 +97,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_textarea('l212_veiculodepublicacao',0,0,$Il212_veiculodepublicacao,true,'text',3,"")
+                    db_input('l212_veiculodepublicacao',19,$Il212_numerotermo,true,'text',3,"")
                     ?>
                 </td>
             </tr>
