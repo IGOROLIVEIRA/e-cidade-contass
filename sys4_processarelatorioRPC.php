@@ -42,7 +42,6 @@ include("model/dbVariaveisRelatorio.php");
 include("model/dbGeradorRelatorio.model.php");
 include("model/dbOrdemRelatorio.model.php");
 include("model/dbPropriedadeRelatorio.php");
-ini_set("error_reporting", "E_ALL & ~NOTICE");
 
 
 $oPost                                     = db_utils::postMemory($_POST);
@@ -54,10 +53,11 @@ $lSqlErro = false;
 $lErro    = false;
 
 try {
-    $oGeradorRelatorio = new dbGeradorRelatorio($oPost->iCodRelatorio);
-} catch (Exception $eException) {
-    $lErro = true;
-    $sRetorno = $eException->getMessage();
+
+  $oGeradorRelatorio = new dbGeradorRelatorio($oPost->iCodRelatorio);
+} catch (Exception $eException){
+	$lErro = true;
+  $sRetorno = $eException->getMessage();
 }
 
 if (!$lErro) {
@@ -232,18 +232,47 @@ if (!$lErro) {
             if (!$ok) {
 
                 ob_end_clean();
-                
+
                 $lErro    = true;
                 $sRetorno = $api->getError();
             } else {
 
                 ob_end_clean();
 
-                if ($api->getRowNum() == 0) {
-                    $aRetorno = array("sMsg" => urlencode("Nenhum registro encontrado!"), "erro" => true);
-                    echo $oJson->encode($aRetorno);
-                    exit;
-                }
+	    $api->setFormat($sFormatoSaida);
+	    $sNomeRelatorio   = "tmp/geraRelatorio".date("YmdHis").db_getsession("DB_id_usuario").".".$sFormatoSaida;
+	    $api->setOutputPath($sNomeRelatorio);
+
+	  	ob_start();
+
+	  	$ok = $api->generateReport();
+
+        if(!$ok){
+
+	      ob_end_clean();
+
+	      $lErro    = true;
+	      $sRetorno = $api->getError();
+
+	    }else{
+
+	      ob_end_clean();
+
+	   	  if ($api->getRowNum() == 0){
+		 		  $aRetorno = array("sMsg"=>urlencode("Nenhum registro encontrado!"),"erro"=>true);
+				  echo $oJson->encode($aRetorno);
+				  exit;
+		    }
+
+		    $sRetorno = $sNomeRelatorio;
+	    }
+
+	  }
+
+	} else {
+	  $lErro 	= true;
+	  $sRetorno = "Nenhum relatório emcontrado!";
+	}
 
                 $sRetorno = $sNomeRelatorio;
             }

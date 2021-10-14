@@ -66,7 +66,7 @@ class AgataReport
     function GetReportName()
     {
         //$this->InputBox = new InputBox(_a('Type the Report Name'), 200);
-        //$this->InputBox->button->connect_object('clicked', array(&$this,'Process'), true);
+        //$this->InputBox->button->connect_object('clicked', array($this,'Process'), true);
         $this->Process(true);
     }
     
@@ -506,8 +506,8 @@ class AgataReport
     
     function ExecPosAction()
     {
-        $obj = &$this->posAction[0];
-        $att = &$this->posAction[1];
+        $obj = $this->posAction[0];
+        $att = $this->posAction[1];
         $obj->{$att}();
     }
     

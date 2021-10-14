@@ -1,7 +1,7 @@
 <?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
  *
@@ -32,6 +32,7 @@
 /*******************************************************************************/
 class AgataAPI
 {
+  public $dataSource = array();
     function AgataAPI()
     {
         # Define the Agata's Path
@@ -135,7 +136,8 @@ class AgataAPI
      */
     function getReport()
     {
-        if ($this->Report) {
+        if (isset($this->Report))
+        {
             return $this->Report;
         } else {
             # Reading the Report
@@ -315,7 +317,9 @@ class AgataAPI
             return;
         }
 
-        if ($this->parameters) {
+
+        if ($this->parameters)
+        {
             $header = $Report['Report']['Header']['Body'];
             $footer = $Report['Report']['Footer']['Body'];
 
@@ -396,13 +400,33 @@ class AgataAPI
         return true;
     }
 
+    public function setDetailData($detailKey, $detailData)
+    {
+        $this->detailData[$detailKey] = $detailData;
+    }
+
+    public function setDetailColumns($detailKey, $detailColumns)
+    {
+        $this->detailColumns[$detailKey] = $detailColumns;
+    }
+
+    public function setMasterData($data)
+    {
+        $this->masterData = $data;
+    }
+
+    public function setMasterColumns($columns)
+    {
+        $this->masterColumns = $columns;
+    }
+
     /**
      * Interprets the OpenOffice template
      * @param $source = openoffice template file
      */
-    function parseOpenOffice($source = NULL)
+    function parseOpenOffice($source = NULL, $format = 'sxw')
     {
-        $this->format = 'sxw';
+        $this->format = $format;
 
         # Reading the Report
         $Report = $this->getReport();
@@ -418,42 +442,65 @@ class AgataAPI
 
         $DataSet = $Report['Report']['DataSet'];
 
-        # Process the Query.
-        $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
-        if (is_agata_error($Query)) {
-            $this->error = $Query->GetError();
-            return;
-        } else {
-            $params[0] = $Project;
-            $params[1] = null;
-            $params[2] = $this->outputPath;
-            $params[3] = $Query;
-            $params[4] = $Report;
-            $params[6] = $this->parameters;
-
-            if (!$source) {
-                $Report = $this->getReport();
-                //$source = $Report['Report']['OpenOffice']['Source'];
-
-                $obj = AgataCore::ParseOpenOffice($params, 'Sxw');
-
-                if ($Report['Report']['OpenOffice']['Template']) {
-                    $source = temp . '/template-' . md5(time()) . '.sxw';
-                    $f = @fopen($source, 'w');
-                    if ($f) {
-                        fwrite($f, base64_decode($Report['Report']['OpenOffice']['Template']));
-                        fclose($f);
-                    }
-                } else {
-                    $source = $Report['Report']['OpenOffice']['Source'];
-                }
-            } else {
-                $obj = AgataCore::ParseOpenOffice($params, 'Sxw');
-            }
-
-            $obj->Generate($source, $this->outputPath);
-            $this->rownum = $obj->CurrentQuery->rownum;
+        if (isset($this->masterData))
+        {
+            $Query = new StdClass;
+            $Query->Query       = $this->masterData;
+            $Query->ColumnNames = $this->masterColumns;
         }
+        else
+        {
+            # Process the Query.
+            $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
+            if (is_agata_error($Query))
+            {
+                $this->error = $Query->GetError();
+                return;
+            }
+        }
+
+        $params[0] = $Project;
+        $params[1] = null;
+        $params[2] = $this->outputPath;
+        $params[3] = $Query;
+        $params[4] = $Report;
+        $params[6] = $this->parameters;
+
+        if (!$source)
+        {
+            $Report = $this->getReport();
+
+            $obj = AgataCore::ParseOpenOffice($params, 'Sxw');
+
+            if ($Report['Report']['OpenOffice']['Template'])
+            {
+                $source = temp.'/template-'.md5(time()).'.'.$format;
+                $f = @fopen($source, 'w');
+                if ($f)
+                {
+                    fwrite($f, base64_decode($Report['Report']['OpenOffice']['Template']));
+                    fclose($f);
+                }
+            }
+            else
+            {
+                $source = $Report['Report']['OpenOffice']['Source'];
+            }
+        }
+        else
+        {
+            $obj = AgataCore::ParseOpenOffice($params, 'Sxw');
+        }
+
+        if ($this->detailData)
+        {
+            $obj->setDetailData($this->detailData);
+            $obj->setDetailColumns($this->detailColumns);
+        }
+
+        $obj->Generate($source, $this->outputPath);
+        $this->rownum = @$obj->CurrentQuery->rownum;
+
         $this->Query = $Query;
         return true;
     }
@@ -558,3 +605,4 @@ class AgataAPI
         return $this->rownum;
     }
 }
+?>

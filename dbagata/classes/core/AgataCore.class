@@ -1,7 +1,7 @@
 <?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
  *
@@ -35,7 +35,7 @@ class AgataCore
     /*******************************************************************************/
     /* Creates a Report
     /*******************************************************************************/
-    function CreateReport($type, $params)
+    static function CreateReport($type, $params)
     {
         $class = 'Agata' . strtoupper(substr($type, 0, 1)) . substr($type, 1);
         include_once AGATA_PATH . "/classes/reports/{$class}.class";
@@ -47,7 +47,7 @@ class AgataCore
     /*******************************************************************************/
     /* Creates a merged document
     /*******************************************************************************/
-    function CreateMergedDocument($params, $kind)
+    static function CreateMergedDocument($params, $kind)
     {
         include_once AGATA_PATH . '/classes/reports/AgataMerge.class';
         include_once AGATA_PATH . "/classes/reports/AgataMerge{$kind}.class";
@@ -60,7 +60,7 @@ class AgataCore
     /*******************************************************************************/
     /* Parse an OpenOffice Document
     /*******************************************************************************/
-    function ParseOpenOffice($params, $kind)
+    static function ParseOpenOffice($params, $kind)
     {
         include_once AGATA_PATH . '/classes/reports/AgataMerge.class';
         include_once AGATA_PATH . '/classes/reports/AgataOOParser.class';
@@ -73,7 +73,7 @@ class AgataCore
     /*******************************************************************************/
     /* Creates an address label
     /*******************************************************************************/
-    function CreateAddressLabel($params)
+    static function CreateAddressLabel($params)
     {
         include_once AGATA_PATH . '/classes/reports/AgataMerge.class';
         include_once AGATA_PATH . '/classes/reports/AgataLabel.class';
@@ -85,7 +85,7 @@ class AgataCore
     /*******************************************************************************/
     /* Creates a graph
     /*******************************************************************************/
-    function CreateGraph($params)
+    static function CreateGraph($params)
     {
         include_once AGATA_PATH . '/classes/reports/AgataGraph.class';
         $obj = new AgataGraph;
@@ -96,7 +96,7 @@ class AgataCore
     /*******************************************************************************/
     /* Creates a query object
     /*******************************************************************************/
-    function CreateQuery($agataDB, $DataSet, $ParametersContent)
+    static function CreateQuery($agataDB, $DataSet, $ParametersContent)
     {
 
         $sql = Report::SqlFromReport($DataSet);
@@ -162,6 +162,7 @@ class AgataCore
 
                             $equ_expr = substr($expr1[1], 0, -1);
                             $connections[] = $database;
+
                             $definitions = Project::ReadProjectDefinitions($database);
                             $index = "table:$get_table:field:$get_field";
                             $nickname = $definitions[3][$index];
@@ -183,8 +184,13 @@ class AgataCore
                         }
                     }
                 }
+<<<<<<< HEAD
 
                 $CurrentQuery = new AgataDataSet;
+=======
+
+                $CurrentQuery = new AgataDataSet;
+>>>>>>> 7c51c72c8c1a2de0f008b737c14ee2a13d4ec924
                 $CurrentQuery->FunctionMatrix = $function_matrix;
                 $CurrentQuery->CrossMatrix    = $cross_matrix;
                 $CurrentQuery->ColumnCount    = $ColumnCount;
@@ -195,6 +201,7 @@ class AgataCore
                 $CurrentQuery->result         = $query;
                 $CurrentQuery->Parameters     = $NewParametersContent;
                 //$this->CurrentQuery           = $CurrentQuery;
+
                 //$conn->Close();
                 //@Wait::Off();
                 return $CurrentQuery;
@@ -209,7 +216,7 @@ class AgataCore
     /*******************************************************************************/
     /* Requires an Agata Function
     /*******************************************************************************/
-    function requireFunction($function)
+    static function requireFunction($function)
     {
         $function_dir    = AGATA_PATH . '/functions';
         $function_path   = $function_dir . str_replace('/', bar, $function);
@@ -225,3 +232,4 @@ class AgataCore
         return $function_name;
     }
 }
+?>

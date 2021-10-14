@@ -60,7 +60,7 @@ function splitCondHigh($text)
 /***********************************************************/
 function GetNumbers($string)
 {
-  return ereg_replace('[^0-9]','',$string);
+  return preg_replace('/[^0-9]/','',$string);
 }
 
 
@@ -188,7 +188,7 @@ function ArrayEreg($array, $string)
 {
     foreach ($array as $value)
     {
-        if (ereg($value, $string))
+        if (strpos($string, $value) !== FALSE)
             return true;
     }
     return false;
@@ -701,7 +701,7 @@ function remove_table_from($string, $table)
 
 function MySerialize($string, $text)
 {
-    $text = ereg_replace("\n", "\n$string:", $text);
+    $text = str_replace("\n", "\n$string:", $text);
     return "$string:$text\n\n";
 }
 

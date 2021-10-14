@@ -1,7 +1,7 @@
 <?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
  *
@@ -36,18 +36,21 @@ class Dialog
     /***********************************************************/
     function Dialog($mensagem, $erro = true, $kill = false, $submessage = null)
     {
-        if (!is_array($mensagem)) {
-            $mensagem = preg_replace("\r", ' ', $mensagem);
-            $mensagem = preg_replace("\n", ' ', $mensagem);
-            if (strlen($mensagem) > 40) {
-                $msgs = explode(' ', $mensagem);
-                $n = 0;
-                foreach ($msgs as $msg) {
-                    $result[$n] .= ' ' . $msg;
-                    if (strlen($result[$n]) > 40)
-                        $n++;
-                }
-                $mensagem = $result;
+        if (!is_array($mensagem))
+        {
+            $mensagem = preg_replace("/\r/", ' ', $mensagem);
+            $mensagem = preg_replace("/\n/", ' ', $mensagem);
+            if (strlen($mensagem) >40)
+            {
+            $msgs = explode(' ', $mensagem);
+            $n = 0;
+            foreach ($msgs as $msg)
+            {
+                $result[$n] .= ' ' . $msg;
+                if (strlen($result[$n]) > 40)
+                $n ++;
+            }
+            $mensagem = $result;
             }
         }
         $this->ShowMessage($mensagem, $erro, $kill, $submessage);
@@ -64,7 +67,7 @@ class Dialog
             //$this->window->set_modal(true);
             $this->window->set_border_width(10);
             $this->window->realize();
-            $this->window->connect_object('key_press_event', array(&$this, 'KeyTest'), null);
+            $this->window->connect_object('key_press_event', array($this,'KeyTest'), null);
 
             $this->img = Gdk::pixmap_create_from_xpm($this->window->window, null, images . 'ico_message.xpm');
             //$this->img = Gdk::pixmap_create_from_xpm($this->window->window, null, images . 'ico_warning.xpm');
@@ -129,20 +132,24 @@ class Dialog
 
             //$this->button = $button = new GtkButton('   ' . _a('Close') . '   ');
 
-            if ($kill) {
-                $button->connect_object('clicked', array(&$this, 'Quit'));
-            } else {
-                $button->connect_object('clicked', array(&$this, 'Close'));
-            }
+            if ($kill)
+            { $button->connect_object('clicked', array($this, 'Quit')); }
+            else
+            { $button->connect_object('clicked', array($this, 'Close')); }
 
             $hbox->pack_start($button, true, false);
             $vbox->pack_start($hbox, true, true);
             $this->window->show_all();
-        } else {
-            if (is_array($labels)) {
-                echo '<b>' . _a('Message') . ': </b>' . implode(' ', $labels) . '<br>';
-            } else {
-                echo '<b>' . _a('Message') . ': </b>' . $labels . '<br>';
+        }
+        else
+        {
+            if (is_array($labels))
+            {
+                echo '<b>' . _a('Message') . ': </b>' . implode(' ', $labels) . '<br>' . $submessage . '<br>';
+            }
+            else
+            {
+                echo '<b>' . _a('Message') . ': </b>' . $labels . '<br>' . $submessage . '<br>';
             }
         }
     }
