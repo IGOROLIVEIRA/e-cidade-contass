@@ -106,7 +106,7 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->line($xcol + 130, $xlin + 15, $xcol + 130, $xlin + 25);
     //Municipio
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text(12, $xlin + 22, 'MUNICIPIO');
+    $this->objpdf->text(12, $xlin + 22, 'MUNICÍPIO');
     $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text(14, $xlin + 24.3, $this->dadosPrestador->z01_munic);
     $this->objpdf->line(10, $xlin + 20, 200, $xlin + 20);    
@@ -176,7 +176,7 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->line($xcol + 130, $xlin + 15, $xcol + 130, $xlin + 25);
     //Municipio
     $this->objpdf->Setfont('Arial', 'B', 5);
-    $this->objpdf->text(12, $xlin + 22, 'MUNICIPIO');
+    $this->objpdf->text(12, $xlin + 22, 'MUNICÍPIO');
     $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text(14, $xlin + 24.3, $this->dadosTomador->z01_munic);
     $this->objpdf->line(10, $xlin + 25, 200, $xlin + 25);
@@ -230,7 +230,6 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->cell(30, 5, "VALOR UNITÁRIO", 1, 0, "C");
     $this->objpdf->cell(15, 5, "ALIQ (%)", 1, 0, "C");
     $this->objpdf->cell(30, 5, "VALOR TOTAL", 1, 1, "C");
-
 
     /*
      ** Dados do Servico;
@@ -308,7 +307,7 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->sety($this->yOld);
     $this->objpdf->setX(125);
     $this->objpdf->Setfont('Arial', '', 10);
-    $this->objpdf->cell(40, 5, "Valor dos Servicos", 1, 0);
+    $this->objpdf->cell(40, 5, "Valor dos Serviços", 1, 0);
     $this->objpdf->Setfont('Arial', '', 10);
     $this->objpdf->cell(35, 5, "R$ " . number_format($this->fTotaliUni, 2, ",", "."), 1, 1, "R");
     $this->objpdf->setX(125);

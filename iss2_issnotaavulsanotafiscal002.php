@@ -59,7 +59,7 @@ $hasItemServico = empty(db_utils::fieldsMemory($rsServico,0)->q62_issgruposervic
 if($hasItemServico) {
     $pdf1 = new db_impcarne($pdf, '49');
 } else {
-    $pdf1 = new db_impcarne($pdf, '492');    
+    $pdf1 = new db_impcarne($pdf, '492');
 }
 $rsParIssqn = $oDaoParIssqn->sql_record($oDaoParIssqn->sql_query(null,"q60_notaavulsalinkautenticacao"));
 $pdf1->urlautenticacao = db_utils::fieldsMemory($rsParIssqn,0)->q60_notaavulsalinkautenticacao;
