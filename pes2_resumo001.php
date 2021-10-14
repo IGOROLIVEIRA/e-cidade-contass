@@ -267,12 +267,15 @@ function js_emite(){
 
 }
 function js_mostrarFicha() {
-  if (document.form1.com_quebra.value == 't') {
+  if (document.form1.com_quebra.value == 't' && document.form1.tipo.value == 'l') {
     $('row_ficha').show();
   } else {
     $('com_ficha').value = 'f';
     $('row_ficha').hide();
   }
 }
+document.getElementById('tipo').addEventListener('change', event => {
+  js_mostrarFicha();
+});
 js_mostrarFicha();
 </script>  
