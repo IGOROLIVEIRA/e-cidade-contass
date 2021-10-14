@@ -196,14 +196,14 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                JOIN orcfontes ON (o70_codfon, o70_anousu) = (o57_codfon, o57_anousu)
                WHERE c74_anousu = ". db_getsession("DB_anousu") ."
                  AND o57_fonte = '{$oDadosRec->o57_fonte}'
-                 AND ((c53_tipo = 101 AND substr(o57_fonte,1,2) != '49') 
+                 AND ((c53_tipo = 101 AND substr(o57_fonte,1,2) != '49')
                         OR (c53_tipo = 100 AND substr(o57_fonte,1,2) = '49'))
                  AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
                 GROUP BY 1, 2, 3, 4, 5, 6, 7 ORDER BY 4, 3, 6";
 
 
             $rsDocRec = db_query($sSql);
-    
+
             $oCodDoc = db_utils::fieldsMemory($rsDocRec, 0);
 
             if (($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
@@ -322,7 +322,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                             for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++){
 
                                 $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
-                                
+
                                 $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
 
                                 if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->z01_cgccpf != ''){
@@ -354,9 +354,9 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                             }
 
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
-                                    
-                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                                                       
-                                
+
+                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {
+
                                 $aDados = new stdClass();
                                 $aDados->si26_tiporegistro = 11;
                                 $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
@@ -377,18 +377,17 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                 $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11] = $aDados;
 
                             }
-                            
+
                         } elseif (array_key_exists($sHash10.$sHash11, $aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
-                                
+
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
 
                         }
-                    
+
                     }
                 }
             }
         }
-
 
         /*
          * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2021!
@@ -425,34 +424,11 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
             foreach ($oDados10->Reg11 as $aDados11) {
                 foreach ($aDados11 as $oDados11) {
 
-                    if($oDados11->si26_nroconvenio == '' || $oDados11->si26_nroconvenio == null) {
-
-                        $sSqlConvRec = "    SELECT
-                                                c206_nroconvenio,   
-                                                c206_dataassinatura
-                                            FROM conlancamrec
-                                                LEFT JOIN conlancamcorrente ON c86_conlancam = c74_codlan
-                                                LEFT JOIN corplacaixa 		ON (k82_id, k82_data, k82_autent) = (c86_id, c86_data, c86_autent)
-                                                LEFT JOIN placaixarec 		ON k81_seqpla = k82_seqpla
-                                                LEFT JOIN convconvenios 	ON c206_sequencial = k81_convenio
-                                            WHERE c74_codrec = {$oDados10->si25_codreceita}
-                                                AND conlancamrec.c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' 
-                                                AND k81_convenio IS NOT NULL";
-
-                        $rsConvRec  = db_query($sSqlConvRec);
-                        $oConv      = db_utils::fieldsMemory($rsConvRec, 0);
-                        $sNroConv   = $oConv->c206_nroconvenio;
-                        $dtAssinat  = $oConv->c206_dataassinatura;
-
-                    } else {
-                        $sNroConv   = $oDados11->si26_nroconvenio;
-                        $dtAssinat  = $oDados11->si26_dataassinatura;
-                    }
 
                     if (in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc) &&
                         ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '91' || $oDados10->si25_identificadordeducao == '')
                     ) {
-                        
+
                         $clarc21 = new cl_arc212021();
                         $clarc21->si32_tiporegistro = 21;
                         $clarc21->si32_reg20 = $clarc20->si31_sequencial;
