@@ -196,7 +196,7 @@ function js_relatorio2() {
       </tr>
 
       <tr>
-          <td nowrap align="right"><b>Emitir Capa Conciliação:</b></td>
+          <td nowrap align="right"><b>Emitir Conciliação:</b></td>
           <td><?
                $matriz = array("n"=>"nao","s"=>"sim");
                db_select("emitir_capa",$matriz,true,1);

@@ -1072,6 +1072,50 @@ class cl_veiculos {
       }
      return $result;
    }
+
+   function sql_query_abst ($ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos; 
+    }
+    $sql .= " from veiculos ";
+    $sql .= "   inner join veiccentral on ve40_veiculos = ve01_codigo  ";
+    $sql .= "   inner join veiccadcentral on ve36_sequencial = ve40_veiccadcentral  ";
+    $sql .= "   inner join veicmotoristascentral on ve41_veiccadcentral=ve36_sequencial  ";
+    $sql .= "   inner join veicmotoristas on ve05_codigo=ve41_veicmotoristas  ";
+    $sql .= "   inner join cgm on z01_numcgm=ve05_numcgm  ";
+    $sql .= "   inner join veiculoscomb on ve06_veiculos=ve01_codigo ";
+    $sql .= "   inner join veiccadcomb on ve26_codigo = ve06_veiccadcomb ";
+    $sql .= "   left join veiculostransferencia on ve81_codigo=ve01_codigo ";
+    $sql .= "   left join transferenciaveiculos on ve80_sequencial=ve81_transferencia ";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($ve01_codigo!=null ){
+        $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+
+   }  
    function sql_query ( $ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){

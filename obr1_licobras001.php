@@ -17,7 +17,7 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
 
-    $resulthomologacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"l202_datahomologacao",null,"l202_licitacao = $obr01_licitacao"));
+    $resulthomologacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"l202_datahomologacao",null,"l202_licitacao = $obr01_licitacao and l202_datahomologacao is not null"));
     db_fieldsmemory($resulthomologacao,0);
     $data = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
 

@@ -739,6 +739,12 @@ class cl_pontofs {
      $sql .= "      inner join rhlota       on  rhlota.r70_codigo::char(12) = pontofs.r10_lotac        ";
 		 $sql .= "                             and  rhlota.r70_instit           = pontofs.r10_instit       ";
      $sql .= "      inner join cgm          on  cgm.z01_numcgm              = rhpessoal.rh01_numcgm    ";
+     $sql .= "      LEFT JOIN rhlotaexe ON rh26_codigo = r70_codigo    ";
+     $sql .= "      AND rh26_anousu = r10_anousu                       ";
+     $sql .= "      AND rh26_codigo = r10_lotac::integer               ";
+     $sql .= "      LEFT JOIN orcorgao ON o40_orgao = rh26_orgao       ";
+     $sql .= "      AND o40_anousu = r10_anousu                        ";
+     $sql .= "      AND o40_instit = rh02_instit                       ";
 
      $sql2 = "";
      if($dbwhere==""){
