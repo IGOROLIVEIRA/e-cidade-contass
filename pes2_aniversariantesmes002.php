@@ -128,13 +128,13 @@ for ($x = 0; $x < pg_numrows($result); $x++) {
     } else {
         $pre = 1;
     }
-    $pdf->setfont('arial', '', 7);
+    $pdf->setfont('arial', '', 6);
     $pdf->cell(15, $alt, $rh01_regist, 0, 0, "C", $pre);
     $pdf->cell(60, $alt, $z01_nome, 0, 0, "L", $pre);
     $pdf->cell(53, $alt, $z01_ender, 0, 0, "L", $pre);
     $pdf->cell(35, $alt, $z01_bairro, 0, 0, "L", $pre);
     $pdf->cell(8, $alt, db_formatar($rh01_nasc, 'd'), 0, 0, "R", $pre);
-    $pdf->cell(17, $alt, db_formatar($rh01_admiss, 'd'), 0, 1, "R", $pre);
+    $pdf->cell(20, $alt, db_formatar($rh01_admiss, 'd'), 0, 1, "R", $pre);
     $total_fun   += 1;
 }
 $pdf->setfont('arial', 'b', 8);
