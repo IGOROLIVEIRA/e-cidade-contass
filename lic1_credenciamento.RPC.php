@@ -353,13 +353,19 @@ try{
                                     where l20_codigo=$oParam->licitacao and pc24_pontuacao=1";
                 $rsSqlVencedor = db_query($sqlVencedor);
                 $fornecedor = db_utils::fieldsMemory($rsSqlVencedor, 0)->z01_numcgm;
-            }
 
-            foreach ($oParam->itens as $iten) {
-                $clitenshomologacao->l203_item                  = $iten->l205_item;
-                $clitenshomologacao->l203_homologaadjudicacao   = $clhomologacaoadjudica->l202_sequencial;
-                $clitenshomologacao->l203_fornecedor            = $fornecedor;
-                $clitenshomologacao->incluir(null);
+                foreach ($oParam->itens as $iten) {
+                    $clitenshomologacao->l203_item                  = $iten->l205_item;
+                    $clitenshomologacao->l203_homologaadjudicacao   = $clhomologacaoadjudica->l202_sequencial;
+                    $clitenshomologacao->l203_fornecedor            = $fornecedor;
+                    $clitenshomologacao->incluir(null);
+                }
+            }else{
+                foreach ($oParam->itens as $iten) {
+                    $clitenshomologacao->l203_item                  = $iten->l205_item;
+                    $clitenshomologacao->l203_homologaadjudicacao   = $clhomologacaoadjudica->l202_sequencial;
+                    $clitenshomologacao->incluir(null);
+                }
             }
 
             if ($clitenshomologacao->erro_status == "0") {
