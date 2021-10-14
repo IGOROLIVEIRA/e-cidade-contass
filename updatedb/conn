@@ -91,9 +91,10 @@ cmitacambira        5432    e-cidade
 pmsaojoaomissoes    5432    e-cidadenovosclientes
 pmsantafeminas      5432    e-cidadenovosclientes
 pmnovaporteirinha   5432    e-cidadenovosclientes
-pmgraomogol         5432    e-cidadenovosclientes
 pmburitizeiro       5432    e-cidadenovosclientes
 
 e-cidade            5432    pmnovaporteirinha
+
+e-cidade            5432    pmgraomogol
 
 e-cidade            5432    pmburitizeiro
