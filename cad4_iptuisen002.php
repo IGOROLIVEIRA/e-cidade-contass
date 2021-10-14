@@ -74,8 +74,9 @@ if ($alterando == 1 && !empty($j46_codigo) ) {
 
   if( $j46_codigo != "nova" ){
 
-    $resultTipis = $cliptubase->sql_record($cliptuisen->sql_query("", "j45_tipis", "", "j46_codigo = $j46_codigo"));
+    $resultTipis = $cliptubase->sql_record($cliptuisen->sql_query("", "j45_tipis, j45_taxas", "", "j46_codigo = $j46_codigo"));
     $j45_tipis   = db_utils::fieldsMemory($resultTipis,0)->j45_tipis;
+    $j45_taxas   = db_utils::fieldsMemory($resultTipis,0)->j45_taxas;
   }
 }
 
@@ -315,6 +316,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
     <form name="form1" method="post" action="">
       <input name="dadostaxa" type="hidden" value="">
       <input name="j45_tipis" type="hidden" value="<?php echo $j45_tipis ?>">
+      <input name="j45_taxas" type="hidden" value="<?php echo $j45_taxas ?>">
 
       <fieldset style="width:520px;">
       <legend>Dados de Isenção</legend>
@@ -577,16 +579,17 @@ if (!$alterando) {
 </html>
 <script type="text/javascript">
 
-  var tipoIsencao = document.form1.j45_tipis.value;
-  var alterando   = <?php echo ($alterando == true) ? 1 : 0;?>;
+  const tipoIsencao = document.form1.j45_tipis.value;
+  const isencaoTaxas = document.form1.j45_taxas.value;
+  const alterando   = <?php echo ($alterando == true) ? 1 : 0;?>;
 
-  if (alterando == 1 && (tipoIsencao == 1 || tipoIsencao == 2)) {
+  if (alterando == 1 && tipoIsencao == 1 && isencaoTaxas === 't')) {
 
-    var elementosTaxas = document.getElementsByClassName('receit');
+    let elementosTaxas = document.getElementsByClassName('receit');
 
     document.form1.j46_perc.readOnly = 'true';
 
-    for (i in elementosTaxas) {
+    for (let i in elementosTaxas) {
 
       if (isNumeric(i)){
         elementosTaxas[i].readOnly = 'true';
