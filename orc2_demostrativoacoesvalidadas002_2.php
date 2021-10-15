@@ -58,7 +58,7 @@ $sSqlEstimativa .= " 		o54_descr 			   "; // Descrição Programa
 $sSqlEstimativa .= "  from ppadotacao 																				   	    	         ";
 $sSqlEstimativa .= " 	   inner join ppaestimativadespesa 	  on o08_sequencial = o07_coddot			   		 	 ";
 $sSqlEstimativa .= "	   inner join ppaestimativa        	  on o07_ppaestimativa = o05_sequencial		    	 	 ";
-$sSqlEstimativa .= "       inner join orcprograma   	  	  on orcprograma.o54_anousu = ".db_getsession('DB_anousu');
+$sSqlEstimativa .= "       inner join orcprograma   	  	  on orcprograma.o54_anousu = {$oGet->iAno} ";
 $sSqlEstimativa .= "      						   			 and orcprograma.o54_programa = ppadotacao.o08_programa  	 	 ";
 $sSqlEstimativa .= "       left  join orcindicaprograma 	  on orcindicaprograma.o18_orcprograma = orcprograma.o54_programa 	 	 ";
 $sSqlEstimativa .= "      						   		 	 and orcindicaprograma.o18_anousu = ".db_getsession('DB_anousu');
@@ -66,7 +66,7 @@ $sSqlEstimativa .= "       inner join orcorgao on o40_orgao  = o08_orgao ";
 $sSqlEstimativa .= "                          and o40_anousu = o08_ano   "; 
 $sSqlEstimativa .= " where $sWhere";
 $sSqlEstimativa .= "   and o08_instit in({$sListaInstit}) {$sWherePrograma} {$sWhereOrgao}";
-$sSqlEstimativa .= " order by o08_orgao";  
+$sSqlEstimativa .= " order by o08_orgao";
 
 $rsEstimativa 	   = pg_query($sSqlEstimativa); 
 $iLinhasEstimativa = pg_num_rows($rsEstimativa);
@@ -99,7 +99,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
   $sSqlAcoes .= "          case when o55_tipo = 1 then 'Projeto'														 ";
   $sSqlAcoes .= "               when o55_tipo = 2 then 'Atividade'														 ";
   $sSqlAcoes .= "               when o55_tipo = 3 then 'Operações Especiais' end as tipo,								     ";
-  $sSqlAcoes .= "          round(sum(o05_valor),0) as valor				 ";
+  $sSqlAcoes .= "          round(sum(o05_valor),2) as valor				 ";
   $sSqlAcoes .= "     from ppadotacao 												    	       					     		   ";
   $sSqlAcoes .= " 	       inner join ppaestimativadespesa 	       on o08_sequencial   		    = o07_coddot	   		           ";
   $sSqlAcoes .= "	       inner join ppaestimativa        	  	   on o07_ppaestimativa 	    = o05_sequencial 		     	   ";
