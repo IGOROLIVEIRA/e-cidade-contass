@@ -70,6 +70,27 @@ if ($oDaoLicitacaoSituacao->numrows > 0) {
     $dtSituacao = db_formatar(db_utils::fieldsMemory($rsDataSituacao, 0)->l11_data, 'd');
 }
 
+$oDaoCfLicita = db_utils::getDao("cflicita");
+$sWhere                = " l03_codigo       = " . $oLicitatacao->l20_codtipocom;
+$sSqlCfLicita      = $oDaoCfLicita->sql_query(null, "l03_descr", null, $sWhere);
+$rsCfLicita        = $oDaoCfLicita->sql_record($sSqlCfLicita);
+if ($oDaoCfLicita->numrows > 0) {
+    $l03_descr = db_utils::fieldsMemory($rsCfLicita, 0)->l03_descr;
+}
+
+$oDaoDbUsuarios = db_utils::getDao("db_usuarios");
+$sWhere                = " db_usuarios.id_usuario       = " . $oLicitatacao->l20_id_usucria;
+$sSqlDbUsuarios      = $oDaoDbUsuarios->sql_query(null, "db_usuarios.nome", null, $sWhere);
+
+$rsDbUsuarios        = $oDaoDbUsuarios->sql_record($sSqlDbUsuarios);
+if ($oDaoDbUsuarios->numrows > 0) {
+    $nome_usuario = db_utils::fieldsMemory($rsDbUsuarios, 0)->nome;
+}
+
+//$sWhere                = " db_usuarios.id_usuario = liclicita.l20_id_usucria";
+
+//cflicita          on cflicita.l03_codigo = liclicita.l20_codtipocom";
+
 $oDadosLicitatacao  = new licitacao($l20_codigo);
 $oProcessoProtocolo = $oDadosLicitatacao->getProcessoProtocolo();
 $sProcessoProtocolo = '';
@@ -143,7 +164,7 @@ if (!empty($oProcessoProtocolo)) {
                     <b>Modalidade:</b>
                 </td>
                 <td nowrap="nowrap" class="valor" style="text-align: left;">
-                    <?php echo $oLicitatacao->l20_codtipocom . " - " . $oLicitatacao->l03_descr; ?>
+                    <?php echo $oLicitatacao->l20_codtipocom . " - " . $l03_descr; ?>
                 </td>
                 <td nowrap="nowrap" title="<?= $Tl20_numero ?>" style="width:13%;">
                     <?= $Ll20_numero ?>
@@ -207,7 +228,7 @@ if (!empty($oProcessoProtocolo)) {
                     <?= @$Ll20_id_usucria ?>
                 </td>
                 <td nowrap="nowrap" class="valor" style="text-align: left;">
-                    <?php echo $oLicitatacao->l20_id_usucria . " - " . $oLicitatacao->nome; ?>
+                    <?php echo $oLicitatacao->l20_id_usucria . " - " . $nome_usuario; ?>
                 </td>
 
                 <td nowrap="nowrap">
