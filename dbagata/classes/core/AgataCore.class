@@ -100,8 +100,6 @@ class AgataCore
     {
 
         $sql = Report::SqlFromReport($DataSet);
-        echo $sql;
-        exit;
         $Adjustments = Report::ExtractAdjustments($DataSet);
 
         if ($ParametersContent) {
@@ -184,13 +182,9 @@ class AgataCore
                         }
                     }
                 }
-<<<<<<< HEAD
 
                 $CurrentQuery = new AgataDataSet;
-=======
 
-                $CurrentQuery = new AgataDataSet;
->>>>>>> 7c51c72c8c1a2de0f008b737c14ee2a13d4ec924
                 $CurrentQuery->FunctionMatrix = $function_matrix;
                 $CurrentQuery->CrossMatrix    = $cross_matrix;
                 $CurrentQuery->ColumnCount    = $ColumnCount;
