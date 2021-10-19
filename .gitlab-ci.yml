@@ -14,271 +14,271 @@ teste-cmbhecid:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@cmbhecid "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@cmbhecid "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@cmbhecid "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-cmarinos:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@cmarinos.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@cmarinos.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@cmarinos.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-cmbocaiuva:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@cmbocaiuva.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@cmbocaiuva.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@cmbocaiuva.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-cmcapitaoeneas:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@cmcapitaoeneas "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@cmcapitaoeneas "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@cmcapitaoeneas "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-cmmoc:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no ecidade@cmmoc.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no ecidade@cmmoc.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 ecidade@cmmoc.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-cmnavarro:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.4 "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.4 "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@10.251.27.4 "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-cmuba:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@cmuba.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@cmuba.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@cmuba.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-e-cidade:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@e-cidade.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@e-cidade.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git pull origin stable "'
         # - 'ssh -p22 contass@e-cidade.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmpirapora:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmvarzelandia:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmvarzelandia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmvarzelandia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmvarzelandia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmverdelandia:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmverdelandia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmverdelandia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmverdelandia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmibiracatu:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmibiracatu.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmibiracatu.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmibiracatu.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmsaojoaodaponte:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmsaojoaodaponte.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmsaojoaodaponte.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmsaojoaodaponte.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-prevmoc:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no ecidade@prevmoc.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no ecidade@prevmoc.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 ecidade@prevmoc.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmsaofrancisco:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmsaofrancisco.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmsaofrancisco.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmsaofrancisco.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmclarodospocoes:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmclarodospocoes.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmclarodospocoes.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmclarodospocoes.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-mctrans:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no ecidade@10.251.27.64 "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no ecidade@10.251.27.64 "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 ecidade@10.251.27.64 "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-prefeituras:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@prefeituras.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@prefeituras.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@prefeituras.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-cmpirapora:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@cmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@cmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@cmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmlagoadospatos:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmlagoadospatos.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmlagoadospatos.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmlagoadospatos.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-prefeituras2:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.250.30.24 "cd /var/www/e-cidade && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.250.30.24 "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@10.250.30.24 "cd /var/www/e-cidade && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmsaoromao:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmsaoromao.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmsaoromao.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmsaoromao.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmnovaporteirinha:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmnovaporteirinha.contassconsultoria.com.br "cd /var/www/e-cidade && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmnovaporteirinha.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmnovaporteirinha.contassconsultoria.com.br "cd /var/www/e-cidade && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmburitizeiro:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.95 "cd /var/www/e-cidade && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.95 "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@10.251.27.95 "cd /var/www/e-cidade && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmubai:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmubai "cd /var/www/e-cidade && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmubai "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@pmubai "cd /var/www/e-cidade && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste-pmgraomogol:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.96 "cd /var/www/e-cidade && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.96 "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@10.251.27.96 "cd /var/www/e-cidade && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 teste:
     stage: test
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@teste "cd /var/www/e-cidade-teste && git fetch && git checkout -t origin/develop && git pull origin develop "'
+        - 'ssh -o StrictHostKeyChecking=no contass@teste "cd /var/www/e-cidade-teste && git checkout . && git fetch && git checkout stable && git pull origin stable "'
         # - 'ssh -p22 contass@teste "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
     only:
-        - develop
+        - stable
 
 # ----------------------------------- AMBIENTES DE PRODUCAO -------------------------------------
 
