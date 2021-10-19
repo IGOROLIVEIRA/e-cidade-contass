@@ -583,7 +583,7 @@ if (!$alterando) {
   const isencaoTaxas = document.form1.j45_taxas.value;
   const alterando   = <?php echo ($alterando == true) ? 1 : 0;?>;
 
-  if (alterando == 1 && tipoIsencao == 1 && isencaoTaxas === 't')) {
+  if (alterando == 1 && tipoIsencao == 1) {
 
     let elementosTaxas = document.getElementsByClassName('receit');
 
@@ -591,7 +591,7 @@ if (!$alterando) {
 
     for (let i in elementosTaxas) {
 
-      if (isNumeric(i)){
+      if (isNumeric(i) && isencaoTaxas !== 't'){
         elementosTaxas[i].readOnly = 'true';
       }
     }
@@ -604,7 +604,7 @@ if (!$alterando) {
    */
   function js_validarCampo() {
 
-    tipoIsencao = document.form1.j45_tipis.value;
+    let tipoIsencao = document.form1.j45_tipis.value;
 
     if (document.getElementById('j46_tipo').value == "") {
 
@@ -779,14 +779,14 @@ if (!$alterando) {
   function js_pesquisaj46_tipo(mostra){
 
     if(mostra==true){
-      js_OpenJanelaIframe('','db_iframe','func_tipoisen.php?funcao_js=parent.js_mostratipoisen1|0|1|2','Pesquisa',true);
+      js_OpenJanelaIframe('','db_iframe','func_tipoisen.php?funcao_js=parent.js_mostratipoisen1|0|1|2|3','Pesquisa',true);
     }else{
       js_OpenJanelaIframe('','db_iframe','func_tipoisen.php?pesquisa_chave='+document.form1.j46_tipo.value+'&funcao_js=parent.js_mostratipoisen','Pesquisa',false);
     }
 
   }
 
-  function js_alteraValidacaoDataFim(j45_tipis) {
+  function js_alteraValidacaoDataFim(j45_tipis, j45_taxas) {
 
     var elementosTaxas = document.getElementsByClassName('receit');
 
@@ -807,9 +807,9 @@ if (!$alterando) {
       document.form1.j46_perc.value    = '100';
       document.form1.j46_perc.readOnly = 'true';
 
-      for ( i in elementosTaxas) {
+      for (let i in elementosTaxas) {
 
-        if (isNumeric(i)){
+        if (isNumeric(i) && j45_taxas !== 't'){
 
           elementosTaxas[i].value    = '100';
           elementosTaxas[i].readOnly = 'true';
@@ -824,25 +824,27 @@ if (!$alterando) {
     }
   }
 
-  function js_mostratipoisen(chave,tipo,erro){
+  function js_mostratipoisen(chave,tipo,taxas,erro){
 
     document.form1.j45_descr.value = chave;
     document.form1.j45_tipis.value = tipo;
+    document.form1.j45_taxas.value = taxas;
     if(erro==true){
 
       document.form1.j46_tipo.focus();
       document.form1.j46_tipo.value = '';
     }
-    js_alteraValidacaoDataFim(document.form1.j45_tipis.value);
+    js_alteraValidacaoDataFim(document.form1.j45_tipis.value, document.form1.j45_taxas.value);
   }
 
-  function js_mostratipoisen1(chave1,chave2,chave3){
+  function js_mostratipoisen1(chave1,chave2,chave3,chave4){
 
     document.form1.j46_tipo.value  = chave1;
     document.form1.j45_descr.value = chave2;
     document.form1.j45_tipis.value = chave3;
+    document.form1.j45_taxas.value = chave4;
     db_iframe.hide();
-    js_alteraValidacaoDataFim(document.form1.j45_tipis.value);
+    js_alteraValidacaoDataFim(document.form1.j45_tipis.value, document.form1.j45_taxas.value);
   }
 
   function js_pesquisa(){
@@ -935,7 +937,7 @@ if (!$alterando) {
     }
   }
 </script>
-<?
+<?php
 if(isset($incluir)||isset($excluir)||isset($alterar)){
 
   if($cliptuisen->erro_status=="0"){
