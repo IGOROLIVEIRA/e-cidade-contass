@@ -83,7 +83,7 @@ teste-cmuba:
 teste-e-cidade:
     stage: test
     script:
-        - 'ssh-add <(echo "$STAGING_PRIVATE_KEY" | base64 -d)'
+        - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@e-cidade.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout . && git pull origin develop "'
         # - 'ssh -p22 contass@e-cidade.contassconsultoria.com.br "cd /var/www/e-cidade-teste && php deploy_git.php "'
     environment: development
