@@ -44,7 +44,7 @@ $clrecibo = new cl_recibo;
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-<?
+<?php
 	if (!isset($_GET['dias_pesq'])){
 ?>
 <tr> 
@@ -56,7 +56,7 @@ $clrecibo = new cl_recibo;
               <b>Dias Emissão Recibo:</b>
             </td>
             <td>
-              <input type='text' size=10 value='<?=@$_POST["dias_paga"]==''?30:@$_POST["dias_paga"];?>' name='dias_paga' onkeyUp='return js_teclas(event)'>
+              <input type='text' size=10 value='<?=$_POST["dias_paga"]==''?30:$_POST["dias_paga"];?>' name='dias_paga' onkeyUp='return js_teclas(event)'>
             </td>
           </tr>
 					<tr>
@@ -82,7 +82,7 @@ $clrecibo = new cl_recibo;
          
 			}else{
 
-        $iPaga = !isset($_GET['dias_pesq'])?30:$_GET['dias_pesq']; 
+        $iPaga = isset($_GET['dias_pesq']) === false ? 30 : $_GET['dias_pesq']; 
 
 			}
 
