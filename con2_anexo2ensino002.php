@@ -85,22 +85,83 @@ for ($i = 0; $i < pg_num_rows($rsTipoinstit); $i++) {
 
 
 $sWhereReceita      = "o70_instit in ({$instits})";
-// $oReceitas = db_receitasaldo(11,1,3,true,$sWhereReceita,$anousu,$dtini, $dtfim,false,' * ',true,0);
-// $aReceitas = db_utils::getColectionByRecord($oReceitas);
-
-// ini_set('display_errors', 'On');
-// error_reporting(E_ALL);
-
-
-
-
-
-// db_query("drop table if exists work_receita");
-// criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
+$rsReceitas = db_receitasaldo(11, 1, 3, true, $sWhereReceita, $anousu, $dtini, $dtfim, false, ' * ', true, 0);
+$aReceitas = db_utils::getColectionByRecord($rsReceitas);
+db_query("drop table if exists work_receita");
+criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 
 
 // $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"),($DBtxt21_ano.'-'.$DBtxt21_mes.'-'.$DBtxt21_dia),$dtfim,false,$where);
 
+$aReceitasImpostos = array(
+    array('1 - Receita de impostos', 'title', ''),
+    array('1.1 - Receita resultante do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU)', 'subtitle', '41118011%'),
+    array('1.1.1.8.01.1.1 - Imposto sobre a Propriedade Predial e Territorial Urbana - Principal', 'text', '411180111%'),
+    array('1.1.1.8.01.1.2 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas e Juros de Mora', 'text', '411180112%'),
+    array('1.1.1.8.01.1.3 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Dívida Ativa', 'text', '411180113%'),
+    array('1.1.1.8.01.1.4 - Imposto Sobre a Propriedade Predial e Territorial Urbana -  Multas e Juros de Mora da Dívida Ativa', 'text', '411180114%'),
+    array('1.1.1.8.01.1.5 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas', 'text', '411180115%'),
+    array('1.1.1.8.01.1.6 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Juros de Mora', 'text', '411180116%'),
+    array('1.1.1.8.01.1.7 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas da Dívida Ativa', 'text', '411180117%'),
+    array('(-) Deduções da Receita do IPTU', 'text', '49%1118011%'),
+    array('1.2 - Receita resultante do Imposto sobre Transmissão Inter Vivos (ITBI)', 'subtitle', '41118014%'),
+    array('1.1.1.8.01.4.1 - Impostos sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Principal', 'text', '411180141%'),
+    array('1.1.1.8.01.4.2 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas e Juros de Mora', 'text', '411180142%'),
+    array('1.1.1.8.01.4.3 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Dívida Ativa', 'text', '411180143%'),
+    array('1.1.1.8.01.4.4 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas e Juros de Mora da Dívida Ativa', 'text', '411180144%'),
+    array('1.1.1.8.01.4.5 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas', 'text', '411180145%'),
+    array('1.1.1.8.01.4.6 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Juros de Mora', 'text', '411180146%'),
+    array('1.1.1.8.01.4.7 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas da Dívida Ativa', 'text', '411180147%'),
+    array('1.1.1.8.01.4.8 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -Juros de Mora da Dívida Ativa', 'text', '411180148%'),
+    array('(-) Deduções da Receita do ITBI', 'text', '49%1118014%'),
+    array('1.3 - Receita resultante do Imposto sobre Serviços de Qualquer Natureza (ISS)', 'subtitle', '4111802%'),
+    array('1.1.1.8.02.3.1 - Imposto sobre Serviços de Qualquer Natureza - Principal', 'text', '411180231%'),
+    array('1.1.1.8.02.3.2 - Imposto sobre Serviços de Qualquer Natureza - Multas e Juros de Mora', 'text', '411180232%'),
+    array('1.1.1.8.02.3.3 - Imposto sobre Serviços de Qualquer Natureza - Dívida Ativa', 'text', '411180233%'),
+    array('1.1.1.8.02.3.4 - Imposto sobre Serviços de Qualquer Natureza - Multas e Juros de Mora da Dívida Ativa', 'text', '411180234%'),
+    array('1.1.1.8.02.3.5 - Imposto sobre Serviços de Qualquer Natureza - Multas', 'text', '411180235%'),
+    array('1.1.1.8.02.3.6 - Imposto sobre Serviços de Qualquer Natureza - Juros de Mora ', 'text', '411180236%'),
+    array('1.1.1.8.02.3.7 - Imposto sobre Serviços de Qualquer Natureza - Multas da Dívida Ativa', 'text', '411180237%'),
+    array('1.1.1.8.02.3.8 - Imposto sobre Serviços de Qualquer Natureza - Juros de Mora da Dívida Ativa', 'text', '411180238%'),
+    array('1.1.1.8.02.4.1 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Principal', 'text', '411180241%'),
+    array('1.1.1.8.02.4.2 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas e Juros de Mora', 'text', '411180242%'),
+    array('1.1.1.8.02.4.3 - Adicional ISS - Fundo Municipal de Combate à Pobreza -  Dívida Ativa', 'text', '411180243%'),
+    array('1.1.1.8.02.4.4 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas e Juros de Mora da Dívida Ativa', 'text', '411180244%'),
+    array('1.1.1.8.02.4.5 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas', 'text', '411180245%'),
+    array('1.1.1.8.02.4.6 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Juros de Mora', 'text', '411180246%'),
+    array('1.1.1.8.02.4.7 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas da Dívida Ativa', 'text', '411180247%'),
+    array('1.1.1.8.02.4.8 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Juros de Mora da Dívida Ativa', 'text', '411180248%'),
+    array('(-) Deduções da Receita do ISS', 'text', '49%111802%'),
+    array('1.4 - Receita resultante do Imposto de Renda Retido na Fonte (IRRF)', 'subtitle', '4111303%'),
+    array('1.1.1.3.03.1.1 - Imposto sobre a Renda - Retido na Fonte - Trabalho - Principal', 'text', '411130311%'),
+    array('1.1.1.3.03.4.1 - Imposto sobre a Renda - Retido na Fonte - Outros Rendimentos - Principal', 'text', '411130341%'),
+    array('(-) Deduções da Receita do IRRF', 'text', '49%111303%'),
+    array('1.5 - Receita resultante do Imposto Territorial Rural (ITR) (CF, ART. 153, §4º, inciso III)	', 'subtitle', '41112011%'),
+    array('1.1.1.2.01.1.1 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Principal', 'text', '411120111%'),
+    array('1.1.1.2.01.1.2 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Multas e Juros de Mora', 'text', '411120112%'),
+    array('1.1.1.2.01.1.3 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Dívida Ativa', 'text', '411120113%'),
+    array('1.1.1.2.01.1.4 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Multas e Juros de Mora da Dívida Ativa', 'text', '411120114%'),
+    array('1.1.1.2.01.1.5 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Multas', 'text', '411120115%'),
+    array('1.1.1.2.01.1.6 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora', 'text', '411120116%'),
+    array('1.1.1.2.01.1.7 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados -Multas da Dívida Ativa', 'text', '411120117%'),
+    array('1.1.1.2.01.1.8 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora da Dívida Ativa', 'text', '411120118%'),
+    array('(-) Deduções da Receita do ITR ', 'text', '49%1112011%'),
+);
+
+$aReceitasTransferencias = array(
+    array('2 - Receita de transferências constitucionais e legais	', 'title', ''),
+    array('1.7.1.8.01.2.1 - Cota-Parte do Fundo de Participação dos Municípios - Cota Mensal - Principal', 'text', '417180121%'),
+    array('1.7.1.8.01.3.1 - Cota-Parte do Fundo de Participação do Municípios - 1% Cota entregue no mês de dezembro - Principal', 'text', '417180131%'),
+    array('1.7.1.8.01.4.1 - Cota-Parte do Fundo de Participação dos Municípios - 1% Cota entregue no mês de julho - Principal', 'text', '417180141%'),
+    array('1.7.1.8.01.5.1 - Cota-Parte do Imposto Sobre a Propriedade Territorial Rural - Principal', 'text', '417180151%'),
+    array('1.7.1.8.01.8.1 - Cota-Parte do Imposto Sobre Operações de Crédito, Câmbio e Seguro, ou Relativas a Títulos ou Valores Mobiliários - Comercialização do Ouro - Principal', 'text', '417180181%'),
+    array('1.7.1.8.06.1.1 - Transferência Financeira do ICMS - Desoneração - L.C. Nº 87/96 - Principal', 'text', '417180611%'),
+    array('1.7.2.8.01.1.1 - Cota-parte do ICMS - Principal', 'text', '417280111%'),
+    array('1.7.2.8.01.2.1 - Cota-parte do IPVA - Principal', 'text', '417280121%'),
+    array('1.7.2.8.01.3.1 - Cota-Parte do IPI - Municípios - Principal', 'text', '417280131%'),
+);
+
+//echo "<pre>";print_r($relatorioReceitas);exit;
 
 
 /**
@@ -120,7 +181,7 @@ $sWhereReceita      = "o70_instit in ({$instits})";
  */
 
 
-$mPDF = new mpdf('', 'A4', 0, '', 15, 15, 23.5, 15, 5, 11);
+$mPDF = new mpdf('', '', 0, '', 10, 10, 20, 10, 5, 11);
 
 
 $header = "
@@ -172,23 +233,27 @@ ob_start();
             color: inherit;
             font-family: 'Arial';
             font-size: 12px;
+            width: 100%;
         }
+
         .title-relatorio {
             text-align: center;
         }
+
         .th-receita {
             height: 20px;
             background-color: #d8d8d8;
             width: 80%;
             border: 1px SOLID #000000;
             font-family: 'Arial';
-            font-size: 12pt;
+            font-size: 10px;
             font-weight: bold;
             padding: 2px 3px 2px 3px;
             text-align: center;
             vertical-align: bottom;
             white-space: nowrap;
         }
+
         .th-valor {
             height: 20px;
             background-color: #d8d8d8;
@@ -197,7 +262,7 @@ ob_start();
             border-top: 1px SOLID #000000;
             border-bottom: 1px SOLID #000000;
             font-family: 'Arial', Calibre;
-            font-size: 12pt;
+            font-size: 10px;
             font-weight: bold;
             padding: 2px 3px 2px 3px;
             text-align: center;
@@ -211,13 +276,14 @@ ob_start();
             width: 80%;
             border: 1px SOLID #000000;
             font-family: 'Arial';
-            font-size: 11pt;
+            font-size: 10px;
             font-weight: bold;
             padding: 2px 3px 2px 3px;
             text-align: right;
             vertical-align: bottom;
             white-space: nowrap;
         }
+
         .footer-row-valor {
             height: 20px;
             background-color: #d8d8d8;
@@ -226,7 +292,7 @@ ob_start();
             border-top: 1px SOLID #000000;
             border-bottom: 1px SOLID #000000;
             font-family: 'Arial', Calibre;
-            font-size: 11pt;
+            font-size: 10px;
             font-weight: bold;
             padding: 2px 3px 2px 3px;
             text-align: right;
@@ -234,45 +300,47 @@ ob_start();
             white-space: nowrap;
         }
 
-        .title-row-valor{
+        .title-row-valor {
             height: 20px;
             background-color: #d8d8d8;
             width: 20%;
             border-right: 1px SOLID #000000;
             border-bottom: 1px SOLID #d8d8d8;
             font-family: 'Arial', Calibre;
-            font-size: 12pt;
-            padding: 2px 3px 2px 3px;
-            text-align: right;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-        .subtitle-row-valor{
-            height: 20px;
-            background-color: #d8d8d8;
-            width: 20%;
-            border-right: 1px SOLID #000000;
-            border-bottom: 1px SOLID #d8d8d8;
-            font-family: 'Arial', Calibre;
-            font-size: 12pt;
+            font-size: 10px;
             padding: 2px 3px 2px 3px;
             text-align: right;
             vertical-align: bottom;
             white-space: nowrap;
         }
 
-        .table-row-valor{
+        .subtitle-row-valor {
             height: 20px;
-            background-color: #ffffff;
+            background-color: #d8d8d8;
             width: 20%;
-            font-family: 'Arial', Calibre;
             border-right: 1px SOLID #000000;
-            font-size: 10pt;
+            border-bottom: 1px SOLID #d8d8d8;
+            font-family: 'Arial', Calibre;
+            font-size: 10px;
             padding: 2px 3px 2px 3px;
             text-align: right;
             vertical-align: bottom;
             white-space: nowrap;
         }
+
+        .text-row-valor {
+            height: 20px;
+            background-color: #ffffff;
+            width: 20%;
+            font-family: 'Arial', Calibre;
+            border-right: 1px SOLID #000000;
+            font-size: 10px;
+            padding: 2px 3px 2px 3px;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
+
         .ritz .title-row {
             background-color: #d8d8d8;
             color: #000000;
@@ -281,7 +349,7 @@ ob_start();
             border-right: 1px SOLID #000000;
             border-bottom: 1px SOLID #d8d8d8;
             font-family: 'Arial', Calibre;
-            font-size: 11pt;
+            font-size: 10px;
             padding: 2px 3px 2px 3px;
             text-align: left;
         }
@@ -294,32 +362,40 @@ ob_start();
             border-right: 1px SOLID #000000;
             border-bottom: 1px SOLID #d8d8d8;
             font-family: 'Arial', Calibre;
-            font-size: 11pt;
+            font-size: 10px;
             padding: 2px 3px 2px 30px;
             text-align: left;
             vertical-align: bottom;
             white-space: nowrap;
         }
 
-        .ritz .table-row {
+        .ritz .text-row {
             background-color: #ffffff;
             color: #000000;
             direction: ltr;
             border-left: 1px SOLID #000000;
             border-right: 1px SOLID #000000;
             font-family: 'Arial', Calibre;
-            font-size: 11pt;
+            font-size: 10px;
             padding: 2px 3px 2px 60px;
             text-align: left;
             vertical-align: bottom;
+            white-space: nowrap;
+        }
+
+        .ritz .waffle .clear {
+            background-color: #ffffff;
+            color: #000000;
+            direction: ltr;
+            font-size: 10pt;
+            padding: 2px 3px 2px 3px;
             white-space: nowrap;
         }
     </style>
 </head>
 
 <body>
-    <div class="ritz grid-container" dir="ltr">
-        <br />
+    <div class="ritz grid-container" dir="auto">
         <div class="title-relatorio">
             <strong>Anexo II</strong><br />
             <strong>Demonstrativo das Receitas e Despesas com Manutenção e Desenvolvimento do Ensino</strong><br />
@@ -328,89 +404,76 @@ ob_start();
         <table class="waffle" cellspacing="0" cellpadding="0" style="border: 1px #000">
             <thead>
                 <tr>
-                    <th class="th-receita" colspan="8">Receitas</th>
-                    <th class="th-valor">Valor</th>
+                    <th id="0C0" style="width:40px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C1" style="width:100px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C2" style="width:100px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C3" style="width:100px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C4" style="width:100px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C5" style="width:100px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C6" style="width:100px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C7" style="width:100px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C8" style="width:100px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C9" style="width:100px" class="column-headers-background">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
-                <tr style='height:20px;'>
-                    <td class="title-row" colspan="8">01 - Receitas de Impostos </td>
-                    <td class="title-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
+                <tr>
+                    <td class="th-receita" colspan="8">Receitas</td>
+                    <td class="th-valor">Valor</td>
                 </tr>
-                <!-- 1.1 - Receita resultante do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU) -->
-                <tr style='height:20px;'>
-                    <td class="subtitle-row" colspan="8">1.1 - Receita resultante do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU)</td>
-                    <td class="subtitle-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">11120101 - Imposto s/a Propriedade Territorial Rural - Munic.Conv.</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">11120101 - Imposto s/a Propriedade Territorial Rural - Munic.Conv.</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">11120101 - Imposto s/a Propriedade Territorial Rural - Munic.Conv.</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <!-- 1.2 - Receita resultante do Imposto sobre Transmissão Inter Vivos (ITBI) -->
-                <tr style='height:20px;'>
-                    <td class="subtitle-row" colspan="8">1.2 - Receita resultante do Imposto sobre Transmissão Inter Vivos (ITBI)</td>
-                    <td class="subtitle-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">111208 - Imposto sobre Transmissão "Inter Vivos" de Bens Imóveis e de Direitos Reais sobre Imóveis</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">111208 - Imposto sobre Transmissão "Inter Vivos" de Bens Imóveis e de Direitos Reais sobre Imóveis</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">111208 - Imposto sobre Transmissão "Inter Vivos" de Bens Imóveis e de Direitos Reais sobre Imóveis</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-
-                <!-- 1.3 - Receita resultante do Imposto sobre Serviços de Qualquer Natureza (ISS) -->
-                <tr style='height:20px;'>
-                    <td class="subtitle-row" colspan="8">1.3 - Receita resultante do Imposto sobre Serviços de Qualquer Natureza (ISS)</td>
-                    <td class="subtitle-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">1113.05.01 - Imposto sobre Serviços de Qualquer Natureza</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">1113.05.01 - Imposto sobre Serviços de Qualquer Natureza</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">1113.05.01 - Imposto sobre Serviços de Qualquer Natureza</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-
-
-                <!-- 1.5 - Receita resultante do Imposto Territorial Rural (ITR) (CF, ART. 153, §4º, inciso III) -->
-                <tr style='height:20px;'>
-                    <td class="subtitle-row" colspan="8">1.5 - Receita resultante do Imposto Territorial Rural (ITR) (CF, ART. 153, §4º, inciso III)</td>
-                    <td class="subtitle-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">1112.01.01 ? Imposto sobre a Propriedade Territorial Rural ? Municípios Conveniados</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">1112.01.01 ? Imposto sobre a Propriedade Territorial Rural ? Municípios Conveniados</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
-                <tr style='height:20px;'>
-                    <td class="table-row" colspan="8">1112.01.01 ? Imposto sobre a Propriedade Territorial Rural ? Municípios Conveniados</td>
-                    <td class="table-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
-                </tr>
+                <?php
+                $nTotalReceitaImpostos = 0;
+                foreach ($aReceitasImpostos as $receita) {
+                    echo "<tr style='height:20px;'>";
+                    echo "<td class='{$receita[1]}-row' colspan='8'>{$receita[0]}</td>";
+                    echo "    <td class='{$receita[1]}-row-valor'>";
+                    $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '{$receita[2]}'");
+                    $nTotalReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
+                    $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
+                    if ($receita[1] == 'title') {
+                        echo "";
+                    } else {
+                        echo db_formatar($nTotalReceita, "f");
+                    }
+                    echo "    </td>";
+                    echo " </tr>";
+                }
+                ?>
                 <tr style='height:20px;'>
                     <td class="footer-row" colspan="8">Subtotal</td>
-                    <td class="footer-row-valor"><?php echo db_formatar("12000.00", "f"); ?></td>
+                    <td class="footer-row-valor"><?php echo db_formatar($nTotalReceitaImpostos, "f"); ?></td>
+                </tr>
+                <?php
+                    $nTotalReceitaTransferencia = 0;
+                    foreach ($aReceitasTransferencias as $receitaTransferencia) {
+                        echo "<tr style='height:20px;'>";
+                        echo "    <td class='{$receitaTransferencia[1]}-row' colspan='8'>{$receitaTransferencia[0]}</td>";
+                        echo "    <td class='{$receitaTransferencia[1]}-row-valor'>";
+                            $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '{$receitaTransferencia[2]}'");
+                            $nTotalReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
+                            if ($receitaTransferencia[1] == 'title') {
+                                echo "";
+                            } else {
+                                echo db_formatar($nTotalReceita, "f");
+                                $nTotalReceitaTransferencia += $nTotalReceita;
+                            }
+                        echo "    </td>";
+                        echo " </tr>";
+                    }
+                ?>
+                <tr style='height:20px;'>
+                    <td class="footer-row" colspan="8">Subtotal</td>
+                    <td class="footer-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia, "f"); ?></td>
+                </tr>
+                <tr style='height:20px;'>
+                    <td class="footer-row" colspan="8">Total das Receitas (A)</td>
+                    <td class="footer-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia + $nTotalReceitaImpostos, "f"); ?></td>
+                </tr>
+
+                <tr style='height:20px;'>
+                    <td class="footer-row">B - Aplicação Devida (art. 212 da CF/88)</td>
+                    <td class="footer-row">25,00%</td>
+                    <td class="footer-row-valor" ><?php echo db_formatar(($nTotalReceitaTransferencia + $nTotalReceitaImpostos) * 0.25, "f"); ?></td>
                 </tr>
             </tbody>
         </table>
