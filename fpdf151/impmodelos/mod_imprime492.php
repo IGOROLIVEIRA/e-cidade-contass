@@ -227,15 +227,9 @@ $this->objpdf->line($xcol + 130, $xlin + 25, $xcol + 130, $xlin + 30);
 
 $this->objpdf->sety($xlin + 33);
 
-//$this->objpdf->Setfont('Arial', 'B', 7);
-//$this->objpdf->cell(190, 5, "DISCRIMINAÇÃO DOS SERVIÇOS", 1, 1, "C", true);
-//$this->objpdf->Setfont('Arial', '', 7);
-
-$this->objpdf->cell(15, 5, "QUANT", 1, 0, "C");
-$this->objpdf->cell(100, 5, "DISCRIMINAÇÃO DOS SERVIÇOS", 1, 0, "C");
-$this->objpdf->cell(30, 5, "VALOR UNITÁRIO", 1, 0, "C");
-$this->objpdf->cell(15, 5, "ALIQ (%)", 1, 0, "C");
-$this->objpdf->cell(30, 5, "VALOR TOTAL", 1, 1, "C");
+$this->objpdf->Setfont('Arial', 'B', 7);
+$this->objpdf->cell(190, 5, "DISCRIMINACAO DOS SERVICOS", 1, 1, "C", true);
+$this->objpdf->Setfont('Arial', '', 7);
 
 /*
  ** Dados do Servico;
@@ -259,22 +253,8 @@ for ($i = 0; $i < pg_num_rows($this->rsServico); $i++) {
     $sDescitemservico = $oItensServico->db121_estrutural . " - " . $oItensServico->db121_descricao;
     $fAliquota = $oItensServico->q62_aliquota;
 
-    $this->objpdf->cell(15, 3, $oItensServico->q62_qtd, "LR", 0, "R");
-    $cellYold = $this->objpdf->getY();
-    $this->objpdf->multiCell(100, 3, $oItensServico->q62_discriminacao, "LR", "L");
-    $cellYnew = $this->objpdf->getY();
-    $this->objpdf->sety($cellYold);
-    $this->objpdf->setx(125);
-    $vlUniMostra = $oItensServico->q62_vlruni != '' ? number_format($oItensServico->q62_vlruni, 2, ",", ".") : null;
-    $this->objpdf->cell(30, 3, $vlUniMostra, "LR", 0, "R");
-    $vlAliquota = $oItensServico->q62_aliquota != '' ? number_format($oItensServico->q62_aliquota, 2, ",", ".") : null;
-    $this->objpdf->cell(15, 3, $vlAliquota, "LR", 0, "R");
-    //$this->objpdf->cell(15, 3, $oItensServico->q62_aliquota, "LR", 0, "R");
-    $vlTotalMostra = $totalLinha != null ? number_format($totalLinha, 2, ".", ",") : null;
-    $this->objpdf->cell(30, 3, $vlTotalMostra, "LR", 1, "R");    
-
-    //$this->objpdf->multiCell(190, 5, $oItensServico->q62_discriminacao, "", "L");
-    //$this->objpdf->rect(10, $iYinicio, 190, 80);
+    $this->objpdf->multiCell(190, 5, $oItensServico->q62_discriminacao, "", "L");
+    $this->objpdf->rect(10, $iYinicio, 190, 80);
 
     break;
 }
@@ -282,26 +262,18 @@ for ($i = 0; $i < pg_num_rows($this->rsServico); $i++) {
 $this->objpdf->sety(220);
 $iYFinal = $this->objpdf->getY() - 10;
 
-$this->objpdf->line(10, $iYinicio, 10, $iYFinal);
-$this->objpdf->line(25, $iYinicio, 25, $iYFinal);
-$this->objpdf->line(125, $iYinicio, 125, $iYFinal);
-$this->objpdf->line(155, $iYinicio, 155, $iYFinal);
-$this->objpdf->line(170, $iYinicio, 170, $iYFinal);
-$this->objpdf->line(200, $iYinicio, 200, $iYFinal);
-
-//Código da Atividade
-$this->yOld = $this->objpdf->getY() - 15;
-$this->objpdf->rect(10, $this->yOld, 190, 20);
+$this->objpdf->sety(178);
 $this->objpdf->Setfont('Arial', 'B', 7);
-$this->objpdf->sety($this->yOld);
 $this->objpdf->cell(190, 5, "CÓDIGO DO SERVIÇO - ATIVIDADE", 1, 1, "C", true);
-$this->objpdf->Setfont('Arial', '', 7);      
+$this->objpdf->Setfont('Arial', '', 7);
+$this->objpdf->sety(183);
+$this->objpdf->rect(10, $iYinicio+80, 190, 32);
 $this->objpdf->multiCell(190, 5, $sDescitemservico, "", "J");
-$this->objpdf->Setfont('Arial', '', 8);
+$this->objpdf->sety(220);
 
-///box com o total devido de imposto
-$this->yOld = $this->objpdf->getY() + 10;
-$this->objpdf->rect(10, $this->yOld, 115, 25);
+//box com o total devido de imposto
+$this->yOld = $this->objpdf->getY() - 10;
+$this->objpdf->rect(10, $this->yOld, 115, 30);
 $this->objpdf->Setfont('Arial', '', 10);
 $this->objpdf->sety($this->yOld + 2);
 $this->objpdf->Setfont('Arial', 'B', 5);
@@ -315,9 +287,14 @@ $this->objpdf->Setfont('Arial', '', 10);
 $this->objpdf->sety($this->yOld);
 $this->objpdf->setX(125);
 $this->objpdf->Setfont('Arial', '', 10);
-$this->objpdf->cell(40, 5, "Valor dos Serviços", 1, 0);
+$this->objpdf->cell(40, 5, "Base de Cálculo", 1, 0);
 $this->objpdf->Setfont('Arial', '', 10);
 $this->objpdf->cell(35, 5, "R$ " . number_format($this->fTotaliUni, 2, ",", "."), 1, 1, "R");
+
+$this->objpdf->setX(125);
+$this->objpdf->cell(40, 5, "Alíquota", 1, 0);
+$this->objpdf->cell(35, 5, number_format($fAliquota, 2, ",", ".") . "%", 1, 1, "R");
+
 $this->objpdf->setX(125);
 $this->objpdf->cell(40, 5, "Valor ISSQN", 1, 0);
 $this->objpdf->cell(35, 5, "R$ " . number_format($this->fvlrIssqn, 2, ",", "."), 1, 1, "R");
@@ -342,9 +319,9 @@ $this->objpdf->cell(40, 5, "Valor Líquido da Nota", 1, 0);
 $this->objpdf->Setfont('Arial', '', 10);
 $this->objpdf->cell(35, 5, "R$ " . number_format(($fTotalNota), 2, ",", "."), 1, 1, "R");
 
-$this->objpdf->sety(255);
+$this->objpdf->sety(250);
 $this->objpdf->Setfont('Arial', 'B', 10);
 $this->objpdf->cell(30, 20,"Avisos", "LTB", 0, "C");
 $this->objpdf->Setfont('Arial', '', 8);
-$this->objpdf->rect(40, $this->yOld + 30, 160, 20);
+$this->objpdf->rect(40, $this->yOld+40, 160, 20);
 $this->objpdf->MultiCell(160, 5,$this->texto_aviso, 0, "L");
