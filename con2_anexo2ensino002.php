@@ -91,7 +91,7 @@ db_query("drop table if exists work_receita");
 criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 
 
-// $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"),($DBtxt21_ano.'-'.$DBtxt21_mes.'-'.$DBtxt21_dia),$dtfim,false,$where);
+//$result = db_planocontassaldo_matriz(db_getsession("DB_anousu"),($DBtxt21_ano.'-'.$DBtxt21_mes.'-'.$DBtxt21_dia),$dtfim,false,$where);
 
 $aReceitasImpostos = array(
     array('1 - Receita de impostos', 'title', ''),
@@ -197,11 +197,11 @@ $header = "
         <div style=\"width:25%; float:right\" class=\"box\">
             <b>Relatório Ensino - Anexo II</b><br/>
             <b>INSTITUIÇÕES:</b> ";
-foreach ($aInstits as $iInstit) {
-    $oInstituicao = new Instituicao($iInstit);
-    $header .= "(" . trim($oInstituicao->getCodigo()) . ") " . $oInstituicao->getDescricao() . " ";
-}
-$header .= "<br/> <b>PERÍODO:</b> {$dtini} A {$dtfim} <br/>
+            foreach ($aInstits as $iInstit) {
+                $oInstituicao = new Instituicao($iInstit);
+                $header .= "(" . trim($oInstituicao->getCodigo()) . ") " . $oInstituicao->getDescricao() . " ";
+            }
+            $header .= "<br/> <b>PERÍODO:</b> {$DBtxt21} A {$DBtxt22} <br/>
         </div>
     </div>
 </header>";
@@ -397,23 +397,16 @@ ob_start();
 <body>
     <div class="ritz grid-container" dir="auto">
         <div class="title-relatorio">
+            <br/>
             <strong>Anexo II</strong><br />
             <strong>Demonstrativo das Receitas e Despesas com Manutenção e Desenvolvimento do Ensino</strong><br />
             <strong>(Art.212 da C.F; Emenda Constitucional nº 53/06, leis nº 9.394/96 e 11.494/07)</strong><br /><br />
         </div>
-        <table class="waffle" cellspacing="0" cellpadding="0" style="border: 1px #000">
+        <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000" >
             <thead>
                 <tr>
-                    <th id="0C0" style="width:40px" class="column-headers-background">&nbsp;</th>
-                    <th id="0C1" style="width:100px" class="column-headers-background">&nbsp;</th>
-                    <th id="0C2" style="width:100px" class="column-headers-background">&nbsp;</th>
-                    <th id="0C3" style="width:100px" class="column-headers-background">&nbsp;</th>
-                    <th id="0C4" style="width:100px" class="column-headers-background">&nbsp;</th>
-                    <th id="0C5" style="width:100px" class="column-headers-background">&nbsp;</th>
-                    <th id="0C6" style="width:100px" class="column-headers-background">&nbsp;</th>
-                    <th id="0C7" style="width:100px" class="column-headers-background">&nbsp;</th>
-                    <th id="0C8" style="width:100px" class="column-headers-background">&nbsp;</th>
-                    <th id="0C9" style="width:100px" class="column-headers-background">&nbsp;</th>
+                    <th id="0C0" style="width:100%"  class="column-headers-background">&nbsp;</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -469,12 +462,21 @@ ob_start();
                     <td class="footer-row" colspan="8">Total das Receitas (A)</td>
                     <td class="footer-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia + $nTotalReceitaImpostos, "f"); ?></td>
                 </tr>
-
+                 <?php $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ; ?>
                 <tr style='height:20px;'>
-                    <td class="footer-row">B - Aplicação Devida (art. 212 da CF/88)</td>
-                    <td class="footer-row">25,00%</td>
-                    <td class="footer-row-valor" ><?php echo db_formatar(($nTotalReceitaTransferencia + $nTotalReceitaImpostos) * 0.25, "f"); ?></td>
+                    <td class="footer-row" colspan="8">B - Aplicação Devida (art. 212 da CF/88) 25%</td>
+                    <td class="footer-row-valor"><?php echo db_formatar($valorAplicacaoDevida, "f"); ?></td>
                 </tr>
+                <tr style='height:20px;'>
+                    <td class="footer-row" colspan="8">C - Valor da Aplicação em %</td>
+                    <td class="footer-row-valor">NÃO DEFINIDO</td>
+                </tr>
+                <tr style='height:20px;'>
+                    <td class="footer-row" colspan="8">D - Diferença entre o Valor Aplicado e o Limite Constitucional ( D = C - B)</td>
+                    <td class="footer-row-valor"><?php echo db_formatar($valorAplicacaoDevida, "f"); ?></td>
+                </tr>
+
+
             </tbody>
         </table>
     </div>
