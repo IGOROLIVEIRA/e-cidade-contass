@@ -58,10 +58,9 @@ $sSqlEstimativa .= "	 						  		 	 and orcorgao.o40_orgao 		= ppadotacao.o08_org
 $sSqlEstimativa .= "     inner join orcunidade   		  	  on orcunidade.o41_anousu	    = ".db_getsession('DB_anousu');
 $sSqlEstimativa .= "							   			 and orcunidade.o41_orgao	    = ppadotacao.o08_orgao	     	 "; 
 $sSqlEstimativa .= "							   		 	 and orcunidade.o41_unidade 	= ppadotacao.o08_unidade   	 	 ";
-//$sSqlEstimativa .= "							   		 	 and orcunidade.o41_instit   	= ppadotacao.o08_instit   	 	 ";
 $sSqlEstimativa .= "     inner join orcfuncao    		  	  on orcfuncao.o52_funcao       = ppadotacao.o08_funcao    	 	 ";
 $sSqlEstimativa .= "     inner join orcsubfuncao  	  	      on orcsubfuncao.o53_subfuncao = ppadotacao.o08_subfuncao 	 	 ";
-$sSqlEstimativa .= "     inner join orcprograma   	  	      on orcprograma.o54_anousu 	= ".db_getsession('DB_anousu');
+$sSqlEstimativa .= "     inner join orcprograma   	  	      on orcprograma.o54_anousu 	= {$oGet->iAno} ";
 $sSqlEstimativa .= "      						   			 and orcprograma.o54_programa  	= ppadotacao.o08_programa  	 	 ";
 $sSqlEstimativa .= " {$sWhereOrgao}";
 $sSqlEstimativa .= " where 1=1 {$sWhere}";

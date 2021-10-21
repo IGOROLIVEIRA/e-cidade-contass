@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf.php");
@@ -44,7 +44,7 @@ $iAnoUsu        = db_getsession("DB_anousu");
 
 $sSqlInst     = " select codigo,                                            ";
 $sSqlInst    .= "        nomeinstabrev                                      ";
-$sSqlInst    .= "   from db_config                                          "; 
+$sSqlInst    .= "   from db_config                                          ";
 $sSqlInst    .= "  where codigo in(".str_replace('-',', ',$db_selinstit).") ";
 $rsSqlInst    = db_query($sSqlInst);
 $iNumRowsInst = pg_numrows($rsSqlInst);
@@ -52,7 +52,7 @@ $iNumRowsInst = pg_numrows($rsSqlInst);
 $sDescrInst   = '';
 $sVirgula     = '';
 for ($iIndInst = 0; $iIndInst < $iNumRowsInst; $iIndInst++) {
-	
+
   $oInstituicao = db_utils::fieldsMemory($rsSqlInst, $iIndInst);
   $sDescrInst  .= $sVirgula.$oInstituicao->nomeinstabrev;
   $sVirgula     = ', ';
@@ -62,7 +62,7 @@ $sTipo = '';
 if ($origem == "O") {
   $sTipo = "ORÇAMENTO";
 } else {
-	
+
   $sTipo = "BALANÇO";
   if ($tipo_balanco == 2) {
     $sTipo .= "-EMPENHADO";
@@ -70,8 +70,8 @@ if ($origem == "O") {
     $sTipo .= "-LIQUIDADO";
   } else {
     $sTipo .= "-PAGO";
-  } 
-   
+  }
+
   if ($opcao == 3) {
     $head6 = "PERÍODO : ".db_formatar($perini, 'd')." A ".db_formatar($perfin, 'd') ;
   } else {
@@ -95,7 +95,7 @@ $sSqlWork1 .= " where o56_anousu = {$iAnoUsu}                          ";
 $sSqlWork1 .= " union                                                  ";
 $sSqlWork1 .= " select replace(o57_fonte,' ','') as o57_fonte,         ";
 $sSqlWork1 .= "        o57_descr,                          			   ";
-$sSqlWork1 .= "        0::float8 as valor                 			   "; 
+$sSqlWork1 .= "        0::float8 as valor                 			   ";
 $sSqlWork1 .= "   from orcfontes                          			   ";
 $sSqlWork1 .= "  where o57_anousu = {$iAnoUsu}            			   ";
 $rsSqlWork1 = db_query($sSqlWork1);
@@ -107,14 +107,14 @@ $result_rec = db_receitasaldo(11, 1, 3, true, $sWhere, $iAnoUsu, $dataini, $data
 
 $valor = 0;
 for ($i = 0; $i < pg_numrows($result_rec); $i++) {
-	
+
   db_fieldsmemory($result_rec, $i);
   if ($tipo_impressao == "O") {
     $valor = $saldo_inicial;
   } else {
     $valor = $saldo_arrecadado_acumulado;
   }
-  
+
   $sSqlwork1Update  = "update work1 set valor = valor+{$valor} where work1.elemento = '{$o57_fonte}'";
   $rsSqlwork1Update = db_query($sSqlwork1Update);
   $executa          = true;
@@ -129,7 +129,7 @@ if ($tipo_impressao == "O") {
 }
 
 for ($i = 0; $i < pg_numrows($result_rec); $i++) {
-	
+
   db_fieldsmemory($result_rec, $i);
   if ($tipo_balanco == 1) {
     $valor = $dot_ini;
@@ -140,22 +140,22 @@ for ($i = 0; $i < pg_numrows($result_rec); $i++) {
   } else {
     $valor = $pago;
   }
-  
+
   $sSqlwork1Update  = "update work1 set valor = valor+{$valor} where work1.elemento = '{$o58_elemento}00'";
   $rsSqlwork1Update = db_query($sSqlwork1Update);
-  
+
   $conta            = 0;
   $executa          = true;
   while ($executa == true) {
-  	
+
     $o58_elemento     = db_le_mae($o58_elemento, false);
     $sSqlwork1Update  = "update work1 set valor = valor+{$valor} where work1.elemento = '{$o58_elemento}00'";
     $rsSqlwork1Update = db_query($sSqlwork1Update);
-    
-    if (substr($o58_elemento, 2, 13) == "0000000000000") { 
+
+    if (substr($o58_elemento, 2, 13) == "0000000000000") {
       $executa = false;
     }
-    
+
     $conta ++;
     if ($conta > 10) {
       $executa = false;
@@ -165,9 +165,9 @@ for ($i = 0; $i < pg_numrows($result_rec); $i++) {
 
 db_fim_transacao(false);
 
-$pdf = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $pdf->setfillcolor(235);
 $pdf->setfont('arial', 'b', 8);
 
@@ -191,7 +191,7 @@ $pdf->cell(95, $alt, "D E S P E S A", 0, 1, "C", 0);
 $pdf->ln(5);
 
 if ($iAnoUsu < 2008) {
-	
+
    $sSqlWork1  = "   select *                                     ";
    $sSqlWork1 .= "     from work1                                 ";
    $sSqlWork1 .= "    where elemento::bigint in(411000000000000,  ";
@@ -207,9 +207,9 @@ if ($iAnoUsu < 2008) {
    $sSqlWork1 .= "                             )                  ";
    $sSqlWork1 .= " order by elemento                              ";
 } elseif ($iAnoUsu >= 2008 && $iAnoUsu < 2014) {
-	
+
   $sSqlWork1   = "   select *                                      ";
-  $sSqlWork1  .= "     from work1                                  "; 
+  $sSqlWork1  .= "     from work1                                  ";
   $sSqlWork1  .= "    where elemento::bigint in(411000000000000,   ";
   $sSqlWork1  .= "                              412000000000000,   ";
   $sSqlWork1  .= "                              413000000000000,   ";
@@ -226,9 +226,9 @@ if ($iAnoUsu < 2008) {
   $sSqlWork1  .= "                             )                   ";
   $sSqlWork1  .= " order by elemento                               ";
 }elseif ($iAnoUsu >= 2014) {
-	
+
   $sSqlWork1   = "   select *                                      ";
-  $sSqlWork1  .= "     from work1                                  "; 
+  $sSqlWork1  .= "     from work1                                  ";
   $sSqlWork1  .= "    where elemento::bigint in(411000000000000,   ";
   $sSqlWork1  .= "                              412000000000000,   ";
   $sSqlWork1  .= "                              413000000000000,   ";
@@ -243,7 +243,8 @@ if ($iAnoUsu < 2008) {
   $sSqlWork1  .= "                              493000000000000,   ";
   $sSqlWork1  .= "                              495000000000000,   ";
   $sSqlWork1  .= "                              497000000000000,   ";
-  $sSqlWork1  .= "                              498000000000000    ";
+  $sSqlWork1  .= "                              498000000000000,   ";
+  $sSqlWork1  .= "                              499000000000000    ";
   $sSqlWork1  .= "                             )                   ";
   $sSqlWork1  .= " order by elemento                               ";
 }
@@ -253,15 +254,15 @@ $iNumRowsWork1 = pg_numrows($rsSqlWork1);
 
 
 for ($i = 0; $i < $iNumRowsWork1; $i++) {
-	
+
   db_fieldsmemory($rsSqlWork1, $i);
 
-  if ($valor == 0) { 
+  if ($valor == 0) {
     continue;
-  }		
-  
+  }
+
   if ($elemento != "920000000000000" && $elemento != "980000000000000" ) {
-  	
+
 	  $descra[$a] = $descr;
 	  $vlra[$a]   = $valor;
 	  $a         += 1;
@@ -274,16 +275,16 @@ $rsSqlWork1    = db_query($sSqlWork1);
 $iNumRowsWork1 = pg_numrows($rsSqlWork1);
 
 for ($i = 0; $i < $iNumRowsWork1; $i++) {
-	
+
   db_fieldsmemory($rsSqlWork1, $i);
   if (substr($elemento, 3, 12) == "000000000000" && substr($elemento, 2, 1) != "0") {
-  	
+
     if (substr($elemento, 1, 1) == "3") {
-    	
+
       if ($valor == 0 ) {
         continue;
       }
-      
+
       $descrb[$b] = $descr;
       $vlrb[$b]   = $valor;
       $b         += 1;
@@ -293,8 +294,8 @@ for ($i = 0; $i < $iNumRowsWork1; $i++) {
 }
 
 $sSqlWork1  = "   select *                            ";
-$sSqlWork1 .= "     from work1                        "; 
-$sSqlWork1 .= "    where elemento = '410000000000000' "; 
+$sSqlWork1 .= "     from work1                        ";
+$sSqlWork1 .= "    where elemento = '410000000000000' ";
 $sSqlWork1 .= "       or substr(elemento,1,2) = '47'  ";
 $sSqlWork1 .= " order by elemento                     ";
 $rsSqlWork1 = db_query($sSqlWork1);
@@ -315,31 +316,31 @@ $pdf->cell(25, $alt, db_formatar($valorb, 'f'), 0, 1, "R", 0);
 
 $numreg = (sizeof($descra)>sizeof($descrb)?sizeof($descra):sizeof($descrb));
 for($i = 0; $i < $numreg; $i++) {
-	
+
   $pdf->setfont('arial','',7);
   if (isset($vlra[$i])) {
-  	
+
     $pdf->cell(70,$alt,"  ".$descra[$i],0,0,"L",0);
     $pdf->cell(25,$alt,db_formatar($vlra[$i]+0,'f'),0,0,"R",0);
   } else {
-  	
+
     $pdf->cell(70,$alt,"  ",0,0,"L",0);
     $pdf->cell(25,$alt," ",0,0,"R",0);
   }
-  
+
   if (isset($vlrb[$i])) {
-  	
+
     $pdf->cell(70,$alt,"  ".$descrb[$i],0,0,"L",0);
     $pdf->cell(25,$alt,db_formatar($vlrb[$i]+0,'f'),0,0,"R",0);
   }
-  
+
   $pdf->setxy($pdf->lMargin,$pdf->gety()+$alt);
 }
 
 $valorc = $valora - $valorb;
 $pdf->setfont('arial','b',8);
 if ($valorc > 0) {
-	
+
   $pdf->cell(70,$alt,"",0,0,"L",0);
   $pdf->cell(25,$alt,'',0,0,"L",0);
   $pdf->cell(70,$alt,"  "."SUPERAVIT",0,0,"L",0,'','.');
@@ -348,12 +349,12 @@ if ($valorc > 0) {
   $pdf->cell(25,$alt,db_formatar($valora,'f'),0,0,"R",0);
   $pdf->cell(70,$alt,"  "."TOTAIS",0,0,"L",0,'','.');
   $pdf->cell(25,$alt,db_formatar($valorb+$valorc,'f'),0,1,"R",0);
-  
+
   $pdf->Ln(1);
   $pdf->cell(70,$alt,"  "."SUPERAVIT ORÇAMENTO CORRENTE",0,0,"L",0,'','.');
   $pdf->cell(25,$alt,db_formatar($valorc,'f'),0,1,"R",0);
 } else if ($valorc < 0) {
-	
+
   $pdf->cell(70,$alt,"  "."DÉFICIT",0,0,"L",0);
   $pdf->cell(25,$alt,db_formatar($valorc*-1,'f'),0,1,"R",0);
   $pdf->cell(70,$alt,"  "."TOTAIS",0,0,"L",0);
@@ -362,7 +363,7 @@ if ($valorc > 0) {
   $pdf->cell(25,$alt,db_formatar($valorb,'f'),0,1,"R",0);
   $pdf->cell(70,$alt,"",0,0,"L",0);
   $pdf->cell(25,$alt,'',0,0,"L",0);
-  
+
   $pdf->Ln(1);
   $pdf->cell(70,$alt,"  "."DÉFICIT ORÇAMENTO CORRENTE",0,0,"L",0);
   $pdf->cell(25,$alt,db_formatar($valorc*-1,'f'),0,1,"R",0);
@@ -384,24 +385,24 @@ $rsSqlWork1    = db_query($sSqlWork1);
 $iNumRowsWork1 = pg_numrows($rsSqlWork1);
 
 for ($i = 0; $i < $iNumRowsWork1; $i++) {
-	
-  db_fieldsmemory($rsSqlWork1, $i);   
-  
-  if ((substr($elemento,3,12) == "000000000000" 
-       && substr($elemento,2,1) != "0" && substr($elemento,0,1) != "9") 
+
+  db_fieldsmemory($rsSqlWork1, $i);
+
+  if ((substr($elemento,3,12) == "000000000000"
+       && substr($elemento,2,1) != "0" && substr($elemento,0,1) != "9")
        || ($elemento == "920000000000000" || $elemento == "980000000000000" )) {
 
     if (substr($elemento,1,1) == "2" || substr($elemento,1,1) == "8") {
-    	
+
       if ($valor == 0) {
         continue;
       }
-      
+
       $descrd[$d] = $descr;
       $vlrd[$d]   = $valor;
       $d         += 1;
       $valord     = ($valord + $valor);
-    } 
+    }
   }
 }
 
@@ -410,16 +411,16 @@ $rsSqlWork1    = db_query($sSqlWork1);
 $iNumRowsWork1 = pg_numrows($rsSqlWork1);
 
 for ($i = 0; $i < $iNumRowsWork1; $i++) {
-	
+
   db_fieldsmemory($rsSqlWork1,$i);
   if (substr($elemento,3,12) == "000000000000" && substr($elemento,2,1) != "0") {
-  	
+
     if (substr($elemento,1,1) == "4") {
-    	
+
       if ($valor == 0) {
         continue;
       }
-      
+
       $descre[$e] = $descr;
       $vlre[$e]   = $valor;
       $e         += 1;
@@ -451,40 +452,41 @@ $pdf->setfont('arial','',8);
 $numreg = (sizeof($descrd) > sizeof($descre)? sizeof($descrd) : sizeof($descre));
 
 for ($i = 0; $i < $numreg; $i++) {
-	
+
   if (isset($vlrd[$i])) {
-  	
+
     $pdf->setfont('arial','',7);
     $pdf->cell(70,$alt,"  ".$descrd[$i],0,0,"L",0);
-    $pdf->cell(25,$alt,db_formatar($vlrd[$i]+0,'f'),0,0,"R",0);  
+    $pdf->cell(25,$alt,db_formatar($vlrd[$i]+0,'f'),0,0,"R",0);
   } else {
-  	
+
     $pdf->cell(70,$alt,"  ",0,0,"L",0);
     $pdf->cell(25,$alt," ",0,0,"R",0);
-  }  
-  
+  }
+
   if (isset($vlre[$i]) ) {
-  	
+
     $pdf->cell(70,$alt,"  ".$descre[$i],0,0,"L",0);
     $pdf->cell(25,$alt,db_formatar($vlre[$i]+0,'f'),0,0,"R",0);
   }
-  
+
   $pdf->setxy($pdf->lMargin,$pdf->gety()+$alt);
 }
 
-$sSqlWork1     = "select * from work1 where elemento =   '390000000000000' or elemento = '370000000000000'";
+$sSqlWork1     = "select * from work1 where elemento = '399000000000000' or elemento = '370000000000000'";
 $rsSqlWork1    = db_query($sSqlWork1);
+
 $iNumRowsWork1 = pg_numrows($rsSqlWork1);
 
 if ($iNumRowsWork1 > 0) {
-	
+
   $vlr_reserva = 0;
   for ($y = 0; $y < $iNumRowsWork1; $y++) {
-  	
+
     db_fieldsmemory($rsSqlWork1, $y);
     $vlr_reserva += $valor;
   }
-  
+
   $pdf->ln(3);
   $pdf->cell(70,$alt,"",0,0,"L",0,'','.');
   $pdf->cell(25,$alt,"",0,0,"R",0);
@@ -492,7 +494,7 @@ if ($iNumRowsWork1 > 0) {
   $pdf->cell(25,$alt,db_formatar($vlr_reserva,'f'),0,1,"R",0);
 } else {
   $vlr_reserva = 0;
-} 
+}
 
 $pdf->ln(4);
 $pdf->setfont('arial','b',8);
@@ -500,12 +502,12 @@ $pdf->setfont('arial','b',8);
 $valorf = ($valora+$valord)-($valorb+$valore)-$vlr_reserva ;
 
 if ($valorf > 0 ) {
-	
+
   $pdf->cell(70,$alt,"",0,0,"L",0,'','.');
   $pdf->cell(25,$alt,"",0,0,"R",0);
   $pdf->cell(70,$alt,"SUPERAVIT DA EXECUÇÃO ORÇAMENTARIA",0,0,"L",0,'','.');
   $pdf->cell(25,$alt,db_formatar($valorf,'f'),0,1,"R",0);
-  
+
   $pdf->cell(70,$alt,"TOTAIS",0,0,"L",0,'','.');
   $pdf->cell(25,$alt,db_formatar($valora+$valord,'f'),0,0,"R",0);
   $pdf->cell(70,$alt,"TOTAIS",0,0,"L",0,'','.');
@@ -513,7 +515,7 @@ if ($valorf > 0 ) {
 } else {
 
   if ($valorf < 0) {
-  	
+
     $pdf->cell(70,$alt,"DEFICIT",0,0,"L",0,'','.');
     $pdf->cell(25,$alt,db_formatar($valorf,'f'),0,0,"R",0);
     $pdf->cell(70,$alt,"",0,0,"L",0,'','.');
@@ -524,7 +526,7 @@ if ($valorf > 0 ) {
   $pdf->cell(25,$alt,db_formatar($valora+$valord+(abs($valorf)),'f'),0,0,"R",0);
   $pdf->cell(70,$alt,"TOTAIS",0,0,"L",0,'','.');
   $pdf->cell(25,$alt,db_formatar($valorb+$valore+$vlr_reserva,'f'),0,1,"R",0);
-}  
+}
 
 
 $pdf->ln(2);
@@ -561,7 +563,7 @@ if ($valorf > 0 ) {
   $pdf->cell(55,$alt,"SUPERAVIT DA EXEC. ORÇAMENTARIA",0,0,"L",0,'','.');
   $pdf->cell(30,$alt,'',0,0,"R",0);
   $pdf->cell(30,$alt,db_formatar($valorf,'f'),0,1,"R",0);
-  
+
   $pdf->ln(1);
   $pdf->cell(55,$alt,"TOTAL",0,0,"L",0,'','.');
   $pdf->cell(30,$alt,db_formatar($valora+$valord,'f'),0,0,"R",0);
@@ -569,18 +571,18 @@ if ($valorf > 0 ) {
 } else {
 
   if ($valorf < 0) {
-  	
+
     $pdf->cell(55,$alt,"DEFICIT",0,0,"L",0,'','.');
     $pdf->cell(30,$alt,db_formatar($valorf*-1,'f'),0,0,"R",0);
     $pdf->cell(30,$alt,'',0,1,"R",0);
   }
-  
+
   $pdf->ln(1);
   $pdf->cell(55, $alt, "TOTAL", 0, 0, "L", 0, '', '.');
   $pdf->cell(30, $alt, db_formatar($valora+$valord+($valorf*-1),'f'), 0, 0, "R", 0);
   $pdf->cell(30, $alt, db_formatar($valorb+$valore+$vlr_reserva,'f'), 0, 1, "R", 0);
-  
-}  
+
+}
 
 $pdf->ln(14);
 
