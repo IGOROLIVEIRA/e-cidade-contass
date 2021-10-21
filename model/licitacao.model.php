@@ -98,7 +98,7 @@ class licitacao
             $this->iCodLicitacao = $iCodLicitacao;
 
             $oDaoLicitacao = db_utils::getDao("liclicita");
-            $sSqlBuscaLicitacao = $oDaoLicitacao->sql_query($iCodLicitacao);
+            $sSqlBuscaLicitacao = $oDaoLicitacao->sql_query_old($iCodLicitacao);
             $rsBuscaLicitacao   = $oDaoLicitacao->sql_record($sSqlBuscaLicitacao);
 
             $oDadoLicitacao = db_utils::fieldsMemory($rsBuscaLicitacao, 0);

@@ -59,7 +59,7 @@ $sSqlEstimativa  = " SELECT DISTINCT o08_programa, /* Programa do PPA */
                     FROM ppadotacao
                     INNER JOIN ppaestimativadespesa ON o08_sequencial = o07_coddot
                     INNER JOIN ppaestimativa ON o07_ppaestimativa = o05_sequencial
-                    INNER JOIN orcprograma ON orcprograma.o54_anousu = ".db_getsession('DB_anousu')." AND orcprograma.o54_programa = ppadotacao.o08_programa
+                    INNER JOIN orcprograma ON orcprograma.o54_anousu = {$oGet->iAno} AND orcprograma.o54_programa = ppadotacao.o08_programa
                     LEFT JOIN orcindicaprograma ON orcindicaprograma.o18_orcprograma = orcprograma.o54_programa AND orcindicaprograma.o18_anousu = ".db_getsession('DB_anousu')."
                     WHERE $sWhere
                       AND o08_instit IN ({$sListaInstit}) {$sWherePrograma} {$sWhereOrgao}
@@ -140,7 +140,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
                               WHEN o55_tipo = 3 THEN 'Operações Especiais'
                               WHEN o55_tipo = 9 THEN 'Reserva de Contigência'
                           END AS tipo,
-                          round(sum(o05_valor),0) AS valor
+                          round(sum(o05_valor),2) AS valor
                    FROM ppadotacao
                    INNER JOIN ppaestimativadespesa ON o08_sequencial = o07_coddot
                    INNER JOIN ppaestimativa ON o07_ppaestimativa = o05_sequencial

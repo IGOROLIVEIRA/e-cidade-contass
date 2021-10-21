@@ -23,14 +23,16 @@ class cl_precoreferencia {
    var $si01_datacotacao_ano = null; 
    var $si01_datacotacao = null; 
    var $si01_tipoprecoreferencia = 0; 
-   var $si01_justificativa = null; 
+   var $si01_justificativa = null;
+   var $si01_cotacaoitem = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si01_sequencial = int8 = codigo sequencial 
                  si01_processocompra = int8 = numero do processo de compra 
                  si01_datacotacao = date = data da cotacao 
                  si01_tipoprecoreferencia = int8 = Tipo de Preco de Referencia 
-                 si01_justificativa = text = Justificativa 
+                 si01_justificativa = text = Justificativa
+                 si01_cotacaoitem = int4 = Cotação Item  
                  ";
    //funcao construtor da classe 
    function cl_precoreferencia() { 
@@ -62,6 +64,7 @@ class cl_precoreferencia {
        }
        $this->si01_tipoprecoreferencia = ($this->si01_tipoprecoreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_tipoprecoreferencia"]:$this->si01_tipoprecoreferencia);
        $this->si01_justificativa = ($this->si01_justificativa == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_justificativa"]:$this->si01_justificativa);
+       $this->si01_cotacaoitem = ($this->si01_cotacaoitem == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_cotacaoitem"]:$this->si01_cotacaoitem);
      }else{
        $this->si01_sequencial = ($this->si01_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_sequencial"]:$this->si01_sequencial);
      }
@@ -167,14 +170,16 @@ class cl_precoreferencia {
                                       ,si01_processocompra 
                                       ,si01_datacotacao 
                                       ,si01_tipoprecoreferencia 
-                                      ,si01_justificativa 
+                                      ,si01_justificativa
+                                      ,si01_cotacaoitem 
                        )
                 values (
                                 $this->si01_sequencial 
                                ,$this->si01_processocompra 
                                ,".($this->si01_datacotacao == "null" || $this->si01_datacotacao == ""?"null":"'".$this->si01_datacotacao."'")." 
                                ,$this->si01_tipoprecoreferencia 
-                               ,'$this->si01_justificativa' 
+                               ,'$this->si01_justificativa'
+                               ,$this->si01_cotacaoitem 
                       )";
      $result = db_query($sql); 
      

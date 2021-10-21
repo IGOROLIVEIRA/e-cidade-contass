@@ -150,7 +150,7 @@ function js_marca(obj){
 </td><td>
 </table>
 <center>
-  <input type='button' value='reemitir nota' onclick='js_emiteNota(<?=$_GET["q51_sequencial"];?>)' <?=$reemite;?>>
+  <input type='button' value='Reemitir Nota' onclick='js_emiteNota(<?=$_GET["q51_sequencial"];?>)' <?=$reemite;?>>
   <input type='button' value='Voltar'  onclick='parent.db_iframe_pesquisanota.hide()'>
 </center>
 </body>
