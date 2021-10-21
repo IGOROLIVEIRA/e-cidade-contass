@@ -43,8 +43,7 @@ $db_botao = true;
 if(isset($incluir)){
     $sqlerro=false;
     
-
-    if($pc60_orgaoreg==0){
+    if(strlen($pc60_cnpjcpf)==14 && $pc60_orgaoreg==0){
       $sqlerro=true;
       db_msgbox("Campo Órgão Registro não Selecionado!");
     }
