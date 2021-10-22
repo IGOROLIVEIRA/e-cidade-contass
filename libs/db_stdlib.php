@@ -1226,8 +1226,9 @@ function db_sel_instit($instit = null, $campos = " * ")
             $num_cols = pg_numfields($record_config);
             for ($index = 0; $index < $num_cols; $index++) {
                 $nam_campo = pg_fieldname($record_config, $index);
-                global ${$nomevar};
-                ${$nomevar} = pg_result($record_config, 0, $nam_campo);
+                global ${$nam_campo};
+                //return 'variavel = '.$nam_campo;
+                ${$nam_campo} = pg_result($record_config, 0, $nam_campo);
             }
         }
     }

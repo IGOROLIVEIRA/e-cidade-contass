@@ -178,7 +178,8 @@ function js_pesquisa() {
 function js_preenchePesquisa(iCodigoGrupoServico, sDescricao, sEstrutural) {
   $('sDescricaoGrupoServico').value = sDescricao;
   js_divCarregando('Buscando dados do grupo de serviço', 'msgBox');
-  db_iframe_issgruposervico.hide();
+  db_iframe_issgruposervico.hide(true);
   location.href = 'iss1_issconfiguracaogruposervico002.php?iCodigoGrupoServico=' + iCodigoGrupoServico;
+  js_removeObj('msgBox');
 }
 </script>
