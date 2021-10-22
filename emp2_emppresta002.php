@@ -291,7 +291,7 @@ if (pg_num_rows($rsSql) == 0) {
 
                             ?>
                             <?php if ($nota != "") :
-                                if ($totalNota + $rsNota->e999_valor < $rsResultado->e60_vlremp) {
+                                if ($totalNota + $rsNota->e999_valor <= $rsResultado->e60_vlremp) {
                                     $totalNota += $rsNota->e999_valor;
                                     $totalNota -= $rsNota->e999_desconto;
                                 }
@@ -373,7 +373,7 @@ if (pg_num_rows($rsSql) == 0) {
 
 
                     endforeach;
-                    if ($totalNota + $rsNota->e999_valor < $rsResultado->e60_vlremp) {
+                    if ($totalNota + $rsNota->e999_valor <= $rsResultado->e60_vlremp) {
                         $totalNota += $rsNota->e999_valor;
                         $totalNota -= $rsNota->e999_desconto;
                     }

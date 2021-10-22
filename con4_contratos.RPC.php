@@ -34,6 +34,7 @@ require_once("classes/db_acordoprogramacaofinanceira_classe.php");
 require_once("classes/db_acordoposicaoperiodo_classe.php");
 require_once("classes/db_acordoitemprevisao_classe.php");
 require_once("classes/db_credenciamentosaldo_classe.php");
+require_once("classes/db_pcfornereprlegal_classe.php");
 require_once('model/AcordoComissao.model.php');
 require_once('model/Acordo.model.php');
 require_once('model/AcordoItem.model.php');
@@ -81,6 +82,8 @@ $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = 1;
 $oRetorno->itens   = array();
+
+$clpcfornereprlegal = new cl_pcfornereprlegal();
 
 switch ($oParam->exec) {
 
@@ -632,6 +635,29 @@ switch ($oParam->exec) {
                     $lAcordoValido = true;
                 }
             }
+
+            /**
+             * Controle de cadastro de fornecedor
+             */
+
+
+            $result_tipoparticipacao3 = $clpcfornereprlegal->sql_record($clpcfornereprlegal->sql_query("", "*", "", "pc81_cgmforn = {$oParam->contrato->iContratado}"));
+            $resulta     = db_utils::fieldsMemory($result_tipoparticipacao3, 0);
+            //$result_tipoparticipacao3 = db_query("select pc81_cgmforn from pcfornereprlegal where pc81_cgmforn = {$oParam->contrato->iContratado}");
+            if ($resulta->pc81_tipopart != 3 && $resulta->pc81_tipopart != 4 && $resulta->pc81_tipopart != 5) {
+                $result_tipoparticipacao1 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 1");
+
+                if (pg_num_rows($result_tipoparticipacao1) == 0) {
+                    throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
+                }
+
+                $result_tipoparticipacao2 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 2");
+
+                if (pg_num_rows($result_tipoparticipacao2) == 0) {
+                    throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
+                }
+            }
+
             $oLicitacao = db_utils::getDao('liclicita');
             $rsLicitacao   = $oLicitacao->sql_record($oLicitacao->sql_query_file($oParam->contrato->iLicitacao, 'l20_naturezaobjeto'));
             $iNatureza     = db_utils::fieldsMemory($rsLicitacao, 0)->l20_naturezaobjeto;

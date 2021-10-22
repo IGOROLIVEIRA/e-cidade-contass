@@ -65,7 +65,7 @@ switch($oParam->exec) {
                else rh01_nasc
                end as z01_nasc
 		      from cgm
-		      inner join rhpessoal on rh01_numcgm = z01_numcgm
+		      inner join rhpessoal on rh01_numcgm = z01_numcgm AND rh01_instit = ".db_getsession("DB_instit")."
 		      inner join rhpessoalmov on rh02_regist = rh01_regist
 		            and rh02_anousu = $oParam->iAno and rh02_mesusu = $oParam->iMes
 		      left join  rhpesrescisao on rh02_seqpes = rh05_seqpes

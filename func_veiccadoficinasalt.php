@@ -88,6 +88,20 @@ $clrotulo->label("z01_nome");
         $campos = "veiccadoficinas.ve27_codigo,veiccadoficinas.ve27_numcgm, cgm.z01_numcgm, cgm.z01_cgccpf, cgm.z01_nome";
         if(isset($chave_ve27_codigo) && (trim($chave_ve27_codigo)!="") ){
 	         $sql = $clveiccadoficinas->sql_query($chave_ve27_codigo,$campos,"ve27_codigo");
+        }if(isset($chave_numcgm) && (trim($chave_numcgm)!="") ){
+              $sql = $clveiccadoficinas->sql_query(null,$campos,"ve27_codigo","ve27_numcgm = $chave_numcgm $and $dbwhere");
+              $s = $clveiccadoficinas->sql_record($clveiccadoficinas->sql_query(null,$campos,"ve27_codigo","ve27_numcgm = $chave_numcgm $and $dbwhere"));
+              if($clveiccadoficinas->numrows==0){
+              $clveiccadoficinas->ve27_numcgm = $chave_numcgm;
+              $clveiccadoficinas->incluir();
+
+              $sql_result = $clveiccadoficinas->sql_record($clveiccadoficinas->sql_query(null,"max(ve27_codigo)","ve27_codigo",""));
+  
+              
+
+              $sql = $clveiccadoficinas->sql_query(null,$campos,"ve27_codigo","ve27_numcgm = $chave_numcgm $and $dbwhere");
+            }
+        
         }else if(isset($chave_z01_nome) && (trim($chave_z01_nome)!="") ){
         	 $sql = $clveiccadoficinas->sql_query(null,$campos,"ve27_codigo"," z01_nome like '$z01_nome%' ");
         }else{

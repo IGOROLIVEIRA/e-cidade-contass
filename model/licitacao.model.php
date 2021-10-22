@@ -98,7 +98,7 @@ class licitacao
             $this->iCodLicitacao = $iCodLicitacao;
 
             $oDaoLicitacao = db_utils::getDao("liclicita");
-            $sSqlBuscaLicitacao = $oDaoLicitacao->sql_query($iCodLicitacao);
+            $sSqlBuscaLicitacao = $oDaoLicitacao->sql_query_old($iCodLicitacao);
             $rsBuscaLicitacao   = $oDaoLicitacao->sql_record($sSqlBuscaLicitacao);
 
             $oDadoLicitacao = db_utils::fieldsMemory($rsBuscaLicitacao, 0);
@@ -614,12 +614,15 @@ class licitacao
                 /*
                  * incluimos os lotes do item
                  */
+                $sequencial = 0;
                 foreach ($oItem->lote as $oLote) {
 
+                    $sequencial++;
                     $oDaoliclicitemlote = db_utils::getDao("liclicitemlote");
                     $oDaoliclicitemlote->l04_codigo     = utf8_decode($oLote["l04_codigo"]);
                     $oDaoliclicitemlote->l04_liclicitem = utf8_decode($oLote["l04_liclicitem"]);
                     $oDaoliclicitemlote->l04_descricao  = utf8_decode($oLote["l04_descricao"]);
+                    $oDaoliclicitemlote->l04_seq = $sequencial;
                     $oDaoliclicitemlote->incluir(utf8_decode($oLote["l04_codigo"]));
 
                     if ($oDaoliclicitemlote->erro_status == 0) {

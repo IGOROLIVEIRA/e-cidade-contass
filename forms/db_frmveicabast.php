@@ -435,8 +435,16 @@ db_app::load("estilos.css");
                             <?
                                 }
                             }
+
                             ?>
                             <tr>
+
+
+                                <?
+                                $x = array("f" => "Não", "t" => "Sim");
+                                db_select('ve70_importado', $x, true, 1, 'hidden');
+                                ?>
+
                                 <td nowrap title="Observação" colspan="2">
                                     <fieldset>
                                         <legend><strong>Observação</strong></legend>

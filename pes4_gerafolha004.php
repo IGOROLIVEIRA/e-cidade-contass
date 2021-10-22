@@ -1535,7 +1535,7 @@ function gerffer($opcao_geral=null,$opcao_tipo=1){
   // globais de outras funcoes
 
   global $quais_diversos,$tot_prov, $tot_desc,$carregarubricas_geral;
-  global $anousu, $mesusu, $DB_instit;
+  global $anousu, $mesusu, $DB_instit, $db_debug;
 
   global $campos_pessoal, $r110_regisi, $subpes,$chamada_geral,$chamada_geral_arquivo,$pessoal,$Ipessoal,$transacao,$cfpess;
 
@@ -1861,7 +1861,7 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
 
       }
 
-      if (!db_empty($r14_valor)) {
+      if (!db_empty($r14_valor) && ($r14_valor > 0 || $r14_pd == 2)) {
 
          if ( $r14_pd == 2 ) { echo "<br>if<br>";
             $tot_desc += round($r14_valor,2);
@@ -1899,6 +1899,22 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
          $matriz2[9] = db_val( substr("#".$subpes,1,4 ));
          $matriz2[10] = db_val( substr("#".$subpes,6,2 ));
          $matriz2[11] = $DB_instit;
+         if ($db_debug == true) {
+            echo "[gerffer] 1 - Insert: Gerffer<br>";
+           echo "Dados: <br>";
+           echo "r31_regist: ".$matriz2[1]."<br>";
+           echo "r31_rubric:".$matriz2[2]."<br>";
+           echo "r31_lotac:".$matriz2[3]."<br>";
+           echo "r31_valor:".$matriz2[4]."<br>";
+           echo "r31_quant:".$matriz2[5]."<br>";
+           echo "r31_pd:".$matriz2[6]."<br>";
+           echo "r31_semest:".$matriz2[7]."<br>";
+           echo "r31_tpp:".$matriz2[8]."<br>";
+           echo "r31_anousu:".$matriz2[9]."<br>";
+           echo "r31_mesusu:".$matriz2[10]."<br>";
+           echo "r31_instit:".$matriz2[11]."<br>";
+           echo "<br>";
+        }
          db_insert( $chamada_geral_arquivo,$matriz1,$matriz2 );
       }
    }
@@ -4556,8 +4572,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
       // Normal
     }
 
-    //echo "<BR> Situacao funcionario -> $situacao_funcionario";
-
+    // echo "<BR> Situacao funcionario -> $situacao_funcionario  Dias pagamento -> $dias_pagamento";
 
     if ($opcao_geral == 1 ) {
       //echo "<BR> 010-Carrega FXXX salario";
@@ -5274,7 +5289,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
             -(strtolower($d08_carnes)=="riogrande"?0:$valor_ferias_ )),2) <= 0 ) {
               db_delete("gerfsal", bb_condicaosubpes("r14_").$condicaoaux );
             } else {
-              $valor = ( (round(( $salario / 30 ) * $dias_pagamento ,2))
+              $valor = ( (round(( $salario / 30 ) * ($dias_pagamento-$F019) ,2))
               - (strtolower($d08_carnes)=="riogrande"? 0:$valor_ferias_ ));
 
               $matriz1 = array();
@@ -5291,7 +5306,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
                 if ($F019 > 0 &&  'f' == $cadferia[0]["r30_paga13"] ) {
                   $quantidade = ( $qtd_salario/30) * ( $dividir_por - $dias_maternidade - (strtolower($d08_carnes)=="riogrande"? 0: $F019 ) );
                 } else {
-                  $quantidade = ( $qtd_salario/30) * ( 30 - $dias_maternidade );
+                  $quantidade = ( $qtd_salario/30) * ( 30 - $dias_maternidade - $F019 );
                 }
                 $matriz1[1] = "r14_quant";
                 $matriz2[1] = round($quantidade,2);
@@ -8446,6 +8461,12 @@ function le_var_bxxx($formula=null, $area0=null, $area1=null, $sigla=null, $sigl
                    continue;
                  }else if($valor_ > 0 ){
                   if ($situacao_funcionario != 5 || ($situacao_funcionario == 5 && $F019 == 0 )) {
+                    /**
+                     * Caso não tenha salário, não calcular valor_ para base irf para incluir apenas valor da licença
+                     */
+                    /*if (empty($transacao)) {
+                       continue;
+                    }*/
                     $valor_ = round($campo_quant * $valor_ ,2);
                     if ($campo_pd == "1") {
                       $valor += $valor_;

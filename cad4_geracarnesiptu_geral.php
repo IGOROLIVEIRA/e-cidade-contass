@@ -1165,6 +1165,7 @@ where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limi
             $pdf1->descr11_1	   = $z01_numcgm." - ".$nome_contri;
             $pdf1->descr11_2     = strtoupper($j23_ender). ($j23_numero == "" ? "" : ', '.$j23_numero.'  '.$j23_compl);
             $pdf1->descr11_3     = $xbairro;
+            $pdf1->descr17       = $bql;
             $pdf1->bairrocontri  = $j23_bairro;
             $pdf1->munic         = $j23_munic;
             $pdf1->premunic      = $j23_munic;

@@ -27,7 +27,9 @@
 
 //MODULO: compras
 include("dbforms/db_classesgenericas.php");
+include("classes/db_habilitacaoforn_classe.php");
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
+$clhabilitacaoforn        = new cl_habilitacaoforn;
 $clpcfornereprlegal->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
@@ -147,10 +149,12 @@ if($db_opcao != 1){
       $dbwhere = "";
       if(isset($pc81_cgmforn) && trim($pc81_cgmforn) != ""){
         $dbwhere .= " pc81_cgmforn = " . $pc81_cgmforn;
+        $result = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query("","*","","l206_fornecedor = $pc81_cgmforn"));
       }
       if(isset($pc81_sequencia) && trim($pc81_sequencia) != ""){
         $dbwhere .= " and pc81_sequencia <> " . $pc81_sequencia;
       }
+      
       $chavepri= array("pc81_sequencia"=>@$pc81_sequencia);
       $cliframe_alterar_excluir->chavepri=$chavepri;
       $cliframe_alterar_excluir->sql     = $clpcfornereprlegal->sql_query(null,"pc81_sequencia, pc81_datini, pc81_datfin, pc81_obs,b.z01_nome as pc81_cgmresp,
@@ -160,7 +164,12 @@ if($db_opcao != 1){
       $cliframe_alterar_excluir->legenda = "REPRESENTANTES CADASTRADOS";
       $cliframe_alterar_excluir->iframe_height ="160";
       $cliframe_alterar_excluir->iframe_width ="700";
-      $cliframe_alterar_excluir->opcoes  = (isset($db_opcaoal) ? 4 : 1);
+      if($clhabilitacaoforn->numrows>0){
+        $cliframe_alterar_excluir->opcoes  = (isset($db_opcaoal) ? 4 : 2);
+      }else{
+        $cliframe_alterar_excluir->opcoes  = (isset($db_opcaoal) ? 4 : 1);
+      }
+      
       $cliframe_alterar_excluir->iframe_alterar_excluir(1);
       ?>
     </td>

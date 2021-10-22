@@ -26,6 +26,7 @@
  */
 
 //MODULO: issqn
+
 include("dbforms/db_classesgenericas.php");
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clissnotaavulsaservico->rotulo->label();
@@ -126,9 +127,21 @@ ORDER BY r07_anousu DESC,
          r07_mesusu DESC
 LIMIT 1";
 
+$sqlTipoPrestador = "SELECT CASE WHEN char_length(cgm.z01_cgccpf) = 14 THEN 'juridica' ELSE 'fisica' END AS tipopessoa 
+FROM issnotaavulsa 
+INNER JOIN issbase  ON q02_inscr = q51_inscr 
+INNER JOIN cgm ON z01_numcgm = q02_numcgm 
+WHERE q51_sequencial = {$get->q51_sequencial}";
+
 $aValoresTabela = db_utils::getCollectionByRecord(db_query($sSQLTabelaIRRF));
 $oValorDependente = db_utils::fieldsMemory(db_query($sSQLValorDependente), 0);
+$oTipoPrestador = db_utils::fieldsMemory(db_query($sqlTipoPrestador), 0);
 
+if($oTipoPrestador->tipopessoa == 'juridica'){    
+    $dbopcaopjpf = $db_opcao;
+}else{
+    $dbopcaopjpf = 3;
+}
 
 $aTiposRetencoesIRRF = array(
     'nada' => 'Selecione um tipo',
@@ -173,7 +186,7 @@ $aTiposRetencoesINSS = array(
     <center>
         <table border="0">
             <tr>
-                <td>
+                <td> 
                     <fieldset>
                         <legend><b>Serviços</b></legend>
                         <table>
@@ -285,7 +298,7 @@ $aTiposRetencoesINSS = array(
                                                     <?= @$Lq62_vlrinss ?>
                                                 </td>
                                                 <td class="td-retencao-campos" colspan="3">
-                                                    <?php db_input('q62_vlrinss', 15, $Iq62_vlrinss, true, 'text', 3, "") ?>
+                                                    <?php db_input('q62_vlrinss', 15, $Iq62_vlrinss, true, 'text', $dbopcaopjpf, "")//3 ?>
                                                 </td>
                                             </tr>
                                         </table>
@@ -320,7 +333,7 @@ $aTiposRetencoesINSS = array(
                                                     <?= @$Lq62_vlrirrf ?>
                                                 </td>
                                                 <td class="td-retencao-campos" colspan="3">
-                                                    <?php db_input('q62_vlrirrf', 15, $Iq62_vlrirrf, true, 'text', 3, "") ?>
+                                                    <?php db_input('q62_vlrirrf', 15, $Iq62_vlrirrf, true, 'text', $dbopcaopjpf, "")//3 ?>
                                                 </td>
                                             </tr>
                                         </table>

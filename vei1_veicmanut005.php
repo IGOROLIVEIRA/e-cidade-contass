@@ -61,7 +61,7 @@ db_postmemory($HTTP_POST_VARS);
 
 
 if(isset($chavepesquisa)){
-
+  
   $db_opcao = 2;
   $result = $clveicmanut->sql_record($clveicmanut->sql_query($chavepesquisa));
   db_fieldsmemory($result,0);
@@ -337,13 +337,17 @@ if(isset($alterar)){
       include("forms/db_frmveicmanutcstitens.php");
     else
       include("forms/db_frmveicmanut.php");
+
+      echo "<script> document.getElementById('itensLancados').style.display = 'block';</script>"; 
     ?>
   </body>
   <script type="text/javascript">
    <?php
    if(!isset($chavepesquisa)){
     echo "js_pesquisa();";
+    
   }
+  //echo "<script> document.getElementById('itensLancados').style.display = 'block';</script>"; 
   ?>
   function js_pesquisa() {
     js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanut', 'db_iframe_veicmanut', 'func_veicmanut.php?funcao_js=parent.js_preenchepesquisa|ve62_codigo', 'Pesquisa', true, '0');

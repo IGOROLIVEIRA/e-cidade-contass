@@ -42,6 +42,18 @@
               db_select('si01_tipoprecoreferencia', $x, true, $db_opcao, "");
             ?>
           </td>
+          
+        </tr>
+        <tr>
+        <td nowrap title="<?= @$Tsi01_tipoprecoreferencia ?>">
+            <strong>Cotação por item:</strong>
+          </td>
+        <td>
+            <?php 
+              $y = array('0' => 'Selecione','1' => 'No mínimo uma cotação', '2' => 'No mínimo duas cotação', '3' => 'No mínimo três cotação');
+              db_select('si01_cotacaoitem', $y, true, $db_opcao, "");
+            ?>
+          </td>  
         </tr>
         <tr>
           <td><strong>Imprimir Justificativa: </strong></td>

@@ -6016,9 +6016,10 @@ function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte
  * @param $dtIni
  * @param $dtFim
  * @param $instit
+ * @param $emenda
  * @return array|stdClass[]
  */
-function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $instit)
+function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $emenda = NULL)
 {
 
     $sql = "SELECT SUM(
@@ -6036,9 +6037,12 @@ function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $instit)
                     INNER JOIN PLACAIXAREC ON K82_SEQPLA = K81_SEQPLA
                     INNER JOIN ORCRECEITA ON (O70_ANOUSU, O70_CODREC) = (C74_ANOUSU, C74_CODREC)
                     INNER JOIN ORCFONTES ON (O70_CODFON, O70_ANOUSU) = (O57_CODFON, O57_ANOUSU)
-                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'
-                    AND O57_FONTE LIKE '41%'";
+                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'";
 
+    if ($emenda)
+        $sql .= " AND k81_emparlamentar IN (" . implode(",", $emenda) . ") AND O57_FONTE LIKE '4171%' ";
+    else
+        $sql .= " AND O57_FONTE LIKE '4171%' ";
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
