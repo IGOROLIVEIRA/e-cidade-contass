@@ -3854,13 +3854,8 @@ class Trans
     */
     static function Translate($msg,$p1=null,$p2=null,$p3=null)
     {
-<<<<<<< HEAD
-        $inst = & Trans::GetDefaultInstance();
-
-=======
         $inst = Trans::GetDefaultInstance();
 
->>>>>>> 7c51c72c8c1a2de0f008b737c14ee2a13d4ec924
         //
         // $nls will become our localized message, if one would
         // be found. Otherwise, it will become the original message
