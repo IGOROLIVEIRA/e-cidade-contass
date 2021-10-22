@@ -483,7 +483,6 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
         if ($oDados->o57_fonte == "410000000000000") {
             $fTotalarrecadado += $oDados->saldo_arrecadado;
         }
-
         if ($oDados->o57_fonte == "470000000000000") {
             $fTotalarrecadado += $oDados->saldo_arrecadado;
         }
@@ -629,14 +628,6 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
         }
 
         if ($oDados->o57_fonte == "419900300000000") {
-            $fRRCSICOPSJ += $oDados->saldo_arrecadado;
-        }
-
-        if ($oDados->o57_fonte == "412180311000000") {
-            $fRRCSICOPSJ += $oDados->saldo_arrecadado;
-        }
-
-        if ($oDados->o57_fonte == "412180321000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
         }
 
@@ -1021,39 +1012,20 @@ ob_start();
                             if ($dataAtual >= getImplantacao() or !getImplantacao()) {
                                 $inicio = ($dataAtual >= getImplantacao() or !getImplantacao()) ? $dataAtual : getImplantacao();
                                 foreach (getDespesaMensal($inicio, date('Y-m-t', strtotime($inicio)), $aInstits) as $data) {
-                                    $chave = substr($data->o58_elemento, 0, 7);
-                                    $chave2 = $data->o58_elemento;
-
-                                    if ((date("Y", strtotime($inicio)) < db_getsession("DB_anousu") AND $valoresperado == 'liquidado'))
-                                        $despesa2[$chave2][$chaveMes]   += $data->empenhado;
-                                    else
-                                        $despesa2[$chave2][$chaveMes]   += $data->$valoresperado;
-                                    $despesa2[$chave2]['descricao']  = $data->o56_descr;
-
+                                    $chave = $data->o58_elemento;
                                     if (array_key_exists($chaveMes, $despesa[$chave])) {
-                                        $despesa[$chave][$chaveMes]   += $data->$valoresperado;
-                                        $despesa[$chave]['elemento']   = $data->o58_elemento;
-                                        $despesa[$chave]['descricao']  = $data->o56_descr;
+                                        $despesa[$chave][$chaveMes] += $data->$valoresperado;
+                                        $despesa[$chave]['descricao'] = $data->o56_descr;
                                     } else {
-                                        $despesa[$chave][$chaveMes]   = $data->$valoresperado;
-                                        $despesa[$chave]['elemento']  = $data->o58_elemento;
+                                        $despesa[$chave][$chaveMes] = $data->$valoresperado;
                                         $despesa[$chave]['descricao'] = $data->o56_descr;
                                     }
                                 }
                             } else {
                                 foreach (getDespesaMensalInformada($dataAtual, date('Y-m-t', strtotime($dataAtual)), $aInstits, $dtini) as $data) {
-                                    $chave = substr($data->o58_elemento, 0, 7);
-                                    $chave2 = $data->o58_elemento;
-
-                                    if ((date("Y", strtotime($inicio)) < db_getsession("DB_anousu") AND $valoresperado == 'liquidado'))
-                                        $despesa2[$chave2][$chaveMes]   += $data->empenhado;
-                                    else
-                                        $despesa2[$chave2][$chaveMes]   += $data->$valoresperado;
-
-                                    $despesa2[$chave2]['descricao']  = $data->o56_descr;
-
+                                    $chave = $data->o58_elemento;
                                     if (array_key_exists($chaveMes, $despesa[$chave])) {
-                                        $despesa[$chave][$chaveMes]   += $data->$valoresperado;
+                                        $despesa[$chave][$chaveMes] += $data->$valoresperado;
                                         $despesa[$chave]['descricao'] = $data->o56_descr;
                                     } else {
                                         $despesa[$chave][$chaveMes] = $data->$valoresperado;
@@ -1065,21 +1037,18 @@ ob_start();
                         }
 
                         ?>
-
                         <? for ($i = 0; $i <= 11; $i++) { ?>
                             <td class="bdleft bdtop s0"><?= $meses[$i] ?></td>
                         <? } ?>
                         <td class="bdleft bdtop s0">TOTAL GERAL</td>
                     </tr>
                     <?php ksort($despesa); ?>
-                    <?php ksort($despesa2); ?>
                     <tr>
                         <td class="s3 bdleft bdtop">3.1.00.00.00 - PESSOAL E ENCARGOS SOCIAIS</td>
                         <? for ($i = 0; $i <= 12; $i++) { ?>
                             <td class="bdleft bdtop s6"></td>
                         <? } ?>
                     </tr>
-
                     <? foreach ($despesa as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
                         <?php if (substr($elemento, 1, 2) == "31") { ?>
@@ -1165,7 +1134,7 @@ ob_start();
                         if (getImplantacao()) {
                             foreach (getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331', $valorcalculoManual, $oInstit) as $oDespesa) {
 
-                                $chave = substr($oDespesa->o58_elemento, 0, 7);
+                                $chave = $oDespesa->o58_elemento;
                                 if ($oDespesa->$valoresperado <> 0) {
                                     if (array_key_exists($chave, $aDespesas)) {
                                         $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
@@ -1175,7 +1144,7 @@ ob_start();
                                 }
                             }
                             foreach (getSaldoDespesa(null, "o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
-                                $chave = substr($oDespesa->o58_elemento, 0, 7);
+                                $chave = $oDespesa->o58_elemento;
                                 if ($oDespesa->$valoresperado <> 0) {
                                     if (array_key_exists($chave, $aDespesas)) {
                                         $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
@@ -1202,7 +1171,7 @@ ob_start();
                             <tr style='height:19px;'>
                                 <td class="s3 bdleft" colspan="2">
 
-                                    <?php echo db_formatar($oDespesa->o58_elemento, "elemento", 10) . " - " . $oDespesa->o56_descr; ?>
+                                    <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
                                 </td>
                                 <td class="s5">
                                     <?php echo db_formatar($oDespesa->$valoresperado, "f"); ?>
@@ -1291,7 +1260,6 @@ ob_start();
                                 $oInstit = new Instituicao($iInstit);
                                 if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
                                     if (getImplantacao()) {
-
                                         $aSaldoEstrut1 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900101', $valorcalculoManual, $oInstit);
                                         $aSaldoEstrut2 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900301', $valorcalculoManual, $oInstit);
                                         $aSaldoEstrut3 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900501', $valorcalculoManual, $oInstit);
@@ -1318,37 +1286,36 @@ ob_start();
                 </tr>
             <? } else { ?>
                 <td class="s3 bdleft bdtop" colspan="1">(-) Inativos e Pensionistas com Fonte de Custeio Próprio</td>
-                <?php
-                $encontrouElemento = 0;
+                <?php $encontrouElemento = 0; ?>
+                <? foreach ($despesa as $elemento => $datas) { ?>
+                    <?php $subtotal = 0; ?>
 
-                foreach ($despesa2 as $elemento => $datas) {
-                    $subtotal = 0;
-                    if (in_array(substr($elemento, 1, 8), array("31900101", "31900301", "31900501", "31900502"))) {
-                        $encontrouElemento = 1;
-                        for ($i = 0; $i <= 11; $i++) {
-                            if (array_key_exists($meses[$i], $datas)) {
-                                $fSaldoIntaivosPensionistasProprio[$i] += $datas[$meses[$i]];;
-                            } else {
-                                $fSaldoIntaivosPensionistasProprio[$i] = 0;
-                            }
-                        }
-                    }
-                 }
-                if (!$encontrouElemento) {
-                    for ($i = 0; $i <= 12; $i++) {
-                        echo "<td class='bdleft bdtop s6'>0,00</td>";
-                    }
-                } else {
-                    for ($i = 0; $i <= 11; $i++) {
-                        echo '<td class="bdleft bdtop s6">';
-                        $subtotal += $fSaldoIntaivosPensionistasProprio[$i];
-                        echo db_formatar($fSaldoIntaivosPensionistasProprio[$i], "f");
-                        echo '</td>';
-                    }
-                    echo '<td class="bdleft bdtop s6">' . db_formatar($subtotal, "f") . '</td>';
-                }
-            }
-            ?>
+                    <?php if (in_array(substr($elemento, 1, 9), array("331900101", "331900301", "331900501", "331900502"))) { ?>
+                        <? $encontrouElemento = 1; ?>
+
+                        <? for ($i = 0; $i <= 11; $i++) { ?>
+                            <td class="bdleft bdtop s6">
+                                <?php
+                                    if (array_key_exists($meses[$i], $datas)) {
+                                        echo db_formatar($datas[$meses[$i]], "f");
+                                        $subtotal += $datas[$meses[$i]];
+                                        $fSaldoIntaivosPensionistasProprio[$meses[$i]] += $datas[$meses[$i]];;
+                                    } else {
+                                        echo "0,00";
+                                    }
+                                ?></td>
+                        <? } ?>
+                        <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+
+                    <? } ?>
+                <? } ?>
+                <? if (!$encontrouElemento) { ?>
+                    <? for ($i = 0; $i <= 12; $i++) { ?>
+                        <td class="bdleft bdtop s6">0,00</td>
+                    <? } ?>
+                <? } ?>
+            <? } ?>
+
             <tr style='height:19px;'>
                 <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2">(-) Sentenças Judiciais Anteriores</td>
@@ -1409,7 +1376,7 @@ ob_start();
                 <? } else { ?>
                     <td class="s3 bdleft" colspan="1">(-) Sentenças Judiciais Anteriores</td>
                     <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa2 as $elemento => $datas) { ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
 
                         <?php if (in_array(substr($elemento, 1, 7), array("3319091", "3319191", "3319691"))) { ?>
@@ -1470,7 +1437,7 @@ ob_start();
                 <? } else { ?>
                     <td class="s3 bdleft" colspan="1">(-) Despesa de Exercícios Anteriores</td>
                     <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa2 as $elemento => $datas) { ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
 
                         <?php if (in_array(substr($elemento, 1, 7), array("3319092", "3319192", "3319692"))) { ?>
@@ -1539,7 +1506,7 @@ ob_start();
                 <? } else { ?>
                     <td class="s3 bdleft" colspan="1">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
                     <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa2 as $elemento => $datas) { ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
 
                         <?php if (in_array(substr($elemento, 1, 7), array("3319001", "3319003", "3319005"))) { ?>
@@ -1609,7 +1576,7 @@ ob_start();
                 <? } else { ?>
                     <td class="s3 bdleft" colspan="1">(-) Indenização por demissão de servidores ou empregados</td>
                     <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa2 as $elemento => $datas) { ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
 
                         <?php if (in_array(substr($elemento, 1, 9), array("331909401", "331909403", "331919401", "331919403", "331969401", "331969403"))) { ?>
@@ -1669,7 +1636,7 @@ ob_start();
                 <? } else { ?>
                     <td class="s3 bdleft" colspan="1">(-) Incentivos a demissão voluntária</td>
                     <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa2 as $elemento => $datas) { ?>
+                    <? foreach ($despesa as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
 
                         <?php if (in_array(substr($elemento, 1, 9), array("331909402", "331919402", "331969402"))) { ?>
@@ -1711,7 +1678,7 @@ ob_start();
                     <td class="s7 bdleft bdtop" colspan="1">Total da Despesa com Pessoal para Fins de apuração de Limite</td>
                     <? $subtotalmesfinal = 0; ?>
                     <? for ($i = 0; $i <= 11; $i++) { ?>
-                        <? $fTotalDespesaPessoal = $subtotalmes[$meses[$i]] - ($fSaldoIntaivosPensionistasProprio[$i] + $fSaldoSentencasJudAnt[$meses[$i]] + $fSaldoAposentadoriaPensoesTesouro[$meses[$i]] + $fSaldoDespesasAnteriores[$meses[$i]] + $fSaldoIndenizacaoDemissaoServidores[$meses[$i]] + $fSaldoIncentivosDemissaoVoluntaria[$meses[$i]]); ?>
+                        <? $fTotalDespesaPessoal = $subtotalmes[$meses[$i]] - ($fSaldoIntaivosPensionistasProprio[$meses[$i]] + $fSaldoSentencasJudAnt[$meses[$i]] + $fSaldoAposentadoriaPensoesTesouro[$meses[$i]] + $fSaldoDespesasAnteriores[$meses[$i]] + $fSaldoIndenizacaoDemissaoServidores[$meses[$i]] + $fSaldoIncentivosDemissaoVoluntaria[$meses[$i]]); ?>
                         <td class="bdleft bdtop s8"><?= db_formatar($fTotalDespesaPessoal, "f") ?></td>
                         <? $subtotalmesfinal += $subtotalmes[$meses[$i]] ?>
                     <? } ?>
@@ -2047,7 +2014,6 @@ function getValorDespesaInformado($inicio, $fim, $elemento, $valorcalculo, $oIns
     $where = " AND ((c233_mes >= " . date('m', strtotime($inicio)) . " AND c233_ano = " . date('Y', strtotime($inicio)) . ") OR (c233_mes <= " . date('m', strtotime($fim)) . " AND c233_ano = " . date('Y', strtotime($fim)) . "))";
     $whereCompetencia = " AND ((c233_competencia IS NOT NULL AND c233_competencia < '{$inicio}') OR (c233_competencia IS NULL)) ";
     $sql = "SELECT o56_elemento as o58_elemento, o56_descr, c233_ano as o58_anousu, {$valorcalculo} FROM despesaexercicioanterior left join orcelemento on substring(c233_elemento::text, 1, 13) = o56_elemento and c233_ano = o56_anousu WHERE c233_elemento like '{$elemento}%' and c233_orgao = {$oInstit->getCodigo()} {$where} {$whereCompetencia} group by 1,2,3";
-
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
@@ -2124,7 +2090,7 @@ function getDespesaMensalInformada($inicio, $fim, $instituicao, $compentencia)
 
     $where = " AND (c233_mes = " . date('m', strtotime($inicio)) . " AND c233_ano = {$ano}) ";
     $whereCompetencia = " AND ((c233_competencia IS NOT NULL AND c233_competencia < '{$compentencia}') OR (c233_competencia IS NULL)) ";
-    $sql = "SELECT o56_descr, c233_elemento as o58_elemento, c233_valorempenhado as empenhado, c233_valorliquidado as liquidado FROM despesaexercicioanterior left join orcelemento on substring(c233_elemento::text, 1, 13) = o56_elemento and c233_ano = o56_anousu WHERE c233_orgao IN ({$instituicao}) {$where} {$whereCompetencia}";
+    $sql = "SELECT c233_elemento as o58_elemento, c233_valorempenhado as empenhado, c233_valorliquidado as liquidado FROM despesaexercicioanterior left join orcelemento on substring(c233_elemento::text, 1, 13) = o56_elemento and c233_ano = o56_anousu WHERE c233_orgao IN ({$instituicao}) {$where} {$whereCompetencia}";
 
     return db_utils::getColectionByRecord(db_query($sql));
 }
