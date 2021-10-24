@@ -104,9 +104,10 @@ switch($oParam->exec) {
             $b = 0;
             $ve = 0;
             
+            
             //verifica Baixa de Veiculos 
             foreach($resultadoPlanilha as $row){
-               
+                $opNumBaixa  =  0;
                 $test1       = $row->placa;
                 $datasaida   = $row->data;
                 $hora        = $row->hora;
@@ -118,7 +119,7 @@ switch($oParam->exec) {
                     $codCombust = 1;
                 }else if($combust=="ALCOOL"){
                     $codCombust = 2;
-                }else if($combust=="DISEL"){
+                }else if($combust=="DIESEL"){
                     $codCombust = 3;
                 }else if($combust=="GÁS"){
                     $codCombust = 4;
@@ -150,6 +151,7 @@ switch($oParam->exec) {
                     for($i = 0; $i<$clveiculos->numrows; $i++){
                         $resultVeiculo = db_utils::fieldsMemory($resultadoVeiculo, $i);
                         $resultadoBaixa = $clveicbaixa->sql_record($clveicbaixa->sql_query_file(null,"*",null,"ve04_veiculo = $resultVeiculo->ve01_codigo"));
+                        $te = $resultVeiculo->ve01_codigo;
                         if($clveicbaixa->numrows>0){
                             $resultBaixa = db_utils::fieldsMemory($resultadoBaixa, 0);
                             $cod1 = $resultBaixa->ve04_veiculo;
@@ -157,6 +159,8 @@ switch($oParam->exec) {
                             $arrayBaixa[$b][1]  = $test1;
                             $opNumBaixa++;
                             $b++;
+                        }else{
+                            $codVeic = $resultVeiculo->ve01_codigo;
                         }
                     }
                     if($clveiculos->numrows==$opNumBaixa){
@@ -164,11 +168,10 @@ switch($oParam->exec) {
                     }
 
                 }
-                
-                 
+                          
             }
-           
 
+           
             if($opVeic==1){
                 $arrayRetornoVeiculoN = array();
                 foreach ($arrayVeic as $keyRow => $Row){
@@ -184,6 +187,8 @@ switch($oParam->exec) {
                     $arrayRetornoVeiculoN[] = $objValorPlanilhaVeiculoN;
                 }
             }
+
+            
 
             if($opBaixaCompleta==1||$opBaixa==1){
                 $arrayRetornoBaixa = array();
@@ -221,7 +226,7 @@ switch($oParam->exec) {
                     $codCombust = 1;
                 }else if($combust=="ALCOOL"){
                     $codCombust = 2;
-                }else if($combust=="DISEL"){
+                }else if($combust=="DIESEL"){
                     $codCombust = 3;
                 }else if($combust=="GÁS"){
                     $codCombust = 4;
@@ -429,7 +434,7 @@ switch($oParam->exec) {
                     $codCombust = 1;
                 }else if($combust=="ALCOOL"){
                     $codCombust = 2;
-                }else if($combust=="DISEL"){
+                }else if($combust=="DIESEL"){
                     $codCombust = 3;
                 }else if($combust=="GÁS"){
                     $codCombust = 4;
@@ -439,14 +444,22 @@ switch($oParam->exec) {
                 $motoristaNome       = $row->motoristaNome;
                 
                 
+            if($codVeic==null){
+                //faz a busca do veiculo por placa 
+                $resultadoVeiculo = $clveiculos->sql_record($clveiculos->sql_query(null,"*",null,"ve01_placa like '$test1'"));
+                $resultVeiculo = db_utils::fieldsMemory($resultadoVeiculo, 0);
 
-            //faz a busca do veiculo por placa 
-            $resultadoVeiculo = $clveiculos->sql_record($clveiculos->sql_query(null,"*",null,"ve01_placa like '$test1'"));
-            $resultVeiculo = db_utils::fieldsMemory($resultadoVeiculo, 0);
+                //verifica se veiculo já possui retirada
+                $resultadoRetirada = $clveicretirada->sql_record($clveicretirada->sql_query(null,"max(veicretirada.ve60_codigo)",null,"ve60_veiculo = $resultVeiculo->ve01_codigo"));
+                $resultRetirada = db_utils::fieldsMemory($resultadoRetirada, 0);
+            }else{
+                //verifica se veiculo já possui retirada
+                $resultadoRetirada = $clveicretirada->sql_record($clveicretirada->sql_query(null,"max(veicretirada.ve60_codigo)",null,"ve60_veiculo = $codVeic"));
+                $resultRetirada = db_utils::fieldsMemory($resultadoRetirada, 0);
+            }    
+            
 
-            //verifica se veiculo já possui retirada
-            $resultadoRetirada = $clveicretirada->sql_record($clveicretirada->sql_query(null,"max(veicretirada.ve60_codigo)",null,"ve60_veiculo = $resultVeiculo->ve01_codigo"));
-            $resultRetirada = db_utils::fieldsMemory($resultadoRetirada, 0);
+            
 
             $resultadoMot1 = $clcgm->sql_record($clcgm->sql_query(null,"*",null,"z01_cgccpf = '$motorista'"));
             $resultadoMot2 = db_utils::fieldsMemory($resultadoMot1, 0);
@@ -540,7 +553,7 @@ switch($oParam->exec) {
                         $codCombust = 1;
                     }else if($combust=="ALCOOL"){
                         $codCombust = 2;
-                    }else if($combust=="DISEL"){
+                    }else if($combust=="DIESEL"){
                         $codCombust = 3;
                     }else if($combust=="GÁS"){
                         $codCombust = 4;  
@@ -548,6 +561,8 @@ switch($oParam->exec) {
                     $medidasaida = $row->medidasaida;
                     $motorista       = $row->motorista;
                     $nota       = $row->nota;
+
+                    
 
                 //faz a busca do veiculo por placa
                 //$resultadoVeiculo = $clveiculos->sql_record($clveiculos->sql_query(null,"ve01_codigo,z01_cgccpf",null,"ve01_placa = '$test1'"));
@@ -583,7 +598,6 @@ switch($oParam->exec) {
                 $resultadoMotCod = $clveicmotoristas->sql_record($clveicmotoristas->sql_query(null,"*",null,"ve05_numcgm = $resultMotorista->z01_numcgm"));
                 $resultMotCod = db_utils::fieldsMemory($resultadoMotCod, 0);    
 
-       
                 
                 // Incluir a retirada do veiculo
                 
