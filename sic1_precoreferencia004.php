@@ -221,7 +221,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                 m61_abrev,
                 sum(pc11_quant) as pc11_quant,
                 pc69_seq,
-                pc11_seq
+                pc11_seq,
                 pc11_reservado
 from (
 SELECT DISTINCT pc01_servico,
@@ -241,7 +241,7 @@ SELECT DISTINCT pc01_servico,
                 pc90_numeroprocesso AS processo_administrativo,
                 (pc11_quant * pc11_vlrun) AS pc11_valtot,
                 m61_usaquant,
-                pc69_seq
+                pc69_seq,
                 pc11_reservado
 FROM solicitem
 INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
