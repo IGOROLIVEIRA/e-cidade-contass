@@ -316,7 +316,6 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                     GROUP BY 1, 2, 3, 4, c53_tipo, c70_valor, c206_nroconvenio, c206_dataassinatura
                                     ORDER BY 1, 4, 3";
                             $result = db_query($sSql);
-
                             $aDadosCgm11 = array();
 
                             for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++){
@@ -388,7 +387,6 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                 }
             }
         }
-
         /*
          * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2021!
          * */
@@ -436,8 +434,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         $clarc21->si32_codfonteestornada = $oDados11->si26_codfontrecursos;
                         $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
-                        $clarc21->si32_nroconvenio = $sNroConv;
-                        $clarc21->si32_dataassinatura = $dtAssinat;
+                        $clarc21->si32_nroconvenio = $oDados11->si26_nroconvenio;
+                        $clarc21->si32_dataassinatura = $oDados11->si26_dataassinatura;
                         $clarc21->si32_vlestornadofonte = number_format(abs($oDados11->si26_vlarrecadadofonte), 2, ".", "");
                         $clarc21->si32_mes = intval($oDados11->si26_mes);
                         $clarc21->si32_instit = db_getsession("DB_instit");
@@ -463,8 +461,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         $clarc21->si32_codfonteestornada = $oDados11->si26_codfontrecursos;
                         $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);// \d arc212021
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
-                        $clarc21->si32_nroconvenio = $sNroConv;
-                        $clarc21->si32_dataassinatura = $dtAssinat;
+                        $clarc21->si32_nroconvenio = $oDados11->si26_nroconvenio;
+                        $clarc21->si32_dataassinatura = $oDados11->si26_dataassinatura;
                         $clarc21->si32_vlestornadofonte = number_format(abs($oDados11->si26_vlarrecadadofonte), 2, ".", "");
                         $clarc21->si32_mes = intval($oDados11->si26_mes);
                         $clarc21->si32_instit = db_getsession("DB_instit");
