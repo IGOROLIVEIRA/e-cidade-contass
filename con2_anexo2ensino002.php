@@ -222,6 +222,7 @@ $footer = "
 $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
 $mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
 $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
+$mPDF->shrink_tables_to_fit = 1;
 
 ob_start();
 ?>
@@ -395,14 +396,14 @@ ob_start();
 </head>
 
 <body>
-    <div class="ritz grid-container" dir="auto">
+    <div class="ritz " >
         <div class="title-relatorio">
             <br/>
             <strong>Anexo II</strong><br />
             <strong>Demonstrativo das Receitas e Despesas com Manutenção e Desenvolvimento do Ensino</strong><br />
             <strong>(Art.212 da C.F; Emenda Constitucional nº 53/06, leis nº 9.394/96 e 11.494/07)</strong><br /><br />
         </div>
-        <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000" >
+        <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000" autosize="1">
             <thead>
                 <tr>
                     <th id="0C0" style="width:100%"  class="column-headers-background">&nbsp;</th>
