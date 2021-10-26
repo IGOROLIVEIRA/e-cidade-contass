@@ -364,7 +364,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             $('btnAditar').disabled = false;
             $('btnItens').disabled = false;
-
+            
             me.oTxtValorOriginal.setValue(js_formatar(oRetorno.valores.valororiginal, "f"));
             me.oTxtValorAtual.setValue(js_formatar(oRetorno.valores.valoratual, "f"));
 
@@ -1037,17 +1037,18 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
                 var qtanter = oSelecionados[iIndice].aCells[3].getValue().getNumber();
                 var vlranter = oSelecionados[iIndice].aCells[4].getValue().getNumber();
+                
                 if ($('oCboTipoAditivo').value == 9
                     && (oItemAdicionar.quantidade < qtanter || oItemAdicionar.valorunitario < vlranter)) {
-
                     lAditar = false;
-                    return alert("Não é possível realizar DESCRÉSCIMOS de itens no tipo ACRÉSCIMO de itens!");
+                    return alert("Não é possível realizar DESCRÉSCIMOS de itens no tipo ACRÉSCIMO de itens!");   
                 }
 
                 if ($('oCboTipoAditivo').value == 10
                     && (oItemAdicionar.quantidade > qtanter || oItemAdicionar.valorunitario > vlranter)) {
                     lAditar = false;
                     return alert("Não é possível realizar ACRÉSCIMOS de itens no tipo DESCRÉSCIMO de itens!");
+                    
                 }
 
                 if ($('oCboTipoAditivo').value == 13) {
@@ -1543,7 +1544,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           aLinha[0] = oItem.codigoitem;
           aLinha[1] = oItem.descricaoitem.urlDecode();
           aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', 2);
-          aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 2);
+          aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 4);
 
             if (!oItem.novo) {
                 if (iTipoAditamento == 2) {
