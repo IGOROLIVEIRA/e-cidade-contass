@@ -57,7 +57,6 @@ if (isset($oPost->k00_numpre)) {
   echo "<script> ";
   echo "   window.open('{$sUrl}','','location=0'); ";
   echo "</script>";
-
 }
 
 ?>
@@ -71,6 +70,7 @@ if (isset($oPost->k00_numpre)) {
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
 <table  border="0" cellpadding="0" cellspacing="0">
   <tr>
     <td width="360" height="18">&nbsp;</td>
@@ -81,21 +81,26 @@ if (isset($oPost->k00_numpre)) {
 </table>
 <center>
   <form name='form1' method="POST">
-    <table width="250">
+    <table>
       <tr>
         <td align="center">
           <fieldset>
-            <legend><b>Reemisao de recibo</legend>
-            <table>
-              <tr>
-                <td nowrap title="<?=@$k00_numpre?>">
-                  <?=$Lk00_numpre?>
-                </td>
-                <td nowrap>
-                  <? db_input('k00_numpre',10,$Ik00_numpre,true,'text',1)  ?>
-                </td>
-              </tr>
-            </table>
+            <legend><b>Reemisão de Recibo</legend>
+              <table>
+                <tr>
+                  <td>
+                    <?
+                      db_ancora(@$Lk00_numpre,"js_pesquisak00_numpre(true);",$db_opcao);
+                    ?>
+                  </td>
+                  <td>
+                    <?                       
+                      db_input('k00_numpre',10,$Ik00_numpre,true,'text',1);
+                      db_input('z01_nome',40,$Iz01_nome,true,'text',3,'');
+                    ?>
+                  </td>
+                </tr>
+              </table>
           </fieldset>
         </td>
       </tr>
@@ -113,6 +118,17 @@ if (isset($oPost->k00_numpre)) {
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 <script>
+
+function js_pesquisak00_numpre(mostra){
+  js_OpenJanelaIframe('top.corpo','db_iframe_recibo','func_recibo.php?dias_pesq='+0+'&funcao_js=parent.js_busca|k00_numpre|z01_nome','Pesquisa',true);
+}
+
+function js_busca(c1,c2){
+  obj= document.form1;
+  obj.k00_numpre.value = c1;
+  obj.z01_nome.value = c2;
+  db_iframe_recibo.hide();
+}
 
   function js_Reemitir() {
     if ($F(k00_numpre) == "") {

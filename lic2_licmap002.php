@@ -825,7 +825,7 @@ if ($modelo == 1) {
         $alt = 4;
         $valor_tot = 0;
         $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(181, $alt, $l04_descricao, 1, 0, "C", 1);
+        $pdf->multicell(181, $alt, $l04_descricao, 1, "C", true);
         $pdf->ln();
         for ($y = 0; $y < $numrows_itens; $y++) {
 

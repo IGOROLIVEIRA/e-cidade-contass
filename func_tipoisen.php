@@ -134,7 +134,7 @@ $cltipoisen->rotulo->label("j45_descr");
           $result = $cltipoisen->sql_record($cltipoisen->sql_query($pesquisa_chave));
           if($cltipoisen->numrows!=0){
              db_fieldsmemory($result,0);
-             echo "<script>".$funcao_js."('$j45_descr',$j45_tipis,false);</script>";
+             echo "<script>".$funcao_js."('$j45_descr',$j45_tipis,$j45_taxas,false);</script>";
           }else{
 	     echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

@@ -357,7 +357,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
                              where c60_anousu = " . db_getsession("DB_anousu") . " {$sWhere10}) as x
-                        where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
+                        where  debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 
         $rsReg10 = db_query($sqlReg10);
 
@@ -2067,14 +2067,14 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  * Com novas exigencias do TCE/MG, sera necessario informar todas as fontes destas contas bancarias,
                  * tal informaÃ§ao so temos no Acompanhamento Mensal no arquivo CTB.
                  * Desta maneira, sera necessario gerar o saldo das contas por fonte de acordo com os dados do registro 20 e 21 do arquivo CTB.
-                 * 
+                 *
                  * Caso seja RPPS, descrever as regras que barbara me passou
                  */
 
                 $bIsRPPS = $this->getTipoinstit(db_getsession("DB_instit")) == 5;
-                
+
                 if ($bIsRPPS) {
-                    
+
                     $sSqlCtb = "    SELECT DISTINCT 17 AS tiporegistro,
                                             contacontabil,
                                             atributosf,
@@ -2176,7 +2176,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                         ORDER BY codctb,
                                                 codfontrecursos ";
                 } else {
-                    
+
                     $sSqlCtb = "    SELECT  17 AS tiporegistro,
                                             (SELECT CASE
                                                 WHEN c209_tceestrut IS NULL THEN substr(c60_estrut,1,9)
@@ -2223,22 +2223,25 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $rsCtb = db_query($sSqlCtb) or die($sSqlCtb);
 
                 if (pg_num_rows($rsCtb) == 0) {
-                    throw new Exception("Gere o arquivo CTB mensal para prosseguir com a geraÃ§Ã£o do balancete");
+                    throw new Exception("Gere o arquivo CTB mensal para prosseguir com a geração do balancete");
                 }
 
                 for ($iCtb = 0; $iCtb < pg_num_rows($rsCtb); $iCtb++) {
 
-                    $objContasctb = db_utils::fieldsMemory($rsCtb, $iCtb);
 
+                    $objContasctb = db_utils::fieldsMemory($rsCtb, $iCtb);
                     $sHash17 = '17'.$objContasctb->contacontabil . $objContasctb->atributosf . $objContasctb->codctb . $objContasctb->codfontrecursos;
 
                     /**
                      * Os resultados da consulta serao sempre os mesmos para cada iteracao do reg10.
                      * Porem, serao agrupados se a conta contabil for igual a conta contabil do reg10
                      */
-
                     if($reg10Hash == $objContasctb->contacontabil
-                        && !($objContasctb->saldoinicial == 0 && $objContasctb->saldofinal == 0 && $objContasctb->debitos == 0 && $objContasctb->creditos == 0)) {
+                        && !($objContasctb->saldoinicial == 0
+                            && $objContasctb->saldofinal == 0
+                            && $objContasctb->debitos == 0
+                            && $objContasctb->creditos == 0
+                            && $objContasctb->tipoentrsaida == 0)) {
 
                         if (!isset($aContasReg10[$reg10Hash]->reg17[$sHash17])) {
 

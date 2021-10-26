@@ -236,7 +236,8 @@ if (isset($incluir) && trim($incluir) != "") {
                         <td nowrap align="right" title="<?= @$Tl04_descricao ?>"><?= @$Ll04_descricao ?></td>
                         <td nowrap align="left">
                             <?
-                            db_input("l04_descricao", 40, $Il04_descricao, true, "text", $db_opcao);
+                            //db_input("l04_descricao", 40, $Il04_descricao, true, "text", $db_opcao);
+                            db_textarea('l04_descricao', 4, 40, $Il04_descricao, true, 'text', $db_opcao, "onmouseout = 'oganizarTexto();'", "", "", 250);
                             ?>
                         </td>
                     </tr>
@@ -251,6 +252,35 @@ if (isset($incluir) && trim($incluir) != "") {
                     </tr>
                 </table>
                 <script>
+                    var input = document.querySelector('#l04_descricao');
+
+                    function log(e) {
+                        
+                        var regex = /[*|\":<>[\]{}`\\()';#@&$]/;
+                        var key = String.fromCharCode(e.keyCode);
+                       
+                        if (regex.test(key)) {
+                            e.preventDefault();
+                            return false;
+                        }
+                        var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+                        if( keyCode == 13 ) {
+
+
+                            if(!e) var e = window.event;
+
+                            e.cancelBubble = true;
+                            e.returnValue = false;
+
+                            if (e.stopPropagation) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                            }
+                        }
+                    };
+
+                    input.addEventListener('keypress', log);
+
                     function js_valida_dados() {
                         var contador = 0;
                         /*
@@ -289,6 +319,26 @@ if (isset($incluir) && trim($incluir) != "") {
                         parent.db_iframe_lotenovo.hide();
                         parent.itens_lote.location.href = 'lic1_liclicitemlote011.php?licitacao=<?= $licitacao ?>';
                     }
+                    
+                    function oganizarTexto(){
+                        
+                        var texto = document.getElementById("l04_descricao").value;
+                        const myArr = texto.split("\n");
+                        var correcao = "";
+                        if(myArr.length>0){
+                            for(i = 0; i<myArr.length; i++){
+                                if(i==0){
+                                    correcao = myArr[i];
+                                }else{
+                                    correcao += " "+myArr[i];
+                                }
+                                
+                            }
+                            document.getElementById("l04_descricao").value = correcao;
+                        }
+                        
+                    }
+                    
                 </script>
     </center>
     </form>

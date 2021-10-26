@@ -36,6 +36,8 @@ $clrotulo->label("z01_nome");
 $clrotulo->label("z01_cgccpf");
 $clrotulo->label("z01_bairro");
 $clrotulo->label("z01_munic");
+$clrotulo->label("z01_incest");
+
 $clrotulo->label("z01_numcgm");
 $clrotulo->label("z01_ender");
 $clrotulo->label("z01_numero");
@@ -149,6 +151,14 @@ $clrotulo->label("z01_email");
        db_input('q54_inscr',10,$Iq54_inscr,true,'text',$db_opcao," onchange='js_pesquisaq52_inscr(false);'");
       ?>
     </td>
+     <td nowrap title="<?=@$Tz01_incest?>">
+       <?=@$Lz01_incest?>
+    </td>
+    <td colspan='2'> 
+    <?
+     db_input('q53_incest',17,$Iz01_incest,true,'text',3,"")
+    ?>
+    </td>       
 		</tr>
    <tr>
     <td nowrap title="<?=@$Tz01_nome?>">
@@ -197,7 +207,7 @@ $clrotulo->label("z01_email");
     </td>
     <td colspan='4'> 
        <?
-        db_input('q53_municipio',50,$Iz01_munic,true,'text',3,"")
+        db_input('q53_munic',50,$Iz01_munic,true,'text',3,"")
        ?>
     </td>
   </tr>
