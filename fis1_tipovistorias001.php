@@ -25,17 +25,19 @@
  *                                licenca/licenca_pt.txt 
  */
 
-parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
-if(!isset($abas)){
-  echo "<script>location.href='fis1_tipovistorias005.php'</script>";
-  exit;
-}
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_tipovistorias_classe.php");
 include("dbforms/db_funcoes.php");
+
+parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
+if(!isset($abas)){
+  echo "<script>location.href='fis1_tipovistorias005.php'</script>";
+  exit;
+}
+
 db_postmemory($HTTP_POST_VARS);
 $cltipovistorias = new cl_tipovistorias;
 $db_opcao = 1;
