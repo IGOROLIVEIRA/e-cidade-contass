@@ -301,6 +301,36 @@ ob_start();
             white-space: nowrap;
         }
 
+        .footer-total-row {
+            height: 20px;
+            background-color: #d8d8d8;
+            width: 80%;
+            border: 1px SOLID #000000;
+            font-family: 'Arial';
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 3px 2px 3px;
+            text-align: left;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
+
+        .footer-total-row-valor {
+            height: 20px;
+            background-color: #d8d8d8;
+            width: 20%;
+            border-right: 1px SOLID #000000;
+            border-top: 1px SOLID #000000;
+            border-bottom: 1px SOLID #000000;
+            font-family: 'Arial', Calibre;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 3px 2px 3px;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
+
         .title-row-valor {
             height: 20px;
             background-color: #d8d8d8;
@@ -460,21 +490,21 @@ ob_start();
                     <td class="footer-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia, "f"); ?></td>
                 </tr>
                 <tr style='height:20px;'>
-                    <td class="footer-row" colspan="8">Total das Receitas (A)</td>
-                    <td class="footer-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia + $nTotalReceitaImpostos, "f"); ?></td>
+                    <td class="footer-total-row" colspan="8">Total das Receitas (A)</td>
+                    <td class="footer-total-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia + $nTotalReceitaImpostos, "f"); ?></td>
                 </tr>
                  <?php $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ; ?>
                 <tr style='height:20px;'>
-                    <td class="footer-row" colspan="8">B - Aplicação Devida (art. 212 da CF/88) 25%</td>
-                    <td class="footer-row-valor"><?php echo db_formatar($valorAplicacaoDevida, "f"); ?></td>
+                    <td class="footer-total-row" colspan="8">B - Aplicação Devida (art. 212 da CF/88) 25%</td>
+                    <td class="footer-total-row-valor"><?php echo db_formatar($valorAplicacaoDevida, "f"); ?></td>
                 </tr>
                 <tr style='height:20px;'>
-                    <td class="footer-row" colspan="8">C - Valor da Aplicação em %</td>
-                    <td class="footer-row-valor">NÃO DEFINIDO</td>
+                    <td class="footer-total-row" colspan="8">C - Valor da Aplicação em %</td>
+                    <td class="footer-total-row-valor">NÃO DEFINIDO</td>
                 </tr>
                 <tr style='height:20px;'>
-                    <td class="footer-row" colspan="8">D - Diferença entre o Valor Aplicado e o Limite Constitucional ( D = C - B)</td>
-                    <td class="footer-row-valor"><?php echo db_formatar($valorAplicacaoDevida, "f"); ?></td>
+                    <td class="footer-total-row" colspan="8">D - Diferença entre o Valor Aplicado e o Limite Constitucional ( D = C - B)</td>
+                    <td class="footer-total-row-valor"><?php echo db_formatar($valorAplicacaoDevida, "f"); ?></td>
                 </tr>
 
 
