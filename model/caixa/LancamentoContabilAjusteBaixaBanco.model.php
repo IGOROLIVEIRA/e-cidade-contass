@@ -133,12 +133,16 @@ class LancamentoContabilAjusteBaixaBanco {
   	                                          corrente.k12_autent,
                                               corrente.k12_conta,
                                               k02_codrec,
-  	                                          sum(cornump.k12_valor) as total_receita",
+  	                                          (cornump.k12_valor - coalesce((select sum(vlrrec) from disrec_desconto_integral where codcla = corcla.k12_codcla 
+                             and k00_receit = cornump.k12_receit),0)) as total_receita",
                                               null,
                                               "k12_codcla = {$this->iCodigoBaixaBanco}
-                                              and orcreceita.o70_anousu = {$this->iAnoUsu}
-  	                                          group by
-  	                                          corrente.k12_id,
+                                              and orcreceita.o70_anousu = {$this->iAnoUsu} 
+                                              group by 
+                                              cornump.k12_valor,
+                                              corcla.k12_codcla,
+                                              cornump.k12_receit,
+                                              corrente.k12_id,
   	                                          corrente.k12_data,
   	                                          corrente.k12_conta,
                                               k02_codrec,
@@ -150,7 +154,7 @@ class LancamentoContabilAjusteBaixaBanco {
     $rsReceitasBaixaBanco = db_query($sSqlDisrec);
 
     if (!$rsReceitasBaixaBanco) {
-      throw new BusinessException("Não foi possível localizar as receitas a serem arrecadadas.");
+      throw new BusinessException("Não foi possível localizar as receitas a serem arrecadadas 2.".$sSqlDisrec);
     }
 
     $iReceitas = pg_num_rows($rsReceitasBaixaBanco);
@@ -168,9 +172,9 @@ class LancamentoContabilAjusteBaixaBanco {
     echo "<pre>";
 
     for ($rec = 0; $rec < $iReceitas; $rec ++) {
-
+      
       $oDadoSqlGeral = db_utils::fieldsMemory($rsReceitasBaixaBanco, $rec);
-
+      
       $oReceitaContabil = new ReceitaContabil($oDadoSqlGeral->k02_codrec);
       if ($lArrecadaDesconto) {
 
