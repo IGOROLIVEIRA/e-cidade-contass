@@ -154,7 +154,7 @@ class LancamentoContabilAjusteBaixaBanco {
     $rsReceitasBaixaBanco = db_query($sSqlDisrec);
 
     if (!$rsReceitasBaixaBanco) {
-      throw new BusinessException("Não foi possível localizar as receitas a serem arrecadadas 2.".$sSqlDisrec);
+      throw new BusinessException("Não foi possível localizar as receitas a serem arrecadadas.");
     }
 
     $iReceitas = pg_num_rows($rsReceitasBaixaBanco);
