@@ -14,12 +14,13 @@ class Oc15700 extends AbstractMigration
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_sequencial    ', 'int8 ', 'Sequencial'                   ,'Sequencial', 'Sequencial', 19, false, false, false, 1, 'text', 'Sequencial');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_licitacao     ', 'int8 ', 'Licitacao'                    ,'Licitacao', 'Licitacao'  , 19, false, false, false, 1, 'text', 'Licitacao');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_fornecedor    ', 'int8 ', 'Fornecedor'                   ,'0', 'Fornecedor'         , 19, false, false, false, 1, 'text', 'Fornecedor');
-                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_numerotermo   ', 'text ', 'Número do Termo'              ,'0', 'Número do Termo'    , 19, false, false, false, 1, 'text', 'Número do Termo');
+                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_numerotermo   ', 'int4 ', 'Número do Termo'              ,'', 'Número do Termo'    , 19, false, false, false, 1,  'int4', 'Número do Termo');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_dtinicio      ', 'date' , 'Vigência'                     ,'', 'Vigência'            , 16, false, false, false, 0, 'date', 'Vigência');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_dtfim         ', 'date' , 'Vigência Final'               ,'', 'Vigência Final'      , 16, false, false, false, 0, 'date', 'Vigência Final');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_dtpublicacao  ', 'date' , 'Data da Publicação'           ,'', 'Data da Publicação'  , 16, false, false, false, 0, 'date', 'Data da Publicação');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_veiculodepublicacao','text' ,'Veiculo de Publicação'     ,'', 'Veiculo de Publicação'  ,500,false, false, false, 0, 'text', 'Veiculo de Publicação'
-                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_observacao    ', 'text' ,'Observação'                    ,'', 'Observação'  ,500,false, false, false, 0, 'text', 'Observação'
+                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_anousu'       ,  'int4' ,'Ano do termo'                  ,'', 'Ano do termo'         ,500,false, false, false, 0, 'text', 'Ano do termo'
+                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_observacao    ', 'text' ,'Observação'                    ,'', 'Observação'           ,500,false, false, false, 0, 'text', 'Observação'
                     
                     
                     -- INSERINDO db_syssequencia
@@ -33,7 +34,8 @@ class Oc15700 extends AbstractMigration
                     INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l212_dtfim'), 6, 0);
                     INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l212_dtpublicacao'), 7, 0);
                     INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l212_veiculodepublicacao'), 8, 0);
-                    INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l212_observacao'), 9, 0);
+                    INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l212_anousu'), 9, 0);
+                    INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l212_observacao'), 10, 0);
                      
                     --DROP TABLE:
                     DROP TABLE IF EXISTS credenciamentotermo CASCADE;
@@ -48,11 +50,12 @@ class Oc15700 extends AbstractMigration
                     l212_sequencial          int8,
                     l212_licitacao           int8,
                     l212_fornecedor          int8,
-                    l212_numerotermo         text,
+                    l212_numerotermo         int4,
                     l212_dtinicio            date,
                     l212_dtfim               date,
                     l212_dtpublicacao        date,
                     l212_veiculodepublicacao text,
+                    l212_anousu              int4,   
                     l212_observacao          text,
                     l212_instit             int8);
                     

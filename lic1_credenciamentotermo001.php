@@ -16,9 +16,10 @@ if(isset($incluir)){
     $clcredenciamentotermo->l212_fornecedor   = $l212_fornecedor;
     $clcredenciamentotermo->l212_dtinicio     = $l212_dtinicio;
     $clcredenciamentotermo->l212_dtpublicacao = $l212_dtpublicacao;
+    $clcredenciamentotermo->l212_anousu       = db_getsession('DB_anousu');
     $clcredenciamentotermo->l212_veiculodepublicacao = $l212_veiculodepublicacao;
     $clcredenciamentotermo->l212_observacao   = $l212_observacao;
-    $clcredenciamentotermo->l212_instit = db_getsession('DB_instit');
+    $clcredenciamentotermo->l212_instit       = db_getsession('DB_instit');
     $clcredenciamentotermo->incluir();
     db_fim_transacao();
 }
@@ -33,6 +34,12 @@ if(isset($incluir)){
     <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
+    <?
+    db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js, DBHint.widget.js");
+    db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js,dbtextFieldData.widget.js");
+    db_app::load("time.js");
+    db_app::load("estilos.css, grid.style.css");
+    ?>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
     <?

@@ -33,6 +33,7 @@ class cl_credenciamentotermo {
     public $l212_dtpublicacao_ano = null;
     public $l212_dtpublicacao = null;
     public $l212_veiculodepublicacao = null;
+    public $l212_anousu = null;
     public $l212_observacao = null;
     public $l212_instit = null;
     // cria propriedade com as variaveis do arquivo
@@ -44,6 +45,7 @@ class cl_credenciamentotermo {
                  l212_dtinicio = date = Vigência 
                  l212_dtfim = date = Vigência Final 
                  l212_dtpublicacao = date = Data da Publicação 
+                 l212_anousu = int4 = Ano 
                  l212_veiculodepublicacao = text = Veículo de Publicação 
                  l212_observacao = text = Observação 
                  l212_instit = int8 = l212_instit 
@@ -97,6 +99,7 @@ class cl_credenciamentotermo {
                     $this->l212_dtpublicacao = $this->l212_dtpublicacao_ano."-".$this->l212_dtpublicacao_mes."-".$this->l212_dtpublicacao_dia;
                 }
             }
+            $this->l212_anousu = ($this->l212_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["l212_anousu"]:$this->l212_anousu);
             $this->l212_veiculodepublicacao = ($this->l212_veiculodepublicacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l212_veiculodepublicacao"]:$this->l212_veiculodepublicacao);
             $this->l212_observacao = ($this->l212_observacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l212_observacao"]:$this->l212_observacao);
             $this->l212_instit = ($this->l212_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["l212_instit"]:$this->l212_instit);
@@ -176,6 +179,16 @@ class cl_credenciamentotermo {
             return false;
         }
 
+        if ($this->l212_anousu == null ) {
+            $this->erro_sql = " Campo Ano não informado.";
+            $this->erro_campo = "l212_anousu";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         if ($this->l212_instit == null ) {
             $this->erro_sql = " Campo instituicao não informado.";
             $this->erro_campo = "l212_observacao";
@@ -193,7 +206,8 @@ class cl_credenciamentotermo {
                                       ,l212_dtinicio 
                                       ,l212_dtfim 
                                       ,l212_dtpublicacao 
-                                      ,l212_veiculodepublicacao 
+                                      ,l212_veiculodepublicacao
+                                      ,l212_anousu 
                                       ,l212_observacao
                                       ,l212_instit 
                        )
@@ -206,6 +220,7 @@ class cl_credenciamentotermo {
                                ,".($this->l212_dtfim == "null" || $this->l212_dtfim == ""?"null":"'".$this->l212_dtfim."'")." 
                                ,".($this->l212_dtpublicacao == "null" || $this->l212_dtpublicacao == ""?"null":"'".$this->l212_dtpublicacao."'")." 
                                ,'$this->l212_veiculodepublicacao' 
+                               ,$this->l212_anousu 
                                ,'$this->l212_observacao'
                                ,$this->l212_instit 
                       )";
@@ -390,6 +405,21 @@ class cl_credenciamentotermo {
                 return false;
             }
         }
+
+        if (trim($this->l212_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l212_anousu"])) {
+            $sql  .= $virgula." l212_anousu = $this->l212_anousu ";
+            $virgula = ",";
+            if (trim($this->l212_anousu) == null ) {
+                $this->erro_sql = " Campo Ano não informado.";
+                $this->erro_campo = "l212_anousu";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
         if (trim($this->l212_observacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l212_observacao"])) {
             $sql  .= $virgula." l212_observacao = '$this->l212_observacao' ";
             $virgula = ",";

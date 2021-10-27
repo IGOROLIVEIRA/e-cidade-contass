@@ -19,7 +19,7 @@ $clcredenciamentotermo->rotulo->label();
     }
 </style>
 <form name="form1" method="post" action="">
-    <fieldset style="align-items: center; width: 50%; margin-top: 30px; margin-left: 20%">
+    <fieldset style="align-items: center; width: 32%; margin-top: 30px; margin-left: 35%">
         <legend>
             Termo de Credenciamento
         </legend>
@@ -55,6 +55,17 @@ $clcredenciamentotermo->rotulo->label();
                     <?
                     db_input('l212_numerotermo',19,$Il212_numerotermo,true,'text',1,"")
                     ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Ano do Termo:</strong>
+                </td>
+                <td>
+                    <?
+                    $iAnoSessao         = db_getsession('DB_anousu');
+                    ?>
+                    <input type="text" value="<?=$iAnoSessao?>" id="l212_anousu" style="width: 93px; background-color: #DEB887;" readonly>
                 </td>
             </tr>
             <tr>
@@ -119,6 +130,10 @@ $clcredenciamentotermo->rotulo->label();
         <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
         <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
     </div>
+    <fieldset>
+        <legend><b>Itens</b></legend>
+        <div id='cntgriditens'></div>
+    </fieldset>
 </form>
 <script>
     var db_opcao = <?= $db_opcao?>;
@@ -147,7 +162,7 @@ $clcredenciamentotermo->rotulo->label();
         if(mostra==true) {
 
             js_OpenJanelaIframe('top.corpo',
-                'db_iframe_licobras',
+                'db_iframe_licitacao',
                 'func_liclicita.php?situacao=10&credenciamentotermo=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_dtpubratificacao|l20_veicdivulgacao',
                 'Pesquisa Licitações', true);
         }
@@ -162,16 +177,32 @@ $clcredenciamentotermo->rotulo->label();
         document.form1.l212_licitacao.value = codigo;
         document.form1.l212_dtpublicacao.value = aDate[2]+'/'+aDate[1]+'/'+aDate[0];
         document.form1.l212_veiculodepublicacao.value = veicpublica;
-        db_iframe_licobras.hide();
+        db_iframe_licitacao.hide();
         mostrarFornecedores();
+        js_getItens();
     }
 
     function mostrarFornecedores() {
+        var oParam = new Object();
+        oParam.iLicitacao = $F('l212_licitacao');
+        oParam.exec = "getFornecedores";
+        var oAjax = new Ajax.Request(
+            'lic_termocredenciamento.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_retornoGetFornecedores
+            }
+        );
+    }
 
-        let select = $('#l212_fornecedor');
-        var db_opcao = <?= $db_opcao?>;
+    function js_retornoGetFornecedores(oAjax) {
 
-        if(db_opcao !=1){
+        let fornecedores = JSON.parse(oAjax.responseText);
+
+        let select = $('l212_fornecedor');
+        let db_opcao = <?= $db_opcao?>;
+
+        if(db_opcao == 1){
             // Cria option "default"
             let defaultOpt = document.createElement('option');
             defaultOpt.textContent = 'Selecione uma opção';
@@ -179,32 +210,17 @@ $clcredenciamentotermo->rotulo->label();
             select.append(defaultOpt);
         }
 
-        //Busco Elementos de acordo com a tabela
-        let params = {
-            action: 'getFornecedores',
-            l212_licitacao: $('#l212_licitacao').val(),
-        };
+        if(fornecedores.fornecedores.length != 0){
+            fornecedores.fornecedores.forEach(function (oFornecedor, seq) {
+                let option = document.createElement('option');
+                option.value = oFornecedor.z01_numcgm;
+                option.text = oFornecedor.z01_nome;
+                select.append(option);
+            })
+        }else{
+            top.corpo.db_iframe_credenciamentotermo.location.reload();
+        }
 
-        $.ajax({
-            type: "POST",
-            url: "lic_termocredenciamento.RPC.php",
-            data: params,
-            success: function(data) {
-
-                let fornecedores = JSON.parse(data);
-
-                if(fornecedores.fornecedores.length != 0){
-                    fornecedores.fornecedores.forEach(function (oFornecedor, seq) {
-                        let option = document.createElement('option');
-                        option.value = oFornecedor.z01_numcgm;
-                        option.text = oFornecedor.z01_nome;
-                        select.append(option);
-                    })
-                }else{
-                    top.corpo.db_iframe_credenciamentotermo.location.reload();
-                }
-            }
-        });
         if(db_opcao == 1){
             mostrarNumeroTermo();
         }
@@ -213,16 +229,72 @@ $clcredenciamentotermo->rotulo->label();
     function mostrarNumeroTermo() {
 
         var oParam = new Object();
-        oParam.action = "getNumeroTermo";
-        $.ajax({
-            type: "POST",
-            url: "emp1_empautitemcredenciamentotermo.RPC.php",
-            data: oParam,
-            success: function(data) {
-                let response = JSON.parse(data);
-                document.form1.l212_numerotermo.value = response.numerotermo;
+        oParam.exec = "getNumeroTermo";
+        var oAjax = new Ajax.Request(
+            'lic_termocredenciamento.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_retornonumerotermo
             }
+        );
+    }
+
+    function js_retornonumerotermo(oAjax) {
+
+        var oRetornonumerotermo = JSON.parse(oAjax.responseText);
+        document.form1.l212_numerotermo.value = oRetornonumerotermo.numerotermo;
+    }
+
+    function js_showGrid() {
+        oGridItens = new DBGrid('gridItens');
+        oGridItens.nameInstance = 'oGridItens';
+        oGridItens.setCellAlign(new Array("center","center", "center", "center", "center"));
+        oGridItens.setCellWidth(new Array("5%"    , "25%"     , "25%"   , '5%'  ,   '10%'));
+        oGridItens.setHeader(new Array("Item","Material", "Complemento", "Unidade", "Valor Licitado"));
+        oGridItens.hasTotalValue = false;
+        oGridItens.show($('cntgriditens'));
+
+        var width = $('cntgriditens').scrollWidth - 30;
+        $("table" + oGridItens.sName + "header").style.width = width;
+        $(oGridItens.sName + "body").style.width = width;
+        $("table" + oGridItens.sName + "footer").style.width = width;
+    }
+    js_showGrid();
+
+    function js_getItens() {
+        oGridItens.clearAll(true);
+        var oParam = new Object();
+        oParam.iLicitacao = $F('l212_licitacao');
+        oParam.exec = "getItensCredenciamento";
+        var oAjax = new Ajax.Request(
+            'lic_termocredenciamento.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_retornoGetItens
+            }
+        );
+    }
+
+    function js_retornoGetItens(oAjax) {
+        oGridItens.clearAll(true);
+        // var aEventsIn  = ["onmouseover"];
+        // var aEventsOut = ["onmouseout"];
+        // aDadosHintGrid = new Array();
+
+        var oRetornoitens = JSON.parse(oAjax.responseText);
+
+        oRetornoitens.itens.each(function(oLinha, iLinha) {
+            var aLinha = new Array();
+            aLinha[0] = oLinha.pc01_codmater;
+            aLinha[1] = oLinha.pc01_descrmater.urlDecode();
+            aLinha[2] = oLinha.pc01_complmater.urlDecode();
+            aLinha[3] = oLinha.m61_descr;
+            aLinha[4] = oLinha.varlortotal;
+            oGridItens.addRow(aLinha);
+            // nTotal = nTotal + Number(oLinha.varlortotal);
         });
+        // document.getElementById('gridItenstotalValue').innerText = js_formatar(nTotal, 'f');
+        oGridItens.renderRows();
     }
 
 </script>
