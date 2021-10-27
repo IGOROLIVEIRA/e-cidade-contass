@@ -183,8 +183,16 @@ if (isset($incluir) && trim($incluir) != "") {
         <?
         if (isset($licitacao) && trim($licitacao) != "") {
             $sql_marca    = "";
-            $campos       = "l21_codigo,pc81_codprocitem,pc01_descrmater,l04_codigo,l04_descricao";
+            $campos       = "pc81_codprocitem,pc01_codmater,pc01_descrmater,pc11_quant,
+            case
+            when pc80_criterioadjudicacao = 3 then si02_vlprecoreferencia
+            else si02_vlpercreferencia end as vlr_medio,l04_descricao,l21_situacao,
+        case
+        when l21_reservado = 't' then 'SIM'
+        else 'NÃO' end as dl_reservado";
+
             $sql          = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0");
+            echo $sql;
             $sql_disabled = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0 and l04_codigo is not null");
 
             $res_itenslote_desab = $clliclicitemlote->sql_record($sql_disabled);
@@ -255,19 +263,19 @@ if (isset($incluir) && trim($incluir) != "") {
                     var input = document.querySelector('#l04_descricao');
 
                     function log(e) {
-                        
+
                         var regex = /[*|\":<>[\]{}`\\()';#@&$]/;
                         var key = String.fromCharCode(e.keyCode);
-                       
+
                         if (regex.test(key)) {
                             e.preventDefault();
                             return false;
                         }
                         var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
-                        if( keyCode == 13 ) {
+                        if (keyCode == 13) {
 
 
-                            if(!e) var e = window.event;
+                            if (!e) var e = window.event;
 
                             e.cancelBubble = true;
                             e.returnValue = false;
@@ -319,26 +327,25 @@ if (isset($incluir) && trim($incluir) != "") {
                         parent.db_iframe_lotenovo.hide();
                         parent.itens_lote.location.href = 'lic1_liclicitemlote011.php?licitacao=<?= $licitacao ?>';
                     }
-                    
-                    function oganizarTexto(){
-                        
+
+                    function oganizarTexto() {
+
                         var texto = document.getElementById("l04_descricao").value;
                         const myArr = texto.split("\n");
                         var correcao = "";
-                        if(myArr.length>0){
-                            for(i = 0; i<myArr.length; i++){
-                                if(i==0){
+                        if (myArr.length > 0) {
+                            for (i = 0; i < myArr.length; i++) {
+                                if (i == 0) {
                                     correcao = myArr[i];
-                                }else{
-                                    correcao += " "+myArr[i];
+                                } else {
+                                    correcao += " " + myArr[i];
                                 }
-                                
+
                             }
                             document.getElementById("l04_descricao").value = correcao;
                         }
-                        
+
                     }
-                    
                 </script>
     </center>
     </form>

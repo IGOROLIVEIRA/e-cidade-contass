@@ -511,6 +511,8 @@ class cl_liclicitemlote
         $sql .= "      inner join solicita         on solicita.pc10_numero            = solicitem.pc11_numero";
         $sql .= "      inner join db_depart        on db_depart.coddepto              = solicita.pc10_depto";
         $sql .= "      inner join db_usuarios      on solicita.pc10_login             = db_usuarios.id_usuario";
+        $sql .= "      left  join pcorcamitemproc  on pc31_pcprocitem                 = pc81_codprocitem";
+        $sql .= "      left  join itemprecoreferencia on si02_itemproccompra          = pc31_orcamitem";
         $sql .= "      left  join solicitemunid    on solicitemunid.pc17_codigo       = solicitem.pc11_codigo";
         $sql .= "      left  join matunid          on matunid.m61_codmatunid          = solicitemunid.pc17_unid";
         $sql .= "      left  join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo";
