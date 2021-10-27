@@ -2133,6 +2133,100 @@ class FPDF
         }
     }
     // End of class
+
+    function int25($xp,$yp,$text,$alt,$larg)
+    {
+        if (empty($text)) {
+          return ;
+        }
+        $xpos = $xp;
+        $text = strtoupper($text);
+        $barcodeheight = $alt;                               // seta a altura das barras
+        $barcodethinwidth = $larg;                             // seta a largura da barra estreita
+        $barcodethickwidth = $barcodethinwidth * 2.2;          // seta a relacao barra larga/barra estreita
+        // seta os codigos dos caracteres, sendo 0 para estreito e 1 para largo
+        $codingmap  =  Array(
+        "0"=>  "00110",  "1"=>  "10001",
+        "2"=>  "01001",  "3"=>  "11000",
+        "4"=>  "00101",  "5"=>  "10100",
+        "6"=>  "01100",  "7"=>  "00011",
+        "8"=>  "10010",  "9"=>  "01010");
+        // se no. de caracteres impar adiciona 0 no comeco
+        if(strlen($text)%2)
+        $text = "0".$text;
+    
+        $textlen = strlen($text);
+        $barcodewidth  = ($textlen)*(3*$barcodethinwidth + 2*$barcodethickwidth)+($textlen)*(2.5)+(7*$barcodethinwidth + $barcodethickwidth)+3;
+        // imprime na imagem o codigo de inicio
+        $elementwidth = $barcodethinwidth;
+        for($i = 0;$i < 2;$i++) {
+          //imagefilledrectangle($im, $xpos, 0, $xpos + $elementwidth - 1 , $barcodeheight, $black);
+        $this->Rect($xpos, $yp, $xpos + $elementwidth-$xpos, $barcodeheight,"F");
+          $xpos += $elementwidth;
+          $xpos += $barcodethinwidth;
+        //$elementwidth = $barcodethickwidth;
+          //$xpos ++;
+        }
+        // imprime na imagem o codigo em si
+        for($idx = 0;$idx < $textlen;$idx += 2)  {      // a impressao e feita 2 caracteres por vez
+          $charimpar = substr($text,$idx,1);    // pega o caracter impar, que vai ser impresso em preto
+          $charpar  =  substr($text,$idx+1,1);    // pega o caracter par, que vai ser impresso em branco
+          // interlacamento
+          for($baridx = 0;$baridx < 5;$baridx++)  {  // a cada bit do codigo dos caracteres
+            // imprime a barra coresspondente ao bit do caractere impar (preto)
+            $elementwidth = (substr($codingmap[$charimpar],$baridx,1)) ?  $barcodethickwidth : $barcodethinwidth;
+            //imagefilledrectangle($im, $xpos,0, $xpos + $elementwidth - 1,$barcodeheight, $black);
+          $this->Rect($xpos, $yp, $xpos + $elementwidth-$xpos, $barcodeheight,"F");
+            $xpos += $elementwidth;
+            // deixa o espaco correspondente ao bit do caractere par (branco)
+            $elementwidth = (substr($codingmap[$charpar],$baridx,1)) ?  $barcodethickwidth : $barcodethinwidth;
+            $xpos += $elementwidth;
+            //$xpos ++;
+          }
+        }
+        // imprime o codigo de final
+        $elementwidth = $barcodethickwidth;
+        $this->Rect($xpos, $yp, $xpos + $elementwidth-$xpos, $barcodeheight,"F");
+        $xpos += $elementwidth;
+        $xpos += $barcodethinwidth;
+        $elementwidth = $barcodethinwidth;
+        $this->Rect($xpos, $yp, $xpos + $elementwidth-$xpos, $barcodeheight,"F");
+    }
+    
+    function TextWithDirection($x,$y,$txt,$direction='R')
+    {
+        $txt=str_replace(')','\\)',str_replace('(','\\(',str_replace('\\','\\\\',$txt)));
+        if ($direction=='R')
+            $s=sprintf('BT %.2f %.2f %.2f %.2f %.2f %.2f Tm (%s) Tj ET',1,0,0,1,$x*$this->k,($this->h-$y)*$this->k,$txt);
+        elseif ($direction=='L')
+            $s=sprintf('BT %.2f %.2f %.2f %.2f %.2f %.2f Tm (%s) Tj ET',-1,0,0,-1,$x*$this->k,($this->h-$y)*$this->k,$txt);
+        elseif ($direction=='U')
+            $s=sprintf('BT %.2f %.2f %.2f %.2f %.2f %.2f Tm (%s) Tj ET',0,1,-1,0,$x*$this->k,($this->h-$y)*$this->k,$txt);
+        elseif ($direction=='D')
+            $s=sprintf('BT %.2f %.2f %.2f %.2f %.2f %.2f Tm (%s) Tj ET',0,-1,1,0,$x*$this->k,($this->h-$y)*$this->k,$txt);
+        else
+            $s=sprintf('BT %.2f %.2f Td (%s) Tj ET',$x*$this->k,($this->h-$y)*$this->k,$txt);
+        $this->_out($s);
+    }
+    
+    function TextWithRotation($x,$y,$txt,$txt_angle,$font_angle=0)
+    {
+        $txt=str_replace(')','\\)',str_replace('(','\\(',str_replace('\\','\\\\',$txt)));
+    
+        $font_angle+=90+$txt_angle;
+        $txt_angle*=M_PI/180;
+        $font_angle*=M_PI/180;
+    
+        $txt_dx=cos($txt_angle);
+        $txt_dy=sin($txt_angle);
+        $font_dx=cos($font_angle);
+        $font_dy=sin($font_angle);
+    
+        $s=sprintf('BT %.2f %.2f %.2f %.2f %.2f %.2f Tm (%s) Tj ET',
+                 $txt_dx,$txt_dy,$font_dx,$font_dy,
+                 $x*$this->k,($this->h-$y)*$this->k,$txt);
+        $this->_out($s);
+    }    
 }
 
 // Handle special IE contype request
