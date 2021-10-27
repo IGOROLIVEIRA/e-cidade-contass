@@ -183,16 +183,10 @@ if (isset($incluir) && trim($incluir) != "") {
         <?
         if (isset($licitacao) && trim($licitacao) != "") {
             $sql_marca    = "";
-            $campos       = "pc81_codprocitem,pc01_codmater,pc01_descrmater,pc11_quant,
-            case
-            when pc80_criterioadjudicacao = 3 then si02_vlprecoreferencia
-            else si02_vlpercreferencia end as vlr_medio,l04_descricao,l21_situacao,
-        case
-        when l21_reservado = 't' then 'SIM'
-        else 'NÃO' end as dl_reservado";
+            $campos       = "pc81_codprocitem,pc01_codmater,pc01_descrmater,pc11_quant,si02_vlprecoreferencia,l04_descricao,l21_reservado";
 
             $sql          = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0");
-            echo $sql;
+
             $sql_disabled = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0 and l04_codigo is not null");
 
             $res_itenslote_desab = $clliclicitemlote->sql_record($sql_disabled);
