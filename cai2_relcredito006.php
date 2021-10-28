@@ -24,6 +24,9 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+
+use ECidade\V3\Extension\Document;
+
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -80,7 +83,6 @@ $sSql .= " order by {$oPost->ordenador} {$oPost->ordenacao} ";
 $rsCreditos = db_query($sSql);
 $iQtd = pg_num_rows($rsCreditos);
 
-$oPdf = null;
 if ($rsCreditos && $iQtd > 0) {
   $oPdf = new PDFTable();
   $oPdf->setLineHeigth(5);
@@ -103,6 +105,20 @@ if ($rsCreditos && $iQtd > 0) {
 
   }
 }
+else
+{
+  $oPdf = new PDFTable();
+  $oPdf->setLineHeigth(5);
+  $oPdf->addHeaderDescription("Relatório de Créditos"); 
+  $oPdf->addHeaderDescription(""); 
+  $oPdf->addHeaderDescription(""); 
+  $oPdf->addHeaderDescription(""); 
+  $oPdf->addHeaderDescription("SEM INFORMAÇÕES DE CRÉDITOS PARA EXIBIR");  
+  $oPdf->setPercentWidth(true); 
+  $oPdf->setColumnsWidth(array("10","50","30","10"));
+  $oPdf->setHeaders(array( ucfirst($oPost->tipo_origem),"Nome","Receita","Valor"));
+  $oPdf->setColumnsAlign(array(PDFDocument::ALIGN_RIGHT, PDFDocument::ALIGN_LEFT, PDFDocument::ALIGN_LEFT, PDFDocument::ALIGN_RIGHT));
+  $oPdf->addLineInformation(array("","Sem informações de créditos","",""));
+ }
 
 $oPdf->printOut();
-
