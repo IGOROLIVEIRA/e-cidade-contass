@@ -217,7 +217,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
 
                 $sSql = "select * from (SELECT
                 pc01_codmater,
-                case when pc01_complmater is not null and pc01_complmater != pc01_complmater then pc01_descrmater ||'. '|| pc01_complmater
+                case when pc01_complmater is not null and pc01_complmater != pc01_descrmater then pc01_descrmater ||'. '|| pc01_complmater
 		        else pc01_descrmater end as pc01_descrmater,
                 m61_abrev,
                 sum(pc11_quant) as pc11_quant,
@@ -422,7 +422,8 @@ HTML;
 
             $sSql = "select * from (SELECT
                 pc01_codmater,
-                pc01_descrmater||'. '||pc01_complmater as pc01_descrmater,
+                case when pc01_complmater is not null and pc01_complmater != pc01_descrmater then pc01_descrmater ||'. '|| pc01_complmater
+		     else pc01_descrmater end as pc01_descrmater,
                 m61_abrev,
                 sum(pc11_quant) as pc11_quant,
                 pc69_seq,
