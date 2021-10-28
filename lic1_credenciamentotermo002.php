@@ -13,6 +13,7 @@ $db_botao = false;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
+  $clcredenciamentotermo->l212_anousu = db_getsession('DB_anousu');
   $clcredenciamentotermo->alterar($l212_sequencial);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
@@ -24,7 +25,6 @@ if(isset($alterar)){
 ?>
 <html>
 <head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
@@ -32,6 +32,12 @@ if(isset($alterar)){
     <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
+    <?
+    db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js, DBHint.widget.js");
+    db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js,dbtextFieldData.widget.js");
+    db_app::load("time.js");
+    db_app::load("estilos.css, grid.style.css");
+    ?>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
     <?

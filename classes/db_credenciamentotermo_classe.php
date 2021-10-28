@@ -522,7 +522,7 @@ class cl_credenciamentotermo {
     }
 
     // funcao do sql
-    function sql_query ( $l212_sequencial = null,$campos="credenciamentotermo.l212_sequencial,*",$ordem=null,$dbwhere="") {
+    function sql_query ( $l212_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
         $sql = "select ";
         if ($campos != "*" ) {
             $campos_sql = explode("#", $campos);
@@ -577,6 +577,57 @@ class cl_credenciamentotermo {
         $sql .= " from credenciamentotermo ";
         $sql2 = "";
         if ($dbwhere=="") {
+        } else if ($dbwhere != "") {
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($ordem != null ) {
+            $sql .= " order by ";
+            $campos_sql = explode("#", $ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++) {
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
+    // funcao do sql
+    function sql_query_itens ( $l212_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
+        $sql = "select ";
+        if ($campos != "*" ) {
+            $campos_sql = explode("#", $campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++) {
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from credenciamentotermo ";
+        $sql .= " INNER JOIN liclicita on liclicita.l20_codigo = credenciamentotermo.l212_licitacao ";
+        $sql .= " INNER JOIN cgm on cgm.z01_numcgm = l212_fornecedor ";
+        $sql .= " INNER JOIN cflicita on l03_codigo = l20_codtipocom ";
+        $sql .= " INNER JOIN pctipocompra on pc50_codcom = l03_codcom ";
+        $sql .= " INNER JOIN credenciamento on l205_fornecedor = cgm.z01_numcgm and l205_licitacao = l20_codigo ";
+        $sql .= " INNER JOIN liclicitem ON liclicitem.l21_codliclicita = credenciamento.l205_licitacao AND liclicitem.l21_codpcprocitem = credenciamento.l205_item ";
+        $sql .= " INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = credenciamento.l205_item ";
+        $sql .= " INNER JOIN pcorcamitemproc ON pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem ";
+        $sql .= " INNER JOIN pcorcamitem ON pcorcamitem.pc22_orcamitem = pcorcamitemproc.pc31_orcamitem ";
+        $sql .= " INNER JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem ";
+        $sql .= " INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem ";
+        $sql .= " INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo ";
+        $sql .= " INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater ";
+        $sql .= " INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo ";
+        $sql .= " INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid ";
+
+        $sql2 = "";
+        if ($dbwhere=="") {
+            if ( $l212_sequencial != "" && $l212_sequencial != null) {
+                $sql2 = " where credenciamentotermo.l212_sequencial = '$l212_sequencial'";
+            }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }

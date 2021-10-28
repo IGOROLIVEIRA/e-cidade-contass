@@ -129,6 +129,11 @@ $clcredenciamentotermo->rotulo->label();
     <div style="margin-left: 50%; margin-top: 20px">
         <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
         <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+        <?
+        if($db_opcao == "2"):
+        ?>
+        <input name="relatorio" type="button" id="relatorio" value="Gerar Relatorio" onclick="js_relatorio();" >
+        <?endif;?>
     </div>
     <fieldset>
         <legend><b>Itens</b></legend>
@@ -295,6 +300,17 @@ $clcredenciamentotermo->rotulo->label();
         });
         // document.getElementById('gridItenstotalValue').innerText = js_formatar(nTotal, 'f');
         oGridItens.renderRows();
+    }
+
+    function js_relatorio() {
+        let l212_sequencial = $F('l212_sequencial');
+
+        if(l212_sequencial == ''){
+            alert('Sequencial do termo nao informado !')
+        }else{
+            query = 'l212_sequencial='+l212_sequencial;
+            window.open('lic1_imprimetermocredenciamento.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+        }
     }
 
 </script>

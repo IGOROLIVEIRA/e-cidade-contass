@@ -22,6 +22,15 @@ if(isset($incluir)){
     $clcredenciamentotermo->l212_instit       = db_getsession('DB_instit');
     $clcredenciamentotermo->incluir();
     db_fim_transacao();
+
+    if($clcredenciamentotermo->erro_status == 0){
+        $erro = $clcredenciamentotermo->erro_msg;
+        $sqlerro = true;
+    }
+    db_fim_transacao();
+    if($sqlerro == false){
+        db_redireciona("lic1_credenciamentotermo002.php?&chavepesquisa=$clcredenciamentotermo->l212_sequencial");
+    }
 }
 ?>
 <html>
