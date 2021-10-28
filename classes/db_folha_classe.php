@@ -272,11 +272,11 @@ class cl_folha
                 $this->erro_sql   = "Auxiliar de Cálculos ($this->r38_regist." - ".$this->r38_instit) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_banco = "Auxiliar de Cálculos já Cadastrado";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . ' Matricula: ' . $this->r38_regist . " \\n"));
             } else {
                 $this->erro_sql   = "Auxiliar de Cálculos ($this->r38_regist." - ".$this->r38_instit) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . ' Matricula: ' . $this->r38_regist . " \\n"));
             }
             $this->erro_status = "0";
             $this->numrows_incluir = 0;
@@ -541,7 +541,7 @@ class cl_folha
             $this->erro_sql   = "Auxiliar de Cálculos nao Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->r38_regist . "-" . $this->r38_instit;
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . ' Matricula: ' . $this->r38_regist . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
             return false;
@@ -551,7 +551,7 @@ class cl_folha
                 $this->erro_sql = "Auxiliar de Cálculos nao foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : " . $this->r38_regist . "-" . $this->r38_instit;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . ' Matricula: ' . $this->r38_regist . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
