@@ -182,6 +182,10 @@ class FPDF
             $this->x = $margin;
     }
 
+    function GetLeftMargin() {
+      return $this->lMargin;
+    }
+
     function SetTopMargin($margin)
     {
         // Set top margin
@@ -193,6 +197,10 @@ class FPDF
         // Set right margin
         $this->rMargin = $margin;
     }
+    
+    function GetRightMargin() {
+        return $this->rMargin;
+      }      
 
     function SetAutoPageBreak($auto, $margin = 0)
     {
@@ -1785,6 +1793,220 @@ class FPDF
         }
         return $nl;
     }
+
+    function bold() {
+      $this->SetFont('','B');
+    }
+   
+    function endbold() {
+      $this->SetFont('','');
+    }
+   function WriteText($text)
+   {
+       $intPosIni = 0;
+       $intPosFim = 0;
+       if (strpos($text,'<')!==false and strpos($text,'[')!==false)
+       {
+           if (strpos($text,'<')<strpos($text,'['))
+           {
+               $this->Write(5,substr($text,0,strpos($text,'<')));
+               $intPosIni = strpos($text,'<');
+               $intPosFim = strpos($text,'>');
+               $this->SetFont('','B');
+               $this->Write(5,substr($text,$intPosIni+1,$intPosFim-$intPosIni-1));
+               $this->SetFont('','');
+               $this->WriteText(substr($text,$intPosFim+1,strlen($text)));
+           }
+           else
+           {
+               $this->Write(5,substr($text,0,strpos($text,'[')));
+               $intPosIni = strpos($text,'[');
+               $intPosFim = strpos($text,']');
+               $w=$this->GetStringWidth('a')*($intPosFim-$intPosIni-1);
+               $this->Cell($w,$this->FontSize+0.75,substr($text,$intPosIni+1,$intPosFim-$intPosIni-1),1,0,'');
+               $this->WriteText(substr($text,$intPosFim+1,strlen($text)));
+           }
+       }
+       else
+       {
+           if (strpos($text,'<')!==false)
+           {
+               $this->Write(5,substr($text,0,strpos($text,'<')));
+               $intPosIni = strpos($text,'<');
+               $intPosFim = strpos($text,'>');
+               $this->SetFont('','B');
+               $this->WriteText(substr($text,$intPosIni+1,$intPosFim-$intPosIni-1));
+               $this->SetFont('','');
+               $this->WriteText(substr($text,$intPosFim+1,strlen($text)));
+           }
+           elseif (strpos($text,'[')!==false)
+           {
+               $this->Write(5,substr($text,0,strpos($text,'[')));
+               $intPosIni = strpos($text,'[');
+               $intPosFim = strpos($text,']');
+               $w=$this->GetStringWidth('a')*($intPosFim-$intPosIni-1);
+               $this->Cell($w,$this->FontSize+0.75,substr($text,$intPosIni+1,$intPosFim-$intPosIni-1),1,0,'');
+               $this->WriteText(substr($text,$intPosFim+1,strlen($text)));
+           }
+           else
+           {
+               $this->Write(5,$text);
+           }
+   
+       }
+   }
+   
+     /**
+      *  Retorna o altura disponivel para escrita
+      *  @return integer
+      */
+     public function getAvailHeight() {
+   
+        $nAlturaPagina = $this->h;
+        $iPosicaoAtual = $this->getY();
+        $iMargemBaixa  = $this->bMargin;
+        $nResultado    = ( $nAlturaPagina - $iPosicaoAtual ) - $iMargemBaixa;
+        return (float)$nResultado;
+     }
+   
+     /**
+      * Retorna a largura disponível para escrita
+      * @return float
+      */
+     public function getAvailWidth() {
+   
+       $nLarguraPagina = $this->w;
+       $iPosicaoAtual  = $this->getX();
+       $iMargemDireita = $this->rMargin;
+       $nResultado     = ( $nLarguraPagina - $iPosicaoAtual ) - $iMargemDireita;
+   
+       return (float) $nResultado;
+     }
+   
+     function VCell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false) {
+       //Output a cell
+       $k=$this->k;
+       if($this->y+$h>$this->PageBreakTrigger && !$this->InHeader && !$this->InFooter && $this->AcceptPageBreak())
+       {
+         //Automatic page break
+         $x=$this->x;
+         $ws=$this->ws;
+         if($ws>0)
+         {
+           $this->ws=0;
+           $this->_out('0 Tw');
+         }
+         $this->AddPage($this->CurOrientation,$this->CurPageFormat);
+         $this->x=$x;
+         if($ws>0)
+         {
+           $this->ws=$ws;
+           $this->_out(sprintf('%.3F Tw',$ws*$k));
+         }
+       }
+       if($w==0)
+         $w=$this->w-$this->rMargin-$this->x;
+       $s='';
+       // begin change Cell function
+       if($fill || $border>0)
+       {
+         if($fill)
+           $op=($border>0) ? 'B' : 'f';
+         else
+           $op='S';
+         if ($border>1) {
+           $s=sprintf('q %.2F w %.2F %.2F %.2F %.2F re %s Q ',$border,
+                      $this->x*$k,($this->h-$this->y)*$k,$w*$k,-$h*$k,$op);
+         }
+         else
+           $s=sprintf('%.2F %.2F %.2F %.2F re %s ',$this->x*$k,($this->h-$this->y)*$k,$w*$k,-$h*$k,$op);
+       }
+       if(is_string($border))
+       {
+         $x=$this->x;
+         $y=$this->y;
+         if(is_int(strpos($border,'L')))
+           $s.=sprintf('%.2F %.2F m %.2F %.2F l S ',$x*$k,($this->h-$y)*$k,$x*$k,($this->h-($y+$h))*$k);
+         else if(is_int(strpos($border,'l')))
+           $s.=sprintf('q 2 w %.2F %.2F m %.2F %.2F l S Q ',$x*$k,($this->h-$y)*$k,$x*$k,($this->h-($y+$h))*$k);
+   
+         if(is_int(strpos($border,'T')))
+           $s.=sprintf('%.2F %.2F m %.2F %.2F l S ',$x*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-$y)*$k);
+         else if(is_int(strpos($border,'t')))
+           $s.=sprintf('q 2 w %.2F %.2F m %.2F %.2F l S Q ',$x*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-$y)*$k);
+   
+         if(is_int(strpos($border,'R')))
+           $s.=sprintf('%.2F %.2F m %.2F %.2F l S ',($x+$w)*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
+         else if(is_int(strpos($border,'r')))
+           $s.=sprintf('q 2 w %.2F %.2F m %.2F %.2F l S Q ',($x+$w)*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
+   
+         if(is_int(strpos($border,'B')))
+           $s.=sprintf('%.2F %.2F m %.2F %.2F l S ',$x*$k,($this->h-($y+$h))*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
+         else if(is_int(strpos($border,'b')))
+           $s.=sprintf('q 2 w %.2F %.2F m %.2F %.2F l S Q ',$x*$k,($this->h-($y+$h))*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
+       }
+       if(trim($txt)!='')
+       {
+         $cr=substr_count($txt,"\n");
+         if ($cr>0) { // Multi line
+           $txts = explode("\n", $txt);
+           $lines = count($txts);
+           for($l=0;$l<$lines;$l++) {
+             $txt=$txts[$l];
+             $w_txt=$this->GetStringWidth($txt);
+             if ($align=='U')
+               $dy=$this->cMargin+$w_txt;
+             elseif($align=='D')
+               $dy=$h-$this->cMargin;
+             else
+               $dy=($h+$w_txt)/2;
+             $txt=str_replace(')','\\)',str_replace('(','\\(',str_replace('\\','\\\\',$txt)));
+             if($this->ColorFlag)
+               $s.='q '.$this->TextColor.' ';
+             $s.=sprintf('BT 0 1 -1 0 %.2F %.2F Tm (%s) Tj ET ',
+                         ($this->x+.5*$w+(.7+$l-$lines/2)*$this->FontSize)*$k,
+                         ($this->h-($this->y+$dy))*$k,$txt);
+             if($this->ColorFlag)
+               $s.=' Q ';
+           }
+         }
+         else { // Single line
+           $w_txt=$this->GetStringWidth($txt);
+           $Tz=100;
+           if ($w_txt>$h-2*$this->cMargin) {
+             $Tz=($h-2*$this->cMargin)/$w_txt*100;
+             $w_txt=$h-2*$this->cMargin;
+           }
+           if ($align=='U')
+             $dy=$this->cMargin+$w_txt;
+           elseif($align=='D')
+             $dy=$h-$this->cMargin;
+           else
+             $dy=($h+$w_txt)/2;
+           $txt=str_replace(')','\\)',str_replace('(','\\(',str_replace('\\','\\\\',$txt)));
+           if($this->ColorFlag)
+             $s.='q '.$this->TextColor.' ';
+           $s.=sprintf('q BT 0 1 -1 0 %.2F %.2F Tm %.2F Tz (%s) Tj ET Q ',
+                       ($this->x+.5*$w+.3*$this->FontSize)*$k,
+                       ($this->h-($this->y+$dy))*$k,$Tz,$txt);
+           if($this->ColorFlag)
+             $s.=' Q ';
+         }
+       }
+       // end change Cell function
+       if($s)
+         $this->_out($s);
+       $this->lasth=$h;
+       if($ln>0)
+       {
+         //Go to next line
+         $this->y+=$h;
+         if($ln==1)
+           $this->x=$this->lMargin;
+       }
+       else
+         $this->x+=$w;
+     }
 
     function Row($data, $altura = 5, $borda = true, $espaco = 5, $preenche = 0, $naousaespaco = false)
     {
