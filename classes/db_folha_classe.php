@@ -864,7 +864,7 @@ class cl_folha {
      $sql .= "      inner join rhpessoalmov on rhpessoalmov.rh02_regist = folha.r38_regist";
      $sql .= "                             and rh02_anousu = ".db_anofolha();
      $sql .= "                             and rh02_mesusu = ".db_mesfolha();
-     $sql .= "                             and rh02_instit = ".db_getsession("DB_instit");  
+     $sql .= "                             and rh02_instit = ".db_getsession("DB_instit");
      $sql .= "      inner join rhpessoalmovcontabancaria on rhpessoalmov.rh02_seqpes = rhpessoalmovcontabancaria.rh138_rhpessoalmov ";
      $sql .= "                                          and rhpessoalmov.rh02_instit = rhpessoalmovcontabancaria.rh138_instit";
      $sql .= "      left join contabancaria on contabancaria.db83_sequencial = rhpessoalmovcontabancaria.rh138_contabancaria";
@@ -909,8 +909,8 @@ class cl_folha {
      $sql2 = "";
      if($dbwhere==""){
        if($r38_regist!=null ){
-         $sql2 .= " where folha.r38_regist = $r38_regist "; 
-       } 
+         $sql2 .= " where folha.r38_regist = $r38_regist ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -1037,9 +1037,9 @@ class cl_folha {
     $sql .= "      inner join rhpessoalmov on rhpessoalmov.rh02_regist = folha.r38_regist";
     $sql .= "                             and rh02_anousu = ".db_anofolha();
     $sql .= "                             and rh02_mesusu = ".db_mesfolha();
-    $sql .= "                             and rh02_instit = ".db_getsession("DB_instit");  
+    $sql .= "                             and rh02_instit = ".db_getsession("DB_instit");
     $sql .= "      left join rhfuncao on rhpessoalmov.rh02_funcao = rhfuncao.rh37_funcao";
-    $sql .= "                             and rhfuncao.rh37_instit = ".db_getsession("DB_instit");  
+    $sql .= "                             and rhfuncao.rh37_instit = ".db_getsession("DB_instit");
     $sql2 = "";
     if($dbwhere==""){
       if($r38_regist!=null ){
@@ -1061,4 +1061,3 @@ class cl_folha {
         return $sql;
         }
 }
-?>
