@@ -53,7 +53,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('l212_numerotermo',19,$Il212_numerotermo,true,'text',1,"")
+                    db_input('l212_numerotermo',19,$Il212_numerotermo,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -74,7 +74,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_select('l212_fornecedor', $aTabFonec, true, $db_opcao, " onchange='' style='width:452;' ");
+                    db_select('l212_fornecedor', $aTabFonec, true, $db_opcao, " onchange='js_getItens()' style='width:452;' ");
                     ?>
                 </td>
             </tr>
@@ -141,10 +141,28 @@ $clcredenciamentotermo->rotulo->label();
     </fieldset>
 </form>
 <script>
+
+    function js_showGrid() {
+        oGridItens = new DBGrid('gridItens');
+        oGridItens.nameInstance = 'oGridItens';
+        oGridItens.setCellAlign(new Array("center","center", "center", "center", "center"));
+        oGridItens.setCellWidth(new Array("5%"    , "25%"     , "25%"   , '5%'  ,   '10%'));
+        oGridItens.setHeader(new Array("Item","Material", "Complemento", "Unidade", "Valor Licitado"));
+        oGridItens.hasTotalValue = false;
+        oGridItens.show($('cntgriditens'));
+
+        var width = $('cntgriditens').scrollWidth - 30;
+        $("table" + oGridItens.sName + "header").style.width = width;
+        $(oGridItens.sName + "body").style.width = width;
+        $("table" + oGridItens.sName + "footer").style.width = width;
+    }
+    js_showGrid();
+
     var db_opcao = <?= $db_opcao?>;
 
     if(db_opcao != 1){
         mostrarFornecedores();
+        js_getItens();
     }
 
     function js_pesquisa(){
@@ -184,12 +202,13 @@ $clcredenciamentotermo->rotulo->label();
         document.form1.l212_veiculodepublicacao.value = veicpublica;
         db_iframe_licitacao.hide();
         mostrarFornecedores();
-        js_getItens();
     }
 
     function mostrarFornecedores() {
         var oParam = new Object();
         oParam.iLicitacao = $F('l212_licitacao');
+        oParam.iCodtermo  = $F('l212_sequencial');
+        oParam.idbopcao   = <?=$db_opcao?>;
         oParam.exec = "getFornecedores";
         var oAjax = new Ajax.Request(
             'lic_termocredenciamento.RPC.php', {
@@ -250,26 +269,12 @@ $clcredenciamentotermo->rotulo->label();
         document.form1.l212_numerotermo.value = oRetornonumerotermo.numerotermo;
     }
 
-    function js_showGrid() {
-        oGridItens = new DBGrid('gridItens');
-        oGridItens.nameInstance = 'oGridItens';
-        oGridItens.setCellAlign(new Array("center","center", "center", "center", "center"));
-        oGridItens.setCellWidth(new Array("5%"    , "25%"     , "25%"   , '5%'  ,   '10%'));
-        oGridItens.setHeader(new Array("Item","Material", "Complemento", "Unidade", "Valor Licitado"));
-        oGridItens.hasTotalValue = false;
-        oGridItens.show($('cntgriditens'));
-
-        var width = $('cntgriditens').scrollWidth - 30;
-        $("table" + oGridItens.sName + "header").style.width = width;
-        $(oGridItens.sName + "body").style.width = width;
-        $("table" + oGridItens.sName + "footer").style.width = width;
-    }
-    js_showGrid();
-
     function js_getItens() {
         oGridItens.clearAll(true);
         var oParam = new Object();
-        oParam.iLicitacao = $F('l212_licitacao');
+        oParam.iLicitacao   = $F('l212_licitacao');
+        oParam.iCodtermo    = $F('l212_sequencial');
+        oParam.iFornecedor  = $F('l212_fornecedor');
         oParam.exec = "getItensCredenciamento";
         var oAjax = new Ajax.Request(
             'lic_termocredenciamento.RPC.php', {

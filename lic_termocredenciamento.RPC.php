@@ -15,12 +15,20 @@ switch ($oParam->exec) {
 
     case 'getFornecedores':
         $iAnoSessao      = db_getsession('DB_anousu');
-
-        $sqlFornecedor = "SELECT DISTINCT z01_numcgm,
+        if($oParam->idbopcao == "1"){
+            $sqlFornecedor = "SELECT DISTINCT z01_numcgm,
                                           z01_nome
             FROM credenciamento
             INNER JOIN cgm ON z01_numcgm = l205_fornecedor
             WHERE l205_licitacao ={$oParam->iLicitacao}";
+        }else{
+            $sqlFornecedor = "SELECT z01_numcgm,
+                                     z01_nome
+            FROM credenciamentotermo
+            INNER JOIN cgm ON z01_numcgm = l212_fornecedor
+            where l212_sequencial = $oParam->iCodtermo";
+        }
+
         $rsFornecedor  = db_query($sqlFornecedor);
 
         $oFornecedor = db_utils::getCollectionByRecord($rsFornecedor);
@@ -29,6 +37,12 @@ switch ($oParam->exec) {
     break;
 
     case 'getItensCredenciamento':
+
+        if($oParam->iFornecedor == null){
+            $where = "WHERE credenciamentotermo.l212_sequencial = $oParam->iCodtermo";
+        }else{
+            $where = "WHERE l20_codigo = $oParam->iLicitacao and l205_fornecedor = $oParam->iFornecedor";
+        }
 
         $sqlItens = "SELECT DISTINCT pc11_seq,
                 pc01_codmater,
@@ -59,10 +73,11 @@ switch ($oParam->exec) {
                 AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
                 INNER JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
                 AND pcorcamjulg.pc24_orcamforne = pcorcamforne.pc21_orcamforne
+                LEFT JOIN credenciamentotermo on l212_fornecedor = l205_fornecedor and l212_licitacao = l205_licitacao 
                 LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
                 LEFT JOIN credenciamentosaldo ON credenciamentosaldo.l213_licitacao = liclicita.l20_codigo
                 AND l21_codigo = l213_itemlicitacao
-                WHERE l20_codigo = $oParam->iLicitacao";
+                $where";
         $resultItens = db_query($sqlItens);
         for ($iCont = 0; $iCont < pg_num_rows($resultItens); $iCont++) {
 

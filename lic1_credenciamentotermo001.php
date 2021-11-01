@@ -10,27 +10,41 @@ $clcredenciamentotermo = new cl_credenciamentotermo;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-    db_inicio_transacao();
-    $clcredenciamentotermo->l212_licitacao    = $l212_licitacao;
-    $clcredenciamentotermo->l212_numerotermo  = $l212_numerotermo;
-    $clcredenciamentotermo->l212_fornecedor   = $l212_fornecedor;
-    $clcredenciamentotermo->l212_dtinicio     = $l212_dtinicio;
-    $clcredenciamentotermo->l212_dtpublicacao = $l212_dtpublicacao;
-    $clcredenciamentotermo->l212_anousu       = db_getsession('DB_anousu');
-    $clcredenciamentotermo->l212_veiculodepublicacao = $l212_veiculodepublicacao;
-    $clcredenciamentotermo->l212_observacao   = $l212_observacao;
-    $clcredenciamentotermo->l212_instit       = db_getsession('DB_instit');
-    $clcredenciamentotermo->incluir();
-    db_fim_transacao();
 
-    if($clcredenciamentotermo->erro_status == 0){
-        $erro = $clcredenciamentotermo->erro_msg;
-        $sqlerro = true;
+    try {
+
+        $resultNumeroTermo = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,"l212_numerotermo","l212_numerotermo desc limit 1","l212_numerotermo = $l212_numerotermo"));
+
+        if(pg_num_rows($resultNumeroTermo) > 0){
+            throw new Exception("Usuário: Numero do Termo ja utilizado !");
+        }
+
+        db_inicio_transacao();
+        $clcredenciamentotermo->l212_licitacao    = $l212_licitacao;
+        $clcredenciamentotermo->l212_numerotermo  = $l212_numerotermo;
+        $clcredenciamentotermo->l212_fornecedor   = $l212_fornecedor;
+        $clcredenciamentotermo->l212_dtinicio     = $l212_dtinicio;
+        $clcredenciamentotermo->l212_dtpublicacao = $l212_dtpublicacao;
+        $clcredenciamentotermo->l212_anousu       = db_getsession('DB_anousu');
+        $clcredenciamentotermo->l212_veiculodepublicacao = $l212_veiculodepublicacao;
+        $clcredenciamentotermo->l212_observacao   = $l212_observacao;
+        $clcredenciamentotermo->l212_instit       = db_getsession('DB_instit');
+        $clcredenciamentotermo->incluir();
+        db_fim_transacao();
+
+        if($clcredenciamentotermo->erro_status == 0){
+            $erro = $clcredenciamentotermo->erro_msg;
+            $sqlerro = true;
+        }
+        db_fim_transacao();
+        if($sqlerro == false){
+            db_redireciona("lic1_credenciamentotermo002.php?&chavepesquisa=$clcredenciamentotermo->l212_sequencial");
+        }
+
+    }catch (Exception $eErro){
+        db_msgbox($eErro->getMessage());
     }
-    db_fim_transacao();
-    if($sqlerro == false){
-        db_redireciona("lic1_credenciamentotermo002.php?&chavepesquisa=$clcredenciamentotermo->l212_sequencial");
-    }
+
 }
 ?>
 <html>
