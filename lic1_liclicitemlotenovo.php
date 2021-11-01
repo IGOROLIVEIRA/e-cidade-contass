@@ -183,7 +183,7 @@ if (isset($incluir) && trim($incluir) != "") {
         <?
         if (isset($licitacao) && trim($licitacao) != "") {
             $sql_marca    = "";
-            $campos       = "pc81_codprocitem,pc01_codmater,pc01_descrmater,pc11_quant,si02_vlprecoreferencia,l04_descricao,l21_reservado";
+            $campos       = "l21_codigo,pc81_codprocitem,pc01_codmater,pc01_descrmater,pc11_quant,si02_vlprecoreferencia,l04_codigo,l04_descricao,l21_reservado";
 
             $sql          = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0");
 
@@ -297,6 +297,8 @@ if (isset($incluir) && trim($incluir) != "") {
                         var lista_itens = "";
                         var separador = "";
                         for (i = 0; i < lote.document.form1.elements.length; i++) {
+                            console.log(lote.document.form1.elements[i]);
+                            console.log(lote.document.form1.elements[i].checked);
                             if (lote.document.form1.elements[i].type == "checkbox") {
                                 if (lote.document.form1.elements[i].checked == true) {
                                     lista_itens += separador + lote.document.form1.elements[i].value;
@@ -305,7 +307,6 @@ if (isset($incluir) && trim($incluir) != "") {
                                 }
                             }
                         }
-
                         if (contador == 0) {
                             alert("Selecione um item.");
                             return false;
