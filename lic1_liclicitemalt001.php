@@ -99,7 +99,6 @@ if (!$sqlerro && $codprocesso) {
     );
 
     $rsSolicitem = db_query($sSqlSolicitem);
-    db_criatabela($rsSolicitem);
 
     for ($count = 0; $count < pg_numrows($rsSolicitem); $count++) {
 
@@ -113,7 +112,6 @@ if (!$sqlerro && $codprocesso) {
         $rsOrigem = $oDaoItemOrigem->sql_record($sSqlOrigem);
 
         db_inicio_transacao();
-        db_criatabela($rsOrigem);
         $oItemOrigem = db_utils::fieldsMemory($rsOrigem, 0);
         // $nova_quantidade = floatval($oItemOrigem->pc11_quant) + floatval($oSolicitemReservado->pc11_quant);
 
