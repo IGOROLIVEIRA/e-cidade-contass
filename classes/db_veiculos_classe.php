@@ -754,6 +754,7 @@ class cl_veiculos
          $this->erro_status = "0";
          return false;
        }*/
+<<<<<<< Updated upstream
         }
         if (trim($this->ve01_dtaquis) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_dtaquis_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ve01_dtaquis_dia"] != "")) {
             $sql  .= $virgula . " ve01_dtaquis = '$this->ve01_dtaquis' ";
@@ -782,6 +783,333 @@ class cl_veiculos
                 }
             }
         }
+=======
+     }
+     if(trim($this->ve01_dtaquis)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_dtaquis_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ve01_dtaquis_dia"] !="") ){
+       $sql  .= $virgula." ve01_dtaquis = '$this->ve01_dtaquis' ";
+       $virgula = ",";
+       if(trim($this->ve01_dtaquis) == null ){
+         $this->erro_sql = " Campo Data de Aquisição nao Informado.";
+         $this->erro_campo = "ve01_dtaquis_dia";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_dtaquis_dia"])){
+         $sql  .= $virgula." ve01_dtaquis = null ";
+         $virgula = ",";
+         if(trim($this->ve01_dtaquis) == null ){
+           $this->erro_sql = " Campo Data de Aquisição nao Informado.";
+           $this->erro_campo = "ve01_dtaquis_dia";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+         }
+       }
+     }
+<<<<<<< Updated upstream
+     
+     if(trim($this->ve01_veiccadcategcnh)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcategcnh"])){
+       $sql  .= $virgula." ve01_veiccadcategcnh = ".($this->ve01_veiccadcategcnh == 0? 'null' : $this->ve01_veiccadcategcnh)." ";
+       $virgula = ",";
+     }
+
+     if(trim($this->ve01_anofab)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anofab"])){
+       $sql  .= $virgula." ve01_anofab = $this->ve01_anofab ";
+       $virgula = ",";
+       if(trim($this->ve01_anofab) == null && $si04_tipoveiculo == 3){
+         $this->erro_sql = " Campo Ano de Fabricação nao Informado.";
+         $this->erro_campo = "ve01_anofab";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_anomod)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anomod"])){
+       $sql  .= $virgula." ve01_anomod = $this->ve01_anomod ";
+       $virgula = ",";
+       if(trim($this->ve01_anomod) == null && $si04_tipoveiculo == 3){
+         $this->erro_sql = " Campo Ano do Modelo nao Informado.";
+         $this->erro_campo = "ve01_anomod";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_ceplocalidades)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_ceplocalidades"])){
+       $sql  .= $virgula." ve01_ceplocalidades = $this->ve01_ceplocalidades ";
+       $virgula = ",";
+       if(trim($this->ve01_ceplocalidades) == null ){
+         $this->erro_sql = " Campo Municipio nao Informado.";
+         $this->erro_campo = "ve01_ceplocalidades";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_ativo"])){
+       $sql  .= $virgula." ve01_ativo = $this->ve01_ativo ";
+       $virgula = ",";
+       if(trim($this->ve01_ativo) == null ){
+         $this->erro_sql = " Campo Ativo nao Informado.";
+         $this->erro_campo = "ve01_ativo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_veictipoabast)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veictipoabast"])){
+       $sql  .= $virgula." ve01_veictipoabast = $this->ve01_veictipoabast ";
+       $virgula = ",";
+       if(trim($this->ve01_veictipoabast) == null ){
+         $this->erro_sql = " Campo Tipo de Abastecimento nao Informado.";
+         $this->erro_campo = "ve01_veictipoabast";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_medidaini)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_medidaini"])){
+       $sql  .= $virgula." ve01_medidaini = $this->ve01_medidaini ";
+       $virgula = ",";
+       if(trim($this->ve01_medidaini) == null ){
+         $this->erro_sql = " Campo Medida Inicial nao Informado.";
+         $this->erro_campo = "ve01_medidaini";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_codigoant)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codigoant"])){
+       $sql  .= $virgula." ve01_codigoant = ".($this->ve01_codigoant == 0 || $this->ve01_codigoant == null ? 'null' : $this->ve01_codigoant)." ";
+       $virgula = ",";
+     }
+     if(trim($this->ve01_codunidadesub)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codunidadesub"])){
+       $sql  .= $virgula." ve01_codunidadesub = '".($this->ve01_codunidadesub == 0 || $this->ve01_codunidadesub == null ? '' : $this->ve01_codunidadesub)."' ";
+       $virgula = ",";
+     }
+     if(trim($this->ve01_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_instit"])){
+         $sql  .= $virgula." ve01_instit = '".($this->ve01_instit == 0 || $this->ve01_instit == null ? db_getsession("DB_instit") : $this->ve01_instit)."' ";
+         $virgula = ",";
+     }
+     $sql .= " where ";
+     if($ve01_codigo!=null){
+       $sql .= " ve01_codigo = $this->ve01_codigo";
+     }
+     $resaco = $this->sql_record($this->sql_query_file($this->ve01_codigo));
+     if($this->numrows>0){
+       for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+         $acount = pg_result($resac,0,0);
+         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+         $resac = db_query("insert into db_acountkey values($acount,9248,'$this->ve01_codigo','A')");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_codigo"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9248,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_codigo'))."','$this->ve01_codigo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_placa"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9249,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_placa'))."','$this->ve01_placa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadtipo"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9250,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadtipo'))."','$this->ve01_veiccadtipo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadmarca"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9251,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadmarca'))."','$this->ve01_veiccadmarca',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadmodelo"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9252,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadmodelo'))."','$this->ve01_veiccadmodelo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcor"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9253,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadcor'))."','$this->ve01_veiccadcor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadproced"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9309,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadproced'))."','$this->ve01_veiccadproced',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcateg"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9310,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadcateg'))."','$this->ve01_veiccadcateg',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_chassi"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9254,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_chassi'))."','$this->ve01_chassi',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_ranavam"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9311,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_ranavam'))."','$this->ve01_ranavam',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_placanum"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9312,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_placanum'))."','$this->ve01_placanum',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_certif"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9255,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_certif'))."','$this->ve01_certif',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_quantpotencia"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9313,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_quantpotencia'))."','$this->ve01_quantpotencia',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadpotencia"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9314,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadpotencia'))."','$this->ve01_veiccadpotencia',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_quantcapacidad"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9315,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_quantcapacidad'))."','$this->ve01_quantcapacidad',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadtipocapacidade"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9316,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadtipocapacidade'))."','$this->ve01_veiccadtipocapacidade',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_dtaquis"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9258,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_dtaquis'))."','$this->ve01_dtaquis',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcategcnh"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9260,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadcategcnh'))."','$this->ve01_veiccadcategcnh',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_anofab"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9261,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_anofab'))."','$this->ve01_anofab',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_anomod"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9317,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_anomod'))."','$this->ve01_anomod',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_ceplocalidades"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9318,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_ceplocalidades'))."','$this->ve01_ceplocalidades',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_ativo"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9262,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_ativo'))."','$this->ve01_ativo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veictipoabast"]))
+           $resac = db_query("insert into db_acount values($acount,1590,11076,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veictipoabast'))."','$this->ve01_veictipoabast',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_medidaini"]))
+           $resac = db_query("insert into db_acount values($acount,1590,11080,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_medidaini'))."','$this->ve01_medidaini',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       }
+     }
+     $result = db_query($sql);
+     if($result==false){
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Cadastro de Veiculos nao Alterado. Alteracao Abortada.\\n";
+         $this->erro_sql .= "Valores : ".$this->ve01_codigo;
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       $this->numrows_alterar = 0;
+       return false;
+     }else{
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = "Cadastro de Veiculos nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql .= "Valores : ".$this->ve01_codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = 0;
+         return true;
+       }else{
+         $this->erro_banco = "";
+         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$this->ve01_codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = pg_affected_rows($result);
+         return true;
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($ve01_codigo=null,$dbwhere=null) {
+     if($dbwhere==null || $dbwhere==""){
+       $resaco = $this->sql_record($this->sql_query_file($ve01_codigo));
+     }else{
+       $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
+     }
+     if(($resaco!=false)||($this->numrows!=0)){
+       for($iresaco=0;$iresaco<$this->numrows;$iresaco++){
+         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+         $acount = pg_result($resac,0,0);
+         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+         $resac = db_query("insert into db_acountkey values($acount,9248,'$ve01_codigo','E')");
+         $resac = db_query("insert into db_acount values($acount,1590,9248,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_codigo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9249,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_placa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9250,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadtipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9251,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadmarca'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9252,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadmodelo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9253,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadcor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9309,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadproced'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9310,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadcateg'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9254,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_chassi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9311,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_ranavam'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9312,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_placanum'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9255,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_certif'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9313,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_quantpotencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9314,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadpotencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9315,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_quantcapacidad'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9316,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadtipocapacidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9258,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_dtaquis'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9260,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadcategcnh'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9261,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_anofab'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9317,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_anomod'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9318,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_ceplocalidades'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9262,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_ativo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,11076,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veictipoabast'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,11080,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_medidaini'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       }
+     }
+     $sql = " delete from veiculos
+                    where ";
+     $sql2 = "";
+     if($dbwhere==null || $dbwhere ==""){
+        if($ve01_codigo != ""){
+          if($sql2!=""){
+            $sql2 .= " and ";
+          }
+          $sql2 .= " ve01_codigo = $ve01_codigo ";
+        }
+     }else{
+       $sql2 = $dbwhere;
+     }
+     $result = db_query($sql.$sql2);
+     if($result==false){
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Cadastro de Veiculos nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql .= "Valores : ".$ve01_codigo;
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       $this->numrows_excluir = 0;
+       return false;
+     }else{
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = "Cadastro de Veiculos nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql .= "Valores : ".$ve01_codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_excluir = 0;
+         return true;
+       }else{
+         $this->erro_banco = "";
+         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$ve01_codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_excluir = pg_affected_rows($result);
+         return true;
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
+     $result = db_query($sql);
+     if($result==false){
+       $this->numrows    = 0;
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Erro ao selecionar os registros.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     $this->numrows = pg_numrows($result);
+      if($this->numrows==0){
+        $this->erro_banco = "";
+        $this->erro_sql   = "Record Vazio na Tabela:veiculos";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+     return $result;
+   }
+>>>>>>> Stashed changes
 
         if (trim($this->ve01_anofab) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anofab"])) {
             $sql  .= $virgula . " ve01_anofab = $this->ve01_anofab ";
@@ -1197,6 +1525,7 @@ class cl_veiculos
         $sql .= "      inner  join veiccentral  on  veiccentral.ve40_veiculos=veiculos.ve01_codigo ";
         $sql .= "      inner  join veiccadcentral  on  veiccadcentral.ve36_sequencial=veiccentral.ve40_veiccadcentral ";
 
+<<<<<<< Updated upstream
         if (trim($this->ve01_anofab) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anofab"])) {
             $sql  .= $virgula . " ve01_anofab = $this->ve01_anofab ";
             $virgula = ",";
@@ -1656,6 +1985,663 @@ class cl_veiculos
         }
         return $sql;
     }
+=======
+     $sql2 = "";
+     if($dbwhere==""){
+       if($ve01_codigo!=null ){
+         $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+   function sql_query_file ( $ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+=======
+
+     if(trim($this->ve01_veiccadcategcnh)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcategcnh"])){
+       $sql  .= $virgula." ve01_veiccadcategcnh = ".($this->ve01_veiccadcategcnh == 0? 'null' : $this->ve01_veiccadcategcnh)." ";
+       $virgula = ",";
+     }
+
+     if(trim($this->ve01_anofab)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anofab"])){
+       $sql  .= $virgula." ve01_anofab = $this->ve01_anofab ";
+       $virgula = ",";
+       if(trim($this->ve01_anofab) == null && $si04_tipoveiculo == 3){
+         $this->erro_sql = " Campo Ano de Fabricação nao Informado.";
+         $this->erro_campo = "ve01_anofab";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_anomod)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anomod"])){
+       $sql  .= $virgula." ve01_anomod = $this->ve01_anomod ";
+       $virgula = ",";
+       if(trim($this->ve01_anomod) == null && $si04_tipoveiculo == 3){
+         $this->erro_sql = " Campo Ano do Modelo nao Informado.";
+         $this->erro_campo = "ve01_anomod";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_ceplocalidades)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_ceplocalidades"])){
+       $sql  .= $virgula." ve01_ceplocalidades = $this->ve01_ceplocalidades ";
+       $virgula = ",";
+       if(trim($this->ve01_ceplocalidades) == null ){
+         $this->erro_sql = " Campo Municipio nao Informado.";
+         $this->erro_campo = "ve01_ceplocalidades";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_ativo"])){
+       $sql  .= $virgula." ve01_ativo = $this->ve01_ativo ";
+       $virgula = ",";
+       if(trim($this->ve01_ativo) == null ){
+         $this->erro_sql = " Campo Ativo nao Informado.";
+         $this->erro_campo = "ve01_ativo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_veictipoabast)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veictipoabast"])){
+       $sql  .= $virgula." ve01_veictipoabast = $this->ve01_veictipoabast ";
+       $virgula = ",";
+       if(trim($this->ve01_veictipoabast) == null ){
+         $this->erro_sql = " Campo Tipo de Abastecimento nao Informado.";
+         $this->erro_campo = "ve01_veictipoabast";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_medidaini)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_medidaini"])){
+       $sql  .= $virgula." ve01_medidaini = $this->ve01_medidaini ";
+       $virgula = ",";
+       if(trim($this->ve01_medidaini) == null ){
+         $this->erro_sql = " Campo Medida Inicial nao Informado.";
+         $this->erro_campo = "ve01_medidaini";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve01_codigoant)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codigoant"])){
+       $sql  .= $virgula." ve01_codigoant = ".($this->ve01_codigoant == 0 || $this->ve01_codigoant == null ? 'null' : $this->ve01_codigoant)." ";
+       $virgula = ",";
+     }
+     if(trim($this->ve01_codunidadesub)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codunidadesub"])){
+       $sql  .= $virgula." ve01_codunidadesub = '".($this->ve01_codunidadesub == 0 || $this->ve01_codunidadesub == null ? '' : $this->ve01_codunidadesub)."' ";
+       $virgula = ",";
+     }
+     if(trim($this->ve01_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_instit"])){
+         $sql  .= $virgula." ve01_instit = '".($this->ve01_instit == 0 || $this->ve01_instit == null ? db_getsession("DB_instit") : $this->ve01_instit)."' ";
+         $virgula = ",";
+     }
+     $sql .= " where ";
+     if($ve01_codigo!=null){
+       $sql .= " ve01_codigo = $this->ve01_codigo";
+     }
+     $resaco = $this->sql_record($this->sql_query_file($this->ve01_codigo));
+     if($this->numrows>0){
+       for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+         $acount = pg_result($resac,0,0);
+         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+         $resac = db_query("insert into db_acountkey values($acount,9248,'$this->ve01_codigo','A')");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_codigo"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9248,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_codigo'))."','$this->ve01_codigo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_placa"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9249,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_placa'))."','$this->ve01_placa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadtipo"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9250,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadtipo'))."','$this->ve01_veiccadtipo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadmarca"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9251,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadmarca'))."','$this->ve01_veiccadmarca',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadmodelo"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9252,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadmodelo'))."','$this->ve01_veiccadmodelo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcor"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9253,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadcor'))."','$this->ve01_veiccadcor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadproced"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9309,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadproced'))."','$this->ve01_veiccadproced',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcateg"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9310,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadcateg'))."','$this->ve01_veiccadcateg',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_chassi"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9254,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_chassi'))."','$this->ve01_chassi',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_ranavam"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9311,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_ranavam'))."','$this->ve01_ranavam',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_placanum"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9312,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_placanum'))."','$this->ve01_placanum',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_certif"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9255,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_certif'))."','$this->ve01_certif',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_quantpotencia"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9313,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_quantpotencia'))."','$this->ve01_quantpotencia',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadpotencia"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9314,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadpotencia'))."','$this->ve01_veiccadpotencia',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_quantcapacidad"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9315,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_quantcapacidad'))."','$this->ve01_quantcapacidad',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadtipocapacidade"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9316,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadtipocapacidade'))."','$this->ve01_veiccadtipocapacidade',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_dtaquis"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9258,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_dtaquis'))."','$this->ve01_dtaquis',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcategcnh"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9260,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veiccadcategcnh'))."','$this->ve01_veiccadcategcnh',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_anofab"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9261,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_anofab'))."','$this->ve01_anofab',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_anomod"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9317,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_anomod'))."','$this->ve01_anomod',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_ceplocalidades"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9318,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_ceplocalidades'))."','$this->ve01_ceplocalidades',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_ativo"]))
+           $resac = db_query("insert into db_acount values($acount,1590,9262,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_ativo'))."','$this->ve01_ativo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_veictipoabast"]))
+           $resac = db_query("insert into db_acount values($acount,1590,11076,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_veictipoabast'))."','$this->ve01_veictipoabast',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve01_medidaini"]))
+           $resac = db_query("insert into db_acount values($acount,1590,11080,'".AddSlashes(pg_result($resaco,$conresaco,'ve01_medidaini'))."','$this->ve01_medidaini',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       }
+     }
+     $result = db_query($sql);
+     if($result==false){
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Cadastro de Veiculos nao Alterado. Alteracao Abortada.\\n";
+         $this->erro_sql .= "Valores : ".$this->ve01_codigo;
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       $this->numrows_alterar = 0;
+       return false;
+     }else{
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = "Cadastro de Veiculos nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql .= "Valores : ".$this->ve01_codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = 0;
+         return true;
+       }else{
+         $this->erro_banco = "";
+         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$this->ve01_codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = pg_affected_rows($result);
+         return true;
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($ve01_codigo=null,$dbwhere=null) {
+     if($dbwhere==null || $dbwhere==""){
+       $resaco = $this->sql_record($this->sql_query_file($ve01_codigo));
+     }else{
+       $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
+     }
+     if(($resaco!=false)||($this->numrows!=0)){
+       for($iresaco=0;$iresaco<$this->numrows;$iresaco++){
+         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+         $acount = pg_result($resac,0,0);
+         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+         $resac = db_query("insert into db_acountkey values($acount,9248,'$ve01_codigo','E')");
+         $resac = db_query("insert into db_acount values($acount,1590,9248,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_codigo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9249,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_placa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9250,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadtipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9251,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadmarca'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9252,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadmodelo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9253,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadcor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9309,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadproced'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9310,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadcateg'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9254,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_chassi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9311,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_ranavam'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9312,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_placanum'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9255,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_certif'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9313,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_quantpotencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9314,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadpotencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9315,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_quantcapacidad'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9316,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadtipocapacidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9258,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_dtaquis'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9260,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veiccadcategcnh'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9261,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_anofab'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9317,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_anomod'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9318,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_ceplocalidades'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,9262,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_ativo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,11076,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_veictipoabast'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1590,11080,'','".AddSlashes(pg_result($resaco,$iresaco,'ve01_medidaini'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       }
+     }
+     $sql = " delete from veiculos
+                    where ";
+     $sql2 = "";
+     if($dbwhere==null || $dbwhere ==""){
+        if($ve01_codigo != ""){
+          if($sql2!=""){
+            $sql2 .= " and ";
+          }
+          $sql2 .= " ve01_codigo = $ve01_codigo ";
+        }
+     }else{
+       $sql2 = $dbwhere;
+     }
+     $result = db_query($sql.$sql2);
+     if($result==false){
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Cadastro de Veiculos nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql .= "Valores : ".$ve01_codigo;
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       $this->numrows_excluir = 0;
+       return false;
+     }else{
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = "Cadastro de Veiculos nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql .= "Valores : ".$ve01_codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_excluir = 0;
+         return true;
+       }else{
+         $this->erro_banco = "";
+         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$ve01_codigo;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_excluir = pg_affected_rows($result);
+         return true;
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
+     $result = db_query($sql);
+     if($result==false){
+       $this->numrows    = 0;
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Erro ao selecionar os registros.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     $this->numrows = pg_numrows($result);
+      if($this->numrows==0){
+        $this->erro_banco = "";
+        $this->erro_sql   = "Record Vazio na Tabela:veiculos";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+     return $result;
+   }
+
+   function sql_query_abst ($ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from veiculos ";
+    $sql .= "   inner join veiccentral on ve40_veiculos = ve01_codigo  ";
+    $sql .= "   inner join veiccadcentral on ve36_sequencial = ve40_veiccadcentral  ";
+    $sql .= "   inner join veicmotoristascentral on ve41_veiccadcentral=ve36_sequencial  ";
+    $sql .= "   inner join veicmotoristas on ve05_codigo=ve41_veicmotoristas  ";
+    $sql .= "   inner join cgm on z01_numcgm=ve05_numcgm  ";
+    $sql .= "   inner join veiculoscomb on ve06_veiculos=ve01_codigo ";
+    $sql .= "   inner join veiccadcomb on ve26_codigo = ve06_veiccadcomb ";
+    $sql .= "   left join veiculostransferencia on ve81_codigo=ve01_codigo ";
+    $sql .= "   left join transferenciaveiculos on ve80_sequencial=ve81_transferencia ";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($ve01_codigo!=null ){
+        $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+
+   }
+   function sql_query ( $ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+>>>>>>> Stashed changes
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from veiculos ";
+<<<<<<< Updated upstream
+=======
+     $sql .= "      inner join ceplocalidades         on ceplocalidades.cp05_codlocalidades  = veiculos.ve01_ceplocalidades        ";
+     $sql .= "      left join veiccadtipo            on veiccadtipo.ve20_codigo             = veiculos.ve01_veiccadtipo           ";
+     $sql .= "      inner join veiccadmarca           on veiccadmarca.ve21_codigo            = veiculos.ve01_veiccadmarca          ";
+     $sql .= "      inner join veiccadmodelo          on veiccadmodelo.ve22_codigo           = veiculos.ve01_veiccadmodelo         ";
+     $sql .= "      left join veiccadcor             on veiccadcor.ve23_codigo              = veiculos.ve01_veiccadcor            ";
+     $sql .= "      left join veiccadtipocapacidade  on veiccadtipocapacidade.ve24_codigo   = veiculos.ve01_veiccadtipocapacidade ";
+     $sql .= "      left join veiccadcategcnh        on veiccadcategcnh.ve30_codigo         = veiculos.ve01_veiccadcategcnh       ";
+     $sql .= "      left join veiccadproced          on veiccadproced.ve25_codigo           = veiculos.ve01_veiccadproced         ";
+     $sql .= "      left  join veiccadpotencia        on veiccadpotencia.ve31_codigo         = veiculos.ve01_veiccadpotencia       ";
+     $sql .= "      left join veiccadcateg  as a     on a.ve32_codigo                       = veiculos.ve01_veiccadcateg          ";
+     $sql .= "      inner join veictipoabast          on veictipoabast.ve07_sequencial       = veiculos.ve01_veictipoabast         ";
+     $sql .= "      inner join cepestados             on cepestados.cp03_sigla               = ceplocalidades.cp05_sigla           ";
+     $sql .= "      left  join veiccentral            on ve40_veiculos                       = ve01_codigo                         ";
+     $sql .= "      left  join veiccadcentraldepart   on ve37_veiccadcentral                 = ve40_veiccadcentral                 ";
+     $sql .= "      left  join db_depart              on db_depart.coddepto                  = veiccadcentraldepart.ve37_coddepto  ";
+>>>>>>> Stashed changes
+     $sql2 = "";
+     if($dbwhere==""){
+       if($ve01_codigo!=null ){
+         $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+<<<<<<< Updated upstream
+  function sql_query_placa ($ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+=======
+   function sql_query_central ( $ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+>>>>>>> Stashed changes
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from veiculos ";
+<<<<<<< Updated upstream
+     $sql .= " join veicbaixa on ve04_veiculo = ve01_codigo ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($ve01_codigo!=null ){
+         $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+
+  function sql_query_veiculo ( $ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from veiculos                                                                                                 ";
+    $sql .= "   left join veiculoscomb          on veiculoscomb.ve06_veiculos         = veiculos.ve01_codigo               ";
+    $sql .= "   left join veicresp               on veicresp.ve02_veiculo              = veiculos.ve01_codigo               ";
+    $sql .= "   left join cgm                    on cgm.z01_numcgm                     = veicresp.ve02_numcgm               ";
+    $sql .= "   left join veiccadcomb           on veiccadcomb.ve26_codigo            = veiculoscomb.ve06_veiccadcomb      ";
+    $sql .= "   inner join veiccentral           on veiccentral.ve40_veiculos          = veiculos.ve01_codigo               ";
+    $sql .= "   inner join veiccadcentral        on veiccadcentral.ve36_sequencial     = veiccentral.ve40_veiccadcentral    ";
+    $sql .= "   inner join db_depart             on db_depart.coddepto                 = veiccadcentral.ve36_coddepto       ";
+    $sql .= "   inner join ceplocalidades        on ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades       ";
+    $sql .= "   left join veiccadtipo           on veiccadtipo.ve20_codigo            = veiculos.ve01_veiccadtipo          ";
+    $sql .= "   inner join veiccadmarca          on veiccadmarca.ve21_codigo           = veiculos.ve01_veiccadmarca         ";
+    $sql .= "   inner join veiccadmodelo         on veiccadmodelo.ve22_codigo          = veiculos.ve01_veiccadmodelo        ";
+    $sql .= "   left join veiccadcor            on veiccadcor.ve23_codigo             = veiculos.ve01_veiccadcor           ";
+    $sql .= "   left join veiccadtipocapacidade on veiccadtipocapacidade.ve24_codigo  = veiculos.ve01_veiccadtipocapacidade";
+    $sql .= "   left join veiccadcategcnh       on veiccadcategcnh.ve30_codigo        = veiculos.ve01_veiccadcategcnh      ";
+    $sql .= "   left join veiccadproced         on veiccadproced.ve25_codigo          = veiculos.ve01_veiccadproced        ";
+    $sql .= "   left  join veiccadpotencia       on veiccadpotencia.ve31_codigo        = veiculos.ve01_veiccadpotencia      ";
+    $sql .= "   left join veiccadcateg  as a    on a.ve32_codigo                      = veiculos.ve01_veiccadcateg         ";
+    $sql .= "   inner join veictipoabast         on veictipoabast.ve07_sequencial      = veiculos.ve01_veictipoabast        ";
+    $sql .= "   inner join db_config             on db_config.codigo                   = db_depart.instit                   ";
+    $sql .= "   inner join cepestados            on cepestados.cp03_sigla              = ceplocalidades.cp05_sigla          ";
+    $sql .= "   inner join tipoveiculos          on tipoveiculos.si04_veiculos         = veiculos.ve01_codigo               ";
+    $sql .= "   left  join veicpatri             on veicpatri.ve03_veiculo             = veiculos.ve01_codigo               ";
+    $sql .= "   left  join bens                  on veicpatri.ve03_bem                 = bens.t52_bem                       ";
+    $sql .= "   left  join veicbaixa             on veicbaixa.ve04_veiculo             = veiculos.ve01_codigo               ";
+    $sql .= "   left  join db_usuarios           on db_usuarios.id_usuario             = veicbaixa.ve04_usuario             ";
+
+    $sql2 = "";
+
+    if($dbwhere==""){
+      if($ve01_codigo!=null ){
+        $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+=======
+     $sql .= "      inner join ceplocalidades  on  ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades";
+     $sql .= "      left  join veiccadtipo  on  veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo";
+     $sql .= "      inner join veiccadmarca  on  veiccadmarca.ve21_codigo = veiculos.ve01_veiccadmarca";
+     $sql .= "      inner join veiccadmodelo  on  veiccadmodelo.ve22_codigo = veiculos.ve01_veiccadmodelo";
+     $sql .= "      left join veiccadcor  on  veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor";
+     $sql .= "      left join veiccadtipocapacidade  on  veiccadtipocapacidade.ve24_codigo = veiculos.ve01_veiccadtipocapacidade";
+     $sql .= "      left join veiccadcategcnh  on  veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
+     $sql .= "      left join veiccadproced  on  veiccadproced.ve25_codigo = veiculos.ve01_veiccadproced";
+     $sql .= "      left join veiccadpotencia  on  veiccadpotencia.ve31_codigo = veiculos.ve01_veiccadpotencia";
+     $sql .= "      left join veiccadcateg  as a on   a.ve32_codigo = veiculos.ve01_veiccadcateg";
+     $sql .= "      inner join veictipoabast  on  veictipoabast.ve07_sequencial = veiculos.ve01_veictipoabast";
+     $sql .= "      inner join cepestados  on  cepestados.cp03_sigla = ceplocalidades.cp05_sigla";
+     $sql .= "      inner  join veiccentral  on  veiccentral.ve40_veiculos=veiculos.ve01_codigo ";
+     $sql .= "      inner  join veiccadcentral  on  veiccadcentral.ve36_sequencial=veiccentral.ve40_veiccadcentral ";
+
+     $sql2 = "";
+     if($dbwhere==""){
+       if($ve01_codigo!=null ){
+         $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+   function sql_query_file ( $ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from veiculos ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($ve01_codigo!=null ){
+         $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+  function sql_query_placa ($ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from veiculos ";
+     $sql .= " join veicbaixa on ve04_veiculo = ve01_codigo ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($ve01_codigo!=null ){
+         $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+
+  function sql_query_veiculo ( $ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+>>>>>>> Stashed changes
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+<<<<<<< Updated upstream
+    }
+    return $sql;
+  }
+=======
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from veiculos                                                                                                 ";
+    $sql .= "   left join veiculoscomb          on veiculoscomb.ve06_veiculos         = veiculos.ve01_codigo               ";
+    $sql .= "   left join veicresp               on veicresp.ve02_veiculo              = veiculos.ve01_codigo               ";
+    $sql .= "   left join cgm                    on cgm.z01_numcgm                     = veicresp.ve02_numcgm               ";
+    $sql .= "   left join veiccadcomb           on veiccadcomb.ve26_codigo            = veiculoscomb.ve06_veiccadcomb      ";
+    $sql .= "   inner join veiccentral           on veiccentral.ve40_veiculos          = veiculos.ve01_codigo               ";
+    $sql .= "   inner join veiccadcentral        on veiccadcentral.ve36_sequencial     = veiccentral.ve40_veiccadcentral    ";
+    $sql .= "   inner join db_depart             on db_depart.coddepto                 = veiccadcentral.ve36_coddepto       ";
+    $sql .= "   inner join ceplocalidades        on ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades       ";
+    $sql .= "   left join veiccadtipo           on veiccadtipo.ve20_codigo            = veiculos.ve01_veiccadtipo          ";
+    $sql .= "   inner join veiccadmarca          on veiccadmarca.ve21_codigo           = veiculos.ve01_veiccadmarca         ";
+    $sql .= "   inner join veiccadmodelo         on veiccadmodelo.ve22_codigo          = veiculos.ve01_veiccadmodelo        ";
+    $sql .= "   left join veiccadcor            on veiccadcor.ve23_codigo             = veiculos.ve01_veiccadcor           ";
+    $sql .= "   left join veiccadtipocapacidade on veiccadtipocapacidade.ve24_codigo  = veiculos.ve01_veiccadtipocapacidade";
+    $sql .= "   left join veiccadcategcnh       on veiccadcategcnh.ve30_codigo        = veiculos.ve01_veiccadcategcnh      ";
+    $sql .= "   left join veiccadproced         on veiccadproced.ve25_codigo          = veiculos.ve01_veiccadproced        ";
+    $sql .= "   left  join veiccadpotencia       on veiccadpotencia.ve31_codigo        = veiculos.ve01_veiccadpotencia      ";
+    $sql .= "   left join veiccadcateg  as a    on a.ve32_codigo                      = veiculos.ve01_veiccadcateg         ";
+    $sql .= "   inner join veictipoabast         on veictipoabast.ve07_sequencial      = veiculos.ve01_veictipoabast        ";
+    $sql .= "   inner join db_config             on db_config.codigo                   = db_depart.instit                   ";
+    $sql .= "   inner join cepestados            on cepestados.cp03_sigla              = ceplocalidades.cp05_sigla          ";
+    $sql .= "   inner join tipoveiculos          on tipoveiculos.si04_veiculos         = veiculos.ve01_codigo               ";
+    $sql .= "   left  join veicpatri             on veicpatri.ve03_veiculo             = veiculos.ve01_codigo               ";
+    $sql .= "   left  join bens                  on veicpatri.ve03_bem                 = bens.t52_bem                       ";
+    $sql .= "   left  join veicbaixa             on veicbaixa.ve04_veiculo             = veiculos.ve01_codigo               ";
+    $sql .= "   left  join db_usuarios           on db_usuarios.id_usuario             = veicbaixa.ve04_usuario             ";
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
     function sql_query_veiculo($ve01_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
@@ -1697,6 +2683,7 @@ class cl_veiculos
         $sql .= "   left  join veicbaixa             on veicbaixa.ve04_veiculo             = veiculos.ve01_codigo               ";
         $sql .= "   left  join db_usuarios           on db_usuarios.id_usuario             = veicbaixa.ve04_usuario             ";
 
+<<<<<<< Updated upstream
         $sql2 = "";
 
         if ($dbwhere == "") {
@@ -1717,6 +2704,29 @@ class cl_veiculos
             }
         }
         return $sql;
+=======
+<<<<<<< Updated upstream
+  function sql_query_ultimamedida ( $ve01_codigo=null, $dDataBase=null, $sHoraBase=null, $sWhereA=null, $sWhereM=null, $sWhereD=null, $sWhereR=null) {
+
+
+=======
+    if($dbwhere==""){
+      if($ve01_codigo!=null ){
+        $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+>>>>>>> Stashed changes
     }
 
 
@@ -1724,7 +2734,12 @@ class cl_veiculos
     {
 
 
+<<<<<<< Updated upstream
         /*
+=======
+>>>>>>> Stashed changes
+  	/*
+>>>>>>> Stashed changes
   	 * caso nao seja setado a data e hora pelo usuario, o sistema buscava a data e hora da seção,
   	 * o que ocorria problema, pois as vezes o veiculo estava devolvido ex:
   	 * 18/04/2013 10:00 , e o usuario entraria para proxima devolução
