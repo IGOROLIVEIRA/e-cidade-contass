@@ -208,7 +208,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
         /**
          *########################### registro 20 #####################
          */
-        $sSql = "select '20' as tipoRegistro,
+        $sSql = "select distinct '20' as tipoRegistro,
 				infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
 	(SELECT CASE
     WHEN o41_subunidade != 0
