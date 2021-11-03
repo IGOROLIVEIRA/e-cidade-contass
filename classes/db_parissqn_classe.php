@@ -44,7 +44,7 @@ class cl_parissqn {
    // cria publiciaveis do arquivo
    public $q60_receit = 0;
    public $q60_tipo = 0;
-    public $q60_tipo_notaavulsa = 0;
+   public $q60_tipo_notaavulsa = 0;
    public $q60_aliq = 0;
    public $q60_aliq_reduzida = 0;
    public $q60_codvencpublic = 0;
@@ -974,7 +974,7 @@ class cl_parissqn {
      return $result;
    }
    // funcao do sql
-   function sql_query ( $oid = null,$campos="parissqn.oid,*",$ordem=null,$dbwhere=""){
+   function sql_query ( $oid = null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -988,18 +988,19 @@ class cl_parissqn {
      }
      $sql .= " from parissqn ";
      $sql .= "      inner join cadvencdesc  on  cadvencdesc.q92_codigo = parissqn.q60_codvencvar";
+     $sql .= "      left join cadvencdesc as cadvencdescinc on cadvencdescinc.q92_codigo = parissqn.q60_codvenc_incentivo";
      $sql .= "      inner join tabrec  on  tabrec.k02_codigo = parissqn.q60_receit";
      $sql .= "      inner join arretipo  on  arretipo.k00_tipo = parissqn.q60_tipo";
-     $sql .= "       left  join db_documentotemplate  on  db_documentotemplate.db82_sequencial = parissqn.q60_templatealvara";
-     $sql .= "       left join isstipoalvara  on  isstipoalvara.q98_sequencial = parissqn.q60_isstipoalvaraper";
-     $sql .= "       left join isstipoalvara t on  t.q98_sequencial = parissqn.q60_isstipoalvaraper";
+     $sql .= "      left  join db_documentotemplate  on  db_documentotemplate.db82_sequencial = parissqn.q60_templatealvara";
+     $sql .= "      left join isstipoalvara  on  isstipoalvara.q98_sequencial = parissqn.q60_isstipoalvaraper";
+     $sql .= "      left join isstipoalvara t on  t.q98_sequencial = parissqn.q60_isstipoalvaraper";
      $sql .= "      inner join histcalc  on  histcalc.k01_codigo = cadvencdesc.q92_hist";
      $sql .= "      inner join arretipo  as a on   a.k00_tipo = cadvencdesc.q92_tipo";
      $sql .= "      inner join tabrecjm  on  tabrecjm.k02_codjm = tabrec.k02_codjm";
      $sql .= "      inner join db_config  on  db_config.codigo = arretipo.k00_instit";
      $sql .= "      inner join cadtipo  on  cadtipo.k03_tipo = arretipo.k03_tipo";
-     $sql .= "       left join db_config  as b on   b.codigo = db_documentotemplate.db82_instit";
-     $sql .= "       left join db_documentotemplatetipo  on  db_documentotemplatetipo.db80_sequencial = db_documentotemplate.db82_templatetipo";
+     $sql .= "      left join db_config  as b on   b.codigo = db_documentotemplate.db82_instit";
+     $sql .= "      left join db_documentotemplatetipo  on  db_documentotemplatetipo.db80_sequencial = db_documentotemplate.db82_templatetipo";
      $sql2 = "";
      if($dbwhere==""){
        if( $oid != "" && $oid != null){

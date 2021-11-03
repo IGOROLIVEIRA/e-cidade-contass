@@ -342,7 +342,7 @@ if ($grupo == 'tipo'){
 
    $pdf->SetXY(10, $valY+30);
 
-   $col01=array(010,255,050);
+   $col01=array(10,255,050);
    $col02=array(220,000,100);
    $col03=array(030,111,150);
    $col04=array(200,225,000);
@@ -350,16 +350,16 @@ if ($grupo == 'tipo'){
    $col06=array(180,205,200);
    $col07=array(070,005,150);
    $col08=array(255,100,100);
-   $col09=array(090,045,050);
+   $col09=array(90,45,50);
    $col10=array(000,165,010);
-   $col11=array(110,085,060);
+   $col11=array(110,85,60);
    $col12=array(120,145,120);
    $col13=array(130,125,180);
    $col14=array(255,125,240);
    $col15=array(205,165,200);
    $col16=array(160,105,150);
    $col17=array(165,205,100);
-   $col18=array(180,085,050);
+   $col18=array(180,85,50);
    $col19=array(125,255,010);
    $col20=array(200,065,060);
 

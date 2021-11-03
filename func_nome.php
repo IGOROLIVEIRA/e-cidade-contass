@@ -93,7 +93,7 @@ if (isset($script) && $script != "" && !is_bool($script)) {
 
 if (isset($testanome) && $testanome=='true' && !isset($pesquisa_chave)) {
 
-  $funmat			= explode("\|",$funcao_js);
+  $funmat			= explode("|",$funcao_js);
   $func_antes = $funmat[0];
   $valores		= "";
   $camp				= "";
@@ -101,18 +101,21 @@ if (isset($testanome) && $testanome=='true' && !isset($pesquisa_chave)) {
 
 	for($i=1;$i<count($funmat);$i++){
 
-		if($funmat[$i] == "0")
-       $funmat[$i] = "z01_numcgm";
-    if($funmat[$i] == "1")
-       $funmat[$i] = "z01_nome";
+	if($funmat[$i] == "0") {
+      $funmat[$i] = "z01_numcgm";
+    }
 
-    $valores .= "|".$funmat[$i];
-    $camp		 .= $vir.$funmat[$i];
-    $vir			= ",";
+    if($funmat[$i] == "1") {
+      $funmat[$i] = "z01_nome";
+    }
+
+    $valores .= "|" . $funmat[$i];
+    $camp  .= $vir . $funmat[$i];
+    $vir .= ",";
   }
 
 
-	$funmat[0] = "js_testanome";
+  $funmat[0] = "js_testanome";
   $funcao_js = $funmat[0]."|z01_numcgm|z01_nome|z01_ender|z01_cgccpf|z01_incest|z01_uf|".$valores;
   // $funcao_js = $funmat[0]."|z01_numcgm|z01_ender|z01_cgccpf|z01_incest|z01_uf|".$valores;
 
@@ -142,7 +145,7 @@ if (isset($testanome) && $testanome=='true' && !isset($pesquisa_chave)) {
 
 	// function js_testanome(z01_numcgm,ender,cgccpf,z01_incest,z01_uf<?=$camp?>){
   function js_testanome(z01_numcgm,z01_nome,ender,cgccpf,z01_incest,z01_uf<?=$camp?>){
-
+  	
       alerta = "";
 
       if(ender == ""){
@@ -174,13 +177,13 @@ if (isset($testanome) && $testanome=='true' && !isset($pesquisa_chave)) {
 
     if(alerta != "" && <?=$testanome?> == true){
 	  alert("O Contribuinte não possui o CGM atualizado");
-	 <?
+	 <?  
       //testa permissao de menu
- 	  echo "location.href = 'prot1_cadcgm002.php?chavepesquisa='+z01_numcgm+'&testanome=$func_antes&valores=$valores&funcao_js=".$func_antes.$valores."';";
+ 	  echo "location.href = 'prot1_cadcgm002.php?chavepesquisa=' +z01_numcgm + '&testanome={$func_antes}&valores={$valores}&funcao_js={$func_antes}{$valores}';";
      ?>
-	}else{
-   <?=$func_antes."(".$camp.")"?>;
-  }
+	}else{		
+		<?= $func_antes . "(" . $camp . ")"; ?>;
+  	}
   }
 <?
 }

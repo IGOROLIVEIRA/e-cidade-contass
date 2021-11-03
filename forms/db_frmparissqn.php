@@ -36,6 +36,31 @@ $clrotulo->label("q92_descr");
 $clrotulo->label("q60_tiponumcertbaixa");
 $clrotulo->label("db82_descricao");
 $clrotulo->label("k01_descr");
+
+/**
+ * sql para retornar a descrição do campo:$q60_codvenc_incentivo (Vencimento com Incentivo:)
+ */
+if (isset($q60_codvenc_incentivo) && $q60_codvenc_incentivo != null) {
+
+	require_once("classes/db_cadvencdesc_classe.php");
+	$oDaoCadvencdesc      = new cl_cadvencdesc;
+	$sSqlDescr            = $oDaoCadvencdesc->sql_query_file($q60_codvenc_incentivo, "q92_descr as descricao_incentivo", null, null);
+  $rsDescr              = $oDaoCadvencdesc->sql_record($sSqlDescr);
+  $descricao_incentivo  = db_utils::fieldsMemory($rsDescr, 0)->descricao_incentivo;
+}
+
+/**
+ * sql para retornar a descrição do campo:$q60_tipo_notaavulsa (Tipo Déb. Nota Avulsa:)
+ */
+if (isset($q60_tipo_notaavulsa) && $q60_tipo_notaavulsa != null) {
+
+	require_once("classes/db_arretipo_classe.php");
+	$oDaoArretipo       = new cl_arretipo;
+	$sSqlArretipo       = $oDaoArretipo->sql_query_file($q60_tipo_notaavulsa, "k00_descr as desc_tipo_nota", null, null);
+  $rsSqlArretipo      = $oDaoArretipo->sql_record($sSqlArretipo);
+  $desc_tipo_nota     = db_utils::fieldsMemory($rsSqlArretipo, 0)->desc_tipo_nota;
+}
+
 ?>
 <style>
 fieldset {
@@ -152,7 +177,7 @@ fieldset fieldset table tr td:first-child {
 			<td>
 				<?
 				db_input('q60_codvenc_incentivo',10,$Iq60_codvenc_incentivo,true,'text',$db_opcao," onchange='js_pesquisaq60_codvenc_incentivo(false);'");
-				db_input('q92_descr_incentivo',40,$Iq92_descr,true,'text',3,'');
+				db_input('descricao_incentivo',40,$Iq92_descr,true,'text',3,'');
 				?>
 			</td>
 		</tr>
@@ -459,7 +484,7 @@ fieldset fieldset table tr td:first-child {
 			<td>
 				<?
 				db_input('q60_tipo_notaavulsa', 10, $Iq60_tipo_notaavulsa, true, 'text', $db_opcao, " onchange='js_pesquisaq60_tipo_notaavulsa(false);'");
-				db_input('k00_descr_notaavulsa', 40, $Ik00_descr, true, 'text', 3, '');
+				db_input('desc_tipo_nota', 40, $Ik00_descr, true, 'text', 3, '');
 				?>
 			</td>
 		</tr>
@@ -726,7 +751,7 @@ function js_pesquisaq60_tipo_notaavulsa(mostra){
 		if(document.form1.q60_tipo_notaavulsa.value != ''){
 			js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_arretipo','func_arretipo.php?pesquisa_chave='+document.form1.q60_tipo_notaavulsa.value+'&funcao_js=parent.js_mostraarretipo_notaavulsa','Pesquisa',false);
 		}else{
-			document.form1.k00_descr_notaavulsa.value = '';
+			document.form1.desc_tipo_nota.value = '';
 		}
 	}
 }
@@ -749,7 +774,7 @@ function js_mostraarretipo1(chave1,chave2){
 
 function js_mostraarretipo_notaavulsa(chave,erro){
 
-	document.form1.k00_descr_notaavulsa.value = chave;
+	document.form1.desc_tipo_nota.value = chave;
 	if(erro==true){
 		document.form1.q60_tipo_notaavulsa.focus();
 		document.form1.q60_tipo_notaavulsa.value = '';
@@ -759,7 +784,7 @@ function js_mostraarretipo_notaavulsa(chave,erro){
 function js_mostraarretipo_notaavulsa1(chave1,chave2){
 
 	document.form1.q60_tipo_notaavulsa.value  = chave1;
-	document.form1.k00_descr_notaavulsa.value = chave2;
+	document.form1.desc_tipo_nota.value = chave2;
 	db_iframe_arretipo.hide();
 }
 
@@ -820,7 +845,7 @@ function js_pesquisaq60_codvenc_incentivo(mostra){
      if(document.form1.q60_codvenc_incentivo.value != ''){
         js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadvencdesc','func_cadvencdesc.php?pesquisa_chave='+document.form1.q60_codvenc_incentivo.value+'&funcao_js=parent.js_mostracadvencdesc_incentivo','Pesquisa',false);
      }else{
-       document.form1.q92_descr_incentivo.value = '';
+       document.form1.descricao_incentivo.value = '';
      }
   }
 }
@@ -836,7 +861,7 @@ function js_mostracadvencdesc(chave,erro){
 
 function js_mostracadvencdesc_incentivo(chave,erro){
 
-  document.form1.q92_descr_incentivo.value = chave;
+  document.form1.descricao_incentivo.value = chave;
   if(erro==true){
     document.form1.q60_codvenc_incentivo.focus();
     document.form1.q60_codvenc_incentivo.value = '';
@@ -853,7 +878,7 @@ function js_mostracadvencdesc1(chave1,chave2){
 function js_mostracadvencdesc_incentivo1(chave1,chave2){
 
   document.form1.q60_codvenc_incentivo.value = chave1;
-  document.form1.q92_descr_incentivo.value      = chave2;
+  document.form1.descricao_incentivo.value   = chave2;
   db_iframe_cadvencdesc.hide();
 }
 
