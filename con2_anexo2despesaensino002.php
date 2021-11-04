@@ -37,6 +37,8 @@ include("libs/db_sql.php");
 require_once("classes/db_cgm_classe.php");
 require_once("classes/db_slip_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
+require_once("classes/db_empresto_classe.php");
+$clempresto = new cl_empresto;
 $clrotulo = new rotulocampo;
 
 db_postmemory($HTTP_POST_VARS);
@@ -188,6 +190,41 @@ $fSubTotal = 0;
 $aSubFuncoes = array(122,272,271,361,365,366,367,843);
 $sFuncao     = "12";
 $aFonte      = array("'101'");
+$aFonteFundeb      = array("'118','119'");
+
+$sele_work = ' e60_instit in (' . $instits . ') ';
+$sql_order = " order by o58_orgao, e60_anousu, e60_codemp::integer";
+$sql_where_externo .= "  ";
+$sql_where_externo .= ' and e60_anousu < ' . db_getsession("DB_anousu");
+$sql_where_externo .= " and o15_codtri in ('')";
+$sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, '', $sql_where_externo, "$sql_order ");
+$res = $clempresto->sql_record($sqlempresto);
+//db_criatabela($res);
+if ($clempresto->numrows == 0) {
+    db_redireciona("db_erros.php?fechar=true&db_erro=Sem movimentação de restos a pagar.");
+    exit;
+}
+
+  $rows = $clempresto->numrows;
+
+  $total_rp_proc = 0;
+  $total_rp_nproc = 0;
+  $total_mov_pagmento = 0;
+
+  for ($x = 0; $x < $rows; $x++) {
+    db_fieldsmemory($res, $x);
+    $total_rp_proc += ($e91_vlrliq - $e91_vlrpag);
+    $total_rp_nproc += round($vlrpagnproc,2);
+    $total_mov_pagmento += ($vlrpag+$vlrpagnproc);
+  }
+
+  if(($total_rp_proc + $total_rp_nproc) < $total_anterior || $total_mov_pagmento < $total_anterior){
+    $iRestosAPagar = db_formatar(0,"f");
+  }
+  else{
+    $iRestosAPagar = $total_mov_pagmento-$total_anterior;
+  }
+
 ?>
 <html>
 
@@ -371,19 +408,28 @@ $aFonte      = array("'101'");
                      *
                      */
 
+                    $nValorTotalPago = 0;
+                    $nValorTotalEmpenhadoENaoLiquidado = 0;
+                    $nValorTotalLiquidadoAPagar = 0;
+                    $nValorTotalGeral = 0;
                     foreach ($aSubFuncoes as $iSubFuncao) {
-                        $sDescrSubfunao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
+                        $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
 
-                        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+                        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+                        $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+                        $nValorPagoSubFuncao = $aDespesasSubFuncao[0]->pago;
+                        $nValorEmpenhadoENaoLiquidadoSubFuncao = $aDespesasSubFuncao[0]->empenhado - $aDespesasSubFuncao[0]->anulado - $aDespesasSubFuncao[0]->liquidado;
+                        $nValorLiquidadoAPagarSubFuncao = $aDespesasSubFuncao[0]->liquidado - $aDespesasSubFuncao[0]->pago;
+                        $nValorTotalSubFuncao = $nValorPagoSubFuncao + $nValorEmpenhadoENaoLiquidadoSubFuncao + $nValorLiquidadoAPagarSubFuncao;
                         if (count($aDespesasProgramas) > 0) {
 
                         ?>
                             <tr>
-                                <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($iSubFuncao, 'subfuncao')." ".$sDescrSubfunao ?></td>
-                                <td class="text-row" style="text-align: right; "></td>
-                                <td class="text-row" style="text-align: right; "></td>
-                                <td class="text-row" style="text-align: right; "></td>
-                                <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                                <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($iSubFuncao, 'subfuncao')." ".$sDescrSubfuncao ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorPagoSubFuncao, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorEmpenhadoENaoLiquidadoSubFuncao, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorLiquidadoAPagarSubFuncao, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nValorTotalSubFuncao, "f"); ?></td>
                             </tr>
                         <?php
                         /**
@@ -392,22 +438,31 @@ $aFonte      = array("'101'");
                         foreach ($aDespesasProgramas as $oDespesaPrograma) {
                             $oPrograma = new Programa($oDespesaPrograma->o58_programa, $oDespesaPrograma->o58_anousu);
                             $fSubTotal += $oDespesaPrograma->pago;
+                            $nValorPago = $oDespesaPrograma->pago;
+                            $nValorEmpenhadoENaoLiquidado = $oDespesaPrograma->empenhado - $oDespesaPrograma->anulado - $oDespesaPrograma->liquidado;
+                            $nValorLiquidadoAPagar = $oDespesaPrograma->liquidado - $oDespesaPrograma->pago;
+                            $nValorTotal = $nValorPago + $nValorEmpenhadoENaoLiquidado + $nValorLiquidadoAPagar;
+
+                            $nValorTotalPago += $nValorPago;
+                            $nValorTotalEmpenhadoENaoLiquidado += $nValorEmpenhadoENaoLiquidado;
+                            $nValorTotalLiquidadoAPagar += $nValorLiquidadoAPagar;
+                            $nValorTotalGeral += $nValorTotal;
                             ?>
                              <tr>
-                                <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($oPrograma->getCodigoPrograma(), "programa")." ".$oPrograma->getDescricao(); ?></td>
-                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($oDespesaPrograma->pago_acumulado, "f"); ?></td>
-                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($oDespesaPrograma->empenhado_acumulado - $oDespesaPrograma->anulado_acumulado - $oDespesaPrograma->liquidado_acumulado, "f"); ?></td>
-                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($oDespesaPrograma->atual_a_pagar_liquidado, "f"); ?></td>
-                                <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                                <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($oPrograma->getCodigoPrograma(), "programa")." ".$oPrograma->getDescricao(); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorPago, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorEmpenhadoENaoLiquidado, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorLiquidadoAPagar, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nValorTotal, "f"); ?></td>
                             </tr>
                         <?php }
                         ?>
-                        <tr style='height:20px;'>
-                            <td class="s3 bdleft">&nbsp;</td>
-                            <td class="s3"></td>
-                            <td class="s3"></td>
-                            <td class="s3" colspan="5"></td>
-                            <td class="s3"></td>
+                        <tr>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;">&nbsp;</td>
+                            <td class="text-row"></td>
+                            <td class="text-row"></td>
+                            <td class="text-row"></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"></td>
                         </tr>
                         <?php
                         }
@@ -416,28 +471,73 @@ $aFonte      = array("'101'");
                     <tr>
                         <td class="subtitle-2-row" colspan="5">2 - EDUCAÇÃO 12 - FUNDEB (FONTES 118 e 119)</td>
                     </tr>
-                    <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px;">361 - ENSINO FUNDAMENTAL (SUBFUNÇÕES)</td>
-                        <td class="text-row" style="text-align: right; "><?php echo db_formatar(120000000.40, "f"); ?></td>
-                        <td class="text-row" style="text-align: right; "><?php echo db_formatar(120000000.40, "f"); ?></td>
-                        <td class="text-row" style="text-align: right; "><?php echo db_formatar(120000000.40, "f"); ?></td>
-                        <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
-                    </tr>
-                    <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px;">0020 - JF + EDUCAÇÃO (PROGRAMAS)</td>
-                        <td class="text-row" style="text-align: right; "><?php echo db_formatar(120000000.40, "f"); ?></td>
-                        <td class="text-row" style="text-align: right; "><?php echo db_formatar(120000000.40, "f"); ?></td>
-                        <td class="text-row" style="text-align: right; "><?php echo db_formatar(120000000.40, "f"); ?></td>
-                        <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
-                    </tr>
+                    <?php
+                    /**
+                     * @todo loop de cada subfuncao
+                     *
+                     */
+
+                    foreach ($aSubFuncoes as $iSubFuncao) {
+                        $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
+
+                        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonteFundeb).") and o58_instit in ($instits) group by 1,2");
+                        $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonteFundeb).") and o58_instit in ($instits) group by 1,2");
+                        $nValorPagoSubFuncao = $aDespesasSubFuncao[0]->pago;
+                        $nValorEmpenhadoENaoLiquidadoSubFuncao = $aDespesasSubFuncao[0]->empenhado - $aDespesasSubFuncao[0]->anulado - $aDespesasSubFuncao[0]->liquidado;
+                        $nValorLiquidadoAPagarSubFuncao = $aDespesasSubFuncao[0]->liquidado - $aDespesasSubFuncao[0]->pago;
+                        $nValorTotalSubFuncao = $nValorPagoSubFuncao + $nValorEmpenhadoENaoLiquidadoSubFuncao + $nValorLiquidadoAPagarSubFuncao;
+                        if (count($aDespesasProgramas) > 0) {
+
+                        ?>
+                            <tr>
+                                <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($iSubFuncao, 'subfuncao')." ".$sDescrSubfuncao ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorPagoSubFuncao, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorEmpenhadoENaoLiquidadoSubFuncao, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorLiquidadoAPagarSubFuncao, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nValorTotalSubFuncao, "f"); ?></td>
+                            </tr>
+                        <?php
+                        /**
+                         * @todo para cada subfuncao lista os programas
+                         */
+                        foreach ($aDespesasProgramas as $oDespesaPrograma) {
+                            $oPrograma = new Programa($oDespesaPrograma->o58_programa, $oDespesaPrograma->o58_anousu);
+                            $nValorPago = $oDespesaPrograma->pago;
+                            $nValorEmpenhadoENaoLiquidado = $oDespesaPrograma->empenhado - $oDespesaPrograma->anulado - $oDespesaPrograma->liquidado;
+                            $nValorLiquidadoAPagar = $oDespesaPrograma->liquidado - $oDespesaPrograma->pago;
+                            $nValorTotal = $nValorPago + $nValorEmpenhadoENaoLiquidado + $nValorLiquidadoAPagar;
+                            $nValorTotalPago += $nValorPago;
+                            $nValorTotalEmpenhadoENaoLiquidado += $nValorEmpenhadoENaoLiquidado;
+                            $nValorTotalLiquidadoAPagar += $nValorLiquidadoAPagar;
+                            $nValorTotalGeral += $nValorTotal;
+                            ?>
+                             <tr>
+                                <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($oPrograma->getCodigoPrograma(), "programa")." ".$oPrograma->getDescricao(); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorPago, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorEmpenhadoENaoLiquidado, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorLiquidadoAPagar, "f"); ?></td>
+                                <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nValorTotal, "f"); ?></td>
+                            </tr>
+                        <?php }
+                        ?>
+                            <tr>
+                                <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;">&nbsp;</td>
+                                <td class="text-row"></td>
+                                <td class="text-row"></td>
+                                <td class="text-row"></td>
+                                <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"></td>
+                            </tr>
+                        <?php
+                        }
+                    }
+                    ?>
                     <tr>
                         <td class="subtitle-row" style="width: 300px;">3 - TOTAL DESPESAS (1 + 2)</td>
-                        <td class="subtitle-row" style="text-align: center;"><?php echo db_formatar(120000000.40, "f"); ?></td>
-                        <td class="subtitle-row" style="text-align: center;"><?php echo db_formatar(120000000.40, "f"); ?></td>
-                        <td class="subtitle-row" style="text-align: center;"><?php echo db_formatar(120000000.40, "f"); ?></td>
-                        <td class="subtitle-row" style="width: 100px; text-align: center;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                        <td class="subtitle-row" style="text-align: center;"><?php echo db_formatar($nValorTotalPago, "f"); ?></td>
+                        <td class="subtitle-row" style="text-align: center;"><?php echo db_formatar($nValorTotalEmpenhadoENaoLiquidado, "f"); ?></td>
+                        <td class="subtitle-row" style="text-align: center;"><?php echo db_formatar($nValorTotalLiquidadoAPagar, "f"); ?></td>
+                        <td class="subtitle-row" style="width: 100px; text-align: center;"><?php echo db_formatar($nValorTotalGeral, "f"); ?></td>
                     </tr>
-
                 </tbody>
             </table>
             <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 20px;" autosize="1">
@@ -450,63 +550,63 @@ $aFonte      = array("'101'");
                         <td class="subtitle-row" style="width: 100px; text-align: center;">VALOR</td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000;">4 - VALOR PAGO </td>
-                        <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">4 - VALOR PAGO </td>
+                        <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nValorTotalPago, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000;">5 - RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">5 - RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(abs($nResulatadoLiquidoTransfFundeb), "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000;">6 - DESPESAS CUSTEADAS COM SUPERÁVIT DO FUNDEB ATÉ O PRIMEIRO QUADRIMESTRE - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">6 - DESPESAS CUSTEADAS COM SUPERÁVIT DO FUNDEB ATÉ O PRIMEIRO QUADRIMESTRE - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000;">7 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">7 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; padding-left: 20px;">7.1 - RECURSOS DE IMPOSTOS</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">7.1 - RECURSOS DE IMPOSTOS</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; padding-left: 20px;">7.2 - RECURSOS DO FUNDEB</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">7.2 - RECURSOS DO FUNDEB</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000;">8 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">8 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; padding-left: 20px;">8.1 - RECURSOS DE IMPOSTOS (7.1 - 16.1)</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">8.1 - RECURSOS DE IMPOSTOS (7.1 - 16.1)</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; padding-left: 20px;">8.2 - RECURSOS DO FUNDEB (7.2 - 16.2)</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">8.2 - RECURSOS DO FUNDEB (7.2 - 16.2)</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000;">9 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">9 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; padding-left: 20px;">9.1 - RECURSOS DE IMPOSTOS</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.1 - RECURSOS DE IMPOSTOS</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; padding-left: 20px;">9.2 - RECURSOS DO FUNDEB</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.2 - RECURSOS DO FUNDEB</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000;">10 - CANCELAMENTO, NO EXERCÍCIO, DE RESTOS A PAGAR INSCRITOS COM DISPONIBILIDADE FINANCEIRA</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">10 - CANCELAMENTO, NO EXERCÍCIO, DE RESTOS A PAGAR INSCRITOS COM DISPONIBILIDADE FINANCEIRA</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; padding-left: 20px;">10.1 - RECURSOS DE IMPOSTOS</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.1 - RECURSOS DE IMPOSTOS</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
                     </tr>
                     <tr>
-                        <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; padding-left: 20px;">10.2 - RECURSOS DO FUNDEB</td>
+                        <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.2 - RECURSOS DO FUNDEB</td>
                         <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
                     </tr>
                     <tr>
@@ -516,7 +616,9 @@ $aFonte      = array("'101'");
 
                 </tbody>
             </table>
-            <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 20px;" autosize="1">
+        </div>
+        <div class="body-relatorio" style="padding-top: 1px;">
+            <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 30px;" autosize="1">
                 <tbody>
                     <tr>
                         <td class="title-row" >IV - RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB</td>

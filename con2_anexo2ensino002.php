@@ -84,6 +84,17 @@ for ($i = 0; $i < pg_num_rows($rsTipoinstit); $i++) {
 }
 
 
+$sWhereDespesa      = " o58_instit in({$instits})";
+db_query("drop table if exists work_dotacao");
+criaWorkDotacao($sWhereDespesa,array($anousu), $dtini, $dtfim);
+
+$aSubFuncao = array(122,272,271,361,365,366,367,843);
+$sFuncao     = "12";
+$aFonte      = array("'101','118','119'");
+
+$aDespesasAplicada = getSaldoDespesa(null, "o58_funcao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).") and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+$nValorAplicado = $aDespesasAplicada[0]->pago;
+
 $sWhereReceita      = "o70_instit in ({$instits})";
 $rsReceitas = db_receitasaldo(11, 1, 3, true, $sWhereReceita, $anousu, $dtini, $dtfim, false, ' * ', true, 0);
 $aReceitas = db_utils::getColectionByRecord($rsReceitas);
@@ -493,21 +504,23 @@ ob_start();
                     <td class="footer-total-row" colspan="8">Total das Receitas (A)</td>
                     <td class="footer-total-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia + $nTotalReceitaImpostos, "f"); ?></td>
                 </tr>
-                 <?php $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ; ?>
+                 <?php
+                    $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ;
+                    $nDiferencaAplicacao = $nValorAplicado - $valorAplicacaoDevida;
+                    $nPercentualAplicado = ($nValorAplicado/ ($nTotalReceitaTransferencia + $nTotalReceitaImpostos))*100;
+                 ?>
                 <tr style='height:20px;'>
                     <td class="footer-total-row" colspan="8">B - Aplicação Devida (art. 212 da CF/88) 25%</td>
                     <td class="footer-total-row-valor"><?php echo db_formatar($valorAplicacaoDevida, "f"); ?></td>
                 </tr>
                 <tr style='height:20px;'>
-                    <td class="footer-total-row" colspan="8">C - Valor da Aplicação em %</td>
-                    <td class="footer-total-row-valor">NÃO DEFINIDO</td>
+                    <td class="footer-total-row" colspan="8"><?php echo "C - Valor da Aplicação ".db_formatar($nPercentualAplicado, "f")."%"; ?></td>
+                    <td class="footer-total-row-valor"><?php echo db_formatar($nValorAplicado, "f"); ?></td>
                 </tr>
                 <tr style='height:20px;'>
                     <td class="footer-total-row" colspan="8">D - Diferença entre o Valor Aplicado e o Limite Constitucional ( D = C - B)</td>
-                    <td class="footer-total-row-valor"><?php echo db_formatar($valorAplicacaoDevida, "f"); ?></td>
+                    <td class="footer-total-row-valor"><?php echo db_formatar($nDiferencaAplicacao, "f"); ?></td>
                 </tr>
-
-
             </tbody>
         </table>
     </div>
