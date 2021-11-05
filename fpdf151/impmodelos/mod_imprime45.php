@@ -153,22 +153,54 @@ for ($i = 0; $i < 2; $i++){
    $this->objpdf->cell(30,$altura,'Número do imóvel: ',1,0,"L",$iPreencheFundo);
    $this->objpdf->SetFont('Arial','',8);
    $this->objpdf->cell(10,$altura,@$this->j39_numero,1,1,"L",0);
-  
-   $this->objpdf->SetFont('Arial','B',8);
-   $this->objpdf->cell(15,$altura,'Setor : ',1,0,"L",$iPreencheFundo);
-   $this->objpdf->SetFont('Arial','',8);
-   $this->objpdf->cell(14,$altura,@$this->j34_setor,1,0,"L",0);
-   $this->objpdf->SetFont('Arial','B',8);
-  
-   $this->objpdf->cell(15,$altura,'Quadra : ',1,0,"L",$iPreencheFundo);
-   $this->objpdf->SetFont('Arial','',8);
-   $this->objpdf->cell(14,$altura,@$this->j34_quadra,1,0,"L",0);
-   $this->objpdf->SetFont('Arial','B',8);
-  
-   $this->objpdf->cell(15,$altura,'Lote: ',1,0,"L",$iPreencheFundo);
-   $this->objpdf->SetFont('Arial','',8);
-   $this->objpdf->cell(15,$altura,(@$this->matriz == ""?$this->j34_lote:@$this->matriz),1,1,"L",0);
-   
+
+   if (@$this->db21_usadistritounidade == 't') {
+
+
+       $this->objpdf->SetFont('Arial','B',8);
+       $this->objpdf->cell(9,$altura,'Dist.: ',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',8);
+       $this->objpdf->cell(6,$altura,@$this->j34_distrito,1,0,"L",0);
+
+       $this->objpdf->SetFont('Arial','B',8);
+       $this->objpdf->cell(9,$altura,'Set.: ',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',8);
+       $this->objpdf->cell(10,$altura,@$this->j34_setor,1,0,"L",0);
+
+       $this->objpdf->SetFont('Arial','B',8);
+       $this->objpdf->cell(11,$altura,'Quad.: ',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',8);
+       $this->objpdf->cell(10,$altura,@$this->j34_quadra,1,0,"L",0);
+
+       $this->objpdf->SetFont('Arial','B',8);
+       $this->objpdf->cell(8,$altura,'Lot.: ',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',8);
+       $this->objpdf->cell(10,$altura,(@$this->matriz == ""?$this->j34_lote:@$this->matriz),1,0,"L",0);
+
+       $this->objpdf->SetFont('Arial','B',8);
+       $this->objpdf->cell(8,$altura,'Uni.: ',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',8);
+       $this->objpdf->cell(7,$altura,@$this->j01_unidade,1,1,"L",0);
+
+
+   } else {
+
+       $this->objpdf->SetFont('Arial','B',8);
+       $this->objpdf->cell(15,$altura,'Setor : ',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',8);
+       $this->objpdf->cell(14,$altura,@$this->j34_setor,1,0,"L",0);
+       $this->objpdf->SetFont('Arial','B',8);
+
+       $this->objpdf->cell(15,$altura,'Quadra : ',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',8);
+       $this->objpdf->cell(14,$altura,@$this->j34_quadra,1,0,"L",0);
+       $this->objpdf->SetFont('Arial','B',8);
+
+       $this->objpdf->cell(15,$altura,'Lote: ',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',8);
+       $this->objpdf->cell(15,$altura,(@$this->matriz == ""?$this->j34_lote:@$this->matriz),1,1,"L",0);
+
+   }
    
    
    $this->objpdf->SetFont('Arial','B',8);
@@ -410,9 +442,18 @@ for ($i = 0; $i < 2; $i++){
    $this->objpdf->cell(170,$altura,'',"TLR",0,"L",0); $this->objpdf->cell(27, $altura,'',"TLR",1,"L",0);
    $this->objpdf->cell(170,$altura,'',"LBR",0,"l",0); $this->objpdf->cell(27, $altura,'',"LR" ,1,"L",0);
    $this->objpdf->cell(170,$altura,'',"LBR",0,"l",0); $this->objpdf->cell(27, $altura,'',"LR" ,1,"L",0);
-   $this->objpdf->cell(170,$altura,'',"LBR",0,"l",0); $this->objpdf->cell(27, $altura,''," LR",1,"L",0);
 
-//   $this->objpdf->ln(2);
+   $this->objpdf->SetFont('Arial','B',8);
+   $this->objpdf->cell(25,$altura,'Juros',1,0,"L",$iPreencheFundo);
+   $this->objpdf->SetFont('Arial','',8);
+   $this->objpdf->cell(23,$altura,db_formatar($this->vlrjuros, 'f'),1,0,"R",0);
+   $this->objpdf->SetFont('Arial','B',8);
+   $this->objpdf->cell(23,$altura,'Multa',1,0,"L",$iPreencheFundo);
+   $this->objpdf->SetFont('Arial','',8);
+   $this->objpdf->cell(39,$altura,db_formatar($this->vlrmulta, 'f'),1,0,"R",0);
+   $this->objpdf->cell(60,$altura,'',"LBR",0,"l",0);
+
+   $this->objpdf->cell(27, $altura,''," LR",1,"L",0);
    
    $this->objpdf->SetFont('Arial','B',6);
    
@@ -509,7 +550,7 @@ for ($i = 0; $i < 2; $i++){
    $this->objpdf->SetFont('Arial','',6);
    $this->objpdf->cell(20,$altura,db_formatar($nTotalAvaliado,'f')      ,1,0,"R",0);
    $this->objpdf->cell(20,$altura,""                        ,1,0,"R",0);
-   $this->objpdf->cell(20,$altura,db_formatar($nTotalImposto,'f')       ,1,0,"R",0);    
+   $this->objpdf->cell(20,$altura,db_formatar($this->tx_banc + $this->vlrtotal,'f')       ,1,0,"R",0);
    $this->objpdf->cell(27, $altura,''                   ,"BLR",1,"L",0);
    
    
@@ -539,7 +580,7 @@ for ($i = 0; $i < 2; $i++){
      if ( $this->cgc == "28531762000133") { // araruama
      	 $this->objpdf->cell(60,$altura,'Taxa de expediente: R$ '.db_formatar($this->tx_banc,'f','',1).' - Valor a Pagar : R$ '.db_formatar($this->it14_valorpaga+$this->tx_banc,'f','',1),0,1,"L",0);
      } else {
-       $this->objpdf->cell(60,$altura,'Valor a Pagar : R$ '.db_formatar(($this->it14_valorpaga + $this->tx_banc),'f'),0,1,"L",0);
+       $this->objpdf->cell(60,$altura,'Valor a Pagar : R$ '.db_formatar(($this->tx_banc + $this->vlrtotal),'f'),0,1,"L",0);
      }
    }
    
