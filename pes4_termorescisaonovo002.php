@@ -486,21 +486,29 @@ for ($iCont = 0; $iCont < $oDaoRhpesrescisao->numrows; $iCont++) {
     $oPdf->cell(30, $alt, db_formatar(0, 'f'), 1, 0, "L", 0);
     addText($oPdf, "Férias Proporc                 /12 avos");
 
-    if (isset($aValoresRescisao['6006']->provento))
-        $oPdf->cell(30, $alt, db_formatar($aValoresRescisao['6006']->provento, 'f'), 1, 1, "L", 0);
-    else
-        $oPdf->cell(30, $alt, db_formatar($aValoresRescisao['1020']->provento, 'f'), 1, 1, "L", 0);
-
+    if (isset($aValoresRescisao['6006']['P']->provento)) {
+        if ($aValoresRescisao['6006']['P']->provento)
+            $oPdf->cell(30, $alt, db_formatar($aValoresRescisao['6006']['P']->provento, 'f'), 1, 1, "L", 0);
+    } elseif (isset($aValoresRescisao['1020']['P']->provento)) {
+        if ($aValoresRescisao['1020']['P']->provento)
+            $oPdf->cell(30, $alt, db_formatar($aValoresRescisao['1020']['P']->provento, 'f'), 1, 1, "L", 0);
+    } else {
+        $oPdf->cell(30, $alt, db_formatar(0, 'f'), 1, 1, "L", 0);
+    }
     unset($aValoresRescisao['5001']);
-    unset($aValoresRescisao['1020']);
     unset($aValoresRescisao['6002']);
     unset($aValoresRescisao['6006']);
 
     addText($oPdf, "Férias Venc. Per. Aquisitivo          a");
-    if (isset($aValoresRescisao['6007']->provento))
-        $oPdf->cell(30, $alt, db_formatar($aValoresRescisao['6007']->provento, 'f'), 1, 0, "L", 0);
-    else
-        $oPdf->cell(30, $alt, db_formatar($aValoresRescisao['1020']->provento, 'f'), 1, 0, "L", 0);
+    if (isset($aValoresRescisao['6007']['V']->provento)) {
+        if ($aValoresRescisao['6007']['V']->provento)
+            $oPdf->cell(30, $alt, db_formatar($aValoresRescisao['6007']['V']->provento, 'f'), 1, 0, "L", 0);
+    } elseif (isset($aValoresRescisao['1020']['V']->provento)) {
+        if ($aValoresRescisao['1020']['V']->provento)
+            $oPdf->cell(30, $alt, db_formatar($aValoresRescisao['1020']['V']->provento, 'f'), 1, 0, "L", 0);
+    } else {
+        $oPdf->cell(30, $alt, db_formatar(0, 'f'), 1, 0, "L", 0);
+    }
     addText($oPdf, "Terço Constituc. de              Férias");
     $oPdf->cell(30, $alt, db_formatar($aValoresRescisao['R931']->provento, 'f'), 1, 0, "L", 0);
     addText($oPdf, "Aviso Prévio                 Indenizado");
@@ -768,13 +776,37 @@ function getValoresRescisao($matricula, $ano, $mes, $aFeriasAvisoPrevio)
             $aDados[$oBaseRubrica->rubrica]->desconto = $oBaseRubrica->desconto;
         } else
         if (!isset($aDados[$oResult->e990_sequencial])) {
-            $oDados = $oResult;
-            $oDados->provento = $oBaseRubrica->provento;
-            $oDados->desconto = $oBaseRubrica->desconto;
-            $aDados[$oResult->e990_sequencial] = $oDados;
+            if ((intval($oBaseRubrica->rubrica) >= 0001 && intval($oBaseRubrica->rubrica) <= 3999) && (intval($oBaseRubrica->rubricaesocial) == '1020' or intval($oBaseRubrica->rubricaesocial) == '6006' or intval($oBaseRubrica->rubricaesocial) == '6007')) {
+                if ($oBaseRubrica->tipo == 'P') {
+                    $oDados = $oResult;
+                    $oDados->provento = $oBaseRubrica->provento;
+                    $oDados->desconto = $oBaseRubrica->desconto;
+                    $aDados[$oResult->e990_sequencial]['P'] = $oDados;
+                } else if ($oBaseRubrica->tipo == 'V') {
+                    $oDados = $oResult;
+                    $oDados->provento = $oBaseRubrica->provento;
+                    $oDados->desconto = $oBaseRubrica->desconto;
+                    $aDados[$oResult->e990_sequencial]['V'] = $oDados;
+                }
+            } else {
+                $oDados = $oResult;
+                $oDados->provento = $oBaseRubrica->provento;
+                $oDados->desconto = $oBaseRubrica->desconto;
+                $aDados[$oResult->e990_sequencial] = $oDados;
+            }
         } else {
-            $aDados[$oResult->e990_sequencial]->provento += $oBaseRubrica->provento;
-            $aDados[$oResult->e990_sequencial]->desconto += $oBaseRubrica->desconto;
+            if ((intval($oBaseRubrica->rubrica) >= 0001 && intval($oBaseRubrica->rubrica) <= 3999) && (intval($oBaseRubrica->rubricaesocial) == '1020' or intval($oBaseRubrica->rubricaesocial) == '6006' or intval($oBaseRubrica->rubricaesocial) == '6007')) {
+                if ($oBaseRubrica->tipo == 'P') {
+                    $aDados[$oResult->e990_sequencial]['P']->provento += $oBaseRubrica->provento;
+                    $aDados[$oResult->e990_sequencial]['P']->desconto += $oBaseRubrica->desconto;
+                } else if ($oBaseRubrica->tipo == 'V') {
+                    $aDados[$oResult->e990_sequencial]['V']->provento += $oBaseRubrica->provento;
+                    $aDados[$oResult->e990_sequencial]['V']->desconto += $oBaseRubrica->desconto;
+                }
+            } else {
+                $aDados[$oResult->e990_sequencial]->provento += $oBaseRubrica->provento;
+                $aDados[$oResult->e990_sequencial]->desconto += $oBaseRubrica->desconto;
+            }
         }
         if (in_array($oBaseRubrica->rubrica, $aFeriasAvisoPrevio)) {
             $aDados['feriasAvisoPrevio'] += $oBaseRubrica->provento;
