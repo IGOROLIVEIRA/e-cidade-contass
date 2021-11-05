@@ -588,7 +588,20 @@ if ($db_opcao == 1) {
 			      db_select('db21_usasisagua',$x,true,$db_opcao,"");
 			      ?>
 			    </td>
-			  </tr>
+			</tr>
+
+            <tr>
+                <td >
+                   <strong>Usa Distrito e Unidade: </strong>
+                </td>
+
+                <td>
+                  <?
+                  $x = array("f"=>"NAO","t"=>"SIM");
+                  db_select('db21_usadistritounidade',$x,true,$db_opcao,"");
+                  ?>
+                </td>
+            </tr>
 		  
 		  <tr>  
 		    <td nowrap title="<?=@$Tident?>">

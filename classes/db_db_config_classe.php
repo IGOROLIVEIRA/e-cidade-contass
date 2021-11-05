@@ -82,6 +82,7 @@ class cl_db_config {
    var $db21_codcli = 0;
    var $nomeinstabrev = null;
    var $db21_usasisagua = 'f';
+   var $db21_usadistritounidade = 'f';
    var $db21_codigomunicipoestado = 0;
    var $db21_datalimite_dia = null;
    var $db21_datalimite_mes = null;
@@ -138,6 +139,7 @@ class cl_db_config {
                  db21_codcli = int4 = Código do cliente
                  nomeinstabrev = varchar(20) = Nome da instituição para relatório
                  db21_usasisagua = bool = Usa sistema de água
+                 db21_usadistritounidade = bool = Usa Distrito e Unidade
                  db21_codigomunicipoestado = int4 = Código do município no estado
                  db21_datalimite = date = Data limite que instituição é valida
                  db21_criacao = date = Data de criação da instituição
@@ -211,6 +213,7 @@ class cl_db_config {
        $this->db21_codcli = ($this->db21_codcli == ""?@$GLOBALS["HTTP_POST_VARS"]["db21_codcli"]:$this->db21_codcli);
        $this->nomeinstabrev = ($this->nomeinstabrev == ""?@$GLOBALS["HTTP_POST_VARS"]["nomeinstabrev"]:$this->nomeinstabrev);
        $this->db21_usasisagua = ($this->db21_usasisagua == "f"?@$GLOBALS["HTTP_POST_VARS"]["db21_usasisagua"]:$this->db21_usasisagua);
+       $this->db21_usadistritounidade = ($this->db21_usadistritounidade == "f"?@$GLOBALS["HTTP_POST_VARS"]["db21_usadistritounidade"]:$this->db21_usadistritounidade);
        $this->db21_codigomunicipoestado = ($this->db21_codigomunicipoestado == ""?@$GLOBALS["HTTP_POST_VARS"]["db21_codigomunicipoestado"]:$this->db21_codigomunicipoestado);
        if($this->db21_datalimite == ""){
          $this->db21_datalimite_dia = ($this->db21_datalimite_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["db21_datalimite_dia"]:$this->db21_datalimite_dia);
@@ -518,6 +521,15 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
+     if($this->db21_usadistritounidade == null ){
+       $this->erro_sql = " Campo Usa Distrito e Unidade nao Informado.";
+       $this->erro_campo = "db21_usadistritounidade";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($this->db21_codigomunicipoestado == null ){
        $this->erro_sql = " Campo Código do município no estado nao Informado.";
        $this->erro_campo = "db21_codigomunicipoestado";
@@ -627,6 +639,7 @@ class cl_db_config {
                                       ,db21_codcli
                                       ,nomeinstabrev
                                       ,db21_usasisagua
+                                      ,db21_usadistritounidade
                                       ,db21_codigomunicipoestado
                                       ,db21_datalimite
                                       ,db21_criacao
@@ -676,6 +689,7 @@ class cl_db_config {
                                ,$this->db21_codcli
                                ,'$this->nomeinstabrev'
                                ,'$this->db21_usasisagua'
+                               ,'$this->db21_usadistritounidade'
                                ,$this->db21_codigomunicipoestado
                                ,".($this->db21_datalimite == "null" || $this->db21_datalimite == ""?"null":"'".$this->db21_datalimite."'")."
                                ,".($this->db21_criacao == "null" || $this->db21_criacao == ""?"null":"'".$this->db21_criacao."'")."
@@ -754,6 +768,7 @@ class cl_db_config {
        $resac = db_query("insert into db_acount values($acount,83,9500,'','".AddSlashes(pg_result($resaco,0,'db21_codcli'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,83,10178,'','".AddSlashes(pg_result($resaco,0,'nomeinstabrev'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,83,10967,'','".AddSlashes(pg_result($resaco,0,'db21_usasisagua'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,83,10967,'','".AddSlashes(pg_result($resaco,0,'db21_usadistritounidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,83,15412,'','".AddSlashes(pg_result($resaco,0,'db21_codigomunicipoestado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,83,15416,'','".AddSlashes(pg_result($resaco,0,'db21_datalimite'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,83,15414,'','".AddSlashes(pg_result($resaco,0,'db21_criacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -1212,6 +1227,19 @@ class cl_db_config {
        if(trim($this->db21_usasisagua) == null ){
          $this->erro_sql = " Campo Usa sistema de água nao Informado.";
          $this->erro_campo = "db21_usasisagua";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->db21_usadistritounidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_usadistritounidade"])){
+       $sql  .= $virgula." db21_usadistritounidade = '$this->db21_usadistritounidade' ";
+       $virgula = ",";
+       if(trim($this->db21_usadistritounidade) == null ){
+         $this->erro_sql = " Campo Usa Distrito e Unidade nao Informado.";
+         $this->erro_campo = "db21_usadistritounidade";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
