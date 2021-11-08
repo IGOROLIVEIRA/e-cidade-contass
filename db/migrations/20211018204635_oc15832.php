@@ -6,18 +6,19 @@ class Oc15832 extends AbstractMigration
 {
     public function up()
     {
-        $estrut = array('conta1'=> [
-                                'estrut' => '417390000000000',
-                                'descr' => 'OUTRAS TRANSFERENCIAS DOS MUNICIPIOS'
-                            ],
-                        'conta2'=> [
-                                'estrut' => '417395000000000',
-                                'descr' => 'TRANSFERENCIAS DE MUNICIPIOS A CONSORCIOS PUBLICOS'
-                            ],
-                        'conta3'=> [
-                                'estrut' => '417395001000000',
-                                'descr' => 'TRANSFERENCIAS DE MUNICIPIOS A CONSORCIOS PUBLICOS'
-                            ]
+        $estrut = array(
+            array(
+                'estrut' => '417390000000000',
+                'descr' => 'OUTRAS TRANSFERENCIAS DOS MUNICIPIOS'
+            ),
+            array(
+                'estrut' => '417395000000000',
+                'descr' => 'TRANSFERENCIAS DE MUNICIPIOS A CONSORCIOS PUBLICOS'
+            ),
+            array(
+                'estrut' => '417395001000000',
+                'descr' => 'TRANSFERENCIAS DE MUNICIPIOS A CONSORCIOS PUBLICOS'
+            )
         );
 
         foreach ($estrut as $conta => $dados){
