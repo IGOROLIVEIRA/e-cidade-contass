@@ -117,7 +117,7 @@ $aTotalContribuicaoFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulad
 $nTotalContribuicaoFundeb = count($aTotalContribuicaoFundeb) > 0 ? $aTotalContribuicaoFundeb[0]->saldo_arrecadado_acumulado : 0;
 
 $nTotalReceitasRecebidasFundeb = abs($nDevolucaoRecursoFundeb) + abs($nTransferenciaRecebidaFundeb);
-$nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb+abs($nTotalContribuicaoFundeb);
+$nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb-abs($nTotalContribuicaoFundeb);
 
 
 $fSubTotal = 0;
@@ -147,7 +147,7 @@ $nTotalSemDisponbilidade = 0;
 
 function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
     $where = " c61_instit in ({$aInstits})" ;
-    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$nFonte') ) ";
+    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
     $nTotalAnterior = 0;
     for($x = 0; $x < pg_numrows($result); $x++){
@@ -175,7 +175,7 @@ function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
         $clEmpResto = new cl_empresto();
         $sSqlOrder = "";
         $sCampos = " o15_codtri, sum(vlrpag) as pago ";
-        $sSqlWhere = " o15_codtri in ('$sFonte') group by 1 ";
+        $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
         $aEmpResto = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
         $nValorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
 
@@ -416,7 +416,7 @@ ob_start();
                         </tr>
                         <tr>
                             <td class="subtitle-row" style="width: 300px;">FUNÇÃO / SUBFUNÇÃO/ PROGRAMA</td>
-                            <td class="subtitle-row" style="text-align: center;">VALOR PAGO</td>
+                            <td class="subtitle-row" style="width: 100px; text-align: center;">VALOR PAGO</td>
                             <td class="subtitle-row" style="text-align: center;">VALOR EMPENHADO E NÃO LIQUIDADO</td>
                             <td class="subtitle-row" style="text-align: center;">VALOR LIQUIDADO A PAGAR</td>
                             <td class="subtitle-row" style="width: 100px; text-align: center;">TOTAL</td>
@@ -550,10 +550,10 @@ ob_start();
                         ?>
                         <tr>
                             <td class="subtitle-row" style="width: 300px;">3 - TOTAL DESPESAS (1 + 2)</td>
-                            <td class="subtitle-row" style="text-align: center;"><?php echo db_formatar($nValorTotalPago, "f"); ?></td>
-                            <td class="subtitle-row" style="text-align: center;"><?php echo db_formatar($nValorTotalEmpenhadoENaoLiquidado, "f"); ?></td>
-                            <td class="subtitle-row" style="text-align: center;"><?php echo db_formatar($nValorTotalLiquidadoAPagar, "f"); ?></td>
-                            <td class="subtitle-row" style="width: 100px; text-align: center;"><?php echo db_formatar($nValorTotalGeral, "f"); ?></td>
+                            <td class="subtitle-row" style="text-align: right;"><?php echo db_formatar($nValorTotalPago, "f"); ?></td>
+                            <td class="subtitle-row" style="text-align: right;"><?php echo db_formatar($nValorTotalEmpenhadoENaoLiquidado, "f"); ?></td>
+                            <td class="subtitle-row" style="text-align: right;"><?php echo db_formatar($nValorTotalLiquidadoAPagar, "f"); ?></td>
+                            <td class="subtitle-row" style="width: 100px; text-align: right;"><?php echo db_formatar($nValorTotalGeral, "f"); ?></td>
                         </tr>
                     </tbody>
                 </table>
@@ -624,7 +624,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">9 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoTotal = getRestosSemDisponilibidade(array(101,118,119), $dtini, $dtfim, $instits);
+                                    $nValorRecursoTotal = getRestosSemDisponilibidade(array("'101'","'118','119'"), $dtini, $dtfim, $instits);
                                     $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorRecursoTotal;
                                     echo db_formatar($nValorRecursoTotal, "f");
                                 ?>
@@ -634,7 +634,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.1 - RECURSOS DE IMPOSTOS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoImposto = getRestosSemDisponilibidade(array(101), $dtini, $dtfim, $instits);
+                                    $nValorRecursoImposto = getRestosSemDisponilibidade(array("'101'"), $dtini, $dtfim, $instits);
                                     echo db_formatar($nValorRecursoImposto, "f");
                                 ?>
                             </td>
@@ -643,7 +643,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.2 - RECURSOS DO FUNDEB</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoFundeb = getRestosSemDisponilibidade(array(118, 119), $dtini, $dtfim, $instits);
+                                    $nValorRecursoFundeb = getRestosSemDisponilibidade(array("'118', '119'"), $dtini, $dtfim, $instits);
                                     echo db_formatar($nValorRecursoFundeb, "f");
                                 ?>
                             </td>
@@ -678,7 +678,7 @@ ob_start();
                         </tr>
                         <tr>
                             <td class="subtitle-row" style="width: 300px;">11 - TOTAL APLICADO ((4 + 6 + 7 +9) - ( 5 + 8 + 10))</td>
-                            <td class="subtitle-row" style="width: 100px; text-align: center;">
+                            <td class="subtitle-row" style="width: 100px; text-align: right;">
                                 <?php
 
                                     echo db_formatar($nTotalAplicadoEntrada - $nTotalAplicadoSaida, "f");
@@ -766,7 +766,7 @@ ob_start();
                         <tr>
                             <td class="subtitle-row" style="width: 300px;">19 - TOTAL DO RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB ( 17 - 18 )</td>
                             <td class="subtitle-row" style="width: 100px; text-align: right;">
-                            <?php echo db_formatar(abs($nContribuicaoFundeb+$nTotalReceitasRecebidasFundeb), "f"); ?></td>
+                            <?php echo db_formatar(abs($nContribuicaoFundeb - $nTotalReceitasRecebidasFundeb), "f"); ?></td>
                         </tr>
                     </tbody>
                 </table>

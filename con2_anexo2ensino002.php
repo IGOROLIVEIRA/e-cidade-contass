@@ -35,7 +35,9 @@ include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
 require_once("classes/db_cgm_classe.php");
+require_once("classes/db_slip_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
+require_once("classes/db_empresto_classe.php");
 $clrotulo = new rotulocampo;
 
 db_postmemory($HTTP_POST_VARS);
@@ -90,10 +92,110 @@ criaWorkDotacao($sWhereDespesa,array($anousu), $dtini, $dtfim);
 
 $aSubFuncao = array(122,272,271,361,365,366,367,843);
 $sFuncao     = "12";
-$aFonte      = array("'101','118','119'");
+$aFontes      = array("'101','118','119'");
 
-$aDespesasAplicada = getSaldoDespesa(null, "o58_funcao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).") and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-$nValorAplicado = $aDespesasAplicada[0]->pago;
+function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
+    $where = " c61_instit in ({$aInstits})" ;
+    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
+    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
+    $nTotalAnterior = 0;
+    for($x = 0; $x < pg_numrows($result); $x++){
+        $oPlanoConta = db_utils::fieldsMemory($result, $x);
+        if( ( $oPlanoConta->movimento == "S" )
+            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
+            continue;
+        }
+        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
+            if($oPlanoConta->sinal_anterior == "C")
+                $nTotalAnterior -= $oPlanoConta->saldo_anterior;
+            else {
+                $nTotalAnterior += $oPlanoConta->saldo_anterior;
+            }
+        }
+    }
+    return $nTotalAnterior;
+}
+
+function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
+    $iSaldoRestosAPagarSemDisponibilidade = 0;
+
+    foreach($aFontes as $sFonte){
+        db_inicio_transacao();
+        $clEmpResto = new cl_empresto();
+        $sSqlOrder = "";
+        $sCampos = " o15_codtri, sum(vlrpag) as pago ";
+        $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
+        $aEmpResto = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
+        $nValorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
+
+        $nTotalAnterior = getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits);
+        $nSaldo = 0;
+        if($nValorRpPago > $nTotalAnterior){
+            $nSaldo = $nValorRpPago - $nTotalAnterior ;
+        }
+        $iSaldoRestosAPagarSemDisponibilidade += $nSaldo;
+        db_query("drop table if exists work_pl");
+        db_fim_transacao();
+    }
+    return  $iSaldoRestosAPagarSemDisponibilidade;
+}
+
+function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dtfim, $aInstits){
+    $clSlip = new cl_slip();
+    $nValorAplicado = 0;
+    // despesas pagas
+    $aDespesasAplicada = getSaldoDespesa(null, "o58_funcao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).") and o15_codtri in (".implode(",",$aFontes).") and o58_instit in ($instits) group by 1,2");
+    $nValorAplicado = $aDespesasAplicada[0]->pago;
+
+    $nTotalReceitasRecebidasFundeb = 0;
+    $nDevolucaoRecursoFundeb = 0;
+    $rsSlip = $clSlip->sql_record($clSlip->sql_query_fundeb($dtini, $dtfim, $aInstits));
+    $nDevolucaoRecursoFundeb = db_utils::fieldsMemory($rsSlip, 0)->k17_valor;
+
+    $nTransferenciaRecebidaFundeb = 0;
+    $aTransferenciasRecebidasFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '417580111%'");
+    $nTransferenciaRecebidaFundeb = count($aTransferenciasRecebidasFundeb) > 0 ? $aTransferenciasRecebidasFundeb[0]->saldo_arrecadado_acumulado : 0;
+
+    $aTotalContribuicaoFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495%'");
+    $nTotalContribuicaoFundeb = count($aTotalContribuicaoFundeb) > 0 ? $aTotalContribuicaoFundeb[0]->saldo_arrecadado_acumulado : 0;
+
+    $nTotalReceitasRecebidasFundeb = abs($nDevolucaoRecursoFundeb) + abs($nTransferenciaRecebidaFundeb);
+    $nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb-abs($nTotalContribuicaoFundeb);
+    $nValorAplicado = $nValorAplicado - $nResulatadoLiquidoTransfFundeb;
+
+    $clempresto = new cl_empresto();
+    if(count($aFontes) < 1){
+        $aFontes = array("'201','218','219'");
+    }
+
+    $sSqlOrder = "";
+    $sCampos = " o15_codtri, sum(vlrpag) as pago ";
+    $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
+    $dtfim = db_getsession("DB_anousu")."-04-30";
+    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
+    $nValorAplicado = $nValorAplicado + $valorRpPago;
+
+    $nValorPagoSemDisponibilidade = getRestosSemDisponilibidade($aFontes, $dtini, $dtfim, $instits);
+
+    $nValorAplicado = $nValorAplicado + $nValorPagoSemDisponibilidade;
+
+    $clempresto = new cl_empresto();
+    if(count($aFontes) < 1){
+        $aFontes = array("'101','118','119','201','218','219'");
+    }
+
+    $sSqlOrder = "";
+    $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
+    $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
+    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorRpAnulado = count($aEmpResto) > 0 ? $aEmpResto[0]->vlranu : 0;
+
+    $nValorAplicado = $nValorAplicado + $valorRpAnulado;
+
+    return $nValorAplicado;
+}
+
 
 $sWhereReceita      = "o70_instit in ({$instits})";
 $rsReceitas = db_receitasaldo(11, 1, 3, true, $sWhereReceita, $anousu, $dtini, $dtfim, false, ' * ', true, 0);
@@ -464,13 +566,14 @@ ob_start();
                     echo "    <td class='{$receita[1]}-row-valor'>";
                     $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '{$receita[2]}'");
                     $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
-                    $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
+
                     $nTotalReceitaDeducao = 0;
                     if($receita[3] != ''){
                         $aReceitasDeducao = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '{$receita[3]}'");
                         $nTotalReceitaDeducao = count($aReceitasDeducao) > 0 ? $aReceitasDeducao[0]->saldo_arrecadado_acumulado : 0;
                     }
                     $nTotalReceita = $nReceita + $nTotalReceitaDeducao;
+                    $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
                     if ($receita[1] == 'title') {
                         echo "";
                     } else {
@@ -511,6 +614,7 @@ ob_start();
                     <td class="footer-total-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia + $nTotalReceitaImpostos, "f"); ?></td>
                 </tr>
                  <?php
+                    $nValorAplicado = getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $anousu, $dtini, $dtfim, $aInstits);
                     $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ;
                     $nDiferencaAplicacao = $nValorAplicado - $valorAplicacaoDevida;
                     $nPercentualAplicado = ($nValorAplicado/ ($nTotalReceitaTransferencia + $nTotalReceitaImpostos))*100;
