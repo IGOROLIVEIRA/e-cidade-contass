@@ -38,7 +38,7 @@ contrato = function () {
         oParam.credenciamento = $F('tipodispenca');
         oParam.addNegation    = negation;
         oParam.tipoCompras = tipoCompras;
-        js_divCarregando("Aguarde, carregando as licita??es...", "msgBox");
+        js_divCarregando("Aguarde, carregando as licitações...", "msgBox");
         var oAjax   = new Ajax.Request(
             sURL,
             {
@@ -57,7 +57,7 @@ contrato = function () {
         if ($F('ac16_origem') == 1) {
             sTitulo = "Processo de compras";
         } else {
-            sTitulo = "Licita??es";
+            sTitulo = "Licitações";
         }
         var iLarguraJanela = 1200;
         var iAlturaJanela  = document.body.clientHeight;
@@ -76,7 +76,7 @@ contrato = function () {
         oJanela.setContent(sContent);
         oMessageBoard = new DBMessageBoard('messageboardlicitacao',
             sTitulo +" vencidas por "+$F('nomecontratado'),
-            'Escolha as licita??es que far?o parte do contrato',
+            'Escolha as licitações que farão parte do contrato',
             $('windowwndLicitacoesVencidas_content')
         );
         oJanela.setShutDownFunction(function() {

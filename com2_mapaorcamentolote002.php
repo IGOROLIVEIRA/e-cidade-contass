@@ -134,7 +134,7 @@ for ($iRow = 0; $iRow < pg_num_rows($rsItens); $iRow++) {
 
         //$oPdf->setfont('arial', 'b', 11);
         $oPdf->setfont('arial', 'b', $iFont);
-        $oPdf->cell(192, $iLine, "Lote {$oItem->pc68_nome} - Valor Médio: R$ {$nValorMedioLote}", 1, 1, 'L', 1);
+        $oPdf->multicell(192, $iLine, "Lote {$oItem->pc68_nome} - Valor Médio: R$ {$nValorMedioLote}", 1,'L', true);
         $oPdf->cell(15, $iLine, "Item Lote", 1, 0, 'C', 0);
         $oPdf->cell(15, $iLine, "Código", 1, 0, 'C', 0);
         $oPdf->cell(130, $iLine, "Material / Serviço", 1, 0, 'C', 0);
