@@ -29,6 +29,26 @@ switch ($_POST["action"]) {
 
         $iAnoSessao         = db_getsession('DB_anousu');
 
+        $sqlElementosTabela = "select distinct pc07_codele,o56_descr,o56_elemento from pctabela 
+        inner join pctabelaitem on pc95_codtabela = pc94_sequencial
+        inner join pcmaterele on pc07_codmater = pc95_codmater
+        LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+        AND orcelemento.o56_anousu = $iAnoSessao
+        where pc94_sequencial = $tabela";
+       
+
+        $rsEleTabela = db_query($sqlElementosTabela);
+        
+        $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
+        if(pg_numrows($rsEleTabela)>0){
+            foreach($oElementos as $row){
+                if($row->pc07_codele==$codele){
+                    
+                   $elementonum = $row->o56_elemento;
+                }
+            }
+        }
+
         $result_unidade = array();
         $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
         $numrows_unid = $clmatunid->numrows;
@@ -206,6 +226,8 @@ switch ($_POST["action"]) {
 
                 $itemRows  = array();
 
+                
+
                 $selectunid = "";
                 $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
                 $selectunid .= "<option selected='selected'></option>";
@@ -270,6 +292,7 @@ switch ($_POST["action"]) {
                 }else{
                     $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='width: 80px' />";
                 }
+                $itemRows[] = "<input type='hidden' id='elemtNum' value='{$elementonum}' />";
                 $employeeData[] = $itemRows;
             }
 
@@ -289,16 +312,45 @@ switch ($_POST["action"]) {
         $codele = $_POST["codele"];
         $iAnoSessao         = db_getsession('DB_anousu');
 
-        $sqlElementosTabela = "select distinct pc07_codele,o56_descr from pctabela 
+        $squery = "select e55_codele from empautitem where e55_autori = $autori";
+        $rsEle = db_query($squery);
+
+        if(pg_numrows($rsEle)>0){
+            $oEle = db_utils::getCollectionByRecord($rsEle);
+
+            foreach($oEle as $row){
+                $codEle = $row->e55_codele;
+            }
+        }
+        
+    
+        $sqlElementosTabela = "select distinct pc07_codele,o56_descr,o56_elemento from pctabela 
         inner join pctabelaitem on pc95_codtabela = pc94_sequencial
         inner join pcmaterele on pc07_codmater = pc95_codmater
         LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
         AND orcelemento.o56_anousu = $iAnoSessao
         where pc94_sequencial = $tabela";
-        $rsEleTabela = db_query($sqlElementosTabela);
+       
 
+        $rsEleTabela = db_query($sqlElementosTabela);
+        
         $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
-        $oRetorno->elementos = $oElementos;
+        if(pg_numrows($rsEle)>0){
+            $rsElemen = array();
+            foreach($oElementos as $row){
+                if($row->pc07_codele==$codEle){
+                    $rsElemen[0]->pc07_codele = $row->pc07_codele; 
+                    $rsElemen[0]->o56_descr = $row->o56_descr; 
+                    $rsElemen[0]->o56_elemento = $row->o56_elemento;
+                }
+            }
+            
+            $oRetorno->elementos = $rsElemen;
+
+        }else{
+            $oRetorno->elementos = $oElementos;
+        }
+        
 
         break;
 
