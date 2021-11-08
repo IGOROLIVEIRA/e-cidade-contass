@@ -39,9 +39,9 @@ switch ($oParam->exec) {
     case 'getItensCredenciamento':
 
         if($oParam->iFornecedor == null){
-            $where = "WHERE credenciamentotermo.l212_sequencial = $oParam->iCodtermo";
+            $where = "WHERE credenciamentotermo.l212_sequencial = $oParam->iCodtermo order by pc11_seq";
         }else{
-            $where = "WHERE l20_codigo = $oParam->iLicitacao and l205_fornecedor = $oParam->iFornecedor";
+            $where = "WHERE l20_codigo = $oParam->iLicitacao and l205_fornecedor = $oParam->iFornecedor order by pc11_seq";
         }
 
         $sqlItens = "SELECT DISTINCT pc11_seq,
@@ -83,6 +83,7 @@ switch ($oParam->exec) {
 
             $oItensLicitacao = db_utils::fieldsMemory($resultItens, $iCont);
             $oItem      = new stdClass();
+            $oItem->pc11_seq                        = $oItensLicitacao->pc11_seq;
             $oItem->pc01_codmater                   = $oItensLicitacao->pc01_codmater;
             $oItem->pc01_descrmater                 = urlencode($oItensLicitacao->pc01_descrmater);
             $oItem->pc01_complmater                 = urlencode($oItensLicitacao->pc01_complmater);

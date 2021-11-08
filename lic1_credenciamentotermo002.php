@@ -11,11 +11,33 @@ $clcredenciamentotermo = new cl_credenciamentotermo;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  db_inicio_transacao();
-  $db_opcao = 2;
-  $clcredenciamentotermo->l212_anousu = db_getsession('DB_anousu');
-  $clcredenciamentotermo->alterar($l212_sequencial);
-  db_fim_transacao();
+
+    try {
+
+        $resultNumeroTermo = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,"l212_numerotermo","l212_numerotermo desc limit 1","l212_numerotermo = $l212_numerotermo"));
+
+        if(pg_num_rows($resultNumeroTermo) > 0){
+            throw new Exception("Usuário: Numero do Termo ja utilizado !");
+        }
+
+        db_inicio_transacao();
+        $db_opcao = 2;
+        $clcredenciamentotermo->l212_anousu = db_getsession('DB_anousu');
+        $clcredenciamentotermo->alterar($l212_sequencial);
+        db_fim_transacao();
+
+        if($clcredenciamentotermo->erro_status == 0){
+            $erro = $clcredenciamentotermo->erro_msg;
+            $sqlerro = true;
+        }
+        db_fim_transacao();
+        if($sqlerro == false){
+            db_redireciona("lic1_credenciamentotermo002.php?&chavepesquisa=$l212_sequencial");
+        }
+
+    }catch (Exception $eErro){
+        db_msgbox($eErro->getMessage());
+    }
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
    $result = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query($chavepesquisa)); 

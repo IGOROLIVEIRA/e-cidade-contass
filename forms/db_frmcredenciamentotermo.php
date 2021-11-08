@@ -135,7 +135,7 @@ $clcredenciamentotermo->rotulo->label();
         <input name="relatorio" type="button" id="relatorio" value="Gerar Relatorio" onclick="js_relatorio();" >
         <?endif;?>
     </div>
-    <fieldset>
+    <fieldset id="fieldsetitens" style="display: none">
         <legend><b>Itens</b></legend>
         <div id='cntgriditens'></div>
     </fieldset>
@@ -145,9 +145,9 @@ $clcredenciamentotermo->rotulo->label();
     function js_showGrid() {
         oGridItens = new DBGrid('gridItens');
         oGridItens.nameInstance = 'oGridItens';
-        oGridItens.setCellAlign(new Array("center","center", "center", "center", "center"));
-        oGridItens.setCellWidth(new Array("5%"    , "25%"     , "25%"   , '5%'  ,   '10%'));
-        oGridItens.setHeader(new Array("Item","Material", "Complemento", "Unidade", "Valor Licitado"));
+        oGridItens.setCellAlign(new Array("center","center","center", "center", "center"));
+        oGridItens.setCellWidth(new Array("5%"    ,"5%"    , "25%"   , '5%'  ,   '10%'));
+        oGridItens.setHeader(new Array("Item","Sequencia","Material", "Unidade", "Valor Licitado"));
         oGridItens.hasTotalValue = false;
         oGridItens.show($('cntgriditens'));
 
@@ -156,7 +156,6 @@ $clcredenciamentotermo->rotulo->label();
         $(oGridItens.sName + "body").style.width = width;
         $("table" + oGridItens.sName + "footer").style.width = width;
     }
-    js_showGrid();
 
     var db_opcao = <?= $db_opcao?>;
 
@@ -248,6 +247,9 @@ $clcredenciamentotermo->rotulo->label();
         if(db_opcao == 1){
             mostrarNumeroTermo();
         }
+        document.getElementById('fieldsetitens').style.display = '';
+        js_showGrid();
+        js_getItens();
     }
 
     function mostrarNumeroTermo() {
@@ -287,24 +289,47 @@ $clcredenciamentotermo->rotulo->label();
 
     function js_retornoGetItens(oAjax) {
         oGridItens.clearAll(true);
-        // var aEventsIn  = ["onmouseover"];
-        // var aEventsOut = ["onmouseout"];
-        // aDadosHintGrid = new Array();
+        var aEventsIn  = ["onmouseover"];
+        var aEventsOut = ["onmouseout"];
+        aDadosHintGrid = new Array();
 
         var oRetornoitens = JSON.parse(oAjax.responseText);
 
         oRetornoitens.itens.each(function(oLinha, iLinha) {
             var aLinha = new Array();
             aLinha[0] = oLinha.pc01_codmater;
-            aLinha[1] = oLinha.pc01_descrmater.urlDecode();
-            aLinha[2] = oLinha.pc01_complmater.urlDecode();
+            aLinha[1] = oLinha.pc11_seq;
+            aLinha[2] = oLinha.pc01_descrmater.urlDecode();
             aLinha[3] = oLinha.m61_descr;
             aLinha[4] = oLinha.varlortotal;
             oGridItens.addRow(aLinha);
+
+            var sTextEvent  = " ";
+
+            if (aLinha[2] !== '') {
+                sTextEvent += "<b>Material: </b>"+aLinha[2];
+            } else {
+                sTextEvent += "<b>Nenhum dado à mostrar</b>";
+            }
             // nTotal = nTotal + Number(oLinha.varlortotal);
+
+            var oDadosHint           = new Object();
+            oDadosHint.idLinha   = `gridItensrowgridItens${iLinha}`;
+            oDadosHint.sText     = sTextEvent;
+            aDadosHintGrid.push(oDadosHint);
         });
         // document.getElementById('gridItenstotalValue').innerText = js_formatar(nTotal, 'f');
         oGridItens.renderRows();
+
+        aDadosHintGrid.each(function(oHint, id) {
+            var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
+            oDBHint.setText(oHint.sText);
+            oDBHint.setShowEvents(aEventsIn);
+            oDBHint.setHideEvents(aEventsOut);
+            oDBHint.setPosition('B', 'L');
+            oDBHint.setUseMouse(true);
+            oDBHint.make($(oHint.idLinha), 2);
+        });
     }
 
     function js_relatorio() {
