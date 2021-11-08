@@ -465,12 +465,12 @@ ob_start();
                     $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '{$receita[2]}'");
                     $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
                     $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
-                    $nTotalReceitaDeducao =0;
+                    $nTotalReceitaDeducao = 0;
                     if($receita[3] != ''){
                         $aReceitasDeducao = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '{$receita[3]}'");
                         $nTotalReceitaDeducao = count($aReceitasDeducao) > 0 ? $aReceitasDeducao[0]->saldo_arrecadado_acumulado : 0;
                     }
-                    $nTotalReceita = $nReceita - $nTotalReceitaDeducao;
+                    $nTotalReceita = $nReceita + $nTotalReceitaDeducao;
                     if ($receita[1] == 'title') {
                         echo "";
                     } else {
