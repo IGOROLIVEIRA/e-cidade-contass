@@ -39,8 +39,8 @@ require_once("classes/db_slip_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 require_once("classes/db_empresto_classe.php");
 
+
 $clselorcdotacao = new cl_selorcdotacao();
-$clempresto = new cl_empresto();
 $clrotulo = new rotulocampo;
 
 db_postmemory($HTTP_POST_VARS);
@@ -75,7 +75,7 @@ for ($i = 0; $i < pg_num_rows($rsInstits); $i++) {
     $ainstitunticoes[] = $odadosInstint->si09_instit;
 }
 $iInstituicoes = implode(',', $ainstitunticoes);
-echo "<pre>";print_r($iInstituicoes);exit;
+
 $rsTipoinstit = $clinfocomplementaresinstit->sql_record($clinfocomplementaresinstit->sql_query(null, "si09_sequencial, si09_tipoinstit", null, "si09_instit in( {$instits})"));
 
 /**
@@ -102,17 +102,11 @@ db_query("drop table if exists work_receita");
 criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 
 
-//$result = db_planocontassaldo_matriz(db_getsession("DB_anousu"),($DBtxt21_ano.'-'.$DBtxt21_mes.'-'.$DBtxt21_dia),$dtfim,false,$where);
-
-
-// echo "<pre>";print_r($aReceitas);exit;
-
-
 $nTotalReceitasRecebidasFundeb = 0;
 $nContribuicaoFundeb = 0;
 
 $nDevolucaoRecursoFundeb = 0;
-$rsSlip = $clSlip->sql_record($clSlip->sql_query_fundeb($dtini, $dtfim, $instits));
+$rsSlip = $clSlip->sql_record($clSlip->sql_query_fundeb($dtini, $dtfim, $aInstits));
 $nDevolucaoRecursoFundeb = db_utils::fieldsMemory($rsSlip, 0)->k17_valor;
 
 $nTransferenciaRecebidaFundeb = 0;
@@ -129,111 +123,84 @@ $nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb+abs($nTotalCont
 $fSubTotal = 0;
 $aSubFuncoes = array(122,272,271,361,365,366,367,843);
 $sFuncao     = "12";
-$aFonte      = array("'101'");
-$aFonteFundeb      = array("'118','119'");
+$aFonte      = array("'101','201'");
+$aFonteFundeb      = array("'118','119','218','219'");
 
-function getRestosSemDisponilibidade($instits, $aFonte, $DBtxt21_ano, $DBtxt21_mes, $DBtxt21_dia, $dtfim) {
-    $where = " c61_instit in ({$instits})" ;
-    $where .= " and (c61_codigo = '118' or c61_codigo = '1118') ";
 
-    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), ($DBtxt21_ano.'-'.$DBtxt21_mes.'-'.$DBtxt21_dia), $dtfim, false, $where);
 
-    $total_anterior    = 0;
-    $total_debitos  = 0;
-    $total_creditos = 0;
-    $total_final    = 0;
-    $iAjustePcasp   = 0;
-
-    if (USE_PCASP) {
-        $iAjustePcasp = 8;
+function getRestosCusteadosComSuperavit($aFontes, $dtini, $dtfim, $instits) {
+    $clempresto = new cl_empresto();
+    if(count($aFontes) < 1){
+        $aFontes = array("'201','218','219'");
     }
 
-    for($x = 0; $x < pg_numrows($result);$x++){
-        $oPlanoContaSaldo = db_utils::fieldsMemory($result,$x);
+    $sSqlOrder = "";
+    $sCampos = " o15_codtri, sum(vlrpag) as pago ";
+    $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
+    $dtfim = db_getsession("DB_anousu")."-04-30";
+    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
+    return  $valorRpPago;
+}
 
-        if( ( $oPlanoContaSaldo->tipo == "S" ) && ( $oPlanoContaSaldo->c61_reduz != 0 ) ) {
+$nTotalSemDisponbilidade = 0;
+
+function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
+    $where = " c61_instit in ({$aInstits})" ;
+    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
+    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
+    $nTotalAnterior = 0;
+    for($x = 0; $x < pg_numrows($result); $x++){
+        $oPlanoConta = db_utils::fieldsMemory($result, $x);
+        if( ( $oPlanoConta->movimento == "S" )
+            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
             continue;
         }
-
-        if (USE_PCASP) {
-        } else {
-            if(substr($oPlanoContaSaldo->estrutural,0,1) == '3' ) {
-                if(substr($oPlanoContaSaldo->estrutural,2)+0 > 0 )
-                    continue;
-            }
-            if(substr($oPlanoContaSaldo->estrutural,0,1) == '4' ) {
-                if(substr($oPlanoContaSaldo->estrutural,2)+0 > 0 )
-                    continue;
+        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
+            if($oPlanoConta->sinal_anterior == "C")
+                $nTotalAnterior -= $oPlanoConta->saldo_anterior;
+            else {
+                $nTotalAnterior += $oPlanoConta->saldo_anterior;
             }
         }
+    }
+    return $nTotalAnterior;
+}
 
-        if( ( $oPlanoContaSaldo->movimento == "S" ) && ( ( $oPlanoContaSaldo->saldo_anterior + $oPlanoContaSaldo->saldo_anterior_debito + $oPlanoContaSaldo->saldo_anterior_credito) == 0 ) ) {
-            continue;
+function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
+    $iSaldoRestosAPagarSemDisponibilidade = 0;
+    foreach($aFontes as $sFonte){
+        db_inicio_transacao();
+        $clEmpResto = new cl_empresto();
+        $sSqlOrder = "";
+        $sCampos = " o15_codtri, sum(vlrpag) as pago ";
+        $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
+        $aEmpResto = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
+        $nValorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
+        $nTotalAnterior = getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits);
+        $nSaldo = 0;
+        if($nValorRpPago > $nTotalAnterior){
+            $nSaldo = $nTotalAnterior ;
         }
+        $iSaldoRestosAPagarSemDisponibilidade += $nSaldo;
+        db_query("drop table if exists work_pl");
+        db_fim_transacao();
+    }
+    return  $iSaldoRestosAPagarSemDisponibilidade;
+}
 
-        if(substr($oPlanoContaSaldo->estrutural,1,14) == '00000000000000'){
-
-            if($oPlanoContaSaldo->sinal_anterior == "C")
-                $total_anterior -= $oPlanoContaSaldo->saldo_anterior;
-            else
-                $total_anterior += $oPlanoContaSaldo->saldo_anterior;
-
-            if($oPlanoContaSaldo->sinal_final == "C")
-                $total_final -= $oPlanoContaSaldo->saldo_final;
-            else
-                $total_final += $oPlanoContaSaldo->saldo_final;
-
-            $total_debitos  += $oPlanoContaSaldo->saldo_anterior_debito;
-            $total_creditos += $oPlanoContaSaldo->saldo_anterior_credito;
-        }
-
+function getCancelamentoRestosComDisponilibidade($aFontes, $dtini, $dtfim, $instits) {
+    $clempresto = new cl_empresto();
+    if(count($aFontes) < 1){
+        $aFontes = array("'101','118','119','201','218','219'");
     }
 
-
-    $total_final = $total_anterior + $total_debitos - $total_creditos;
-    $sInst = '';
-    foreach ($aInstits as $inst) {
-        $sInst .='instit_'.$inst.'-';
-    }
-    $filtra_despesa = $sInst."recurso_118-recurso_1118";
-    $clselorcdotacao->setDados($filtra_despesa);
-    $sql_filtro = $clselorcdotacao->getDados(false);
-    function retorna_desdob($elemento, $e64_codele, $clorcelemento)
-    {
-        return pg_query($clorcelemento->sql_query_file(null, null, "o56_elemento as estrutural,o56_descr as descr", null, "o56_codele = $e64_codele and o56_elemento like '$elemento%'"));
-    }
-
-    $sele_work = ' e60_instit in (' . $instits . ') ';
-    $sele_work1 = '';//tipo de recurso
-    $anoatual = db_getsession("DB_anousu");
-
-    $sql_order = " order by o58_orgao,e60_anousu,e60_codemp::integer";
-    $sql_where_externo = "  ";
-    $sql_where_externo .= ' and e60_anousu < ' . db_getsession("DB_anousu");
-    $sql_where_externo .= " and " . $sql_filtro;
-
-    $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
-    $res = $clempresto->sql_record($sqlempresto);
-
-    $rows = $clempresto->numrows;
-
-    $total_rp_proc = 0;
-    $total_rp_nproc = 0;
-    $total_mov_pagmento = 0;
-
-    for ($x = 0; $x < $rows; $x++) {
-        db_fieldsmemory($res, $x);
-        $total_rp_proc += ($e91_vlrliq - $e91_vlrpag);
-        $total_rp_nproc += round($vlrpagnproc,2);
-        $total_mov_pagmento += ($vlrpag+$vlrpagnproc);
-    }
-
-    if(($total_rp_proc + $total_rp_nproc) < $total_anterior || $total_mov_pagmento < $total_anterior){
-        $iRestosAPagar = db_formatar(0,"f");
-    }
-    else{
-        $iRestosAPagar = $total_mov_pagmento-$total_anterior;
-    }
+    $sSqlOrder = "";
+    $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
+    $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
+    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorRpAnulado = count($aEmpResto) > 0 ? $aEmpResto[0]->vlranu : 0;
+    return  $valorRpAnulado;
 }
 /**
  * mPDF
@@ -599,15 +566,33 @@ ob_start();
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">4 - VALOR PAGO </td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nValorTotalPago, "f"); ?></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $nTotalAplicadoEntrada = 0;
+                                    $nTotalAplicadoEntrada = $nValorTotalPago;
+                                    echo db_formatar($nValorTotalPago, "f");
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">5 - RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(abs($nResulatadoLiquidoTransfFundeb), "f"); ?></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $nTotalAplicadoSaida = 0;
+                                    $nTotalAplicadoSaida = $nResulatadoLiquidoTransfFundeb;
+                                    echo db_formatar(abs($nResulatadoLiquidoTransfFundeb), "f");
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">6 - DESPESAS CUSTEADAS COM SUPERÁVIT DO FUNDEB ATÉ O PRIMEIRO QUADRIMESTRE - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $nValorCusteadoSuperavit = getRestosCusteadosComSuperavit(array("'218','219','201'"), $dtini, $dtfim, $instits);
+                                    $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorCusteadoSuperavit;
+                                    echo db_formatar($nValorCusteadoSuperavit, "f");
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">7 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO</td>
@@ -635,31 +620,68 @@ ob_start();
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">9 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $nValorRecursoTotal = getRestosSemDisponilibidade(array("'101','118','119'"), $dtini, $dtfim, $instits);
+                                    $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorRecursoTotal;
+                                    echo db_formatar($nValorRecursoTotal, "f");
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.1 - RECURSOS DE IMPOSTOS</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $nValorRecursoImposto = getRestosSemDisponilibidade(array("'101'"), $dtini, $dtfim, $instits);
+                                    echo db_formatar($nValorRecursoImposto, "f");
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.2 - RECURSOS DO FUNDEB</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $nValorRecursoFundeb = getRestosSemDisponilibidade(array("'118', '119'"), $dtini, $dtfim, $instits);
+                                    echo db_formatar($nValorRecursoFundeb, "f");
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">10 - CANCELAMENTO, NO EXERCÍCIO, DE RESTOS A PAGAR INSCRITOS COM DISPONIBILIDADE FINANCEIRA</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $nValorRecursoTotal = getCancelamentoRestosComDisponilibidade(array(), $dtini, $dtfim, $instits);
+                                    $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nValorRecursoTotal;
+                                    echo db_formatar($nValorRecursoTotal, "f");
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.1 - RECURSOS DE IMPOSTOS</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $nValorRecursoTotal = getCancelamentoRestosComDisponilibidade(array("'101','201'"), $dtini, $dtfim, $instits);
+                                    echo db_formatar($nValorRecursoTotal, "f");
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.2 - RECURSOS DO FUNDEB</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $nValorRecursoTotal = getCancelamentoRestosComDisponilibidade(array("'118','119','218','219'"), $dtini, $dtfim, $instits);
+                                    echo db_formatar($nValorRecursoTotal, "f");
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="subtitle-row" style="width: 300px;">11 - TOTAL APLICADO ((4 + 6 + 7 +9) - ( 5 + 8 + 10))</td>
-                            <td class="subtitle-row" style="width: 100px; text-align: center;"><?php echo db_formatar(120000000.40, "f"); ?></td>
+                            <td class="subtitle-row" style="width: 100px; text-align: center;">
+                                <?php
+
+                                    echo db_formatar($nTotalAplicadoEntrada - $nTotalAplicadoSaida, "f");
+                                ?>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

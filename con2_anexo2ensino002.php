@@ -105,58 +105,58 @@ criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 //$result = db_planocontassaldo_matriz(db_getsession("DB_anousu"),($DBtxt21_ano.'-'.$DBtxt21_mes.'-'.$DBtxt21_dia),$dtfim,false,$where);
 
 $aReceitasImpostos = array(
-    array('1 - Receita de impostos', 'title', ''),
-    array('1.1 - Receita resultante do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU)', 'subtitle', '41118011%'),
-    array('1.1.1.8.01.1.1 - Imposto sobre a Propriedade Predial e Territorial Urbana - Principal', 'text', '411180111%'),
-    array('1.1.1.8.01.1.2 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas e Juros de Mora', 'text', '411180112%'),
-    array('1.1.1.8.01.1.3 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Dívida Ativa', 'text', '411180113%'),
-    array('1.1.1.8.01.1.4 - Imposto Sobre a Propriedade Predial e Territorial Urbana -  Multas e Juros de Mora da Dívida Ativa', 'text', '411180114%'),
-    array('1.1.1.8.01.1.5 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas', 'text', '411180115%'),
-    array('1.1.1.8.01.1.6 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Juros de Mora', 'text', '411180116%'),
-    array('1.1.1.8.01.1.7 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas da Dívida Ativa', 'text', '411180117%'),
-    array('(-) Deduções da Receita do IPTU', 'text', '49%1118011%'),
-    array('1.2 - Receita resultante do Imposto sobre Transmissão Inter Vivos (ITBI)', 'subtitle', '41118014%'),
-    array('1.1.1.8.01.4.1 - Impostos sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Principal', 'text', '411180141%'),
-    array('1.1.1.8.01.4.2 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas e Juros de Mora', 'text', '411180142%'),
-    array('1.1.1.8.01.4.3 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Dívida Ativa', 'text', '411180143%'),
-    array('1.1.1.8.01.4.4 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas e Juros de Mora da Dívida Ativa', 'text', '411180144%'),
-    array('1.1.1.8.01.4.5 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas', 'text', '411180145%'),
-    array('1.1.1.8.01.4.6 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Juros de Mora', 'text', '411180146%'),
-    array('1.1.1.8.01.4.7 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas da Dívida Ativa', 'text', '411180147%'),
-    array('1.1.1.8.01.4.8 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -Juros de Mora da Dívida Ativa', 'text', '411180148%'),
-    array('(-) Deduções da Receita do ITBI', 'text', '49%1118014%'),
-    array('1.3 - Receita resultante do Imposto sobre Serviços de Qualquer Natureza (ISS)', 'subtitle', '4111802%'),
-    array('1.1.1.8.02.3.1 - Imposto sobre Serviços de Qualquer Natureza - Principal', 'text', '411180231%'),
-    array('1.1.1.8.02.3.2 - Imposto sobre Serviços de Qualquer Natureza - Multas e Juros de Mora', 'text', '411180232%'),
-    array('1.1.1.8.02.3.3 - Imposto sobre Serviços de Qualquer Natureza - Dívida Ativa', 'text', '411180233%'),
-    array('1.1.1.8.02.3.4 - Imposto sobre Serviços de Qualquer Natureza - Multas e Juros de Mora da Dívida Ativa', 'text', '411180234%'),
-    array('1.1.1.8.02.3.5 - Imposto sobre Serviços de Qualquer Natureza - Multas', 'text', '411180235%'),
-    array('1.1.1.8.02.3.6 - Imposto sobre Serviços de Qualquer Natureza - Juros de Mora ', 'text', '411180236%'),
-    array('1.1.1.8.02.3.7 - Imposto sobre Serviços de Qualquer Natureza - Multas da Dívida Ativa', 'text', '411180237%'),
-    array('1.1.1.8.02.3.8 - Imposto sobre Serviços de Qualquer Natureza - Juros de Mora da Dívida Ativa', 'text', '411180238%'),
-    array('1.1.1.8.02.4.1 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Principal', 'text', '411180241%'),
-    array('1.1.1.8.02.4.2 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas e Juros de Mora', 'text', '411180242%'),
-    array('1.1.1.8.02.4.3 - Adicional ISS - Fundo Municipal de Combate à Pobreza -  Dívida Ativa', 'text', '411180243%'),
-    array('1.1.1.8.02.4.4 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas e Juros de Mora da Dívida Ativa', 'text', '411180244%'),
-    array('1.1.1.8.02.4.5 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas', 'text', '411180245%'),
-    array('1.1.1.8.02.4.6 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Juros de Mora', 'text', '411180246%'),
-    array('1.1.1.8.02.4.7 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas da Dívida Ativa', 'text', '411180247%'),
-    array('1.1.1.8.02.4.8 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Juros de Mora da Dívida Ativa', 'text', '411180248%'),
-    array('(-) Deduções da Receita do ISS', 'text', '49%111802%'),
-    array('1.4 - Receita resultante do Imposto de Renda Retido na Fonte (IRRF)', 'subtitle', '4111303%'),
-    array('1.1.1.3.03.1.1 - Imposto sobre a Renda - Retido na Fonte - Trabalho - Principal', 'text', '411130311%'),
-    array('1.1.1.3.03.4.1 - Imposto sobre a Renda - Retido na Fonte - Outros Rendimentos - Principal', 'text', '411130341%'),
-    array('(-) Deduções da Receita do IRRF', 'text', '49%111303%'),
-    array('1.5 - Receita resultante do Imposto Territorial Rural (ITR) (CF, ART. 153, §4º, inciso III)	', 'subtitle', '41112011%'),
-    array('1.1.1.2.01.1.1 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Principal', 'text', '411120111%'),
-    array('1.1.1.2.01.1.2 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Multas e Juros de Mora', 'text', '411120112%'),
-    array('1.1.1.2.01.1.3 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Dívida Ativa', 'text', '411120113%'),
-    array('1.1.1.2.01.1.4 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Multas e Juros de Mora da Dívida Ativa', 'text', '411120114%'),
-    array('1.1.1.2.01.1.5 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Multas', 'text', '411120115%'),
-    array('1.1.1.2.01.1.6 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora', 'text', '411120116%'),
-    array('1.1.1.2.01.1.7 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados -Multas da Dívida Ativa', 'text', '411120117%'),
-    array('1.1.1.2.01.1.8 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora da Dívida Ativa', 'text', '411120118%'),
-    array('(-) Deduções da Receita do ITR ', 'text', '49%1112011%'),
+    array('1 - Receita de impostos', 'title', '',''),
+    array('1.1 - Receita resultante do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU)', 'subtitle', '41118011%', '49%1118011%'),
+    array('1.1.1.8.01.1.1 - Imposto sobre a Propriedade Predial e Territorial Urbana - Principal', 'text', '411180111%', ''),
+    array('1.1.1.8.01.1.2 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas e Juros de Mora', 'text', '411180112%', ''),
+    array('1.1.1.8.01.1.3 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Dívida Ativa', 'text', '411180113%', ''),
+    array('1.1.1.8.01.1.4 - Imposto Sobre a Propriedade Predial e Territorial Urbana -  Multas e Juros de Mora da Dívida Ativa', 'text', '411180114%', ''),
+    array('1.1.1.8.01.1.5 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas', 'text', '411180115%', ''),
+    array('1.1.1.8.01.1.6 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Juros de Mora', 'text', '411180116%', ''),
+    array('1.1.1.8.01.1.7 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas da Dívida Ativa', 'text', '411180117%', ''),
+    array('(-) Deduções da Receita do IPTU', 'text', '49%1118011%',''),
+    array('1.2 - Receita resultante do Imposto sobre Transmissão Inter Vivos (ITBI)', 'subtitle', '41118014%', '49%1118014%'),
+    array('1.1.1.8.01.4.1 - Impostos sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Principal', 'text', '411180141%',''),
+    array('1.1.1.8.01.4.2 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas e Juros de Mora', 'text', '411180142%',''),
+    array('1.1.1.8.01.4.3 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Dívida Ativa', 'text', '411180143%',''),
+    array('1.1.1.8.01.4.4 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas e Juros de Mora da Dívida Ativa', 'text', '411180144%',''),
+    array('1.1.1.8.01.4.5 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas', 'text', '411180145%',''),
+    array('1.1.1.8.01.4.6 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Juros de Mora', 'text', '411180146%',''),
+    array('1.1.1.8.01.4.7 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas da Dívida Ativa', 'text', '411180147%',''),
+    array('1.1.1.8.01.4.8 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -Juros de Mora da Dívida Ativa', 'text', '411180148%',''),
+    array('(-) Deduções da Receita do ITBI', 'text', '49%1118014%',''),
+    array('1.3 - Receita resultante do Imposto sobre Serviços de Qualquer Natureza (ISS)', 'subtitle', '4111802%', '49%111802%'),
+    array('1.1.1.8.02.3.1 - Imposto sobre Serviços de Qualquer Natureza - Principal', 'text', '411180231%',''),
+    array('1.1.1.8.02.3.2 - Imposto sobre Serviços de Qualquer Natureza - Multas e Juros de Mora', 'text', '411180232%',''),
+    array('1.1.1.8.02.3.3 - Imposto sobre Serviços de Qualquer Natureza - Dívida Ativa', 'text', '411180233%',''),
+    array('1.1.1.8.02.3.4 - Imposto sobre Serviços de Qualquer Natureza - Multas e Juros de Mora da Dívida Ativa', 'text', '411180234%',''),
+    array('1.1.1.8.02.3.5 - Imposto sobre Serviços de Qualquer Natureza - Multas', 'text', '411180235%',''),
+    array('1.1.1.8.02.3.6 - Imposto sobre Serviços de Qualquer Natureza - Juros de Mora ', 'text', '411180236%',''),
+    array('1.1.1.8.02.3.7 - Imposto sobre Serviços de Qualquer Natureza - Multas da Dívida Ativa', 'text', '411180237%',''),
+    array('1.1.1.8.02.3.8 - Imposto sobre Serviços de Qualquer Natureza - Juros de Mora da Dívida Ativa', 'text', '411180238%',''),
+    array('1.1.1.8.02.4.1 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Principal', 'text', '411180241%',''),
+    array('1.1.1.8.02.4.2 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas e Juros de Mora', 'text', '411180242%',''),
+    array('1.1.1.8.02.4.3 - Adicional ISS - Fundo Municipal de Combate à Pobreza -  Dívida Ativa', 'text', '411180243%',''),
+    array('1.1.1.8.02.4.4 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas e Juros de Mora da Dívida Ativa', 'text', '411180244%',''),
+    array('1.1.1.8.02.4.5 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas', 'text', '411180245%',''),
+    array('1.1.1.8.02.4.6 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Juros de Mora', 'text', '411180246%',''),
+    array('1.1.1.8.02.4.7 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Multas da Dívida Ativa', 'text', '411180247%',''),
+    array('1.1.1.8.02.4.8 - Adicional ISS - Fundo Municipal de Combate à Pobreza - Juros de Mora da Dívida Ativa', 'text', '411180248%',''),
+    array('(-) Deduções da Receita do ISS', 'text', '49%111802%',''),
+    array('1.4 - Receita resultante do Imposto de Renda Retido na Fonte (IRRF)', 'subtitle', '4111303%', '49%111303%',''),
+    array('1.1.1.3.03.1.1 - Imposto sobre a Renda - Retido na Fonte - Trabalho - Principal', 'text', '411130311%',''),
+    array('1.1.1.3.03.4.1 - Imposto sobre a Renda - Retido na Fonte - Outros Rendimentos - Principal', 'text', '411130341%',''),
+    array('(-) Deduções da Receita do IRRF', 'text', '49%111303%',''),
+    array('1.5 - Receita resultante do Imposto Territorial Rural (ITR) (CF, ART. 153, §4º, inciso III)	', 'subtitle', '41112011%', '49%1112011%'),
+    array('1.1.1.2.01.1.1 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Principal', 'text', '411120111%',''),
+    array('1.1.1.2.01.1.2 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Multas e Juros de Mora', 'text', '411120112%',''),
+    array('1.1.1.2.01.1.3 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Dívida Ativa', 'text', '411120113%',''),
+    array('1.1.1.2.01.1.4 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Multas e Juros de Mora da Dívida Ativa', 'text', '411120114%',''),
+    array('1.1.1.2.01.1.5 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Multas', 'text', '411120115%',''),
+    array('1.1.1.2.01.1.6 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora', 'text', '411120116%',''),
+    array('1.1.1.2.01.1.7 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados -Multas da Dívida Ativa', 'text', '411120117%',''),
+    array('1.1.1.2.01.1.8 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora da Dívida Ativa', 'text', '411120118%',''),
+    array('(-) Deduções da Receita do ITR ', 'text', '49%1112011%',''),
 );
 
 $aReceitasTransferencias = array(
@@ -463,12 +463,18 @@ ob_start();
                     echo "<td class='{$receita[1]}-row' colspan='8'>{$receita[0]}</td>";
                     echo "    <td class='{$receita[1]}-row-valor'>";
                     $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '{$receita[2]}'");
-                    $nTotalReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
+                    $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
                     $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
+                    $nTotalReceitaDeducao =0;
+                    if($receita[3] != ''){
+                        $aReceitasDeducao = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '{$receita[3]}'");
+                        $nTotalReceitaDeducao = count($aReceitasDeducao) > 0 ? $aReceitasDeducao[0]->saldo_arrecadado_acumulado : 0;
+                    }
+                    $nTotalReceita = $nReceita - $nTotalReceitaDeducao;
                     if ($receita[1] == 'title') {
                         echo "";
                     } else {
-                        echo db_formatar($nTotalReceita, "f");
+                        echo db_formatar(abs($nTotalReceita), "f");
                     }
                     echo "    </td>";
                     echo " </tr>";
