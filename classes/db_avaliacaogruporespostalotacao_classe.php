@@ -79,4 +79,30 @@ class cl_avaliacaogruporespostalotacao extends DAOBasica
         }
         return $sql;
     }
+
+    public function buscaAvaliacaoPreenchida( $eso04_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "" )
+    {
+        $sql  = "select {$campos} ";
+        $sql .= "  from avaliacaogruporespostalotacao ";
+        $sql .= "  join avaliacaogruporesposta on db107_sequencial = eso04_avaliacaogruporesposta ";
+        $sql .= "  join avaliacaogrupoperguntaresposta on db108_avaliacaogruporesposta = db107_sequencial";
+        $sql .= "  join avaliacaoresposta ON db106_sequencial = db108_avaliacaoresposta ";
+        $sql .= "  join avaliacaoperguntaopcao ON db104_sequencial = db106_avaliacaoperguntaopcao ";
+        $sql .= "  join avaliacaopergunta ON db103_sequencial = db104_avaliacaopergunta ";
+        $sql .= "  join avaliacaogrupopergunta ON db103_avaliacaogrupopergunta = db102_sequencial ";
+        $sql .= "  join avaliacao ON db102_avaliacao = db101_sequencial ";
+        $sql2 = "";
+        if (empty($dbwhere)) {
+            if (!empty($eso04_sequencial)){
+                $sql2 .= " where avaliacaogruporespostalotacao.eso04_sequencial = {$eso04_sequencial} ";
+            }
+        } else if (!empty($dbwhere)) {
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if (!empty($ordem)) {
+            $sql .= " order by {$ordem}";
+        }
+        return $sql;
+    }
 }

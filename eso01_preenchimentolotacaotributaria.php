@@ -39,11 +39,12 @@ $aCGM = array();
 $sMsg = null;
 
 try {
-    $sSqlCGM  = '     select distinct z01_numcgm as cgm,                 ';
+    $sSqlCGM  = '     select distinct z01_numcgm as cgm, codigo,         ';
     $sSqlCGM .= '            z01_cgccpf||\' - \'||z01_nome as empregador ';
     $sSqlCGM .= '       from rhlota                                      ';
     $sSqlCGM .= ' inner join cgm                                         ';
     $sSqlCGM .= '         on rhlota.r70_numcgm = cgm.z01_numcgm          ';
+    $sSqlCGM .= ' inner join db_config on cgm.z01_numcgm = db_config.numcgm ';
     $sSqlCGM .= '      where r70_instit = '. db_getsession("DB_instit")   ;
     $sSqlCGM .= '   order by z01_numcgm '                                 ;
 
@@ -55,7 +56,7 @@ try {
 
     if (pg_num_rows($rsSqlCGM) > 0) {
         $aCGM = db_utils::makeCollectionFromRecord($rsSqlCGM, function ($oItemCGM) {
-            return (object)array('cgm'=>$oItemCGM->cgm,'empregador'=>$oItemCGM->empregador);
+            return (object)array('cgm'=>$oItemCGM->cgm,'empregador'=>$oItemCGM->empregador,'codigo'=>$oItemCGM->codigo);
         });
     } else {
         throw new DBException("Desculpe, não encontramos nenhum Empregador vinculado na instituição.\nContate o suporte.");   
@@ -109,7 +110,9 @@ try {
                     if (!empty($aCGM)) { 
                         foreach ($aCGM as $oCGM) {
                             ?>
-                            <option value="<?php echo $oCGM->cgm; ?>"><?php echo $oCGM->empregador; ?></option>
+                            <option value="<?php echo $oCGM->cgm; ?>"
+                            <?php if($oCGM->codigo == db_getsession("DB_instit")) { echo "selected='true'"; } ?> >
+                            <?php echo $oCGM->empregador; ?></option>
                             <?php 
                         }
                     } 
@@ -125,10 +128,7 @@ try {
     <input type="button" id="proximo"  name="proximo"  value="Próximo"  class="controle" />
     <br>
     <br>
-    <!-- TODO ENVIO -->
-    <!-- Só descomentar -->
-    <!-- <input type="button" id="envioESocial"  name="envioESocial"  value="Enviar para eSocial" /> -->
-    <!-- FIM TODO ENVIO -->
+    <input type="button" id="envioESocial"  name="envioESocial"  value="Enviar para eSocial" >
     <form>
     <script type="text/javascript">
         var viewAvaliacao      = '';
@@ -266,18 +266,17 @@ try {
         // TODO Envio
         // Verificar quando implementarem a funcao de envio do arquivo da lotacao
         // se o exec terá esse nome e os parametros do exec "Nivelar"; 
-        // $('envioESocial').addEventListener('click', function(){
+        $('envioESocial').addEventListener('click', function(){
 
-        //     var parametros = {'exec': 'agendarLotacaoTributaria',  'cgm': $F('cgm')};
-        //     new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
+            var parametros = {'exec': 'agendarLotacaoTributaria',  'cgm': $F('cgm')};
+            new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
 
-        //         alert(retorno.sMessage);
-        //         if (retorno.erro) {
-        //             return false;
-        //         }
-        //     }).setMessage('Agendando envio para o eSocial').execute();
-        // });
-        // FIM TODO Envio
+                alert(retorno.sMessage);
+                if (retorno.erro) {
+                    return false;
+                }
+            }).setMessage('Agendando envio para o eSocial').execute();
+        });
     </script>
     <?php
     db_menu();

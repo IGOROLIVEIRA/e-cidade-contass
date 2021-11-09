@@ -61,9 +61,18 @@ if (isset($oPost->incluir)) {
     $clavaliacaopergunta->db103_obrigatoria            = $oPost->db103_obrigatoria;
     $clavaliacaopergunta->db103_ativo                  = $oPost->db103_ativo;
     $clavaliacaopergunta->db103_ordem                  = $oPost->db103_ordem;
+    $clavaliacaopergunta->db103_identificadorcampo     = $oPost->db103_identificadorcampo;
     $clavaliacaopergunta->incluir(null);
     
     $erro_msg = $clavaliacaopergunta->erro_msg;
+    if ($sqlerro == false) {
+
+      $clavaliacaopergunta->db103_identificador = "{$oPost->db103_identificador}-{$clavaliacaopergunta->db103_sequencial}";
+      $clavaliacaopergunta->alterar($clavaliacaopergunta->db103_sequencial);
+      if ($clavaliacaopergunta->erro_status == 0) {
+        $lSqlErro = true;
+      }
+    }
     
     if ($clavaliacaopergunta->erro_status == 0) {
       $sqlerro = true;
@@ -77,10 +86,10 @@ if (isset($oPost->incluir)) {
 		  	
 		    if (!$sqlerro) {
 		              
-		      $sIdentificadorOpcao                               = $oPost->db103_identificador."_".$oPost->db103_avaliacaotiporesposta;
 		      $clavaliacaoperguntaopcao->db104_avaliacaopergunta = $clavaliacaopergunta->db103_sequencial;
-		      $clavaliacaoperguntaopcao->db104_identificador     = $sIdentificadorOpcao;
-		      $clavaliacaoperguntaopcao->db104_aceitatexto       = 'true';
+          $clavaliacaoperguntaopcao->db104_identificador     = $oPost->db103_identificadorcampo;
+          $clavaliacaoperguntaopcao->db104_aceitatexto       = 'true';
+          $clavaliacaoperguntaopcao->db104_identificadorcampo = $oPost->db103_identificadorcampo;
 		      $clavaliacaoperguntaopcao->incluir(null);
 		      
 		      if ($clavaliacaoperguntaopcao->erro_status == 0) {
@@ -108,6 +117,7 @@ if (isset($oPost->incluir)) {
     $clavaliacaopergunta->db103_obrigatoria            = $oPost->db103_obrigatoria;
     $clavaliacaopergunta->db103_ativo                  = $oPost->db103_ativo;
     $clavaliacaopergunta->db103_ordem                  = $oPost->db103_ordem;
+    $clavaliacaopergunta->db103_identificadorcampo     = $oPost->db103_identificadorcampo;
     $clavaliacaopergunta->alterar($clavaliacaopergunta->db103_sequencial);
     $erro_msg = $clavaliacaopergunta->erro_msg;
 
@@ -132,8 +142,6 @@ if (isset($oPost->incluir)) {
             $erro_msg .= "Você poderá apenas desativar essa pergunta. \\nAlteração Abortada.";
           }
         }
-
-        db_inicio_transacao();
         
         if (!$lResposta) {
         	
@@ -147,14 +155,16 @@ if (isset($oPost->incluir)) {
         if (!$lResposta) {
                     
           $clavaliacaoperguntaopcao->db104_avaliacaopergunta = $clavaliacaopergunta->db103_sequencial;
+          $clavaliacaoperguntaopcao->db104_identificador     = $oPost->db103_identificadorcampo;
           $clavaliacaoperguntaopcao->db104_aceitatexto       = 'true';
+          $clavaliacaoperguntaopcao->db104_identificadorcampo = $oPost->db103_identificadorcampo;
           $clavaliacaoperguntaopcao->incluir(null);
           if ($clavaliacaoperguntaopcao->erro_status == 0) {
             $lSqlErro = true;
+            $erro_msg = $clavaliacaoperguntaopcao->erro_msg;
           }
         }
         
-        db_fim_transacao($lSqlErro);
     	}
     	
     	db_fim_transacao($lSqlErro);
@@ -229,6 +239,7 @@ if ($rsAvaliacaoGrupoPergunta != false && $clavaliacaogrupopergunta->numrows > 0
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <style>
 td {

@@ -78,8 +78,18 @@ class DadosESocial
                 return $preenchimento->buscarUltimoPreenchimentoServidor($formularioId);
             case Tipo::EMPREGADOR:
                 return $preenchimento->buscarUltimoPreenchimentoEmpregador($formularioId);
+            case Tipo::LOTACAO_TRIBUTARIA:
+                return $preenchimento->buscarUltimoPreenchimentoLotacao($formularioId);
             case Tipo::RUBRICA:
-                return $preenchimento->buscarUltimoPreenchimentoRubrica($formularioId);
+            case Tipo::CARGO:
+            case Tipo::CARREIRA:
+            case Tipo::FUNCAO:
+            case Tipo::HORARIO:
+            case Tipo::AMBIENTE:
+            case Tipo::PROCESSOSAJ:
+            case Tipo::PORTUARIO:
+            case Tipo::CADASTRAMENTO_INICIAL:
+                return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId);
             default:
                 throw new Exception('Tipo não encontrado.');
         }
@@ -120,6 +130,17 @@ class DadosESocial
             case Tipo::EMPREGADOR:
                 return $preenchimento->cgm;
             case Tipo::RUBRICA:
+                return $preenchimento->pk;
+            case Tipo::LOTACAO_TRIBUTARIA:
+                return $preenchimento->pk;
+            case Tipo::CARGO:
+            case Tipo::CARREIRA:
+            case Tipo::FUNCAO:
+            case Tipo::HORARIO:
+            case Tipo::AMBIENTE:
+            case Tipo::PROCESSOSAJ:
+            case Tipo::PORTUARIO:
+            case Tipo::CADASTRAMENTO_INICIAL:
                 return $preenchimento->pk;
             default:
                 throw new Exception('Tipo não encontrado.');
