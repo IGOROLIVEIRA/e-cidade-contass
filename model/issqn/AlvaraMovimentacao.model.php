@@ -1,39 +1,10 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
-
 /**
- * @deprecated
- * @see model/issqn/alvara/MovimentacaoAlvara.model.php
- *
  * @fileoverview - Classe de Modelo para movimentações do Alvará 
  * @author    Rafael Serpa Nery - rafael.nery@dbseller.com.br	
  * @package   ISSQN
- * @revision  $Author: dbjeferson.belmiro $
- * @version   $Revision: 1.13 $
+ * @revision  $Author: dbrafael.nery $
+ * @version   $Revision: 1.2 $
  */
 require_once('libs/db_stdlib.php');
 require_once('libs/db_utils.php');
@@ -76,7 +47,7 @@ abstract class AlvaraMovimentacao {
    * Observação da movimentacao
    * @var string
    */
-  private $sObservacao          = " ";
+  private $sObservacao          = "";
   
   /**
    * Número do processo do protocolo, na tabela issmovalvaraproc
@@ -101,20 +72,17 @@ abstract class AlvaraMovimentacao {
    */
   function __construct($iCodigoAlvara = null){
     
-    if($iCodigoAlvara == null){
+    if(!empty($iCodigoAlvara)){
+      
+      $this->iCodigoAlvara = $iCodigoAlvara;
+      $this->iIdUsuario    = db_getsession("DB_login");
+    } else {
+      
       throw new ErrorException("Selecione o Alvará que deseja realizar a movimentacao");
     }
-    $oDaoIssAlvara       = db_utils::getDAO("issalvara",true);
-    $sSqlValidaAlvara    = $oDaoIssAlvara->sql_query_file($iCodigoAlvara);
-    $rsSqlValidaAlvara   = $oDaoIssAlvara->sql_record($sSqlValidaAlvara);
     
-    if($oDaoIssAlvara->numrows == 0){
-      throw new ErrorException("Nenhum alvará encontrado com este código: ".$iCodigoAlvara);
-    }
-    
-    $this->iCodigoAlvara = $iCodigoAlvara;
-    $this->iIdUsuario    = db_getsession("DB_id_usuario");
   }
+  
   
   /**
    * Salva movimentação do alvará
@@ -126,42 +94,39 @@ abstract class AlvaraMovimentacao {
      */
     $this->setCodigoMovimentacao(null);
     
-    if ($this->iTipoMovimentacao == null) {
+    if ($this->$iTipoMovimentacao == null) {
       throw new ErrorException("Sem tipo de movimentação setada");
     }
-    
-    if(db_utils::inTransaction() == false){
-      throw new ErrorException("Sem transação ativa no banco de dados");
-    }
-    $oDaoIssMovAlvara  = db_utils::getDAO("issmovalvara",true);
+    if(db_utils::inTransaction()){
       
-    $oDaoIssMovAlvara->q120_isstipomovalvara  = $this->iTipoMovimentacao;
-    $oDaoIssMovAlvara->q120_dtmov             = $this->dtMovimentacao;
-    $oDaoIssMovAlvara->q120_usuario           = $this->iIdUsuario;
-    $oDaoIssMovAlvara->q120_obs               = $this->sObservacao;
-    $oDaoIssMovAlvara->q120_validadealvara    = $this->iValidadeAlvara;
-    $oDaoIssMovAlvara->q120_issalvara         = $this->iCodigoAlvara;
-    $oDaoIssMovAlvara->incluir(null);
-    /**
-     * Seta código atual da movimentacao
-     */
-    $this->iCodigoMovimentacao = $oDaoIssMovAlvara->q120_sequencial;
-    
-    if($oDaoIssMovAlvara->erro_status != "0"){
-      /**
-       * Grava os Documentos 
-       */
-      $this->gravaDocumentos($this->aDocumentos);
-      /**
-       * Grava os Processos
-       */
-      if($this->iCodigoProcesso != null || $this->iCodigoProcesso != ""){
-        $this->gravaProcesso();
+      $oDaoIssMovAlvara  = db_utils::getDAO("issmovalvara",true);
+      
+      $oDaoIssMovAlvara->q120_issalvara         = $this->getCodigoAlvara();
+      $oDaoIssMovAlvara->q120_isstipomovalvara  = $this->getTipoMovimentacao();
+      $oDaoIssMovAlvara->q120_dtmov             = $this->getDataMovimentacao();
+      $oDaoIssMovAlvara->q120_usuario           = $this->getIdUsuario();
+      $oDaoIssMovAlvara->q120_obs               = $this->getObservacao();
+      $oDaoIssMovAlvara->q120_validadealvara    = $this->getValidadeAlvara();
+      $oDaoIssMovAlvara->q120_issalvara         = $this->getCodigoAlvara();
+      $oDaoIssMovAlvara->incluir("");
+      
+      if($oDaoIssMovAlvara != "0"){
+        /**
+         * Grava os Documentos 
+         */
+        $this->gravaDocumentos($this->aDocumentos);
+        /**
+         * Grava os Processos
+         */
+        if($this->getCodigoProcesso() == null){
+          $this->gravaProcesso();
+        }
+      } else {
+        throw new ErrorException($oDaoIssMovAlvara->erro_msg);
       }
     } else {
-      throw new ErrorException($oDaoIssMovAlvara->erro_msg);
+      throw new ErrorException("Sem transação ativa no banco de dados");
     }
-    
   }
     
   /**
@@ -177,22 +142,19 @@ abstract class AlvaraMovimentacao {
    * Enter description here ...
    * @param unknown_type $aDocumentos
    */
-  protected function gravaDocumentos(){
-  	if (count($this->aDocumentos) > 0) {
-  		
-	    $oDaoIssAlvaraDocumento = db_utils::getDAO('issalvaradocumento');
-	    $oDaoIssAlvaraDocumento->excluir("", "q122_issalvara = {$this->iCodigoAlvara}");
-	    
-	    foreach ($this->aDocumentos as $iDocumento){
-	      
-	      $oDaoIssAlvaraDocumento->q122_issalvara    = $this->iCodigoAlvara;
-	      $oDaoIssAlvaraDocumento->q122_caddocumento = $iDocumento;
-	      $oDaoIssAlvaraDocumento->incluir("");
-	      if($oDaoIssAlvaraDocumento->erro_status == "0"){
-	        throw new ErrorException($oDaoIssAlvaraDocumento->erro_msg);
-	      } 
-	    }
-	  }
+  private function gravaDocumentos($aDocumentos){
+    
+    $oDaoIssMovAlvaraDocumento = db_utils::getDAO('issalvaradocumento');
+    
+    foreach ($aDocumentos as $iDocumento){
+      
+      $oDaoIssMovAlvaraDocumento->q122_issmovalvara = $this->getCodigoMovimentacao();
+      $oDaoIssMovAlvaraDocumento->q122_caddocumento = $iDocumento;
+      $oDaoIssMovAlvaraDocumento->incluir("");
+      if($oDaoIssMovAlvaraDocumento->erro_status == "0"){
+        throw new ErrorException($oDaoIssMovAlvaraDocumento->erro_msg);
+      } 
+    }
   }
 
   /**
@@ -201,19 +163,63 @@ abstract class AlvaraMovimentacao {
    */
   private function gravaProcesso(){
     
-    if($this->iCodigoProcesso != "" || $this->iCodigoProcesso != null){
-      
-      $oDaoIssMovAlvaraProcesso  = db_utils::getDAO("issmovalvaraprocesso",true);
-      
-      $oDaoIssMovAlvaraProcesso->q124_codproc      = $this->iCodigoProcesso;
-      $oDaoIssMovAlvaraProcesso->q124_issmovalvara = $this->iCodigoMovimentacao;
-      $oDaoIssMovAlvaraProcesso->incluir("");
-      if($oDaoIssMovAlvaraProcesso->erro_status == "0"){
-        throw new ErrorException($oDaoIssMovAlvaraProcesso->erro_msg);
-      }
+    $oDaoIssMovAlvaraProcesso  = db_utils::getDAO("issmovalvaraprocesso",true);
+    
+    $oDaoIssMovAlvaraProcesso->q124_codproc      = $this->getCodigoProcesso();
+    $oDaoIssMovAlvaraProcesso->q124_issmovalvara = $this->getCodigoMovimentacao();
+    $oDaoIssMovAlvaraProcesso->incluir("");
+    if($oDaoIssMovAlvaraProcesso->erro_status == "0"){
+      throw new ErrorException($oDaoIssMovAlvaraProcesso->erro_msg);
     }
   }
 
+  /**
+   * Método de que busca as movimentações do alvará
+   * @return array;
+   */
+  public function getMovimentacoesAlvara(){
+    
+    $oDaoIssMovAlvara = db_utils::getDAO("issmovalvara",true);
+    $sSqlMovAlvara    = $oDaoIssMovAlvara->sql_query_file(null, "*", "q120_issalvara = {$this->getCodigoAlvara()}");
+    $rsSqlMovAlvara   = $oDaoIssMovAlvara->sql_record($sSqlMovAlvara);
+    
+    if($oDaoIssMovAlvara->num_rows == 0){
+      return array();
+    } else {
+      return db_utils::getColectionByRecord($rsSqlMovAlvara);
+    }
+  }
+
+  public function getCodigoUltimaMovimentacao(){
+    
+  }
+  /**
+   * Retorna array com os códigos(caddocumento) de documentos 
+   * Depende que o Código da Movimentação esteja setado
+   */
+  public function getDocumentosMovimentacao(){
+    
+    if($this->iCodigoMovimentacao == null){
+      throw new ErrorException("Código da movimentação não está setado");
+    }
+    
+    $oDaoIssMovAlvaraDocumento  = db_utils::getDAO('issalvaradocumento');
+    $sSqlIssMovAlvaraDocumento  = $oDaoIssMovAlvaraDocumento->sql_query_file(null,"q122_caddocumento", "q122_issmovalvara = {$this->iCodigoMovimentacao}");
+    $rsSqlIssMovAlvaraDocumento = $oDaoIssMovAlvaraDocumento->sql_record($sSqlIssMovAlvaraDocumento);
+    if($oDaoIssMovAlvaraDocumento->num_rows == 0){
+      return array();
+    } else {
+      
+      $aIssMovAlvaraDocumentos = db_utils::getColetionByRecord($rsSqlIssMovAlvaraDocumento);
+      
+      foreach ($aIssMovAlvaraDocumentos as $oDocumentos) {
+        $aDocumentos[] = $oDocumentos->q122_caddocumento;
+      }
+      return $aDocumentos;
+    }
+  }
+  
+  
   /* Setters */
   
   /**
@@ -249,9 +255,6 @@ abstract class AlvaraMovimentacao {
   * @param strinfg $sObservacao
   */
   public function setObservacao($sObservacao) {
-    if($sObservacao == ""){
-      $sObservacao = " ";
-    }
     $this->sObservacao = $sObservacao;
     return $this;
   }
@@ -337,29 +340,13 @@ abstract class AlvaraMovimentacao {
   * @return integer $iCodigoProcesso
   */
   public function getValidadeAlvara() {
-    return $this->iValidadeAlvara;
+    return $this->$iValidadeAlvara;
   }
-  
   /**
-  * Método de que busca as movimentações do alvará
-  * @return array;
-  */
-  public function getMovimentacoesAlvara($sOrdem=''){
-  
-    $oDaoIssMovAlvara = db_utils::getDAO("issmovalvara",true);
-    $sSqlMovAlvara    = $oDaoIssMovAlvara->sql_query(null, "*", $sOrdem, "q120_issalvara = {$this->iCodigoAlvara}");
-    $rsSqlMovAlvara   = $oDaoIssMovAlvara->sql_record($sSqlMovAlvara);
-  
-    if($oDaoIssMovAlvara->numrows == 0){
-      return array();
-    } else {
-      return db_utils::getColectionByRecord($rsSqlMovAlvara);
-    }
+   * Retorna um array com os códigos dos documentos vinculados a movimentacao do alvara;
+   */
+  public function getDocumentosMovimentacao(){
+        
   }
-  
-  public function getUltimaMovimentacao(){
-  
-    return $this->getMovimentacoesAlvara("q120_sequencial desc limit 1");
-  }
-  
 }
+?>

@@ -39,7 +39,7 @@ db_postmemory($_GET);
 ?>
 <html>
   <head>
-    <title>DBSeller InformÃ¡tica Ltda</title>
+    <title>DBSeller Informática Ltda</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <?php
@@ -86,7 +86,7 @@ db_postmemory($_GET);
             $lTrazerSugestoes = true;
            ?>
           <fieldset >
-          <legend ><label for="matricula" > Escolha sua MatrÃ­cula </label ></legend>
+          <legend ><label for="matricula" > Escolha sua Matrícula </label ></legend>
           <select id = 'matricula' style="width:100%" onchange="buscarAvaliacao(Event)">
           </select >
         </fieldset >
@@ -98,13 +98,13 @@ db_postmemory($_GET);
         }
         ?>
         <fieldset>
-        <legend>FormulÃ¡rio de Cadastro para o eSocial</legend>
+        <legend>Formulário de Cadastro para o eSocial</legend>
           <div id="questionario"></div>
         </fieldset>
         <input type="button" id="anterior" name="anterior" value="Anterior" class="controle" />
         <input type="button" id="limpar"   name="limpar"   value="Limpar"   class="controle" />
         <input type="button" id="salvar"   name="salvar"   value="Salvar"   class="controle" />
-        <input type="button" id="proximo"  name="proximo"  value="PrÃ³ximo"  class="controle" />
+        <input type="button" id="proximo"  name="proximo"  value="Próximo"  class="controle" />
       <form>
 
     <?php
@@ -128,7 +128,7 @@ db_postmemory($_GET);
     function buscarAvaliacao(Event) {
 
       if(Event) {
-        if(!confirmaSaida("Se vocÃª alterar a matrÃ­cula os dados que nÃ£o foram salvos serÃ£o perdidos.\nTem certeza que deseja trocar de matrÃ­cula?")) {
+        if(!confirmaSaida("Se você alterar a matrí­cula os dados que não foram salvos serão perdidos.\nTem certeza que deseja trocar de matrí­cula?")) {
           $('matricula').value = iMatriculaAnterior;
           return false;
         }
@@ -148,7 +148,7 @@ db_postmemory($_GET);
       }
 
       var oAjaxRequest = new AjaxRequest('eso4_preenchimento.RPC.php', oDados, montarAvaliacao);
-          oAjaxRequest.setMessage('Buscando dados da avaliaÃ§Ã£o...');
+          oAjaxRequest.setMessage('Buscando dados da avaliação...');
           oAjaxRequest.execute();
     }
 
@@ -170,7 +170,7 @@ db_postmemory($_GET);
 
       $('anterior').observe('click', function() {
 
-        var sMensagem = "As informaÃ§Ãµes preenchidas, poderÃ£o ser perdidas.\n";
+        var sMensagem = "As informações preenchidas, poderão ser perdidas.\n";
         sMensagem    += "Tem certeza que deseja voltar?";
 
         if(confirm(sMensagem)) {
@@ -192,7 +192,7 @@ db_postmemory($_GET);
     function salvarQuestionario(viewAvaliacao, iCodigoGrupo) {
 
       if(! viewAvaliacao.getStatus().grupoAtual.isValido()) {
-        alert("HÃ¡ informaÃ§Ãµes obrigatÃ³rias inconsistentes.\nVerifique.");
+        alert("Há informações obrigatórias inconsistentes.\nVerifique.");
         return false;
       }
       var lRetorno = true;
@@ -220,7 +220,7 @@ db_postmemory($_GET);
         }
       );
 
-      oAjaxRequest.setMessage('Salvando dados da avaliaÃ§Ã£o...');
+      oAjaxRequest.setMessage('Salvando dados da avaliação...');
       oAjaxRequest.execute();
       return lRetorno;
     }
@@ -274,7 +274,7 @@ db_postmemory($_GET);
 
         buscarAvaliacao();
       });
-      oAjaxRequest.setMessage('Buscando dados da avaliaÃ§Ã£o...');
+      oAjaxRequest.setMessage('Buscando dados da avaliação...');
       oAjaxRequest.execute();
 
     }
@@ -289,7 +289,7 @@ db_postmemory($_GET);
     function confirmaSaida (sMensagem) {
 
       if(typeof sMensagem == 'undefined' || sMensagem == null || sMensagem == false) {
-        sMensagem = 'VocÃª estÃ¡ saindo do cadastro do eSocial.\nAntes de sair, salve seus dados.';
+        sMensagem = 'Você está saindo do cadastro do eSocial.\nAntes de sair, salve seus dados.';
       }
 
       if (!confirm(sMensagem)) {

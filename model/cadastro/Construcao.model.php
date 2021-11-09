@@ -1,32 +1,6 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
-
-require_once('model/cadastro/Imovel.model.php');
-require_once('model/cadastro/CertidaoExistencia.model.php');
+require_once('model/cadastro/imovel.model.php');
+require_once('model/cadastro/certidaoExistencia.model.php');
 
 
 /**
@@ -36,7 +10,7 @@ require_once('model/cadastro/CertidaoExistencia.model.php');
  * @author   Alberto Ferri Neto alberto@dbseller.com.br
  * @package  Cadastro
  * @revision $Author: dbrafael.nery $
- * @version  $Revision: 1.3 $
+ * @version  $Revision: 1.1 $
  */
 class Construcao {
 
@@ -287,19 +261,6 @@ class Construcao {
 		return $this->iCodigoRua;
 	}
 
-	public function getNomeRua() {
-	  
-	  $oDaoRuas    = db_utils::getDao('ruas');
-	  $sSql        = $oDaoRuas->sql_query_file( $this->getCodigoRua() );
-	  $rsResultado = $oDaoRuas->sql_record($sSql);
-	  
-	  if ( !$rsResultado ) {
-	    throw new BusinessException("Erro ao Buscar dados da Rua:" . $oDaoRuas->error_msg);
-	  }
-	  
-	  return db_utils::fieldsMemory($rsResultado, 0)->j14_nome;
-	} 
-	
 	/**
 	 * Define código da rua
 	 * @param integer $iCodigoRua
@@ -477,52 +438,5 @@ class Construcao {
 		$oCertidaoExistencia->setCodigoConstrucao($this->getCodigoConstrucao());
 		return $oCertidaoExistencia;
 	}
-	
-	public function getCalculoIptu($iAnoCalculo) {
-	  
-	  db_app::import('cadastro.CalculoIptu');
-	  
-	  $oCalculo = new CalculoIPTU($this->getMatricula(), $iAnoCalculo);
-	  
-	  return $oCalculo->getCalculoConstrucao($this->getCodigoConstrucao());
-	  
-	}
-	
-	public function getCaracteristicasConstrucao() {
-	  
-	  if(empty($this->iMatricula)) {
-	    throw new Exception('Matrícula não informada.');
-	  }
-	  
-	  if(empty($this->iCodigoConstrucao)) {
-	    throw new Exception('Código da construção não informado.');
-	  }
-	  
-	  $oDaoCarconstr = db_utils::getDao('carconstr');
-	  
-	  $sSqlCarconstr = $oDaoCarconstr->sql_queryCaracteristicas($this->getMatricula(), $this->getCodigoConstrucao());
-	  
-	  $rsCarconstr   = $oDaoCarconstr->sql_record($sSqlCarconstr);
-	  
-	  $aCarconstr    = db_utils::getCollectionByRecord($rsCarconstr);
-	  
-	  $aCaracteristicas = array();
-	  
-	  foreach ($aCarconstr as $oCarconstr) {
-	    
-	    $oCaracteristica = new stdClass();
-	    
-	    $oCaracteristica->iCodigoCaracteristica = $oCarconstr->j31_codigo;
-	    $oCaracteristica->sCaracteristica       = $oCarconstr->j31_descr ;
-	    $oCaracteristica->iNumeroPontos         = $oCarconstr->j31_pontos;
-	    $oCaracteristica->iCodigoGrupo          = $oCarconstr->j32_grupo ;
-	    $oCaracteristica->sDescricaoGrupo       = $oCarconstr->j32_descr ;
-	    
-	    $aCaracteristicas[] = $oCaracteristica;
-	    
-	  }
-	  
-	  return $aCaracteristicas;
-	  
-	}
 }
+

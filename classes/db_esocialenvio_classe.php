@@ -3,6 +3,10 @@
 //CLASSE DA ENTIDADE esocialenvio
 class cl_esocialenvio { 
    // cria variaveis de erro 
+   const SITUACAO_NAO_ENVIADO = 1;
+   const SITUACAO_ENVIADO = 2;
+   const SITUACAO_PROCESSANDO = 3;
+   const SITUACAO_ERRO_ENVIO = 4;
    var $rotulo     = null; 
    var $query_sql  = null; 
    var $numrows    = 0; 
@@ -23,6 +27,9 @@ class cl_esocialenvio {
    var $rh213_dados = null; 
    var $rh213_md5 = null; 
    var $rh213_situacao = 0; 
+   var $rh213_msgretorno = null; 
+   var $rh213_dataprocessamento = null; 
+   var $rh213_ambienteenvio = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  rh213_sequencial = int4 = Código 
@@ -32,6 +39,9 @@ class cl_esocialenvio {
                  rh213_dados = text = Dados 
                  rh213_md5 = varchar(32) = MD5 
                  rh213_situacao = int4 = Situacao 
+                 rh213_msgretorno = text = Mensagem de Retorno 
+                 rh213_dataprocessamento = date = Data Processamento 
+                 rh213_ambienteenvio = int4 = Ambiente de Envio
                  ";
    //funcao construtor da classe 
    function cl_esocialenvio() { 
@@ -58,6 +68,9 @@ class cl_esocialenvio {
        $this->rh213_dados = ($this->rh213_dados == ""?@$GLOBALS["HTTP_POST_VARS"]["rh213_dados"]:$this->rh213_dados);
        $this->rh213_md5 = ($this->rh213_md5 == ""?@$GLOBALS["HTTP_POST_VARS"]["rh213_md5"]:$this->rh213_md5);
        $this->rh213_situacao = ($this->rh213_situacao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh213_situacao"]:$this->rh213_situacao);
+       $this->rh213_msgretorno = ($this->rh213_msgretorno == ""?@$GLOBALS["HTTP_POST_VARS"]["rh213_msgretorno"]:$this->rh213_msgretorno);
+       $this->rh213_dataprocessamento = ($this->rh213_dataprocessamento == ""?@$GLOBALS["HTTP_POST_VARS"]["rh213_dataprocessamento"]:$this->rh213_dataprocessamento);
+       $this->rh213_ambienteenvio = ($this->rh213_ambienteenvio == ""?@$GLOBALS["HTTP_POST_VARS"]["rh213_ambienteenvio"]:$this->rh213_ambienteenvio);
      }else{
        $this->rh213_sequencial = ($this->rh213_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["rh213_sequencial"]:$this->rh213_sequencial);
      }
@@ -119,6 +132,24 @@ class cl_esocialenvio {
        $this->erro_status = "0";
        return false;
      }
+     if($this->rh213_dataprocessamento == null ){ 
+       $this->erro_sql = " Campo Data Processamento não informado.";
+       $this->erro_campo = "rh213_dataprocessamento";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->rh213_ambienteenvio == null ){ 
+       $this->erro_sql = " Campo Ambiente de Envio não informado.";
+       $this->erro_campo = "rh213_ambienteenvio";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($rh213_sequencial == "" || $rh213_sequencial == null ){
        $result = db_query("select nextval('esocialenvio_rh213_sequencial_seq')"); 
        if($result==false){
@@ -159,6 +190,9 @@ class cl_esocialenvio {
                                       ,rh213_dados 
                                       ,rh213_md5 
                                       ,rh213_situacao 
+                                      ,rh213_msgretorno 
+                                      ,rh213_dataprocessamento 
+                                      ,rh213_ambienteenvio 
                        )
                 values (
                                 $this->rh213_sequencial 
@@ -168,6 +202,9 @@ class cl_esocialenvio {
                                ,'$this->rh213_dados' 
                                ,'$this->rh213_md5' 
                                ,$this->rh213_situacao 
+                               ,'$this->rh213_msgretorno'
+                               ,".($this->rh213_dataprocessamento == null ? 'NULL' : "'".$this->rh213_dataprocessamento)."'"."
+                               ,'$this->rh213_ambienteenvio'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -304,6 +341,36 @@ class cl_esocialenvio {
        if(trim($this->rh213_situacao) == null ){ 
          $this->erro_sql = " Campo Situacao não informado.";
          $this->erro_campo = "rh213_situacao";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->rh213_msgretorno)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh213_msgretorno"])){ 
+       $sql  .= $virgula." rh213_msgretorno = '$this->rh213_msgretorno' ";
+       $virgula = ",";
+     }
+     if(trim($this->rh213_dataprocessamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh213_dataprocessamento"])){ 
+       $sql  .= $virgula." rh213_dataprocessamento = ".($this->rh213_dataprocessamento == null ? 'NULL' : "'".$this->rh213_dataprocessamento)."'"." ";
+       $virgula = ",";
+       if(trim($this->rh213_dataprocessamento) == null ){ 
+         $this->erro_sql = " Campo Data Processamento não informado.";
+         $this->erro_campo = "rh213_dataprocessamento";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->rh213_ambienteenvio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh213_ambienteenvio"])){ 
+       $sql  .= $virgula." rh213_ambienteenvio = $this->rh213_ambienteenvio ";
+       $virgula = ",";
+       if(trim($this->rh213_ambienteenvio) == null ) { 
+         $this->erro_sql = " Campo Ambiente de Envio não informado.";
+         $this->erro_campo = "rh213_ambienteenvio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -481,6 +548,7 @@ class cl_esocialenvio {
 
      $sql  = "select {$campos}";
      $sql .= "  from esocialenvio ";
+     $sql .= "  left join esocialrecibo on rh213_sequencial = rh215_esocialenvio";
      $sql2 = "";
      if (empty($dbwhere)) {
        if (!empty($rh213_sequencial)) {
@@ -513,6 +581,46 @@ class cl_esocialenvio {
        $sql .= " order by {$ordem}";
      }
      return $sql;
+  }
+
+  public function checkQueue() {
+    $sql = "SELECT COUNT(*) as queue FROM esocialenvio WHERE rh213_empregador = ".db_getsession("DB_instit")." AND rh213_situacao = ".self::SITUACAO_NAO_ENVIADO;
+    $result = db_query($sql);
+    return db_utils::fieldsMemory($result, 0)->queue > 0;
+  }
+
+  public function setSituacaoEnviado($rh213_sequencial)
+  {
+    $this->rh213_situacao = self::SITUACAO_ENVIADO;
+    $this->rh213_sequencial = $rh213_sequencial;
+    $this->rh213_msgretorno = '';
+    $this->rh213_dataprocessamento = date('Y-m-d h:i:s');
+    $this->alterar($rh213_sequencial);
+  }
+
+  public function setSituacaoErroEnvio($rh213_sequencial, $rh213_msgretorno)
+  {
+    $this->rh213_situacao = self::SITUACAO_ERRO_ENVIO;
+    $this->rh213_sequencial = $rh213_sequencial;
+    $this->rh213_msgretorno = str_replace("'", "\'", $rh213_msgretorno);
+    $this->rh213_dataprocessamento = date('Y-m-d h:i:s');
+    $this->alterar($rh213_sequencial);
+  }
+
+  public function setSituacaoProcessando()
+  {
+    $this->erro_status = "1";
+    $sql = "UPDATE esocialenvio SET rh213_situacao = ".self::SITUACAO_PROCESSANDO." WHERE rh213_situacao = ".self::SITUACAO_NAO_ENVIADO;
+    $result = db_query($sql);
+    if ($result == false) {
+      $this->erro_banco = str_replace("\n","",@pg_last_error());
+      $this->erro_sql   = "Fila de envio para o eSocial não Atualizada. Atualização Abortada.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      $this->numrows_excluir = 0;
+      return false;
+    }
   }
 
 }

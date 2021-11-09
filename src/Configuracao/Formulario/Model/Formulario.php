@@ -27,6 +27,7 @@
 namespace ECidade\Configuracao\Formulario\Model;
 
 use ECidade\Configuracao\Formulario\Repository\Pergunta;
+use ECidade\Configuracao\Formulario\Model\FormularioModelFactory;
 
 /**
  * Class Formulario
@@ -210,6 +211,17 @@ class Formulario {
       }
     }
     return $perguntasIdentificadoras;
+  }
+
+  /**
+   * Retorna colunas identificadoras para a tela de pesquisa
+   * do formulario padrao do eSocial
+   * @return array
+   */
+  public function getIdentificadorColunasPesquisa($tipo) 
+  {
+    $formularioModel = FormularioModelFactory::getStatic($tipo);
+    return $formularioModel::getIdentColunas();
   }
 
 }

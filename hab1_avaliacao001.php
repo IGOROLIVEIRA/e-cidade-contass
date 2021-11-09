@@ -57,22 +57,26 @@ unset($_SESSION["oCandidatoHabitacao"]);
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
      <?
-	     $clcriaabas->identifica  = array("avaliacao"=>"Avaliação",
-	                                      "avaliacaogrupopergunta"=>"Grupos",
-	                                      "avaliacaopergunta"=>"Perguntas");
-	     
-       $clcriaabas->title       = array("avaliacao"=>"Avaliação",
+	     $clcriaabas->identifica  = array("avaliacao"=>"Formulário",
                                         "avaliacaogrupopergunta"=>"Grupos",
-                                        "avaliacaopergunta"=>"Perguntas");
+                                        "avaliacaopergunta"=>"Perguntas",
+                                        "carga"=>"Carga");
+
+       $clcriaabas->title       = array("avaliacao"=>"Formulário",
+                                        "avaliacaogrupopergunta"=>"Grupos",
+                                        "avaliacaopergunta"=>"Perguntas",
+                                        "carga"=>"Carga");
 	      
 	     $clcriaabas->src         = array("avaliacao"=>"hab1_avaliacao004.php");
 	     
        $clcriaabas->sizecampo   = array("avaliacao"=>"23",
                                         "avaliacaogrupopergunta"=>"23",
-                                        "avaliacaopergunta"=>"23");
+                                        "avaliacaopergunta"=>"23",
+                                        "carga"=>"23");
 	     
 	     $clcriaabas->disabled    = array("avaliacaopergunta"=>"true",
-	                                      "avaliacaogrupopergunta"=>"true");
+	                                      "avaliacaogrupopergunta"=>"true",
+                                        "carga"=>"true");
 	      
 	     $clcriaabas->cria_abas(); 
      ?> 

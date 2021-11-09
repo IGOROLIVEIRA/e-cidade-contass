@@ -138,7 +138,7 @@ class cl_avaliacaogruporespostarhpessoal {
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+     /*if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
        $resaco = $this->sql_record($this->sql_query_file($this->eso02_sequencial  ));
@@ -152,7 +152,7 @@ class cl_avaliacaogruporespostarhpessoal {
          $resac = db_query("insert into db_acount values($acount,3924,21793,'','".AddSlashes(pg_result($resaco,0,'eso02_avaliacaogruporesposta'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3924,21794,'','".AddSlashes(pg_result($resaco,0,'eso02_rhpessoal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
-     }
+     }*/
      return true;
    }
    // funcao para alteracao
@@ -204,7 +204,7 @@ class cl_avaliacaogruporespostarhpessoal {
        $sql .= " eso02_sequencial = $this->eso02_sequencial";
      }
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+     /*if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
        $resaco = $this->sql_record($this->sql_query_file($this->eso02_sequencial));
@@ -224,7 +224,7 @@ class cl_avaliacaogruporespostarhpessoal {
              $resac = db_query("insert into db_acount values($acount,3924,21794,'".AddSlashes(pg_result($resaco,$conresaco,'eso02_rhpessoal'))."','$this->eso02_rhpessoal',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $result = db_query($sql);
      if (!$result) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -261,7 +261,7 @@ class cl_avaliacaogruporespostarhpessoal {
    public function excluir ($eso02_sequencial=null,$dbwhere=null) {
 
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+     /*if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
        if (empty($dbwhere)) {
@@ -283,7 +283,7 @@ class cl_avaliacaogruporespostarhpessoal {
            $resac  = db_query("insert into db_acount values($acount,3924,21794,'','".AddSlashes(pg_result($resaco,$iresaco,'eso02_rhpessoal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $sql = " delete from avaliacaogruporespostarhpessoal
                     where ";
      $sql2 = "";

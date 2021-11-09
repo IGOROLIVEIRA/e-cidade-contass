@@ -10,6 +10,8 @@ require_once ("classes/db_esocialenvio_classe.php");
 
 class FilaESocialTask extends Task implements iTarefa
 {
+    const LOTE_PROCESSADO_SUCESSO = '201';
+
     public function iniciar()
     {
         // $job = new \Job();
@@ -30,60 +32,87 @@ class FilaESocialTask extends Task implements iTarefa
         require_once ("libs/db_utils.php");
         require_once ("dbforms/db_funcoes.php");
 
+        $dao = new \cl_esocialenvio();
         try {
 
             /**
              * Conecta no banco com variaveis definidas no 'libs/db_conn.php'
              */
             if (!($conn = @pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA"))) {
-                die("\nErro ao conectar ao banco. host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA \n");
+                throw new Exception("Erro ao conectar ao banco. host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA");
             }
 
-            $dao = new \cl_esocialenvio();
-            $sql = $dao->sql_query_file(null, "*", "rh213_sequencial", "rh213_situacao = 1");
-            
+            $sql = $dao->sql_query_file(null, "*", "rh213_sequencial", "rh213_situacao = ".cl_esocialenvio::SITUACAO_NAO_ENVIADO);
             $rs  = \db_query($sql."\n");
 
-            if (!$rs && pg_num_rows($rs) == 0) {
-                die("Agendamento nao encontrado. \n");
+            if (!$rs || pg_num_rows($rs) == 0) {
+                throw new Exception("Agendamento nao encontrado.");
             }
-            for ($iCont=0; $iCont < pg_num_rows($rs); $iCont++) { 
-                
-                $dadosEnvio = \db_utils::fieldsMemory($rs, $iCont);
-
-                $daoEsocialCertificado = new \cl_esocialcertificado();
-                $sql = $daoEsocialCertificado->sql_query(null, "rh214_senha as senha,rh214_certificado as certificado, z01_cgccpf as nrinsc, z01_nome as nmRazao", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
-                $rsEsocialCertificado  = \db_query($sql."\n");
-
-                if (!$rsEsocialCertificado && pg_num_rows($rsEsocialCertificado) == 0) {
-                    die("Certificado nao encontrado. \n");
-                }
-                $dadosCertificado = \db_utils::fieldsMemory($rsEsocialCertificado, 0);
-                $dadosCertificado->nmrazao = utf8_encode($dadosCertificado->nmrazao);
-                $dados = array($dadosCertificado,json_decode($dadosEnvio->rh213_dados));
-
-                // $sRecurso = Recurso::getRecursoByEvento($dadosEnvio->rh213_evento);
-
-                $exportar = new ESocial(Registry::get('app.config'));
-                $exportar->setDados($dados);
-                $retorno = $exportar->request();
-                echo "<br> \n ";
-                if($retorno) {
-                    $dao->rh213_situacao = 2;
-                    $dao->rh213_sequencial = $dadosEnvio->rh213_sequencial;
-                    $dao->alterar($dadosEnvio->rh213_sequencial);
-
-                    if ($dao->erro_status == 0) {
-                        die("Não foi possível alterar situação da fila. \n");
-                    }
-                } else {
-                    die("Erro no envio das informações.");
-                }
+            $dao->setSituacaoProcessando();
+            if ($dao->erro_status == "0") {
+                throw new Exception("Erro ao Atualizar agendamentos para o status PROCESSANDO.");
             }
+            for ($iCont=0; $iCont < pg_num_rows($rs); $iCont++) {
+                $this->enviar($conn, \db_utils::fieldsMemory($rs, $iCont));
+            }
+
         } catch (\Exception $e) {
-            $this->log("Erro na execução:\n{$e->getMessage()} - ");
+            die("Erro na execução:\n{$e->getMessage()} \n");
         }
-        // parent::terminar();
+    }
+
+    private function enviar($conn, $dadosEnvio)
+    {
+
+        try {
+
+            $dao = new \cl_esocialenvio();
+
+            $daoEsocialCertificado = new \cl_esocialcertificado();
+            $sql = $daoEsocialCertificado->sql_query(null, "rh214_senha as senha,rh214_certificado as certificado, z01_cgccpf as nrinsc, z01_nome as nmRazao", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
+            $rsEsocialCertificado  = \db_query($sql);
+
+            if (!$rsEsocialCertificado && pg_num_rows($rsEsocialCertificado) == 0) {
+                throw new Exception("Certificado nao encontrado.");
+            }
+            $dadosCertificado = \db_utils::fieldsMemory($rsEsocialCertificado, 0);
+            $dadosCertificado->nmrazao = utf8_encode($dadosCertificado->nmrazao);
+            $dados = array($dadosCertificado,json_decode($dadosEnvio->rh213_dados),$dadosEnvio->rh213_evento,$dadosEnvio->rh213_ambienteenvio);
+
+            $exportar = new ESocial(Registry::get('app.config'),"run.php");
+            $exportar->setDados($dados);
+            $retorno = $exportar->request();
+
+            if(!$retorno) {
+                throw new Exception("Erro no envio das informações. \n {$exportar->getDescResposta()}");   
+            }
+            $dao->setSituacaoEnviado($dadosEnvio->rh213_sequencial);
+            if ($dao->erro_status == "0") {
+                throw new Exception("Não foi possível alterar situação ENVIADO da fila.");
+            }
+
+            $dados[] = $exportar->getProtocoloEnvioLote();
+            $exportar = new ESocial(Registry::get('app.config'),"consulta.php");
+            $exportar->setDados($dados);
+            $retorno = $exportar->request();
+            if(!$retorno) {
+                throw new Exception("Erro ao buscar processamento do envio. \n {$exportar->getDescResposta()}");
+            }
+
+            if ($exportar->getCdRespostaProcessamento() != self::LOTE_PROCESSADO_SUCESSO) {
+                throw new Exception("Erro no processamento do lote. ".utf8_decode($exportar->getDescRespostaProcessamento()));
+            }
+
+            $this->incluirRecido($dadosEnvio->rh213_sequencial,$exportar->getNumeroRecibo());
+            echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
+
+        } catch (\Exception $e) {
+            $dao->setSituacaoErroEnvio($dadosEnvio->rh213_sequencial,$e->getMessage());
+            if ($dao->erro_status == "0") {
+                echo "Erro na execução:\n Não foi possível alterar situação NAO ENVIADO da fila. \n {$dao->erro_msg}";
+            }
+            echo "Erro na execução:\n{$e->getMessage()} \n";
+        }
     }
 
     public function cancelar()
@@ -92,5 +121,17 @@ class FilaESocialTask extends Task implements iTarefa
 
     public function abortar()
     {
+    }
+
+    public function incluirRecido($codigoEsocialEnvio, $numeroRecibo) 
+    {
+        $daoEsocialRecibo = new \cl_esocialrecibo();
+        $daoEsocialRecibo->rh215_esocialenvio = $codigoEsocialEnvio;
+        $daoEsocialRecibo->rh215_recibo = $numeroRecibo;
+        $daoEsocialRecibo->rh215_dataentrega = date("Y-m-d H:i:s");
+        $daoEsocialRecibo->incluir();
+        if ($daoEsocialRecibo->erro_status == 0) {
+            die("Não foi possível incluir recibo {$numeroRecibo}. \n".$daoEsocialRecibo->erro_msg);
+        }
     }
 }

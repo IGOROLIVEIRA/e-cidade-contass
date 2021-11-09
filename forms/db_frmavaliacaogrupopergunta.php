@@ -89,7 +89,7 @@ if (isset($oPost->db_opcaoal)) {
     </td>
     <td>
       <?
-        db_input('db101_descricao',50,$Idb101_descricao,true,'text',3,'');
+        db_input('db101_descricao',100,$Idb101_descricao,true,'text',3,'');
       ?>
     </td>
   </tr>
@@ -99,7 +99,7 @@ if (isset($oPost->db_opcaoal)) {
     </td>
     <td colspan="2">
 			<?
-			  db_input('db102_descricao',50,$Idb102_descricao,true,'text',$db_opcao,"")
+			  db_input('db102_descricao',100,$Idb102_descricao,true,'text',$db_opcao,"")
 			?>
     </td>
   </tr>
@@ -108,8 +108,18 @@ if (isset($oPost->db_opcaoal)) {
       <?=@$Ldb102_identificador?>
     </td>
     <td colspan="2">
+      <?
+        db_input('db102_identificador',100,$Idb102_identificador,true,'text',$db_opcao,"")
+      ?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tdb102_identificadorcampo?>">
+      <?=@$Ldb102_identificadorcampo?>
+    </td>
+    <td colspan="2">
 			<?
-			  db_input('db102_identificador',65,$Idb102_identificador,true,'text',$db_opcao,"")
+			  db_input('db102_identificadorcampo',100,$Idb102_identificador,true,'text',$db_opcao,"")
 			?>
     </td>
   </tr>
@@ -144,7 +154,7 @@ if (isset($oPost->db_opcaoal)) {
 			  $chavepri = array("db102_sequencial"=>@$db102_sequencial);
 			  $cliframe_alterar_excluir->chavepri=$chavepri;
 			  $cliframe_alterar_excluir->sql     = $clavaliacaogrupopergunta->sql_query_file(null, "*", "db102_sequencial", $sWhere);
-			  $cliframe_alterar_excluir->campos  ="db102_sequencial,db102_avaliacao,db102_descricao, db102_identificador";
+			  $cliframe_alterar_excluir->campos  ="db102_sequencial,db102_avaliacao,db102_descricao, db102_identificador,db102_identificadorcampo";
 			  $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
 			  $cliframe_alterar_excluir->iframe_height ="160";
 			  $cliframe_alterar_excluir->iframe_width ="600";
@@ -201,7 +211,7 @@ function js_validaCaracteres() {
   if (lResultadoInicial) {
 
     var sValorCaracteres      = $F('db102_identificador').substring(1);
-    var sExpressaoCaracteres  = /^[A-Za-z0-9_]+?$/i;
+    var sExpressaoCaracteres  = /^[A-Za-z0-9_-]+?$/i;
     var sRegExpCaracteres     = new RegExp(sExpressaoCaracteres);
     var lResultadoCaracteres  = sRegExpCaracteres.test(sValorCaracteres);
     if (!lResultadoCaracteres) {
@@ -216,4 +226,26 @@ function js_validaCaracteres() {
   }
   return true;
 }
+function montarIdentificador(textoBase) {
+
+        var listaStringTrocar = "áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÖÔÚÙÛÜÇ";
+        var listaStringSubstituir = "aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC";
+        var stringIdentificador = "";
+        for (var i = 0; i < textoBase.length; i++) {
+            if (listaStringTrocar.indexOf(textoBase.charAt(i)) != -1) {
+                stringIdentificador += listaStringSubstituir.substr(listaStringTrocar.search(textoBase.substr(i, 1)), 1);
+            } else {
+                stringIdentificador += textoBase.substr(i, 1);
+            }
+        }
+
+        stringIdentificador = stringIdentificador.replace(/[^a-zA-Z 0-9]/g, '');
+        var identificador = stringIdentificador.replace(/ /g, '-').toLowerCase().substr(0, 90);
+        return identificador;
+    }
+    $('db102_descricao').observe('blur', function() {
+        if ($F('db102_identificador') == ''){
+            $('db102_identificador').value = montarIdentificador(this.value);
+        }
+    });
 </script>
