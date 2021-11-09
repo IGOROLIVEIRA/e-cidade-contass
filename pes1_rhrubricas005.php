@@ -34,10 +34,14 @@ include("dbforms/db_funcoes.php");
 include("classes/db_rhrubricas_classe.php");
 include("classes/db_rhrubelemento_classe.php");
 include("classes/db_rhrubretencao_classe.php");
+include("classes/db_rubricasesocial_classe");
+include("classes/db_baserubricasesocial_classe.php");
 
 $clrhrubricas    = new cl_rhrubricas();
 $clrhrubelemento = new cl_rhrubelemento();
 $clrhrubretencao = new cl_rhrubretencao();
+$clrubricasesocial = new cl_rubricasesocial;
+$clbaserubricasesocial = new cl_baserubricasesocial;
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -221,7 +225,21 @@ if(isset($alterar) || isset($novasrubricas)){
         }      		
     	}
     }
-  //sqlerro = true;
+    if ($sqlerro == false) {
+      $clbaserubricasesocial->e991_rubricasesocial = $e991_rubricasesocial;
+      $clbaserubricasesocial->e991_rubricas = $rh27_rubric;
+      $clbaserubricasesocial->e991_instit =  db_getsession("DB_instit");
+      $result = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query(null,'e991_rubricasesocial',null,"e991_rubricas = '$rh27_rubric' and  e991_instit = ".db_getsession("DB_instit")));
+      if($clbaserubricasesocial->numrows > 0) { 
+        $clbaserubricasesocial->alterar($rh27_rubric, db_getsession("DB_instit"));
+      } else {
+        $clbaserubricasesocial->incluir();
+      }
+      if($clbaserubricasesocial->erro_status == 0) {
+        $sqlerro=true;
+        $erro_msg = $clbaserubricasesocial->erro_msg;
+      }
+    }
   db_fim_transacao($sqlerro);
   $db_opcao = 2;
   $db_botao = true;
@@ -255,6 +273,10 @@ if(isset($alterar) || isset($novasrubricas)){
     $rh23_codele = '';
     $o56_descr   = '';  	
   }
+  $result = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query(null,'e991_rubricasesocial',null,"e991_rubricas = '$rh27_rubric' and  e991_instit = ".db_getsession("DB_instit")));
+  if($clbaserubricasesocial->numrows > 0) { 
+    db_fieldsmemory($result, 0);
+  } 
   
   $sWhereRetencao   = "     rh75_rubric = '{$chavepesquisa}'";
   $sWhereRetencao  .= " and rh75_instit = ".db_getsession('DB_instit');
@@ -429,9 +451,7 @@ if(isset($chavepesquisa)){
             top.corpo.iframe_rhrubelemento.location.href='pes1_rhrubelemento001.php?rh23_rubric=".@$rh27_rubric."';
             */
             parent.document.formaba.rhbases.disabled=false;
-            parent.document.formaba.rhbasesesocial.disabled=false;
             top.corpo.iframe_rhbases.location.href='pes1_rhbases004.php?r09_rubric=".@$rh27_rubric."';
-            top.corpo.iframe_rhbasesesocial.location.href='pes1_rhbasesesocial004.php?r09_rubric=".@$rh27_rubric."';     
        ";
   if(isset($liberaaba)){
     echo "  parent.mo_camada('rhbases');";

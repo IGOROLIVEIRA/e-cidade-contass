@@ -55,8 +55,8 @@ if(isset($HTTP_POST_VARS["atualizar"])) {
     //if($codsequencia != "0")
     //  pg_exec("delete from db_syssequencia where codsequencia = $codsequencia") or die("Erro(17) excluindo em db_syssequencia");
       if($codsequencia == "0") {//sequencia não existe, criar uma
-        //$result = pg_exec("select max(codsequencia) + 1 from db_syssequencia");
-        $result = pg_exec("select nextval('db_syssequencia_codsequencia_se')");
+        $result = pg_exec("select max(codsequencia) + 1 from db_syssequencia");
+        //$result = pg_exec("select nextval('db_syssequencia_codsequencia_se')");
         $codsequencia = pg_result($result,0,0);
         pg_exec("insert into db_syssequencia values($codsequencia,
                                                   '$nomesequencia',

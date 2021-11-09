@@ -65,17 +65,14 @@ if(isset($alterar)){
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-    <center>
+
+<br /> <br />
+<center>
 	<?
-	include("forms/db_frmconrelinfo.php");
+  	include("forms/db_frmconrelinfo.php");
 	?>
-    </center>
-	</td>
-  </tr>
-</table>
+</center>
+
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
@@ -90,15 +87,12 @@ if(isset($alterar)){
     if($clconrelinfo->erro_campo!=""){
       echo "<script> document.form1.".$clconrelinfo->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clconrelinfo->erro_campo.".focus();</script>";
-    }
+    };
   }else{
     $clconrelinfo->erro(true,true);
-  }
-}
+  };
+};
 if($db_opcao==22){
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>
-<script>
-js_tabulacaoforms("form1","c83_codparrel",true,1,"c83_codparrel",true);
-</script>

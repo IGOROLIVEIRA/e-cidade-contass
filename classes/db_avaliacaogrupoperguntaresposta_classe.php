@@ -515,5 +515,45 @@ class cl_avaliacaogrupoperguntaresposta {
           }
           return $sql;
   }
+
+    function sql_query_UltimaResposta ( $db108_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from avaliacaogrupoperguntaresposta ";
+        $sql .= "      inner join avaliacaoresposta       on  db106_sequencial = db108_avaliacaoresposta";
+        $sql .= "      inner join avaliacaogruporesposta  on  db107_sequencial = db108_avaliacaogruporesposta";
+        $sql .= "      inner join avaliacaoperguntaopcao  on  db104_sequencial = db106_avaliacaoperguntaopcao";
+        $sql .= "      inner join avaliacaopergunta       on  db103_sequencial = db104_avaliacaopergunta";
+        $sql .= "      inner join avaliacaogrupopergunta  on  db103_avaliacaogrupopergunta = db102_sequencial";
+        $sql .= "      inner join avaliacao               on  db102_avaliacao              = db101_sequencial";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($db108_sequencial!=null ){
+                $sql2 .= " where avaliacaogrupoperguntaresposta.db108_sequencial = $db108_sequencial ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
 }
 ?>

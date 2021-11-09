@@ -1,6 +1,6 @@
 <?php
 
-class TransacaoContabil {
+class transacaoContabil {
   
   /**
    * Código da transação

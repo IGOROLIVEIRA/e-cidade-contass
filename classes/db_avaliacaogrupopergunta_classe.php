@@ -137,12 +137,14 @@ class cl_avaliacaogrupopergunta {
                                       ,db102_avaliacao 
                                       ,db102_descricao 
                                       ,db102_identificador 
+                                      ,db102_identificadorcampo
                        )
                 values (
                                 $this->db102_sequencial 
                                ,$this->db102_avaliacao 
                                ,'$this->db102_descricao' 
                                ,'$this->db102_identificador' 
+                               ,'$this->db102_identificadorcampo' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -227,6 +229,10 @@ class cl_avaliacaogrupopergunta {
      }
      if(trim($this->db102_identificador)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db102_identificador"])){ 
        $sql  .= $virgula." db102_identificador = '$this->db102_identificador' ";
+       $virgula = ",";
+     }
+     if(trim($this->db102_identificadorcampo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db102_identificadorcampo"])){ 
+       $sql  .= $virgula." db102_identificadorcampo = '$this->db102_identificadorcampo' ";
        $virgula = ",";
      }
      $sql .= " where ";

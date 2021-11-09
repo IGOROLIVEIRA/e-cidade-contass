@@ -68,6 +68,11 @@ class cl_rhrubricas {
    var $rh27_valorpadrao = 0; 
    var $rh27_quantidadepadrao = 0; 
    var $rh27_rhfundamentacaolegal = 0; 
+   var $rh27_codincidprev = 0; 
+   var $rh27_codincidirrf = 0; 
+   var $rh27_codincidfgts = 0; 
+   var $rh27_codincidregime = 0; 
+   var $rh27_tetoremun = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  rh27_rubric = char(4) = Código da Rubrica 
@@ -96,6 +101,11 @@ class cl_rhrubricas {
                  rh27_valorpadrao = float8 = Valor Padrão 
                  rh27_quantidadepadrao = float8 = Quantidade Padrão 
                  rh27_rhfundamentacaolegal = int4 = Código Fundamentação Legal 
+                 rh27_codincidprev = char(2) = Cod. incidência tributária previdência social
+                 rh27_codincidirrf = char(2) = Cod. incidência tributária irrf
+                 rh27_codincidfgts = char(2) = Cod. incidência para o fgts
+                 rh27_codincidregime = char(2) = Cod. incidência Regime Próprio RPPS/regime militar
+                 rh27_tetoremun = Boolean = Teto remuneratório (art. 37, XI, da CF/1988)
                  ";
    //funcao construtor da classe 
    function cl_rhrubricas() { 
@@ -141,6 +151,11 @@ class cl_rhrubricas {
        $this->rh27_valorpadrao = ($this->rh27_valorpadrao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_valorpadrao"]:$this->rh27_valorpadrao);
        $this->rh27_quantidadepadrao = ($this->rh27_quantidadepadrao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_quantidadepadrao"]:$this->rh27_quantidadepadrao);
        $this->rh27_rhfundamentacaolegal = ($this->rh27_rhfundamentacaolegal == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_rhfundamentacaolegal"]:$this->rh27_rhfundamentacaolegal);
+       $this->rh27_codincidprev = ($this->rh27_codincidprev == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_codincidprev"]:$this->rh27_codincidprev);
+       $this->rh27_codincidirrf = ($this->rh27_codincidirrf == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_codincidirrf"]:$this->rh27_codincidirrf);
+       $this->rh27_codincidfgts = ($this->rh27_codincidfgts == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_codincidfgts"]:$this->rh27_codincidfgts);
+       $this->rh27_codincidregime = ($this->rh27_codincidregime == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_codincidregime"]:$this->rh27_codincidregime);
+       $this->rh27_tetoremun = ($this->rh27_tetoremun == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_tetoremun"]:$this->rh27_tetoremun);
      }else{
        $this->rh27_rubric = ($this->rh27_rubric == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_rubric"]:$this->rh27_rubric);
        $this->rh27_instit = ($this->rh27_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh27_instit"]:$this->rh27_instit);
@@ -333,6 +348,11 @@ class cl_rhrubricas {
                                       ,rh27_valorpadrao 
                                       ,rh27_quantidadepadrao 
                                       ,rh27_rhfundamentacaolegal 
+                                      ,rh27_codincidprev 
+                                      ,rh27_codincidirrf 
+                                      ,rh27_codincidfgts 
+                                      ,rh27_codincidregime 
+                                      ,rh27_tetoremun 
                        )
                 values (
                                 '$this->rh27_rubric' 
@@ -361,6 +381,11 @@ class cl_rhrubricas {
                                ,$this->rh27_valorpadrao 
                                ,$this->rh27_quantidadepadrao 
                                ,$this->rh27_rhfundamentacaolegal 
+                               ,".(empty($this->rh27_codincidprev) ? 'NULL' : "'{$this->rh27_codincidprev}'"  )."
+                               ,".(empty($this->rh27_codincidirrf) ? 'NULL' : "'{$this->rh27_codincidirrf}'"  )."
+                               ,".(empty($this->rh27_codincidfgts) ? 'NULL' : "'{$this->rh27_codincidfgts}'"  )."
+                               ,".(empty($this->rh27_codincidregime) ? 'NULL' : "'{$this->rh27_codincidregime}'"  )."
+                               ,".(empty($this->rh27_tetoremun) ? 'NULL' : "'{$this->rh27_tetoremun}'"  )."
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -690,6 +715,42 @@ class cl_rhrubricas {
        $this->rh27_rhfundamentacaolegal = "null" ; 
      } 
      $sql  .= $virgula." rh27_rhfundamentacaolegal = $this->rh27_rhfundamentacaolegal ";
+
+     if(trim($this->rh27_codincidprev)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidprev"])){ 
+        if(trim($this->rh27_codincidprev)=="" && isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidprev"])){ 
+          $sql  .= $virgula." rh27_codincidprev = NULL ";
+        } else {
+          $sql  .= $virgula." rh27_codincidprev = '{$this->rh27_codincidprev}' ";
+        }
+     }
+     if(trim($this->rh27_codincidirrf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidirrf"])){ 
+        if(trim($this->rh27_codincidirrf)=="" && isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidirrf"])){ 
+          $sql  .= $virgula." rh27_codincidirrf = NULL ";
+        } else {
+          $sql  .= $virgula." rh27_codincidirrf = '{$this->rh27_codincidirrf}' ";
+        }
+     }
+     if(trim($this->rh27_codincidfgts)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidfgts"])){ 
+        if(trim($this->rh27_codincidfgts)=="" && isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidfgts"])){ 
+          $sql  .= $virgula." rh27_codincidfgts = NULL ";
+        } else {
+          $sql  .= $virgula." rh27_codincidfgts = '{$this->rh27_codincidfgts}' ";
+        }
+     }
+     if(trim($this->rh27_codincidregime)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidregime"])){ 
+        if(trim($this->rh27_codincidregime)=="" && isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidregime"])){ 
+          $sql  .= $virgula." rh27_codincidregime = NULL ";
+        } else {
+          $sql  .= $virgula." rh27_codincidregime = '{$this->rh27_codincidregime}' ";
+        }
+     }
+     if(trim($this->rh27_tetoremun)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_tetoremun"])){ 
+        if(trim($this->rh27_tetoremun)=="" && isset($GLOBALS["HTTP_POST_VARS"]["rh27_tetoremun"])){ 
+          $sql  .= $virgula." rh27_tetoremun = NULL ";
+        } else {
+          $sql  .= $virgula." rh27_tetoremun = '{$this->rh27_tetoremun}' ";
+        }
+     }
      
      $sql .= " where ";
      if($rh27_rubric!=null){

@@ -63,6 +63,16 @@ db_input('h13_tpcont',2,$Ih13_tpcont,true,'text',$db_opcao,"")
     </td>
   </tr>
   <tr>
+    <td nowrap title="<?=@$Th13_categoria?>">
+       <?=@$Lh13_categoria?>
+    </td>
+    <td>
+<?
+db_input('h13_categoria',3,$Ih13_categoria,true,'text',$db_opcao,"")
+?>
+    </td>
+  </tr>
+  <tr>
     <td nowrap title="<?=@$Th13_descr?>">
        <?=@$Lh13_descr?>
     </td>

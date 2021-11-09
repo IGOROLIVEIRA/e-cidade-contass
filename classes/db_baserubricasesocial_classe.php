@@ -111,6 +111,77 @@ class cl_baserubricasesocial {
      $this->erro_status = "1";
      return true;
    }
+   function alterar ($e991_rubricas = null, $e991_instit = null) { 
+      $this->atualizacampos();
+     $sql = " update baserubricasesocial set ";
+     $virgula = "";
+     if(trim($this->e991_rubricasesocial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e991_rubricasesocial"])){ 
+       $sql  .= $virgula." e991_rubricasesocial = '$this->e991_rubricasesocial' ";
+       $virgula = ",";
+       if(trim($this->e991_rubricasesocial) == null ) { 
+         $this->erro_sql = " Campo Sequencial do rubricasesocial nao Informado.";
+         $this->erro_campo = "e991_rubricasesocial";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->e991_rubricas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e991_rubricas"])){ 
+       $sql  .= $virgula." e991_rubricas = '$this->e991_rubricas' ";
+       $virgula = ",";
+       if(trim($this->e991_rubricas) == null ) { 
+         $this->erro_sql = " Campo Sequencial do rubricas nao Informado.";
+         $this->erro_campo = "e991_rubricas";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+
+     $sql .= " where ";
+     if($e991_rubricas!=null){
+       $sql .= " e991_rubricas = '$this->e991_rubricas'";
+     }
+     if($e991_instit!=null){
+       $sql .= " and  e991_instit = $this->e991_instit";
+     }
+
+     $result = db_query($sql);
+     if($result==false){ 
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "Bases das rúbricas do E-Social nao Alterado. Alteracao Abortada.\\n";
+         $this->erro_sql .= "Valores : ".$this->e991_rubricasesocial."-".$this->e991_instit;
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       $this->numrows_alterar = 0;
+       return false;
+     }else{
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = "Bases das rúbricas do E-Social nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql .= "Valores : ".$this->e991_rubricasesocial."-".$this->e991_instit;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = 0;
+         return true;
+       }else{
+         $this->erro_banco = "";
+         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$this->e991_rubricasesocial."-".$this->e991_instit;
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = pg_affected_rows($result);
+         return true;
+       } 
+     }
+   }
    // funcao para exclusao
    function excluir($e991_rubricas=null, $e991_rubricasesocial=null, $e991_instit=null, $basesManter=null) {
      $this->atualizacampos(true);

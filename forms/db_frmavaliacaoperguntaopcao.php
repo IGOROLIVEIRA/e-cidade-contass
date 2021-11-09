@@ -55,7 +55,7 @@ if (isset($oPost->db_opcaoal)) {
     $db104_sequencial    = "";
     $db104_descricao     = "";
     $db104_aceitatexto   = "";
-    $db104_identificador = "";
+    // $db104_identificador = "";
   }
 } 
 ?>
@@ -115,6 +115,26 @@ if (isset($oPost->db_opcaoal)) {
       ?>
     </td>
   </tr>
+  <tr>
+    <td nowrap title="<?=@$Tdb104_valorresposta?>">
+      <?=@$Ldb104_valorresposta?>
+    </td>
+    <td> 
+      <?
+        db_input('db104_valorresposta',50,$Idb104_valorresposta,true,'text',$db_opcao,"")
+      ?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tdb104_identificadorcampo?>">
+      <?=@$Ldb104_identificadorcampo?>
+    </td>
+    <td> 
+      <?
+        db_input('db104_identificadorcampo',50,$Idb104_identificadorcampo,true,'text',$db_opcao,"")
+      ?>
+    </td>
+  </tr>
 </table>
 </fieldset>
 <table border="0" width="100%">
@@ -142,7 +162,7 @@ if (isset($oPost->db_opcaoal)) {
       <?
         $sWhere    = "db104_avaliacaopergunta = {$db103_sequencial}";
         $sCampos   = "db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_identificador";
-        $sCampos  .= ", db104_aceitatexto, db104_peso";
+        $sCampos  .= ", db104_aceitatexto, db104_peso,db104_valorresposta";
         $chavepri  = array("db104_sequencial"=>@$db104_sequencial);
         $cliframe_alterar_excluir->chavepri      = $chavepri;
         $cliframe_alterar_excluir->sql           = $clavaliacaoperguntaopcao ->sql_query_file(null,'avaliacaoperguntaopcao.*','db104_sequencial',$sWhere);
@@ -180,7 +200,7 @@ function js_validaCaracteres() {
   var sValorInicial     = $F('db104_identificador').substring(0,1);
   var sExpressaoInicial = /[A-Za-z]/;
   var sRegExpInicial    = new RegExp(sExpressaoInicial);
-  var lResultadoInicial = sRegExpInicial.test(sValorInicial);
+  // var lResultadoInicial = sRegExpInicial.test(sValorInicial);
 
   if (sValorInicial == '') {
 
@@ -189,10 +209,10 @@ function js_validaCaracteres() {
     return false;
   } 
   
-  if (lResultadoInicial) {
+  // if (lResultadoInicial) {
 
     var sValorCaracteres      = $F('db104_identificador').substring(1);
-    var sExpressaoCaracteres  = /^[A-Za-z0-9_]+?$/i;
+    var sExpressaoCaracteres  = /^[A-Za-z0-9_-]+?$/i;
     var sRegExpCaracteres     = new RegExp(sExpressaoCaracteres);
     var lResultadoCaracteres  = sRegExpCaracteres.test(sValorCaracteres);
     if (!lResultadoCaracteres) {
@@ -200,10 +220,10 @@ function js_validaCaracteres() {
       alert('São permitidas apenas letras, números e/ou caracter "_" (underline)');
       return false;
     }
-  } else {
+  /*} else {
 
     alert('É permitido apenas letra no caracter inicial');
     return false;
-  }
+  }*/
 }
 </script>
