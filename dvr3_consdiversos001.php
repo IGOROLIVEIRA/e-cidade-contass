@@ -72,12 +72,12 @@ $clrotulo->label("dv09_procdiver");
         <table class="form-container">
             <tr>
                 <td>
-                    <?
+                    <?php
                     db_ancora($Ldv05_coddiver, 'js_diver(true); ', 1);
                     ?>
                 </td>
                 <td>
-                    <?
+                    <?php
                     db_input('dv05_coddiver', 5, $Idv05_coddiver, true, 'text', 1, "onchange='js_diver(false)'");
                     db_input('z01_nome', 40, 0, true, 'text', 3, "", "z01_nomediver");
                     ?>
@@ -85,12 +85,12 @@ $clrotulo->label("dv09_procdiver");
             </tr>
             <tr>
                 <td>
-                    <?
+                    <?php
                     db_ancora($Ldv05_numcgm, ' js_cgm(true); ', 1);
                     ?>
                 </td>
                 <td>
-                    <?
+                    <?php
                     db_input('dv05_numcgm', 5, $Idv05_numcgm, true, 'text', 1, "onchange='js_cgm(false)'", "dv05_numcgm");
                     db_input('z01_nome', 40, 0, true, 'text', 3, "", "z01_nomecgm");
                     ?>
@@ -98,12 +98,12 @@ $clrotulo->label("dv09_procdiver");
             </tr>
             <tr>
                 <td>
-                    <?
+                    <?php
                     db_ancora($Lj01_matric, ' js_matri(true); ', 1);
                     ?>
                 </td>
                 <td>
-                    <?
+                    <?php
                     db_input('j01_matric', 5, $Ij01_matric, true, 'text', 1, "onchange='js_matri(false)'");
                     db_input('z01_nome', 40, 0, true, 'text', 3, "", "z01_nomematri");
                     ?>
@@ -112,12 +112,12 @@ $clrotulo->label("dv09_procdiver");
 
             <tr>
                 <td>
-                    <?
+                    <?php
                     db_ancora($Lq02_inscr, ' js_inscr(true); ', 1);
                     ?>
                 </td>
                 <td>
-                    <?
+                    <?php
                     db_input('q02_inscr', 5, $Iq02_inscr, true, 'text', 1, "onchange='js_inscr(false)'");
                     db_input('z01_nome', 40, 0, true, 'text', 3, "", "z01_nomeinscr");
                     ?>
@@ -125,12 +125,12 @@ $clrotulo->label("dv09_procdiver");
             </tr>
             <tr>
                 <td>
-                    <?
+                    <?php
                     db_ancora($Ldv09_procdiver, 'js_proc(true); ', 1);
                     ?>
                 </td>
                 <td>
-                    <?
+                    <?php
                     db_input('dv09_procdiver', 5, $Idv09_procdiver, true, 'text', 1, "onchange='js_proc(false)'");
                     db_input('z01_nome', 40, 0, true, 'text', 3, "", "z01_nomeproc");
                     ?>
@@ -141,11 +141,11 @@ $clrotulo->label("dv09_procdiver");
                     Data inicial
                 </td>
                 <td>
-                    <?
+                    <?php
                     db_inputdata('dataini', "", "", "", true, 'text', 1)
                     ?>
                     <b>até</b>
-                    <?
+                    <?php
                     db_inputdata('datafim', "", "", "", true, 'text', 1)
                     ?>
                 </td>
@@ -155,7 +155,7 @@ $clrotulo->label("dv09_procdiver");
     <input type="submit" name="pesquisar" value="Pesquisar" onclick="return js_testacamp();">
 </form>
 
-<?
+<?php
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
 ?>
 </body>
@@ -280,7 +280,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     }
 
 </script>
-<?
+<?php
 if (isset($dado) && $dado == "inscr") {
     db_msgbox(_M("tributario.diversos.drv3_consdiversos001.inscricao_invalida"));
 }
