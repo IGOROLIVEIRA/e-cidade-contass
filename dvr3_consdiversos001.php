@@ -167,11 +167,12 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     }
 
     function js_diver(mostra) {
-        var diver = document.form1.dv05_coddiver.value;
-        if (mostra == true) {
+        const dv05_coddiver = document.form1.dv05_coddiver;
+        if (mostra === true) {
             js_OpenJanelaIframe('top.corpo', 'db_iframe', 'func_diversos.php?funcao_js=parent.js_mostradiver|dv05_coddiver|dv05_numcgm', 'Pesquisa', true);
         } else {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe', 'func_diversos.php?pesquisa_chave=' + diver + '&funcao_js=parent.js_mostradiver1', 'Pesquisa', false);
+            dv05_coddiver.setAttribute('disabled', 'disabled');
+            js_OpenJanelaIframe('top.corpo', 'db_iframe', 'func_diversos.php?pesquisa_chave=' + dv05_coddiver.value + '&funcao_js=parent.js_mostradiver1', 'Pesquisa', false);
         }
     }
 
@@ -183,7 +184,9 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
     function js_mostradiver1(chave, erro) {
         document.form1.z01_nomediver.value = chave;
-        if (erro == true) {
+        const dv05_coddiver = document.form1.dv05_coddiver;
+        dv05_coddiver.removeAttribute('disabled');
+        if (erro === true) {
             document.form1.dv05_coddiver.focus();
             document.form1.dv05_coddiver.value = '';
         }
