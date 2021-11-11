@@ -263,6 +263,38 @@ switch ($oParam->exec) {
   }
 
   break;
+
+  case "buscaCodigoITBI":
+
+    $sSQL = "SELECT DISTINCT ON (it01_guia) it01_guia
+     FROM itbi
+      INNER JOIN db_usuarios ON db_usuarios.id_usuario = itbi.it01_id_usuario
+      INNER JOIN db_depart ON db_depart.coddepto = itbi.it01_coddepto
+      INNER JOIN itbitransacao ON it04_codigo = it01_tipotransacao
+      INNER JOIN itbiavalia ON itbiavalia.it14_guia = itbi.it01_guia
+      INNER JOIN itbimatric ON itbi.it01_guia = itbimatric.it06_guia
+      INNER JOIN itbinome ON itbinome.it03_guia = itbi.it01_guia
+      INNER JOIN itbinomecgm ON itbinomecgm.it21_itbinome = itbinome.it03_seq
+      LEFT JOIN itbicancela ON itbicancela.it16_guia = itbi.it01_guia
+     WHERE itbicancela.it16_guia IS NULL
+         AND it14_guia IS NOT NULL
+         AND CASE
+                 WHEN db_usuarios.usuext = ".db_getsession('DB_id_usuario')." THEN CASE
+                                                      WHEN itbi.it01_id_usuario = 1 THEN TRUE
+                                                      ELSE FALSE
+                                                  END
+                 ELSE CASE
+                          WHEN itbi.it01_coddepto = ".db_getsession('DB_coddepto')." THEN TRUE
+                          ELSE FALSE
+                      END
+             END
+        AND itbinomecgm.it21_numcgm = {$oParam->oDadosForm->cod_cgm}
+     ORDER BY it01_guia DESC LIMIT 1";
+    $resultado = db_query($sSQL);
+    $oRetorno = db_utils::fieldsMemory($resultado, 0);
+
+  break;
+
   case "geraRecibo_Carne":
 
     $aRecibosComCustasEmitidos = array();

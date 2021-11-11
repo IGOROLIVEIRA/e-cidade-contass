@@ -602,6 +602,19 @@ if ($db_opcao == 1) {
                   ?>
                 </td>
             </tr>
+
+            <tr>
+                <td >
+                   <strong>Usa Débito ITBI: </strong>
+                </td>
+
+                <td>
+                  <?
+                  $x = array("f"=>"NAO","t"=>"SIM");
+                  db_select('db21_usadebitoitbi',$x,true,$db_opcao,"");
+                  ?>
+                </td>
+            </tr>
 		  
 		  <tr>  
 		    <td nowrap title="<?=@$Tident?>">

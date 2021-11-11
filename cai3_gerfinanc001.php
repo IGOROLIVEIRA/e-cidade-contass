@@ -47,7 +47,6 @@ require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
 
 parse_str($HTTP_SERVER_VARS ['QUERY_STRING']);
-
 if (session_is_registered("DB_tipodebitoparcel")) {
   db_putsession("DB_tipodebitoparcel", "");
 }
@@ -347,7 +346,7 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                    if (oRetorno.status == 2) {
                      alert(sMsg);
                    } else {
-
+                     let itbi = 29;
                      if(oRetorno.iConfirm == 1){
 
                        if(confirm(sMsg)){
@@ -355,13 +354,40 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                        } else {
                          js_emiteReciboCarne(oParam,false,true);
                        }
-                     } else {
+                     }
+                     else if (oParam.oDadosForm.tipo_debito == itbi) {
+                      js_emiteGuiaItbi(oParam);
+                     }
+                     else {
                        js_emiteReciboCarne(oParam,true);
                      }
                    }
                  }
               });
 
+
+          function js_emiteGuiaItbi(oParam) {
+            oParam.exec = "buscaCodigoITBI";
+            oParam.oDadosForm.cod_cgm = oParam.oDadosForm.ver_numcgm;
+            var oAjaxITBI = new Ajax.Request("cai3_emitecarne.RPC.php",
+                {method    : 'post',
+                 parameters: 'json='+Object.toJSON(oParam),
+                 onComplete:
+                   function(oAjaxITBI) {
+
+                     var oRetorno = eval("("+oAjaxITBI.responseText+")");
+                     var sMsg     = oRetorno.message.urlDecode().replace("/\\n/g","\n");
+                     if (oRetorno.status == 2) {
+                       alert(sMsg);
+                     } else {
+                        let sParam = "toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=1,height="+
+                        (screen.height-100)+",width="+(screen.width-100);
+                        oJanela = window.open('reciboitbi.php?itbi='+oRetorno.it01_guia+'&tipoguia=n',"",sParam);
+                        oJanela.moveTo(0,0);
+                     }
+                   }
+                });
+          }
 
           function js_emiteReciboCarne(oParam,lNovoRecibo,lForcajanela){
 

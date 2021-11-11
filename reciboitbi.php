@@ -362,7 +362,7 @@ if($clitbiconstr->numrows  > 0){
 
 //die($clitbinome->sql_queryguia("","it03_nome as z01_nome,it03_sexo,it03_cpfcnpj as z01_cgccpf,it03_endereco as z01_ender,it03_numero,it03_compl,it03_cxpostal,it03_bairro as z01_bairro,it03_munic as z01_munic,it03_uf as z01_uf,it03_cep as z01_cep,it03_mail,it22_itbi,it22_setor as j34_setor,it22_quadra as j34_quadra,it22_lote as j34_lote,it22_descrlograd as j14_nome,it22_numero as j39_numero,it22_compl,it06_matric,it04_codigo,it04_descr,it04_desconto,it04_obs,it04_aliquota,itbi.*,itburbano.*,itbirural.*,itbiavalia.*",""," it03_guia  = $itbi and upper(it03_tipo)  = 'T' and it03_princ = 't' "));
 
-$result1 = $clitbinome->sql_record($clitbinome->sql_queryguia("","z01_numcgm,it03_nome as z01_nome,z01_telef as fonetransmitente,it03_mail as mailtransmitente ,it03_sexo,it03_cpfcnpj as z01_cgccpf,it03_endereco as z01_ender,it03_numero,it03_compl,it03_cxpostal,it03_bairro as z01_bairro,it03_munic as z01_munic,it03_uf as z01_uf,it03_cep as z01_cep,it03_mail,it22_itbi,it22_setor as j34_setor,it22_quadra as j34_quadra,it22_lote as j34_lote,it22_descrlograd as j14_nome,j13_descr,it22_numero as j39_numero,it22_compl as j39_compl,it06_matric,it04_codigo,it04_descr,it04_desconto,it04_obs,itbi.*,itburbano.*,itbirural.*,itbiavalia.*",""," it03_guia  = $itbi and upper(it03_tipo)  = 'T' and it03_princ = 't' "));
+$result1 = $clitbinome->sql_record($clitbinome->sql_queryguia("","z01_numcgm,it03_nome as z01_nome,z01_telef as fonetransmitente,it03_mail as mailtransmitente ,it03_sexo,it03_cpfcnpj as z01_cgccpf,it03_endereco as z01_ender,it03_numero,it03_compl,it03_cxpostal,it03_bairro as z01_bairro,it03_munic as z01_munic,it03_uf as z01_uf,it03_cep as z01_cep,it03_mail,it22_itbi,it22_setor as j34_setor,it22_quadra as j34_quadra,j34_distrito,it22_lote as j34_lote,it22_descrlograd as j14_nome,j13_descr,it22_numero as j39_numero,it22_compl as j39_compl,it06_matric,it04_codigo,it04_descr,it04_desconto,it04_obs,itbi.*,itburbano.*,itbirural.*,itbiavalia.*",""," it03_guia  = $itbi and upper(it03_tipo)  = 'T' and it03_princ = 't' "));
 
 if($clitbinome->numrows  > 0){
   //db_criatabela($result1);exit;
@@ -586,6 +586,40 @@ if(isset($tx_banc) && $tx_banc != '' && $tx_banc > 0){
   $valorpagamento += $tx_banc;
 }
 
+// #################################### Atualização dos valores do ITBI
+if ($db21_usadebitoitbi == 't') {
+  $sSQL_guia_numpre = <<<SQL
+      select arrecad_itbi.k00_numpre
+      from arrecad_itbi
+          inner join arrecad on arrecad.k00_numpre = arrecad_itbi.k00_numpre
+          inner join itbi on itbi.it01_guia = arrecad_itbi.it01_guia
+            where itbi.it01_guia = $itbi;
+
+SQL;
+
+  $resultGuiaNumpre = db_query($sSQL_guia_numpre);
+  $oDado = db_utils::fieldsMemory($resultGuiaNumpre,0);
+  $ano = db_getsession('DB_anousu');
+  $data_atual = date("Y-m-d",db_getsession("DB_datausu"));
+  $sSQL = <<<SQL
+              select
+                substr(fc_calcula,2,13)::float8 as vlrhis,
+                substr(fc_calcula,15,13)::float8 as vlrcor,
+                substr(fc_calcula,28,13)::float8 as vlrjuros,
+                substr(fc_calcula,41,13)::float8 as vlrmulta,
+                substr(fc_calcula,54,13)::float8 as vlrdesconto,
+                (substr(fc_calcula,15,13)::float8+
+                substr(fc_calcula,28,13)::float8+
+                substr(fc_calcula,41,13)::float8-
+                substr(fc_calcula,54,13)::float8) as total
+                FROM fc_calcula($oDado->k00_numpre, 1, 3, '$data_atual'::date, '1996-11-30'::date, $ano);
+SQL;
+
+  $resultCorrecoes = db_query($sSQL);
+  $oDadoCorrecoes = db_utils::fieldsMemory($resultCorrecoes, 0);
+  $valorpagamento = $oDadoCorrecoes->total;
+  $data_atual = $datavencimento;
+}
 $vlrbar = db_formatar(str_replace('.','',str_pad(number_format($valorpagamento,2,"","."),11,"0",STR_PAD_LEFT)),'s','0',11,'e');
 
 if($oRegraEmissao->isCobranca()){
@@ -604,7 +638,7 @@ if($oRegraEmissao->isCobranca()){
 if ($lLiberado) {
   // Nao gera código de barras quando não estiver liberada
   try {
-     $oConvenio = new convenio($oRegraEmissao->getConvenio(),$numpre,1,$it14_valorpaga,$vlrbar,$datavencimento,6);
+     $oConvenio = new convenio($oRegraEmissao->getConvenio(), $numpre, 1, (float)$valorpagamento, $vlrbar, $datavencimento, 6);
   } catch (Exception $eExeption){
      db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
      exit;
@@ -931,10 +965,14 @@ $pdf1->bairrocomprador           =@$bairrocomprador;
 $pdf1->it06_matric               =@$it06_matric;
 $pdf1->j39_numero                =@$j39_numero;
 $pdf1->j39_compl                 =@$j39_compl;
+$pdf1->db21_usadistritounidade   =@$db21_usadistritounidade;
+$pdf1->db21_usadebitoitbi        =@$db21_usadebitoitbi;
+$pdf1->j34_distrito              =@$j34_distrito;
 $pdf1->j34_setor                 =@$j34_setor;
 $pdf1->j34_quadra                =@$j34_quadra;
-$pdf1->matriz                    =@$matriz[3];
 $pdf1->j34_lote                  =@$j34_lote;
+$pdf1->j01_unidade               =@$j01_unidade;
+$pdf1->matriz                    =@$matriz[3];
 $pdf1->j13_descr                 =@$j13_descr;
 $pdf1->j14_tipo                  =@$j14_tipo;
 $pdf1->j14_nome                  =@$j14_nome;
@@ -1020,6 +1058,15 @@ $pdf1->transmitentes             = @$propri;
 $pdf1->tipoguia                  = @$tipoguia;
 
 $pdf1->lRetificado 				 = $lRetificado;
+
+if ($db21_usadebitoitbi == 't') {
+    $pdf1->vlrhis       = $oDadoCorrecoes->vlrhis      != "" ? (float)$oDadoCorrecoes->vlrhis      : (float)"0,00";
+    $pdf1->vlrcor       = $oDadoCorrecoes->vlrcor      != "" ? (float)$oDadoCorrecoes->vlrcor      : (float)"0,00";
+    $pdf1->vlrjuros     = $oDadoCorrecoes->vlrjuros    != "" ? (float)$oDadoCorrecoes->vlrjuros    : (float)"0,00";
+    $pdf1->vlrmulta     = $oDadoCorrecoes->vlrjuros    != "" ? (float)$oDadoCorrecoes->vlrmulta    : (float)"0,00";
+    $pdf1->vlrdesconto  = $oDadoCorrecoes->vlrdesconto != "" ? (float)$oDadoCorrecoes->vlrdesconto : (float)"0,00";
+    $pdf1->vlrtotal     = $oDadoCorrecoes->total       != "" ? (float)$oDadoCorrecoes->total       : (float)"0,00";
+}
 
 // ###################### BUSCA OS DADOS PARA IMPRIMIR O LOGO DO BANCO #########################
 //verifica se é ficha e busca o codigo do banco
