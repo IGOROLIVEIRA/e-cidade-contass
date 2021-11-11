@@ -41,7 +41,8 @@ if (pg_num_rows($rsLotes) == 0) {
                 case when pc01_complmater is not null and pc01_complmater != pc01_descrmater then pc01_descrmater ||'. '|| pc01_complmater
 		     else pc01_descrmater end as pc01_descrmater,
                 m61_abrev,
-                sum(pc11_quant) as pc11_quant
+                sum(pc11_quant) as pc11_quant,
+                pc11_reservado
 from (
 SELECT DISTINCT pc01_servico,
                 pc11_codigo,
@@ -59,7 +60,8 @@ SELECT DISTINCT pc01_servico,
                 pc10_numero,
                 pc90_numeroprocesso AS processo_administrativo,
                 (pc11_quant * pc11_vlrun) AS pc11_valtot,
-                m61_usaquant
+                m61_usaquant,
+                pc11_reservado
 FROM solicitem
 INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
 LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
@@ -76,7 +78,7 @@ WHERE pc81_codproc = {$codigo_preco}
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
                 pc11_seq,
-                pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
+                pc01_descrmater,pc01_complmater,m61_abrev,pc11_reservado ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
                 {$tipoReferencia} as si02_vlprecoreferencia,
@@ -132,7 +134,12 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
         $oDadosDaLinha = new stdClass();
         $oDadosDaLinha->seq = $iCont + 1;
         $oDadosDaLinha->item = $oResult->pc01_codmater;
-        $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
+        if ($oResult->pc11_reservado == 't') {
+            $oDadosDaLinha->descricao = '[ITEM ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
+        } else {
+            $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
+        }
+        //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
         $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
         $oDadosDaLinha->quantidade = $oResult->pc11_quant;
         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
@@ -289,7 +296,12 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
             $oDadosDaLinha = new stdClass();
             $oDadosDaLinha->seq = $iCont + 1;
             $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
-            $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
+            if ($oResult->pc11_reservado == 't') {
+                $oDadosDaLinha->descricao = '[ITEM ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
+            } else {
+                $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
+            }
+            //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
             $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
             $oDadosDaLinha->quantidade = $oResult->pc11_quant;
             $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
