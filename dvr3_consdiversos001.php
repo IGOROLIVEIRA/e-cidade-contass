@@ -47,24 +47,6 @@ $clrotulo->label("dv09_procdiver");
     </style>
 </head>
 <body bgcolor=#CCCCCC>
-<script>
-    function js_testacamp() {
-        /*
-          var matri = document.form1.j01_matric.value;
-          var inscr = document.form1.q02_inscr.value;
-          var numcgm = document.form1.dv05_numcgm.value;
-          var diver = document.form1.dv05_coddiver.value;
-          var proc = document.form1.dv09_procdiver.value;
-          var dataini = document.form1.dataini_dia.value;
-          var datafim = document.form1.datafim_dia.value;
-          if(matri=="" && inscr=="" && numcgm=="" && proc=="" && diver =="" && dataini =="" && datafim ==""){
-            alert("Informe um campo para pesquisa!");
-            return false;
-          }
-          */
-        return true;
-    }
-</script>
 <form class="container" name="form1" method="post" action="dvr3_consdiversos002.php"
       onSubmit="return js_verifica_campos_digitados();">
     <fieldset>
@@ -152,7 +134,7 @@ $clrotulo->label("dv09_procdiver");
             </tr>
         </table>
     </fieldset>
-    <input type="submit" name="pesquisar" value="Pesquisar" onclick="return js_testacamp();">
+    <input type="submit" name="pesquisar" value="Pesquisar">
 </form>
 
 <?php
