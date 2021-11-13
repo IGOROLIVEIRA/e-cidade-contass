@@ -135,7 +135,7 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
         $oDadosDaLinha->seq = $iCont + 1;
         $oDadosDaLinha->item = $oResult->pc01_codmater;
         if ($oResult->pc11_reservado == 't') {
-            $oDadosDaLinha->descricao = '[ITEM ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
+            $oDadosDaLinha->descricao = '[ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
         } else {
             $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
         }
@@ -297,7 +297,7 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
             $oDadosDaLinha->seq = $iCont + 1;
             $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
             if ($oResult->pc11_reservado == 't') {
-                $oDadosDaLinha->descricao = '[ITEM ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
+                $oDadosDaLinha->descricao = '[ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
             } else {
                 $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
             }

@@ -242,7 +242,7 @@ HTML;
                 $oDadosDaLinha->item = $oResult->pc01_codmater;
                 $oDadosDaLinha->pc80_codproc = $oResult->pc80_codproc;
                 if ($oResult->pc11_reservado == 't') {
-                    $oDadosDaLinha->descricao = '[ITEM ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
+                    $oDadosDaLinha->descricao = '[ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
                 } else {
                     $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
                 }
@@ -530,7 +530,7 @@ HTML;
                     $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
                     $oDadosDaLinha->pc80_codproc = $oResult->pc80_codproc;
                     if ($oResult->pc11_reservado == 't') {
-                        $oDadosDaLinha->descricao = '[ITEM ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
+                        $oDadosDaLinha->descricao = '[ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
                     } else {
                         $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
                     }
