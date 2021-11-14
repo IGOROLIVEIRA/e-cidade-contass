@@ -121,13 +121,13 @@ function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
 
     foreach($aFontes as $sFonte){
         db_inicio_transacao();
+        echo "<pre>";print_r($sFonte);
         $clEmpResto = new cl_empresto();
         $sSqlOrder = "";
         $sCampos = " o15_codtri, sum(vlrpag) as pago ";
         $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
         $aEmpResto = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
         $nValorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
-
         $nTotalAnterior = getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits);
         $nSaldo = 0;
         if($nValorRpPago > $nTotalAnterior){
@@ -137,15 +137,16 @@ function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
         db_query("drop table if exists work_pl");
         db_fim_transacao();
     }
+
     return  $iSaldoRestosAPagarSemDisponibilidade;
 }
 
-function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dtfim, $aInstits){
+function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dtfim, $aInstits) {
     $clSlip = new cl_slip();
     $nValorAplicado = 0;
     // despesas pagas
     $aDespesasAplicada = getSaldoDespesa(null, "o58_funcao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).") and o15_codtri in (".implode(",",$aFontes).") and o58_instit in ($instits) group by 1,2");
-    $nValorAplicado = $aDespesasAplicada[0]->pago;
+    $nValorAplicado = count($aDespesasAplicada[0]) > 0 ? $aDespesasAplicada[0]->pago : 0;
 
     $nTotalReceitasRecebidasFundeb = 0;
     $nDevolucaoRecursoFundeb = 0;
@@ -164,33 +165,24 @@ function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dt
     $nValorAplicado = $nValorAplicado - $nResulatadoLiquidoTransfFundeb;
 
     $clempresto = new cl_empresto();
-    if(count($aFontes) < 1){
-        $aFontes = array("'201','218','219'");
-    }
-
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(vlrpag) as pago ";
-    $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
-    $dtfim = db_getsession("DB_anousu")."-04-30";
-    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
-    $nValorAplicado = $nValorAplicado + $valorRpPago;
+    $aFontesSuperavit = array("'201','218','219'");
+    $sSqlWhere = " o15_codtri in (".implode(",", $aFontesSuperavit).") group by 1";
+    $dtFimQuadrimestre = db_getsession("DB_anousu")."-04-30";
+    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtFimQuadrimestre, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorRpPagoSuperavit = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
+    $nValorAplicado = $nValorAplicado + $valorRpPagoSuperavit;
 
+    $aFontes = array("'101'","'118','119'");
     $nValorPagoSemDisponibilidade = getRestosSemDisponilibidade($aFontes, $dtini, $dtfim, $instits);
-
     $nValorAplicado = $nValorAplicado + $nValorPagoSemDisponibilidade;
-
-    $clempresto = new cl_empresto();
-    if(count($aFontes) < 1){
-        $aFontes = array("'101','118','119','201','218','219'");
-    }
 
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
     $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
     $valorRpAnulado = count($aEmpResto) > 0 ? $aEmpResto[0]->vlranu : 0;
-
     $nValorAplicado = $nValorAplicado + $valorRpAnulado;
 
     return $nValorAplicado;
@@ -614,7 +606,7 @@ ob_start();
                     <td class="footer-total-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia + $nTotalReceitaImpostos, "f"); ?></td>
                 </tr>
                  <?php
-                    $nValorAplicado = getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $anousu, $dtini, $dtfim, $aInstits);
+                    $nValorAplicado = getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dtfim, $aInstits);
                     $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ;
                     $nDiferencaAplicacao = $nValorAplicado - $valorAplicacaoDevida;
                     $nPercentualAplicado = ($nValorAplicado/ ($nTotalReceitaTransferencia + $nTotalReceitaImpostos))*100;
@@ -629,7 +621,15 @@ ob_start();
                 </tr>
                 <tr style='height:20px;'>
                     <td class="footer-total-row" colspan="8">D - Diferença entre o Valor Aplicado e o Limite Constitucional ( D = C - B)</td>
-                    <td class="footer-total-row-valor"><?php echo db_formatar($nDiferencaAplicacao, "f"); ?></td>
+                    <td class="footer-total-row-valor">
+                        <?php
+                            if($nDiferencaAplicacao > 0){
+                                echo db_formatar($nDiferencaAplicacao, "f");
+                            } else{
+                                echo "(".db_formatar(abs($nDiferencaAplicacao), "f")." )";
+                            }
+                        ?>
+                    </td>
                 </tr>
             </tbody>
         </table>
