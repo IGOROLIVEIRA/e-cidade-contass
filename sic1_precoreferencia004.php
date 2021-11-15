@@ -294,7 +294,7 @@ JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferenc
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
-            die($sSql);
+
             $rsResult = db_query($sSql) or die(pg_last_error());
             $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
             // die($sSql);
