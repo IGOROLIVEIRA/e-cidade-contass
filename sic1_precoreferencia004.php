@@ -294,7 +294,7 @@ JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferenc
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
-            //die($sSql);
+            die($sSql);
             $rsResult = db_query($sSql) or die(pg_last_error());
             $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
             // die($sSql);
@@ -454,7 +454,8 @@ HTML;
                 sum(pc11_quant) as pc11_quant,
                 pc69_seq,
                 pc11_seq,
-                pc11_reservado
+                pc11_reservado,
+                l21_ordem
 from (
 SELECT DISTINCT pc01_servico,
                 pc11_codigo,
@@ -474,7 +475,8 @@ SELECT DISTINCT pc01_servico,
                 (pc11_quant * pc11_vlrun) AS pc11_valtot,
                 m61_usaquant,
                 pc69_seq,
-                pc11_reservado
+                pc11_reservado,
+                l21_ordem
 FROM solicitem
 INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
 LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
@@ -490,12 +492,15 @@ left join processocompraloteitem on
 left join processocompralote on
 			pc68_sequencial = pc69_processocompralote
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
+left join liclicitem on l21_codpcprocitem = pc81_codprocitem
 WHERE pc81_codproc = {$codigo_preco}
   AND pc10_instit = " . db_getsession("DB_instit") . "
-ORDER BY pc11_seq) as x GROUP BY
+ORDER BY l21_ordem) as x GROUP BY
                 pc01_codmater,
                 pc11_seq,
-                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq,pc11_reservado ) as matquan join
+                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq,pc11_reservado,l21_ordem
+                order by
+                l21_ordem) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
                 {$tipoReferencia} as si02_vlprecoreferencia,
@@ -523,7 +528,7 @@ JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
+ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by l21_ordem asc";
         //die($sSql);
         $rsResult = db_query($sSql) or die(pg_last_error());
         $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
