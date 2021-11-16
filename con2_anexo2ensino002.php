@@ -121,7 +121,6 @@ function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
 
     foreach($aFontes as $sFonte){
         db_inicio_transacao();
-        echo "<pre>";print_r($sFonte);
         $clEmpResto = new cl_empresto();
         $sSqlOrder = "";
         $sCampos = " o15_codtri, sum(vlrpag) as pago ";
@@ -181,9 +180,13 @@ function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dt
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
-    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorRpAnulado = count($aEmpResto) > 0 ? $aEmpResto[0]->vlranu : 0;
-    $nValorAplicado = $nValorAplicado + $valorRpAnulado;
+    $aFontes =array("'101','118','119','201','218','219'");
+    $aEmpRestos = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorRpAnulado = 0;
+    foreach($aEmpRestos as $oEmpResto){
+        $valorRpAnulado += $oEmpResto->vlranu;
+    }
+    $nValorAplicado = $nValorAplicado - $valorRpAnulado;
 
     return $nValorAplicado;
 }

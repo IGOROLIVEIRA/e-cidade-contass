@@ -123,8 +123,8 @@ $nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb-abs($nTotalCont
 $fSubTotal = 0;
 $aSubFuncoes = array(122,272,271,361,365,366,367,843);
 $sFuncao     = "12";
-$aFonte      = array("'101','201'");
-$aFonteFundeb      = array("'118','119','218','219'");
+$aFonte      = array("'101'");
+$aFonteFundeb      = array("'118','119'");
 
 
 
@@ -200,8 +200,12 @@ function getCancelamentoRestosComDisponilibidade($aFontes, $dtini, $dtfim, $inst
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
-    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorRpAnulado = count($aEmpResto) > 0 ? $aEmpResto[0]->vlranu : 0;
+    $aEmpRestos = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorRpAnulado = 0;
+    foreach($aEmpRestos as $oEmpResto){
+        $valorRpAnulado += $oEmpResto->vlranu;
+    }
+
     return  $valorRpAnulado;
 }
 /**
@@ -557,7 +561,10 @@ ob_start();
                         </tr>
                     </tbody>
                 </table>
-                <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 20px;" autosize="1">
+
+            </div>
+            <div class="body-relatorio" style="padding-top: 1px;">
+            <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 20px;" autosize="1">
                     <tbody>
                         <tr>
                             <td class="title-row" >II - TOTAL DA APLICAÇÃO NO ENSINO</td>
@@ -582,7 +589,12 @@ ob_start();
                                 <?php
                                     $nTotalAplicadoSaida = 0;
                                     $nTotalAplicadoSaida = $nResulatadoLiquidoTransfFundeb;
-                                    echo db_formatar(abs($nResulatadoLiquidoTransfFundeb), "f");
+                                    if($nResulatadoLiquidoTransfFundeb >0){
+                                        echo db_formatar(abs($nResulatadoLiquidoTransfFundeb), "f");
+                                    }else{
+                                        echo "(".db_formatar(abs($nResulatadoLiquidoTransfFundeb), "f")." )";
+                                    }
+
                                 ?>
                             </td>
                         </tr>
@@ -624,7 +636,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">9 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoTotal = getRestosSemDisponilibidade(array("'101'","'118','119'"), $dtini, $dtfim, $instits);
+                                    $nValorRecursoTotal = getRestosSemDisponilibidade(array("'101'","'201'","'118','119'","'218','219'"), $dtini, $dtfim, $instits);
                                     $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorRecursoTotal;
                                     echo db_formatar($nValorRecursoTotal, "f");
                                 ?>
@@ -634,7 +646,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.1 - RECURSOS DE IMPOSTOS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoImposto = getRestosSemDisponilibidade(array("'101'"), $dtini, $dtfim, $instits);
+                                    $nValorRecursoImposto = getRestosSemDisponilibidade(array("'101'","'201'"), $dtini, $dtfim, $instits);
                                     echo db_formatar($nValorRecursoImposto, "f");
                                 ?>
                             </td>
@@ -643,7 +655,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.2 - RECURSOS DO FUNDEB</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoFundeb = getRestosSemDisponilibidade(array("'118', '119'"), $dtini, $dtfim, $instits);
+                                    $nValorRecursoFundeb = getRestosSemDisponilibidade(array("'118','119'","'218','219'"), $dtini, $dtfim, $instits);
                                     echo db_formatar($nValorRecursoFundeb, "f");
                                 ?>
                             </td>
@@ -687,8 +699,6 @@ ob_start();
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="body-relatorio" style="padding-top: 1px;">
                 <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 30px;" autosize="1">
                     <tbody>
                         <tr>
@@ -766,7 +776,16 @@ ob_start();
                         <tr>
                             <td class="subtitle-row" style="width: 300px;">19 - TOTAL DO RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB ( 17 - 18 )</td>
                             <td class="subtitle-row" style="width: 100px; text-align: right;">
-                            <?php echo db_formatar(abs($nContribuicaoFundeb - $nTotalReceitasRecebidasFundeb), "f"); ?></td>
+                                <?php
+                                    $resultadoLiquido =  $nTotalReceitasRecebidasFundeb - $nContribuicaoFundeb;
+                                    if($resultadoLiquido > 0) {
+                                        echo db_formatar(abs($resultadoLiquido), "f");
+                                    }else{
+                                        echo "(".db_formatar(abs($resultadoLiquido), "f")." )";
+                                    }
+
+                                ?>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
