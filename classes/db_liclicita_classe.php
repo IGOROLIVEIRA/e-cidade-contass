@@ -3147,6 +3147,11 @@ class cl_liclicita
         return $sql;
     }
 
+    function alterar_dtpubratificacao($l20_codigo)
+    {
+        $sql = "update liclicita set l20_dtpubratificacao = '$this->l20_dtpubratificacao' where l20_codigo = $l20_codigo";
+        $result = db_query($sql);
+    }
 
     function alterar_liclicitajulgamento($l20_codigo)
     {

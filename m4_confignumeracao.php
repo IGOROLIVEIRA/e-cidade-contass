@@ -59,12 +59,12 @@ if (!isset($db_opcao)){
         <tr>
             <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
                 <?
-                    $clcriaabas->identifica = array("licitacao"=>"Licitacao","acordo"=>"Acordo");
-                    $clcriaabas->sizecampo  = array("licitacao"=>"20","acordo"=>"20");
-                    $clcriaabas->title      = array("licitacao"=>"Licitacao","acordo"=>"Acordo");
-                    $clcriaabas->src        = array("licitacao"=>"m4_licitacao.php","acordo"=>"m4_acordo.php");
+                    $clcriaabas->identifica = array("licitacao"=>"Licitacao","acordo"=>"Acordo","protocolo"=>"Protocolo");
+                    $clcriaabas->sizecampo  = array("licitacao"=>"20","acordo"=>"20","protocolo"=>"20");
+                    $clcriaabas->title      = array("licitacao"=>"Licitacao","acordo"=>"Acordo","protocolo"=>"Protocolo");
+                    $clcriaabas->src        = array("licitacao"=>"m4_licitacao.php","acordo"=>"m4_acordo.php","protocolo"=>"m4_protocolo.php");
                     if ($db_opcao==1){
-                        $clcriaabas->disabled   =  array("licitacao"=>"false","acordo"=>"false");
+                        $clcriaabas->disabled   =  array("licitacao"=>"false","acordo"=>"false","protocolo"=>"false");
                     }
                     $clcriaabas->cria_abas();
                 ?>
