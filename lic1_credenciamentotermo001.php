@@ -4,9 +4,11 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_credenciamentotermo_classe.php");
+include("classes/db_credenciamento_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clcredenciamentotermo = new cl_credenciamentotermo;
+$clcredenciamento = new cl_credenciamento;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
@@ -17,6 +19,24 @@ if(isset($incluir)){
 
         if(pg_num_rows($resultNumeroTermo) > 0){
             throw new Exception("Usuário: Numero do Termo ja utilizado !");
+        }
+
+        $rstermocredencialemnto = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,"*",null,"l212_fornecedor = $l212_fornecedor and l212_licitacao = $l212_licitacao"));
+
+        if(pg_num_rows($rstermocredencialemnto) > 0){
+            throw new Exception("Usuário: Já existe termo cadastrado para esse fornecedor!");
+        }
+
+        $rsdtCredenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"l205_datacred",null,"l205_licitacao = $l212_licitacao and l205_fornecedor = $l212_fornecedor"));
+
+        db_fieldsmemory($rsdtCredenciamento,0);
+        $data = (implode("/",(array_reverse(explode("-",$l205_datacred)))));
+
+        $datacred = DateTime::createFromFormat('d/m/Y', $data);
+        $dtiniciotermo = DateTime::createFromFormat('d/m/Y', $l212_dtinicio);
+
+        if($dtiniciotermo < $datacred){
+            throw new Exception("Usuário: Data de incio do termo menor que data de credenciamento.");
         }
 
         db_inicio_transacao();

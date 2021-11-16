@@ -39,6 +39,10 @@ if(!isset($pesquisa_chave)){
 //    $dataDoSistema = date("Y-m-d", db_getsession('DB_datausu'));
 //    $Where = "l212_dtinicio >= '{$dataDoSistema}' and l212_dtfim <= '{$dataDoSistema}'";
 
+    if($autoriza="false"){
+        $Where = "l212_sequencial not in (select e54_termocredenciamento from empautoriza where e54_termocredenciamento is not null)";
+    }
+
     $sql = $clcredenciamentotermo->sql_query(null,"*",null,$Where);
     $repassa = array();
     echo '<div class="container">';
@@ -55,7 +59,7 @@ if(!isset($pesquisa_chave)){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$l212_sequencial',false);</script>";
         }else{
-            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") nï¿½o Encontrado',true);</script>";
         }
     }else{
         echo "<script>".$funcao_js."('',false);</script>";

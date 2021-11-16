@@ -75,6 +75,13 @@ db_app::load("DBFormCache.js");
                     ?>
                 </td>
             </tr>
+            <tr style="display: none;">
+                <td>
+                    <?
+                    db_input('l212_sequencial',10,$Il212_sequencial,true,'text',3,"");
+                    ?>
+                </td>
+            </tr>
             <tr>
                 <td nowrap title="<?= @$Te54_autori ?>">
                     <?= @$Le54_autori ?>
@@ -257,7 +264,7 @@ db_app::load("DBFormCache.js");
 
             js_OpenJanelaIframe('top.corpo.iframe_empautoriza',
                 'db_iframe_credenciamentotermo',
-                'func_credenciamentotermo.php?virgente=true&funcao_js=parent.js_preenchertermocredenciamento|l212_numerotermo|l20_edital|l20_numero|l20_anousu|z01_numcgm|z01_nome|l03_descr|l20_codigo|pc50_codcom',
+                'func_credenciamentotermo.php?virgente=true&autoriza=false&funcao_js=parent.js_preenchertermocredenciamento|l212_numerotermo|l212_sequencial|l20_edital|l20_numero|l20_anousu|z01_numcgm|z01_nome|l03_descr|l20_codigo|pc50_codcom',
                 'Pesquisa Termo Credenciamento',true, '0', '1');
         }
     }
@@ -265,9 +272,10 @@ db_app::load("DBFormCache.js");
     /**
      * funcao para preencher termo de credenciamento da ancora
      */
-    function js_preenchertermocredenciamento(codigo,edital,numero,ano,cgm,nome,tipocompra,codlicitacao,codtipocom)
+    function js_preenchertermocredenciamento(codigo,seqtermo,edital,numero,ano,cgm,nome,tipocompra,codlicitacao,codtipocom)
     {
         document.form1.l212_numerotermo.value = codigo;
+        document.form1.l212_sequencial.value = seqtermo;
         document.form1.e54_numerll.value = edital+'/'+ano;
         document.form1.e54_nummodalidade.value = numero;
         document.form1.e54_numcgm.value = cgm;

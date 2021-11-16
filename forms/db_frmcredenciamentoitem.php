@@ -323,5 +323,9 @@ $clrotulo->label("pc01_descrmater");
             }
         });
     }
+    
+    function js_verificadisponivel() {
+
+    }
 
 </script>
