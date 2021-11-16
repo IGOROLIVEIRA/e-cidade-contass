@@ -52,6 +52,12 @@ if(isset($pc16_codmater)){
     $pcmateranterior = $pc16_codmater;
 }
 
+if((isset($opcao) && $opcao == "alterar")){
+  echo"<script>var operador = 1;</script>";
+}else{
+  echo"<script>var operador = 0;</script>";
+}
+
 /**
  * Busca parametros da insitutuicao atual
  */
@@ -110,6 +116,7 @@ echo "
        function js_passaparam(opcao){
 				 qry  = 'verificado=ok';
 				 val  = top.corpo.iframe_solicita.document.form1.opselec.value;
+         val1  = top.corpo.iframe_solicita.document.form1.trancaIte.value;
 				 qry += '".$parametro."';
 
 				 opc = '';
@@ -118,6 +125,11 @@ echo "
 				   opc += '&pc11_codigo=".@$pc11_codigo."';
 				   opc += '&opcao='+opcao;
 				 }
+         if(val1=='1'){
+          qry += '&trancaIte=1';
+         }else if(val1=='0'){
+          qry += '&trancaIte=0';
+         }
 				 if(val == '1'){
 				   qry += '&selecao=1';
 				 }else if(val == '2'){
@@ -149,6 +161,9 @@ $rsRegistroPreco             = $oDaoSolicitaVInculo->sql_record($sSqlRegistroPre
 
 if ($oDaoSolicitaVInculo->numrows > 0) {
   $iRegistroPreco = db_utils::fieldsMemory($rsRegistroPreco, 0)->pc53_solicitapai;
+  $operadorRegistroPreco = 1;
+}else{
+  $operadorRegistroPreco = 0;
 }
 $trancaCodEle = 1;
 if (isset($pc11_codigo) && $pc11_codigo != '') {
@@ -265,6 +280,14 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                         if (( isset ($alterar) || isset ($excluir) || isset ($incluir) || ( isset ($opcao) && ($opcao == "alterar" || $opcao == "excluir"))) && isset ($sqlerro) && $sqlerro == false){
                             $tranca = 3;
                         }
+                        if (( isset ($alterar) || isset ($incluir) || ( isset ($opcao) && ($opcao == "alterar" || $opcao == "excluir"))) && isset ($sqlerro) && $sqlerro == false){
+                          if($operadorRegistroPreco==1 || $trancaIte==1){
+                            $tranca = 3;
+                          }else{
+                            $tranca = 1;
+                          }
+                         
+                        }
                         $result_servico = $clpcmater->sql_record($clpcmater->sql_query($pc16_codmater, "pc01_servico, pc01_descrmater", "pc01_codmater"));
                         if ($clpcmater->numrows > 0) {
                             db_fieldsmemory($result_servico, 0);
@@ -281,6 +304,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 
                     db_ancora(@$Lpc16_codmater, "js_pesquisapc16_codmater(true);", $tranca);
                     ?>
+
                 </td>
                 <td nowrap>
                     <?
@@ -288,6 +312,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                     db_input("iCodigoRegistro", 8, "iCodigoRegistro", true, 'hidden', $db_opcao);
                     db_input("pc01_veiculo", 8, "", true, 'hidden', $db_opcao);
                     db_input("codigoitemregistropreco", 8, "", true, 'hidden', $db_opcao);
+                    db_input("pcmateranterior", 8, $pcmateranterior, true, 'hidden', $db_opcao);
                     ?>
                 </td>
                 <td colspan="7">
@@ -476,7 +501,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr id="codeleRow">
                 <?
 
                 if ( isset ($o56_codele) && $o56_codele != "") {
@@ -512,12 +537,26 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                         echo "<script>document.form1.o56_codele.value=$o56_codelefunc;</script>";
                     }
                     ?>
+                    
                 </td>
+
                 <?
                 }
                 db_input("o56_codelefunc", 5, $Io56_codele, true, 'hidden', $db_opcao);
                 ?>
+                
             </tr>
+            <tr style="display:none;" id="subEl">
+                <td nowrap title="<?=@$To56_descr?>">
+                        <strong>Sub. ele:</strong>
+                  </td>
+                <td colspan="3">
+                      <select id="eleSub" name="eleSub">
+                        <options value="">Selecione</options>
+                      </select>
+                </td>
+            </tr>
+
 
             <tr id='ctnServicoQuantidade' style="display:none;">
               <td><strong>Serviço Controlado por Quantidades: </strong></td>
@@ -887,7 +926,6 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         if (lError) {
           return alert(oResponse.message.urlDecode());
         }
-
         if (empty(document.form1.pc11_codigo.value)) {
           document.form1.pc11_resum.value = oResponse.dados.descricaocomplemento.urlDecode();
         }
@@ -928,7 +966,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       }
     }
     function js_mostrapcmater1(chave1,chave2,codele,lVeic, iRegistro){
-
+      
       js_esconteVeic(lVeic);
 
     	if (iRegistro != null) {
@@ -950,14 +988,22 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           obj=document.createElement('input');
           obj.setAttribute('name','opcao');
           obj.setAttribute('type','hidden');
-          obj.setAttribute('value','$opcao');
+          obj.setAttribute('value','$opcao'); 
           document.form1.appendChild(obj);
         ";
       }
       ?>
       document.form1.info.disabled = false;
       js_buscaDadosComplementaresMaterial(chave1);
-      js_materanterior();
+      document.getElementById("codeleRow").style.display="none";
+    
+      if(operador==1){
+        js_buscarEle();
+      }else{
+        js_materanterior();
+      }
+     
+      
     }
 
     /**
@@ -1056,7 +1102,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       <?
       echo "materanterior = '$pcmateranterior';\n";
       if ($iRegistroPreco != "") {
-       echo  "document.form1.submit()";
+       echo  "document.form1.submit();";
       } else {
       echo "
         if(materanterior!=document.form1.pc16_codmater.value){
@@ -1151,6 +1197,52 @@ function js_retornogetSaldo(oAjax) {
   }
   return true;
 }
+
+function js_buscarEle() {
+var sUrl        = "com4_materialsolicitacao.RPC.php";
+
+var oRequest         = new Object();
+oRequest.pc_mat = $F('pc16_codmater').valueOf();
+oRequest.exec        = "getDadosElementos";
+var oAjax = new Ajax.Request(
+                             sUrl,
+                             {
+                             method: 'post',
+                             parameters: 'json='+js_objectToJson(oRequest),
+                             onComplete: js_retornogetDados
+                             }
+                            );
+
+}
+
+function js_retornogetDados(oAjax) {
+  var oRetorno = eval("("+oAjax.responseText+")");
+  oRetorno.dados.forEach(function (oItem) {
+    valor = oItem.codigo+" - "+oItem.elemento+" - "+oItem.nome.urlDecode();
+    valorElem = oItem.elemento;
+    $('eleSub').options[0]     = new Option(valor, oItem.codigo); 
+  });
+  
+  document.getElementById("subEl").style.display= "table-row";
+ 
+  valorEle = document.getElementById("o56_codele_select_descr").value;
+  const val =  valorEle.split("-");
+  const num = val[1].split(" ");
+  if((num[1].substr(0,7))!=(valorElem.substr(0,7))){
+    alert("Elemento do item selecionado diferente do item anterior, é necessário remover as dotações vinculadas ao item para a troca do material");
+    var input = document.querySelector("#db_opcao");
+    input.disabled = true;
+    document.getElementById("codeleRow").style.display="table-row";
+    document.form1.o56_codele_select_descr.focus();
+  }else{
+    var input = document.querySelector("#db_opcao");
+    input.disabled = false;
+  } 
+  //$('ctnServicoQuantidade').style.display='table-row';
+  
+}
+
+
 function js_mostrapactovalor1(chave1,chave2) {
 
   document.form1.o103_pactovalor.value = chave1;
