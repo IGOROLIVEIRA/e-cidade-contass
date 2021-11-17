@@ -123,10 +123,13 @@ function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
         db_inicio_transacao();
         $clEmpResto = new cl_empresto();
         $sSqlOrder = "";
-        $sCampos = " o15_codtri, sum(vlrpag) as pago ";
+        $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
         $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
-        $aEmpResto = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
-        $nValorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
+        $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
+        $nValorRpPago = 0;
+        foreach($aEmpRestos as $oResto){
+            $nValorRpPago += $oResto->pagorpp + $oResto->pagorpnp;
+        }
         $nTotalAnterior = getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits);
         $nSaldo = 0;
         if($nValorRpPago > $nTotalAnterior){
@@ -165,16 +168,20 @@ function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dt
 
     $clempresto = new cl_empresto();
     $sSqlOrder = "";
-    $sCampos = " o15_codtri, sum(vlrpag) as pago ";
+    $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
     $aFontesSuperavit = array("'201','218','219'");
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontesSuperavit).") group by 1";
     $dtFimQuadrimestre = db_getsession("DB_anousu")."-04-30";
-    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtFimQuadrimestre, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorRpPagoSuperavit = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
+    $aEmpRestosPagoSuperavit = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtFimQuadrimestre, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorRpPagoSuperavit = 0;
+    foreach($aEmpRestosPagoSuperavit as $oResto){
+        $valorRpPagoSuperavit += $oResto->pagorpp + $oResto->pagorpnp;
+    }
     $nValorAplicado = $nValorAplicado + $valorRpPagoSuperavit;
 
-    $aFontes = array("'101'","'118','119'");
+    $aFontes = array("'101'","'201'","'118','119'","'218','219'");
     $nValorPagoSemDisponibilidade = getRestosSemDisponilibidade($aFontes, $dtini, $dtfim, $instits);
+
     $nValorAplicado = $nValorAplicado + $nValorPagoSemDisponibilidade;
 
     $sSqlOrder = "";

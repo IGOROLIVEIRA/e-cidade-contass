@@ -174,11 +174,13 @@ function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
         db_inicio_transacao();
         $clEmpResto = new cl_empresto();
         $sSqlOrder = "";
-        $sCampos = " o15_codtri, sum(vlrpag) as pago ";
+        $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
         $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
-        $aEmpResto = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
-        $nValorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
-
+        $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
+        $nValorRpPago = 0;
+        foreach($aEmpRestos as $oEmpResto){
+            $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
+        }
         $nTotalAnterior = getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits);
         $nSaldo = 0;
         if($nValorRpPago > $nTotalAnterior){
@@ -563,8 +565,8 @@ ob_start();
                 </table>
 
             </div>
-            <div class="body-relatorio" style="padding-top: 1px;">
-            <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 20px;" autosize="1">
+            <div class="body-relatorio" style="padding-top: 10px;">
+            <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 50px;" autosize="1">
                     <tbody>
                         <tr>
                             <td class="title-row" >II - TOTAL DA APLICAÇÃO NO ENSINO</td>
