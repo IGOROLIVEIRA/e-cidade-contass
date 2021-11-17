@@ -91,10 +91,21 @@ switch ($oParam->exec) {
       $sql = " delete from pctabelaitem
                     where pc95_codtabela = {$oParam->iCodigoTabela}
                     and pc95_codmater = {$oParam->iCodigoItem}";
+
+
       $resultado = db_query($sql);
       if ($resultado == false) {
         throw new Exception("Erro ao excluir item.\n{$clpctabelaitem->erro_msg}");
       }
+
+      $verificaAutEmpenho = db_query("select e55_item
+                                from empautitem
+                                where e55_item = {$oParam->iCodigoItem}");
+
+      if (pg_num_rows($verificaAutEmpenho) > 0) {
+          throw new Exception("Erro ao excluir item. Item já possui autorização de empenho");
+      }
+
       db_fim_transacao(false);
 
     } catch (Exception $eErro) {
