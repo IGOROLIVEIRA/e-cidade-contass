@@ -434,7 +434,7 @@ class Assentamento {
 
    /**
     * Persist na base um assentamento
-    * @return mixed true | String mensagem de erro
+    * @return boolean
     */
    public function persist() {
 
@@ -460,7 +460,7 @@ class Assentamento {
        if(empty($this->iCodigo)) {
 
            if (!$classenta->incluir(null)) {
-               return $classenta->erro_msg;
+               throw new DBException($classenta->erro_msg);
            }
            $this->setCodigo($classenta->h16_codigo);
 
@@ -468,7 +468,7 @@ class Assentamento {
 
            $classenta->h16_codigo = $this->getCodigo();
            if (!$classenta->alterar($this->getCodigo())) {
-               return $classenta->erro_msg;
+               throw new DBException($classenta->erro_msg);
            }
        }
 
