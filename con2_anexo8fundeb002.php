@@ -47,8 +47,8 @@ $dtini = implode("-", array_reverse(explode("/", $DBtxt21)));
 $dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
 
 $instits = str_replace('-', ', ', $db_selinstit);
-$aInstits = explode(",",$instits);
-if(count($aInstits) > 1){
+$aInstits = explode(",", $instits);
+if (count($aInstits) > 1) {
     $oInstit = new Instituicao();
     $oInstit = $oInstit->getDadosPrefeitura();
 } else {
@@ -90,7 +90,7 @@ for ($i = 0; $i < pg_num_rows($rsTipoinstit); $i++) {
 $db_filtro = " o70_instit in({$instits}) ";
 $anousu = db_getsession("DB_anousu");
 
-$aSubFuncoes = array(122,272,271,361,365,366,367,843);
+$aSubFuncoes = array(122, 272, 271, 361, 365, 366, 367, 843);
 $sFuncao     = "12";
 $aFonte      = array("'101','201'");
 
@@ -103,7 +103,8 @@ $aReceitasImpostos = array(
     array('2.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.00.1.1 + NR 1.3.2.1.00.5.1 )', 'text', array('413210011%', '413210051%'), "'166','167'"),
 );
 
-function getValorNaturezaReceita($aNaturecaReceita, $aFontes, $anoUsu, $dtIni, $dtFim, $instits){
+function getValorNaturezaReceita($aNaturecaReceita, $aFontes, $anoUsu, $dtIni, $dtFim, $instits)
+{
     $nReceitaTotal = 0;
     $sWhereReceita      = " o70_instit in ({$instits}) ";
     $sWhereReceita      .= " and o70_codigo in ( select o15_codigo from orctiporec where o15_codtri in ({$aFontes}) )";
@@ -111,7 +112,7 @@ function getValorNaturezaReceita($aNaturecaReceita, $aFontes, $anoUsu, $dtIni, $
     $aReceitas = db_utils::getColectionByRecord($rsReceitas);
     db_query("drop table if exists work_receita");
     criarWorkReceita($sWhereReceita, array($anoUsu), $dtIni, $dtFim);
-    foreach( $aNaturecaReceita as $sNatureza){
+    foreach ($aNaturecaReceita as $sNatureza) {
         $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '{$sNatureza}'");
         $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
         $nReceitaTotal = $nReceitaTotal + $nReceita;
@@ -121,7 +122,8 @@ function getValorNaturezaReceita($aNaturecaReceita, $aFontes, $anoUsu, $dtIni, $
     return $nReceitaTotal;
 }
 
-function getDevolucaoRecursoFundeb($dtIni, $dtFim, $aInstits){
+function getDevolucaoRecursoFundeb($dtIni, $dtFim, $aInstits)
+{
     $clSlip = new cl_slip();
     $nDevolucaoRecursoFundeb = 0;
     $rsSlip = $clSlip->sql_record($clSlip->sql_query_fundeb($dtIni, $dtFim, $aInstits));
@@ -159,11 +161,11 @@ $header = " <header>
                     <div style=\"width:25%; float:right\" class=\"box\">
                         <b>Relatório Despesa Ensino - Anexo III</b><br/>
                         <b>INSTITUIÇÕES:</b> ";
-                        foreach ($aInstits as $iInstit) {
-                            $oInstituicao = new Instituicao($iInstit);
-                            $header .= "(" . trim($oInstituicao->getCodigo()) . ") " . $oInstituicao->getDescricao() . " ";
-                        }
-                        $header .= "<br/> <b>PERÍODO:</b> {$DBtxt21} A {$DBtxt22} <br/>
+foreach ($aInstits as $iInstit) {
+    $oInstituicao = new Instituicao($iInstit);
+    $header .= "(" . trim($oInstituicao->getCodigo()) . ") " . $oInstituicao->getDescricao() . " ";
+}
+$header .= "<br/> <b>PERÍODO:</b> {$DBtxt21} A {$DBtxt22} <br/>
                     </div>
                 </div>
             </header>";
@@ -187,700 +189,706 @@ ob_start();
 
 ?>
 <html>
-    <head>
-        <style type="text/css">
-            .ritz .waffle a {
-                color: inherit;
-            }
 
-            .ritz .waffle .s16 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: normal;
-                overflow: hidden;
-                word-wrap: break-word;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+<head>
+    <style type="text/css">
+        .ritz .waffle a {
+            color: inherit;
+        }
 
-            .ritz .waffle .s32 {
-                border-left: none;
-                border-bottom: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s16 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: normal;
+            overflow: hidden;
+            word-wrap: break-word;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s27 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-            }
+        .ritz .waffle .s32 {
+            border-left: none;
+            border-bottom: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s41 {
-                border-bottom: 1px SOLID #808080;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: right;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s27 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+        }
 
-            .ritz .waffle .s2 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s41 {
+            border-bottom: 1px SOLID #808080;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: right;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s45 {
-                background-color: #ffffff;
-                text-align: center;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s2 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s25 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s45 {
+            background-color: #ffffff;
+            text-align: center;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s29 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #808080;
-                background-color: #cccccc;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s25 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s18 {
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: right;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s29 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #808080;
+            background-color: #cccccc;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s9 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s18 {
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: right;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s1 {
-                border-bottom: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s9 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s0 {
-                background-color: #ffffff;
-                text-align: left;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s1 {
+            border-bottom: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s38 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: middle;
-                white-space: normal;
-                overflow: hidden;
-                word-wrap: break-word;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s0 {
+            background-color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s43 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #808080;
-                background-color: #cccccc;
-                text-align: right;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s38 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: middle;
+            white-space: normal;
+            overflow: hidden;
+            word-wrap: break-word;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s28 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s43 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #808080;
+            background-color: #cccccc;
+            text-align: right;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s6 {
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: right;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s28 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s3 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s6 {
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: right;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s26 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: right;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s3 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s23 {
-                border-bottom: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s26 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: right;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s13 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: left;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s23 {
+            border-bottom: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s7 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: normal;
-                overflow: hidden;
-                word-wrap: break-word;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s13 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: left;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s15 {
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s7 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: normal;
+            overflow: hidden;
+            word-wrap: break-word;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s44 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: right;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s15 {
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s17 {
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s44 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: right;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s11 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s17 {
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s42 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #808080;
-                background-color: #cccccc;
-                text-align: left;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s11 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s34 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: right;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s42 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #808080;
+            background-color: #cccccc;
+            text-align: left;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s12 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: right;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s34 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: right;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s40 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: right;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s12 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: right;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s30 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #808080;
-                background-color: #cccccc;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s40 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: right;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s47 {
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s30 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #808080;
+            background-color: #cccccc;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s35 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s47 {
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s8 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: right;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s35 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s31 {
-                border-right: none;
-                border-bottom: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s8 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: right;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s48 {
-                border-bottom: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s31 {
+            border-right: none;
+            border-bottom: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s10 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: normal;
-                overflow: hidden;
-                word-wrap: break-word;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s48 {
+            border-bottom: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s36 {
-                border-right: none;
-                border-bottom: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: middle;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s10 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: normal;
+            overflow: hidden;
+            word-wrap: break-word;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s14 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: right;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s36 {
+            border-right: none;
+            border-bottom: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: middle;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s19 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: right;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s14 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: right;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s21 {
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s19 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: right;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s22 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s21 {
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s37 {
-                border-left: none;
-                border-bottom: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: middle;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s22 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s5 {
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: left;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s37 {
+            border-left: none;
+            border-bottom: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: middle;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s20 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s5 {
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: left;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s39 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: normal;
-                overflow: hidden;
-                word-wrap: break-word;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s20 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s33 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: top;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s39 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: normal;
+            overflow: hidden;
+            word-wrap: break-word;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s24 {
-                border-bottom: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                color: #000000;
-                font-family: 'Arial', Arial;
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s33 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: top;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s4 {
-                border-right: 1px SOLID #000000;
-                background-color: #ffffff;
-                text-align: left;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: bottom;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
+        .ritz .waffle .s24 {
+            border-bottom: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            color: #000000;
+            font-family: 'Arial', Arial;
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
 
-            .ritz .waffle .s46 {
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                background-color: #cccccc;
-                text-align: center;
-                font-weight: bold;
-                color: #000000;
-                font-family: 'Arial';
-                font-size: 10pt;
-                vertical-align: middle;
-                white-space: nowrap;
-                direction: ltr;
-                padding: 2px 3px 2px 3px;
-            }
-        </style>
-    </head>
-    <body>
+        .ritz .waffle .s4 {
+            border-right: 1px SOLID #000000;
+            background-color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: bottom;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+
+        .ritz .waffle .s46 {
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            background-color: #cccccc;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            font-family: 'Arial';
+            font-size: 10pt;
+            vertical-align: middle;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 2px 3px 2px 3px;
+        }
+        .body-relatorio {
+            width: 100%;
+            height: 80%;
+        }
+    </style>
+</head>
+
+<body>
     <div>
         <div class="title-relatorio">
             <p><strong>Anexo VIII</strong></p>
             <p><strong>Fundo Manutenção e Desenvolvimento da Educação Básica e de Valorização Dos Profissionais da Educação - FUNDEB</strong></p>
             <p><strong> (Art. 212 - A DA CR/88, LEIS 9.394/96, 14.113/2020 E IN 05/2012) </strong></p>
         </div>
-
+        <div class="body-relatorio">
             <!-- <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000" autosize="1">
                     <thead>
                         <tr>
@@ -896,19 +904,19 @@ ob_start();
                             <td class="th-valor">VALOR</td>
                         </tr>
                         <?php
-                            $nTotalReceitaRecurso = 0;
-                            foreach ($aReceitasImpostos as $receita) {
-                                echo "<tr>";
-                                echo "<td class='{$receita[1]}-row'>{$receita[0]}</td>";
-                                echo "<td class='{$receita[1]}-row-valor'> ";
-                                $nReceita = getValorNaturezaReceita($receita[2], $receita[3], $anousu, $dtini, $dtfim, $instits);
-                                if ($receita[1] == 'title') {
-                                    $nTotalReceitaRecurso += $nReceita;
-                                }
-                                echo db_formatar(abs($nReceita), "f");
-                                echo "</td>";
-                                echo "</tr>";
+                        $nTotalReceitaRecurso = 0;
+                        foreach ($aReceitasImpostos as $receita) {
+                            echo "<tr>";
+                            echo "<td class='{$receita[1]}-row'>{$receita[0]}</td>";
+                            echo "<td class='{$receita[1]}-row-valor'> ";
+                            $nReceita = getValorNaturezaReceita($receita[2], $receita[3], $anousu, $dtini, $dtfim, $instits);
+                            if ($receita[1] == 'title') {
+                                $nTotalReceitaRecurso += $nReceita;
                             }
+                            echo db_formatar(abs($nReceita), "f");
+                            echo "</td>";
+                            echo "</tr>";
+                        }
                         ?>
                         <tr>
                             <td class="title-footer-row">3 - TOTAL ( 1 - 2 )</td>
@@ -920,8 +928,8 @@ ob_start();
                             <td class="title-footer-row">4 - DEVOLUÇÃO DE RECURSOS DO FUNDEB, RECEBIDOS EM ATRASO, PARA AS CONTAS DE ORIGEM DOS RECURSOS (CONSULTA 1047710)</td>
                                 <td class="title-footer-row-valor">
                                     <?php
-                                        $nDevolucaoFundeb =getDevolucaoRecursoFundeb($dtini, $dtfim, $aInstits);
-                                        echo db_formatar($nDevolucaoFundeb, "f");
+                                    $nDevolucaoFundeb = getDevolucaoRecursoFundeb($dtini, $dtfim, $aInstits);
+                                    echo db_formatar($nDevolucaoFundeb, "f");
                                     ?>
                                 </td>
                             </td>
@@ -930,7 +938,7 @@ ob_start();
                             <td class="title-footer-row">5 - RECEITA TOTAL (3 - 4)</td>
                                 <td class="title-footer-row-valor">
                                     <?php
-                                        echo db_formatar($nTotalReceitaRecurso - $nDevolucaoFundeb, "f");
+                                    echo db_formatar($nTotalReceitaRecurso - $nDevolucaoFundeb, "f");
                                     ?>
                                 </td>
                             </td>
@@ -1199,6 +1207,12 @@ ob_start();
                         <td class="s15"></td>
                         <td class="s15"></td>
                     </tr>
+                </table>
+            </div>
+        </div>
+        <div class="body-relatorio">
+            <div class="ritz grid-container" dir="ltr">
+                <table class="waffle no-grid" cellspacing="0" cellpadding="0">
                     <tr style="height: 20px">
                         <td class="s0" dir="ltr"></td>
                         <td class="s1" dir="ltr" colspan="9">III - GASTOS COM PROFISSIONAIS DA EDUCAÇÃO BÁSICA EM EFETIVO
@@ -1301,10 +1315,6 @@ ob_start();
                         <td class="s15"></td>
                         <td class="s15"></td>
                     </tr>
-                </table>
-            </div>
-            <div class="ritz grid-container" dir="ltr">
-                <table class="waffle no-grid" cellspacing="0" cellpadding="0">
                     <tr style="height: 20px">
                         <td class="s0" dir="ltr"></td>
                         <td class="s1" dir="ltr" colspan="9">V - VALOR MÍNIMO LEGAL DA COMPLEMENTAÇÃO DA UNIÃO AO FUNDEB -
@@ -1517,8 +1527,10 @@ ob_start();
                     </tr>
                 </table>
             </div>
+        </div>
     </div>
-    </body>
+</body>
+
 </html>
 <?php
 
