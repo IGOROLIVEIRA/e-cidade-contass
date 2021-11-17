@@ -273,8 +273,16 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
             $clhablic10->si57_dtemissaocndt = $oDados10->dtemissaocndt;
             $clhablic10->si57_dtvalidadecndt = $oDados10->dtvalidadecndt;
             $clhablic10->si57_dthabilitacao = $oDados10->dthabilitacao;
-            $clhablic10->si57_presencalicitantes = $oDados10->presencalicitantes;
-            $clhablic10->si57_renunciarecurso = $oDados10->renunciarecurso;
+            if($oDados10->presencalicitantes == null ){
+                $clhablic10->si57_presencalicitantes = 1;
+            }else{
+                $clhablic10->si57_presencalicitantes = $oDados10->presencalicitantes;
+            }
+            if($oDados10->renunciarecurso == null){
+                $clhablic10->si57_renunciarecurso = 1;
+            }else{
+                $clhablic10->si57_renunciarecurso = $oDados10->renunciarecurso;
+            }
             $clhablic10->si57_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clhablic10->si57_instit = db_getsession("DB_instit");
 
