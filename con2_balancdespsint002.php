@@ -465,39 +465,137 @@ for ($i = 0; $i < count($arr_niveis); $i++) {
     } else {
       $ordem  = "order by o58_codigo,o15_descr";
     }
-  }
+  }else if ($nivel == 9) {
+      // cateconomica
+      if (trim($selecao)!="") {
+        $selecao .= ",substr(o58_elemento,1,2) as elemento";
+      } else {
+        $selecao  = "select substr(o58_elemento,1,2) as elemento";
+      }
+      
+      if (trim($agrupar)!="") {
+        $agrupar .= ",o58_elemento,o56_descr";
+      } else {
+        $agrupar  = "group by o58_elemento,o56_descr";
+      }
+      
+      if (trim($ordem)!="") {
+        $ordem .= ",o58_elemento,o56_descr";
+      } else {
+        $ordem  = "order by o58_elemento,o56_descr";
+      }
+      if (trim($where )!="") {
+        $where  .= ",o58_elemento like '33%' or o58_elemento like '34%'";
+      } else {
+        $where   = "where o58_elemento like '33%' or o58_elemento like '34%'";
+      }
+  } 
 }
 
-$sql_result = $selecao.",
-sum(dot_ini)        as dot_ini,
-sum(saldo_anterior) as saldo_anterior,
-sum(empenhado)      as empenhado,
-sum(anulado)        as anulado,
-sum(liquidado)      as liquidado,
-sum(pago)           as pago,
-sum(suplementado)   as suplementado,
-sum(reduzido)       as reduzido,
-sum(atual)          as atual,
-sum(reservado)      as reservado,
-sum(atual_menos_reservado)   as atual_menos_reservado,
-sum(atual_a_pagar)           as atual_a_pagar,
-sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
-sum(empenhado_acumulado)     as empenhado_acumulado,
-sum(anulado_acumulado)       as anulado_acumulado,
-sum(liquidado_acumulado)     as liquidado_acumulado,
-sum(pago_acumulado)          as pago_acumulado,
-sum(suplementado_acumulado)  as suplementado_acumulado,
-sum(reduzido_acumulado)      as reduzido_acumulado
-from ($sql_dotacaosaldo) as rr ";
 
-$sql_result .= $agrupar." ";
-$sql_result .= $ordem;
+if($nivel != 9){
+      $sql_result = $selecao.",
+      sum(dot_ini)        as dot_ini,
+      sum(saldo_anterior) as saldo_anterior,
+      sum(empenhado)      as empenhado,
+      sum(anulado)        as anulado,
+      sum(liquidado)      as liquidado,
+      sum(pago)           as pago,
+      sum(suplementado)   as suplementado,
+      sum(reduzido)       as reduzido,
+      sum(atual)          as atual,
+      sum(reservado)      as reservado,
+      sum(atual_menos_reservado)   as atual_menos_reservado,
+      sum(atual_a_pagar)           as atual_a_pagar,
+      sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
+      sum(empenhado_acumulado)     as empenhado_acumulado,
+      sum(anulado_acumulado)       as anulado_acumulado,
+      sum(liquidado_acumulado)     as liquidado_acumulado,
+      sum(pago_acumulado)          as pago_acumulado,
+      sum(suplementado_acumulado)  as suplementado_acumulado,
+      sum(reduzido_acumulado)      as reduzido_acumulado
+      from ($sql_dotacaosaldo) as rr 
+      ";
 
-//echo $sql_result; exit;
+      if($where != ""){
+        $sql_result .= $where; 
+          
+      }
+        
+      $sql_result .= $agrupar." ";
+      $sql_result .= $ordem;
+   
+        // echo $sql_result; exit;
+      
+      if ($selecao != "") {
+        $result = pg_exec($sql_result);
+      }
+    
+} else {
 
-if ($selecao != "") {
-  $result = pg_exec($sql_result);
+      $sql_result = $selecao.",
+      sum(dot_ini)        as dot_ini,
+      sum(saldo_anterior) as saldo_anterior,
+      sum(empenhado)      as empenhado,
+      sum(anulado)        as anulado,
+      sum(liquidado)      as liquidado,
+      sum(pago)           as pago,
+      sum(suplementado)   as suplementado,
+      sum(reduzido)       as reduzido,
+      sum(atual)          as atual,
+      sum(reservado)      as reservado,
+      sum(atual_menos_reservado)   as atual_menos_reservado,
+      sum(atual_a_pagar)           as atual_a_pagar,
+      sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
+      sum(empenhado_acumulado)     as empenhado_acumulado,
+      sum(anulado_acumulado)       as anulado_acumulado,
+      sum(liquidado_acumulado)     as liquidado_acumulado,
+      sum(pago_acumulado)          as pago_acumulado,
+      sum(suplementado_acumulado)  as suplementado_acumulado,
+      sum(reduzido_acumulado)      as reduzido_acumulado
+      from ($sql_dotacaosaldo) as rr 
+      group by rr.o58_elemento";
+
+      $sql_result2 = "select elemento,
+      sum(dot_ini)        as dot_ini,
+      sum(saldo_anterior) as saldo_anterior,
+      sum(empenhado)      as empenhado,
+      sum(anulado)        as anulado,
+      sum(liquidado)      as liquidado,
+      sum(pago)           as pago,
+      sum(suplementado)   as suplementado,
+      sum(reduzido)       as reduzido,
+      sum(atual)          as atual,
+      sum(reservado)      as reservado,
+      sum(atual_menos_reservado)   as atual_menos_reservado,
+      sum(atual_a_pagar)           as atual_a_pagar,
+      sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
+      sum(empenhado_acumulado)     as empenhado_acumulado,
+      sum(anulado_acumulado)       as anulado_acumulado,
+      sum(liquidado_acumulado)     as liquidado_acumulado,
+      sum(pago_acumulado)          as pago_acumulado,
+      sum(suplementado_acumulado)  as suplementado_acumulado,
+      sum(reduzido_acumulado)      as reduzido_acumulado
+      from ($sql_result) as y group by elemento";
+
+      if($where != ""){
+        $sql_result .= $where; 
+          
+      }
+        
+      $sql_result .= $agrupar." ";
+      $sql_result .= $ordem;
+      
+
+      if ($selecao != "") {
+        $result = pg_exec($sql_result2);
+      }
+
+       echo $sql_result; exit;
+      db_criatabela($result);
+
 }
+
 
 $orgao     = "";
 $unidade   = "";
