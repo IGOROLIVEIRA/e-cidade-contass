@@ -55,6 +55,15 @@ switch ($oParam->exec) {
         throw new Exception("Item já adicionado nesta tabela!");
       }
 
+      $verificaItemTabelas = db_query("select pc95_sequencial
+      from pctabelaitem
+        where pc95_codmater = {$oParam->iCodigoItem}
+          ");
+
+      if(pg_num_rows($verificaItemTabelas) > 0){
+        throw new Exception("Item já adicionado em outra tabela");
+      }    
+
       $clpctabelaitem = new cl_pctabelaitem;
       $clpctabelaitem->pc95_codmater  = $oParam->iCodigoItem;
       $clpctabelaitem->pc95_codtabela = $oParam->iCodigoTabela;
