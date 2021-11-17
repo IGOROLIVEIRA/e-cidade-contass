@@ -89,6 +89,7 @@ class DadosESocial
             case Tipo::PROCESSOSAJ:
             case Tipo::PORTUARIO:
             case Tipo::CADASTRAMENTO_INICIAL:
+            case Tipo::ESTABELECIMENTOS:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId);
             default:
                 throw new Exception('Tipo não encontrado.');
@@ -141,6 +142,7 @@ class DadosESocial
             case Tipo::PROCESSOSAJ:
             case Tipo::PORTUARIO:
             case Tipo::CADASTRAMENTO_INICIAL:
+            case Tipo::ESTABELECIMENTOS:
                 return $preenchimento->pk;
             default:
                 throw new Exception('Tipo não encontrado.');
