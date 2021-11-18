@@ -615,7 +615,7 @@ db_fieldsmemory($result_pcparam1, 0);
     }
   }
 } else if (isset($alterar) && $sqlerro == false) {
-
+  
 
   if (!isset($pc16_codmater) || (isset($pc16_codmater) && $pc16_codmater == "")) {
 
@@ -701,6 +701,9 @@ e55_sequen is not null and e54_anulad is null"
       }
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //$clsolicitempcmater->excluir(@ $pc16_codmater, @ $pc11_codigo);
+
+    $sql_record = $clpcmaterele->sql_record($clpcmaterele->sql_query($pc16_codmater, null, "o56_codele,o56_descr,o56_elemento", "o56_descr"));
 
     if ($sqlerro == false) {
       $clsolicitem->alterar($pc11_codigo);
@@ -747,7 +750,7 @@ e55_sequen is not null and e54_anulad is null"
       }
     }
     if ($sqlerro == false && isset($pc16_codmater) && $pc16_codmater != "") {
-      $clsolicitempcmater->excluir(@ $pc16_codmater, @ $pc11_codigo);
+      $clsolicitempcmater->excluir(@ $pcmateranterior, @ $pc11_codigo);
       if ($clsolicitempcmater->erro_status == 0) {
         $sqlerro = true;
         $erro_msg = $clsolicitempcmater->erro_msg;
@@ -770,7 +773,12 @@ e55_sequen is not null and e54_anulad is null"
         $erro_msg = str_replace("Inclusao", "Alteracao", $erro_msg);
       }
       if ($sqlerro == false) {
-        $clsolicitemele->incluir($pc11_codigo, $o56_codele);
+        if($eleSub==""){
+          $clsolicitemele->incluir($pc11_codigo, $o56_codele);
+        }else{
+          $clsolicitemele->incluir($pc11_codigo, $eleSub);
+        }
+        
         if ($clsolicitemele->erro_status == 0) {
           $sqlerro = true;
           $erro_msg = $clsolicitemele->erro_msg;
@@ -1010,6 +1018,7 @@ e55_sequen is not null and e54_anulad is null"
         }
       }
     }
+    
     //$sqlerro = true;
     db_fim_transacao($sqlerro);
     if ($sqlerro == false) {
@@ -1883,6 +1892,7 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
       }
     }
   } else {
+    
     echo "<script>top.corpo.iframe_solicita.location.href = 'com1_solicita005.php?chavepesquisa=$pc11_numero&ld=false$parametro'</script>";
     if ($pc30_sugforn == 't') {
       echo "<script> top.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc11_numero$parametro';</script>";

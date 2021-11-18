@@ -12,9 +12,11 @@ require_once 'classes/db_acordoitem_classe.php';
 require_once 'classes/db_acordoaux_classe.php';
 require_once 'classes/db_parametroscontratos_classe.php';
 require_once 'classes/db_manutencaoacordo_classe.php';
+require_once 'classes/db_acordoposicao_classe.php';
 
 $clacordo = new cl_acordo;
 $clmanutencaoacordo = new cl_manutencaoacordo;
+$clacordoposicao = new cl_acordoposicao;
 
 $clacordo->rotulo->label();
 $clrotulo = new rotulocampo;
@@ -28,6 +30,7 @@ $clrotulo->label('ac16_licitacao');
 $clrotulo->label('l20_objeto');
 $clrotulo->label('ac16_dataassinatura');
 $clrotulo->label('ac35_dataassinaturatermoaditivo');
+$clrotulo->label('ac26_numeroaditamento');
 
 if (isset($alterar)) {
   if (empty($_POST['ac16_adesaoregpreco'])) {
@@ -64,6 +67,17 @@ if (isset($alterar)) {
 
     if ($clacordo->numrows > 0) {
       db_msgbox("Já existe acordo com o número $ac16_numeroacordo");
+      $erro = true;
+    }
+  }
+
+  if($ac26_numeroaditamento != $ac26_numeroaditamento_old){
+    $sWhere = "ac26_numeroaditamento = '$ac26_numeroaditamento' and ac26_acordo = $ac16_sequencial";
+
+    $numadt = $clacordoposicao->sql_record($clacordoposicao->sql_query(null,'ac26_sequencial',null,$sWhere));
+
+    if ($clacordoposicao->numrows > 0) {
+      db_msgbox("Já existe aditamento com o número $ac26_numeroaditamento");
       $erro = true;
     }
   }
@@ -137,7 +151,12 @@ if (isset($alterar)) {
       $seq = pg_result($resmanut, 0, 0);
 
       $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: " . $oPosicao->ac16_datainicio . ' - ' . $oPosicao->ac16_datafim . ' atual: ' . $ac16_datainicio . ' - ' . $ac16_datafim . "  '," . db_getsession('DB_datausu') . ',' . db_getsession('DB_id_usuario') . ')');
+    
+      $numeroaditamento = "ac26_numeroaditamento_{$oPosicao->ac18_sequencial}";
+      $clacordoposicao->ac26_numeroaditamento = $$numeroaditamento;
+      $clacordoposicao->alterar_numaditamento($oPosicao->posicao);
     }
+    
     $clacordo->ac16_numero = $ac16_numeroacordo;
     $clacordo->alterar($ac16_sequencial);
 
@@ -160,6 +179,8 @@ if (isset($alterar)) {
 
       $clmanutencaoacordo->incluir();
     }
+    
+
     if ($sqlerro == false) {
       db_msgbox('Alteração efetuada');
 
@@ -173,7 +194,8 @@ if (isset($alterar)) {
                             ac16_datafim,
                             ac18_datainicio,
                             ac18_datafim,
-                            ac35_dataassinaturatermoaditivo
+                            ac35_dataassinaturatermoaditivo,
+                            ac26_numeroaditamento
               from
                 acordoposicao
               inner join acordo on
@@ -235,7 +257,8 @@ if (isset($alterar)) {
                         ac16_datafim,
                         ac18_datainicio,
                         ac18_datafim,
-                        ac35_dataassinaturatermoaditivo
+                        ac35_dataassinaturatermoaditivo,
+                        ac26_numeroaditamento
           from
             acordoposicao
           inner join acordo on
@@ -268,6 +291,8 @@ if (isset($alterar)) {
   db_fieldsmemory($result, 0);
 
   $ac16_numeroacordo_old = $ac16_numeroacordo;
+
+  $ac26_numeroaditamento_old = $ac26_numeroaditamento;
 }
 
 ?>
@@ -561,9 +586,23 @@ if (isset($alterar)) {
                   <td colspan="2">
                     <fieldset class='fieldsetinterno'>
                       <legend>
-                        <b>Vigência Aditivos <?php echo $posicao ?></b>
+                        <b>Aditivo <?php echo $posicao ?></b>
                       </legend>
                       <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+                        <tr width="1%">
+                          <td nowrap title="numero aditamento">
+                            <strong>Nº Aditamento: </strong>
+                            <td>
+                              <?php
+                                $numadtm = "ac26_numeroaditamento_{$ac18_sequencial}";
+                                $numadtmOld = "ac26_numeroaditamento_old_{$ac18_sequencial}";
+                                $$numadtm = $ac26_numeroaditamento;
+                                $$numadtmOld = $ac26_numeroaditamento;
+                                db_input("ac26_numeroaditamento_{$ac18_sequencial}", 10, $Iac26_sequencial, true, "text", 2, "");
+                                db_input("ac26_numeroaditamento_old_{$ac18_sequencial}", 10, $Iac26_sequencial, true, 'hidden', 2, "");
+                              ?>
+                          </td>
+                        </tr>
                         <tr>
                           <td width="1%">
                             <b>Inicio:</b>

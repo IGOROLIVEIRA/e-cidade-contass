@@ -201,11 +201,26 @@ abstract class ContaPlano {
     public function getUltimoAnoPlano($sWhere = null) {
 
         $oDaoPlano     = db_utils::getDao($this->getNomeDao());
-        $sCampo        = "max(c60_anousu) as c60_anousu";
-        $sSqlMaximoAno = $oDaoPlano->sql_query_file(null, null, $sCampo, null, $sWhere);
-        $rsMaximoAno   = $oDaoPlano->sql_record($sSqlMaximoAno);
 
-        return db_utils::fieldsMemory($rsMaximoAno, 0)->c60_anousu;
+        if ($oDaoPlano->tabela = "conplanoorcamento"){
+
+            $oDaoVinculo = db_utils::getDao("conaberturaexe");
+            $sCampo = "max(c91_anousudestino) as c60_anousu";
+            $sWhere = "c91_instit = ".db_getsession("DB_instit");
+            $sSqlMaximoAno = $oDaoVinculo->sql_query_file(null, $sCampo, null, $sWhere);
+            $rsMaximoAno   = $oDaoVinculo->sql_record($sSqlMaximoAno);
+
+            return db_utils::fieldsMemory($rsMaximoAno, 0)->c60_anousu;
+
+        } else{
+
+            $sCampo        = "max(c60_anousu) as c60_anousu";
+            $sSqlMaximoAno = $oDaoPlano->sql_query_file(null, null, $sCampo, null, $sWhere);
+            $rsMaximoAno   = $oDaoPlano->sql_record($sSqlMaximoAno);
+
+            return db_utils::fieldsMemory($rsMaximoAno, 0)->c60_anousu;
+        }
+
     }
 
 

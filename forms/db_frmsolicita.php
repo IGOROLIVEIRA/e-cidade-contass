@@ -330,6 +330,7 @@ if(isset($departusu) && trim($departusu)!=""){
   echo '<input style="float:left;margin-left: 2px;" name="importar" type="button" id="importar" value="Importar Solicitação" onclick="js_importa();">';
 }
 db_input('opselec',40,"",true,'hidden',3);
+db_input('trancaIte',40,"",true,'hidden',3);
 ?>
 <!--
 <input type='button' id = 'btnInconsistencia' value='Relatorio Inconsistencias' onclick='js_exibeRelatorioInconsistencia();' style='display:none; float:left;margin-left: 2px;' />
