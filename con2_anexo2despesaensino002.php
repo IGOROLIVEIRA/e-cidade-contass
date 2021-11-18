@@ -38,6 +38,7 @@ require_once("classes/db_cgm_classe.php");
 require_once("classes/db_slip_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 require_once("classes/db_empresto_classe.php");
+require_once("classes/db_empempenho_classe.php");
 
 
 $clselorcdotacao = new cl_selorcdotacao();
@@ -128,19 +129,22 @@ $aFonteFundeb      = array("'118','119'");
 
 
 
-function getRestosCusteadosComSuperavit($aFontes, $dtini, $dtfim, $instits) {
-    $clempresto = new cl_empresto();
+function getDespesasCusteadosComSuperavit($aFontes, $dtini, $dtfim, $instits) {
+    $clempempenho = new cl_empempenho();
     if(count($aFontes) < 1){
         $aFontes = array("'201','218','219'");
     }
 
     $sSqlOrder = "";
-    $sCampos = " o15_codtri, sum(vlrpag) as pago ";
+    $sCampos = " o15_codtri, sum(vlrpag) as vlrpag ";
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
     $dtfim = db_getsession("DB_anousu")."-04-30";
-    $aEmpResto = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorRpPago = count($aEmpResto) > 0 ? $aEmpResto[0]->pago : 0;
-    return  $valorRpPago;
+    $aEmpEmpenho = $clempempenho->getDespesasCusteadosComSuperavit(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorEmpPagoSuperavit = 0;
+    foreach($aEmpEmpenho as $oEmp){
+        $valorEmpPagoSuperavit += $oEmp->vlrpag;
+    }
+    return  $valorEmpPagoSuperavit;
 }
 
 $nTotalSemDisponbilidade = 0;
@@ -604,7 +608,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">6 - DESPESAS CUSTEADAS COM SUPERÁVIT DO FUNDEB ATÉ O PRIMEIRO QUADRIMESTRE - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorCusteadoSuperavit = getRestosCusteadosComSuperavit(array("'218','219','201'"), $dtini, $dtfim, $instits);
+                                    $nValorCusteadoSuperavit = getDespesasCusteadosComSuperavit(array("'218','219','201'"), $dtini, $dtfim, $instits);
                                     $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorCusteadoSuperavit;
                                     echo db_formatar($nValorCusteadoSuperavit, "f");
                                 ?>

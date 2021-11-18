@@ -38,6 +38,7 @@ require_once("classes/db_cgm_classe.php");
 require_once("classes/db_slip_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 require_once("classes/db_empresto_classe.php");
+require_once("classes/db_empempenho_classe.php");
 $clrotulo = new rotulocampo;
 
 db_postmemory($HTTP_POST_VARS);
@@ -166,24 +167,25 @@ function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dt
     $nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb-abs($nTotalContribuicaoFundeb);
     $nValorAplicado = $nValorAplicado - $nResulatadoLiquidoTransfFundeb;
 
-    $clempresto = new cl_empresto();
+    $clempempenho = new cl_empempenho();
     $sSqlOrder = "";
-    $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
+    $sCampos = " o15_codtri, sum(vlrpag) as vlrpag";
     $aFontesSuperavit = array("'201','218','219'");
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontesSuperavit).") group by 1";
     $dtFimQuadrimestre = db_getsession("DB_anousu")."-04-30";
-    $aEmpRestosPagoSuperavit = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtFimQuadrimestre, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorRpPagoSuperavit = 0;
-    foreach($aEmpRestosPagoSuperavit as $oResto){
-        $valorRpPagoSuperavit += $oResto->pagorpp + $oResto->pagorpnp;
+    $aEmpPagoSuperavit = $clempempenho->getDespesasCusteadosComSuperavit(db_getsession("DB_anousu"), $dtini, $dtFimQuadrimestre, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+    $valorEmpPagoSuperavit = 0;
+    foreach($aEmpPagoSuperavit as $oEmp){
+        $valorEmpPagoSuperavit += $oEmp->vlrpag;
     }
-    $nValorAplicado = $nValorAplicado + $valorRpPagoSuperavit;
+    $nValorAplicado = $nValorAplicado + $valorEmpPagoSuperavit;
 
     $aFontes = array("'101'","'201'","'118','119'","'218','219'");
     $nValorPagoSemDisponibilidade = getRestosSemDisponilibidade($aFontes, $dtini, $dtfim, $instits);
 
     $nValorAplicado = $nValorAplicado + $nValorPagoSemDisponibilidade;
 
+    $clempresto = new cl_empresto();
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
