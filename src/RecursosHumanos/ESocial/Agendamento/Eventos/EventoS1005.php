@@ -30,34 +30,30 @@ class EventoS1005 extends EventoBase
 	public function montarDados()
 	{
 
-		if (empty($this->dados->dadosEstab->aliqGilrat->procAdmJudRat->tpProc)) {
-            unset($this->dados->dadosEstab->aliqGilrat->procAdmJudRat);
+		if (empty($this->dados[0]->dadosEstab->aliqGilrat->procAdmJudRat->tpProc)) {
+            unset($this->dados[0]->dadosEstab->aliqGilrat->procAdmJudRat);
         }
-        if (empty($this->dados->dadosEstab->aliqGilrat->procAdmJudFap->tpProc)) {
-            unset($this->dados->dadosEstab->aliqGilrat->procAdmJudFap);
-        }
-
-        if ($this->dados->dadosEstab->infoTrab->infoApr->contApr == 0) {
-            $this->dados->dadosEstab->infoTrab->infoApr->nrProcJud = null;
-            unset($this->dados->dadosEstab->infoTrab->infoApr->contEntEd);
-            unset($this->dados->dadosEstab->infoTrab->infoApr->infoEntEduc);
+        if (empty($this->dados[0]->dadosEstab->aliqGilrat->procAdmJudFap->tpProc)) {
+            unset($this->dados[0]->dadosEstab->aliqGilrat->procAdmJudFap);
         }
 
-        if ($this->dados->dadosEstab->infoTrab->infoPCD->contPCD == 0) {
-            $this->dados->dadosEstab->infoTrab->infoPCD->nrProcJud = null;
-        }
+        /*if ($this->dados[0]->dadosEstab->infoTrab->infoApr->contApr == 0) {
+            $this->dados[0]->dadosEstab->infoTrab->infoApr->nrProcJud = null;
+            unset($this->dados[0]->dadosEstab->infoTrab->infoApr->infoEntEduc);
+        }*/
+
 
         $oDadosAPI                          = new \stdClass;
         $oDadosAPI->evtTabEstab             = new \stdClass;
         $oDadosAPI->evtTabEstab->sequencial = 1;
-        $oDadosAPI->evtTabEstab->tpInsc     = $this->dados->ideEstab->tpInsc;
-        $oDadosAPI->evtTabEstab->nrInsc     = $this->dados->ideEstab->nrInsc;
-        $oDadosAPI->evtTabEstab->iniValid   = $this->dados->ideEstab->iniValid;
-        if (!empty($oDado->ideEstab->fimValid)) {
-            $oDadosAPI->evtTabEstab->fimvalid = $oDado->ideEstab->fimValid;
+        $oDadosAPI->evtTabEstab->tpInsc     = $this->tpInsc;
+        $oDadosAPI->evtTabEstab->nrInsc     = $this->nrInsc;
+        $oDadosAPI->evtTabEstab->iniValid   = $this->iniValid;
+        if (!empty($this->fimValid)) {
+            $oDadosAPI->evtTabEstab->fimvalid = $this->fimValid;
         }
         $oDadosAPI->evtTabEstab->modo       = "INC";
-        $oDadosAPI->evtTabEstab->dadosEstab = $this->dados->dadosEstab;
+        $oDadosAPI->evtTabEstab->dadosEstab = $this->dados[0]->dadosEstab;
 
         return $oDadosAPI;
 	}

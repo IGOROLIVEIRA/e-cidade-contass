@@ -134,7 +134,7 @@ class Preenchimentos
         $campos .= "    and db103_identificadorcampo != 'instituicao' ";
         $campos .= ') as pk ';
         $dao = new \cl_avaliacaogruporesposta;
-        $sql = $dao->sql_avaliacao_preenchida(null, $campos, null, $where);
+        $sql = $dao->sql_avaliacao_preenchida(null, $campos, "preenchimento desc", $where);
 
         $rs = \db_query($sql);
 

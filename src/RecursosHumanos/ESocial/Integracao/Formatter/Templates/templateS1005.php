@@ -1,17 +1,5 @@
 <?php
 return array(
-    'ideEstab' => array(
-        'nome_api' => 'ideEstab',
-        'properties' => array(
-            'tpInsc' => array(
-                'nome_api'=> 'tpInsc',
-                'type' => 'int'
-            ),
-            'nrInsc' => 'nrInsc',
-            'iniValid' => 'iniValid',
-            'fimValid' => 'fimValid'
-        )
-    ),
     'dadosEstab' => array(
         'nome_api' => 'dadosEstab',
         'properties' => array(
@@ -30,10 +18,6 @@ return array(
                     ),
                     'fap' => array(
                         'nome_api'=>'fap',
-                        'type' => 'float'
-                    ),
-                    'aliqRatAjust' => array(
-                        'nome_api'=>'aliqRatAjust',
                         'type' => 'float'
                     ),
                 ),
@@ -80,22 +64,11 @@ return array(
             ),
             'infoTrab' => array (
                 'nome_api' => 'infoTrab',
-                'properties' => array(
-                    'regPt' => array(
-                        'nome_api'=>  'regPt',
-                        'type' => 'int'
-                    )
-                ),
                 'groups' => array(
                     'infoApr' => array (
                         'nome_api' => 'infoApr',
                         'properties' => array(
-                            'contApr' => array(
-                                'nome_api'=>  'contApr',
-                                'type' => 'int'
-                            ),
                             'nrProcJud',
-                            'contEntEd',
                         ),
                         'groups' => array(
                             'infoEntEduc' => array (
@@ -114,7 +87,7 @@ return array(
                         )
                     ),
                     'infoPCD' => array (
-                        'nome_api' => 'infoPCD',
+                        'nome_api' => 'infoPDC',
                         'properties' => array(
                             'contPCD' => array(
                                 'nome_api'=>  'contPCD',
@@ -127,4 +100,17 @@ return array(
             ),
         )
     ),
+    'novavalidade' => array (
+        'nome_api' => 'novavalidade',
+        'properties' => array(
+            'inivalid' => array(
+                'nome_api'=>  'inivalid',
+                'type' => 'string'
+            ),
+            'fimvalid' => array(
+                'nome_api'=>  'fimvalid',
+                'type' => 'string'
+            ),
+        )
+    )
 );
