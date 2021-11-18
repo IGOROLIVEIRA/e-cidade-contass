@@ -4,8 +4,6 @@ use Classes\PostgresMigration;
 
 class Createusrfilipi extends PostgresMigration
 {
-
-    {
         public function up()
         {
           $this->_run();
@@ -143,4 +141,5 @@ class Createusrfilipi extends PostgresMigration
         {
           $this->execute("insert into db_permissao select {$id_usuario}, id_item, permissaoativa, anousu, id_instit, id_modulo from db_permissao where id_usuario = 1 order by 2");
         }
+
 }
