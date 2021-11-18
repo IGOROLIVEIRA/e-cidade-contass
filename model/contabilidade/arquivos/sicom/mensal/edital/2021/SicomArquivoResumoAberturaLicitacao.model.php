@@ -599,7 +599,7 @@ ORDER BY nroprocessolicitatorio
             $clralic12->si182_exercicioprocesso = $oResult12->exercicioprocesso;
             $clralic12->si182_nroprocessolicitatorio = $oResult12->nroprocessolicitatorio;
             $clralic12->si182_codobralocal = $oResult12->codobralocal;
-            $clralic12->si182_logradouro = $oResult12->logradouro;
+            $clralic12->si182_logradouro = $this->removeCaracteres(utf8_decode($oResult12->logradouro));
             $clralic12->si182_numero = $oResult12->numero;
             $clralic12->si182_bairro = $oResult12->bairro;
             $clralic12->si182_distrito = $oResult12->distrito;
