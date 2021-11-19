@@ -54,8 +54,7 @@ class FilaESocialTask extends Task implements iTarefa
         }
 
         foreach ($array_global as $row) {
-            if ($row[0] != 'cisnorte')
-                continue;
+
             try {
 
                 /**

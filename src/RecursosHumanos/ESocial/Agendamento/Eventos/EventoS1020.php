@@ -45,11 +45,12 @@ class EventoS1020 extends EventoBase
             $oDadosAPI->evtTabLotacao->dadosLotacao->fpas = $oDado->fpasLotacao->fpas;
             $oDadosAPI->evtTabLotacao->dadosLotacao->tpLotacao = str_pad($oDado->dadosLotacao->tpLotacao, 2, "0", STR_PAD_LEFT);
             $oDadosAPI->evtTabLotacao->dadosLotacao->tpInsc = empty($oDado->dadosLotacao->tpInsc) ? null : $oDado->dadosLotacao->tpInsc;
+            $oDadosAPI->evtTabLotacao->dadosLotacao->nrInsc = empty($oDado->dadosLotacao->nrInsc) ? null : $oDado->dadosLotacao->nrInsc;
 
-            if ($oDado->dadosLotacao->tpLotacao == 1)
+            if (in_array($oDado->dadosLotacao->tpLotacao, array('01', '10', '21', '24', '90', '91'))) {
                 $oDadosAPI->evtTabLotacao->dadosLotacao->nrInsc = null;
-            else
-                $oDadosAPI->evtTabLotacao->dadosLotacao->nrInsc = empty($oDado->dadosLotacao->nrInsc) ? null : $oDado->dadosLotacao->nrInsc;
+                $oDadosAPI->evtTabLotacao->dadosLotacao->tpInsc = null;
+            }
 
             $oDadosAPI->evtTabLotacao->dadosLotacao->codTercs = str_pad($oDado->fpasLotacao->codTercs, 4, "0", STR_PAD_LEFT);
             $oDadosAPI->evtTabLotacao->dadosLotacao->codTercsSusp = empty($oDado->fpasLotacao->codTercsSusp) ? null : $oDado->fpasLotacao->codTercsSusp;
