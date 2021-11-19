@@ -268,7 +268,7 @@ try {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
                 $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo));
                 // var_dump($dadosDoPreenchimento);
-                // exit;
+                // exit('alguma coisa');
                 $formatter = FormatterFactory::get($arquivo);
                 $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
                 // var_dump($dadosTabela);

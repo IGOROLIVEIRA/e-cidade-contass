@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 
@@ -13,41 +13,62 @@ use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 class EventoS1020 extends EventoBase
 {
 
-	/**
-	 * 
-	 * @param \stdClass $dados
-	 */
-	function __construct($dados)
-	{
-		parent::__construct($dados);
-	}
+    /**
+     *
+     * @param \stdClass $dados
+     */
+    function __construct($dados)
+    {
+        parent::__construct($dados);
+    }
 
     /**
-	 * Retorna dados no formato necessario para envio
-	 * pela API sped-esocial
-	 * @return array stdClass
-	 */
-	public function montarDados()
-	{
-		$oDadosAPI                            = new \stdClass;
-        $oDadosAPI->evtTabLotacao             = new \stdClass;
-        $oDadosAPI->evtTabLotacao->sequencial = 1;
-        $oDadosAPI->evtTabLotacao->codLotacao = $this->dados->ideLotacao->codLotacao;
-        $oDadosAPI->evtTabLotacao->iniValid   = $this->dados->ideLotacao->iniValid;
-        if (!empty($oDado->ideLotacao->fimValid)) {
-            $oDadosAPI->evtTabLotacao->fimvalid = $oDado->ideLotacao->fimValid;
+     * Retorna dados no formato necessario para envio
+     * pela API sped-esocial
+     * @return array stdClass
+     */
+    public function montarDados()
+    {
+        foreach ($this->dados as $oDado) {
+
+            $oDadosAPI                            = new \stdClass;
+            $oDadosAPI->evtTabLotacao             = new \stdClass;
+            $oDadosAPI->evtTabLotacao->sequencial = 1;
+            $oDadosAPI->evtTabLotacao->codLotacao = $oDado->ideLotacao->codLotacao;
+            $oDadosAPI->evtTabLotacao->iniValid   = $this->iniValid;
+            if (!empty($this->fimValid)) {
+                $oDadosAPI->evtTabLotacao->fimvalid = $this->fimValid;
+            }
+
+            $oDadosAPI->evtTabLotacao->modo               = "INC";
+            $oDadosAPI->evtTabLotacao->dadosLotacao       = $oDado->dadosLotacao;
+            $oDadosAPI->evtTabLotacao->dadosLotacao->fpas = $oDado->fpasLotacao->fpas;
+            $oDadosAPI->evtTabLotacao->dadosLotacao->tpLotacao = str_pad($oDado->dadosLotacao->tpLotacao, 2, "0", STR_PAD_LEFT);
+            $oDadosAPI->evtTabLotacao->dadosLotacao->tpInsc = empty($oDado->dadosLotacao->tpInsc) ? null : $oDado->dadosLotacao->tpInsc;
+
+            if ($oDado->dadosLotacao->tpLotacao == 1)
+                $oDadosAPI->evtTabLotacao->dadosLotacao->nrInsc = null;
+            else
+                $oDadosAPI->evtTabLotacao->dadosLotacao->nrInsc = empty($oDado->dadosLotacao->nrInsc) ? null : $oDado->dadosLotacao->nrInsc;
+
+            $oDadosAPI->evtTabLotacao->dadosLotacao->codTercs = str_pad($oDado->fpasLotacao->codTercs, 4, "0", STR_PAD_LEFT);
+            $oDadosAPI->evtTabLotacao->dadosLotacao->codTercsSusp = empty($oDado->fpasLotacao->codTercsSusp) ? null : $oDado->fpasLotacao->codTercsSusp;
+
+            if (!empty($oDado->dadosLotacao->procJudTerceiro)) {
+                $oDadosAPI->evtTabLotacao->dadosLotacao->procJudTerceiro = $oDado->dadosLotacao->procJudTerceiro;
+            }
+
+            if (!empty($oDado->dadosLotacao->infoEmprParcial)) {
+                $oDadosAPI->evtTabLotacao->dadosLotacao->infoemprparcial = $oDado->dadosLotacao->infoEmprParcial;
+            }
+
+            if (!empty($oDado->dadosLotacao->dadosOpPort)) {
+                $oDadosAPI->evtTabLotacao->dadosLotacao->dadosopport = $oDado->dadosLotacao->dadosOpPort;
+            }
+
+            $aDadosAPI[] = $oDadosAPI;
         }
 
-        $oDadosAPI->evtTabLotacao->modo               = "INC";
-        $oDadosAPI->evtTabLotacao->dadosLotacao       = $this->dados->dadosLotacao;
-        $oDadosAPI->evtTabLotacao->dadosLotacao->fpas = $this->dados->fpasLotacao->fpas;
-        $oDadosAPI->evtTabLotacao->dadosLotacao->tpLotacao = str_pad($this->dados->dadosLotacao->tpLotacao,2,"0",STR_PAD_LEFT);
-        $oDadosAPI->evtTabLotacao->dadosLotacao->tpInsc = empty($this->dados->dadosLotacao->tpInsc) ? null : $this->dados->dadosLotacao->tpInsc;
-        $oDadosAPI->evtTabLotacao->dadosLotacao->nrInsc = empty($this->dados->dadosLotacao->nrInsc) ? null : $this->dados->dadosLotacao->nrInsc;
-        $oDadosAPI->evtTabLotacao->dadosLotacao->codTercs = str_pad($this->dados->fpasLotacao->codTercs,4,"0",STR_PAD_LEFT);
-        $oDadosAPI->evtTabLotacao->dadosLotacao->codTercsSusp = empty($this->dados->fpasLotacao->codTercsSusp) ? null : $this->dados->fpasLotacao->codTercsSusp;
-
-        return $oDadosAPI;
-	}
-
+        return $aDadosAPI;
+    }
 }

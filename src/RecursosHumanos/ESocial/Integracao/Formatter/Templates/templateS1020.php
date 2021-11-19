@@ -19,10 +19,7 @@ return array(
     ),
     'fpasLotacao' => array(
         'properties' => array(
-            'fpas' => array(
-                'fpas' => 'fpas',
-                'type' => 'int'
-            ),
+            'fpas' => 'fpas',
             'codTercs' => 'codTercs',
             'codTercsSusp' => 'codTercsSusp',
         )

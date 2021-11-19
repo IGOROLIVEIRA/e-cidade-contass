@@ -36,6 +36,17 @@ class AjusteCargadeDados extends AbstractMigration
  WHERE eso05_instit = fc_getsession('DB_instit')::int'
         WHERE db101_sequencial=3000015;
 
+
+        ALTER TABLE public.eventos1020 ALTER COLUMN eso08_tipoinscricaocontratante TYPE int4 USING eso08_tipoinscricaocontratante::int4;
+ALTER TABLE public.eventos1020 ALTER COLUMN eso08_tipoinscricaoproprietario TYPE int4 USING eso08_tipoinscricaoproprietario::int4;
+ALTER TABLE public.eventos1020 ALTER COLUMN eso08_aliquotarat TYPE int4 USING eso08_aliquotarat::int4;
+
+
+UPDATE configuracoes.db_itensmenu
+	SET funcao='con4_manutencaoformulario001.php?esocial=4'
+	where descricao ilike 'S-1020%' and funcao = 'eso01_preenchimentolotacaotributaria.php';
+
+
         ");
     }
 }

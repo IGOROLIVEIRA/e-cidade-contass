@@ -160,16 +160,10 @@ class Preenchimentos
      */
     public function buscarUltimoPreenchimentoLotacao($codigoFormulario)
     {
-        $where = array(" db101_sequencial = {$codigoFormulario} ");
-        if (!empty($this->responsavelPreenchimento)) {
-            $where[] = "eso04_cgm = {$this->responsavelPreenchimento}";
-        }
-
-        $where = implode(' and ', $where);
-
-        $group = " group by eso04_cgm";
-        $campos = 'eso04_cgm as cgm, max(db107_sequencial) as preenchimento, ';
-        $campos .= '(select z01_cgccpf from cgm where z01_numcgm = eso04_cgm) as inscricao_empregador ';
+        $where = " db101_sequencial = {$codigoFormulario} ";
+        $group = "";
+        $campos = "(select z01_numcgm from cgm where z01_numcgm = $this->responsavelPreenchimento) as cgm, max(db107_sequencial) as preenchimento, ";
+        $campos .= "(select z01_cgccpf from cgm where z01_numcgm = $this->responsavelPreenchimento) as inscricao_empregador ";
         $dao = new \cl_avaliacaogruporespostalotacao;
         $sql = $dao->buscaAvaliacaoPreenchida(null, $campos, null, $where . $group);
         $rs = \db_query($sql);
