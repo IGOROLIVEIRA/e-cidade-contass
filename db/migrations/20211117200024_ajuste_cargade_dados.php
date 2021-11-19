@@ -11,11 +11,11 @@ class AjusteCargadeDados extends AbstractMigration
         SET db101_cargadados='SELECT eso05_codclassificacaotributaria,
         eso05_indicativocooperativa,
         CASE
-            WHEN eso05_indicativodeconstrutora = 't' THEN 3003674
+            WHEN eso05_indicativodeconstrutora = \'t\' THEN 3003674
             ELSE 3003673
         END AS eso05_indicativodeconstrutora,
         CASE
-            WHEN eso05_indicativodesoneracao = 't' THEN 3003676
+            WHEN eso05_indicativodesoneracao = \'t\' THEN 3003676
             ELSE 3003675
         END AS eso05_indicativodesoneracao,
         CASE
@@ -24,7 +24,7 @@ class AjusteCargadeDados extends AbstractMigration
             ELSE 2
         END AS eso05_indicativoprodutorrural,
         CASE
-            WHEN eso05_microempresa = 't' THEN 4000527
+            WHEN eso05_microempresa = \'t\' THEN 4000527
             ELSE 3
         END AS eso05_microempresa,
         CASE
@@ -33,18 +33,18 @@ class AjusteCargadeDados extends AbstractMigration
         END AS eso05_registroeletronicodeempregados,
         eso05_cnpjdoentefederativoresp
  FROM avaliacaoS1000
- WHERE eso05_instit = fc_getsession('DB_instit')::int'
+ WHERE eso05_instit = fc_getsession(\'DB_instit\')::int'
         WHERE db101_sequencial=3000015;
 
 
         ALTER TABLE public.eventos1020 ALTER COLUMN eso08_tipoinscricaocontratante TYPE int4 USING eso08_tipoinscricaocontratante::int4;
-ALTER TABLE public.eventos1020 ALTER COLUMN eso08_tipoinscricaoproprietario TYPE int4 USING eso08_tipoinscricaoproprietario::int4;
-ALTER TABLE public.eventos1020 ALTER COLUMN eso08_aliquotarat TYPE int4 USING eso08_aliquotarat::int4;
+		ALTER TABLE public.eventos1020 ALTER COLUMN eso08_tipoinscricaoproprietario TYPE int4 USING eso08_tipoinscricaoproprietario::int4;
+		ALTER TABLE public.eventos1020 ALTER COLUMN eso08_aliquotarat TYPE int4 USING eso08_aliquotarat::int4;
 
 
-UPDATE configuracoes.db_itensmenu
-	SET funcao='con4_manutencaoformulario001.php?esocial=4'
-	where descricao ilike 'S-1020%' and funcao = 'eso01_preenchimentolotacaotributaria.php';
+		UPDATE configuracoes.db_itensmenu
+		SET funcao='con4_manutencaoformulario001.php?esocial=4'
+		where descricao ilike 'S-1020%' and funcao = 'eso01_preenchimentolotacaotributaria.php';
 
 
         ");
