@@ -149,6 +149,7 @@ function getDespesasCusteadosComSuperavit($aFontes, $dtini, $dtfim, $instits) {
 
 $nTotalSemDisponbilidade = 0;
 
+
 function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
     $where = " c61_instit in ({$aInstits})" ;
     $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
