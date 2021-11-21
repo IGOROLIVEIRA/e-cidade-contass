@@ -37,12 +37,14 @@ require_once("classes/db_cgm_classe.php");
 require_once("classes/db_slip_classe.php");
 require_once("classes/db_empresto_classe.php");
 require_once("classes/db_empempenho_classe.php");
+require_once("classes/db_dadosexercicioanterior_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 include("libs/db_sql.php");
 require("vendor/mpdf/mpdf/mpdf.php");
 
 $clselorcdotacao = new cl_selorcdotacao();
 $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
+$cldadosexecicioanterior = new cl_dadosexercicioanterior();
 db_postmemory($HTTP_POST_VARS);
 
 $dtini = implode("-", array_reverse(explode("/", $DBtxt21)));
@@ -99,10 +101,12 @@ $aReceitasImpostos = array(
     array('1 - FUNDEB - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS', 'title', array('413210011%', '413210051%', '417580111%'), "'118','119'"),
     array('1.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS  PROFISSIONAIS DA EDUCAÇÃO  - FUNDEB  (NR 1.7.5.8.01.1.1 )', 'text', array('417580111%'), "'118','119'"),
     array('1.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.00.1.1 + NR 1.3.2.1.00.5.1 )', 'text', array('413210011%', '413210051%'), "'118','119'"),
-    array('2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT', 'title', array('413210011%', '413210051%', '417580111%'), "'166','167'"),
+    array('2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT', 'title', array('413210011%', '413210051%', '417180911%'), "'166','167'"),
     array('2.1 - TRANSFERÊNCIAS DE RECURSOS DA COMPLEMENTAÇÃO DA UNIÃO AO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISISONAIS DA EDUCAÇÃO - FUNDEB (VAAT) (NR 1.7.1.8.09.1.1 )', 'text', array('417180911%'), "'166','167'"),
     array('2.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.00.1.1 + NR 1.3.2.1.00.5.1 )', 'text', array('413210011%', '413210051%'), "'166','167'"),
 );
+
+$oDadosexecicioanterior = $cldadosexecicioanterior->getDadosExercicioAnterior(db_getsession("DB_anousu"), $instits, "*", "");
 
 function getValorNaturezaReceita($aNaturecaReceita, $aFontes, $anoUsu, $dtIni, $dtFim, $instits)
 {
@@ -182,7 +186,7 @@ function getPagamentoComplementacaoCapital($dtini, $dtfim, $instits)
     $clempempenho = new cl_empempenho();
     $sSqlOrder    = "";
     $sCampos      = "sum(vlrpag) as vlrpago ";
-    $sSqlWhere    = " substr(o56_elemento,0,3) = '344' and o15_codtri in ('166', '167')";
+    $sSqlWhere    = " substr(o56_elemento, 1, 3) = '344' and o15_codtri in ('166', '167')";
     $aEmpEmpenho  = $clempempenho->getEmpenhosMovimentosPeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits, $sCampos, $sSqlWhere, $sSqlOrder);
     $valorEmpPago = 0;
     foreach($aEmpEmpenho as $oEmp){
@@ -1698,7 +1702,7 @@ ob_start();
                         <?php
                             $nTotalAplicadoRemuProfEducBasica = $nTotalPagoItem13Fonte118 + $nTotalPagoItem13Fonte166;
                             echo "<td class='s22' dir='ltr'>"; echo db_formatar($nTotalAplicadoRemuProfEducBasica,"f"); echo "</td>";
-                            echo "<td class='s22' dir='ltr'>"; echo db_formatar(($nTotalAplicadoRemuProfEducBasica / $nReceitaTotalFundeb )*100,"f"); echo "</td>";
+                            echo "<td class='s22' dir='ltr'>"; echo db_formatar(($nTotalAplicadoRemuProfEducBasica / $nReceitaTotalFundeb )*100,"f")."%"; echo "</td>";
                         ?>
                 </tr>
                 <tr style="height: 20px">
@@ -1736,19 +1740,19 @@ ob_start();
                             $nRestosaPagar = $nTotalPagoItem13Fonte118 + $nTotalPagoItem13Fonte119;
                             $nFundebItem171 = $nFundebImpostosTransferencias - $nDevolucaoFundeb - $nRestosaPagar;
 
-                            $nFundebComplementacao = getValorNaturezaReceita(array('413210011%', '413210051%', '417580111%'), "'166','167'", $anousu, $dtini, $dtfim, $instits);
+                            $nFundebComplementacao = getValorNaturezaReceita(array('413210011%', '413210051%', '417180911%'), "'166','167'", $anousu, $dtini, $dtfim, $instits);
                             $nRestosaPagarFonte166_167 = $nTotalPagoItem13Fonte166 + $nTotalPagoItem13Fonte167;
                             $nFundebItem172 = $nFundebComplementacao - $nRestosaPagarFonte166_167;
                         ?>
                     <td class="s7" dir="ltr"><?php echo db_formatar($nFundebItem171 + $nFundebItem172,"f"); ?></td>
-                    <td class="s7" dir="ltr"><?php echo db_formatar((($nFundebItem171 + $nFundebItem172) / $nReceitaTotalFundeb) * 100,"f");?></td>
+                    <td class="s7" dir="ltr"><?php echo db_formatar((($nFundebItem171 + $nFundebItem172) / $nReceitaTotalFundeb) * 100,"f")."%";?></td>
                     <td class="s7" dir="ltr"><?php echo db_formatar( ($nReceitaTotalFundeb * 0.10),"f") ?></td>
                 </tr>
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
                     <td class="s12" dir="ltr" colspan="6" >17.1 - FUNDEB - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS (1 - 4 - 13A - 13B)</td>
                     <td class="s10" dir="ltr"><?php echo db_formatar($nFundebItem171,"f"); ?></td>
-                    <td class="s10" dir="ltr"><?php echo db_formatar(($nFundebItem171 / $nReceitaTotalFundeb) * 100,"f");?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar(($nFundebItem171 / $nReceitaTotalFundeb) * 100,"f")."%";?></td>
                     <td class="s6" dir="ltr"></td>
                 </tr>
                 <tr style="height: 20px">
@@ -1756,7 +1760,7 @@ ob_start();
                     <td class="s19" dir="ltr" colspan="6">17.2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT (2 - 13D - 13E)
                     </td>
                     <td class="s20" dir="ltr"><?php echo db_formatar($nFundebItem172,"f");?></td>
-                    <td class="s20" dir="ltr"><?php echo db_formatar(($nFundebItem172 / $nReceitaTotalFundeb) * 100,"f");?></td>
+                    <td class="s20" dir="ltr"><?php echo db_formatar(($nFundebItem172 / $nReceitaTotalFundeb) * 100,"f")."%";?></td>
                     <td class="s6" dir="ltr" style='border-bottom: 1px SOLID #000000;'></td>
                 </tr>
                 <tr style="height: 20px">
@@ -1797,11 +1801,12 @@ ob_start();
                 <?php
                     $nFundebComplementacaoAplicadoEmpenho = getPagamentoComplementacaoCapital($dtini, $dtfim, $instits);
                     $nFundebComplementacaoAplicadoRestosaPagar = getRestosaPagarComplementacaoCapital($dtini, $dtfim, $instits);
+                    $TotalAplicadoItem20 = $nFundebComplementacaoAplicadoEmpenho+$nFundebComplementacaoAplicadoRestosaPagar;
                 ?>
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
                     <td class="s12" dir="ltr" colspan="6">20 - TOTAL APLICADO</td>
-                    <td class="s10" dir="ltr" colspan="2"><?php echo db_formatar($nFundebComplementacaoAplicadoEmpenho+$nFundebComplementacaoAplicadoRestosaPagar,"f"); ?></td>
+                    <td class="s10" dir="ltr" colspan="2"><?php echo db_formatar($TotalAplicadoItem20,"f"); ?></td>
                     <td class="s31" dir="ltr"></td>
                 </tr>
                 <tr style="height: 20px">
@@ -1833,8 +1838,8 @@ ob_start();
                 <tr style="height: 20px">
                     <td class="s5" dir="ltr"></td>
                     <td class="s21" dir="ltr" colspan="6">23 -TOTAL DE GASTOS COM DESPESA DE CAPITAL (20 - 21 + 22 )</td>
-                    <td class="s22" dir="ltr" colspan="2"><?php echo db_formatar($nFundebComplementacaoAplicadoRestosaPagar,"f"); ?></td>
-                    <td class="s22" dir="ltr"></td>
+                    <td class="s22" dir="ltr" colspan="2"><?php echo db_formatar($TotalAplicadoItem20,"f"); ?></td>
+                    <td class="s22" dir="ltr"><?php echo db_formatar(($TotalAplicadoItem20/$nFundebComplementacao)*100,"f")."%"; ?></td>
                 </tr>
                 <tr style="height: 20px">
                     <td class="s27"></td>
@@ -1862,6 +1867,7 @@ ob_start();
                 <?php
                     $nFundebComplementacaoAplicadoEmpenho = getPagamentoComplementacaoInfantil($dtini, $dtfim, $instits);
                     $nFundebComplementacaoAplicadoRestosaPagar = getRestosaPagarComplementacaoInfantil($dtini, $dtfim, $instits);
+                    $nTotalAPlicadoItem26 = $nFundebComplementacaoAplicadoEmpenho + $nFundebComplementacaoAplicadoRestosaPagar;
                 ?>
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
@@ -1878,7 +1884,7 @@ ob_start();
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
                     <td class="s12" dir="ltr" colspan="6">26 - TOTAL APLICADO</td>
-                    <td class="s10" dir="ltr" colspan="2"><?php echo db_formatar($nFundebComplementacaoAplicadoEmpenho + $nFundebComplementacaoAplicadoRestosaPagar,"f"); ?></td>
+                    <td class="s10" dir="ltr" colspan="2"><?php echo db_formatar($nTotalAPlicadoItem26,"f"); ?></td>
                     <td class="s31" dir="ltr"></td>
                 </tr>
                 <tr style="height: 20px">
@@ -1910,8 +1916,8 @@ ob_start();
                 <tr style="height: 20px">
                     <td class="s5" dir="ltr"></td>
                     <td class="s21" dir="ltr" colspan="6">29 -TOTAL DE GASTOS COM EDUCAÇÃO INFANTIL (26 - 27 + 28 )</td>
-                    <td class="s22" dir="ltr" colspan="2"><?php echo db_formatar($nFundebComplementacaoAplicadoEmpenho + $nFundebComplementacaoAplicadoRestosaPagar,"f"); ?></td>
-                    <td class="s22" dir="ltr"></td>
+                    <td class="s22" dir="ltr" colspan="2"><?php echo db_formatar($nTotalAPlicadoItem26,"f"); ?></td>
+                    <td class="s22" dir="ltr"><?php echo db_formatar(($nTotalAPlicadoItem26/$nFundebComplementacao)*100,"f")."%"; ?></td>
                 </tr>
                 <tr style="height: 20px">
                     <td class="s27"></td>
@@ -1946,19 +1952,19 @@ ob_start();
                     <td class="s12"></td>
                     <td class="s31" dir="ltr"></td>
                     <td class="s31" dir="ltr"></td>
-                    <td class="s10" dir="ltr">0,00</td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($oDadosexecicioanterior->c235_superavit_fundeb_permitido,"f"); ?></td>
                 </tr>
                 <?php
-                    $nValorNaoAplicadoFundebImpostosTransfAnoAnterior = 0;
-                    $nValorNaoAplicadoFundebComplementacaoAnoAnterior = 0;
+                    $nValorNaoAplicadoFundebImpostosTransfAnoAnterior = $oDadosexecicioanterior->c235_naoaplicfundebimposttransf;
+                    $nValorNaoAplicadoFundebComplementacaoAnoAnterior = $oDadosexecicioanterior->c235_naoaplicfundebcompl;
                 ?>
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
                     <td class="s28" dir="ltr" colspan="5">31 - VALOR NÃO APLICADO NO EXERCÍCIO ANTERIOR</td>
                     <td class="s12"></td>
                     <td class="s10" dir="ltr"><?php echo db_formatar($nValorNaoAplicadoFundebImpostosTransfAnoAnterior,"f"); ?></td>
-                    <td class="s31" dir="ltr"></td>
-                    <td class="s10" dir="ltr"><?php echo db_formatar($nValorNaoAplicadoFundebImpostosTransfAnoAnterior,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nValorNaoAplicadoFundebComplementacaoAnoAnterior,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nValorNaoAplicadoFundebImpostosTransfAnoAnterior+$nValorNaoAplicadoFundebComplementacaoAnoAnterior,"f"); ?></td>
                 </tr>
                 <?php
                     $nValorAPlicadoSuperavit218_219 = getDespesasCusteadosComSuperavit(array("'218','219'"), $dtini, $dtfim, $instits);

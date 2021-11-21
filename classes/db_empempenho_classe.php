@@ -2351,6 +2351,7 @@ class cl_empempenho {
         $sSql .= "        o58_programa,                                                                                                                                     ";
         $sSql .= "        o54_descr as descprograma,                                                                                                                        ";
         $sSql .= "        o15_codtri,                                                                                                                        ";
+        $sSql .= "        o56_elemento,                                                                                                                        ";
         $sSql .= "        coalesce(e60_vlremp,0) as e60_vlremp,                                                                                                             ";
         $sSql .= "        coalesce(e60_vlranu,0) as e60_vlranu,                                                                                                             ";
         $sSql .= "        coalesce(e60_vlrliq,0) as e60_vlrliq,                                                                                                             ";
