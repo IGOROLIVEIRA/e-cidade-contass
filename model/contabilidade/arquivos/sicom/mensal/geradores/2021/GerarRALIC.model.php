@@ -115,7 +115,7 @@ class GerarRALIC extends GerarAM
               $aCSVRALIC12['si182_numero']                      = !$aRALIC12['si182_numero'] ? '' : $aRALIC12['si182_numero'];
               $aCSVRALIC12['si182_bairro']                      = utf8_decode($aRALIC12['si182_bairro']);
               $aCSVRALIC12['si182_distrito']                    = utf8_decode($aRALIC12['si182_distrito']);
-              $aCSVRALIC12['si182_municipio']                   = utf8_decode($aRALIC12['si182_municipio']);
+              $aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];
               $aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
               $aCSVRALIC12['si182_latitude']                    = $this->sicomNumberReal($aRALIC12['si182_latitude'], 6);
               $aCSVRALIC12['si182_longitude']                   = $this->sicomNumberReal($aRALIC12['si182_longitude'], 6);
