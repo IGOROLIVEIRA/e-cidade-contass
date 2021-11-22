@@ -420,8 +420,7 @@ function js_desabilita(dis){
 
 </div>
 <div class="container">
-<?php	
-//Criado por Raimundo Barbosa
+<?php
 //Retorna o campo Histórico da Testadas Internas, importados de outros sistemas.
 //Visível na Testadas Internas somente se o campo j34_histortestadaint conter dados.
 	if ($idbql != '') {
