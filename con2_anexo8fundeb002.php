@@ -1942,7 +1942,7 @@ ob_start();
                     <td class="s3" dir="ltr"></td>
                     <td class="s4" dir="ltr" colspan="6">DESCRIÇÃO</td>
                     <td class="s29" dir="ltr">FUNDEB - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS</td>
-                    <td class="s44" dir="ltr">FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT</td>
+                    <td class="s29" dir="ltr">FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT</td>
                     <td class="s53" dir="ltr">TOTAL</td>
                 </tr>
                 <tr style="height: 20px">
@@ -1950,8 +1950,8 @@ ob_start();
                     <td class="s28" dir="ltr" colspan="5">30 - VALOR DO SUPERÁVIT PERMITIDO NO EXERCICIO ANTERIOR (5% DO
                         VALOR RECEBIDO DE RECEITA)</td>
                     <td class="s12"></td>
-                    <td class="s31" dir="ltr"></td>
-                    <td class="s31" dir="ltr"></td>
+                    <td class="s10" dir="ltr"></td>
+                    <td class="s10" dir="ltr"></td>
                     <td class="s10" dir="ltr"><?php echo db_formatar($oDadosexecicioanterior->c235_superavit_fundeb_permitido,"f"); ?></td>
                 </tr>
                 <?php
@@ -1972,7 +1972,7 @@ ob_start();
                 ?>
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
-                    <td class="s28" dir="ltr" colspan="5">32 - VALOR DE SUPERÁVIT APLICADO ATÉ O PRIMEIRO QUADRIMESTRE
+                    <td class="s28" dir="ltr" colspan="">32 - VALOR DE SUPERÁVIT APLICADO ATÉ O PRIMEIRO QUADRIMESTRE
                     </td>
                     <td class="s12"></td>
                     <td class="s10" dir="ltr"><?php echo db_formatar($nValorAPlicadoSuperavit218_219,"f"); ?></td>

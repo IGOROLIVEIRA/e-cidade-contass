@@ -75,6 +75,7 @@ class cl_dadosexercicioanterior {
      if($this->c235_anousu != null || $this->c235_anousu != ""){
         $result = db_query("select * from dadosexercicioanterior where c235_anousu = ".$this->c235_anousu);
         if (pg_numrows($result) > 0) {
+
             $this->erro_sql = " Já existe dados cadastrados para o exericio atual.";
             $this->erro_campo = "c235_anousu";
             $this->erro_banco = "";
@@ -191,12 +192,12 @@ class cl_dadosexercicioanterior {
          $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
          $acount = pg_result($resac,0,0);
          $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,1009256,'$this->c235_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009256,'','".AddSlashes(pg_result($resaco,0,'c235_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009257,'','".AddSlashes(pg_result($resaco,0,'c235_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009259,'','".AddSlashes(pg_result($resaco,0,'c235_naoaplicfundebimposttransf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009258,'','".AddSlashes(pg_result($resaco,0,'c235_superavit_fundeb_permitido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009269,'','".AddSlashes(pg_result($resaco,0,'c235_naoaplicfundebcompl'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acountkey values($acount,(select codcam from db_syscampo where nomecam = 'c235_sequencial'),'$this->c235_sequencial','I')");
+         $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_sequencial'),'','".AddSlashes(pg_result($resaco,0,'c235_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_anousu'),'','".AddSlashes(pg_result($resaco,0,'c235_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_naoaplicfundebimposttransf'),'','".AddSlashes(pg_result($resaco,0,'c235_naoaplicfundebimposttransf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_superavit_fundeb_permitido'),'','".AddSlashes(pg_result($resaco,0,'c235_superavit_fundeb_permitido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_naoaplicfundebcompl'),'','".AddSlashes(pg_result($resaco,0,'c235_naoaplicfundebcompl'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
     }
     return true;
@@ -297,17 +298,17 @@ class cl_dadosexercicioanterior {
            $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
            $acount = pg_result($resac,0,0);
            $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac = db_query("insert into db_acountkey values($acount,1009256,'$this->c235_sequencial','A')");
+           $resac = db_query("insert into db_acountkey values($acount,(select codcam from db_syscampo where nomecam = 'c235_sequencial'),'$this->c235_sequencial','A')");
            if (isset($GLOBALS["HTTP_POST_VARS"]["c235_sequencial"]) || $this->c235_sequencial != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009256,'".AddSlashes(pg_result($resaco,$conresaco,'c235_sequencial'))."','$this->c235_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+             $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_sequencial'),'".AddSlashes(pg_result($resaco,$conresaco,'c235_sequencial'))."','$this->c235_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["c235_anousu"]) || $this->c235_anousu != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009257,'".AddSlashes(pg_result($resaco,$conresaco,'c235_anousu'))."','$this->c235_anousu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+             $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_anousu'),'".AddSlashes(pg_result($resaco,$conresaco,'c235_anousu'))."','$this->c235_anousu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["c235_naoaplicfundebimposttransf"]) || $this->c235_naoaplicfundebimposttransf != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009259,'".AddSlashes(pg_result($resaco,$conresaco,'c235_naoaplicfundebimposttransf'))."','$this->c235_naoaplicfundebimposttransf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+             $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_naoaplicfundebimposttransf'),'".AddSlashes(pg_result($resaco,$conresaco,'c235_naoaplicfundebimposttransf'))."','$this->c235_naoaplicfundebimposttransf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["c235_superavit_fundeb_permitido"]) || $this->c235_superavit_fundeb_permitido != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009258,'".AddSlashes(pg_result($resaco,$conresaco,'c235_superavit_fundeb_permitido'))."','$this->c235_superavit_fundeb_permitido',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+             $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_superavit_fundeb_permitido'),'".AddSlashes(pg_result($resaco,$conresaco,'c235_superavit_fundeb_permitido'))."','$this->c235_superavit_fundeb_permitido',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["c235_naoaplicfundebcompl"]) || $this->c235_naoaplicfundebcompl != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009269,'".AddSlashes(pg_result($resaco,$conresaco,'c235_naoaplicfundebcompl'))."','$this->c235_naoaplicfundebcompl',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+             $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_naoaplicfundebcompl'),'".AddSlashes(pg_result($resaco,$conresaco,'c235_naoaplicfundebcompl'))."','$this->c235_naoaplicfundebcompl',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
      }
@@ -364,12 +365,12 @@ class cl_dadosexercicioanterior {
            $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
            $acount = pg_result($resac,0,0);
            $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,1009256,'$c235_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009256,'','".AddSlashes(pg_result($resaco,$iresaco,'c235_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009257,'','".AddSlashes(pg_result($resaco,$iresaco,'c235_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009259,'','".AddSlashes(pg_result($resaco,$iresaco,'c235_naoaplicfundebimposttransf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009258,'','".AddSlashes(pg_result($resaco,$iresaco,'c235_superavit_fundeb_permitido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009269,'','".AddSlashes(pg_result($resaco,$iresaco,'c235_naoaplicfundebcompl'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acountkey values($acount,(select codcam from db_syscampo where nomecam = 'c235_sequencial'),'$c235_sequencial','E')");
+           $resac  = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_sequencial'),'','".AddSlashes(pg_result($resaco,$iresaco,'c235_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_anousu'),'','".AddSlashes(pg_result($resaco,$iresaco,'c235_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_naoaplicfundebimposttransf'),'','".AddSlashes(pg_result($resaco,$iresaco,'c235_naoaplicfundebimposttransf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_superavit_fundeb_permitido'),'','".AddSlashes(pg_result($resaco,$iresaco,'c235_superavit_fundeb_permitido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq='dadosexercicioanterior'),(select codcam from db_syscampo where nomecam = 'c235_naoaplicfundebcompl'),'','".AddSlashes(pg_result($resaco,$iresaco,'c235_naoaplicfundebcompl'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
      }
