@@ -1,4 +1,5 @@
 <?php
+
 /**
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2017  DBSeller Servicos de Informatica
@@ -52,7 +53,7 @@ class cl_avaliacaogruporespostalotacao extends DAOBasica
         $sql2 = "";
 
         if (empty($dbwhere)) {
-            $sql2 .=" where ";
+            $sql2 .= " where ";
             $aWhere = array();
 
             if (!empty($iCodigoPergunta)) {
@@ -80,11 +81,10 @@ class cl_avaliacaogruporespostalotacao extends DAOBasica
         return $sql;
     }
 
-    public function buscaAvaliacaoPreenchida( $eso04_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "" )
+    public function buscaAvaliacaoPreenchida($eso04_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql  = "select {$campos} ";
-        $sql .= "  from avaliacaogruporespostalotacao ";
-        $sql .= "  join avaliacaogruporesposta on db107_sequencial = eso04_avaliacaogruporesposta ";
+        $sql .= "  from avaliacaogruporesposta ";
         $sql .= "  join avaliacaogrupoperguntaresposta on db108_avaliacaogruporesposta = db107_sequencial";
         $sql .= "  join avaliacaoresposta ON db106_sequencial = db108_avaliacaoresposta ";
         $sql .= "  join avaliacaoperguntaopcao ON db104_sequencial = db106_avaliacaoperguntaopcao ";
@@ -92,11 +92,7 @@ class cl_avaliacaogruporespostalotacao extends DAOBasica
         $sql .= "  join avaliacaogrupopergunta ON db103_avaliacaogrupopergunta = db102_sequencial ";
         $sql .= "  join avaliacao ON db102_avaliacao = db101_sequencial ";
         $sql2 = "";
-        if (empty($dbwhere)) {
-            if (!empty($eso04_sequencial)){
-                $sql2 .= " where avaliacaogruporespostalotacao.eso04_sequencial = {$eso04_sequencial} ";
-            }
-        } else if (!empty($dbwhere)) {
+        if (!empty($dbwhere)) {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
