@@ -1300,7 +1300,7 @@ ob_start();
                         echo db_formatar($pago167, "f");
                         echo "  </td>";
                         echo "</tr>";
-                        $aSubFuncoes = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_instit in ($instits) group by 1,2");
+                        $aSubFuncoes = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o15_codtri in (".implode(",",array("'118','119','166','167'")).") and o58_instit in ($instits) group by 1,2");
                         foreach ($aSubFuncoes as $oSubFuncao) {
                             $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$oSubFuncao->o58_subfuncao}'"), 0)->o53_descr;
 
@@ -1332,13 +1332,13 @@ ob_start();
                             $aDespesasProgramas = getSaldoDespesa(null, "o58_programa, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_instit in ($instits) group by 1,2");
                             foreach ($aDespesasProgramas as $oDespesaPrograma) {
                                 $oPrograma = new Programa($oDespesaPrograma->o58_programa, $oDespesaPrograma->o58_anousu);
-                                $aPrograma118 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'118'")).") and o58_instit in ($instits) group by 1,2");
+                                $aPrograma118 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'118'")).") and o58_instit in ($instits) group by 1,2");
                                 $nValorPagoFonte118 = count( $aPrograma118) > 0 ? $aPrograma118[0]->pago : 0;
-                                $aFonte119 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'119'")).") and o58_instit in ($instits) group by 1,2");
+                                $aFonte119 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'119'")).") and o58_instit in ($instits) group by 1,2");
                                 $nValorPagoFonte119 = count( $aFonte119) > 0 ? $aFonte119[0]->pago : 0;
-                                $aFonte166 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'166'")).") and o58_instit in ($instits) group by 1,2");
+                                $aFonte166 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'166'")).") and o58_instit in ($instits) group by 1,2");
                                 $nValorPagoFonte166 = count( $aFonte166) > 0 ? $aFonte166[0]->pago : 0;
-                                $aFonte167 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'167'")).") and o58_instit in ($instits) group by 1,2");
+                                $aFonte167 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'167'")).") and o58_instit in ($instits) group by 1,2");
                                 $nValorPagoFonte167 = count( $aFonte167) > 0 ? $aFonte167[0]->pago : 0;
                                 echo "<tr style='height: 20px'>";
                                 echo " <td class='s8' dir='ltr'></td>";
@@ -1984,9 +1984,9 @@ ob_start();
                     <td class="s28" dir="ltr" colspan="5">33 - VALOR APLICADO ATÉ O PRIMEIRO QUADRIMESTRE QUE INTEGRARÁ O
                         LIMITE CONSTITUCIONAL</td>
                     <td class="s12"></td>
-                    <td class="s10" dir="ltr"><?php echo db_formatar($nValorAPlicadoSuperavit118_119,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nValorAPlicadoSuperavit218_219,"f"); ?></td>
                     <td class="s31" dir="ltr"></td>
-                    <td class="s10" dir="ltr"><?php echo db_formatar($nValorAPlicadoSuperavit118_119,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nValorAPlicadoSuperavit218_219,"f"); ?></td>
                 </tr>
                 <?php
                     $nValorAPlicadoSuperavitPosPrimQuad218_219 = getDespesasCusteadosComSuperavitPosPrimeiroQuadrimestre(array("'218','219'"), $dtini, $dtfim, $instits);
