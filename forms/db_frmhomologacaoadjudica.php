@@ -303,6 +303,10 @@ $clrotulo->label("l20_codigo");
             document.getElementById('l202_licitacao').value = '';
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_datahomologacao').value = '';
+            if(oRetorno.regpreco == 2){
+                alert('Confira a vigência do Registro de preço');
+                window.location.href = 'com4_vigenciaregistropreco001.php?pc54_solicita='+oRetorno.pc10_numero;
+            }
         }else{
             alert(oRetorno.message.urlDecode());
         }
