@@ -1285,23 +1285,23 @@ ob_start();
                         echo " <td class='s31' dir='ltr'></td>";
                         echo " <td class='s31' dir='ltr'></td>";
 
-                        $aSubFuncoes = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o15_codtri in (".implode(",",array("'118','119','166','167'")).") and o58_instit in ($instits) group by 1,2");
+                        $aSubFuncoes = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o15_codtri in (".implode(",",array("'118','119','166','167'")).") and o58_instit in ($instits) group by 1,2 order by 1");
                         foreach ($aSubFuncoes as $oSubFuncao) {
                             $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$oSubFuncao->o58_subfuncao}'"), 0)->o53_descr;
 
                             echo "<tr style='height: 20px'> ";
                             echo " <td class='s8' dir='ltr'></td>";
                             echo " <td class='s9' dir='ltr' colspan='5'>{$oSubFuncao->o58_subfuncao} - {$sDescrSubfuncao}</td>";
-                            $aSubFuncao118 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'118'")).") and o58_instit in ($instits) group by 1,2");
+                            $aSubFuncao118 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'118'")).") and o58_instit in ($instits) group by 1,2 order by 1");
                             $nValorPagoSubFuncao118 = count( $aSubFuncao118) > 0 ? $aSubFuncao118[0]->pago : 0;
                             $pagoFuncao118 += $nValorPagoSubFuncao118;
-                            $aSubFuncao119 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'119'")).") and o58_instit in ($instits) group by 1,2");
+                            $aSubFuncao119 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'119'")).") and o58_instit in ($instits) group by 1,2 order by 1");
                             $nValorPagoSubFuncao119 = count( $aSubFuncao119) > 0 ? $aSubFuncao119[0]->pago : 0;
                             $pagoFuncao119 += $nValorPagoSubFuncao119;
-                            $aSubFuncao166 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'166'")).") and o58_instit in ($instits) group by 1,2");
+                            $aSubFuncao166 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'166'")).") and o58_instit in ($instits) group by 1,2 order by 1");
                             $nValorPagoSubFuncao166 = count( $aSubFuncao166) > 0 ? $aSubFuncao166[0]->pago : 0;
                             $pagoFuncao166 += $nValorPagoSubFuncao166;
-                            $aSubFuncao167 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'167'")).") and o58_instit in ($instits) group by 1,2");
+                            $aSubFuncao167 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'167'")).") and o58_instit in ($instits) group by 1,2 order by 1");
                             $nValorPagoSubFuncao167 = count( $aSubFuncao167) > 0 ? $aSubFuncao167[0]->pago : 0;
                             $pagoFuncao167 += $nValorPagoSubFuncao167;
                             echo " <td class='s10' dir='ltr'>";
