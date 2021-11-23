@@ -70,10 +70,10 @@ if (isset($alterar)) {
    parent.document.formaba.acervo3.disabled = false;
    parent.document.formaba.acervo4.disabled = false;
    parent.document.formaba.acervo5.disabled = false;
-   CurrentWindow.corpo.iframe_acervo2.location.href='bib1_autoracervo001.php?bi21_acervo=<?=$bi06_seq?>&bi06_titulo=<?=$bi06_titulo?>';
-   CurrentWindow.corpo.iframe_acervo3.location.href='bib1_assunto001.php?bi15_acervo=<?=$bi06_seq?>&bi06_titulo=<?=$bi06_titulo?>';
-   CurrentWindow.corpo.iframe_acervo4.location.href='bib1_exemplar001.php?bi23_acervo=<?=$bi06_seq?>&bi06_titulo=<?=$bi06_titulo?>';
-   CurrentWindow.corpo.iframe_acervo5.location.href='bib1_localacervo001.php?bi20_acervo=<?=$bi06_seq?>&bi06_titulo=<?=$bi06_titulo?>';
+   (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acervo2.location.href='bib1_autoracervo001.php?bi21_acervo=<?=$bi06_seq?>&bi06_titulo=<?=$bi06_titulo?>';
+   (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acervo3.location.href='bib1_assunto001.php?bi15_acervo=<?=$bi06_seq?>&bi06_titulo=<?=$bi06_titulo?>';
+   (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acervo4.location.href='bib1_exemplar001.php?bi23_acervo=<?=$bi06_seq?>&bi06_titulo=<?=$bi06_titulo?>';
+   (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acervo5.location.href='bib1_localacervo001.php?bi20_acervo=<?=$bi06_seq?>&bi06_titulo=<?=$bi06_titulo?>';
   </script>
   <?
 }
