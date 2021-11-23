@@ -724,24 +724,103 @@ class Siops {
                 return '4_18';
             }
 
-        } elseif (in_array($oDespesa->o58_codigo, array(148, 149, 150, 151, 152, 153, 154, 159, 248, 249, 250, 251, 252, 253, 254, 259))) {
+        } elseif (in_array($oDespesa->o58_codigo, array(153, 154, 159, 161, 253, 254, 259, 261))) { 
 
-            if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
-                return '5_11';
-            } elseif ($oDespesa->o58_subfuncao == 301) {
-                return '5_12';
-            } elseif ($oDespesa->o58_subfuncao == 302) {
-                return '5_13';
-            } elseif ($oDespesa->o58_subfuncao == 303) {
-                return '5_14';
-            } elseif ($oDespesa->o58_subfuncao == 304) {
-                return '5_15';
-            } elseif ($oDespesa->o58_subfuncao == 305) {
-                return '5_16';
-            } elseif ($oDespesa->o58_subfuncao == 306) {
-                return '5_17';
-            } else {
-                return '5_18';
+            if (in_array($oDespesa->o58_codigo, array(154, 159, 254, 259)) && strpos(strtolower($oDespesa->o55_descr), 'covid')) {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '87_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '87_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '87_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '87_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '87_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '87_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '87_17';
+                }else {
+                    return '87_18';
+                }
+                
+            } elseif (in_array($oDespesa->o58_codigo, array(154, 159, 254, 259))) {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '86_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '86_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '86_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '86_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '86_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '86_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '86_17';
+                }else {
+                    return '86_18';
+                }
+
+            } elseif (in_array($oDespesa->o58_codigo, array(153, 253)) && strpos(strtolower($oDespesa->o55_descr), 'covid')) {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '89_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '89_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '89_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '89_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '89_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '89_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '89_17';
+                }else {
+                    return '89_18';
+                }
+
+            } elseif (in_array($oDespesa->o58_codigo, array(153, 253))) {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '88_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '88_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '88_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '88_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '88_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '88_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '88_17';
+                }else {
+                    return '88_18';
+                }
+
+            } elseif (in_array($oDespesa->o58_codigo, array(161, 261)) && $oDespesa->o58_funcao == '10') {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '90_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '90_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '90_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '90_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '90_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '90_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '90_17';
+                }else {
+                    return '90_18';
+                }
+            
             }
 
         } elseif($oDespesa->o58_codigo == 155 || $oDespesa->o58_codigo == 255) {
