@@ -204,7 +204,7 @@ if ($formato == 'pdf') {
     }
 
     $oPdf->ln(3);
-    $oPdf->cell(30, $alt, 'Total da Geral  :  ', "T", 0, "L", 0);
+    $oPdf->cell(50, $alt, 'Total da Geral  :  ', "T", 0, "L", 0);
     $oPdf->cell(45, $alt, $func, "T", 0, "L", 0);
     $oPdf->cell(40, $alt, '', "T", 0, "L", 0);
     $oPdf->cell(20, $alt, db_formatar($total, 'f'), "T", 1, "R", 0);
