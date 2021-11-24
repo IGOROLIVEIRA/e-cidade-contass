@@ -88,16 +88,16 @@ function cabecalho(&$pdf, &$troca)
         $pdf->Cell(15, $tam2, "Data", 1, 0, "C", 1);
         $pdf->Cell(50, $tam2, "Credor", 1, 0, "C", 1);
 
-        $pdf->Cell(20, $tam2, "RP não proc", 1, 0, "C", 1);
-        $pdf->Cell(20, $tam2, "RP proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Não Proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Proc", 1, 0, "C", 1);
 
-        $pdf->Cell(20, $tam2, "RP não proc", 1, 0, "C", 1);
-        $pdf->Cell(20, $tam2, "RP proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Não Proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Proc", 1, 0, "C", 1);
         $pdf->setx($pdf->getx() + 20);
-        $pdf->Cell(20, $tam2, "RP não proc", 1, 0, "C", 1);
-        $pdf->Cell(20, $tam2, "RP proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Não Proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Proc", 1, 0, "C", 1);
 
-        $pdf->Cell(20, $tam2, "A liquidar ", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "A Liquidar ", 1, 0, "C", 1);
         $pdf->Cell(20, $tam2, "Liquidados ", 1, 0, "C", 1);
         $pdf->Cell(20, $tam2, "Geral ", 1, 1, "C", 1);
 
