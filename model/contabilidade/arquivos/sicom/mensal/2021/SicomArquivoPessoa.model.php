@@ -122,7 +122,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
                 $clpessoa->si12_nomerazaosocial = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oDados->z01_nome), 0, 200)));
                 $clpessoa->si12_tipocadastro = $oDados->z09_tipo;
                 if ($oDados->z09_tipo == 2) {
-                    $clpessoa->si12_justificativaalteracao = $oDados->z01_obs;
+                    $clpessoa->si12_justificativaalteracao = str_replace($what, $by, $oDados->z01_obs);
                 } else {
                     $clpessoa->si12_justificativaalteracao = '';
                 }

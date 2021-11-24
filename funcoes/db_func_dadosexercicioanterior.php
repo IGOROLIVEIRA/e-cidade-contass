@@ -1,0 +1,3 @@
+<?
+$campos = "dadosexercicioanterior.c235_sequencial,dadosexercicioanterior.c235_naoaplicfundebimposttransf,dadosexercicioanterior.c235_superavit_fundeb_permitido,dadosexercicioanterior.c235_naoaplicfundebcompl,dadosexercicioanterior.c235_anousu as db_c235_anousu";
+?>

@@ -24,11 +24,11 @@ class cl_eventos1005
     public $eso06_aliquotarat = null;
     public $eso06_fatoracidentario = null;
     public $eso06_codtipoprocessorat = 0;
-    public $eso06_nroprocessos1070rat = 0;
-    public $eso06_codindicativosuspensaos1070rat = 0;
+    public $eso06_nroprocessos1070rat = null;
+    public $eso06_codindicativosuspensaos1070rat = null;
     public $eso06_codtipoprocessofap = 0;
-    public $eso06_nroprocessos1070fap = 0;
-    public $eso06_codindicativosuspensaos1070fap = 0;
+    public $eso06_nroprocessos1070fap = null;
+    public $eso06_codindicativosuspensaos1070fap = null;
     public $eso06_tipocaepf = 0;
     public $eso06_subscontribuicaoobra = 0;
     public $eso06_nroprocessojudicia = 0;
@@ -154,19 +154,19 @@ class cl_eventos1005
             $this->eso06_codtipoprocessorat = "null";
         }
         if ($this->eso06_nroprocessos1070rat == "") {
-            $this->eso06_nroprocessos1070rat = "null";
+            $this->eso06_nroprocessos1070rat = "";
         }
         if ($this->eso06_codindicativosuspensaos1070rat == "") {
-            $this->eso06_codindicativosuspensaos1070rat = "null";
+            $this->eso06_codindicativosuspensaos1070rat = "";
         }
         if ($this->eso06_codtipoprocessofap == "") {
             $this->eso06_codtipoprocessofap = "null";
         }
         if ($this->eso06_nroprocessos1070fap == "") {
-            $this->eso06_nroprocessos1070fap = "null";
+            $this->eso06_nroprocessos1070fap = "";
         }
         if ($this->eso06_codindicativosuspensaos1070fap == "") {
-            $this->eso06_codindicativosuspensaos1070fap = "null";
+            $this->eso06_codindicativosuspensaos1070fap = "";
         }
         if ($this->eso06_tipocaepf == "") {
             $this->eso06_tipocaepf = "null";
