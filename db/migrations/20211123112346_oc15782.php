@@ -9,6 +9,10 @@ class Oc15782 extends AbstractMigration
         $sql = <<<SQL
             BEGIN;
 
+                update db_itensmenu set libcliente = 'f' where id_item = (select id_item from db_itensmenu where descricao like '%Credenciamento%' and help = 'Credenciamento');
+                update db_itensmenu set libcliente = 'f' where id_item = (select id_item from db_itensmenu where funcao = 'lic1_precomedio001.php');
+                update db_itensmenu set libcliente = 'f' where id_item = (select id_item from db_itensmenu where descricao like '%Desconto Tabela%' and id_item not in (select id_item from db_itensmenu where funcao = 'con4_sicomdescontotabela.php'));
+
                 UPDATE db_menu
                 SET menusequencia = menusequencia +30
                 WHERE id_item_filho IN
