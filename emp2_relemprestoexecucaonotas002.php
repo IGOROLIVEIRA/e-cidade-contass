@@ -69,11 +69,11 @@ function cabecalho(&$pdf, &$troca)
         $tam2 = "5";
         $pdf->addpage("L");
         $pdf->SetFont('Arial', 'B', 7);
-        $pdf->Cell(80, $tam, "Dados cadastrais dos empenhos", 1, 0, "C", 1);
+        $pdf->Cell(80, $tam, "Dados dos Empenhos", 1, 0, "C", 1);
         $pdf->Cell(40, $tam, "Inscrição", 1, 0, "C", 1);
         $alturacabecalho = $pdf->gety();
         $distanciacabecalho = $pdf->getx();
-        $pdf->Cell(100, $tam2, "Movimentação dos restos a pagar no período", 1, 1, "C", 1);
+        $pdf->Cell(100, $tam2, "Movimentação dos Restos a Pagar no Período", 1, 1, "C", 1);
         $pdf->setxy($distanciacabecalho, $alturacabecalho + 5);
         $pdf->Cell(40, $tam2, "Anulação", 1, 0, "C", 1);
         $alturacabecalho2 = $pdf->gety();
@@ -82,10 +82,10 @@ function cabecalho(&$pdf, &$troca)
         $pdf->setxy($distanciacabecalho2 + 20, $alturacabecalho2);
         $pdf->Cell(40, $tam2, "Pagamento", 1, "TLR", "C", 1);
         $pdf->setxy($distanciacabecalho + 100, $alturacabecalho);
-        $pdf->Cell(60, $tam, "Saldo a pagar finais", 1, 1, "C", 1);
+        $pdf->Cell(60, $tam, "Saldo Final de Restos a Pagar", 1, 1, "C", 1);
 
-        $pdf->Cell(15, $tam2, "Empenho", 1, 0, "C", 1);
-        $pdf->Cell(15, $tam2, "Emissão", 1, 0, "C", 1);
+        $pdf->Cell(15, $tam2, "Número", 1, 0, "C", 1); 
+        $pdf->Cell(15, $tam2, "Data", 1, 0, "C", 1);
         $pdf->Cell(50, $tam2, "Credor", 1, 0, "C", 1);
 
         $pdf->Cell(20, $tam2, "RP não proc", 1, 0, "C", 1);
