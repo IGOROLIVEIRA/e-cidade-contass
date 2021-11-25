@@ -627,6 +627,17 @@ switch($oParam->exec) {
                             $erro = "Homologação salva com sucesso!";
                             $oRetorno->message = urlencode($erro);
                             $oRetorno->status = 1;
+
+                        /*Verifica se é registro de preco*/
+                            $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
+                            $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
+                            $oRetorno->regpreco = $l20_tipnaturezaproced;
+
+                        /*cria consulta da solicitação com licitação*/
+                            $resultsolicita = $clliclicita->sql_record($clliclicita->sql_query_julgamento_licitacao(null,"pc10_numero",null,"l20_codigo = {$l202_licitacao}"));
+                            $pc10_numero = db_utils::fieldsMemory($resultsolicita, 0)->pc10_numero;
+                            $oRetorno->pc10_numero = $pc10_numero;
+
                         }
                         /**
                          * Incluindo nova situação a licitacao Homologada
