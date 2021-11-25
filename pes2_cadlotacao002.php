@@ -174,8 +174,6 @@ foreach ($aDados as $oDadosLotacao) {
      $pre = 1;
    }
 
-   //$pdf->Cell(275,0,'','T');
-
    $pdf->setfont('arial','B',7);
    $pdf->cell(20,$alt,$oDadosLotacao->r70_estrut,'T',0,"L",$pre);
    $pdf->setfont('arial','',7);
@@ -184,7 +182,6 @@ foreach ($aDados as $oDadosLotacao) {
    $pdf->cell(75,$alt,$oDadosLotacao->r70_descr ,'T',0,"L",$pre);
    $pdf->cell(80,$alt,db_formatar($oDadosLotacao->o40_orgao,'orgao').' - '.$oDadosLotacao->o40_descr                                                 ,'T',0,"L",$pre);
    $pdf->cell(73,$alt,db_formatar($oDadosLotacao->o41_orgao,'orgao').db_formatar($oDadosLotacao->o41_unidade,'orgao').' - '.$oDadosLotacao->o41_descr,'T',0,"L",$pre);
-   // $pdf->cell(12,$alt,$oDadosLotacao->rh72_coddot,'T',1,"R",$pre);
    $pdf->cell(12,$alt,empty($oDadosLotacao->rh72_coddot) ? $oDadosLotacao->o58_coddot[0] : $oDadosLotacao->rh72_coddot,'T',1,"R",$pre);
 
    if ($completo == 's') {
