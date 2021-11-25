@@ -67,7 +67,7 @@ $head6 = "TIPO    : ".$sTipo;
 $oRhLota = db_utils::getDao('rhlota');
 
 $sSqlLota = $oRhLota->sql_query_dadosElemento($ano, db_getsession('DB_instit'), $sWhere, $sOrdem);
-
+// die($sSqlLota);
 $rsRhLota = $oRhLota->sql_record($sSqlLota);
 
 if ($oRhLota->numrows == 0){
@@ -112,7 +112,8 @@ foreach (db_utils::getCollectionByRecord($rsRhLota) as $oDados) {
   $oDadosLinha->o54_programa            = $oDados->o54_programa ;
   $oDadosLinha->o54_descr               = $oDados->o54_descr    ;
   $oDadosLinha->c58_descr               = $oDados->c58_descr    ;
-  $oDadosLinha->rh72_coddot              = $oDados->rh72_coddot    ;
+  $oDadosLinha->rh72_coddot              = $oDados->rh72_coddot;
+  $oDadosLinha->o58_coddot[]             = $oDados->o58_coddot;
 
   if($elementoAnterior != $oDadosLinha->r70_estrut){
     $oElementoSecundario                  = new stdClass();
@@ -183,7 +184,8 @@ foreach ($aDados as $oDadosLotacao) {
    $pdf->cell(75,$alt,$oDadosLotacao->r70_descr ,'T',0,"L",$pre);
    $pdf->cell(80,$alt,db_formatar($oDadosLotacao->o40_orgao,'orgao').' - '.$oDadosLotacao->o40_descr                                                 ,'T',0,"L",$pre);
    $pdf->cell(73,$alt,db_formatar($oDadosLotacao->o41_orgao,'orgao').db_formatar($oDadosLotacao->o41_unidade,'orgao').' - '.$oDadosLotacao->o41_descr,'T',0,"L",$pre);
-   $pdf->cell(12,$alt,$oDadosLotacao->rh72_coddot,'T',1,"R",$pre);
+   // $pdf->cell(12,$alt,$oDadosLotacao->rh72_coddot,'T',1,"R",$pre);
+   $pdf->cell(12,$alt,empty($oDadosLotacao->rh72_coddot) ? $oDadosLotacao->o58_coddot[0] : $oDadosLotacao->rh72_coddot,'T',1,"R",$pre);
 
    if ($completo == 's') {
 
