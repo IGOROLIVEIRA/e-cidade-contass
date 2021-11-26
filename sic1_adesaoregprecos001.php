@@ -27,8 +27,6 @@ if(isset($incluir) || isset($alterar)){
 
   $objeto = db_utils::fieldsMemory($resultado, 0);
 
-  echo var_dump($objeto);
-
   if($objeto->si06_dataadesao != null){
         $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_dataadesao_ano;
         $sqlerro = true;
