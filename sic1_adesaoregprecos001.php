@@ -27,7 +27,9 @@ if(isset($incluir) || isset($alterar)){
 
   $objeto = db_utils::fieldsMemory($resultado, 0);
 
-  if($objeto->si06_dataadesao == null){
+  echo var_dump($objeto);
+
+  if($objeto->si06_dataadesao != null){
         $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_dataadesao_ano;
         $sqlerro = true;
   }
@@ -38,8 +40,6 @@ if(isset($incluir) || isset($alterar)){
     }
 
     
-    if($resultado != null)
-
 	$sDataAta = join('-', array_reverse(explode('/', $si06_dataata)));
 	$sDataAbertura = join('-', array_reverse(explode('/', $si06_dataabertura)));
 
