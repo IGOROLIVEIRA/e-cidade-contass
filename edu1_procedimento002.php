@@ -63,9 +63,9 @@ if (isset($alterar)) {
    parent.document.formaba.a2.style.color = "black";
    parent.document.formaba.a3.disabled    = false;
    parent.document.formaba.a3.style.color = "black";
-   CurrentWindow.corpo.iframe_a2.location.href      = 'edu1_avaliacoes.php?procedimento=<?=$ed40_i_codigo?>'+
+   (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a2.location.href      = 'edu1_avaliacoes.php?procedimento=<?=$ed40_i_codigo?>'+
                                             '&ed40_c_descr=<?=$ed40_c_descr?>&forma=<?=trim($ed37_c_tipo)?>';
-   CurrentWindow.corpo.iframe_a3.location.href      = 'edu1_procescola001.php?ed86_i_procedimento=<?=$ed40_i_codigo?>'+
+   (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a3.location.href      = 'edu1_procescola001.php?ed86_i_procedimento=<?=$ed40_i_codigo?>'+
                                             '&ed40_c_descr=<?=$ed40_c_descr?>';
   </script>
   <?
@@ -125,9 +125,9 @@ if (isset($alterar)) {
     <script>
      parent.document.formaba.a2.disabled = false;
      parent.document.formaba.a3.disabled = false;
-     CurrentWindow.corpo.iframe_a2.location.href   = 'edu1_avaliacoes.php?procedimento=<?=$ed40_i_codigo?>'+
+     (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a2.location.href   = 'edu1_avaliacoes.php?procedimento=<?=$ed40_i_codigo?>'+
                                            '&ed40_c_descr=<?=$ed40_c_descr?>&forma=<?=trim($ed37_c_tipo)?>';
-     CurrentWindow.corpo.iframe_a3.location.href   = 'edu1_procescola001.php?ed86_i_procedimento=<?=$ed40_i_codigo?>'+
+     (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a3.location.href   = 'edu1_procescola001.php?ed86_i_procedimento=<?=$ed40_i_codigo?>'+
                                            '&ed40_c_descr=<?=$ed40_c_descr?>';
     </script>
     <?
