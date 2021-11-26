@@ -158,6 +158,33 @@ if (isset($alterar)) {
       $change = true;
   }
 
+  if(!isset($erro)){
+     //altera data homologação
+     if($sqlerro == false){
+
+      $result_dataHomologacao = $clliclicita->sql_record($clliclicita->sql_query(null,"distinct homologacaoadjudica.*",null,"l20_codigo = $l20_codigo"));
+
+
+      for ($iCont = 0; $iCont < pg_num_rows($result_dataHomologacao); $iCont++) {
+
+        $oPosicao = db_utils::fieldsMemory($result_dataHomologacao,$iCont);
+
+        $datahomologacao = 'l202_datahomologacao_' . $oPosicao->l202_sequencial;
+        $dataadjudicacao = 'l202_dataadjudicacao_'. $oPosicao->l202_sequencial;
+
+        $datah = '';
+        $dataa = '';
+
+        $datah = implode('-', array_reverse(explode('/', $$datahomologacao)));
+        $dataa = implode('-', array_reverse(explode('/', $$dataadjudicacao)));
+
+        $resultado = db_query("update homologacaoadjudica  set l202_datahomologacao = '$datah', l202_dataadjudicacao  = '$dataa' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+        $sqlerro = false;
+
+      }
+
+  }
+
   if (!isset($erro) && !$erro_edital && $change == true) {
     //print_r($_POST);exit;
     $clliclicita->l20_numero = $l20_numero;
@@ -203,6 +230,12 @@ if (isset($alterar)) {
       }
     }
 
+   
+
+     
+
+    }
+
     $clmanutencaolicitacao->manutlic_licitacao = $l20_codigo;
     $clmanutencaolicitacao->manutlic_codunidsubanterior = $manutlic_codunidsubanterior;
 
@@ -227,6 +260,7 @@ if (isset($alterar)) {
   $sCampos = '*, ';
   $sCampos .= "(select count(*) from liclicitem where l21_codliclicita = l20_codigo) as itens_lancados";
   $result = $clliclicita->sql_record($clliclicita->sql_query($chavepesquisa, $sCampos));
+
 
   if ($clliclicita->numrows > 0) {
 
@@ -397,6 +431,60 @@ if (isset($alterar)) {
                       ?>
                     </td>
                   </tr>
+
+              
+                 
+                <?php 
+                
+                $result_dha = $clliclicita->sql_record($clliclicita->sql_query(null,"distinct homologacaoadjudica.*",null,"l20_codigo = $l20_codigo"));
+
+                
+                for ($i = 0; $i < pg_numrows($result_dha); $i++): 
+                  db_fieldsmemory($result_dha, $i);  ?>
+
+                  <tr>
+                  <td colspan="2">
+                  <fieldset class='fieldsetinterno'>
+                  <legend>
+                        <b>Código: <?php echo $l202_sequencial ?></b>
+                      </legend>
+
+                      <table cellpadding="0" border="0" width="100%" class="">
+
+
+
+                  <tr>
+                  <td nowrap title="Data Homologação">
+                    <strong>Data Homologação: </strong>
+                  </td>
+                  <td>
+                  <?
+                  db_inputdata("l202_datahomologacao_$l202_sequencial",@$l202_datahomologacao_dia,@$l202_datahomologacao_mes,@$l202_datahomologacao_ano,true,'',$iCampo);
+                  ?>
+                  </td>
+                  </tr>
+
+                  <tr>
+                  <td nowrap title="Data Adjudicação">
+                    <strong>Data Adjudicação: </strong>
+                  </td>
+                  <td>
+                  <?
+                 db_inputdata("l202_dataadjudicacao_$l202_sequencial",@$l202_dataadjudicacao_dia,@$l202_dataadjudicacao_mes,@$l202_dataadjudicacao_ano,true,'',$iCampo);
+                 ?>
+                  </td>
+                  </tr>
+
+                  </table>
+                    </fieldset>
+                  </td>
+                </tr>
+                
+
+
+                <?php endfor; ?>
+              
+
 
               <?php
                 endif;

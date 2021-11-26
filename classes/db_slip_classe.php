@@ -1051,4 +1051,12 @@ class cl_slip {
 
     return $sql;
   }
+
+  function sql_query_fundeb ($dataInicial=null, $dataFinal=null, $instituicao){
+
+    $sql = "select sum(k17_valor) as k17_valor from slipconcarpeculiar inner join slip on k131_slip=k17_codigo ";
+    $sql .= "  where k131_concarpeculiar='095' and k17_instit in ({$instituicao}) and k17_situacao=2 and k17_data between '{$dataInicial}' and '{$dataFinal}'";
+
+    return $sql;
+  }
 }

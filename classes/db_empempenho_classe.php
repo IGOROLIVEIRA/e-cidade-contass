@@ -2275,4 +2275,126 @@ class cl_empempenho {
         }
         return $sql;
     }
+
+    public function getDespesasCusteadosComSuperavit($iAnoUsu, $sDataInicial, $sDataFinal, $sInstituicoes, $sCampos = '*', $sWhere = '', $sOrder = '') {
+
+        $sSql  = "select $sCampos                                                                                                                                           ";
+        $sSql .= " from (                                                                                                                                                   ";
+        $sSql .= "   select                                                                                                                                                 ";
+        $sSql .= "        e60_numemp,                                                                                                                                       ";
+        $sSql .= "        e60_anousu,                                                                                                                                       ";
+        $sSql .= "        c70_anousu,                                                                                                                                       ";
+        $sSql .= "        e60_numcgm,                                                                                                                                       ";
+        $sSql .= "        e60_coddot,                                                                                                                                       ";
+        $sSql .= "        e60_instit,                                                                                                                                       ";
+        $sSql .= "        coalesce(e60_vlremp,0) as e60_vlremp,                                                                                                             ";
+        $sSql .= "        coalesce(e60_vlranu,0) as e60_vlranu,                                                                                                             ";
+        $sSql .= "        coalesce(e60_vlrliq,0) as e60_vlrliq,                                                                                                             ";
+        $sSql .= "        coalesce(e60_vlrpag,0) as e60_vlrpag,                                                                                                             ";
+        $sSql .= "        coalesce(vlranu,0) as vlranu,                                                                                                                     ";
+        $sSql .= "        coalesce(vlrliq,0) as  vlrliq,                                                                                                                    ";
+        $sSql .= "        coalesce(vlrpag,0) as vlrpag                                                                                                                     ";
+        $sSql .= "   from empempenho                                                                                                                                          ";
+        $sSql .= "        left outer join (                                                                                                                                 ";
+        $sSql .= "        select c75_numemp, c70_anousu,                                                                                                                     ";
+        $sSql .= "            sum( round( case when c53_tipo   = 11 then c70_valor else 0 end,2) ) as vlranu,                                                               ";
+        $sSql .= "            sum( round( case when c53_tipo   = 20 then c70_valor else ( case when c53_tipo = 21 then c70_valor*-1 else  0 end) end,2) ) as vlrliq,         ";
+        $sSql .= "            sum( round( case when c53_tipo = 30 then c70_valor else ( case when c53_tipo = 31 then c70_valor*-1 else  0 end) end,2) ) as vlrpag       ";
+        $sSql .= "        from conlancamemp                                                                                                                                 ";
+        $sSql .= "             inner join conlancamdoc on c71_codlan = c75_codlan                                                                                            ";
+        $sSql .= "             inner join conhistdoc   on c53_coddoc = c71_coddoc                                                                                            ";
+        $sSql .= "             inner join conlancam    on c70_codlan = c75_codlan                                                                                            ";
+        $sSql .= "             inner join empempenho   on e60_numemp = c75_numemp                                                                                            ";
+        $sSql .= "        where e60_anousu = $iAnoUsu and c75_data between '$sDataInicial' and '$sDataFinal'                                                                ";
+        $sSql .= "             and  e60_instit in ($sInstituicoes)                                                                                                          ";
+        $sSql .= "        group by c75_numemp, c70_anousu                                                                                                                    ";
+        $sSql .= "        ) as x on x.c75_numemp = e60_numemp                                                                                                               ";
+        $sSql .= "      where e60_anousu = $iAnoUsu                                                                                                                         ";
+        $sSql .= " ) as x                                                                                                                                                   ";
+        $sSql .= "      inner join empelemento  on e64_numemp    = e60_numemp                                                                                               ";
+        $sSql .= "      inner join cgm          on z01_numcgm    = e60_numcgm                                                                                               ";
+        $sSql .= "      inner join orcdotacao   on o58_coddot    = e60_coddot and o58_anousu  = e60_anousu and o58_instit = e60_instit                                      ";
+        $sSql .= "      inner join orcorgao     on o40_orgao     = o58_orgao  and o40_anousu  = o58_anousu                                                                  ";
+        $sSql .= "      inner join orcunidade   on o41_anousu    = o58_anousu and o41_orgao   = o58_orgao and o41_unidade = o58_unidade                                     ";
+        $sSql .= "      inner join orcfuncao    on o52_funcao    = orcdotacao.o58_funcao                                                                                    ";
+        $sSql .= "      inner join orcsubfuncao on o53_subfuncao = orcdotacao.o58_subfuncao                                                                                 ";
+        $sSql .= "      inner join orcprograma  on o54_programa  = o58_programa and o54_anousu = orcdotacao.o58_anousu                                                      ";
+        $sSql .= "      inner join orcprojativ  on o55_projativ  = o58_projativ and o55_anousu = orcdotacao.o58_anousu                                                      ";
+        $sSql .= "      inner join orcelemento  on o58_codele    = o56_codele and o58_anousu   = o56_anousu                                                                 ";
+        $sSql .= "      inner join empempaut    on e61_numemp    = e60_numemp                                                                                               ";
+        $sSql .= "      inner join orctiporec on o15_codigo = o58_codigo                                                                                                    ";
+
+        if (!empty($sWhere)) {
+          $sSql .= " where {$sWhere} ";
+        }
+
+        if (!empty($sOrder)) {
+          $sSql .= " order by {$sOrder} ";
+        }
+        return db_utils::getColectionByRecord(db_query($sSql));
+      }
+
+      public function getEmpenhosMovimentosPeriodo($iAnoUsu, $sDataInicial, $sDataFinal, $sInstituicoes, $sCampos = '*', $sWhere = '', $sOrder = '') {
+
+        $sSql  = "select $sCampos                                                                                                                                           ";
+        $sSql .= " from (                                                                                                                                                   ";
+        $sSql .= "   select                                                                                                                                                 ";
+        $sSql .= "        e60_numemp,                                                                                                                                       ";
+        $sSql .= "        e60_anousu,                                                                                                                                       ";
+        $sSql .= "        c70_anousu,                                                                                                                                       ";
+        $sSql .= "        e60_numcgm,                                                                                                                                       ";
+        $sSql .= "        e58_coddot,                                                                                                                                       ";
+        $sSql .= "        e60_instit,                                                                                                                                       ";
+        $sSql .= "        o58_funcao,                                                                                                                                       ";
+        $sSql .= "        o58_subfuncao,                                                                                                                                    ";
+        $sSql .= "        o53_descr as descsubfuncao,                                                                                                                       ";
+        $sSql .= "        o58_programa,                                                                                                                                     ";
+        $sSql .= "        o54_descr as descprograma,                                                                                                                        ";
+        $sSql .= "        o15_codtri,                                                                                                                                       ";
+        $sSql .= "        o56_elemento,                                                                                                                                     ";
+        $sSql .= "        coalesce(e60_vlremp,0) as e60_vlremp,                                                                                                             ";
+        $sSql .= "        coalesce(e60_vlranu,0) as e60_vlranu,                                                                                                             ";
+        $sSql .= "        coalesce(e60_vlrliq,0) as e60_vlrliq,                                                                                                             ";
+        $sSql .= "        coalesce(e60_vlrpag,0) as e60_vlrpag,                                                                                                             ";
+        $sSql .= "        coalesce(vlranu,0) as vlranu,                                                                                                                     ";
+        $sSql .= "        coalesce(vlrliq,0) as  vlrliq,                                                                                                                    ";
+        $sSql .= "        coalesce(vlrpag,0) as vlrpag                                                                                                                      ";
+        $sSql .= "   from empempenho                                                                                                                                        ";
+        $sSql .= "        left outer join (                                                                                                                                 ";
+        $sSql .= "          select c75_numemp, c70_anousu,                                                                                                                    ";
+        $sSql .= "              sum( round( case when c53_tipo   = 11 then c70_valor else 0 end,2) ) as vlranu,                                                               ";
+        $sSql .= "              sum( round( case when c53_tipo   = 20 then c70_valor else ( case when c53_tipo = 21 then c70_valor*-1 else  0 end) end,2) ) as vlrliq,        ";
+        $sSql .= "              sum( round( case when c53_tipo = 30 then c70_valor else ( case when c53_tipo = 31 then c70_valor*-1 else  0 end) end,2) ) as vlrpag           ";
+        $sSql .= "          from conlancamemp                                                                                                                                 ";
+        $sSql .= "              inner join conlancamdoc on c71_codlan = c75_codlan                                                                                           ";
+        $sSql .= "              inner join conhistdoc   on c53_coddoc = c71_coddoc                                                                                           ";
+        $sSql .= "              inner join conlancam    on c70_codlan = c75_codlan                                                                                           ";
+        $sSql .= "              inner join empempenho   on e60_numemp = c75_numemp                                                                                           ";
+        $sSql .= "          where e60_anousu = $iAnoUsu and c75_data between '$sDataInicial' and '$sDataFinal'                                                                ";
+        $sSql .= "               and  e60_instit in ($sInstituicoes)                                                                                                          ";
+        $sSql .= "          group by c75_numemp, c70_anousu                                                                                                                   ";
+        $sSql .= "       ) as x on x.c75_numemp = e60_numemp                                                                                                               ";
+        $sSql .= "       inner join cgm          on z01_numcgm    = e60_numcgm                                                                                              ";
+        $sSql .= "       inner join orcdotacao   on o58_coddot    = e60_coddot and o58_anousu  = e60_anousu and o58_instit = e60_instit                                     ";
+        $sSql .= "       inner join orcorgao     on o40_orgao     = o58_orgao  and o40_anousu  = o58_anousu                                                                 ";
+        $sSql .= "       inner join orcunidade   on o41_anousu    = o58_anousu and o41_orgao   = o58_orgao and o41_unidade = o58_unidade                                    ";
+        $sSql .= "       inner join orcfuncao    on o52_funcao    = orcdotacao.o58_funcao                                                                                   ";
+        $sSql .= "       inner join orcsubfuncao on o53_subfuncao = orcdotacao.o58_subfuncao                                                                                ";
+        $sSql .= "       inner join orcprograma  on o54_programa  = o58_programa and o54_anousu = orcdotacao.o58_anousu                                                     ";
+        $sSql .= "       inner join orcprojativ  on o55_projativ  = o58_projativ and o55_anousu = orcdotacao.o58_anousu                                                     ";
+        $sSql .= "       inner join orcelemento  on o58_codele    = o56_codele and o58_anousu   = o56_anousu                                                                ";
+        $sSql .= "       inner join empempaut    on e61_numemp    = e60_numemp                                                                                              ";
+        $sSql .= "       inner join orctiporec on o15_codigo = o58_codigo                                                                                                   ";
+        $sSql .= "   where e60_anousu = $iAnoUsu                                                                                                                            ";
+        $sSql .= " ) as x                                                                                                                                                   ";
+
+        if (!empty($sWhere)) {
+          $sSql .= " where {$sWhere} ";
+        }
+
+        if (!empty($sOrder)) {
+          $sSql .= " order by {$sOrder} ";
+        }
+        return db_utils::getColectionByRecord(db_query($sSql));
+      }
 }
