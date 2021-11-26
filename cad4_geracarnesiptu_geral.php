@@ -317,7 +317,7 @@ try {
 $pdf1 = $oRegraEmissao->getObjPdf();
 
 if($capa== "s"){
-  $pdfcapa = new db_impcarne($oRegraEmissao->getSpdf(), 561);
+  $pdfcapa = new db_impcarne($oRegraEmissao->getSpdf(), 56);
 }
 
 if($linhasIptunump >0 ){
