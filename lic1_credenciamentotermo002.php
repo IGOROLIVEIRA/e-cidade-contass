@@ -14,8 +14,7 @@ if(isset($alterar)){
 
     try {
 
-        $resultNumeroTermo = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,"l212_numerotermo","l212_numerotermo desc limit 1","l212_numerotermo = $l212_numerotermo"));
-
+        $resultNumeroTermo = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,"l212_numerotermo","l212_numerotermo desc limit 1","l212_numerotermo = $l212_numerotermo and l212_sequencial != $l212_sequencial"));
         if(pg_num_rows($resultNumeroTermo) > 0){
             throw new Exception("Usuário: Numero do Termo ja utilizado !");
         }

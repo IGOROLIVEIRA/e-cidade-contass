@@ -178,12 +178,11 @@ $clrotulo->label("pc01_descrmater");
             success: function(data) {
 
                 let elementos = JSON.parse(data);
-
                 if(elementos.elementos.length != 0){
                     elementos.elementos.forEach(function (oElementos, ele) {
                         let option = document.createElement('option');
                         option.value = oElementos.pc07_codele;
-                        option.text = oElementos.o56_descr;
+                        option.text = oElementos.o56_descr.urlDecode();
                         select.append(option);
                     })
                 }else{

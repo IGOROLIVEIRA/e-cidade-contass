@@ -141,7 +141,7 @@ $clcredenciamentotermo->rotulo->label();
     </fieldset>
 </form>
 <script>
-
+    mostrarFornecedores();
     function js_showGrid() {
         oGridItens = new DBGrid('gridItens');
         oGridItens.nameInstance = 'oGridItens';

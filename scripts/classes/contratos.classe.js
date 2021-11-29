@@ -88,6 +88,7 @@ contrato = function () {
          */
         $('btnConfirmarObjetos').observe("click", function (){
             me.confirmaSelecao();
+            me.verificacredenciamentotermo(oRetorno);
         });
         /*
          * Montamos a grid com os dados
@@ -188,7 +189,7 @@ contrato = function () {
                     if (js_search_in_array(oDados.itensSelecionados, oDados.itens[i].licitacao)) {
                         lMarcado = true;
                     }
-                    oGridDados.addRow(aLinha, false, false, lMarcado);
+                    oGridDados.addRow(aLinha);
                 }
             }
 
@@ -240,6 +241,23 @@ contrato = function () {
 
 
         }
+
+    this.verificacredenciamentotermo = function() {
+        var oParam     = new Object();
+        oParam.exec    = "verificaCredenciamentoTermo";
+        aItensSelecionados.each(function(oLinha, id) {
+            oParam.iLicitacao = oLinha.aCells[1].getContent();;
+        });
+
+        var oAjax   = new Ajax.Request(
+            sURL,
+            {
+                method    : 'post',
+                parameters: 'json='+Object.toJSON(oParam),
+                onComplete: me.retornoVerificaTermoCredenciamento
+            }
+        );
+    }    
 //cntDados
 
         var oParam     = new Object();
@@ -324,6 +342,14 @@ contrato = function () {
             alert(oRetorno.message.urlDecode());
             $('ac16_acordogrupo').value = '';
             $('ac02_descricao').value   = '';
+            return false;
+        }
+    }
+
+    this.retornoVerificaTermoCredenciamento = function(oResponse){
+        var oRetorno = eval("("+oResponse.responseText+")");
+        if(oRetorno.status == 2){
+            alert(oRetorno.message.urlDecode());
             return false;
         }
     }

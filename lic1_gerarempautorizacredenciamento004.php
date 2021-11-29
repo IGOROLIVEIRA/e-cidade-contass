@@ -47,6 +47,7 @@ require_once("classes/db_pctipocompra_classe.php");
 require_once("classes/db_empparametro_classe.php");
 require_once("classes/db_pcparam_classe.php");
 require_once("classes/db_concarpeculiar_classe.php");
+require_once("classes/db_credenciamentotermo_classe.php");
 
 require_once("model/CgmFactory.model.php");
 require_once("model/fornecedor.model.php");
@@ -69,7 +70,7 @@ $clempparametro                   = new cl_empparametro;
 $clpcparam 	                      = new cl_pcparam;
 $clconcarpeculiar                 = new cl_concarpeculiar;
 $oDaoEmpenhoProcessoAdminitrativo = new cl_empautorizaprocesso;
-
+$clcredenciamentotermo            = new cl_credenciamentotermo;
 
 $db_opcao    = 1;
 $db_botao    = true;
@@ -131,6 +132,28 @@ if (isset($incluir)) {
             }
         }
     }
+
+    if($sqlerro==false){
+        $resultVigencia = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,"l212_dtinicio,l212_dtfim,l212_numerotermo",null,"l212_sequencial = $l212_sequencial"));
+        db_fieldsmemory($resultVigencia,0);
+        $dataini = (implode("/",(array_reverse(explode("-",$l212_dtinicio)))));
+        $datafim = (implode("/",(array_reverse(explode("-",$l212_dtfim)))));
+        $datesistema = date("d/m/Y",db_getsession("DB_datausu"));
+
+        $dataInicio = DateTime::createFromFormat('d/m/Y', $dataini);
+        $dataFim = DateTime::createFromFormat('d/m/Y', $datafim);
+        $dataGen = DateTime::createFromFormat('d/m/Y', $datesistema);
+
+        if($dataInicio < $dataGen){
+            throw new Exception("Usuário: Não é possível gerar autorização de empenho, Termo $l212_numerotermo ainda não está vigente");
+        }
+
+        if($dataFim > $dataGen){
+            throw new Exception("Usuário: Não é possível gerar autorização de empenho, Termo $l212_numerotermo não está vigente.");
+        }
+        
+    }
+
     // Valida Ano da Sessao e da Data da Sessao... devem ser a mesma
     if ($sqlerro == false) {
 

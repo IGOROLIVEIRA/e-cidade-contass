@@ -36,9 +36,6 @@ if(!isset($pesquisa_chave)){
         }
     }
 
-//    $dataDoSistema = date("Y-m-d", db_getsession('DB_datausu'));
-//    $Where = "l212_dtinicio >= '{$dataDoSistema}' and l212_dtfim <= '{$dataDoSistema}'";
-
     if($autoriza="false"){
         $Where = "l212_sequencial not in (select e54_termocredenciamento from empautoriza where e54_termocredenciamento is not null)";
     }

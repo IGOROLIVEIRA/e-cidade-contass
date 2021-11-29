@@ -61,6 +61,7 @@ require_once("libs/db_sessoes.php");
 require_once("std/DBTime.php");
 require_once("std/DBDate.php");
 require_once("model/contrato/AcordoItemTipoCalculoFactory.model.php");
+require_once("classes/db_credenciamentotermo_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -505,6 +506,17 @@ switch ($oParam->exec) {
         }
         break;
 
+    case "verificaCredenciamentoTermo":
+        
+        $clcredenciamentotermo = new cl_credenciamentotermo;
+        $rsLicitacao           = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,'*',null,"l212_licitacao = {$oParam->iLicitacao}"));
+        db_fieldsmemory($rsLicitacao, 0)->l212_sequencial;
+
+        if($l212_sequencial != null){
+            $oRetorno->status    = 2;
+            $oRetorno->message   = urlencode("Licitação com Termo de Credenciamento vinculado.");
+        }
+        break;
 
     case "getProcessosContratado":
 

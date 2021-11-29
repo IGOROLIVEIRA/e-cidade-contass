@@ -182,9 +182,14 @@ switch ($_POST["action"]) {
                         AND pc24_pontuacao = 1";
 
         $rsEleTabela = db_query($sqlElementosTabela);
+        for ($i = 0; $i < pg_numrows($rsEleTabela); $i++) {
+            $oDados = db_utils::fieldsMemory($rsEleTabela, $i);
 
-        $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
-        $oRetorno->elementos = $oElementos;
+            $oElementos = new stdClass();
+            $oElementos->pc07_codele = $oDados->pc07_codele;
+            $oElementos->o56_descr = urlencode($oDados->o56_descr);
+            $oRetorno->elementos[]  = $oElementos;
+        }
 
         break;
 
