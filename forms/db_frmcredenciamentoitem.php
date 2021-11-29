@@ -253,7 +253,15 @@ $clrotulo->label("pc01_descrmater");
         $("#mytable tr").each(function() {
 
             if ($(this).find("input[type='checkbox']").is(":checked")) {
+                var qtdDisponivel = $(this).find("td").eq(5).find("input").val();
+                console.log(qtdDisponivel);
+                var qtdSolicitada = $(this).find("td").eq(7).find("input").val();
+                console.log(qtdSolicitada);
 
+                if(qtdSolicitada > qtdDisponivel){
+                    alert('Quantidade não disponivel');
+                    return false;
+                }
                 oDados.id = $(this).find("td").eq(2).html();
                 oDados.unidade = $(this).find("td").eq(4).find("select").val();
                 oDados.vlrunit = $(this).find("td").eq(6).find("input").val();
