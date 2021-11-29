@@ -36,7 +36,10 @@ include("classes/db_pcfornecon_classe.php");
 include("classes/db_pcfornemov_classe.php");
 include("classes/db_pcfornecert_classe.php");
 include("classes/db_condataconf_classe.php");
+include("classes/db_licitaparam_classe.php");
 $clpcforne = new cl_pcforne;
+$cllicitaparam = new cl_licitaparam;
+$clpcfornecon = new cl_pcfornecon;
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 1;
 $db_botao = true;
@@ -60,6 +63,43 @@ if(isset($incluir)){
         if($dtsession < $z09_datacadastro){
             db_msgbox("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
             $sqlerro = true;
+        }
+
+        $rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null,"*",null,"l12_instit = ".db_getsession('DB_instit')));
+        db_fieldsmemory($rsParamLic, 0)->l12_validacadfornecedor;
+
+        if($l12_validacadfornecedor == "t"){
+          
+          if($z01_telef == ""){
+            db_msgbox("Usuário: Campo Email não informado !");
+            $sqlerro = true;
+          }
+  
+          if($z01_email == ""){
+            db_msgbox("Usuário: Campo Telefone não informado !");
+            $sqlerro = true;
+          }
+
+          /**
+           * Verifica conta bancaria
+           */
+          $rsContaBancaria = $clpcfornecon->sql_record($clpcfornecon->sql_query(null,"*",null,"pc63_numcgm={$pc60_numcgm}"));
+          //db_criatabela($rsContaBancaria);exit;
+          if(pg_numrows($rsContaBancaria) == 0) {
+            db_msgbox("Usuário: E necessario cadastrar ao menos uma conta bancaria !");
+            $sqlerro = true;
+
+            echo "
+              <script>
+                  function js_db_libera(){         
+                    parent.document.formaba.pcfornecon.disabled=false;
+                    top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$pc60_numcgm."';
+                ";
+            echo"}\n
+                js_db_libera();
+              </script>\n
+            ";
+          }
         }
 
         /**
