@@ -45,6 +45,7 @@ require_once("model/AcordoRescisao.model.php");
 require_once("model/AcordoAnulacao.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoItem.model.php");
+require_once("model/contrato/AcordoLancamentoContabil.model.php");
 require_once("model/licitacao.model.php");
 require_once("model/Dotacao.model.php");
 require_once("model/MaterialCompras.model.php");
@@ -95,6 +96,10 @@ switch ($oParam->exec) {
             $oHomologacao->setAcordo($oParam->acordo);
             $oHomologacao->setObservacao($sObservacao);
             $oHomologacao->save();
+            $oAcordo                   = new Acordo($oParam->acordo);
+            $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+            $sHistorico = "Valor referente a homologação do Acordo: {$iCodigoAcordo}.";
+            $oAcordoLancamentoContabil->registraControleContrato($oParam->acordo, $oAcordo->getValorContrato(), $sHistorico);
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
@@ -118,6 +123,10 @@ switch ($oParam->exec) {
             $oHomologacao = new AcordoHomologacao($oParam->codigo);
             $oHomologacao->setObservacao($sObservacao);
             $oHomologacao->cancelar();
+            $oAcordo                   = new Acordo($oHomologacao->getAcordo());
+            $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+            $sHistorico = "Valor referente a Cancelamento homologação do Acordo: {$iCodigoAcordo}.";
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico);
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
