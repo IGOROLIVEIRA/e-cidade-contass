@@ -37,11 +37,14 @@ include("classes/db_pcfornemov_classe.php");
 include("classes/db_pcfornecert_classe.php");
 include("classes/db_condataconf_classe.php");
 include("classes/db_licitaparam_classe.php");
+include("classes/db_cgm_classe.php");
+
 $clpcforne = new cl_pcforne;
 $cllicitaparam = new cl_licitaparam;
 $clpcfornecon = new cl_pcfornecon;
+$clcgm = new cl_cgm;
 db_postmemory($HTTP_POST_VARS);
-   $db_opcao = 1;
+$db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
     $sqlerro=false;
@@ -100,6 +103,16 @@ if(isset($incluir)){
               </script>\n
             ";
           }
+        }
+        
+        /**
+        * alterando email e telefone OC15701
+        */
+        if($sqlerro == false){
+          $clcgm->z01_numcgm = $pc60_numcgm;
+          $clcgm->z01_email = $z01_email;
+          $clcgm->z01_telef = $z01_telef;
+          $clcgm->alterar($pc60_numcgm);
         }
 
         /**
