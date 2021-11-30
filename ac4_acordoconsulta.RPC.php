@@ -140,6 +140,52 @@ switch($oParam->exec) {
 
     break;
 
+  case "adesaoregpreco":
+
+    $oAcordo               = new Acordo($oParam->ac16_sequencial);
+    $aAdesaoVinculadas     = $oAcordo->getAdesaoRegPreco();
+    $oRetorno->dados       = array();
+  
+    foreach ($aAdesaoVinculadas as $oAdesao) {
+      $oStdDados     = $oAdesao->getDados();
+      $oStdAdesao = new stdClass();
+      $oStdAdesao->iCodigoLicitacao     = $oStdDados->l20_codigo;
+      $oStdAdesao->sObjetoLicitacao     = $oStdDados->l20_objeto;
+      $oStdAdesao->sLocalLicitacao      = $oStdDados->l20_local;
+      $oStdAdesao->dtCriacaoLicitacao   = $oStdDados->l20_datacria;
+      $oStdAdesao->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
+      $oStdAdesao->sModalidadeLicitacao = utf8_encode($oStdDados->l03_descr);
+        $oRetorno->dados[] = $oStdAdesao;
+      }
+  
+      $oRetorno->detalhe         = $oParam->detalhe;
+      $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
+  
+    break;
+
+  case "licrealizadaoutrosorgaos":
+
+      $oAcordo               = new Acordo($oParam->ac16_sequencial);
+      $aAdesaoVinculadas     = $oAcordo->getLicitacaoOutrosOrgaos();
+      $oRetorno->dados       = array();
+    
+    foreach ($aAdesaoVinculadas as $oAdesao) {
+      $oStdDados     = $oAdesao->getDados();
+      $oStdAdesao = new stdClass();
+      $oStdAdesao->iCodigoLicitacao     = $oStdDados->l20_codigo;
+      $oStdAdesao->sObjetoLicitacao     = $oStdDados->l20_objeto;
+      $oStdAdesao->sLocalLicitacao      = $oStdDados->l20_local;
+      $oStdAdesao->dtCriacaoLicitacao   = $oStdDados->l20_datacria;
+      $oStdAdesao->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
+      $oStdAdesao->sModalidadeLicitacao = utf8_encode($oStdDados->l03_descr);
+        $oRetorno->dados[] = $oStdAdesao;
+      }
+    
+      $oRetorno->detalhe         = $oParam->detalhe;
+      $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
+    
+  break;
+
   case "processodecomprasConsulta":
 
     $oAcordo                       = new Acordo($oParam->ac16_sequencial);

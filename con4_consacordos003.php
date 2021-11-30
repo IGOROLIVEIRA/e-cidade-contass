@@ -315,11 +315,7 @@ db_app::import("configuracao.DBDepartamento");
                 break;
 
             case '2':
-
-                $oTabDetalhes->add("empenhamentos", "Licitações",
-                    "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licitacoes");
-
-                break;
+                
             case '3':
 
                 // Manual
@@ -343,6 +339,19 @@ db_app::import("configuracao.DBDepartamento");
                 $oTabDetalhes->add("empenhamentos", "Empenhos",
                     "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=empenhos");
                 break;
+        }
+
+        if($clAcordo->getTipoOrigem() ==  "2"){
+            $oTabDetalhes->add("empenhamentos", "Licitações",
+            "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licitacoes");
+        }
+        if($clAcordo->getTipoOrigem() ==  "4"){
+            $oTabDetalhes->add("Adesão de Registro de Preços","Adesão de Registro de Preços",
+            "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=adesaoregpreco");
+        }
+        if($clAcordo->getTipoOrigem() ==  "8" || $clAcordo->getTipoOrigem() ==  "9"){
+            $oTabDetalhes->add("Licitação Realizada por outros Órgãos","Licitação Realizada por outros Órgãos",
+            "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licrealizadaoutrosorgaos");
         }
 
         $oTabDetalhes->add("posicoes", "Posições" ,

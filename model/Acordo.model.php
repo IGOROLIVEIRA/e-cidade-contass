@@ -2693,6 +2693,46 @@ class Acordo
         return $this->aLicitacoes;
     }
 
+    public function getAdesaoRegPreco()
+    {
+
+        $oDaoAcordo        = db_utils::getDao("acordo");
+        $sCamposLicitacoes = " adesaoregprecos.si06_sequencial ";
+        $sSqlAdesao        = $oDaoAcordo->sql_queryAdesaoVinculadas($this->iCodigoAcordo, $sCamposLicitacoes);
+        $rsAdesaovinculada = $oDaoAcordo->sql_record($sSqlAdesao);
+
+        if ($oDaoAcordo->numrows > 0) {
+
+            for ($iAdesao = 0; $iAdesao < $oDaoAcordo->numrows; $iAdesao++) {
+
+                $iCodigoAdesao    = db_utils::fieldsMemory($rsAdesaovinculada, $iAdesao)->si06_sequencial;
+                $this->aAdesao[] = new licitacao($iCodigoAdesao);
+            }
+        }
+
+        return $this->aAdesao;
+    }
+
+    public function getLicitacaoOutrosOrgaos()
+    {
+
+        $oDaoAcordo        = db_utils::getDao("acordo");
+        $sCamposLicitacoes = " liclicitaoutrosorgaos.lic211_sequencial ";
+        $sSqlLicitacaoOutrosOrgaos        = $oDaoAcordo->sql_queryLicitacoesOutrosOrgaosVinculadas($this->iCodigoAcordo, $sCamposLicitacoes);
+        $rsLicitacaoOutrosOrgaos          = $oDaoAcordo->sql_record($sSqlLicitacaoOutrosOrgaos);
+
+        if ($oDaoAcordo->numrows > 0) {
+
+            for ($iLicitacaoOutrosOrgaos = 0; $iLicitacaoOutrosOrgaos < $oDaoAcordo->numrows; $iLicitacaoOutrosOrgaos++) {
+
+                $iCodigoLicitacao    = db_utils::fieldsMemory($rsLicitacaoOutrosOrgaos, $iLicitacaoOutrosOrgaos)->lic211_sequencial;
+                $this->aLicitacaoOutrosOrgaos[] = new licitacao($iCodigoLicitacao);
+            }
+        }
+
+        return $this->aLicitacaoOutrosOrgaos;
+    }
+
     public function getProcessosDeCompras()
     {
 
