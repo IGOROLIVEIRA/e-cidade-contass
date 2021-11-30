@@ -370,17 +370,24 @@ class Resposta
      */
     public static function remover(\ECidade\Configuracao\Formulario\Resposta\Model\Resposta $resposta)
     {
-
         if (!\db_utils::inTransaction()) {
             throw new \DBException('Sem transação com o banco de dados.');
         }
         if (empty($resposta)) {
             throw new \ParameterException("Resposta não informada.");
         }
+        $oDaoAvaliacaoGrupoRespostaCgm      = new \cl_avaliacaogruporespostacgm();
         $oDaoAvaliacaoResposta              = new \cl_avaliacaoresposta();
         $oDaoAvaliacaoGrupoPerguntaResposta = new \cl_avaliacaogrupoperguntaresposta();
         $oDaoAvaliacaoGrupoResposta         = new \cl_avaliacaogruporesposta();
+
         foreach ($resposta->getRespostas() as $valorResposta) {
+
+            $oDaoAvaliacaoGrupoRespostaCgm->excluir(null, "eso03_avaliacaogruporesposta = {$resposta->getCodigo()}");
+            if ($oDaoAvaliacaoGrupoRespostaCgm->erro_status == 0) {
+                throw new \BusinessException("Erro ao excluir vinculo do grupo respostas com o cgm.");
+            }
+
             $oDaoAvaliacaoGrupoPerguntaResposta->excluir(null, "db108_avaliacaoresposta = {$valorResposta->getCodigo()}");
             if ($oDaoAvaliacaoGrupoPerguntaResposta->erro_status == 0) {
                 throw new \BusinessException("Erro ao excluir vinculo das respostas com o formulário.");
