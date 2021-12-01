@@ -446,15 +446,27 @@ for ($i = 0; $i < 2; $i++){
    $this->objpdf->cell(170,$altura,'',"LBR",0,"l",0); $this->objpdf->cell(27, $altura,'',"LR" ,1,"L",0);
 
    if (@$this->db21_usadebitoitbi == 't') {
-       $this->objpdf->SetFont('Arial','B',8);
-       $this->objpdf->cell(25,$altura,'Juros',1,0,"L",$iPreencheFundo);
-       $this->objpdf->SetFont('Arial','',8);
-       $this->objpdf->cell(23,$altura,db_formatar($this->vlrjuros, 'f'),1,0,"R",0);
-       $this->objpdf->SetFont('Arial','B',8);
-       $this->objpdf->cell(23,$altura,'Multa',1,0,"L",$iPreencheFundo);
-       $this->objpdf->SetFont('Arial','',8);
-       $this->objpdf->cell(39,$altura,db_formatar($this->vlrmulta, 'f'),1,0,"R",0);
-       $this->objpdf->cell(60,$altura,'',"LBR",0,"l",0);
+       $valor_corrigido = $this->vlrtotal - $this->aDadosFormasPgto[0]['Imposto'] - $this->vlrjuros - $this->vlrmulta;
+       $this->objpdf->SetFont('Arial','B',6);
+       $this->objpdf->cell(21,$altura,'Valor Principal',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',6);
+       $this->objpdf->cell(21,$altura,db_formatar($this->aDadosFormasPgto[0]['Imposto'],'f'),1,0,"R",0);
+
+       $this->objpdf->SetFont('Arial','B',6);
+       $this->objpdf->cell(21,$altura,'Valor Correção',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',6);
+       $this->objpdf->cell(21,$altura,db_formatar($valor_corrigido, 'f'),1,0,"R",0);
+
+       $this->objpdf->SetFont('Arial','B',6);
+       $this->objpdf->cell(21,$altura,'Juros',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',6);
+       $this->objpdf->cell(21,$altura,db_formatar($this->vlrjuros, 'f'),1,0,"R",0);
+
+       $this->objpdf->SetFont('Arial','B',6);
+       $this->objpdf->cell(22,$altura,'Multa',1,0,"L",$iPreencheFundo);
+       $this->objpdf->SetFont('Arial','',6);
+       $this->objpdf->cell(22,$altura,db_formatar($this->vlrmulta, 'f'),1,0,"R",0);
+
        $this->objpdf->cell(27, $altura,''," LR",1,"L",0);
    } else {
         $this->objpdf->cell(170,$altura,'',"LBR",0,"l",0); $this->objpdf->cell(27, $altura,''," LR",1,"L",0);
