@@ -266,15 +266,17 @@ switch ($oParam->exec) {
 
   case "buscaCodigoITBI":
 
-    $sSQL = "SELECT DISTINCT ON (it01_guia) it01_guia
+    $sSQL = "SELECT DISTINCT itbi.it01_guia
      FROM itbi
       INNER JOIN db_usuarios ON db_usuarios.id_usuario = itbi.it01_id_usuario
       INNER JOIN db_depart ON db_depart.coddepto = itbi.it01_coddepto
       INNER JOIN itbitransacao ON it04_codigo = it01_tipotransacao
       INNER JOIN itbiavalia ON itbiavalia.it14_guia = itbi.it01_guia
-      INNER JOIN itbimatric ON itbi.it01_guia = itbimatric.it06_guia
       INNER JOIN itbinome ON itbinome.it03_guia = itbi.it01_guia
       INNER JOIN itbinomecgm ON itbinomecgm.it21_itbinome = itbinome.it03_seq
+      INNER JOIN arrecad_itbi ON arrecad_itbi.it01_guia = itbi.it01_guia
+      INNER JOIN arrecad ON arrecad.k00_numpre = arrecad_itbi.k00_numpre
+      LEFT JOIN itbimatric ON itbi.it01_guia = itbimatric.it06_guia
       LEFT JOIN itbicancela ON itbicancela.it16_guia = itbi.it01_guia
      WHERE itbicancela.it16_guia IS NULL
          AND it14_guia IS NOT NULL
@@ -288,8 +290,7 @@ switch ($oParam->exec) {
                           ELSE FALSE
                       END
              END
-        AND itbinomecgm.it21_numcgm = {$oParam->oDadosForm->cod_cgm}
-     ORDER BY it01_guia DESC LIMIT 1";
+        AND arrecad.k00_numpre = {$oParam->oDadosForm->k00_numpre}";
     $resultado = db_query($sSQL);
     $oRetorno = db_utils::fieldsMemory($resultado, 0);
 
