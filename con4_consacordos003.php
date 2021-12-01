@@ -349,7 +349,7 @@ db_app::import("configuracao.DBDepartamento");
             $oTabDetalhes->add("Adesão de Registro de Preços","Adesão de Registro de Preços",
             "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=adesaoregpreco");
         }
-        if($clAcordo->getTipoOrigem() ==  "8" || $clAcordo->getTipoOrigem() ==  "9"){
+        if($clAcordo->getTipoOrigem() ==  "5" || $clAcordo->getTipoOrigem() ==  "8" || $clAcordo->getTipoOrigem() ==  "9"){
             $oTabDetalhes->add("Licitação Realizada por outros Órgãos","Licitação Realizada por outros Órgãos",
             "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licrealizadaoutrosorgaos");
         }
@@ -473,6 +473,10 @@ db_app::import("configuracao.DBDepartamento");
     }
 
     function js_consultaLicitacao(iCodigoLicitacao) {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
+    }
+
+    function js_consultaLicitacaooutroorgao(iCodigoLicitacao) {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
     }
 

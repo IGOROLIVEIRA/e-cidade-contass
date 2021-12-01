@@ -1431,7 +1431,7 @@ class cl_acordo {
         $sSql .= "select distinct {$sCampos}";
         $sSql .= "       from acordo";
         $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
-        $sSql .= "            inner join liclicita ON liclicita.l20_codigo = acordo.ac16_licitacao";
+        $sSql .= "            inner join adesaoregprecos ON adesaoregprecos.si06_sequencial = acordo.ac16_adesaoregpreco";
         $sSql .= "  where 1 = 1 ";
         $sSql .= " {$sWhere} {$sOrder} ";
 

@@ -140,22 +140,20 @@ switch($oParam->exec) {
 
     break;
 
-  case "adesaoregpreco":
+  case "adesaoregprecoConsulta":
 
     $oAcordo               = new Acordo($oParam->ac16_sequencial);
     $aAdesaoVinculadas     = $oAcordo->getAdesaoRegPreco();
     $oRetorno->dados       = array();
   
     foreach ($aAdesaoVinculadas as $oAdesao) {
-      $oStdDados     = $oAdesao->getDados();
+    
       $oStdAdesao = new stdClass();
-      $oStdAdesao->iCodigoLicitacao     = $oStdDados->l20_codigo;
-      $oStdAdesao->sObjetoLicitacao     = $oStdDados->l20_objeto;
-      $oStdAdesao->sLocalLicitacao      = $oStdDados->l20_local;
-      $oStdAdesao->dtCriacaoLicitacao   = $oStdDados->l20_datacria;
-      $oStdAdesao->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
-      $oStdAdesao->sModalidadeLicitacao = utf8_encode($oStdDados->l03_descr);
-        $oRetorno->dados[] = $oStdAdesao;
+      $oStdAdesao->si06_sequencial      = $oAdesao->si06_sequencial;
+      $oStdAdesao->si06_objetoadesao    = utf8_encode($oAdesao->si06_objetoadesao);
+      $oStdAdesao->si06_dataadesao      = implode("/",(array_reverse(explode("-",$oAdesao->si06_dataadesao))));;
+      $oStdAdesao->departamento         = utf8_encode($oAdesao->departamento);
+      $oRetorno->dados[] = $oStdAdesao;
       }
   
       $oRetorno->detalhe         = $oParam->detalhe;
@@ -163,22 +161,20 @@ switch($oParam->exec) {
   
     break;
 
-  case "licrealizadaoutrosorgaos":
+  case "licrealizadaoutrosorgaosConsulta":
 
       $oAcordo               = new Acordo($oParam->ac16_sequencial);
-      $aAdesaoVinculadas     = $oAcordo->getLicitacaoOutrosOrgaos();
+      $aLicitacaoOutroOrgao     = $oAcordo->getLicitacaoOutrosOrgaos();
       $oRetorno->dados       = array();
     
-    foreach ($aAdesaoVinculadas as $oAdesao) {
-      $oStdDados     = $oAdesao->getDados();
-      $oStdAdesao = new stdClass();
-      $oStdAdesao->iCodigoLicitacao     = $oStdDados->l20_codigo;
-      $oStdAdesao->sObjetoLicitacao     = $oStdDados->l20_objeto;
-      $oStdAdesao->sLocalLicitacao      = $oStdDados->l20_local;
-      $oStdAdesao->dtCriacaoLicitacao   = $oStdDados->l20_datacria;
-      $oStdAdesao->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
-      $oStdAdesao->sModalidadeLicitacao = utf8_encode($oStdDados->l03_descr);
-        $oRetorno->dados[] = $oStdAdesao;
+    foreach ($aLicitacaoOutroOrgao as $oLicitacao) {
+      
+      $oStdLicitacaoOutroOrgao = new stdClass();
+      $oStdLicitacaoOutroOrgao->lic211_sequencial    = $oLicitacao->lic211_sequencial;
+      $oStdLicitacaoOutroOrgao->lic211_tipo          = utf8_encode($oLicitacao->lic211_tipo);
+      $oStdLicitacaoOutroOrgao->sLocalLicitacao      = '';
+      $oStdLicitacaoOutroOrgao->dtCriacaoLicitacao   = '';
+        $oRetorno->dados[] = $oStdLicitacaoOutroOrgao;
       }
     
       $oRetorno->detalhe         = $oParam->detalhe;

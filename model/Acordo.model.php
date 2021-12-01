@@ -2697,16 +2697,28 @@ class Acordo
     {
 
         $oDaoAcordo        = db_utils::getDao("acordo");
-        $sCamposLicitacoes = " adesaoregprecos.si06_sequencial ";
-        $sSqlAdesao        = $oDaoAcordo->sql_queryAdesaoVinculadas($this->iCodigoAcordo, $sCamposLicitacoes);
+        $sCamposAdesao = " adesaoregprecos.si06_sequencial ";
+        $sSqlAdesao        = $oDaoAcordo->sql_queryAdesaoVinculadas($this->iCodigoAcordo, $sCamposAdesao);
         $rsAdesaovinculada = $oDaoAcordo->sql_record($sSqlAdesao);
+        $oDaoAdesaoregpreco = db_utils::getDao("adesaoregprecos");
 
         if ($oDaoAcordo->numrows > 0) {
 
             for ($iAdesao = 0; $iAdesao < $oDaoAcordo->numrows; $iAdesao++) {
 
                 $iCodigoAdesao    = db_utils::fieldsMemory($rsAdesaovinculada, $iAdesao)->si06_sequencial;
-                $this->aAdesao[] = new licitacao($iCodigoAdesao);
+                $rsAdesao = $oDaoAdesaoregpreco->sql_record($oDaoAdesaoregpreco->sql_query($iCodigoAdesao,"si06_sequencial,si06_objetoadesao,si06_dataadesao,coddepto||'-'||descrdepto as departamento"));
+                
+                for($i = 0; $i < $oDaoAdesaoregpreco->numrows; $i++){
+            
+                    $oDadosAdesao = db_utils::fieldsMemory($rsAdesao, $i);
+                    $oStdAdesao   = new stdClass();
+                    $oStdAdesao->si06_sequencial = $oDadosAdesao->si06_sequencial;
+                    $oStdAdesao->si06_objetoadesao = $oDadosAdesao->si06_objetoadesao;
+                    $oStdAdesao->si06_dataadesao = $oDadosAdesao->si06_dataadesao;
+                    $oStdAdesao->departamento = $oDadosAdesao->departamento;
+                    $this->aAdesao[] = $oStdAdesao;
+                }
             }
         }
 
@@ -2720,13 +2732,41 @@ class Acordo
         $sCamposLicitacoes = " liclicitaoutrosorgaos.lic211_sequencial ";
         $sSqlLicitacaoOutrosOrgaos        = $oDaoAcordo->sql_queryLicitacoesOutrosOrgaosVinculadas($this->iCodigoAcordo, $sCamposLicitacoes);
         $rsLicitacaoOutrosOrgaos          = $oDaoAcordo->sql_record($sSqlLicitacaoOutrosOrgaos);
+        $oDaoliclicitaoutrosorgaos        = db_utils::getDao("liclicitaoutrosorgaos");
 
         if ($oDaoAcordo->numrows > 0) {
 
             for ($iLicitacaoOutrosOrgaos = 0; $iLicitacaoOutrosOrgaos < $oDaoAcordo->numrows; $iLicitacaoOutrosOrgaos++) {
 
                 $iCodigoLicitacao    = db_utils::fieldsMemory($rsLicitacaoOutrosOrgaos, $iLicitacaoOutrosOrgaos)->lic211_sequencial;
-                $this->aLicitacaoOutrosOrgaos[] = new licitacao($iCodigoLicitacao);
+                
+                $rsLicitacao = $oDaoliclicitaoutrosorgaos->sql_record($oDaoliclicitaoutrosorgaos->sql_query($iCodigoLicitacao,"lic211_sequencial,lic211_tipo"));
+
+                for($i = 0; $i < $oDaoliclicitaoutrosorgaos->numrows; $i++){
+                    
+                    $oDadosLicitacao = db_utils::fieldsMemory($rsLicitacao, $i);
+                    
+                    if($oDadosLicitacao->lic211_tipo == "5"){
+                        $tipo = "5 - Licitação realizada por outro órgão ou entidade";
+                    }elseif($oDadosLicitacao->lic211_tipo == "6"){
+                        $tipo = "6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade";
+                    }elseif($oDadosLicitacao->lic211_tipo == "7"){
+                        $tipo = "7 - Licitação - Regime Diferenciado de Contratações";
+                    }elseif($oDadosLicitacao->lic211_tipo == "8"){
+                        $tipo = "8 - Licitação realizada por consorcio público ";
+                    }elseif($oDadosLicitacao->lic211_tipo == "9"){
+                        $tipo = "9 - Licitação realizada por outro ente da federação ";
+                    }
+
+                    $oStdLicitacao   = new stdClass();
+                    $oStdLicitacao->lic211_sequencial   = $oDadosLicitacao->lic211_sequencial;
+                    $oStdLicitacao->lic211_tipo         = $tipo;
+                    $oStdLicitacao->data                = '';
+                    $oStdLicitacao->departamento        = '';
+                    
+                    $this->aLicitacaoOutrosOrgaos[]     = $oStdLicitacao;
+                }
+
             }
         }
 

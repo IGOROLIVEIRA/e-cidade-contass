@@ -329,10 +329,10 @@ $oGet = db_utils::postMemory($_GET);
 
                                     var aRow = new Array();
 
-                                    aRow[0] = oDado.codigo;
-                                    aRow[1] = oDado.descricao.urlDecode();
-                                    aRow[2] = js_formatar(oDado.quantidade, 'f');
-                                    aRow[3] = js_formatar(oDado.vlrTotal, 'f');
+                                    aRow[0] = oDado.lic211_sequencial;
+                                    aRow[1] = oDado.lic211_tipo.urlDecode();
+                                    aRow[2] = '';
+                                    aRow[3] = '';
                                     oGrvDetalhes.addRow(aRow);
 
                                     var oDadosHint           = new Object();
@@ -346,10 +346,10 @@ $oGet = db_utils::postMemory($_GET);
 
                                     var aRow = new Array();
 
-                                    aRow[0] = oDado.codigo;
-                                    aRow[1] = oDado.descricao.urlDecode();
-                                    aRow[2] = js_formatar(oDado.quantidade, 'f');
-                                    aRow[3] = js_formatar(oDado.vlrTotal, 'f');
+                                    aRow[0] = oDado.si06_sequencial;
+                                    aRow[1] = oDado.si06_objetoadesao.urlDecode();
+                                    aRow[2] = oDado.si06_dataadesao;
+                                    aRow[3] = oDado.departamento.urlDecode();
                                     oGrvDetalhes.addRow(aRow);
 
                                     var oDadosHint           = new Object();
@@ -581,7 +581,7 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
                 oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
-                oGrvDetalhes.setCellAlign(['left', 'left', 'left' , 'left']);
+                oGrvDetalhes.setCellAlign(['center', 'center', 'center' , 'center']);
                 oGrvDetalhes.setHeader(['Código','Objeto','Data da Adesão', 'Departamento']);
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.hasTotalizador = true;
@@ -595,7 +595,7 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
                 oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
-                oGrvDetalhes.setCellAlign(['left', 'left', 'left' , 'left']);
+                oGrvDetalhes.setCellAlign(['center', 'center', 'center' , 'center']);
                 oGrvDetalhes.setHeader(['Código','Tipo de Licitação','Data', 'Departamento']);
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.hasTotalizador = true;
