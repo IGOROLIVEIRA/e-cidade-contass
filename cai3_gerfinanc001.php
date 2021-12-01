@@ -342,6 +342,7 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                  function(oAjax2) {
 
                    var oRetorno = eval("("+oAjax2.responseText+")");
+                   oParam.oDadosForm.k00_numpre = oRetorno.aNumpresForm[0];
                    var sMsg     = oRetorno.message.urlDecode().replace("/\\n/g","\n");
                    if (oRetorno.status == 2) {
                      alert(sMsg);
@@ -368,7 +369,6 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
 
           function js_emiteGuiaItbi(oParam) {
             oParam.exec = "buscaCodigoITBI";
-            oParam.oDadosForm.cod_cgm = oParam.oDadosForm.ver_numcgm;
             var oAjaxITBI = new Ajax.Request("cai3_emitecarne.RPC.php",
                 {method    : 'post',
                  parameters: 'json='+Object.toJSON(oParam),
@@ -382,7 +382,8 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                      } else {
                         let sParam = "toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=1,height="+
                         (screen.height-100)+",width="+(screen.width-100);
-                        oJanela = window.open('reciboitbi.php?itbi='+oRetorno.it01_guia+'&tipoguia=n',"",sParam);
+                        let novadatavencimento = oParam.oDadosForm.forcarvencimento == "true" ? "&novadatavencimento="+oParam.oDadosForm.k00_dtoper : "";
+                        oJanela = window.open('reciboitbi.php?itbi='+oRetorno.it01_guia+'&tipoguia=n'+novadatavencimento,"",sParam);
                         oJanela.moveTo(0,0);
                      }
                    }
