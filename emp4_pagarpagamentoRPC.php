@@ -286,7 +286,7 @@ switch ($oParam->exec) {
         break;
 
     case "pagarSlip" :
-        // Condição para slip sem cheque, retirada do arquivo emp4_empagepagamento001.php
+        // Condio para slip sem cheque, retirada do arquivo emp4_empagepagamento001.php
         $oRetorno = new stdClass();
         $oRetorno->status = 1;
         $oRetorno->message = "";
@@ -299,13 +299,13 @@ switch ($oParam->exec) {
                     $e91_codcheque = '0';
                     $codigomovimento = '0';
 
-                    $data = date("Y-m-d", db_getsession("DB_datausu"));
-
-                    if (!empty($oMovimento->dtPagamento) && $oMovimento->dtPagamento != '//') {
-                        $dtAuxData = new DBDate($oMovimento->dtPagamento);
+                    if (!empty($oParam->dtPagamento) && $oParam->dtPagamento != '//') {
+                        $dtAuxData = new DBDate($oParam->dtPagamento);
                         $dtAuxData = $dtAuxData->getDate();
                         $data = $dtAuxData; // aqui ele atribui a data_para_pagamento enviada pelo usuário
                         unset($dtAuxData);
+                    } else {
+                        $data = date("Y-m-d", db_getsession("DB_datausu"));
                     }
 
                     $ip = db_getsession("DB_ip");
@@ -319,14 +319,17 @@ switch ($oParam->exec) {
                         $oRetorno->mensagem = "Erro ao Autenticar SLIP $numslip!";
                         break;
                     } else {
+                      
                         db_fieldsmemory($result03, 0);
                         if (substr($verautenticacao, 0, 1) != "1") {
                             throw new Exception($verautenticacao);
                             break;
                         }
+                        
 
                         if (USE_PCASP) {
                             try {
+                              
                                 $oDaocfautent = db_utils::getDao('cfautent');
                                 $oDaoSlipTipoOperacao  = db_utils::getDao('sliptipooperacaovinculo');
                                 $sSqlBuscaTipoOperacao = $oDaoSlipTipoOperacao->sql_query_file($codigo);
@@ -348,7 +351,6 @@ switch ($oParam->exec) {
                                 $oTransferencia->setIDTerminal($iCodigoTerminal);
                                 $oTransferencia->setNumeroAutenticacao(substr($verautenticacao, 1, 7));
                                 $oTransferencia->executarLancamentoContabil(null, false, $e91_codcheque);
-                                db_fim_transacao(false);
                                 
                                 $oDaoEmpageMov = db_utils::getDao("empagemov");
                                 $oDaoEmpageMov->e81_numdoc = (isset($oMovimento->sNumDoc) && $oMovimento->sNumDoc != '') ? $oMovimento->sNumDoc : '';
@@ -375,6 +377,7 @@ switch ($oParam->exec) {
                 $oRetorno->message = urlencode($eErro->getMessage());
             }
         }
+        db_fim_transacao(false);
         echo $oJson->encode($oRetorno);
         // Final da slip sem cheque
         break;
@@ -394,16 +397,16 @@ switch ($oParam->exec) {
         db_inicio_transacao();
         foreach ($oParam->aMovimentos as $oMovimento) {
 
-          $oOrdemPagamento = new ordemPagamento($oMovimento->iNotaLiq);
-
           if (!empty($oParam->dtPagamento) && $oParam->dtPagamento != '//') {
-
             $dtAuxData = new DBDate($oParam->dtPagamento);
             $dtAuxData = $dtAuxData->getDate();
-            $oOrdemPagamento->setDataUsu($dtAuxData);
+            $data = $dtAuxData; // aqui ele atribui a data_para_pagamento enviada pelo usuário
             unset($dtAuxData);
-
+          } else {
+              $data = date("Y-m-d", db_getsession("DB_datausu"));
           }
+
+          $oOrdemPagamento = new ordemPagamento($oMovimento->iNotaLiq, $data);
 
           $oOrdemPagamento->setCheque($oMovimento->iCheque);
           $oOrdemPagamento->setChequeAgenda($oMovimento->iCodCheque);
@@ -418,18 +421,20 @@ switch ($oParam->exec) {
           $oAutentica->iNota          = $oMovimento->iNotaLiq;
           $oAutentica->sAutentica     = $oOrdemPagamento->getRetornoautenticacao();
           $oRetorno->aAutenticacoes[] = $oAutentica;
+
+          $oDaoEmpageMov = db_utils::getDao("empagemov");
+          $oDaoEmpageMov->e81_numdoc = (isset($oMovimento->sNumDoc) && $oMovimento->sNumDoc != '') ? $oMovimento->sNumDoc : '';
+          $oDaoEmpageMov->e81_codmov = $oMovimento->iCodMov;
+          $oDaoEmpageMov->alterar($oMovimento->iCodMov);
+  
+          if ($oDaoEmpageMov->erro_status == 0) {
+              $sErroMsg = "Erro [8] - Não foi possivel incluir o número do documento ao movimento.";
+              throw new Exception($sErroMsg);
+          }
         }
 
         db_fim_transacao(false);
-        $oDaoEmpageMov = db_utils::getDao("empagemov");
-        $oDaoEmpageMov->e81_numdoc = (isset($oMovimento->sNumDoc) && $oMovimento->sNumDoc != '') ? $oMovimento->sNumDoc : '';
-        $oDaoEmpageMov->e81_codmov = $oMovimento->iCodMov;
-        $oDaoEmpageMov->alterar($oMovimento->iCodMov);
 
-        if ($oDaoEmpageMov->erro_status == 0) {
-            $sErroMsg = "Erro [8] - Não foi possivel incluir o número do documento ao movimento.";
-            throw new Exception($sErroMsg);
-        }
 
         $oRetorno->message = urlencode("Pagamento(s) Efetuado(s) com sucesso!");
       }

@@ -113,7 +113,7 @@ $db_botao = false;
 
 </html>
 <script>
-    // AtualizaÁ„o de GRID - widouglas
+    // Atualizaùùo de GRID - widouglas
     function js_init() {
         // Analisando o retorno
         gridNotas = new DBGrid("gridNotas");
@@ -154,7 +154,7 @@ $db_botao = false;
         gridNotas.allowSelectColumns(true);
         gridNotas.setCellWidth(new Array('7%', '7%', '7%', '7%', '7%', '7%', '15%', '15%', '17%', '5%', '7%', '7%', '7%', '7%'));
         gridNotas.setCellAlign(new Array("center", "center", "right", "center", "center", "center", "left", "left", "left", "center", "center", "center", "center"));
-        gridNotas.setHeader(new Array("Slip", "Mov.", "Valor", "Conta CrÈdito", "Conta DÈbito", "Data", "DescriÁ„o", "DescriÁ„o Conta", "Nome/Raz„o Social", "InstituiÁ„o", "SituaÁ„o", "N∫ Documento"));
+        gridNotas.setHeader(new Array("Slip", "Mov.", "Valor", "Conta Crùdito", "Conta Dùbito", "Data", "Descriùùo", "Descriùùo Conta", "Nome/Razùo Social", "Instituiùùo", "Situaùùo", "Nù Documento"));
         gridNotas.show(document.getElementById('gridNotas'));
 
         js_getNotas();
@@ -231,7 +231,7 @@ $db_botao = false;
             }
             gridNotas.renderRows();
         } else if (oResponse.status == 2) {
-            $('gridNotasstatus').innerHTML = "&nbsp;<b>N„o foram encontrados movimentos.</b>";
+            $('gridNotasstatus').innerHTML = "&nbsp;<b>Nùo foram encontrados movimentos.</b>";
         }
     }
 
@@ -247,18 +247,18 @@ $db_botao = false;
             alert('Nenhum Movimento Selecionado');
             return false;
         }
-
+        /*
         if (js_comparadata(sDataDia, parent.$F('data_para_pagamento'), ">")) {
-            alert("Data Informada Inv·lida.\nData menor que a data do sistema");
+            alert("Data Informada Invùlida.\nData menor que a data do sistema");
             return false;
         }
-
+        */
         oRequisicao = new Object();
         oRequisicao.exec = "pagarSlip";
         oRequisicao.dtPagamento = parent.$F('data_para_pagamento');
         oRequisicao.aMovimentos = new Array();
         var lMostraMsgErroRetencao = false;
-        var sMsgRetencaoMesAnterior = "AtenÁ„o:\n";
+        var sMsgRetencaoMesAnterior = "Atenùùo:\n";
         var sVirgula = "";
 
         for (var i = 0; i < aMovimentos.length; i++) {
@@ -275,9 +275,10 @@ $db_botao = false;
             oMovimento.sNumDoc = document.getElementById("numdoc" + aMovimentos[i].aCells[2].getValue()).value;
             oRequisicao.aMovimentos.push(oMovimento);
         }
-
+        // console.log(oRequisicao);
         parent.js_divCarregando("Aguarde, pagando movimentos.", "msgBox")
         var sJson = js_objectToJson(oRequisicao);
+        
         var oAjax = new Ajax.Request(
             sUrlRPC, {
                 method: 'post',
@@ -285,7 +286,7 @@ $db_botao = false;
                 onComplete: js_retornoPagarEmpenho
             }
         );
-    
+
         return false;
     }
 
