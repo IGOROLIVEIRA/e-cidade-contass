@@ -35,12 +35,13 @@ db_app::import("Acordo");
 db_app::import("contabilidade.*");
 db_app::import("contabilidade.lancamento.*");
 /**
- * Classificao do arcordo
+ * Lançamento contabil do arcordo
  *
  * @package Contrato
  */
 class AcordoLancamentoContabil
 {
+
     public function __construct()
     {
 
@@ -57,9 +58,9 @@ class AcordoLancamentoContabil
      */
     public function registraControleContrato($iCodigoAcordo, $nValorLancamento, $sHistorico)
     {
-        // if(db_getsession('DB_anousu') < 2022){
-        //     return;
-        // }
+        if(db_getsession('DB_anousu') < 2022){
+            return;
+        }
         $iAnoUsu = db_getsession('DB_anousu');
         $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
         $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
@@ -88,13 +89,14 @@ class AcordoLancamentoContabil
      * @param  integer $iCodigoAcordo
      * @param  DBDate $oDataLancamento
      * @param  float $nValorLancamento
+     * @param  string $sHistorico
      * @return Resource
      */
-    public function anulaRegistroControleContrato($iCodigoAcordo, $nValorLancamento)
+    public function anulaRegistroControleContrato($iCodigoAcordo, $nValorLancamento, $sHistorico)
     {
-        // if(db_getsession("DB_anousu") < 2022){
-        //     return false;
-        // }
+        if(db_getsession("DB_anousu") < 2022){
+            return;
+        }
         $iAnoUsu = db_getsession('DB_anousu');
         $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
         $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
@@ -106,7 +108,7 @@ class AcordoLancamentoContabil
         $oLancamentoAuxiliarAcordoHomologacao = new LancamentoAuxiliarAcordoMovimentacao();
         $oLancamentoAuxiliarAcordoHomologacao->setAcordo($oAcordo);
         $oLancamentoAuxiliarAcordoHomologacao->setValorTotal($nValorLancamento);
-        $oLancamentoAuxiliarAcordoHomologacao->setObservacaoHistorico("Valor referente ao cancelamento da homologação do Acordo: {$iCodigoAcordo}.");
+        $oLancamentoAuxiliarAcordoHomologacao->setObservacaoHistorico($sHistorico);
         $oLancamentoAuxiliarAcordoHomologacao->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
         $oContaCorrente = new ContaCorrenteDetalhe();
