@@ -589,7 +589,7 @@ if(isset($tx_banc) && $tx_banc != '' && $tx_banc > 0){
 // #################################### Atualização dos valores do ITBI
 if ($db21_usadebitoitbi == 't') {
   $sSQL_guia_numpre = <<<SQL
-      select arrecad_itbi.k00_numpre
+      select arrecad_itbi.k00_numpre, arrecad.*
       from arrecad_itbi
           inner join arrecad on arrecad.k00_numpre = arrecad_itbi.k00_numpre
           inner join itbi on itbi.it01_guia = arrecad_itbi.it01_guia
@@ -600,7 +600,8 @@ SQL;
   $resultGuiaNumpre = db_query($sSQL_guia_numpre);
   $oDado = db_utils::fieldsMemory($resultGuiaNumpre,0);
   $ano = db_getsession('DB_anousu');
-  $data_atual = date("Y-m-d",db_getsession("DB_datausu"));
+  $data = (isset($novadatavencimento) && !empty($novadatavencimento)) ? implode("-", array_reverse(explode("/", $novadatavencimento))) : date("Y-m-d", db_getsession("DB_datausu"));
+
   $sSQL = <<<SQL
               select
                 substr(fc_calcula,2,13)::float8 as vlrhis,
@@ -612,14 +613,15 @@ SQL;
                 substr(fc_calcula,28,13)::float8+
                 substr(fc_calcula,41,13)::float8-
                 substr(fc_calcula,54,13)::float8) as total
-                FROM fc_calcula($oDado->k00_numpre, 1, 3, '$data_atual'::date, '1996-11-30'::date, $ano);
+                FROM fc_calcula($oDado->k00_numpre, 1, 3, '$data'::date, '$data'::date, $ano);
 SQL;
 
   $resultCorrecoes = db_query($sSQL);
   $oDadoCorrecoes = db_utils::fieldsMemory($resultCorrecoes, 0);
   $valorpagamento = $oDadoCorrecoes->total;
-  $data_atual = $datavencimento;
+  $datavencimento = $data;
 }
+
 $vlrbar = db_formatar(str_replace('.','',str_pad(number_format($valorpagamento,2,"","."),11,"0",STR_PAD_LEFT)),'s','0',11,'e');
 
 if($oRegraEmissao->isCobranca()){
@@ -1066,6 +1068,10 @@ if ($db21_usadebitoitbi == 't') {
     $pdf1->vlrmulta     = $oDadoCorrecoes->vlrjuros    != "" ? (float)$oDadoCorrecoes->vlrmulta    : (float)"0,00";
     $pdf1->vlrdesconto  = $oDadoCorrecoes->vlrdesconto != "" ? (float)$oDadoCorrecoes->vlrdesconto : (float)"0,00";
     $pdf1->vlrtotal     = $oDadoCorrecoes->total       != "" ? (float)$oDadoCorrecoes->total       : (float)"0,00";
+
+    if(strtotime($oDado->k00_dtvenc) > strtotime($datavencimento)) {
+        $pdf1->datavencimento = $oDado->k00_dtvenc;
+    }
 }
 
 // ###################### BUSCA OS DADOS PARA IMPRIMIR O LOGO DO BANCO #########################
