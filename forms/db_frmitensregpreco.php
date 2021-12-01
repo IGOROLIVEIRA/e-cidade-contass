@@ -160,10 +160,10 @@ $clrotulo->label("pc01_descrmater");
           <input type="hidden" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdAderida]" value="<?= $oItem->pc11_quant ?>">
         </td>
         <td class="linhagrid">
-          <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdLicitada]" value="<?= $oItem->si07_quantidadelicitada ?>">
+          <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdLicitada]" onkeypress="maskValor4(event,this)" value="<?= $oItem->si07_quantidadelicitada ?>">
         </td>
         <td class="linhagrid">
-          <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][precoUnitario]" value="<?= $oItem->si07_precounitario ?>">
+          <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][precoUnitario]" onkeypress="maskValor4(event,this)" value="<?= $oItem->si07_precounitario ?>">
         </td>
         <td class="linhagrid fornecedor">
           <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][descricaoFornecedor]" value="<?= $oItem->z01_nome ?>" readonly class="input-inativo">
@@ -206,6 +206,23 @@ $clrotulo->label("pc01_descrmater");
 <script type="text/javascript" src="scripts/prototype.js"></script>
 
 <script>
+
+function maskValor4(e, oObject) {
+
+if (!js_mask(e, '0-9|.|-')) {
+  oObject.value = '';
+  return false;
+}
+
+setTimeout(function() {
+
+  mValor = oObject.value;
+  mValor = mValor.replace(/\D/g,"");
+  mValor = mValor.replace(/(\d)(\d{4})$/,"$1.$2");
+  oObject.value = mValor;
+  return true;
+}, 1);
+}  
 
 function retornoAjax(res) {
 

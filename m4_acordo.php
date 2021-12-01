@@ -52,10 +52,24 @@ db_postmemory($HTTP_POST_VARS);
 
 $anousu = db_getsession('DB_anousu');
 $instit = db_getsession('DB_instit');
+
 if (isset($alterar)) {
   $sqlerro = false;
   $aditivo = false;
   db_inicio_transacao();
+
+  if($ac16_licitacao != null){
+    $resultado = db_query("select * from liclicita where l20_codigo = '$ac16_licitacao'");
+    $licitacao = db_utils::fieldsMemory($resultado, 0);
+    $clacordo->ac16_numeroprocesso = $licitacao->l20_edital;
+
+    $resultadocflicita = db_query("Select * from cflicita inner join liclicita on cflicita.l03_codigo = liclicita.l20_codtipocom where l03_codigo = '$licitacao->l20_codtipocom' and l20_codigo = '$ac16_licitacao';
+    ");
+
+    $cflicita = db_utils::fieldsMemory($resultadocflicita, 0);
+    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' WHERE ac16_sequencial = '$ac16_sequencial';");
+
+  }
 
   $ac16_datainicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
   $ac16_datafim = implode('-', array_reverse(explode('/', $ac16_datafim)));
@@ -321,6 +335,14 @@ if (isset($alterar)) {
     #fieldset_depart_responsavel table {
       margin: 0 auto;
     }
+
+    #ac16_objeto{
+      width: 100%;
+    }
+
+    
+
+
   </style>
 </head>
 
@@ -346,6 +368,30 @@ if (isset($alterar)) {
                 <?php
                 db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_acordo(false);'");
                 db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3); ?>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="2">
+                <fieldset >
+                  <legend>
+                    <b>Objeto</b>
+                  </legend>
+                  <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+
+            <tr>
+              
+
+              <td>
+                  <?
+                  db_textarea('ac16_objeto', 2,2, $ac16_objeto, true, 'text', 2, "","","","");
+                  ?>
+                </td>
+
+            </tr>
+
+            </table>
+                </fieldset>
               </td>
             </tr>
 

@@ -24,6 +24,9 @@ require_once("classes/db_veicabastposto_classe.php");
 require_once("classes/db_veiccadpostoexterno_classe.php");
 require_once("classes/db_veicabastretirada_classe.php");
 require_once("classes/db_veicbaixa_classe.php");
+require_once("classes/db_veiccentral_classe.php"); 
+require_once("classes/db_veiccadcentral_classe.php");
+require_once("classes/db_veiccadcomb_classe.php");
 
 
 $oJson             = new services_json();
@@ -48,6 +51,10 @@ $clveicabastposto  = new cl_veicabastposto();
 $clveiccadpostoexterno  = new cl_veiccadpostoexterno();
 $clveicabastretirada    = new cl_veicabastretirada();
 $clveicbaixa            = new cl_veicbaixa();
+$clveiccentral          = new cl_veiccentral();
+$clveiccadcentral       = new cl_veiccadcentral(); 
+$clveiccadcomb          = new cl_veiccadcomb();
+
 
 
 /**
@@ -115,15 +122,6 @@ switch($oParam->exec) {
                 $vUnitario   = floor($row->vUnitario*100)/100;
                 $litros      = $row->litros;
                 $combust     = $row->combust;
-                if($combust=="GASOLINA"){
-                    $codCombust = 1;
-                }else if($combust=="ALCOOL"){
-                    $codCombust = 2;
-                }else if($combust=="DIESEL"){
-                    $codCombust = 3;
-                }else if($combust=="GÁS"){
-                    $codCombust = 4;
-                }
                 $medidasaida = $row->medidasaida;
                 $motorista       = $row->motorista;
                 $motoristaNome       = $row->motoristaNome;
@@ -222,15 +220,6 @@ switch($oParam->exec) {
                 $vUnitario   = floor($row->vUnitario*100)/100;
                 $litros      = $row->litros;
                 $combust     = $row->combust;
-                if($combust=="GASOLINA"){
-                    $codCombust = 1;
-                }else if($combust=="ALCOOL"){
-                    $codCombust = 2;
-                }else if($combust=="DIESEL"){
-                    $codCombust = 3;
-                }else if($combust=="GÁS"){
-                    $codCombust = 4;
-                }
                 $medidasaida = $row->medidasaida;
                 $motorista       = $row->motorista;
                 $motoristaNome       = $row->motoristaNome;
@@ -290,10 +279,6 @@ switch($oParam->exec) {
                     $arrayRetornoKm[] = $objValorPlanilhaKm;
                 }
             }
-
-            
-
-                
 
 
             foreach($resultadoEmpenho as $row){
@@ -430,15 +415,6 @@ switch($oParam->exec) {
                 $vUnitario   = floor($row->vUnitario*100)/100;
                 $litros      = $row->litros;
                 $combust     = $row->combust;
-                if($combust=="GASOLINA"){
-                    $codCombust = 1;
-                }else if($combust=="ALCOOL"){
-                    $codCombust = 2;
-                }else if($combust=="DIESEL"){
-                    $codCombust = 3;
-                }else if($combust=="GÁS"){
-                    $codCombust = 4;
-                }
                 $medidasaida = $row->medidasaida;
                 $motorista       = $row->motorista;
                 $motoristaNome       = $row->motoristaNome;
@@ -512,8 +488,6 @@ switch($oParam->exec) {
                 }
             }
 
-           
-
             if($controle1==1){
     
                 $arrayRetornoPlanilhaMoto = array();
@@ -536,11 +510,62 @@ switch($oParam->exec) {
                 }
             }
 
+            //Valida o tipo de combustivel 
+            $arrayComb = array();
+            $com = 0;
+            $controleCom = 0;
+            foreach($resultadoPlanilha as $row){
+               
+                $placa       = $row->placa;
+                $datasaida   = $row->data;
+                $hora        = $row->hora;
+                $valor       = $row->valor;
+                $vUnitario   = floor($row->vUnitario*100)/100;
+                $litros      = $row->litros;
+                $combust     = strtoupper($row->combust);
+                $medidasaida = $row->medidasaida;
+                $motorista       = $row->motorista;
+                $motoristaNome       = $row->motoristaNome;
+
+                $resultadoComb = $clveiccadcomb->sql_record($clveiccadcomb->sql_query(null,"*",null,"ve26_descr like '$combust'"));
+
+                if($clveiccadcomb->numrows==0){
+                    $arrayComb[$com][0] = $combust;
+                    $arrayComb[$com][1] = $placa;
+                    $controleCom = 1;
+                    $com++;
+                }
+
+            }
+
+            if($controleCom==1){
+    
+                $arrayRetornoComb = array();
+                foreach ($arrayComb as $keyRow => $Row){
+
+                    
+                    $objItensPlanilhaCom = new stdClass();
+                    foreach ($Row as $keyCel => $cell){
+                        
+                        if($keyCel == 0){
+                            $objItensPlanilhaCom->comb      =  $cell;
+                        }
+                        if($keyCel == 1){
+                            $objItensPlanilhaCom->placa     =  $cell;
+                        }
+                        
+                    }
+                    $objItensPlanilhaCom->identificador = 7 ;
+                    $arrayRetornoComb[] = $objItensPlanilhaCom;
+                }
+            }
+
            
 
             //após a verificação de todas validações realiza a importar
         
-            if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1==0 && $opBaixaCompleta==0 && $opBaixa==0 && $opKm==0 && $opVeic==0){
+            if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1==0 && $opBaixaCompleta==0 && $opBaixa==0 && $opKm==0 && $opVeic==0 && $controleCom==0){
+                $emp = 0;
                 foreach($resultadoPlanilha as $row){
                     $test1       = $row->placa;
                     $datasaida   = $row->data;
@@ -548,19 +573,14 @@ switch($oParam->exec) {
                     $valor       = $row->valor;
                     $vUnitario   = floor($row->vUnitario*100)/100;
                     $litros      = $row->litros;
-                    $combust     = $row->combust;
-                    if($combust=="GASOLINA"){
-                        $codCombust = 1;
-                    }else if($combust=="ALCOOL"){
-                        $codCombust = 2;
-                    }else if($combust=="DIESEL"){
-                        $codCombust = 3;
-                    }else if($combust=="GÁS"){
-                        $codCombust = 4;  
-                    }
-                    $medidasaida = $row->medidasaida;
-                    $motorista       = $row->motorista;
-                    $nota       = $row->nota;
+                    $combust     = strtoupper($row->combust);
+                    //Busca o codigo do combustivel
+                    $resultadoComb     = $clveiccadcomb->sql_record($clveiccadcomb->sql_query(null,"*",null,"ve26_descr like '$combust'"));
+                    $resultadoCombCodi = db_utils::fieldsMemory($resultadoComb, 0);
+                    $codCombust        = $resultadoCombCodi->ve26_codigo;
+                    $medidasaida       = $row->medidasaida;
+                    $motorista         = $row->motorista;
+                    $nota              = $row->nota;
 
                     
 
@@ -596,7 +616,14 @@ switch($oParam->exec) {
                 
                 //Identifica Cod do motorista
                 $resultadoMotCod = $clveicmotoristas->sql_record($clveicmotoristas->sql_query(null,"*",null,"ve05_numcgm = $resultMotorista->z01_numcgm"));
-                $resultMotCod = db_utils::fieldsMemory($resultadoMotCod, 0);    
+                $resultMotCod = db_utils::fieldsMemory($resultadoMotCod, 0);
+                
+                //Verifica codigo do departamento de cada veiculo.
+                $resultCodDepart =  $clveiccentral->sql_record($clveiccentral->sql_query_file(null,"*",null,"ve40_veiculos = $codigoVeic"));
+                $resultCodDeparto = db_utils::fieldsMemory($resultCodDepart, 0);
+
+                $resultDeparta =  $clveiccadcentral->sql_record($clveiccadcentral->sql_query_file(null,"*",null,"ve36_sequencial = $resultCodDeparto->ve40_veiccadcentral"));
+                $resultDepartaCod = db_utils::fieldsMemory($resultDeparta, 0);
 
                 
                 // Incluir a retirada do veiculo
@@ -607,7 +634,7 @@ switch($oParam->exec) {
                 $clveicretirada->ve60_horasaida            = $hora;
                 $clveicretirada->ve60_medidasaida          = $medidasaida;
                 $clveicretirada->ve60_destino              = " ";
-                $clveicretirada->ve60_coddepto             = db_getsession("DB_coddepto");
+                $clveicretirada->ve60_coddepto             = $resultDepartaCod->ve36_coddepto;
                 $clveicretirada->ve60_data                 = date("Y-m-d",db_getsession("DB_datausu"));
                 $clveicretirada->ve60_hora                 = db_hora();
                 $clveicretirada->ve60_usuario              = db_getsession("DB_id_usuario"); 
@@ -635,7 +662,7 @@ switch($oParam->exec) {
                 $resultadoAba = $clveicabast->sql_record($clveicabast->sql_query_valorMax(null,"max(ve70_codigo)",null,"ve70_veiculos = $codigoVeic"));
                 $resultAba = db_utils::fieldsMemory($resultadoAba, 0);
 
-                $codemp = explode("/",$valorEm[$i]);
+                $codemp = explode("/",$valorEm[$emp]);
                 $codEmp = $codemp[0];
                 $anoEmp = $codemp[1];
                 
@@ -651,11 +678,11 @@ switch($oParam->exec) {
                 $clempveiculos -> si05_item_empenho      = "f";  
                 $clempveiculos -> incluir(null);
 
-                $i++;
+                $emp++;
 
 
 
-                $resultadoRetirada = $clveicretirada->sql_record($clveicretirada->sql_query(null,"max(veicretirada.ve60_codigo)",null,"ve60_veiculo = $resultVeiculo->ve01_codigo"));
+                $resultadoRetirada = $clveicretirada->sql_record($clveicretirada->sql_query(null,"max(veicretirada.ve60_codigo)",null,"ve60_veiculo = $codigoVeic"));
                 $resultRetirada = db_utils::fieldsMemory($resultadoRetirada, 0);
 
                 $clveicabastretirada->ve73_veicabast    = $resultAba->max;
@@ -767,6 +794,14 @@ switch($oParam->exec) {
                     }
                     
                     $oRetorno->itens = $arrayRetornoKm;
+                } else if($controleCom==1){
+
+                    if($erro == false){
+                        unlink($arquivo);
+                    }
+                    
+                    $oRetorno->itens = $arrayRetornoComb;
+
                 }
 
                     
