@@ -338,6 +338,29 @@ if ($processar == "a") {
     $sqlrelemp = $clempempenho->sql_query_relatorio(null, $sCamposPosicaoAtual, $sOrderSQL, $sWhereSQL, $sSqlAnulado);
 
     if ($agrupar == "d") {
+
+        if($sememp == "s"){
+            $sqlrelemp =
+            "select count(e60_numemp) AS e60_numemp,
+            empelemento.e64_codele,
+            o56_elemento,
+            o56_descr,
+            sum(empelemento.e64_vlremp) AS e64_vlremp,
+            sum(empelemento.e64_vlrliq) AS e64_vlrliq,
+            sum(empelemento.e64_vlranu) AS e64_vlranu,
+            sum(empelemento.e64_vlrpag) AS e64_vlrpag,
+            sum(e60_vlremp) as e60_vlremp,
+            sum(e60_vlranu) as e60_vlranu,
+            sum(e60_vlrliq) as e60_vlrliq,
+            sum(e60_vlrpag) as e60_vlrpag  
+            FROM empelemento
+            inner JOIN empempenho ON e64_numemp = e60_numemp
+            inner JOIN orcelemento ON (e64_codele, e60_anousu) = (o56_codele, o56_anousu)
+            WHERE $sWhereSQL
+            GROUP BY 2, o56_elemento,o56_descr
+            HAVING count(e60_numemp) >= 1
+            ORDER BY 4";
+        }else{    
         $sqlrelemp = "select distinct  x.e60_resumo,
 					  x.e60_numemp,
 					  x.e60_codemp,
@@ -419,6 +442,11 @@ if ($processar == "a") {
                 x.descrdepto,
                 e94_empanuladotipo,
             	e38_descr";
+        }
+         
+
+
+                // echo $sqlrelemp;exit;      
     } elseif ($agrupar == "ta") {
         $sqlrelemp = "select 	  x.e60_resumo,
 					  x.e60_numemp,
@@ -587,9 +615,9 @@ if ($processar == "a") {
             	e38_descr";
     }
 
-    $sqlrelemp = "select * from ($sqlrelemp) as x " . ($agrupar == "d"
-        ? " order by e64_codele, e60_emiss "
-        : " order by $sOrderSQL ");
+    // $sqlrelemp = "select * from ($sqlrelemp) as x " . ($agrupar != "d"
+        // ? " order by e64_codele, e60_emiss "
+        // : " order by $sOrderSQL ");
 
     $res = $clempempenho->sql_record($sqlrelemp);
     // echo $sqlrelemp;db_criatabela($res);die();
@@ -1833,12 +1861,13 @@ if ($agrupar == 'r') {
 }
 
 if ($agrupar == 'd') {
-
+    $encoding = mb_internal_encoding(); // ou UTF-8, ISO-8859-1...
     $desdobraAnt = '';
     $contEmpenhos = 0;
     echo "ELEMENTO;;;;DESCRICAO;;MOVIMENTACAO;;;;SALDO A PAGAR;;;\n";
-    echo "TP COMPRA;LICI;EMP;EMISSAO;NOME;DOTACAO;EMPENHADO;ANULADO;LIQUIDADO;PAGO;LIQUIDADO;NAO LIQUID;GERAL;\n";
+    echo "TP COMPRA;LICI;EMP;EMISSAO;NOME;QUANTIDADE;EMPENHADO;ANULADO;LIQUIDADO;PAGO;LIQUIDADO;NAO LIQUID;GERAL;\n";
     if ($mostralan == "m") {
+ 
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
     }
     if ($mostraritem == "m") {
@@ -1853,11 +1882,7 @@ if ($agrupar == 'd') {
 
         $objeto = db_utils::fieldsMemory($res, $x, true);
 
-        if (empty($desdobraAnt)) {
-            $desdobraAnt = "{$objeto->e64_codele}";
-            echo ";;;$objeto->e64_codele ;$objeto->o56_descr;\n";
-        }
-
+        $contempenho = str_pad($objeto->e60_numemp, 1, '0', STR_PAD_LEFT);
         $dotacao = str_pad($objeto->e60_coddot, 4, '0', STR_PAD_LEFT);
         $EMPENHADO = db_formatar($objeto->e60_vlremp, 'f');
         $ANULADO = db_formatar($objeto->e60_vlranu, 'f');
@@ -1866,12 +1891,33 @@ if ($agrupar == 'd') {
         $LIQUIDADO2 = db_formatar($objeto->e60_vlrliq - $objeto->e60_vlrpag, 'f');
         $NAOLIQUID = db_formatar($objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq, 'f');
         $GERAL = db_formatar($objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag, 'f');
-
-
-        if ($desdobraAnt != "{$objeto->e64_codele}") {
-
+        $contEmpenhos=$contempenho;
+        if (empty($desdobraAnt)) {
+            $desdobraAnt = "{$objeto->e64_codele}";
+            $descricao = mb_strtoupper($objeto->o56_descr, $encoding);
+            echo ";;;$objeto->e64_codele ;$descricao);\n";
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
-            echo ";;;$objeto->e64_codele;$objeto->o56_descr;\n";
+        }
+        $TotalEmpenhado    = $objeto->e60_vlremp;
+        $TotalAnulado      = $objeto->e60_vlranu;
+        $TotalLiquidado    = $objeto->e60_vlrliq;
+        $TotalPago         = $objeto->e60_vlrpag;
+        $TotalLiquidado2   = $objeto->e60_vlrliq - $objeto->e60_vlrpag;
+        $TotalNaoLiquidado = $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
+        $TotalGeral        = $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
+
+        $GeralTotalEmpenhado    = $objeto->e60_vlremp;
+        $GeralTotalAnulado      = $objeto->e60_vlranu;
+        $GeralTotalLiquidado    = $objeto->e60_vlrliq;
+        $GeralTotalPago         = $objeto->e60_vlrpag;
+        $GeralTotalLiquidado2   = $objeto->e60_vlrliq - $objeto->e60_vlrpag;
+        $GeralTotalNaoLiquidado = $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
+        $GeralTotalGeral        = $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
+        if ($desdobraAnt != "{$objeto->e64_codele}") {
+            $descricao = mb_strtoupper($objeto->o56_descr, $encoding);
+            echo ";;;$objeto->e64_codele ;$descricao);\n";
+            echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
+            
             $TotalEmpenhado    = 0;
             $TotalAnulado      = 0;
             $TotalLiquidado    = 0;
@@ -1997,9 +2043,9 @@ if ($agrupar == 'd') {
 
         $contEmpenhos++;
 
-        if ($x == $rows - 1) {
+        /*if ($x == $rows - 1) {
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
-        }
+        }*/
     }
 
     echo "TOTAL DE EMPENHOS: $rows;;;;;TOTAL GERAL;$GeralTotalEmpenhado;$GeralTotalAnulado;$GeralTotalLiquidado;$GeralTotalPago;$GeralTotalLiquidado2;$GeralTotalNaoLiquidado;$GeralTotalGeral;\n";
