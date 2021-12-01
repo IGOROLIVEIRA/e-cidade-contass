@@ -225,16 +225,22 @@ $clcredenciamentotermo->rotulo->label();
         let select = $('l212_fornecedor');
         let db_opcao = <?= $db_opcao?>;
 
-        if(db_opcao == 1){
-            // Cria option "default"
-            let defaultOpt = document.createElement('option');
-            defaultOpt.textContent = 'Selecione uma opção';
-            defaultOpt.value = '0';
-            select.append(defaultOpt);
-        }
-
         if(fornecedores.fornecedores.length != 0){
             fornecedores.fornecedores.forEach(function (oFornecedor, seq) {
+                
+                if(seq == 0){
+                    if(db_opcao == 1){
+                        // Cria option "default"
+                        let defaultOpt = document.createElement('option');
+                        defaultOpt.textContent = 'Selecione uma opção';
+                        defaultOpt.value = '0';
+                        select.append(defaultOpt);
+                    }
+
+                    var aDate = oFornecedor.l20_dtpubratificacao.split('-');
+                document.form1.l212_dtpublicacao.value = aDate[2]+'/'+aDate[1]+'/'+aDate[0];
+
+                }
                 let option = document.createElement('option');
                 option.value = oFornecedor.z01_numcgm;
                 option.text = oFornecedor.z01_nome;

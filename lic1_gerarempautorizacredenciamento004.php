@@ -145,11 +145,13 @@ if (isset($incluir)) {
         $dataGen = DateTime::createFromFormat('d/m/Y', $datesistema);
 
         if($dataInicio < $dataGen){
-            throw new Exception("Usuário: Não é possível gerar autorização de empenho, Termo $l212_numerotermo ainda não está vigente");
+            $sqlerro= true;
+            $erro_msg = "Usuário: Não é possível gerar autorização de empenho, Termo $l212_numerotermo ainda não está vigente";
         }
 
-        if($dataFim > $dataGen){
-            throw new Exception("Usuário: Não é possível gerar autorização de empenho, Termo $l212_numerotermo não está vigente.");
+        if($dataGen > $dataFim){
+            $sqlerro= true;
+            $erro_msg = "Usuário: Não é possível gerar autorização de empenho, Termo $l212_numerotermo não está vigente.";
         }
         
     }

@@ -17,15 +17,19 @@ switch ($oParam->exec) {
         $iAnoSessao      = db_getsession('DB_anousu');
         if($oParam->idbopcao == "1"){
             $sqlFornecedor = "SELECT DISTINCT z01_numcgm,
-                                          z01_nome
+                                          z01_nome,
+                                          l20_dtpubratificacao
             FROM credenciamento
             INNER JOIN cgm ON z01_numcgm = l205_fornecedor
+            INNER JOIN liclicita on l20_codigo = l205_licitacao
             WHERE l205_licitacao ={$oParam->iLicitacao}";
         }else{
             $sqlFornecedor = "SELECT z01_numcgm,
-                                     z01_nome
+                                     z01_nome,
+                                     l20_dtpubratificacao
             FROM credenciamentotermo
             INNER JOIN cgm ON z01_numcgm = l212_fornecedor
+            INNER JOIN liclicita on l20_codigo = l212_licitacao
             where l212_sequencial = $oParam->iCodtermo";
         }
 

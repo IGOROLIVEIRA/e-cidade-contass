@@ -39,7 +39,7 @@ if(isset($incluir)){
         $dtiniciotermo = DateTime::createFromFormat('d/m/Y', $l212_dtinicio);
 
         if($dtiniciotermo < $datacred){
-            throw new Exception("Usuário: Data de incio do termo menor que data de credenciamento.");
+            throw new Exception("Usuário: Data de inicio do termo menor que data de credenciamento.");
             $sqlerro = true;
         }
 

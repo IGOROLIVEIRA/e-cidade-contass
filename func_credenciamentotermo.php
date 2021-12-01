@@ -35,11 +35,11 @@ if(!isset($pesquisa_chave)){
             $campos = "credenciamentotermo.*";
         }
     }
-
+/*
     if($autoriza="false"){
         $Where = "l212_sequencial not in (select e54_termocredenciamento from empautoriza where e54_termocredenciamento is not null)";
     }
-
+*/
     $sql = $clcredenciamentotermo->sql_query(null,"*",null,$Where);
     $repassa = array();
     echo '<div class="container">';
