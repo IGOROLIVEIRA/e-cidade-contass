@@ -109,7 +109,7 @@ if ($db21_usadebitoitbi == 't') {
           from itbi
               inner join itbinome on itbinome.it03_guia = itbi.it01_guia
               inner join itbinomecgm on itbinomecgm.it21_itbinome = itbinome.it03_seq
-                  where itbinome.it03_tipo = 'T' and itbi.it01_guia = $clitbiavalia->it14_guia order by itbinomecgm.it21_numcgm limit 1;
+                  where itbinome.it03_tipo = 'C' and itbi.it01_guia = $clitbiavalia->it14_guia order by itbinomecgm.it21_numcgm limit 1;
 SQL;
 
     $resultCgm = db_query($sqlCGM);
@@ -154,7 +154,7 @@ SQL;
 
   }
 
-  if (! $lSqlErro) {
+  if (! $lSqlErro && $oGet->tipo == "urbano") {
 
     $resultMatric = db_query("select it06_matric from itbimatric where it06_guia = {$clitbiavalia->it14_guia};");
     $oDadoMatric = db_utils::fieldsMemory($resultMatric, 0);
@@ -166,6 +166,7 @@ SQL;
 
     if($clarrematric->erro_status == 0){
         $lSqlErro = true;
+        $sMsgErro = $clarrematric->erro_msg;
     }
 
   }
@@ -191,6 +192,7 @@ SQL;
  	  
  	  if ( $clitbiavaliaformapagamentovalor->erro_status == 0 ) {
  		$lSqlErro = true;
+        $sMsgErro = $clitbiavaliaformapagamentovalor->erro_msg;
  	    break;	
  	  }
  	}
@@ -289,11 +291,11 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 if ( isset($oPost->liberar) ) {
 	
   if( $lSqlErro ){
-  	
+    db_msgbox($sMsgErro);
     $clitbiavalia->erro(true,false);
     $db_botao=true;
   
-    echo "<script> document.form1.db_opcao.disabled=false;</script>";
+    //echo "<script> document.form1.db_opcao.disabled=false;</script>";
     if($clitbiavalia->erro_campo!=""){
       echo "<script> document.form1.".$clitbiavalia->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clitbiavalia->erro_campo.".focus();</script>";
