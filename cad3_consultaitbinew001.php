@@ -63,6 +63,7 @@ db_fieldsmemory($config,0);
 </head>
 <body bgcolor=#CCCCCC>
 <form name="form1" method="post" action="cad3_consultaitbinew001.php">
+<input type="hidden" value="<?=$db21_usadistritounidade?>" id="db21_usadistritounidade" />
 <center>
 <fieldset style="margin: 30px auto 10px; width: 600px;">
 <legend><strong>Consulta ITBI</strong></legend>
@@ -280,8 +281,10 @@ function js_consultaitbi() {
        querystring += '&setorloc='+document.form1.setor.value;
        querystring += '&quadraloc='+document.form1.quadra.value;
        querystring += '&loteloc='+document.form1.lote.value;
-       querystring += '&unidade='+document.form1.j01_unidade.value;
-       querystring += '&distrito='+document.form1.j34_distrito.value;
+       if (document.form1.db21_usadistritounidade.value == 't') {
+            querystring += '&distrito='+document.form1.j34_distrito.value;
+            querystring += '&unidade='+document.form1.j01_unidade.value;
+       }
      }else{
        querystring  = 'matric=';
        querystring += '&setor=';
