@@ -111,7 +111,7 @@ class Evento
             throw new \Exception("Erro ao buscar registros do evento para verificação.");
         }
 
-        if (pg_num_rows($rs) > 0) {
+        if (pg_num_rows($rs) > 0 && $this->modo === 'INC') {
             $md5Evento = \db_utils::fieldsMemory($rs, 0)->rh213_md5;
             if ($md5Evento == $this->md5) {
                 throw new \Exception("Já existe um envio do evento S-{$this->tipoEvento} com as mesmas informações.");
