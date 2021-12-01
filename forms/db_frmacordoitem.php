@@ -418,6 +418,8 @@ db_app::load("estilos.css, grid.style.css");
                     document.form1.ac20_pcmater.focus();
                     document.form1.ac20_pcmater.value = '';
                 } else {
+                    isServico = chave2;
+                    js_verificaServico();
                     js_getElementosMateriais();
                 }
             } else {
@@ -429,7 +431,7 @@ db_app::load("estilos.css, grid.style.css");
     }
 
     function js_mostrapcmater1(chave1, chave2, chave3) {
-
+        alert("Chave1 = "+chave1+" chave2 = "+chave2);
         if (chave3 === 'f') {
             $('tdlabelservico').style.display = 'none';
             $('tdselectservico').style.display = 'none';

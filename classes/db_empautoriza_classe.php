@@ -1790,7 +1790,7 @@ class cl_empautoriza
             " e54_autori = {$iCodAutori} "
         );
         $rsSolicitacao   = db_query($sSqlSolicitacao);
-
+        /* Aleteração OC15688
         if ($rsSolicitacao && pg_num_rows($rsSolicitacao) > 0) {
 
             $iCodigoProcessoCompra = db_utils::fieldsMemory($rsSolicitacao, 0)->pc80_codproc;
@@ -1801,8 +1801,8 @@ class cl_empautoriza
                               and e73_autori = {$iCodAutori}";
 
             $rsDeleta = db_query($sSqlDeleta);
-        }
-
+        }*/
+  
         /*
          * Alteramos a situação da autorização de empenho para anulada
          */

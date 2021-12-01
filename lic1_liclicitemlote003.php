@@ -54,7 +54,7 @@ if (isset($excluir) && trim($excluir)!=""){
          $sLotesVinculados = $sLotesVinculados ? $sLotesVinculados . ',' : '';
          $sLotesVinculados .= "'" . trim($vetor_lotes[$i]) . "'";
      }
-
+     
      if($sLotesVinculados){
           $sSqlDadosCompLote = "
                SELECT db150_lote
@@ -62,10 +62,11 @@ if (isset($excluir) && trim($excluir)!=""){
                    WHERE db150_lote in
                        (SELECT l04_codigo
                            FROM liclicitemlote
-                           WHERE l04_descricao in (" . $sLotesVinculados . "));
+                           WHERE l04_descricao like '" . $l04_descricao . "');
                ";
-          
+               
           $rsDadosCompLote = db_query($sSqlDadosCompLote);
+          
           
           if(pg_numrows($rsDadosCompLote)){
                if(pg_numrows($rsDadosCompLote) == 1){
@@ -81,16 +82,16 @@ if (isset($excluir) && trim($excluir)!=""){
           
      if(!$sqlerro){
 
-          for($i = 0; $i < sizeof($vetor_lotes); $i++){
+          //for($i = 0; $i < sizeof($vetor_lotes); $i++){
      
-               $clliclicitemlote->excluir(null,"l04_descricao = '".trim($vetor_lotes[$i])."'");
+               $clliclicitemlote->excluir(null,"l04_descricao like '".$l04_descricao."'");
      
                if ($clliclicitemlote->erro_status == 0){
                     $erro_msg = $clliclicitemlote->erro_msg;
                     $sqlerro = true;
-                    break;
+                    
                }
-          }
+          //}
 
      }
 

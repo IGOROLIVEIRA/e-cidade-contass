@@ -237,7 +237,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
         }
 
 
-        $sSql = "SELECT '10' AS tipoRegistro,
+        $sSql = "SELECT distinct '10' AS tipoRegistro,
      l20_codigo as seqlicitacao,
        infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
   (SELECT CASE

@@ -49,16 +49,18 @@ class Factory
             case Tipo::SERVIDOR:
                 return new Servidor();
                 break;
-            case Tipo::LOTACAO_TRIBUTARIA:
-                break;                
+            case Tipo::LOTACAO_TRIBUTARIA:         
             case Tipo::CARGO:
-                break;
             case Tipo::FUNCAO:
-                break;
             case Tipo::HORARIO:
+            case Tipo::CARREIRA:
+            case Tipo::AMBIENTE:
+            case Tipo::PROCESSOSAJ:
+            case Tipo::PORTUARIO:
+            case Tipo::CADASTRAMENTO_INICIAL:
                 break;
             default:
-                throw new \Exception('Tipo de fomulário não encontrado.');
+                throw new \Exception("Tipo de fomulário {$tipo} não encontrado.");
         }
     }
 }

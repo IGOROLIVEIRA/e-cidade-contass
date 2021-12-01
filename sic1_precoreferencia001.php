@@ -33,7 +33,12 @@ if (isset($incluir)) {
         if ($procReferencia->si01_processocompra != '') {
             echo "<script>alert('Já existe preço referência para esse processo de compra');</script>";
             $processoValidado = false;
-        }
+        }  
+
+        if ($oPost->si01_cotacaoitem == 0) {
+            echo "<script>alert('Selecione o tipo de cotação por item!');</script>";
+            $processoValidado = false;
+        } 
 
         if(!empty($si01_datacotacao)){
             $anousu = db_getsession('DB_anousu');
@@ -62,7 +67,54 @@ if (isset($incluir)) {
             $sFuncao = "min";
         }
 
-        $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
+        
+
+        $sSql = "select pc23_orcamitem,count(pc23_vlrun) as valor
+                      from pcproc
+                      join pcprocitem on pc80_codproc = pc81_codproc
+                      join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
+                      join pcorcamitem on pc31_orcamitem = pc22_orcamitem
+                      join pcorcamval on pc22_orcamitem = pc23_orcamitem
+                      where pc80_codproc = $si01_processocompra and pc23_vlrun != 0 group by pc23_orcamitem";
+
+        $rsResult = db_query($sSql);
+        
+        
+        $arrayValores = array(); $cont = 0;
+       
+        for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+            $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
+
+            if($oPost->si01_cotacaoitem==1){
+                if($oItemOrc->valor>=1){
+                    
+                    $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
+                    $cont++;
+                }
+
+            }else if($oPost->si01_cotacaoitem==2){
+                if($oItemOrc->valor>=2){
+                    
+                    $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
+                    $cont++;
+                }
+                
+            }else if($oPost->si01_cotacaoitem==3){
+                if($oItemOrc->valor>=3){
+                    
+                    $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
+                    $cont++;
+                }
+                
+            }         
+            
+        }
+
+
+        for ($iCont = 0; $iCont < $cont; $iCont++) {
+            $valor = $arrayValores[$iCont];
+            $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
                     round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
                     round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
                       from pcproc
@@ -70,14 +122,12 @@ if (isset($incluir)) {
                       join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
                       join pcorcamitem on pc31_orcamitem = pc22_orcamitem
                       join pcorcamval on pc22_orcamitem = pc23_orcamitem
-                      where pc80_codproc = $si01_processocompra and pc23_vlrun > 0 group by pc23_orcamitem";
+                      where pc80_codproc = $si01_processocompra and pc23_orcamitem = $valor group by pc23_orcamitem";
 
-        $rsResult = db_query($sSql);
+                      $rsResultee = db_query($sSql);
 
+                      $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
 
-        for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-
-            $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
             $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
             $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
             $clitemprecoreferencia->si02_precoreferencia = $clprecoreferencia->si01_sequencial;

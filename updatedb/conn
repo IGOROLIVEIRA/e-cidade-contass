@@ -28,9 +28,6 @@ pmitacambira        5432    prefeituras
 basemodeloppa       5432    prefeituras
 treinamento         5432    prefeituras
 
-pmburitizeiro          5432    prefeituras2
-pmgraomogol            5432    prefeituras2
-pmnovaporteirinha      5432    prefeituras2
 pmsantafeminas         5432    prefeituras2
 pmsaojoaomissoes       5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
@@ -92,9 +89,10 @@ cmitacambira        5432    e-cidade
 pmsaojoaomissoes    5432    e-cidadenovosclientes
 pmsantafeminas      5432    e-cidadenovosclientes
 pmnovaporteirinha   5432    e-cidadenovosclientes
-pmgraomogol         5432    e-cidadenovosclientes
 pmburitizeiro       5432    e-cidadenovosclientes
 
 e-cidade            5432    pmnovaporteirinha
+
+e-cidade            5432    pmgraomogol
 
 e-cidade            5432    pmburitizeiro

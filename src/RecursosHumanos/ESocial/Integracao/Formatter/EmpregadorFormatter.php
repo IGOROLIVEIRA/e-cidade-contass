@@ -33,13 +33,6 @@ class EmpregadorFormatter extends Formatter
     private function posProcessamento($dadosFormatado)
     {
         foreach ($dadosFormatado as $dadoEmpregador) {
-            if (isset($dadoEmpregador->infoCadastro) && $dadoEmpregador->infoCadastro->indEtt == 'N') {
-                unset($dadoEmpregador->infoCadastro->nrRegEtt);
-            }
-
-            if (isset($dadoEmpregador->infoEFR) && $dadoEmpregador->infoEFR->ideEFR == 'S') {
-                unset($dadoEmpregador->infoEFR->cnpjEFR);
-            }
 
             // grupo dadosIsencao é opcional
             if (isset($dadoEmpregador->dadosIsencao)) {

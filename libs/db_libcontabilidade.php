@@ -5871,6 +5871,7 @@ class cl_estrutura_sistema {
               $sql .= " AND o58_codigo IN ({$fonte}) ";
           }
           $sql .= " {$group} ) AS x";
+
           return db_utils::getColectionByRecord(db_query($sql));
 
     }

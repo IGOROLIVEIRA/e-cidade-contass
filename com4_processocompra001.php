@@ -46,7 +46,7 @@ $iAcao = ($oGet->acao ? $oGet->acao : 3);
     <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBAbas.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js?v=1"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/messageboard.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">

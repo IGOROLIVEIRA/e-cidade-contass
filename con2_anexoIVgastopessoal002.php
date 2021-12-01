@@ -58,6 +58,14 @@ if (count($aInstits) > 1) {
         $oInstit = new Instituicao($iInstit);
     }
 }
+
+$iRpps = 0;
+foreach ($aInstits as $iInstit) {
+    $instit = new Instituicao($iInstit);
+    if ($instit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS)
+        $iRpps = 1;
+}
+
 /**
  * pego todas as instituições OC10823;
  */
@@ -106,7 +114,7 @@ $valorcalculoManual = $tipoCalculo == 1 ? "sum(c233_valorempenhado) as {$valores
 $valorcalculo = $tipoCalculo == 1 ? "sum(empenhado) - sum(anulado) as {$valoresperado}" : "sum(liquidado) as {$valoresperado}";
 
 db_inicio_transacao();
-function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
+function getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps)
 {
     $fTotalarrecadado = 0;
     $fCSACRPPS = 0; //412102907
@@ -152,6 +160,14 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
         }
 
         if ($oDados->o57_fonte == "419900300000000") {
+            $fRRCSICOPSJ += $oDados->saldo_arrecadado;
+        }
+
+        if ($oDados->o57_fonte == "412180311000000") {
+            $fRRCSICOPSJ += $oDados->saldo_arrecadado;
+        }
+
+        if ($oDados->o57_fonte == "412180321000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
         }
 
@@ -286,11 +302,11 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
         if ($oDados->o57_fonte == "412100484000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
         }
-
+        /*
         if ($oDados->o57_fonte == "412180311020000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
         }
-
+        */
         if ($oDados->o57_fonte == "412100481000000") {
             $fRRCPPSJ += $oDados->saldo_arrecadado;
         }
@@ -343,118 +359,114 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
                 $fCPRPPS += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 7) == "4121801") {
+            if ($oDados->o57_fonte == "412180100000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 7) == "4121802") {
+            if ($oDados->o57_fonte == "412180200000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100421") {
+            if ($oDados->o57_fonte == "412100421000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100422") {
+            if ($oDados->o57_fonte == "412100422000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100423") {
+            if ($oDados->o57_fonte == "412100423000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100424") {
+            if ($oDados->o57_fonte == "412100424000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100431") {
+            if ($oDados->o57_fonte == "412100431000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100432") {
+            if ($oDados->o57_fonte == "412100432000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100433") {
+            if ($oDados->o57_fonte == "412100433000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100434") {
+            if ($oDados->o57_fonte == "412100434000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100441") {
+            if ($oDados->o57_fonte == "412100441000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100442") {
+            if ($oDados->o57_fonte == "412100442000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100443") {
+            if ($oDados->o57_fonte == "412100443000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100444") {
+            if ($oDados->o57_fonte == "412100444000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100461") {
+            if ($oDados->o57_fonte == "412100461000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100462") {
+            if ($oDados->o57_fonte == "412100462000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100463") {
+            if ($oDados->o57_fonte == "412100463000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100464") {
+            if ($oDados->o57_fonte == "412100464000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100471") {
+            if ($oDados->o57_fonte == "412100471000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100472") {
+            if ($oDados->o57_fonte == "412100472000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100473") {
+            if ($oDados->o57_fonte == "412100473000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100474") {
+            if ($oDados->o57_fonte == "412100474000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100481") {
+            if ($oDados->o57_fonte == "412100481000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100482") {
+            if ($oDados->o57_fonte == "412100482000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100483") {
+            if ($oDados->o57_fonte == "412100483000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
 
-            if (substr($oDados->o57_fonte, 0, 9) == "412100484") {
+            if ($oDados->o57_fonte == "412100484000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
-
-            if (substr($oDados->o57_fonte, 0, 11) == "41218031102") {
+            /*
+            if ($oDados->o57_fonte == "412180311020000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
-
-            if (substr($oDados->o57_fonte, 0, 7) == "4199003") {
-                $fRRCSICOPSJ += $oDados->saldo_arrecadado;
-            }
-
+            */
             if (substr($oDados->o57_fonte, 0, 9) == "412100481") {
                 $fRRCPPSJ += $oDados->saldo_arrecadado;
             }
@@ -473,6 +485,7 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
         }
 
         $oAnoatual = db_utils::getColectionByRecord(db_receitasaldo(11, 1, 3, true, $db_filtro, $anousu, getImplantacao(), $dtfim, false, ' * ', true, 0));
+
     } else {
         $dtini_aux = $anousu . '-01-01';
         $oAnoatual = db_receitasaldo(11, 1, 3, true, $db_filtro, $anousu, $dtini_aux, $dtfim, false, ' * ', true, 0);
@@ -483,6 +496,7 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
         if ($oDados->o57_fonte == "410000000000000") {
             $fTotalarrecadado += $oDados->saldo_arrecadado;
         }
+
         if ($oDados->o57_fonte == "470000000000000") {
             $fTotalarrecadado += $oDados->saldo_arrecadado;
         }
@@ -622,12 +636,20 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
         if ($oDados->o57_fonte == "412100484000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
         }
-
+        /*
         if ($oDados->o57_fonte == "412180311020000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
         }
-
+*/
         if ($oDados->o57_fonte == "419900300000000") {
+            $fRRCSICOPSJ += $oDados->saldo_arrecadado;
+        }
+
+        if ($oDados->o57_fonte == "412180311000000") {
+            $fRRCSICOPSJ += $oDados->saldo_arrecadado;
+        }
+
+        if ($oDados->o57_fonte == "412180321000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
         }
 
@@ -662,7 +684,7 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim)
     );
 }
 
-$aDespesasReceitas = getDespesasReceitas($iInstituicoes, $dtini, $dtfim);
+$aDespesasReceitas = getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps);
 
 $fTotalReceitasArrecadadas = $aDespesasReceitas['fTotalReceitasArrecadadas'];
 $fCSACRPPS = $aDespesasReceitas['fCSACRPPS'];
@@ -1002,9 +1024,54 @@ ob_start();
                             "11" => 'NOV',
                             "12" => 'DEZ',
                         );
-                        while ($dataFinal > $dataAtual) {
 
+                        // Monta informação do ano inteiro
+                        if ($valoresperado == 'liquidado') {
+                            $chaveMesDezembro = "DEZ/" . date("Y", strtotime($dataAtual));
+                            if ($dataAtual >= getImplantacao() or !getImplantacao()) {
+                                foreach (getDespesaMensal("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits) as $data) {
+                                    $chave = substr($data->o58_elemento, 0, 7);
+                                    if ($valoresperado == 'liquidado')
+                                        $despesa[$chave][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+                                }
+
+                                foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprio("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits, $iRpps) as $data) {
+                                    $chave2 = $data->o58_elemento;
+                                    $despesaSaldoIntaivosPensionistasProprio[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+                                }
+
+                                if ($iRpps) {
+                                    foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits) as $data) {
+                                        $chave2 = substr($data->o58_elemento, 0, 7);
+                                        $despesa[$chave2][$chaveMesDezembro] -= $data->empenhado - $data->liquidado;
+                                    }
+                                }
+
+                                foreach (getDespesaMensalExclusaoSaldoSentencasJudAnt("01-01-" . date("Y", strtotime($dtini)), "01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits) as $data) {
+                                    $chave2 = $data->o58_elemento;
+                                    $despesaSaldoSentencasJudAnt[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+                                }
+
+                                foreach (getDespesaMensalSaldoIndenizacaoDemissaoServidores("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits) as $data) {
+                                    $chave2 = $data->o58_elemento;
+                                    $despesaSaldoIndenizacaoDemissaoServidores[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+                                }
+
+                                foreach (getDespesaMensalSaldoDespesasAnteriores("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits, $dtini) as $data) {
+                                    $chave2 = $data->o58_elemento;
+                                    $despesaSaldoDespesasAnteriores[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+                                }
+                            } else {
+                                foreach (getDespesaMensalInformada("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits, "01-01-" . date("Y", strtotime($dataAtual))) as $data) {
+                                    $chave = substr($data->o58_elemento, 0, 7);
+                                    $despesa[$chave][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+                                }
+                            }
+                        }
+
+                        while ($dataFinal > $dataAtual) {
                             $chaveMes = $mesesExtenso[date("m", strtotime($dataAtual))] . "/" . date("Y", strtotime($dataAtual));
+                            $chaveMesDezembro = "DEZ/" . date("Y", strtotime($dataAtual));
                             $meses[] = $chaveMes;
 
                             if (!array_key_exists($chaveMes, $subtotalmes))
@@ -1012,43 +1079,120 @@ ob_start();
                             if ($dataAtual >= getImplantacao() or !getImplantacao()) {
                                 $inicio = ($dataAtual >= getImplantacao() or !getImplantacao()) ? $dataAtual : getImplantacao();
                                 foreach (getDespesaMensal($inicio, date('Y-m-t', strtotime($inicio)), $aInstits) as $data) {
-                                    $chave = $data->o58_elemento;
+                                    $chave = substr($data->o58_elemento, 0, 7);
+
                                     if (array_key_exists($chaveMes, $despesa[$chave])) {
-                                        $despesa[$chave][$chaveMes] += $data->$valoresperado;
-                                        $despesa[$chave]['descricao'] = $data->o56_descr;
+                                        $despesa[$chave][$chaveMes]   += $data->$valoresperado;
+                                        $despesa[$chave]['elemento']   = $data->o58_elemento;
+                                        $despesa[$chave]['descricao']  = $data->o56_descr;
                                     } else {
-                                        $despesa[$chave][$chaveMes] = $data->$valoresperado;
+                                        $despesa[$chave][$chaveMes]   = $data->$valoresperado;
+                                        $despesa[$chave]['elemento']  = $data->o58_elemento;
                                         $despesa[$chave]['descricao'] = $data->o56_descr;
                                     }
+
+                                    if ($valoresperado == 'liquidado')
+                                        $despesa[$chave][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+                                }
+
+                                foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprio($inicio, date('Y-m-t', strtotime($inicio)), $aInstits, $iRpps) as $data) {
+                                    $chave2 = $data->o58_elemento;
+
+                                    if ($valoresperado == 'liquidado')
+                                        $despesaSaldoIntaivosPensionistasProprio[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+
+                                    $despesaSaldoIntaivosPensionistasProprio[$chave2][$chaveMes]   += $data->$valoresperado;
+                                    $despesaSaldoIntaivosPensionistasProprio[$chave2]['descricao']  = $data->o56_descr;
+                                }
+
+                                if ($iRpps) {
+                                    foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir($inicio, date('Y-m-t', strtotime($inicio)), $aInstits) as $data) {
+                                        $chave2 = substr($data->o58_elemento, 0, 7);
+
+                                        if ($valoresperado == 'liquidado')
+                                            $despesa[$chave2][$chaveMesDezembro] -= $data->empenhado - $data->liquidado;
+
+                                        $despesa[$chave2][$chaveMes] -= $data->$valoresperado;
+                                    }
+                                }
+
+                                foreach (getDespesaMensalExclusaoSaldoSentencasJudAnt($dtini, $inicio, date('Y-m-t', strtotime($inicio)), $aInstits) as $data) {
+                                    $chave2 = $data->o58_elemento;
+
+                                    if ($valoresperado == 'liquidado')
+                                        $despesaSaldoSentencasJudAnt[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+
+                                    $despesaSaldoSentencasJudAnt[$chave2][$chaveMes]   += $data->$valoresperado;
+                                    $despesaSaldoSentencasJudAnt[$chave2]['descricao']  = $data->o56_descr;
+                                }
+
+
+                                foreach (getDespesaMensalSaldoIndenizacaoDemissaoServidores($inicio, date('Y-m-t', strtotime($inicio)), $aInstits) as $data) {
+                                    $chave2 = $data->o58_elemento;
+
+                                    if ($valoresperado == 'liquidado')
+                                        $despesaSaldoIndenizacaoDemissaoServidores[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+
+                                    $despesaSaldoIndenizacaoDemissaoServidores[$chave2][$chaveMes]   += $data->$valoresperado;
+                                    $despesaSaldoIndenizacaoDemissaoServidores[$chave2]['descricao']  = $data->o56_descr;
+                                }
+
+                                foreach (getDespesaMensalSaldoDespesasAnteriores($inicio, date('Y-m-t', strtotime($inicio)), $aInstits, $dtini) as $data) {
+                                    $chave2 = $data->o58_elemento;
+
+                                    if ($valoresperado == 'liquidado')
+                                        $despesaSaldoDespesasAnteriores[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
+
+                                    $despesaSaldoDespesasAnteriores[$chave2][$chaveMes]   += $data->$valoresperado;
+                                    $despesaSaldoDespesasAnteriores[$chave2]['descricao']  = $data->o56_descr;
                                 }
                             } else {
                                 foreach (getDespesaMensalInformada($dataAtual, date('Y-m-t', strtotime($dataAtual)), $aInstits, $dtini) as $data) {
-                                    $chave = $data->o58_elemento;
+                                    $chave = substr($data->o58_elemento, 0, 7);
+
                                     if (array_key_exists($chaveMes, $despesa[$chave])) {
-                                        $despesa[$chave][$chaveMes] += $data->$valoresperado;
+                                        $despesa[$chave][$chaveMes]   += $data->$valoresperado;
                                         $despesa[$chave]['descricao'] = $data->o56_descr;
                                     } else {
                                         $despesa[$chave][$chaveMes] = $data->$valoresperado;
                                         $despesa[$chave]['descricao'] = $data->o56_descr;
                                     }
+
+                                    if ($valoresperado == 'liquidado')
+                                        $despesa[$chave][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                 }
                             }
                             $dataAtual = date('Y-m-01', strtotime($dataAtual . ' +1 month'));
                         }
 
                         ?>
+
                         <? for ($i = 0; $i <= 11; $i++) { ?>
                             <td class="bdleft bdtop s0"><?= $meses[$i] ?></td>
                         <? } ?>
                         <td class="bdleft bdtop s0">TOTAL GERAL</td>
                     </tr>
                     <?php ksort($despesa); ?>
+                    <?php ksort($despesa2); ?>
                     <tr>
                         <td class="s3 bdleft bdtop">3.1.00.00.00 - PESSOAL E ENCARGOS SOCIAIS</td>
                         <? for ($i = 0; $i <= 12; $i++) { ?>
                             <td class="bdleft bdtop s6"></td>
                         <? } ?>
                     </tr>
+
+                    <?
+                    foreach ($despesa as $elemento => $datas) {
+                        $totalConferencia = 0;
+                        for ($i = 0; $i <= 11; $i++) {
+                            $totalConferencia += $datas[$meses[$i]];
+                        }
+                        if ($totalConferencia == 0) {
+                            unset($despesa[$elemento]);
+                        }
+                    }
+                    ?>
+
                     <? foreach ($despesa as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
                         <?php if (substr($elemento, 1, 2) == "31") { ?>
@@ -1077,9 +1221,10 @@ ob_start();
                             <td class="bdleft bdtop s6"></td>
                         <? } ?>
                     </tr>
+
                     <? foreach ($despesa as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
-                        <?php if (substr($elemento, 1, 7) == "3339034") { ?>
+                        <?php if (substr($elemento, 0, 7) == "3339034") { ?>
                             <tr>
                                 <td class="bdleft bdtop"><?= db_formatar($elemento, "elemento") . " - " . $despesa[$elemento]['descricao'];; ?></td>
                                 <? for ($i = 0; $i <= 11; $i++) { ?>
@@ -1134,7 +1279,7 @@ ob_start();
                         if (getImplantacao()) {
                             foreach (getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331', $valorcalculoManual, $oInstit) as $oDespesa) {
 
-                                $chave = $oDespesa->o58_elemento;
+                                $chave = substr($oDespesa->o58_elemento, 0, 7);
                                 if ($oDespesa->$valoresperado <> 0) {
                                     if (array_key_exists($chave, $aDespesas)) {
                                         $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
@@ -1143,8 +1288,9 @@ ob_start();
                                     }
                                 }
                             }
+
                             foreach (getSaldoDespesa(null, "o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
-                                $chave = $oDespesa->o58_elemento;
+                                $chave = substr($oDespesa->o58_elemento, 0, 7);
                                 if ($oDespesa->$valoresperado <> 0) {
                                     if (array_key_exists($chave, $aDespesas)) {
                                         $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
@@ -1154,11 +1300,78 @@ ob_start();
                                 }
                             }
                         } else {
-                            $aDespesas = getSaldoDespesa(null, "o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                            foreach (getSaldoDespesa(null, "o58_elemento, o56_descr, o58_anousu, SUM(empenhado) empenhado, SUM(liquidado) liquidado", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2,3") as $oDespesa) {
+                                $chave = $oDespesa->o58_elemento;
+                                /*
+                                if ($valoresperado == 'liquidado') {
+                                    if ($oDespesa->o58_anousu == date("Y", strtotime($dtini))) {
+                                        $oDespesa->liquidado += $oDespesa->empenhado - $oDespesa->liquidado;
+                                    }
+                                }
+                                */
+                                if ($oDespesa->$valoresperado <> 0) {
+                                    if (array_key_exists($chave, $aDespesas)) {
+                                        $aDespesas[$chave]->$valoresperado += $oDespesa->$valoresperado;
+                                    } else {
+                                        $aDespesas[$chave] = $oDespesa;
+                                    }
+                                }
+                            }
                         }
-                        ksort($aDespesas);
-                        foreach ($aDespesas as $oDespesa) :
 
+                        // Tratando o acumulado do ano anterior
+
+                        if ($valoresperado == 'liquidado') {
+                            foreach (getDespesaMensal("01-01-" . date("Y", strtotime($dtini)), "31-12-" . date("Y", strtotime($dtini)), array($oInstit->getCodigo())) as $data) {
+                                $chave = str_pad(substr($data->o58_elemento, 0, 7), 13, "0");
+                                if (substr($chave, 1, 2) == "31") {
+                                    if ($data->empenhado - $data->liquidado <> 0) {
+                                        $aDespesas[$chave]->liquidado += $data->empenhado - $data->liquidado;
+                                        $aDespesas[$chave]->o56_descr = $data->o56_descr;
+                                    }
+                                }
+                            }
+                        }
+
+                        if ($iRpps) {
+                            foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir("01-01-" . date("Y", strtotime($dtini)), "31-12-" . date("Y", strtotime($dtini)), $aInstits) as $data) {
+                                $chave = str_pad(substr($data->o58_elemento, 0, 7), 13, "0");
+                                if (substr($chave, 1, 2) == "31") {
+                                    if ($data->empenhado - $data->liquidado <> 0) {
+                                        $aDespesas[$chave]->liquidado -= $data->empenhado - $data->liquidado;
+                                        $aDespesas[$chave]->o56_descr = $data->o56_descr;
+                                    }
+                                }
+                            }
+
+                            foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir($dtini, "31-12-" . date("Y", strtotime($dtini)), $aInstits) as $data) {
+                                $chave = str_pad(substr($data->o58_elemento, 0, 7), 13, "0");
+                                if (substr($chave, 1, 2) == "31") {
+                                    if ($data->empenhado - $data->liquidado <> 0) {
+                                        if ($valoresperado == 'liquidado')
+                                            $aDespesas[$chave]->liquidado -= $data->empenhado - $data->liquidado;
+                                        $aDespesas[$chave]->$valoresperado -= $data->$valoresperado;
+                                        $aDespesas[$chave]->o56_descr = $data->o56_descr;
+                                    }
+                                }
+                            }
+
+                            foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir("01-01-" . date("Y", strtotime($dtfim)), $dtfim, $aInstits) as $data) {
+                                $chave = str_pad(substr($data->o58_elemento, 0, 7), 13, "0");
+                                if (substr($chave, 1, 2) == "31") {
+                                    if ($data->empenhado - $data->liquidado <> 0) {
+                                        if ($valoresperado == 'liquidado')
+                                            $aDespesas[$chave]->liquidado -= $data->empenhado - $data->liquidado;
+                                        $aDespesas[$chave]->$valoresperado -= $data->$valoresperado;
+                                        $aDespesas[$chave]->o56_descr = $data->o56_descr;
+                                    }
+                                }
+                            }
+                        }
+
+                        ksort($aDespesas);
+
+                        foreach ($aDespesas as $oDespesa) :
                             if ($oDespesa->o58_elemento == '3317170000000') {
                                 /**
                                  * Solicitado por Wesley@contass em 28/03/2017
@@ -1170,8 +1383,7 @@ ob_start();
                         ?>
                             <tr style='height:19px;'>
                                 <td class="s3 bdleft" colspan="2">
-
-                                    <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
+                                    <?php echo db_formatar($oDespesa->o58_elemento, "elemento", 10) . " - " . $oDespesa->o56_descr; ?>
                                 </td>
                                 <td class="s5">
                                     <?php echo db_formatar($oDespesa->$valoresperado, "f"); ?>
@@ -1195,7 +1407,7 @@ ob_start();
                                 }
                             }
 
-                            foreach (getSaldoDespesa(null, "o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
+                            foreach (getSaldoDespesa(null, "o58_elemento, o56_descr, SUM({$valoresperado}) {$valoresperado} ", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
                                 $chave = $oDespesa->o58_elemento;
                                 if (array_key_exists($chave, $aDespesas)) {
                                     $aDespesas2[$chave]->$valoresperado += $oDespesa->$valoresperado;
@@ -1204,7 +1416,29 @@ ob_start();
                                 }
                             }
                         } else {
-                            $aDespesas2 = getSaldoDespesa(null, "o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                            foreach (getSaldoDespesa(null, "o58_elemento, o56_descr, SUM({$valoresperado}) {$valoresperado} ", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2") as $oDespesa) {
+                                $chave = $oDespesa->o58_elemento;
+
+                                if ($oDespesa->$valoresperado <> 0) {
+                                    if (array_key_exists($chave, $oDespesa)) {
+                                        $aDespesas2[$chave]->$valoresperado += $oDespesa->$valoresperado;
+                                    } else {
+                                        $aDespesas2[$chave] = $oDespesa;
+                                    }
+                                }
+                            }
+                        }
+
+                        if ($valoresperado == 'liquidado') {
+                            foreach (getDespesaMensal("01-01-" . date("Y", strtotime($dtini)), "31-12-" . date("Y", strtotime($dtini)), array($oInstit->getCodigo())) as $data) {
+                                $chave = str_pad(substr($data->o58_elemento, 0, 7), 13, "0");
+                                if (substr($chave, 0, 7) == "3339034") {
+                                    if ($data->empenhado - $data->liquidado <> 0) {
+                                        $aDespesas2[$chave]->liquidado += $data->empenhado - $data->liquidado;
+                                        $aDespesas2[$chave]->o56_descr = $data->o56_descr;
+                                    }
+                                }
+                            }
                         }
 
                         foreach ($aDespesas2 as $oDespesa) :
@@ -1260,6 +1494,7 @@ ob_start();
                                 $oInstit = new Instituicao($iInstit);
                                 if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
                                     if (getImplantacao()) {
+
                                         $aSaldoEstrut1 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900101', $valorcalculoManual, $oInstit);
                                         $aSaldoEstrut2 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900301', $valorcalculoManual, $oInstit);
                                         $aSaldoEstrut3 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '331900501', $valorcalculoManual, $oInstit);
@@ -1286,36 +1521,36 @@ ob_start();
                 </tr>
             <? } else { ?>
                 <td class="s3 bdleft bdtop" colspan="1">(-) Inativos e Pensionistas com Fonte de Custeio Próprio</td>
-                <?php $encontrouElemento = 0; ?>
-                <? foreach ($despesa as $elemento => $datas) { ?>
-                    <?php $subtotal = 0; ?>
-
-                    <?php if (in_array(substr($elemento, 1, 9), array("331900101", "331900301", "331900501", "331900502"))) { ?>
-                        <? $encontrouElemento = 1; ?>
-
-                        <? for ($i = 0; $i <= 11; $i++) { ?>
-                            <td class="bdleft bdtop s6">
-                                <?php
+            <?php
+                        $encontrouElemento = 0;
+                        foreach ($despesaSaldoIntaivosPensionistasProprio as $elemento => $datas) {
+                            $subtotal = 0;
+                            if (in_array(substr($elemento, 1, 8), array("31900101", "31900301", "31900501", "31900502"))) {
+                                $encontrouElemento = 1;
+                                for ($i = 0; $i <= 11; $i++) {
                                     if (array_key_exists($meses[$i], $datas)) {
-                                        echo db_formatar($datas[$meses[$i]], "f");
-                                        $subtotal += $datas[$meses[$i]];
-                                        $fSaldoIntaivosPensionistasProprio[$meses[$i]] += $datas[$meses[$i]];;
+                                        $fSaldoIntaivosPensionistasProprio[$i] += $datas[$meses[$i]];;
                                     } else {
-                                        echo "0,00";
+                                        $fSaldoIntaivosPensionistasProprio[$i] += 0;
                                     }
-                                ?></td>
-                        <? } ?>
-                        <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
-
-                    <? } ?>
-                <? } ?>
-                <? if (!$encontrouElemento) { ?>
-                    <? for ($i = 0; $i <= 12; $i++) { ?>
-                        <td class="bdleft bdtop s6">0,00</td>
-                    <? } ?>
-                <? } ?>
-            <? } ?>
-
+                                }
+                            }
+                        }
+                        if (!$encontrouElemento) {
+                            for ($i = 0; $i <= 12; $i++) {
+                                echo "<td class='bdleft bdtop s6'>0,00</td>";
+                            }
+                        } else {
+                            for ($i = 0; $i <= 11; $i++) {
+                                echo '<td class="bdleft bdtop s6">';
+                                $subtotal += $fSaldoIntaivosPensionistasProprio[$i];
+                                echo db_formatar($fSaldoIntaivosPensionistasProprio[$i], "f");
+                                echo '</td>';
+                            }
+                            echo '<td class="bdleft bdtop s6">' . db_formatar($subtotal, "f") . '</td>';
+                        }
+                    }
+            ?>
             <tr style='height:19px;'>
                 <? if ($tipoEmissao == 1) { ?>
                     <td class="s3 bdleft" colspan="2">(-) Sentenças Judiciais Anteriores</td>
@@ -1351,13 +1586,13 @@ ob_start();
                                     }
                                 }
 
-                                $aSaldoEstrut1 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319091%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
-                                $aSaldoEstrut2 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319191%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
-                                $aSaldoEstrut3 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319691%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
+                                $aSaldoEstrut1 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319091%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' and c75_data BETWEEN '{$dtini}' AND '{$dtfim}' group by 1,2,3");
+                                $aSaldoEstrut2 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319191%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' and c75_data BETWEEN '{$dtini}' AND '{$dtfim}' group by 1,2,3");
+                                $aSaldoEstrut3 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319691%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' and c75_data BETWEEN '{$dtini}' AND '{$dtfim}' group by 1,2,3");
                             } else {
-                                $aSaldoEstrut1 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319091%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
-                                $aSaldoEstrut2 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319191%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
-                                $aSaldoEstrut3 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319691%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
+                                $aSaldoEstrut1 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319091%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' and c75_data BETWEEN '{$dtini}' AND '{$dtfim}'  group by 1,2,3");
+                                $aSaldoEstrut2 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319191%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' and c75_data BETWEEN '{$dtini}' AND '{$dtfim}' group by 1,2,3");
+                                $aSaldoEstrut3 = getSaldoDespesaSentenca(null, $sCampos, null, "o58_elemento like '3319691%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' and c75_data BETWEEN '{$dtini}' AND '{$dtfim}' group by 1,2,3");
                             }
 
                             for ($i = 1; $i <= 3; $i++) {
@@ -1375,35 +1610,37 @@ ob_start();
                     </td>
                 <? } else { ?>
                     <td class="s3 bdleft" colspan="1">(-) Sentenças Judiciais Anteriores</td>
-                    <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa as $elemento => $datas) { ?>
-                        <?php $subtotal = 0; ?>
+                <?php
+                    $encontrouElemento = 0;
 
-                        <?php if (in_array(substr($elemento, 1, 7), array("3319091", "3319191", "3319691"))) { ?>
-                            <? $encontrouElemento = 1; ?>
-
-                            <? for ($i = 0; $i <= 11; $i++) { ?>
-                                <td class="bdleft bdtop s6">
-                                    <?php
-                                    if (array_key_exists($meses[$i], $datas)) {
-                                        echo db_formatar($datas[$meses[$i]], "f");
-                                        $subtotal += $datas[$meses[$i]];
-                                        $fSaldoSentencasJudAnt[$meses[$i]] += $datas[$meses[$i]];
-                                    } else {
-                                        echo "0,00";
-                                    }
-                                    ?></td>
-                            <? } ?>
-                            <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
-
-                        <? } ?>
-                    <? } ?>
-                    <? if (!$encontrouElemento) { ?>
-                        <? for ($i = 0; $i <= 12; $i++) { ?>
-                            <td class="bdleft bdtop s6">0,00</td>
-                        <? } ?>
-                    <? } ?>
-                <? } ?>
+                    foreach ($despesaSaldoSentencasJudAnt as $elemento => $datas) {
+                        $subtotal = 0;
+                        if (in_array(substr($elemento, 0, 7), array("3319091", "3319191", "3319691"))) {
+                            $encontrouElemento = 1;
+                            for ($i = 0; $i <= 11; $i++) {
+                                if (array_key_exists($meses[$i], $datas)) {
+                                    $fSaldoSentencasJudAnt[$i] += $datas[$meses[$i]];;
+                                } else {
+                                    $fSaldoSentencasJudAnt[$i] += 0;
+                                }
+                            }
+                        }
+                    }
+                    if (!$encontrouElemento) {
+                        for ($i = 0; $i <= 12; $i++) {
+                            echo "<td class='bdleft bdtop s6'>0,00</td>";
+                        }
+                    } else {
+                        for ($i = 0; $i <= 11; $i++) {
+                            echo '<td class="bdleft bdtop s6">';
+                            $subtotal += $fSaldoSentencasJudAnt[$i];
+                            echo db_formatar($fSaldoSentencasJudAnt[$i], "f");
+                            echo '</td>';
+                        }
+                        echo '<td class="bdleft bdtop s6">' . db_formatar($subtotal, "f") . '</td>';
+                    }
+                }
+                ?>
             </tr>
 
             <tr style='height:19px;'>
@@ -1412,6 +1649,19 @@ ob_start();
                     <td class="s5">
                         <?php
                         $fSaldoDespesasAnteriores = 0;
+                        /*
+                        foreach (getDespesaMensalSaldoDespesasAnteriores("01-01-" . date("Y", strtotime($oDataIni->getDate("Y-m-d"))), $oDataIni->getDate("Y-m-d"), $aInstits) as $data) {
+                            $fSaldoDespesasAnteriores += $data->empenhado - $data->liquidado;
+                        }
+
+                        foreach (getDespesaMensalSaldoDespesasAnteriores($oDataIni->getDate("Y-m-d"), $oDataFim->getDate("Y-m-d"), $aInstits) as $data) {
+                            if ($valoresperado == 'liquidado')
+                                $fSaldoDespesasAnteriores += $data->empenhado - $data->liquidado;
+
+                            $fSaldoDespesasAnteriores   += $data->$valoresperado;
+                        }
+                        */
+
                         foreach ($aInstits as $iInstit) {
                             $oInstit = new Instituicao($iInstit);
                             if (getImplantacao()) {
@@ -1431,110 +1681,117 @@ ob_start();
                             }
                             $fSaldoDespesasAnteriores += $aSaldoEstrut1[0]->$valoresperado + $aSaldoEstrut2[0]->$valoresperado + $aSaldoEstrut3[0]->$valoresperado;
                         }
+
                         echo db_formatar($fSaldoDespesasAnteriores, "f");
                         ?>
                     </td>
                 <? } else { ?>
                     <td class="s3 bdleft" colspan="1">(-) Despesa de Exercícios Anteriores</td>
-                    <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa as $elemento => $datas) { ?>
-                        <?php $subtotal = 0; ?>
+                <?
+                    $encontrouElemento = 0;
 
-                        <?php if (in_array(substr($elemento, 1, 7), array("3319092", "3319192", "3319692"))) { ?>
-                            <? $encontrouElemento = 1; ?>
-
-                            <? for ($i = 0; $i <= 11; $i++) { ?>
-                                <td class="bdleft bdtop s6">
-                                    <?php
-                                    if (array_key_exists($meses[$i], $datas)) {
-                                        echo db_formatar($datas[$meses[$i]], "f");
-                                        $subtotal += $datas[$meses[$i]];
-                                        $fSaldoDespesasAnteriores[$meses[$i]] += $datas[$meses[$i]];
-                                    } else {
-                                        echo "0,00";
-                                    }
-                                    ?></td>
-                            <? } ?>
-                            <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
-
-                        <? } ?>
-                    <? } ?>
-                    <? if (!$encontrouElemento) { ?>
-                        <? for ($i = 0; $i <= 12; $i++) { ?>
-                            <td class="bdleft bdtop s6">0,00</td>
-                        <? } ?>
-                    <? } ?>
-                <? } ?>
+                    foreach ($despesaSaldoDespesasAnteriores as $elemento => $datas) {
+                        $subtotal = 0;
+                        if (in_array(substr($elemento, 0, 7), array("3319092", "3319192", "3319692"))) {
+                            $encontrouElemento = 1;
+                            for ($i = 0; $i <= 11; $i++) {
+                                if (array_key_exists($meses[$i], $datas)) {
+                                    $fSaldoDespesasAnteriores[$i] += $datas[$meses[$i]];;
+                                } else {
+                                    $fSaldoDespesasAnteriores[$i] += 0;
+                                }
+                            }
+                        }
+                    }
+                    if (!$encontrouElemento) {
+                        for ($i = 0; $i <= 12; $i++) {
+                            echo "<td class='bdleft bdtop s6'>0,00</td>";
+                        }
+                    } else {
+                        for ($i = 0; $i <= 11; $i++) {
+                            echo '<td class="bdleft bdtop s6">';
+                            $subtotal += $fSaldoDespesasAnteriores[$i];
+                            echo db_formatar($fSaldoDespesasAnteriores[$i], "f");
+                            echo '</td>';
+                        }
+                        echo '<td class="bdleft bdtop s6">' . db_formatar($subtotal, "f") . '</td>';
+                    }
+                }
+                ?>
             </tr>
+            <? if ($anousu <= 2018) { ?>
+                <tr style='height:19px;'>
+                    <? if ($tipoEmissao == 1) { ?>
+                        <td class="s3 bdleft" colspan="2">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
+                        <td class="s5">
+                            <?php
+                            $fSaldoAposentadoriaPensoesTesouro = 0;
+                            foreach ($aInstits as $iInstit) {
+                                $oInstit = new Instituicao($iInstit);
+                                if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA || $oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_CAMARA) {
+                                    if (getImplantacao()) {
+                                        $aSaldoEstrut1 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '3319692', $valorcalculoManual, $oInstit);
+                                        $aSaldoEstrut2 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '3319692', $valorcalculoManual, $oInstit);
+                                        $aSaldoEstrut3 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '3319692', $valorcalculoManual, $oInstit);
 
-            <tr style='height:19px;'>
-                <? if ($tipoEmissao == 1) { ?>
-                    <td class="s3 bdleft" colspan="2">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
-                    <td class="s5">
-                        <?php
-                        $fSaldoAposentadoriaPensoesTesouro = 0;
-                        foreach ($aInstits as $iInstit) {
-                            $oInstit = new Instituicao($iInstit);
-                            if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA || $oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_CAMARA) {
-                                if (getImplantacao()) {
-                                    $aSaldoEstrut1 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '3319692', $valorcalculoManual, $oInstit);
-                                    $aSaldoEstrut2 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '3319692', $valorcalculoManual, $oInstit);
-                                    $aSaldoEstrut3 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), getImplantacao(), '3319692', $valorcalculoManual, $oInstit);
+                                        $fSaldo1 = ($aSaldoEstrut1[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut1[0]->o58_anousu <= 2018) ? $aSaldoEstrut1[0]->$valoresperado : 0;
+                                        $fSaldo2 = ($aSaldoEstrut2[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut2[0]->o58_anousu <= 2018) ? $aSaldoEstrut2[0]->$valoresperado : 0;
+                                        $fSaldo3 = ($aSaldoEstrut3[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut3[0]->o58_anousu <= 2018) ? $aSaldoEstrut3[0]->$valoresperado : 0;
+                                        $fSaldoAposentadoriaPensoesTesouro += $fSaldo1 + $fSaldo2 + $fSaldo3;
 
+                                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                                    } else {
+
+                                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                                    }
                                     $fSaldo1 = ($aSaldoEstrut1[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut1[0]->o58_anousu <= 2018) ? $aSaldoEstrut1[0]->$valoresperado : 0;
                                     $fSaldo2 = ($aSaldoEstrut2[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut2[0]->o58_anousu <= 2018) ? $aSaldoEstrut2[0]->$valoresperado : 0;
                                     $fSaldo3 = ($aSaldoEstrut3[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut3[0]->o58_anousu <= 2018) ? $aSaldoEstrut3[0]->$valoresperado : 0;
                                     $fSaldoAposentadoriaPensoesTesouro += $fSaldo1 + $fSaldo2 + $fSaldo3;
-
-                                    $aSaldoEstrut1 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
-                                    $aSaldoEstrut2 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
-                                    $aSaldoEstrut3 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
-                                } else {
-                                    $aSaldoEstrut1 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
-                                    $aSaldoEstrut2 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
-                                    $aSaldoEstrut3 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
                                 }
-                                $fSaldo1 = ($aSaldoEstrut1[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut1[0]->o58_anousu <= 2018) ? $aSaldoEstrut1[0]->$valoresperado : 0;
-                                $fSaldo2 = ($aSaldoEstrut2[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut2[0]->o58_anousu <= 2018) ? $aSaldoEstrut2[0]->$valoresperado : 0;
-                                $fSaldo3 = ($aSaldoEstrut3[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut3[0]->o58_anousu <= 2018) ? $aSaldoEstrut3[0]->$valoresperado : 0;
-                                $fSaldoAposentadoriaPensoesTesouro += $fSaldo1 + $fSaldo2 + $fSaldo3;
+                            }
+                            echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
+                            ?>
+                        </td>
+                    <? } else { ?>
+                        <td class="s3 bdleft" colspan="1">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
+                    <?php
+                        $encontrouElemento = 0;
+
+                        foreach ($despesa2 as $elemento => $datas) {
+                            $subtotal = 0;
+                            if (in_array(substr($elemento, 0, 7), array("3319001", "3319003", "3319005"))) {
+                                $encontrouElemento = 1;
+                                for ($i = 0; $i <= 11; $i++) {
+                                    if (array_key_exists($meses[$i], $datas)) {
+                                        $fSaldoAposentadoriaPensoesTesouro[$i] += $datas[$meses[$i]];;
+                                    } else {
+                                        $fSaldoAposentadoriaPensoesTesouro[$i] += 0;
+                                    }
+                                }
                             }
                         }
-                        echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
-                        ?>
-                    </td>
-                <? } else { ?>
-                    <td class="s3 bdleft" colspan="1">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
-                    <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa as $elemento => $datas) { ?>
-                        <?php $subtotal = 0; ?>
-
-                        <?php if (in_array(substr($elemento, 1, 7), array("3319001", "3319003", "3319005"))) { ?>
-                            <? $encontrouElemento = 1; ?>
-
-                            <? for ($i = 0; $i <= 11; $i++) { ?>
-                                <td class="bdleft bdtop s6">
-                                    <?php
-                                    if (array_key_exists($meses[$i], $datas)) {
-                                        echo db_formatar($datas[$meses[$i]], "f");
-                                        $subtotal += $datas[$meses[$i]];
-                                        $fSaldoAposentadoriaPensoesTesouro[$meses[$i]] += $datas[$meses[$i]];
-                                    } else {
-                                        echo "0,00";
-                                    }
-                                    ?></td>
-                            <? } ?>
-                            <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
-
-                        <? } ?>
-                    <? } ?>
-                    <? if (!$encontrouElemento) { ?>
-                        <? for ($i = 0; $i <= 12; $i++) { ?>
-                            <td class="bdleft bdtop s6">0,00</td>
-                        <? } ?>
-                    <? } ?>
-                <? } ?>
-            </tr>
+                        if (!$encontrouElemento) {
+                            for ($i = 0; $i <= 12; $i++) {
+                                echo "<td class='bdleft bdtop s6'>0,00</td>";
+                            }
+                        } else {
+                            for ($i = 0; $i <= 11; $i++) {
+                                echo '<td class="bdleft bdtop s6">';
+                                $subtotal += $fSaldoAposentadoriaPensoesTesouro[$i];
+                                echo db_formatar($fSaldoAposentadoriaPensoesTesouro[$i], "f");
+                                echo '</td>';
+                            }
+                            echo '<td class="bdleft bdtop s6">' . db_formatar($subtotal, "f") . '</td>';
+                        }
+                    }
+                    ?>
+                </tr>
+            <? } ?>
 
             <tr style='height:19px;'>
                 <? if ($tipoEmissao == 1) { ?>
@@ -1561,6 +1818,22 @@ ob_start();
                                 $aSaldoEstrut5 = getSaldoDesdobramento("c60_estrut LIKE '331969401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), getImplantacao(), $dtfim, "", "");
                                 $aSaldoEstrut6 = getSaldoDesdobramento("c60_estrut LIKE '331969403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), getImplantacao(), $dtfim, "", "");
                             } else {
+                                if ($valoresperado == 'liquidado') {
+                                    $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331909401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331909403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331919401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331919403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut5 = getSaldoDesdobramento("c60_estrut LIKE '331969401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut6 = getSaldoDesdobramento("c60_estrut LIKE '331969403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+
+                                    $fSaldoIndenizacaoDemissaoServidores += ($aSaldoEstrut1[0]->empenhado - $aSaldoEstrut1[0]->liquidado)
+                                        + ($aSaldoEstrut2[0]->empenhado - $aSaldoEstrut2[0]->liquidado)
+                                        + ($aSaldoEstrut3[0]->empenhado - $aSaldoEstrut3[0]->liquidado)
+                                        + ($aSaldoEstrut4[0]->empenhado - $aSaldoEstrut4[0]->liquidado)
+                                        + ($aSaldoEstrut5[0]->empenhado - $aSaldoEstrut5[0]->liquidado)
+                                        + ($aSaldoEstrut6[0]->empenhado - $aSaldoEstrut6[0]->liquidado);
+                                }
+
                                 $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331909401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "", "");
                                 $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331909403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "", "");
                                 $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331919401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, "", "");
@@ -1575,35 +1848,39 @@ ob_start();
                     </td>
                 <? } else { ?>
                     <td class="s3 bdleft" colspan="1">(-) Indenização por demissão de servidores ou empregados</td>
-                    <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa as $elemento => $datas) { ?>
+                    <?php $encontrouElemento = 0;
+                    foreach ($despesaSaldoIndenizacaoDemissaoServidores as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
 
-                        <?php if (in_array(substr($elemento, 1, 9), array("331909401", "331909403", "331919401", "331919403", "331969401", "331969403"))) { ?>
-                            <? $encontrouElemento = 1; ?>
-
-                            <? for ($i = 0; $i <= 11; $i++) { ?>
-                                <td class="bdleft bdtop s6">
-                                    <?php
-                                    if (array_key_exists($meses[$i], $datas)) {
-                                        echo db_formatar($datas[$meses[$i]], "f");
-                                        $subtotal += $datas[$meses[$i]];
-                                        $fSaldoIndenizacaoDemissaoServidores[$meses[$i]] += $datas[$meses[$i]];
-                                    } else {
-                                        echo "0,00";
+                        <?php if (in_array(substr($elemento, 0, 9), array("331909401", "331909403", "331919401", "331919403", "331969403", "331919403"))) { ?>
+                <?php $encontrouElemento = 1;
+                            for ($i = 0; $i <= 11; $i++) {
+                                if (array_key_exists($meses[$i], $datas)) {
+                                    $fSaldoIndenizacaoDemissaoServidores[$i] += $datas[$meses[$i]];;
+                                } else {
+                                    if (!array_key_exists($i, $fSaldoIndenizacaoDemissaoServidores)) {
+                                        $fSaldoIndenizacaoDemissaoServidores[$i] += 0;
                                     }
-                                    ?></td>
-                            <? } ?>
-                            <td class="bdleft bdtop s6"><?= db_formatar($subtotal, "f"); ?></td>
+                                }
+                            }
+                        }
+                    }
 
-                        <? } ?>
-                    <? } ?>
-                    <? if (!$encontrouElemento) { ?>
-                        <? for ($i = 0; $i <= 12; $i++) { ?>
-                            <td class="bdleft bdtop s6">0,00</td>
-                        <? } ?>
-                    <? } ?>
-                <? } ?>
+                    if (!$encontrouElemento) {
+                        for ($i = 0; $i <= 12; $i++) {
+                            echo "<td class='bdleft bdtop s6'>0,00</td>";
+                        }
+                    } else {
+                        for ($i = 0; $i <= 11; $i++) {
+                            echo '<td class="bdleft bdtop s6">';
+                            $subtotal += $fSaldoIndenizacaoDemissaoServidores[$i];
+                            echo db_formatar($fSaldoIndenizacaoDemissaoServidores[$i], "f");
+                            echo '</td>';
+                        }
+                        echo '<td class="bdleft bdtop s6">' . db_formatar($subtotal, "f") . '</td>';
+                    }
+                }
+                ?>
             </tr>
             <tr style='height:19px;'>
                 <? if ($tipoEmissao == 1) { ?>
@@ -1636,10 +1913,10 @@ ob_start();
                 <? } else { ?>
                     <td class="s3 bdleft" colspan="1">(-) Incentivos a demissão voluntária</td>
                     <?php $encontrouElemento = 0; ?>
-                    <? foreach ($despesa as $elemento => $datas) { ?>
+                    <? foreach ($despesa2 as $elemento => $datas) { ?>
                         <?php $subtotal = 0; ?>
 
-                        <?php if (in_array(substr($elemento, 1, 9), array("331909402", "331919402", "331969402"))) { ?>
+                        <?php if (in_array(substr($elemento, 0, 9), array("331909402", "331919402", "331969402"))) { ?>
                             <? $encontrouElemento = 1; ?>
 
                             <? for ($i = 0; $i <= 11; $i++) { ?>
@@ -1648,7 +1925,7 @@ ob_start();
                                     if (array_key_exists($meses[$i], $datas)) {
                                         echo db_formatar($datas[$meses[$i]], "f");
                                         $subtotal += $datas[$meses[$i]];
-                                        $fSaldoIndenizacaoDemissaoServidores[$meses[$i]] += $datas[$meses[$i]];
+                                        $fSaldoIncentivosDemissaoVoluntaria[$meses[$i]] += $datas[$meses[$i]];
                                     } else {
                                         echo "0,00";
                                     }
@@ -1678,9 +1955,9 @@ ob_start();
                     <td class="s7 bdleft bdtop" colspan="1">Total da Despesa com Pessoal para Fins de apuração de Limite</td>
                     <? $subtotalmesfinal = 0; ?>
                     <? for ($i = 0; $i <= 11; $i++) { ?>
-                        <? $fTotalDespesaPessoal = $subtotalmes[$meses[$i]] - ($fSaldoIntaivosPensionistasProprio[$meses[$i]] + $fSaldoSentencasJudAnt[$meses[$i]] + $fSaldoAposentadoriaPensoesTesouro[$meses[$i]] + $fSaldoDespesasAnteriores[$meses[$i]] + $fSaldoIndenizacaoDemissaoServidores[$meses[$i]] + $fSaldoIncentivosDemissaoVoluntaria[$meses[$i]]); ?>
+                        <? $fTotalDespesaPessoal = $subtotalmes[$meses[$i]] - ($fSaldoIntaivosPensionistasProprio[$i] + $fSaldoSentencasJudAnt[$i] + $fSaldoAposentadoriaPensoesTesouro[$i] + $fSaldoDespesasAnteriores[$i] + $fSaldoIndenizacaoDemissaoServidores[$i] + $fSaldoIncentivosDemissaoVoluntaria[$i]); ?>
                         <td class="bdleft bdtop s8"><?= db_formatar($fTotalDespesaPessoal, "f") ?></td>
-                        <? $subtotalmesfinal += $subtotalmes[$meses[$i]] ?>
+                        <? $subtotalmesfinal += $fTotalDespesaPessoal ?>
                     <? } ?>
                     <td class="bdleft bdtop s8"><?= db_formatar($subtotalmesfinal, "f") ?></td>
                 <? } ?>
@@ -1879,7 +2156,7 @@ ob_start();
 
                 <td class="s8">
                     <?php
-                    $fRCLBase = $fRecCorrLiq - $fCFRP;
+                    $fRCLBase = $fRecCorrLiq - $fCFRP - $fCFRPB;
                     echo db_formatar($fRCLBase, "f");
                     ?>
                 </td>
@@ -1898,11 +2175,11 @@ ob_start();
             <tr style='height:19px;'>
                 <? if ($tipoEmissao == 1) { ?>
                     <td class="s1 bdleft">Aplicação no Exercício</td>
-                    <td class="s10"><?php echo db_formatar(($fTotalDespesaPessoal / $fRCLBase) * 100, "f"); ?>%</td>
+                    <td class="s10"><?php echo number_format((($fTotalDespesaPessoal / $fRCLBase) * 100), 2, ",", "."); ?>%</td>
                     <td class="s10"><?php echo db_formatar($fTotalDespesaPessoal, "f") ?></td>
                 <? } else { ?>
                     <td class="s1 bdleft" colspan="12">APLICAÇÃO NO EXERCÍCIO</td>
-                    <td class="s10"><?php echo db_formatar(($subtotalmesfinal / $fRCLBase) * 100, "f"); ?>%</td>
+                    <td class="s10"><?php echo number_format((($subtotalmesfinal / $fRCLBase) * 100), 2, ",", "."); ?>%</td>
                     <td class="s10"><?php echo db_formatar($subtotalmesfinal, "f") ?></td>
                 <? } ?>
             </tr>
@@ -1954,7 +2231,6 @@ ob_start();
 </html>
 
 <?php
-
 $html = ob_get_contents();
 ob_end_clean();
 //echo $html;
@@ -1963,7 +2239,6 @@ $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
 
 /* ---- */
-
 
 db_query("drop table if exists work_dotacao");
 db_query("drop table if exists work_receita");
@@ -2001,7 +2276,6 @@ function getConsolidacaoConsorcios(DBDate $oDataIni, DBDate $oDataFim)
  */
 function getValorManual($iCodRelatorio, $iLinha, $iInstit, $iCodPeriodo, $iAnousu)
 {
-
     $oLinha = new linhaRelatorioContabil($iCodRelatorio, $iLinha, $iInstit);
     $oLinha->setPeriodo($iCodPeriodo);
     $oLinha->setEncode(true);
@@ -2014,6 +2288,7 @@ function getValorDespesaInformado($inicio, $fim, $elemento, $valorcalculo, $oIns
     $where = " AND ((c233_mes >= " . date('m', strtotime($inicio)) . " AND c233_ano = " . date('Y', strtotime($inicio)) . ") OR (c233_mes <= " . date('m', strtotime($fim)) . " AND c233_ano = " . date('Y', strtotime($fim)) . "))";
     $whereCompetencia = " AND ((c233_competencia IS NOT NULL AND c233_competencia < '{$inicio}') OR (c233_competencia IS NULL)) ";
     $sql = "SELECT o56_elemento as o58_elemento, o56_descr, c233_ano as o58_anousu, {$valorcalculo} FROM despesaexercicioanterior left join orcelemento on substring(c233_elemento::text, 1, 13) = o56_elemento and c233_ano = o56_anousu WHERE c233_elemento like '{$elemento}%' and c233_orgao = {$oInstit->getCodigo()} {$where} {$whereCompetencia} group by 1,2,3";
+
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
@@ -2048,7 +2323,7 @@ function getDespesaMensal($inicio, $fim, $instituicao)
     $ano = date("Y", strtotime($inicio));
     $instituicao = implode(",", $instituicao);
 
-    $sql = "SELECT *
+    $sql = "SELECT * FROM (SELECT *
     FROM
         (
             SELECT
@@ -2077,21 +2352,405 @@ function getDespesaMensal($inicio, $fim, $instituicao)
                 ) AS x
         ) AS xxx
     WHERE
-        empenhado + liquidado > 0";
+        empenhado + liquidado <> 0 ) as x ";
+
+    return db_utils::getColectionByRecord(db_query($sql));
+}
+
+function getDespesaMensalExclusaoSaldoIntaivosPensionistasProprio($inicio, $fim, $instituicao, $iRpps)
+{
+    $ano = date("Y", strtotime($inicio));
+    $instituicao = implode(",", $instituicao);
+
+    $sql = "SELECT * FROM (SELECT
+                c60_estrut o58_elemento,
+                c60_descr o56_descr,
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2)
+                            WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1 :: FLOAT8), 2)
+                            ELSE 0 :: FLOAT8
+                        END
+                    ),
+                    0
+                ) AS liquidado,
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
+                            WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1 :: FLOAT8), 2)
+                            ELSE 0 :: FLOAT8
+                        END
+                    ),
+                    0
+                ) AS empenhado
+            FROM
+                (
+                    SELECT
+                        DISTINCT ON (c70_codlan) c53_tipo,
+                        c60_estrut,
+                        c60_descr,
+                        c70_valor
+                    FROM
+                        conlancamele
+                        INNER JOIN conlancam ON c70_codlan = c67_codlan
+                        INNER JOIN conlancamdoc ON c70_codlan = c71_codlan
+                        INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                        INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c67_codele
+                        AND c61_anousu = c70_anousu
+                        INNER JOIN conplanoorcamento ON c61_codcon = c60_codcon
+                        AND c61_anousu = c60_anousu
+                        INNER JOIN conlancamemp ON c70_codlan = c75_codlan
+                        INNER JOIN empempenho ON e60_numemp = c75_numemp
+                        INNER JOIN orcdotacao ON e60_coddot = o58_coddot
+                        AND e60_anousu = o58_anousu
+                        INNER JOIN infocomplementaresinstit ON e60_instit = si09_instit
+                    WHERE
+                        c70_anousu = {$ano}
+                        AND e60_instit in ({$instituicao})
+                        AND c61_instit in ({$instituicao})
+                        AND c53_tipo IN (10, 11, 20, 21)
+                        AND c70_data BETWEEN '{$inicio}' AND '{$fim}'
+                        AND o58_codigo IN (103, 203)
+                    ";
+    if ($iRpps) {
+        $sql .= getCondicaoTipoDespesa($instituicao);
+        $sql .= " ) AND (
+                        c60_estrut LIKE '331900101%'
+                        OR c60_estrut LIKE '331900301%'
+                    )) OR ( c60_estrut LIKE '331900501%' OR c60_estrut LIKE '331900502%') )) as w
+                GROUP BY c60_estrut, c60_descr";
+    } else {
+        $sql .= "
+                    AND ( c60_estrut LIKE '331900501%' OR c60_estrut LIKE '331900502%') ) as w
+                    GROUP BY c60_estrut, c60_descr";
+    }
+    $sql .= " ) as x";
+
+    return db_utils::getColectionByRecord(db_query($sql));
+}
+
+function getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir($inicio, $fim, $instituicao)
+{
+    $ano = date("Y", strtotime($inicio));
+    $instituicao = implode(",", $instituicao);
+
+    $sql = "SELECT * FROM (SELECT
+                c60_estrut o58_elemento,
+                c60_descr o56_descr,
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2)
+                            WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1 :: FLOAT8), 2)
+                            ELSE 0 :: FLOAT8
+                        END
+                    ),
+                    0
+                ) AS liquidado,
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
+                            WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1 :: FLOAT8), 2)
+                            ELSE 0 :: FLOAT8
+                        END
+                    ),
+                    0
+                ) AS empenhado
+            FROM
+                (
+                    SELECT
+                        DISTINCT ON (c70_codlan) c53_tipo,
+                        c60_estrut,
+                        c60_descr,
+                        c70_valor
+                    FROM
+                        conlancamele
+                        INNER JOIN conlancam ON c70_codlan = c67_codlan
+                        INNER JOIN conlancamdoc ON c70_codlan = c71_codlan
+                        INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                        INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c67_codele
+                        AND c61_anousu = c70_anousu
+                        INNER JOIN conplanoorcamento ON c61_codcon = c60_codcon
+                        AND c61_anousu = c60_anousu
+                        INNER JOIN conlancamemp ON c70_codlan = c75_codlan
+                        INNER JOIN empempenho ON e60_numemp = c75_numemp
+                        INNER JOIN orcdotacao ON e60_coddot = o58_coddot
+                        AND e60_anousu = o58_anousu
+                        INNER JOIN infocomplementaresinstit ON e60_instit = si09_instit
+                    WHERE
+                        c70_anousu = {$ano}
+                        AND e60_instit in ({$instituicao})
+                        AND c61_instit in ({$instituicao})
+                        AND c53_tipo IN (10, 11, 20, 21)
+                        AND c70_data BETWEEN '{$inicio}' AND '{$fim}'
+                        AND o58_codigo IN (103, 203)
+                    ";
+    $sql .= getCondicaoTipoDespesaInvertido($instituicao);
+    $sql .= " ) AND (
+                c60_estrut LIKE '331900101%'
+               OR c60_estrut LIKE '331900301%'
+            )) as w
+            GROUP BY c60_estrut, c60_descr";
+    $sql .= " ) as x";
+
+    return db_utils::getColectionByRecord(db_query($sql));
+}
+
+function getDespesaMensalSaldoIndenizacaoDemissaoServidores($inicio, $fim, $instituicao)
+{
+    $ano = date("Y", strtotime($inicio));
+    $instituicao = implode(",", $instituicao);
+
+    $sql = "SELECT * FROM (SELECT
+                c60_estrut o58_elemento,
+                c60_descr o56_descr,
+                COALESCE(
+        SUM(
+            CASE
+                WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2)
+                WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1 :: FLOAT8), 2)
+                ELSE 0 :: FLOAT8
+            END
+        ),
+        0
+    ) AS liquidado,
+    COALESCE(
+        SUM(
+            CASE
+                WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
+                WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1 :: FLOAT8), 2)
+                ELSE 0 :: FLOAT8
+            END
+        ),
+        0
+    ) AS empenhado
+FROM
+    (
+        SELECT
+                        DISTINCT ON (c70_codlan) c53_tipo,
+                        c60_estrut,
+                        c60_descr,
+                        c70_valor
+        FROM
+            conlancamele
+            INNER JOIN conlancam ON c70_codlan = c67_codlan
+            INNER JOIN conlancamdoc ON c70_codlan = c71_codlan
+            INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+            INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c67_codele
+            AND c61_anousu = c70_anousu
+            INNER JOIN conplanoorcamento ON c61_codcon = c60_codcon
+            AND c61_anousu = c60_anousu
+            INNER JOIN conlancamemp ON c70_codlan = c75_codlan
+            INNER JOIN empempenho ON e60_numemp = c75_numemp
+                    WHERE
+                        c70_anousu = {$ano}
+                        AND e60_instit in ({$instituicao})
+                        AND c61_instit in ({$instituicao})
+                        AND c53_tipo IN (10, 11, 20, 21)
+                        AND c70_data BETWEEN '{$inicio}' AND '{$fim}'
+                        AND (
+                            c60_estrut LIKE '331909401%'
+                            OR c60_estrut LIKE '331909403%'
+                            OR c60_estrut LIKE '331919401%'
+                            OR c60_estrut LIKE '331919403%'
+                            OR c60_estrut LIKE '331969403%'
+                            OR c60_estrut LIKE '331919403%') ) as w
+             GROUP BY c60_estrut, c60_descr";
+    $sql .= " ) as x";
+
+    return db_utils::getColectionByRecord(db_query($sql));
+}
+
+function getDespesaMensalExclusaoSaldoSentencasJudAnt($inicial, $inicio, $fim, $instituicao)
+{
+    $ano = date("Y", strtotime($inicio));
+    $instituicao = implode(",", $instituicao);
+
+    $sql = "SELECT * FROM (";
+    $sql .= "select
+            e60_numemp,
+            o58_elemento,
+            o56_descr,
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR, 2) :: FLOAT8
+                        WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR * -1, 2) :: FLOAT8
+                        ELSE 0 :: FLOAT8
+                    END
+                ),
+                0
+            ) AS liquidado,
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
+                        WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1 :: FLOAT8), 2)
+                        ELSE 0 :: FLOAT8
+                    END
+                ),
+                0
+            ) AS empenhado
+        from
+            work_dotacao
+            inner join orcelemento on o58_codele = o56_codele
+            and o58_anousu = o56_anousu
+            inner join empempenho on o58_coddot = e60_coddot
+            and o58_anousu = e60_anousu
+            inner join conlancamemp on e60_numemp = c75_numemp
+            inner join conlancam on c75_codlan = c70_codlan
+            inner join conlancamdoc on c71_codlan = c70_codlan
+            inner join conhistdoc on c53_coddoc = c71_coddoc
+        where
+            (o58_elemento like '3319091%' OR
+            o58_elemento like '3319191%' OR
+            o58_elemento like '3319691%')
+            and o58_instit IN ({$instituicao})
+            and e60_datasentenca < '{$inicial}'
+            and e60_emiss BETWEEN '{$inicio}' AND '{$fim}'
+        group by
+            1,
+            2,
+            3";
+    $sql .= " ) as x";
+
+    return db_utils::getColectionByRecord(db_query($sql));
+}
+
+function getDespesaMensalSaldoDespesasAnteriores($inicio, $fim, $instituicao, $anterior)
+{
+    $ano = date("Y", strtotime($inicio));
+    $instituicao = implode(",", $instituicao);
+
+    $sql = "SELECT * FROM (";
+    $sql .= "SELECT
+                    o58_elemento,
+                    o56_descr,
+                    SUM (CASE
+                        WHEN e50_compdesp IS NOT NULL THEN liquidado_compdesp
+                        ELSE liquidado
+                    END) AS liquidado,
+                    SUM (CASE
+                        WHEN e50_compdesp IS NOT NULL THEN empenhado_compdesp
+                        ELSE empenhado
+                    END) AS empenhado
+                    FROM
+                    (SELECT
+                            o58_elemento,
+                          o56_descr,
+                          liquidado,
+                          empenhado,
+                          e50_compdesp,
+                          (SELECT SUM(
+                              CASE
+                                  WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR,2)::FLOAT8
+                                  WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
+                              ELSE 0::FLOAT8 END) AS liquidado_compdesp
+                              FROM pagordem
+                                INNER JOIN conlancamord ON c80_codord = e50_codord
+                                INNER JOIN conlancamemp ON c80_codlan = c75_codlan
+                                INNER JOIN conlancam ON c75_codlan = c70_codlan
+                                INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                                INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                              WHERE e50_numemp = e60_numemp
+                                AND e50_compdesp < '{$anterior}'
+                                AND e50_codord = x.e50_codord) as liquidado_compdesp,
+                           (SELECT SUM(
+                              CASE
+                                  WHEN C53_TIPO = 10 THEN ROUND(C70_VALOR,2)::FLOAT8
+                                  WHEN C53_TIPO = 11 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
+                              ELSE 0::FLOAT8 END) AS empenhado_compdesp
+                              FROM pagordem
+                                INNER JOIN conlancamord ON c80_codord = e50_codord
+                                INNER JOIN conlancamemp ON c80_codlan = c75_codlan
+                                INNER JOIN conlancam ON c75_codlan = c70_codlan
+                                INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                                INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                              WHERE e50_numemp = e60_numemp
+                                AND e50_compdesp < '{$anterior}'
+                                AND e50_codord = x.e50_codord) as empenhado_compdesp
+                    FROM
+                      (SELECT o58_elemento,
+                              o56_descr,
+                              e60_numemp,
+                              liquidado,
+                              empenhado,
+                              e50_compdesp,
+                              e50_codord
+                      FROM work_dotacao
+                      INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
+                      INNER JOIN empempenho ON o58_coddot = e60_coddot AND o58_anousu = e60_anousu
+                      INNER JOIN pagordem ON e50_numemp = e60_numemp
+                      WHERE (o58_elemento LIKE '3319092%' OR o58_elemento LIKE '3319192%' OR o58_elemento LIKE '3319692%')
+                          AND o58_instit IN ({$instituicao})
+                            and e60_emiss BETWEEN '{$inicio}' AND '{$fim}'
+                          AND (e60_datasentenca < '{$anterior}' OR e50_compdesp < '{$anterior}')) AS x) as xx GROUP BY 1, 2";
+    $sql .= " ) as x";
 
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
 
-function getDespesaMensalInformada($inicio, $fim, $instituicao, $compentencia)
+function getDespesaMensalInformada($inicio, $fim, $instituicao, $competencia)
 {
     $ano = date("Y", strtotime($inicio));
     $instituicao = implode(",", $instituicao);
 
     $where = " AND (c233_mes = " . date('m', strtotime($inicio)) . " AND c233_ano = {$ano}) ";
-    $whereCompetencia = " AND ((c233_competencia IS NOT NULL AND c233_competencia < '{$compentencia}') OR (c233_competencia IS NULL)) ";
-    $sql = "SELECT c233_elemento as o58_elemento, c233_valorempenhado as empenhado, c233_valorliquidado as liquidado FROM despesaexercicioanterior left join orcelemento on substring(c233_elemento::text, 1, 13) = o56_elemento and c233_ano = o56_anousu WHERE c233_orgao IN ({$instituicao}) {$where} {$whereCompetencia}";
+    $whereCompetencia = " AND ((c233_competencia IS NOT NULL AND c233_competencia < '{$competencia}') OR (c233_competencia IS NULL)) ";
+    $sql = "SELECT o56_descr, c233_elemento as o58_elemento, c233_valorempenhado as empenhado, c233_valorliquidado as liquidado FROM despesaexercicioanterior left join orcelemento on substring(c233_elemento::text, 1, 13) = o56_elemento and c233_ano = o56_anousu WHERE c233_orgao IN ({$instituicao}) {$where} {$whereCompetencia}";
 
     return db_utils::getColectionByRecord(db_query($sql));
+}
+
+
+function getCondicaoTipoDespesa($aInstituicoes)
+{
+    $sql = " AND ((( si09_tipoinstit = " . Instituicao::TIPO_INSTIT_RPPS . " ) AND ( ";
+    $or = 0;
+    foreach (explode(",", $aInstituicoes) as $iChave => $iInstituicao) {
+        $sqlComplementar = "SELECT * FROM infocomplementaresinstit WHERE si09_instit = {$iInstituicao}";
+        $qQuery = pg_query($sqlComplementar);
+
+        while ($oRow = pg_fetch_object($qQuery)) {
+            if ($oRow->si09_tipoinstit == Instituicao::TIPO_INSTIT_CAMARA) {
+                $sql .= $or ? " OR e60_tipodespesa = 2 " : " e60_tipodespesa = 2 ";
+                $or = 1;
+            }
+
+            if ($oRow->si09_tipoinstit == Instituicao::TIPO_INSTIT_PREFEITURA) {
+                $sql .= $or ? " OR e60_tipodespesa = 1 " : " e60_tipodespesa = 1 ";
+                $or = 1;
+            }
+        }
+    }
+    return $sql;
+}
+
+function getCondicaoTipoDespesaInvertido($aInstituicoes)
+{
+    $sql = " AND (( si09_tipoinstit = " . Instituicao::TIPO_INSTIT_RPPS . " ) ";
+    $aCondicao = array(Instituicao::TIPO_INSTIT_CAMARA => " e60_tipodespesa = 2 ", Instituicao::TIPO_INSTIT_PREFEITURA => " e60_tipodespesa = 1 ");
+
+    foreach (explode(",", $aInstituicoes) as $iChave => $iInstituicao) {
+        $sqlComplementar = "SELECT * FROM infocomplementaresinstit WHERE si09_instit = {$iInstituicao}";
+        $qQuery = pg_query($sqlComplementar);
+
+        while ($oRow = pg_fetch_object($qQuery)) {
+            if ($oRow->si09_tipoinstit == Instituicao::TIPO_INSTIT_CAMARA) {
+                unset($aCondicao[Instituicao::TIPO_INSTIT_CAMARA]);
+            }
+
+            if ($oRow->si09_tipoinstit == Instituicao::TIPO_INSTIT_PREFEITURA) {
+                unset($aCondicao[Instituicao::TIPO_INSTIT_PREFEITURA]);
+            }
+        }
+    }
+
+    $sql .= " AND ( " . implode(" OR ", $aCondicao) . ") ";
+    return $sql;
 }
 ?>

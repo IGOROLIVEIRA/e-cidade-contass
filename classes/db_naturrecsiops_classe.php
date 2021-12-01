@@ -377,7 +377,19 @@ class cl_naturrecsiops {
             $sql .= $campos;
         }
         $sql .= " from naturrecsiops ";
-        $sql .= ' inner join elerecsiops on elerecsiops.c231_elerecsiops = substr(naturrecsiops.c230_natrecsiops, 1, 10) and naturrecsiops.c230_anousu = elerecsiops.c231_anousu ';
+
+        if ($c230_anousu >= 2021) {
+            
+            if(substr($c230_natrececidade, 0, 1) == '9') {
+                $sql .= ' inner join elerecsiops on substr(c230_natrecsiops,3,8) = c231_elerecsiops AND c230_anousu = c231_anousu';
+            } else {
+                $sql .= ' inner join elerecsiops on substr(c230_natrecsiops,1,8) = c231_elerecsiops AND c230_anousu = c231_anousu';
+            }
+            
+        } else {
+            $sql .= ' inner join elerecsiops on elerecsiops.c231_elerecsiops = substr(naturrecsiops.c230_natrecsiops, 1, 10) and naturrecsiops.c230_anousu = elerecsiops.c231_anousu ';
+        }
+
         $sql2 = "";
         if ($dbwhere=="") {
             if ($c230_natrececidade!=null ) {

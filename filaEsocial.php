@@ -18,6 +18,7 @@ require_once("model/configuracao/TaskManager.model.php");
 require_once("src/RecursosHumanos/ESocial/Integracao/Recurso.php");
 require_once("src/RecursosHumanos/ESocial/Model/Formulario/Tipo.php");
 require_once("src/RecursosHumanos/ESocial/Integracao/ESocial.php");*/
+
 use \ECidade\V3\Extension\Registry;
 use \ECidade\Core\Config as AppConfig;
 
@@ -37,17 +38,18 @@ $fila = new FilaESocialTask();
     'app.api' => array(
         'centraldeajuda' => 'http://centraldeajuda.dbseller.com.br/help/api/index.php/',
         'esocial' => array(
-            'url' => 'http://172.16.212.56/sped-esocial-master/run.php', // informe a api do eSocial. ESTE IP E DA MAQUINA DE ROBSON. LEMBRAR DE MUDAR.
+            'url' => 'http://34.95.213.240/sped-esocial/', // informe a api do eSocial. ESTE IP E DA MAQUINA DE ROBSON. LEMBRAR DE MUDAR.
+            //'url' => 'http://10.251.27.76/sped-esocial-2.5/',
             'login' => '', // login do cliente
             'password' => '' // senha do cliente
         )
     ),
 
-    'app.proxy' => array(
-        'http'  => '172.16.212.254:3128', // e.g. 172.16.212.254:3128
-        'https' => '172.16.212.254:3128', // e.g. 192.168.0.1:3128
-        'tcp'   => '172.16.212.254:3128'  // e.g. 192.168.0.1:3128
-    ),
+    // 'app.proxy' => array(
+    //     'http'  => '172.16.212.254:3128', // e.g. 172.16.212.254:3128
+    //     'https' => '172.16.212.254:3128', // e.g. 192.168.0.1:3128
+    //     'tcp'   => '172.16.212.254:3128'  // e.g. 192.168.0.1:3128
+    // ),
 
     'app.request.session.attachOn' => '*.php',
 

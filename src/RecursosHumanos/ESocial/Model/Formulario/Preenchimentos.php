@@ -1,4 +1,5 @@
 <?php
+
 namespace ECidade\RecursosHumanos\ESocial\Model\Formulario;
 
 use ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosResposta;
@@ -105,22 +106,24 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulários das rubricas.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formulários.");
         }
 
         return \db_utils::getCollectionByRecord($rs);
     }
 
     /**
-     * Busca o preenchimento dos formulários genéricos.
-     * Aqueles que possuem uma carga de dados e um campo pk (Uma chave única )
-     *
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarUltimoPreenchimentoRubrica($codigoFormulario)
+    public function buscarUltimoPreenchimentoInstituicao($codigoFormulario)
     {
-        $where = " db101_sequencial = {$codigoFormulario} ";
+        $where  = " db101_sequencial = {$codigoFormulario} ";
+        $where .= " AND COALESCE((SELECT db106_resposta::integer
+                FROM avaliacaogrupoperguntaresposta
+                JOIN avaliacaoresposta ON avaliacaogrupoperguntaresposta.db108_avaliacaoresposta=avaliacaoresposta.db106_sequencial
+                JOIN avaliacaoperguntaopcao ON avaliacaoperguntaopcao.db104_sequencial = avaliacaoresposta.db106_avaliacaoperguntaopcao
+                WHERE db108_avaliacaogruporesposta=db107_sequencial and db104_identificadorcampo = 'instituicao'),0) IN (" . db_getsession("DB_instit") . ",0)";
         $campos = 'distinct db107_sequencial as preenchimento, ';
         $campos .= '(select db106_resposta';
         $campos .= '   from avaliacaoresposta as ar ';
@@ -130,9 +133,10 @@ class Preenchimentos
         $campos .= '  where ap.db103_perguntaidentificadora is true ';
         $campos .= '    and preenchimento.db108_avaliacaogruporesposta = db107_sequencial ';
         $campos .= "    and db103_identificadorcampo != 'instituicao' ";
+        $campos .= "    order by db106_resposta desc limit 1 ";
         $campos .= ') as pk ';
         $dao = new \cl_avaliacaogruporesposta;
-        $sql = $dao->sql_avaliacao_preenchida(null, $campos, null, $where);
+        $sql = $dao->sql_avaliacao_preenchida(null, $campos, "preenchimento desc", $where);
 
         $rs = \db_query($sql);
 
@@ -145,6 +149,29 @@ class Preenchimentos
         /**
          * @todo busca os empregadores da instituição e adicona para cada rubriuca
          */
+        return \db_utils::getCollectionByRecord($rs);
+    }
+
+    /**
+     * Busca os preenchimentos Lotacao
+     *
+     * @param integer $codigoFormulario
+     * @return stdClass[]
+     */
+    public function buscarUltimoPreenchimentoLotacao($codigoFormulario)
+    {
+        $where = " db101_sequencial = {$codigoFormulario} ";
+        $group = "";
+        $campos = "(select z01_numcgm from cgm where z01_numcgm = $this->responsavelPreenchimento) as cgm, max(db107_sequencial) as preenchimento, ";
+        $campos .= "(select z01_cgccpf from cgm where z01_numcgm = $this->responsavelPreenchimento) as inscricao_empregador ";
+        $dao = new \cl_avaliacaogruporespostalotacao;
+        $sql = $dao->buscaAvaliacaoPreenchida(null, $campos, null, $where . $group);
+        $rs = \db_query($sql);
+
+        if (!$rs) {
+            throw new \Exception("Erro ao buscar os preenchimentos dos formulários dos empregadores.");
+        }
+
         return \db_utils::getCollectionByRecord($rs);
     }
 

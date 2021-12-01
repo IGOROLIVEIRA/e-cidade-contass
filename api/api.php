@@ -36,9 +36,9 @@ $app['class.loader'] = Registry::get('app.loader');
 //// aplica o service provider do ServiceController
 $app->register(new ServiceControllerServiceProvider());
 
-require_once ("libs/db_stdlib.php");
-require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR ."libs/db_conecta.php");
-require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR ."libs/db_sessoes.php");
+require_once("libs/db_stdlib.php");
+require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "libs/db_conecta.php");
+require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "libs/db_sessoes.php");
 
 // app authentication
 //$app->before(function (Request $request, Application $app) {
@@ -57,33 +57,27 @@ require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR ."libs/db_sessoes.php");
 //  if (empty($_SESSION) || empty($_SESSION['DB_login'])) {
 //    throw new AccessDeniedHttpException('Sessão inválida ou expirada. Tente logar novamente.');
 //  }
-//echo 'here asdf'.db_getsession("DB_servidor");exit;
-  $DB_SERVIDOR = db_getsession("DB_servidor");
-  $DB_BASE     = db_getsession("DB_base");
-  $DB_PORTA    = db_getsession("DB_porta");
-  $DB_USUARIO  = db_getsession("DB_user");
-  $DB_SENHA    = db_getsession("DB_senha");
-//
-  global $conn;
-  $conn = pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA");
+
+global $conn;
+$conn = pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA");
 //
 //});
 
 // app api version1 routes
 $app->register(new \ECidade\Api\V1\APIServiceProvider(), array(
-  'ecidade_api.mount_prefix' => '/api/v1'
+    'ecidade_api.mount_prefix' => '/api/v1'
 ));
 
 // app error handling
 $app->error(function (\Exception $e, $code) use ($app) {
 
     $response = array(
-      "statusCode" => $code,
-      "message" => \DBString::utf8_encode_all($e->getMessage())
+        "statusCode" => $code,
+        "message" => \DBString::utf8_encode_all($e->getMessage())
     );
 
     if ($app['debug']) {
-      $response["stacktrace"] = $e->getTraceAsString();
+        $response["stacktrace"] = $e->getTraceAsString();
     }
 
     return new JsonResponse($response);

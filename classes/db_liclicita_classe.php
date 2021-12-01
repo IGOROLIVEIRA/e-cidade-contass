@@ -2301,6 +2301,54 @@ class cl_liclicita
         return $sql;
     }
 
+    function sql_query_old ( $l20_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+          $campos_sql = split("#",$campos);
+          $virgula = "";
+          for($i=0;$i<sizeof($campos_sql);$i++){
+            $sql .= $virgula.$campos_sql[$i];
+            $virgula = ",";
+          }
+        }else{
+          $sql .= $campos;
+        }
+        $sql .= " from liclicita ";
+        $sql .= "      inner join db_config         on db_config.codigo = liclicita.l20_instit";
+        $sql .= "      inner join db_usuarios       on db_usuarios.id_usuario = liclicita.l20_id_usucria";
+        $sql .= "      inner join cflicita          on cflicita.l03_codigo = liclicita.l20_codtipocom";
+        $sql .= "      inner join liclocal          on liclocal.l26_codigo = liclicita.l20_liclocal";
+        $sql .= "      inner join liccomissao       on liccomissao.l30_codigo = liclicita.l20_liccomissao";
+        $sql .= "      inner join licsituacao       on licsituacao.l08_sequencial = liclicita.l20_licsituacao";
+        $sql .= "      inner join cgm               on  cgm.z01_numcgm = db_config.numcgm";
+        $sql .= "      inner join db_config as dbconfig on  dbconfig.codigo = cflicita.l03_instit";
+        $sql .= "      inner join pctipocompra      on pctipocompra.pc50_codcom = cflicita.l03_codcom";
+        $sql .= "      inner join bairro            on bairro.j13_codi = liclocal.l26_bairro";
+        $sql .= "      inner join ruas              on ruas.j14_codigo = liclocal.l26_lograd";
+        $sql .= "      left  join liclicitaproc     on liclicitaproc.l34_liclicita = liclicita.l20_codigo";
+        $sql .= "      left  join protprocesso      on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
+        $sql2 = "";
+        if($dbwhere==""){
+          if($l20_codigo!=null ){
+            $sql2 .= " where liclicita.l20_codigo = $l20_codigo ";
+          }
+        }else if($dbwhere != ""){
+          $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+          $sql .= " order by ";
+          $campos_sql = split("#",$ordem);
+          $virgula = "";
+          for($i=0;$i<sizeof($campos_sql);$i++){
+            $sql .= $virgula.$campos_sql[$i];
+            $virgula = ",";
+          }
+        }
+         //echo $sql;
+        return $sql;
+     }
+
   function sql_query_relatorio($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
   {
     $sql = "select ";
@@ -2513,6 +2561,41 @@ class cl_liclicita
 
     // funcao do sql
     function sql_query_file($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
+        $sql = "select ";
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from liclicita ";
+        $sql2 = "";
+        if ($dbwhere == "") {
+            if ($l20_codigo != null) {
+                $sql2 .= " where liclicita.l20_codigo = $l20_codigo ";
+            }
+        } else if ($dbwhere != "") {
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($ordem != null) {
+            $sql .= " order by ";
+            $campos_sql = split("#", $ordem);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
+    function sql_query_consulta($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -3064,6 +3147,11 @@ class cl_liclicita
         return $sql;
     }
 
+    function alterar_dtpubratificacao($l20_codigo)
+    {
+        $sql = "update liclicita set l20_dtpubratificacao = '$this->l20_dtpubratificacao' where l20_codigo = $l20_codigo";
+        $result = db_query($sql);
+    }
 
     function alterar_liclicitajulgamento($l20_codigo)
     {
@@ -3513,4 +3601,3 @@ class cl_liclicita
         return $aItensPcmater;
     }
 }
-?>

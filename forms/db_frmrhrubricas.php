@@ -46,6 +46,11 @@ if($db_opcao==1){
 
 $rh27_instit = db_getsession("DB_instit");
 
+$oDaoAvaliacaoperguntaopcao = db_utils::getDao("avaliacaoperguntaopcao");
+define('ESOCIAL_OPCAO_PREVSOCIAL', 3000947);
+define('ESOCIAL_OPCAO_IRRF', 3000948);
+define('ESOCIAL_OPCAO_FGTS', 3000949);
+define('ESOCIAL_OPCAO_REGIME', 4000361);
 ?>
 <div align="center">
 <form name="form1" method="post" action="<?=$db_action?>" >
@@ -351,6 +356,94 @@ $rh27_instit = db_getsession("DB_instit");
          
          </table>
       </fieldset>
+
+      <fieldset id="ctneSocial">
+       <Legend><b>eSocial</b></Legend>
+         <table width="100%">
+          <tr>
+            <td colspan="1" title="" >
+              <b>Base eSocial</b>
+            </td>
+            <td title="Base eSocial" >
+              <?php
+                $result = $clrubricasesocial->sql_record($clrubricasesocial->sql_query_file(null,"e990_sequencial,e990_descricao"));
+                db_selectrecord("e991_rubricasesocial",$result,true,$db_opcao,"","","","","js_reload(this.value)");
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" title="<?php echo $Trh27_codincidprev; ?>" >
+              <?php echo $Lrh27_codincidprev; ?>
+            </td>
+            <td title="<?php echo $Trh27_codincidprev; ?>" >
+              <?php
+                $result=$oDaoAvaliacaoperguntaopcao->sql_record($oDaoAvaliacaoperguntaopcao->sql_query_file(null,"db104_sequencial,db104_valorresposta||' - '||db104_descricao AS db104_descricao","db104_valorresposta","db104_avaliacaopergunta = ".ESOCIAL_OPCAO_PREVSOCIAL));
+                $aSelect = array();
+                for($iCont = 0; $iCont < $oDaoAvaliacaoperguntaopcao->numrows; $iCont++) {
+                  $aSelect[db_utils::fieldsMemory($result, $iCont)->db104_sequencial] = db_utils::fieldsMemory($result, $iCont)->db104_descricao;
+                }
+                db_select('rh27_codincidprev', $aSelect, true, $db_opcao, "style='width:430;'");
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" title="<?php echo $Trh27_codincidirrf; ?>" >
+              <?php echo $Lrh27_codincidirrf; ?>
+            </td>
+            <td title="<?php echo $Trh27_codincidirrf; ?>" >
+              <?php
+                $result=$oDaoAvaliacaoperguntaopcao->sql_record($oDaoAvaliacaoperguntaopcao->sql_query_file(null,"db104_sequencial,db104_valorresposta||' - '||db104_descricao AS db104_descricao","db104_valorresposta","db104_avaliacaopergunta = ".ESOCIAL_OPCAO_IRRF));
+                $aSelect = array();
+                for($iCont = 0; $iCont < $oDaoAvaliacaoperguntaopcao->numrows; $iCont++) {
+                  $aSelect[db_utils::fieldsMemory($result, $iCont)->db104_sequencial] = db_utils::fieldsMemory($result, $iCont)->db104_descricao;
+                }
+                db_select('rh27_codincidirrf', $aSelect, true, $db_opcao, "style='width:430;'");
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" title="<?php echo $Trh27_codincidfgts; ?>" >
+              <?php echo $Lrh27_codincidfgts; ?>
+            </td>
+            <td title="<?php echo $Trh27_codincidfgts; ?>" >
+              <?php
+                $result=$oDaoAvaliacaoperguntaopcao->sql_record($oDaoAvaliacaoperguntaopcao->sql_query_file(null,"db104_sequencial,db104_descricao","db104_valorresposta","db104_avaliacaopergunta = ".ESOCIAL_OPCAO_FGTS));
+                $aSelect = array();
+                for($iCont = 0; $iCont < $oDaoAvaliacaoperguntaopcao->numrows; $iCont++) {
+                  $aSelect[db_utils::fieldsMemory($result, $iCont)->db104_sequencial] = db_utils::fieldsMemory($result, $iCont)->db104_descricao;
+                }
+                db_select('rh27_codincidfgts', $aSelect, true, $db_opcao, "style='width:430;'");
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" title="<?php echo $Trh27_codincidregime; ?>" >
+              <?php echo $Lrh27_codincidregime; ?>
+            </td>
+            <td title="<?php echo $Trh27_codincidregime; ?>" >
+              <?php
+                $result=$oDaoAvaliacaoperguntaopcao->sql_record($oDaoAvaliacaoperguntaopcao->sql_query_file(null,"db104_sequencial,db104_descricao","db104_valorresposta","db104_avaliacaopergunta = ".ESOCIAL_OPCAO_REGIME));
+                $aSelect = array();
+                for($iCont = 0; $iCont < $oDaoAvaliacaoperguntaopcao->numrows; $iCont++) {
+                  $aSelect[db_utils::fieldsMemory($result, $iCont)->db104_sequencial] = db_utils::fieldsMemory($result, $iCont)->db104_descricao;
+                }
+                db_select('rh27_codincidregime', $aSelect, true, $db_opcao, "style='width:430;'");
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" title="<?php echo $Trh27_tetoremun; ?>" >
+              <?php echo $Lrh27_tetoremun; ?>
+            </td>
+            <td title="<?php echo $Trh27_tetoremun; ?>" >
+              <?php
+                $aTetoRemun = array("f" => "NAO", "t" => "SIM");
+                db_select('rh27_tetoremun', $aTetoRemun, true, $db_opcao, "style='width:52px;'"); 
+              ?>
+            </td>
+          </tr>
+         </table>
+      </fieldset>
       
       <fieldset id="ctnFormulas">
         <Legend> <b>Fórmulas</b> </Legend>
@@ -473,6 +566,7 @@ $rh27_instit = db_getsession("DB_instit");
 
 var oToogleInformacoes = new DBToogle('ctnInformacoes', true);
 var oToogleFormulas    = new DBToogle('ctnFormulas', true);
+var oToogleeSocial    = new DBToogle('ctneSocial', false);
 /**
  * Vaidacao do formulario
  *
@@ -773,4 +867,5 @@ function js_bloqueiaMedias(obj) {
 	}
 
 ?>
+$('e991_rubricasesocialdescr').style.width = '372px';
 </script>
