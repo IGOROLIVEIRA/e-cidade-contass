@@ -99,7 +99,7 @@ switch ($oParam->exec) {
             $oAcordo                   = new Acordo($oParam->acordo);
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
             $sHistorico = "Valor referente a homologação do Acordo: {$iCodigoAcordo}.";
-            $oAcordoLancamentoContabil->registraControleContrato($oParam->acordo, $oAcordo->getValorContrato(), $sHistorico);
+            $oAcordoLancamentoContabil->registraControleContrato($oParam->acordo, $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
@@ -126,7 +126,7 @@ switch ($oParam->exec) {
             $oAcordo                   = new Acordo($oHomologacao->getAcordo());
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
             $sHistorico = "Valor referente a Cancelamento homologação do Acordo: {$iCodigoAcordo}.";
-            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico);
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
@@ -355,7 +355,7 @@ switch ($oParam->exec) {
 
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
             $sHistorico = "Valor referente a Recisão do Acordo: {$oAcordo->getCodigoAcordo()}.";
-            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico);
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico, $oRecisao->getDataMovimento());
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
@@ -375,7 +375,7 @@ switch ($oParam->exec) {
         try {
 
             db_inicio_transacao();
-
+            $dtMovimento = implode("-", array_reverse(explode("/", $oParam->sData)));
             $oRecisao = new AcordoRescisao($oParam->codigo);
             $nValorRescisao = floatval(str_replace(',', '.', $oParam->valorrescisao));
 
@@ -391,7 +391,7 @@ switch ($oParam->exec) {
             $oAcordo = new Acordo($oRecisao->getAcordo());
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
             $sHistorico = "Valor referente a Cancelamento da Recisão do Acordo: {$oAcordo->getCodigoAcordo()}.";
-            $oAcordoLancamentoContabil->registraControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico);
+            $oAcordoLancamentoContabil->registraControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico, $dtMovimento);
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {

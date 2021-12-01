@@ -55,6 +55,7 @@ require_once("dbforms/db_funcoes.php");
 require_once("libs/db_sessoes.php");
 require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_liclicitaoutrosorgaos_classe.php");
+require_once("model/contrato/AcordoLancamentoContabil.model.php");
 $oJson    = new services_json();
 $oRetorno = new stdClass();
 $oDaoTipocompra = new cl_pctipocompra();
@@ -415,16 +416,26 @@ switch($oParam->exec) {
                     $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
                     $oRetorno->status = 1;
                     throw new BusinessException($erro_msg);
-                }else {
-                    if ($oPosicao->codigo == $oContrato->getUltimaPosicao(true)->getCodigo()) {
-                      $oAcordoPosicao->remover();
-                    } else {
-                      throw new BusinessException(" Não é possível excluir uma aditamento/apostilamento que não seja o último. Para excluir um aditamento/apostilamento, faça a partir do último ");
-                    }
-                    db_fim_transacao(false);
-                    $oRetorno->status = 2;
-                    $oRetorno->message = urlencode('Aditamento excluído com sucesso!');
                 }
+                if ($oPosicao->codigo != $oContrato->getUltimaPosicao(true)->getCodigo()) {
+                    throw new BusinessException(" Não é possível excluir uma aditamento/apostilamento que não seja o último. Para excluir um aditamento/apostilamento, faça a partir do último ");
+                }
+                $nValorLancamentoContabil =0;
+                foreach($oAcordoPosicao->getItens() as $oItenAditado){
+                    $nValorLancamentoContabil += $oItenAditado->getValorAditado();
+                }
+                $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+                $sHistorico = "Valor referente a exclusão da posição {$oPosicao->codigo} do Acordo: {$oAcordoPosicao->getAcordo()}.";
+                if($nValorLancamentoContabil < 0){
+                    $oAcordoLancamentoContabil->registraControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $oAcordoPosicao->getDataAssinatura());
+                }else{
+                    $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $oAcordoPosicao->getDataAssinatura());
+                }
+
+                $oAcordoPosicao->remover();
+                db_fim_transacao(false);
+                $oRetorno->status = 2;
+                $oRetorno->message = urlencode('Aditamento excluído com sucesso!');
             }
 
         } catch (Exception $eErro) {

@@ -3243,9 +3243,9 @@ class Acordo
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
         $sHistorico = "Valor referente a Aditivo {$oNovaPosicao->getNumeroAditamento()} do Acordo: {$this->getCodigoAcordo()}.";
         if($nValorLancamentoContabil > 0){
-            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico);
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $oNovaPosicao->getData());
         }else{
-            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico);
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oNovaPosicao->getData());
         }
         return $this;
     }
@@ -4079,9 +4079,11 @@ class Acordo
     {
 
         $nValorItens = 0;
+        $nValorLancamentoContabil = 0;
 
         foreach ($aItens as $oItem) {
             $nValorItens += round(abs($oItem->valorapostilado), 2);
+            $nValorLancamentoContabil += round($oItem->valorapostilado, 2);
         }
 
         /**
@@ -4194,6 +4196,13 @@ class Acordo
              * Alterado opcao para false para nao gerar reserva conforme solicitado por Mario
              */
             $oNovoItem->save(false);
+        }
+        $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+        $sHistorico = "Valor referente a Apostilamento {$oNovaPosicao->getNumeroApostilamento()} do Acordo: {$this->getCodigoAcordo()}.";
+        if($nValorLancamentoContabil > 0){
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $oNovaPosicao->getData());
+        }else{
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oNovaPosicao->getData());
         }
 
         return $this;

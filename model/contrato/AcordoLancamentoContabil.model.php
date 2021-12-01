@@ -51,12 +51,12 @@ class AcordoLancamentoContabil
      * Registra lançamento contabil movimentação contrato
      *
      * @param  integer $iCodigoAcordo
-     * @param  DBDate $oDataLancamento
      * @param  float $nValorLancamento
      * @param  string $sHistorico
+     * @param  DBDate $oDataLancamento
      * @return Resource
      */
-    public function registraControleContrato($iCodigoAcordo, $nValorLancamento, $sHistorico)
+    public function registraControleContrato($iCodigoAcordo, $nValorLancamento, $sHistorico, $datoDataLancamentoLancamento)
     {
         if(db_getsession('DB_anousu') < 2022){
             return;
@@ -79,7 +79,7 @@ class AcordoLancamentoContabil
         $oContaCorrente = new ContaCorrenteDetalhe();
         $oContaCorrente->setAcordo($oAcordo);
         $oLancamentoAuxiliarAcordoHomologacao->setContaCorrenteDetalhe($oContaCorrente);
-        return $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordoHomologacao);
+        return $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordoHomologacao, $datoDataLancamentoLancamento);
 
     }
 
@@ -87,12 +87,12 @@ class AcordoLancamentoContabil
      * Registra lançamento contabil movimentação contrato
      *
      * @param  integer $iCodigoAcordo
-     * @param  DBDate $oDataLancamento
      * @param  float $nValorLancamento
      * @param  string $sHistorico
+     * @param  DBDate $oDataLancamento
      * @return Resource
      */
-    public function anulaRegistroControleContrato($iCodigoAcordo, $nValorLancamento, $sHistorico)
+    public function anulaRegistroControleContrato($iCodigoAcordo, $nValorLancamento, $sHistorico, $datoDataLancamentoLancamento)
     {
         if(db_getsession("DB_anousu") < 2022){
             return;
@@ -114,6 +114,6 @@ class AcordoLancamentoContabil
         $oContaCorrente = new ContaCorrenteDetalhe();
         $oContaCorrente->setAcordo($oAcordo);
         $oLancamentoAuxiliarAcordoHomologacao->setContaCorrenteDetalhe($oContaCorrente);
-        return $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordoHomologacao);
+        return $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordoHomologacao, $datoDataLancamentoLancamento);
     }
 }
