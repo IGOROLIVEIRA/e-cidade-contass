@@ -335,9 +335,10 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         JOIN orcprojativ ON (o58_anousu, o58_projativ) = (o55_anousu, o55_projativ)
         INNER JOIN empempaut ON e61_numemp = e60_numemp
         INNER JOIN empautoriza ON e54_autori = e61_autori
+        LEFT JOIN pctipocompra ON e60_codcom = pc50_codcom
+        LEFT JOIN cflicita ON pc50_pctipocompratribunal = l03_pctipocompratribunal AND l03_instit = " . db_getsession("DB_instit") . " and pc50_codcom=l03_codcom
+        LEFT JOIN liclicita ON (ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0'), l20_anousu::varchar, l03_codigo) = (l20_edital::varchar, ((string_to_array(e60_numerol, '/'))[2])::varchar, l20_codtipocom)
         LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
-        LEFT JOIN liclicita ON e54_codlicitacao=l20_codigo
-        LEFT JOIN cflicita ON l20_codtipocom=l03_codigo
         LEFT JOIN orcunidade ON (o58_anousu, o58_orgao, o58_unidade) = (orcunidade.o41_anousu, orcunidade.o41_orgao, orcunidade.o41_unidade)
         LEFT JOIN orcorgao ON (orcorgao.o40_orgao, orcorgao.o40_anousu) = (orcunidade.o41_orgao, orcunidade.o41_anousu)
         LEFT JOIN cgm o ON o.z01_numcgm = orcunidade.o41_orddespesa
