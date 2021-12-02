@@ -341,6 +341,15 @@ class cl_rhrubricas
             return false;
         }
 
+        if (($this->rh27_tetoremun == null) || ($this->rh27_tetoremun == "")) {
+            $this->erro_sql = " Campo rh27_tetoremun nao declarado.";
+            $this->erro_banco = "Chave Primaria zerada.";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         $this->rh27_rubric = $rh27_rubric;
         $this->rh27_instit = $rh27_instit;
         if (($this->rh27_rubric == null) || ($this->rh27_rubric == "")) {

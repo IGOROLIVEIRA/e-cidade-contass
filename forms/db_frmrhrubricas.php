@@ -438,7 +438,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                                 </td>
                                 <td title="<?php echo $Trh27_tetoremun; ?>">
                                     <?php
-                                    $aTetoRemun = array("f" => "NAO", "t" => "SIM");
+                                    $aTetoRemun = array("" => "Selecione", "f" => "NAO", "t" => "SIM");
                                     db_select('rh27_tetoremun', $aTetoRemun, true, $db_opcao, "style='width:52px;'");
                                     ?>
                                 </td>
