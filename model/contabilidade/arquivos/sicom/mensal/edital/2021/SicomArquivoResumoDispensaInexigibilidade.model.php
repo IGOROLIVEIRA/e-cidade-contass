@@ -268,12 +268,12 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
-                INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-				INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = db150_codobra
+                LEFT JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
+				        LEFT JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = db150_codobra
                 WHERE db_config.codigo = " . db_getsession('DB_instit') . " AND liclancedital.l47_dataenvio = '" . $this->sDataFinal . "'
                     AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
 ";
-    $rsResult10 = db_query($sSql);
+    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
 
     /**
      * registro 10
