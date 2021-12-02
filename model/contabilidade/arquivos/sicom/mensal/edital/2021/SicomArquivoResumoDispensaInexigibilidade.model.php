@@ -273,7 +273,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 WHERE db_config.codigo = " . db_getsession('DB_instit') . " AND liclancedital.l47_dataenvio = '" . $this->sDataFinal . "'
                     AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
 ";
-    $rsResult10 = db_query($sSql);db_criatabela($rsResult10);die($sSql);
+    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
 
     /**
      * registro 10
