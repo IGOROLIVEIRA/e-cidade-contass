@@ -341,11 +341,6 @@ db_app::import("configuracao.DBDepartamento");
 
                 case '2':
 
-                    $oTabDetalhes->add(
-                        "empenhamentos",
-                        "Licitações",
-                        "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licitacoes"
-                    );
 
                 case '3':
 
@@ -375,7 +370,7 @@ db_app::import("configuracao.DBDepartamento");
                     break;
             }
 
-            if ($clAcordo->getTipoOrigem() ==  "2") {
+            if ($clAcordo->getTipoOrigem() ==  "2" || $clAcordo->getOrigem() == "2") {
                 $oTabDetalhes->add(
                     "empenhamentos",
                     "Licitações",
