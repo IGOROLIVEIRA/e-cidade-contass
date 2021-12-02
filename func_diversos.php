@@ -147,7 +147,7 @@ $cldiversos->rotulo->label("dv05_numcgm");
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $cldiversos->sql_record($cldiversos->sql_query_func($pesquisa_chave,"*",null," dv05_instit = ".db_getsession('DB_instit')." "));
+          $result = $cldiversos->sql_record($cldiversos->sql_query_func($pesquisa_chave, "*", null, " dv05_instit = " . db_getsession('DB_instit') . " and diversos.dv05_coddiver = $pesquisa_chave "));          
           if($cldiversos->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$z01_nome',false);</script>";
