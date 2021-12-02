@@ -333,27 +333,24 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         JOIN emptipo ON e60_codtipo = e41_codtipo
         JOIN cgm ON e60_numcgm = z01_numcgm
         JOIN orcprojativ ON (o58_anousu, o58_projativ) = (o55_anousu, o55_projativ)
+        INNER JOIN empempaut ON e61_numemp = e60_numemp
+        INNER JOIN empautoriza ON e54_autori = e61_autori
         LEFT JOIN pctipocompra ON e60_codcom = pc50_codcom
-        LEFT JOIN cflicita ON pc50_pctipocompratribunal = l03_pctipocompratribunal AND l03_instit = " . db_getsession("DB_instit") . "
-        LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
+        LEFT JOIN cflicita ON pc50_pctipocompratribunal = l03_pctipocompratribunal AND l03_instit = " . db_getsession("DB_instit") . " and pc50_codcom=l03_codcom
         LEFT JOIN liclicita ON (ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0'), l20_anousu::varchar, l03_codigo) = (l20_edital::varchar, ((string_to_array(e60_numerol, '/'))[2])::varchar, l20_codtipocom)
+        LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
         LEFT JOIN orcunidade ON (o58_anousu, o58_orgao, o58_unidade) = (orcunidade.o41_anousu, orcunidade.o41_orgao, orcunidade.o41_unidade)
         LEFT JOIN orcorgao ON (orcorgao.o40_orgao, orcorgao.o40_anousu) = (orcunidade.o41_orgao, orcunidade.o41_anousu)
         LEFT JOIN cgm o ON o.z01_numcgm = orcunidade.o41_orddespesa
         LEFT JOIN homologacaoadjudica ON l20_codigo = l202_licitacao
-        LEFT JOIN empempaut ON e61_numemp = e60_numemp
-        LEFT JOIN empautoriza ON e61_autori = e60_numemp
-
         LEFT JOIN acordoitemexecutadoempautitem on ac19_autori = e61_autori
         LEFT JOIN acordoitemexecutado on ac29_sequencial = ac19_acordoitemexecutado
         LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
         LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
         LEFT JOIN acordo on ac26_acordo = ac16_sequencial
         LEFT JOIN acordoposicaoaditamento ON ac35_acordoposicao = ac26_sequencial
-
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-            LEFT JOIN manutencaolicitacao ON manutlic_licitacao = l20_codigo
-
+        LEFT JOIN manutencaolicitacao ON manutlic_licitacao = l20_codigo
         WHERE e60_anousu = " . db_getsession("DB_anousu") . "
         AND o56_anousu = " . db_getsession("DB_anousu") . "
         AND o58_anousu = " . db_getsession("DB_anousu") . "
@@ -362,8 +359,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     $rsEmpenho10 = db_query($sSql);
 
-    //echo $sSql;
-    //db_criatabela($rsEmpenho10);
+    // echo $sSql;
+    // db_criatabela($rsEmpenho10);exit;
 
     $aCaracteres = array("°", chr(13), chr(10), "'", ";");
     // matriz de entrada
