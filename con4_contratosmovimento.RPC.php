@@ -242,6 +242,12 @@ switch ($oParam->exec) {
             } else {
                 $itens = $oAcordo->getItens();
                 foreach ($itens as $item) {
+                    $dotacaoItem = $item->getDotacoes();
+
+                    if ($dotacaoItem == null) {
+                        $lAcordoValido = false;
+                        throw new Exception("Item sem dotacao item: " . $item->getcodigo());
+                    }
 
                     if ($item->getPeriodosItem() == null) {
                         $lAcordoValido = false;
