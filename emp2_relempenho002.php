@@ -87,12 +87,12 @@ include("classes/db_orcdotacao_classe.php");
 include("classes/db_orcorgao_classe.php");
 include("classes/db_empemphist_classe.php");
 include("classes/db_emphist_classe.php");
-include("classes/db_orcelemento_classe.php");
+include("classes/db_orcelemento_classe.php"); 
 include("classes/db_conlancamemp_classe.php");
 include("classes/db_conlancamdoc_classe.php");
 include("classes/db_empempitem_classe.php");
 include("classes/db_empresto_classe.php");
-include("classes/db_empelemento_classe.php");
+include("classes/db_empelemento_classe.php");  
 
 //db_postmemory($HTTP_POST_VARS,2);exit;
 db_postmemory($HTTP_POST_VARS);
@@ -181,7 +181,6 @@ $desdobramentos = $clselorcdotacao->getDesdobramento(); // coloca os codele dos 
 if ($desdobramentos != "") {
     $sele_desdobramentos = " and empelemento.e64_codele in " . $desdobramentos; // adiciona desdobramentos
 }
-
 //////////////////////////////////////////////////////////////////
 
 $resultinst = pg_exec("select munic from db_config where codigo in (" . str_replace('-', ', ', $db_selinstit) . ") ");
@@ -437,7 +436,6 @@ if ($processar == "a") {
 
     $sqlrelemp = $clempempenho->sql_query_relatorio(null, $sCamposPosicaoAtual, $sOrderSQL, $sWhereSQL, $sSqlAnulado);
     if ($agrupar == "d") {
-
         if ($sememp == "s") {
             $sqlrelemp =
                 "select count(e60_numemp) AS e60_numemp,
@@ -455,7 +453,7 @@ if ($processar == "a") {
                 FROM empelemento
                 inner JOIN empempenho ON e64_numemp = e60_numemp
                 inner JOIN orcelemento ON (e64_codele, e60_anousu) = (o56_codele, o56_anousu)
-                WHERE $sWhereSQL
+                WHERE $sWhereSQL $sele_desdobramentos 
                 GROUP BY 2, o56_elemento,o56_descr
                 HAVING count(e60_numemp) >= 1
                 ORDER BY 1";
@@ -556,7 +554,6 @@ if ($processar == "a") {
             $sqlrelemp = "select * from ($sqlrelemp) as yy order by yy.o56_descr";
         }
     } elseif ($agrupar == "ta") {
-
         $sqlrelemp = "select 	  x.e60_resumo,
 					  x.e60_numemp,
 					  x.e60_codemp,
@@ -800,7 +797,6 @@ if ($processar == "a") {
           to_number(e60_codemp::text,'9999999999')
 			   from (
 			  select e60_numemp, e60_vlremp,
-
 					sum(case when c53_tipo = 11 then c70_valor else 0 end) as e60_vlranu,
 					sum(case when c53_tipo = 20 then c70_valor else 0 end) - sum(case when c53_tipo = 21 then c70_valor else 0 end) as e60_vlrliq,
 					sum(case when c53_tipo = 30 then c70_valor else 0 end) - sum(case when c53_tipo = 31 then c70_valor else 0 end) as e60_vlrpag
@@ -878,9 +874,8 @@ if ($processar == "a") {
 					    orctiporec.o15_descr,   empempenho.e60_codcom, pctipocompra.pc50_descr,empempenho.e60_concarpeculiar ";
     }
     $sqlperiodo .= " order by $sOrderSQL  ";
-
+    
     if ($agrupar == "d" || $sele_desdobramentos != "") {
-
         $sqlperiodo =  "
 			      select distinct e60_numemp,
 					e60_resumo,
