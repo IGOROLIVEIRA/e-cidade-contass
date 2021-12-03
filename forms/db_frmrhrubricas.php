@@ -363,17 +363,22 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                         <table width="100%">
                             <tr>
                                 <td colspan="1" title="">
-                                    <b>Base eSocial</b>
+                                    <b>Natureza da Rubrica
+                                    </b>
                                 </td>
-                                <td title="Base eSocial">
+                                <td title="Natureza da Rubrica">
                                     <?php
-                                    $result = $clrubricasesocial->sql_record($clrubricasesocial->sql_query_file(null, "e990_sequencial,e990_descricao"));
-                                    db_selectrecord("e991_rubricasesocial", $result, true, $db_opcao, "", "", "", "Selecione", "js_reload(this.value)");
+                                    $result = $clrubricasesocial->sql_record($clrubricasesocial->sql_query_file(null, "e990_sequencial,e990_descricao", 'e990_sequencial asc'));
+                                    $aSelect = array("" => "Selecione");
+                                    for ($iCont = 0; $iCont < $clrubricasesocial->numrows; $iCont++) {
+                                        $aSelect[db_utils::fieldsMemory($result, $iCont)->e990_sequencial] = db_utils::fieldsMemory($result, $iCont)->e990_sequencial . ' - ' . db_utils::fieldsMemory($result, $iCont)->e990_descricao;
+                                    }
+                                    db_select('e991_rubricasesocial', $aSelect, true, $db_opcao, "style='width:430;'");
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="1" title="<?php echo $Trh27_codincidprev; ?>">
+                                <td colspan=" 1" title="<?php echo $Trh27_codincidprev; ?>">
                                     <?php echo $Lrh27_codincidprev; ?>
                                 </td>
                                 <td title="<?php echo $Trh27_codincidprev; ?>">
