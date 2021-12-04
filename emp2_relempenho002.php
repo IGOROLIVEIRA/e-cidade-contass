@@ -411,8 +411,8 @@ if ($agrupar != "orgao" && $agrupar != "r" && $agrupar != "d") {
 }
 
 if ($agrupar == "oo") {
-    // $sOrderSQL = " e60_emiss, z01_nome, e60_anousu, e60_codemp ";
-    $sOrderSQL = " to_number(e60_codemp::text,'9999999999') ";
+    $sOrderSQL = " e60_emiss, z01_nome, e60_anousu, e60_codemp ";
+    // $sOrderSQL = " to_number(e60_codemp::text,'9999999999') ";
 }
 
 
@@ -431,9 +431,7 @@ if ($agrupar == "ta") {
 }
 
 if ($processar == "a") {
-
     $sWhereSQL = str_replace("yyy.", "", $sWhereSQL);
-
     $sqlrelemp = $clempempenho->sql_query_relatorio(null, $sCamposPosicaoAtual, $sOrderSQL, $sWhereSQL, $sSqlAnulado);
     if ($agrupar == "d") {
         if ($sememp == "s") {
@@ -740,14 +738,12 @@ if ($processar == "a") {
                 x.l20_edital,
                 x.l20_anousu";
     }
-    if ($agrupar != "d") {
-        $sqlrelemp = "select * from ($sqlrelemp) as x " . ($agrupar != "d"
+   
+        $sqlrelemp = "select * from ($sqlrelemp) as x " . ($agrupar == "d"
             ? " order by e64_codele, e60_emiss "
             : $agrupar == "c"
             ? " order by  x.ac16_sequencial "
             : " order by $sOrderSQL ");
-    }
-
     // echo $sqlrelemp;exit;
     $res = $clempempenho->sql_record($sqlrelemp);
 
@@ -1422,7 +1418,6 @@ if ($tipo == "a" or 1 == 1) {
                     //$pdf->Cell(102, $tam, "COMPLEMENTO", 1, 1, "C", 1); // quebra linha1
                 }
             } else if ($tipo == "a" and $sememp == "s" and ($agrupar == "oo" || $agrupar == 'gest')) {
-
                 $pdf->Cell(150, $tam, '', 1, 0, "C", 1);
                 $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                 $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
@@ -1460,6 +1455,8 @@ if ($tipo == "a" or 1 == 1) {
             }
             $pdf->SetFont('Arial', '', 7);
             $imprime_header = false;
+            // echo $RLe60_vlremp;
+            // echo $sqlrelemp;exit;
         }
         /* ----------- AGRUPAR POR FORNECEDOR -----------*/
         if ($repete != $e60_numcgm and $agrupar == "a") {
@@ -2040,7 +2037,6 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->Cell(11, $tam, "$e60_numerol", $iBorda, 0, "R", $preenche);
             $pdf->Cell(11, $tam, "$e60_codemp", $iBorda, 0, "R", $preenche);
             $pdf->Cell(15, $tam, $e60_emiss, $iBorda, 0, "C", $preenche);
-
             if ($agrupar == "a") {
                 if ($mostrar == "r") {
                     $pdf->Cell(40, $tam, db_formatar($o15_codigo, 'recurso') . " - " . substr($o15_descr, 0, 20), $iBorda, 0, "L", $preenche); // recurso
@@ -2097,9 +2093,7 @@ if ($tipo == "a" or 1 == 1) {
             if ($mostrarobs == "m") {
                 $pdf->multicell(270, 4, $e60_resumo);
             }
-
-
-
+            
 
             if (1 == 1) {
                 $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$dataesp11' and '$dataesp22'")));
@@ -2966,5 +2960,7 @@ if ($hist == "h") {
             }
         }
     }
-}
+} 
+// echo $sqlrelemp;exit;
+
 $pdf->output();
