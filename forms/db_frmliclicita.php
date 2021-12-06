@@ -277,7 +277,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 </tr>
 
                                 <tr>
-
                                     <td nowrap title="<?= @$Tl20_tipliticacao ?>" id="tipolicitacao">
                                         <?= @$Ll20_tipliticacao ?>
                                     </td>
@@ -293,6 +292,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
+                                <tr>
+                                    <td nowrap title="<?= @$Tl20_leidalicitacao ?>" id="leidalicitacao">
+                                        <strong>Lei da Licitação:</strong>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $arr_tipo = array(
+                                            "0" => "Selecione",
+                                            "1" => "1 - Lei 14.133/2021",
+                                            "2" => "2 - Lei 8.666/1993 e outras"
+                                        );
+                                        db_select("l20_leidalicitacao", $arr_tipo, true, $db_opcao);
+                                        ?>
+                                    </td>
+                                </tr>
 
                                 <tr>
                                     <td nowrap title="<?= @$Tl20_tipnaturezaproced ?>" id="tipnaturezaproced">
@@ -430,7 +444,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-
+                                <tr id="datenpc">
+                                    <td nowrap title="Link no PNCP" id="linkpncp">
+                                        <b>Link no PNCP: </b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_inputdata("l20_dtpulicacaopncp", @$l20_dtpulicacaopncp_dia, @$l20_dtpulicacaopncp_mes, @$l20_dtpulicacaopncp_ano, true, 'text', $db_opcao);
+                                        ?>
+                                    </td>
+                                </tr>
 
                                 <tr>
                                     <td nowrap title="Data Publicação DO" id="dtpublic">
@@ -937,6 +960,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.getElementById("lprocsis").style.width = "85px";
         document.getElementById("l20_usaregistropreco").style.width = "85px";
         document.getElementById("l20_tipliticacao").style.width = "300px";
+        document.getElementById("l20_leidalicitacao").style.width = "300px";
         document.getElementById("l20_tipnaturezaproced").style.width = "300px";
         document.getElementById("l20_regimexecucao").style.width = "300px";
         document.getElementById("l20_criterioadjudicacao").style.width = "300px";
@@ -1033,6 +1057,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("equipepregao").style.display = 'none';
             document.getElementById("local").style.display = 'none';
             document.getElementById("aceitabilidade").style.display = 'none';
+            document.getElementById("datenpc").style.display = '';
 
         } else {
 
@@ -1042,6 +1067,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_razao").disabled = true;
             document.getElementById("l20_tipoprocesso").disabled = true;
             document.getElementById("dispensa").style.display = 'none';
+            document.getElementById("datenpc").style.display = 'none';
             //document.getElementById("l20_dtpubratificacao").value='';
 
             /*document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';)*/
