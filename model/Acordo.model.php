@@ -3240,6 +3240,9 @@ class Acordo
         $oNovaPosicao->setTipo($iTipoAditamento);
         $oNovaPosicao->save();
 
+        if($nValorLancamentoContabil == 0){
+            return $this;
+        }
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
         $sHistorico = "Valor referente a Aditivo {$oNovaPosicao->getNumeroAditamento()} do Acordo: {$this->getCodigoAcordo()}.";
         if($nValorLancamentoContabil > 0){
@@ -4085,7 +4088,6 @@ class Acordo
             $nValorItens += round(abs($oItem->valorapostilado), 2);
             $nValorLancamentoContabil += round($oItem->valorapostilado, 2);
         }
-
         /**
          * cancelamos a ultima posição do acordo.
          */
@@ -4197,11 +4199,17 @@ class Acordo
              */
             $oNovoItem->save(false);
         }
+
+        if($nValorLancamentoContabil == 0){
+            return $this;
+        }
+
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-        $sHistorico = "Valor referente a Apostilamento {$oNovaPosicao->getNumeroApostilamento()} do Acordo: {$this->getCodigoAcordo()}.";
+        $sHistorico = "Valor referente a Apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de código: {$this->getCodigoAcordo()}.";
+        if($nValorLancamentoContabil < 0){
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oNovaPosicao->getData());
+        }
         if($nValorLancamentoContabil > 0){
-            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $oNovaPosicao->getData());
-        }else{
             $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oNovaPosicao->getData());
         }
 
