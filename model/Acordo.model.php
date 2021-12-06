@@ -26,6 +26,7 @@
  */
 
 require_once('model/empenho/AutorizacaoEmpenho.model.php');
+require_once("model/contrato/AcordoLancamentoContabil.model.php");
 
 /**
  * controle de acordos/contratos
@@ -1491,16 +1492,16 @@ class Acordo
         }
         $aGarantias      = $this->getGarantias();
         $iTotalGarantias = count($aGarantias);
-        
-        
+
+
         if($iTotalGarantias==1){
-                
+
                 $oDaoAcordoGarantia = db_utils::getDao("acordoacordogarantia");
                 $oDaoAcordoGarantia->excluir(null, "ac12_acordo={$this->getCodigoAcordo()}");
                 $this->aGarantias = "";
                 $op=1;
 
-                
+
         }else{
 
             $oDaoGarantias = db_utils::getDao("acordoacordogarantia");
@@ -1520,20 +1521,20 @@ class Acordo
                 }
             }/*
             for ($i = 0; $i < $iTotalGarantias; $i++) {
-                
+
                 if($op==1){
                     break;
                 }
                 if ($this->aGarantias[$i]->getCodigo() == $iGarantia) {
-                    
+
                     array_splice($this->aGarantias, $i, 1);
                     break;
-                }         
+                }
             }*/
         }
 
-        
-          
+
+
         return $this;
     }
 
@@ -1576,13 +1577,13 @@ class Acordo
         $iTotalPenalidades = count($aPenalidades);
 
         if($iTotalPenalidades==1){
-                
+
             $oDaoPenalidades = db_utils::getDao("acordoacordopenalidade");
             $oDaoPenalidades->excluir(null, "ac15_acordo={$this->getCodigoAcordo()}");
-            $this->aPenalidades = ""; 
-           
+            $this->aPenalidades = "";
 
-            
+
+
     }else{
 
         $oDaoPenalidades = db_utils::getDao("acordoacordopenalidade");
@@ -3125,11 +3126,12 @@ class Acordo
     public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia)
     {
         $nValorItens = 0;
+        $nValorLancamentoContabil = 0;
 
         foreach ($aItens as $oItem) {
             $nValorItens += round($oItem->valorunitario * $oItem->quantidade, 2);
+            $nValorLancamentoContabil += round($oItem->valoraditado, 2);
         }
-
 
         /**
          * cancelamos a ultima posição do acordo.
@@ -3318,6 +3320,16 @@ class Acordo
         $oNovaPosicao->setTipo($iTipoAditamento);
         $oNovaPosicao->save();
 
+        if($nValorLancamentoContabil == 0){
+            return $this;
+        }
+        $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+        $sHistorico = "Valor referente a Aditivo {$oNovaPosicao->getNumeroAditamento()} do Acordo: {$this->getCodigoAcordo()}.";
+        if($nValorLancamentoContabil > 0){
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $oNovaPosicao->getData());
+        }else{
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oNovaPosicao->getData());
+        }
         return $this;
     }
 
@@ -4032,7 +4044,7 @@ class Acordo
                 o15_codtri AS fonterecurso,
                 o58_projativ AS projetoativ,
                 o56_elemento as codorcamentario
-                from acordoposicao 
+                from acordoposicao
             inner join acordoitem on ac20_acordoposicao = ac26_sequencial
             inner join acordoitemdotacao on ac22_acordoitem = ac20_sequencial
             INNER JOIN orcdotacao ON (orcdotacao.o58_anousu,orcdotacao.o58_coddot) = (acordoitemdotacao.ac22_anousu,acordoitemdotacao.ac22_coddot)
@@ -4150,11 +4162,12 @@ class Acordo
     {
 
         $nValorItens = 0;
+        $nValorLancamentoContabil = 0;
 
         foreach ($aItens as $oItem) {
             $nValorItens += round(abs($oItem->valorapostilado), 2);
+            $nValorLancamentoContabil += round($oItem->valorapostilado, 2);
         }
-
         /**
          * cancelamos a ultima posição do acordo.
          */
@@ -4265,6 +4278,19 @@ class Acordo
              * Alterado opcao para false para nao gerar reserva conforme solicitado por Mario
              */
             $oNovoItem->save(false);
+        }
+
+        if($nValorLancamentoContabil == 0){
+            return $this;
+        }
+
+        $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+        $sHistorico = "Valor referente a Apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de código: {$this->getCodigoAcordo()}.";
+        if($nValorLancamentoContabil < 0){
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oNovaPosicao->getData());
+        }
+        if($nValorLancamentoContabil > 0){
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oNovaPosicao->getData());
         }
 
         return $this;
