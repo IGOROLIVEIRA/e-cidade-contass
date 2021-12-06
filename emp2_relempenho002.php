@@ -407,12 +407,12 @@ if ($agrupar != "orgao" && $agrupar != "r" && $agrupar != "d") {
         } elseif ($chk_ordem == "P") {
             $sOrderSQL = "e60_vlrpag desc ";
         }
-    }
+    } 
 }
 
-if ($agrupar == "oo") {
-    $sOrderSQL = " e60_emiss, z01_nome, e60_anousu, e60_codemp ";
-    // $sOrderSQL = " to_number(e60_codemp::text,'9999999999') ";
+if ($agrupar == "oo") { 
+    // $sOrderSQL = " e60_emiss, e60_codemp, z01_nome, e60_anousu ";
+    $sOrderSQL = " to_number(e60_codemp::text,'9999999999') ";
 }
 
 
