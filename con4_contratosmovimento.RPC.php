@@ -251,6 +251,12 @@ switch ($oParam->exec) {
             } else {
                 $itens = $oAcordo->getItens();
                 foreach ($itens as $item) {
+                    $dotacaoItem = $item->getDotacoes();
+
+                    if ($dotacaoItem == null) {
+                        $lAcordoValido = false;
+                        throw new Exception("Usuário: Assinatura do contrato não incluída. Item " . $item->getMaterial()->getCodigo() . " sem dotação.");
+                    }
 
                     if ($item->getPeriodosItem() == null) {
                         $lAcordoValido = false;
