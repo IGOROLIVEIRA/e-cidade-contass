@@ -46,7 +46,7 @@ $clrotulo->label("ac16_resumoobjeto");
 	<?
 	db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
 	db_app::load("widgets/dbmessageBoard.widget.js, widgets/windowAux.widget.js, datagrid.widget.js");
-	db_app::load("classes/DBViewAcordoDotacao.classe.js");
+	db_app::load("classes/DBViewAcordoDotacaoItens.classe.js");
 	db_app::load("estilos.css, grid.style.css");
 	?>
 </head>
@@ -110,7 +110,7 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     function alteraAcordo(){
-        oViewSolicitacaoDotacao = new DBViewAcordoDotacao(document.getElementById('ac16_sequencial').value, "oViewSolicitacaoDotacao");
+        oViewSolicitacaoDotacao = new DBViewAcordoDotacaoItens(document.getElementById('ac16_sequencial').value, "oViewSolicitacaoDotacao");
         oViewSolicitacaoDotacao.getDotacoes();
         oViewSolicitacaoDotacao.onBeforeSave();
     }
