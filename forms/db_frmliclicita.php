@@ -364,6 +364,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
+                                <tr id="disputa">
+                                    <td nowrap title="Modo de disputa">
+                                        <b>Modo de disputa: </b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $aDisputas = array(
+                                            "1" => "Aberto",
+                                            "2" => "Fechado",
+                                            "3" => "Conjunto"
+                                        );
+                                        db_select("l20_mododisputa", $aDisputas, true, '');
+                                        ?>
+                                    </td>
+                                </tr>
 
                                 <tr style="display:none;" id="convite1">
                                     <td nowrap title="<?= @$Tl20_numeroconvidado ?>" id="numeroconvidado">
@@ -445,12 +460,39 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 </tr>
 
                                 <tr id="datenpc">
-                                    <td nowrap title="Link no PNCP" id="linkpncp">
-                                        <b>Link no PNCP: </b>
+                                    <td nowrap title="Data de Publicação PNCP">
+                                        <b>Data de Publicação PNCP: </b>
                                     </td>
                                     <td>
                                         <?
                                         db_inputdata("l20_dtpulicacaopncp", @$l20_dtpulicacaopncp_dia, @$l20_dtpulicacaopncp_mes, @$l20_dtpulicacaopncp_ano, true, 'text', $db_opcao);
+                                        ?>
+                                    </td>
+                                </tr>
+
+                                <tr id="linkpnpc">
+                                    <td nowrap title="Link no PNCP">
+                                        <b>Link no PNCP: </b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('l20_linkpncp', 100, $Il20_linkpncp, true, 'text', $db_opcao, "");
+                                        ?>
+                                    </td>
+                                </tr>
+
+                                <tr id="diario">
+                                    <td nowrap title="Diário Oficial da Divulgação">
+                                        <b>Diário Oficial da Divulgação: </b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $aDiarios = array(
+                                            "1" => "Município",
+                                            "2" => "Estado",
+                                            "3" => "União"
+                                        );
+                                        db_select("l20_diariooficialdivulgacao", $aDiarios, true, '');
                                         ?>
                                     </td>
                                 </tr>
@@ -462,6 +504,28 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td>
                                         <?
                                         db_inputdata('l20_dtpublic', @$l20_dtpublic_dia, @$l20_dtpublic_mes, @$l20_dtpublic_ano, true, 'text', $db_opcao, "", "", "#ffffff");
+                                        ?>
+                                    </td>
+                                </tr>
+
+                                <tr id="dtpubedital">
+                                    <td nowrap title="Data Publicação Edital" id="dtpublic">
+                                        <b>Data Publicação Edital: </b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_inputdata('l20_dtpulicacaoedital', @$l20_dtpulicacaoedital_dia, @$l20_dtpulicacaoedital_mes, @$l20_dtpulicacaoedital_ano, true, 'text', $db_opcao);
+                                        ?>
+                                    </td>
+                                </tr>
+
+                                <tr id="linkedital">
+                                    <td nowrap title="Link de Publicação Edital">
+                                        <b>Link de Publicação Edital:</b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('l20_linkedital', 100, $Il20_linkedital, true, 'text', $db_opcao, "");
                                         ?>
                                     </td>
                                 </tr>
@@ -1006,19 +1070,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         if (oRetorno.tribunal == 100 || oRetorno.tribunal == 101 || oRetorno.tribunal == 102 || oRetorno.tribunal == 103) {
 
-            // document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
-            // document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
-            // document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
             document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
             document.form1.l20_razao.style.backgroundColor = '#FFFFFF ';
-
-            // document.getElementById("l20_veicdivulgacao").disabled=false;
-            // document.getElementById("l20_dtpubratificacao").disabled=false;
             document.getElementById("l20_justificativa").disabled = false;
             document.getElementById("l20_razao").disabled = false;
             document.getElementById("l20_tipoprocesso").disabled = false;
             document.getElementById("dispensa").style.display = 'block';
-            //document.getElementById("l20_dtpubratificacao").value='';
 
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display = 'none';
@@ -1058,19 +1115,22 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("local").style.display = 'none';
             document.getElementById("aceitabilidade").style.display = 'none';
             document.getElementById("datenpc").style.display = '';
+            document.getElementById("linkpnpc").style.display = '';
+            document.getElementById("diario").style.display = 'none';
+            document.getElementById("dtpubedital").style.display = 'none';
+            document.getElementById("linkedital").style.display = 'none';
 
         } else {
 
-            // document.getElementById("l20_veicdivulgacao").disabled=true;
-            // document.getElementById("l20_dtpubratificacao").disabled=true;
             document.getElementById("l20_justificativa").disabled = true;
             document.getElementById("l20_razao").disabled = true;
             document.getElementById("l20_tipoprocesso").disabled = true;
             document.getElementById("dispensa").style.display = 'none';
             document.getElementById("datenpc").style.display = 'none';
-            //document.getElementById("l20_dtpubratificacao").value='';
-
-            /*document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';)*/
+            document.getElementById("linkpnpc").style.display = 'none';
+            document.getElementById("diario").style.display = '';
+            document.getElementById("dtpubedital").style.display = '';
+            document.getElementById("linkedital").style.display = '';
 
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display = 'inline';
@@ -1109,8 +1169,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("equipepregao").style.display = 'inline';
             document.getElementById("local").style.display = 'inline';
             document.getElementById("aceitabilidade").style.display = 'inline';
-
-
         }
 
         let aModalidades = ['48', '49', '50', '52', '53', '54'];
