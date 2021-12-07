@@ -209,6 +209,16 @@ $clrotulo->label("pc01_descrmater");
 <script>
   function maskValor4(e, oObject) {
 
+    novaString = oObject.value + e.key;
+
+    if (novaString.includes('.')) {
+
+      if (novaString.substr(novaString.indexOf(".")).length == 6) {
+        e.preventDefault();
+        return true;
+      }
+
+    }
 
     if (e.key == ",") {
       oObject.value = oObject.value + ".";
