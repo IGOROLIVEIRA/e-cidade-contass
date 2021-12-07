@@ -255,7 +255,7 @@ switch ($oParam->exec) {
 
                     if ($dotacaoItem == null) {
                         $lAcordoValido = false;
-                        throw new Exception("Item sem dotacao item: " . $item->getcodigo());
+                        throw new Exception("Usuário: Assinatura do contrato não incluída. Item " . $item->getMaterial()->getCodigo() . " sem dotação.");
                     }
 
                     if ($item->getPeriodosItem() == null) {
