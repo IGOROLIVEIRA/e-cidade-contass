@@ -9,6 +9,7 @@ class Oc15701 extends AbstractMigration
         $sql = "
             BEGIN;
             ALTER TABLE licitaparam ADD COLUMN l12_validacadfornecedor BOOLEAN;
+            UPDATE licitaparam set l12_validacadfornecedor = 'f';
             COMMIT;
         ";
         $this->execute($sql);
@@ -21,6 +22,6 @@ class Oc15701 extends AbstractMigration
         ALTER TABLE licitaparam DROP COLUMN l12_validacadfornecedor;
         COMMIT;
     ";
-    $this->execute($sql);
+        $this->execute($sql);
     }
 }
