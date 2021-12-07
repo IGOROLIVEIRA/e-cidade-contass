@@ -87,12 +87,12 @@ include("classes/db_orcdotacao_classe.php");
 include("classes/db_orcorgao_classe.php");
 include("classes/db_empemphist_classe.php");
 include("classes/db_emphist_classe.php");
-include("classes/db_orcelemento_classe.php"); 
+include("classes/db_orcelemento_classe.php");
 include("classes/db_conlancamemp_classe.php");
 include("classes/db_conlancamdoc_classe.php");
 include("classes/db_empempitem_classe.php");
 include("classes/db_empresto_classe.php");
-include("classes/db_empelemento_classe.php");  
+include("classes/db_empelemento_classe.php");
 
 //db_postmemory($HTTP_POST_VARS,2);exit;
 db_postmemory($HTTP_POST_VARS);
@@ -407,12 +407,12 @@ if ($agrupar != "orgao" && $agrupar != "r" && $agrupar != "d") {
         } elseif ($chk_ordem == "P") {
             $sOrderSQL = "e60_vlrpag desc ";
         }
-    } 
+    }
 }
 
-if ($agrupar == "oo") { 
+if ($agrupar == "oo") {
     // $sOrderSQL = " e60_emiss, e60_codemp, z01_nome, e60_anousu ";
-    $sOrderSQL = " to_number(e60_codemp::text,'9999999999') ";
+    $sOrderSQL = " e60_codemp ";
 }
 
 
@@ -738,13 +738,14 @@ if ($processar == "a") {
                 x.l20_edital,
                 x.l20_anousu";
     }
-   
+    if ($agrupar != "d") {
         $sqlrelemp = "select * from ($sqlrelemp) as x " . ($agrupar == "d"
             ? " order by e64_codele, e60_emiss "
             : $agrupar == "c"
             ? " order by  x.ac16_sequencial "
             : " order by $sOrderSQL ");
-    // echo $sqlrelemp;exit;
+    }
+
     $res = $clempempenho->sql_record($sqlrelemp);
 
     if ($clempempenho->numrows > 0) {
@@ -870,7 +871,7 @@ if ($processar == "a") {
 					    orctiporec.o15_descr,   empempenho.e60_codcom, pctipocompra.pc50_descr,empempenho.e60_concarpeculiar ";
     }
     $sqlperiodo .= " order by $sOrderSQL  ";
-    
+
     if ($agrupar == "d" || $sele_desdobramentos != "") {
         $sqlperiodo =  "
 			      select distinct e60_numemp,
@@ -1536,14 +1537,14 @@ if ($tipo == "a" or 1 == 1) {
 
         if ($repete_d != $e64_codele and $agrupar == "d") {
             $quantimp = 1;
-             /* somatorio  */
-             if ($agrupar == "d" and $sememp == "s") { 
+            /* somatorio  */
+            if ($agrupar == "d" and $sememp == "s") {
                 $t_emp = $e60_vlremp;
                 $t_liq = $e60_vlrliq;
-                $t_anu = $e60_vlranu; 
+                $t_anu = $e60_vlranu;
                 $t_pag = $e60_vlrpag;
                 $t_total = $total;
-             }
+            }
             /*  */
             if ($quantimp > 1 or ($sememp == "s" and $quantimp > 0)) {
                 if (($quantimp > 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
@@ -1565,10 +1566,10 @@ if ($tipo == "a" or 1 == 1) {
                     }
 
                     // $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
-                  
+
 
                     // if ($x < $rows) {
-                        // $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($totalelemento, "s") . " EMPENHO" . ($totalelemento == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                    // $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($totalelemento, "s") . " EMPENHO" . ($totalelemento == 1 ? "" : "S"), $base, 0, "L", $preenche);
                     // } else
                     $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($e60_numemp, "s") . " EMPENHO" . ($e60_numemp == 1 ? "" : "S"), $base, 0, "L", $preenche);
                     $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
@@ -1584,7 +1585,7 @@ if ($tipo == "a" or 1 == 1) {
                     }
                     $pdf->SetFont('Arial', '', 7);
                 }
-            }         
+            }
             $t_emp = 0;
             $t_liq = 0;
             $t_anu = 0;
@@ -1603,7 +1604,6 @@ if ($tipo == "a" or 1 == 1) {
                 $pdf->Cell(80, $tam, "$o56_descr", $iBorda, 1, "L", 0);
                 $pdf->SetFont('Arial', '', 7);
             }
-             
         }
 
         /*----------- AGRUPAR POR RECURSO -----------*/
@@ -2093,7 +2093,7 @@ if ($tipo == "a" or 1 == 1) {
             if ($mostrarobs == "m") {
                 $pdf->multicell(270, 4, $e60_resumo);
             }
-            
+
 
             if (1 == 1) {
                 $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$dataesp11' and '$dataesp22'")));
@@ -2889,7 +2889,7 @@ if ($hist == "h") {
 														    group by x.o58_orgao, x.o58_unidade, x.o40_descr, x.o41_descr";
     }
     //	 echo $sql;exit;
-    
+
     $result1 = $clempempenho->sql_record($sql);
     if ($clempempenho->numrows > 0 and 1 == 2) {
         $pdf->addpage("L");
@@ -2960,7 +2960,7 @@ if ($hist == "h") {
             }
         }
     }
-} 
+}
 // echo $sqlrelemp;exit;
 
 $pdf->output();
