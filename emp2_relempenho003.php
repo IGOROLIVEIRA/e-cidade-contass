@@ -96,7 +96,7 @@ if ($desdobramentos != "") {
 $resultinst = pg_exec("select munic from db_config where codigo in (" . str_replace('-', ', ', $db_selinstit) . ") ");
 db_fieldsmemory($resultinst, 0);
 
-$head1 = "MUNICÍPIO DE " . strtoupper($munic);
+$head1 = "MUNICPIO DE " . strtoupper($munic);
 
 //////////////////////////////////////////////////////////////////
 
@@ -208,7 +208,7 @@ if ($listalicita != "") {
 
 if (($datacredor != "--") && ($datacredor1 != "--")) {
     $sWhereSQL = $sWhereSQL . " and e60_emiss between '$datacredor' and '$datacredor1'  ";
-    $info = "De " . db_formatar($datacredor, "d") . " até " . db_formatar($datacredor1, "d") . ".";
+    $info = "De " . db_formatar($datacredor, "d") . " at " . db_formatar($datacredor1, "d") . ".";
 } else
     if ($datacredor != "--") {
     $sWhereSQL = $sWhereSQL . " and e60_emiss >= '$datacredor'  ";
@@ -216,7 +216,7 @@ if (($datacredor != "--") && ($datacredor1 != "--")) {
 } else
         if ($datacredor1 != "--") {
     $sWhereSQL = $sWhereSQL . "    e60_emiss <= '$datacredor1'   ";
-    $info = "Até " . db_formatar($datacredor1, "d") . ".";
+    $info = "At " . db_formatar($datacredor1, "d") . ".";
 }
 
 if ($tipoemp == "todos") {
@@ -622,7 +622,7 @@ if ($processar == "a") {
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
     } else {
-        db_redireciona('db_erros.php?fechar=true&db_erro=Não existem dados para gerar a consulta (A21) !');
+        db_redireciona('db_erros.php?fechar=true&db_erro=No existem dados para gerar a consulta (A21) !');
     }
 } else {
 
@@ -827,7 +827,7 @@ if ($processar == "a") {
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
     } else {
-        db_redireciona('db_erros.php?fechar=true&db_erro=Não existem dados para gerar a consulta!');
+        db_redireciona('db_erros.php?fechar=true&db_erro=No existem dados para gerar a consulta!');
     }
 }
 
@@ -1011,7 +1011,7 @@ if ($agrupar == 'gest') {
 
     if ($processar == "a") {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -1021,7 +1021,7 @@ if ($agrupar == 'gest') {
             . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
     } else {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -1181,7 +1181,7 @@ if ($agrupar == 'oo') {
 
     if ($processar == "a") {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -1191,7 +1191,7 @@ if ($agrupar == 'oo') {
             . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
     } else {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -1239,7 +1239,7 @@ if ($agrupar == 'oo') {
 
                 if ($imprime_header == true) {
                     echo "\n";
-                    echo ";;;;TOTALIZAÇÃO DOS HISTÓRICOS;;;SALDO A PAGAR;\n";
+                    echo ";;;;TOTALIZAO DOS HISTRICOS;;;SALDO A PAGAR;\n";
                     echo "$RLe63_codhist;$RLe40_descr;$RLe60_vlremp;$RLe60_vlranu;$RLe60_vlrliq;$RLe60_vlrpag;LIQUIDADO;NAO LIQUIDADO;GERAL;\n";
                 }
 
@@ -1454,7 +1454,7 @@ if ($agrupar == 'a') {
 
     if ($processar == "a") {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -1464,7 +1464,7 @@ if ($agrupar == 'a') {
             . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
     } else {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -1647,7 +1647,7 @@ if ($agrupar == 'orgao') {
 
     if ($processar == "a") {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -1657,7 +1657,7 @@ if ($agrupar == 'orgao') {
             . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
     } else {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -1839,7 +1839,7 @@ if ($agrupar == 'r') {
 
     if ($processar == "a") {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -1849,7 +1849,7 @@ if ($agrupar == 'r') {
             . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
     } else {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -2055,7 +2055,7 @@ if ($agrupar == 'd') {
 
         if ($processar == "a") {
 
-            echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+            echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
                 . db_formatar($lanctotemp, 'p') . ";"
                 . db_formatar($lanctotanuemp, 'p') . ";"
                 . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -2065,7 +2065,7 @@ if ($agrupar == 'd') {
                 . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
         } else {
 
-            echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+            echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
                 . db_formatar($lanctotemp, 'p') . ";"
                 . db_formatar($lanctotanuemp, 'p') . ";"
                 . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -2081,28 +2081,6 @@ if ($agrupar == 'd') {
 
             echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
         }
-
-        $TotalEmpenhado    += $objeto->e60_vlremp;
-        $TotalAnulado      += $objeto->e60_vlranu;
-        $TotalLiquidado    += $objeto->e60_vlrliq;
-        $TotalPago         += $objeto->e60_vlrpag;
-        $TotalLiquidado2   += $objeto->e60_vlrliq - $objeto->e60_vlrpag;
-        $TotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
-        $TotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
-
-        $GeralTotalEmpenhado    += $objeto->e60_vlremp;
-        $GeralTotalAnulado      += $objeto->e60_vlranu;
-        $GeralTotalLiquidado    += $objeto->e60_vlrliq;
-        $GeralTotalPago         += $objeto->e60_vlrpag;
-        $GeralTotalLiquidado2   += $objeto->e60_vlrliq - $objeto->e60_vlrpag;
-        $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
-        $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
-
-
-        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome;";
-        echo "$dotacao - $objeto->dl_estrutural;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
-        echo "\n";
-
         if ($mostraritem == "m") {
             if ($instits != db_getsession("DB_instit")) {
                 echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
@@ -2238,47 +2216,6 @@ if ($agrupar == 'd') {
                         echo substr($e62_descr, 0, 100) . ";\n";
                     }
                 }
-
-                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
-                $rows_item = $clempempitem->numrows;
-
-                for ($item = 0; $item < $rows_item; $item++) {
-                    db_fieldsmemory($resitem, $item, true);
-
-                    echo "$e62_item;$pc01_descrmater;";
-                    echo db_formatar($e62_quant, 'f') . ";";
-                    echo db_formatar($e62_vltot, 'f') . ";";
-                    echo substr($e62_descr, 0, 100) . ";\n";
-                }
-            } else {
-                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
-                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
-                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
-                $sCamposEmpenho .= "         ,e62_descr";
-                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
-                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
-                $sCamposEmpenho .= "         ,rnvaloruni";
-                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
-                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
-                $sCamposEmpenho .= "         ,o56_descr";
-                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
-                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
-                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
-                $sCamposEmpenho .= "         end as observacao";
-                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
-
-                $oDaoEmpenho      = db_utils::getDao("empempenho");
-                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
-                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
-                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
-                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
-
-                    echo "$e62_item;$pc01_descrmater;";
-                    echo db_formatar($e62_quant, 'f') . ";";
-                    echo db_formatar($e62_vltot, 'f') . ";";
-                    echo db_formatar($saldo_valor, 'f') . ";";
-                    echo substr($e62_descr, 0, 100) . ";\n";
-                }
             }
             if ($mostrarobs == "m") {
                 echo "$objeto->e60_resumo;\n";
@@ -2326,7 +2263,7 @@ if ($agrupar == 'd') {
 
         if ($processar == "a") {
 
-            echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+            echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
                 . db_formatar($lanctotemp, 'p') . ";"
                 . db_formatar($lanctotanuemp, 'p') . ";"
                 . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -2336,7 +2273,7 @@ if ($agrupar == 'd') {
                 . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
         } else {
 
-            echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+            echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
                 . db_formatar($lanctotemp, 'p') . ";"
                 . db_formatar($lanctotanuemp, 'p') . ";"
                 . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -2517,7 +2454,7 @@ if ($agrupar == 'ta') {
 
     if ($processar == "a") {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -2527,7 +2464,7 @@ if ($agrupar == 'ta') {
             . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
     } else {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -2539,7 +2476,7 @@ if ($agrupar == 'do') {
 
     $dotOrcAnt = '';
     $contEmpenhos = 0;
-    echo "REDUZIDO;;;;DOTAÇÃO ORÇAMENTÁRIA;;MOVIMENTACAO;;;;SALDO A PAGAR;;;\n";
+    echo "REDUZIDO;;;;DOTAO ORAMENTRIA;;MOVIMENTACAO;;;;SALDO A PAGAR;;;\n";
     echo "TP COMPRA;LICI;EMP;EMISSAO;NOME;DOTACAO;EMPENHADO;ANULADO;LIQUIDADO;PAGO;LIQUIDADO;NAO LIQUID;GERAL;\n";
     if ($mostralan == "m") {
         echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
@@ -2709,7 +2646,7 @@ if ($agrupar == 'do') {
 
     if ($processar == "a") {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
@@ -2719,7 +2656,7 @@ if ($agrupar == 'do') {
             . db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'p') . ";";
     } else {
 
-        echo "MOVIMENTAÇÃO CONTABIL NO PERIODO;;;;;;"
+        echo "MOVIMENTAO CONTABIL NO PERIODO;;;;;;"
             . db_formatar($lanctotemp, 'p') . ";"
             . db_formatar($lanctotanuemp, 'p') . ";"
             . db_formatar($lanctotliq - $lanctotanuliq, 'p') . ";"
