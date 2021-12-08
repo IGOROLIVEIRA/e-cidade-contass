@@ -181,6 +181,7 @@ $desdobramentos = $clselorcdotacao->getDesdobramento(); // coloca os codele dos 
 if ($desdobramentos != "") {
     $sele_desdobramentos = " and empelemento.e64_codele in " . $desdobramentos; // adiciona desdobramentos
 }
+
 //////////////////////////////////////////////////////////////////
 
 $resultinst = pg_exec("select munic from db_config where codigo in (" . str_replace('-', ', ', $db_selinstit) . ") ");
@@ -433,64 +434,91 @@ if ($agrupar == "ta") {
 if ($processar == "a") {
     $sWhereSQL = str_replace("yyy.", "", $sWhereSQL);
     $sqlrelemp = $clempempenho->sql_query_relatorio(null, $sCamposPosicaoAtual, $sOrderSQL, $sWhereSQL, $sSqlAnulado);
+
     if ($agrupar == "d") {
-        if ($sememp == "s") {
-            $sqlrelemp =
-                "select count(e60_numemp) AS e60_numemp,
-            empelemento.e64_codele,
-            o56_elemento,
-            o56_descr,
-            sum(empelemento.e64_vlremp) AS e64_vlremp,
-            sum(empelemento.e64_vlrliq) AS e64_vlrliq,
-            sum(empelemento.e64_vlranu) AS e64_vlranu,
-            sum(empelemento.e64_vlrpag) AS e64_vlrpag,
-            sum(e60_vlremp) as e60_vlremp,
-            sum(e60_vlranu) as e60_vlranu,
-            sum(e60_vlrliq) as e60_vlrliq,
-            sum(e60_vlrpag) as e60_vlrpag  
-                FROM empelemento
-                inner JOIN empempenho ON e64_numemp = e60_numemp
-                inner JOIN orcelemento ON (e64_codele, e60_anousu) = (o56_codele, o56_anousu)
-                WHERE $sWhereSQL $sele_desdobramentos 
-                GROUP BY 2, o56_elemento,o56_descr
-                HAVING count(e60_numemp) >= 1
-                ORDER BY 1";
-        } else {
-            $sqlrelemp =
-                "select distinct x.e60_resumo,
-                x.e60_numemp,
-                x.e60_codemp,
-                x.e60_emiss,
-                x.e60_numcgm,
-                x.z01_nome,
-                x.z01_cgccpf,
-                x.z01_munic,
-                x.e63_codhist,
-                x.e40_descr,
-                x.e60_anousu,
-                x.e60_coddot,
-                x.o58_coddot,
-                x.o58_orgao,
-                x.o40_orgao,
-                x.o40_descr,
-                x.o58_unidade,
-                x.o41_descr,
-                x.o15_codigo,
-                x.o15_descr,
-                x.dl_estrutural,
-                x.e60_codcom,
-                x.pc50_descr,
-                empelemento.e64_codele,
-                orcelemento.o56_elemento,
-                orcelemento.o56_descr,
+
+        $sqlrelemp = "select distinct x.e60_resumo,
+					  x.e60_numemp,
+					  x.e60_codemp,
+					  x.e60_emiss,
+					  x.e60_numcgm,
+					  x.z01_nome,
+					  x.z01_cgccpf,
+					  x.z01_munic,
+ 					  x.e63_codhist,
+					  x.e40_descr,
+ 				  	  x.e60_anousu,
+					  x.e60_coddot,
+					  x.o58_coddot,
+					  x.o58_orgao,
+					  x.o40_orgao,
+					  x.o40_descr,
+					  x.o58_unidade,
+					  x.o41_descr,
+					  x.o15_codigo,
+					  x.o15_descr,
+					  x.dl_estrutural,
+					  x.e60_codcom,
+					  x.pc50_descr,
+					  empelemento.e64_codele,
+                      orcelemento.o56_elemento,
+					  orcelemento.o56_descr,
+            x.e60_vlremp,
+					  x.e60_vlranu,
+					  x.e60_vlrliq,
+            x.e60_vlrpag,
+					  empelemento.e64_vlremp,
+					  empelemento.e64_vlrliq,
+					  empelemento.e64_vlranu,
+					  empelemento.e64_vlrpag,
+            x.e60_concarpeculiar,
+            x.e60_numerol,
+            x.e54_gestaut,
+            x.descrdepto,
+            x.ac16_sequencial,
+            x.ac16_resumoobjeto,
+            x.ac16_numero,
+            x.l20_edital,
+            x.l20_anousu
+				  from ($sqlrelemp) as x
+			               inner join empelemento on x.e60_numemp = e64_numemp  " . $sele_desdobramentos . "
+				       inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
+
+				       group by
+                x.e60_resumo,
+					      x.e60_numemp,
+					      x.e60_codemp,
+					      x.e60_emiss,
+					      x.e60_numcgm,
+					      x.z01_nome,
+					      x.z01_cgccpf,
+					      x.z01_munic,
+ 					      x.e63_codhist,
+					      x.e40_descr,
+ 				  	      x.e60_anousu,
+					      x.e60_coddot,
+					      x.o58_coddot,
+					      x.o58_orgao,
+					      x.o40_orgao,
+					      x.o40_descr,
+					      x.o58_unidade,
+					      x.o41_descr,
+					      x.o15_codigo,
+					      x.o15_descr,
+					      x.dl_estrutural,
+					      x.e60_codcom,
+					      x.pc50_descr,
+					      empelemento.e64_codele,
+                          orcelemento.o56_elemento,
+					      orcelemento.o56_descr,
                 x.e60_vlremp,
-                x.e60_vlranu,
-                x.e60_vlrliq,
+					      x.e60_vlranu,
+					      x.e60_vlrliq,
                 x.e60_vlrpag,
-                empelemento.e64_vlremp,
-                empelemento.e64_vlrliq,
-                empelemento.e64_vlranu,
-                empelemento.e64_vlrpag,
+					      empelemento.e64_vlremp,
+					      empelemento.e64_vlrliq,
+					      empelemento.e64_vlranu,
+					      empelemento.e64_vlrpag,
                 x.e60_concarpeculiar,
                 x.e60_numerol,
                 x.e54_gestaut,
@@ -498,60 +526,12 @@ if ($processar == "a") {
                 x.ac16_sequencial,
                 x.ac16_resumoobjeto,
                 x.ac16_numero,
+                e94_empanuladotipo,
+            	  e38_descr,
                 x.l20_edital,
-                x.l20_anousu
-                from ($sqlrelemp) as x
-                    inner join empelemento on x.e60_numemp = e64_numemp  " . $sele_desdobramentos . "
-                    inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
-                    group by
-                    x.e60_resumo,
-                    x.e60_numemp,
-                    x.e60_codemp,
-                    x.e60_emiss,
-                    x.e60_numcgm,
-                    x.z01_nome,
-                    x.z01_cgccpf,
-                    x.z01_munic,
-                    x.e63_codhist,
-                    x.e40_descr,
-                    x.e60_anousu,
-                    x.e60_coddot,
-                    x.o58_coddot,
-                    x.o58_orgao,
-                    x.o40_orgao,
-                    x.o40_descr,
-                    x.o58_unidade,
-                    x.o41_descr,
-                    x.o15_codigo,
-                    x.o15_descr,
-                    x.dl_estrutural,
-                    x.e60_codcom,
-                    x.pc50_descr,
-                    empelemento.e64_codele,
-                    orcelemento.o56_elemento,
-                    orcelemento.o56_descr,
-                    x.e60_vlremp,
-                    x.e60_vlranu,
-                    x.e60_vlrliq,
-                    x.e60_vlrpag,
-                    empelemento.e64_vlremp,
-                    empelemento.e64_vlrliq,
-                    empelemento.e64_vlranu,
-                    empelemento.e64_vlrpag,
-                    x.e60_concarpeculiar,
-                    x.e60_numerol,
-                    x.e54_gestaut,
-                    x.descrdepto,
-                    x.ac16_sequencial,
-                    x.ac16_resumoobjeto,
-                    x.ac16_numero,
-                    e94_empanuladotipo,
-                        e38_descr,
-                    x.l20_edital,
-                    x.l20_anousu";
-            $sqlrelemp = "select * from ($sqlrelemp) as yy order by yy.o56_descr";
-        }
+                x.l20_anousu";
     } elseif ($agrupar == "ta") {
+
         $sqlrelemp = "select 	  x.e60_resumo,
 					  x.e60_numemp,
 					  x.e60_codemp,
@@ -747,7 +727,6 @@ if ($processar == "a") {
     }
 
     $res = $clempempenho->sql_record($sqlrelemp);
-
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
     } else {
@@ -794,6 +773,7 @@ if ($processar == "a") {
           to_number(e60_codemp::text,'9999999999')
 			   from (
 			  select e60_numemp, e60_vlremp,
+
 					sum(case when c53_tipo = 11 then c70_valor else 0 end) as e60_vlranu,
 					sum(case when c53_tipo = 20 then c70_valor else 0 end) - sum(case when c53_tipo = 21 then c70_valor else 0 end) as e60_vlrliq,
 					sum(case when c53_tipo = 30 then c70_valor else 0 end) - sum(case when c53_tipo = 31 then c70_valor else 0 end) as e60_vlrpag
@@ -1028,6 +1008,7 @@ if ($processar == "a") {
     }
 
     $res = $clempempenho->sql_record($sqlperiodo);
+    //echo $sqlperiodo;db_criatabela($res);die();
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
     } else {
@@ -1229,15 +1210,14 @@ if ($tipo == "a" or 1 == 1) {
             }
 
             if ($agrupar == "d") {
-                $encoding = mb_internal_encoding(); // ou UTF-8, ISO-8859-1...
                 if ($sememp == "n") {
                     $pdf->Cell(45, $tam, strtoupper($RLo56_codele), 1, 0, "C", 1);
-                    $pdf->Cell(120, $tam, mb_strtoupper($RLo56_descr), 1, 0, "C", 1);
+                    $pdf->Cell(120, $tam, strtoupper($RLo56_descr), 1, 0, "C", 1);
                     $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
                 } else {
                     $pdf->Cell(45, $tam, strtoupper($RLo56_codele), 1, 0, "C", 1);
-                    $pdf->Cell(80, $tam, mb_strtoupper($RLo56_descr, $encoding), 1, 0, "C", 1);
+                    $pdf->Cell(80, $tam, strtoupper($RLo56_descr), 1, 0, "C", 1);
                     $pdf->Cell(97, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
 
@@ -1518,7 +1498,6 @@ if ($tipo == "a" or 1 == 1) {
                 $pdf->Cell(105, $tam, "$o56_descr", $iBorda, 1, "L", 0);
                 if ($sememp == "n") {
                     //$pdf->Cell(25, $tam, $z01_cgccpf, 0, 0, "C", 0);
-
                     //$pdf->Cell(72, $tam, $z01_munic, 0, 1, "L", 0);
                 }
             }
@@ -1534,7 +1513,6 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->SetFont('Arial', '', 7);
         }
         /* ----------- AGRUPAR POR DESDOBRAMENTO ----------- */
-
         if ($repete_d != $e64_codele and $agrupar == "d") {
             $quantimp = 1;
             /* somatorio  */
@@ -1548,13 +1526,8 @@ if ($tipo == "a" or 1 == 1) {
             /*  */
             if ($quantimp > 1 or ($sememp == "s" and $quantimp > 0)) {
                 if (($quantimp > 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
-                    $pdf->SetFont('Arial', 'B', 7);
-                    if ($agrupar == "d" and $sememp == "s") {
-                        $pdf->Cell(45, $tam, "$e64_codele - $o56_elemento", $iBorda, 0, "C", 0);
-                        $pdf->Cell(80, $tam, mb_strtoupper($o56_descr, $encoding), $iBorda, 0, "L", 0);
-                    }
                     //$pdf->setX(125);
-                    // $pdf->SetFont('Arial', 'B', 7);
+                    $pdf->SetFont('Arial', 'B', 7);
                     if ($sememp == "n") {
                         $base = "B";
                         $preenche = 1;
@@ -1564,14 +1537,8 @@ if ($tipo == "a" or 1 == 1) {
                         $preenche = 0;
                         $iTamanhoCelula = 25;
                     }
-
-                    // $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
-
-
-                    // if ($x < $rows) {
-                    // $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($totalelemento, "s") . " EMPENHO" . ($totalelemento == 1 ? "" : "S"), $base, 0, "L", $preenche);
-                    // } else
-                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($e60_numemp, "s") . " EMPENHO" . ($e60_numemp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($quantimp, "s") . " EMPENHO" . ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
                     $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
                     $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
                     $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
@@ -1599,11 +1566,11 @@ if ($tipo == "a" or 1 == 1) {
             }
             $pdf->SetFont('Arial', 'B', 8);
             $totalforne++;
-            if ($agrupar == "d" and $sememp == "n") {
+            if ($agrupar == "d") {
                 $pdf->Cell(45, $tam, "$e64_codele - $o56_elemento", $iBorda, 0, "C", 0);
-                $pdf->Cell(80, $tam, "$o56_descr", $iBorda, 1, "L", 0);
-                $pdf->SetFont('Arial', '', 7);
+                $pdf->Cell(105, $tam, "$o56_descr", $iBorda, 1, "L", 0);
             }
+            $pdf->SetFont('Arial', '', 7);
         }
 
         /*----------- AGRUPAR POR RECURSO -----------*/
@@ -2273,7 +2240,7 @@ if ($tipo == "a" or 1 == 1) {
                 $iCelulaFornec  = 65;
             }
             $iTamanho = 125;
-            /*
+
             $pdf->Cell($iTamanho, $tam, '', $base, 0, "R", $preenche);
             $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($quantimp, "s") . " EMPENHO" . ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
             $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
@@ -2286,7 +2253,7 @@ if ($tipo == "a" or 1 == 1) {
                 $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
             } else {
                 $pdf->Ln();
-            }*/
+            }
             $pdf->Ln();
             $pdf->Ln();
             if ($agrupar == "ta") {
@@ -2357,9 +2324,8 @@ if ($tipo == "a" or 1 == 1) {
             }
         }
     }
-    // echo $sqlperiodo;db_criatabela($res);exit;
-
 }
+
 /* geral sintetico */
 if ($tipo == "s") {
 
@@ -2889,7 +2855,10 @@ if ($hist == "h") {
 														    group by x.o58_orgao, x.o58_unidade, x.o40_descr, x.o41_descr";
     }
     //	 echo $sql;exit;
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     $result1 = $clempempenho->sql_record($sql);
     if ($clempempenho->numrows > 0 and 1 == 2) {
         $pdf->addpage("L");

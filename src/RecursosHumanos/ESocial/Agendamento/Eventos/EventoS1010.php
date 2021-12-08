@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 
@@ -13,25 +13,27 @@ use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 class EventoS1010 extends EventoBase
 {
 
-	/**
-	 * 
-	 * @param \stdClass $dados
-	 */
-	function __construct($dados)
-	{
-		parent::__construct($dados);
-	}
+    /**
+     *
+     * @param \stdClass $dados
+     */
+    function __construct($dados)
+    {
+        parent::__construct($dados);
+    }
 
     /**
-	 * Retorna dados no formato necessario para envio
-	 * pela API sped-esocial
-	 * @return array stdClass
-	 */
-	public function montarDados()
-	{
-		$aDadosAPI = array();
+     * Retorna dados no formato necessario para envio
+     * pela API sped-esocial
+     * @return array stdClass
+     */
+    public function montarDados()
+    {
+        $aDadosAPI = array();
         $iSequencial = 1;
+
         foreach ($this->dados as $oDado) {
+
             if (!isset($oDado->dadosRubrica->natRubr)) {
                 continue;
             }
@@ -40,12 +42,16 @@ class EventoS1010 extends EventoBase
             $oDadosAPI->evtTabRubrica->sequencial = $iSequencial;
             $oDadosAPI->evtTabRubrica->codRubr    = $oDado->ideRubrica->codRubr;
             $oDadosAPI->evtTabRubrica->ideTabRubr = $oDado->ideRubrica->ideTabRubr;
-            $oDadosAPI->evtTabRubrica->inivalid   = $oDado->ideRubrica->iniValid;
-            if (!empty($oDado->ideRubrica->fimValid)) {
-                $oDadosAPI->evtTabRubrica->fimvalid = $oDado->ideRubrica->fimValid;
+            $oDadosAPI->evtTabRubrica->inivalid   = $this->iniValid;
+            if (!empty($this->fimValid)) {
+                $oDadosAPI->evtTabRubrica->fimvalid = $this->fimValid;
             }
-            $oDadosAPI->evtTabRubrica->modo         = 'INC';
+            $oDadosAPI->evtTabRubrica->modo         = $this->modo;
+            // var_dump($oDado);
+            // exit;
+
             $oDadosAPI->evtTabRubrica->dadosRubrica = $oDado->dadosRubrica;
+
             if (!empty($oDado->ideProcessoCP->nrProc)) {
                 $oDadosAPI->evtTabRubrica->ideProcessoCP = $oDado->ideProcessoCP;
             }
@@ -63,6 +69,5 @@ class EventoS1010 extends EventoBase
         }
 
         return $aDadosAPI;
-	}
-
+    }
 }

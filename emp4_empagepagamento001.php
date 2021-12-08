@@ -155,6 +155,7 @@ if (isset ($atualizar)) {
 		if ($sqlerro == true) {
 			break;
 		}
+
 		if ($tipo == 'banco') {
 			//e81_codmov,e82_codord,e81_valor
 			$arr_dad = split("-", $arr_chaves[$d]);

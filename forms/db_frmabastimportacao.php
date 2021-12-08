@@ -509,6 +509,24 @@ if(isset($_POST["processar"])) {
                             Placa
                             </th>  
                         </tr>
+                    </table> 
+                    <table style="width: 20%; border: 0px solid black; display: none;" id="tblComb" >
+
+                    <tr>
+                            <th colspan="2" style="text-align: center;" >
+                             Combustível não encontrado na base 
+                            </th>
+                    <tr>
+                    
+                        <tr style='background-color:#ffffff;'>
+                            
+                            <th style="width: 150px;">
+                            Placa
+                            </th>
+                            <th style="width: 150px;">
+                            Combustível
+                            </th>    
+                        </tr>
                     </table>               
   </form>
     
@@ -787,6 +805,26 @@ if(isset($_POST["processar"])) {
                     var linha = tabela.insertRow(numeroLinhas);
                     var celula1 = linha.insertCell(0);
                     celula1.innerHTML =  "<div style='text-align:center;'>"+vplaca+"<div>";
+                    
+
+                }else if(identificador==7){
+                    if(cont==1){
+                        alert("Combustivel não localizado na base!"); 
+                        cont++;
+                    }
+                    
+                    
+                    var vplaca = oItem.placa;
+                    var vcom = oItem.comb;
+                    document.getElementById("tblComb").style.display="block";
+
+                    var tabela = document.getElementById("tblComb");
+                    var numeroLinhas = tabela.rows.length;
+                    var linha = tabela.insertRow(numeroLinhas);
+                    var celula1 = linha.insertCell(0);
+                    var celula2 = linha.insertCell(1);
+                    celula1.innerHTML =  "<div style='text-align:center;'>"+vplaca+"<div>";
+                    celula2.innerHTML =  "<div style='text-align:center;'>"+vcom+"<div>";
                     
 
                 }

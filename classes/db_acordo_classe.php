@@ -1414,17 +1414,48 @@ class cl_acordo {
         $sSql .= "select distinct {$sCampos}";
         $sSql .= "       from acordo";
         $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
-        $sSql .= "            inner join acordoitem       on acordoitem.ac20_acordoposicao    = acordoposicao.ac26_sequencial";
-        $sSql .= "            left join acordoliclicitem on acordoliclicitem.ac24_acordoitem = acordoitem.ac20_sequencial";
-        $sSql .= "            left join liclicitem       on liclicitem.l21_codigo            = acordoliclicitem.ac24_liclicitem";
-        $sSql .= "            inner join liclicita        on liclicita.l20_codigo             = liclicitem.l21_codliclicita
- or liclicita.l20_codigo = acordo.ac16_licitacao ";
-        $sSql .= "            left join cgm on z01_numcgm = ac16_contratado ";
+        $sSql .= "            inner join liclicita ON liclicita.l20_codigo = acordo.ac16_licitacao";
+        $sSql .= "            inner join cgm on z01_numcgm = ac16_contratado  ";
         $sSql .= "  where 1 = 1 ";
         $sSql .= " {$sWhere} {$sOrder} ";
 
         return $sSql;
     }
+
+    function sql_queryAdesaoVinculadas($iCodigoAcordo = null, $sCampos = "*", $sOrder = null, $sWhere = "") {
+
+        $sSql = "";
+        if (!empty($iCodigoAcordo)) {
+            $sWhere .= " and acordo.ac16_sequencial = {$iCodigoAcordo} ";
+        }
+
+        $sSql .= "select distinct {$sCampos}";
+        $sSql .= "       from acordo";
+        $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
+        $sSql .= "            inner join adesaoregprecos ON adesaoregprecos.si06_sequencial = acordo.ac16_adesaoregpreco";
+        $sSql .= "  where 1 = 1 ";
+        $sSql .= " {$sWhere} {$sOrder} ";
+
+        return $sSql;
+    }
+
+    function sql_queryLicitacoesOutrosOrgaosVinculadas($iCodigoAcordo = null, $sCampos = "*", $sOrder = null, $sWhere = "") {
+
+        $sSql = "";
+        if (!empty($iCodigoAcordo)) {
+            $sWhere .= " and acordo.ac16_sequencial = {$iCodigoAcordo} ";
+        }
+
+        $sSql .= "select distinct {$sCampos}";
+        $sSql .= "       from acordo";
+        $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
+        $sSql .= "            INNER JOIN liclicitaoutrosorgaos ON liclicitaoutrosorgaos.lic211_sequencial = acordo.ac16_licoutroorgao";
+        $sSql .= "  where 1 = 1 ";
+        $sSql .= " {$sWhere} {$sOrder} ";
+
+        return $sSql;
+    }
+
     function sql_query_completo( $ac16_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){
@@ -2258,4 +2289,3 @@ class cl_acordo {
     }
 
 }
-?>

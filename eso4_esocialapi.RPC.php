@@ -262,7 +262,6 @@ try {
             db_inicio_transacao();
 
             $iCgm = $oParam->empregador;
-
             foreach ($oParam->arquivos as $arquivo) {
 
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
@@ -276,13 +275,15 @@ try {
                 /**
                  * Limitado array em 50 pois e o maximo que um lote pode enviar
                  */
+
                 foreach (array_chunk($dadosTabela, 50) as $aTabela) {
-                    $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}");
+                    $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo);
                     $eventoFila->adicionarFila();
                 }
             }
 
             db_fim_transacao(false);
+
             ob_start();
             $response = system("php -q filaEsocial.php");
             ob_end_clean();
@@ -290,7 +291,6 @@ try {
             break;
 
         case "consultar":
-
             $clesocialenvio = db_utils::getDao("esocialenvio");
             $oRetorno->lUpdate = $clesocialenvio->checkQueue();
             break;

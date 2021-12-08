@@ -71,5 +71,12 @@ $fila = new FilaESocialTask();
 
 ));
 
+switch ($argv[1]) {
+    case 'consultar':
+        $fila->consultar();
+        break;
 
-$fila->iniciar();
+    default:
+        $fila->iniciar();
+        break;
+}

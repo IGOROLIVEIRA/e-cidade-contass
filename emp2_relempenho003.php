@@ -2081,6 +2081,28 @@ if ($agrupar == 'd') {
 
             echo ";;;DATA;LANCAMENTO;DOCUMENTO;VALOR;;;;;;;\n";
         }
+
+        $TotalEmpenhado    += $objeto->e60_vlremp;
+        $TotalAnulado      += $objeto->e60_vlranu;
+        $TotalLiquidado    += $objeto->e60_vlrliq;
+        $TotalPago         += $objeto->e60_vlrpag;
+        $TotalLiquidado2   += $objeto->e60_vlrliq - $objeto->e60_vlrpag;
+        $TotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
+        $TotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
+
+        $GeralTotalEmpenhado    += $objeto->e60_vlremp;
+        $GeralTotalAnulado      += $objeto->e60_vlranu;
+        $GeralTotalLiquidado    += $objeto->e60_vlrliq;
+        $GeralTotalPago         += $objeto->e60_vlrpag;
+        $GeralTotalLiquidado2   += $objeto->e60_vlrliq - $objeto->e60_vlrpag;
+        $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
+        $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
+
+
+        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome;";
+        echo "$dotacao - $objeto->dl_estrutural;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
+        echo "\n";
+
         if ($mostraritem == "m") {
             if ($instits != db_getsession("DB_instit")) {
                 echo "ITEM;DESCRICAO DO ITEM;QUANTIDADE;VALOR TOTAL;COMPLEMENTO;;;;;;\n";
@@ -2215,6 +2237,47 @@ if ($agrupar == 'd') {
                         echo db_formatar($saldo_valor, 'f') . ";";
                         echo substr($e62_descr, 0, 100) . ";\n";
                     }
+                }
+
+                $resitem = $clempempitem->sql_record($clempempitem->sql_query(null, null, "e62_item,pc01_descrmater,e62_quant,e62_vltot,e62_descr", null, $dbwhere));
+                $rows_item = $clempempitem->numrows;
+
+                for ($item = 0; $item < $rows_item; $item++) {
+                    db_fieldsmemory($resitem, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
+                }
+            } else {
+                $sCamposEmpenho  = "distinct riseqitem     as item_empenho";
+                $sCamposEmpenho .= "         ,ricodmater   as e62_item";
+                $sCamposEmpenho .= "         ,rsdescr      as pc01_descrmater";
+                $sCamposEmpenho .= "         ,e62_descr";
+                $sCamposEmpenho .= "         ,rnquantini   as e62_quant";
+                $sCamposEmpenho .= "         ,rnvalorini   as e62_vltot";
+                $sCamposEmpenho .= "         ,rnvaloruni";
+                $sCamposEmpenho .= "         ,rnsaldoitem  as saldo";
+                $sCamposEmpenho .= "         ,round(rnsaldovalor,2) as saldo_valor";
+                $sCamposEmpenho .= "         ,o56_descr";
+                $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
+                $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
+                $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
+                $sCamposEmpenho .= "         end as observacao";
+                $sWhereEmpenho   = "e60_numemp = {$objeto->e60_numemp}";
+
+                $oDaoEmpenho      = db_utils::getDao("empempenho");
+                $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($objeto->e60_numemp, $sCamposEmpenho);
+                $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
+                for ($item = 0; $item < $oDaoEmpenho->numrows; $item++) {
+                    db_fieldsmemory($rsBuscaEmpenho, $item, true);
+
+                    echo "$e62_item;$pc01_descrmater;";
+                    echo db_formatar($e62_quant, 'f') . ";";
+                    echo db_formatar($e62_vltot, 'f') . ";";
+                    echo db_formatar($saldo_valor, 'f') . ";";
+                    echo substr($e62_descr, 0, 100) . ";\n";
                 }
             }
             if ($mostrarobs == "m") {
