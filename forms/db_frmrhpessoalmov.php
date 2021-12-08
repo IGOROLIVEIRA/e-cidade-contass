@@ -504,24 +504,6 @@ if (isset($db_opcaoal)) {
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?= @$Trh02_hrsmen ?>">
-                                    <?= @$Lrh02_hrsmen ?>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_input('rh02_hrsmen', 4, $Irh02_hrsmen, true, 'text', $db_opcao, "")
-                                    ?>
-                                </td>
-                                <td nowrap title="<?= @$Trh02_hrssem ?>" align="right">
-                                    <?= @$Lrh02_hrssem ?>
-                                </td>
-                                <td nowrap align="left">
-                                    <?
-                                    db_input('rh02_hrssem', 4, $Irh02_hrssem, true, 'text', $db_opcao, "")
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td nowrap title="<?= @$Trh02_ocorre ?>">
                                     <?= @$Lrh02_ocorre ?>
                                 </td>
@@ -686,17 +668,6 @@ if (isset($db_opcaoal)) {
                                     db_select('rh02_abonopermanencia', $aAbonoPermanencia, true, $db_opcao, "onchange='js_abonopermanencia()'");
                                     ?>
                                 </td>
-                                <td>
-                                    <strong>Tipo de Jornada:</strong>
-                                </td>
-                                <td>
-                                    <?php
-                                    $aTipoJornada = array(
-                                        '0' => 'Selecione', '2' => 'Jornada 12 x 36 (12 horas de trabalho seguidas de 36 horas ininterruptas de descanso', '3' => 'Jornada com horário diário fixo e folga variável', '4' => 'Jornada com horário diário fixo e folga fixa (no domingo)', '5' => 'Jornada com horário diário fixo e folga fixa (exceto no domingo)', '6' => 'Jornada com horário diário fixo e folga fixa (em outro dia da semana), com folga adicional ', '7' => 'Turno ininterrupto de revezamento', '9' => 'Demais tipos de jornada'
-                                    );
-                                    db_select("rh02_tipojornada", $aTipoJornada, true, $db_opcao, "", "", "", "");
-                                    ?>
-                                </td>
                             </tr>
                             <tr id="datainicio" <? echo ($GLOBALS['rh02_abonopermanencia'] == 't') ? '' : 'style="display: none;"' ?>>
                                 <td nowrap title="Data Início">
@@ -707,54 +678,116 @@ if (isset($db_opcaoal)) {
                                     db_inputdata('rh02_datainicio', @$rh02_datainicio_dia, @$rh02_datainicio_mes, @$rh02_datainicio_ano, true, 'text', $db_opcao, "")
                                     ?>
                                 </td>
-                                <td>
-                                    <strong>Possui Horário Noturno:</strong>
-                                </td>
-                                <td>
-                                    <?php
-                                    $aHorarioNoturno = array('f' => 'Não', 't' => 'Sim');
-                                    db_select("rh02_horarionoturno", $aHorarioNoturno, true, $db_opcao, "", "", "", "");
-                                    ?>
-                                </td>
-                            </tr>
-
-                            <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
-                                <td nowrap title="CNPJ Cedente">
-                                    <strong>CNPJ Cedente:</strong>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_input('rh02_cnpjcedente', 10, 1, true, 'text', $db_opcao);
-                                    ?>
-                                </td>
-                                <td nowrap title="Matricula do Trabalhador no órgão Cedente">
-                                    <strong>Matricula do Trabalhador no órgão Cedente:</strong>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_input('rh02_mattraborgcedente', 10, 1, true, 'text', $db_opcao);
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
-                            <td nowrap title="Data de Admissão no órgão Cedente">
-                                    <strong>Data de Admissão no órgão Cedente:</strong>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_inputdata('rh02_dataadmisorgcedente', @$rh02_dataadmisorgcedente_dia, @$rh02_dataadmisorgcedente_mes, @$rh02_dataadmisorgcedente_ano, true, 'text', $db_opcao, "")
-                                    ?>
-                                </td>
-                                <td nowrap title="Matricula do Trabalhador no órgão Cedente">
-                                    <strong>Matricula do Trabalhador no órgão Cedente:</strong>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_input('rh02_mattraborgcedente', 10, 1, true, 'text', $db_opcao);
-                                    ?>
-                                </td>
                             </tr>
                         </table>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <fieldset id="ctnHoras">
+                        <legend align="left"><b>Horas</b></legend>
+                        <center>
+                            <table width="100%">
+                                <tr>
+                                    <td nowrap title="<?= @$Trh02_hrsmen ?>">
+                                        <?= @$Lrh02_hrsmen ?>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_input('rh02_hrsmen', 4, $Irh02_hrsmen, true, 'text', $db_opcao, "")
+                                        ?>
+                                    </td>
+                                    <td nowrap title="<?= @$Trh02_hrssem ?>" align="right">
+                                        <?= @$Lrh02_hrssem ?>
+                                    </td>
+                                    <td nowrap align="left">
+                                        <?
+                                        db_input('rh02_hrssem', 4, $Irh02_hrssem, true, 'text', $db_opcao, "")
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Tipo de Jornada:</strong>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $aTipoJornada = array(
+                                            '0' => 'Selecione', '2' => 'Jornada 12 x 36 (12 horas de trabalho seguidas de 36 horas ininterruptas de descanso', '3' => 'Jornada com horário diário fixo e folga variável', '4' => 'Jornada com horário diário fixo e folga fixa (no domingo)', '5' => 'Jornada com horário diário fixo e folga fixa (exceto no domingo)', '6' => 'Jornada com horário diário fixo e folga fixa (em outro dia da semana), com folga adicional ', '7' => 'Turno ininterrupto de revezamento', '9' => 'Demais tipos de jornada'
+                                        );
+                                        db_select("rh02_tipojornada", $aTipoJornada, true, $db_opcao, "", "", "", "");
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <strong>Possui Horário Noturno:</strong>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $aHorarioNoturno = array('f' => 'Não', 't' => 'Sim');
+                                        db_select("rh02_horarionoturno", $aHorarioNoturno, true, $db_opcao, "", "", "", "");
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
+                                    <td nowrap title="Jornada de Trabalho">
+                                        <strong>Jornada de Trabalho:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        $sSqlJornadaTrab  = $cljornadadetrabalho->sql_query(null, "*", "", "");
+                                        $rsSqlJornadaTrab = $cljornadadetrabalho->sql_record($sSqlJornadaTrab);
+                                        //db_selectrecord('rh02_jornadadetrabalho', $rsSqlJornadaTrab, true, $db_opcao);
+                                        $aSelect = array("" => "Selecione");
+                                        for ($iCont = 0; $iCont < $cljornadadetrabalho->numrows; $iCont++) {
+                                            $aSelect[db_utils::fieldsMemory($rsSqlJornadaTrab, $iCont)->jt_sequencial] = db_utils::fieldsMemory($rsSqlJornadaTrab, $iCont)->jt_nome;
+                                        }
+                                        db_select('rh02_jornadadetrabalho', $aSelect, true, $db_opcao, "style='width:430;'");
+                                        ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <fieldset id="ctnDadosCedencia">
+                        <legend align="left"><b>Dados Cedência</b></legend>
+                        <center>
+                            <table width="100%">
+                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
+                                    <td nowrap title="CNPJ Cedente">
+                                        <strong>CNPJ Cedente:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_input('rh02_cnpjcedente', 10, 1, true, 'text', $db_opcao);
+                                        ?>
+                                    </td>
+                                    <td nowrap title="Matricula do Trabalhador no órgão Cedente">
+                                        <strong>Matricula do Trabalhador no órgão Cedente:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_input('rh02_mattraborgcedente', 10, 1, true, 'text', $db_opcao);
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
+                                    <td nowrap title="Data de Admissão no órgão Cedente">
+                                        <strong>Data de Admissão no órgão Cedente:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_inputdata('rh02_dataadmisorgcedente', @$rh02_dataadmisorgcedente_dia, @$rh02_dataadmisorgcedente_mes, @$rh02_dataadmisorgcedente_ano, true, 'text', $db_opcao, "")
+                                        ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
                     </fieldset>
                 </td>
             </tr>

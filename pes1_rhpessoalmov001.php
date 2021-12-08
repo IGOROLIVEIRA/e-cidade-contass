@@ -61,6 +61,7 @@ $clrhfuncao        = new cl_rhfuncao;
 $clpensao          = new cl_pensao;
 $cltpcontra        = new cl_tpcontra;
 $cltipodeficiencia = new cl_tipodeficiencia;
+$cljornadadetrabalho = new cl_jornadadetrabalho;
 $oDaoPontoCom      = new cl_pontocom();
 
 $db_opcao  = 22;
