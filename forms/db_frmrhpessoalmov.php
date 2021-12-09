@@ -1203,12 +1203,13 @@ if (isset($db_opcaoal)) {
                     if (document.form1.rh02_jornadadetrabalho.value != '') {
                         js_OpenJanelaIframe('top.corpo.iframe_rhpessoalmov', 'db_iframejornadadetrabalho', 'func_jornadadetrabalho.php?pesquisa_chave=' + document.form1.rh02_jornadadetrabalho.value + '&funcao_js=parent.js_mostrajornadadetrabalho&instit=<?= (db_getsession("DB_instit")) ?>', 'Pesquisa', false, '0');
                     } else {
-                        document.form1.jt_nome.value = '';
+                        document.form1.rh02_jornadadetrabalho.value = '';
                     }
                 }
             }
 
             function js_mostrajornadadetrabalho(chave, erro) {
+                console.log('chave', chave);
                 document.form1.rh02_jornadadetrabalho.value = chave;
                 if (erro == true) {
                     document.form1.rh02_jornadadetrabalho.focus();
@@ -1217,6 +1218,7 @@ if (isset($db_opcaoal)) {
             }
 
             function js_mostrajornadadetrabalho1(chave1, chave2) {
+                console.log('chave1', chave1)
                 document.form1.rh02_jornadadetrabalho.value = chave1;
                 document.form1.rh02_nome.value = chave2;
                 db_iframejornadadetrabalho.hide();

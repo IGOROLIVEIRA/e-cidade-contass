@@ -48,6 +48,8 @@ $cljornadadetrabalho = new cl_jornadadetrabalho;
     } else {
         if ($pesquisa_chave != null && $pesquisa_chave != "") {
             $result = $cljornadadetrabalho->sql_record($cljornadadetrabalho->sql_query($pesquisa_chave));
+            echo $cljornadadetrabalho->sql_query($pesquisa_chave);
+            echo 'numrows ' . $cljornadadetrabalho->numrows;
             if ($cljornadadetrabalho->numrows != 0) {
                 db_fieldsmemory($result, 0);
                 echo "<script>" . $funcao_js . "('$oid',false);</script>";
