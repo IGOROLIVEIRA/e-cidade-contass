@@ -580,17 +580,20 @@ class empenho {
           $acordoLancamento = false;
         }
 
-        $oDataIntegracao = new DBDate( date("Y-m-d", db_getsession("DB_datausu")) );
-        $oInstituicao    = new Instituicao(db_getsession("DB_instit"));
-        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataIntegracao, $oInstituicao)) && $acordoLancamento == true){
-
-          $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+        $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
           $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null,
             "e100_acordo",
             null,
             "e100_numemp = {$oEmpenhoFinanceiro->getNumero()}");
-          $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
-          if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+        $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+
+        if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0 && $iAnoSessao > 2021) {
+            $acordoLancamento = true;
+        }
+
+        $oDataIntegracao = new DBDate( date("Y-m-d", db_getsession("DB_datausu")) );
+        $oInstituicao    = new Instituicao(db_getsession("DB_instit"));
+        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataIntegracao, $oInstituicao)) && $acordoLancamento == true){
 
             $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
             $oEventoContabilAcordo = new EventoContabil(901, $iAnoSessao);
@@ -606,9 +609,8 @@ class empenho {
             $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
             $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
-
             $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
-          }
+
         }
 
       } catch(Exception $e) {
