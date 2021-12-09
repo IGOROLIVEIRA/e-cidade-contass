@@ -1227,7 +1227,7 @@ class cl_rhpessoalmov
             if (trim($this->rh02_horarionoturno) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_horarionoturno"])) {
                 $this->rh02_horarionoturno = "f";
             }
-            $sql  .= $virgula . " rh02_horarionoturno = $this->rh02_horarionoturno ";
+            $sql  .= $virgula . " rh02_horarionoturno = '$this->rh02_horarionoturno' ";
             $virgula = ",";
         }
 

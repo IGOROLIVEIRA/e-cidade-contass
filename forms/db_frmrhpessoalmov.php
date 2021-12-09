@@ -686,7 +686,7 @@ if (isset($db_opcaoal)) {
             <tr>
                 <td align="center">
                     <fieldset id="ctnHoras">
-                        <legend align="left"><b>Horas</b></legend>
+                        <legend align="left"><b>Horário de Trabalho</b></legend>
                         <center>
                             <table width="100%">
                                 <tr>
@@ -730,59 +730,17 @@ if (isset($db_opcaoal)) {
                                     </td>
                                 </tr>
                                 <tr>
-                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
-                                    <td nowrap title="Jornada de Trabalho">
-                                        <strong>Jornada de Trabalho:</strong>
-                                    </td>
-                                    <td nowrap>
+                                    <td nowrap title="Jornada de trabalho">
                                         <?
-                                        $sSqlJornadaTrab  = $cljornadadetrabalho->sql_query(null, "*", "", "");
-                                        $rsSqlJornadaTrab = $cljornadadetrabalho->sql_record($sSqlJornadaTrab);
-                                        //db_selectrecord('rh02_jornadadetrabalho', $rsSqlJornadaTrab, true, $db_opcao);
-                                        $aSelect = array("" => "Selecione");
-                                        for ($iCont = 0; $iCont < $cljornadadetrabalho->numrows; $iCont++) {
-                                            $aSelect[db_utils::fieldsMemory($rsSqlJornadaTrab, $iCont)->jt_sequencial] = db_utils::fieldsMemory($rsSqlJornadaTrab, $iCont)->jt_nome;
-                                        }
-                                        db_select('rh02_jornadadetrabalho', $aSelect, true, $db_opcao, "style='width:430;'");
+                                        db_ancora('Jornada de Trabalho', "js_pesquisarh02_jornadadetrabalho(true);", $db_opcao);
                                         ?>
                                     </td>
-                                </tr>
-                            </table>
-                        </center>
-                    </fieldset>
-                </td>
-            </tr>
-            <tr>
-                <td align="center">
-                    <fieldset id="ctnDadosCedencia">
-                        <legend align="left"><b>Dados Cedência</b></legend>
-                        <center>
-                            <table width="100%">
-                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
-                                    <td nowrap title="CNPJ Cedente">
-                                        <strong>CNPJ Cedente:</strong>
-                                    </td>
                                     <td nowrap>
                                         <?
-                                        db_input('rh02_cnpjcedente', 10, 1, true, 'text', $db_opcao);
+                                        db_input('rh02_jornadadetrabalho', 6, 1, true, 'text', $db_opcao, "onchange='js_pesquisarh02_jornadadetrabalho(false);'");
                                         ?>
-                                    </td>
-                                    <td nowrap title="Matricula do Trabalhador no órgão Cedente">
-                                        <strong>Matricula do Trabalhador no órgão Cedente:</strong>
-                                    </td>
-                                    <td nowrap>
                                         <?
-                                        db_input('rh02_mattraborgcedente', 10, 1, true, 'text', $db_opcao);
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
-                                    <td nowrap title="Data de Admissão no órgão Cedente">
-                                        <strong>Data de Admissão no órgão Cedente:</strong>
-                                    </td>
-                                    <td nowrap>
-                                        <?
-                                        db_inputdata('rh02_dataadmisorgcedente', @$rh02_dataadmisorgcedente_dia, @$rh02_dataadmisorgcedente_mes, @$rh02_dataadmisorgcedente_ano, true, 'text', $db_opcao, "")
+                                        db_input('rh02_nome', 34, $Ir70_descr, true, 'text', 3, '');
                                         ?>
                                     </td>
                                 </tr>
@@ -913,6 +871,54 @@ if (isset($db_opcaoal)) {
             </tr>
             <tr>
                 <td align="center">
+                    <fieldset id="ctnDadosCedencia">
+                        <legend align="left"><b>Dados Cedência</b></legend>
+                        <center>
+                            <table width="100%">
+                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
+                                    <td nowrap title="CNPJ Cedente">
+                                        <strong>CNPJ Cedente:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?php
+                                        db_input('rh02_cnpjcedente', 14, 1, true, 'text', $db_opcao, "  onBlur='js_verificaCNPJ(this)' onKeyDown='return js_controla_tecla_enter(this,event);' onKeyUp='js_limpa(this)'", '', '', '', '14');
+                                        ?>
+                                        <script type="text/javascript">
+                                            function js_limpa(obj) {
+                                                x = obj.value;
+                                                y = x.replace('.', '');
+                                                y = y.replace('/', '');
+                                                y = y.replace('-', '');
+                                                document.form1.rh02_cnpjcedente.value = y;
+                                            }
+                                        </script>
+                                    </td>
+                                    <td nowrap title="Matricula do Trabalhador no órgão Cedente">
+                                        <strong>Matricula do Trabalhador no órgão Cedente:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_input('rh02_mattraborgcedente', 10, 1, true, 'text', $db_opcao);
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
+                                    <td nowrap title="Data de Admissão no órgão Cedente">
+                                        <strong>Data de Admissão no órgão Cedente:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_inputdata('rh02_dataadmisorgcedente', @$rh02_dataadmisorgcedente_dia, @$rh02_dataadmisorgcedente_mes, @$rh02_dataadmisorgcedente_ano, true, 'text', $db_opcao, "")
+                                        ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
                     <fieldset id="ctnSiope">
                         <legend align="left"><b>Siope</b></legend>
                         <center>
@@ -1033,6 +1039,7 @@ if (isset($db_opcaoal)) {
             </tr>
             <tr>
                 <td align="center">
+                    <input type="hidden" name="tipadm" value="<?= $GLOBALS['rh01_tipadm'] ?>">
                     <input type="hidden" name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" />
                     <input type="button" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> <? if ($db_opcao != 3) echo "onclick='js_validaDados();'"; ?>>
                 </td>
@@ -1187,6 +1194,32 @@ if (isset($db_opcaoal)) {
                 document.form1.rh02_funcao.value = chave1;
                 document.form1.rh37_descr.value = chave2;
                 db_iframe_rhfuncao.hide();
+            }
+
+            function js_pesquisarh02_jornadadetrabalho(mostra) {
+                if (mostra == true) {
+                    js_OpenJanelaIframe('top.corpo.iframe_rhpessoalmov', 'db_iframejornadadetrabalho', 'func_jornadadetrabalho.php?funcao_js=parent.js_mostrajornadadetrabalho1|jt_sequencial|jt_nome&instit=<?= (db_getsession("DB_instit")) ?>', 'Pesquisa', true, '0');
+                } else {
+                    if (document.form1.rh02_jornadadetrabalho.value != '') {
+                        js_OpenJanelaIframe('top.corpo.iframe_rhpessoalmov', 'db_iframejornadadetrabalho', 'func_jornadadetrabalho.php?pesquisa_chave=' + document.form1.rh02_jornadadetrabalho.value + '&funcao_js=parent.js_mostrajornadadetrabalho&instit=<?= (db_getsession("DB_instit")) ?>', 'Pesquisa', false, '0');
+                    } else {
+                        document.form1.jt_nome.value = '';
+                    }
+                }
+            }
+
+            function js_mostrajornadadetrabalho(chave, erro) {
+                document.form1.rh02_jornadadetrabalho.value = chave;
+                if (erro == true) {
+                    document.form1.rh02_jornadadetrabalho.focus();
+                    document.form1.rh02_jornadadetrabalho.value = '';
+                }
+            }
+
+            function js_mostrajornadadetrabalho1(chave1, chave2) {
+                document.form1.rh02_jornadadetrabalho.value = chave1;
+                document.form1.rh02_nome.value = chave2;
+                db_iframejornadadetrabalho.hide();
             }
 
             function js_pesquisarh02_lota(mostra) {
@@ -1416,6 +1449,7 @@ if (isset($db_opcaoal)) {
                         clearInterval(validaDados)
                     }
                 }, 500);
+
             }
 
             function js_verificaconta() {
@@ -1515,6 +1549,15 @@ if (isset($db_opcaoal)) {
                     alert(_M(sMensagem + 'erro_diasgozoferias_minimo'));
                     document.form1.rh02_diasgozoferias.focus();
                     return false;
+                }
+
+                if (document.form1.tipadm.value == 3 || document.form1.tipadm.value == 4) {
+                    if (document.form1.rh02_cnpjcedente.value != "") {
+                        if (js_verificaCNPJ(document.form1.rh02_cnpjcedente) == false) {
+                            alert("Usuário: \n\nInforme o CNPJ Cedente.\n\nAdministrador:");
+                            return false;
+                        }
+                    }
                 }
 
                 document.form1.submit();
@@ -1928,6 +1971,7 @@ if (isset($db_opcaoal)) {
             var oToogleContaBancaria = new DBToogle('ctnContaBancaria', true);
             var oToogleRescisao = new DBToogle('ctnRescisao', true);
             var oToogleSiope = new DBToogle('ctnSiope', false);
+            var oToogleDadosCedencia = new DBToogle('ctnDadosCedencia', false);
 
             function js_verifica_lotacao() {
                 let oParam = new Object();
@@ -1947,6 +1991,17 @@ if (isset($db_opcaoal)) {
                 oToogleSiope.show(oRetorno.lShow);
             }
             js_verifica_lotacao();
+
+            function js_verificaCNPJ(cnpj) {
+                if (cnpj.value.length == 14) {
+                    return js_TestaNI(cnpj, 1);
+                }
+                if (cnpj.value != "") {
+                    cnpj.select();
+                    cnpj.focus();
+                }
+                return false;
+            }
         </script>
         <?
 

@@ -45,36 +45,36 @@ class Evento2200 extends AbstractMigration
 
         insert 	into	db_itensmenu( id_item ,	descricao ,	help ,	funcao ,	itemativo ,	manutencao ,	desctec ,	libcliente )
         values ( (select max(id_item)+1 from db_itensmenu) ,
-        'Incluir' ,
-        'Incluir' ,
+        'Inclusão' ,
+        'Inclusão' ,
         'pes1_jornadadetrabalho001.php' ,
         '1' ,
         '1' ,
-        'Incluir' ,
+        'Inclusão' ,
         'true' );
 
         insert into db_menu( id_item ,id_item_filho ,menusequencia ,modulo ) values ( 4001447 ,(select max(id_item) from db_itensmenu) ,102 ,952 );
 
         insert 	into	db_itensmenu( id_item ,	descricao ,	help ,	funcao ,	itemativo ,	manutencao ,	desctec ,	libcliente )
         values ( (select max(id_item)+1 from db_itensmenu) ,
-        'Alterar' ,
-        'Alterar' ,
+        'Alteração' ,
+        'Alteração' ,
         'pes1_jornadadetrabalho002.php' ,
         '1' ,
         '1' ,
-        'Alterar' ,
+        'Alteração' ,
         'true' );
 
         insert into db_menu( id_item ,id_item_filho ,menusequencia ,modulo ) values ( 4001447 ,(select max(id_item) from db_itensmenu) ,102 ,952 );
 
         insert 	into	db_itensmenu( id_item ,	descricao ,	help ,	funcao ,	itemativo ,	manutencao ,	desctec ,	libcliente )
         values ( (select max(id_item)+1 from db_itensmenu) ,
-        'Excluir' ,
-        'Excluir' ,
+        'Exclusão' ,
+        'Exclusão' ,
         'pes2_jornadadetrabalho003.php' ,
         '1' ,
         '1' ,
-        'Excluir' ,
+        'Exclusão' ,
         'true' );
 
         insert into db_menu( id_item ,id_item_filho ,menusequencia ,modulo ) values ( 4001447 ,(select max(id_item) from db_itensmenu) ,102 ,952 );
