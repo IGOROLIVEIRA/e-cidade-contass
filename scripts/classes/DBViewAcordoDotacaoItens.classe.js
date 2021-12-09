@@ -5,7 +5,7 @@
  @author Victor Felipe
  */
 
-DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
+DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
     var me = this;
     this.iCodigoAcordo = iCodigoAcordo;
@@ -34,7 +34,12 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
     sContent += "    <div id='ctnGridDotacoesItens'></div>";
     sContent += "  </fieldset>";
     sContent += "  <div id='ctnBtnAlterar' style='text-align:center'>";
-    sContent += "    <input type='button' id='btnAlterarDotacao' value='Alterar Dotações'";
+    if (this.tipoSql == 'insert') {
+        sContent += "<input type='button' id='btnAlterarDotacao' value='Inserir Dotações'";
+    } else {
+        sContent += "<input type='button' id='btnAlterarDotacao' value='Alterar Dotações'";
+
+    }
     sContent += "           onclick='" + sNomeFuncaoAlterarDotacoes + "'> ";
     sContent += "  </div>";
     sContent += "</div>";
@@ -73,7 +78,7 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
         'Valor',
         'Dotação',
         'Ação'
-        )
+    )
     );
     oGridDotacoes.show($('ctnGridDotacoesItens'));
 
@@ -82,7 +87,7 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
      */
     this.getDotacoes = () => {
 
-      
+
         let msgDiv = "Carregando Lista de Itens \n Aguarde ...";
         js_divCarregando(msgDiv, 'msgBox');
 
@@ -105,12 +110,11 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
         js_removeObj('msgBox');
         let oRetorno = eval("(" + oAjax.responseText + ")");
         this.tipoSql = oRetorno.tipoSql;
-        alert(JSON.stringify(oRetorno));
-        
 
-        if(oRetorno.status == 2){
+
+        if (oRetorno.status == 2) {
             alert(oRetorno.message.urlDecode());
-        }else{
+        } else {
             me.iAnoSessao = oRetorno.iAnoSessao;
             me.aDotacoes = oRetorno.aDotacoes;
             me.renderizaLinhasGrid();
@@ -120,18 +124,18 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
 
     /* Função utilizada para manusear a imagem da seta */
     this.controlArrow = (iDotacao = null, showAll = false) => {
-        if(iDotacao){
+        if (iDotacao) {
             let image = document.getElementsByClassName(`img__dot${iDotacao}`);
 
-            if(image[0].src.includes('seta.gif')){
+            if (image[0].src.includes('seta.gif')) {
                 image[0].src = 'imagens/setabaixo.gif';
-            }else{
+            } else {
                 image[0].src = 'imagens/seta.gif';
             }
 
             me.showItensLine(iDotacao, showAll);
 
-        }else{
+        } else {
             me.showItensLine();
         }
     }
@@ -174,17 +178,28 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
             let sNomeFuncaoHide = me.sNameInstance + `.controlArrow('${iCodigoDotacao}')`;
 
             var aRowDotacao = new Array();
-            aRowDotacao[0]  = `<span style='padding:5px;' onclick=${sNomeFuncaoMarcarTodos}><b>M</b></span>&nbsp;`;
+            aRowDotacao[0] = `<span style='padding:5px;' onclick=${sNomeFuncaoMarcarTodos}><b>M</b></span>&nbsp;`;
             aRowDotacao[0] += `Dotação <span onclick=${sNomeFuncaoHide}> <img class='img__dot${iCodigoDotacao}' src='imagens/seta.gif'>  </span>`;
             aRowDotacao[0] += `<a onclick='${sNomeFuncaoDotacao}';return false;' href='#'><b>`;
-            aRowDotacao[0] += `${oDotacao.iDotacao}</b></a> do Ano <b>${oDotacao.iAnoDotacao}</b>`;
+            if (this.tipoSql == 'update') {
+                aRowDotacao[0] += `${oDotacao.iDotacao}</b></a> do Ano <b>${oDotacao.iAnoDotacao}</b>`;
+
+            }
             aRowDotacao[1] = "";
             aRowDotacao[2] = "";
             aRowDotacao[3] = "";
 
             if (oDotacao.lAutorizado == 'false') {
-                aRowDotacao[4] = `<input id='btnAlteraDotacao${iCodigoDotacao}' type='button' value='Alterar'`;
-                aRowDotacao[4] += "       onclick=\""+sNomeFuncaoAlteraDotacao+"\" />";
+
+                if (this.tipoSql == 'update') {
+                    aRowDotacao[4] = `<input id='btnAlteraDotacao${iCodigoDotacao}' type='button' value='Alterar'`;
+                    aRowDotacao[4] += "       onclick=\"" + sNomeFuncaoAlteraDotacao + "\" />";
+                } else {
+                    aRowDotacao[4] = `<input id='btnAlteraDotacao${iCodigoDotacao}' type='button' value='Inserir'`;
+                    aRowDotacao[4] += "       onclick=\"" + sNomeFuncaoAlteraDotacao + "\" />";
+                }
+
+
             } else {
                 aRowDotacao[4] = `<input id='btnAlteraDotacao${iCodigoDotacao}' onclick='alert(\"Essa Dotação Possui Itens Já Autorizados.\")'`;
                 aRowDotacao[4] += " type='button' value='Alterar' />";
@@ -197,8 +212,8 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
             });
             iLinha++;
 
-            
-            oDotacao.aItens.each( (oItem, iIndice) => {
+
+            oDotacao.aItens.each((oItem, iIndice) => {
 
                 let sElementoItem = oDotacao.sElemento;
 
@@ -209,7 +224,7 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
                 }
 
                 let sNomeFuncaoAlteraDotacaoItem = me.sNameInstance + ".pesquisaDotacaoItem('";
-                sNomeFuncaoAlteraDotacaoItem += oItem.iDotacao + "'," + iIndice + ", '" + sElementoItem + "',"+oDotacao.iAnoDotacao+")";
+                sNomeFuncaoAlteraDotacaoItem += oItem.iDotacao + "'," + iIndice + ", '" + sElementoItem + "'," + oDotacao.iAnoDotacao + ")";
                 let sFunctionToogleLinha = me.sNameInstance + ".toogleLinhaItem('" + iCodigoDotacao + "'," + iIndice + ")";
                 aRowItem = new Array();
                 let sChecked = '';
@@ -230,13 +245,20 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
                     sDotacao += "Selecionar<a>";
                 }
 
-                aRowItem[3]  = "<a onclick='"+sNomeFuncaoDotacaoItem+";return false;' href='#'>";
-                aRowItem[3] += oItem.iDotacao+"<a>";
+                aRowItem[3] = "<a onclick='" + sNomeFuncaoDotacaoItem + ";return false;' href='#'>";
+                aRowItem[3] += oItem.iDotacao + "<a>";
 
                 aRowItem[3] = sDotacao;
 
-                aRowItem[4] = "<input id='btnAlteraDotacaoItem" + iIndice + "' type='button' value='Alterar'";
-                aRowItem[4] += "       onclick=\"" + sNomeFuncaoAlteraDotacaoItem + "\" />";
+                if (sDotacao == 'Selecionar<a>') {
+                    aRowItem[4] = "<input id='btnAlteraDotacaoItem" + iIndice + "' type='button' value='Inserir'";
+                    aRowItem[4] += "       onclick=\"" + sNomeFuncaoAlteraDotacaoItem + "\" />";
+                } else {
+                    aRowItem[4] = "<input id='btnAlteraDotacaoItem" + iIndice + "' type='button' value='Alterar'";
+                    aRowItem[4] += "       onclick=\"" + sNomeFuncaoAlteraDotacaoItem + "\" />";
+                }
+
+
                 oGridDotacoes.addRow(aRowItem);
                 oGridDotacoes.aRows[iLinha].isSelected = oItem.lAlterado;
 
@@ -256,10 +278,10 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
         oGridDotacoes.renderRows();
         oGridDotacoes.setNumRows(iTotalDotacoes);
 
-        if(iCodDot){
+        if (iCodDot) {
             /* Trecho utilizado somente quando a função alteraDotacaoGrupo é chamada */
             me.controlArrow(iCodDot, true);
-        }else{
+        } else {
             me.controlArrow();
         }
     }
@@ -307,7 +329,7 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
             me.aDotacoes[sDotacaoAtual].iDotacao = iCodigoDotacao;
             me.aDotacoes[sDotacaoAtual].iAnoDotacao = me.iAnoSessao;
 
-            me.aDotacoes[sDotacaoAtual].aItens.each( (oItem, iInd) => {
+            me.aDotacoes[sDotacaoAtual].aItens.each((oItem, iInd) => {
 
                 oItem.iDotacao = iCodigoDotacao;
                 oItem.iAnoDotacao = me.iAnoSessao;
@@ -326,30 +348,30 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
     /* Seta as classes nas TRs para manipulação da exibição/ocultação das linhas */
     this.setClassLine = (iLine, iDotacao) => {
 
-        oGridDotacoes.aRows[iLine].addClassName('tr__'+iDotacao);
+        oGridDotacoes.aRows[iLine].addClassName('tr__' + iDotacao);
         oGridDotacoes.aRows[iLine].addClassName('tr__conteudo');
 
     }
 
     /* Exibe a tr referente a dotação selecionada */
     this.showItensLine = (iDotacao = null, showAll = false) => {
-        if(!iDotacao){
+        if (!iDotacao) {
             let aLinhas = document.getElementsByClassName('tr__conteudo');
 
-            for(let count = 0; count < aLinhas.length; count++){
+            for (let count = 0; count < aLinhas.length; count++) {
                 aLinhas[count].style.display = 'none';
             }
-        }else{
-            let aLinhas = document.getElementsByClassName('tr__'+iDotacao);
+        } else {
+            let aLinhas = document.getElementsByClassName('tr__' + iDotacao);
 
-            if(showAll){
+            if (showAll) {
                 aLinhas = document.getElementsByClassName('tr__conteudo');
 
-                for(let count = 0; count < aLinhas.length; count++){
-                    aLinhas[count].style.display = aLinhas[count].classList.contains('tr__'+iDotacao) ? '' : 'none';
+                for (let count = 0; count < aLinhas.length; count++) {
+                    aLinhas[count].style.display = aLinhas[count].classList.contains('tr__' + iDotacao) ? '' : 'none';
                 }
-            }else{
-                for(let count = 0; count < aLinhas.length; count++){
+            } else {
+                for (let count = 0; count < aLinhas.length; count++) {
                     aLinhas[count].style.display = aLinhas[count].style.display == 'none' ? '' : 'none';
                 }
             }
@@ -378,8 +400,12 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
      * @param {integer} iCodigoDotacao Código da dotação
      */
     this.alteraDotacaoItem = (iCodigoDotacao) => {
-        let keyDotAnterior = sDotacaoAtual+iAnoDotAtual;
-        alert('alteraDotacaoItem' + JSON.stringify(me.aDotacoes.aItens[0]['iOrdem']));
+        let keyDotAnterior = sDotacaoAtual + iAnoDotAtual;
+        if (this.tipoSql == 'insert') {
+            keyDotAnterior = 1;
+
+        }
+        //alert('alteraDotacaoItem' + JSON.stringify(me.aDotacoes.aItens[0]['iOrdem']));
         if (me.aDotacoes[keyDotAnterior]) {
 
             if (me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual]) {
@@ -417,7 +443,7 @@ DBViewAcordoDotacaoItens = function(iCodigoAcordo, sNameInstance) {
             }
             let oDotacao = me.aDotacoes[iCodigoDotacao];
 
-            oDotacao.aItens.each( (oItem, iIndice) => {
+            oDotacao.aItens.each((oItem, iIndice) => {
 
                 let oItemAlterar = new Object();
 

@@ -136,7 +136,6 @@ switch ($oParam->exec) {
 				for ($i = 0; $i < pg_num_rows($rsResultItens); $i++) {
 					$aItens = db_utils::fieldsMemory($rsResultItens, $i);
 
-
 					$oDotacao->sElemento = $sElemento;
 					$oDotacao->lAutorizado = "false";
 
@@ -151,8 +150,8 @@ switch ($oParam->exec) {
 					$oItem->lAlterado = false;
 					$oDotacao->aItens[] = $oItem;
 
-					if (!isset($aItensDotacao[$i])) {
-						$aItensDotacao[$i] = $oDotacao;
+					if (!isset($aItensDotacao[$var++])) {
+						$aItensDotacao[$var++] = $oDotacao;
 					}
 				}
 			}
