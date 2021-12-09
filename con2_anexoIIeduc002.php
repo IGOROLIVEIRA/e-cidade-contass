@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -105,10 +105,10 @@ $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
 ob_start();
 
 ?>
-  
+
   <html>
   <head>
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style type="text/css">
       .ritz .waffle a { color : inherit; }
@@ -135,7 +135,7 @@ ob_start();
     </style>
   </head>
   <body>
-  
+
   <div class="ritz grid-container" dir="ltr">
     <table class="waffle" cellspacing="0" cellpadding="0">
       <thead>
@@ -166,7 +166,13 @@ ob_start();
         <td class="s7">SubFunções</td>
         <td class="s7">Programas</td>
         <td class="s8" colspan="5">Especificação</td>
-        <td class="s9">Despesa (1)</td>
+        <?php
+            if(db_getsession("DB_anousu") >= 2021){
+                echo  "<td class='s9'>Valor Pago</td>";
+            }else{
+                echo  "<td class='s9'>Despesa (1)</td>";
+            }
+        ?>
       </tr>
       <tr style='height:20px;'>
         <td class="s6 bdleft"></td>
@@ -235,7 +241,14 @@ ob_start();
       }
       ?>
       <tr style='height:20px;'>
-        <td class="s15 bdleft" colspan="8">SUBTOTAL</td>
+        <?php
+            if(db_getsession("DB_anousu") >= 2021){
+                echo  "<td class='s15 bdleft' colspan='8'>VALOR PAGO (A)</td>";
+            }else{
+                echo  "<td class='s15 bdleft' colspan='8'>SUBTOTAL</td>";
+            }
+        ?>
+
         <td class="s15"><?=db_formatar($fSubTotal,"f")?></td>
       </tr>
       <tr style='height:20px;'>
@@ -249,20 +262,35 @@ ob_start();
       </tr>
       <tr style='height:20px;'>
         <td class="s16 bdleft" colspan="8">Restos a Pagar Não Processados de Exercícios Anteriores</td>
-        <td class="s3"></td>
+        <td class="s15"></td>
       </tr>
+      <?php
+            if(db_getsession("DB_anousu") < 2021){
+                echo  "<td class='s15 bdleft' colspan='8'>VALOR PAGO (A)</td>";
+                echo  "<tr style='height:20px;'>";
+                echo  "<td class='s16 bdleft' colspan='8'>Processados no Exercício Atual (3)</td>";
+                echo  "<td class='s15'>";
+                $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$aFonte);
+                echo db_formatar($fSaldoRP,"f");
+                echo  "</td>";
+                echo  "</tr>";
+            }
+      ?>
+
       <tr style='height:20px;'>
-        <td class="s16 bdleft" colspan="8">Processados no Exercício Atual (3)</td>
-        <td class="s15">
-          <?php
-          $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$aFonte);
-          echo db_formatar($fSaldoRP,"f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s17 bdleft" colspan="8">TOTAL</td>
-        <td class="s18"><?=db_formatar(($fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$fSaldoRP),"f")?></td>
+        <?php
+            if(db_getsession("DB_anousu") >= 2021){
+                echo  "<td class='s17 bdleft' colspan='8'>SUBTOTAL (C = A + FUNDEB + B)</td>";
+                echo "<td class='s18'>";
+                echo db_formatar(($fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)),"f");
+                echo "</td>";
+            }else{
+                echo  "<td class='s17 bdleft' colspan='8'>TOTAL</td>";
+                echo "<td class='s18'>";
+                echo db_formatar(($fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$fSaldoRP),"f");
+                echo "</td>";
+            }
+        ?>
       </tr>
       <tr style='height:20px;'>
         <td class="s19 bdleft" colspan="9">(1) Art. 70 da Lei Federal n. 9394/96.</td>
@@ -279,8 +307,8 @@ ob_start();
       </tbody>
     </table>
   </div>
-  
-  
+
+
   </body>
   </html>
 
