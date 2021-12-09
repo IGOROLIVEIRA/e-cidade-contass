@@ -59,6 +59,7 @@ switch ($oParam->exec) {
 
 			$aItens = $oParam->aItens;
 
+
 			foreach ($oParam->aItens as $oItem) {
 
 				if (count($oAcordo->getAutorizacoes('', $oItem->iAnoDotacao))) {
@@ -66,11 +67,11 @@ switch ($oParam->exec) {
 				}
 
 				$oItem->iAcordo = $iAcordo;
-				if (strcmp($oParam->tipoSql, "update") == 0) {
+				if (strcmp($oItem->itemDotacao, "true") == 0) {
 					$oAcordoItem = AcordoItem::alterarDotacao($oItem);
 				}
 
-				if (strcmp($oParam->tipoSql, "insert") == 0) {
+				if (strcmp($oItem->itemDotacao, "false") == 0) {
 					$oAcordoItem = AcordoItem::inserirItensDotacao($oItem);
 				}
 			}
@@ -133,6 +134,7 @@ switch ($oParam->exec) {
 
 				$oDotacao = new stdClass();
 				$oDotacao->aItens = array();
+				$oDotacao->quantidade = pg_num_rows($rsResultItens);
 				for ($i = 0; $i < pg_num_rows($rsResultItens); $i++) {
 					$aItens = db_utils::fieldsMemory($rsResultItens, $i);
 
@@ -152,6 +154,8 @@ switch ($oParam->exec) {
 
 					if (!isset($aItensDotacao[$var++])) {
 						$aItensDotacao[$var++] = $oDotacao;
+						$oDotacao = new stdClass();
+						$oDotacao->aItens = array();
 					}
 				}
 			}
@@ -171,6 +175,7 @@ switch ($oParam->exec) {
 				$oDotacaoAcordo = db_utils::fieldsMemory($rsDotacoes, $count);
 
 				$sSqlItens = "SELECT DISTINCT
+								ac20_sequencial,
 								ac20_pcmater,
 								ac20_ordem,
 								pc01_descrmater,
@@ -209,6 +214,7 @@ switch ($oParam->exec) {
 
 					$oDotacao = new stdClass();
 					$oDotacao->aItens = array();
+					$oDotacao->itemDotacao = "true";
 					for ($i = 0; $i < pg_num_rows($rsResultItens); $i++) {
 						$aItens = db_utils::fieldsMemory($rsResultItens, $i);
 						$iCodigoDotacao = $aItens->ac22_coddot . $aItens->ac22_anousu;
@@ -222,6 +228,7 @@ switch ($oParam->exec) {
 						$oDotacao->lAutorizado = "false";
 
 						$oItem = new stdClass();
+						$oItem->sequencial = $aItens->ac20_sequencial;
 						$oItem->iItem = $aItens->ac20_pcmater;
 						$oItem->iOrdem = $aItens->ac20_ordem;
 						$oItem->sNomeItem = $aItens->pc01_descrmater;
@@ -234,10 +241,11 @@ switch ($oParam->exec) {
 						$oItem->iCodigoItem = $aItens->ac20_sequencial;
 						$oItem->lAlterado = false;
 						$oItem->sElemento = $aItens->o56_elemento;
+						$oItem->itemDotacao = "true";
 						$oDotacao->aItens[] = $oItem;
 
-						if (!isset($aItensDotacao[$iCodigoDotacao])) {
-							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
+						if (!isset($aItensDotacao[$oItem->sequencial])) {
+							$aItensDotacao[$oItem->sequencial] = $oDotacao;
 						}
 					}
 				}
@@ -246,6 +254,77 @@ switch ($oParam->exec) {
 				$oRetorno->iAnoSessao = db_getsession("DB_anousu");
 				$oRetorno->tipoSql = "update";
 			}
+
+
+			//$aItensDotacao = array();
+
+			//$tipoSql = "insert";
+
+			$sSqlItens = "SELECT DISTINCT
+								ac20_sequencial,
+								ac20_pcmater,
+								ac20_ordem,
+								pc01_descrmater,
+								ac20_valorunitario,
+								ac20_quantidade,
+								ac20_sequencial ,
+								ac20_acordoposicao,
+								ac20_quantidade,
+								ac20_valortotal
+								FROM orcdotacao, acordoitem
+							JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+							JOIN acordoposicaotipo ON ac26_acordoposicaotipo = ac27_sequencial
+							JOIN acordo ON ac26_acordo = ac16_sequencial
+							JOIN cgm ON ac16_contratado = z01_numcgm
+							JOIN pcmater ON ac20_pcmater = pc01_codmater
+							WHERE ac20_acordoposicao = (SELECT max(ac26_sequencial)
+															FROM acordoposicao
+															WHERE ac26_acordo = '" . $oParam->iCodigoAcordo . "') 
+															AND ac16_sequencial = '" . $oParam->iCodigoAcordo . "'
+															ORDER BY ac20_acordoposicao DESC, ac20_sequencial ASC";
+
+			$rsResultItens = db_query($sSqlItens);
+
+			if (pg_num_rows($rsResultItens) == 0) {
+				$oRetorno->message = urlencode("Não existe itens para este Acordo.");
+				$oRetorno->status = 2;
+			} else {
+
+				$oDotacao = new stdClass();
+				$oDotacao->aItens = array();
+				$oDotacao->itemDotacao = "false";
+				for ($i = 0; $i < pg_num_rows($rsResultItens); $i++) {
+					$aItens = db_utils::fieldsMemory($rsResultItens, $i);
+
+					$oDotacao->sElemento = $sElemento;
+					$oDotacao->lAutorizado = "false";
+
+					$oItem = new stdClass();
+					$oItem->sequencial = $aItens->ac20_sequencial;
+					$oItem->iItem = $aItens->ac20_pcmater;
+					$oItem->iOrdem = $aItens->ac20_ordem;
+					$oItem->sNomeItem = $aItens->pc01_descrmater;
+					$oItem->nValor = $aItens->ac20_valortotal;
+					$oItem->nQuantidade = $aItens->ac20_quantidade;
+
+					$oItem->iCodigoItem = $aItens->ac20_sequencial;
+					$oItem->lAlterado = false;
+					$oItem->itemDotacao = "false";
+					$oDotacao->aItens[] = $oItem;
+
+
+
+					if (!isset($aItensDotacao[$oItem->sequencial])) {
+						$aItensDotacao[$oItem->sequencial] = $oDotacao;
+					}
+
+					$oDotacao = new stdClass();
+					$oDotacao->aItens = array();
+				}
+			}
+
+			$oRetorno->aDotacoes = $aItensDotacao;
+			$oRetorno->iAnoSessao = db_getsession("DB_anousu");
 		}
 		break;
 }

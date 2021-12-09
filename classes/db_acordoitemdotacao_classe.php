@@ -92,7 +92,7 @@ class cl_acordoitemdotacao
   // funcao para inclusao
   function incluir($ac22_sequencial)
   {
-    $this->atualizacampos();
+    //$this->atualizacampos();
     if ($this->ac22_coddot == null) {
       $this->erro_sql = " Campo Código Dotação nao Informado.";
       $this->erro_campo = "ac22_coddot";
@@ -112,7 +112,7 @@ class cl_acordoitemdotacao
       return false;
     }
     if ($this->ac22_acordoitem == null) {
-      $this->erro_sql = " Campo Acordo Item nao Informado.";
+      $this->erro_sql = " Campo Acordo Item nao Informado. ";
       $this->erro_campo = "ac22_acordoitem";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
