@@ -354,8 +354,13 @@ try {
       break;
 
     case "getSicom":
-
-      $resultctb20 = $clctb->sql_record($clctb->sql_query(null, "round(si96_vlsaldofinalfonte,2) as si96_vlsaldofinalfonte ,si96_codfontrecursos", null, "si96_mes = 12 and si96_vlsaldofinalfonte != 0 and si96_instit = {$instit}"));
+      // OC16157
+      if ($anousu >= 2021) {
+        $resultctb20 = $clctb->sql_record($clctb->sql_query(null, "round(si96_vlsaldofinalfonte,2) as si96_vlsaldofinalfonte ,si96_codfontrecursos ,si96_saldocec", null, "si96_mes = 12 and si96_saldocec = 1 and si96_vlsaldofinalfonte != 0 and si96_instit = {$instit}"));
+      } else {
+        $resultctb20 = $clctb->sql_record($clctb->sql_query(null, "round(si96_vlsaldofinalfonte,2) as si96_vlsaldofinalfonte ,si96_codfontrecursos ,si96_saldocec", null, "si96_mes = 12 and si96_vlsaldofinalfonte != 0 and si96_instit = {$instit}"));
+      }
+      // OC16157
       if (pg_num_rows($resultctb20) == 0) {
         echo $oJson->encode(0);
         exit;
