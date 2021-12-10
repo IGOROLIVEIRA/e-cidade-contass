@@ -61,6 +61,9 @@ $clrotulo->label("r02_descrprev");
 
 const REGIME_CLT = 2;
 
+if (empty($GLOBALS['rh01_tipadm']))
+    $GLOBALS['rh01_tipadm'] = $tipadm;
+
 if (isset($db_opcaoal)) {
 
     $db_opcao = 33;
@@ -740,7 +743,7 @@ if (isset($db_opcaoal)) {
                                         db_input('rh02_jornadadetrabalho', 6, 1, true, 'text', $db_opcao, "onchange='js_pesquisarh02_jornadadetrabalho(false);'");
                                         ?>
                                         <?
-                                        db_input('rh02_nome', 34, $Ir70_descr, true, 'text', 3, '');
+                                        db_input('rh02_nomejornada', 34, 1, true, 'text', 3, '');
                                         ?>
                                     </td>
                                 </tr>
@@ -1208,17 +1211,17 @@ if (isset($db_opcaoal)) {
                 }
             }
 
-            function js_mostrajornadadetrabalho(chave, erro) {
-                console.log('chave', chave);
-                document.form1.rh02_jornadadetrabalho.value = chave;
+            function js_mostrajornadadetrabalho(chave1, chave2, erro) {
+                document.form1.rh02_jornadadetrabalho.value = chave1;
+                document.form1.rh02_nomejornada.value = chave2;
                 if (erro == true) {
                     document.form1.rh02_jornadadetrabalho.focus();
                     document.form1.rh02_jornadadetrabalho.value = '';
+                    document.form1.rh02_nomejornada.value = '';
                 }
             }
 
             function js_mostrajornadadetrabalho1(chave1, chave2) {
-                console.log('chave1', chave1)
                 document.form1.rh02_jornadadetrabalho.value = chave1;
                 document.form1.rh02_nome.value = chave2;
                 db_iframejornadadetrabalho.hide();

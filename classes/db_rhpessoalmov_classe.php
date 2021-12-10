@@ -510,14 +510,41 @@ class cl_rhpessoalmov
         }
 
         if ($this->rh02_cnpjcedente == null) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->erro_sql = " Campo CNPJ Cedente não informado.";
+                $this->erro_campo = "rh02_cnpjcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
             $this->rh02_cnpjcedente = "null";
         }
 
         if ($this->rh02_mattraborgcedente == null) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->erro_sql = " Campo Matricula do Trabalhador no órgão Cedente não informado.";
+                $this->erro_campo = "rh02_mattraborgcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
             $this->rh02_mattraborgcedente = "null";
         }
 
         if ($this->rh02_dataadmisorgcedente == null) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->erro_sql = " Campo Data de Admissão no órgão Cedente não informado.";
+                $this->erro_campo = "rh02_dataadmisorgcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
             $this->rh02_dataadmisorgcedente = "null";
         }
 
@@ -1230,9 +1257,16 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_horarionoturno = '$this->rh02_horarionoturno' ";
             $virgula = ",";
         }
-
         if (trim($this->rh02_cnpjcedente) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"])) {
-            if (trim($this->rh02_cnpjcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"])) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_cnpjcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"])) {
+                $this->erro_sql = " Campo CNPJ Cedente não informado.";
+                $this->erro_campo = "rh02_cnpjcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else if (trim($this->rh02_cnpjcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
                 $this->rh02_cnpjcedente = "null";
             }
             $sql  .= $virgula . " rh02_cnpjcedente = $this->rh02_cnpjcedente ";
@@ -1240,7 +1274,15 @@ class cl_rhpessoalmov
         }
 
         if (trim($this->rh02_mattraborgcedente) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"])) {
-            if (trim($this->rh02_mattraborgcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"])) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_mattraborgcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"])) {
+                $this->erro_sql = " Campo Matricula do Trabalhador no órgão Cedente não informado.";
+                $this->erro_campo = "rh02_mattraborgcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else if (trim($this->rh02_mattraborgcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
                 $this->rh02_mattraborgcedente = "null";
             }
             $sql  .= $virgula . " rh02_mattraborgcedente = $this->rh02_mattraborgcedente ";
@@ -1251,7 +1293,15 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_dataadmisorgcedente = '$this->rh02_dataadmisorgcedente' ";
             $virgula = ",";
         } else {
-            if (isset($GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente_dia"])) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_dataadmisorgcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente"])) {
+                $this->erro_sql = " Campo Matricula do Trabalhador no órgão Cedente não informado.";
+                $this->erro_campo = "rh02_dataadmisorgcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else if (isset($GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente_dia"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
                 $sql  .= $virgula . " rh02_dataadmisorgcedente = null ";
                 $virgula = ",";
             }
