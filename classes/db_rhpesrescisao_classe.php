@@ -913,9 +913,9 @@ class cl_rhpesrescisao
 
         $sSql .= "where ";
         $sSql .= " case";
-        $sSql .= "     when gerfres.r20_regist IS NOT NULL and r20_anousu = $iAno";/* Caso tenha cálculo */
-        $sSql .= "       then (rhpessoalmov.rh02_anousu = $iAno)";
-        $sSql .= "     else (extract(year from rhpesrescisao.rh05_recis) = $iAno)"; /* Caso não tenha calculo*/
+        $sSql .= "     when gerfres.r20_regist IS NOT NULL and r20_anousu = $iAno and  r20_mesusu = $iMes";/* Caso tenha cálculo */
+        $sSql .= "       then (rhpessoalmov.rh02_anousu = $iAno and rhpessoalmov.rh02_mesusu = $iMes)";
+        $sSql .= "     else (extract(year from rhpesrescisao.rh05_recis) = $iAno and extract(month from rhpesrescisao.rh05_recis) = $iMes)"; /* Caso não tenha calculo*/
         $sSql .= " end";
 
         $sSql .= "    and rhpessoalmov.rh02_instit                     = $iInstit                                                                                     \n";
