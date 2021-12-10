@@ -51,11 +51,10 @@ $cljornadadetrabalho = new cl_jornadadetrabalho;
             echo $cljornadadetrabalho->sql_query($pesquisa_chave);
             echo 'numrows ' . $cljornadadetrabalho->numrows;
             if ($cljornadadetrabalho->numrows != 0) {
-                db_criatabela($result);
                 db_fieldsmemory($result, 0);
                 echo "<script>" . $funcao_js . "('$jt_sequencial','$jt_nome',false);</script>";
             } else {
-                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado','',true);</script>";
             }
         } else {
             echo "<script>" . $funcao_js . "('',false);</script>";

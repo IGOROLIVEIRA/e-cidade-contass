@@ -58,6 +58,7 @@ $clrotulo->label("db83_sequencial");
 $clrotulo->label("rh01_reajusteparidade");
 $clrotulo->label("rh03_padraoprev");
 $clrotulo->label("r02_descrprev");
+$clrotulo->label("jt_nome");
 
 const REGIME_CLT = 2;
 
@@ -743,7 +744,7 @@ if (isset($db_opcaoal)) {
                                         db_input('rh02_jornadadetrabalho', 6, 1, true, 'text', $db_opcao, "onchange='js_pesquisarh02_jornadadetrabalho(false);'");
                                         ?>
                                         <?
-                                        db_input('rh02_nomejornada', 34, 1, true, 'text', 3, '');
+                                        db_input('jt_nome', 34, 1, true, 'text', 3, '');
                                         ?>
                                     </td>
                                 </tr>
@@ -1206,24 +1207,24 @@ if (isset($db_opcaoal)) {
                     if (document.form1.rh02_jornadadetrabalho.value != '') {
                         js_OpenJanelaIframe('top.corpo.iframe_rhpessoalmov', 'db_iframejornadadetrabalho', 'func_jornadadetrabalho.php?pesquisa_chave=' + document.form1.rh02_jornadadetrabalho.value + '&funcao_js=parent.js_mostrajornadadetrabalho&instit=<?= (db_getsession("DB_instit")) ?>', 'Pesquisa', false, '0');
                     } else {
-                        document.form1.rh02_jornadadetrabalho.value = '';
+                        document.form1.jt_nome.value = '';
                     }
                 }
             }
 
             function js_mostrajornadadetrabalho(chave1, chave2, erro) {
                 document.form1.rh02_jornadadetrabalho.value = chave1;
-                document.form1.rh02_nomejornada.value = chave2;
+                document.form1.jt_nome.value = chave2;
                 if (erro == true) {
                     document.form1.rh02_jornadadetrabalho.focus();
                     document.form1.rh02_jornadadetrabalho.value = '';
-                    document.form1.rh02_nomejornada.value = '';
+                    document.form1.jt_nome.value = '';
                 }
             }
 
             function js_mostrajornadadetrabalho1(chave1, chave2) {
                 document.form1.rh02_jornadadetrabalho.value = chave1;
-                document.form1.rh02_nome.value = chave2;
+                document.form1.jt_nome.value = chave2;
                 db_iframejornadadetrabalho.hide();
             }
 
@@ -1478,6 +1479,18 @@ if (isset($db_opcaoal)) {
                         return false;
                     }
                 }
+
+                if (document.form1.rh30_vinculo.value == 'A') {
+                    if (document.form1.rh02_hrsmen.value == '' ||
+                        document.form1.rh02_hrssem.value == '' ||
+                        document.form1.rh02_tipojornada.value == 0 ||
+                        document.form1.rh02_jornadadetrabalho.value == ''
+                    ) {
+                        alert('Os campos de Horário de Trabalho são obrigatórios');
+                        return false;
+                    }
+                }
+
 
                 if (document.form1.rh02_fpagto.value > 1 || document.form1.inputCodigoBanco.value != "") {
 
