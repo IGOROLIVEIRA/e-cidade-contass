@@ -92,6 +92,7 @@ class cl_acordoitemdotacao
   // funcao para inclusao
   function incluir($ac22_sequencial)
   {
+    //throw new Exception($this->ac22_sequencial .$this->ac22_coddot .$this->ac22_anousu.$this->ac22_acordoitem . $ac22_sequencial);
     //$this->atualizacampos();
     if ($this->ac22_coddot == null) {
       $this->erro_sql = " Campo Código Dotação nao Informado.";

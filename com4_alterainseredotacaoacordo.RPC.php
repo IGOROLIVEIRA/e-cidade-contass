@@ -244,8 +244,8 @@ switch ($oParam->exec) {
 						$oItem->itemDotacao = "true";
 						$oDotacao->aItens[] = $oItem;
 
-						if (!isset($aItensDotacao[$oItem->sequencial])) {
-							$aItensDotacao[$oItem->sequencial] = $oDotacao;
+						if (!isset($aItensDotacao[$iCodigoDotacao])) {
+							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
 						}
 					}
 				}
@@ -314,12 +314,12 @@ switch ($oParam->exec) {
 
 
 
-					if (!isset($aItensDotacao[$oItem->sequencial])) {
-						$aItensDotacao[$oItem->sequencial] = $oDotacao;
+					if (!isset($aItensDotacao[0])) {
+						$aItensDotacao[0] = $oDotacao;
 					}
 
-					$oDotacao = new stdClass();
-					$oDotacao->aItens = array();
+					//$oDotacao = new stdClass();
+					//$oDotacao->aItens = array();
 				}
 			}
 

@@ -9,6 +9,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
     var me = this;
     this.sequencialitem = '';
+    this.itemDotacaao = '';
     this.iCodigoAcordo = iCodigoAcordo;
     this.sNameInstance = sNameInstance;
     this.sUrlRPC = 'com4_alterainseredotacaoacordo.RPC.php';
@@ -224,7 +225,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
                 }
 
                 let sNomeFuncaoAlteraDotacaoItem = me.sNameInstance + ".pesquisaDotacaoItem('";
-                sNomeFuncaoAlteraDotacaoItem += oItem.sequencial + "'," + "'" + oItem.iDotacao + "'," + iIndice + ", '" + sElementoItem + "'," + oDotacao.iAnoDotacao + ")";
+                sNomeFuncaoAlteraDotacaoItem += oItem.sequencial + "','" + oItem.itemDotacao + "'," + "'" + oItem.iDotacao + "'," + iIndice + ", '" + sElementoItem + "'," + oDotacao.iAnoDotacao + " )";
                 let sFunctionToogleLinha = me.sNameInstance + ".toogleLinhaItem('" + iCodigoDotacao + "'," + iIndice + ")";
                 aRowItem = new Array();
                 let sChecked = '';
@@ -382,11 +383,12 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
     /**
      * Abre janela para alterar a Dotação de um item especifico;
      */
-    this.pesquisaDotacaoItem = (seqItem, sDotacao, iIndiceItem, sElemento, iAnoDot) => {
+    this.pesquisaDotacaoItem = (seqItem,itemDotacao, sDotacao, iIndiceItem, sElemento, iAnoDot) => {
         sDotacaoAtual = sDotacao;
         iAnoDotAtual = iAnoDot;
         iIndiceItemAtual = iIndiceItem;
         this.sequencialitem = seqItem;
+        this.itemDotacao = itemDotacao;
         let sFuncaoRetorno = 'funcao_js=parent.' + me.sNameInstance + '.alteraDotacaoItem|o58_coddot';
         js_OpenJanelaIframe('',
             'db_iframe_alterarDotacao',
@@ -402,12 +404,10 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
      */
     this.alteraDotacaoItem = (iCodigoDotacao) => {
         let keyDotAnterior = sDotacaoAtual + iAnoDotAtual;
-        if (this.tipoSql == 'insert') {
-            keyDotAnterior = 1;
-
+        if(this.itemDotacao == "false"){
+            keyDotAnterior = 0;
         }
-
-        keyDotAnterior = this.sequencialitem;
+        
 
         //alert('alteraDotacaoItem' + JSON.stringify(me.aDotacoes.aItens[0]['iOrdem']));
         if (me.aDotacoes[keyDotAnterior]) {
