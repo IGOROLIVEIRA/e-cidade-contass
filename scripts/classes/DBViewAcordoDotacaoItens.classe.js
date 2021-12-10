@@ -112,7 +112,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
         js_removeObj('msgBox');
         let oRetorno = eval("(" + oAjax.responseText + ")");
         this.tipoSql = oRetorno.tipoSql;
-        alert(JSON.stringify(oRetorno));
+        //alert(JSON.stringify(oRetorno));
 
         if (oRetorno.status == 2) {
             alert(oRetorno.message.urlDecode());
