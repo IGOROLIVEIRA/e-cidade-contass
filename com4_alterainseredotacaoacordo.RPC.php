@@ -306,7 +306,6 @@ switch ($oParam->exec) {
 					$oItem->sNomeItem = $aItens->pc01_descrmater;
 					$oItem->nValor = $aItens->ac20_valortotal;
 					$oItem->nQuantidade = $aItens->ac20_quantidade;
-
 					$oItem->iCodigoItem = $aItens->ac20_sequencial;
 					$oItem->lAlterado = false;
 					$oItem->itemDotacao = "false";

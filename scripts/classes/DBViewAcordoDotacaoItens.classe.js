@@ -192,7 +192,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
             if (oDotacao.lAutorizado == 'false') {
 
-                if (this.tipoSql == 'update') {
+                if (iCodigoDotacao != '0') {
                     aRowDotacao[4] = `<input id='btnAlteraDotacao${iCodigoDotacao}' type='button' value='Alterar'`;
                     aRowDotacao[4] += "       onclick=\"" + sNomeFuncaoAlteraDotacao + "\" />";
                 } else {
@@ -212,6 +212,8 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
                 oCell.sStyle += ';border-right: 1px solid #eeeee2;';
             });
             iLinha++;
+
+            
 
 
             oDotacao.aItens.each((oItem, iIndice) => {
@@ -274,6 +276,14 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
             });
             iTotalDotacoes++;
+
+            if(iCodigoDotacao == '0'){
+                var linha = new Array();
+                linha[0] = '<b> Dotações cadastradas </b> ';
+                oGridDotacoes.addRow(linha);
+                iLinha++;
+            }
+
         }
 
         oGridDotacoes.renderRows();
@@ -405,7 +415,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
     this.alteraDotacaoItem = (iCodigoDotacao) => {
         let keyDotAnterior = sDotacaoAtual + iAnoDotAtual;
         if(this.itemDotacao == "false"){
-            keyDotAnterior = 0;
+            keyDotAnterior = "0";
         }
         
 
