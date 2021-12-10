@@ -2709,9 +2709,9 @@ class Acordo
 
                 $iCodigoAdesao    = db_utils::fieldsMemory($rsAdesaovinculada, $iAdesao)->si06_sequencial;
                 $rsAdesao = $oDaoAdesaoregpreco->sql_record($oDaoAdesaoregpreco->sql_query($iCodigoAdesao,"si06_sequencial,si06_objetoadesao,si06_dataadesao,coddepto||'-'||descrdepto as departamento"));
-                
+
                 for($i = 0; $i < $oDaoAdesaoregpreco->numrows; $i++){
-            
+
                     $oDadosAdesao = db_utils::fieldsMemory($rsAdesao, $i);
                     $oStdAdesao   = new stdClass();
                     $oStdAdesao->si06_sequencial = $oDadosAdesao->si06_sequencial;
@@ -2740,13 +2740,13 @@ class Acordo
             for ($iLicitacaoOutrosOrgaos = 0; $iLicitacaoOutrosOrgaos < $oDaoAcordo->numrows; $iLicitacaoOutrosOrgaos++) {
 
                 $iCodigoLicitacao    = db_utils::fieldsMemory($rsLicitacaoOutrosOrgaos, $iLicitacaoOutrosOrgaos)->lic211_sequencial;
-                
+
                 $rsLicitacao = $oDaoliclicitaoutrosorgaos->sql_record($oDaoliclicitaoutrosorgaos->sql_query($iCodigoLicitacao,"lic211_sequencial,lic211_tipo"));
 
                 for($i = 0; $i < $oDaoliclicitaoutrosorgaos->numrows; $i++){
-                    
+
                     $oDadosLicitacao = db_utils::fieldsMemory($rsLicitacao, $i);
-                    
+
                     if($oDadosLicitacao->lic211_tipo == "5"){
                         $tipo = "5 - Licitação realizada por outro órgão ou entidade";
                     }elseif($oDadosLicitacao->lic211_tipo == "6"){
@@ -2764,7 +2764,7 @@ class Acordo
                     $oStdLicitacao->lic211_tipo         = $tipo;
                     $oStdLicitacao->data                = '';
                     $oStdLicitacao->departamento        = '';
-                    
+
                     $this->aLicitacaoOutrosOrgaos[]     = $oStdLicitacao;
                 }
 
@@ -3324,7 +3324,7 @@ class Acordo
             return $this;
         }
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-        $sHistorico = "Valor referente a Aditivo {$oNovaPosicao->getNumeroAditamento()} do Acordo: {$this->getCodigoAcordo()}.";
+        $sHistorico = "Valor referente ao aditivo {$oNovaPosicao->getNumeroAditamento()} do contrato de código: {$this->getCodigoAcordo()}.";
         if($nValorLancamentoContabil > 0){
             $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $oNovaPosicao->getData());
         }else{
@@ -4285,7 +4285,7 @@ class Acordo
         }
 
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-        $sHistorico = "Valor referente a Apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de código: {$this->getCodigoAcordo()}.";
+        $sHistorico = "Valor referente ao apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de código: {$this->getCodigoAcordo()}.";
         if($nValorLancamentoContabil < 0){
             $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oNovaPosicao->getData());
         }
