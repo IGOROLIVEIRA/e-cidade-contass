@@ -146,22 +146,22 @@ class cl_jornadadetrabalho
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
-        $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-            && ($lSessaoDesativarAccount === false))) {
+        // $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+        // if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        //     && ($lSessaoDesativarAccount === false))) {
 
-            $resaco = $this->sql_record($this->sql_query_file($this->jt_sequencial));
-            if (($resaco != false) || ($this->numrows != 0)) {
+        //     $resaco = $this->sql_record($this->sql_query_file($this->jt_sequencial));
+        //     if (($resaco != false) || ($this->numrows != 0)) {
 
-                $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac, 0, 0);
-                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                $resac = db_query("insert into db_acountkey values($acount,1009247,'$this->jt_sequencial','I')");
-                $resac = db_query("insert into db_acount values($acount,1010192,1009247,'','" . AddSlashes(pg_result($resaco, 0, 'jt_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,1010192,1009248,'','" . AddSlashes(pg_result($resaco, 0, 'jt_nome')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,1010192,1009250,'','" . AddSlashes(pg_result($resaco, 0, 'jt_descricao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            }
-        }
+        //         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+        //         $acount = pg_result($resac, 0, 0);
+        //         $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+        //         $resac = db_query("insert into db_acountkey values($acount,1009247,'$this->jt_sequencial','I')");
+        //         $resac = db_query("insert into db_acount values($acount,1010192,1009247,'','" . AddSlashes(pg_result($resaco, 0, 'jt_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //         $resac = db_query("insert into db_acount values($acount,1010192,1009248,'','" . AddSlashes(pg_result($resaco, 0, 'jt_nome')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //         $resac = db_query("insert into db_acount values($acount,1010192,1009250,'','" . AddSlashes(pg_result($resaco, 0, 'jt_descricao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //     }
+        // }
         return true;
     }
 
@@ -214,28 +214,28 @@ class cl_jornadadetrabalho
         if ($jt_sequencial != null) {
             $sql .= " jt_sequencial = $this->jt_sequencial";
         }
-        $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-            && ($lSessaoDesativarAccount === false))) {
+        // $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+        // if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        //     && ($lSessaoDesativarAccount === false))) {
 
-            $resaco = $this->sql_record($this->sql_query_file($this->jt_sequencial));
-            if ($this->numrows > 0) {
+        //     $resaco = $this->sql_record($this->sql_query_file($this->jt_sequencial));
+        //     if ($this->numrows > 0) {
 
-                for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+        //         for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
 
-                    $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                    $acount = pg_result($resac, 0, 0);
-                    $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                    $resac = db_query("insert into db_acountkey values($acount,1009247,'$this->jt_sequencial','A')");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["jt_sequencial"]) || $this->jt_sequencial != "")
-                        $resac = db_query("insert into db_acount values($acount,1010192,1009247,'" . AddSlashes(pg_result($resaco, $conresaco, 'jt_sequencial')) . "','$this->jt_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["jt_nome"]) || $this->jt_nome != "")
-                        $resac = db_query("insert into db_acount values($acount,1010192,1009248,'" . AddSlashes(pg_result($resaco, $conresaco, 'jt_nome')) . "','$this->jt_nome'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["jt_descricao"]) || $this->jt_descricao != "")
-                        $resac = db_query("insert into db_acount values($acount,1010192,1009250,'" . AddSlashes(pg_result($resaco, $conresaco, 'jt_descricao')) . "','$this->jt_descricao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                }
-            }
-        }
+        //             $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+        //             $acount = pg_result($resac, 0, 0);
+        //             $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+        //             $resac = db_query("insert into db_acountkey values($acount,1009247,'$this->jt_sequencial','A')");
+        //             if (isset($GLOBALS["HTTP_POST_VARS"]["jt_sequencial"]) || $this->jt_sequencial != "")
+        //                 $resac = db_query("insert into db_acount values($acount,1010192,1009247,'" . AddSlashes(pg_result($resaco, $conresaco, 'jt_sequencial')) . "','$this->jt_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             if (isset($GLOBALS["HTTP_POST_VARS"]["jt_nome"]) || $this->jt_nome != "")
+        //                 $resac = db_query("insert into db_acount values($acount,1010192,1009248,'" . AddSlashes(pg_result($resaco, $conresaco, 'jt_nome')) . "','$this->jt_nome'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             if (isset($GLOBALS["HTTP_POST_VARS"]["jt_descricao"]) || $this->jt_descricao != "")
+        //                 $resac = db_query("insert into db_acount values($acount,1010192,1009250,'" . AddSlashes(pg_result($resaco, $conresaco, 'jt_descricao')) . "','$this->jt_descricao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //         }
+        //     }
+        // }
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -273,30 +273,30 @@ class cl_jornadadetrabalho
     function excluir($jt_sequencial = null, $dbwhere = null)
     {
 
-        $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-            && ($lSessaoDesativarAccount === false))) {
+        // $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+        // if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        //     && ($lSessaoDesativarAccount === false))) {
 
-            if ($dbwhere == null || $dbwhere == "") {
+        //     if ($dbwhere == null || $dbwhere == "") {
 
-                $resaco = $this->sql_record($this->sql_query_file($jt_sequencial));
-            } else {
-                $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
-            }
-            if (($resaco != false) || ($this->numrows != 0)) {
+        //         $resaco = $this->sql_record($this->sql_query_file($jt_sequencial));
+        //     } else {
+        //         $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
+        //     }
+        //     if (($resaco != false) || ($this->numrows != 0)) {
 
-                for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+        //         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
 
-                    $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                    $acount = pg_result($resac, 0, 0);
-                    $resac  = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                    $resac  = db_query("insert into db_acountkey values($acount,1009247,'$jt_sequencial','E')");
-                    $resac  = db_query("insert into db_acount values($acount,1010192,1009247,'','" . AddSlashes(pg_result($resaco, $iresaco, 'jt_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac  = db_query("insert into db_acount values($acount,1010192,1009248,'','" . AddSlashes(pg_result($resaco, $iresaco, 'jt_nome')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac  = db_query("insert into db_acount values($acount,1010192,1009250,'','" . AddSlashes(pg_result($resaco, $iresaco, 'jt_descricao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                }
-            }
-        }
+        //             $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
+        //             $acount = pg_result($resac, 0, 0);
+        //             $resac  = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+        //             $resac  = db_query("insert into db_acountkey values($acount,1009247,'$jt_sequencial','E')");
+        //             $resac  = db_query("insert into db_acount values($acount,1010192,1009247,'','" . AddSlashes(pg_result($resaco, $iresaco, 'jt_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             $resac  = db_query("insert into db_acount values($acount,1010192,1009248,'','" . AddSlashes(pg_result($resaco, $iresaco, 'jt_nome')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             $resac  = db_query("insert into db_acount values($acount,1010192,1009250,'','" . AddSlashes(pg_result($resaco, $iresaco, 'jt_descricao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //         }
+        //     }
+        // }
         $sql = " delete from jornadadetrabalho
                     where ";
         $sql2 = "";
