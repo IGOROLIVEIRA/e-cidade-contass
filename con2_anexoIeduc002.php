@@ -1500,27 +1500,29 @@ ob_start();
                         <td class="s20 bdleft" colspan="9">04 - Aplicação no Exercício</td>
                         <td class="s21"><?php echo db_formatar($fTotalAnexoII, "f"); ?></td>
                     </tr>
-                    <?php if(db_getsession("DB_anousu") > 2020) { ?>
-                    <tr style='height:20px;'>
-                        <?php
-                        db_query("drop table if exists work_receita");
-                        db_fim_transacao();
-                        $fTotalAnexoII = getTotalAnexoIIEducacao($instits, $dtini, $dtfim, $anousu);
-                        ?>
-                        <td class="s20 bdleft" colspan="9">05 - Restos a pagar pagos inscritos sem disponibilidade - (Consulta 932.736/2015)</td>
-                        <td class="s21"><?php echo db_formatar($iRestosAPagar, "f"); ?></td>
-                    </tr>
+                    <?php if(db_getsession("DB_anousu") < 2020) { ?>
+                        <tr style='height:20px;'>
+                            <?php
+                            db_query("drop table if exists work_receita");
+                            db_fim_transacao();
+                            $fTotalAnexoII = getTotalAnexoIIEducacao($instits, $dtini, $dtfim, $anousu);
+                            ?>
+                            <td class="s20 bdleft" colspan="9">05 - Restos a pagar pagos inscritos sem disponibilidade - (Consulta 932.736/2015)</td>
+                            <td class="s21"><?php echo db_formatar($iRestosAPagar, "f"); ?></td>
+                        </tr>
                     <?php } ?>
-                    <tr style='height:20px;'>
-                        <?php
-                        db_query("drop table if exists work_receita");
-                        db_fim_transacao();
-                        $fTotalAnexoII = getTotalAnexoIIEducacao($instits, $dtini, $dtfim, $anousu);
-                        ?>
-                        <td class="s20 bdleft" dir="ltr" colspan="9">06 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII + $iRestosAPagar) * 100) / $fTotalReceitas, "f"); //echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f");
-                                                                                                                                ?></td>
-                        <td class="s21"><?= db_formatar(($fTotalAnexoII + $iRestosAPagar), "f") ?></td>
-                    </tr>
+                    <?php if(db_getsession("DB_anousu") > 2020) { ?>
+                        <tr style='height:20px;'>
+                            <?php
+                            db_query("drop table if exists work_receita");
+                            db_fim_transacao();
+                            $fTotalAnexoII = getTotalAnexoIIEducacaoNovo($instits, $dtini, $dtfim, $anousu);
+                            ?>
+                            <td class="s20 bdleft" dir="ltr" colspan="9">06 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII) * 100) / $fTotalReceitas, "f");
+                                                                                                                                    ?></td>
+                            <td class="s21"><?= db_formatar(($fTotalAnexoII), "f") ?></td>
+                        </tr>
+                    <?php } ?>
                 <?php endif; ?>
             </tbody>
         </table>
