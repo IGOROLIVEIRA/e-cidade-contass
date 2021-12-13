@@ -58,9 +58,9 @@ $clrotulo->label("pc01_descrmater");
         <fieldset style="margin-top:5px; width:45%;">
             <legend><b>Elemento dos Itens</b></legend>
             <table border="0" cellpadding='0' cellspacing='0'>
-                <tr id = "trelemento" style="height: 20px; display: none">
+                <tr id="trelemento" style="height: 20px; display: none">
                     <td nowrap title="">
-                        <b>Elemento dos item:  </b>
+                        <b>Elemento do item: </b>
                     </td>
                     <td>
                         <select id="pc07_codele" onchange="js_troca();">
@@ -73,17 +73,17 @@ $clrotulo->label("pc01_descrmater");
             <div>
                 <table id="myTable" style="display: none" class="display nowrap">
                     <thead>
-                    <tr>
-                        <th data-orderable="false"></th>
-                        <th data-orderable="false">Ordem</th>
-                        <th data-orderable="false">Item</th>
-                        <th data-orderable="false">Descrição Item</th>
-                        <th data-orderable="false">Unidade</th>
-                        <th data-orderable="false">Quantidade Disponivel</th>
-                        <th data-orderable="false">Vl. Unitário</th>
-                        <th data-orderable="false">Qtd. Solicitada</th>
-                        <th data-orderable="false">Vlr. Total.</th>
-                    </tr>
+                        <tr>
+                            <th data-orderable="false"></th>
+                            <th data-orderable="false">Ordem</th>
+                            <th data-orderable="false">Item</th>
+                            <th data-orderable="false">Descrição Item</th>
+                            <th data-orderable="false">Unidade</th>
+                            <th data-orderable="false">Quantidade Disponivel</th>
+                            <th data-orderable="false">Vl. Unitário</th>
+                            <th data-orderable="false">Qtd. Solicitada</th>
+                            <th data-orderable="false">Vlr. Total.</th>
+                        </tr>
                     </thead>
                 </table>
             </div>
@@ -94,7 +94,6 @@ $clrotulo->label("pc01_descrmater");
     </center>
 </form>
 <script>
-
     function js_loadTable() {
 
         $('#myTable').DataTable().clear().destroy();
@@ -166,9 +165,9 @@ $clrotulo->label("pc01_descrmater");
         //Busco Elementos de acordo com a tabela
         let params = {
             action: 'getElementos',
-            e55_autori: <?= $e55_autori?>,
-            e54_numcgm: <?= $z01_numcgm?>,
-            e54_codlicitacao: <?= $e54_codlicitacao?>,
+            e55_autori: <?= $e55_autori ?>,
+            e54_numcgm: <?= $z01_numcgm ?>,
+            e54_codlicitacao: <?= $e54_codlicitacao ?>,
         };
 
         $.ajax({
@@ -178,14 +177,14 @@ $clrotulo->label("pc01_descrmater");
             success: function(data) {
 
                 let elementos = JSON.parse(data);
-                if(elementos.elementos.length != 0){
-                    elementos.elementos.forEach(function (oElementos, ele) {
+                if (elementos.elementos.length != 0) {
+                    elementos.elementos.forEach(function(oElementos, ele) {
                         let option = document.createElement('option');
                         option.value = oElementos.pc07_codele;
                         option.text = oElementos.o56_descr.urlDecode();
                         select.append(option);
                     })
-                }else{
+                } else {
                     top.corpo.iframe_empautoriza.location.reload();
                 }
             }
@@ -194,11 +193,12 @@ $clrotulo->label("pc01_descrmater");
         // Libera a Selecao do Elemento
         let tabela = $('#chave_tabela').val();
 
-        if(tabela != ""){
+        if (tabela != "") {
             $('#trelemento').show();
         }
     }
     mostrarElemento();
+
     function js_troca() {
         if (document.getElementById('pc07_codele').value == '...') {
             $('#textocontainer').css("display", "inline");
@@ -243,9 +243,9 @@ $clrotulo->label("pc01_descrmater");
 
         var oParam = new Object();
         oParam.action = "salvar";
-        oParam.autori = <?= $e55_autori?>;
-        oParam.fornecedor = <?= $z01_numcgm?>;
-        oParam.licitacao = <?= $e54_codlicitacao?>;
+        oParam.autori = <?= $e55_autori ?>;
+        oParam.fornecedor = <?= $z01_numcgm ?>;
+        oParam.licitacao = <?= $e54_codlicitacao ?>;
         oParam.codele = $('#pc07_codele').val();
         var oDados = {};
         var aDados = [];
@@ -258,7 +258,7 @@ $clrotulo->label("pc01_descrmater");
                 var qtdSolicitada = $(this).find("td").eq(7).find("input").val();
                 console.log(qtdSolicitada);
 
-                if(qtdSolicitada > qtdDisponivel){
+                if (qtdSolicitada > qtdDisponivel) {
                     alert('Quantidade não disponivel');
                     return false;
                 }
@@ -299,9 +299,9 @@ $clrotulo->label("pc01_descrmater");
 
         var oParam = new Object();
         oParam.action = "excluir";
-        oParam.autori = <?= $e55_autori?>;
-        oParam.fornecedor = <?= $z01_numcgm?>;
-        oParam.licitacao = <?= $e54_codlicitacao?>;
+        oParam.autori = <?= $e55_autori ?>;
+        oParam.fornecedor = <?= $z01_numcgm ?>;
+        oParam.licitacao = <?= $e54_codlicitacao ?>;
         oParam.codele = $('#pc07_codele').val();
         var oDados = {};
         var aDados = [];
@@ -330,9 +330,8 @@ $clrotulo->label("pc01_descrmater");
             }
         });
     }
-    
+
     function js_verificadisponivel() {
 
     }
-
 </script>
