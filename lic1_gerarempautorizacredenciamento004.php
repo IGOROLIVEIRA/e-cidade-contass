@@ -67,7 +67,7 @@ $clemptipo                        = new cl_emptipo;
 $clcflicita                       = new cl_cflicita;
 $clpctipocompra                   = new cl_pctipocompra;
 $clempparametro                   = new cl_empparametro;
-$clpcparam 	                      = new cl_pcparam;
+$clpcparam                           = new cl_pcparam;
 $clconcarpeculiar                 = new cl_concarpeculiar;
 $oDaoEmpenhoProcessoAdminitrativo = new cl_empautorizaprocesso;
 $clcredenciamentotermo            = new cl_credenciamentotermo;
@@ -79,19 +79,18 @@ $iAnoUsu     = db_getsession("DB_anousu");
 $iAnoData    = date("Y", db_getsession("DB_datausu"));
 $rsEmpParam  = $clempparametro->sql_record($clempparametro->sql_query($iAnoUsu));
 if ($clempparametro->numrows > 0) {
-    db_fieldsmemory($rsEmpParam,0);
+    db_fieldsmemory($rsEmpParam, 0);
     if ($e30_notaliquidacao != '') {
         $sUrlEmpenho = "emp4_empempenho001.php";
     }
 }
-if(isset($incluir)) {
+if (isset($incluir)) {
 
     try {
 
         $oFornecedor = new fornecedor($e54_numcgm);
         $oFornecedor->verificaBloqueioAutorizacaoEmpenho(null);
         $iStatusBloqueio = $oFornecedor->getStatusBloqueio();
-
     } catch (Exception $eException) {
 
         $sqlerro  = true;
@@ -106,20 +105,20 @@ if(isset($incluir)) {
 }
 
 if (isset($incluir)) {
-    $sqlerro=false;
+    $sqlerro = false;
 
-    if($sqlerro==false){
+    if ($sqlerro == false) {
 
-        $res_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_fornecdeb"));
+        $res_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_fornecdeb"));
         if ($clpcparam->numrows > 0) {
-            db_fieldsmemory($res_pcparam,0);
+            db_fieldsmemory($res_pcparam, 0);
 
-            $sql_fornec     = "select * from fc_tipocertidao($e54_numcgm,'c','".date("Y-m-d",db_getsession("DB_datausu"))."','') as retorno";
+            $sql_fornec     = "select * from fc_tipocertidao($e54_numcgm,'c','" . date("Y-m-d", db_getsession("DB_datausu")) . "','') as retorno";
             $res_fornec     = @db_query($sql_fornec);
             $numrows_fornec = @pg_numrows($res_fornec);
 
             if ($numrows_fornec > 0) {
-                db_fieldsmemory($res_fornec,0);
+                db_fieldsmemory($res_fornec, 0);
             }
 
             if (isset($retorno) && $retorno == "positiva") {
@@ -133,27 +132,26 @@ if (isset($incluir)) {
         }
     }
 
-    if($sqlerro==false){
-        $resultVigencia = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,"l212_dtinicio,l212_dtfim,l212_numerotermo",null,"l212_sequencial = $l212_sequencial"));
-        db_fieldsmemory($resultVigencia,0);
-        $dataini = (implode("/",(array_reverse(explode("-",$l212_dtinicio)))));
-        $datafim = (implode("/",(array_reverse(explode("-",$l212_dtfim)))));
-        $datesistema = date("d/m/Y",db_getsession("DB_datausu"));
+    if ($sqlerro == false) {
+        $resultVigencia = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null, "l212_dtinicio,l212_dtfim,l212_numerotermo", null, "l212_sequencial = $l212_sequencial"));
+        db_fieldsmemory($resultVigencia, 0);
+        $dataini = (implode("/", (array_reverse(explode("-", $l212_dtinicio)))));
+        $datafim = (implode("/", (array_reverse(explode("-", $l212_dtfim)))));
+        $datesistema = date("d/m/Y", db_getsession("DB_datausu"));
 
         $dataInicio = DateTime::createFromFormat('d/m/Y', $dataini);
         $dataFim = DateTime::createFromFormat('d/m/Y', $datafim);
         $dataGen = DateTime::createFromFormat('d/m/Y', $datesistema);
 
-        if($dataInicio < $dataGen){
-            $sqlerro= true;
+        if ($dataGen < $dataInicio) {
+            $sqlerro = true;
             $erro_msg = "Usuário: Não é possível gerar autorização de empenho, Termo $l212_numerotermo ainda não está vigente";
         }
 
-        if($dataGen > $dataFim){
-            $sqlerro= true;
+        if ($dataGen > $dataFim) {
+            $sqlerro = true;
             $erro_msg = "Usuário: Não é possível gerar autorização de empenho, Termo $l212_numerotermo não está vigente.";
         }
-        
     }
 
     // Valida Ano da Sessao e da Data da Sessao... devem ser a mesma
@@ -164,9 +162,7 @@ if (isset($incluir)) {
             $sDataUsu = date("d/m/Y", db_getsession("DB_datausu"));
             $erro_msg = "ERRO: Ano da Sessão ($iAnoUsu) diferente do Ano da Data Atual ($sDataUsu)!";
             $sqlerro  = true;
-
         }
-
     }
 
     db_inicio_transacao();
@@ -175,18 +171,18 @@ if (isset($incluir)) {
 
         $clempautoriza->e54_autori  = $e54_autori;
         $clempautoriza->e54_numcgm  = $e54_numcgm;
-        $clempautoriza->e54_login   = db_getsession("DB_id_usuario") ;
+        $clempautoriza->e54_login   = db_getsession("DB_id_usuario");
         $clempautoriza->e54_resumo  = $e54_resumo;
         $clempautoriza->e54_anousu  = $iAnoUsu;
         $clempautoriza->e54_codlicitacao = $e54_codlicitacao;
         $clempautoriza->e54_codcom  = $e54_codcom;
         $clempautoriza->e54_destin  = $e54_destin;
-        $clempautoriza->e54_tipol   = $e54_tipol ;
+        $clempautoriza->e54_tipol   = $e54_tipol;
         $clempautoriza->e54_numerl  = $e54_numerll;
         $clempautoriza->e54_nummodalidade  = $e54_nummodalidade;
         $clempautoriza->e54_tipoautorizacao = 3;
         $clempautoriza->e54_tipoorigem = 2;
-        $clempautoriza->e54_emiss   = date("Y-m-d",db_getsession("DB_datausu"));
+        $clempautoriza->e54_emiss   = date("Y-m-d", db_getsession("DB_datausu"));
         $clempautoriza->e54_codtipo = $e54_codtipo;
         $clempautoriza->e54_instit  = db_getsession("DB_instit");
         $clempautoriza->e54_depto   = db_getsession("DB_coddepto");
@@ -208,7 +204,7 @@ if (isset($incluir)) {
         $clempautoriza->incluir(null);
         if ($clempautoriza->erro_status == 0) {
 
-            $sqlerro=true;
+            $sqlerro = true;
             $erro_msg = $clempautoriza->erro_msg;
         } else {
             $ok_msg   = $clempautoriza->erro_msg;
@@ -221,20 +217,20 @@ if (isset($incluir)) {
         $clempauthist->e57_codhist = $e57_codhist;
         $clempauthist->incluir($e54_autori);
         $erro_msg = $clempauthist->erro_msg;
-        if ($clempauthist->erro_status==0) {
-            $sqlerro=true;
+        if ($clempauthist->erro_status == 0) {
+            $sqlerro = true;
         }
     }
 
-    if (isset($e44_tipo)&&$e44_tipo!="") {
-        $result = $clempprestatip->sql_record($clempprestatip->sql_query_file($e44_tipo,"e44_obriga"));
-        db_fieldsmemory($result,0);
-        if ($e44_obriga!=0) {
+    if (isset($e44_tipo) && $e44_tipo != "") {
+        $result = $clempprestatip->sql_record($clempprestatip->sql_query_file($e44_tipo, "e44_obriga"));
+        db_fieldsmemory($result, 0);
+        if ($e44_obriga != 0) {
             $clempautpresta->e58_autori = $e54_autori;
             $clempautpresta->e58_tipo   = $e44_tipo;
             $clempautpresta->incluir();
-            if ($clempautpresta->erro_status==0) {
-                $sqlerro=true;
+            if ($clempautpresta->erro_status == 0) {
+                $sqlerro = true;
             }
         }
     }
@@ -257,12 +253,10 @@ if (isset($incluir)) {
 
 
     db_fim_transacao($sqlerro);
-
-}
-else if (isset($pesq_ult)&&$pesq_ult==true) {
-    $result_ultalt=$clempautoriza->sql_record($clempautoriza->sql_query(null,"e54_codlicitacao ,e54_numcgm  ,z01_nome  ,e54_login   ,e54_codcom  ,e54_destin  ,e54_valor   ,e54_anousu  ,e54_tipol   ,e54_numerl  ,e54_praent  ,e54_entpar  ,e54_conpag  ,e54_codout  ,e54_contat  ,e54_telef   ,e54_numsol  ,e54_anulad  ,e54_emiss   ,e54_resumo  ,e54_codtipo ,e54_instit  ,e54_depto","e54_autori desc limit 1","e54_instit =".db_getsession("DB_instit")." and e54_login=".db_getsession("DB_id_usuario")));
-    if ($clempautoriza->numrows>0) {
-        db_fieldsmemory($result_ultalt,0);
+} else if (isset($pesq_ult) && $pesq_ult == true) {
+    $result_ultalt = $clempautoriza->sql_record($clempautoriza->sql_query(null, "e54_codlicitacao ,e54_numcgm  ,z01_nome  ,e54_login   ,e54_codcom  ,e54_destin  ,e54_valor   ,e54_anousu  ,e54_tipol   ,e54_numerl  ,e54_praent  ,e54_entpar  ,e54_conpag  ,e54_codout  ,e54_contat  ,e54_telef   ,e54_numsol  ,e54_anulad  ,e54_emiss   ,e54_resumo  ,e54_codtipo ,e54_instit  ,e54_depto", "e54_autori desc limit 1", "e54_instit =" . db_getsession("DB_instit") . " and e54_login=" . db_getsession("DB_id_usuario")));
+    if ($clempautoriza->numrows > 0) {
+        db_fieldsmemory($result_ultalt, 0);
     }
 }
 $pctipocompras  = db_query("
@@ -281,6 +275,7 @@ $cflicitas  = db_query("
 $aCflicitas = db_utils::getCollectionByRecord($cflicitas);
 ?>
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -303,31 +298,33 @@ $aCflicitas = db_utils::getCollectionByRecord($cflicitas);
   ");
     ?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 
-<center>
-    <div style="margin-top: 20px; width: 700px; ">
-        <?
-        include("forms/db_frmempautorizacredenciamento.php");
-        ?>
-    </div>
-</center>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+
+    <center>
+        <div style="margin-top: 20px; width: 700px; ">
+            <?
+            include("forms/db_frmempautorizacredenciamento.php");
+            ?>
+        </div>
+    </center>
 </body>
+
 </html>
 <?
-if(isset($incluir)) {
-    if($sqlerro==true){
+if (isset($incluir)) {
+    if ($sqlerro == true) {
         db_msgbox($erro_msg);
         echo "<script>
         var codlicitacao = document.form1.e54_codlicitacao.value;
         js_pesquisa_fornecedor(codlicitacao);
     </script>";
-        $db_botao=true;
-        if(isset($incluir) && $clempautoriza->erro_campo!=""){
-            echo "<script> document.form1.".$clempautoriza->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-            echo "<script> document.form1.".$clempautoriza->erro_campo.".focus();</script>";
+        $db_botao = true;
+        if (isset($incluir) && $clempautoriza->erro_campo != "") {
+            echo "<script> document.form1." . $clempautoriza->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $clempautoriza->erro_campo . ".focus();</script>";
         }
-    }else{
+    } else {
         //db_msgbox($ok_msg);
         echo "
       <script>

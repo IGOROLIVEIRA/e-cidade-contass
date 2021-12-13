@@ -12,38 +12,38 @@ $clcredenciamento = new cl_credenciamento;
 $db_opcao = 1;
 $db_botao = true;
 $sqlerro = false;
-if(isset($incluir)){
+if (isset($incluir)) {
 
     try {
 
-        $resultNumeroTermo = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,"l212_numerotermo","l212_numerotermo desc limit 1","l212_numerotermo = $l212_numerotermo"));
+        $resultNumeroTermo = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null, "l212_numerotermo", "l212_numerotermo desc limit 1", "l212_numerotermo = $l212_numerotermo"));
 
-        if(pg_num_rows($resultNumeroTermo) > 0){
+        if (pg_num_rows($resultNumeroTermo) > 0) {
             throw new Exception("Usuário: Numero do Termo ja utilizado !");
             $sqlerro = true;
         }
 
-        $rstermocredencialemnto = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,"*",null,"l212_fornecedor = $l212_fornecedor and l212_licitacao = $l212_licitacao"));
+        $rstermocredencialemnto = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null, "*", null, "l212_fornecedor = $l212_fornecedor and l212_licitacao = $l212_licitacao"));
 
-        if(pg_num_rows($rstermocredencialemnto) > 0){
+        if (pg_num_rows($rstermocredencialemnto) > 0) {
             throw new Exception("Usuário: Já existe termo cadastrado para esse fornecedor!");
             $sqlerro = true;
         }
 
-        $rsdtCredenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"l205_datacred",null,"l205_licitacao = $l212_licitacao and l205_fornecedor = $l212_fornecedor"));
+        $rsdtCredenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null, "l205_datacred", null, "l205_licitacao = $l212_licitacao and l205_fornecedor = $l212_fornecedor"));
 
-        db_fieldsmemory($rsdtCredenciamento,0);
-        $data = (implode("/",(array_reverse(explode("-",$l205_datacred)))));
+        db_fieldsmemory($rsdtCredenciamento, 0);
+        $data = (implode("/", (array_reverse(explode("-", $l205_datacred)))));
 
         $datacred = DateTime::createFromFormat('d/m/Y', $data);
         $dtiniciotermo = DateTime::createFromFormat('d/m/Y', $l212_dtinicio);
 
-        if($dtiniciotermo < $datacred){
+        if ($dtiniciotermo < $datacred) {
             throw new Exception("Usuário: Data de inicio do termo menor que data de credenciamento.");
             $sqlerro = true;
         }
 
-        if($sqlerro == false){
+        if ($sqlerro == false) {
             db_inicio_transacao();
             $clcredenciamentotermo->l212_licitacao    = $l212_licitacao;
             $clcredenciamentotermo->l212_numerotermo  = $l212_numerotermo;
@@ -56,24 +56,23 @@ if(isset($incluir)){
             $clcredenciamentotermo->l212_instit       = db_getsession('DB_instit');
             $clcredenciamentotermo->incluir();
             db_fim_transacao();
-    
-            if($clcredenciamentotermo->erro_status == 0){
+
+            if ($clcredenciamentotermo->erro_status == 0) {
                 $erro = $clcredenciamentotermo->erro_msg;
                 $sqlerro = true;
             }
             db_fim_transacao();
-            if($sqlerro == false){
+            if ($sqlerro == false) {
                 db_redireciona("lic1_credenciamentotermo002.php?&chavepesquisa=$clcredenciamentotermo->l212_sequencial");
             }
         }
-        
-    }catch (Exception $eErro){
+    } catch (Exception $eErro) {
         db_msgbox($eErro->getMessage());
     }
-
 }
 ?>
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -90,13 +89,15 @@ if(isset($incluir)){
     db_app::load("estilos.css, grid.style.css");
     ?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
     <?
     include("forms/db_frmcredenciamentotermo.php");
-    db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
     ?>
 </body>
+
 </html>
 <script>
-    js_tabulacaoforms("form1","l212_licitacao",true,1,"l212_licitacao",true);
+    js_tabulacaoforms("form1", "l212_licitacao", true, 1, "l212_licitacao", true);
 </script>

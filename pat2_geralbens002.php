@@ -1256,5 +1256,3 @@ function quebrar_texto($texto, $tamanho)
     return $aTextoNovo;
 
 }
-
-?>
