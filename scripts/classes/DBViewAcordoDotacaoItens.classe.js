@@ -24,7 +24,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
     this.oGridItens = new DBGrid('gridItensSolicitacao');
     this.oGridItens.sNameInstance = sNameInstance + 'oGridItens';
-    oWindowDotacaoItem = new windowAux('wndItemDotacao', "Lista de Dotações do Acordo " + me.iCodigoAcordo, 800, 450);
+    oWindowDotacaoItem = new windowAux('wndItemDotacao', "Lista de Dotações do Acordo " + me.iCodigoAcordo, 850, 450);
     oWindowDotacaoItem.setShutDownFunction(function () {
         oWindowDotacaoItem.destroy();
     });
@@ -39,7 +39,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
     if (this.tipoSql == 'insert') {
         sContent += "<input type='button' id='btnAlterarDotacao' value='Inserir Dotações'";
     } else {
-        sContent += "<input type='button' id='btnAlterarDotacao' value='Alterar Dotações'";
+        sContent += "<input type='button' id='btnAlterarDotacao' value='Salvar Dotações'";
 
     }
     sContent += "           onclick='" + sNomeFuncaoAlterarDotacoes + "'> ";
@@ -48,10 +48,10 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
     oWindowDotacaoItem.setContent(sContent);
 
-    var sMsgHelp = "Para alterar a dotação de todos itens, clique em \"M\" para marcar todos itens de uma dotação.";
-    sMsgHelp += "Clique no botao \'Alterar\" da Dotação e selecione a nova dotação. ";
-    sMsgHelp += "Para alterar a dotação de um item, clique no Botão \"Alterar\". Para confirmar as alterações, clique";
-    sMsgHelp += " em <b>\"Alterar\"</b>.";
+    var sMsgHelp = "Para alterar/inserir a dotação de todos itens, clique em \"M\" para marcar todos itens de uma dotação.";
+    sMsgHelp += "Clique no botao \'Alterar/Inserir\" da Dotação e selecione a nova dotação. ";
+    sMsgHelp += "Para alterar a dotação de um item, clique no Botão \"Alterar/Inserir\". Para confirmar as alterações, clique";
+    sMsgHelp += " em <b>\"Salvar dotações\"</b>.";
     oMessageBoard = new DBMessageBoard('msgBoardDotacao',
         'Dotações Retornadas',
         sMsgHelp,
@@ -279,7 +279,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
             if(iCodigoDotacao == '0'){
                 var linha = new Array();
-                linha[0] = '<b> Dotações cadastradas </b> ';
+                linha[0] = '<b>Alterar dotações cadastradas </b> ';
                 oGridDotacoes.addRow(linha);
                 iLinha++;
             }

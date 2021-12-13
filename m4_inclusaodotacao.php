@@ -39,32 +39,34 @@ $clrotulo->label("ac16_resumoobjeto");
 ?>
 
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
-	<?
-	db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
-	db_app::load("widgets/dbmessageBoard.widget.js, widgets/windowAux.widget.js, datagrid.widget.js");
-	db_app::load("classes/DBViewAcordoDotacaoItens.classe.js");
-	db_app::load("estilos.css, grid.style.css");
-	?>
+    <?
+    db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
+    db_app::load("widgets/dbmessageBoard.widget.js, widgets/windowAux.widget.js, datagrid.widget.js");
+    db_app::load("classes/DBViewAcordoDotacaoItens.classe.js");
+    db_app::load("estilos.css, grid.style.css");
+    ?>
 </head>
+
 <body style="background-color: #cccccc; margin-top: 35px">
     <center>
         <div style="display: table;" id='pesquisa-solicitacoes'>
             <fieldset>
-                <legend><b>Alteração de Dotação</legend>
+                <legend><b>Alteração/Inclusão de Dotação</legend>
                 <table>
                     <tr>
                         <td nowrap title="<?php echo $Tac16_sequencial; ?>" width="130">
-							<?php db_ancora($Lac16_sequencial, "js_acordo(true);",1); ?>
+                            <?php db_ancora($Lac16_sequencial, "js_acordo(true);", 1); ?>
                         </td>
                         <td colspan="2">
-							<?php
-							db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_acordo(false);'");
-							db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
-							?>
+                            <?php
+                            db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_acordo(false);'");
+                            db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
+                            ?>
                         </td>
                     </tr>
                 </table>
@@ -73,46 +75,45 @@ $clrotulo->label("ac16_resumoobjeto");
         <input style='margin-top: 10px;' type="button" name='Alterar' value='Alterar' onclick="alteraAcordo();">
     </center>
 </body>
+
 </html>
 
 <script type="text/javascript">
-
-    function js_acordo(mostra){
-        if(mostra==true){
-            js_OpenJanelaIframe('','db_iframe_acordo',
+    function js_acordo(mostra) {
+        if (mostra == true) {
+            js_OpenJanelaIframe('', 'db_iframe_acordo',
                 'func_acordoinstit.php?funcao_js=parent.js_mostraAcordo1|ac16_sequencial|z01_nome',
-                'Pesquisa',true);
-        }else{
-            if($F('ac16_sequencial').trim() != ''){
-                js_OpenJanelaIframe('','db_iframe_depart',
-                    'func_acordoinstit.php?pesquisa_chave='+$F('ac16_sequencial')+'&funcao_js=parent.js_mostraAcordo'+
+                'Pesquisa', true);
+        } else {
+            if ($F('ac16_sequencial').trim() != '') {
+                js_OpenJanelaIframe('', 'db_iframe_depart',
+                    'func_acordoinstit.php?pesquisa_chave=' + $F('ac16_sequencial') + '&funcao_js=parent.js_mostraAcordo' +
                     '&descricao=true',
-                    'Pesquisa',false);
-            }else{
+                    'Pesquisa', false);
+            } else {
                 $('ac16_resumoobjeto').value = '';
             }
         }
     }
 
-    function js_mostraAcordo(chave, descricao, erro){
+    function js_mostraAcordo(chave, descricao, erro) {
 
         $('ac16_resumoobjeto').value = descricao;
-        if(erro==true){
+        if (erro == true) {
             $('ac16_sequencial').focus();
             $('ac16_sequencial').value = '';
         }
     }
 
-    function js_mostraAcordo1(chave1,chave2){
+    function js_mostraAcordo1(chave1, chave2) {
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
         db_iframe_acordo.hide();
     }
 
-    function alteraAcordo(){
+    function alteraAcordo() {
         oViewSolicitacaoDotacao = new DBViewAcordoDotacaoItens(document.getElementById('ac16_sequencial').value, "oViewSolicitacaoDotacao");
         oViewSolicitacaoDotacao.getDotacoes();
         oViewSolicitacaoDotacao.onBeforeSave();
     }
-
 </script>
