@@ -303,7 +303,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             "1" => "1 - Lei 14.133/2021",
                                             "2" => "2 - Lei 8.666/1993 e outras"
                                         );
-                                        db_select("l20_leidalicitacao", $arr_tipo, true, $db_opcao);
+                                        db_select("l20_leidalicitacao", $arr_tipo, true, $db_opcao, "onchange='js_verificalei(this.value);'");
                                         ?>
                                     </td>
                                 </tr>
@@ -1114,8 +1114,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("equipepregao").style.display = 'none';
             document.getElementById("local").style.display = 'none';
             document.getElementById("aceitabilidade").style.display = 'none';
-            document.getElementById("datenpc").style.display = '';
-            document.getElementById("linkpnpc").style.display = '';
+            document.getElementById("datenpc").style.display = 'none';
+            document.getElementById("linkpnpc").style.display = 'none';
             document.getElementById("diario").style.display = 'none';
             document.getElementById("dtpubedital").style.display = 'none';
             document.getElementById("linkedital").style.display = 'none';
@@ -1126,8 +1126,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_razao").disabled = true;
             document.getElementById("l20_tipoprocesso").disabled = true;
             document.getElementById("dispensa").style.display = 'none';
-            document.getElementById("datenpc").style.display = 'none';
-            document.getElementById("linkpnpc").style.display = 'none';
+            document.getElementById("datenpc").style.display = '';
+            document.getElementById("linkpnpc").style.display = '';
             document.getElementById("diario").style.display = '';
             document.getElementById("dtpubedital").style.display = '';
             document.getElementById("linkedital").style.display = '';
@@ -1801,6 +1801,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         } else {
             document.getElementById(valor.name).value = qnt.substr(0, quantidade);
             alert("Olá. Para atender  as normas do TCE MG / SICOM, este campo é  limitado. * LIMITE ALCANÇADO * !");
+        }
+    }
+
+    function js_verificalei(lei) {
+        if (lei == 1) {
+            document.getElementById('disputa').style.display = '';
+        } else {
+            document.getElementById('disputa').style.display = 'none';
         }
     }
 

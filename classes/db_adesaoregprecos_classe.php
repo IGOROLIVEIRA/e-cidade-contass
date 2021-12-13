@@ -54,6 +54,7 @@ class cl_adesaoregprecos {
    var $si06_cadinicial = null;
    var $si06_exercicioedital = null;
    var $si06_anocadastro = null;
+   var $si06_leidalicitacao = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si06_sequencial = int8 = Sequencial 
@@ -78,6 +79,7 @@ class cl_adesaoregprecos {
                  si06_exercicioedital = int8 = Exercício do edital 
                  si06_cadinicial = int4 = Cadastro Inicial 
                  si06_anocadastro = int4 = Ano cadastro 
+                 si06_leidalicitacao = int4 = Lei de licitacao
                  ";
    //funcao construtor da classe 
    function cl_adesaoregprecos() { 
@@ -155,6 +157,7 @@ class cl_adesaoregprecos {
        $this->si06_exercicioedital = ($this->si06_exercicioedital == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_exercicioedital"]:$this->si06_exercicioedital);
        $this->si06_cadinicial = ($this->si06_cadinicial == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_cadinicial"]:$this->si06_cadinicial);
        $this->si06_anocadastro = ($this->si06_anocadastro == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_anocadastro"]:$this->si06_anocadastro);
+       $this->si06_leidalicitacao = ($this->si06_leidalicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_leidalicitacao"]:$this->si06_leidalicitacao);
      }else{
        $this->si06_sequencial = ($this->si06_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_sequencial"]:$this->si06_sequencial);
      }
@@ -339,6 +342,16 @@ class cl_adesaoregprecos {
        return false;
      }
 
+     if($this->si06_leidalicitacao == null ){ 
+      $this->erro_sql = " Campo Lei da Licitacao nao Informado.";
+      $this->erro_campo = "si06_leidalicitacao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
      if($this->si06_cadinicial == null && db_getsession('DB_anousu') >= 2020){
        $this->si06_cadinicial = 1;
      }else{
@@ -402,6 +415,7 @@ class cl_adesaoregprecos {
                                       ,si06_exercicioedital
                                       ,si06_cadinicial
                                       ,si06_anocadastro
+                                      ,si06_leidalicitacao
                        )
                 values (
                                 $this->si06_sequencial
@@ -427,6 +441,7 @@ class cl_adesaoregprecos {
                                ,$this->si06_exercicioedital
                                ,$this->si06_cadinicial
                                ,$this->si06_anocadastro
+                               ,$this->si06_leidalicitacao
                       )";
      $result = db_query($sql);
      if($result==false){ 
@@ -802,6 +817,19 @@ class cl_adesaoregprecos {
          return false;
        }
      }
+     if(trim($this->si06_leidalicitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_leidalicitacao"])){ 
+      $sql  .= $virgula." si06_leidalicitacao = $this->si06_leidalicitacao ";
+      $virgula = ",";
+      if(trim($this->si06_leidalicitacao) == null ){ 
+        $this->erro_sql = " Campo lei de licitacao nao Informado.";
+        $this->erro_campo = "si06_leidalicitacao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      if(trim($this->si06_edital)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"])){
        $sql  .= $virgula." si06_edital = $this->si06_edital ";
        $virgula = ",";
@@ -1080,4 +1108,3 @@ class cl_adesaoregprecos {
      return $sql;
   }
 }
-?>
