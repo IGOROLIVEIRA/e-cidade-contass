@@ -100,6 +100,7 @@ class cl_sliprecurso {
        $this->erro_status = "0";
        return false;
      }
+     
      if($this->k29_valor == null ){ 
        $this->erro_sql = " Campo Valor nao Informado.";
        $this->erro_campo = "k29_valor";
@@ -230,6 +231,7 @@ class cl_sliprecurso {
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_msg   .= $sql;
          $this->erro_status = "0";
          return false;
        }

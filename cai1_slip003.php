@@ -339,6 +339,7 @@ try {
     $pdf->objpdf->AliasNbPages();
     $pdf->imprime();
     $pdf->objpdf->Output();
+
 } catch (Exception $oErro) {
     $sErro = str_replace("\n", '\n', $oErro->getMessage());
 

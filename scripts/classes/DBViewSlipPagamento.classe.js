@@ -251,6 +251,10 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   me.oTxtHistoricoInputCodigo.addEvent('onChange', ";"+me.sNomeInstancia+".pesquisaHistorico(false);");
   me.oTxtHistoricoInputDescricao             = new DBTextField('oTxtHistoricoInputDescricao', me.sNomeInstancia+'.oTxtHistoricoInputDescricao', '', 56);
 
+    me.oTxtFonteInputCodigo                = new DBTextField('oTxtFonteInputCodigo', me.sNomeInstancia+'.oTxtFonteInputCodigo', '', me.iTamanhoCampo);
+    me.oTxtFonteInputCodigo.addEvent('onChange', ";"+me.sNomeInstancia+".pesquisaFonte(false);");
+    me.oTxtFonteInputDescricao             = new DBTextField('oTxtFonteInputDescricao', me.sNomeInstancia+'.oTxtFonteInputDescricao', '', 56);
+
   me.oTxtProcessoInput                       = new DBTextField('oTxtProcessoInput', me.sNomeInstancia+'.oTxtProcessoInput', '', me.iTamanhoCampo);
   me.oTxtProcessoInput.setMaxLength(15);
   me.oTxtValorInput                          = new DBTextField('oTxtValorInput', me.sNomeInstancia+'.oTxtValorInput', '', 24);
@@ -580,6 +584,27 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     me.oTxtHistoricoInputDescricao.setReadOnly(true);
     me.oTxtHistoricoInputDescricao.show(oCellHistoricoInputDescricao);
 
+    /**
+     * Label Fonte
+     */
+
+    var oRowFonte             = oTabela.insertRow(iLinhaTabela); iLinhaTabela++;
+    var oCellFonteLabel       = oRowFonte.insertCell(0);
+    oCellFonteLabel.id        = "td_fonte_"+me.sNomeInstancia;
+    oCellFonteLabel.innerHTML = "<b><a href='#' onclick='"+me.sNomeInstancia+".pesquisaFonte(true);'>Fonte de Recursos:</a></b>";
+ 
+    /**
+     * Codigo Fonte
+     */
+    var oCellFonteInputCodigo = oRowFonte.insertCell(1);
+    me.oTxtFonteInputCodigo.show(oCellFonteInputCodigo);
+ 
+    /**
+     * Descricao Historico
+     */
+    var oCellFonteInputDescricao = oRowFonte.insertCell(2);
+    me.oTxtFonteInputDescricao.setReadOnly(true);
+    me.oTxtFonteInputDescricao.show(oCellFonteInputDescricao);
 
     /**
      * Label Processo
@@ -821,6 +846,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     oParam.k17_valor                      = me.oTxtValorInput.getValue();
     oParam.k17_hist                       = me.oTxtHistoricoInputCodigo.getValue();
     oParam.iCGM                           = me.oTxtFavorecidoInputCodigo.getValue();
+    oParam.iCodigoFonte                   = me.oTxtFonteInputCodigo.getValue();
     oParam.sCaracteristicaPeculiarDebito  = me.oTxtCaracteristicaDebitoInputCodigo.getValue();
     oParam.sCaracteristicaPeculiarCredito = me.oTxtCaracteristicaCreditoInputCodigo.getValue();
     oParam.k17_texto                      = encodeURIComponent(tagString(me.getObservacao()));
@@ -842,6 +868,8 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     if (me.iTipoTransferencia == 1) {
       oParam.iCodigoInstituicaoDestino = me.oTxtInstituicaoDestinoCodigo.getValue();
     }
+
+    console.log(oParam);
 
     new Ajax.Request(me.sUrlRpc,
                     {method: 'post',
@@ -1036,6 +1064,18 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   };
 
   /**
+   * Lookup de pesquisa do Fonte
+   */
+   me.pesquisaFonte = function (lMostra) {
+
+    var sUrlHistorico = "func_orctiporec.php?funcao_js=parent."+me.sNomeInstancia+".preencheFonte";
+    if (lMostra) {
+      sUrlHistorico = "func_orctiporec.php?funcao_js=parent."+me.sNomeInstancia+".completaFonte|o15_codigo|o15_descr";
+    }
+    js_OpenJanelaIframe("", 'db_iframe_fonte', sUrlHistorico, "Pesquisa Histórico", lMostra);
+  };
+
+  /**
    * Preenche a descricao Historico
    */
   me.preencheHistorico = function (sDescricao, lErro) {
@@ -1054,6 +1094,16 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     me.oTxtHistoricoInputCodigo.setValue(iCodigoHistorico);
     me.oTxtHistoricoInputDescricao.setValue(sDescricao);
     db_iframe_conhist.hide();
+  };
+
+  
+  /**
+   * Completa os fonte
+   */
+   me.completaFonte = function (iCodigoFonte, sDescricao) {
+        me.oTxtFonteInputCodigo.setValue(iCodigoFonte);
+        me.oTxtFonteInputDescricao.setValue(sDescricao);
+        db_iframe_fonte.hide();
   };
 
   /**
