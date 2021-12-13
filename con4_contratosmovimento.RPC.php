@@ -45,6 +45,7 @@ require_once("model/AcordoRescisao.model.php");
 require_once("model/AcordoAnulacao.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoItem.model.php");
+require_once("model/contrato/AcordoLancamentoContabil.model.php");
 require_once("model/licitacao.model.php");
 require_once("model/Dotacao.model.php");
 require_once("model/MaterialCompras.model.php");
@@ -95,6 +96,10 @@ switch ($oParam->exec) {
             $oHomologacao->setAcordo($oParam->acordo);
             $oHomologacao->setObservacao($sObservacao);
             $oHomologacao->save();
+            $oAcordo                   = new Acordo($oParam->acordo);
+            $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+            $sHistorico = "Valor referente a homologação do contrato com o código: {$oParam->acordo}.";
+            $oAcordoLancamentoContabil->registraControleContrato($oParam->acordo, $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
@@ -118,6 +123,10 @@ switch ($oParam->exec) {
             $oHomologacao = new AcordoHomologacao($oParam->codigo);
             $oHomologacao->setObservacao($sObservacao);
             $oHomologacao->cancelar();
+            $oAcordo                   = new Acordo($oHomologacao->getAcordo());
+            $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+            $sHistorico = "Valor referente a Cancelamento homologação do contrato com o código: {$oParam->codigo}.";
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
@@ -242,6 +251,12 @@ switch ($oParam->exec) {
             } else {
                 $itens = $oAcordo->getItens();
                 foreach ($itens as $item) {
+                    $dotacaoItem = $item->getDotacoes();
+
+                    if ($dotacaoItem == null) {
+                        $lAcordoValido = false;
+                        throw new Exception("Usuário: Assinatura do contrato não incluída. Item " . $item->getMaterial()->getCodigo() . " sem dotação.");
+                    }
 
                     if ($item->getPeriodosItem() == null) {
                         $lAcordoValido = false;
@@ -344,6 +359,10 @@ switch ($oParam->exec) {
 
             $oRecisao->save();
 
+            $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+            $sHistorico = "Valor referente a Recisão do contrato com o código: {$oAcordo->getCodigoAcordo()}.";
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico, $oRecisao->getDataMovimento());
+
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
 
@@ -362,16 +381,23 @@ switch ($oParam->exec) {
         try {
 
             db_inicio_transacao();
-
+            $dtMovimento = implode("-", array_reverse(explode("/", $oParam->sData)));
             $oRecisao = new AcordoRescisao($oParam->codigo);
+            $nValorRescisao = floatval(str_replace(',', '.', $oParam->valorrescisao));
 
             if (!$oRecisao->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
             }
+
             $oRecisao->setDataMovimento();
             $oRecisao->setValorRescisao(0);
             $oRecisao->setObservacao($sObservacao);
             $oRecisao->cancelar();
+
+            $oAcordo = new Acordo($oRecisao->getAcordo());
+            $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+            $sHistorico = "Valor referente a Cancelamento da Recisão do contrato com o código: {$oAcordo->getCodigoAcordo()}.";
+            $oAcordoLancamentoContabil->registraControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico, $dtMovimento);
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {

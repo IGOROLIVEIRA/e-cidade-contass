@@ -35,7 +35,7 @@ require_once ("model/contabilidade/lancamento/LancamentoAuxiliarBase.model.php")
  * @subpackage lancamento
  * @version $Revision: 1.6 $
  */
-class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancamentoAuxiliar {
+class LancamentoAuxiliarAcordoMovimentacao extends LancamentoAuxiliarBase implements ILancamentoAuxiliar {
 
   /**
    * Dados da tabela conhist
@@ -56,12 +56,6 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
   private $oAcordo;
 
   /**
-   * Empenho Financeiro
-   * @var EmpenhoFinanceiro
-   */
-  private $oEmpenhoFinanceiro;
-
-  /**
    * Codigo do Documento do Lançamento
    * @var iDocumento
    */
@@ -74,38 +68,14 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
    * @param date    $dtLancamento      - data do lancamento
    */
 
-  public function executaLancamentoAuxiliar($iCodigoLancamento, $dtLancamento)  {
+  public function executaLancamentoAuxiliar($iCodigoLancamento, $dtLancamento)
+  {
 
-    $oDaoAcordo = db_utils::getDao('acordo');
-
-    $sql = $oDaoAcordo->sql_query_lancamentos_empenhocontrato("c71_coddoc", $this->getEmpenho()->getNumero());
-
-    $result = db_query($sql);
-
-    $aDocumentos = array();
-    for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) {
-      $aDocumentos[] =  db_utils::fieldsMemory($result,$iCont)->c71_coddoc;
-    }
-
-    if ($this->iDocumento == 900
-        && (in_array(2,$aDocumentos) || in_array(3,$aDocumentos) || in_array(204,$aDocumentos) || in_array(206,$aDocumentos))) {
-      return;
-    }
-
-    if (in_array($this->iDocumento,array(901,903,904)) && !in_array(900,$aDocumentos)) {
-      return;
-    }
-
-
-      $this->setCodigoLancamento($iCodigoLancamento);
-      $this->setDataLancamento($dtLancamento);
-      $this->setNumeroEmpenho($this->getEmpenho()->getNumero());
-      $this->salvarVinculoAcordo();
-      $this->salvarVinculoEmpenho();
-      if ($this->getCodigoNotaLiquidacao() != "") {
-        $this->salvarVinculoNotaDeLiquidacao();
-      }
-      return true;
+    $this->setCodigoLancamento($iCodigoLancamento);
+    parent::salvarVinculoComplemento();
+    $this->setDataLancamento($dtLancamento);
+    $this->salvarVinculoAcordo();
+    return true;
 
   }
 
@@ -210,7 +180,7 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
    * Função da classe que constroi uma instância de LancamentoAuxiliarAcordo,
    * de acordo com código do lançamento, passado como parâmetro
    * @param  integer $iCodigoLancamento
-   * @return LancamentoAuxiliarAcordo
+   * @return LancamentoAuxiliarAcordoHomolocacao
    */
   public static function getInstance($iCodigoLancamento) {
 
@@ -225,7 +195,6 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
 
     $oStdLancamentoAcordo  = db_utils::fieldsMemory($rsResultado, 0);
     $iAcordo               = $oStdLancamentoAcordo->c87_acordo;
-    $iEmpenho              = $oStdLancamentoAcordo->c75_numemp;
     $nValorTotal           = $oStdLancamentoAcordo->c70_valor;
     $dtLancamento          = $oStdLancamentoAcordo->c70_data;
     $iCodigoNotaLiquidacao = $oStdLancamentoAcordo->c66_codnota;
@@ -235,9 +204,7 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
      */
     $oLancamento  = new LancamentoAuxiliarAcordo();
     $oAcordo      = new Acordo($iAcordo);
-    $oEmpenho     = new EmpenhoFinanceiro($iEmpenho);
     $oLancamento->setAcordo($oAcordo);
-    $oLancamento->setEmpenho($oEmpenho);
     $oLancamento->setValorTotal($nValorTotal);
     $oLancamento->setCodigoLancamento($iCodigoLancamento);
     $oLancamento->setDataLancamento($dtLancamento);
@@ -246,7 +213,6 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
      * informacoes para conta corrente contratos e contratos Passivos
      */
     $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
-    $oContaCorrenteDetalhe->setEmpenho($oEmpenho);
     $oContaCorrenteDetalhe->setAcordo($oAcordo);
     $oLancamento->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
 

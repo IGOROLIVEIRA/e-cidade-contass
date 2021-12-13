@@ -295,7 +295,7 @@ if($registros > 0){
       }
     }
     if (lChequesMesmoSlip) {
-      alert('Hï¿½ slip com mais de um cheque. Todos os cheques do slip serï¿½o marcados.');
+      alert('Há slip com mais de um cheque. Todos os cheques do slip serão marcados.');
     }
   }
 
