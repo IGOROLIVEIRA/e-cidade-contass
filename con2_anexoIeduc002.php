@@ -1398,6 +1398,51 @@ ob_start();
                     </tr>
                     <?php
                     $fTotalDeducoes = 0;
+                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '491%'");
+                    foreach ($aDadoDeducao as $oDeducao) {
+                    ?>
+                        <tr style='height:20px;'>
+                            <td class="s7 bdleft"></td>
+                            <td class="s14"><?php echo db_formatar($oDeducao->o57_fonte, "receita"); ?></td>
+                            <td class="s6" colspan="7"><?= $oDeducao->o57_descr; ?></td>
+                            <td class="s15">
+                                <?php
+                                $fTotalDeducoes += $oDeducao->saldo_arrecadado;
+                                echo db_formatar($oDeducao->saldo_arrecadado, "f");
+                                ?>
+                            </td>
+                        </tr>
+                    <?php }
+                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '492%'");
+                    foreach ($aDadoDeducao as $oDeducao) {
+                    ?>
+                        <tr style='height:20px;'>
+                            <td class="s7 bdleft"></td>
+                            <td class="s14"><?php echo db_formatar($oDeducao->o57_fonte, "receita"); ?></td>
+                            <td class="s6" colspan="7"><?= $oDeducao->o57_descr; ?></td>
+                            <td class="s15">
+                                <?php
+                                $fTotalDeducoes += $oDeducao->saldo_arrecadado;
+                                echo db_formatar($oDeducao->saldo_arrecadado, "f");
+                                ?>
+                            </td>
+                        </tr>
+                    <?php }
+                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '493%'");
+                    foreach ($aDadoDeducao as $oDeducao) {
+                    ?>
+                        <tr style='height:20px;'>
+                            <td class="s7 bdleft"></td>
+                            <td class="s14"><?php echo db_formatar($oDeducao->o57_fonte, "receita"); ?></td>
+                            <td class="s6" colspan="7"><?= $oDeducao->o57_descr; ?></td>
+                            <td class="s15">
+                                <?php
+                                $fTotalDeducoes += $oDeducao->saldo_arrecadado;
+                                echo db_formatar($oDeducao->saldo_arrecadado, "f");
+                                ?>
+                            </td>
+                        </tr>
+                    <?php }
                     $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '498%'");
                     foreach ($aDadoDeducao as $oDeducao) {
                     ?>
@@ -1455,6 +1500,7 @@ ob_start();
                         <td class="s20 bdleft" colspan="9">04 - Aplicação no Exercício</td>
                         <td class="s21"><?php echo db_formatar($fTotalAnexoII, "f"); ?></td>
                     </tr>
+                    <?php if(db_getsession("DB_anousu") > 2020) { ?>
                     <tr style='height:20px;'>
                         <?php
                         db_query("drop table if exists work_receita");
@@ -1464,6 +1510,7 @@ ob_start();
                         <td class="s20 bdleft" colspan="9">05 - Restos a pagar pagos inscritos sem disponibilidade - (Consulta 932.736/2015)</td>
                         <td class="s21"><?php echo db_formatar($iRestosAPagar, "f"); ?></td>
                     </tr>
+                    <?php } ?>
                     <tr style='height:20px;'>
                         <?php
                         db_query("drop table if exists work_receita");
