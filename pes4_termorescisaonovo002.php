@@ -165,12 +165,13 @@ $aUltimoDia = array(
     "12" => "31"
 );
 $sDataCompFim = "{$ano}-{$mes}-" . $aUltimoDia[$mes];
-$sWhere  = "rh05_recis between '{$sDataCompIni}' AND '{$sDataCompFim}' AND rh02_instit = " . db_getsession("DB_instit");
+//$sWhere  = "rh05_recis between '{$sDataCompIni}' AND '{$sDataCompFim}' AND rh02_instit = " . db_getsession("DB_instit");
+$sWhere  = "and rh02_instit = " . db_getsession("DB_instit");
 if (count($aWhere)) {
     $sWhere .= " AND " . implode(" AND ", $aWhere);
 }
 
-$rsResult = $oDaoRhpesrescisao->sql_record($oDaoRhpesrescisao->sql_relatorios_termo_rescisao(null, $sCampos, $sOrdem, $sWhere));
+$rsResult = $oDaoRhpesrescisao->sql_record($oDaoRhpesrescisao->sql_relatorios_termo_rescisao_pontorescisao($ano, $mes, $sCampos, $sWhere));
 
 if ($oDaoRhpesrescisao->numrows == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Não foram encontrados servidores com rescisão em ' . $mes . ' / ' . $ano);
@@ -739,6 +740,7 @@ function getValoresRescisao($matricula, $ano, $mes, $aFeriasAvisoPrevio)
                and r20_regist = $matricula
                and r20_pd != 3
                order by r20_pd,r20_rubric";
+
     $result = db_query($sql);
     $aDados = array();
     $totalProventos = 0;

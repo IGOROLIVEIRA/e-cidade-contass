@@ -1415,6 +1415,7 @@ class cl_acordo {
         $sSql .= "       from acordo";
         $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
         $sSql .= "            inner join liclicita ON liclicita.l20_codigo = acordo.ac16_licitacao";
+        $sSql .= "            inner join cgm on z01_numcgm = ac16_contratado  ";
         $sSql .= "  where 1 = 1 ";
         $sSql .= " {$sWhere} {$sOrder} ";
 
@@ -2288,4 +2289,3 @@ class cl_acordo {
     }
 
 }
-?>
