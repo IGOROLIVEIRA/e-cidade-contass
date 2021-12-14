@@ -610,11 +610,10 @@ ob_start();
         .ritz .waffle .s15 {
             background-color: #ffffff;
             border-right: 1px SOLID #000000;
-            color: #ff0000;
+            color: #000000;
             direction: ltr;
             font-family: 'Calibri', Arial;
             font-size: 11pt;
-            font-weight: bold;
             padding: 2px 3px 2px 3px;
             text-align: right;
             vertical-align: bottom;
@@ -661,7 +660,7 @@ ob_start();
         .ritz .waffle .s19 {
             background-color: #ffffff;
             border-right: 1px SOLID #000000;
-            color: #ff0000;
+            color: #000000;
             direction: ltr;
             font-family: 'Calibri', Arial;
             font-size: 11pt;
