@@ -118,10 +118,8 @@ $cldiversos->rotulo->label("dv05_numcgm");
                     //////////////////////////////////////*/
                 } else if (isset($pesquisar)) {
                     $sql = $cldiversos->sql_query_func("", $campos, "dv05_coddiver desc", " dv05_instit = " . db_getsession('DB_instit') . " ");
-                }
-                if (isset($sql)) {
-                    db_lovrot($sql, 15, "()", "", $funcao_js);
-                }
+                }                
+                    db_lovrot($sql, 15, "()", "", $funcao_js);                
             } else {
                 if ($pesquisa_chave != null && $pesquisa_chave != "") {
                     $result = $cldiversos->sql_record($cldiversos->sql_query_func($pesquisa_chave, "*", null, " dv05_instit = " . db_getsession('DB_instit') . " and diversos.dv05_coddiver = $pesquisa_chave"));
