@@ -9,12 +9,15 @@ include("classes/db_acordoposicao_classe.php");
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $valortotaladitado = 0;
-if($aditamento = true){
+if ($aditamento = true) {
     $sql = "SELECT pc01_codmater,
        pc01_descrmater,
+       ac20_sequencial,
        ac20_valorunitario,
+       ac20_valortotal,
        ac20_quantidade,
        ac20_valoraditado,
+       ac26_acordoposicaotipo,
        ac26_acordoposicaotipo||'-'||ac27_descricao as tipoaditivo,
        ac18_datainicio,
        ac18_datafim,
@@ -44,6 +47,7 @@ $oResult = db_utils::getColectionByRecord($oResult);
 ?>
 
 <html>
+
 <head>
     <title>Contass Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -54,99 +58,112 @@ $oResult = db_utils::getColectionByRecord($oResult);
     db_app::load("estilos.css, grid.style.css");
     ?>
     <style type="text/css">
-        #Aditamento td{
+        #Aditamento td {
             text-align: center;
         }
     </style>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<center>
-    <?php if (isset($ac26_sequencial)): ?>
+    <center>
+        <?php if (isset($ac26_sequencial)) : ?>
 
-    <form action="" method="post" id="form1">
+            <form action="" method="post" id="form1">
 
-        <fieldset style="width: 95%;">
+                <fieldset style="width: 95%;">
 
-            <legend><b>Aditamento</b></legend>
+                    <legend><b>Aditamento</b></legend>
 
-            <table style='width: 100%; background: #ffffff;' align="center">
-                <tr>
-                    <td width="100%">
-                        <table width="100%" id="Aditamento">
-                            <tr style="background: #ffffff; height: 20px;">
-                                <th style="height: 25px; font-size:14px; background: #ffffff;">Cód. Aditamento</th>
-                                <th style="height: 25px; font-size:14px; background: #ffffff;">Tipo</th>
-                                <th style="height: 25px; font-size:14px; background: #ffffff;">Data Assinatura</th>
-                                <th style="height: 25px; font-size:14px; background: #ffffff;">Data Publicação</th>
-                                <th style="height: 25px; font-size:14px; background: #ffffff;">Veiculo de Divulgação</th>
-                                <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição da Alteração</th>
-                                <th style="height: 25px; font-size:14px; background: #ffffff;">Vigência</th> </tr>
-                                <tr style="background: #ffffff; height:20px; ">
-                                <td style=""><?php echo $oResult[0]->ac26_sequencial; ?></td>
-                                <td style=""><?php echo $oResult[0]->tipoaditivo; ?></td>
-                                <td style=""><?php echo date('d/m/Y', strtotime($oResult[0]->ac35_dataassinaturatermoaditivo)); ?></td>
-                                <td style=""><?php echo date('d/m/Y', strtotime($oResult[0]->ac35_datapublicacao)); ?></td>
-                                <td style=""><?php echo $oResult[0]->ac35_veiculodivulgacao; ?></td>
-                                <td style=""><?php echo $oResult[0]->ac35_descricaoalteracao; ?></td>
-                                <td style=""><?php echo date("d/m/Y", strtotime($oResult[0]->ac18_datainicio))." á ".date("d/m/Y", strtotime($oResult[0]->ac18_datafim)); ?></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-        <br>
-        <br>
-        <fieldset style="width: 75%; margin-bottom: 10px">
-            <legend><b>Itens do Aditamento</b></legend>
-            <table style='width: 100%; background: #ffffff;' border='0' align="center">
-                <tr style="background: #ffffff; height: 20px;">
-                    <th style="height: 25px; font-size:14px; background: #ffffff;">Código Item</th>
-                    <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
-                    <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Unitário</th>
-                    <th style="height: 25px; font-size:14px; background: #ffffff;">Quantidade Aditada</th>
-                    <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Aditado</th>
-                </tr>
-                <tr>
-                    <?php $iMaterial = ""; ?>
-                    <?php $i = 0; ?>
-                    <?php foreach ($oResult as $aResult): ?>
-                    <?php if($aResult->ac20_acordoposicao == $oResult[0]->ac20_acordoposicao){
-                    if($iMaterial != $aResult->ac20_pcmater){
-                        $valortotaladitado += $aResult->ac20_valoraditado;
-                        ?>
-                    <?php if($i!=0):?>
-                <?php endif; ?>
-                <tr>
-                    <td colspan="10" style="height:10px; width:100%;"><hr></td>
-                </tr>
-                <tr style="margin-top:5px; background: #e1dede; height:10px;">
-                    <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
-                    <td ><?php echo $aResult->pc01_descrmater; ?> </td>
-                    <td align="center"><?php echo $aResult->ac20_valorunitario; ?> </td>
-                    <td align="center"><?php echo $aResult->ac20_quantidadeaditada; ?> </td>
-                    <td align="center"><?php echo $aResult->ac20_valoraditado; ?> </td>
-                </tr>
+                    <table style='width: 100%; background: #ffffff;' align="center">
+                        <tr>
+                            <td width="100%">
+                                <table width="100%" id="Aditamento">
+                                    <tr style="background: #ffffff; height: 20px;">
+                                        <th style="height: 25px; font-size:14px; background: #ffffff;">Cód. Aditamento</th>
+                                        <th style="height: 25px; font-size:14px; background: #ffffff;">Tipo</th>
+                                        <th style="height: 25px; font-size:14px; background: #ffffff;">Data Assinatura</th>
+                                        <th style="height: 25px; font-size:14px; background: #ffffff;">Data Publicação</th>
+                                        <th style="height: 25px; font-size:14px; background: #ffffff;">Veiculo de Divulgação</th>
+                                        <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição da Alteração</th>
+                                        <th style="height: 25px; font-size:14px; background: #ffffff;">Vigência</th>
+                                    </tr>
+                                    <tr style="background: #ffffff; height:20px; ">
+                                        <td style=""><?php echo $oResult[0]->ac26_sequencial; ?></td>
+                                        <td style=""><?php echo $oResult[0]->tipoaditivo; ?></td>
+                                        <td style=""><?php echo date('d/m/Y', strtotime($oResult[0]->ac35_dataassinaturatermoaditivo)); ?></td>
+                                        <td style=""><?php echo date('d/m/Y', strtotime($oResult[0]->ac35_datapublicacao)); ?></td>
+                                        <td style=""><?php echo $oResult[0]->ac35_veiculodivulgacao; ?></td>
+                                        <td style=""><?php echo $oResult[0]->ac35_descricaoalteracao; ?></td>
+                                        <td style=""><?php echo date("d/m/Y", strtotime($oResult[0]->ac18_datainicio)) . " á " . date("d/m/Y", strtotime($oResult[0]->ac18_datafim)); ?></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <br>
+                <br>
+                <fieldset style="width: 75%; margin-bottom: 10px">
+                    <legend><b>Itens do Aditamento</b></legend>
+                    <table style='width: 100%; background: #ffffff;' border='0' align="center">
+                        <tr style="background: #ffffff; height: 20px;">
+                            <th style="height: 25px; font-size:14px; background: #ffffff;">Código Item</th>
+                            <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
+                            <th style="height: 25px; font-size:14px; background: #ffffff;">Quantidade</th>
+                            <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Unitário</th>
+                            <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Total</th>
+                            <th style="height: 25px; font-size:14px; background: #ffffff;">Quantidade Aditada</th>
+                            <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Aditado</th>
+                        </tr>
+                        <tr>
+                            <?php $iMaterial = ""; ?>
+                            <?php $i = 0; ?>
+                            <?php foreach ($oResult as $aResult) : ?>
+                                <?php if ($aResult->ac20_acordoposicao == $oResult[0]->ac20_acordoposicao) {
+                                    if ($iMaterial != $aResult->ac20_pcmater) {
+                                        $valortotaladitado += $aResult->ac20_valoraditado;
+                                ?>
+                                        <?php if ($i != 0) : ?>
+                                        <?php endif; ?>
+                        <tr>
+                            <td colspan="10" style="height:10px; width:100%;">
+                                <hr>
+                            </td>
+                        </tr>
+                        <tr style="margin-top:5px; background: <?php if ($aResult->ac26_acordoposicaotipo == 12) {
+                                                                    echo "#7CFC00";
+                                                                } else {
+                                                                    echo "#e1dede";
+                                                                } ?>; height:10px;">
+                            <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
+                            <td><?php echo $aResult->pc01_descrmater; ?> </td>
+                            <td><?php echo $aResult->ac20_quantidade; ?> </td>
+                            <td align="center"><?php echo $aResult->ac20_valorunitario; ?> </td>
+                            <td align="center"><?php echo $aResult->ac20_valortotal; ?> </td>
+                            <td align="center"><?php echo $aResult->ac20_quantidadeaditada; ?> </td>
+                            <td align="center"><?php echo $aResult->ac20_valoraditado; ?> </td>
+                        </tr>
 
-                <?php $iMaterial = $aResult->ac20_pcmater; ?>
+                        <?php $iMaterial = $aResult->ac20_pcmater; ?>
 
-                <?php } ?>
+                    <?php } ?>
 
                 <?php } ?>
                 <?php $i++; ?>
-                <?php endforeach;?>
+            <?php endforeach; ?>
 
-                <?php endif; ?>
-                </tr>
+        <?php endif; ?>
+        </tr>
 
-            </table>
-        </fieldset>
-            <table style='width: 20%; background: #ffffff; margin-right:152px' align="right">
-                <tr style="background: #ffffff; height: 10px;">
-                    <td style="height: 25px; font-size:14px; background: #ffffff;"><strong>Valor Total Aditado:</strong></td>
-                    <td><? echo "R$".number_format($valortotaladitado, 2, ',', '.')?></td>
-                </tr>
-            </table>
-    </form>
+                    </table>
+                </fieldset>
+                <table style='width: 20%; background: #ffffff; margin-right:152px' align="right">
+                    <tr style="background: #ffffff; height: 10px;">
+                        <td style="height: 25px; font-size:14px; background: #ffffff;"><strong>Valor Total Aditado:</strong></td>
+                        <td><? echo "R$" . number_format($valortotaladitado, 2, ',', '.') ?></td>
+                    </tr>
+                </table>
+            </form>
 </body>
+
 </html>
