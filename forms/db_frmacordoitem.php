@@ -431,7 +431,7 @@ db_app::load("estilos.css, grid.style.css");
     }
 
     function js_mostrapcmater1(chave1, chave2, chave3) {
-        alert("Chave1 = "+chave1+" chave2 = "+chave2);
+
         if (chave3 === 'f') {
             $('tdlabelservico').style.display = 'none';
             $('tdselectservico').style.display = 'none';
@@ -455,6 +455,7 @@ db_app::load("estilos.css, grid.style.css");
                 js_verificaServico();
                 js_getElementosMateriais();
             } else {
+
                 db_iframe_pcmater.hide();
                 alert(oRetorno.message.urlDecode());
                 return false;

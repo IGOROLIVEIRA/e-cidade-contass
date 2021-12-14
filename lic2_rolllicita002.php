@@ -33,7 +33,7 @@ if ($l20_codigo != "") {
 
     $sWhere .= $sAnd . " l20_codigo=$l20_codigo ";
     $sAnd = " and ";
-    $info1 = "Código: ".$l20_codigo;
+    $info1 = "Código: " . $l20_codigo;
 }
 if ($l03_codigo != "") {
 
@@ -55,17 +55,17 @@ l20_objeto as objeto ";
 $sWhere .= $sAnd . " l20_instit = " . db_getsession("DB_instit");
 $sAnd = ' and ';
 
-if($exercicio){
+if ($exercicio) {
     $sWhere .= $sAnd . " extract (year from l20_datacria) = " . $exercicio;
 }
 
-if($cgms){
+if ($cgms) {
     $sWhere .= $sAnd . " cgmfornecedor.z01_numcgm in (" . $cgms . ") ";
 }
 
-if($status){
+if ($status) {
     $sWhere .= $sAnd . ' l08_sequencial = ';
-    switch($status){
+    switch ($status) {
         case '1':
         case '2':
         case '3':
@@ -73,12 +73,11 @@ if($status){
         case '5':
         case '6':
             $sWhere .= intval($status) - 1;
-        break;
+            break;
         default:
             $sWhere .= $status;
-        break;
+            break;
     }
-
 }
 
 $sSqlLicLicita = $clliclicita->sql_query(null, $sCampos, "l00_anocria,l20_edital,l20_datacria", $sWhere);
@@ -138,31 +137,31 @@ for ($i = 0; $i < $numrows; $i++) {
     $pdf->cell(30, $alt, 'Critério de Adjudicação', 1, 0, "C", 1);
     $pdf->cell(22, $alt, 'Data de abertura', 1, 0, "C", 1);
     $pdf->cell(88, $alt, 'Objeto', 1, 0, "C", 1);
-    
-    if(in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))){
+
+    if (in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))) {
         $pdf->cell(27, $alt, 'Data de Homologação', 1, 1, "C", 1);
-    }elseif(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103, 106))){
+    } elseif (in_array($l03_pctipocompratribunal, array(100, 101, 102, 103, 106))) {
         $pdf->cell(27, $alt, 'Data de Ratificação', 1, 1, "C", 1);
-    }else{
+    } else {
         $pdf->cell(27, $alt, ' - ', 1, 1, "C", 1);
     }
 
     $pdf->setfont('arial', '', 7);
 
-    $pdf->cell(8, $alt*$alt_novo, $l20_codigo, 1, 0, "C", 0);
-    $pdf->cell(16, $alt*$alt_novo, $processo, 1, 0, "C", 0);
-    $pdf->cell(10, $alt*$alt_novo, ($l20_nroedital ? $l20_nroedital : ' - '), 1, 0, "C", 0);
-    $pdf->cell(55, $alt*$alt_novo, $modalidade, 1, 0, "C", 0);
-    $pdf->cell(15, $alt*$alt_novo, $l20_numero, 1, 0, "C", 0);
-    $pdf->cell(8, $alt*$alt_novo, $usaregistropreco, 1, 0, "C", 0);
+    $pdf->cell(8, $alt * $alt_novo, $l20_codigo, 1, 0, "C", 0);
+    $pdf->cell(16, $alt * $alt_novo, $processo, 1, 0, "C", 0);
+    $pdf->cell(10, $alt * $alt_novo, ($l20_nroedital ? $l20_nroedital : ' - '), 1, 0, "C", 0);
+    $pdf->cell(55, $alt * $alt_novo, $modalidade, 1, 0, "C", 0);
+    $pdf->cell(15, $alt * $alt_novo, $l20_numero, 1, 0, "C", 0);
+    $pdf->cell(8, $alt * $alt_novo, $usaregistropreco, 1, 0, "C", 0);
 
-    if(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103, 106))){
+    if (in_array($l03_pctipocompratribunal, array(100, 101, 102, 103, 106))) {
         $descCriterio = ' - ';
-    }else{
-        switch($l20_criterioadjudicacao){
+    } else {
+        switch ($l20_criterioadjudicacao) {
             case 1:
-                 $descCriterio = "Desconto sobre tabela";
-                 break;
+                $descCriterio = "Desconto sobre tabela";
+                break;
             case 2:
                 $descCriterio = 'Menor taxa ou percentual';
                 break;
@@ -172,14 +171,14 @@ for ($i = 0; $i < $numrows; $i++) {
         }
     }
 
-    $pdf->cell(30, $alt*$alt_novo, $descCriterio, 1, 0, "C", 0);
-    $pdf->cell(22, $alt*$alt_novo, db_formatar($abertura, "d"), 1, 0, "C", 0);
+    $pdf->cell(30, $alt * $alt_novo, $descCriterio, 1, 0, "C", 0);
+    $pdf->cell(22, $alt * $alt_novo, db_formatar($abertura, "d"), 1, 0, "C", 0);
 
     if (strlen($objeto) > 56) {
 
         $pos_x = $pdf->x;
         $pos_y = $pdf->y;
-        $pdf->cell(88, $alt*$alt_novo, "", 1, 0, "L", 0);
+        $pdf->cell(88, $alt * $alt_novo, "", 1, 0, "L", 0);
         $pdf->x = $pos_x;
         $pdf->y = $pos_y;
         foreach ($aObjeto as $oObjeto) {
@@ -188,22 +187,22 @@ for ($i = 0; $i < $numrows; $i++) {
         }
         $pdf->x = $pos_x - 56;
     } else {
-        $pdf->cell(88, $alt*$alt_novo, $objeto, 1, 0, "L", 0);
+        $pdf->cell(88, $alt * $alt_novo, $objeto, 1, 0, "L", 0);
     }
 
     if (strlen($objeto) > 56) {
         $pdf->y = $pos_y;
         $pdf->x = $pos_x + 88;
     }
-    
+
     $data = '';
-    if(in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))){
+    if (in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))) {
         $data = $l202_datahomologacao;
-    }elseif(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103, 106))){
+    } elseif (in_array($l03_pctipocompratribunal, array(100, 101, 102, 103, 106))) {
         $data = $l20_dtpubratificacao;
     }
 
-    $pdf->cell(27, $alt*$alt_novo, $data ? db_formatar($data, 'd') : ' - ', 1, 1, "C", 0);
+    $pdf->cell(27, $alt * $alt_novo, $data ? db_formatar($data, 'd') : ' - ', 1, 1, "C", 0);
 
     $sSqlFornecedores = " select distinct
                             l206_fornecedor||' - '||z01_nome AS fornecedor,
@@ -218,7 +217,7 @@ for ($i = 0; $i < $numrows; $i++) {
 
     $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());
 
-    if(!pg_numrows($result_fornecedores)){
+    if (!pg_numrows($result_fornecedores)) {
         $sSqlFornecedores = "
             SELECT DISTINCT 
                 ac16_contratado||' - '||z01_nome AS fornecedor,
@@ -231,18 +230,22 @@ for ($i = 0; $i < $numrows; $i++) {
             INNER JOIN habilitacaoforn ON l206_fornecedor = ac16_contratado
             WHERE ac16_licitacao = {$l20_codigo}";
 
-        $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());                
-    }
-
-    
-    if(!pg_numrows($result_fornecedores)){
-        $sSqlFornecedores = $clacordo->sql_queryLicitacoesVinculadas(null, 
-        "z01_numcgm||' - '||z01_nome as fornecedor, ac16_numero as contrato, ac16_dataassinatura, ac16_datainicio, ac16_datafim", null, " AND l21_codliclicita=$l20_codigo and l20_instit = " . db_getsession("DB_instit"));
         $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());
     }
 
-    if($usaregistropreco == 'SIM'){
-        $sSqlFornecedores = $clhabilitacao->sql_query(null,"z01_numcgm||' - '||z01_nome as fornecedor","z01_nome","l206_licitacao = {$l20_codigo}");
+
+    if (!pg_numrows($result_fornecedores)) {
+        $sSqlFornecedores = $clacordo->sql_queryLicitacoesVinculadas(
+            null,
+            "z01_numcgm||' - '||z01_nome as fornecedor, ac16_numero as contrato, ac16_dataassinatura, ac16_datainicio, ac16_datafim",
+            null,
+            " AND l20_codigo=$l20_codigo and l20_instit = " . db_getsession("DB_instit")
+        );
+        $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());
+    }
+
+    if ($usaregistropreco == 'SIM') {
+        $sSqlFornecedores = $clhabilitacao->sql_query(null, "z01_numcgm||' - '||z01_nome as fornecedor", "z01_nome", "l206_licitacao = {$l20_codigo}");
         $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());
     }
 
@@ -265,7 +268,6 @@ for ($i = 0; $i < $numrows; $i++) {
             $pdf->cell(32, $alt, $oFornecedor->ac16_dataassinatura ? db_formatar($oFornecedor->ac16_dataassinatura, "d") : ' - ', 1, 0, "C", $p);
             $pdf->cell(30, $alt, $oFornecedor->ac16_datainicio ? db_formatar($oFornecedor->ac16_datainicio, "d") : ' - ', 1, 0, "C", $p);
             $pdf->cell(30, $alt, $oFornecedor->ac16_datafim ? db_formatar($oFornecedor->ac16_datafim, "d") : ' - ', 1, 1, "C", $p);
-
         }
     }
     /**
@@ -296,7 +298,4 @@ function quebrar_texto($texto, $tamanho)
     }
     $aTextoNovo[] = trim($string_atual);
     return $aTextoNovo;
-
 }
-
-?>
