@@ -820,15 +820,6 @@ class cl_rhlota {
                          rhlotavincativ.rh39_subfuncao,
                          rh43_recurso) limit 1
                     )) as o58_coddot                                                           ";
-    /*$sSql .= "     (SELECT rh72_coddot FROM rhempenhofolha 
-                    JOIN rhempenhofolharhemprubrica        on rh81_rhempenhofolha = rh72_sequencial
-                    JOIN rhempenhofolharubrica on rh73_sequencial     = rh81_rhempenhofolharubrica
-                    JOIN rhpessoalmov          on rh73_seqpes     = rh02_seqpes AND rh02_lota = r70_codigo
-                    where ( (coalesce(rh72_projativ, -1),coalesce(rh72_programa, -1),coalesce(rh72_funcao, -1),coalesce(rh72_subfuncao, -1),coalesce(rh72_recurso, -1)) = 
-      (coalesce(rh25_projativ, -1),coalesce(rh25_programa, -1),coalesce(rh25_funcao, -1),coalesce(rh25_subfuncao, -1),coalesce(rh25_recurso, -1)) 
-      OR  (rh72_projativ,rh72_programa,rh72_funcao,rh72_subfuncao,rh72_recurso) = 
-      (rhlotavincativ.rh39_projativ,rhlotavincativ.rh39_programa,rhlotavincativ.rh39_funcao,rhlotavincativ.rh39_subfuncao,rh43_recurso))
-      AND rh72_anousu = {$dAno} AND rh73_tiporubrica = 1 AND rh72_tipoempenho = 1 order by rh72_mesusu desc limit 1) as rh72_coddot                                          ";*/
 		$sSql .= "from rhlota                                                                                               ";
 		$sSql .= "      left join rhlotaexe                    on rh26_codigo              = r70_codigo                     ";
 		$sSql .= "                                            and rh26_anousu              = {$dAno}                        ";
