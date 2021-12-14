@@ -426,11 +426,11 @@ switch($oParam->exec) {
                 }
                 if($nValorLancamentoContabil != 0){
                     $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-                    $sHistorico = "Valor referente a exclusão da posição {$oPosicao->codigo} do contrato de código: {$oAcordoPosicao->getAcordo()}.";
-                    if($nValorLancamentoContabil > 0){
+                    $sHistorico = "Valor referente a estorno da posição {$oPosicao->codigo} do contrato de código: {$oAcordoPosicao->getAcordo()}.";
+                    if($nValorLancamentoContabil < 0){
                         $oAcordoLancamentoContabil->registraControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $oAcordoPosicao->getDataAssinatura());
                     }
-                    if($nValorLancamentoContabil < 0){
+                    if($nValorLancamentoContabil > 0){
                         $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $oAcordoPosicao->getDataAssinatura());
                     }
                 }
