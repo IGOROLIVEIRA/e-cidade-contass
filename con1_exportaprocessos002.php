@@ -55,7 +55,9 @@ if ($oGet->extensao == 1) {
 
 $oLicitacao = new licitacao($iLicitacao);
 try {
-    $aItensLicitacao   = $oLicitacao->getItensExport();
+    $aEditalLicitacao   = $oLicitacao->getEditalExport();
+    $aItensLicitacao    = $oLicitacao->getItensExport();
+    $aEditalLicitacao    = $oLicitacao->getLoteExport();
 } catch (Exception $oErro) {
     db_redireciona('db_erros.php?fechar=true&db_erro=' . $oErro->getMessage());
 }
@@ -68,19 +70,6 @@ if ($clabre_arquivo->arquivo != false) {
 
     $vir = $separador;
     $del = $delimitador;
-
-    fputs($clabre_arquivo->arquivo, formatarCampo("TIPO DE REGISTRO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("CODIGO ORGAO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("TIPO ORGAO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("CNPJ", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("NOME ORGAO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("PROCESSO LICITATORIO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("EXERCICIO PROCESSO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("NUMERO EDITAL", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("EXERCICIO EDITAL", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("PROCESSO OBJETO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("NATUREZA DO OBJETO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("REGISTRO DE PREÇO", $vir, $del));
 
     fputs($clabre_arquivo->arquivo, "\n");
 
@@ -98,10 +87,6 @@ if ($clabre_arquivo->arquivo != false) {
         $sProcessoObjeto                 = '';
         $iNaturezaObjeto                 = '';
         $iRegistroPreco                  = '';
-
-        // if ($oItens->pc01_servico == 't') {
-        //     $sNomeOrgao      = "SERVIÇO";
-        // }
 
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
