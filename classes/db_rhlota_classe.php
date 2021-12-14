@@ -799,8 +799,28 @@ class cl_rhlota {
 		$sSql .= "     projativ_novo.o55_projativ as o55_projativ_novo,                                                     ";
 		$sSql .= "     projativ_novo.o55_descr    as o55_descr_novo,                                                        ";
 		$sSql .= "     projativ_novo.o55_anousu   as o55_anousu_novo,                                                        ";
-    $sSql .= "     orcdotacao.o58_coddot,                                                           ";
-    $sSql .= "     (SELECT rh72_coddot FROM rhempenhofolha 
+    $sSql .= "     coalesce(orcdotacao.o58_coddot,(select o.o58_coddot from 
+                    orcdotacao o join orcelemento e on (o.o58_codele, o.o58_anousu) = (e.o56_codele, e.o56_anousu) 
+                    where e.o56_elemento = coalesce(rpad(substr(elemento_novo.o56_elemento,1,7),13,'0'),'3319011000000') and e.o56_anousu=2021
+                    and (o.o58_anousu,
+                        o.o58_instit,
+                        o.o58_orgao,
+                        o.o58_unidade,
+                        o.o58_projativ,
+                        o.o58_programa,
+                        o.o58_funcao,
+                        o.o58_subfuncao,
+                        o.o58_codigo) = (rh26_anousu,
+                         r70_instit,
+                         rh26_orgao,
+                         rh26_unidade,
+                         rhlotavincativ.rh39_projativ,
+                         rhlotavincativ.rh39_programa,
+                         rhlotavincativ.rh39_funcao,
+                         rhlotavincativ.rh39_subfuncao,
+                         rh43_recurso) limit 1
+                    )) as o58_coddot                                                           ";
+    /*$sSql .= "     (SELECT rh72_coddot FROM rhempenhofolha 
                     JOIN rhempenhofolharhemprubrica        on rh81_rhempenhofolha = rh72_sequencial
                     JOIN rhempenhofolharubrica on rh73_sequencial     = rh81_rhempenhofolharubrica
                     JOIN rhpessoalmov          on rh73_seqpes     = rh02_seqpes AND rh02_lota = r70_codigo
@@ -808,7 +828,7 @@ class cl_rhlota {
       (coalesce(rh25_projativ, -1),coalesce(rh25_programa, -1),coalesce(rh25_funcao, -1),coalesce(rh25_subfuncao, -1),coalesce(rh25_recurso, -1)) 
       OR  (rh72_projativ,rh72_programa,rh72_funcao,rh72_subfuncao,rh72_recurso) = 
       (rhlotavincativ.rh39_projativ,rhlotavincativ.rh39_programa,rhlotavincativ.rh39_funcao,rhlotavincativ.rh39_subfuncao,rh43_recurso))
-      AND rh72_anousu = {$dAno} AND rh73_tiporubrica = 1 AND rh72_tipoempenho = 1 order by rh72_mesusu desc limit 1) as rh72_coddot                                          ";
+      AND rh72_anousu = {$dAno} AND rh73_tiporubrica = 1 AND rh72_tipoempenho = 1 order by rh72_mesusu desc limit 1) as rh72_coddot                                          ";*/
 		$sSql .= "from rhlota                                                                                               ";
 		$sSql .= "      left join rhlotaexe                    on rh26_codigo              = r70_codigo                     ";
 		$sSql .= "                                            and rh26_anousu              = {$dAno}                        ";
@@ -833,6 +853,7 @@ class cl_rhlota {
 		$sSql .= "      left join orcelemento                  on orcelemento.o56_codele   = rhlotavincele.rh28_codeledef   ";
 		$sSql .= "                                            and orcelemento.o56_anousu   = {$dAno}                        ";
 		$sSql .= "      left join orcelemento as elemento_novo on elemento_novo.o56_codele = rhlotavincele.rh28_codelenov   ";
+    $sSql .= "      AND elemento_novo.o56_anousu = {$dAno}                                                              ";
 		$sSql .= "      left join rhlotavincativ as lvat       on lvat.rh39_codlotavinc    = rh25_codlotavinc               ";
 		$sSql .= "                                            and lvat.rh39_codelenov      = rhlotavincele.rh28_codelenov   ";
 		$sSql .= "      left join orcprojativ as projativ_novo on projativ_novo.o55_anousu = lvat.rh39_anousu               ";
@@ -840,11 +861,11 @@ class cl_rhlota {
 		$sSql .= "      left join rhlotavincrec                on rhlotavincrec.rh43_codelenov = lvat.rh39_codelenov        ";
 		$sSql .= "                                            and rhlotavincrec.rh43_codlotavinc = rh25_codlotavinc         ";
 		$sSql .= "      left join orctiporec as recurso_novo   on recurso_novo.o15_codigo = rhlotavincrec.rh43_recurso      ";
-		$sSql .= "      left join orcdotacao on (rh26_anousu,r70_instit,rh26_orgao,rh26_unidade,rh25_projativ,rh25_programa,rh25_funcao,rh25_subfuncao) ";
-    $sSql .= "      = (o58_anousu,o58_instit,o58_orgao,o58_unidade,o58_projativ,o58_programa,o58_funcao,o58_subfuncao) ";
+		$sSql .= "      left join orcdotacao on (rh26_anousu,r70_instit,rh26_orgao,rh26_unidade,rh25_projativ,rh25_programa,rh25_funcao,rh25_subfuncao,rh25_recurso,coalesce(rh28_codelenov,(select o56_codele from orcelemento where o56_elemento = '3319011000000' and o56_anousu={$dAno} limit 1))) ";
+    $sSql .= "      = (o58_anousu,o58_instit,o58_orgao,o58_unidade,o58_projativ,o58_programa,o58_funcao,o58_subfuncao,o58_codigo,o58_codele) ";
     $sSql .= "                                                                                                          ";
 		$sSql .= "  where r70_instit = {$iInstituicao} {$sWhere}                                                            ";
-		$sSql .= " order by  {$sOrdem}                                                                                      ";
+		$sSql .= " order by  {$sOrdem}, o58_coddot desc                                                                     ";
 		
 		return $sSql;
 		
