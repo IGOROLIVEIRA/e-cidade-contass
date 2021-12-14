@@ -40,17 +40,23 @@ $clrotulo->label("l20_codigo");
 db_postmemory($HTTP_GET_VARS);
 
 $oGet         = db_utils::postMemory($_GET);
+
 $iLicitacao   = $oGet->l20_codigo;
-//$extensao     = $oGet->;
+
+if ($oGet->extensao == 1) {
+    $extensao = 'txt';
+} else if ($oGet->extensao == 2) {
+    $extensao = 'csv';
+} else if ($oGet->extensao == 3) {
+    $extensao = 'imp';
+}
+
 //====================  instanciamos a classe da solicitação selecionada para retornar os itens
 
 $oLicitacao = new licitacao($iLicitacao);
-
 try {
-
-    $aItensLicitacao   = $oLicitacao->getItensPorFornecedor();
+    $aItensLicitacao   = $oLicitacao->getItensExport();
 } catch (Exception $oErro) {
-
     db_redireciona('db_erros.php?fechar=true&db_erro=' . $oErro->getMessage());
 }
 
@@ -63,40 +69,53 @@ if ($clabre_arquivo->arquivo != false) {
     $vir = $separador;
     $del = $delimitador;
 
-    fputs($clabre_arquivo->arquivo, formatarCampo("CÓDIGO DO MATERIAL NA SOLICITAÇÃO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("POSIÇÃO DO MATERIAL NA SOLICITAÇÃO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("CÓDIGO DO MATERIAL", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("DESCRIÇÃO", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("QUANTIDADE.", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("UNIDADE", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("VALOR UNITÁRIO (R$)", $vir, $del));
-    fputs($clabre_arquivo->arquivo, formatarCampo("VALOR TOTAL (R$)", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("TIPO DE REGISTRO", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("CODIGO ORGAO", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("TIPO ORGAO", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("CNPJ", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("NOME ORGAO", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("PROCESSO LICITATORIO", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("EXERCICIO PROCESSO", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("NUMERO EDITAL", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("EXERCICIO EDITAL", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("PROCESSO OBJETO", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("NATUREZA DO OBJETO", $vir, $del));
+    fputs($clabre_arquivo->arquivo, formatarCampo("REGISTRO DE PREÇO", $vir, $del));
 
     fputs($clabre_arquivo->arquivo, "\n");
 
     foreach ($aItensLicitacao as $iItens => $oItens) {
 
-        $iCodigoMaterial   = $oItens->pc01_codmater;
-        $iSeqSolicitem     = $oItens->pc11_codigo;
-        $iPosicaoSolicitem = $oItens->pc11_seq;
-        $iQuantidade       = $oItens->pc11_quant;
-        $sUnidade          = $oItens->m61_descr;
-        $nValor            = db_formatar($oItens->pc11_vlrun, "f");
-        $nValorTotal       = db_formatar(($oItens->pc11_quant * $oItens->pc11_vlrun), "f");
-        $sDescricao        = $oItens->pc01_descrmater;
+        $iTipoRegistro                   = '1';
+        $iCodigoOrgao                    = '01';
+        $iTipoOrgao                      = '01';
+        $iCnpj                           = $oItens->cnpj;
+        $sNomeOrgao                      = $oItens->nomeorgao;
+        $iProcessoLicitatorio            = $oItens->processolicitatorio;
+        $iExercicio                      = $oItens->anoprocessolicitatorio;
+        $iNroEdital                      = $oItens->processolicitatorio;
+        $iExercicioEdital                = $oItens->anoprocessolicitatorio;
+        $sProcessoObjeto                 = '';
+        $iNaturezaObjeto                 = '';
+        $iRegistroPreco                  = '';
 
-        if ($oItens->pc01_servico == 't') {
-            $sUnidade        = "SERVIÇO";
-        }
+        // if ($oItens->pc01_servico == 't') {
+        //     $sNomeOrgao      = "SERVIÇO";
+        // }
 
-        fputs($clabre_arquivo->arquivo, formatarCampo($iSeqSolicitem, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iPosicaoSolicitem, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoMaterial, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($sDescricao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iQuantidade, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($sUnidade, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($nValor, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($nValorTotal, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iTipoOrgao, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iExercício, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iExercicioEdital, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($sProcessoObjeto, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iNaturezaObjeto, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
         fputs($clabre_arquivo->arquivo, "\n");
     }
 
@@ -114,11 +133,11 @@ function formatarCampo($valor, $separador, $delimitador)
 
     $del = "";
     if ($delimitador == "1") {
-
-        $del = ";";
-    } else if ($delimitador == "2") {
-
         $del = "|";
+    } else if ($delimitador == "2") {
+        $del = ";";
+    } else if ($delimitador == "3") {
+        $del = ",";
     }
 
     $valor = str_replace("\n", " ", $valor);

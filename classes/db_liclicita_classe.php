@@ -340,7 +340,6 @@ class cl_liclicita
             $this->l20_nroedital = ($this->l20_nroedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_nroedital"] : $this->l20_nroedital);
             $this->l20_cadinicial = ($this->l20_cadinicial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_cadinicial"] : $this->l20_cadinicial);
             $this->l20_exercicioedital = ($this->l20_exercicioedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_exercicioedital"] : $this->l20_exercicioedital);
-
         } else {
             $this->l20_codigo = ($this->l20_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codigo"] : $this->l20_codigo);
         }
@@ -363,17 +362,17 @@ class cl_liclicita
             return false;
         }
 
-//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-//            if ($this->l20_dtpubratificacao == null) {
-//                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE ou Dispensa de Licitacao'. Para este tipo é  \\n\\n obrigatorio preencher a  Data Publicação Termo Ratificação";
-//                $this->erro_campo = "l20_dtpubratificacao";
-//                $this->erro_banco = "";
-//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
-//        }
+        //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+        //            if ($this->l20_dtpubratificacao == null) {
+        //                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE ou Dispensa de Licitacao'. Para este tipo é  \\n\\n obrigatorio preencher a  Data Publicação Termo Ratificação";
+        //                $this->erro_campo = "l20_dtpubratificacao";
+        //                $this->erro_banco = "";
+        //                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        //                $this->erro_status = "0";
+        //                return false;
+        //            }
+        //        }
 
 
         if ($this->l20_condicoespag == null || $this->l20_condicoespag == "") {
@@ -399,17 +398,17 @@ class cl_liclicita
             }
         }
 
-//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-//            if ($this->l20_dtpubratificacao == null || $this->l20_dtpubratificacao == "") {
-//                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
-//                $this->erro_campo = "l20_dtpubratificacao";
-//                $this->erro_banco = "";
-//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
-//        }
+        //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+        //            if ($this->l20_dtpubratificacao == null || $this->l20_dtpubratificacao == "") {
+        //                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
+        //                $this->erro_campo = "l20_dtpubratificacao";
+        //                $this->erro_banco = "";
+        //                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        //                $this->erro_status = "0";
+        //                return false;
+        //            }
+        //        }
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
             if ($this->l20_tipoprocesso == null || $this->l20_tipoprocesso == "" || $this->l20_tipoprocesso == 0) {
@@ -425,17 +424,17 @@ class cl_liclicita
             $this->l20_tipoprocesso = 0;
         }
 
-//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-//            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
-//                $this->erro_sql = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
-//                $this->erro_campo = "l20_veicdivulgacao";
-//                $this->erro_banco = "";
-//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
-//        }
+        //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+        //            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
+        //                $this->erro_sql = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
+        //                $this->erro_campo = "l20_veicdivulgacao";
+        //                $this->erro_banco = "";
+        //                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        //                $this->erro_status = "0";
+        //                return false;
+        //            }
+        //        }
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 
@@ -617,7 +616,6 @@ class cl_liclicita
                 $this->erro_status = "0";
                 return false;
             }
-
         }
         if ($this->l20_tipojulg == null || !$this->l20_tipojulg) {
             $this->erro_sql = " Campo Tipo de Julgamento não Informado.";
@@ -788,7 +786,7 @@ class cl_liclicita
                 return false;
             }
         } else {
-            $this->l20_regimexecucao = 'NULL';// aqui
+            $this->l20_regimexecucao = 'NULL'; // aqui
         }
 
         if ($this->l20_prazoentrega == null) {
@@ -934,10 +932,10 @@ class cl_liclicita
             }
         }
 
-        if(db_getsession('DB_anousu') >= 2020){
+        if (db_getsession('DB_anousu') >= 2020) {
             $this->l20_cadinicial = 1;
             $this->l20_exercicioedital = db_getsession('DB_anousu');
-        }else{
+        } else {
             $this->l20_cadinicial = 'null';
             $this->l20_exercicioedital = 'null';
         }
@@ -1081,7 +1079,8 @@ class cl_liclicita
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        if (
+            !isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
                 && ($lSessaoDesativarAccount === false))
         ) {
             $resaco = $this->sql_record($this->sql_query_file($this->l20_codigo));
@@ -1264,15 +1263,15 @@ class cl_liclicita
         if (trim($this->l20_tipoprocesso == 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_tipoprocesso = $this->l20_tipoprocesso ";
             $virgula = ",";
-//            if (trim($this->l20_tipoprocesso) == null || trim($this->l20_tipoprocesso) == 0) {
-//                $this->erro_sql = "obrigatorio preencher os campos: Tipo de Processo";
-//                $this->erro_campo = "l20_tipoprocesso";
-//                $this->erro_banco = "";
-//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
+            //            if (trim($this->l20_tipoprocesso) == null || trim($this->l20_tipoprocesso) == 0) {
+            //                $this->erro_sql = "obrigatorio preencher os campos: Tipo de Processo";
+            //                $this->erro_campo = "l20_tipoprocesso";
+            //                $this->erro_banco = "";
+            //                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            //                $this->erro_status = "0";
+            //                return false;
+            //            }
         }
 
         if (trim($this->l20_veicdivulgacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
@@ -1352,15 +1351,15 @@ class cl_liclicita
 
 
         if (trim($this->l20_horacria != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_horacria"]))) {
-//            if($this->l20_codtipocom == && $this->l20_datacria > $this->l20_dataaber){
-//                $this->erro_sql = "Data Abertura Proc. Adm deve ser menor que Data Emis/Alt Edital/Convite.";
-//                $this->erro_campo = "l20_datacria";
-//                $this->erro_banco = "";
-//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
+            //            if($this->l20_codtipocom == && $this->l20_datacria > $this->l20_dataaber){
+            //                $this->erro_sql = "Data Abertura Proc. Adm deve ser menor que Data Emis/Alt Edital/Convite.";
+            //                $this->erro_campo = "l20_datacria";
+            //                $this->erro_banco = "";
+            //                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            //                $this->erro_status = "0";
+            //                return false;
+            //            }
             $sql .= $virgula . " l20_horacria = '$this->l20_horacria' ";
             $virgula = ",";
             if ($this->l20_horacria == null) {
@@ -1466,21 +1465,21 @@ class cl_liclicita
         }
 
         if (trim($this->l20_recdocumentacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao"]))) {
-                if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-                    $sql .= $virgula . " l20_recdocumentacao = null ";
-                    $virgula = ",";
-                } else if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
-                    $this->erro_sql = " A data informada no campo  Abertura das Propostas deve ser  superior a   Data Edital/Convite.";
-                    $this->erro_campo = "l20_recdocumentacao";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                } else {
-                    $sql .= $virgula . " l20_recdocumentacao = ' $this->l20_recdocumentacao '";
-                    $virgula = ",";
-                }
+            if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+                $sql .= $virgula . " l20_recdocumentacao = null ";
+                $virgula = ",";
+            } else if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
+                $this->erro_sql = " A data informada no campo  Abertura das Propostas deve ser  superior a   Data Edital/Convite.";
+                $this->erro_campo = "l20_recdocumentacao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else {
+                $sql .= $virgula . " l20_recdocumentacao = ' $this->l20_recdocumentacao '";
+                $virgula = ",";
+            }
         }
 
         if (trim($this->l20_dataaber != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]))) {
@@ -1994,7 +1993,8 @@ class cl_liclicita
             $sql .= " l20_codigo = $this->l20_codigo";
         }
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        if (
+            !isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
                 && ($lSessaoDesativarAccount === false))
         ) {
             // $resaco = $this->sql_record($this->sql_query_file($this->l20_codigo));
@@ -2098,7 +2098,8 @@ class cl_liclicita
     {
 
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        if (
+            !isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
                 && ($lSessaoDesativarAccount === false))
         ) {
             if ($dbwhere == null || $dbwhere == "") {
@@ -2301,17 +2302,18 @@ class cl_liclicita
         return $sql;
     }
 
-    function sql_query_old ( $l20_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_old($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-          $campos_sql = split("#",$campos);
-          $virgula = "";
-          for($i=0;$i<sizeof($campos_sql);$i++){
-            $sql .= $virgula.$campos_sql[$i];
-            $virgula = ",";
-          }
-        }else{
-          $sql .= $campos;
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
         }
         $sql .= " from liclicita ";
         $sql .= "      inner join db_config         on db_config.codigo = liclicita.l20_instit";
@@ -2328,89 +2330,89 @@ class cl_liclicita
         $sql .= "      left  join liclicitaproc     on liclicitaproc.l34_liclicita = liclicita.l20_codigo";
         $sql .= "      left  join protprocesso      on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
         $sql2 = "";
-        if($dbwhere==""){
-          if($l20_codigo!=null ){
-            $sql2 .= " where liclicita.l20_codigo = $l20_codigo ";
-          }
-        }else if($dbwhere != ""){
-          $sql2 = " where $dbwhere";
+        if ($dbwhere == "") {
+            if ($l20_codigo != null) {
+                $sql2 .= " where liclicita.l20_codigo = $l20_codigo ";
+            }
+        } else if ($dbwhere != "") {
+            $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
-          $sql .= " order by ";
-          $campos_sql = split("#",$ordem);
-          $virgula = "";
-          for($i=0;$i<sizeof($campos_sql);$i++){
-            $sql .= $virgula.$campos_sql[$i];
-            $virgula = ",";
-          }
+        if ($ordem != null) {
+            $sql .= " order by ";
+            $campos_sql = split("#", $ordem);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
         }
-         //echo $sql;
+        //echo $sql;
         return $sql;
-     }
+    }
 
-  function sql_query_relatorio($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
-  {
-    $sql = "select ";
-    if ($campos != "*") {
-      $campos_sql = split("#", $campos);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $campos;
+    function sql_query_relatorio($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
+    {
+        $sql = "select ";
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from liclicita ";
+        $sql .= "      inner join db_config         on db_config.codigo = liclicita.l20_instit";
+        $sql .= "      inner join db_usuarios       on db_usuarios.id_usuario = liclicita.l20_id_usucria";
+        $sql .= "      inner join cflicita          on cflicita.l03_codigo = liclicita.l20_codtipocom";
+        $sql .= "      inner join pctipocompratribunal on pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal";
+        $sql .= "      inner join liclocal          on liclocal.l26_codigo = liclicita.l20_liclocal";
+        $sql .= "      inner join liccomissao       on liccomissao.l30_codigo = liclicita.l20_liccomissao";
+        $sql .= "      inner join licsituacao       on licsituacao.l08_sequencial = liclicita.l20_licsituacao";
+        $sql .= "      inner join cgm               on  cgm.z01_numcgm = db_config.numcgm";
+        $sql .= "      inner join db_config as dbconfig on  dbconfig.codigo = cflicita.l03_instit";
+        $sql .= "      inner join pctipocompra      on pctipocompra.pc50_codcom = cflicita.l03_codcom";
+        $sql .= "      inner join bairro            on bairro.j13_codi = liclocal.l26_bairro";
+        $sql .= "      inner join ruas              on ruas.j14_codigo = liclocal.l26_lograd";
+        //    $sql .= "      left join homologacaoadjudica on l202_licitacao = l20_codigo";
+        //    $sql .= "      left join liclicitaproc     on liclicitaproc.l34_liclicita = liclicita.l20_codigo";
+        //    $sql .= "      left join protprocesso      on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
+        //    $sql .= "      left join habilitacaoforn   on l206_licitacao = l20_codigo";
+        //    $sql .= "      left join cgm as cgmfornecedor on cgmfornecedor.z01_numcgm = l206_fornecedor";
+        $sql2 = "";
+        if ($dbwhere == "") {
+            if ($l20_codigo != null) {
+                $sql2 .= " where liclicita.l20_codigo = $l20_codigo ";
+            }
+        } else if ($dbwhere != "") {
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($groupby != null) {
+            $sql .= " group by ";
+            $campos_sql = split("#", $groupby);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $groupby;
+        }
+        if ($ordem != null) {
+            $sql .= " order by ";
+            $campos_sql = split("#", $ordem);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
     }
-    $sql .= " from liclicita ";
-    $sql .= "      inner join db_config         on db_config.codigo = liclicita.l20_instit";
-    $sql .= "      inner join db_usuarios       on db_usuarios.id_usuario = liclicita.l20_id_usucria";
-    $sql .= "      inner join cflicita          on cflicita.l03_codigo = liclicita.l20_codtipocom";
-    $sql .= "      inner join pctipocompratribunal on pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal";
-    $sql .= "      inner join liclocal          on liclocal.l26_codigo = liclicita.l20_liclocal";
-    $sql .= "      inner join liccomissao       on liccomissao.l30_codigo = liclicita.l20_liccomissao";
-    $sql .= "      inner join licsituacao       on licsituacao.l08_sequencial = liclicita.l20_licsituacao";
-    $sql .= "      inner join cgm               on  cgm.z01_numcgm = db_config.numcgm";
-    $sql .= "      inner join db_config as dbconfig on  dbconfig.codigo = cflicita.l03_instit";
-    $sql .= "      inner join pctipocompra      on pctipocompra.pc50_codcom = cflicita.l03_codcom";
-    $sql .= "      inner join bairro            on bairro.j13_codi = liclocal.l26_bairro";
-    $sql .= "      inner join ruas              on ruas.j14_codigo = liclocal.l26_lograd";
-//    $sql .= "      left join homologacaoadjudica on l202_licitacao = l20_codigo";
-//    $sql .= "      left join liclicitaproc     on liclicitaproc.l34_liclicita = liclicita.l20_codigo";
-//    $sql .= "      left join protprocesso      on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
-//    $sql .= "      left join habilitacaoforn   on l206_licitacao = l20_codigo";
-//    $sql .= "      left join cgm as cgmfornecedor on cgmfornecedor.z01_numcgm = l206_fornecedor";
-    $sql2 = "";
-    if ($dbwhere == "") {
-      if ($l20_codigo != null) {
-        $sql2 .= " where liclicita.l20_codigo = $l20_codigo ";
-      }
-    } else if ($dbwhere != "") {
-      $sql2 = " where $dbwhere";
-    }
-    $sql .= $sql2;
-    if ($groupby != null) {
-      $sql .= " group by ";
-      $campos_sql = split("#", $groupby);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $groupby;
-    }
-    if ($ordem != null) {
-      $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    }
-    return $sql;
-  }
 
     function sql_query_edital($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
     {
@@ -3200,7 +3202,7 @@ class cl_liclicita
         $sql .= " where ";
         if ($l20_codigo != null) {
             $sql .= " l20_codigo = $l20_codigo";
-        }//die($sql);
+        } //die($sql);
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -3232,7 +3234,6 @@ class cl_liclicita
                 return true;
             }
         }
-
     }
 
     function alterarSituacaoCredenciamento($l20_codigo, $l20_licsituacao)
@@ -3309,7 +3310,7 @@ class cl_liclicita
         $sql .= " where ";
         if ($l20_codigo != null) {
             $sql .= " l20_codigo = $l20_codigo";
-        }//die($sql);
+        } //die($sql);
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -3341,7 +3342,6 @@ class cl_liclicita
                 return true;
             }
         }
-
     }
 
 
@@ -3540,9 +3540,7 @@ class cl_liclicita
                 }
 
                 break;
-
         }
-
     }
 
     function excluirpublicacaocredenciamento($l20_codigo)
@@ -3599,5 +3597,40 @@ class cl_liclicita
             $aItensPcmater[] = db_utils::fieldsMemory($rsResult, $icont);
         }
         return $aItensPcmater;
+    }
+
+    public function sql_query_licitacao_exporta($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
+        $sql  = " select distinct {$campos} ";
+        $sql .= "  from liclicita
+        join db_depart on coddepto=l20_codepartamento
+        join db_config on codigo=instit
+        join infocomplementaresinstit on si09_instit=instit
+        join liclicitem on l21_codliclicita=l20_codigo
+        join pcprocitem on pc81_codprocitem=l21_codpcprocitem
+        join pcproc on pc80_codproc=pc81_codproc
+        join solicitem on pc11_codigo=pc81_solicitem
+        join solicitempcmater on pc16_solicitem=pc11_codigo
+        join pcmater on pc16_codmater = pc01_codmater
+        join solicitemunid on pc17_codigo=pc11_codigo
+        join matunid on m61_codmatunid=pc17_unid
+        join pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+        join pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+        join pcorcamval ON pc22_orcamitem = pc23_orcamitem
+        join itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+        join precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+        left join liclicitemlote on l04_liclicitem=l21_codigo";
+
+        if (!empty($dbwhere)) {
+            $sql .= " where {$dbwhere} ";
+        } else if (!empty($l20_codigo)) {
+            $sql .= " where liclicita.l20_codigo = $l20_codigo ";
+        }
+
+        if (!empty($ordem)) {
+            $sql .= " order by {$ordem} ";
+        }
+
+        return $sql;
     }
 }

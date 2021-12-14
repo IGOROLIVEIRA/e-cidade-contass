@@ -53,12 +53,12 @@ $clrotulo->label("l20_numero");
         function js_emite() {
 
             var codigo = document.form1.l20_codigo.value;
-            var separador = document.form1.separador.value;
             var delimitador = document.form1.delimitador.value;
+            var extensao = document.form1.extensao.value;
 
             var sQuery = 'l20_codigo=' + codigo;
             sQuery += '&delimitador=' + delimitador;
-            sQuery += '&extenssao=' + separador;
+            sQuery += '&extensao=' + extensao
 
             if (codigo == '' || codigo == null) {
 
@@ -97,6 +97,7 @@ $clrotulo->label("l20_numero");
                     </tr>
                 </table>
             </fieldset>
+
             <div style="margin-top: 50px; width: 890px;">
 
                 <fieldset style="width: 400px; float:left">
@@ -108,8 +109,9 @@ $clrotulo->label("l20_numero");
                             <td align="left" nowrap>
                                 <?
                                 $aDelimitador = array(
-                                    "1" => "ponto-virgula",
-                                    "2" => "pipe"
+                                    "1" => "pipe",
+                                    "2" => "Ponto e vírgula",
+                                    "3" => "Virgula",
                                 );
                                 db_select('delimitador', $aDelimitador, true, 1, "");
                                 ?>
@@ -158,7 +160,7 @@ $clrotulo->label("l20_numero");
                                     "1" => "ponto-virgula",
                                     "2" => "pipe"
                                 );
-                                db_select('delimitador', $aDelimitador, true, 1, "");
+                                db_select('delimitador2', $aDelimitador, true, 1, "");
                                 ?>
                             </td>
                         </tr>
@@ -171,13 +173,13 @@ $clrotulo->label("l20_numero");
                                     "2" => "csv",
                                     "3" => "imp"
                                 );
-                                db_select('extensao', $aExtensoes, true, 1, "");
+                                db_select('extensao2', $aExtensoes, true, 1, "");
                                 ?>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2" align="center">
-                                <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
+                                <input name="emite3" id="emite3" type="button" value="Processar" onclick="">
                             </td>
                         </tr>
                     </table>
