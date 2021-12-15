@@ -98,7 +98,7 @@ switch ($oParam->exec) {
             $oHomologacao->save();
             $oAcordo                   = new Acordo($oParam->acordo);
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-            $sHistorico = "Valor referente a homologação do contrato com o código: {$oParam->acordo}.";
+            $sHistorico = "Valor referente a homologação do contrato de código: {$oParam->acordo}.";
             $oAcordoLancamentoContabil->registraControleContrato($oParam->acordo, $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
 
             db_fim_transacao(false);
@@ -125,7 +125,7 @@ switch ($oParam->exec) {
             $oHomologacao->cancelar();
             $oAcordo                   = new Acordo($oHomologacao->getAcordo());
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-            $sHistorico = "Valor referente a Cancelamento homologação do contrato com o código: {$oParam->codigo}.";
+            $sHistorico = "Valor referente a cancelamento da homologação do contrato de código: {$oParam->codigo}.";
             $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
 
             db_fim_transacao(false);
@@ -360,7 +360,7 @@ switch ($oParam->exec) {
             $oRecisao->save();
 
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-            $sHistorico = "Valor referente a Recisão do contrato com o código: {$oAcordo->getCodigoAcordo()}.";
+            $sHistorico = "Valor referente a rescisão do contrato com o código: {$oAcordo->getCodigoAcordo()}.";
             $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico, $oRecisao->getDataMovimento());
 
             db_fim_transacao(false);
@@ -396,7 +396,7 @@ switch ($oParam->exec) {
 
             $oAcordo = new Acordo($oRecisao->getAcordo());
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-            $sHistorico = "Valor referente a Cancelamento da Recisão do contrato com o código: {$oAcordo->getCodigoAcordo()}.";
+            $sHistorico = "Valor referente ao cancelamento da rescisão do contrato de código: {$oAcordo->getCodigoAcordo()}.";
             $oAcordoLancamentoContabil->registraControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico, $dtMovimento);
 
             db_fim_transacao(false);

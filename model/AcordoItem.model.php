@@ -587,6 +587,38 @@ order by
         }
     }
 
+    public function inserirItensDotacao($oItem)
+    {
+        $iAnoSessao = db_getsession("DB_anousu");
+
+        if (empty($oItem->iCodigoDotacao)) {
+            throw new Exception("ERRO [ 0 ] - Dotação não Informada.");
+        }
+
+        if (empty($oItem->iAnoDotacao)) {
+            $oItem->iAnoDotacao = $iAnoSessao;
+        }
+
+        if ($oItem->iAnoDotacao > $iAnoSessao) {
+            throw new Exception("Dotacao {$oItem->iCodigoDotacao}/{$oItem->iAnoDotacao} deve ser uma dotação do Exercício");
+        }
+
+        $oItemAcordoDotacao = db_utils::getDao('acordoitemdotacao');
+
+
+        $oItemAcordoDotacao->ac22_coddot = $oItem->iCodigoDotacao;
+        $oItemAcordoDotacao->ac22_anousu = $iAnoSessao;
+        $oItemAcordoDotacao->ac22_acordoitem = $oItem->iCodigoItem;
+        $oItemAcordoDotacao->ac22_valor = $oItem->nValor;
+        $oItemAcordoDotacao->ac22_quantidade = $oItem->nQuantidade;
+
+        $oItemAcordoDotacao->incluir();
+
+        if ($oItemAcordoDotacao->erro_status == '0') {
+            throw new Exception($oItemAcordoDotacao->erro_msg . "Erro");
+        }
+    }
+
     /**
      * Realiza a alteração de uma determinada dotação por outra.
      *

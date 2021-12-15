@@ -580,17 +580,20 @@ class empenho {
           $acordoLancamento = false;
         }
 
-        $oDataIntegracao = new DBDate( date("Y-m-d", db_getsession("DB_datausu")) );
-        $oInstituicao    = new Instituicao(db_getsession("DB_instit"));
-        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataIntegracao, $oInstituicao)) && $acordoLancamento == true){
-
-          $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+        $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
           $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null,
             "e100_acordo",
             null,
             "e100_numemp = {$oEmpenhoFinanceiro->getNumero()}");
-          $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
-          if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+        $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+
+        if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+            $acordoLancamento = true;
+        }
+
+        $oDataIntegracao = new DBDate( date("Y-m-d", db_getsession("DB_datausu")) );
+        $oInstituicao    = new Instituicao(db_getsession("DB_instit"));
+        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataIntegracao, $oInstituicao)) && $acordoLancamento == true){
 
             $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
             $oEventoContabilAcordo = new EventoContabil(901, $iAnoSessao);
@@ -606,9 +609,8 @@ class empenho {
             $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
             $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
-
             $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
-          }
+
         }
 
       } catch(Exception $e) {
@@ -1088,19 +1090,19 @@ class empenho {
       $acordoLancamento = false;
     }
 
-    if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
-
-      $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+    $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
       $sSqlContrato = $oDaoEmpenhoContrato->sql_query_file(null,
           "e100_acordo",
           null,
           "e100_numemp = {$oEmpenho->e60_numemp}");
 
-      $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+    $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
 
+    if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+        $acordoLancamento = true;
+    }
 
-      if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
-
+    if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
         try {
 
           $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
@@ -1125,7 +1127,6 @@ class empenho {
           $this->erro_msg = $e->getMessage();
           return false;
         }
-      }
      }
     return true;
   }
@@ -3522,9 +3523,7 @@ class empenho {
           $acordoLancamento = false;
         }
 
-        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
-
-          $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+        $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
           $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null,
               "e100_acordo",
               null,
@@ -3533,7 +3532,11 @@ class empenho {
 
           $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
 
-          if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+        if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+            $acordoLancamento = true;
+        }
+
+        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
 
               try {
 
@@ -3575,7 +3578,7 @@ class empenho {
                   $this->sErroMsg = "({$eErro->getMessage()})";
               }
           }
-        }
+
       }
     }
   }

@@ -432,7 +432,7 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        
+
         if($this->ac16_acordocategoria == null ){
             $this->ac16_acordocategoria = "0";
         }
@@ -2185,6 +2185,24 @@ class cl_acordo {
     JOIN conlancamemp ON c75_numemp = e60_numemp
     JOIN conlancamdoc ON c71_codlan = c75_codlan
     {$sWhere} ";
+
+        return $sSql;
+
+    }
+
+    function sql_query_lancamentos_contrato($sCampos = "*", $iAcordo = null) {
+
+        $sWhere = " WHERE 1 = 1 ";
+
+        if (!empty($iAcordo)) {
+            $sWhere .= " AND c87_acordo = {$iAcordo} ";
+        }
+
+        $sSql = " SELECT DISTINCT {$sCampos}
+                FROM conlancam
+                JOIN conlancamacordo ON c87_codlan = c70_codlan
+                JOIN conlancamdoc ON c71_codlan = c87_codlan
+                {$sWhere} ";
 
         return $sSql;
 

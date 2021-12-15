@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -32,6 +32,7 @@ include_once "libs/db_usuariosonline.php";
 include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
+require_once("classes/db_empresto_classe.php");
 include("libs/db_sql.php");
 db_postmemory($HTTP_POST_VARS);
 
@@ -55,6 +56,78 @@ criaWorkDotacao($sWhereDespesa,array($anousu), $dtini, $dtfim);
 
 $sWhereReceita      = "o70_instit in ({$instits})";
 criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
+
+$nRPInscritosExercicio = 0;
+
+function getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits){
+    db_inicio_transacao();
+
+    $where = " c61_instit in ({$aInstits})" ;
+    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFonte) ) ";
+    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
+    $nTotalFinal = 0;
+    for($x = 0; $x < pg_numrows($result); $x++){
+        $oPlanoConta = db_utils::fieldsMemory($result, $x);
+        if( ( $oPlanoConta->movimento == "S" )
+            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
+            continue;
+        }
+        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
+            if($oPlanoConta->saldo_final == "C"){
+                $nTotalFinal -= $oPlanoConta->saldo_final;
+            }else {
+                $nTotalFinal += $oPlanoConta->saldo_final;
+            }
+        }
+    }
+    db_query("drop table if exists work_pl");
+    db_fim_transacao();
+    return $nTotalFinal;
+}
+
+function getRestosSemDisponilibidade($sFontes, $dtIni, $dtFim, $aInstits) {
+    db_inicio_transacao();
+
+    $clEmpResto = new cl_empresto();
+    $sSqlOrder = "";
+    $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
+    $sSqlWhere = " o15_codtri in ($sFontes) group by 1 ";
+    $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
+
+    $nValorRpPago = 0;
+    foreach($aEmpRestos as $oEmpResto){
+        $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
+    }
+
+    $dtIni = db_getsession("DB_anousu")."-01-01";
+    $where = " c61_instit in ({$aInstits})" ;
+    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFontes) ) ";
+    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
+
+    $nTotalAnterior = 0;
+    for($x = 0; $x < pg_numrows($result); $x++){
+        $oPlanoConta = db_utils::fieldsMemory($result, $x);
+        if( ( $oPlanoConta->movimento == "S" )
+            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
+            continue;
+        }
+        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
+            if($oPlanoConta->sinal_anterior == "C"){
+                $nTotalAnterior -= $oPlanoConta->saldo_anterior;
+            }else {
+                $nTotalAnterior += $oPlanoConta->saldo_anterior;
+            }
+        }
+    }
+
+    $iSaldoRestosAPagarSemDisponibilidade = 0;
+    if($nValorRpPago > $nTotalAnterior){
+        $iSaldoRestosAPagarSemDisponibilidade = $nValorRpPago - $nTotalAnterior ;
+    }
+    db_query("drop table if exists work_pl");
+    db_fim_transacao();
+    return  $iSaldoRestosAPagarSemDisponibilidade;
+}
 
 /**
  * mPDF
@@ -105,10 +178,10 @@ $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
 ob_start();
 
 ?>
-  
+
   <html>
   <head>
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style type="text/css">
       .ritz .waffle a { color : inherit; }
@@ -135,7 +208,7 @@ ob_start();
     </style>
   </head>
   <body>
-  
+
   <div class="ritz grid-container" dir="ltr">
     <table class="waffle" cellspacing="0" cellpadding="0">
       <thead>
@@ -166,7 +239,13 @@ ob_start();
         <td class="s7">SubFunções</td>
         <td class="s7">Programas</td>
         <td class="s8" colspan="5">Especificação</td>
-        <td class="s9">Despesa (1)</td>
+        <?php
+            if(db_getsession("DB_anousu") >= 2021){
+                echo  "<td class='s9'>Valor Pago</td>";
+            }else{
+                echo  "<td class='s9'>Despesa (1)</td>";
+            }
+        ?>
       </tr>
       <tr style='height:20px;'>
         <td class="s6 bdleft"></td>
@@ -195,7 +274,7 @@ ob_start();
       foreach ($aSubFuncoes as $iSubFuncao) {
         $sDescrSubfunao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
 
-        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(atual_a_pagar+atual_a_pagar_liquidado),0) as apagar", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
         if (count($aDespesasProgramas) > 0) {
 
           ?>
@@ -213,6 +292,9 @@ ob_start();
           foreach ($aDespesasProgramas as $oDespesaPrograma) {
             $oPrograma = new Programa($oDespesaPrograma->o58_programa, $oDespesaPrograma->o58_anousu);
             $fSubTotal += $oDespesaPrograma->pago;
+            if($dtfim == db_getsession("DB_anousu")."-12-31" ){
+                $nRPInscritosExercicio += $oDespesaPrograma->apagar;
+            }
             ?>
             <tr style='height:20px;'>
               <td class="s3 bdleft"></td>
@@ -235,7 +317,14 @@ ob_start();
       }
       ?>
       <tr style='height:20px;'>
-        <td class="s15 bdleft" colspan="8">SUBTOTAL</td>
+        <?php
+            if(db_getsession("DB_anousu") >= 2021){
+                echo  "<td class='s15 bdleft' colspan='8'>VALOR PAGO (A)</td>";
+            }else{
+                echo  "<td class='s15 bdleft' colspan='8'>SUBTOTAL</td>";
+            }
+        ?>
+
         <td class="s15"><?=db_formatar($fSubTotal,"f")?></td>
       </tr>
       <tr style='height:20px;'>
@@ -247,23 +336,88 @@ ob_start();
           ?>
         </td>
       </tr>
+      <?php
+            if(db_getsession("DB_anousu") >= 2021){
+                if($dtfim < db_getsession("DB_anousu")."-12-31" ){
+                    echo "<tr style='height:20px;'>";
+                    echo "    <td class='s16 bdleft' colspan='8'>Restos a Pagar Inscritos No Exercício (B)</td>";
+                    echo "    <td class='s15'></td>";
+                    echo "</tr>";
+                }else{
+                    echo "<tr style='height:20px;'>";
+                    echo "    <td class='s16 bdleft' colspan='8'>Restos a Pagar Inscritos No Exercício (B)</td>";
+                    echo "    <td class='s15'>"; echo db_formatar($nRPInscritosExercicio, "f");echo "</td>";
+                    echo "</tr>";
+                }
+            }
+            if(db_getsession("DB_anousu") < 2021){
+                echo "<tr style='height:20px;'>";
+                echo "    <td class='s16 bdleft' colspan='8'>Restos a Pagar Não Processados de Exercícios Anteriores</td>";
+                echo "    <td class='s15'></td>";
+                echo "</tr>";
+                echo  "<td class='s15 bdleft' colspan='8'>VALOR PAGO (A)</td>";
+                echo  "<tr style='height:20px;'>";
+                echo  "<td class='s16 bdleft' colspan='8'>Processados no Exercício Atual (3)</td>";
+                echo  "<td class='s15'>";
+                $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$aFonte);
+                echo db_formatar($fSaldoRP,"f");
+                echo  "</td>";
+                echo  "</tr>";
+            }
+      ?>
+
       <tr style='height:20px;'>
-        <td class="s16 bdleft" colspan="8">Restos a Pagar Não Processados de Exercícios Anteriores</td>
-        <td class="s3"></td>
+        <?php
+            $nSubTotalC = $fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$nRPInscritosExercicio;
+            if(db_getsession("DB_anousu") >= 2021){
+                echo  "<td class='s17 bdleft' colspan='8'>SUBTOTAL (C = A + FUNDEB + B)</td>";
+                echo "<td class='s18'>";
+                echo db_formatar($nSubTotalC,"f");
+                echo "</td>";
+            }else{
+                echo  "<td class='s17 bdleft' colspan='8'>TOTAL</td>";
+                echo "<td class='s18'>";
+                echo db_formatar($nSubTotalC,"f");
+                echo "</td>";
+            }
+        ?>
       </tr>
-      <tr style='height:20px;'>
-        <td class="s16 bdleft" colspan="8">Processados no Exercício Atual (3)</td>
-        <td class="s15">
-          <?php
-          $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$aFonte);
-          echo db_formatar($fSaldoRP,"f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s17 bdleft" colspan="8">TOTAL</td>
-        <td class="s18"><?=db_formatar(($fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$fSaldoRP),"f")?></td>
-      </tr>
+
+        <?php
+            if(db_getsession("DB_anousu") >= 2021){
+                $nSaldoFonteAno = getSaldoPlanoContaFonte("'101'", $dtini, $dtfim, $instits);
+                $nRPSEMDisponibilidade = $nRPInscritosExercicio - $nSaldoFonteAno;
+                if($nRPSEMDisponibilidade < 0){
+                    $nRPSEMDisponibilidade = 0;
+                }
+                if($dtfim < db_getsession("DB_anousu")."-12-31" ){
+                    $nRPSEMDisponibilidade = 0;
+                }
+                echo "<tr style='height:20px;'>";
+                echo  "<td class='s16 bdleft' colspan='8'>RESTO A PAGAR (PROCESSADOS E NÃO PROCESSADOS) INSCRITOS SEM DISPONIBILIDADE DE CAIXA (D)</td>";
+                echo "<td class='s15'>";
+                echo db_formatar($nRPSEMDisponibilidade,"f");
+                echo "</td>";
+                echo "</tr>";
+
+                $nRPAnteriorSEMDisponibilidade = getRestosSemDisponilibidade("'101'", $dtini, $dtfim, $instits);
+                echo "<tr style='height:20px;'>";
+                echo  "<td class='s16 bdleft' colspan='8'>RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE DE CAIXA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)(E)</td>";
+                echo "<td class='s15'>";
+                echo db_formatar($nRPAnteriorSEMDisponibilidade,"f");
+                echo "</td>";
+                echo "</tr>";
+
+                $nTotalAPlicado = $nSubTotalC - ($nRPSEMDisponibilidade + $nRPAnteriorSEMDisponibilidade);
+                echo "<tr style='height:20px;'>";
+                echo  "<td class='s17 bdleft' colspan='8'>TOTAL APLICADO (F = C - D + E)</td>";
+                echo "<td class='s18'>";
+                echo db_formatar($nTotalAPlicado,"f");
+                echo "</td>";
+                echo "</tr>";
+            }
+        ?>
+
       <tr style='height:20px;'>
         <td class="s19 bdleft" colspan="9">(1) Art. 70 da Lei Federal n. 9394/96.</td>
       </tr>
@@ -279,8 +433,8 @@ ob_start();
       </tbody>
     </table>
   </div>
-  
-  
+
+
   </body>
   </html>
 
