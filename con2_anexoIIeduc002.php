@@ -59,11 +59,12 @@ criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 
 $nRPInscritosExercicio = 0;
 
-function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits, $bDoExecicio = false){
+function getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits){
+    db_inicio_transacao();
+
     $where = " c61_instit in ({$aInstits})" ;
-    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
+    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFonte) ) ";
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
-    $nTotalAnterior = 0;
     $nTotalFinal = 0;
     for($x = 0; $x < pg_numrows($result); $x++){
         $oPlanoConta = db_utils::fieldsMemory($result, $x);
@@ -71,46 +72,60 @@ function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits, $bDoExecici
             && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
             continue;
         }
-        $nSaldofinal = $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito - $oPlanoConta->saldo_anterior_credito;
         if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
-            if($oPlanoConta->sinal_anterior == "C"){
-                $nTotalAnterior -= $oPlanoConta->saldo_anterior;
-                $nTotalFinal -= $nSaldofinal;
+            if($oPlanoConta->saldo_final == "C"){
+                $nTotalFinal -= $oPlanoConta->saldo_final;
             }else {
-                $nTotalAnterior += $oPlanoConta->saldo_anterior;
-                $nTotalFinal += $nSaldofinal;
+                $nTotalFinal += $oPlanoConta->saldo_final;
             }
         }
     }
-    if($bDoExecicio){
-        return $nTotalFinal;
-    }
-    return $nTotalAnterior;
+    db_query("drop table if exists work_pl");
+    db_fim_transacao();
+    return $nTotalFinal;
 }
 
-function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
-    $iSaldoRestosAPagarSemDisponibilidade = 0;
+function getRestosSemDisponilibidade($sFontes, $dtIni, $dtFim, $aInstits) {
+    db_inicio_transacao();
 
-    foreach($aFontes as $sFonte){
-        db_inicio_transacao();
-        $clEmpResto = new cl_empresto();
-        $sSqlOrder = "";
-        $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
-        $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
-        $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
-        $nValorRpPago = 0;
-        foreach($aEmpRestos as $oEmpResto){
-            $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
-        }
-        $nTotalAnterior = getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits);
-        $nSaldo = 0;
-        if($nValorRpPago > $nTotalAnterior){
-            $nSaldo = $nValorRpPago - $nTotalAnterior ;
-        }
-        $iSaldoRestosAPagarSemDisponibilidade += $nSaldo;
-        db_query("drop table if exists work_pl");
-        db_fim_transacao();
+    $clEmpResto = new cl_empresto();
+    $sSqlOrder = "";
+    $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
+    $sSqlWhere = " o15_codtri in ($sFontes) group by 1 ";
+    $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
+
+    $nValorRpPago = 0;
+    foreach($aEmpRestos as $oEmpResto){
+        $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
     }
+
+    $dtIni = db_getsession("DB_anousu")."-01-01";
+    $where = " c61_instit in ({$aInstits})" ;
+    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFontes) ) ";
+    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
+
+    $nTotalAnterior = 0;
+    for($x = 0; $x < pg_numrows($result); $x++){
+        $oPlanoConta = db_utils::fieldsMemory($result, $x);
+        if( ( $oPlanoConta->movimento == "S" )
+            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
+            continue;
+        }
+        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
+            if($oPlanoConta->sinal_anterior == "C"){
+                $nTotalAnterior -= $oPlanoConta->saldo_anterior;
+            }else {
+                $nTotalAnterior += $oPlanoConta->saldo_anterior;
+            }
+        }
+    }
+
+    $iSaldoRestosAPagarSemDisponibilidade = 0;
+    if($nValorRpPago > $nTotalAnterior){
+        $iSaldoRestosAPagarSemDisponibilidade = $nValorRpPago - $nTotalAnterior ;
+    }
+    db_query("drop table if exists work_pl");
+    db_fim_transacao();
     return  $iSaldoRestosAPagarSemDisponibilidade;
 }
 
@@ -353,7 +368,7 @@ ob_start();
 
       <tr style='height:20px;'>
         <?php
-            $nSubTotalC = $fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$fSaldoRP;
+            $nSubTotalC = $fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$nRPInscritosExercicio;
             if(db_getsession("DB_anousu") >= 2021){
                 echo  "<td class='s17 bdleft' colspan='8'>SUBTOTAL (C = A + FUNDEB + B)</td>";
                 echo "<td class='s18'>";
@@ -370,7 +385,7 @@ ob_start();
 
         <?php
             if(db_getsession("DB_anousu") >= 2021){
-                $nSaldoFonteAno = getSaldoPlanoContaFonte("'101'", $dtIni, $dtFim, $instits, true);
+                $nSaldoFonteAno = getSaldoPlanoContaFonte("'101'", $dtini, $dtfim, $instits);
                 $nRPSEMDisponibilidade = $nRPInscritosExercicio - $nSaldoFonteAno;
                 if($nRPSEMDisponibilidade < 0){
                     $nRPSEMDisponibilidade = 0;
@@ -385,7 +400,7 @@ ob_start();
                 echo "</td>";
                 echo "</tr>";
 
-                $nRPAnteriorSEMDisponibilidade = getRestosSemDisponilibidade(array("'101'","'201'"), $dtini, $dtfim, $instits);
+                $nRPAnteriorSEMDisponibilidade = getRestosSemDisponilibidade("'101'", $dtini, $dtfim, $instits);
                 echo "<tr style='height:20px;'>";
                 echo  "<td class='s16 bdleft' colspan='8'>RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE DE CAIXA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)(E)</td>";
                 echo "<td class='s15'>";
