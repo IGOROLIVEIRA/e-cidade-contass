@@ -83,9 +83,6 @@ if (!isset($departamento) || $departamento == 0) {
   $departamento = null;
 }
 
-$elemento = "";
-
-
 $erro = "";
 $clpermusuario_dotacao =  new cl_permusuario_dotacao(
   db_getsession('DB_anousu'),
