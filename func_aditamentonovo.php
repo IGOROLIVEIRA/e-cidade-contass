@@ -1,4 +1,5 @@
 <?php
+require_once("libs/db_utils.php");
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -43,6 +44,30 @@ WHERE ac26_sequencial = {$ac26_sequencial} order by ac20_ordem";
 $oResult = db_query($sql);
 //die($sql);
 $oResult = db_utils::getColectionByRecord($oResult);
+
+$sql = "select ac20_pcmater from acordoitem where ac20_acordoposicao = {$adanterior}";
+$itensAditivoAnterior = db_query($sql);
+$AditivoAnterior = db_query($sql);
+$AditivoAnterior = db_utils::getColectionByRecord($AditivoAnterior);
+$tamanho = count($AditivoAnterior);
+$tamanho - 1;
+
+$itensContrato;
+$itens;
+
+
+
+if ($adanterior == 0) {
+    $sql = "select * from acordoposicao where ac26_acordo = {$ac16_sequencial} and ac26_acordoposicaotipo = 1";
+    $itensContrato = db_query($sql);
+    $itensContrato = db_utils::fieldsMemory($itensContrato, 0);
+    $sql = "select * from acordoitem where ac20_acordoposicao = {$itensContrato->ac26_sequencial}";
+    $itensContrato = db_query($sql);
+    $itens = db_query($sql);
+    $itens = db_utils::getColectionByRecord($itens);
+    $tamanho = count($itens);
+    $tamanho - 1;
+}
 
 ?>
 
@@ -130,11 +155,43 @@ $oResult = db_utils::getColectionByRecord($oResult);
                                 <hr>
                             </td>
                         </tr>
-                        <tr style="margin-top:5px; background: <?php if ($aResult->ac26_acordoposicaotipo == 12) {
-                                                                    echo "#7CFC00";
+
+
+                        <tr style="margin-top:5px; background:  <?php
+
+                                                                $item = false;
+
+                                                                if ($adanterior == 0) {
+
+                                                                    for ($i = 0; $i <= $tamanho; $i++) {
+
+                                                                        $obj = db_utils::fieldsMemory($itensContrato, $i);
+
+                                                                        if (strcmp($obj->ac20_pcmater, $aResult->ac20_pcmater) == 0) {
+
+                                                                            $item = true;
+                                                                        }
+                                                                    }
                                                                 } else {
-                                                                    echo "#e1dede";
-                                                                } ?>; height:10px;">
+
+                                                                    for ($i = 0; $i <= $tamanho; $i++) {
+
+                                                                        $obj = db_utils::fieldsMemory($itensAditivoAnterior, $i);
+
+                                                                        if (strcmp($obj->ac20_pcmater, $aResult->ac20_pcmater) == 0) {
+
+                                                                            $item = true;
+                                                                        }
+                                                                    }
+                                                                }
+
+
+                                                                ?>
+                                                           <?php if ($item == false && $tamanho != 0) {
+                                                                echo "#7CFC00";
+                                                            } else {
+                                                                echo "#e1dede";
+                                                            } ?> ; height:10px;">
                             <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
                             <td><?php echo $aResult->pc01_descrmater; ?> </td>
                             <td><?php echo $aResult->ac20_quantidade; ?> </td>
@@ -157,13 +214,28 @@ $oResult = db_utils::getColectionByRecord($oResult);
 
                     </table>
                 </fieldset>
+
                 <table style='width: 20%; background: #ffffff; margin-right:152px' align="right">
                     <tr style="background: #ffffff; height: 10px;">
                         <td style="height: 25px; font-size:14px; background: #ffffff;"><strong>Valor Total Aditado:</strong></td>
                         <td><? echo "R$" . number_format($valortotaladitado, 2, ',', '.') ?></td>
                     </tr>
                 </table>
+
+
             </form>
+
+            <div style="margin-left: -20%; ">
+                <fieldset style="width: 20%; margin-bottom: 10px; margin-right:152px">
+                    <legend><b>Legenda</b></legend>
+                    <table style='width: 100%; ' align="right">
+                        <tr>
+                            <td style="height: 25px; font-size:14px; background: #7CFC00;"><strong>Itens incluídos</strong></td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+
 </body>
 
 </html>
