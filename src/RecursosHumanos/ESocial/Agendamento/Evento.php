@@ -56,6 +56,13 @@ class Evento
     private $iniValid;
 
     /**
+     * modo
+     *
+     * @var string
+     */
+    private $modo;
+
+    /**
      * Undocumented function
      *
      * @param integer $tipoEvento
@@ -63,7 +70,7 @@ class Evento
      * @param string $responsavelPreenchimento
      * @param \stdClass $dados
      */
-    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid)
+    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo)
     {
         /**
          * @todo pesquisar exite na fila um evento do tipo: $tipoEvento para o : $responsavelPreenchimento
@@ -78,6 +85,7 @@ class Evento
         $this->dado                     = $dado;
         $this->tpAmb                    = $tpAmb;
         $this->iniValid                 = $iniValid;
+        $this->modo                     = $modo;
 
         $dado = json_encode(\DBString::utf8_encode_all($this->dado));
         if (is_null($dado)) {
@@ -103,7 +111,7 @@ class Evento
             throw new \Exception("Erro ao buscar registros do evento para verificação.");
         }
 
-        if (pg_num_rows($rs) > 0) {
+        if (pg_num_rows($rs) > 0 && $this->modo === 'INC') {
             $md5Evento = \db_utils::fieldsMemory($rs, 0)->rh213_md5;
             if ($md5Evento == $this->md5) {
                 throw new \Exception("Já existe um envio do evento S-{$this->tipoEvento} com as mesmas informações.");
@@ -133,12 +141,10 @@ class Evento
         $daoFilaEsocial->rh213_dataprocessamento = date('Y-m-d h:i:s');
 
         if (is_object($dados) || count($dados) > 0) {
-
             $daoFilaEsocial->incluir(null);
             if ($daoFilaEsocial->erro_status == 0) {
                 throw new \Exception("Não foi possível adicionar na fila. \n {$daoFilaEsocial->erro_msg}");
             }
-
         }
     }
 
@@ -163,19 +169,19 @@ class Evento
     }
 
     /**
-     * Retorna dados para envio no formato requerido conforme cada Evento 
+     * Retorna dados para envio no formato requerido conforme cada Evento
      *
      * @param array stdClass
      */
     private function montarDadosAPI()
     {
-        $sNomeClasse = "\ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoS".$this->tipoEvento;
+        $sNomeClasse = "\ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoS" . $this->tipoEvento;
         $evento = new $sNomeClasse($this->dado);
         $evento->setIniValid($this->iniValid);
+        $evento->setModo($this->modo);
         if (!is_object($evento)) {
             throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");
         }
         return $evento->montarDados();
-    }   
-
+    }
 }

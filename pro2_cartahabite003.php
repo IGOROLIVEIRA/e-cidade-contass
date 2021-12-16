@@ -43,8 +43,8 @@ ini_set("error_reporting","E_ALL & ~NOTICE");
 $clagata = new cl_dbagata("projetos/modelo_habite.agt");
 
 $oInstit = new Instituicao(db_getsession('DB_instit'));
-if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO) {
-    $clagata = new cl_dbagata("projetos/modelo_habite_buritizeiro.agt");
+if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO||$oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO) {
+	$clagata = new cl_dbagata("projetos/modelo_habite_novo.agt");
 }
 
 $api     = $clagata->api;
@@ -69,7 +69,7 @@ try {
 }
 
 if($api->parseOpenOffice($oDocumentoTemplate->getArquivoTemplate())){
-
+	
 	$sNomeRelatorio   = "tmp/carta_habite_" . date('YmdHis') . db_getsession("DB_id_usuario") . ".pdf";
 
 	$sComandoConverte = db_stdClass::ex_oo2pdf($sCaminhoSalvoSxw, $sNomeRelatorio);
@@ -80,7 +80,7 @@ if($api->parseOpenOffice($oDocumentoTemplate->getArquivoTemplate())){
 		db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
 
 	} else {
-
+	
 		db_redireciona($sNomeRelatorio);
 
 	}
