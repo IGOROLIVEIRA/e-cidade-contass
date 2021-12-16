@@ -493,11 +493,10 @@ ob_start();
         .ritz .waffle .s15 {
             background-color: #ffffff;
             border-right: 1px SOLID #000000;
-            color: #ff0000;
+            color: #000000;
             direction: ltr;
             font-family: 'Calibri', Arial;
             font-size: 11pt;
-            font-weight: bold;
             padding: 2px 3px 2px 3px;
             text-align: right;
             vertical-align: bottom;
@@ -1398,7 +1397,7 @@ ob_start();
                     </tr>
                     <?php
                     $fTotalDeducoes = 0;
-                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '491%'");
+                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '491111%'");
                     foreach ($aDadoDeducao as $oDeducao) {
                     ?>
                         <tr style='height:20px;'>
@@ -1413,7 +1412,7 @@ ob_start();
                             </td>
                         </tr>
                     <?php }
-                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '492%'");
+                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '492111%'");
                     foreach ($aDadoDeducao as $oDeducao) {
                     ?>
                         <tr style='height:20px;'>
@@ -1428,7 +1427,7 @@ ob_start();
                             </td>
                         </tr>
                     <?php }
-                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '493%'");
+                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '493111%'");
                     foreach ($aDadoDeducao as $oDeducao) {
                     ?>
                         <tr style='height:20px;'>
@@ -1443,7 +1442,7 @@ ob_start();
                             </td>
                         </tr>
                     <?php }
-                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '498%'");
+                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '498111%'");
                     foreach ($aDadoDeducao as $oDeducao) {
                     ?>
                         <tr style='height:20px;'>
@@ -1458,7 +1457,7 @@ ob_start();
                             </td>
                         </tr>
                     <?php }
-                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '499%'");
+                    $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '499111%'");
                     foreach ($aDadoDeducao as $oDeducao) {
                     ?>
                         <tr style='height:20px;'>

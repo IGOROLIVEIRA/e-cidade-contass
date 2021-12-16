@@ -59,75 +59,9 @@ criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 
 $nRPInscritosExercicio = 0;
 
-function getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits){
-    db_inicio_transacao();
 
-    $where = " c61_instit in ({$aInstits})" ;
-    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFonte) ) ";
-    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
-    $nTotalFinal = 0;
-    for($x = 0; $x < pg_numrows($result); $x++){
-        $oPlanoConta = db_utils::fieldsMemory($result, $x);
-        if( ( $oPlanoConta->movimento == "S" )
-            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
-            continue;
-        }
-        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
-            if($oPlanoConta->saldo_final == "C"){
-                $nTotalFinal -= $oPlanoConta->saldo_final;
-            }else {
-                $nTotalFinal += $oPlanoConta->saldo_final;
-            }
-        }
-    }
-    db_query("drop table if exists work_pl");
-    db_fim_transacao();
-    return $nTotalFinal;
-}
 
-function getRestosSemDisponilibidade($sFontes, $dtIni, $dtFim, $aInstits) {
-    db_inicio_transacao();
 
-    $clEmpResto = new cl_empresto();
-    $sSqlOrder = "";
-    $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
-    $sSqlWhere = " o15_codtri in ($sFontes) group by 1 ";
-    $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
-
-    $nValorRpPago = 0;
-    foreach($aEmpRestos as $oEmpResto){
-        $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
-    }
-
-    $dtIni = db_getsession("DB_anousu")."-01-01";
-    $where = " c61_instit in ({$aInstits})" ;
-    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFontes) ) ";
-    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
-
-    $nTotalAnterior = 0;
-    for($x = 0; $x < pg_numrows($result); $x++){
-        $oPlanoConta = db_utils::fieldsMemory($result, $x);
-        if( ( $oPlanoConta->movimento == "S" )
-            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
-            continue;
-        }
-        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
-            if($oPlanoConta->sinal_anterior == "C"){
-                $nTotalAnterior -= $oPlanoConta->saldo_anterior;
-            }else {
-                $nTotalAnterior += $oPlanoConta->saldo_anterior;
-            }
-        }
-    }
-
-    $iSaldoRestosAPagarSemDisponibilidade = 0;
-    if($nValorRpPago > $nTotalAnterior){
-        $iSaldoRestosAPagarSemDisponibilidade = $nValorRpPago - $nTotalAnterior ;
-    }
-    db_query("drop table if exists work_pl");
-    db_fim_transacao();
-    return  $iSaldoRestosAPagarSemDisponibilidade;
-}
 
 /**
  * mPDF
