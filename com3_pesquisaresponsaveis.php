@@ -77,12 +77,15 @@ db_fieldsmemory($result, 0);
     background-color: #999999;
 }
 .bordas_corp{
-    border: 1px solid #cccccc;
+    border: 0px solid #cccccc;
     border-top-color: #999999;
     border-right-color: #999999;
     border-left-color: #999999;
     border-bottom-color: #999999;
     background-color: #cccccc;
+}
+.config1{
+    background-color: #ffffff;
 }
 </style>
   </head>
@@ -135,21 +138,25 @@ db_fieldsmemory($result, 0);
                 <?
           }
           $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l20_codigo and pc50_pctipocompratribunal in (100,101,102,103)"));
-
+          $op = 0;
             if ($clliclicita->numrows > 0) {
-
+              
               $sql = $clliccomissaocgm->sql_query_file(null,"
 l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm),
                case
                when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento de dispensa ou inexigibilidade'
-               when l31_tipo::varchar = '2' then '2-Cotação de preços'
+               when l31_tipo::varchar = '2' then '4-Ratificação'
                when l31_tipo::varchar = '3' then '3-Informação de existência de recursos orçamentários'
                when l31_tipo::varchar = '4' then '4-Ratificação'
                when l31_tipo::varchar = '5' then '5-Publicação em órgão oficial'
                when l31_tipo::varchar = '6' then '6-Parecer Jurídico'
                when l31_tipo::varchar = '7' then '7-Parecer (outros)'
+               when l31_tipo::varchar = '8' then '5-Publicação em órgão oficial'
                end as l31_tipo
-                ",null,"l31_licitacao=$l20_codigo");
+                ",null,"l31_licitacao=$l20_codigo order by Cast(l31_tipo as numeric) ASC");
+
+                $sql2 = "Select *, (select z01_nome from cgm where z01_numcgm = l200_numcgm)as nome from parecerlicitacao where l200_licitacao = $l20_codigo";
+                $op = 1;
 
           }else {
 
@@ -171,7 +178,7 @@ l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numc
                when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
                when l31_tipo::varchar = '9' then '9-Avaliação de Bens'
    end as l31_tipo",
-                  "", "l31_licitacao =  $l20_codigo");
+                  "", "l31_licitacao =  $l20_codigo order by Cast(l31_tipo as numeric) ASC");
           }else{
 
                 $campos = "l30_codigo,l30_data,l30_portaria,l30_datavalid,l30_tipo";
@@ -185,16 +192,170 @@ l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numc
                when l31_tipo::varchar = '5' then '5-Condução do procedimento licitatório'
                when l31_tipo::varchar = '6' then '6-Homologação'
                when l31_tipo::varchar = '7' then '7-Adjudicação'
-               when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
+               when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial' 
+               when l31_tipo::varchar = '10' then '10-Orçamento de obra/serviço'
    end as l31_tipo",
-                    "", "l31_licitacao =  $l20_codigo");
+                    "", "l31_licitacao =  $l20_codigo order by Cast(l31_tipo as numeric) ASC");
 
             }
-
+            
 
             }
-           db_lovrot(@$sql,15,"","","");
+           //db_lovrot(@$sql,15,"","","");
+           
+            $sql1 = "select *, (select z01_nome from cgm where z01_numcgm = si01_numcgmcotacao)as nomeCotacao, (select z01_nome from cgm where z01_numcgm = si01_numcgmorcamento)as nomeOrca from precoreferencia 
+            where si01_processocompra = (select pc81_codproc from pcprocitem 
+            where pc81_codprocitem = (select max(l21_codpcprocitem) from liclicitem 
+            where l21_codliclicita = $l20_codigo));";
+           $result = db_query($sql);
+           $result1 = db_query($sql1);
+           $rsResult1 = db_utils::fieldsMemory($result1,0);
           ?>
+          <table border='' class="bordas_corp">
+          <tr>
+            <th>Codigo Sequencial</th>
+            <th>Numcmg Participante </th>
+            <th>Nome/Razão Social</th>
+            <th>Tipo</th>
+          </tr>
+         
+          <?php
+          $op1 = 0;
+          $apre = 0;
+          for ($i = 0; $i < pg_num_rows($result); $i++) {
+            $rsResult = db_utils::fieldsMemory($result, $i);
+            
+
+            if($i==1){
+                if($op==1){
+                    if($rsResult1->si01_numcgmcotacao!=""&&$rsResult1->si01_numcgmorcamento!=""){
+                        echo" <tr class='config1'>";
+                        echo"<td>".$rsResult1->si01_sequencial."</td>";
+                        echo"<td>".$rsResult1->si01_numcgmcotacao."</td>";
+                        echo"<td>".$rsResult1->nomecotacao."</td>";
+                        echo"<td>2-Pesquisa de preços </td>";
+                        echo" </tr>";
+
+                        echo" <tr class=''>";
+                        echo"<td>".$rsResult1->si01_sequencial."</td>";
+                        echo"<td>".$rsResult1->si01_numcgmorcamento."</td>";
+                        echo"<td>".$rsResult1->nomeorca."</td>";
+                        echo"<td>3-Informação de existência de recursos orçamentários </td>";  
+                        echo" </tr>"; 
+                    }
+                }
+            }
+            
+            if($i==2){
+                if($op==1){
+                
+                }else{
+                    if($rsResult1->si01_numcgmcotacao!=""&&$rsResult1->si01_numcgmorcamento!=""){
+                        echo" <tr class='config1'>";
+                        echo"<td>".$rsResult1->si01_sequencial."</td>";
+                        echo"<td>".$rsResult1->si01_numcgmcotacao."</td>";
+                        echo"<td>".$rsResult1->nomecotacao."</td>";
+                        echo"<td>".$rsResult1->si01_tipocotacao."-Pesquisa de preços </td>";
+                        echo" </tr>";
+    
+                        echo" <tr class=''>";
+                        echo"<td>".$rsResult1->si01_sequencial."</td>";
+                        echo"<td>".$rsResult1->si01_numcgmorcamento."</td>";
+                        echo"<td>".$rsResult1->nomeorca."</td>";
+                        echo"<td>".$rsResult1->si01_tipoorcamento."-Informação de existência de recursos orçamentários </td>";  
+                        echo" </tr>";
+                    }
+                }
+                
+             }
+ 
+            if($i%2==0){
+                echo" <tr class='config1'>";
+            }else{
+                echo" <tr class=''>";
+            }
+                echo"<td>".$rsResult->l31_codigo."</td>";
+                echo"<td>".$rsResult->l31_numcgm."</td>";
+                echo"<td>".$rsResult->z01_nome."</td>";
+                echo"<td>".$rsResult->l31_tipo."</td>";
+                echo" </tr>";
+            if($i==2){   
+                if($op==1){
+                
+                    $result2 = db_query($sql2);
+                    for ($j = 0; $j < pg_num_rows($result2); $j++) {
+                        $rsResult2 = db_utils::fieldsMemory($result2, $j);
+                        if($rsResult2->l200_tipoparecer==2){
+                            
+                            echo" <tr class=''>";
+                            echo"<td>".$rsResult2->l200_sequencial."</td>";
+                            echo"<td>".$rsResult2->l200_numcgm."</td>";
+                            echo"<td>".$rsResult2->nome."</td>";
+                            echo"<td>6-Parecer Jurídico </td>";
+                            echo" </tr>";
+    
+                        }
+                        if($rsResult2->l200_tipoparecer==1 || $rsResult2->l200_tipoparecer==3 || $rsResult2->l200_tipoparecer==4){
+                            if($op1==0){
+                                echo" <tr class=''>";
+                                echo"<td>".$rsResult2->l200_sequencial."</td>";
+                                echo"<td>".$rsResult2->l200_numcgm."</td>";
+                                echo"<td>".$rsResult2->nome."</td>";
+                                echo"<td>7-Parecer (outros) </td>";
+                                echo" </tr>";
+                                $op1 = 1;
+                            }
+                        }
+                    }
+                    $op==0;
+                }
+            }
+            $apre++;  
+          }
+          if($apre==1){
+            echo" <tr class=''>";
+            echo"<td>".$rsResult1->si01_sequencial."</td>";
+            echo"<td>".$rsResult1->si01_numcgmcotacao."</td>";
+            echo"<td>".$rsResult1->nomecotacao."</td>";
+            echo"<td>2-Pesquisa de preços </td>";
+            echo" </tr>";
+
+            echo" <tr class='config1'>";
+            echo"<td>".$rsResult1->si01_sequencial."</td>";
+            echo"<td>".$rsResult1->si01_numcgmorcamento."</td>";
+            echo"<td>".$rsResult1->nomeorca."</td>";
+            echo"<td>3-Informação de existência de recursos orçamentários </td>";  
+            echo" </tr>";
+            
+            $result2 = db_query($sql2);
+                    for ($j = 0; $j < pg_num_rows($result2); $j++) {
+                        $rsResult2 = db_utils::fieldsMemory($result2, $j);
+                        if($rsResult2->l200_tipoparecer==2){
+                            
+                            echo" <tr class=''>";
+                            echo"<td>".$rsResult2->l200_sequencial."</td>";
+                            echo"<td>".$rsResult2->l200_numcgm."</td>";
+                            echo"<td>".$rsResult2->nome."</td>";
+                            echo"<td>6-Parecer Jurídico </td>";
+                            echo" </tr>";
+    
+                        }
+                        if($rsResult2->l200_tipoparecer==1 || $rsResult2->l200_tipoparecer==3 || $rsResult2->l200_tipoparecer==4){
+                            if($op1==0){
+                                echo" <tr class=''>";
+                                echo"<td>".$rsResult2->l200_sequencial."</td>";
+                                echo"<td>".$rsResult2->l200_numcgm."</td>";
+                                echo"<td>".$rsResult2->nome."</td>";
+                                echo"<td>7-Parecer (outros) </td>";
+                                echo" </tr>";
+                                $op1 = 1;
+                            }
+                        }
+                    }
+          }
+          
+          ?>
+          </table>
           </fieldset>
         </div>
   </body>
