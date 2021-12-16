@@ -225,7 +225,9 @@ if ($adanterior == 0) {
 
             </form>
 
-            <div style="margin-left: -20%; ">
+            <div style="margin-left: -20%; <?php if (strcmp($oResult[0]->tipoaditivo, "12-Alteração de Projeto/Especificação") != 0) {
+                                                echo "display: none;";
+                                            } ?>">
                 <fieldset style="width: 20%; margin-bottom: 10px; margin-right:152px">
                     <legend><b>Legenda</b></legend>
                     <table style='width: 100%; ' align="right">
