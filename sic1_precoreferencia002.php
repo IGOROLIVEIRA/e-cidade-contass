@@ -5,14 +5,18 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_precoreferencia_classe.php");
 include("classes/db_itemprecoreferencia_classe.php");
+include("classes/db_liccomissaocgm_classe.php");
 include("dbforms/db_funcoes.php");
 $oPost = db_utils::postMemory($_POST);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clprecoreferencia = new cl_precoreferencia;
 $clitemprecoreferencia = new cl_itemprecoreferencia;
+$clliccomissaocgm      = new cl_liccomissaocgm();
 $db_opcao = 22;
 $db_botao = false;
+
+
 
 if (isset($imprimir)) {
 
@@ -60,10 +64,14 @@ if (isset($imprimirword)) {
 }
 
 if (isset($alterar)) {
+    $clprecoreferencia->si01_tipoCotacao  = 3;
+    $clprecoreferencia->si01_tipoOrcamento  = 4;
+    $clprecoreferencia->si01_numcgmCotacao = $respCotacaocodigo;
+    $clprecoreferencia->si01_numcgmOrcamento = $respOrcacodigo;
     db_inicio_transacao();
     $db_opcao = 2;
     $clprecoreferencia->si01_justificativa = $si01_justificativa;
-
+   
     /**
      * Atualização do valor dos itens do preço referência
      */

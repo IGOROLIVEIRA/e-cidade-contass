@@ -8,8 +8,9 @@ include("classes/db_parecerlicitacao_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_liclicitasituacao_classe.php");
 include("classes/db_liclicita_classe.php");
+
 db_postmemory($HTTP_POST_VARS);
-$clparecerlicitacao = new cl_parecerlicitacao;
+$clparecerlicitacao = new cl_parecerlicitacao; 
 $pctipocompra = new cl_pctipocompra();
 $db_opcao = 1;
 $db_botao = true;
