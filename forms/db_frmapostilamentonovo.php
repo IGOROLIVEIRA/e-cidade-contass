@@ -5,34 +5,41 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 ?>
-<fieldset   style="width: 60%; margin-left:10px; margin-top: 25px;">
+<fieldset style="width: 60%; margin-left:10px; margin-top: 25px;">
     <legend><b>Apostilamento</b></legend>
     <form name="form1" method="post" action="">
 
         <table border="0" style="margin-right: 10px">
             <tr>
-                <td title="<?=@$Tac16_sequencial?>">
-                    <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);",$db_opcao); ?>
+                <td title="<?= @$Tac16_sequencial ?>">
+                    <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
                 </td>
                 <td>
                     <?
-                    db_input('ac16_sequencial',5,$Iac16_sequencial,true,'text',
-                        $db_opcao," onchange='js_pesquisaac16_sequencial(false);'");
+                    db_input(
+                        'ac16_sequencial',
+                        5,
+                        $Iac16_sequencial,
+                        true,
+                        'text',
+                        $db_opcao,
+                        " onchange='js_pesquisaac16_sequencial(false);'"
+                    );
                     ?>
                     <?
-                    db_input('ac16_resumoobjeto',40,$Iac16_resumoobjeto,true,'text',3);
+                    db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
                     ?>
                 </td>
 
-                <td title="<?=@$Tsi03_dataassinacontrato?>">
-                    <?=@$Lsi03_dataassinacontrato?>
+                <td title="<?= @$Tsi03_dataassinacontrato ?>">
+                    <?= @$Lsi03_dataassinacontrato ?>
                     <?
                     db_inputdata('si03_dataassinacontrato', @$si03_dataassinacontrato_dia, @$si03_dataassinacontrato_mes, @$si03_dataassinacontrato_ano, true, 'text', 3, "")
                     ?>
                 </td>
             </tr>
             <tr>
-                <td title="<?=@$Tsi03_numapostilamento?>">
+                <td title="<?= @$Tsi03_numapostilamento ?>">
                     <?= @$Lsi03_numapostilamento ?>
                 </td>
                 <td>
@@ -40,7 +47,7 @@ $clrotulo->label("ac16_resumoobjeto");
                     db_input('si03_numapostilamento', 2, $Isi03_numapostilamento, true, 'text', $db_opcao, "")
                     ?>
 
-                    <?=@$Lsi03_dataapostila ?>
+                    <?= @$Lsi03_dataapostila ?>
 
                     <?
                     db_inputdata('si03_dataapostila', @$si03_dataapostila_dia, @$si03_dataapostila_mes, @$si03_dataapostila_ano, true, 'text', $db_opcao, "")
@@ -48,7 +55,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
             </tr>
             <tr>
-                <td nowrap >
+                <td nowrap>
                     <?= @$Lsi03_tipoapostila ?>
                 </td>
                 <td>
@@ -101,7 +108,7 @@ $clrotulo->label("ac16_resumoobjeto");
                                 <td>
                                     <? db_input('datainicial', 10, 0, true, 'text', 3, "") ?>
                                 </td>
-                                <td><label class="bold" >Final:<label></td>
+                                <td><label class="bold">Final:<label></td>
                                 <td>
                                     <? db_input('datafinal', 10, 0, true, 'text', 3, "") ?>
                                 </td>
@@ -121,8 +128,8 @@ $clrotulo->label("ac16_resumoobjeto");
                                 <td>
                                     <? db_input('valororiginal', 14, 0, true, 'text', 3, "") ?>
                                 </td>
-                                <td><label class="bold" >Valor Atual:</label></td>
-                                <td >
+                                <td><label class="bold">Valor Atual:</label></td>
+                                <td>
                                     <? db_input('valoratual', 14, 0, true, 'text', 3, "") ?>
                                 </td>
                             </tr>
@@ -146,14 +153,13 @@ $clrotulo->label("ac16_resumoobjeto");
 </table>
 <input type='button' disabled id='btnSalvar' value='Salvar' onclick="apostilar();">
 <script>
-
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
     aItensPosicao = new Array();
     oGridItens = new DBGrid('oGridItens');
     oGridItens.nameInstance = 'oGridItens';
     oGridItens.setCheckbox(0);
-    oGridItens.setCellAlign(['center', 'left', "right", "right","right", "right", "center", "right", "center", "center", "center", "center", "center"]);
-    oGridItens.setCellWidth(["3%","25%","8%","8%"]);
+    oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
+    oGridItens.setCellWidth(["3%", "25%", "8%", "8%"]);
     oGridItens.setHeader(["Cód", "Item", "Qtde Anterior", "Vl Unit Anterior", "Quantidade", "Vl Unitário", "Vl Total", "Vl Apostilado", "Qt Aditada", "Dotações", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
     oGridItens.aHeaders[9].lDisplayed = false;
@@ -173,6 +179,7 @@ $clrotulo->label("ac16_resumoobjeto");
             }
         }
     }
+
     function js_mostraliclicita(chave, erro) {
         document.form1.l20_codigo.value = chave;
         if (erro == true) {
@@ -180,19 +187,22 @@ $clrotulo->label("ac16_resumoobjeto");
             document.form1.si03_licitacao.value = '';
         }
     }
+
     function js_mostraliclicita1(chave1, chave2, chave3) {
         document.form1.si03_licitacao.value = chave1;
         document.form1.l20_edital.value = chave2 + '/' + chave3;
         db_iframe_liclicita.hide();
     }
+
     function js_pesquisa() {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_apostilamento', 'func_apostilamentonovo.php?funcao_js=parent.js_preenchepesquisa|si03_sequencial', 'Pesquisa', true);
     }
+
     function js_preenchepesquisa(chave) {
         db_iframe_apostilamento.hide();
         <?
-        if($db_opcao!=1){
-            echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
+        if ($db_opcao != 1) {
+            echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
         }
         ?>
     }
@@ -218,7 +228,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             if ($('ac16_sequencial').value != '') {
 
-                var sUrl = 'func_acordonovo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
+                var sUrl = 'func_acordonovo.php?descricao=true&pesquisa_chave=' + $('ac16_sequencial').value +
                     '&funcao_js=parent.js_mostraacordo';
 
                 js_OpenJanelaIframe('top.corpo',
@@ -235,19 +245,19 @@ $clrotulo->label("ac16_resumoobjeto");
     /**
      * Retorno da pesquisa acordos
      */
-    function js_mostraacordo(chave1,chave2,chave3,erro) {
+    function js_mostraacordo(chave1, chave2, chave3, erro) {
 
         if (erro == true) {
 
-            $('ac16_sequencial').value   = '';
+            $('ac16_sequencial').value = '';
             $('ac16_resumoobjeto').value = chave1;
             $('si03_dataassinacontrato').value = '';
             $('ac16_sequencial').focus();
         } else {
 
-            $('ac16_sequencial').value   = chave1;
+            $('ac16_sequencial').value = chave1;
             $('ac16_resumoobjeto').value = chave2;
-            $('si03_dataassinacontrato').value = chave3.substr(8, 2)+'/'+chave3.substr(5, 2)+'/'+chave3.substr(0, 4);
+            $('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
             pesquisarDadosAcordo(chave1);
         }
     }
@@ -255,11 +265,11 @@ $clrotulo->label("ac16_resumoobjeto");
     /**
      * Retorno da pesquisa acordos
      */
-    function js_mostraacordo1(chave1,chave2,chave3) {
-        $('ac16_sequencial').value    = chave1;
-        $('ac16_resumoobjeto').value  = chave2;
+    function js_mostraacordo1(chave1, chave2, chave3) {
+        $('ac16_sequencial').value = chave1;
+        $('ac16_resumoobjeto').value = chave2;
 
-        $('si03_dataassinacontrato').value  = chave3.substr(8, 2)+'/'+chave3.substr(5, 2)+'/'+chave3.substr(0, 4);
+        $('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
         pesquisarDadosAcordo(chave1);
         db_iframe_acordo.hide();
     }
@@ -277,29 +287,29 @@ $clrotulo->label("ac16_resumoobjeto");
             iAcordo: iAcordo
         }
 
-        new AjaxRequest(sUrlRpc, oParam, function (oRetorno, lErro) {
+        new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
-            if (lErro) {
-                return alert(oRetorno.message.urlDecode());
-            }
+                if (lErro) {
+                    return alert(oRetorno.message.urlDecode());
+                }
 
-            $('btnSalvar').disabled = false;
+                $('btnSalvar').disabled = false;
 
-            $('valororiginal').value = js_formatar(oRetorno.valores.valororiginal, "f");
-            $('valoratual').value    = js_formatar(oRetorno.valores.valoratual, "f");
+                $('valororiginal').value = js_formatar(oRetorno.valores.valororiginal, "f");
+                $('valoratual').value = js_formatar(oRetorno.valores.valoratual, "f");
 
-            $('datainicial').value = oRetorno.datainicial;
-            $('datafinal').value   = oRetorno.datafinal;
-            $('si03_numapostilamento').value = oRetorno.seqapostila;
+                $('datainicial').value = oRetorno.datainicial;
+                $('datafinal').value = oRetorno.datafinal;
+                $('si03_numapostilamento').value = oRetorno.seqapostila;
 
-            aItensPosicao = oRetorno.itens;
-            preencheItens(aItensPosicao);
+                aItensPosicao = oRetorno.itens;
+                preencheItens(aItensPosicao);
 
-            /*aItensPosicao.each(function (oItem, iLinha) {
-                me.salvarInfoDotacoes(iLinha);
-            });*/
+                /*aItensPosicao.each(function (oItem, iLinha) {
+                    me.salvarInfoDotacoes(iLinha);
+                });*/
 
-        }).setMessage("Aguarde, pesquisando acordos.")
+            }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
     }
 
@@ -307,7 +317,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         oGridItens.clearAll(true);
 
-        aItens.each(function (oItem, iSeq) {
+        aItens.each(function(oItem, iSeq) {
 
             var aLinha = new Array();
             var iTipoApostila = $("si03_tipoapostila").value;
@@ -336,7 +346,7 @@ $clrotulo->label("ac16_resumoobjeto");
             if (iTipoAltApostila != 3) {
                 oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
                 oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3)");
-                oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); calculaValorTotal(" + iSeq + ");CalcularValorApostilado("+ iSeq +")");
+                oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); calculaValorTotal(" + iSeq + ");CalcularValorApostilado(" + iSeq + ")");
             }
 
             aLinha[5] = oInputUnitario.toInnerHtml();
@@ -369,7 +379,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
                 oItem.dotacoesoriginal = new Array();
 
-                oItem.dotacoes.forEach(function (oDotacaoOriginal) {
+                oItem.dotacoes.forEach(function(oDotacaoOriginal) {
                     oItem.dotacoesoriginal.push({
                         dotacao: oDotacaoOriginal.dotacao,
                         quantidade: oDotacaoOriginal.quantidade,
@@ -410,11 +420,11 @@ $clrotulo->label("ac16_resumoobjeto");
         var aLinha = oGridItens.aRows[iLinha],
             nValorAnterior = aLinha.aCells[4].getValue().getNumber();
         nQuantidade = aLinha.aCells[5].getValue().getNumber(),
-        nUnitario = aLinha.aCells[6].getValue().getNumber();
+            nUnitario = aLinha.aCells[6].getValue().getNumber();
 
         var valorapostilado = (nQuantidade * nValorAnterior) - (nQuantidade * nUnitario);
 
-        if((nUnitario == 0) || (nUnitario = undefined)){
+        if ((nUnitario == 0) || (nUnitario = undefined)) {
             valorapostilado = 0;
         }
 
@@ -461,8 +471,7 @@ $clrotulo->label("ac16_resumoobjeto");
         sContent += "    </tr>";
         sContent += "  </table>";
         sContent += "</fieldset>";
-        sContent += "  <input type='button' value='Adicionar' id='btnSalvarDotacao'>";
-        ;
+        sContent += "  <input type='button' value='Adicionar' id='btnSalvarDotacao'>";;
         sContent += "  <fieldset style=\"margin-top: 5px;\">";
         sContent += "    <div id='cntgridDotacoes'></div>";
         sContent += "  </fieldset>";
@@ -475,11 +484,11 @@ $clrotulo->label("ac16_resumoobjeto");
             oDadosItem.aCells[5].getValue() + "</b>)",
             $('windowwndDotacoesItem_content'));
 
-        windowDotacaoItem.setShutDownFunction(function () {
+        windowDotacaoItem.setShutDownFunction(function() {
             windowDotacaoItem.destroy();
         });
 
-        $('btnSalvarDotacao').observe("click", function () {
+        $('btnSalvarDotacao').observe("click", function() {
             saveDotacao(iLinha)
         });
 
@@ -519,7 +528,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oGridDotacoes.clearAll(true);
 
         nValorTotal = 0;
-        aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
+        aItensPosicao[iLinha].dotacoes.each(function(oDotacao, iDot) {
 
             var oValorDotacao = new DBTextField("valordot" + iDot, "valordot" + iDot, js_formatar(oDotacao.valor, "f"));
             oValorDotacao.addStyle("width", "100%");
@@ -555,17 +564,17 @@ $clrotulo->label("ac16_resumoobjeto");
     function atualizarItemDotacao(iLinha, iDotacao, oValor) {
 
         aItensPosicao[iLinha].dotacoes[iDotacao].valor = oValor.value.getNumber();
-        aItensPosicao[iLinha].dotacoes[iDotacao].quantidade = js_round((oValor.value.getNumber()/aItensPosicao[iLinha].valorunitario), 2);
+        aItensPosicao[iLinha].dotacoes[iDotacao].quantidade = js_round((oValor.value.getNumber() / aItensPosicao[iLinha].valorunitario), 2);
 
         nValorTotal = 0;
         var nQuantTotal = 0;
-        aItensPosicao[iLinha].dotacoes.each(function (oDotacao) {
+        aItensPosicao[iLinha].dotacoes.each(function(oDotacao) {
             nValorTotal += oDotacao.valor;
             nQuantTotal += oDotacao.quantidade;
         });
 
         if (nQuantTotal > aItensPosicao[iLinha].quantidade) {
-            aItensPosicao[iLinha].dotacoes[iDotacao].quantidade -= (nQuantTotal - aItensPosicao[iLinha].quantidade) ;
+            aItensPosicao[iLinha].dotacoes[iDotacao].quantidade -= (nQuantTotal - aItensPosicao[iLinha].quantidade);
         }
 
         $('TotalForCol1').innerHTML = js_formatar(nValorTotal, 'f');
@@ -611,25 +620,25 @@ $clrotulo->label("ac16_resumoobjeto");
             valororiginal: nValor
         };
 
-        oDotacao.quantidade = js_round((nValor/aItensPosicao[iLinha].valorunitario), 2);
+        oDotacao.quantidade = js_round((nValor / aItensPosicao[iLinha].valorunitario), 2);
         nValorTotal = nValor;
         var nQuantTotal = 0;
-        aItensPosicao[iLinha].dotacoes.each(function (oDotacao) {
+        aItensPosicao[iLinha].dotacoes.each(function(oDotacao) {
             nValorTotal += oDotacao.valor;
             nQuantTotal += oDotacao.quantidade;
         });
 
-        if (nValorTotal > (aItensPosicao[iLinha].quantidade*aItensPosicao[iLinha].valorunitario)) {
+        if (nValorTotal > (aItensPosicao[iLinha].quantidade * aItensPosicao[iLinha].valorunitario)) {
             alert("Valor Dotações maior que valor do item.");
             return false;
         }
 
         if (nQuantTotal > aItensPosicao[iLinha].quantidade) {
-            oDotacao.quantidade -= (nQuantTotal - aItensPosicao[iLinha].quantidade) ;
+            oDotacao.quantidade -= (nQuantTotal - aItensPosicao[iLinha].quantidade);
         }
 
         var lInserir = true;
-        aItensPosicao[iLinha].dotacoes.forEach(function (oDotacaoItem) {
+        aItensPosicao[iLinha].dotacoes.forEach(function(oDotacaoItem) {
 
             if (oDotacaoItem.dotacao == oDotacao.dotacao) {
                 lInserir = false;
@@ -655,8 +664,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oParam.iDotacao = iDotacao;
         js_divCarregando('Aguarde, pesquisando saldo Dotações', 'msgBox');
         var oAjax = new Ajax.Request(
-            "con4_contratos.RPC.php",
-            {
+            "con4_contratos.RPC.php", {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
                 onComplete: retornoGetSaldotacao
@@ -696,11 +704,11 @@ $clrotulo->label("ac16_resumoobjeto");
         /**
          * Soma o valor original total
          */
-        aItensPosicao[iLinha].dotacoes.each(function (oDotacao) {
+        aItensPosicao[iLinha].dotacoes.each(function(oDotacao) {
             nValorTotalAnterior += +oDotacao.valororiginal;
         });
 
-        aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
+        aItensPosicao[iLinha].dotacoes.each(function(oDotacao, iDot) {
 
             var nPercentual = (nValorTotalAnterior == 0) ? 0 : (new Number(oDotacao.valororiginal) * 100) / nValorTotalAnterior;
             var nValorDotacao = js_round((nValorTotalItem * nPercentual) / 100, 2);
@@ -795,7 +803,7 @@ $clrotulo->label("ac16_resumoobjeto");
             return alert("Obrigatório informar a descrição da Apostila.");
         }
 
-        oGridItens.getRows().forEach(function (oRow) {
+        oGridItens.getRows().forEach(function(oRow) {
 
             if (oRow.isSelected) {
                 oSelecionados[oRow.aCells[9].getValue()] = oRow;
@@ -808,11 +816,11 @@ $clrotulo->label("ac16_resumoobjeto");
         }
 
         var oApostila = new Object();
-        oApostila.dataapostila          = $("si03_dataapostila").value;
-        oApostila.tipoapostila          = $("si03_tipoapostila").value;
-        oApostila.descrapostila         = encodeURIComponent(tagString($("si03_descrapostila").value));
+        oApostila.dataapostila = $("si03_dataapostila").value;
+        oApostila.tipoapostila = $("si03_tipoapostila").value;
+        oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
-        oApostila.numapostilamento      = $("si03_numapostilamento").value;
+        oApostila.numapostilamento = $("si03_numapostilamento").value;
 
         var oParam = {
             exec: "processarApostilamento",
@@ -825,7 +833,7 @@ $clrotulo->label("ac16_resumoobjeto");
         };
 
         var lAditar = true;
-        aItensPosicao.forEach(function (oItem, iIndice) {
+        aItensPosicao.forEach(function(oItem, iIndice) {
 
             if (!lAditar) {
                 return false;
@@ -833,7 +841,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             var oItemAdicionar = {};
             var valoranterior = (oItem.qtdeanterior * oItem.vlunitanterior);
-            var valoratual =(oItem.quantidade * oItem.valorunitario);
+            var valoratual = (oItem.quantidade * oItem.valorunitario);
             var valorApostiladoReal = valoranterior - valoratual;
 
             oItemAdicionar.codigo = oItem.codigo;
@@ -863,7 +871,7 @@ $clrotulo->label("ac16_resumoobjeto");
                  */
                 var nValorDotacao = Number(0);
 
-                oItem.dotacoes.forEach(function (oDotacao) {
+                oItem.dotacoes.forEach(function(oDotacao) {
 
                     /**
                      * Removido validacao de inclusao de dotacao zerada conforme solicitado na OC 3855
@@ -896,43 +904,44 @@ $clrotulo->label("ac16_resumoobjeto");
             return false;
         }
 
-        new AjaxRequest(sUrlRpc, oParam, function (oRetorno, lErro) {
+        new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
-            if (lErro) {
-                return alert(oRetorno.message.urlDecode());
-            }
+                if (lErro) {
+                    return alert(oRetorno.message.urlDecode());
+                }
 
-            alert("Apostilamento realizado com sucesso.");
-            js_limparCampos();
-            js_pesquisaac16_sequencial(true);
-        }).setMessage("Aguarde, apostilando contrato.")
+                alert("Apostilamento realizado com sucesso.");
+                js_limparCampos();
+                js_pesquisaac16_sequencial(true);
+            }).setMessage("Aguarde, apostilando contrato.")
             .execute();
     }
 
     function js_changeTipoApostila(iTipo) {
-        aItensPosicao.forEach(function (oItem, iIndice) {
+        aItensPosicao.forEach(function(oItem, iIndice) {
 
-        if (iTipo == "03") {
-            $("si03_tipoalteracaoapostila").value = 3;
-            document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = true;
-            document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = true;
-            document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = false;
-            document.getElementById('valorunitario'+iIndice).addClassName('readonly');
-            document.getElementById('valorunitario'+iIndice).readOnly = true;
-        } else {
-            $("si03_tipoalteracaoapostila").value = 1;
-            document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = false;
-            document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = false;
-            document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = true;
-        }
+            if (iTipo == "03") {
+                $("si03_tipoalteracaoapostila").value = 3;
+                document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = true;
+                document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = true;
+                document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = false;
+                document.getElementById('valorunitario' + iIndice).addClassName('readonly');
+                document.getElementById('valorunitario' + iIndice).readOnly = true;
+            } else {
+                $("si03_tipoalteracaoapostila").value = 1;
+                document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = false;
+                document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = false;
+                document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = true;
+            }
 
-        if(iTipo =="01" || iTipo =="02"){
-            document.getElementById('valorunitario'+iIndice).removeClassName('readonly');
-            document.getElementById('valorunitario'+iIndice).readOnly = false;
-        }
+            if (iTipo == "01" || iTipo == "02") {
+                document.getElementById('valorunitario' + iIndice).removeClassName('readonly');
+                document.getElementById('valorunitario' + iIndice).readOnly = false;
+            }
 
         });
     }
+
     function js_limparCampos() {
         $("ac16_sequencial").value = "";
         $("si03_dataapostila").value = "";
