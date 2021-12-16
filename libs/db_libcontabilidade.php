@@ -6117,7 +6117,7 @@ class cl_estrutura_sistema {
     // para uso dos anexos da educação e saude
     function getRestosSemDisponilibidade($sFontes, $dtIni, $dtFim, $aInstits) {
         db_inicio_transacao();
-
+        db_query("drop table if exists work_pl");
         $clEmpResto = new cl_empresto();
         $sSqlOrder = "";
         $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
@@ -6133,7 +6133,6 @@ class cl_estrutura_sistema {
         $where = " c61_instit in ({$aInstits})" ;
         $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFontes) ) ";
         $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
-
         $nTotalAnterior = 0;
         for($x = 0; $x < pg_numrows($result); $x++){
             $oPlanoConta = db_utils::fieldsMemory($result, $x);
@@ -6205,7 +6204,10 @@ class cl_estrutura_sistema {
      */
     function getTotalAnexoIIEducacaoNovo($instits,$dtini,$dtfim,$anousu){
         db_inicio_transacao();
-        $nRPExercicioAnteriorSemSaldo = getRestosSemDisponilibidade("'101'", db_getsession("DB_anousu")."-01-01", $dtfim, $instits);
+        db_query("drop table if exists work_pl");
+        db_query("drop table if exists work_dotacao");
+        db_query("drop table if exists work_receita");
+        $nRPExercicioAnteriorSemSaldo = getRestosSemDisponilibidade("'101'", $dtini, $dtfim, $instits);
         $sWhereDespesa      = " o58_instit in({$instits})";
         criaWorkDotacao($sWhereDespesa,array($anousu),$dtini,$dtfim);
         $sWhereReceita      = "o70_instit in ({$instits})";
@@ -6227,16 +6229,17 @@ class cl_estrutura_sistema {
             }
         }
         $aDadoDeducao = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '495%'");
-        $nSaldoFinalFonte = getSaldoPlanoContaFonte("'101'", $dtini, $dtfim, $instits, true);
+        $nSaldoFinalFonte = getSaldoPlanoContaFonte("'101'", $dtini, $dtfim, $instits);
         db_query("drop table if exists work_pl");
         db_query("drop table if exists work_dotacao");
         db_query("drop table if exists work_receita");
         db_fim_transacao();
+
         $nRPExercicioSemSaldo = $fTotalRPExercicio - $nSaldoFinalFonte;
         if($nRPExercicioSemSaldo < 0){
             $nRPExercicioSemSaldo = 0;
         }
-        $nValorAplicado = ($fSubTotal + abs($aDadoDeducao[0]->saldo_arrecadado_acumulado) ) - ($nRPExercicioAnteriorSemSaldo + $nRPExercicioSemSaldo);
+        $nValorAplicado = ($fSubTotal + abs($aDadoDeducao[0]->saldo_arrecadado_acumulado) + $fTotalRPExercicio) - ($nRPExercicioAnteriorSemSaldo + $nRPExercicioSemSaldo);
         return $nValorAplicado;
     }
 

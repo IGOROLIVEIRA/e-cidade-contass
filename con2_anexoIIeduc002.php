@@ -302,7 +302,7 @@ ob_start();
 
       <tr style='height:20px;'>
         <?php
-            $nSubTotalC = $fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$nRPInscritosExercicio;
+            $nSubTotalC = $fSubTotal + abs($aDadoDeducao[0]->saldo_arrecadado_acumulado) + $nRPInscritosExercicio;
             if(db_getsession("DB_anousu") >= 2021){
                 echo  "<td class='s17 bdleft' colspan='8'>SUBTOTAL (C = A + FUNDEB + B)</td>";
                 echo "<td class='s18'>";
