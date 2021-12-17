@@ -29,6 +29,9 @@
 $clcontabancaria->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("db89_codagencia");
+$ano = db_getsession("DB_anousu"); //ano 
+
+
 ?>
 <script>
 	function js_functionVerificaIdentificador() {
@@ -107,6 +110,34 @@ $clrotulo->label("db89_codagencia");
 						?>
 					</td>
 				</tr>
+				<!-- OC16190 -->
+
+				<tr>
+					<td nowrap title="<?= @$Tdb83_numerocontratooc ?>">
+						<?= @$Ldb83_numerocontratooc ?>
+					</td>
+					<td>
+						<?
+						db_input('db83_numerocontratooc', 15, 1, true, 'text', $db_opcao, "");
+						?>
+					</td>
+				</tr>
+				<tr>
+					<td nowrap title="<?= @$Tdb83_dataassinaturacop ?>">
+						<?= @$Ldb83_dataassinaturacop  ?>
+
+					</td>
+					<td>
+						<?
+						$data = explode("-", $db83_dataassinaturacop);
+						$db83_dataassinaturacop_dia = $data[2];
+						$db83_dataassinaturacop_mes = $data[1];
+						$db83_dataassinaturacop_ano = $data[0];
+						db_inputdata('db83_dataassinaturacop', @$db83_dataassinaturacop_dia, @$db83_dataassinaturacop_mes, @$db83_dataassinaturacop_ano, true, 'text', $db_opcao);
+						?>
+					</td>
+				</tr>
+				<!-- OC16190 -->
 				<tr>
 					<td nowrap title="<?= @$Tdb83_tipoconta ?>">
 						<?= @$Ldb83_tipoconta ?>
