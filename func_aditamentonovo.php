@@ -193,8 +193,8 @@ if ($adanterior == 0) {
                                                                 echo "#e1dede";
                                                             } ?> ; height:10px;">
                             <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
-                            <td><?php echo $aResult->pc01_descrmater; ?> </td>
-                            <td><?php echo $aResult->ac20_quantidade; ?> </td>
+                            <td align="center"><?php echo $aResult->pc01_descrmater; ?> </td>
+                            <td align="center"><?php echo $aResult->ac20_quantidade; ?> </td>
                             <td align="center"><?php echo $aResult->ac20_valorunitario; ?> </td>
                             <td align="center"><?php echo $aResult->ac20_valortotal; ?> </td>
                             <td align="center"><?php echo $aResult->ac20_quantidadeaditada; ?> </td>
@@ -225,16 +225,15 @@ if ($adanterior == 0) {
 
             </form>
 
-            <div style="margin-left: -20%; <?php if (strcmp($oResult[0]->tipoaditivo, "12-Alteração de Projeto/Especificação") != 0) {
+            <div style="margin-left: -36%; <?php if (strcmp($oResult[0]->tipoaditivo, "12-Alteração de Projeto/Especificação") != 0) {
                                                 echo "display: none;";
                                             } ?>">
-                <fieldset style="width: 20%; margin-bottom: 10px; margin-right:152px">
-                    <legend><b>Legenda</b></legend>
-                    <table style='width: 100%; ' align="right">
-                        <tr>
-                            <td style="height: 25px; font-size:14px; background: #7CFC00;"><strong>Itens incluídos</strong></td>
-                        </tr>
-                    </table>
+                <legend style="font-size: 16px;"><b>Legenda</b></legend>
+                <table style='width: 100%; ' align="right">
+                    <tr>
+                        <td style="height: 25px; font-size:14px; background: #7CFC00;"><strong>Itens incluídos</strong></td>
+                    </tr>
+                </table>
                 </fieldset>
             </div>
 
