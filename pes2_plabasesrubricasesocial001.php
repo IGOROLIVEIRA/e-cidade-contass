@@ -66,7 +66,7 @@ db_postmemory($HTTP_POST_VARS);
 
         function js_pesquisabase01(mostra) {
             if (mostra == true) {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_rubricasesocial.php?funcao_js=parent.js_mostrabase011|e990_sequencial|e990_descricao', 'Pesquisa', true);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase011|r08_codigo|r08_descr', 'Pesquisa', true);
             } else {
                 if (document.form1.base01.value != '') {
                     js_OpenJanelaIframe('top.corpo', 'db_iframe_base01', 'func_bases.php?pesquisa_chave=' + document.form1.base01.value + '&funcao_js=parent.js_mostrabase01', 'Pesquisa', false);
@@ -119,10 +119,10 @@ db_postmemory($HTTP_POST_VARS);
                     ?>
                 </td>
             </tr>
-            <tr id="columnBase">
-                <td nowrap align="right" title="Digite a base desejada ou deixe em branco para todas."><b>
+            <tr>
+                <td nowrap align="right" title="Teto remuneratório (art. 37, XI, da CF/1988)"><b>
                         <?
-                        db_ancora('Base :', "js_pesquisabase01(true)", @$db_opcao);
+                        db_ancora('Teto remuneratório (art. 37, XI, da CF/1988):', "js_pesquisabase01(true)", @$db_opcao);
                         ?>
                         &nbsp;</b>
                 </td>
@@ -130,6 +130,147 @@ db_postmemory($HTTP_POST_VARS);
                     <?
                     db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase01(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base01");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap align="right" title="Base de Calculo IRRF Mensal"><b>
+                        <?
+                        db_ancora('Base de Calculo IRRF Mensal:', "js_pesquisabase02(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase02(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base02");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap align="right" title="Base de Cálculo IRRF Férias"><b>
+                        <?
+                        db_ancora('Base de Cálculo IRRF Férias:', "js_pesquisabase03(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase03(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base03");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap align="right" title="Base de Cálculo IRRF 13º Salário"><b>
+                        <?
+                        db_ancora('Base de Cálculo IRRF 13º Salário:', "js_pesquisabase04(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase04(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base04");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap align="right" title="Base de Cálculo RGPS Mensal"><b>
+                        <?
+                        db_ancora('Base de Cálculo RGPS Mensal:', "js_pesquisabase05(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase05(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base05");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+
+                <td nowrap align="right" title="Base de Cálculo RGPS Férias"><b>
+                        <?
+                        db_ancora('Base de Cálculo RGPS Férias:', "js_pesquisabase06(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase06(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base06");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap align="right" title="Base de Cálculo RGPS 13º Salário"><b>
+                        <?
+                        db_ancora('Base de Cálculo RGPS 13º Salário:', "js_pesquisabase07(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase07(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base07");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap align="right" title="Base de Cálculo RPPS Mensal"><b>
+                        <?
+                        db_ancora('Base de Cálculo RPPS Mensal:', "js_pesquisabase08(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase08(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base08");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap align="right" title="Base de Cálculo RPPS Férias"><b>
+                        <?
+                        db_ancora('Base de Cálculo RPPS Férias:', "js_pesquisabase09(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase09(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base09");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap align="right" title="Base de Cálculo RPPS 13º Salário"><b>
+                        <?
+                        db_ancora('Base de Cálculo RPPS 13º Salário:', "js_pesquisabase010(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase010(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base010");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap align="right" title="Base de Cálculo FGTS"><b>
+                        <?
+                        db_ancora('Base de Cálculo FGTS:', "js_pesquisabase011(true)", @$db_opcao);
+                        ?>
+                        &nbsp;</b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase011(false)'");
+                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base011");
                     ?>
                 </td>
             </tr>
