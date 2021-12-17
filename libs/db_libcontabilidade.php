@@ -6239,7 +6239,7 @@ class cl_estrutura_sistema {
         if($nRPExercicioSemSaldo < 0){
             $nRPExercicioSemSaldo = 0;
         }
-        $nValorAplicado = ($fSubTotal + abs($aDadoDeducao[0]->saldo_arrecadado_acumulado) + $fTotalRPExercicio) - ($nRPExercicioAnteriorSemSaldo + $nRPExercicioSemSaldo);
+        $nValorAplicado = $fSubTotal + abs($aDadoDeducao[0]->saldo_arrecadado_acumulado) + $fTotalRPExercicio  + $nRPExercicioAnteriorSemSaldo -  $nRPExercicioSemSaldo;
         return $nValorAplicado;
     }
 
