@@ -342,7 +342,7 @@ ob_start();
                 echo "</td>";
                 echo "</tr>";
 
-                $nTotalAPlicado = $nSubTotalC - ($nRPSEMDisponibilidade + $nRPAnteriorSEMDisponibilidade);
+                $nTotalAPlicado = $nSubTotalC - $nRPSEMDisponibilidade + $nRPAnteriorSEMDisponibilidade;
                 echo "<tr style='height:20px;'>";
                 echo  "<td class='s17 bdleft' colspan='8'>TOTAL APLICADO (F = C - D + E)</td>";
                 echo "<td class='s18'>";
