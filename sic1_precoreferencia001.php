@@ -7,6 +7,7 @@ include("classes/db_precoreferencia_classe.php");
 include("classes/db_itemprecoreferencia_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_condataconf_classe.php");
+include("classes/db_liccomissaocgm_classe.php");
 require("libs/db_utils.php");
 db_postmemory($HTTP_POST_VARS);
 $oPost = db_utils::postMemory($_POST);
@@ -14,11 +15,22 @@ $oPost = db_utils::postMemory($_POST);
 $clprecoreferencia     = new cl_precoreferencia;
 $clitemprecoreferencia = new cl_itemprecoreferencia;
 $clcondataconf = new cl_condataconf;
+$clliccomissaocgm      = new cl_liccomissaocgm();
 
 $db_opcao = 1;
 $db_botao = true;
+$respCotacaocodigoV = $respCotacaocodigo;
+$respOrcacodigoV = $respOrcacodigo;
+
+$respCotacaonomeV = $respCotacaonome;
+$respOrcanomeV = $respOrcanome;
+
 if (isset($incluir)) {
     db_inicio_transacao();
+    $clprecoreferencia->si01_tipoCotacao  = 3;
+    $clprecoreferencia->si01_tipoOrcamento  = 4;
+    $clprecoreferencia->si01_numcgmCotacao = $respCotacaocodigo;
+    $clprecoreferencia->si01_numcgmOrcamento = $respOrcacodigo;
     $datesistema = date("d/m/Y", db_getsession('DB_datausu'));
     if ($si01_datacotacao > $datesistema) {
         $msg = "Data da Cotação maior que data do Sistema";
@@ -35,11 +47,14 @@ if (isset($incluir)) {
             $processoValidado = false;
         }  
 
-        if ($oPost->si01_cotacaoitem == 0) {
-            echo "<script>alert('Selecione o tipo de cotação por item!');</script>";
-            $processoValidado = false;
-        } 
-
+        if($processoValidado==true){
+            if ($oPost->si01_cotacaoitem == 0) {
+                echo "<script>alert('Selecione o tipo de cotação por item!');</script>";
+                $processoValidado = false;
+            } 
+    
+        }
+        
         if(!empty($si01_datacotacao)){
             $anousu = db_getsession('DB_anousu');
             $instituicao = db_getsession('DB_instit');
@@ -219,9 +234,22 @@ if (isset($incluir)) {
         if ($clprecoreferencia->erro_campo != "") {
             echo "<script> document.form1." . $clprecoreferencia->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
             echo "<script> document.form1." . $clprecoreferencia->erro_campo . ".focus();</script>";
+            echo "<script> document.getElementById('respCotacaocodigo').value=$respCotacaocodigoV;</script>  ";
+            echo "<script> 
+            document.getElementById('respOrcacodigo').value=$respOrcacodigoV;
+            </script>  ";
+            echo "<script> document.getElementById('respCotacaonome').value='$respCotacaonomeV';</script>  ";
+            echo "<script> document.getElementById('respOrcanome').value='$respOrcanomeV';</script>  ";
+        
         }
     } else {
-        $clprecoreferencia->erro(true, true);
+        $clprecoreferencia->erro(true,true);
+        echo "<script> document.getElementById('respCotacaocodigo').value=$respCotacaocodigoV;</script>  ";
+        echo "<script> 
+        document.getElementById('respOrcacodigo').value=$respOrcacodigoV;
+        </script>  ";
+        echo "<script> document.getElementById('respCotacaonome').value='$respCotacaonomeV';</script>  ";
+        echo "<script> document.getElementById('respOrcanome').value='$respOrcanomeV';</script>  ";
     }
 }
 ?>
