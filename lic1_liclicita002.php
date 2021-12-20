@@ -89,59 +89,59 @@
             53 - Pregão eletrônico
             54 - Leilão
             */
-            
-        if($oPost->modalidade_tribunal==48||$oPost->modalidade_tribunal==49||$oPost->modalidade_tribunal==50||$oPost->modalidade_tribunal==52||$oPost->modalidade_tribunal==53||$oPost->modalidade_tribunal==54){
+
+        if ($oPost->modalidade_tribunal == 48 || $oPost->modalidade_tribunal == 49 || $oPost->modalidade_tribunal == 50 || $oPost->modalidade_tribunal == 52 || $oPost->modalidade_tribunal == 53 || $oPost->modalidade_tribunal == 54) {
             $salvarModalidade = 1;
-            if($respConducodigo==""){
+            if ($respConducodigo == "") {
                 $erro_msg .= 'Responsável pela condução do processo não informado\n\n';
                 $nomeCampo = "respConducodigo";
                 $sqlerro = true;
-              }
-            if($respAbertcodigo==""){
+            }
+            if ($respAbertcodigo == "") {
                 $erro_msg .= 'Responsável pela abertura do processo não informado\n\n';
                 $nomeCampo = "respAbertcodigo";
                 $sqlerro = true;
-              }
-              if($respEditalcodigo==""){
-                $erro_msg .= 'Responsável pela emissão do edital não informado\n\n';  
+            }
+            if ($respEditalcodigo == "") {
+                $erro_msg .= 'Responsável pela emissão do edital não informado\n\n';
                 $nomeCampo = "respEditalcodigo";
                 $sqlerro = true;
-              }
-              if($respPubliccodigo==""){
-                $erro_msg .= 'Responsável pela publicação não informado\n\n';  
+            }
+            if ($respPubliccodigo == "") {
+                $erro_msg .= 'Responsável pela publicação não informado\n\n';
                 $nomeCampo = "respPubliccodigo";
                 $sqlerro = true;
-              }
-              if($oPost->l20_naturezaobjeto==1){
-                if($respObrascodigo==""){
-                    $erro_msg .= 'Responsável pelos orçamentos, obras e serviços não informado\n\n';  
+            }
+            if ($oPost->l20_naturezaobjeto == 1) {
+                if ($respObrascodigo == "") {
+                    $erro_msg .= 'Responsável pelos orçamentos, obras e serviços não informado\n\n';
                     $nomeCampo = "respObrascodigo";
                     $sqlerro = true;
                 }
-              }
-              if($oPost->modalidade_tribunal==54){
-                if($respAvaliBenscodigo==""){
-                    $erro_msg .= 'Responsável pela avaliação de bens não informado\n\n';  
+            }
+            if ($oPost->modalidade_tribunal == 54) {
+                if ($respAvaliBenscodigo == "") {
+                    $erro_msg .= 'Responsável pela avaliação de bens não informado\n\n';
                     $nomeCampo = "respAvaliBenscodigo";
                     $sqlerro = true;
                 }
-              }
-        }else if($oPost->modalidade_tribunal==100 || $oPost->modalidade_tribunal==101 || $oPost->modalidade_tribunal==102 || $oPost->modalidade_tribunal==103){
+            }
+        } else if ($oPost->modalidade_tribunal == 100 || $oPost->modalidade_tribunal == 101 || $oPost->modalidade_tribunal == 102 || $oPost->modalidade_tribunal == 103) {
             $salvarModalidade = 2;
-            if($respAutocodigo==""){
+            if ($respAutocodigo == "") {
                 $erro_msg .= 'Responsável pela condução do processo não informado\n\n';
                 $nomeCampo = "respAutocodigo";
                 $sqlerro = true;
-              }
-              if($oPost->l20_naturezaobjeto==1){
-                if($respObrascodigo==""){
-                    $erro_msg .= 'Responsável pelos orçamentos, obras e serviços não informado\n\n';  
+            }
+            if ($oPost->l20_naturezaobjeto == 1) {
+                if ($respObrascodigo == "") {
+                    $erro_msg .= 'Responsável pelos orçamentos, obras e serviços não informado\n\n';
                     $nomeCampo = "respObrascodigo";
                     $sqlerro = true;
                 }
-              }
-          }
-           
+            }
+        }
+
         if ($confirmado == 0) {
             $l20_tipojulg = $tipojulg;
         }
@@ -182,29 +182,39 @@
         /*
       Verifica se os Campos "Tipo de Licitao", "Natureza do Procedimento" no foram selecionados.
     */
-    if(in_array($iTipoCompraTribunal,$aTipoLicNatProc)){
-      if($oPost->modalidade_tribunal != 51){
-        if( $oPost->l20_tipliticacao == '0' || empty($oPost->l20_tipliticacao) ){
-            $erro_msg .= 'Campo Tipo de Licitacao nao informado\n\n';
-            $sqlerro = true;
+        if (in_array($iTipoCompraTribunal, $aTipoLicNatProc)) {
+            if ($oPost->modalidade_tribunal != 51) {
+                if ($oPost->l20_tipliticacao == '0' || empty($oPost->l20_tipliticacao)) {
+                    $erro_msg .= 'Campo Tipo de Licitacao nao informado\n\n';
+                    $sqlerro = true;
+                }
+            }
+            if ($oPost->l20_tipnaturezaproced == '0' || empty($oPost->l20_tipnaturezaproced)) {
+                $erro_msg .= 'Campo Natureza do Procedimento nao informado\n\n';
+                $sqlerro = true;
+            }
         }
-      }
-        if( $oPost->l20_tipnaturezaproced == '0' || empty($oPost->l20_tipnaturezaproced) ){
-            $erro_msg .= 'Campo Natureza do Procedimento nao informado\n\n';
-            $sqlerro = true;
-        }
-    }
 
         /*
       Verifica se o Campo "Natureza do Objeto" no foi selecionado.
     */
-    if($oPost->modalidade_tribunal != 51){
-      if( $oPost->l20_naturezaobjeto == '0' || empty($oPost->l20_naturezaobjeto) ){
-          $erro_msg .= 'Campo Natureza do Objeto nao informado\n\n';
-          $sqlerro = true;
-      }
-    }
+        if ($oPost->modalidade_tribunal != 51) {
+            if ($oPost->l20_naturezaobjeto == '0' || empty($oPost->l20_naturezaobjeto)) {
+                $erro_msg .= 'Campo Natureza do Objeto nao informado\n\n';
+                $sqlerro = true;
+            }
+        }
 
+        /*
+        Verifica se o campo "Regime de execução" foi selecionado
+    */
+
+        if ($oPost->l20_naturezaobjeto == 1 || $oPost->l20_naturezaobjeto == 7) {
+            if ($oPost->l20_regimexecucao == 0) {
+                $erro_msg .= 'Campo Regime da Execução não selecionado\n\n';
+                $sqlerro = true;
+            }
+        }
 
         if ($lIncluiProc && !$sqlerro && $lprocsis == 's') {
 
@@ -624,117 +634,114 @@
                 }
             }
         }
-        if($salvarModalidade==1){
-            if($respConducodigo!=""){
+        if ($salvarModalidade == 1) {
+            if ($respConducodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '5' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
 
                 $clliccomissaocgm->l31_numcgm = $respConducodigo;
                 $clliccomissaocgm->l31_tipo = 5;
                 $clliccomissaocgm->l31_licitacao = $l20_codigo;
                 $clliccomissaocgm->incluir(null);
             }
-            if($respAbertcodigo!=""){
+            if ($respAbertcodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '1' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
 
                 $clliccomissaocgm->l31_numcgm = $respAbertcodigo;
                 $clliccomissaocgm->l31_tipo = 1;
                 $clliccomissaocgm->l31_licitacao = $l20_codigo;
                 $clliccomissaocgm->incluir(null);
             }
-            if($respEditalcodigo!=""){
+            if ($respEditalcodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '2' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
 
                 $clliccomissaocgm->l31_numcgm = $respEditalcodigo;
                 $clliccomissaocgm->l31_tipo = 2;
                 $clliccomissaocgm->l31_licitacao = $l20_codigo;
                 $clliccomissaocgm->incluir(null);
             }
-            if($respPubliccodigo!=""){
+            if ($respPubliccodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '8' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
 
-                $clliccomissaocgm->l31_numcgm = $respPubliccodigo; 
+                $clliccomissaocgm->l31_numcgm = $respPubliccodigo;
                 $clliccomissaocgm->l31_tipo = 8;
                 $clliccomissaocgm->l31_licitacao = $l20_codigo;
                 $clliccomissaocgm->incluir(null);
             }
-            if($respObrascodigo!=""){
+            if ($respObrascodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '10' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
 
                 $clliccomissaocgm->l31_numcgm = $respObrascodigo;
                 $clliccomissaocgm->l31_tipo = 10;
                 $clliccomissaocgm->l31_licitacao = $l20_codigo;
                 $clliccomissaocgm->incluir(null);
             }
-            if($respAvaliBenscodigo!=""){
+            if ($respAvaliBenscodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '9' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
 
                 $clliccomissaocgm->l31_numcgm = $respAvaliBenscodigo;
                 $clliccomissaocgm->l31_tipo = 9;
                 $clliccomissaocgm->l31_licitacao = $l20_codigo;
                 $clliccomissaocgm->incluir(null);
-            }   
-
-          }else if($salvarModalidade==2){
-            if($respConducodigo!=""){
+            }
+        } else if ($salvarModalidade == 2) {
+            if ($respConducodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '5' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
             }
-            if($respAbertcodigo!=""){
+            if ($respAbertcodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '1' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
             }
-            if($respEditalcodigo!=""){
+            if ($respEditalcodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '2' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
             }
-            if($respPubliccodigo!=""){
+            if ($respPubliccodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '8' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
             }
-            if($respObrascodigo!=""){
+            if ($respObrascodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '10' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
 
                 $clliccomissaocgm->l31_numcgm = $respObrascodigo;
                 $clliccomissaocgm->l31_tipo = 10;
                 $clliccomissaocgm->l31_licitacao = $l20_codigo;
                 $clliccomissaocgm->incluir(null);
             }
-            if($respAvaliBenscodigo!=""){
+            if ($respAvaliBenscodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '9' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
-
+                $clliccomissaocgm->excluir(null, $dbquery);
             }
-            if($respAutocodigo!=""){
+            if ($respAutocodigo != "") {
                 //excluir o reponsavel
                 $dbquery = "l31_tipo = '1' and l31_licitacao = $l20_codigo";
-                $clliccomissaocgm->excluir(null,$dbquery);
+                $clliccomissaocgm->excluir(null, $dbquery);
 
                 $clliccomissaocgm->l31_numcgm = $respAutocodigo;
                 $clliccomissaocgm->l31_tipo = 1;
                 $clliccomissaocgm->l31_licitacao = $l20_codigo;
                 $clliccomissaocgm->incluir(null);
             }
-
-          }
+        }
 
         db_fim_transacao($sqlerro);
     } else if (isset($chavepesquisa)) {
@@ -744,7 +751,7 @@
 		unset($chavepesquisa);
 		db_msgbox("Esta licitação já está homologada.");
 	} else {*/
-        
+
         $db_opcao  = 2;
         $sCampos   = '*, ';
         $sCampos  .= "(select count(*) from liclicitem where l21_codliclicita = l20_codigo) as itens_lancados";
