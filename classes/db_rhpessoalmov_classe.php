@@ -99,6 +99,18 @@ class cl_rhpessoalmov
     var $rh02_datainicio_mes = null;
     var $rh02_datainicio_ano = null;
     var $rh02_datainicio = null;
+
+    var $rh02_tipojornada = 0;
+    var $rh02_horarionoturno = 'f';
+    var $rh02_cnpjcedente = null;
+    var $rh02_mattraborgcedente = null;
+    var $rh02_dataadmisorgcedente_dia = null;
+    var $rh02_dataadmisorgcedente_mes = null;
+    var $rh02_dataadmisorgcedente_ano = null;
+    var $rh02_dataadmisorgcedente = null;
+
+    var $rh02_jornadadetrabalho = null;
+
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  rh02_instit = int4 = Cod. Instituição
@@ -140,6 +152,13 @@ class cl_rhpessoalmov
                  rh02_cotadeficiencia = bool = cota de pessoas com deficiência habilitadas ou de beneficiários reabilitados
                  rh02_plansegreg = int4 = Plano de Segregação da Massa
                  rh02_datainicio = date = Data início
+                 rh02_tipojornada = int4 = Tipo de Jornada
+                 rh02_horarionoturno = bool = Horario noturno
+                 rh02_cnpjcedente = varchar(100) = cnpj cedente
+                 rh02_mattraborgcedente = varchar(100) = Matricula do Trabalhador no órgão Cedente
+                 rh02_dataadmisorgcedente = date = Data admissão org Cedente
+                 rh02_jornadadetrabalho = int4 = Jornada de Trabalho
+
                  ";
     //funcao construtor da classe
     function cl_rhpessoalmov()
@@ -230,6 +249,19 @@ class cl_rhpessoalmov
                     $this->rh02_datainicio = $this->rh02_datainicio_ano . "-" . $this->rh02_datainicio_mes . "-" . $this->rh02_datainicio_dia;
                 }
             }
+            $this->rh02_tipojornada = ($this->rh02_tipojornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_tipojornada"] : $this->rh02_tipojornada);
+            $this->rh02_horarionoturno = ($this->rh02_horarionoturno == "f" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_horarionoturno"] : $this->rh02_horarionoturno);
+            $this->rh02_cnpjcedente = ($this->rh02_cnpjcedente == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"] : $this->rh02_cnpjcedente);
+            $this->rh02_mattraborgcedente = ($this->rh02_mattraborgcedente == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"] : $this->rh02_mattraborgcedente);
+            if ($this->rh02_dataadmisorgcedente == "") {
+                $this->rh02_dataadmisorgcedente_dia = ($this->rh02_dataadmisorgcedente_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente_dia"] : $this->rh02_dataadmisorgcedente_dia);
+                $this->rh02_dataadmisorgcedente_mes = ($this->rh02_dataadmisorgcedente_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente_mes"] : $this->rh02_dataadmisorgcedente_mes);
+                $this->rh02_dataadmisorgcedente_ano = ($this->rh02_dataadmisorgcedente_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente_ano"] : $this->rh02_dataadmisorgcedente_ano);
+                if ($this->rh02_dataadmisorgcedente_dia != "") {
+                    $this->rh02_dataadmisorgcedente = $this->rh02_dataadmisorgcedente_ano . "-" . $this->rh02_dataadmisorgcedente_mes . "-" . $this->rh02_dataadmisorgcedente_dia;
+                }
+            }
+            $this->rh02_jornadadetrabalho = ($this->rh02_jornadadetrabalho == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"] : $this->rh02_jornadadetrabalho);
         } else {
             $this->rh02_instit = ($this->rh02_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_instit"] : $this->rh02_instit);
             $this->rh02_seqpes = ($this->rh02_seqpes == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_seqpes"] : $this->rh02_seqpes);
@@ -473,6 +505,66 @@ class cl_rhpessoalmov
             $this->rh02_datainicio = "null";
         }
 
+        if ($this->rh02_tipojornada == null) {
+            $this->rh02_tipojornada = "null";
+        }
+
+        if ($this->rh02_horarionoturno == null) {
+            $this->rh02_horarionoturno = "f";
+        }
+
+        if ($this->rh02_cnpjcedente == null) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->erro_sql = " Campo CNPJ Cedente não informado.";
+                $this->erro_campo = "rh02_cnpjcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+            $this->rh02_cnpjcedente = "null";
+        }
+
+        if ($this->rh02_mattraborgcedente == null) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->erro_sql = " Campo Matricula do Trabalhador no órgão Cedente não informado.";
+                $this->erro_campo = "rh02_mattraborgcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+            $this->rh02_mattraborgcedente = "null";
+        }
+
+        if ($this->rh02_dataadmisorgcedente == null) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->erro_sql = " Campo Data de Admissão no órgão Cedente não informado.";
+                $this->erro_campo = "rh02_dataadmisorgcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+            $this->rh02_dataadmisorgcedente = "null";
+        }
+
+        if ($this->rh02_jornadadetrabalho == null) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->erro_sql = " Campo Jornada de Trabalho não informado.";
+                $this->erro_campo = "rh02_jornadadetrabalho";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+            $this->rh02_jornadadetrabalho = "null";
+        }
+
         if ($rh02_seqpes == "" || $rh02_seqpes == null) {
             $result = db_query("select nextval('rhpessoalmov_rh02_seqpes_seq')");
             if ($result == false) {
@@ -571,6 +663,12 @@ class cl_rhpessoalmov
                                       ,rh02_cotadeficiencia
                                       ,rh02_plansegreg
                                       ,rh02_datainicio
+                                      ,rh02_tipojornada
+                                      ,rh02_horarionoturno
+                                      ,rh02_cnpjcedente
+                                      ,rh02_mattraborgcedente
+                                      ,rh02_dataadmisorgcedente
+                                      ,rh02_jornadadetrabalho
                        )
                 values (
                                 $this->rh02_instit
@@ -619,6 +717,12 @@ class cl_rhpessoalmov
                                ," . ($this->rh02_cotadeficiencia == "null" || $this->rh02_cotadeficiencia == "" ? "null" : "'" . $this->rh02_cotadeficiencia . "'") . "
                                ," . ($this->rh02_plansegreg == "null" || $this->rh02_plansegreg == "" ? "null" : "'" . $this->rh02_plansegreg . "'") . "
                                ," . ($this->rh02_datainicio == "null" || $this->rh02_datainicio == "" ? "null" : "'" . $this->rh02_datainicio . "'") . "
+                               ," . ($this->rh02_tipojornada == "null" || $this->rh02_tipojornada == "" ? "null" : "'" . $this->rh02_tipojornada . "'") . "
+                               ," . ($this->rh02_horarionoturno == "null" || $this->rh02_horarionoturno == "" ? "f" : "'" . $this->rh02_horarionoturno . "'") . "
+                               ," . ($this->rh02_cnpjcedente == "null" || $this->rh02_cnpjcedente == "" ? "null" : "'" . $this->rh02_cnpjcedente . "'") . "
+                               ," . ($this->rh02_mattraborgcedente == "null" || $this->rh02_mattraborgcedente == "" ? "null" : "'" . $this->rh02_mattraborgcedente . "'") . "
+                               ," . ($this->rh02_dataadmisorgcedente == "null" || $this->rh02_dataadmisorgcedente == "" ? "null" : "'" . $this->rh02_dataadmisorgcedente . "'") . "
+                               ," . ($this->rh02_jornadadetrabalho == "null" || $this->rh02_jornadadetrabalho == "" ? "null" : "'" . $this->rh02_jornadadetrabalho . "'") . "
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -1157,6 +1261,87 @@ class cl_rhpessoalmov
             }
         }
 
+        if (trim($this->rh02_tipojornada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipojornada"])) {
+            if (trim($this->rh02_tipojornada) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipojornada"])) {
+                $this->rh02_tipojornada = "0";
+            }
+            $sql  .= $virgula . " rh02_tipojornada = $this->rh02_tipojornada ";
+            $virgula = ",";
+        }
+
+        if (trim($this->rh02_horarionoturno) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_horarionoturno"])) {
+            if (trim($this->rh02_horarionoturno) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_horarionoturno"])) {
+                $this->rh02_horarionoturno = "f";
+            }
+            $sql  .= $virgula . " rh02_horarionoturno = '$this->rh02_horarionoturno' ";
+            $virgula = ",";
+        }
+        if (trim($this->rh02_cnpjcedente) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"])) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_cnpjcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"])) {
+                $this->erro_sql = " Campo CNPJ Cedente não informado.";
+                $this->erro_campo = "rh02_cnpjcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else if (trim($this->rh02_cnpjcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->rh02_cnpjcedente = "null";
+            }
+            $sql  .= $virgula . " rh02_cnpjcedente = $this->rh02_cnpjcedente ";
+            $virgula = ",";
+        }
+
+        if (trim($this->rh02_mattraborgcedente) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"])) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_mattraborgcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"])) {
+                $this->erro_sql = " Campo Matricula do Trabalhador no órgão Cedente não informado.";
+                $this->erro_campo = "rh02_mattraborgcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else if (trim($this->rh02_mattraborgcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->rh02_mattraborgcedente = "null";
+            }
+            $sql  .= $virgula . " rh02_mattraborgcedente = $this->rh02_mattraborgcedente ";
+            $virgula = ",";
+        }
+
+        if (trim($this->rh02_dataadmisorgcedente) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente_dia"] != "")) {
+            $sql  .= $virgula . " rh02_dataadmisorgcedente = '$this->rh02_dataadmisorgcedente' ";
+            $virgula = ",";
+        } else {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_dataadmisorgcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente"])) {
+                $this->erro_sql = " Campo Data de Admissão no órgão Cedente não informado.";
+                $this->erro_campo = "rh02_dataadmisorgcedente";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else if (isset($GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente_dia"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $sql  .= $virgula . " rh02_dataadmisorgcedente = null ";
+                $virgula = ",";
+            }
+        }
+
+        if (trim($this->rh02_jornadadetrabalho) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"])) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_jornadadetrabalho) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"])) {
+                $this->erro_sql = " Campo Jornada de Trabalho não informado.";
+                $this->erro_campo = "rh02_jornadadetrabalho";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else if (trim($this->rh02_jornadadetrabalho) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->rh02_jornadadetrabalho = "null";
+            }
+            $sql  .= $virgula . " rh02_jornadadetrabalho = $this->rh02_jornadadetrabalho ";
+            $virgula = ",";
+        }
+
         $sql .= " where ";
         if ($rh02_seqpes != null) {
             $sql .= " rh02_seqpes = $this->rh02_seqpes";
@@ -1419,6 +1604,7 @@ class cl_rhpessoalmov
         $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm                          ";
         $sql .= "      inner join db_estrutura  on  db_estrutura.db77_codestrut = rhlota.r70_codestrut";
         $sql .= "      left  join tipodeficiencia  on  tipodeficiencia.rh150_sequencial = rhpessoalmov.rh02_tipodeficiencia";
+        $sql .= "      left  join jornadadetrabalho  on  jornadadetrabalho.jt_sequencial = rhpessoalmov.rh02_jornadadetrabalho";
         $sql2 = "";
         if (empty($dbwhere)) {
             if (!empty($rh02_seqpes)) {
