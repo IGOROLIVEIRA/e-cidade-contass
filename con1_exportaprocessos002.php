@@ -156,13 +156,21 @@ if ($clabre_arquivo->arquivo != false) {
     fclose($clabre_arquivo->arquivo);
 }
 $aArquivosGerados = array();
-$aArquivosGerados[] =  strtoupper("tmp/Edital_$iLicitacao.$extensao");
-$aArquivosGerados[] =  strtoupper("tmp/Itens_$iLicitacao.$extensao");
-$aArquivosGerados[] =  strtoupper("tmp/Lote_$iLicitacao.$extensao");
+$aArquivosGerados[] =  "tmp/Edital_$iLicitacao.$extensao";
+$aArquivosGerados[] =  "tmp/Itens_$iLicitacao.$extensao";
+$aArquivosGerados[] =  "tmp/Lote_$iLicitacao.$extensao";
 
 $sNomeArquivo = "export_process";
 
-compactaArquivos($aArquivosGerados, $sNomeArquivo);
+$aListaArquivos = " ";
+foreach ($aArquivosGerados as $oArquivo) {
+    $aListaArquivos .= " " . $oArquivo;
+}
+//print_r($aListaArquivos);
+system("rm -f tmp/$sNomeArquivo.zip");
+system("bin/zip -q tmp/$sNomeArquivo.zip $aListaArquivos");
+
+//compactaArquivos($aArquivosGerados, $sNomeArquivo);
 
 echo "<script>";
 echo "  jan = window.open('db_download.php?arquivo=" . "tmp/export_process.zip" . "','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
