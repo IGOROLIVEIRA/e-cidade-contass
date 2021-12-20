@@ -138,6 +138,8 @@ for($i = 0;$i < $num;$i++){
                                                          case when matunid.m61_abrev is null or matunid.m61_abrev = '' then coalesce(matunidaut.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) else coalesce(matunid.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) end as m61_abrev,
                                                          pcmater.pc01_descrmater,
                                                          pc01_codmater,
+                                                         pc01_servico,
+                                                         e62_servicoquantidade,
 						         (case when solicitem.pc11_resum is null  or solicitem.pc11_resum ='' then pc01_complmater else solicitem.pc11_resum end)||'\n'||e55_descr AS e62_descr,
                                                         /* e62_descr,*/
                                                          empempenho.e60_codemp,
@@ -235,7 +237,8 @@ if ($clempparametro->numrows>0){
 
 	$e30_numdec = 4 ;
 
-}
+}  
+  
 
    $pdf1->numdec         = $e30_numdec;
    $pdf1->valoritem      = 'm52_valor';
@@ -249,6 +252,11 @@ if ($clempparametro->numrows>0){
    $pdf1->Snumeroproc    = "pc81_codproc";
    $pdf1->Snumero        = "pc11_numero";
    $pdf1->obs_ordcom_orcamval = "pc23_obs";
+
+   $resultado = db_utils::fieldsMemory($resultitem, 0);
+   if($resultado->pc01_servico ==  't' && $resultado->e62_servicoquantidade == 'f' ){
+    $pdf1->vlrunitem      = 'm52_valor';
+  }
 
    $pdf1->imprime();
 

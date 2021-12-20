@@ -526,7 +526,8 @@ $iMesImplantacao = $aImplantacao[1];
         $sSqlInformacoesServidor  = "SELECT {$sCampos}                                                                  ";  
         $sSqlInformacoesServidor .= " FROM cgm                                                                          ";
         $sSqlInformacoesServidor .= "   INNER JOIN rhpessoal ON z01_numcgm  = rh01_numcgm                               ";
-        $sSqlInformacoesServidor .= "   INNER JOIN rhfuncao  ON rh01_funcao = rh37_funcao AND rh01_instit = rh37_instit ";
+        $sSqlInformacoesServidor .= "   INNER JOIN rhpessoalmov ON (rh01_regist,rh01_instit) = (rh02_regist,rh02_instit) AND (rh02_anousu,rh02_mesusu) = ({$ano},{$mes})";
+        $sSqlInformacoesServidor .= "   INNER JOIN rhfuncao  ON rh02_funcao = rh37_funcao AND rh01_instit = rh37_instit ";
         $sSqlInformacoesServidor .= " WHERE {$sWhere}                                                                   "; 
             
         $dados = db_query($sSqlInformacoesServidor);

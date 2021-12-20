@@ -324,6 +324,40 @@ $oGet = db_utils::postMemory($_GET);
                                     aDadosHintGrid.push(oDadosHint);
 
                                     break;
+                                
+                                case 'licrealizadaoutrosorgaos':
+
+                                    var aRow = new Array();
+
+                                    aRow[0] = oDado.lic211_sequencial;
+                                    aRow[1] = oDado.lic211_tipo.urlDecode();
+                                    aRow[2] = '';
+                                    aRow[3] = '';
+                                    oGrvDetalhes.addRow(aRow);
+
+                                    var oDadosHint           = new Object();
+                                    oDadosHint.idLinha   = oGrvDetalhes.aRows[iInd].sId;
+                                    oDadosHint.sText     = sTextEvent;
+                                    aDadosHintGrid.push(oDadosHint);
+
+                                    break;
+
+                                case 'adesaoregpreco':
+
+                                    var aRow = new Array();
+
+                                    aRow[0] = oDado.si06_sequencial;
+                                    aRow[1] = oDado.si06_objetoadesao.urlDecode();
+                                    aRow[2] = oDado.si06_dataadesao;
+                                    aRow[3] = oDado.departamento.urlDecode();
+                                    oGrvDetalhes.addRow(aRow);
+
+                                    var oDadosHint           = new Object();
+                                    oDadosHint.idLinha   = oGrvDetalhes.aRows[iInd].sId;
+                                    oDadosHint.sText     = sTextEvent;
+                                    aDadosHintGrid.push(oDadosHint);
+
+                                    break;
                             }
 
                         }
@@ -540,6 +574,34 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes.clearAll(true);
                 oGrvDetalhes.renderRows();
 
+                break;
+
+            case 'adesaoregpreco':
+
+                oGrvDetalhes = new DBGrid('detalhes');
+                oGrvDetalhes.nameInstance = 'oGrvDetalhes';
+                oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
+                oGrvDetalhes.setCellAlign(['center', 'center', 'center' , 'center']);
+                oGrvDetalhes.setHeader(['Código','Objeto','Data da Adesão', 'Departamento']);
+                oGrvDetalhes.setHeight(230);
+                oGrvDetalhes.hasTotalizador = true;
+                oGrvDetalhes.show($('grvDetalhes'));
+                oGrvDetalhes.clearAll(true);
+                oGrvDetalhes.renderRows();
+                break;
+
+            case 'licrealizadaoutrosorgaos':
+
+                oGrvDetalhes = new DBGrid('detalhes');
+                oGrvDetalhes.nameInstance = 'oGrvDetalhes';
+                oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
+                oGrvDetalhes.setCellAlign(['center', 'center', 'center' , 'center']);
+                oGrvDetalhes.setHeader(['Código','Tipo de Licitação','Data', 'Departamento']);
+                oGrvDetalhes.setHeight(230);
+                oGrvDetalhes.hasTotalizador = true;
+                oGrvDetalhes.show($('grvDetalhes'));
+                oGrvDetalhes.clearAll(true);
+                oGrvDetalhes.renderRows();
                 break;
 
             case 'saldo':

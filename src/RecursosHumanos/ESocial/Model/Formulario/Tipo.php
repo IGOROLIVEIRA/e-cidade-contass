@@ -25,6 +25,7 @@ class Tipo
     const PORTUARIO = 11;
     const REGISTRO_PRELIMINAR = 24;
     const CADASTRAMENTO_INICIAL = 25;
+    const ESTABELECIMENTOS = 26;
 
 
     /**
@@ -81,7 +82,7 @@ class Tipo
 
     public static function getArrVinculacaoTipo() {
         return array(
-        1 => 'S1000',
+        1 => 'S1000',  
         2 => 'S1010',
         4 => 'S1020',
         5 => 'S1030',
@@ -105,7 +106,7 @@ class Tipo
         23 => 'S1300',
         24 => 'S2190',
         25 => 'S2200',
-        26 => 'S2205',
+        26 => 'S1005',
         27 => 'S2206',
         28 => 'S2210',
         29 => 'S2220',
@@ -117,17 +118,18 @@ class Tipo
         35 => 'S2260',
         36 => 'S2298',
         37 => 'S2299',
-        38 => 'S2300',
+        38 => 'S2205',
         39 => 'S2306',
         40 => 'S2399',
         41 => 'S2400',
         42 => 'S3000',
         43 => 'S5001',
-        44 => 'S5002',
+        44 => 'S2300',
         45 => 'S5003',
         46 => 'S5011',
         47 => 'S5012',
-        48 => 'S5013'
+        48 => 'S5013',
+        55 => 'S5002'
         );
     }
 

@@ -355,6 +355,7 @@ for ( $iInd = 0; $iInd  < $iNumRows; $iInd++ ) {
 
     $sSqlDadosTestadaInterna     = " select tesinter.j39_idbql,                                                ";
     $sSqlDadosTestadaInterna    .= "        tesinter.j39_orientacao,                                           ";
+    $sSqlDadosTestadaInterna    .= "        orientacao.j64_descricao,                                          ";
     $sSqlDadosTestadaInterna    .= "        tesinter.j39_testad,                                               ";
     $sSqlDadosTestadaInterna    .= "        tesinter.j39_testle,                                               ";
     $sSqlDadosTestadaInterna    .= "        lote.j34_lote,                                                     ";
@@ -376,7 +377,7 @@ for ( $iInd = 0; $iInd  < $iNumRows; $iInd++ ) {
     $iNumRowsDadosTestadaInterna = pg_num_rows($rsSqlDadosTestadaInterna);
 
     if ( $iNumRowsDadosTestadaInterna > 0 ) {
-
+   
       for ( $xIndTestadaInterna = 0; $xIndTestadaInterna  < $iNumRowsDadosTestadaInterna; $xIndTestadaInterna++ ) {
 
         $oDadoTestadaInterna  = db_utils::fieldsMemory($rsSqlDadosTestadaInterna, $xIndTestadaInterna);
@@ -384,7 +385,7 @@ for ( $iInd = 0; $iInd  < $iNumRows; $iInd++ ) {
         $oDadosTestadaInterna = new stdClass();
         $oDadosTestadaInterna->iCodigoLote = $oDadoTestadaInterna->j34_lote;
         $oDadosTestadaInterna->iOutro      = $oDadoTestadaInterna->j39_idbql;
-        $oDadosTestadaInterna->iOrientacao = $oDadoTestadaInterna->j39_orientacao;
+        $oDadosTestadaInterna->iOrientacao = $oDadoTestadaInterna->j64_descricao;
         $oDadosTestadaInterna->iTestadaMI  = $oDadoTestadaInterna->j39_testad;
         $oDadosTestadaInterna->iTestadaMed = $oDadoTestadaInterna->j39_testle;
 

@@ -418,6 +418,8 @@ db_app::load("estilos.css, grid.style.css");
                     document.form1.ac20_pcmater.focus();
                     document.form1.ac20_pcmater.value = '';
                 } else {
+                    isServico = chave2;
+                    js_verificaServico();
                     js_getElementosMateriais();
                 }
             } else {
@@ -453,6 +455,7 @@ db_app::load("estilos.css, grid.style.css");
                 js_verificaServico();
                 js_getElementosMateriais();
             } else {
+
                 db_iframe_pcmater.hide();
                 alert(oRetorno.message.urlDecode());
                 return false;

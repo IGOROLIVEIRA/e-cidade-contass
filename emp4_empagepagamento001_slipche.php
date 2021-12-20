@@ -223,7 +223,7 @@ function js_calcula(){
 	  $cliframe_seleciona->js_marcador = "parent.js_calcula();";
 	  $cliframe_seleciona->dbscript = "onclick='parent.js_calcula();parent.verificarCheques(this)'";
 	  $cliframe_seleciona->desabilitados = false;
-	  $cliframe_seleciona->checked = true;
+	  $cliframe_seleciona->checked = false;
 	  
     $campos  = "e91_codcheque,k17_codigo,e91_cheque,e91_valor,e86_data,k17_credito,k17_debito,k17_data,c50_descr,c60_descr,z01_nome,e89_codmov";
 	  $cliframe_seleciona->campos  = $campos; 
@@ -315,7 +315,7 @@ if($registros > 0){
     <center>
       <table  class='bordas'>
         <tr>
-          <td class='bordas02' align='center'><a  title='Inverte Marcação' href='' onclick='return js_marca(this);return false;'>M</a></td>
+          <td class='bordas02' align='center'><a  title='Inverte Marcaï¿½ï¿½o' href='' onclick='return js_marca(this);return false;'>M</a></td>
           <td class='bordas02' align='center' ><small><b><?=$RLk17_codigo?></b></small></td>
           <td class='bordas02' align='center' ><small><b><?=$RLk17_credito?></b></small></td>
           <td class='bordas02' align='center' ><small><b><?=$RLk17_debito?></b></small></td>

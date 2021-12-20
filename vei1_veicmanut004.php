@@ -73,6 +73,17 @@ if (isset($incluir)) {
   $datahoraManutencao = strtotime($oDataManutencao->getDate() . " " . $ve62_hora);
   $dataManutencao = $oDataManutencao->getDate();
   $retirada = $ve65_veicretirada;
+  $tipogasto = $ve62_tipogasto;
+
+
+    /*
+    * verifica se o tipo de gasto está preenchido
+    */
+    if($tipogasto=="0"){
+      db_msgbox("Tipo de gasto não selecionado.");
+      $sqlerro=true;
+      $erro_msg="Não foi possível incluir.";
+    }
 
     if($medida<$ultimamedida1){
         db_msgbox("Medida de manutenção menor que Medida de manutenção anterior.");
@@ -147,15 +158,15 @@ if (isset($incluir)) {
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
     } elseif (!empty($ve62_datahora3) && $datahoraManutencao > strtotime($ve62_datahora3)) {
-      db_msgbox("Data ou Hora da manutencao maior que manutencao posterior.");
+      db_msgbox("Data ou Hora da manutenção maior que manutenção posterior.");
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
     } elseif (!empty($ve70_datahora1) && $datahoraManutencao < strtotime($ve70_datahora1)) {
-      db_msgbox("Data ou Hora da manutencao menor que abastecimento anterior.");
+      db_msgbox("Data ou Hora da manutenção menor que abastecimento anterior.");
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
     } elseif (!empty($ve70_datahora3) && $datahoraManutencao > strtotime($ve70_datahora3)) {
-      db_msgbox("Data ou Hora da Manutencao maior que abastecimento posterior.");
+      db_msgbox("Data ou Hora da manutenção maior que abastecimento posterior.");
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
     } else if (!empty($ve62_medida1) && $medida < $ve62_medida1) {
