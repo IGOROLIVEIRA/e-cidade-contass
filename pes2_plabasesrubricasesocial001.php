@@ -50,23 +50,27 @@ db_postmemory($HTTP_POST_VARS);
 
     <script>
         function js_emite() {
-
-            if (document.form1.tipoRelatorio.value == 'base') {
-                qry = '?ativos=' + document.form1.ativos.value;
-                qry += '&base=' + document.form1.base01.value;
-                qry += '&descr_base=' + document.form1.descr_base01.value;
-                jan = window.open('pes2_relbasesrubricasesocial002.php' + qry, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-            } else {
-                qry = '?ativos=' + document.form1.ativos.value;
-                jan = window.open('pes2_cadrubricasesocial002.php' + qry, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-            }
+            qry = '?date=' + document.form1.daterel.value;
+            //qry += '&base01='  + document.form1.base01.value;
+            qry += '&base02=' + document.form1.base02.value;
+            qry += '&base03=' + document.form1.base03.value;
+            qry += '&base04=' + document.form1.base04.value;
+            qry += '&base05=' + document.form1.base05.value;
+            qry += '&base06=' + document.form1.base06.value;
+            qry += '&base07=' + document.form1.base07.value;
+            qry += '&base08=' + document.form1.base08.value;
+            qry += '&base09=' + document.form1.base09.value;
+            qry += '&base010=' + document.form1.base010.value;
+            qry += '&base011=' + document.form1.base011.value;
+            qry += '&ativos=' + document.form1.ativos.value;
+            const jan = window.open('pes2_planilhabasesrubricaesocial.php' + qry);
             jan.moveTo(0, 0);
         }
 
-
+        /*Ancora01
         function js_pesquisabase01(mostra) {
             if (mostra == true) {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase011|r08_codigo|r08_descr', 'Pesquisa', true);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase001|r08_codigo|r08_descr', 'Pesquisa', true);
             } else {
                 if (document.form1.base01.value != '') {
                     js_OpenJanelaIframe('top.corpo', 'db_iframe_base01', 'func_bases.php?pesquisa_chave=' + document.form1.base01.value + '&funcao_js=parent.js_mostrabase01', 'Pesquisa', false);
@@ -84,9 +88,271 @@ db_postmemory($HTTP_POST_VARS);
             }
         }
 
-        function js_mostrabase011(chave1, chave2) {
+        function js_mostrabase001(chave1, chave2) {
             document.form1.base01.value = chave1;
             document.form1.descr_base01.value = chave2;
+            db_iframe_bases.hide();
+        }
+        */
+
+        /*Ancora02*/
+        function js_pesquisabase02(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase002|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base01.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base02', 'func_bases.php?pesquisa_chave=' + document.form1.base01.value + '&funcao_js=parent.js_mostrabase02', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base01.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase02(chave, erro) {
+            document.form1.descr_base02.value = chave;
+            if (erro == true) {
+                document.form1.base02.focus();
+                document.form1.base02.value = '';
+            }
+        }
+
+        function js_mostrabase002(chave1, chave2) {
+            document.form1.base02.value = chave1;
+            document.form1.descr_base02.value = chave2;
+            db_iframe_bases.hide();
+        }
+        /*Ancora03*/
+        function js_pesquisabase03(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase003|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base03.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base03', 'func_bases.php?pesquisa_chave=' + document.form1.base03.value + '&funcao_js=parent.js_mostrabase03', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base03.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase03(chave, erro) {
+            document.form1.descr_base03.value = chave;
+            if (erro == true) {
+                document.form1.base03.focus();
+                document.form1.base03.value = '';
+            }
+        }
+
+        function js_mostrabase003(chave1, chave2) {
+            document.form1.base03.value = chave1;
+            document.form1.descr_base03.value = chave2;
+            db_iframe_bases.hide();
+        }
+        /*Ancora04*/
+        function js_pesquisabase04(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase004|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base04.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base04', 'func_bases.php?pesquisa_chave=' + document.form1.base04.value + '&funcao_js=parent.js_mostrabase04', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base04.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase04(chave, erro) {
+            document.form1.descr_base04.value = chave;
+            if (erro == true) {
+                document.form1.base04.focus();
+                document.form1.base04.value = '';
+            }
+        }
+
+        function js_mostrabase004(chave1, chave2) {
+            document.form1.base04.value = chave1;
+            document.form1.descr_base04.value = chave2;
+            db_iframe_bases.hide();
+        }
+        /*Ancora05*/
+        function js_pesquisabase05(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase005|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base05.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base05', 'func_bases.php?pesquisa_chave=' + document.form1.base05.value + '&funcao_js=parent.js_mostrabase05', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base05.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase05(chave, erro) {
+            document.form1.descr_base05.value = chave;
+            if (erro == true) {
+                document.form1.base05.focus();
+                document.form1.base05.value = '';
+            }
+        }
+
+        function js_mostrabase005(chave1, chave2) {
+            document.form1.base05.value = chave1;
+            document.form1.descr_base05.value = chave2;
+            db_iframe_bases.hide();
+        }
+        /*Ancora06*/
+        function js_pesquisabase06(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase006|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base06.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base06', 'func_bases.php?pesquisa_chave=' + document.form1.base06.value + '&funcao_js=parent.js_mostrabase06', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base06.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase06(chave, erro) {
+            document.form1.descr_base06.value = chave;
+            if (erro == true) {
+                document.form1.base06.focus();
+                document.form1.base06.value = '';
+            }
+        }
+
+        function js_mostrabase006(chave1, chave2) {
+            document.form1.base06.value = chave1;
+            document.form1.descr_base06.value = chave2;
+            db_iframe_bases.hide();
+        }
+        /*Ancora07*/
+        function js_pesquisabase07(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase007|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base07.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base07', 'func_bases.php?pesquisa_chave=' + document.form1.base07.value + '&funcao_js=parent.js_mostrabase07', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base07.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase07(chave, erro) {
+            document.form1.descr_base07.value = chave;
+            if (erro == true) {
+                document.form1.base07.focus();
+                document.form1.base07.value = '';
+            }
+        }
+
+        function js_mostrabase007(chave1, chave2) {
+            document.form1.base07.value = chave1;
+            document.form1.descr_base07.value = chave2;
+            db_iframe_bases.hide();
+        }
+        /*Ancora08*/
+        function js_pesquisabase08(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase008|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base08.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base08', 'func_bases.php?pesquisa_chave=' + document.form1.base08.value + '&funcao_js=parent.js_mostrabase08', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base08.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase08(chave, erro) {
+            document.form1.descr_base08.value = chave;
+            if (erro == true) {
+                document.form1.base08.focus();
+                document.form1.base08.value = '';
+            }
+        }
+
+        function js_mostrabase008(chave1, chave2) {
+            document.form1.base08.value = chave1;
+            document.form1.descr_base08.value = chave2;
+            db_iframe_bases.hide();
+        }
+        /*Ancora09*/
+        function js_pesquisabase09(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase009|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base09.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base09', 'func_bases.php?pesquisa_chave=' + document.form1.base09.value + '&funcao_js=parent.js_mostrabase09', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base09.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase09(chave, erro) {
+            document.form1.descr_base09.value = chave;
+            if (erro == true) {
+                document.form1.base09.focus();
+                document.form1.base09.value = '';
+            }
+        }
+
+        function js_mostrabase009(chave1, chave2) {
+            document.form1.base09.value = chave1;
+            document.form1.descr_base09.value = chave2;
+            db_iframe_bases.hide();
+        }
+        /*Ancora010*/
+        function js_pesquisabase010(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase0010|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base010.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base010', 'func_bases.php?pesquisa_chave=' + document.form1.base010.value + '&funcao_js=parent.js_mostrabase010', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base010.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase010(chave, erro) {
+            document.form1.descr_base010.value = chave;
+            if (erro == true) {
+                document.form1.base010.focus();
+                document.form1.base010.value = '';
+            }
+        }
+
+        function js_mostrabase0010(chave1, chave2) {
+            document.form1.base010.value = chave1;
+            document.form1.descr_base010.value = chave2;
+            db_iframe_bases.hide();
+        }
+        /*Ancora011*/
+        function js_pesquisabase011(mostra) {
+            if (mostra == true) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase0011|r08_codigo|r08_descr', 'Pesquisa', true);
+            } else {
+                if (document.form1.base011.value != '') {
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base011', 'func_bases.php?pesquisa_chave=' + document.form1.base011.value + '&funcao_js=parent.js_mostrabase011', 'Pesquisa', false);
+                } else {
+                    document.form1.descr_base011.value = '';
+                }
+            }
+        }
+
+        function js_mostrabase011(chave, erro) {
+            document.form1.descr_base011.value = chave;
+            if (erro == true) {
+                document.form1.base011.focus();
+                document.form1.base011.value = '';
+            }
+        }
+
+        function js_mostrabase0011(chave1, chave2) {
+            document.form1.base011.value = chave1;
+            document.form1.descr_base011.value = chave2;
             db_iframe_bases.hide();
         }
     </script>
@@ -106,31 +372,14 @@ db_postmemory($HTTP_POST_VARS);
     <table align="center">
         <form name="form1" method="post" action="">
             <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td align="right"><strong>Tipo de Relatório:&nbsp;&nbsp;</strong>
+                <td nowrap align="right">
+                    <strong>Data:</strong>
                 </td>
-                <td align="left">
+                <td>
                     <?
-                    $arrTipoRelatorio = array("base" => "Bases e-social / rubricas", "rubrica" => "Rubricas - Bases e-social");
-                    db_select('tipoRelatorio', $arrTipoRelatorio, true, 4, "onchange='js_tipo_relatorio();'");
+                    db_inputdata('daterel', @$daterel_dia, @$daterel_mes, @$daterel_ano, true, 'text', $db_opcao, "")
                     ?>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap align="right" title="Teto remuneratório (art. 37, XI, da CF/1988)"><b>
-                        <?
-                        db_ancora('Teto remuneratório (art. 37, XI, da CF/1988):', "js_pesquisabase01(true)", @$db_opcao);
-                        ?>
-                        &nbsp;</b>
-                </td>
-                <td nowrap>
-                    <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase01(false)'");
-                    db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base01");
-                    ?>
+                    &nbsp;</b>
                 </td>
             </tr>
             <tr>
@@ -142,7 +391,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase02(false)'");
+                    db_input('base02', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase02(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base02");
                     ?>
                 </td>
@@ -156,7 +405,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase03(false)'");
+                    db_input('base03', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase03(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base03");
                     ?>
                 </td>
@@ -170,7 +419,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase04(false)'");
+                    db_input('base04', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase04(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base04");
                     ?>
                 </td>
@@ -184,7 +433,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase05(false)'");
+                    db_input('base05', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase05(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base05");
                     ?>
                 </td>
@@ -199,7 +448,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase06(false)'");
+                    db_input('base06', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase06(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base06");
                     ?>
                 </td>
@@ -213,7 +462,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase07(false)'");
+                    db_input('base07', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase07(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base07");
                     ?>
                 </td>
@@ -227,7 +476,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase08(false)'");
+                    db_input('base08', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase08(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base08");
                     ?>
                 </td>
@@ -241,7 +490,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase09(false)'");
+                    db_input('base09', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase09(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base09");
                     ?>
                 </td>
@@ -255,7 +504,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase010(false)'");
+                    db_input('base010', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase010(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base010");
                     ?>
                 </td>
@@ -269,7 +518,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td nowrap>
                     <?
-                    db_input('base01', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase011(false)'");
+                    db_input('base011', 4, @$base01, true, 'text', @$db_opcao, "onchange='js_pesquisabase011(false)'");
                     db_input("r08_descr", 50, @$Ir08_descr, true, "text", 3, "", "descr_base011");
                     ?>
                 </td>
@@ -300,18 +549,6 @@ db_postmemory($HTTP_POST_VARS);
     <?
     db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
     ?>
-    <script>
-        function js_tipo_relatorio() {
-            let elementoVerificar = $("tipoRelatorio");
-            let elementoBase = $('columnBase');
-            if (elementoVerificar.value == 'base') {
-                elementoBase.show();
-            } else {
-                elementoBase.hide();
-            }
-        }
-        js_tipo_relatorio();
-    </script>
 </body>
 
 </html>
