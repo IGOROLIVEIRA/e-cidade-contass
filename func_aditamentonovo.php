@@ -225,15 +225,16 @@ if ($adanterior == 0) {
 
             </form>
 
-            <div style="margin-left: -36%; <?php if (strcmp($oResult[0]->tipoaditivo, "12-Alteração de Projeto/Especificação") != 0) {
-                                                echo "display: none;";
-                                            } ?>">
-                <legend style="font-size: 16px;"><b>Legenda</b></legend>
-                <table style='width: 100%; ' align="right">
-                    <tr>
-                        <td style="height: 25px; font-size:14px; background: #7CFC00;"><strong>Itens incluídos</strong></td>
-                    </tr>
-                </table>
+            <div style="margin-right:910px; width: 10%; <?php if (strcmp($oResult[0]->tipoaditivo, "12-Alteração de Projeto/Especificação") != 0) {
+                                                            echo "display: none;";
+                                                        } ?>">
+                <fieldset>
+                    <legend style="font-size: 16px;"><b>Legenda</b></legend>
+                    <table style='width: 100%; ' align="right">
+                        <tr>
+                            <td style="height: 25px; font-size:14px; background: #7CFC00;"><strong>Itens incluídos</strong></td>
+                        </tr>
+                    </table>
                 </fieldset>
             </div>
 
