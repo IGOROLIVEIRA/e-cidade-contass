@@ -41,6 +41,7 @@ $clsaltes->rotulo->label("k13_conta");
 $clsaltes->rotulo->label("k13_descr");
 $clcontabancaria->rotulo->label("db83_numerocontratooc");
 $clcontabancaria->rotulo->label("db83_dataassinaturacop");
+$ano = db_getsession("DB_anousu"); //ano 
 
 ?>
 <html>

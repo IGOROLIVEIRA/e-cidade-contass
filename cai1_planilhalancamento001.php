@@ -787,30 +787,35 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoConta();
   }
 
+
+
   function js_mostraSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb_conta, idb83_numerocontratooc, idb83_dataassinaturacop) {
 
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
 
-    if (iCodigoConta != '') {
-      $('db83_numerocontratooc').value = idb83_numerocontratooc;
-    } else {
-      $('db83_numerocontratooc').value = '';
-    }
-
-    if (idb83_dataassinaturacop != '') {
-      const data = idb83_dataassinaturacop.split('-');
-      $('db83_dataassinaturacop').value = data[2] + "/" + data[1] + "/" + data[0];
-    } else {
-      $('db83_dataassinaturacop').value = '';
-    }
-    if (iCodigoRecurso == 174 || iCodigoRecurso == 179 || iCodigoRecurso == 190 || iCodigoRecurso == 191) {
-      if (idb83_dataassinaturacop == '' || idb83_numerocontratooc == '') {
-        alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
-
+    <?php if ($ano >= 2022) { ?>
+      if (iCodigoConta != '') {
+        $('db83_numerocontratooc').value = idb83_numerocontratooc;
+      } else {
+        $('db83_numerocontratooc').value = '';
       }
-    }
+      if (idb83_dataassinaturacop != '') {
+        const data = idb83_dataassinaturacop.split('-');
+        $('db83_dataassinaturacop').value = data[2] + "/" + data[1] + "/" + data[0];
+      } else {
+        $('db83_dataassinaturacop').value = '';
+      }
+
+
+      if (iCodigoRecurso == 174 || iCodigoRecurso == 179 || iCodigoRecurso == 190 || iCodigoRecurso == 191) {
+        if (idb83_dataassinaturacop == '' || idb83_numerocontratooc == '') {
+          alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
+
+        }
+      }
+    <?php } ?>
     iCodRecursoConta = $F('c61_codigo').substr(-3);
 
     if ($F('estrutural').substr(0, 3) == '211') {
@@ -862,6 +867,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
     js_mostrarNotificacaoConta();
   }
+
 
   function js_getCgmConta(iReduz) {
     sJson = '{"exec":"getCgmConta","iCodReduz":' + iReduz + '}';
@@ -1147,11 +1153,13 @@ if ($oInstit->db21_usasisagua == "t") {
    */
   function js_addReceita() {
 
-    if ($F('db83_dataassinaturacop') == '' || $F('db83_numerocontratooc') == '') {
-      if ($F('c61_codigo') == 174 || $F('c61_codigo') == 179 || $F('c61_codigo') == 190 || $F('c61_codigo') == 191) {
-        alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
-        $('k81_conta').focus();
-        return false;
+    if ($('anoUsu').value >= 2022) {
+      if ($F('db83_dataassinaturacop') == '' || $F('db83_numerocontratooc') == '') {
+        if ($F('c61_codigo') == 174 || $F('c61_codigo') == 179 || $F('c61_codigo') == 190 || $F('c61_codigo') == 191) {
+          alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
+          $('k81_conta').focus();
+          return false;
+        }
       }
     }
 
