@@ -45,27 +45,26 @@ if (isset($incluir)) {
         if ($procReferencia->si01_processocompra != '') {
             echo "<script>alert('Já existe preço referência para esse processo de compra');</script>";
             $processoValidado = false;
-        }  
+        }
 
-        if($processoValidado==true){
+        if ($processoValidado == true) {
             if ($oPost->si01_cotacaoitem == 0) {
                 echo "<script>alert('Selecione o tipo de cotação por item!');</script>";
                 $processoValidado = false;
-            } 
-    
-        }
-        
-        if(!empty($si01_datacotacao)){
-            $anousu = db_getsession('DB_anousu');
-            $instituicao = db_getsession('DB_instit');
-            $datacotacao = strtotime(implode("-",(array_reverse(explode("/",$si01_datacotacao)))));
-            $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
-            $c99_datapat = strtotime(db_utils::fieldsMemory($result, 0)->c99_datapat);
-            if ($datacotacao <= $c99_datapat) {
-                echo "<script>alert('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');</script>";
-                $processoValidado  = false;
             }
         }
+
+        // if(!empty($si01_datacotacao)){
+        //     $anousu = db_getsession('DB_anousu');
+        //     $instituicao = db_getsession('DB_instit');
+        //     $datacotacao = strtotime(implode("-",(array_reverse(explode("/",$si01_datacotacao)))));
+        //     $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+        //     $c99_datapat = strtotime(db_utils::fieldsMemory($result, 0)->c99_datapat);
+        //     if ($datacotacao <= $c99_datapat) {
+        //         echo "<script>alert('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');</script>";
+        //         $processoValidado  = false;
+        //     }
+        // }
 
         if ($processoValidado) {
             $clprecoreferencia->incluir(null);
@@ -82,7 +81,7 @@ if (isset($incluir)) {
             $sFuncao = "min";
         }
 
-        
+
 
         $sSql = "select pc23_orcamitem,count(pc23_vlrun) as valor
                       from pcproc
@@ -93,37 +92,34 @@ if (isset($incluir)) {
                       where pc80_codproc = $si01_processocompra and pc23_vlrun != 0 group by pc23_orcamitem";
 
         $rsResult = db_query($sSql);
-        
-        
-        $arrayValores = array(); $cont = 0;
-       
+
+
+        $arrayValores = array();
+        $cont = 0;
+
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
 
-            if($oPost->si01_cotacaoitem==1){
-                if($oItemOrc->valor>=1){
-                    
-                    $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
-                    $cont++;
-                }
+            if ($oPost->si01_cotacaoitem == 1) {
+                if ($oItemOrc->valor >= 1) {
 
-            }else if($oPost->si01_cotacaoitem==2){
-                if($oItemOrc->valor>=2){
-                    
                     $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
                     $cont++;
                 }
-                
-            }else if($oPost->si01_cotacaoitem==3){
-                if($oItemOrc->valor>=3){
-                    
+            } else if ($oPost->si01_cotacaoitem == 2) {
+                if ($oItemOrc->valor >= 2) {
+
                     $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
                     $cont++;
                 }
-                
-            }         
-            
+            } else if ($oPost->si01_cotacaoitem == 3) {
+                if ($oItemOrc->valor >= 3) {
+
+                    $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
+                    $cont++;
+                }
+            }
         }
 
 
@@ -139,9 +135,9 @@ if (isset($incluir)) {
                       join pcorcamval on pc22_orcamitem = pc23_orcamitem
                       where pc80_codproc = $si01_processocompra and pc23_orcamitem = $valor group by pc23_orcamitem";
 
-                      $rsResultee = db_query($sSql);
+            $rsResultee = db_query($sSql);
 
-                      $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
+            $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
 
             $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
             $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
@@ -182,21 +178,21 @@ if (isset($incluir)) {
       </script>";
     }
     if ($clprecoreferencia->erro_status != 0) {
-        db_redireciona("sic1_precoreferencia002.php?chavepesquisa=".$clprecoreferencia->si01_sequencial);
+        db_redireciona("sic1_precoreferencia002.php?chavepesquisa=" . $clprecoreferencia->si01_sequencial);
     }
 }
 ?>
-    <html>
+<html>
 
-    <head>
-        <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <meta http-equiv="Expires" CONTENT="0">
-        <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-        <link href="estilos.css" rel="stylesheet" type="text/css">
-    </head>
+<head>
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+</head>
 
-    <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
     <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
         <tr>
             <td width="360" height="18">&nbsp;</td>
@@ -219,12 +215,12 @@ if (isset($incluir)) {
     <?
     db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
     ?>
-    </body>
+</body>
 
-    </html>
-    <script>
-        js_tabulacaoforms("form1", "si01_processocompra", true, 1, "si01_processocompra", true);
-    </script>
+</html>
+<script>
+    js_tabulacaoforms("form1", "si01_processocompra", true, 1, "si01_processocompra", true);
+</script>
 <?
 if (isset($incluir)) {
     if ($clprecoreferencia->erro_status == "0") {
@@ -240,10 +236,9 @@ if (isset($incluir)) {
             </script>  ";
             echo "<script> document.getElementById('respCotacaonome').value='$respCotacaonomeV';</script>  ";
             echo "<script> document.getElementById('respOrcanome').value='$respOrcanomeV';</script>  ";
-        
         }
     } else {
-        $clprecoreferencia->erro(true,true);
+        $clprecoreferencia->erro(true, true);
         echo "<script> document.getElementById('respCotacaocodigo').value=$respCotacaocodigoV;</script>  ";
         echo "<script> 
         document.getElementById('respOrcacodigo').value=$respOrcacodigoV;
