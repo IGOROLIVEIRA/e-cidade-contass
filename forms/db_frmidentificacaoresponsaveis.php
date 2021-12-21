@@ -41,10 +41,11 @@ $clrotulo->label("o40_descr");
           </td>
           <td>
             <?
+            //OC16203
             if (db_getsession("DB_modulo") != 952) {
-              $x = array('1' => 'Gestor', '2' => 'Contador', '3' => 'Controle Interno', '4' => 'Ordenador de Despesa por Delegação');
+              $x = array('1' => 'Gestor', '2' => 'Contador', '3' => 'Controle Interno', '4' => 'Ordenador de Despesa por Delegação', '5' => 'Tesoureiro', '6' => 'Responsável Pelo Orçamento Municipal');
             } else {
-              $x = array('5' => 'Responsável pelo envio');
+              $x = array('7' => 'Responsável pelo envio');
             }
             db_select("si166_tiporesponsavel", $x, true, $db_opcao, "onchange='mostrar_campos()'");
             //db_input('si166_tiporesponsavel',11,$Isi166_tiporesponsavel,true,'text',$db_opcao,"")
