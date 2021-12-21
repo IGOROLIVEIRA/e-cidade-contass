@@ -50,8 +50,8 @@ db_postmemory($HTTP_POST_VARS);
 
     <script>
         function js_emite() {
-            qry = '?date=' + document.form1.daterel.value;
-            //qry += '&base01='  + document.form1.base01.value;
+            qry = '?ano=' + document.form1.DBtxt23.value;
+            qry += '&mes=' + document.form1.DBtxt25.value;
             qry += '&base02=' + document.form1.base02.value;
             qry += '&base03=' + document.form1.base03.value;
             qry += '&base04=' + document.form1.base04.value;
@@ -66,34 +66,6 @@ db_postmemory($HTTP_POST_VARS);
             const jan = window.open('pes2_planilhabasesrubricaesocial.php' + qry);
             jan.moveTo(0, 0);
         }
-
-        /*Ancora01
-        function js_pesquisabase01(mostra) {
-            if (mostra == true) {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_bases', 'func_bases.php?funcao_js=parent.js_mostrabase001|r08_codigo|r08_descr', 'Pesquisa', true);
-            } else {
-                if (document.form1.base01.value != '') {
-                    js_OpenJanelaIframe('top.corpo', 'db_iframe_base01', 'func_bases.php?pesquisa_chave=' + document.form1.base01.value + '&funcao_js=parent.js_mostrabase01', 'Pesquisa', false);
-                } else {
-                    document.form1.descr_base01.value = '';
-                }
-            }
-        }
-
-        function js_mostrabase01(chave, erro) {
-            document.form1.descr_base01.value = chave;
-            if (erro == true) {
-                document.form1.base01.focus();
-                document.form1.base01.value = '';
-            }
-        }
-
-        function js_mostrabase001(chave1, chave2) {
-            document.form1.base01.value = chave1;
-            document.form1.descr_base01.value = chave2;
-            db_iframe_bases.hide();
-        }
-        */
 
         /*Ancora02*/
         function js_pesquisabase02(mostra) {
@@ -372,14 +344,19 @@ db_postmemory($HTTP_POST_VARS);
     <table align="center">
         <form name="form1" method="post" action="">
             <tr>
-                <td nowrap align="right">
-                    <strong>Data:</strong>
+                <td align="left" nowrap title="Digite o Ano / Mes de competência">
+                    <strong>Ano / Mês :&nbsp;&nbsp;</strong>
                 </td>
                 <td>
                     <?
-                    db_inputdata('daterel', @$daterel_dia, @$daterel_mes, @$daterel_ano, true, 'text', $db_opcao, "")
+                    $DBtxt23 = db_anofolha();
+                    db_input('DBtxt23', 4, $IDBtxt23, true, 'text', 2, '')
                     ?>
-                    &nbsp;</b>
+                    &nbsp;/&nbsp;
+                    <?
+                    $DBtxt25 = db_mesfolha();
+                    db_input('DBtxt25', 2, $IDBtxt25, true, 'text', 2, '')
+                    ?>
                 </td>
             </tr>
             <tr>

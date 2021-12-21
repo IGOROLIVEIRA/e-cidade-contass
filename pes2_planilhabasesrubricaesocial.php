@@ -36,9 +36,6 @@ $by   = array(
 );
 
 $instituicao = db_getsession("DB_instit");
-$adate = explode('/', $date);
-$mes = $adate[1];
-$ano = $adate[2];
 
 //Inicio
 $sheet = $objPHPExcel->getActiveSheet();
@@ -115,8 +112,9 @@ if ($ativos == 'f') {
 if ($ativos == 'i') {
     $where = "";
 }
+$campos = "rh27_rubric,e991_rubricasesocial,rh27_descr,rh27_codincidprev,rh27_codincidirrf,rh27_codincidfgts,rh27_codincidregime,rh27_tetoremun";
+$rsRubricas = $clrhrubricas->sql_record($clrhrubricas->sql_query(null, $instituicao, $campos, "rh27_rubric", $where));
 
-$rsRubricas = $clrhrubricas->sql_record($clrhrubricas->sql_query(null, $instituicao, "*", "rh27_rubric", $where));
 $numrows_rubricas = $clrhrubricas->numrows;
 
 for ($i = 0; $i < $numrows_rubricas; $i++) {
@@ -124,13 +122,16 @@ for ($i = 0; $i < $numrows_rubricas; $i++) {
 
     /**BUSCO a Natureza da Rubrica*/
     if ($e991_rubricasesocial != "") {
-        $resultNatureza = $clrhrubricas->sql_record($clrhrubricas->sql_query(null, "e990_descricao", null, "where e991_rubricasesocial = {$e991_rubricasesocial}"));
+        $resultNatureza = $clrhrubricas->sql_record($clrhrubricas->sql_query(null, $instituicao, "distinct e990_sequencial||'-'||e990_descricao as e990_descricao", null, "e991_rubricasesocial = '{$e991_rubricasesocial}'"));
         db_fieldsmemory($resultNatureza, 0);
     }
+
     /**Cod. incidência tributária previdência social */
     if ($rh27_codincidprev != "") {
         $resultIncidTributaria = $clavaliacaoperguntaopcao->sql_record($clavaliacaoperguntaopcao->sql_query_file(null, "db104_valorresposta||' - '||db104_descricao AS db104_descricao", null, "db104_sequencial = $rh27_codincidprev"));
         db_fieldsmemory($resultIncidTributaria, 0);
+    } else {
+        $db104_descricao = '';
     }
     /**Cod. incidência tributária irrf */
     if ($rh27_codincidirrf != "") {
