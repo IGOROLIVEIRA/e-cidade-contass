@@ -26,116 +26,114 @@
  */
 ?>
 <script>
-// --------------------
-function valida_dados(){
+  // --------------------
+  function valida_dados() {
 
-   if (document.getElementById('o47_coddot').value == '') {
+    if (document.getElementById('o47_coddot').value == '') {
 
-     alert('Campo Reduzido da dotação é obrigatório!');
-     return false;
-   }
+      alert('Campo Reduzido da dotação é obrigatório!');
+      return false;
+    }
 
-   if (document.getElementById('o58_concarpeculiar').value == '') {
+    if (document.getElementById('o58_concarpeculiar').value == '') {
 
-     alert('Você deve selecionar uma C.Peculiar/Cod de Aplicação antes de incluir a Suplementação!');
-     return false;
-   }
+      alert('Você deve selecionar uma C.Peculiar/Cod de Aplicação antes de incluir a Suplementação!');
+      return false;
+    }
 
-   if (document.getElementById('o50_motivosuplementacao').value == 't') {
-     if (document.getElementById('o47_motivo').value == '') {
+    if (document.getElementById('o50_motivosuplementacao').value == 't') {
+      if (document.getElementById('o47_motivo').value == '') {
 
-       alert('Campo motivo é obrigatório!');
-       return false;
-     }
-   }
+        alert('Campo motivo é obrigatório!');
+        return false;
+      }
+    }
 
-   var op= document.createElement("input");
-       op.setAttribute("type","hidden");
-       op.setAttribute("name","<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>");
-       op.setAttribute("value","");
-       document.form1.appendChild(op);
-       document.form1.submit();
+    var op = document.createElement("input");
+    op.setAttribute("type", "hidden");
+    op.setAttribute("name", "<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>");
+    op.setAttribute("value", "");
+    document.form1.appendChild(op);
+    document.form1.submit();
 
-}
-// --------------------
+  }
+  // --------------------
 </script>
 <form name="form1" method="post" action="">
-<center>
-<table border=0 >
-<tr>
-<td valign=top>
- <fieldset><legend><b>Dotação</b></legend>
- <table>
-   <tr>
-     <td nowrap title="<?=@$To47_coddot?>"> <? db_ancora(@$Lo47_coddot,"js_pesquisao47_coddot(true);",$op); ?> </td>
-     <td><? db_input('o47_coddot',10,$Io47_coddot,true,'text',$op,"onchange='js_pesquisao47_coddot(false);'"); ?> </td>
-     <td><input type="submit" name="pesquisa_dot"  value="pesquisar"> </td>
-  </tr>
-  <tr>
-  <?
-    if ($oDadosProjeto->o138_sequencial != "") {
-  ?>
-   <tr>
-     <td nowrap><? db_ancora("<b>Projeção Despesa</b>","js_pesquisa_estimativa(true);",$op); ?> </td>
-     <td><? db_input('o07_sequencial',8,$Io47_coddot,true,'text',3,"onchange='js_pesquisa_estimativa(false);'"); ?> </td>
-  </tr>
-  <?
-    }
-  ?>
-  <tr>
-     <td nowrap title="<?=@$To58_orgao ?>">Orgão : </td>
-     <td><? db_input('o58_orgao',10,"$Io58_orgao",true,'text',3,"");  ?> </td>
-     <td colspan=3><? db_input('o40_descr',40,"",true,'text',3,"");  ?> </td>
-  </tr>
-  <tr>
-     <td nowrap title="<?=@$To58_elemento ?>" >Elemento  : </td>
-     <td> <? db_input('o56_elemento',10,"",true,'text',3,"");  ?>  </td>
-     <td> <? db_input('o56_descr',40,"",true,'text',3,"");  ?>       </td>
-  </tr>
-  <tr>
-     <td nowrap title="<?=@$To58_codigo ?>" >Recurso  : </td>
-     <td> <? db_input('o58_codigo',10,"",true,'text',3,"");  ?> </td>
-     <td> <? db_input('o15_descr',40,"",true,'text',3,"");  ?> </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$To58_concarpeculiar?>">
-       <?
-       db_ancora(@$Lo58_concarpeculiar,"js_pesquisao58_concarpeculiar(true);",$db_opcao,"","o58_concarpeculiarancora");
-       ?>
-    </td>
-    <td><? db_input('o58_concarpeculiar',10,@$Io58_concarpeculiar,true,'text',$db_opcao,"onchange='js_pesquisao58_concarpeculiar(false);'");  ?></td>
-    <td><? db_input('c58_descr',40,@$Ic58_descr,true,'text',3,''); ?></td>
-  </tr>
-  <tr>
-    <td>Saldo: </td>
-    <td><? db_input('atual_menos_reservado',10,'',true,'text',3,'','','','text-align:right');  ?> </td>
-  </tr>
-  <tr>
-    <td><b>Valor a Suplementar:</b></td>
-    <td><? db_input('o47_valor',10,$Io47_valor,true,'text',1,'','','','text-align:right');  ?> </td>
-  </tr>
-  <?php
-  //OC2785
-    $motivo  = db_query("
-                    select o50_motivosuplementacao from orcparametro where o50_anousu = ".db_getsession("DB_anousu"));
-    $aMotivo = db_utils::getCollectionByRecord($motivo);
-  ?>
-  <?php if ($aMotivo[0]->o50_motivosuplementacao == 't') : ?>
-  <tr>
-    <td><b>Motivo:</b></td>
-    <td colspan="2"><? db_input('o47_motivo',52,"",true,'text',1,'','','','');  ?> </td>
-    <input type="hidden" id="o50_motivosuplementacao" value="<?php echo $aMotivo[0]->o50_motivosuplementacao ?>">
-  </tr>
-  <?php else : ?>
-    <input type="hidden" id="o50_motivosuplementacao" value="">
-  <?php endif; ?>
-  <tr>
-    <td>&nbsp;</td>
-    <td colspan="2" align="center">
-      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
-               type="button" id="db_opcao"
-               value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
-               <?=($db_botao==false?"disabled":"")?>" onclick='valida_dados();'" >
+  <center>
+    <table border=0>
+      <tr>
+        <td valign=top>
+          <fieldset>
+            <legend><b>Dotação</b></legend>
+            <table>
+              <tr>
+                <td nowrap title="<?= @$To47_coddot ?>"> <? db_ancora(@$Lo47_coddot, "js_pesquisao47_coddot(true);", $op); ?> </td>
+                <td><? db_input('o47_coddot', 10, $Io47_coddot, true, 'text', $op, "onchange='js_pesquisao47_coddot(false);'"); ?> </td>
+                <td><input type="submit" name="pesquisa_dot" value="pesquisar"> </td>
+              </tr>
+              <tr>
+                <?
+                if ($oDadosProjeto->o138_sequencial != "") {
+                ?>
+              <tr>
+                <td nowrap><? db_ancora("<b>Projeção Despesa</b>", "js_pesquisa_estimativa(true);", $op); ?> </td>
+                <td><? db_input('o07_sequencial', 8, $Io47_coddot, true, 'text', 3, "onchange='js_pesquisa_estimativa(false);'"); ?> </td>
+              </tr>
+            <?
+                }
+            ?>
+            <tr>
+              <td nowrap title="<?= @$To58_orgao ?>">Orgão : </td>
+              <td><? db_input('o58_orgao', 10, "$Io58_orgao", true, 'text', 3, "");  ?> </td>
+              <td colspan=3><? db_input('o40_descr', 40, "", true, 'text', 3, "");  ?> </td>
+            </tr>
+            <tr>
+              <td nowrap title="<?= @$To58_elemento ?>">Elemento : </td>
+              <td> <? db_input('o56_elemento', 10, "", true, 'text', 3, "");  ?> </td>
+              <td> <? db_input('o56_descr', 40, "", true, 'text', 3, "");  ?> </td>
+            </tr>
+            <tr>
+              <td nowrap title="<?= @$To58_codigo ?>">Recurso : </td>
+              <td> <? db_input('o58_codigo', 10, "", true, 'text', 3, "");  ?> </td>
+              <td> <? db_input('o15_descr', 40, "", true, 'text', 3, "");  ?> </td>
+            </tr>
+            <tr>
+              <td nowrap title="<?= @$To58_concarpeculiar ?>">
+                <?
+                db_ancora(@$Lo58_concarpeculiar, "js_pesquisao58_concarpeculiar(true);", $db_opcao, "", "o58_concarpeculiarancora");
+                ?>
+              </td>
+              <td><? db_input('o58_concarpeculiar', 10, @$Io58_concarpeculiar, true, 'text', $db_opcao, "onchange='js_pesquisao58_concarpeculiar(false);'");  ?></td>
+              <td><? db_input('c58_descr', 40, @$Ic58_descr, true, 'text', 3, ''); ?></td>
+            </tr>
+            <tr>
+              <td>Saldo: </td>
+              <td><? db_input('atual_menos_reservado', 10, '', true, 'text', 3, '', '', '', 'text-align:right');  ?> </td>
+            </tr>
+            <tr>
+              <td><b>Valor a Suplementar:</b></td>
+              <td><? db_input('o47_valor', 10, $Io47_valor, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
+            </tr>
+            <?php
+            //OC2785
+            $motivo  = db_query("
+                    select o50_motivosuplementacao from orcparametro where o50_anousu = " . db_getsession("DB_anousu"));
+            $aMotivo = db_utils::getCollectionByRecord($motivo);
+            ?>
+            <?php if ($aMotivo[0]->o50_motivosuplementacao == 't') : ?>
+              <tr>
+                <td><b>Motivo:</b></td>
+                <td colspan="2"><? db_input('o47_motivo', 52, "", true, 'text', 1, '', '', '', '');  ?> </td>
+                <input type="hidden" id="o50_motivosuplementacao" value="<?php echo $aMotivo[0]->o50_motivosuplementacao ?>">
+              </tr>
+            <?php else : ?>
+              <input type="hidden" id="o50_motivosuplementacao" value="">
+            <?php endif; ?>
+            <tr>
+              <td>&nbsp;</td>
+              <td colspan="2" align="center">
+                <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="button" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>" onclick='valida_dados();'" >
     </td>
   </tr>
  </table>
@@ -147,14 +145,14 @@ function valida_dados(){
 
  <fieldset><legend><b>Projeto</b></legend>
  <table width=200px>
-   <tr><td><b>Projeto</b></td><td><? db_input("o39_codproj",6,'',true,'text',3); ?></td></tr>
-   <tr><td><b>Suplementação</b> </td><td><? db_input("o46_codsup",6,'',true,'text',3); ?></td></tr>
+   <tr><td><b>Projeto</b></td><td><? db_input("o39_codproj", 6, '', true, 'text', 3); ?></td></tr>
+   <tr><td><b>Suplementação</b> </td><td><? db_input("o46_codsup", 6, '', true, 'text', 3); ?></td></tr>
  </table>
  </fieldset>
 
  <fieldset><legend><b>Saldos</b></legend>
  <table width=200px>
-    <tr><td><b>Total Suplementado</b></td><td><? db_input("soma_suplem",10,'',true,'text',3,'','','','text-align:right'); ?></td></tr>
+    <tr><td><b>Total Suplementado</b></td><td><? db_input("soma_suplem", 10, '', true, 'text', 3, '', '', '', 'text-align:right'); ?></td></tr>
  </table>
  </fieldset>
 
@@ -165,49 +163,53 @@ function valida_dados(){
 <center>
 <?  ///////// total reduzido
 
-  /*OC2785*/
-  $motivo  = db_query("
-                    select o50_motivosuplementacao from orcparametro where o50_anousu = ".db_getsession("DB_anousu"));
-    $aMotivo = db_utils::getCollectionByRecord($motivo);
-    $o47_motivo = "";
-    $o47_motivo_union = "";
-    if ($aMotivo[0]->o50_motivosuplementacao == 't') {
-      $o47_motivo = ",o47_motivo";
-      $o47_motivo_union = ", 'A' as o47_motivo";
-    }
+/*OC2785*/
+$motivo  = db_query("
+                    select o50_motivosuplementacao from orcparametro where o50_anousu = " . db_getsession("DB_anousu"));
+$aMotivo = db_utils::getCollectionByRecord($motivo);
+$o47_motivo = "";
+$o47_motivo_union = "";
+if ($aMotivo[0]->o50_motivosuplementacao == 't') {
+  $o47_motivo = ",o47_motivo";
+  $o47_motivo_union = ", 'A' as o47_motivo";
+}
 
-  $sSqlTotalSuplementacoes = $clorcsuplemval->sql_query_file("","" ,"" ,
-                                              "fc_estruturaldotacao(o47_anousu,o47_coddot) as o50_estrutdespesa,
+$sSqlTotalSuplementacoes = $clorcsuplemval->sql_query_file(
+  "",
+  "",
+  "",
+  "fc_estruturaldotacao(o47_anousu,o47_coddot) as o50_estrutdespesa,
                                               1 as tipo,o47_anousu,o47_coddot,o47_valor{$o47_motivo}",
-                                              "" ,
-                                              "o47_codsup=$o46_codsup
-                                              and o47_valor >= 0");
-  $sSqlTotalSuplementacoes .= " union all ";
-  $sSqlTotalSuplementacoes .= " select  fc_estruturaldotacaoppa(o08_ano,o08_sequencial) as o50_estrutdespesa , ";
-  $sSqlTotalSuplementacoes .= "         2 as tipo,o08_ano, o136_sequencial, o136_valor{$o47_motivo_union}";
-  $sSqlTotalSuplementacoes .= "  from orcsuplemdespesappa ";
-  $sSqlTotalSuplementacoes .= "       inner join ppaestimativadespesa on o07_sequencial = o136_ppaestimativadespesa";
-  $sSqlTotalSuplementacoes .= "       inner join ppadotacao           on o07_coddot     = o08_sequencial";
-  $sSqlTotalSuplementacoes .= " where o136_orcsuplem={$o46_codsup}";
+  "",
+  "o47_codsup=$o46_codsup
+                                              and o47_valor >= 0"
+);
+$sSqlTotalSuplementacoes .= " union all ";
+$sSqlTotalSuplementacoes .= " select  fc_estruturaldotacaoppa(o08_ano,o08_sequencial) as o50_estrutdespesa , ";
+$sSqlTotalSuplementacoes .= "         2 as tipo,o08_ano, o136_sequencial, o136_valor{$o47_motivo_union}";
+$sSqlTotalSuplementacoes .= "  from orcsuplemdespesappa ";
+$sSqlTotalSuplementacoes .= "       inner join ppaestimativadespesa on o07_sequencial = o136_ppaestimativadespesa";
+$sSqlTotalSuplementacoes .= "       inner join ppadotacao           on o07_coddot     = o08_sequencial";
+$sSqlTotalSuplementacoes .= " where o136_orcsuplem={$o46_codsup}";
 
-  $clorcsuplemval = new cl_orcsuplemval;
+$clorcsuplemval = new cl_orcsuplemval;
 
-  $chavepri = "";
-  if ($o47_motivo != "") {
-    $chavepri = array("o47_anousu"=>$anousu,"o47_coddot"=>@$o47_coddot,"tipo" =>@$tipo,"o47_motivo" =>@$o47_motivo);
-  } else {
-    $chavepri = array("o47_anousu"=>$anousu,"o47_coddot"=>@$o47_coddot,"tipo" =>@$tipo);
-  }
-  //print_r($sSqlTotalSuplementacoes);die;
-  $cliframe_alterar_excluir->chavepri=$chavepri;
-  $cliframe_alterar_excluir->sql   =  $sSqlTotalSuplementacoes;
-  $cliframe_alterar_excluir->campos  ="o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo}";
-  $cliframe_alterar_excluir->legenda="lista";
-  $cliframe_alterar_excluir->iframe_height ="200";
-  $cliframe_alterar_excluir->opcoes = 3;
-  $cliframe_alterar_excluir->iframe_alterar_excluir(1);
+$chavepri = "";
+if ($o47_motivo != "") {
+  $chavepri = array("o47_anousu" => $anousu, "o47_coddot" => @$o47_coddot, "tipo" => @$tipo, "o47_motivo" => @$o47_motivo);
+} else {
+  $chavepri = array("o47_anousu" => $anousu, "o47_coddot" => @$o47_coddot, "tipo" => @$tipo);
+}
+//print_r($sSqlTotalSuplementacoes);die;
+$cliframe_alterar_excluir->chavepri = $chavepri;
+$cliframe_alterar_excluir->sql   =  $sSqlTotalSuplementacoes;
+$cliframe_alterar_excluir->campos  = "o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo}";
+$cliframe_alterar_excluir->legenda = "lista";
+$cliframe_alterar_excluir->iframe_height = "200";
+$cliframe_alterar_excluir->opcoes = 3;
+$cliframe_alterar_excluir->iframe_alterar_excluir(1);
 
-  ?>
+?>
 </form>
 </center>
 
@@ -312,57 +314,4 @@ function getDadosDotacaoPPA(iDotacao) {
 function preencheDadosDotacao(oAjax) {
 
   js_removeObj('msgBox');
-  oRetorno = eval("("+oAjax.responseText+")");
-  if (oRetorno.status == 1) {
-
-    $('o47_coddot').value   = '';
-    $('o58_orgao').value    = oRetorno.dadosdotacao.o08_orgao;
-    $('o40_descr').value    = oRetorno.dadosdotacao.o40_descr.urlDecode();
-    $('o56_elemento').value = oRetorno.dadosdotacao.o56_elemento;
-    $('o56_descr').value    = oRetorno.dadosdotacao.o56_descr.urlDecode();
-    $('o58_codigo').value   = oRetorno.dadosdotacao.o08_recurso;
-    $('o15_descr').value    = oRetorno.dadosdotacao.o15_descr;
-
-  } else {
-
-    alert('Estimativa informada não possui estrutura válida.')
-    $('o07_sequencial').value = '';
-  }
-}
-
-function js_pesquisao58_concarpeculiar(mostra){
-
-  if(mostra==true){
-    js_OpenJanelaIframe('',
-                        'db_iframe_concarpeculiar',
-                        'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr',
-                        'Pesquisa',
-                        true);
-  }else{
-     if(document.form1.o58_concarpeculiar.value != ''){
-         js_OpenJanelaIframe('',
-                             'db_iframe_concarpeculiar',
-                             'func_concarpeculiar.php?pesquisa_chave='+document.form1.o58_concarpeculiar.value.trim()+'&funcao_js=parent.js_mostraconcarpeculiar',
-                             'Pesquisa',
-                             false);
-     }else{
-       document.form1.c58_descr.value = '';
-     }
-  }
-}
-
-function js_mostraconcarpeculiar(chave,erro){
-  document.form1.c58_descr.value = chave;
-  if(erro==true){
-    document.form1.o58_concarpeculiar.focus();
-    document.form1.o58_concarpeculiar.value = '';
-  }
-}
-
-function js_mostraconcarpeculiar1(chave1,chave2){
-  document.form1.o58_concarpeculiar.value =chave1;
-  document.form1.c58_descr.value = chave2;
-  db_iframe_concarpeculiar.hide();
-}
-
-</script>
+  oRetorno = eval(" ("+oAjax.responseText+")"); if (oRetorno.status==1) { $('o47_coddot').value='' ; $('o58_orgao').value=oRetorno.dadosdotacao.o08_orgao; $('o40_descr').value=oRetorno.dadosdotacao.o40_descr.urlDecode(); $('o56_elemento').value=oRetorno.dadosdotacao.o56_elemento; $('o56_descr').value=oRetorno.dadosdotacao.o56_descr.urlDecode(); $('o58_codigo').value=oRetorno.dadosdotacao.o08_recurso; $('o15_descr').value=oRetorno.dadosdotacao.o15_descr; } else { alert('Estimativa informada não possui estrutura válida.') $('o07_sequencial').value='' ; } } function js_pesquisao58_concarpeculiar(mostra){ if(mostra==true){ js_OpenJanelaIframe('', 'db_iframe_concarpeculiar' , 'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr' , 'Pesquisa' , true); }else{ if(document.form1.o58_concarpeculiar.value !='' ){ js_OpenJanelaIframe('', 'db_iframe_concarpeculiar' , 'func_concarpeculiar.php?pesquisa_chave=' +document.form1.o58_concarpeculiar.value.trim()+'&funcao_js=parent.js_mostraconcarpeculiar', 'Pesquisa' , false); }else{ document.form1.c58_descr.value='' ; } } } function js_mostraconcarpeculiar(chave,erro){ document.form1.c58_descr.value=chave; if(erro==true){ document.form1.o58_concarpeculiar.focus(); document.form1.o58_concarpeculiar.value='' ; } } function js_mostraconcarpeculiar1(chave1,chave2){ document.form1.o58_concarpeculiar.value=chave1; document.form1.c58_descr.value=chave2; db_iframe_concarpeculiar.hide(); } </script>
