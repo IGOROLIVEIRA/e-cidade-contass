@@ -115,6 +115,14 @@
               <td><b>Valor a Suplementar:</b></td>
               <td><? db_input('o47_valor', 10, $Io47_valor, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
             </tr>
+            <tr>
+              <td><b>N° do Contrato da Operação de Crédito:</b></td>
+              <td><? db_input('o47_valor', 10, $Io47_valor, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
+            </tr>
+            <tr>
+              <td><b>Data de Assinatura do Contrato OP:</b></td>
+              <td><? db_input('o47_valor', 10, $Io47_valor, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
+            </tr>
             <?php
             //OC2785
             $motivo  = db_query("
