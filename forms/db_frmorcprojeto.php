@@ -61,6 +61,10 @@ $clrotulo->label("o45_numlei");
               <td><? db_textarea('o39_descr', 0, 67, $Io39_descr, true, 'text', $db_opcao, "") ?></td>
             </tr>
             <tr>
+              <td nowrap title="<?= @$To39_justi ?>"><?= @$Lo39_justi ?></td>
+              <td><? db_textarea('o39_justi', 0, 67, $Io39_justi, true, 'text', $db_opcao, "") ?></td>
+            </tr>
+            <tr>
               <td nowrap title="<?= @$To39_codlei ?>"><? db_ancora(@$Lo39_codlei, "js_pesquisao39_codlei(true);", $db_opcao); ?></td>
               <td>
                 <? db_input('o39_codlei', 8, $Io39_codlei, true, 'text', $db_opcao, " onchange='js_pesquisao39_codlei(false);'") ?>
