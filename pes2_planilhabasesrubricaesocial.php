@@ -112,8 +112,10 @@ if ($ativos == 'f') {
 if ($ativos == 'i') {
     $where = "";
 }
-$campos = "rh27_rubric,e991_rubricasesocial,rh27_descr,rh27_codincidprev,rh27_codincidirrf,rh27_codincidfgts,rh27_codincidregime,rh27_tetoremun";
-$rsRubricas = $clrhrubricas->sql_record($clrhrubricas->sql_query(null, $instituicao, $campos, "rh27_rubric", $where));
+$campos = "rh27_rubric,rh27_descr,e991_rubricasesocial as rubricasesocial,rh27_codincidprev as codincidprev,
+rh27_codincidirrf as codincidirrf,rh27_codincidfgts as codincidfgts,rh27_codincidregime as codincidregime,rh27_tetoremun";
+//. "and rh27_rubric='R903'"
+$rsRubricas = $clrhrubricas->sql_record($clrhrubricas->sql_query(null, $instituicao, $campos, "rh27_rubric", $where . "and rh27_instit = $instituicao"));
 
 $numrows_rubricas = $clrhrubricas->numrows;
 
@@ -121,32 +123,41 @@ for ($i = 0; $i < $numrows_rubricas; $i++) {
     db_fieldsmemory($rsRubricas, $i);
 
     /**BUSCO a Natureza da Rubrica*/
-    if ($e991_rubricasesocial != "") {
-        $resultNatureza = $clrhrubricas->sql_record($clrhrubricas->sql_query(null, $instituicao, "distinct e990_sequencial||'-'||e990_descricao as e990_descricao", null, "e991_rubricasesocial = '{$e991_rubricasesocial}'"));
+    if ($rubricasesocial != "") {
+        $resultNatureza = $clrhrubricas->sql_record($clrhrubricas->sql_query(null, $instituicao, "distinct e990_sequencial||'-'||e990_descricao as e990_descricao", null, "e991_rubricasesocial = '{$rubricasesocial}'"));
         db_fieldsmemory($resultNatureza, 0);
+    } else {
+        $e990_descricao = "";
     }
 
     /**Cod. incidência tributária previdência social */
-    if ($rh27_codincidprev != "") {
-        $resultIncidTributaria = $clavaliacaoperguntaopcao->sql_record($clavaliacaoperguntaopcao->sql_query_file(null, "db104_valorresposta||' - '||db104_descricao AS db104_descricao", null, "db104_sequencial = $rh27_codincidprev"));
+    if ($codincidprev != "") {
+        $resultIncidTributaria = $clavaliacaoperguntaopcao->sql_record($clavaliacaoperguntaopcao->sql_query_file(null, "db104_valorresposta||' - '||db104_descricao AS descrrh27_codincidprev", null, "db104_sequencial = $codincidprev"));
         db_fieldsmemory($resultIncidTributaria, 0);
     } else {
-        $db104_descricao = '';
+        $descrrh27_codincidprev = '';
     }
     /**Cod. incidência tributária irrf */
-    if ($rh27_codincidirrf != "") {
-        $resultCodIncRRF = $clavaliacaoperguntaopcao->sql_record($clavaliacaoperguntaopcao->sql_query_file(null, "db104_valorresposta||' - '||db104_descricao AS descrh27_codincidirrf", null, "db104_sequencial = $rh27_codincidirrf"));
+    if ($codincidirrf != "") {
+        $resultCodIncRRF = $clavaliacaoperguntaopcao->sql_record($clavaliacaoperguntaopcao->sql_query_file(null, "db104_valorresposta||' - '||db104_descricao AS descrh27_codincidirrf", null, "db104_sequencial = $codincidirrf"));
         db_fieldsmemory($resultCodIncRRF, 0);
+    } else {
+        $descrh27_codincidirrf = "";
     }
+
     /**Cod. incidência para o fgts */
-    if ($rh27_codincidfgts != "") {
-        $resultCodIncidFGTS = $clavaliacaoperguntaopcao->sql_record($clavaliacaoperguntaopcao->sql_query_file(null, "db104_descricao AS descrh27_codincidfgts", null, "db104_sequencial = $rh27_codincidfgts"));
+    if ($codincidfgts != "") {
+        $resultCodIncidFGTS = $clavaliacaoperguntaopcao->sql_record($clavaliacaoperguntaopcao->sql_query_file(null, "db104_descricao AS descrh27_codincidfgts", null, "db104_sequencial = $codincidfgts"));
         db_fieldsmemory($resultCodIncidFGTS, 0);
+    } else {
+        $descrh27_codincidfgts = "";
     }
     /**Cod. incidência Regime Próprio RPPS/regime militar */
-    if ($rh27_codincidregime != "") {
-        $resultCodincidRegime = $clavaliacaoperguntaopcao->sql_record($clavaliacaoperguntaopcao->sql_query_file(null, "db104_descricao AS descrh27_codincidregime", null, "db104_sequencial = $rh27_codincidregime"));
+    if ($codincidregime != "") {
+        $resultCodincidRegime = $clavaliacaoperguntaopcao->sql_record($clavaliacaoperguntaopcao->sql_query_file(null, "db104_descricao AS descrh27_codincidregime", null, "db104_sequencial = $codincidregime"));
         db_fieldsmemory($resultCodincidRegime, 0);
+    } else {
+        $descrh27_codincidregime = "";
     }
 
     /**Base de Calculo IRRF Mensal */
@@ -306,7 +317,7 @@ for ($i = 0; $i < $numrows_rubricas; $i++) {
     }
     $sheet->setCellValue($collA, $rubrica);
     $sheet->setCellValue($collB, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $e990_descricao)));
-    $sheet->setCellValue($collC, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $db104_descricao)));
+    $sheet->setCellValue($collC, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $descrrh27_codincidprev)));
     $sheet->setCellValue($collD, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $descrh27_codincidirrf)));
     $sheet->setCellValue($collE, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $descrh27_codincidfgts)));
     $sheet->setCellValue($collF, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $descrh27_codincidregime)));
