@@ -163,7 +163,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 			INNER JOIN liccomissaocgm AS liccomissaocgm ON (liclicita.l20_codigo=liccomissaocgm.l31_licitacao)
 			INNER JOIN protocolo.cgm as cgm on (liccomissaocgm.l31_numcgm=cgm.z01_numcgm)
 			INNER JOIN configuracoes.db_config as db_config on (liclicita.l20_instit=db_config.codigo)
-			INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
+			INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom) 
 	    INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 			LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 			WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= " . db_getsession("DB_anousu") . "
@@ -202,6 +202,43 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
             }
             if (!in_array($oDados10->codlicitacao, $aLicitacoes)) {
                 $aLicitacoes[] = $oDados10->codlicitacao;
+                $slq1 = "select * from precoreferencia where si01_processocompra = (select pc81_codproc from pcprocitem where pc81_codprocitem = (select max(l21_codpcprocitem) from liclicitem where l21_codliclicita = $oDados10->codlicitacao))";
+                $rsResult10Preco = db_query($slq1);
+                $oDados10Preco = db_utils::fieldsMemory($rsResult10Preco, 0);
+
+                if($oDados10Preco->si01_tipocotacao!=""){
+                  $slq2 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmcotacao";
+                  $rsResultCPF = db_query($slq2);
+                  $rsResultCPF = db_utils::fieldsMemory($rsResultCPF, 0);
+
+                    $clresplic10->si55_tiporegistro = 10;
+                    $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
+                    $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
+                    $clresplic10->si55_exerciciolicitacao = $oDados10->exerciciolicitacao;
+                    $clresplic10->si55_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
+                    $clresplic10->si55_tiporesp = $oDados10Preco->si01_tipocotacao;
+                    $clresplic10->si55_nrocpfresp = $rsResultCPF->z01_cgccpf;
+                    $clresplic10->si55_instit = db_getsession("DB_instit");
+                    $clresplic10->si55_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                    $clresplic10->incluir(null);
+
+                  $slq3 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmorcamento";
+                  $rsResultCPF1 = db_query($slq3);
+                  $rsResultCPF1 = db_utils::fieldsMemory($rsResultCPF1, 0);
+
+                    $clresplic10->si55_tiporegistro = 10;
+                    $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
+                    $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
+                    $clresplic10->si55_exerciciolicitacao = $oDados10->exerciciolicitacao;
+                    $clresplic10->si55_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
+                    $clresplic10->si55_tiporesp = $oDados10Preco->si01_tipoorcamento;
+                    $clresplic10->si55_nrocpfresp = $rsResultCPF1->z01_cgccpf;
+                    $clresplic10->si55_instit = db_getsession("DB_instit");
+                    $clresplic10->si55_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                    $clresplic10->incluir(null);
+
+                }
+
             }
         }
 

@@ -137,7 +137,7 @@ class empenho {
   }
 
 
-  function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='', 
+  function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='',
                     $iContaPagadora = null, $lVerificaContaPagadora = true) {
 
     /*
@@ -145,7 +145,7 @@ class empenho {
      * obriga informar a conta pagadora
      */
     if ($lVerificaContaPagadora) {
-        
+
         $clempparametro = $this->usarDao("empparametro", true);
         $rsParametros   = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"),"*"));
         if ($clempparametro->numrows > 0){
@@ -160,7 +160,7 @@ class empenho {
             $this->erro_msg    = "Conta pagadora não informada.";
             return false;
         }
-        
+
     }
 
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
@@ -580,17 +580,20 @@ class empenho {
           $acordoLancamento = false;
         }
 
-        $oDataIntegracao = new DBDate( date("Y-m-d", db_getsession("DB_datausu")) );
-        $oInstituicao    = new Instituicao(db_getsession("DB_instit"));
-        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataIntegracao, $oInstituicao)) && $acordoLancamento == true){
-
-          $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+        $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
           $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null,
             "e100_acordo",
             null,
             "e100_numemp = {$oEmpenhoFinanceiro->getNumero()}");
-          $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
-          if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+        $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+
+        if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+            $acordoLancamento = true;
+        }
+
+        $oDataIntegracao = new DBDate( date("Y-m-d", db_getsession("DB_datausu")) );
+        $oInstituicao    = new Instituicao(db_getsession("DB_instit"));
+        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataIntegracao, $oInstituicao)) && $acordoLancamento == true){
 
             $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
             $oEventoContabilAcordo = new EventoContabil(901, $iAnoSessao);
@@ -606,9 +609,8 @@ class empenho {
             $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
             $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
-
             $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
-          }
+
         }
 
       } catch(Exception $e) {
@@ -1088,19 +1090,19 @@ class empenho {
       $acordoLancamento = false;
     }
 
-    if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
-
-      $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+    $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
       $sSqlContrato = $oDaoEmpenhoContrato->sql_query_file(null,
           "e100_acordo",
           null,
           "e100_numemp = {$oEmpenho->e60_numemp}");
 
-      $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+    $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
 
+    if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+        $acordoLancamento = true;
+    }
 
-      if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
-
+    if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
         try {
 
           $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
@@ -1125,7 +1127,6 @@ class empenho {
           $this->erro_msg = $e->getMessage();
           return false;
         }
-      }
      }
     return true;
   }
@@ -2016,7 +2017,7 @@ class empenho {
    *  @return recordset;
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
-                            $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null, 
+                            $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null,
                             $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
@@ -2346,14 +2347,14 @@ class empenho {
     }
     if ($lLiquidar && !$this->lSqlErro){
 
-      $this->liquidar(  
-                $this->numemp, 
-                $objEmpElem->e64_codele, 
-                $objEmpNota->e69_codnota, 
-                $nTotal,$sHistorico, 
-                '', 
-                $iCompDesp, 
-                $iContaPagadora, 
+      $this->liquidar(
+                $this->numemp,
+                $objEmpElem->e64_codele,
+                $objEmpNota->e69_codnota,
+                $nTotal,$sHistorico,
+                '',
+                $iCompDesp,
+                $iContaPagadora,
                 $lVerificaContaPagadora);
       if ($this->erro_status == "0"){
 
@@ -2880,84 +2881,86 @@ class empenho {
       }
 
     }
+    // a partir de 2022 os lançamento serão feitos no contrato.
+    if(db_getsession("DB_anousu") < 2022){
+        /**
+         * Lancamentos do contrato
+         * - busca contrato do empenho, caso encontre, efetua lançamento
+         */
+        $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
+        $oInstituicao     = new Instituicao(db_getsession('DB_instit'));
 
-    /**
-     * Lancamentos do contrato
-     * - busca contrato do empenho, caso encontre, efetua lançamento
-     */
-    $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
-    $oInstituicao     = new Instituicao(db_getsession('DB_instit'));
+        $oDaoAcordo = db_utils::getDao('acordo');
 
-    $oDaoAcordo = db_utils::getDao('acordo');
+        $sql = $oDaoAcordo->sql_query_lancamentos_empenhocontrato("c71_coddoc", $this->numemp);
 
-    $sql = $oDaoAcordo->sql_query_lancamentos_empenhocontrato("c71_coddoc", $this->numemp);
+        $result = db_query($sql);
 
-    $result = db_query($sql);
+        $aDocumentos = array();
 
-    $aDocumentos = array();
-
-    for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) {
-      $aDocumentos[] =  db_utils::fieldsMemory($result,$iCont)->c71_coddoc;
-    }
-
-    $acordoLancamento = true;
-
-    if (!in_array(900,$aDocumentos)) {
-      $acordoLancamento = false;
-    }
-
-    if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
-
-      $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
-      $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null,
-        "e100_acordo",
-        null,
-        "e100_numemp = {$this->numemp}"
-      );
-
-      $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
-      if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
-
-        try {
-
-          $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
-          $oEventoContabilAcordo = new EventoContabil(903, $iAnoUsu);
-          $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
-          $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
-          $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
-          $oLancamentoAuxiliarAcordo->setValorTotal(round($nValorAnular, 2));
-
-          $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
-          $oContaCorrenteDetalhe->setAcordo($oAcordo);
-          $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
-          $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
-          $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
-
-          $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
-
-          /**
-           * Incluir novamente saldo da quantidade autorizada do acordo
-           */
-          $oDaoEmpempAut   = db_utils::getDao("empempaut");
-          $rsDaoEmpempAut  = $oDaoEmpempAut->sql_record($oDaoEmpempAut->sql_query_file($this->numemp,"distinct e61_autori as autori"));
-          if ($oDaoEmpempAut->numrows > 0){
-            $oDaoEmpempitem  = db_utils::getDao("empempitem");
-            $aItensAcordo = array();
-            foreach ($aItens as $oItem) {
-              $rsEmpempItem = $oDaoEmpempitem->sql_record($oDaoEmpempitem->sql_query_file(null,null,"e62_item",null,"e62_sequencial = {$oItem->e62_sequencial}"));
-              $iCodMaterial = db_utils::fieldsmemory($rsEmpempItem, 0)->e62_item;
-              $aItensAcordo[$iCodMaterial] = clone($oItem);
-              $aItensAcordo[$iCodMaterial]->pc01_codmater = $iCodMaterial;
-            }
-            $oAcordo->anularAutorizacao(db_utils::fieldsMemory($rsDaoEmpempAut,0)->autori, $aItensAcordo);
-
-          }
-        } catch (Exception $eErro) {
-
-          $this->lSqlErro = true;
-          $this->sErroMsg = "({$eErro->getMessage()})";
+        for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) {
+        $aDocumentos[] =  db_utils::fieldsMemory($result,$iCont)->c71_coddoc;
         }
-      }
+
+        $acordoLancamento = true;
+
+        if (!in_array(900,$aDocumentos)) {
+        $acordoLancamento = false;
+        }
+
+        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
+
+        $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+        $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null,
+            "e100_acordo",
+            null,
+            "e100_numemp = {$this->numemp}"
+        );
+
+        $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+        if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+
+            try {
+
+            $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
+            $oEventoContabilAcordo = new EventoContabil(903, $iAnoUsu);
+            $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
+            $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
+            $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
+            $oLancamentoAuxiliarAcordo->setValorTotal(round($nValorAnular, 2));
+
+            $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
+            $oContaCorrenteDetalhe->setAcordo($oAcordo);
+            $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
+            $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+            $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
+
+            $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+
+            /**
+             * Incluir novamente saldo da quantidade autorizada do acordo
+             */
+            $oDaoEmpempAut   = db_utils::getDao("empempaut");
+            $rsDaoEmpempAut  = $oDaoEmpempAut->sql_record($oDaoEmpempAut->sql_query_file($this->numemp,"distinct e61_autori as autori"));
+            if ($oDaoEmpempAut->numrows > 0){
+                $oDaoEmpempitem  = db_utils::getDao("empempitem");
+                $aItensAcordo = array();
+                foreach ($aItens as $oItem) {
+                $rsEmpempItem = $oDaoEmpempitem->sql_record($oDaoEmpempitem->sql_query_file(null,null,"e62_item",null,"e62_sequencial = {$oItem->e62_sequencial}"));
+                $iCodMaterial = db_utils::fieldsmemory($rsEmpempItem, 0)->e62_item;
+                $aItensAcordo[$iCodMaterial] = clone($oItem);
+                $aItensAcordo[$iCodMaterial]->pc01_codmater = $iCodMaterial;
+                }
+                $oAcordo->anularAutorizacao(db_utils::fieldsMemory($rsDaoEmpempAut,0)->autori, $aItensAcordo);
+
+            }
+            } catch (Exception $eErro) {
+
+            $this->lSqlErro = true;
+            $this->sErroMsg = "({$eErro->getMessage()})";
+            }
+        }
+        }
     }
 
     /*
@@ -3520,9 +3523,7 @@ class empenho {
           $acordoLancamento = false;
         }
 
-        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
-
-          $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+        $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
           $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null,
               "e100_acordo",
               null,
@@ -3531,7 +3532,11 @@ class empenho {
 
           $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
 
-          if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+        if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
+            $acordoLancamento = true;
+        }
+
+        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
 
               try {
 
@@ -3573,7 +3578,7 @@ class empenho {
                   $this->sErroMsg = "({$eErro->getMessage()})";
               }
           }
-        }
+
       }
     }
   }

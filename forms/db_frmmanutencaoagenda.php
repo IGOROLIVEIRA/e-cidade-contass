@@ -212,6 +212,7 @@ if (count($aParametrosEmpenho) > 0) {
                                                 </td>
                                                 <td colspan=3 nowrap>
                                                     <?php
+
                                                     $sWhere = "db83_tipoconta = 1";
                                                     /* [Extensão] - Filtro da Despesa */
 
@@ -234,7 +235,9 @@ if (count($aParametrosEmpenho) > 0) {
 
                                                     }
                                                     $e83_codtipo ='0';
+
                                                     db_select("e83_codtipo",$arr,true,1,"onchange='js_setContaPadrao(this.value);' style='width:26em'");
+
                                                     ?>
                                                 </td>
                                             </tr>
@@ -925,6 +928,7 @@ if (count($aParametrosEmpenho) > 0) {
 
         js_removeObj("msgBox");
         js_liberaBotoes(true);
+
         var oResponse = eval("("+oAjax.responseText+")");
         gridNotas.clearAll(true);
         gridNotas.setStatus("");
@@ -1010,7 +1014,7 @@ if (count($aParametrosEmpenho) > 0) {
                     } else {
                         aLinha[9]   = js_createInputNumDocumento(e81_numdoc, e81_codmov, e97_codforma);
                     }
-                    
+
                     if (e43_sequencial != "") {
                         aLinha[10]   = "("+e42_sequencial+") - "+js_formatar(e42_dtpagamento,'d');
                     } else {
@@ -1229,7 +1233,7 @@ if (count($aParametrosEmpenho) > 0) {
         gridNotas.aHeaders[1].lDisplayed = false;
         gridNotas.aHeaders[11].lDisplayed = false;
         gridNotas.aHeaders[16].lDisplayed = false;
-        
+
         gridNotas.show(document.getElementById('gridNotas'));
         $('gridNotasstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
         // Tarefa 24652
@@ -1280,11 +1284,11 @@ if (count($aParametrosEmpenho) > 0) {
         let sDisabled = "";
 
         if (iCodForma == 1 || iCodForma == 2) {
-            sDisabled = "disabled='disabled'";            
+            sDisabled = "disabled='disabled'";
         }
 
         return "<input value='"+sNumDoc+"' size='13' maxlength='15' id='numdoc"+iCodMov+"' "+sDisabled+">";
-        
+
     }
 
     function js_objectToJson(oObject) {
@@ -1343,7 +1347,7 @@ if (count($aParametrosEmpenho) > 0) {
         objNumDoc = document.getElementById("numdoc"+iCodMov+"");
 
         if (iTipoForma == 1 || iTipoForma == 2) {
-            
+
             objNumDoc.value = '';
             objNumDoc.setAttribute("disabled", "disabled");
 
@@ -1490,12 +1494,12 @@ if (count($aParametrosEmpenho) > 0) {
             return false;
 
         }
-        if (js_comparadata(sDataDia,$F('e42_dtpagamento'),">")) {
-
+        /*
+        if (js_comparadata(sDataDia, $F('e42_dtpagamento'), ">")) {
             alert("Data Informada Inválida.\nData menor que a data do sistema");
             return false;
-
-        }
+        } 
+        */
         var oEnvio                   = new Object();
         oEnvio.exec                  = "configurarPagamento";
         oEnvio.lEfetuarPagamento     = lEfetuarPagamento;
@@ -1547,23 +1551,23 @@ if (count($aParametrosEmpenho) > 0) {
             var dtAutoriza           = $F('e42_dtpagamento');
             var nValorRetencao       = js_strToFloat(aMovimentos[iMov].aCells[14].getValue());
             var lRetencaoMesAnterior = $('validarretencao'+iCodMov).innerHTML;
-            
+
             if (iForma != 1 && iForma != 2) {
                 var sNumDoc          = aMovimentos[iMov].aCells[10].getValue().trim();
             }
-            
+
             if (iForma == 2) {
-                
+
                 var iCodCheque        = aMovimentos[iMov].aCells[16].getValue().trim();
                 var iCheque           = aMovimentos[iMov].aCells[10].getValue().trim();
 
-            }      
+            }
 
             /**
              * Se for cheque, verifica se o cheque já foi emitido
              */
             if (lEfetuarPagamento && iForma == 2 && aMovimentos[iMov].getClassName() != 'comMov') {
-                
+
                 alert("Para efetuar o pagamento é necessário emitir o cheque.");
                 return false;
 
@@ -1622,13 +1626,13 @@ if (count($aParametrosEmpenho) > 0) {
             oMovimento.iCodNota          = iNota;
             oMovimento.nValorRetencao    = nValorRetencao.valueOf();
             oMovimento.sConCarPeculiar   = sConCarPeculiar;
-            
+
             if (iForma != 1 && iForma != 2) {
                 oMovimento.sNumDoc       = sNumDoc;
             }
-            
+
             if (iForma == 2) {
-                
+
                 oMovimento.iCheque       = iCheque;
                 oMovimento.iCodCheque    = iCodCheque;
 
@@ -2226,19 +2230,19 @@ if (count($aParametrosEmpenho) > 0) {
         }, 500);
     }
 
-    function selecionarConta(elemento, iCodMov) {    
-        
+    function selecionarConta(elemento, iCodMov) {
+
         iContaPagadoraPadrao    = document.getElementById("contapagpadrao"+iCodMov).value;
         iContaSelecionada       = elemento.getElementsByTagName("div")[0].textContent;
         sDescConta              = elemento.getElementsByTagName("span")[0].textContent
 
         if (iContaPagadoraPadrao != '') {
-            
+
             if (iContaSelecionada != iContaPagadoraPadrao) {
 
-                sMsgConfirm = 'A conta selecionada é diferente da Conta Pagadora informada anteriormente. '; 
+                sMsgConfirm = 'A conta selecionada é diferente da Conta Pagadora informada anteriormente. ';
                 sMsgConfirm += 'Essa ação substituirá os dados. \n \nDeseja prosseguir?';
-                
+
                 if (!confirm(sMsgConfirm)){
                     return false;
                 } else {
@@ -2265,20 +2269,20 @@ if (count($aParametrosEmpenho) > 0) {
         js_divCarregando("Aguarde, Atualizando Conta Pagadora.","msgBox");
 
         var oAjax  = new Ajax.Request('emp4_manutencaoPagamentoRPC.php', {
-            method    : 'post', 
-            parameters: 'json='+Object.toJSON(oParam), 
+            method    : 'post',
+            parameters: 'json='+Object.toJSON(oParam),
             onComplete: js_retornoAtualizaContaPagadoraPadrao
         });
 
     }
 
     function js_retornoAtualizaContaPagadoraPadrao(oAjax) {
-        
+
         js_removeObj("msgBox");
 
         var oRetorno = eval("("+oAjax.responseText+")");
 
-        if (oRetorno.status == 1) {                
+        if (oRetorno.status == 1) {
             alert(oRetorno.message.urlDecode());
         } else {
             alert(oRetorno.message.urlDecode());
@@ -2291,11 +2295,11 @@ if (count($aParametrosEmpenho) > 0) {
         var aMovimentos = gridNotas.getSelection();
 
         if (aMovimentos.length > 0) {
-            
+
             var dtBase      = $F('e42_dtpagamento');
             var iCheque     = $('iCheque').value;
 
-            windowChequeItem = new windowAux('wndChequeItem', 'Emitir Cheque', 520, 180);     
+            windowChequeItem = new windowAux('wndChequeItem', 'Emitir Cheque', 520, 180);
 
             var sContent = "<div class='subcontainer' style='margin-top:30px;'>";
             sContent += "   <fieldset><legend>Informação para o cheque</legend>";
@@ -2331,7 +2335,7 @@ if (count($aParametrosEmpenho) > 0) {
             var h = ((screen.height / 2) - 110);
             windowChequeItem.setIndex(5);
             windowChequeItem.allowDrag(false);
-            windowChequeItem.show(h, w);     
+            windowChequeItem.show(h, w);
 
         } else {
             alert('Selecione um movimento.');
@@ -2359,7 +2363,7 @@ if (count($aParametrosEmpenho) > 0) {
 
         let aNotas = [];
         let lCredorUnico = true;
-        let lContaPagadoraUnica = true;    
+        let lContaPagadoraUnica = true;
 
         aMovimentos.each(function (aMovimento) {
 
@@ -2392,15 +2396,15 @@ if (count($aParametrosEmpenho) > 0) {
             alert('Só é permitido gerar mais de um cheque para a mesma conta pagadora!');
             return false;
         }
-        
+
         oCheque = new Object();
-        oParam  = new Object();        
-        
+        oParam  = new Object();
+
         oCheque.sCredor             = encodeURIComponent(aMovimentos[0][7]);
         oCheque.dtData              = dtData;
         oCheque.aTotCheques         = [];
         oCheque.numeroCheque        = iNumCheque;
-        oCheque.aNotasLiquidacao    = aNotas;      
+        oCheque.aNotasLiquidacao    = aNotas;
 
         oParam.exec         = 'emitirCheque';
         oParam.params       = [];
@@ -2409,8 +2413,8 @@ if (count($aParametrosEmpenho) > 0) {
         js_divCarregando("Aguarde, Efetuando emissão do cheques.","msgBox");
 
         var oAjax  = new Ajax.Request('emp4_agendaPagamentoRPC.php', {
-            method    : 'post', 
-            parameters: 'json='+Object.toJSON(oParam), 
+            method    : 'post',
+            parameters: 'json='+Object.toJSON(oParam),
             onComplete: js_retornoEmissaoCheque
         });
 
@@ -2425,9 +2429,9 @@ if (count($aParametrosEmpenho) > 0) {
         if (oRetorno.status == 1) {
 
             aInfoCheques = oRetorno.aInfoCheques;
-            
+
             if (aInfoCheques.length > 0) {
-                
+
                 alert(oRetorno.message.urlDecode());
                 js_pesquisarOrdens();
 
@@ -2442,25 +2446,25 @@ if (count($aParametrosEmpenho) > 0) {
     }
 
     function js_inputdata(sNomeInput, strData = null) {
-            
+
         var aData = strData.split('/');
 
         var	strData  = '<input type="text" id="'+sNomeInput+'" value="'+strData+'" name="'+sNomeInput+'" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" style="width: 70px;" >';
             strData += '<input value="D" type="button" name="dtjs_'+sNomeInput+'" onclick="pegaPosMouse(event);show_calendar(\''+sNomeInput+'\',\'none\'); " >';
             strData += '<input name="'+sNomeInput+'_dia" type="hidden" title="" id="'+sNomeInput+'_dia" value="'+aData[0]+'" size="2"  maxlength="2" >';
-            strData += '<input name="'+sNomeInput+'_mes" type="hidden" title="" id="'+sNomeInput+'_mes" value="'+aData[1]+'" size="2"  maxlength="2" >'; 
+            strData += '<input name="'+sNomeInput+'_mes" type="hidden" title="" id="'+sNomeInput+'_mes" value="'+aData[1]+'" size="2"  maxlength="2" >';
             strData += '<input name="'+sNomeInput+'_ano" type="hidden" title="" id="'+sNomeInput+'_ano" value="'+aData[2]+'" size="4"  maxlength="4" >';
-            
+
         var sStringFunction  = "js_comparaDatas"+sNomeInput+" = function(dia,mes,ano){ \n";
             sStringFunction += "  var objData        = document.getElementById('"+sNomeInput+"'); \n";
             sStringFunction += "  objData.value      = dia+'/'+mes+'/'+ano; \n";
-            sStringFunction += "} \n";  
+            sStringFunction += "} \n";
 
-        var script = document.createElement("SCRIPT");        
+        var script = document.createElement("SCRIPT");
         script.innerHTML = sStringFunction;
 
-        document.body.appendChild(script);    
-            
+        document.body.appendChild(script);
+
         return strData;
 
     }
@@ -2477,7 +2481,7 @@ if (count($aParametrosEmpenho) > 0) {
             } else {
                 lDisabled = true;
             }
-    
+
         });
 
         if (aMovimentos.length == 0) {
