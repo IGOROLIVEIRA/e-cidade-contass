@@ -1080,6 +1080,8 @@ class cl_rhrubricas
         $sql .= "      inner join cgm                   on cgm.z01_numcgm                        = db_config.numcgm";
         $sql .= "      inner join db_tipoinstit         on db_tipoinstit.db21_codtipo            = db_config.db21_tipoinstit";
         $sql .= "      left  join rhfundamentacaolegal  on rhfundamentacaolegal.rh137_sequencial = rhrubricas.rh27_rhfundamentacaolegal";
+        $sql .= "      left join baserubricasesocial on (e991_rubricas, e991_instit) = (rh27_rubric, rh27_instit)";
+        $sql .= "      left join rubricasesocial on e990_sequencial = e991_rubricasesocial";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($rh27_rubric != null) {
