@@ -9,7 +9,7 @@ class Oc15635 extends AbstractMigration
         $sql = <<<SQL
                 BEGIN;
 
-                SELECT fc_getsession();
+                SELECT fc_startsession();
 
                 CREATE OR REPLACE FUNCTION public.fc_estornoplanilha(integer, date, character varying, integer, boolean)
                  RETURNS character varying
