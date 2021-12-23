@@ -33,7 +33,6 @@
  */
 require_once("classes/db_contranslan_classe.php");
 require_once("dbforms/db_funcoes.php");
-require_once("classes/db_empresto_classe.php");
 
 
 //|00|//cl_despdesdobramento
