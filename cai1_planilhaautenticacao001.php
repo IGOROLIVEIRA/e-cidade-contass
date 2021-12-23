@@ -207,10 +207,10 @@ function js_retornoExclusaoAutenticacaoPlanilha(oAjax) {
     var oRetorno = eval("("+oAjax.responseText+")");
 
     if (oRetorno.status == 1) {
-      alert("Autenticação exccluída com sucesso!");      
+      alert("Autenticação excluída com sucesso!");
     } else {
       alert(oRetorno.message.urlDecode());
-    }    
+    }
 }
 
 var oGridReceitas = new DBGrid('ctnGridReceitasVinculadas');
