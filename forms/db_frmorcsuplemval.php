@@ -28,7 +28,7 @@
 <script>
   // --------------------
   function valida_dados() {
-
+    
     if (document.getElementById('o47_coddot').value == '') {
 
       alert('Campo Reduzido da dotação é obrigatório!');
@@ -40,6 +40,19 @@
       alert('Você deve selecionar uma C.Peculiar/Cod de Aplicação antes de incluir a Suplementação!');
       return false;
     }
+
+    if (document.getElementById('o47_numerocontratoop').value == '') {
+
+      alert('Para suplementações onde a origem do recurso for operação de crédito é obrigatório informar o número do contrato e sua respectiva data de assinatura');
+      return false;
+    }
+
+    if (document.getElementById('o47_dataassinaturacop').value == '') {
+
+        alert('Para suplementações onde a origem do recurso for operação de crédito é obrigatório informar o número do contrato e sua respectiva data de assinatura');
+        return false;
+    }
+
 
     if (document.getElementById('o50_motivosuplementacao').value == 't') {
       if (document.getElementById('o47_motivo').value == '') {
@@ -115,14 +128,16 @@
               <td><b>Valor a Suplementar:</b></td>
               <td><? db_input('o47_valor', 10, $Io47_valor, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
             </tr>
+            <?php if( $tiposup == 1002 or $tiposup == 1007) { ?>
             <tr>
               <td><b>N° do Contrato da Operação de Crédito:</b></td>
-              <td><? db_input('o47_valor', 10, $Io47_valor, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
+              <td><? db_input('o47_numerocontratoop', 10, $Io47_numerocontratotoop, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
             </tr>
             <tr>
               <td><b>Data de Assinatura do Contrato OP:</b></td>
-              <td><? db_input('o47_valor', 10, $Io47_valor, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
+              <td><? db_input('o47_dataassinaturacop', 10, $Io47_dataassinaturacop, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
             </tr>
+            <?php } ?> 
             <?php
             //OC2785
             $motivo  = db_query("
@@ -321,5 +336,58 @@ function getDadosDotacaoPPA(iDotacao) {
 
 function preencheDadosDotacao(oAjax) {
 
-  js_removeObj('msgBox');
-  oRetorno = eval(" ("+oAjax.responseText+")"); if (oRetorno.status==1) { $('o47_coddot').value='' ; $('o58_orgao').value=oRetorno.dadosdotacao.o08_orgao; $('o40_descr').value=oRetorno.dadosdotacao.o40_descr.urlDecode(); $('o56_elemento').value=oRetorno.dadosdotacao.o56_elemento; $('o56_descr').value=oRetorno.dadosdotacao.o56_descr.urlDecode(); $('o58_codigo').value=oRetorno.dadosdotacao.o08_recurso; $('o15_descr').value=oRetorno.dadosdotacao.o15_descr; } else { alert('Estimativa informada não possui estrutura válida.') $('o07_sequencial').value='' ; } } function js_pesquisao58_concarpeculiar(mostra){ if(mostra==true){ js_OpenJanelaIframe('', 'db_iframe_concarpeculiar' , 'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr' , 'Pesquisa' , true); }else{ if(document.form1.o58_concarpeculiar.value !='' ){ js_OpenJanelaIframe('', 'db_iframe_concarpeculiar' , 'func_concarpeculiar.php?pesquisa_chave=' +document.form1.o58_concarpeculiar.value.trim()+'&funcao_js=parent.js_mostraconcarpeculiar', 'Pesquisa' , false); }else{ document.form1.c58_descr.value='' ; } } } function js_mostraconcarpeculiar(chave,erro){ document.form1.c58_descr.value=chave; if(erro==true){ document.form1.o58_concarpeculiar.focus(); document.form1.o58_concarpeculiar.value='' ; } } function js_mostraconcarpeculiar1(chave1,chave2){ document.form1.o58_concarpeculiar.value=chave1; document.form1.c58_descr.value=chave2; db_iframe_concarpeculiar.hide(); } </script>
+js_removeObj('msgBox');
+oRetorno = eval("("+oAjax.responseText+")");
+if (oRetorno.status == 1) {
+
+  $('o47_coddot').value   = '';
+  $('o58_orgao').value    = oRetorno.dadosdotacao.o08_orgao;
+  $('o40_descr').value    = oRetorno.dadosdotacao.o40_descr.urlDecode();
+  $('o56_elemento').value = oRetorno.dadosdotacao.o56_elemento;
+  $('o56_descr').value    = oRetorno.dadosdotacao.o56_descr.urlDecode();
+  $('o58_codigo').value   = oRetorno.dadosdotacao.o08_recurso;
+  $('o15_descr').value    = oRetorno.dadosdotacao.o15_descr;
+
+} else {
+
+  alert('Estimativa informada não possui estrutura válida.')
+  $('o07_sequencial').value = '';
+}
+}
+
+function js_pesquisao58_concarpeculiar(mostra){
+
+if(mostra==true){
+  js_OpenJanelaIframe('',
+                      'db_iframe_concarpeculiar',
+                      'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr',
+                      'Pesquisa',
+                      true);
+}else{
+   if(document.form1.o58_concarpeculiar.value != ''){
+       js_OpenJanelaIframe('',
+                           'db_iframe_concarpeculiar',
+                           'func_concarpeculiar.php?pesquisa_chave='+document.form1.o58_concarpeculiar.value.trim()+'&funcao_js=parent.js_mostraconcarpeculiar',
+                           'Pesquisa',
+                           false);
+   }else{
+     document.form1.c58_descr.value = '';
+   }
+}
+}
+
+function js_mostraconcarpeculiar(chave,erro){
+document.form1.c58_descr.value = chave;
+if(erro==true){
+  document.form1.o58_concarpeculiar.focus();
+  document.form1.o58_concarpeculiar.value = '';
+}
+}
+
+function js_mostraconcarpeculiar1(chave1,chave2){
+document.form1.o58_concarpeculiar.value =chave1;
+document.form1.c58_descr.value = chave2;
+db_iframe_concarpeculiar.hide();
+}
+
+</script>
