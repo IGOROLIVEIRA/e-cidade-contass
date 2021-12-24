@@ -100,7 +100,6 @@ class cl_sliprecurso {
        $this->erro_status = "0";
        return false;
      }
-     
      if($this->k29_valor == null ){ 
        $this->erro_sql = " Campo Valor nao Informado.";
        $this->erro_campo = "k29_valor";

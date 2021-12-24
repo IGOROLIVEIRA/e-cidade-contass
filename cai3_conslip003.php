@@ -50,6 +50,7 @@ $clrotulo->label('k18_motivo');
 $clrotulo->label('k17_motivoestorno');
 $clrotulo->label('k17_dtestorno');
 $clrotulo->label('e81_numdoc');
+$clrotulo->label('k29_recurso');
 
 $get = db_utils::postMemory($_GET);
 $sql = "         select slip.k17_codigo,
@@ -77,7 +78,15 @@ $sql = "         select slip.k17_codigo,
 									end
 									) as k17_situacao,
 						     z01_numcgm,
-						     z01_nome
+						     z01_nome,
+                             CASE 
+                        WHEN k29_recurso IS NULL AND k152_sequencial IN (1,2,3,4,9,10,13,14,15,17,18)
+                        THEN r2.c61_codigo
+                        WHEN k29_recurso IS NULL AND k152_sequencial IN (5,6,7,8,11,12,16)
+                        THEN r1.c61_codigo
+                        ELSE k29_recurso
+                    END k29_recurso,
+                             o15_descr
                       from slip
 	                     left join conplanoreduz r1 on r1.c61_reduz       = k17_debito
 	                                               and r1.c61_anousu      = extract(year from k17_data)
@@ -91,7 +100,17 @@ $sql = "         select slip.k17_codigo,
                        left join conhist          on k17_hist           = c50_codhist
 		                   left join slipnum          on slipnum.k17_codigo = slip.k17_codigo
 		                   left join cgm              on cgm.z01_numcgm     = slipnum.k17_numcgm
-                       left join slipprocesso on slip.k17_codigo = slipprocesso.k145_slip
+                           left join sliprecurso recurso on recurso.k29_slip = slip.k17_codigo AND k29_valor = slip.k17_valor
+                           left join sliptipooperacaovinculo on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
+                        left join sliptipooperacao on sliptipooperacaovinculo.k153_slipoperacaotipo = sliptipooperacao.k152_sequencial 
+                           left join orctiporec ON o15_codigo = (CASE 
+                           WHEN k29_recurso IS NULL AND k152_sequencial IN (1,2,3,4,5,9,10,13,14,15,17,18)
+                           THEN r2.c61_codigo
+                           WHEN k29_recurso IS NULL AND k152_sequencial IN (6,7,8,11,12,16)
+                           THEN r1.c61_codigo
+                           ELSE k29_recurso
+                       END)
+                           left join slipprocesso on slip.k17_codigo = slipprocesso.k145_slip
                 WHERE  slip.k17_codigo = " . $get->slip . "
 		          order by slip.k17_codigo";
 
@@ -265,6 +284,18 @@ if ( !empty($oFinalidadePagamento) ) {
 			 <input type='text' value="<?= "{$oSlip->z01_numcgm} - {$oSlip->z01_nome}"; ?>" size=93 readonly '>
 			 <td>
 			 </tr>
+
+            <tr>
+                <td nowrap>
+                    <?=$Lk29_recurso; ?>
+                </td>   
+                <td colspan=5>
+                    <input type='text' value="<?=$oSlip->k29_recurso; ?>" size=10 readonly '>
+                    &nbsp;
+                    <input type='text' size=80 readonly value='<?=$oSlip->o15_descr; ?>' '>
+                </td>
+            </tr>
+
 	       <tr>
 		   <td>
          <?=$Lk17_valor; ?>

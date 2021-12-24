@@ -62,6 +62,7 @@ switch ($oParam->exec) {
 			$oRetorno->iTipoPagamento         = $oSlip->getTipoPagamento();
 			$oRetorno->iSituacao              = $oSlip->getSituacao();
 			$oRetorno->dtData                 = $oSlip->getData();
+            $oRetorno->iFonteRecurso          = $oSlip->getFonteRecursos()->getCodigoRecurso();
 
 			$oRetorno->sCaracteristicaDebito  = $oSlip->getCaracteristicaPeculiarDebito();
 			$oRetorno->sCaracteristicaCredito = $oSlip->getCaracteristicaPeculiarCredito();

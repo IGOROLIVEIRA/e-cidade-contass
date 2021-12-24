@@ -867,7 +867,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
 
     if (me.iTipoTransferencia == 1) {
       oParam.iCodigoInstituicaoDestino = me.oTxtInstituicaoDestinoCodigo.getValue();
-    }
+    } 
 
     console.log(oParam);
 
@@ -1068,7 +1068,8 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
    */
    me.pesquisaFonte = function (lMostra) {
 
-    var sUrlHistorico = "func_orctiporec.php?funcao_js=parent."+me.sNomeInstancia+".preencheFonte";
+    var sUrlHistorico = "func_orctiporec.php?pesquisa_chave="+me.oTxtFonteInputCodigo.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preencheFonte";
+
     if (lMostra) {
       sUrlHistorico = "func_orctiporec.php?funcao_js=parent."+me.sNomeInstancia+".completaFonte|o15_codigo|o15_descr";
     }
@@ -1105,6 +1106,14 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
         me.oTxtFonteInputDescricao.setValue(sDescricao);
         db_iframe_fonte.hide();
   };
+
+    me.preencheFonte = function (chave, erro) {
+        me.oTxtFonteInputDescricao.setValue(chave);
+        if (erro==true) {
+            me.oTxtFonteInputCodigo.focus();
+            me.oTxtFonteInputCodigo.value = '';
+        }
+    };
 
   /**
    * Abre lookup de pesquisa do CGM
