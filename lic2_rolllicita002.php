@@ -83,6 +83,33 @@ if ($status) {
 $sSqlLicLicita = $clliclicita->sql_query(null, $sCampos, "l00_anocria,l20_edital,l20_datacria", $sWhere);
 $result = $clliclicita->sql_record($sSqlLicLicita);
 $numrows = $clliclicita->numrows;
+$array = array();
+$valor_codigo = 0;
+$j = 0;
+
+$contolador = 0;
+for ($i = 0; $i < $numrows; $i++) {
+    $op = 0;
+    db_fieldsmemory($result, $i);
+    if($valor_codigo==0){
+        $valor_codigo = $l20_codigo;
+    }else{
+        if($valor_codigo==$l20_codigo){
+            if($contolador==0){
+                $array[$j]=$l20_codigo;
+                $j++;
+                $contolador = 1;
+            }
+            
+        }else{
+           
+                $valor_codigo = $l20_codigo;
+                $contolador = 0;
+            
+        }
+    }
+
+}
 
 if ($numrows == 0) {
 
@@ -109,9 +136,21 @@ $muda = 0;
 $mostraAndam = $mostramov;
 $oInfoLog = array();
 for ($i = 0; $i < $numrows; $i++) {
+$operador = 0;
 
     db_fieldsmemory($result, $i);
 
+    for($j=0;$j<count($array);$j++){
+        if($array[$j]==$l20_codigo){
+         if($l202_datahomologacao==""){
+             $operador = 1;
+             break;
+         }
+            
+        }
+    }
+
+    if($operador==0){
 
     if ($pdf->gety() > $pdf->h - 30 || $muda == 0) {
 
@@ -278,6 +317,7 @@ for ($i = 0; $i < $numrows; $i++) {
     $pdf->setfont('arial', 'b', 7);
     $pdf->cell(279, $alt, "Status: {$oLicitacao->getSituacao()->getSDescricao()}", 1, 1, "L", 1);
     $pdf->ln();
+}
 }
 $pdf->Output();
 
