@@ -111,7 +111,7 @@ $ano = db_getsession("DB_anousu"); //ano
             $sql = $clsaltes->sql_query("", $campos, "k13_descr", "$where k13_descr like '$chave_k13_descr%' and c61_instit = " . db_getsession("DB_instit") . ($recurso == "0" ? "" : " and c61_codigo = $recurso"));
           } else {
             $sql = $clsaltes->sql_query_anousu("", $campos, "k13_conta", "$where c61_instit = " . db_getsession("DB_instit") . ($recurso == "0" ? "" : " and c61_codigo = $recurso"));
-          }
+          } 
           db_lovrot($sql, 15, "()", "", $funcao_js);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
