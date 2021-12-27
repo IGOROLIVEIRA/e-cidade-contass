@@ -69,7 +69,7 @@ $db_botao  = false;
 $sDisabled = "";
 
 /**
- * Realiza validaï¿½ï¿½o para o tipo de reajuste
+ * Realiza validação para o tipo de reajuste
  * para Aposentados e pensionistas.
  */
 
@@ -85,7 +85,7 @@ if (isset($incluir) && !$lErro) {
             $clrhpessoalmov->rh02_laudodeficiencia = ServidorRepository::persistLaudoMedico($_FILES['rh02_laudodeficiencia_file'], $rh02_laudodeficiencia);
         }
     } catch (Exception $oException) {
-        $erro_msg = "Erro Laudo Deficiente Fï¿½sico: " . $oException->getMessage();
+        $erro_msg = "Erro Laudo Deficiente Físico: " . $oException->getMessage();
         $sqlerro = true;
     }
 
@@ -94,7 +94,7 @@ if (isset($incluir) && !$lErro) {
             $clrhpessoalmov->rh02_laudoportadormolestia = ServidorRepository::persistLaudoMedico($_FILES['rh02_laudoportadormolestia_file'], $rh02_laudoportadormolestia);
         }
     } catch (Exception $oException) {
-        $erro_msg = "Erro Laudo Portador de Molï¿½stia: " . $oException->getMessage();
+        $erro_msg = "Erro Laudo Portador de Moléstia: " . $oException->getMessage();
         $sqlerro = true;
     }
 
@@ -106,7 +106,7 @@ if (isset($incluir) && !$lErro) {
             ($rh02_tipcatprof == '0' || $rh02_segatuacao == '0')
         ) {
             $sqlerro  = true;
-            $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuaï¿½ï¿½o devem ser preenchidos';
+            $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuação devem ser preenchidos';
         } else
     if (
             in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118', '1118', '218', '166', '266')) &&
@@ -119,7 +119,7 @@ if (isset($incluir) && !$lErro) {
             $rh02_art1leiprestservsocial == 'f'
         ) {
             $sqlerro  = true;
-            $erro_msg = 'Pelo menos uma das opï¿½ï¿½es do Siope deve ser marcada com SIM quando a matrï¿½cula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
+            $erro_msg = 'Pelo menos uma das opções do Siope deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
 ';
         }
     }
@@ -145,7 +145,7 @@ if (isset($incluir) && !$lErro) {
             }
         } else {
             $sqlerro  = true;
-            $erro_msg = 'Informe no mï¿½nimo 30 dias de fï¿½rias padrï¿½o para o funcionï¿½rio.';
+            $erro_msg = 'Informe no mínimo 30 dias de férias padrão para o funcionário.';
         }
     }
 
@@ -257,7 +257,7 @@ if (isset($incluir) && !$lErro) {
                 $oContaBancaria->salvar();
             } catch (Exception $oException) {
 
-                $erro_msg = "Erro ao Cadastrar dados bancï¿½rios do Servidor";
+                $erro_msg = "Erro ao Cadastrar dados bancários do Servidor";
                 $sqlerro  = true;
             }
 
@@ -285,7 +285,7 @@ if (isset($incluir) && !$lErro) {
             $_POST["rh02_laudodeficiencia"] = ServidorRepository::removeLaudoMedico($rh02_laudodeficiencia);
         }
     } catch (Exception $oException) {
-        $erro_msg = "Erro Laudo Deficiente Fï¿½sico: " . $oException->getMessage();
+        $erro_msg = "Erro Laudo Deficiente Físico: " . $oException->getMessage();
         $sqlerro = true;
     }
 
@@ -296,7 +296,7 @@ if (isset($incluir) && !$lErro) {
             $_POST["rh02_laudoportadormolestia"] = ServidorRepository::removeLaudoMedico($rh02_laudoportadormolestia);
         }
     } catch (Exception $oException) {
-        $erro_msg = "Erro Laudo Portador de Molï¿½stia: " . $oException->getMessage();
+        $erro_msg = "Erro Laudo Portador de Moléstia: " . $oException->getMessage();
         $sqlerro = true;
     }
 
@@ -308,7 +308,7 @@ if (isset($incluir) && !$lErro) {
             ($rh02_tipcatprof == '0' || $rh02_segatuacao == '0')
         ) {
             $sqlerro  = true;
-            $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuaï¿½ï¿½o devem ser preenchidos';
+            $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuação devem ser preenchidos';
         } else
     if (
             in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118', '1118', '218', '166', '266')) &&
@@ -321,7 +321,7 @@ if (isset($incluir) && !$lErro) {
             $rh02_art1leiprestservsocial == 'f'
         ) {
             $sqlerro  = true;
-            $erro_msg = ' Pelo menos uma das opï¿½ï¿½es do Siope deve ser marcada com SIM quando a matrï¿½cula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
+            $erro_msg = ' Pelo menos uma das opções do Siope deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
 ';
         }
     }
@@ -352,7 +352,7 @@ if (isset($incluir) && !$lErro) {
             }
         } else {
             $sqlerro  = true;
-            $erro_msg = 'Informe no mï¿½nimo 30 dias de fï¿½rias padrï¿½o para o funcionï¿½rio.';
+            $erro_msg = 'Informe no mínimo 30 dias de férias padrão para o funcionário.';
         }
     }
 
@@ -432,7 +432,7 @@ if (isset($incluir) && !$lErro) {
                 $oServidor->salvar();
             } catch (Exception $oException) {
 
-                $erro_msg = "Erro ao Cadastrar dados bancï¿½rios do Servidor" . $oException->getMessage();
+                $erro_msg = "Erro ao Cadastrar dados bancários do Servidor" . $oException->getMessage();
                 $sqlerro  = true;
             }
         }
@@ -521,7 +521,7 @@ if (isset($incluir) && !$lErro) {
 
             /**
              * Caso a folha complementar e suplementar estiverem aberta,
-             * os eventos financeiros do ponto e do histï¿½rico ponto serï¿½o excluï¿½dos.
+             * os eventos financeiros do ponto e do histórico ponto serão excluídos.
              */
             if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
 
@@ -536,7 +536,7 @@ if (isset($incluir) && !$lErro) {
                 if ($oFolhaComplementar->getSequencial() && $oFolhaComplementar->isAberto()) {
 
                     /**
-                     * Excluï¿½ os eventos financeiros do histï¿½rico ponto.
+                     * Excluí os eventos financeiros do histórico ponto.
                      */
                     $aEventosFinanceiros = $oFolhaComplementar->getHistoricoRegistrosPonto($oServidor);
                     foreach ($aEventosFinanceiros as $oEventoFinanceiro) {
@@ -547,7 +547,7 @@ if (isset($incluir) && !$lErro) {
                     }
 
                     /**
-                     * Excluï¿½ os eventos financeiros do ponto.
+                     * Excluí os eventos financeiros do ponto.
                      */
                     $oPonto = $oServidor->getPonto($oFolhaComplementar->getTabelaPonto());
                     $oPonto->limpar();
@@ -559,7 +559,7 @@ if (isset($incluir) && !$lErro) {
                 if ($oFolhaSuplementar->getSequencial() && $oFolhaSuplementar->isAberto()) {
 
                     /**
-                     * Excluï¿½ os eventos financeiros do histï¿½rico ponto.
+                     * Excluí os eventos financeiros do histórico ponto.
                      */
                     $aEventosFinanceiros = $oFolhaSuplementar->getHistoricoRegistrosPonto($oServidor);
 
@@ -571,7 +571,7 @@ if (isset($incluir) && !$lErro) {
                     }
 
                     /**
-                     * Excluï¿½ os eventos financeiros do ponto.
+                     * Excluí os eventos financeiros do ponto.
                      */
                     $oPonto = $oServidor->getPonto($oFolhaSuplementar->getTabelaPonto());
                     $oPonto->limpar();
@@ -917,7 +917,7 @@ if ($lErro) {
 }
 
 /**
- * Verifica se  o  usuï¿½rio possui permissao para liberar as abas para o lanï¿½amento
+ * Verifica se  o  usuário possui permissao para liberar as abas para o lançamento
  */
 if (isset($rh02_seqpes)) {
 
