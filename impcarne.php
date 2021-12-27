@@ -31,25 +31,25 @@ exit;
 
 // MODELO 1  - CARNES DE PARCELAMENTO
 // MODELO 2  - RECIBO DE PAGAMENTO ( 2 VIAS )
-// MODELO 3  - ALVAR?
+// MODELO 3  - ALVARÁ
 // MODELO 4  - BOLETO
-// MODELO 5  - AUTORIZA??O DE EMPENHO
+// MODELO 5  - AUTORIZAÇÃO DE EMPENHO
 // MODELO 6  - NOTA DE EMPENHO
 // MODELO 7  - ORDEM DE PAGAMENTO
 // MODELO 8  - FICHA DE TRANSFERENCIA DE BENS
 // MODELO 10 - ORDEM DE COMPRA
-// MODELO 11 - SOLICITA??O DE COMPRA
+// MODELO 11 - SOLICITAÇÃO DE COMPRA
 // MODELO 22 - RECIBO DE PAGAMENTO ( 1 VIAS )
 
 class db_impcarne extends cl_assinatura {
 
 
-/////   VARI?VEIS PARA EMISSAO DE CARNES DE PARCELAMENTO - MODELO 1
+/////   VARIÁVEIS PARA EMISSAO DE CARNES DE PARCELAMENTO - MODELO 1
 
   var $modelo    = 1;
 
   var $qtdcarne  = null;
-  var $tipodebito= 'TIPO DE D?BITO';
+  var $tipodebito= 'TIPO DE DÉBITO';
   var $tipoinscr1= null;
   var $prefeitura= 'PREFEITURA DBSELLER';
   var $secretaria= 'SECRETARIA DE FAZENDA';
@@ -58,12 +58,12 @@ class db_impcarne extends cl_assinatura {
   var $parcela   = null;
   var $titulo1   = '';
   var $descr1    = null;
-  var $titulo2   = 'C?d de Arrecada??o';
+  var $titulo2   = 'Cód de Arrecadação';
   var $descr2    = null;
-  var $titulo3   = 'Contribuinte/Endere?o';
+  var $titulo3   = 'Contribuinte/Endereço';
   var $descr3_1  = null;
   var $descr3_2  = null;
-  var $titulo4   = 'Instru??es';
+  var $titulo4   = 'Instruções';
   var $descr4_1  = null;
   var $descr4_2  = null;
   var $titulo5   = 'Parcela';
@@ -74,14 +74,14 @@ class db_impcarne extends cl_assinatura {
   var $descr7    = null;
   var $titulo8   = '';
   var $descr8    = null;
-  var $titulo9   = 'C?d. de Arrecada??o';
+  var $titulo9   = 'Cód. de Arrecadação';
   var $descr9    = null;
   var $titulo10  = 'Parcela';
   var $descr10   = null;
-  var $titulo11  = 'Contribuinte/Endere?o';
+  var $titulo11  = 'Contribuinte/Endereço';
   var $descr11_1 = null;
   var $descr11_2 = null;
-  var $titulo12  = 'Instru??es';
+  var $titulo12  = 'Instruções';
   var $descr12_1 = null;
   var $descr12_2 = null;
   var $titulo13  = '';
@@ -98,7 +98,7 @@ class db_impcarne extends cl_assinatura {
   var $codigo_barras = null;
   var $objpdf = null;
 
-//////  VARI?VEIS PARA EMISSAO DE RECIBO DE PAGAMENTO - MODELO 2
+//////  VARIÁVEIS PARA EMISSAO DE RECIBO DE PAGAMENTO - MODELO 2
 
   var $enderpref = null;
   var $tipocompl = null;
@@ -137,7 +137,7 @@ class db_impcarne extends cl_assinatura {
   var $numpre    = null;
   var $valtotal  = null;
 
-//////  VARI?VEIS PARA EMISSAO DE ALVAR?
+//////  VARIÁVEIS PARA EMISSAO DE ALVARÁ
 
   var $tipoalvara  = null;
   var $ativ        = null;
@@ -183,13 +183,13 @@ class db_impcarne extends cl_assinatura {
   var $sacado2		= '';
   var $sacado3		= '';
 
-//// variaveis para a solicita??o de compras
+//// variaveis para a solicitação de compras
 
-  var $pc10_numero      = null;         // numero da solicita??o
-  var $descrdepto       = '';           // descri??o do departamento
-  var $pc50_descr       = '';           // descri??o do tipo de compra
-  var $pc10_data        = null;         // data da solicita??o
-  var $pc10_vlrap       = null;         // valor da solicita??o
+  var $pc10_numero      = null;         // numero da solicitação
+  var $descrdepto       = '';           // descrição do departamento
+  var $pc50_descr       = '';           // descrição do tipo de compra
+  var $pc10_data        = null;         // data da solicitação
+  var $pc10_vlrap       = null;         // valor da solicitação
   var $pc10_resumo      = '';
   var $pc11_prazo       = '';
   var $pc11_pgto        = '';
@@ -205,7 +205,7 @@ class db_impcarne extends cl_assinatura {
   var $quantdotac       = null;         // quantidade de itens na dotacao
   var $valdotac         = null;         // valor da dotacao
 
-//// variaveis para a autoriza??o de empenho E ORDEM DE COMPRA
+//// variaveis para a autorização de empenho E ORDEM DE COMPRA
 
   var $ano		= null;		// ano
   var $numaut 		= null;  	// numero do empenho
@@ -230,39 +230,39 @@ class db_impcarne extends cl_assinatura {
   var $empenhado	= null;  	// data da emissao
   var $numcgm 		= null;		// cgm do fornecedor
 //  var $nome   		= null;		// nome do fornecedor
-//  var $ender  		= null;		// endere?o do fornecedor
+//  var $ender  		= null;		// endereço do fornecedor
 //  var $munic  		= null;		// municipio do fornecedor
   var $dotacao 		= null;		// dotacao orcamentaria (orgao,unidade,funcao,subfuncao,programa,projativ,elemento,recurso)
   var $descrdotacao 	= null;		// descricao da dotacao
   var $coddot		= null;		// codigo reduzido da despesa
-  var $destino		= null;		// destino do material ou servi?o
-  var $resumo		= null;		// destino do material ou servi?o
-  var $licitacao  	= null;		// tipo de licita??o
-  var $num_licitacao  	= null;		// numero da licita??o
-  var $descr_licitacao 	= null;		// descri??o do tipo de licita??o
-  var $descr_tipocompra	= null;		// descri??o do tipo de compra
+  var $destino		= null;		// destino do material ou serviço
+  var $resumo		= null;		// destino do material ou serviço
+  var $licitacao  	= null;		// tipo de licitação
+  var $num_licitacao  	= null;		// numero da licitação
+  var $descr_licitacao 	= null;		// descrição do tipo de licitação
+  var $descr_tipocompra	= null;		// descrição do tipo de compra
   var $prazo_ent  	= null;		// prazo de entrega
-  var $obs		= null;		// observa??es
-  var $cond_pag		= null;		// condi??es de pagamento
-  var $out_cond		= null;		// outras condi??es de pagamento
+  var $obs		= null;		// observações
+  var $cond_pag		= null;		// condições de pagamento
+  var $out_cond		= null;		// outras condições de pagamento
   var $contato		= null;		// contato
   var $telef_cont 	= null;		// telefone do contato
   var $recorddositens 	= null;		// record set dos itens
   var $linhasdositens 	= null;		// numero de itens da autorizacao
   var $item	    	= null;		// codigo do item
   var $quantitem    	= null;		// quantidade do item
-  var $valoritem    	= null;		// valor unit?rio do item
-  var $empempenho       = null;         // cod empenho para emiss?o de ordem de compra
-  var $dataordem        = null;         // data da gera??o da ordem de compra
+  var $valoritem    	= null;		// valor unitário do item
+  var $empempenho       = null;         // cod empenho para emissão de ordem de compra
+  var $dataordem        = null;         // data da geração da ordem de compra
   var $observacaoitem   = null;
   var $descricaoitem    = null;
   var $ordpag		= null;		// numero da ordem de pagamento
   var $elemento		= null;		// elemento da despesa
-  var $descr_elemento	= null;		// descri??o do elemento da despesa
+  var $descr_elemento	= null;		// descrição do elemento da despesa
   var $elementoitem	= null;		// elemento do item da ordem de pagamento
-  var $descr_elementoitem= null;	// descri??o do elemento do item da ordem de pagamento
+  var $descr_elementoitem= null;	// descrição do elemento do item da ordem de pagamento
   var $outrasordens     = null;		// saldo das outras ordens de pagamento do empenho
-  var $vlrrec           = null;		// valor das receitas de reten?oes
+  var $vlrrec           = null;		// valor das receitas de retençoes
   var $cnpj             = null;         // cpf ou cnpj do credor
 
 /// variaveis para a nota de empenho
@@ -275,7 +275,7 @@ class db_impcarne extends cl_assinatura {
     $x = false;
     if(($this->objpdf->gety() > $this->objpdf->h - 78 && $pagina == 1 ) || ( $this->objpdf->gety() > $this->objpdf->h-30 && $pagina != 1)){
       if($this->objpdf->PageNo() == 1){
-        $this->objpdf->text(111.2,$xlin+214,'Continua na P?gina '.($this->objpdf->PageNo()+1));
+        $this->objpdf->text(111.2,$xlin+214,'Continua na Página '.($this->objpdf->PageNo()+1));
         // $this->objpdf->rect($xcol,$xlin+217,202,55,2,'DF','1234');
         $this->objpdf->rect($xcol,$xlin+217,66,55,2,'DF','1234');
         $this->objpdf->rect($xcol+68,$xlin+217,66,55,2,'DF','1234');
@@ -296,7 +296,7 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->TextWithDirection(1.5,$xlin+60,$this->texto,'U'); // texto no canhoto do carne
         $this->objpdf->setfont('Arial','',11);
       }else{
-        $this->objpdf->text(112.5,$xlin+271,'Continua na P?gina '.($this->objpdf->PageNo()+1));
+        $this->objpdf->text(112.5,$xlin+271,'Continua na Página '.($this->objpdf->PageNo()+1));
       }
       $this->objpdf->addpage();
       $pagina += 1;
@@ -306,12 +306,12 @@ class db_impcarne extends cl_assinatura {
       $xlin = 20;
       $xcol = 4;
 
-      // Imprime cabe?alho com dados sobre a prefeitura se mudar de p?gina
+      // Imprime cabeçalho com dados sobre a prefeitura se mudar de página
       $this->objpdf->setfillcolor(245);
       $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
       $this->objpdf->setfillcolor(255,255,255);
       $this->objpdf->Setfont('Arial','B',9);
-      $this->objpdf->text(130,$xlin-13,'SOLICITA??O DE COMPRA N'.CHR(176));
+      $this->objpdf->text(130,$xlin-13,'SOLICITAÇÃO DE COMPRA N'.CHR(176));
       $this->objpdf->text(185,$xlin-13,db_formatar($this->pc10_numero,'s','0',6,'e'));
       $this->objpdf->Image('imagens/files/logo_boleto.png',15,$xlin-17,12);
       $this->objpdf->Setfont('Arial','B',9);
@@ -321,8 +321,8 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text(40,$xlin-8,$this->municpref);
       $this->objpdf->text(40,$xlin-5,$this->telefpref);
       $this->objpdf->text(40,$xlin-2,$this->emailpref);
-//	    $this->objpdf->text(40,$xlin+2,'Continua??o da P?gina '.($this->objpdf->PageNo()-1));
-      $this->objpdf->text(130,$xlin+2,'P?gina '.$this->objpdf->PageNo());
+//	    $this->objpdf->text(40,$xlin+2,'Continuação da Página '.($this->objpdf->PageNo()-1));
+      $this->objpdf->text(130,$xlin+2,'Página '.$this->objpdf->PageNo());
 
       $xlin = 0;
       $this->objpdf->Setfont('Arial','B',8);
@@ -346,13 +346,13 @@ class db_impcarne extends cl_assinatura {
       //Label das colunas
       $this->objpdf->text($xcol+   4,$xlin+28,'ITEM');
       $this->objpdf->text($xcol+15.5,$xlin+28,'QUANTIDADE');
-      $this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVI?O');
-      $this->objpdf->text($xcol+ 145,$xlin+28,'VALOR UNIT?RIO');
+      $this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVIÇO');
+      $this->objpdf->text($xcol+ 145,$xlin+28,'VALOR UNITÁRIO');
       $this->objpdf->text($xcol+ 176,$xlin+28,'VALOR TOTAL');
 
       $maiscol = 0;
       $xlin = 20;
-      // Seta altura nova para impress?o dos dados
+      // Seta altura nova para impressão dos dados
       $this->objpdf->sety($xlin+11);
       $x = true;
     }
@@ -390,24 +390,24 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Image('imagens/files/'.$this->logo,8,$y-14,8);
       $this->objpdf->Image('imagens/files/'.$this->logo,95,$y-14,8);
       $this->objpdf->SetFont('Times','',5);
-      $this->objpdf->RoundedRect(10,$y+1,32,6,2,'DF','1234'); // matricula/ inscri??o
-      $this->objpdf->RoundedRect(43,$y+1,27,6,2,'DF','1234'); // cod. de arrecada??o
+      $this->objpdf->RoundedRect(10,$y+1,32,6,2,'DF','1234'); // matricula/ inscrição
+      $this->objpdf->RoundedRect(43,$y+1,27,6,2,'DF','1234'); // cod. de arrecadação
       $this->objpdf->RoundedRect(71,$y+1,20,6,2,'DF','1234'); // parcela
 
-      $this->objpdf->RoundedRect(10,$y+8,81,12,2,'DF','1234'); // nome / endere?o
+      $this->objpdf->RoundedRect(10,$y+8,81,12,2,'DF','1234'); // nome / endereço
 
-      $this->objpdf->RoundedRect(10,$y+21,81,14,2,'DF','1234'); // instru?oes
+      $this->objpdf->RoundedRect(10,$y+21,81,14,2,'DF','1234'); // instruçoes
 
       $this->objpdf->RoundedRect(10,$y+36,39,7,2,'DF','1234'); // vencimento
       $this->objpdf->RoundedRect(50,$y+36,41,7,2,'DF','1234'); // valor
 
       $this->objpdf->SetFont('Arial','',5);
-      $this->objpdf->Text(13,$y+3,$this->titulo1); // matricula/ inscri??o
+      $this->objpdf->Text(13,$y+3,$this->titulo1); // matricula/ inscrição
       $this->objpdf->SetFont('Arial','B',7);
       $this->objpdf->Text(13,$y+6,$this->descr1); // numero da matricula ou inscricao
 
       $this->objpdf->SetFont('Arial','',5);
-      $this->objpdf->Text(45,$y+3,$this->titulo2); // cod. de arrecada??o
+      $this->objpdf->Text(45,$y+3,$this->titulo2); // cod. de arrecadação
       $this->objpdf->SetFont('Arial','B',7);
       $this->objpdf->Text(47,$y+6,$this->descr2); // numpre
 
@@ -417,21 +417,21 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Text(76,$y+6,$this->descr5); // Parcela inicial e total de parcelas
 
       $this->objpdf->SetFont('Arial','',5);
-      $this->objpdf->Text(13,$y+10,$this->titulo3); // contribuinte/endere?o
+      $this->objpdf->Text(13,$y+10,$this->titulo3); // contribuinte/endereço
       $this->objpdf->SetFont('Arial','B',7);
       $this->objpdf->Text(13,$y+13,$this->descr3_1); // nome do contribuinte
-      $this->objpdf->Text(13,$y+16,$this->descr3_2); // endere?o
+      $this->objpdf->Text(13,$y+16,$this->descr3_2); // endereço
 
       $this->objpdf->SetFont('Arial','',5);
-      $this->objpdf->Text(13,$y+23,$this->titulo4); // Instru??es
+      $this->objpdf->Text(13,$y+23,$this->titulo4); // Instruções
       $this->objpdf->SetFont('Arial','B',7);
       $xx = $this->objpdf->getx();
       $yy = $this->objpdf->gety();
       $this->objpdf->setleftmargin(10);
       $this->objpdf->setrightmargin(120);
       $this->objpdf->sety($y+23);
-      $this->objpdf->multicell(0,3,$this->descr4_1); // Instru??es 1 - linha 1
-//        $this->objpdf->multicell(0,3,$this->descr4_2); // Instru??es 1 - linha 2
+      $this->objpdf->multicell(0,3,$this->descr4_1); // Instruções 1 - linha 1
+//        $this->objpdf->multicell(0,3,$this->descr4_2); // Instruções 1 - linha 2
       $this->objpdf->setxy($xx,$yy);
 
       $this->objpdf->SetFont('Arial','',5);
@@ -463,7 +463,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Text(97,$y+6,$this->descr8); // numero da matricula ou inscricao
 
       $this->objpdf->SetFont('Arial','',5);
-      $this->objpdf->Text(131,$y+3,$this->titulo9); // cod. de arrecada??o
+      $this->objpdf->Text(131,$y+3,$this->titulo9); // cod. de arrecadação
       $this->objpdf->SetFont('Arial','B',7);
       $this->objpdf->Text(133,$y+6,$this->descr9); // numpre
 
@@ -478,21 +478,21 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Text(183,$y+6,$this->descr13); // livre
 
       $this->objpdf->SetFont('Arial','',5);
-      $this->objpdf->Text(97,$y+10,$this->titulo11); // contribuinte / endere?o
+      $this->objpdf->Text(97,$y+10,$this->titulo11); // contribuinte / endereço
       $this->objpdf->SetFont('Arial','B',7);
       $this->objpdf->Text(97,$y+13,$this->descr11_1); // nome do contribuinte
-      $this->objpdf->Text(97,$y+16,$this->descr11_2); // endere?o
+      $this->objpdf->Text(97,$y+16,$this->descr11_2); // endereço
 
       $this->objpdf->SetFont('Arial','',5);
-      $this->objpdf->Text(97,$y+24,$this->titulo12); // instru??es
+      $this->objpdf->Text(97,$y+24,$this->titulo12); // instruções
       $this->objpdf->SetFont('Arial','B',7);
       $xx = $this->objpdf->getx();
       $yy = $this->objpdf->gety();
       $this->objpdf->setleftmargin(97);
       $this->objpdf->setrightmargin(2);
       $this->objpdf->sety($y+24);
-      $this->objpdf->multicell(0,3,$this->descr12_1); // Instru??es 2 - linha 1
-      $this->objpdf->multicell(0,3,$this->descr12_2); // Instru??es 2 - linha 2
+      $this->objpdf->multicell(0,3,$this->descr12_1); // Instruções 2 - linha 1
+      $this->objpdf->multicell(0,3,$this->descr12_2); // Instruções 2 - linha 2
       $this->objpdf->setxy($xx,$yy);
 
       $this->objpdf->SetFont('Arial','',5);
@@ -528,7 +528,7 @@ class db_impcarne extends cl_assinatura {
               $this->objpdf->setleftmargin(10);
               $this->objpdf->setrightmargin(120);
               $this->objpdf->sety($y+28);
-              $this->objpdf->multicell(0,3,$this->descr4_1); // Instru??es 1 - linha 1
+              $this->objpdf->multicell(0,3,$this->descr4_1); // Instruções 1 - linha 1
               $this->objpdf->ln(39.5);
       */
     }else if ( $this->modelo == 22 ) {
@@ -551,13 +551,13 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->setfillcolor(245);
       $this->objpdf->Roundedrect(15,45,110,35,2,'DF','1234');
       $this->objpdf->Setfont('Arial','',6);
-      $this->objpdf->text(16,47,'Identifica??o:');
+      $this->objpdf->text(16,47,'Identificação:');
       $this->objpdf->Setfont('Arial','',8);
       $this->objpdf->text(16,51,'Nome :');
       $this->objpdf->text(32,51,$this->nome);
-      $this->objpdf->text(16,56,'Endere?o :');
+      $this->objpdf->text(16,56,'Endereço :');
       $this->objpdf->text(32,56,$this->ender);
-      $this->objpdf->text(16,60,'Munic?pio :');
+      $this->objpdf->text(16,60,'Município :');
       $this->objpdf->text(32,60,$this->munic);
       $this->objpdf->text(16,64,'CEP :');
       $this->objpdf->text(32,64,$this->cep);
@@ -579,7 +579,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Setfont('Arial','',8);
       $this->objpdf->text(132,58,$this->nomepri);
       $this->objpdf->Setfont('Arial','',6);
-      $this->objpdf->text(132,63,'N?mero/Complemento :');
+      $this->objpdf->text(132,63,'Número/Complemento :');
       $this->objpdf->Setfont('Arial','',8);
       $this->objpdf->text(132,66,$this->nrpri."      ".$this->complpri);
       $this->objpdf->Setfont('Arial','',6);
@@ -588,7 +588,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text(132,74,$this->bairropri);
 
       $this->objpdf->Setfont('Arial','B',11);
-      $this->objpdf->text(70,87,'RECIBO V?LIDO AT?: '.$this->datacalc);
+      $this->objpdf->text(70,87,'RECIBO VÁLIDO ATÉ: '.$this->datacalc);
 
       $this->objpdf->setfillcolor(245);
       $this->objpdf->Roundedrect(15,90,180,65,2,'DF','1234');
@@ -596,7 +596,7 @@ class db_impcarne extends cl_assinatura {
 
       $this->objpdf->SetXY(17,96);
       if($this->taxabanc!=0){
-        $this->objpdf->Cell(20,4,'Taxa Banc?ria',0,0,"L",0);
+        $this->objpdf->Cell(20,4,'Taxa Bancária',0,0,"L",0);
         $this->objpdf->Cell(20,4,db_formatar($this->taxabanc,'f'),0,1,"R",0);
       }
 
@@ -611,7 +611,7 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->cell(15,4,db_formatar(pg_result($this->recorddadospagto,$i,$this->valor),'f'),0,1,"R",0);
       }
       $this->objpdf->SetXY(15,158);
-      $this->objpdf->multicell(0,4,'HIST?RICO :   '.$this->historico);
+      $this->objpdf->multicell(0,4,'HISTÓRICO :   '.$this->historico);
       $this->objpdf->setx(15);
       $this->objpdf->multicell(0,4,$this->histparcel);
       $this->objpdf->setfillcolor(255,255,255);
@@ -623,7 +623,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Roundedrect(93,200,48,10,2,'DF','1234');
       $this->objpdf->Roundedrect(146,200,48,10,2,'DF','1234');
       $this->objpdf->text(42,202,'Vencimento');
-      $this->objpdf->text(95,202,'C?digo de Arrecada??o');
+      $this->objpdf->text(95,202,'Código de Arrecadação');
       $this->objpdf->text(148,202,'Valor a Pagar');
       $this->objpdf->setfont('Arial','',10);
       $this->objpdf->text(48,207,$this->dtvenc);
@@ -646,7 +646,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Roundedrect(146,250,48,10,2,'DF','1234');
       $this->objpdf->setfont('Arial','',6);
       $this->objpdf->text(42,252,'Vencimento');
-      $this->objpdf->text(95,252,'C?digo de Arrecada??o');
+      $this->objpdf->text(95,252,'Código de Arrecadação');
       $this->objpdf->text(148,252,'Valor a Pagar');
       $this->objpdf->setfont('Arial','',10);
       $this->objpdf->text(48,257,$this->dtvenc);
@@ -717,12 +717,12 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Text($coluna + 40,$linha+39,$this->nome); // nome
 
       $this->objpdf->SetFont('Arial','B',9);
-      $this->objpdf->Text($coluna,$linha+43,"ENDERE?O: "); // endereco
+      $this->objpdf->Text($coluna,$linha+43,"ENDEREÇO: "); // endereco
       $this->objpdf->SetFont('Arial','',9);
       $this->objpdf->Text($coluna + 40,$linha+43,$this->ender); // endereco
 
       $this->objpdf->SetFont('Arial','B',9);
-      $this->objpdf->Text($coluna,$linha+47,"N?MERO: "); // endereco
+      $this->objpdf->Text($coluna,$linha+47,"NÚMERO: "); // endereco
       $this->objpdf->SetFont('Arial','',9);
       $this->objpdf->Text($coluna + 40,$linha+47,($this->numero == ""?"":$this->numero));
 
@@ -736,7 +736,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->setx(40);
       if($this->q02_memo!=''){
         $this->objpdf->SetFont('Arial','B',9);
-        $this->objpdf->Text($coluna,$linha+51,"OBSERVA??O: "); // observa??o
+        $this->objpdf->Text($coluna,$linha+51,"OBSERVAÇÃO: "); // observação
         $this->objpdf->SetFont('Arial','',9);
         $this->objpdf->sety($linha+52);
         $this->objpdf->Multicell(0,3,$this->q02_memo); // texto
@@ -754,7 +754,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->SetFont('Arial','B',8);
       $this->objpdf->Ln(0.5);
       $this->objpdf->setx(45);
-      $this->objpdf->Multicell(0,3,"ATIVIDADE PRINCIPAL: " . $this->descrativ) ; // descri??o da atividade principal
+      $this->objpdf->Multicell(0,3,"ATIVIDADE PRINCIPAL: " . $this->descrativ) ; // descrição da atividade principal
       $linha += 6;
       $obs='';
       if(isset($this->q03_atmemo[$this->ativ])){
@@ -789,7 +789,7 @@ class db_impcarne extends cl_assinatura {
           $this->objpdf->roundedrect(42,$yyy-1,127,5,2,'1234'); // descricao da atividade secundaria
           $this->objpdf->Ln(0.5);
           $this->objpdf->setx(45);
-          $this->objpdf->Multicell(0,3,"ATIVIDADE SECUND?RIA: " . $this->outrasativs[$chave]); // texto
+          $this->objpdf->Multicell(0,3,"ATIVIDADE SECUNDÁRIA: " . $this->outrasativs[$chave]); // texto
           $linha += 6;
 
           if($obs!=""){
@@ -808,8 +808,8 @@ class db_impcarne extends cl_assinatura {
       }
       $x=64;
 //        if($this->q02_obs!=''){
-//	  $this->objpdf->Text($coluna,$linha+$x,"OBSERVA??O: "); // descri??o da atividade principal
-//	  $this->objpdf->Text($coluna + 45,$linha+$x,$this->q02_obs); // descri??o da atividade principal
+//	  $this->objpdf->Text($coluna,$linha+$x,"OBSERVAÇÃO: "); // descrição da atividade principal
+//	  $this->objpdf->Text($coluna + 45,$linha+$x,$this->q02_obs); // descrição da atividade principal
 //	  $x=$x+4;
 //	}
 
@@ -819,28 +819,28 @@ class db_impcarne extends cl_assinatura {
 
       $this->objpdf->sety(125);
       $this->objpdf->SetFont('Arial','',9);
-      $this->objpdf->Multicell(0,6,$this->obs); // observa??o
+      $this->objpdf->Multicell(0,6,$this->obs); // observação
       $this->objpdf->setfont('arial','',6);
       $this->objpdf->SetXY($coluna-18,165);
-      $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".'SECRET?RIO DA IND. COM. E TURISMO',0,"C",0);
+      $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".'SECRETÁRIO DA IND. COM. E TURISMO',0,"C",0);
       $this->objpdf->SetXY($coluna+50,165);
       $this->objpdf->MultiCell(90,4,'..........................................................................................',0,"C",0);
 
 //        $this->objpdf->SetXY($coluna-35,160);
-//        $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".'SECRET?RIO DA IND. COM. E TURISMO',0,"C",0);
+//        $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".'SECRETÁRIO DA IND. COM. E TURISMO',0,"C",0);
 //        $this->objpdf->SetXY($coluna+35,160);
 //        $this->objpdf->MultiCell(90,4,'..........................................................................................',0,"C",0);
 
 
       $this->objpdf->sety(180);
       $this->objpdf->setfont('arial','B',12);
-      $this->objpdf->multicell(0,8,'FIXAR EM LUGAR VIS?VEL',1,"C");
+      $this->objpdf->multicell(0,8,'FIXAR EM LUGAR VISÍVEL',1,"C");
       $this->objpdf->SetFont('Arial','B',10);
 
 
     }else if ( $this->modelo == 4 ) {
 
-      // BOLETO BANC?RIO
+      // BOLETO BANCÁRIO
 
       $linha = 186;
       $pdf->Line(47,$linha,47,$linha+9);
@@ -890,28 +890,28 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Text(151,$linha+11,"Parcela");
       $this->objpdf->Text(171,$linha+11,"Vencimento");
       $this->objpdf->Text(13,$linha+19,"Cedente");
-      $this->objpdf->Text(151,$linha+19,"Ag?ncia/C?digo Cedente");
+      $this->objpdf->Text(151,$linha+19,"Agência/Código Cedente");
       $this->objpdf->Text(13,$linha+27,"Data do Documento");
-      $this->objpdf->Text(42,$linha+27,"N?mero do Documento");
-      $this->objpdf->Text(88,$linha+27,"Esp?cie Doc.");
+      $this->objpdf->Text(42,$linha+27,"Número do Documento");
+      $this->objpdf->Text(88,$linha+27,"Espécie Doc.");
       $this->objpdf->Text(114,$linha+27,"Aceite");
       $this->objpdf->Text(127,$linha+27,"Data do Processamento");
-      $this->objpdf->Text(151,$linha+27,"Nosso N?mero");
-      $this->objpdf->Text(13,$linha+35,"C?digo do Cedente");
+      $this->objpdf->Text(151,$linha+27,"Nosso Número");
+      $this->objpdf->Text(13,$linha+35,"Código do Cedente");
       $this->objpdf->Text(47,$linha+35,"Carteira");
-      $this->objpdf->Text(67,$linha+35,"Esp?cie");
+      $this->objpdf->Text(67,$linha+35,"Espécie");
       $this->objpdf->Text(93,$linha+35,"Quantidade");
       $this->objpdf->Text(123,$linha+35,"Valor");
       $this->objpdf->Text(151,$linha+35,"( = ) Valor do Documento");
-      $this->objpdf->Text(13,$linha+43,"Instru??es");
+      $this->objpdf->Text(13,$linha+43,"Instruções");
       $this->objpdf->Text(151,$linha+43,"( - ) Desconto / Abatimento");
-      $this->objpdf->Text(151,$linha+51,"( - ) Outras Dedu??es");
+      $this->objpdf->Text(151,$linha+51,"( - ) Outras Deduções");
       $this->objpdf->Text(151,$linha+59,"( + ) Mora / Multa");
-      $this->objpdf->Text(151,$linha+67,"( + ) Outros Acr?cimos");
+      $this->objpdf->Text(151,$linha+67,"( + ) Outros Acrécimos");
       $this->objpdf->Text(151,$linha+75,"( = ) Valor Cobrado");
       $this->objpdf->Text(13,$linha+83,"Sacado");
       $this->objpdf->Text(13,$linha+91,"Sacador/Avalista");
-      $this->objpdf->Text(160,$linha+99,"Autentica??o Mec?nica");
+      $this->objpdf->Text(160,$linha+99,"Autenticação Mecânica");
 
       $this->objpdf->SetFont('Arial','b',8);
       $this->objpdf->Text(13,$linha+15,$this->localpagamento);  	// local de pagamento
@@ -965,7 +965,7 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->setfillcolor(255,255,255);
 //		$this->objpdf->roundedrect(10,07,190,183,2,'DF','1234');
         $this->objpdf->Setfont('Arial','B',11);
-        $this->objpdf->text(150,$xlin-13,'RECIBO V?LIDO AT?: ');
+        $this->objpdf->text(150,$xlin-13,'RECIBO VÁLIDO ATÉ: ');
         $this->objpdf->text(159,$xlin-8,$this->datacalc);
         $this->objpdf->Image('imagens/files/'.$this->logo,15,$xlin-17,12);
         $this->objpdf->Setfont('Arial','B',9);
@@ -979,15 +979,15 @@ class db_impcarne extends cl_assinatura {
 
         $this->objpdf->Roundedrect($xcol,$xlin+2,$xcol+119,20,2,'DF','1234');
         $this->objpdf->Setfont('Arial','',6);
-        $this->objpdf->text($xcol+2,$xlin+4,'Identifica??o:');
+        $this->objpdf->text($xcol+2,$xlin+4,'Identificação:');
         $this->objpdf->Setfont('Arial','',8);
         $this->objpdf->text($xcol+2,$xlin+7,$this->tipoinscr);
         $this->objpdf->text($xcol+17,$xlin+7,$this->nrinscr);
         $this->objpdf->text($xcol+30,$xlin+7,'Nome :');
         $this->objpdf->text($xcol+40,$xlin+7,$this->nome);
-        $this->objpdf->text($xcol+2,$xlin+11,'Endere?o :');
+        $this->objpdf->text($xcol+2,$xlin+11,'Endereço :');
         $this->objpdf->text($xcol+17,$xlin+11,$this->ender);
-        $this->objpdf->text($xcol+2,$xlin+15,'Munic?pio :');
+        $this->objpdf->text($xcol+2,$xlin+15,'Município :');
         $this->objpdf->text($xcol+17,$xlin+15,$this->munic);
         $this->objpdf->text($xcol+75,$xlin+15,'CEP :');
         $this->objpdf->text($xcol+82,$xlin+15,$this->cep);
@@ -1033,7 +1033,7 @@ class db_impcarne extends cl_assinatura {
             $this->objpdf->setx($xcol+3+$maiscol);
             $this->objpdf->cell(4,3,"Rec",0,0,"L",0);
             $this->objpdf->cell(11,3,"    Reduz",0,0,"L",0);
-            $this->objpdf->cell(63,3,"    Descri??o",0,0,"L",0);
+            $this->objpdf->cell(63,3,"    Descrição",0,0,"L",0);
             $this->objpdf->cell(15,3,"                Valor",0,1,"L",0);
 
           }
@@ -1050,7 +1050,7 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->Roundedrect($xcol,$xlin+71,202,30,2,'DF','1234');
         $this->objpdf->SetY($xlin+72);
         $this->objpdf->SetX($xcol+3);
-        $this->objpdf->multicell(0,4,'HIST?RICO :   '.$this->historico);
+        $this->objpdf->multicell(0,4,'HISTÓRICO :   '.$this->historico);
         $this->objpdf->SetX($xcol+3);
         $this->objpdf->multicell(0,4,$this->histparcel);
         $this->objpdf->Setfont('Arial','',6);
@@ -1060,7 +1060,7 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->Roundedrect(168,$xlin+103,38,10,2,'DF','1234');
         $this->objpdf->Roundedrect(146,$xlin+115,40,10,2,'DF','1234');
         $this->objpdf->text(130,$xlin+105,'Vencimento');
-        $this->objpdf->text(170,$xlin+105,'C?digo de Arrecada??o');
+        $this->objpdf->text(170,$xlin+105,'Código de Arrecadação');
         $this->objpdf->text(148,$xlin+118,'Valor a Pagar');
         $this->objpdf->setfont('Arial','',10);
         $this->objpdf->text(135,$xlin+110,$this->dtvenc);
@@ -1070,7 +1070,7 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->setfillcolor(0,0,0);
         $this->objpdf->SetFont('Arial','',4);
 //	        $this->objpdf->TextWithDirection(1.5,$xlin+60,$this->texto,'U'); // texto no canhoto do carne
-        $this->objpdf->TextWithDirection(1.5,$xlin+60,$this->texto . ' - ' . ($i == 1?'2? VIA':'1? VIA'),'U'); // texto no canhoto do carne
+        $this->objpdf->TextWithDirection(1.5,$xlin+60,$this->texto . ' - ' . ($i == 1?'2ª VIA':'1ª VIA'),'U'); // texto no canhoto do carne
         $this->objpdf->setfont('Arial','',11);
         $this->objpdf->text(10,$xlin+108,$this->linhadigitavel);
         $this->objpdf->int25(10,$xlin+110,$this->codigobarras,15,0.341);
@@ -1079,7 +1079,7 @@ class db_impcarne extends cl_assinatura {
       }
 
     }else if ( $this->modelo == 11 ) {
-////////// MODELO 11  -  SOLICITA??O DE COMPRA
+////////// MODELO 11  -  SOLICITAÇÃO DE COMPRA
       $this->objpdf->AliasNbPages();
       $this->objpdf->AddPage();
       $this->objpdf->settopmargin(1);
@@ -1091,10 +1091,10 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->setfillcolor(245);
       $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
 
-      // Imprime o cabe?alho com dados sobre a prefeitura
+      // Imprime o cabeçalho com dados sobre a prefeitura
       $this->objpdf->setfillcolor(255,255,255);
       $this->objpdf->Setfont('Arial','B',9);
-      $this->objpdf->text(130,$xlin-13,'SOLICITA??O DE COMPRA N'.CHR(176));
+      $this->objpdf->text(130,$xlin-13,'SOLICITAÇÃO DE COMPRA N'.CHR(176));
       $this->objpdf->text(185,$xlin-13,db_formatar($this->pc10_numero,'s','0',6,'e'));
       $this->objpdf->Image('imagens/files/logo_boleto.png',15,$xlin-17,12);
       $this->objpdf->Setfont('Arial','B',9);
@@ -1105,10 +1105,10 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text(40,$xlin- 5,$this->telefpref);
       $this->objpdf->text(40,$xlin- 2,$this->emailpref);
 
-      // Caixa com dados da solicita??o
+      // Caixa com dados da solicitação
       $this->objpdf->rect($xcol,$xlin+3,$xcol+198,18,2,'DF','1234');
       $this->objpdf->Setfont('Arial','',6);
-      $this->objpdf->text($xcol+2,$xlin+5,'Dados do Solicita??o');
+      $this->objpdf->text($xcol+2,$xlin+5,'Dados do Solicitação');
       $this->objpdf->Setfont('Arial','B',8);
       $this->objpdf->text($xcol+  2,$xlin+ 8,'Departamento');
       $this->objpdf->text($xcol+109,$xlin+ 8,'Tipo');
@@ -1117,7 +1117,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text($xcol+  2,$xlin+16,'Resumo');
       $this->objpdf->Setfont('Arial','',8);
 
-      // Imprime dados da solicita??o
+      // Imprime dados da solicitação
       $this->objpdf->text($xcol+ 23,$xlin+ 8,':  '.$this->descrdepto);
       if(isset($this->pc10_data) && trim($this->pc10_data)!=""){
         $this->pc10_data = db_formatar($this->pc10_data,'d');
@@ -1144,9 +1144,9 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->rect($xcol,    $xlin+30,15,185,2,'DF','34');
       // Caixa da quantidade
       $this->objpdf->rect($xcol+ 15,$xlin+30,20,185,2,'DF','34');
-      // Caixa dos materiais ou servi?os
+      // Caixa dos materiais ou serviços
       $this->objpdf->rect($xcol+ 35,$xlin+30,107,185,2,'DF','34');
-      // Caixa dos valores unit?rios
+      // Caixa dos valores unitários
       $this->objpdf->rect($xcol+142,$xlin+30,30,185,2,'DF','');
       // Caixa dos valores totais dos itens
       $this->objpdf->rect($xcol+172,$xlin+30,30,185,2,'DF','34');
@@ -1158,8 +1158,8 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Setfont('Arial','B',8);
       $this->objpdf->text($xcol+   4,$xlin+28,'ITEM');
       $this->objpdf->text($xcol+15.5,$xlin+28,'QUANTIDADE');
-      $this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVI?O');
-      $this->objpdf->text($xcol+ 145,$xlin+28,'VALOR UNIT?RIO');
+      $this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVIÇO');
+      $this->objpdf->text($xcol+ 145,$xlin+28,'VALOR UNITÁRIO');
       $this->objpdf->text($xcol+ 176,$xlin+28,'VALOR TOTAL');
       $maiscol = 0;
 
@@ -1210,7 +1210,7 @@ class db_impcarne extends cl_assinatura {
             $prazo = "\nPRAZO: ".trim($prazo);
           }
           if(isset($pgto) && trim($pgto)!=""){
-            $pgto = "\nCONDI??O: ".trim($pgto);
+            $pgto = "\nCONDIÇÃO: ".trim($pgto);
           }
           if(isset($resum) && trim($resum)!=""){
             $resum = "\nRESUMO: ".trim($resum);
@@ -1230,7 +1230,7 @@ class db_impcarne extends cl_assinatura {
         }
         $dist = 2.7;
         if(isset($testacod) && trim($testacod)!=""){
-          $pc13_coddot= "DOTA??O: ".$testacod;
+          $pc13_coddot= "DOTAÇÃO: ".$testacod;
           $dist = 3.2;
         }
         if(isset($testaval) && trim($testaval)!=""){
@@ -1328,9 +1328,9 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
       $this->objpdf->setfillcolor(255,255,255);
       $this->objpdf->Setfont('Arial','B',9);
-      $this->objpdf->text(130,$xlin-13,'AUTORIZA??O DE EMPENHO N'.CHR(176));
+      $this->objpdf->text(130,$xlin-13,'AUTORIZAÇÃO DE EMPENHO N'.CHR(176));
       $this->objpdf->text(185,$xlin-13,db_formatar($this->numaut,'s','0',6,'e'));
-      $this->objpdf->text(133.5,$xlin-8,'SOLICITA??O DE COMPRA N'.CHR(176));
+      $this->objpdf->text(133.5,$xlin-8,'SOLICITAÇÃO DE COMPRA N'.CHR(176));
       $this->objpdf->text(185,$xlin-8,db_formatar($this->numsol,'s','0',6,'e'));
       $this->objpdf->Image('imagens/files/logo_boleto.png',15,$xlin-17,12); //.$this->logo
       $this->objpdf->Setfont('Arial','B',9);
@@ -1345,12 +1345,12 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Setfont('Arial','',6);
       $this->objpdf->text($xcol+2,$xlin+4,'Dados da Ordem de Compra');
       $this->objpdf->Setfont('Arial','B',8);
-      $this->objpdf->text($xcol+2,$xlin+ 8,'Licita??o');
+      $this->objpdf->text($xcol+2,$xlin+ 8,'Licitação');
       $this->objpdf->text($xcol+2,$xlin+12,'Tipo de Compra');
       $this->objpdf->text($xcol+2,$xlin+16,'Prazo de Entrega');
-      $this->objpdf->text($xcol+2,$xlin+20,'Observa??es');
+      $this->objpdf->text($xcol+2,$xlin+20,'Observações');
       $this->objpdf->text($xcol+2,$xlin+24,'Cond.de Pagto');
-      $this->objpdf->text($xcol+2,$xlin+28,'Outras Condi??es');
+      $this->objpdf->text($xcol+2,$xlin+28,'Outras Condições');
       $this->objpdf->Setfont('Arial','',8);
       $this->objpdf->text($xcol+27,$xlin+ 8,':  '.$this->num_licitacao.'  -  '.$this->descr_licitacao);
       $this->objpdf->text($xcol+27,$xlin+12,':  '.$this->descr_tipocompra);
@@ -1361,12 +1361,12 @@ class db_impcarne extends cl_assinatura {
 
       $this->objpdf->rect($xcol+106,$xlin+2,96,28,2,'DF','1234');
       $this->objpdf->Setfont('Arial','',6);
-      $this->objpdf->text($xcol+110,$xlin+4,'Dados da Dota??o');
+      $this->objpdf->text($xcol+110,$xlin+4,'Dados da Dotação');
       $this->objpdf->Setfont('Arial','B',8);
-      $this->objpdf->text($xcol+108,$xlin+ 8,'Dota??o');
+      $this->objpdf->text($xcol+108,$xlin+ 8,'Dotação');
       $this->objpdf->text($xcol+108,$xlin+12,'Reduzido');
-      $this->objpdf->text($xcol+108,$xlin+16,'Descri??o');
-      $this->objpdf->text($xcol+108,$xlin+20,'?rg?o');
+      $this->objpdf->text($xcol+108,$xlin+16,'Descrição');
+      $this->objpdf->text($xcol+108,$xlin+20,'Órgão');
       $this->objpdf->text($xcol+108,$xlin+24,'Unidade');
       $this->objpdf->text($xcol+108,$xlin+28,'Destino');
       $this->objpdf->Setfont('Arial','',8);
@@ -1384,9 +1384,9 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text($xcol+109,$xlin+38,'Numcgm');
       $this->objpdf->text($xcol+150,$xlin+38,(strlen($this->cnpj) == 11?'CPF':'CNPJ'));
       $this->objpdf->text($xcol+  2,$xlin+38,'Nome');
-      $this->objpdf->text($xcol+  2,$xlin+42,'Endere?o');
+      $this->objpdf->text($xcol+  2,$xlin+42,'Endereço');
       $this->objpdf->text($xcol+102,$xlin+42,'Complemento');
-      $this->objpdf->text($xcol+  2,$xlin+46,'Munic?pio');
+      $this->objpdf->text($xcol+  2,$xlin+46,'Município');
       $this->objpdf->text($xcol+115,$xlin+46,'CEP');
       $this->objpdf->text($xcol+  2,$xlin+50,'Contato');
       $this->objpdf->text($xcol+110,$xlin+50,'Telefone');
@@ -1430,8 +1430,8 @@ class db_impcarne extends cl_assinatura {
 
       $this->objpdf->text($xcol+   4,$xlin+58,'ITEM');
       $this->objpdf->text($xcol+15.5,$xlin+58,'QUANTIDADE');
-      $this->objpdf->text($xcol+  70,$xlin+58,'MATERIAL OU SERVI?O');
-      $this->objpdf->text($xcol+ 145,$xlin+58,'VALOR UNIT?RIO');
+      $this->objpdf->text($xcol+  70,$xlin+58,'MATERIAL OU SERVIÇO');
+      $this->objpdf->text($xcol+ 145,$xlin+58,'VALOR UNITÁRIO');
       $this->objpdf->text($xcol+ 176,$xlin+58,'VALOR TOTAL');
       $maiscol = 0;
 
@@ -1456,7 +1456,7 @@ class db_impcarne extends cl_assinatura {
         /////// troca de pagina
         if( ( $this->objpdf->gety() > $this->objpdf->h - 70 && $pagina == 1 ) || ( $this->objpdf->gety() > $this->objpdf->h - 22 && $pagina != 1 )){
           if ($this->objpdf->PageNo() == 1){
-            $this->objpdf->text(110,$xlin+214,'Continua na P?gina '.($this->objpdf->PageNo()+1));
+            $this->objpdf->text(110,$xlin+214,'Continua na Página '.($this->objpdf->PageNo()+1));
             $this->objpdf->rect($xcol,$xlin+217,202,55,2,'DF','1234');
 
             $y = 260;
@@ -1486,7 +1486,7 @@ class db_impcarne extends cl_assinatura {
             $this->objpdf->TextWithDirection(1.5,$xlin+60,$this->texto,'U'); // texto no canhoto do carne
             $this->objpdf->setfont('Arial','',11);
           }else{
-            $this->objpdf->text(110,$xlin+320,'Continua na P?gina '.($this->objpdf->PageNo()+1));
+            $this->objpdf->text(110,$xlin+320,'Continua na Página '.($this->objpdf->PageNo()+1));
           }
           $this->objpdf->addpage();
           $pagina += 1;
@@ -1499,9 +1499,9 @@ class db_impcarne extends cl_assinatura {
           $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
           $this->objpdf->setfillcolor(255,255,255);
           $this->objpdf->Setfont('Arial','B',9);
-          $this->objpdf->text(130,$xlin-13,'AUTORIZA??O DE EMPENHO N'.CHR(176));
+          $this->objpdf->text(130,$xlin-13,'AUTORIZAÇÃO DE EMPENHO N'.CHR(176));
           $this->objpdf->text(185,$xlin-13,db_formatar($this->numaut,'s','0',6,'e'));
-          $this->objpdf->text(133.5,$xlin-8,'SOLICITA??O DE COMPRA N'.CHR(176));
+          $this->objpdf->text(133.5,$xlin-8,'SOLICITAÇÃO DE COMPRA N'.CHR(176));
           $this->objpdf->text(185,$xlin-8,db_formatar($this->numsol,'s','0',6,'e'));
           $this->objpdf->Image('imagens/files/logo_boleto.png',15,$xlin-17,12); //.$this->logo
           $this->objpdf->Setfont('Arial','B',9);
@@ -1532,10 +1532,10 @@ class db_impcarne extends cl_assinatura {
 
           $this->objpdf->text($xcol+4,$xlin+58,'ITEM');
           $this->objpdf->text($xcol+15.5,$xlin+58,'QUANTIDADE');
-          $this->objpdf->text($xcol+70,$xlin+58,'MATERIAL OU SERVI?O');
-          $this->objpdf->text($xcol+145,$xlin+58,'VALOR UNIT?RIO');
+          $this->objpdf->text($xcol+70,$xlin+58,'MATERIAL OU SERVIÇO');
+          $this->objpdf->text($xcol+145,$xlin+58,'VALOR UNITÁRIO');
           $this->objpdf->text($xcol+176,$xlin+58,'VALOR TOTAL');
-          $this->objpdf->text($xcol+38,$xlin+63,'Continua??o da P?gina '.($this->objpdf->PageNo()-1));
+          $this->objpdf->text($xcol+38,$xlin+63,'Continuação da Página '.($this->objpdf->PageNo()-1));
 
           $maiscol = 0;
 
@@ -1608,7 +1608,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Setfont('Arial','B',10);
       $this->objpdf->text(128,$xlin-13,'NOTA DE EMPENHO N'.CHR(176).': ');
       $this->objpdf->text(175,$xlin-13,db_formatar($this->codemp,'s','0',6,'e'));
-      $this->objpdf->text(134,$xlin-8,'DATA DE EMISS?O : ');
+      $this->objpdf->text(134,$xlin-8,'DATA DE EMISSÃO : ');
       $this->objpdf->text(175,$xlin-8,$this->emissao);
       $this->objpdf->Image('imagens/files/logo_boleto.png',15,$xlin-17,12); //.$this->logo
       $this->objpdf->Setfont('Arial','B',9);
@@ -1619,17 +1619,17 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text(40,$xlin-5,$this->telefpref);
       $this->objpdf->text(40,$xlin-2,$this->emailpref);
 
-      /// retangulo dos dados da dota??o
+      /// retangulo dos dados da dotação
       $this->objpdf->rect($xcol,$xlin+2,$xcol+100,50,2,'DF','1234');
       $this->objpdf->Setfont('Arial','B',8);
-      $this->objpdf->text($xcol+2,$xlin+7,'?rgao');
+      $this->objpdf->text($xcol+2,$xlin+7,'Órgao');
       $this->objpdf->text($xcol+2,$xlin+11,'Unidade');
-      $this->objpdf->text($xcol+2,$xlin+15,'Fun??o');
+      $this->objpdf->text($xcol+2,$xlin+15,'Função');
 
       $this->objpdf->text($xcol+2,$xlin+22,'Proj/Ativ');
       $this->objpdf->text($xcol+2,$xlin+30,'Rubrica');
       $this->objpdf->text($xcol+2,$xlin+42,'Recurso');
-      $this->objpdf->text($xcol+2,$xlin+48,'Licita??o');
+      $this->objpdf->text($xcol+2,$xlin+48,'Licitação');
 
       $this->objpdf->Setfont('Arial','',8);
       $this->objpdf->text($xcol+17,$xlin+7,':  '.db_formatar($this->orgao,'orgao').' - '.$this->descr_orgao);
@@ -1655,8 +1655,8 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Setfont('Arial','B',8);
       $this->objpdf->text($xcol+107,$xlin+7,'Numcgm');
       $this->objpdf->text($xcol+107,$xlin+11,'Nome');
-      $this->objpdf->text($xcol+107,$xlin+15,'Endere?o');
-      $this->objpdf->text($xcol+107,$xlin+19,'Munic?pio');
+      $this->objpdf->text($xcol+107,$xlin+15,'Endereço');
+      $this->objpdf->text($xcol+107,$xlin+19,'Município');
       $this->objpdf->Setfont('Arial','',8);
       $this->objpdf->text($xcol+124,$xlin+7,': '.$this->numcgm);
       $this->objpdf->text($xcol+124,$xlin+11,': '.$this->nome);
@@ -1670,12 +1670,12 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->rect($xcol+106,$xlin+42.5,47,9,2,'DF','1234');
       $this->objpdf->rect($xcol+155,$xlin+42.5,47,9,2,'DF','1234');
       $this->objpdf->Setfont('Arial','',6);
-      $this->objpdf->text($xcol+108,$xlin+34.0,'Valor Or?ado');
+      $this->objpdf->text($xcol+108,$xlin+34.0,'Valor Orçado');
       $this->objpdf->text($xcol+157,$xlin+34.0,'Saldo Anterior');
       $this->objpdf->text($xcol+108,$xlin+44.5,'Valor Empenhado');
       $this->objpdf->text($xcol+157,$xlin+44.5,'Saldo Atual');
       $this->objpdf->Setfont('Arial','',8);
-      $this->objpdf->text($xcol+108,$xlin+27,'AUTORIZA??O N'.chr(176).' '.db_formatar($this->numaut,'s','0',5,'e'));
+      $this->objpdf->text($xcol+108,$xlin+27,'AUTORIZAÇÃO N'.chr(176).' '.db_formatar($this->numaut,'s','0',5,'e'));
       $this->objpdf->text($xcol+150,$xlin+27,'SEQ. DO EMPENHO N'.chr(176).' '.db_formatar($this->numemp,'s','0',6,'e'));
 //	$this->objpdf->text($xcol+108,$xlin+26.5,$this->texto);
       $this->objpdf->text($xcol+130,$xlin+38.0,db_formatar($this->orcado,'f'));
@@ -1698,10 +1698,10 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->rect($xcol+152,$xlin+54,25,6,2,'DF','12');
       $this->objpdf->rect($xcol+177,$xlin+54,25,6,2,'DF','12');
 
-      //// t?tulo do corpo do empenho
+      //// título do corpo do empenho
       $this->objpdf->text($xcol+2,$xlin+58,'QUANT');
-      $this->objpdf->text($xcol+70,$xlin+58,'MATERIAL OU SERVI?O');
-      $this->objpdf->text($xcol+154,$xlin+58,'VALOR UNIT?RIO');
+      $this->objpdf->text($xcol+70,$xlin+58,'MATERIAL OU SERVIÇO');
+      $this->objpdf->text($xcol+154,$xlin+58,'VALOR UNITÁRIO');
       $this->objpdf->text($xcol+181,$xlin+58,'VALOR TOTAL');
       $maiscol = 0;
 
@@ -1733,7 +1733,7 @@ class db_impcarne extends cl_assinatura {
         /////// troca de pagina
         if( ( $this->objpdf->gety() > $this->objpdf->h - 93 && $pagina == 1 ) || ( $this->objpdf->gety() > $this->objpdf->h - 22 && $pagina != 1 )){
           if ($this->objpdf->PageNo() == 1){
-            $this->objpdf->text(110,$xlin+214,'Continua na P?gina '.($this->objpdf->PageNo()+1));
+            $this->objpdf->text(110,$xlin+214,'Continua na Página '.($this->objpdf->PageNo()+1));
             $this->objpdf->rect($xcol,$xlin+217,202,55,2,'DF','1234');
 
             $y = 260;
@@ -1741,7 +1741,7 @@ class db_impcarne extends cl_assinatura {
             $this->objpdf->MultiCell(70,4,'AUTORIZO'."\n\n\n".'DIRETOR DE COMPRAS',0,"C",0);
 
             $this->objpdf->SetXY(72,$y);
-            $this->objpdf->MultiCell(70,4,'AUTORIZO'."\n\n\n".'SECRETARIA DE FINAN?AS',0,"C",0);
+            $this->objpdf->MultiCell(70,4,'AUTORIZO'."\n\n\n".'SECRETARIA DE FINANÇAS',0,"C",0);
 
             $this->objpdf->SetXY(142,$y);
             $this->objpdf->MultiCell(70,4,'VISTO'."\n\n\n".'',0,"C",0);
@@ -1752,7 +1752,7 @@ class db_impcarne extends cl_assinatura {
             $this->objpdf->TextWithDirection(1.5,$xlin+60,$this->texto,'U'); // texto no canhoto do carne
             $this->objpdf->setfont('Arial','',11);
           }else{
-            $this->objpdf->text(110,$xlin+297,'Continua na P?gina '.($this->objpdf->PageNo()+1));
+            $this->objpdf->text(110,$xlin+297,'Continua na Página '.($this->objpdf->PageNo()+1));
           }
           $this->objpdf->addpage();
           $pagina += 1;
@@ -1795,10 +1795,10 @@ class db_impcarne extends cl_assinatura {
 
 //	    $this->objpdf->text($xcol+4,$xlin+58,'ITEM');
           $this->objpdf->text($xcol+0.5,$xlin+58,'QUANTIDADE');
-          $this->objpdf->text($xcol+65,$xlin+58,'MATERIAL OU SERVI?O');
-          $this->objpdf->text($xcol+145,$xlin+58,'VALOR UNIT?RIO');
+          $this->objpdf->text($xcol+65,$xlin+58,'MATERIAL OU SERVIÇO');
+          $this->objpdf->text($xcol+145,$xlin+58,'VALOR UNITÁRIO');
           $this->objpdf->text($xcol+176,$xlin+58,'VALOR TOTAL');
-          $this->objpdf->text($xcol+38,$xlin+63,'Continua??o da P?gina '.($this->objpdf->PageNo()-1));
+          $this->objpdf->text($xcol+38,$xlin+63,'Continuação da Página '.($this->objpdf->PageNo()-1));
 
           $maiscol = 0;
 
@@ -1846,8 +1846,8 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->SetFont('Arial','',6);
         $this->objpdf->text($xcol+12,$xlin+199,'EMPENHADO E CONFERIDO');
         $this->objpdf->text($xcol+26,$xlin+213,'VISTO');
-        $this->objpdf->text($xcol+19,$xlin+227,'T?CNICO CONT?BIL');
-        $this->objpdf->text($xcol+13,$xlin+240,'SECRET?RIO(A) DA FAZENDA');
+        $this->objpdf->text($xcol+19,$xlin+227,'TÉCNICO CONTÁBIL');
+        $this->objpdf->text($xcol+13,$xlin+240,'SECRETÁRIO(A) DA FAZENDA');
 
         $this->objpdf->text($xcol+66,$xlin+212,'DATA  ____________/____________/____________');
         $this->objpdf->text($xcol+76,$xlin+227,'PREFEITO MUNICIPAL');
@@ -1863,7 +1863,7 @@ class db_impcarne extends cl_assinatura {
 
         $this->objpdf->SetFont('Arial','',7);
         $this->objpdf->text($xcol+90,$xlin+249,'R E C I B O');
-        $this->objpdf->text($xcol+45,$xlin+253,'RECEBI(EMOS) DO MUNIC?PIO DE '.$this->municpref.', A IMPORT?NCIA ABAIXO ESPECIFICADA, REFERENTE ?:');
+        $this->objpdf->text($xcol+45,$xlin+253,'RECEBI(EMOS) DO MUNICÍPIO DE '.$this->municpref.', A IMPORTÂNCIA ABAIXO ESPECIFICADA, REFERENTE À:');
         $this->objpdf->text($xcol+2,$xlin+257,'(     ) PARTE DO VALOR EMPENHADO');
         $this->objpdf->text($xcol+102,$xlin+257,'(     ) SALDO/TOTAL EMPENHADO');
         $this->objpdf->text($xcol+2,$xlin+261,'R$');
@@ -1899,7 +1899,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Setfont('Arial','B',10);
       $this->objpdf->text(128,$xlin-13,'ORDEM DE PAGAMENTO N'.CHR(176).': ');
       $this->objpdf->text(177,$xlin-13,db_formatar($this->ordpag,'s','0',6,'e'));
-      $this->objpdf->text(134,$xlin-8,'DATA DE EMISS?O : ');
+      $this->objpdf->text(134,$xlin-8,'DATA DE EMISSÃO : ');
       $this->objpdf->text(175,$xlin-8,$this->emissao);
       $this->objpdf->Image('imagens/files/logo_boleto.png',15,$xlin-17,12); //.$this->logo
       $this->objpdf->Setfont('Arial','B',9);
@@ -1910,18 +1910,18 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text(40,$xlin-5,$this->telefpref);
       $this->objpdf->text(40,$xlin-2,$this->emailpref);
 
-      /// retangulo dos dados da dota??o
+      /// retangulo dos dados da dotação
       $this->objpdf->rect($xcol,$xlin+2,$xcol+100,35,2,'DF','1234');
       $this->objpdf->Setfont('Arial','B',8);
       if($ano < 2005){
         $this->objpdf->text($xcol+2,$xlin+19,'RESTOS A PAGAR ');
       }else{
-        $this->objpdf->text($xcol+2,$xlin+7,'?rgao');
+        $this->objpdf->text($xcol+2,$xlin+7,'Órgao');
         $this->objpdf->text($xcol+2,$xlin+11,'Unidade');
-        $this->objpdf->text($xcol+2,$xlin+15,'Fun??o');
+        $this->objpdf->text($xcol+2,$xlin+15,'Função');
 
         $this->objpdf->text($xcol+2,$xlin+19,'Proj/Ativ');
-        $this->objpdf->text($xcol+2,$xlin+23,'Dota??o');
+        $this->objpdf->text($xcol+2,$xlin+23,'Dotação');
         $this->objpdf->text($xcol+2,$xlin+27,'Elemento');
         $this->objpdf->text($xcol+2,$xlin+34,'Recurso');
 
@@ -1944,8 +1944,8 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Setfont('Arial','B',8);
       $this->objpdf->text($xcol+107,$xlin+9,'Numcgm');
       $this->objpdf->text($xcol+107,$xlin+13,'Nome');
-      $this->objpdf->text($xcol+107,$xlin+17,'Endere?o');
-      $this->objpdf->text($xcol+107,$xlin+21,'Munic?pio');
+      $this->objpdf->text($xcol+107,$xlin+17,'Endereço');
+      $this->objpdf->text($xcol+107,$xlin+21,'Município');
       $this->objpdf->Setfont('Arial','',8);
       $this->objpdf->text($xcol+124,$xlin+9,': '.$this->numcgm);
       $this->objpdf->text($xcol+124,$xlin+13,': '.$this->nome);
@@ -1970,7 +1970,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->rect($xcol+102,$xlin+105, 75,17,2,'DF','34');
       $this->objpdf->rect($xcol+177,$xlin+105, 25,17,2,'DF','34');
 
-      ///// retangulo das reten??es
+      ///// retangulo das retenções
       $this->objpdf->rect($xcol+177,$xlin+179, 25, 8,2,'DF','34');
       $this->objpdf->rect($xcol+177,$xlin+171, 25, 8,2,'DF','');
       $this->objpdf->rect($xcol+000,$xlin+133, 75,46,2,'DF','12');
@@ -1999,7 +1999,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text($xcol+2,$xlin+46,'Dados da Ordem de Compra');
       $this->objpdf->Setfont('Arial','B',6);
 
-      //// t?tulo do corpo do empenho
+      //// título do corpo do empenho
       $maiscol = 0;
 
       /// monta os dados dos elementos da ordem de compra
@@ -2008,7 +2008,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->setleftmargin(4);
       $this->objpdf->sety($xlin+48);
       $this->objpdf->cell(20,4,'ELEMENTO',0,0,"L");
-      $this->objpdf->cell(80,4,'DESCRI??O',0,0,"L");
+      $this->objpdf->cell(80,4,'DESCRIÇÃO',0,0,"L");
       $this->objpdf->cell(25,4,'VALOR',0,0,"R");
       $this->objpdf->cell(25,4,'ANULADO',0,0,"R");
       $this->objpdf->cell(25,4,'PAGO',0,0,"R");
@@ -2036,17 +2036,17 @@ class db_impcarne extends cl_assinatura {
       }
 
 
-      /// monta os dados das reten??es da ordem de compra
+      /// monta os dados das retenções da ordem de compra
       $this->objpdf->SetWidths(array(10,62,25));
       $this->objpdf->SetAligns(array('C','L','R'));
       $this->objpdf->setleftmargin(4);
       $this->objpdf->setxy($xcol+102,$xlin+134);
       $this->objpdf->Setfont('Arial','B',10);
-      $this->objpdf->text($xcol+104,$xlin+131,'Dados das Reten??es');
+      $this->objpdf->text($xcol+104,$xlin+131,'Dados das Retenções');
       $this->objpdf->text($xcol+2,$xlin+131,'Repasses');
       $this->objpdf->Setfont('Arial','b',7);
       $this->objpdf->cell(10,4,'REC.',0,0,"L");
-      $this->objpdf->cell(62,4,'DESCRI??O',0,0,"L");
+      $this->objpdf->cell(62,4,'DESCRIÇÃO',0,0,"L");
       $this->objpdf->cell(25,4,'VALOR',0,1,"R");
       $this->objpdf->Setfont('Arial','',7);
       $total_ret = 0;
@@ -2085,13 +2085,13 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->cell(50,5,'VALOR RESTANTE',0,0,"R");
       $this->objpdf->cell(23,4,db_formatar($this->empenhado - $this->outrasordens - $total_emp - $total_anu ,'f'),0,1,"R");
       $this->objpdf->Setfont('Arial','b',8);
-      $this->objpdf->text($xcol+2,$xlin+102,'OBSERVA??ES :');
+      $this->objpdf->text($xcol+2,$xlin+102,'OBSERVAÇÕES :');
       $this->objpdf->Setfont('Arial','',7);
       $this->objpdf->setxy($xcol,$xlin+103);
       $this->objpdf->Setfont('Arial','',7);
       $this->objpdf->multicell(102,4,$this->obs);
 
-      /// total das reten??es
+      /// total das retenções
       $this->objpdf->setxy($xcol+127,$xlin+172);
       $this->objpdf->Setfont('Arial','B',7);
       $this->objpdf->cell(50,5,'TOTAL ',0,0,"R");
@@ -2106,7 +2106,7 @@ class db_impcarne extends cl_assinatura {
       /// liquido da ordem de compra
       $this->objpdf->setxy($xcol+127,$xlin+181);
       $this->objpdf->Setfont('Arial','B',7);
-      $this->objpdf->cell(50,5,'L?QUIDO DA ORDEM DE COMPRA ',0,0,"R");
+      $this->objpdf->cell(50,5,'LÍQUIDO DA ORDEM DE COMPRA ',0,0,"R");
       $this->objpdf->cell(23,5,db_formatar($total_sal - $total_ret,'f'),0,1,"R");
 
 
@@ -2133,8 +2133,8 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->SetFont('Arial','',6);
       $this->objpdf->text($xcol+12,$xlin+199,'EMPENHADO E CONFERIDO');
       $this->objpdf->text($xcol+26,$xlin+213,'VISTO');
-      $this->objpdf->text($xcol+19,$xlin+227,'T?CNICO CONT?BIL');
-      $this->objpdf->text($xcol+13,$xlin+240,'SECRET?RIO(A) DA FAZENDA');
+      $this->objpdf->text($xcol+19,$xlin+227,'TÉCNICO CONTÁBIL');
+      $this->objpdf->text($xcol+13,$xlin+240,'SECRETÁRIO(A) DA FAZENDA');
 
       $this->objpdf->text($xcol+66,$xlin+212,'DATA  ____________/____________/____________');
       $this->objpdf->text($xcol+76,$xlin+227,'PREFEITO MUNICIPAL');
@@ -2150,7 +2150,7 @@ class db_impcarne extends cl_assinatura {
 
       $this->objpdf->SetFont('Arial','',7);
       $this->objpdf->text($xcol+90,$xlin+249,'R E C I B O');
-      $this->objpdf->text($xcol+45,$xlin+253,'RECEBI(EMOS) DO MUNIC?PIO DE '.$this->municpref.', A IMPORT?NCIA ABAIXO ESPECIFICADA, REFERENTE ?:');
+      $this->objpdf->text($xcol+45,$xlin+253,'RECEBI(EMOS) DO MUNICÍPIO DE '.$this->municpref.', A IMPORTÂNCIA ABAIXO ESPECIFICADA, REFERENTE À:');
       $this->objpdf->text($xcol+2,$xlin+257,'(     ) PARTE DO VALOR EMPENHADO');
       $this->objpdf->text($xcol+102,$xlin+257,'(     ) SALDO/TOTAL EMPENHADO');
       $this->objpdf->text($xcol+2,$xlin+261,'R$');
@@ -2199,7 +2199,7 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->setfillcolor(255,255,255);
 //		$this->objpdf->roundedrect(10,07,190,183,2,'DF','1234');
         $this->objpdf->Setfont('Arial','B',11);
-        $this->objpdf->text(150,$xlin-13,'TRANSFER?NCIA N'.chr(176).'  '.$this->codtransf);
+        $this->objpdf->text(150,$xlin-13,'TRANSFERÊNCIA N'.chr(176).'  '.$this->codtransf);
         $this->objpdf->text(159,$xlin-8,$this->datacalc);
         $this->objpdf->Image('imagens/files/logo_boleto.png',15,$xlin-17,12);
         $this->objpdf->Setfont('Arial','B',9);
@@ -2238,11 +2238,11 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->text($xcol+2,$xlin+27,'Itens a Transmitir :');
         $this->objpdf->Setfont('Arial','b',8);
         $this->objpdf->text($xcol+2,$xlin+30,'BEM');
-        $this->objpdf->text($xcol+25,$xlin+30,'DESCRI??O');
-        $this->objpdf->text($xcol+75,$xlin+30,'CLASSIFICA??O');
+        $this->objpdf->text($xcol+25,$xlin+30,'DESCRIÇÃO');
+        $this->objpdf->text($xcol+75,$xlin+30,'CLASSIFICAÇÃO');
         $this->objpdf->text($xcol+102,$xlin+30,'BEM');
-        $this->objpdf->text($xcol+125,$xlin+30,'DESCRI??O');
-        $this->objpdf->text($xcol+175,$xlin+30,'CLASSIFICA??O');
+        $this->objpdf->text($xcol+125,$xlin+30,'DESCRIÇÃO');
+        $this->objpdf->text($xcol+175,$xlin+30,'CLASSIFICAÇÃO');
         $this->objpdf->Setfont('Arial','',8);
         $this->objpdf->sety($xlin+31);
         $maiscol = 0;
@@ -2319,7 +2319,7 @@ class db_impcarne extends cl_assinatura {
 //	$this->objpdf->multicell(0,6,db_geratexto($db02_texto),0,"J",0,$db02_inicia);
 
       $this->objpdf->SetFont('Arial','B',9);
-      $this->objpdf->Text($coluna,$linha+35,'INSCRI??O:'); // inscricao
+      $this->objpdf->Text($coluna,$linha+35,'INSCRIÇÃO:'); // inscricao
 
       if ($this->processo > 0) {
         $this->objpdf->Text($coluna + 70,$linha+35,'PROCESSO:'); // inscricao
@@ -2344,12 +2344,12 @@ class db_impcarne extends cl_assinatura {
 
 
       $this->objpdf->SetFont('Arial','B',9);
-      $this->objpdf->Text($coluna,$linha+47,"ENDERE?O: "); // endereco
+      $this->objpdf->Text($coluna,$linha+47,"ENDEREÇO: "); // endereco
       $this->objpdf->SetFont('Arial','',9);
       $this->objpdf->Text($coluna + 40,$linha+47,$this->ender); // endereco
 
       $this->objpdf->SetFont('Arial','B',9);
-      $this->objpdf->Text($coluna,$linha+51,"N?MERO: "); // endereco
+      $this->objpdf->Text($coluna,$linha+51,"NÚMERO: "); // endereco
       $this->objpdf->SetFont('Arial','',9);
       $this->objpdf->Text($coluna + 40,$linha+51,($this->numero == ""?"":$this->numero));
 
@@ -2363,7 +2363,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->SetFont('Arial','B',9);
       $this->objpdf->Text($coluna,$linha+55,"DATA DE INCLUSAO: ");
       if ($this->datafim != "") {
-        $this->objpdf->Text($coluna + 60,$linha+55,"VALIDADE AT?: ");
+        $this->objpdf->Text($coluna + 60,$linha+55,"VALIDADE ATÉ: ");
       }
       $this->objpdf->SetFont('Arial','',9);
       $this->objpdf->Text($coluna + 40,$linha+55,db_formatar($this->datainc,'d'));
@@ -2375,7 +2375,7 @@ class db_impcarne extends cl_assinatura {
 
       if($this->q02_memo!=''){
         $this->objpdf->SetFont('Arial','B',9);
-        $this->objpdf->Text($coluna,$linha+59,"OBSERVA??O: "); // observa??o
+        $this->objpdf->Text($coluna,$linha+59,"OBSERVAÇÃO: "); // observação
         $this->objpdf->SetFont('Arial','',9);
         $this->objpdf->sety($linha+60);
         $this->objpdf->Multicell(0,3,$this->q02_memo); // texto
@@ -2393,7 +2393,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->SetFont('Arial','B',8);
       $this->objpdf->Ln(0.5);
       $this->objpdf->setx(45);
-      $this->objpdf->Multicell(0,3,"ATIVIDADE PRINCIPAL: " . $this->descrativ) ; // descri??o da atividade principal
+      $this->objpdf->Multicell(0,3,"ATIVIDADE PRINCIPAL: " . $this->descrativ) ; // descrição da atividade principal
       $linha += 6;
       $obs='';
       if(isset($this->q03_atmemo[$this->ativ])){
@@ -2428,7 +2428,7 @@ class db_impcarne extends cl_assinatura {
           $this->objpdf->roundedrect(42,$yyy-1,127,5,2,'1234'); // descricao da atividade secundaria
           $this->objpdf->Ln(0.5);
           $this->objpdf->setx(45);
-          $this->objpdf->Multicell(0,3,"ATIVIDADE SECUND?RIA: " . $this->outrasativs[$chave]); // texto
+          $this->objpdf->Multicell(0,3,"ATIVIDADE SECUNDÁRIA: " . $this->outrasativs[$chave]); // texto
           $linha += 6;
 
           if($obs!=""){
@@ -2447,19 +2447,19 @@ class db_impcarne extends cl_assinatura {
       }
       $x=64;
 //        if($this->q02_obs!=''){
-//	  $this->objpdf->Text($coluna,$linha+$x,"OBSERVA??O: "); // descri??o da atividade principal
-//	  $this->objpdf->Text($coluna + 45,$linha+$x,$this->q02_obs); // descri??o da atividade principal
+//	  $this->objpdf->Text($coluna,$linha+$x,"OBSERVAÇÃO: "); // descrição da atividade principal
+//	  $this->objpdf->Text($coluna + 45,$linha+$x,$this->q02_obs); // descrição da atividade principal
 //	  $x=$x+4;
 //	}
 
 //        $linha = $this->objpdf->gety();
       $this->objpdf->SetFont('Arial','B',12);
-      $this->objpdf->Text($coluna+40,$linha + 5,"DATA DE EMISS?O DESTE DOCUMENTO."); // data
+      $this->objpdf->Text($coluna+40,$linha + 5,"DATA DE EMISSÃO DESTE DOCUMENTO."); // data
       $this->objpdf->Text($coluna+40,$linha + 10,$this->municpref . ", ".date('d')." DE ".strtoupper(db_mes( date('m')))." DE ".date('Y') . "."); // data
 
       $this->objpdf->sety(125);
       $this->objpdf->SetFont('Arial','',9);
-      $this->objpdf->Multicell(0,6,$this->obs); // observa??o
+      $this->objpdf->Multicell(0,6,$this->obs); // observação
       $this->objpdf->setfont('arial','',6);
       $this->objpdf->SetXY($coluna-18,165);
 
@@ -2484,14 +2484,14 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->MultiCell(90,4,'..........................................................................................',0,"C",0);
 
 //        $this->objpdf->SetXY($coluna-35,160);
-//        $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".'SECRET?RIO DA IND. COM. E TURISMO',0,"C",0);
+//        $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".'SECRETÁRIO DA IND. COM. E TURISMO',0,"C",0);
 //        $this->objpdf->SetXY($coluna+35,160);
 //        $this->objpdf->MultiCell(90,4,'..........................................................................................',0,"C",0);
 
 
       $this->objpdf->sety(180);
       $this->objpdf->setfont('arial','B',12);
-      $this->objpdf->multicell(0,8,'FIXAR EM LUGAR VIS?VEL',1,"C");
+      $this->objpdf->multicell(0,8,'FIXAR EM LUGAR VISÍVEL',1,"C");
       $this->objpdf->SetFont('Arial','B',10);
 
 
@@ -2531,9 +2531,9 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text($xcol+109,$xlin+8,'Numcgm');
       $this->objpdf->text($xcol+150,$xlin+8,(strlen($this->cnpj) == 11?'CPF':'CNPJ'));
       $this->objpdf->text($xcol+  2,$xlin+8,'Nome');
-      $this->objpdf->text($xcol+  2,$xlin+12,'Endere?o');
+      $this->objpdf->text($xcol+  2,$xlin+12,'Endereço');
       $this->objpdf->text($xcol+102,$xlin+12,'Complemento');
-      $this->objpdf->text($xcol+  2,$xlin+16,'Munic?pio');
+      $this->objpdf->text($xcol+  2,$xlin+16,'Município');
       $this->objpdf->text($xcol+115,$xlin+16,'CEP');
       $this->objpdf->text($xcol+  2,$xlin+20,'Contato');
       $this->objpdf->text($xcol+110,$xlin+20,'Telefone');
@@ -2552,7 +2552,7 @@ class db_impcarne extends cl_assinatura {
 
         $posicao_atual=$this->objpdf->gety();
 //	  $this->objpdf->multicell(0,3,$this->obs,1);
-        $this->objpdf->multicell(202,4,"Observa??es:  ".$this->obs,1);
+        $this->objpdf->multicell(202,4,"Observações:  ".$this->obs,1);
         $posicao_depois=$this->objpdf->gety();
 
 //	  $this->objpdf->Roundedrect($xcol,$xlin+54,202,80,2,'DF','1234');
@@ -2585,8 +2585,8 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text($xcol+   2,$xlin+28,'ITEM');
       $this->objpdf->text($xcol+12.5,$xlin+28,'EMPENHO');
       $this->objpdf->text($xcol+27.5,$xlin+28,'QUANT');
-      $this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVI?O');
-      $this->objpdf->text($xcol+ 145,$xlin+28,'VALOR UNIT?RIO');
+      $this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVIÇO');
+      $this->objpdf->text($xcol+ 145,$xlin+28,'VALOR UNITÁRIO');
       $this->objpdf->text($xcol+ 176,$xlin+28,'VALOR TOTAL');
       $maiscol = 0;
 
@@ -2620,12 +2620,12 @@ class db_impcarne extends cl_assinatura {
         if( ( $this->objpdf->gety() > $this->objpdf->h - 40 && $pagina == 1 ) || ( $this->objpdf->gety() > $this->objpdf->h - 40 && $pagina != 1 )){
           if ($this->objpdf->PageNo() == 1){
             if ($this->obs!=""){
-              $this->objpdf->text(110,290-$xlin,'Continua na P?gina '.($this->objpdf->PageNo()+1));
+              $this->objpdf->text(110,290-$xlin,'Continua na Página '.($this->objpdf->PageNo()+1));
               //$this->objpdf->rect($xcol,$xlin+217,202,55,2,'DF','1234');
-            }else $this->objpdf->text(110,$xlin+243,'Continua na P?gina '.($this->objpdf->PageNo()+1));
+            }else $this->objpdf->text(110,$xlin+243,'Continua na Página '.($this->objpdf->PageNo()+1));
 
           }else{
-            $this->objpdf->text(110,$xlin+320,'Continua na P?gina '.($this->objpdf->PageNo()+1));
+            $this->objpdf->text(110,$xlin+320,'Continua na Página '.($this->objpdf->PageNo()+1));
           }
           $this->objpdf->addpage();
           $pagina += 1;
@@ -2672,10 +2672,10 @@ class db_impcarne extends cl_assinatura {
           $this->objpdf->text($xcol+   2,$xlin+59,'ITEM');
           $this->objpdf->text($xcol+12.5,$xlin+59,'EMPENHO');
           $this->objpdf->text($xcol+27.5,$xlin+59,'QUANT');
-          $this->objpdf->text($xcol+  70,$xlin+59,'MATERIAL OU SERVI?O');
-          $this->objpdf->text($xcol+ 145,$xlin+59,'VALOR UNIT?RIO');
+          $this->objpdf->text($xcol+  70,$xlin+59,'MATERIAL OU SERVIÇO');
+          $this->objpdf->text($xcol+ 145,$xlin+59,'VALOR UNITÁRIO');
           $this->objpdf->text($xcol+ 176,$xlin+59,'VALOR TOTAL');
-          $this->objpdf->text($xcol+  40,$xlin+63,'Continua??o da P?gina '.($this->objpdf->PageNo()-1));
+          $this->objpdf->text($xcol+  40,$xlin+63,'Continuação da Página '.($this->objpdf->PageNo()-1));
 
           $maiscol = 0;
 
@@ -2695,7 +2695,7 @@ class db_impcarne extends cl_assinatura {
 
     }else if ( $this->modelo == 12 ) {
 
-////////// MODELO 12  -  ANULA??O DE EMPENHO
+////////// MODELO 12  -  ANULAÇÃO DE EMPENHO
 
       $this->objpdf->AliasNbPages();
       $this->objpdf->AddPage();
@@ -2708,9 +2708,9 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
       $this->objpdf->setfillcolor(255,255,255);
       $this->objpdf->Setfont('Arial','B',10);
-      $this->objpdf->text(126,$xlin-13,'NOTA DE ANULA??O N'.CHR(176).': ');
+      $this->objpdf->text(126,$xlin-13,'NOTA DE ANULAÇÃO N'.CHR(176).': ');
       $this->objpdf->text(175,$xlin-13,db_formatar($this->codemp,'s','0',6,'e'));
-      $this->objpdf->text(134,$xlin-8,'DATA DE EMISS?O : ');
+      $this->objpdf->text(134,$xlin-8,'DATA DE EMISSÃO : ');
       $this->objpdf->text(175,$xlin-8,$this->emissao);
       $this->objpdf->Image('imagens/files/logo_boleto.png',15,$xlin-17,12); //.$this->logo
       $this->objpdf->Setfont('Arial','B',9);
@@ -2721,17 +2721,17 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text(40,$xlin-5,$this->telefpref);
       $this->objpdf->text(40,$xlin-2,$this->emailpref);
 
-      /// retangulo dos dados da dota??o
+      /// retangulo dos dados da dotação
       $this->objpdf->rect($xcol,$xlin+2,$xcol+100,50,2,'DF','1234');
       $this->objpdf->Setfont('Arial','B',8);
-      $this->objpdf->text($xcol+2,$xlin+7,'?rgao');
+      $this->objpdf->text($xcol+2,$xlin+7,'Órgao');
       $this->objpdf->text($xcol+2,$xlin+11,'Unidade');
-      $this->objpdf->text($xcol+2,$xlin+15,'Fun??o');
+      $this->objpdf->text($xcol+2,$xlin+15,'Função');
 
       $this->objpdf->text($xcol+2,$xlin+22,'Proj/Ativ');
       $this->objpdf->text($xcol+2,$xlin+30,'Rubrica');
       $this->objpdf->text($xcol+2,$xlin+42,'Recurso');
-      $this->objpdf->text($xcol+2,$xlin+48,'Licita??o');
+      $this->objpdf->text($xcol+2,$xlin+48,'Licitação');
 
       $this->objpdf->Setfont('Arial','',8);
       $this->objpdf->text($xcol+17,$xlin+7,':  '.db_formatar($this->orgao,'orgao').' - '.$this->descr_orgao);
@@ -2756,8 +2756,8 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->Setfont('Arial','B',8);
       $this->objpdf->text($xcol+107,$xlin+7,'Numcgm');
       $this->objpdf->text($xcol+107,$xlin+11,'Nome');
-      $this->objpdf->text($xcol+107,$xlin+15,'Endere?o');
-      $this->objpdf->text($xcol+107,$xlin+19,'Munic?pio');
+      $this->objpdf->text($xcol+107,$xlin+15,'Endereço');
+      $this->objpdf->text($xcol+107,$xlin+19,'Município');
       $this->objpdf->Setfont('Arial','',8);
       $this->objpdf->text($xcol+124,$xlin+7,': '.$this->numcgm);
       $this->objpdf->text($xcol+124,$xlin+11,': '.$this->nome);
@@ -2773,7 +2773,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->rect($xcol+155,$xlin+42.5,47,9,2,'DF','1234');
       $this->objpdf->Setfont('Arial','',6);
       $this->objpdf->text($xcol+157,$xlin+23.5,'Valor Empenhado');
-      $this->objpdf->text($xcol+108,$xlin+34.0,'Valor Or?ado');
+      $this->objpdf->text($xcol+108,$xlin+34.0,'Valor Orçado');
       $this->objpdf->text($xcol+157,$xlin+34.0,'Saldo Anterior');
       $this->objpdf->text($xcol+108,$xlin+44.5,'Valor Anulado');
       $this->objpdf->text($xcol+157,$xlin+44.5,'Saldo Atual');
@@ -2800,10 +2800,10 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->rect($xcol+152,$xlin+54,25,6,2,'DF','12');
       $this->objpdf->rect($xcol+177,$xlin+54,25,6,2,'DF','12');
 
-      //// t?tulo do corpo do empenho
+      //// título do corpo do empenho
       $this->objpdf->text($xcol+2,$xlin+58,'QUANT');
-      $this->objpdf->text($xcol+70,$xlin+58,'MATERIAL OU SERVI?O');
-      $this->objpdf->text($xcol+154,$xlin+58,'VALOR UNIT?RIO');
+      $this->objpdf->text($xcol+70,$xlin+58,'MATERIAL OU SERVIÇO');
+      $this->objpdf->text($xcol+154,$xlin+58,'VALOR UNITÁRIO');
       $this->objpdf->text($xcol+181,$xlin+58,'VALOR TOTAL');
       $maiscol = 0;
 
@@ -2868,8 +2868,8 @@ class db_impcarne extends cl_assinatura {
              $this->objpdf->SetFont('Arial','',6);
              $this->objpdf->text($xcol+12,$xlin+199,'EMPENHADO E CONFERIDO');
              $this->objpdf->text($xcol+26,$xlin+213,'VISTO');
-             $this->objpdf->text($xcol+19,$xlin+227,'T?CNICO CONT?BIL');
-             $this->objpdf->text($xcol+13,$xlin+240,'SECRET?RIO(A) DA FAZENDA');
+             $this->objpdf->text($xcol+19,$xlin+227,'TÉCNICO CONTÁBIL');
+             $this->objpdf->text($xcol+13,$xlin+240,'SECRETÁRIO(A) DA FAZENDA');
 
              $this->objpdf->text($xcol+66,$xlin+212,'DATA  ____________/____________/____________');
              $this->objpdf->text($xcol+76,$xlin+227,'PREFEITO MUNICIPAL');
@@ -2885,7 +2885,7 @@ class db_impcarne extends cl_assinatura {
 
              $this->objpdf->SetFont('Arial','',7);
              $this->objpdf->text($xcol+90,$xlin+249,'R E C I B O');
-             $this->objpdf->text($xcol+45,$xlin+253,'RECEBI(EMOS) DO MUNIC?PIO DE '.$this->municpref.', A IMPORT?NCIA ABAIXO ESPECIFICADA, REFERENTE ?:');
+             $this->objpdf->text($xcol+45,$xlin+253,'RECEBI(EMOS) DO MUNICÍPIO DE '.$this->municpref.', A IMPORTÂNCIA ABAIXO ESPECIFICADA, REFERENTE À:');
              $this->objpdf->text($xcol+2,$xlin+257,'(     ) PARTE DO VALOR EMPENHADO');
              $this->objpdf->text($xcol+102,$xlin+257,'(     ) SALDO/TOTAL EMPENHADO');
              $this->objpdf->text($xcol+2,$xlin+261,'R$');
@@ -2905,7 +2905,7 @@ class db_impcarne extends cl_assinatura {
         $xlin = 169;
       }
     }else{
-      echo "<script>alert('Modelo de carne($this->modelo) n?o definido')</script>";
+      echo "<script>alert('Modelo de carne($this->modelo) não definido')</script>";
       exit;
     }
   }
