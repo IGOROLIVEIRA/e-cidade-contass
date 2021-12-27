@@ -105,6 +105,13 @@ $sql = "         select slip.k17_codigo,
                               when k17_situacao = 4 then 'Anulado'
                          end
                         ) as k17_situacao,
+                        CASE 
+                        WHEN k29_recurso IS NULL AND k152_sequencial IN (1,2,3,4,5,9,10,13,14,15,17,18)
+                        THEN r2.c61_codigo
+                        WHEN k29_recurso IS NULL AND k152_sequencial IN (6,7,8,11,12,16)
+                        THEN r1.c61_codigo
+                        ELSE k29_recurso
+                    END k29_recurso,
                         k17_valor,
                         k17_dtaut,
                         z01_nome,
@@ -123,7 +130,10 @@ $sql = "         select slip.k17_codigo,
 
                    left join slipnum on slipnum.k17_codigo = slip.k17_codigo
                    left join cgm on cgm.z01_numcgm = slipnum.k17_numcgm
+                   left join sliprecurso recurso on recurso.k29_slip = slip.k17_codigo AND k29_valor = slip.k17_valor
                    left join slipprocesso on slip.k17_codigo = slipprocesso.k145_slip
+                   left join sliptipooperacaovinculo on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
+    left join sliptipooperacao on sliptipooperacaovinculo.k153_slipoperacaotipo = sliptipooperacao.k152_sequencial
                   where k17_instit = " . db_getsession('DB_instit') ."
                         $where $where1
                   order by slip.k17_codigo" ;

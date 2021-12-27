@@ -924,6 +924,7 @@ $db_opcao = 1;
 		var iCodMov          = aMovimentos[iMov].aCells[0].getValue();
 		var nValor           = js_strToFloat(aMovimentos[iMov].aCells[10].getValue()).valueOf();
 		var iNota            = aMovimentos[iMov].aCells[2].getValue();
+        var iRecurso         = aMovimentos[iMov].aCells[3].getValue();
 		var iContaFornecedor = aMovimentos[iMov].aCells[6].getValue();
 		var iContaPagadora   = aMovimentos[iMov].aCells[4].getValue();
         

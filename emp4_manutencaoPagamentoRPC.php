@@ -358,6 +358,9 @@ switch($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
+            if ($oMovimento->iRecurso)
+                $oTransferencia->setFonteRecurso($oMovimento->iRecurso);
+            
 		  if (isset($oMovimento->iCodCheque) && $oMovimento->iCodCheque != '') {
 			$oTransferencia->setCheque($oMovimento->iCodCheque);
 		  }
