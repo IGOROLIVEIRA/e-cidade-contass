@@ -106,9 +106,9 @@ $sql = "         select slip.k17_codigo,
                          end
                         ) as k17_situacao,
                         CASE 
-                        WHEN k29_recurso IS NULL AND k152_sequencial IN (1,2,3,4,9,10,13,14,15,17,18)
+                        WHEN k29_recurso IS NULL AND k152_sequencial IN (1,2,3,4,5,9,10,13,14,15,17,18)
                         THEN r2.c61_codigo
-                        WHEN k29_recurso IS NULL AND k152_sequencial IN (5,6,7,8,11,12,16)
+                        WHEN k29_recurso IS NULL AND k152_sequencial IN (6,7,8,11,12,16)
                         THEN r1.c61_codigo
                         ELSE k29_recurso
                     END k29_recurso,
