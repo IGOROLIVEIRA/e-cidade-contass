@@ -188,8 +188,9 @@ $clrotulo->label("descrdepto");
 </form>
 
 <script>
-  (function(exports) {
 
+  (function(exports) {
+    
     const MENSAGENS = 'patrimonial.compras.com4_processocompra.';
 
     var sRpc = 'com4_processocompra.RPC.php',
@@ -569,8 +570,14 @@ $clrotulo->label("descrdepto");
         if (Object.keys(aLotes).length) {
 
           for (var iValue in aLotes) {
-            var oOption = new Option(aLotes[iValue], iValue);
-
+            var limite = aLotes[iValue];
+            if(limite.length>50){
+              result = limite.substring(0,80);
+              result = result+"...";
+            }else{
+              result = limite;
+            }
+            var oOption = new Option(result, iValue);
             oLote.options.add(oOption);
           }
         }
@@ -685,7 +692,7 @@ $clrotulo->label("descrdepto");
       var oWindowLote = new windowAux( 'WindowLote',
                                        '',
                                        400,
-                                       230 );
+                                       300 );
 
       var oContentWindow = document.createElement("div");
       var oMessageBoard  = new messageBoard('teste', 'Inclusão de Lote', 'Inclusão de um novo lote.', oContentWindow)
@@ -708,12 +715,15 @@ $clrotulo->label("descrdepto");
       oTable.appendChild(document.createElement("tr"));
       oTable.firstChild.appendChild(document.createElement("td"));
       oTable.firstChild.appendChild(document.createElement("td"));
+      
 
       oTable.firstChild.firstChild.appendChild(oLabel);
-
-      var oInputDescricao = new DBTextField('txt_lotedescricao', 'oInputDescricao', '', 20);
-      oInputDescricao.setMaxLength(100);
+      
+      var oInputDescricao = new DBTextField('txt_lotedescricao', 'oInputDescricao', '', 30);
+      oInputDescricao.setMaxLength(250);
       oInputDescricao.show(oTable.firstChild.lastChild);
+      
+
 
       oFieldset.appendChild(oLegend);
       oFieldset.appendChild(oTable);
@@ -752,7 +762,48 @@ $clrotulo->label("descrdepto");
 
       oWindowLote.setContent(oContentWindow);
       oWindowLote.show();
+      //document.getElementById("txt_lotedescricao").style.width = "200px";
+      //document.getElementById("txt_lotedescricao").style.height = "100px";
+      var input = document.querySelector('#txt_lotedescricao');
+      input.addEventListener('keypress', log);
     });
+
+
+                    function log(e) {
+                        var regex = /[*|\":<>[\]{}`\\()';#@&$]/;
+                        var key = String.fromCharCode(e.keyCode);
+                        if (regex.test(key)) {
+                            e.preventDefault();
+                            return false;
+                        }
+                        var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+                        if( keyCode == 13 ) {
+
+
+                            if(!e) var e = window.event;
+
+                            e.cancelBubble = true;
+                            e.returnValue = false;
+
+                            if (e.stopPropagation) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                            }
+                        }
+
+                        var iLimite = 250;
+                        var elem = document.getElementById("txt_lotedescricao").value;
+                        var iTamanhoCampo = elem.length;
+
+                          if ( iTamanhoCampo > iLimite ) {
+
+                            elem = elem.substr(0,iLimite);
+                            document.getElementById("txt_lotedescricao").value = elem;
+                            alert("Limite máximo de 250 caracteres");
+                          }
+                        
+                    };
+
 
     oBotoes.excluirLote.observe('click', function() {
 

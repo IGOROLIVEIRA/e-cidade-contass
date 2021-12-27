@@ -48,6 +48,8 @@ class cl_avaliacaoperguntaopcao {
    var $db104_identificador = null; 
    var $db104_aceitatexto = 'f'; 
    var $db104_peso = 0; 
+   var $db104_identificadorcampo = null; 
+   var $db104_valorresposta = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  db104_sequencial = int4 = Sequencial 
@@ -141,6 +143,7 @@ class cl_avaliacaoperguntaopcao {
        $this->erro_status = "0";
        return false;
      }
+     $this->db104_identificador = "{$this->db104_identificador}-{$this->db104_sequencial}";
      $sql = "insert into avaliacaoperguntaopcao(
                                        db104_sequencial 
                                       ,db104_avaliacaopergunta 
@@ -148,6 +151,8 @@ class cl_avaliacaoperguntaopcao {
                                       ,db104_identificador 
                                       ,db104_aceitatexto 
                                       ,db104_peso 
+                                      ,db104_identificadorcampo 
+                                      ,db104_valorresposta 
                        )
                 values (
                                 $this->db104_sequencial 
@@ -156,6 +161,8 @@ class cl_avaliacaoperguntaopcao {
                                ,'$this->db104_identificador' 
                                ,'$this->db104_aceitatexto' 
                                ,$this->db104_peso 
+                               ,'$this->db104_identificadorcampo'
+                               ,'$this->db104_valorresposta'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -254,6 +261,14 @@ class cl_avaliacaoperguntaopcao {
         } 
        $sql  .= $virgula." db104_peso = $this->db104_peso ";
        $virgula = ",";
+     }
+     if(trim($this->db104_identificadorcampo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db104_identificadorcampo"])){ 
+        $sql  .= $virgula." db104_identificadorcampo = '$this->db104_identificadorcampo' ";
+        $virgula = ",";
+     }
+     if(trim($this->db104_valorresposta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db104_valorresposta"])){ 
+        $sql  .= $virgula." db104_valorresposta = '$this->db104_valorresposta' ";
+        $virgula = ",";
      }
      $sql .= " where ";
      if($db104_sequencial!=null){

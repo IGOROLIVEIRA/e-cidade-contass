@@ -81,6 +81,7 @@ $clliclicitem                = new cl_liclicitem;
 $oDaoSolicitaVinculo         = new cl_solicitavinculo();
 $oDaoProcessoAdministrativo  = new cl_solicitaprotprocesso();
 
+$trancaIte = 0;
 $opselec  = 2;
 $db_opcao = 22;
 $db_botao = false;
@@ -111,7 +112,7 @@ if (!isset($param)) {
       $oSolicitacao = db_utils::fieldsMemory($result_pcproc,0);
       if ($oSolicitacao->pc10_solicitacaotipo != 5) {
 
-        db_msgbox("Solicitação em processo de compras.");
+        db_msgbox("Solicitaï¿½ï¿½o em processo de compras.");
   	    echo "<script>location.href='com1_solicita005.php';</script>";
   	    exit;
       }
@@ -120,6 +121,7 @@ if (!isset($param)) {
 }
 
 if (isset($param) && trim($param) != "") {
+  $trancaIte = 1;
 
   $parametro = "&param=".$param;
   if (isset($chavepesquisa) && trim($chavepesquisa) != "" && @$liberaaba == "false"){
@@ -191,7 +193,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
     $erro_msg = $clsolicita->erro_msg;
 
     /**
-     * Alteração do código do Protocolo Administrativo
+     * Alteraï¿½ï¿½o do cï¿½digo do Protocolo Administrativo
      */
     if (!$sqlerro) {
       $pc90_sequencial              = null;
@@ -230,7 +232,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
     if (!$sqlerro) {
 
      /**
-      * verificamos se a solicitacao é de Regitro de preco
+      * verificamos se a solicitacao ï¿½ de Regitro de preco
       */
       $sSqlDadoRegistroPreco = $oDaoSolicitaVinculo->sql_query_file(null, "pc53_sequencial, pc53_solicitapai",
                                                                     null,
@@ -257,12 +259,12 @@ if (isset($alterar) || isset($chavepesquisa)) {
         if ($pc10_solicitacaotipo == 5   && $pc54_solicita != $iNumeroRegistroPrecoAnterior) {
 
           /**
-           * verifica se existe itens lançados para a Solicitacao
+           * verifica se existe itens lanï¿½ados para a Solicitacao
            */
           if ($iTotalItensCadastrados > 0) {
 
             $sqlerro  = true;
-            $erro_msg = 'Antes de alterar a Compilação do Registro de preço ,exclua os itens da solicitação.';
+            $erro_msg = 'Antes de alterar a Compilaï¿½ï¿½o do Registro de preï¿½o ,exclua os itens da solicitaï¿½ï¿½o.';
             $lAlteraVinculoCompilacaoRegistroPreco = false;
           }
         } else if ($pc10_solicitacaotipo != 5) {
@@ -270,7 +272,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
           if ($iTotalItensCadastrados > 0) {
 
             $sqlerro  = true;
-            $erro_msg = 'Antes de alterar o tipo da solicitação ,exclua os itens da solicitação.';
+            $erro_msg = 'Antes de alterar o tipo da solicitaï¿½ï¿½o ,exclua os itens da solicitaï¿½ï¿½o.';
 
             $lAlteraVinculoCompilacaoRegistroPreco = false;
           } else if ($iNumeroRegistroPrecoAnterior == $pc54_solicita && $pc10_solicitacaotipo == 5) {
@@ -285,7 +287,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
           $oDaoSolicitaVinculo->excluir($oDadosRegistroPreco->pc53_sequencial);
           if ($oDaoSolicitaVinculo->erro_status == 0) {
 
-            $erro_msg = 'Erro ao modificar vinculo da Solicitacao com o Registro de Preço.';
+            $erro_msg = 'Erro ao modificar vinculo da Solicitacao com o Registro de Preï¿½o.';
             $sqlerro  = true;
           }
           if (!$sqlerro && $pc10_solicitacaotipo == 5) {
@@ -295,7 +297,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
             $oDaoSolicitaVinculo->incluir(null);
             if ($oDaoSolicitaVinculo->erro_status == 0) {
 
-              $erro_msg  = "Erro ao modificar vinculo da Solicitacao com o Registro de Preço.\n";
+              $erro_msg  = "Erro ao modificar vinculo da Solicitacao com o Registro de Preï¿½o.\n";
               $erro_msg .= $oDaoSolicitaVinculo->erro_msg;
               $sqlerro  = true;
             }
@@ -310,7 +312,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
           $oDaoSolicitaVinculo->incluir(null);
           if ($oDaoSolicitaVinculo->erro_status == 0) {
 
-            $erro_msg  = "Erro ao vincular da Solicitacao com o Registro de Preço.\n";
+            $erro_msg  = "Erro ao vincular da Solicitacao com o Registro de Preï¿½o.\n";
             $erro_msg .= $oDaoSolicitaVinculo->erro_msg;
             $sqlerro  = true;
           }
@@ -341,7 +343,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
     }
    }
    /*
-    * Verificamos se a solicitação possui vinculo com o  pacto, e entao
+    * Verificamos se a solicitaï¿½ï¿½o possui vinculo com o  pacto, e entao
     * validamos se o usuario
     */
    $oDaoOrctiporecConvenioPacto  = db_utils::getDao("orctiporecconveniosolicita");
@@ -376,7 +378,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
    } else if (isset($o74_sequencial) && $o74_sequencial != "") {
 
       /**
-       * Verificamos se o usuário já cadastrou algum item
+       * Verificamos se o usuï¿½rio jï¿½ cadastrou algum item
        * caso tenha, nao podemos deixar o usuario vincular a solicitacao
        * a um pacto
        */
@@ -386,7 +388,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
       if ($oDaoSolicitem->numrows > 0) {
 
         $sqlerro  = true;
-        $erro_msg = "Solicitação já possui itens cadastrados!\\nA solicitação não podera ser vinculada a  um pacto.";
+        $erro_msg = "Solicitaï¿½ï¿½o jï¿½ possui itens cadastrados!\\nA solicitaï¿½ï¿½o nï¿½o podera ser vinculada a  um pacto.";
 
       } else {
 
@@ -418,7 +420,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
     unset($_SESSION["processocompras{$pc10_numero}"]);
     unset($_SESSION["processoorcamento{$pc10_numero}"]);
     /**
-     * verifica se a solicitacao é de RP. caso for, traz o codigo da compilacao
+     * verifica se a solicitacao ï¿½ de RP. caso for, traz o codigo da compilacao
      */
     if ($pc10_solicitacaotipo == 5) {
 
@@ -500,7 +502,7 @@ if(isset($chavepesquisa) || isset($pc10_numero)){
     }
   }
   if($erro==true){
-    db_msgbox("Usuário: \\n\\nFoi gerada autorização de empenho para um ou mais item desta solicitação.\\nSolicitação de compras não poderá ser alterada.\\n\\nAdiministrador:");
+    db_msgbox("Usuï¿½rio: \\n\\nFoi gerada autorizaï¿½ï¿½o de empenho para um ou mais item desta solicitaï¿½ï¿½o.\\nSolicitaï¿½ï¿½o de compras nï¿½o poderï¿½ ser alterada.\\n\\nAdiministrador:");
     echo "<script>CurrentWindow.corpo.iframe_solicita.location.href = 'com1_solicita005.php'</script>";
   }
   */
@@ -514,7 +516,7 @@ if(isset($chavepesquisa) || isset($pc10_numero)){
       $oDaoProcessoCompras = db_utils::fieldsMemory($result_pcproc, 0);
 
       /**
-       * Tipo de solicatao: 5 - Registro de preço
+       * Tipo de solicatao: 5 - Registro de preï¿½o
        * - exibe numero do processo de compras na mensagem de erro
        */
       if ( $iTipoSolicitacao == TIPO_SOLICITACAO_REGISTRO_PRECO ) {

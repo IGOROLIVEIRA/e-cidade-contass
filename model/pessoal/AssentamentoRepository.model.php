@@ -147,10 +147,10 @@ class AssentamentoRepository {
 
   public static function persist(Assentamento $oAssentamento) {
 
-    $mResponsePeristAssentamento = $oAssentamento->persist();
-
-    if($mResponsePeristAssentamento !== true) {
-      throw new BusinessException(_M(self::MENSAGEM."erro_persistir_assentamento\n".$mResponsePeristAssentamento));
+    try {
+       $oAssentamento->persist();
+    } catch (DBException $oErro) {
+       throw new BusinessException(_M(self::MENSAGEM."erro_persistir_assentamento\n".$oErro->getMessage()));
     }
   }
 

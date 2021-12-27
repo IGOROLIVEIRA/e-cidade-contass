@@ -2,11 +2,32 @@
 ///MODULO: sicom
   $clprecoreferencia->rotulo->label();
   $clrotulo = new rotulocampo;
+
+  if($si01_processocompra!=""){
+    $respCotacaocodigo = $si01_numcgmcotacao;
+    $respOrcacodigo = $si01_numcgmorcamento;
+
+        $sql = "Select z01_nome from cgm where z01_numcgm = ".$respCotacaocodigo;
+        $nome = db_query($sql);
+        $nome = db_utils::fieldsMemory($nome,0);
+        $respCotacaonome = $nome->z01_nome;
+
+        $sql1 = "Select z01_nome from cgm where z01_numcgm = ".$respOrcacodigo;
+        $nome1 = db_query($sql1);
+        $nome1 = db_utils::fieldsMemory($nome1,0);
+        $respOrcanome = $nome1->z01_nome;
+
+        //echo"<pre>";
+    //var_dump($oItem2->z01_nome);
+    //exit;
+
+    //echo"<script>alert($procReferencia->si01_numcgmCotacao);</script>";
+  }
 ?>
 <form name="form1" method="post" action="">
   <center>
     <fieldset style="margin-left: 50%; margin-top: 10px;">
-      <legend>Preço de Referência</legend>
+      <legend>Preï¿½o de Referï¿½ncia</legend>
       <table border="0">
         <tr>
           <td nowrap title="<?= @$Tsi01_sequencial ?>">
@@ -38,28 +59,56 @@
           </td>
           <td>
             <?php
-              $x = array('1' => 'Preço Médio', '2' => 'Maior Preço', '3' => 'Menor Preço');
+              $x = array('1' => 'Preï¿½o Mï¿½dio', '2' => 'Maior Preï¿½o', '3' => 'Menor Preï¿½o');
               db_select('si01_tipoprecoreferencia', $x, true, $db_opcao, "");
             ?>
           </td>
-          
+
         </tr>
         <tr>
         <td nowrap title="<?= @$Tsi01_tipoprecoreferencia ?>">
-            <strong>Cotação por item:</strong>
+            <strong>Cotaï¿½ï¿½o por item:</strong>
           </td>
         <td>
-            <?php 
-              $y = array('0' => 'Selecione','1' => 'No mínimo uma cotação', '2' => 'No mínimo duas cotação', '3' => 'No mínimo três cotação');
+            <?php
+              $y = array('0' => 'Selecione','1' => 'No mï¿½nimo uma cotaï¿½ï¿½o', '2' => 'No mï¿½nimo duas cotaï¿½ï¿½o', '3' => 'No mï¿½nimo trï¿½s cotaï¿½ï¿½o');
               db_select('si01_cotacaoitem', $y, true, $db_opcao, "");
             ?>
-          </td>  
+          </td>
+        </tr>
+        <tr>
+                                    <td nowrap title="respCotacaocodigo">
+                                        <?
+                                        db_ancora("Responsï¿½vel pela Cotaï¿½ï¿½o: ","js_pesquisal31_numcgm(true,'respCotacaocodigo','respCotacaonome');",$db_opcao)
+
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('respCotacaocodigo',10,$respCotacaocodigo,true,'text',$db_opcao,"onchange=js_pesquisal31_numcgm(false,'respCotacaocodigo','respCotacaonome');");
+                                        db_input('respCotacaonome',45,$respCotacaonome,true,'text',3,"");
+                                        ?>
+                                    </td>
+        </tr>
+        <tr>
+                                    <td nowrap title="respOrcacodigo">
+                                        <?
+                                        db_ancora("Resp. Recursos Orï¿½amentï¿½rios:","js_pesquisal31_numcgm(true,'respOrcacodigo','respOrcanome');",$db_opcao)
+
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('respOrcacodigo',10,$respOrcacodigo,true,'text',$db_opcao,"onchange=js_pesquisal31_numcgm(false,'respOrcacodigo','respOrcanome');");
+                                        db_input('respOrcanome',45,$respOrcanome,true,'text',3,"");
+                                        ?>
+                                    </td>
         </tr>
         <tr>
           <td><strong>Imprimir Justificativa: </strong></td>
           <td>
             <?php
-              $x = array('n' => 'Não', 's' => 'Sim');
+              $x = array('n' => 'Nï¿½o', 's' => 'Sim');
               db_select('impjustificativa', $x, true, $db_opcao, "style = 'width: 91px;'");
             ?>
           </td>
@@ -124,4 +173,38 @@
       "?chavepesquisa='+chave";
     } ?>
   }
+
+  var varNumCampo;
+    var varNomeCampo;
+    function js_pesquisal31_numcgm(mostra,numCampo,nomeCampo){
+        varNumCampo = numCampo;
+        varNomeCampo = nomeCampo;
+
+        if(mostra==true){
+            js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&filtro=1','Pesquisa',true,'0','1');
+        }else{
+            numcgm = document.getElementById(numCampo).value;
+            if(numcgm != ''){
+                js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?pesquisa_chave='+numcgm+'&funcao_js=parent.js_mostracgm&filtro=1','Pesquisa',false);
+            }else{
+                document.getElementById(numCampo).value = "";
+            }
+        }
+    }
+
+    function js_mostracgm(erro,chave){
+        document.getElementById(varNomeCampo).value = chave;
+        if(erro==true){
+          document.getElementById(varNumCampo).value = "";
+          document.getElementById(varNomeCampo).value = "";
+          alert("Responsï¿½vel nï¿½o encontrado!");
+        }
+    }
+    function js_mostracgm1(chave1,chave2){
+
+    document.getElementById(varNumCampo).value = chave1;
+    document.getElementById(varNomeCampo).value = chave2;
+    db_iframe_cgm.hide();
+    }
+
 </script>

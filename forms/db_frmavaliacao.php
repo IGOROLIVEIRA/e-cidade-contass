@@ -78,7 +78,7 @@ if ($db_opcao == 1) {
     </td>
     <td>
 			<?
-			  db_input('db101_descricao', 50, $Idb101_descricao, true, 'text', $db_opcao, "");
+			  db_input('db101_descricao', 100, $Idb101_descricao, true, 'text', $db_opcao, "");
 			?>
     </td>
   </tr>
@@ -221,7 +221,7 @@ function js_validaCaracteres() {
   if (lResultadoInicial) {
 
     var sValorCaracteres      = $F('db101_identificador').substring(1);
-    var sExpressaoCaracteres  = /^[A-Za-z0-9_]+?$/i;
+    var sExpressaoCaracteres  = /^[A-Za-z0-9_-]+?$/i;
     var sRegExpCaracteres     = new RegExp(sExpressaoCaracteres);
     var lResultadoCaracteres  = sRegExpCaracteres.test(sValorCaracteres);
     if (!lResultadoCaracteres) {

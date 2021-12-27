@@ -7,9 +7,11 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_liclicita_classe.php");
 include("classes/db_homologacaoadjudica_classe.php");
+include("classes/db_liccomissaocgm_classe.php");
 db_postmemory($HTTP_POST_VARS);
 $clliclicita = new cl_liclicita();
 $clhomologacaoadjudica = new cl_homologacaoadjudica();
+$clliccomissaocgm     = new cl_liccomissaocgm();
 
 $db_opcao = 1;
 $db_botao = true;

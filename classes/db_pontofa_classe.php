@@ -698,6 +698,8 @@ class cl_pontofa {
 		                                       and  rhrubricas.rh27_instit = pontofa.r21_instit ";
      $sql .= "      inner join rhlota       on  rhlota.r70_codigo::char(12) = pontofa.r21_lotac
 		                                       and  rhlota.r70_instit = pontofa.r21_instit ";
+     $sql .= "      INNER JOIN rhlotavinc ON rhlota.r70_codigo = rhlotavinc.rh25_codigo
+                                            AND rhlotavinc.rh25_anousu = ".db_anofolha();
      $sql .= "      inner join cgm          on  cgm.z01_numcgm = rhpessoal.rh01_numcgm";
      $sql .= "      LEFT JOIN rhlotaexe ON rh26_codigo = r70_codigo    ";
      $sql .= "      AND rh26_anousu = r21_anousu                       ";

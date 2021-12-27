@@ -14,6 +14,7 @@ include("classes/db_habilitacaoforn_classe.php");
 include("classes/db_parecerlicitacao_classe.php");
 include("classes/db_licitemobra_classe.php");
 include("classes/db_acordo_classe.php");
+include("classes/db_liccomissaocgm_classe.php");
 
 $cllicitemobra         = new cl_licitemobra;
 $clcredenciamento      = new cl_credenciamento;
@@ -25,6 +26,7 @@ $clliclicitasituacao   = new cl_liclicitasituacao;
 $clhabilitacaoforn     = new cl_habilitacaoforn();
 $clparecerlicitacao    = new cl_parecerlicitacao();
 $clacordo              = new cl_acordo();
+$clliccomissaocgm     = new cl_liccomissaocgm();
 
 $oJson    = new services_json();
 $oRetorno = new stdClass();
@@ -374,6 +376,22 @@ try{
                 $oRetorno = $erro_msg;
             }
 
+            if($oParam->respRaticodigo!=""){
+           
+                $clliccomissaocgm->l31_numcgm = $oParam->respRaticodigo;
+                $clliccomissaocgm->l31_tipo = 2;
+                $clliccomissaocgm->l31_licitacao = $oParam->licitacao;
+                $clliccomissaocgm->incluir(null);
+            }
+
+            if($oParam->respPubliccodigo!=""){
+
+                $clliccomissaocgm->l31_numcgm = $oParam->respPubliccodigo;
+                $clliccomissaocgm->l31_tipo = 8;
+                $clliccomissaocgm->l31_licitacao = $oParam->licitacao;
+                $clliccomissaocgm->incluir(null);
+            }
+
             db_fim_transacao();
             break;
 
@@ -381,6 +399,7 @@ try{
 
 			$sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
 			$rsSql = db_query($sSql);
+        
 			$datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
 
 			if($datapat >= join('-',array_reverse(explode('/', $oParam->l20_dtpubratificacao)))){
@@ -482,6 +501,29 @@ try{
                 $sqlerro = true;
                 $oRetorno = $erro_msg;
             }
+            
+            if($oParam->respRaticodigo!=""){
+                //excluir o reponsavel
+                $dbquery = "l31_tipo = '2' and l31_licitacao = $oParam->licitacao";
+                $clliccomissaocgm->excluir(null,$dbquery);
+
+                $clliccomissaocgm->l31_numcgm = $oParam->respRaticodigo;
+                $clliccomissaocgm->l31_tipo = 2;
+                $clliccomissaocgm->l31_licitacao = $oParam->licitacao;
+                $clliccomissaocgm->incluir(null);
+            }
+
+            if($oParam->respPubliccodigo!=""){
+                //excluir o reponsavel
+                $dbquery = "l31_tipo = '5' and l31_licitacao = $oParam->licitacao";
+                $clliccomissaocgm->excluir(null,$dbquery);
+
+                $clliccomissaocgm->l31_numcgm = $oParam->respPubliccodigo;
+                $clliccomissaocgm->l31_tipo = 5;
+                $clliccomissaocgm->l31_licitacao = $oParam->licitacao;
+                $clliccomissaocgm->incluir(null);
+            }
+            
 
             break;
 
@@ -515,6 +557,9 @@ try{
                     throw new Exception('Existe contratos cadastrados para essa Licitação não e possível excluir.');
                 }
             }
+
+            $clliccomissaocgm->excluir(null,"l31_licitacao = $oParam->licitacao and l31_tipo = '8'"); 
+            $clliccomissaocgm->excluir(null,"l31_licitacao = $oParam->licitacao and l31_tipo = '2'"); 
 
             /**
              * busco sequencial da homologação

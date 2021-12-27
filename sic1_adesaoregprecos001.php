@@ -21,17 +21,29 @@ $db_opcao = isset($alterar) ? 2 : 1;
 
 if (isset($incluir) || isset($alterar)) {
 
-    if (!intval($si06_edital)) {
-        $erro_msg = 'Valor do campo Edital inválido. Verifique!';
+  $dataAux = $si06_dataadesao_ano+1;
+  $resultado = db_query("select * from adesaoregprecos where si06_dataadesao >= '$si06_dataadesao_ano-01-01 00:00:00' 
+  and si06_dataadesao < '$dataAux-01-01 00:00:00' and si06_numeroadm = $si06_numeroadm");
+
+  $objeto = db_utils::fieldsMemory($resultado, 0);
+
+  if($objeto->si06_dataadesao != null){
+        $erro_msg = 'Erro, o nï¿½mero do processo de adesï¿½o informado jï¿½ estï¿½ sendo utilizado no exercï¿½cio de ' . $si06_dataadesao_ano;
+        $sqlerro = true;
+  }
+
+    if(!intval($si06_edital) && !$sqlerro){
+        $erro_msg = 'Valor do campo Edital invï¿½lido. Verifique!';
         $sqlerro = true;
     }
 
-    $sDataAta = join('-', array_reverse(explode('/', $si06_dataata)));
-    $sDataAbertura = join('-', array_reverse(explode('/', $si06_dataabertura)));
+    
+	$sDataAta = join('-', array_reverse(explode('/', $si06_dataata)));
+	$sDataAbertura = join('-', array_reverse(explode('/', $si06_dataabertura)));
 
     if ($sDataAta > $sDataAbertura && !$sqlerro) {
         $sqlerro = true;
-        $erro_msg = 'Data da Ata é maior que a Data de Abertura!';
+        $erro_msg = 'Data da Ata ï¿½ maior que a Data de Abertura!';
     }
 
     $oDaoPcProc = db_utils::getDao('pcproc');
@@ -40,7 +52,7 @@ if (isset($incluir) || isset($alterar)) {
 
     if ($sDataCotacao > $sDataAbertura && !$sqlerro) {
         $sqlerro = true;
-        $erro_msg = 'Data da Cotação é maior que a Data de Abertura!';
+        $erro_msg = 'Data da Cotaï¿½ï¿½o ï¿½ maior que a Data de Abertura!';
     }
 }
 if (!$sqlerro) {
@@ -98,7 +110,7 @@ if (!$sqlerro) {
                 db_fieldsmemory($rsResult, 0);
                 $_SESSION["codigoAdesao"] = $si06_sequencial;
                 echo "<script>
-                alert('Inclusão efetuada com sucesso');
+                alert('Inclusï¿½o efetuada com sucesso');
                 parent.document.formaba.db_itens.disabled=false;
                 parent.mo_camada('db_itens');
                 (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
@@ -177,7 +189,7 @@ if (!$sqlerro) {
     if (isset($excluir)) {
         if (!$si06_sequencial) {
             $sqlerro = true;
-            $erro_msg = 'Adesão de Registro de Preço ainda não cadastrada.';
+            $erro_msg = 'Adesï¿½o de Registro de Preï¿½o ainda nï¿½o cadastrada.';
         } else {
             db_inicio_transacao();
             $db_opcao = 3;

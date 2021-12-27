@@ -39,7 +39,7 @@ require_once("classes/db_pagordemele_classe.php");
 require_once("classes/db_empnota_classe.php");
 require_once("classes/db_empnotaele_classe.php");
 
-//////////////////////////////Controle Andamento da SOlicitação de Compras/////////////////////
+//////////////////////////////Controle Andamento da SOlicitaï¿½ï¿½o de Compras/////////////////////
 require_once("classes/db_pcparam_classe.php");
 require_once("classes/db_protprocesso_classe.php");
 require_once("classes/db_proctransfer_classe.php");
@@ -186,12 +186,12 @@ $clconlancamdoc      = new cl_conlancamdoc;
 $clconlancamcompl = new cl_conlancamcompl;
 $clconlancamnota  = new cl_conlancamnota;
 
-// Retenções
+// Retenï¿½ï¿½es
 require_once("classes/db_empautret_classe.php");
 require_once("classes/db_empempret_classe.php");
 require_once("classes/db_empretencao_classe.php");
 
-// lançamentos contábeis
+// lanï¿½amentos contï¿½beis
 require_once("classes/empenho.php");
 
 db_app::import("exceptions.*");
@@ -256,9 +256,9 @@ if (!empty($iElemento)) {
                 $sGrupoDesdobramento = $oGrupoContaOrcamento->getDescricao();
                 if ($oGrupoContaOrcamento->getCodigo() == 9) {
 
-                    $sMensagem = "O desdobramento deste empenho está no grupo {$sGrupoDesdobramento} ";
+                    $sMensagem = "O desdobramento deste empenho estï¿½ no grupo {$sGrupoDesdobramento} ";
                     $lLiquidar = "disabled='disabled'";
-                    db_msgbox("$sMensagem. não será possível liquidar o empenho diretamente");
+                    db_msgbox("$sMensagem. nï¿½o serï¿½ possï¿½vel liquidar o empenho diretamente");
                 } else {
                     $lLiquidaMaterialConsumo = 'true';
                 }
@@ -279,22 +279,22 @@ if (isset($incluir)) {
 
     if (strtotime($dtDataUsu) <= strtotime($c99_data)) {
 
-        $erro_msg  = "Não foi possível incluir os lançamentos do evento contabil.\n\n";
-        $erro_msg .= "Erro Técnico: ";
-        $erro_sql   = "Valores lançamentos (" . pg_result(db_query('select max(c69_sequen)+1 from conlancamval'), 0, 0) . ") nao Incluído. Inclusao Abortada.";
-        $erro_msg   .= "Usuário: \\n\\n " . $erro_sql . " \\n\\n";
+        $erro_msg  = "Nï¿½o foi possï¿½vel incluir os lanï¿½amentos do evento contabil.\n\n";
+        $erro_msg .= "Erro Tï¿½cnico: ";
+        $erro_sql   = "Valores lanï¿½amentos (" . pg_result(db_query('select max(c69_sequen)+1 from conlancamval'), 0, 0) . ") nao Incluï¿½do. Inclusao Abortada.";
+        $erro_msg   .= "Usuï¿½rio: \\n\\n " . $erro_sql . " \\n\\n";
         $erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n "));
-        $erro_msg   .=  " ERRO: DATA INVÁLIDA. LIMITE: {$c99_data} \\n\\n";
+        $erro_msg   .=  " ERRO: DATA INVï¿½LIDA. LIMITE: {$c99_data} \\n\\n";
         $erro_status = "0";
 
         unset($incluir);
         db_msgbox($erro_msg);
     }
 
-    /* Ocorrência 2630
-     * Validações de datas para geração de autorizações de empenhos e geração de empenhos
-     * 1. Validar impedimento para geração de autorizações/empenhos com data anterior a data de homologação
-     * 2. Validar impedimento para geração de autorizações de empenhos de licitações que não estejam homologadas.
+    /* Ocorrï¿½ncia 2630
+     * Validaï¿½ï¿½es de datas para geraï¿½ï¿½o de autorizaï¿½ï¿½es de empenhos e geraï¿½ï¿½o de empenhos
+     * 1. Validar impedimento para geraï¿½ï¿½o de autorizaï¿½ï¿½es/empenhos com data anterior a data de homologaï¿½ï¿½o
+     * 2. Validar impedimento para geraï¿½ï¿½o de autorizaï¿½ï¿½es de empenhos de licitaï¿½ï¿½es que nï¿½o estejam homologadas.
      */
     $sSqlLicitacao = "select e54_emiss
                           from empautoriza
@@ -305,7 +305,7 @@ if (isset($incluir)) {
 
         if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > db_getsession('DB_datausu')) {
 
-            db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (" . date("d/m/Y", strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) . ") seja maior que a data de emissão do empenho (" . date("d/m/Y", db_getsession('DB_datausu')) . ").");
+            db_msgbox("Nï¿½o ï¿½ permitido emitir empenhos de licitaï¿½ï¿½es cuja data da autorizaï¿½ï¿½o (" . date("d/m/Y", strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) . ") seja maior que a data de emissï¿½o do empenho (" . date("d/m/Y", db_getsession('DB_datausu')) . ").");
             db_redireciona("emp4_empempenho004.php");
         }
     }
@@ -319,7 +319,7 @@ if (isset($incluir)) {
     db_query($sSql);
 
 
-    //////////////////////////////Controle Andamento da SOlicitação de Compras/////////////////////
+    //////////////////////////////Controle Andamento da SOlicitaï¿½ï¿½o de Compras/////////////////////
     //----------------------------REcebe processo se existe tranferencia -------------
     $result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_gerareserva,pc30_contrandsol"));
     db_fieldsmemory($result_pcparam, 0);
@@ -382,7 +382,7 @@ if (isset($incluir)) {
 
     $clempempaut->sql_record($clempempaut->sql_query(null, "*", "", "e61_autori = $e54_autori"));
     if ($clempempaut->numrows > 0) {
-        $erro_msg = "Autorização empenhada!";
+        $erro_msg = "Autorizaï¿½ï¿½o empenhada!";
         $sqlerro  = true;
     }
 
@@ -390,15 +390,15 @@ if (isset($incluir)) {
     if ($clempautoriza->numrows > 0) {
         db_fieldsmemory($resaut, 0);
         if ($e54_anousu != db_getsession("DB_anousu")) {
-            $erro_msg = "Autorização de outro exercício.! ($e54_anousu)";
+            $erro_msg = "Autorizaï¿½ï¿½o de outro exercï¿½cio.! ($e54_anousu)";
             $sqlerro  = true;
         }
     } else {
-        $erro_msg = "Autorização não encontrada!";
+        $erro_msg = "Autorizaï¿½ï¿½o nï¿½o encontrada!";
         $sqlerro  = true;
     }
 
-    //verifica o saldo dos itens com o saldo total da autorização
+    //verifica o saldo dos itens com o saldo total da autorizaï¿½ï¿½o
     $resdiftot = $clempempaut->sql_record("select e54_autori,
                                     e54_valor,
 									sum(e55_vltot) as e55_vltot
@@ -412,12 +412,12 @@ if (isset($incluir)) {
     if ($clempempaut->numrows > 0) {
 
         db_fieldsmemory($resdiftot, 0);
-        $erro_msg = "Valor total dos itens diferente do valor total da autorização. Vlr. da Autorização: $e54_valor - Vlr. Total dos Itens: $e55_vltot ";
+        $erro_msg = "Valor total dos itens diferente do valor total da autorizaï¿½ï¿½o. Vlr. da Autorizaï¿½ï¿½o: $e54_valor - Vlr. Total dos Itens: $e55_vltot ";
         $sqlerro  = true;
     }
 
     if ($sqlerro == false) {
-        // chama função de critica para empenhos
+        // chama funï¿½ï¿½o de critica para empenhos
         $sql = "select fc_verifica_lancamento(" . $e54_autori . ",'" . date("Y-m-d", db_getsession("DB_datausu")) . "',1,00.00)";
         $result_erro = db_query($sql) or die($sql);
         $erro_msg = pg_result($result_erro, 0, 0);
@@ -437,7 +437,7 @@ if (isset($incluir)) {
 
     if (count($arr_credito) == 0) {
         $sqlerro  = true;
-        $erro_msg = "Não existem transações cadastradas para esta instituição.";
+        $erro_msg = "Nï¿½o existem transaï¿½ï¿½es cadastradas para esta instituiï¿½ï¿½o.";
     }
 
     //final
@@ -448,7 +448,7 @@ if (isset($incluir)) {
         $e60_numemp = '';
 
         /*
-         *  NÃO COMENTAR A LINHA ABAIXO,
+         *  Nï¿½O COMENTAR A LINHA ABAIXO,
         *  ELA SERVE PARA NUMERAR OS EMPENHOS EM BAGE, ONDE EXISTE O EMPENHO 1 NA PREFEITURA,1 NO DAEBE E 1 NA CAMARA
         *
         */
@@ -502,7 +502,7 @@ if (isset($incluir)) {
             if ($clempempenho->numrows > 0) {
 
                 $sqlerro  = true;
-                $erro_msg = "Já existe um empenho de número {$e60_codemp}/{$anousu} lançado na instituição!" . pg_last_error();
+                $erro_msg = "Jï¿½ existe um empenho de nï¿½mero {$e60_codemp}/{$anousu} lanï¿½ado na instituiï¿½ï¿½o!" . pg_last_error();
             }
         }
 
@@ -517,7 +517,7 @@ if (isset($incluir)) {
             $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
             if (!$rsResult) {
                 $sqlerro  = true;
-                $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124 e 142.\n";
+                $erro_msg = "Inclusï¿½o Abortada!\n ï¿½ obrigatï¿½rio informar o convï¿½nio para os empenhos de fontes 122, 123, 124 e 142.\n";
             }
         }
 
@@ -559,7 +559,7 @@ if (isset($incluir)) {
             $clempempenho->e60_concarpeculiar = $e54_concarpeculiar;
 
             /**
-             * Validação solicitada pela OC 6457
+             * Validaï¿½ï¿½o solicitada pela OC 6457
              * @author MarioJunior
              */
 
@@ -570,7 +570,7 @@ if (isset($incluir)) {
             $rsResult = db_query($sSql);
             db_fieldsMemory($rsResult, 0);
 
-            //rotina para pegar o elemento da dotação
+            //rotina para pegar o elemento da dotaï¿½ï¿½o
             if ($sqlerro == false) {
 
                 $result09  = $clorcdotacao->sql_record($clorcdotacao->sql_query_ele(db_getsession("DB_anousu"), $e56_coddot, "o56_elemento as elemento_emp"));
@@ -579,7 +579,7 @@ if (isset($incluir)) {
                     db_fieldsmemory($result09, 0);
                 } else {
                     $sqlerro  = true;
-                    $erro_msg = "Não existe elemento para dotação $e56_coddot";
+                    $erro_msg = "Nï¿½o existe elemento para dotaï¿½ï¿½o $e56_coddot";
                 }
             }
 
@@ -595,14 +595,14 @@ if (isset($incluir)) {
 
             $aElementos = array('3319001', '3319003', '3319091', '3319092', '3319094', '3319191', '3319192', '3319194');
 
-            if (($tipoinstit == 5 || $tipoinstit == 6) &&
-                (in_array(substr($o56_elemento, 0, -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0, -6), $aElementos) && db_getsession("DB_anousu") >= 2021))
-            ) {
-                if ($e60_tipodespesa != 0) {
+            if ( ($tipoinstit == 5 || $tipoinstit == 6) &&
+                (in_array(substr($o56_elemento, 0 , -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0 , -6), $aElementos) && db_getsession("DB_anousu") >= 2021) )
+                ) {
+                if($e60_tipodespesa != 0) {
                     $clempempenho->e60_tipodespesa = $e60_tipodespesa;
                     $sqlerro = false;
                 } else {
-                    $erro_msg = "Tipo de Despesa não informado";
+                    $erro_msg = "Tipo de Despesa nï¿½o informado";
                     db_msgbox($erro_msg);
                     $sqlerro = true;
                 }
@@ -611,7 +611,7 @@ if (isset($incluir)) {
                 $sqlerro = false;
             }
             /**
-             * Validação solicitada pela OC 8359
+             * Validaï¿½ï¿½o solicitada pela OC 8359
              *
              */
 
@@ -620,7 +620,7 @@ if (isset($incluir)) {
             if (in_array(substr($o56_elemento, 0, -6), $elementosemp)) {
                 if ($clempempenho->e60_datasentenca == null) {
                     if (substr($o56_elemento, 0, -6) == '3319091') {
-                        $erro_msg = "Usuário: Para este elemento é obrigatório informar a data da sentença judicial";
+                        $erro_msg = "Usuï¿½rio: Para este elemento ï¿½ obrigatï¿½rio informar a data da sentenï¿½a judicial";
                         db_msgbox($erro_msg);
                         $sqlerro = true;
                     }
@@ -635,39 +635,39 @@ if (isset($incluir)) {
                 if (strlen($z01_cgccpf) == 14) {
                     if ($z01_cgccpf == '00000000000000') {
                         $sqlerro = true;
-                        $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
+                        $erro_msg = "ERRO: Nï¿½mero do CNPJ estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente";
                     }
                 } else {
                     if ($z01_cgccpf == '' || $z01_cgccpf == null) {
                         $sqlerro = true;
-                        $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
+                        $erro_msg = "ERRO: Nï¿½mero do CNPJ estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente";
                     }
                 }
 
                 if (strlen($z01_cgccpf) == 11) {
                     if ($z01_cgccpf == '00000000000') {
                         $sqlerro = true;
-                        $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
+                        $erro_msg = "ERRO: Nï¿½mero do CPF estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente";
                     }
                 } else {
                     if ($z01_cgccpf == '' || $z01_cgccpf == null) {
                         $sqlerro = true;
-                        $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
+                        $erro_msg = "ERRO: Nï¿½mero do CPF estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente";
                     }
                 }
             }
             //FIM OC 7037
 
-            /* Ocorrência 11933
-             * Valida se o parâmetro Atesto de Controle Interno está marcado como SIM
-             * e valida se a autorização de empenho está desbloqueada na rotina Controle Interno - Procedimentos - Atesto de Controle Interno
+            /* Ocorrï¿½ncia 11933
+             * Valida se o parï¿½metro Atesto de Controle Interno estï¿½ marcado como SIM
+             * e valida se a autorizaï¿½ï¿½o de empenho estï¿½ desbloqueada na rotina Controle Interno - Procedimentos - Atesto de Controle Interno
              */
             $bAtestoContInt = db_utils::fieldsMemory($clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu"), "e30_atestocontinterno", null, "")), 0)->e30_atestocontinterno;
             $clempautorizliberado->sql_record($clempautorizliberado->sql_query(null, "*", "", "e232_autori = $chavepesquisa"));
 
             if ($bAtestoContInt == 't' && $clempautorizliberado->numrows == 0) {
                 $sqlerro = true;
-                $erro_msg = "Usuário: Esta autorização de empenho ainda não recebeu o Atesto do Controle Interno. Aguarde a liberação para emissão do empenho!";
+                $erro_msg = "Usuï¿½rio: Esta autorizaï¿½ï¿½o de empenho ainda nï¿½o recebeu o Atesto do Controle Interno. Aguarde a liberaï¿½ï¿½o para emissï¿½o do empenho!";
             }
 
             $sSqlDataAutEmp = "select e54_emiss from empautoriza where e54_autori = {$e54_autori} limit 1";
@@ -675,7 +675,7 @@ if (isset($incluir)) {
             if (pg_num_rows(db_query($sSqlDataAutEmp))) {
                 if (strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss) > db_getsession('DB_datausu')) {
                     $sqlerro = true;
-                    $erro_msg = "Não é permitido emitir empenho cuja data da autorização (" . date("d/m/Y", strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss)) . ") seja maior que a data de emissão do empenho (" . date("d/m/Y", db_getsession('DB_datausu')) . ").";
+                    $erro_msg = "Nï¿½o ï¿½ permitido emitir empenho cuja data da autorizaï¿½ï¿½o (" . date("d/m/Y", strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss)) . ") seja maior que a data de emissï¿½o do empenho (" . date("d/m/Y", db_getsession('DB_datausu')) . ").";
                 }
             }
 
@@ -740,7 +740,7 @@ if (isset($incluir)) {
     }
     /*final*/
 
-    //rotina para pegar o elemento da dotação
+    //rotina para pegar o elemento da dotaï¿½ï¿½o
     if ($sqlerro == false) {
 
         $result09  = $clorcdotacao->sql_record($clorcdotacao->sql_query_ele(db_getsession("DB_anousu"), $e56_coddot, "o56_elemento as elemento_emp"));
@@ -750,7 +750,7 @@ if (isset($incluir)) {
         } else {
 
             $sqlerro  = true;
-            $erro_msg = "Não existe elemento para dotação $e56_coddot";
+            $erro_msg = "Nï¿½o existe elemento para dotaï¿½ï¿½o $e56_coddot";
         }
     }
     //final
@@ -763,7 +763,7 @@ if (isset($incluir)) {
         for ($i = 0; $i < $numrows; $i++) {
 
             db_fieldsmemory($result, $i);
-            //rotina para pegar o elemento da dotação
+            //rotina para pegar o elemento da dotaï¿½ï¿½o
             $result09  = $clorcelemento->sql_record($clorcelemento->sql_query_file($e55_codele, db_getsession("DB_anousu"), "o56_elemento as elemento_item"));
             $numrows09 = $clorcelemento->numrows;
             if ($numrows09 > 0) {
@@ -771,13 +771,13 @@ if (isset($incluir)) {
             } else {
 
                 $sqlerro  = true;
-                $erro_msg = "Não existe elemento para o item $e55_item";
+                $erro_msg = "Nï¿½o existe elemento para o item $e55_item";
             }
             //final
 
-            //rotina que compara os elementos da dotação do empenho com a dotação dos itens
+            //rotina que compara os elementos da dotaï¿½ï¿½o do empenho com a dotaï¿½ï¿½o dos itens
             if (substr($elemento_emp, 0, 6) != substr($elemento_item, 0, 6)) {
-                $erro_msg = "Subelemento do item diferente da dotação. Verifique!";
+                $erro_msg = "Subelemento do item diferente da dotaï¿½ï¿½o. Verifique!";
                 $sqlerro  = true;
             }
             if ($sqlerro == false) {
@@ -801,9 +801,9 @@ if (isset($incluir)) {
                 }
 
                 /*
-                * Verificamos se o item está vinculado a uma autorização de um pacto sem solicitação
-                * Se a autorização foi gerada sem solicitaçao, controla o saldo do pacto, do contrário esse controle foi realizado
-                * no momento da inclusão da solicitação
+                * Verificamos se o item estï¿½ vinculado a uma autorizaï¿½ï¿½o de um pacto sem solicitaï¿½ï¿½o
+                * Se a autorizaï¿½ï¿½o foi gerada sem solicitaï¿½ao, controla o saldo do pacto, do contrï¿½rio esse controle foi realizado
+                * no momento da inclusï¿½o da solicitaï¿½ï¿½o
                 *
                 */
                 $sSqlEmpAutorizaSol = "select *
@@ -941,14 +941,14 @@ if (isset($incluir)) {
         $oDaoEmpenhoNl->incluir(null);
         if ($oDaoEmpenhoNl->erro_status == 0) {
 
-            $erro_msg = "Erro ao incluir empenho como nota de liquidação;";
+            $erro_msg = "Erro ao incluir empenho como nota de liquidaï¿½ï¿½o;";
             $sqlerro  = true;
         }
     }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////LANÇAMENTO CONTÁBIL//////////////////////////////////////////////////////////////////////////
+    //////////////////////////LANï¿½AMENTO CONTï¿½BIL//////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     if ($sqlerro == false) {
         $result09  = $clempelemento->sql_record($clempelemento->sql_query($e60_numemp, null, "e64_codele,o56_elemento,e64_vlremp"));
@@ -990,11 +990,11 @@ if (isset($incluir)) {
             }
 
             if ($isAmortizacaoDivida) {
-                $c71_coddoc = 504; // EMPENHO AMORT. DA DÍVIDA
+                $c71_coddoc = 504; // EMPENHO AMORT. DA Dï¿½VIDA
             }
 
             if ($isPrecatoria) {
-                $c71_coddoc = 500; // EMPENHO DE PRECATÓRIOS
+                $c71_coddoc = 500; // EMPENHO DE PRECATï¿½RIOS
             }
         }
 
@@ -1004,7 +1004,7 @@ if (isset($incluir)) {
             db_fieldsmemory($result09, $i);
 
             $iCodigoDotacao = $e56_coddot;
-            $sComplemento   = "Lançamento do Empenho " . $oEmpenhoFinanceiro->getNumero() . "/" . $oEmpenhoFinanceiro->getAnoUso();
+            $sComplemento   = "Lanï¿½amento do Empenho " . $oEmpenhoFinanceiro->getNumero() . "/" . $oEmpenhoFinanceiro->getAnoUso();
 
             if (isset($e54_resumo) && !empty($e54_resumo)) {
                 $sComplemento .= "  {$e54_resumo}";
@@ -1018,9 +1018,7 @@ if (isset($incluir)) {
                 $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
                 $oContaCorrenteDetalhe->setRecurso($oDotacao->getDadosRecurso());
 
-                /**
-                 * Valida parametro de integracao da contabilidade com contratos
-                 */
+
                 $oEventoContabil     = new EventoContabil($c71_coddoc, $anousu);
                 $oLancamentoAuxiliar = new LancamentoAuxiliarEmpenho();
                 $oLancamentoAuxiliar->setCaracteristicaPeculiar($clempempenho->e60_concarpeculiar);
@@ -1034,37 +1032,45 @@ if (isset($incluir)) {
                 $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
                 $oEventoContabil->executaLancamento($oLancamentoAuxiliar);
 
-                /**
-                 * Pesquisa contrato do empenho
-                 * - caso exista gera lancamento
+                 /**
+                 * Valida parametro de integracao da contabilidade com contratos
                  */
-                $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
-                $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
-                if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
+                // apï¿½s 2021 este lanï¿½amento serï¿½ feito no modulo de contratos.
+                if(db_getsession('DB_anousu') < 2022){
+                    /**
+                     * Pesquisa contrato do empenho
+                     * - caso exista gera lancamento
+                     */
+                    $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
+                    $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
+                    if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
 
-                    $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
-                    $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null, "e100_acordo", null, "e100_numemp = {$e60_numemp}");
+                        $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+                        $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null, "e100_acordo", null, "e100_numemp = {$e60_numemp}");
 
-                    $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+                        $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
 
-                    if ($oDaoEmpenhoContrato->numrows > 0) {
+                        if ($oDaoEmpenhoContrato->numrows > 0) {
 
-                        $iCodigoAcordo         = db_utils::fieldsMemory($rsContrato, 0)->e100_acordo;
-                        $oAcordo               = new Acordo($iCodigoAcordo);
-                        $oEventoContabilAcordo = new EventoContabil(900, $anousu);
+                            $iCodigoAcordo         = db_utils::fieldsMemory($rsContrato, 0)->e100_acordo;
+                            $oAcordo               = new Acordo($iCodigoAcordo);
+                            $oEventoContabilAcordo = new EventoContabil(900, $anousu);
 
-                        $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
-                        $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
-                        $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
-                        $oLancamentoAuxiliarAcordo->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
-                        $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
+                            $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
+                            $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
+                            $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
+                            $oLancamentoAuxiliarAcordo->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
+                            $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
-                        $oContaCorrente = new ContaCorrenteDetalhe();
-                        $oContaCorrente->setAcordo($oAcordo);
-                        $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrente);
-                        $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+                            $oContaCorrente = new ContaCorrenteDetalhe();
+                            $oContaCorrente->setAcordo($oAcordo);
+                            $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrente);
+                            $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+                        }
                     }
                 }
+
+
             } catch (Exception $eErro) {
 
                 $erro_msg = $eErro->getMessage();
@@ -1075,12 +1081,12 @@ if (isset($incluir)) {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //FINAL LANÇAMENTO CONTÁBEIS////////////////////////////////////////////////////////////////////////////////////////////
+    //FINAL LANï¿½AMENTO CONTï¿½BEIS////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // LIQUIDAÇÃO////////////////////////////////////////////////////////////////////////////////////////////
+    // LIQUIDAï¿½ï¿½O////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1099,12 +1105,12 @@ if (isset($incluir)) {
     //**********************************************************/
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //ARQUVO DE LIQUIDAÇÃO////////////////////////////////////////////////////////////////////////////////////////////
+    //ARQUVO DE LIQUIDAï¿½ï¿½O////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     if ($sqlerro == false) {
         if ($opc == 1) {
             //$dados tem todos os elementos e seus valores
-            //variáveis necessárias//
+            //variï¿½veis necessï¿½rias//
             //$dados =  $elemento-$valorliquidar#$elemento-$valorliquidar#elemen...
             //$e60_numemp =  $e60_numemp;
             //$vlrliq     =  $vlrliq;
@@ -1113,7 +1119,7 @@ if (isset($incluir)) {
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //FINAL DE LIQUIDAÇÃO////////////////////////////////////////////////////////////////////////////////////////////
+    //FINAL DE LIQUIDAï¿½ï¿½O////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1124,7 +1130,7 @@ if (isset($incluir)) {
         //$e50_numemp = $e50_numemp;
         //$e50_obs    = $e50_obs;
         //$dados = $elemento-$valor#elemento-valor#elem..
-        //$chaves, é setado quando tiver notas
+        //$chaves, ï¿½ setado quando tiver notas
 
         $e50_numemp = $e60_numemp;
         $e50_obs    = "Ordem de pagamento";
@@ -1132,24 +1138,24 @@ if (isset($incluir)) {
     }
     //FINAL ORDEM DE PAGAMENTO//
 
-    // INICIO LIQUIDAÇÃO + NOTA DE LIQUIDAÇÃO
+    // INICIO LIQUIDAï¿½ï¿½O + NOTA DE LIQUIDAï¿½ï¿½O
     if ($opc == 2 && $sqlerro == false) {
 
         /**
-         * esta opção deve :
-         * - lançar ordem de compra ( modulo compras )
-         * - dar entrada dos ítens na ordem de compra com nota ( modulo almoxarifado )
+         * esta opï¿½ï¿½o deve :
+         * - lanï¿½ar ordem de compra ( modulo compras )
+         * - dar entrada dos ï¿½tens na ordem de compra com nota ( modulo almoxarifado )
          * - liquidar o empenho com nota , obrigatorio usar nota (modulo contabilidade)
          *
          * // ordem de compra
          *
-         * - matordem :  lança 1 registro, ordem de compra
-         * - matordemitem : ítens da ordem de compra
+         * - matordem :  lanï¿½a 1 registro, ordem de compra
+         * - matordemitem : ï¿½tens da ordem de compra
          *
          * // nota do fornecedor
          *
          * - empnota : nota
-         * - empnotaord : ligação da nota com a ordem de compra
+         * - empnotaord : ligaï¿½ï¿½o da nota com a ordem de compra
          * - empnotaele : elementos de empenho ligados a nota
          *
          * // entrada no estoque
@@ -1157,15 +1163,15 @@ if (isset($incluir)) {
          * - matestoqueini : estoque
          * - matmater : materiais/itens, cadastro de materiais ( 1:pcmatar ------ N:matmater )
          * - matestoque : uma tabela que sintetiza valores para relatorios do modulo  almox/estoque
-         * - matestoqueitem : representa os ítens que estao no almox
-         * - matestoqueitemunid : representa como as quantidades são representadas dos ítens
+         * - matestoqueitem : representa os ï¿½tens que estao no almox
+         * - matestoqueitemunid : representa como as quantidades sï¿½o representadas dos ï¿½tens
          * - matestoqueitemoc : itens ligados a ordem de com pra
          * - matestoqueitemnota : itens ligados a nota ( empnota )
          *
          */
         require_once("mat1_matestoque_arqnota.php");
 
-        // liquidação contábil
+        // liquidaï¿½ï¿½o contï¿½bil
         $clempenho = new empenho();
         $clempenho->liquidar($e60_numemp, $e64_codele, $clempnota->e69_codnota, $e60_vlremp, $e54_resumo);
         $e50_codord = $clempenho->iPagOrdem;
@@ -1177,11 +1183,11 @@ if (isset($incluir)) {
     }
 
 
-    //ARQUVO DE RETENÇÕES///
+    //ARQUVO DE RETENï¿½ï¿½ES///
     if ($sqlerro == false) {
         /**
-         * seleciona as retenções lançadas na autorização e
-         * lança para o empenho (duplica-as)
+         * seleciona as retenï¿½ï¿½es lanï¿½adas na autorizaï¿½ï¿½o e
+         * lanï¿½a para o empenho (duplica-as)
          */
         $result_retencao  = $clempautret->sql_record($clempautret->sql_query($e54_autori, null, "empretencao.*"));
         $numrows_retencao = $clempautret->numrows;
@@ -1209,10 +1215,10 @@ if (isset($incluir)) {
             }
         } // end loop
     }
-    //FINAL DE RETENÇÕES//
+    //FINAL DE RETENï¿½ï¿½ES//
 
     //     $sqlerro = true;
-    // db_msgbox("Registro não incluido , transação comentada no script emp1_empempenho004");
+    // db_msgbox("Registro nï¿½o incluido , transaï¿½ï¿½o comentada no script emp1_empempenho004");
     /**[Extensao Ordenador Despesa] inclusao_ordenador*/
 
     db_fim_transacao($sqlerro);
@@ -1226,10 +1232,10 @@ if (isset($incluir)) {
     $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
     db_fieldsmemory($result, 0);
 
-    /* Ocorrência 2630
-     * Validações de datas para geração de autorizações de empenhos e geração de empenhos
-     * 1. Validar impedimento para geração de autorizações/empenhos com data anterior a data de homologação
-     * 2. Validar impedimento para geração de autorizações de empenhos de licitações que não estejam homologadas.
+    /* Ocorrï¿½ncia 2630
+     * Validaï¿½ï¿½es de datas para geraï¿½ï¿½o de autorizaï¿½ï¿½es de empenhos e geraï¿½ï¿½o de empenhos
+     * 1. Validar impedimento para geraï¿½ï¿½o de autorizaï¿½ï¿½es/empenhos com data anterior a data de homologaï¿½ï¿½o
+     * 2. Validar impedimento para geraï¿½ï¿½o de autorizaï¿½ï¿½es de empenhos de licitaï¿½ï¿½es que nï¿½o estejam homologadas.
      */
     $sSqlLicitacao = "select e54_emiss
                           from empautoriza
@@ -1238,7 +1244,7 @@ if (isset($incluir)) {
 
     if (pg_num_rows(db_query($sSqlLicitacao))) {
         if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > db_getsession('DB_datausu')) {
-            db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (" . date("d/m/Y", strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) . ") seja maior que a data de emissão do empenho (" . date("d/m/Y", db_getsession('DB_datausu')) . ").");
+            db_msgbox("Nï¿½o ï¿½ permitido emitir empenhos de licitaï¿½ï¿½es cuja data da autorizaï¿½ï¿½o (" . date("d/m/Y", strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) . ") seja maior que a data de emissï¿½o do empenho (" . date("d/m/Y", db_getsession('DB_datausu')) . ").");
             db_redireciona("emp4_empempenho004.php");
         }
     }
@@ -1319,9 +1325,9 @@ if (isset($incluir)) {
 
 <?
 if ($alertar_retencao == true) {
-    db_msgbox("Autorização $e54_autori com retenções!");
+    db_msgbox("Autorizaï¿½ï¿½o $e54_autori com retenï¿½ï¿½es!");
 }
-//rotina que alerta se o usuario não tem permissão
+//rotina que alerta se o usuario nï¿½o tem permissï¿½o
 if (isset($erro_perm)) {
     db_msgbox($erro_perm);
     db_redireciona("emp4_empempenho004.php");
@@ -1339,10 +1345,10 @@ if (isset($incluir)) {
 
         $ord = '';
         if (isset($e50_codord) && $e50_codord != '') {
-            $ord = "Nota de Liquidação: $e50_codord";
+            $ord = "Nota de Liquidaï¿½ï¿½o: $e50_codord";
         }
 
-        $ok_msg = "Inclusão efetuada com sucesso! \\n Empenho: $e60_codemp\/" . db_getsession("DB_anousu") . " \\n $ord";
+        $ok_msg = "Inclusï¿½o efetuada com sucesso! \\n Empenho: $e60_codemp\/" . db_getsession("DB_anousu") . " \\n $ord";
         db_msgbox($ok_msg);
 
         if (empty($naoimprimir)) {

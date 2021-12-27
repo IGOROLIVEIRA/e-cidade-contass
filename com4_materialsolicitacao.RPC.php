@@ -64,6 +64,43 @@ try {
       $oRetorno->dados->descricaocomplemento = urlencode($oDadosMaterial->pc01_complmater);
 
       break;
+
+      case "getDadosElementos":
+
+          $clpcmaterele = new cl_pcmaterele();
+          $sql_record = $clpcmaterele->sql_record($clpcmaterele->sql_query($oParam->pc_mat, null, "o56_codele,o56_descr,o56_elemento", "o56_descr"));
+          $dad_select = array ();
+          for ($i = 0; $i < $clpcmaterele->numrows; $i++) {
+              db_fieldsmemory($sql_record, $i);
+              
+              $dad_select[$i][0] = $o56_codele;
+              $dad_select[$i][1] = $o56_elemento;
+              $dad_select[$i][2] = urlencode($o56_descr);
+          }
+
+          $arrayRetornoEle = array();
+                foreach ($dad_select as $keyRow => $Row){
+    
+                    $objValorEle = new stdClass();
+                    foreach ($Row as $keyCel => $cell){
+
+                        if($keyCel == 0){
+                            $objValorEle->codigo   =  $cell;
+                        }
+                        if($keyCel == 1){
+                          $objValorEle->elemento    =  $cell;
+                        }
+                        if($keyCel == 2){
+                          $objValorEle->nome    =  $cell;
+                        }
+                    }
+                    
+                    $arrayRetornoEle[] = $objValorEle;
+                }
+      
+          $oRetorno->dados = $arrayRetornoEle;
+
+       break; 
   }
 
   db_fim_transacao(false);

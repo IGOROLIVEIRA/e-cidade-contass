@@ -38,7 +38,7 @@ contrato = function () {
         oParam.credenciamento = $F('tipodispenca');
         oParam.addNegation    = negation;
         oParam.tipoCompras = tipoCompras;
-        js_divCarregando("Aguarde, carregando as licitações...", "msgBox");
+        js_divCarregando("Aguarde, carregando as licitaï¿½ï¿½es...", "msgBox");
         var oAjax   = new Ajax.Request(
             sURL,
             {
@@ -57,7 +57,7 @@ contrato = function () {
         if ($F('ac16_origem') == 1) {
             sTitulo = "Processo de compras";
         } else {
-            sTitulo = "licitações";
+            sTitulo = "Licitaï¿½ï¿½es";
         }
         var iLarguraJanela = 1200;
         var iAlturaJanela  = document.body.clientHeight;
@@ -76,7 +76,7 @@ contrato = function () {
         oJanela.setContent(sContent);
         oMessageBoard = new DBMessageBoard('messageboardlicitacao',
             sTitulo +" vencidas por "+$F('nomecontratado'),
-            'Escolha as licitações que far?o parte do contrato',
+            'Escolha as licitaï¿½ï¿½es que farï¿½o parte do contrato',
             $('windowwndLicitacoesVencidas_content')
         );
         oJanela.setShutDownFunction(function() {
@@ -122,7 +122,7 @@ contrato = function () {
 
         oGridDados.setCellWidth(new Array("5%", "4%", "60%", "11%", "10%"));
         oGridDados.setCellAlign(new Array("right", "right", "left", "right", "right"));
-        oGridDados.setHeader(new Array("Código","Número", "Objeto", "Número do Exercício", "Data da Inclusão"));
+        oGridDados.setHeader(new Array("Cï¿½digo","Nï¿½mero", "Objeto", "Nï¿½mero do Exercï¿½cio", "Data da Inclusï¿½o"));
         oGridDados.show($('cntDados'));
 
 
@@ -197,7 +197,7 @@ contrato = function () {
             me.setPropertiesCss();
         } else {
 
-            oGridDados.setStatus("Não foram Encontrados registros");
+            oGridDados.setStatus("Nï¿½o foram Encontrados registros");
         }
     };
 
@@ -228,13 +228,13 @@ contrato = function () {
 
         if (aItensSelecionados.length == 0) {
 
-            alert('Não foram selecionados nenhum item.');
+            alert('Nï¿½o foram selecionados nenhum item.');
             return false;
         } else {
 
             if (aItensSelecionados.length > 1) {
 
-                alert("Permitida Seleção de Somente um Julgamento!!");
+                alert("Permitida Seleï¿½ï¿½o de Somente um Julgamento!!");
                 return false;
             }
 
@@ -375,23 +375,23 @@ contrato = function () {
         var iLicoutroorgao            = $F('ac16_licoutroorgao');
         var iLei                      = $F('ac16_lei');
 
-        /* Novas validações para atender o SICOM */
+        /* Novas validaï¿½ï¿½es para atender o SICOM */
 
         if(iOrigem == '3') {
             if ((iTipoOrigem == '2' || iTipoOrigem == '3') && !iLicitacao) {
-                alert('Informe uma Licitação.');
+                alert('Informe uma Licitaï¿½ï¿½o.');
                 $('ac16_licitacao').focus();
                 return false;
             }
 
             if(iTipoOrigem == '4' && !iAdesaoregpreco){
-                alert('Informe uma Adesão de Registro de Preço.');
+                alert('Informe uma Adesï¿½o de Registro de Preï¿½o.');
                 $('ac16_adesaoregpreco').focus();
                 return false;
             }
 
             if(['5', '6', '7', '8', '9'].includes(iTipoOrigem) && !iLicoutroorgao){
-                alert('Informe uma Licitação por Outro orgão.');
+                alert('Informe uma Licitaï¿½ï¿½o por Outro orgï¿½o.');
                 $('ac16_licoutroorgao').focus();
                 return false;
             }
@@ -418,7 +418,7 @@ contrato = function () {
         }
         if (iNumero == "") {
 
-            alert('Informe o número do acordo.');
+            alert('Informe o nï¿½mero do acordo.');
             $('ac16_numeroacordo').focus();
             return false;
         }
@@ -432,7 +432,7 @@ contrato = function () {
 
         if (iDepartamentoResponsavel == "") {
 
-            alert('Informe o Departamento Responsável.');
+            alert('Informe o Departamento Responsï¿½vel.');
             $('ac16_deptoresponsavel').focus();
             return false;
         }
@@ -446,7 +446,7 @@ contrato = function () {
         }
         if (dtInicio == "") {
 
-            alert('Informe a data de início do Contrato.');
+            alert('Informe a data de inï¿½cio do Contrato.');
             $('ac16_datainicio').focus();
             return false;
         }
@@ -488,22 +488,22 @@ contrato = function () {
         }
 
       if(iGrupoContrato == 1 && iQtdPeriodoVigencia == ""){
-            alert('Unid.Execução/Entrega não informado.');
+            alert('Unid.Execuï¿½ï¿½o/Entrega nï¿½o informado.');
             $('ac16_qtdperiodo').focus();
             return false;
       }
       if(iGrupoContrato == 2 && iQtdPeriodoVigencia == ""){
-            alert('Unid.Execução/Entrega não informado.');
+            alert('Unid.Execuï¿½ï¿½o/Entrega nï¿½o informado.');
             $('ac16_qtdperiodo').focus();
             return false;
       }
       if(iGrupoContrato == 3 && iQtdPeriodoVigencia == ""){
-            alert('Unid.Execução/Entrega não informado.');
+            alert('Unid.Execuï¿½ï¿½o/Entrega nï¿½o informado.');
             $('ac16_qtdperiodo').focus();
             return false;
       }
       if(iGrupoContrato == 7 && iQtdPeriodoVigencia == ""){
-            alert('Unid.Execução/Entrega não informado.');
+            alert('Unid.Execuï¿½ï¿½o/Entrega nï¿½o informado.');
             $('ac16_qtdperiodo').focus();
             return false;
       }
@@ -728,7 +728,7 @@ contrato = function () {
     };
 
     /**
-     * Verifica se deve mostrar o valor para alteração ou não
+     * Verifica se deve mostrar o valor para alteraï¿½ï¿½o ou nï¿½o
      */
     this.mostraValorAcordo = function() {
 

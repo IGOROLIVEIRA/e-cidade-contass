@@ -96,9 +96,9 @@ $db_opcao_inf=1;
           <tr>
             <td><?db_ancora("<b>Conta Pagadora:</b>","js_pesquisa_contapagadora(true);",1);?></td>
             <td>
-                <? 
-                    db_input("e83_conta",13,1,true,"text",4,"onchange='js_pesquisa_contapagadora(false);'"); 
-                    db_input("e83_codtipo",5,1,true,"hidden");    
+                <?
+                    db_input("e83_conta",13,1,true,"text",4,"onchange='js_pesquisa_contapagadora(false);'");
+                    db_input("e83_codtipo",5,1,true,"hidden");
                 ?>
             </td>
             <td colspan='3'><? db_input("e83_descr",50,"",true,"text",3); ?></td>
@@ -314,7 +314,7 @@ function js_saida(oAjax){
     estrutural            = obj.sEstrutural;
     $('e50_compdesp').value = '';
     $('e83_conta').value    = '';
-    $('e83_descr').value    = ''; 
+    $('e83_descr').value    = '';
     $('e83_codtipo').value  = '';
 
     if (obj.aItensPendentesPatrimonio.length > 0) {
@@ -651,15 +651,15 @@ function in_array(valor,vetor){
 };
 
 function js_pesquisa_contapagadora(mostra) {
-	
+
     if (mostra==true) {
         js_OpenJanelaIframe('top.corpo','db_iframe_empagetipo','func_empagetipo.php?e60_numemp='+$('e60_numemp').value+'&funcao_js=parent.js_mostracontapagadora1|e83_codtipo|e83_conta|e83_descr','Pesquisa',true);
     } else {
-    
-        if ($('e83_conta').value != '') { 
+
+        if ($('e83_conta').value != '') {
             js_OpenJanelaIframe('top.corpo','db_iframe_empagetipo','func_empagetipo.php?pesquisa_chave='+$('e83_conta').value+'&e60_numemp='+$('e60_numemp').value+'&e83_conta='+$('e83_conta').value+'&funcao_js=parent.js_mostracontapagadora','Pesquisa',false);
         } else {
-            $('e83_descr').value    = ''; 
+            $('e83_descr').value    = '';
             $('e83_codtipo').value  = '';
         }
     }
@@ -667,23 +667,23 @@ function js_pesquisa_contapagadora(mostra) {
 }
 
 function js_mostracontapagadora(chave1,chave2,erro) {
-    
-    $('e83_descr').value    = chave1; 
-    $('e83_codtipo').value  = chave2; 
-    if (erro == true) { 
-        
-        $('e83_codtipo').value = ''; 
+
+    $('e83_descr').value    = chave1;
+    $('e83_codtipo').value  = chave2;
+    if (erro == true) {
+
+        $('e83_codtipo').value = '';
         $('e83_conta').value    = '';
-        $('e83_codtipo').focus(); 
+        $('e83_codtipo').focus();
 
     }
 
 }
 
 function js_mostracontapagadora1(chave1,chave2,chave3) {
-        
-    $('e83_codtipo').value  = chave1;  
-    $('e83_conta').value    = chave2;  
+
+    $('e83_codtipo').value  = chave1;
+    $('e83_conta').value    = chave2;
     $('e83_descr').value    = chave3;
     db_iframe_empagetipo.hide();
 

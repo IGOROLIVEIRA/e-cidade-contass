@@ -34,414 +34,437 @@ include("dbforms/db_funcoes.php");
 include("classes/db_rhrubricas_classe.php");
 include("classes/db_rhrubelemento_classe.php");
 include("classes/db_rhrubretencao_classe.php");
+include("classes/db_rubricasesocial_classe");
+include("classes/db_baserubricasesocial_classe.php");
 
 $clrhrubricas    = new cl_rhrubricas();
 $clrhrubelemento = new cl_rhrubelemento();
 $clrhrubretencao = new cl_rhrubretencao();
+$clrubricasesocial = new cl_rubricasesocial;
+$clbaserubricasesocial = new cl_baserubricasesocial;
 
 db_postmemory($HTTP_POST_VARS);
 
 $db_opcao = 22;
 $db_botao = false;
 
-if(isset($alterar) || isset($novasrubricas)){
-  db_inicio_transacao();
-  $calc1 = "";
-  $calc2 = "";
-  $calc3 = "";
-  $sqlerro = false;
+if (isset($alterar) || isset($novasrubricas)) {
+    db_inicio_transacao();
+    $calc1 = "";
+    $calc2 = "";
+    $calc3 = "";
+    $sqlerro = false;
 
-  $clrhrubricas->rh27_form  = str_replace("\\","",$rh27_form);
-  $clrhrubricas->rh27_form2 = str_replace("\\","",$rh27_form2);
-  $clrhrubricas->rh27_form3 = str_replace("\\","",$rh27_form3);
-  $clrhrubricas->rh27_formq = str_replace("\\","",$rh27_formq);
-//$clrhrubricas->rh27_cond2 = str_replace("\\","",$rh27_cond2);
-//$clrhrubricas->rh27_cond3 = str_replace("\\","",$rh27_cond3);
-  $clrhrubricas->rh27_cond2 = stripslashes($rh27_cond2);
-  $clrhrubricas->rh27_cond3 = stripslashes($rh27_cond3);
-  $clrhrubricas->rh27_cond2 = addslashes($rh27_cond2);
-  $clrhrubricas->rh27_cond3 = addslashes($rh27_cond3);
-  $clrhrubricas->rh27_obs   = str_replace("\\","",$rh27_obs);
+    $clrhrubricas->rh27_form  = str_replace("\\", "", $rh27_form);
+    $clrhrubricas->rh27_form2 = str_replace("\\", "", $rh27_form2);
+    $clrhrubricas->rh27_form3 = str_replace("\\", "", $rh27_form3);
+    $clrhrubricas->rh27_formq = str_replace("\\", "", $rh27_formq);
+    //$clrhrubricas->rh27_cond2 = str_replace("\\","",$rh27_cond2);
+    //$clrhrubricas->rh27_cond3 = str_replace("\\","",$rh27_cond3);
+    $clrhrubricas->rh27_cond2 = stripslashes($rh27_cond2);
+    $clrhrubricas->rh27_cond3 = stripslashes($rh27_cond3);
+    $clrhrubricas->rh27_cond2 = addslashes($rh27_cond2);
+    $clrhrubricas->rh27_cond3 = addslashes($rh27_cond3);
+    $clrhrubricas->rh27_obs   = str_replace("\\", "", $rh27_obs);
 
-  if(!isset($novasrubricas)){
-    if($rh27_calc1 > 0){
-      $rubricateste = $rh27_rubric + 2000;
-      // die($clrhrubricas->sql_query_file($rubricateste));
-      $result_teste = $clrhrubricas->sql_record($clrhrubricas->sql_query_file($rubricateste,db_getsession("DB_instit")));
-      if($clrhrubricas->numrows == 0){
-        $calc1 = $rubricateste;
-      }
+    if (!isset($novasrubricas)) {
+        if ($rh27_calc1 > 0) {
+            $rubricateste = $rh27_rubric + 2000;
+            // die($clrhrubricas->sql_query_file($rubricateste));
+            $result_teste = $clrhrubricas->sql_record($clrhrubricas->sql_query_file($rubricateste, db_getsession("DB_instit")));
+            if ($clrhrubricas->numrows == 0) {
+                $calc1 = $rubricateste;
+            }
+        }
+
+        if ($rh27_calc2 > 0) {
+            $rubricateste = $rh27_rubric + 4000;
+            // die($clrhrubricas->sql_query_file($rubricateste));
+            $result_teste = $clrhrubricas->sql_record($clrhrubricas->sql_query_file($rubricateste, db_getsession("DB_instit")));
+            if ($clrhrubricas->numrows == 0) {
+                $calc2 = $rubricateste;
+            }
+        }
+
+        if ($rh27_calc3 == 't') {
+            $rubricateste = $rh27_rubric + 6000;
+            // die($clrhrubricas->sql_query_file($rubricateste));
+            $result_teste = $clrhrubricas->sql_record($clrhrubricas->sql_query_file($rubricateste, db_getsession("DB_instit")));
+            if ($clrhrubricas->numrows == 0) {
+                $calc3 = $rubricateste;
+            }
+        }
+    } else {
+        $arr_codigos = split(",", $novasrubricas);
+        for ($i = 0; $i < count($arr_codigos); $i++) {
+            $rubricainclui = $arr_codigos[$i];
+            if ($i == 0) {
+                $varsubstr = $rh27_descr . " S/ Fï¿½RIAS";
+                $descricinclui = substr($varsubstr, 0, 30);
+            } else if ($i == 1) {
+                $varsubstr = $rh27_descr . " S/ 13o SALï¿½RIO";
+                $descricinclui = substr($varsubstr, 0, 30);
+            } else if ($i == 2) {
+                $varsubstr = $rh27_descr . " S/ RESCISï¿½O";
+                $descricinclui = substr($varsubstr, 0, 30);
+            }
+
+            if ($rubricainclui != 0) {
+
+                if ($sqlerro == false) {
+                    $clrhrubricas->rh27_tipo  = "2";
+                    $clrhrubricas->rh27_calc1 = "0";
+                    $clrhrubricas->rh27_calc2 = "0";
+                    $clrhrubricas->rh27_calc3 = "false";
+                    $clrhrubricas->rh27_descr = $descricinclui;
+                    $clrhrubricas->rh27_instit = db_getsession("DB_instit");
+                    $clrhrubricas->incluir($rubricainclui, db_getsession("DB_instit"));
+                    $erro_msg = $clrhrubricas->erro_msg;
+                    if ($clrhrubricas->erro_status == 0) {
+                        $sqlerro = true;
+                        break;
+                    }
+                }
+
+                if (!$sqlerro) {
+                    $clrhrubelemento->excluir($rubricainclui, db_getsession("DB_instit"));
+                    $erro_msg = $clrhrubelemento->erro_msg;
+                    if ($clrhrubelemento->erro_status == 0) {
+                        $sqlerro = true;
+                    }
+                }
+                if (!$sqlerro) {
+                    $sWhereExcluiRetencao  = "     rh75_rubric = '{$rh27_rubric}' ";
+                    $sWhereExcluiRetencao .= " and rh75_instit = " . db_getsession('DB_instit');
+                    $clrhrubretencao->excluir(null, $sWhereExcluiRetencao);
+                    if ($clrhrubretencao->erro_status == 0) {
+                        $erro_msg = $clrhrubretencao->erro_msg;
+                        $sqlerro = true;
+                    }
+                }
+            }
+        }
     }
 
-    if($rh27_calc2 > 0){
-      $rubricateste = $rh27_rubric + 4000;
-      // die($clrhrubricas->sql_query_file($rubricateste));
-      $result_teste = $clrhrubricas->sql_record($clrhrubricas->sql_query_file($rubricateste,db_getsession("DB_instit")));
-      if($clrhrubricas->numrows == 0){
-        $calc2 = $rubricateste;
-      }
-    }
+    if (!empty($rh27_rhfundamentacaolegal)) {
+        $oDaoFundamentacaoLegal = new cl_rhfundamentacaolegal();
+        $sSqlFundamentacaoLegal = $oDaoFundamentacaoLegal->sql_query_file($rh27_rhfundamentacaolegal);
+        $rsFundamentacao        = db_query($sSqlFundamentacaoLegal);
 
-    if($rh27_calc3 == 't'){
-      $rubricateste = $rh27_rubric + 6000;
-      // die($clrhrubricas->sql_query_file($rubricateste));
-      $result_teste = $clrhrubricas->sql_record($clrhrubricas->sql_query_file($rubricateste,db_getsession("DB_instit")));
-      if($clrhrubricas->numrows == 0){
-        $calc3 = $rubricateste;
-      }
-    }
-  }else{
-    $arr_codigos = split(",",$novasrubricas);
-    for($i=0; $i<count($arr_codigos); $i++){
-      $rubricainclui = $arr_codigos[$i];
-      if($i == 0){
-        $varsubstr = $rh27_descr." S/ FÉRIAS";
-        $descricinclui = substr($varsubstr,0,30);
-      }else if($i == 1){
-        $varsubstr = $rh27_descr." S/ 13o SALÁRIO";
-        $descricinclui = substr($varsubstr,0,30);
-      }else if($i == 2){
-        $varsubstr = $rh27_descr." S/ RESCISÃO";
-        $descricinclui = substr($varsubstr,0,30);
-      }
-
-      if($rubricainclui != 0){
-
-        if($sqlerro == false){
-          $clrhrubricas->rh27_tipo  = "2";
-          $clrhrubricas->rh27_calc1 = "0";
-          $clrhrubricas->rh27_calc2 = "0";
-          $clrhrubricas->rh27_calc3 = "false";
-          $clrhrubricas->rh27_descr = $descricinclui;
-    		  $clrhrubricas->rh27_instit = db_getsession("DB_instit");
-          $clrhrubricas->incluir($rubricainclui,db_getsession("DB_instit"));
-          $erro_msg = $clrhrubricas->erro_msg;
-          if($clrhrubricas->erro_status==0){
+        if (!$rsFundamentacao) {
             $sqlerro = true;
-            break;
-          }
+            $erro_msg = 'Nï¿½o foi possï¿½vel consultar a fundamentaï¿½ï¿½o legal informada.';
         }
 
-        if ( !$sqlerro ) {
-          $clrhrubelemento->excluir($rubricainclui,db_getsession("DB_instit"));
-          $erro_msg = $clrhrubelemento->erro_msg;
-          if($clrhrubelemento->erro_status == 0 ){
-            $sqlerro=true;
-          }
+        if (pg_num_rows($rsFundamentacao) == 0) {
+            $sqlerro = false;
+            $clrhrubricas->rh27_rhfundamentacaolegal = null;
+            $GLOBALS["HTTP_POST_VARS"]["rh27_rhfundamentacaolegal"] = null;
         }
-        if ( !$sqlerro ) {
-        	$sWhereExcluiRetencao  = "     rh75_rubric = '{$rh27_rubric}' ";
-        	$sWhereExcluiRetencao .= " and rh75_instit = ".db_getsession('DB_instit');
-          $clrhrubretencao->excluir(null,$sWhereExcluiRetencao);
-          if($clrhrubretencao->erro_status == 0 ){
-            $erro_msg = $clrhrubretencao->erro_msg;
-            $sqlerro=true;
-          }
+    }
+
+    if ($calc1 == "" && $calc2 == "" && $calc3 == "" && $sqlerro == false) {
+        if ($rh27_calc3 == 't') {
+            $inccalc3 = 'true';
+        } else {
+            $inccalc3 = 'false';
         }
-      }
-    }
-  }
-
-  if ( !empty($rh27_rhfundamentacaolegal) ) {
-    $oDaoFundamentacaoLegal = new cl_rhfundamentacaolegal();
-    $sSqlFundamentacaoLegal = $oDaoFundamentacaoLegal->sql_query_file($rh27_rhfundamentacaolegal);
-    $rsFundamentacao        = db_query($sSqlFundamentacaoLegal);
-
-    if ( !$rsFundamentacao ) {
-      $sqlerro = true;
-      $erro_msg = 'Não foi possível consultar a fundamentação legal informada.';
-    }
-
-    if ( pg_num_rows($rsFundamentacao) == 0 ) {
-      $sqlerro = false;
-      $clrhrubricas->rh27_rhfundamentacaolegal = null;
-      $GLOBALS["HTTP_POST_VARS"]["rh27_rhfundamentacaolegal"] = null;
-    }
-  }
-
-  if($calc1 == "" && $calc2 == "" && $calc3 == "" && $sqlerro == false){
-    if($rh27_calc3 == 't'){
-      $inccalc3 = 'true';
-    }else{
-      $inccalc3 = 'false';
-    }
-    $clrhrubricas->rh27_rubric= $rh27_rubric;
-    $clrhrubricas->rh27_tipo  = $rh27_tipo;
-    $clrhrubricas->rh27_calc1 = $rh27_calc1;
-    $clrhrubricas->rh27_calc2 = $rh27_calc2;
-    $clrhrubricas->rh27_calc3 = $inccalc3;
-    $clrhrubricas->rh27_descr = $rh27_descr;
-	  $clrhrubricas->rh27_instit = db_getsession("DB_instit");
-    $clrhrubricas->alterar($rh27_rubric,db_getsession("DB_instit"));
-    $erro_msg = $clrhrubricas->erro_msg;
-    $rh27_rubric = $clrhrubricas->rh27_rubric;
-    if($clrhrubricas->erro_status==0){
-      $sqlerro = true;
-      $rh27_cond2 = stripslashes($rh27_cond2);
-      $rh27_cond3 = stripslashes($rh27_cond3);
-    }
-    if( !$sqlerro ){
-      $clrhrubelemento->excluir($rh27_rubric,db_getsession("DB_instit"));
-      if($clrhrubelemento->erro_status == 0 ){
-      	$erro_msg = $clrhrubelemento->erro_msg;
-        $sqlerro=true;
-      }
-    }
-
-    if ( !$sqlerro ) {
-      $sWhereExcluiRetencao  = "     rh75_rubric = '{$rh27_rubric}' ";
-      $sWhereExcluiRetencao .= " and rh75_instit = ".db_getsession('DB_instit');
-      $clrhrubretencao->excluir(null,$sWhereExcluiRetencao);
-      if($clrhrubretencao->erro_status == 0 ){
-        $erro_msg = $clrhrubretencao->erro_msg;
-        $sqlerro=true;
-      }
-    }
-
-
-    if ( isset($tipo) ) {
-    	if ( $tipo == 'e') {
-		    if( !$sqlerro && isset($rh23_codele) && trim($rh23_codele) != ""){
-		      $clrhrubelemento->incluir($rh27_rubric,db_getsession("DB_instit"));
-		      if($clrhrubelemento->erro_status == 0 ){
-		      	$erro_msg = $clrhrubelemento->erro_msg;
-		        $sqlerro=true;
-		      }
-		    }
-    	} else if ( $tipo == 'c' || $tipo == 'p' || $tipo == 'd') {
-        if( isset($rh75_retencaotiporec) && trim($rh75_retencaotiporec) != ""){
-          $clrhrubretencao->rh75_retencaotiporec = $rh75_retencaotiporec;
-          $clrhrubretencao->rh75_instit          = db_getsession('DB_instit');
-          $clrhrubretencao->rh75_rubric          = $rh27_rubric;
-          $clrhrubretencao->incluir(null);
-          if($clrhrubretencao->erro_status == 0 ){
-            $erro_msg = $clrhrubretencao->erro_msg;
-            $sqlerro=true;
-          }
+        $clrhrubricas->rh27_rubric = $rh27_rubric;
+        $clrhrubricas->rh27_tipo  = $rh27_tipo;
+        $clrhrubricas->rh27_calc1 = $rh27_calc1;
+        $clrhrubricas->rh27_calc2 = $rh27_calc2;
+        $clrhrubricas->rh27_calc3 = $inccalc3;
+        $clrhrubricas->rh27_descr = $rh27_descr;
+        $clrhrubricas->rh27_instit = db_getsession("DB_instit");
+        $clrhrubricas->alterar($rh27_rubric, db_getsession("DB_instit"));
+        $erro_msg = $clrhrubricas->erro_msg;
+        $rh27_rubric = $clrhrubricas->rh27_rubric;
+        if ($clrhrubricas->erro_status == 0) {
+            $sqlerro = true;
+            $rh27_cond2 = stripslashes($rh27_cond2);
+            $rh27_cond3 = stripslashes($rh27_cond3);
         }
-    	}
+        if (!$sqlerro) {
+            $clrhrubelemento->excluir($rh27_rubric, db_getsession("DB_instit"));
+            if ($clrhrubelemento->erro_status == 0) {
+                $erro_msg = $clrhrubelemento->erro_msg;
+                $sqlerro = true;
+            }
+        }
+
+        if (!$sqlerro) {
+            $sWhereExcluiRetencao  = "     rh75_rubric = '{$rh27_rubric}' ";
+            $sWhereExcluiRetencao .= " and rh75_instit = " . db_getsession('DB_instit');
+            $clrhrubretencao->excluir(null, $sWhereExcluiRetencao);
+            if ($clrhrubretencao->erro_status == 0) {
+                $erro_msg = $clrhrubretencao->erro_msg;
+                $sqlerro = true;
+            }
+        }
+
+
+        if (isset($tipo)) {
+            if ($tipo == 'e') {
+                if (!$sqlerro && isset($rh23_codele) && trim($rh23_codele) != "") {
+                    $clrhrubelemento->incluir($rh27_rubric, db_getsession("DB_instit"));
+                    if ($clrhrubelemento->erro_status == 0) {
+                        $erro_msg = $clrhrubelemento->erro_msg;
+                        $sqlerro = true;
+                    }
+                }
+            } else if ($tipo == 'c' || $tipo == 'p' || $tipo == 'd') {
+                if (isset($rh75_retencaotiporec) && trim($rh75_retencaotiporec) != "") {
+                    $clrhrubretencao->rh75_retencaotiporec = $rh75_retencaotiporec;
+                    $clrhrubretencao->rh75_instit          = db_getsession('DB_instit');
+                    $clrhrubretencao->rh75_rubric          = $rh27_rubric;
+                    $clrhrubretencao->incluir(null);
+                    if ($clrhrubretencao->erro_status == 0) {
+                        $erro_msg = $clrhrubretencao->erro_msg;
+                        $sqlerro = true;
+                    }
+                }
+            }
+        }
+        if ($sqlerro == false) {
+            $clbaserubricasesocial->e991_rubricasesocial = $e991_rubricasesocial;
+            $clbaserubricasesocial->e991_rubricas = $rh27_rubric;
+            $clbaserubricasesocial->e991_instit =  db_getsession("DB_instit");
+            $result = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query(null, 'e991_rubricasesocial', null, "e991_rubricas = '$rh27_rubric' and  e991_instit = " . db_getsession("DB_instit")));
+            if ($clbaserubricasesocial->numrows > 0) {
+                $clbaserubricasesocial->alterar($rh27_rubric, db_getsession("DB_instit"));
+            } else {
+                $clbaserubricasesocial->incluir();
+            }
+            if ($clbaserubricasesocial->erro_status == 0) {
+                $sqlerro = true;
+                $erro_msg = $clbaserubricasesocial->erro_msg;
+            }
+        }
+        db_fim_transacao($sqlerro);
+        $db_opcao = 2;
+        $db_botao = true;
+        if ($sqlerro == false) {
+            $chavepesquisa = $rh27_rubric;
+        }
     }
-  //sqlerro = true;
-  db_fim_transacao($sqlerro);
-  $db_opcao = 2;
-  $db_botao = true;
-  if($sqlerro == false){
-    $chavepesquisa = $rh27_rubric;
-  }
-}
-// }else if(isset($chavepesquisa)){
-// Separei este "IF" para que não fique aparecendo contra-barras nos campos text e textarea
-} else if(isset($chavepesquisa)) {
-  $db_opcao = 2;
-  $db_botao = true;
-  $sCampos = "rhrubricas.*,
+    // }else if(isset($chavepesquisa)){
+    // Separei este "IF" para que nï¿½o fique aparecendo contra-barras nos campos text e textarea
+} else if (isset($chavepesquisa)) {
+    $db_opcao = 2;
+    $db_botao = true;
+    $sCampos = "rhrubricas.*,
               db_config.*,
               rhtipomedia.rh29_descr,
               b.rh29_descr as rh29_descr2,
               rhfundamentacaolegal.rh137_numero||' - '||rhfundamentacaolegal.rh137_descricao as rh137_descricao ";
-  $result = $clrhrubricas->sql_record($clrhrubricas->sql_query($chavepesquisa,db_getsession("DB_instit"),$sCampos));
-  db_fieldsmemory($result,0);
-
-  $rh27_cond2 = stripslashes($rh27_cond2);
-  $rh27_cond3 = stripslashes($rh27_cond3);
-
-  $sWhereRhrubelemento    = "      rhrubelemento.rh23_rubric = '{$chavepesquisa}'";
-  $sWhereRhrubelemento   .= " and rhrubelemento.rh23_instit = ". db_getsession("DB_instit");
-  $sWhereRhrubelemento   .= " and o56_anousu = ". db_getsession("DB_anousu");
-  $result = $clrhrubelemento->sql_record($clrhrubelemento->sql_query($chavepesquisa,db_getsession("DB_instit"), "*", " o56_anousu desc", $sWhereRhrubelemento));
-  if($clrhrubelemento->numrows > 0){
+    $result = $clrhrubricas->sql_record($clrhrubricas->sql_query($chavepesquisa, db_getsession("DB_instit"), $sCampos));
     db_fieldsmemory($result, 0);
-  } else {
-    $rh23_codele = '';
-    $o56_descr   = '';
-  }
 
-  $sWhereRetencao   = "     rh75_rubric = '{$chavepesquisa}'";
-  $sWhereRetencao  .= " and rh75_instit = ".db_getsession('DB_instit');
+    $rh27_cond2 = stripslashes($rh27_cond2);
+    $rh27_cond3 = stripslashes($rh27_cond3);
 
-  $sCamposRetencao  = " rh75_retencaotiporec,";
-  $sCamposRetencao .= " e21_descricao,";
-  $sCamposRetencao .= " e21_retencaotiporecgrupo";
+    $sWhereRhrubelemento    = "      rhrubelemento.rh23_rubric = '{$chavepesquisa}'";
+    $sWhereRhrubelemento   .= " and rhrubelemento.rh23_instit = " . db_getsession("DB_instit");
+    $sWhereRhrubelemento   .= " and o56_anousu = " . db_getsession("DB_anousu");
+    $result = $clrhrubelemento->sql_record($clrhrubelemento->sql_query($chavepesquisa, db_getsession("DB_instit"), "*", " o56_anousu desc", $sWhereRhrubelemento));
+    if ($clrhrubelemento->numrows > 0) {
+        db_fieldsmemory($result, 0);
+    } else {
+        $rh23_codele = '';
+        $o56_descr   = '';
+    }
+    $result = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query(null, 'e991_rubricasesocial', null, "e991_rubricas = '$rh27_rubric' and  e991_instit = " . db_getsession("DB_instit")));
+    if ($clbaserubricasesocial->numrows > 0) {
+        db_fieldsmemory($result, 0);
+    }
 
-  $rsRetencao = $clrhrubretencao->sql_record($clrhrubretencao->sql_query(null,$sCamposRetencao,null,$sWhereRetencao));
+    $sWhereRetencao   = "     rh75_rubric = '{$chavepesquisa}'";
+    $sWhereRetencao  .= " and rh75_instit = " . db_getsession('DB_instit');
 
-  if ( $clrhrubretencao->numrows > 0 ) {
-    db_fieldsmemory($rsRetencao,0);
-  } else {
-  	$rh75_retencaotiporec = '';
-  	$e21_descricao        = '';
-  }
+    $sCamposRetencao  = " rh75_retencaotiporec,";
+    $sCamposRetencao .= " e21_descricao,";
+    $sCamposRetencao .= " e21_retencaotiporecgrupo";
 
-  $oPost  = db_utils::postMemory($_POST);
+    $rsRetencao = $clrhrubretencao->sql_record($clrhrubretencao->sql_query(null, $sCamposRetencao, null, $sWhereRetencao));
 
-  if (isset($oPost->rh27_calc1) && $oPost->rh27_calc1 != 0) {
-    $rh27_calc1 = $oPost->rh27_calc1;
-  }
-  if (isset($oPost->rh27_calc2) && $oPost->rh27_calc2 != 0) {
-    $rh27_calc2 = $oPost->rh27_calc2;
-  }
-  if (isset($oPost->rh27_quant) && $oPost->rh27_quant != 0) {
-    $rh27_quant = $oPost->rh27_quant;
-  }
-  if (isset($oPost->rh27_obs) && $oPost->rh27_obs != '') {
-    $rh27_obs = $oPost->rh27_obs;
-  }
-  if (isset($oPost->rh23_codele) && $oPost->rh23_codele != '') {
-    $rh23_codele = $oPost->rh23_codele;
-  }
-  if (isset($oPost->rh23_codele) && $oPost->rh23_codele != '') {
-    $rh23_codele = $oPost->rh23_codele;
-  }
-  if (isset($oPost->rh27_form) && $oPost->rh27_form != '') {
-    $rh27_form = $oPost->rh27_form;
-  }
-  if (isset($oPost->rh27_form2) && $oPost->rh27_form2 != '') {
-    $rh27_form2 = $oPost->rh27_form2;
-  }
-  if (isset($oPost->rh27_form3) && $oPost->rh27_form3 != '') {
-    $rh27_form3 = $oPost->rh27_form3;
-  }
-  if (isset($oPost->rh27_cond2) && $oPost->rh27_cond2 != '') {
-    $rh27_cond2 = $oPost->rh27_cond2;
-  }
-  if (isset($oPost->rh27_cond3) && $oPost->rh27_cond3 != '') {
-    $rh27_cond3 = $oPost->rh27_cond3;
-  }
-  if (isset($oPost->rh27_limdat) && $oPost->rh27_limdat != '') {
-    $rh27_limdat = $oPost->rh27_limdat;
-  }
-  if (isset($oPost->rh27_tipo) && $oPost->rh27_tipo != '') {
-    $rh27_tipo = $oPost->rh27_tipo;
-  }
-  if (isset($oPost->rh27_pd) && $oPost->rh27_pd != '') {
-    $rh27_pd = $oPost->rh27_pd;
-  }
-  if (isset($oPost->rh27_ativo) && $oPost->rh27_ativo != '') {
-    $rh27_ativo = $oPost->rh27_ativo;
-  }
-  if (isset($oPost->rh27_calc3) && $oPost->rh27_calc3 != '') {
-    $rh27_calc3 = $oPost->rh27_calc3;
-  }
-  if (isset($oPost->rh27_presta) && $oPost->rh27_presta != '') {
-    $rh27_presta = $oPost->rh27_presta;
-  }
-  if (isset($oPost->rh27_propi) && $oPost->rh27_propi != '') {
-    $rh27_propi = $oPost->rh27_propi;
-  }
-  if (isset($oPost->rh27_calcp) && $oPost->rh27_calcp != '') {
-    $rh27_calcp = $oPost->rh27_calcp;
-  }
-  if (isset($oPost->rh27_propq) && $oPost->rh27_propq != '') {
-    $rh27_propq = $oPost->rh27_propq;
-  }
+    if ($clrhrubretencao->numrows > 0) {
+        db_fieldsmemory($rsRetencao, 0);
+    } else {
+        $rh75_retencaotiporec = '';
+        $e21_descricao        = '';
+    }
+
+    $oPost  = db_utils::postMemory($_POST);
+
+    if (isset($oPost->rh27_calc1) && $oPost->rh27_calc1 != 0) {
+        $rh27_calc1 = $oPost->rh27_calc1;
+    }
+    if (isset($oPost->rh27_calc2) && $oPost->rh27_calc2 != 0) {
+        $rh27_calc2 = $oPost->rh27_calc2;
+    }
+    if (isset($oPost->rh27_quant) && $oPost->rh27_quant != 0) {
+        $rh27_quant = $oPost->rh27_quant;
+    }
+    if (isset($oPost->rh27_obs) && $oPost->rh27_obs != '') {
+        $rh27_obs = $oPost->rh27_obs;
+    }
+    if (isset($oPost->rh23_codele) && $oPost->rh23_codele != '') {
+        $rh23_codele = $oPost->rh23_codele;
+    }
+    if (isset($oPost->rh23_codele) && $oPost->rh23_codele != '') {
+        $rh23_codele = $oPost->rh23_codele;
+    }
+    if (isset($oPost->rh27_form) && $oPost->rh27_form != '') {
+        $rh27_form = $oPost->rh27_form;
+    }
+    if (isset($oPost->rh27_form2) && $oPost->rh27_form2 != '') {
+        $rh27_form2 = $oPost->rh27_form2;
+    }
+    if (isset($oPost->rh27_form3) && $oPost->rh27_form3 != '') {
+        $rh27_form3 = $oPost->rh27_form3;
+    }
+    if (isset($oPost->rh27_cond2) && $oPost->rh27_cond2 != '') {
+        $rh27_cond2 = $oPost->rh27_cond2;
+    }
+    if (isset($oPost->rh27_cond3) && $oPost->rh27_cond3 != '') {
+        $rh27_cond3 = $oPost->rh27_cond3;
+    }
+    if (isset($oPost->rh27_limdat) && $oPost->rh27_limdat != '') {
+        $rh27_limdat = $oPost->rh27_limdat;
+    }
+    if (isset($oPost->rh27_tipo) && $oPost->rh27_tipo != '') {
+        $rh27_tipo = $oPost->rh27_tipo;
+    }
+    if (isset($oPost->rh27_pd) && $oPost->rh27_pd != '') {
+        $rh27_pd = $oPost->rh27_pd;
+    }
+    if (isset($oPost->rh27_ativo) && $oPost->rh27_ativo != '') {
+        $rh27_ativo = $oPost->rh27_ativo;
+    }
+    if (isset($oPost->rh27_calc3) && $oPost->rh27_calc3 != '') {
+        $rh27_calc3 = $oPost->rh27_calc3;
+    }
+    if (isset($oPost->rh27_presta) && $oPost->rh27_presta != '') {
+        $rh27_presta = $oPost->rh27_presta;
+    }
+    if (isset($oPost->rh27_propi) && $oPost->rh27_propi != '') {
+        $rh27_propi = $oPost->rh27_propi;
+    }
+    if (isset($oPost->rh27_calcp) && $oPost->rh27_calcp != '') {
+        $rh27_calcp = $oPost->rh27_calcp;
+    }
+    if (isset($oPost->rh27_propq) && $oPost->rh27_propq != '') {
+        $rh27_propq = $oPost->rh27_propq;
+    }
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/numbers.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/numbers.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
-      <center>
-      <?
-      include("forms/db_frmrhrubricas.php");
-      ?>
-      </center>
-    </td>
-  </tr>
-</table>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
+                <center>
+                    <?
+                    include("forms/db_frmrhrubricas.php");
+                    ?>
+                </center>
+            </td>
+        </tr>
+    </table>
 </body>
+
 </html>
 <?
-if(isset($alterar) || isset($novasrubricas)){
-  if($calc1 == "" && $calc2 == "" && $calc3 == ""){
-    if($sqlerro==true){
-      db_msgbox($erro_msg);
-      if($clrhrubricas->erro_campo!=""){
-        echo "<script> document.form1.".$clrhrubricas->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-        echo "<script> document.form1.".$clrhrubricas->erro_campo.".focus();</script>";
-      };
-    }else{
-      $clrhrubricas->erro(true,true);
-    }
-  }else{
-    $ccalculos = "";
-    $dcalculos = "";
-    $cvirgulas = "";
-    $dvirgulas = "";
-    if($calc1 != ""){
-      $ccalculos.= $cvirgulas.$calc1;
-      $dcalculos.= $dvirgulas.$calc1." - (".$rh27_descr." S/ FÉRIAS)";
-      $cvirgulas = ",";
-      if($calc2 != "" && $calc3 != ""){
-        $dvirgulas = ", ";
-      }else{
-        $dvirgulas = " e ";
-      }
-    }else{
-      $ccalculos.= $cvirgulas."0";
-      $cvirgulas = ",";
-    }
-    if($calc2 != ""){
-      $ccalculos.= $cvirgulas.$calc2;
-      $dcalculos.= $dvirgulas.$calc2." - (".$rh27_descr." S/ 13o SALÁRIO)";
-      $cvirgulas = ",";
-      $dvirgulas = " e ";
-    }else{
-      $ccalculos.= $cvirgulas."0";
-      $cvirgulas = ",";
-    }
-    if($calc3 != ""){
-      $ccalculos.= $cvirgulas.$calc3;
-      $dcalculos.= $dvirgulas.$calc3." - (".$rh27_descr." S/ RESCISÃO)";
-    }else{
-      $ccalculos.= $cvirgulas."0";
-      $cvirgulas = ",";
-    }
-    echo "
+if (isset($alterar) || isset($novasrubricas)) {
+    if ($calc1 == "" && $calc2 == "" && $calc3 == "") {
+        if ($sqlerro == true) {
+            db_msgbox($erro_msg);
+            if ($clrhrubricas->erro_campo != "") {
+                echo "<script> document.form1." . $clrhrubricas->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+                echo "<script> document.form1." . $clrhrubricas->erro_campo . ".focus();</script>";
+            };
+        } else {
+            $clrhrubricas->erro(true, true);
+        }
+    } else {
+        $ccalculos = "";
+        $dcalculos = "";
+        $cvirgulas = "";
+        $dvirgulas = "";
+        if ($calc1 != "") {
+            $ccalculos .= $cvirgulas . $calc1;
+            $dcalculos .= $dvirgulas . $calc1 . " - (" . $rh27_descr . " S/ Fï¿½RIAS)";
+            $cvirgulas = ",";
+            if ($calc2 != "" && $calc3 != "") {
+                $dvirgulas = ", ";
+            } else {
+                $dvirgulas = " e ";
+            }
+        } else {
+            $ccalculos .= $cvirgulas . "0";
+            $cvirgulas = ",";
+        }
+        if ($calc2 != "") {
+            $ccalculos .= $cvirgulas . $calc2;
+            $dcalculos .= $dvirgulas . $calc2 . " - (" . $rh27_descr . " S/ 13o SALï¿½RIO)";
+            $cvirgulas = ",";
+            $dvirgulas = " e ";
+        } else {
+            $ccalculos .= $cvirgulas . "0";
+            $cvirgulas = ",";
+        }
+        if ($calc3 != "") {
+            $ccalculos .= $cvirgulas . $calc3;
+            $dcalculos .= $dvirgulas . $calc3 . " - (" . $rh27_descr . " S/ RESCISï¿½O)";
+        } else {
+            $ccalculos .= $cvirgulas . "0";
+            $cvirgulas = ",";
+        }
+        echo "
           <script>
-            alert('Será(ão) gerada(s) a(s) rubrica(s) ".$dcalculos.", não esqueça de configurar suas bases.');
+            alert('Serï¿½(ï¿½o) gerada(s) a(s) rubrica(s) " . $dcalculos . ", nï¿½o esqueï¿½a de configurar suas bases.');
             obj=document.createElement('input');
             obj.setAttribute('name','novasrubricas');
             obj.setAttribute('type','hidden');
-            obj.setAttribute('value','".$ccalculos."');
+            obj.setAttribute('value','" . $ccalculos . "');
             document.form1.appendChild(obj);
             document.form1.submit();
           </script>
          ";
-  }
+    }
 }
-if(isset($chavepesquisa)){
-  echo "
+if (isset($chavepesquisa)) {
+    echo "
         <script>
           function js_db_libera(){
             /*
             parent.document.formaba.rhrubelemento.disabled=false;
-            CurrentWindow.corpo.iframe_rhrubelemento.location.href='pes1_rhrubelemento001.php?rh23_rubric=".@$rh27_rubric."';
+            top.corpo.iframe_rhrubelemento.location.href='pes1_rhrubelemento001.php?rh23_rubric=" . @$rh27_rubric . "';
             */
             parent.document.formaba.rhbases.disabled=false;
-            parent.document.formaba.rhbasesesocial.disabled=false;
-            CurrentWindow.corpo.iframe_rhbases.location.href='pes1_rhbases004.php?r09_rubric=".@$rh27_rubric."';
-            CurrentWindow.corpo.iframe_rhbasesesocial.location.href='pes1_rhbasesesocial004.php?r09_rubric=".@$rh27_rubric."';
+            top.corpo.iframe_rhbases.location.href='pes1_rhbases004.php?r09_rubric=" . @$rh27_rubric . "';
        ";
-  if(isset($liberaaba)){
-    echo "  parent.mo_camada('rhbases');";
-  }
-  echo"   }\n
+    if (isset($liberaaba)) {
+        echo "  parent.mo_camada('rhbases');";
+    }
+    echo "   }\n
           js_db_libera();
         </script>\n
       ";
 }
-if($db_opcao==22||$db_opcao==33){
-  echo "<script>document.form1.pesquisar.click();</script>";
+if ($db_opcao == 22 || $db_opcao == 33) {
+    echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>

@@ -618,5 +618,51 @@ class cl_face {
      }
      return $sql;
   }
+
+  function sql_query_join( $j37_face=null,$campos="*",$ordem=null,$dbwhere="",$join="",$group=""){
+     $sql = "select ";
+     if ($campos != "*" ) {
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     } else {
+       $sql .= $campos;
+     }
+
+     $sql .= " from face ";
+
+     if ($join != "") {
+        $sql .= $join;
+     }
+
+     $sql2 = "";
+
+     if ($dbwhere=="") {
+       if($j37_face!=null ){
+         $sql2 .= " where face.j37_face = $j37_face ";
+       }
+     } else if ($dbwhere != "") {
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+
+     if ($group != "") {
+        $sql .= $group;
+     }
+
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
 }
 ?>

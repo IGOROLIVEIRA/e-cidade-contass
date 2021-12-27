@@ -10,26 +10,18 @@ class FormatterFactory
 
     public static function get($tipo)
     {
+
         $path = ECIDADE_PATH . DS . 'src' . DS . 'RecursosHumanos' . DS . 'ESocial' . DS . 'Integracao' . DS . 'Formatter'. DS . 'Templates';
 
         $formatter = new Formatter\Formatter();
-        switch ($tipo) {
-            case Tipo::S1000:
-                $formatter = new Formatter\EmpregadorFormatter();
-                $formatter->setDePara(require($path . DS . 'templateEmpregador.php'));
-                break;
-            case Tipo::S1005:
-                $formatter->setDePara(require($path . DS . 'templateEstabelecimentoObras.php'));
-                break;
-            case Tipo::RUBRICA:
-                $formatter->setDePara(require($path . DS . 'templateRubrica.php'));
-                break;
-            case Tipo::SERVIDOR:
-                $formatter->setDePara(require($path . DS . 'templateServidor.php'));
-                break;
-            default:
-                throw new \Exception('Tipo de fomulário não encontrado.');
+        /*if ($tipo == Tipo::S1000) {
+            $formatter = new Formatter\EmpregadorFormatter();
+        }*/
+
+        if (!file_exists($path. DS . "template{$tipo}.php")) {
+            throw new \Exception('Template nï¿½o encontrado.');
         }
+        $formatter->setDePara(require($path . DS . "template{$tipo}.php"));
 
         return $formatter;
     }

@@ -604,9 +604,9 @@ class Siops {
         for ($i = 0; $i < pg_num_rows($result); $i++) {
 
             $oReceita = db_utils::fieldsMemory($result, $i);
-
+            
             if ($oReceita->o70_codrec > 0) {
-
+                
                 $oNaturrecsiops = $this->getNaturRecSiops($oReceita->o57_fonte);
 
                 $aReceita = array();
@@ -624,7 +624,7 @@ class Siops {
                     $aReceita['ded_receita']    = abs($oReceita->saldo_arrecadado);
                 }
 
-                if(in_array($oNaturrecsiops->c231_elerecsiops, array('1112010000', '1112020000', '1112043100', '1112043400', '1112080000', '1113050100', '1113050200', '1113060000', '1721010200', '1721010500', '1721360000', '1722010100', '1722010200', '1722010400', '1911080000', '1911380000', '1911390000', '1911400000', '1911440000', '1913080000', '1913110000', '1913120000', '1913130000', '1913250000', '1931040000', '1931110000', '1931120000', '1931130000', '1931210000', '7112010000', '7112040000', '7113060000'))) {
+                if(in_array($oNaturrecsiops->c231_elerecsiops, array('11120100', '11120200', '11120431', '11120434', '11120800', '11130501', '11130502', '11130600', '17210102', '17210105', '17213600', '17220101', '17220102', '17220104', '19110800', '19113800', '19113900', '19114000', '19114400', '19130800', '19131100', '19131200', '19131300', '19132500', '19310400', '19311100', '19311200', '19311300', '19312100', '71120100', '71120400', '71130600'))) {
                     $aReceita['rec_asps']       = abs(($aReceita['rec_realizada'] - $aReceita['ded_receita']));
                 }
 
@@ -724,24 +724,103 @@ class Siops {
                 return '4_18';
             }
 
-        } elseif (in_array($oDespesa->o58_codigo, array(148, 149, 150, 151, 152, 153, 154, 159, 248, 249, 250, 251, 252, 253, 254, 259))) {
+        } elseif (in_array($oDespesa->o58_codigo, array(153, 154, 159, 161, 253, 254, 259, 261))) { 
 
-            if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
-                return '5_11';
-            } elseif ($oDespesa->o58_subfuncao == 301) {
-                return '5_12';
-            } elseif ($oDespesa->o58_subfuncao == 302) {
-                return '5_13';
-            } elseif ($oDespesa->o58_subfuncao == 303) {
-                return '5_14';
-            } elseif ($oDespesa->o58_subfuncao == 304) {
-                return '5_15';
-            } elseif ($oDespesa->o58_subfuncao == 305) {
-                return '5_16';
-            } elseif ($oDespesa->o58_subfuncao == 306) {
-                return '5_17';
-            } else {
-                return '5_18';
+            if (in_array($oDespesa->o58_codigo, array(154, 159, 254, 259)) && strpos(strtolower($oDespesa->o55_descr), 'covid')) {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '87_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '87_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '87_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '87_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '87_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '87_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '87_17';
+                }else {
+                    return '87_18';
+                }
+                
+            } elseif (in_array($oDespesa->o58_codigo, array(154, 159, 254, 259))) {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '86_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '86_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '86_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '86_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '86_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '86_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '86_17';
+                }else {
+                    return '86_18';
+                }
+
+            } elseif (in_array($oDespesa->o58_codigo, array(153, 253)) && strpos(strtolower($oDespesa->o55_descr), 'covid')) {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '89_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '89_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '89_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '89_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '89_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '89_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '89_17';
+                }else {
+                    return '89_18';
+                }
+
+            } elseif (in_array($oDespesa->o58_codigo, array(153, 253))) {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '88_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '88_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '88_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '88_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '88_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '88_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '88_17';
+                }else {
+                    return '88_18';
+                }
+
+            } elseif (in_array($oDespesa->o58_codigo, array(161, 261)) && $oDespesa->o58_funcao == '10') {
+                if (in_array($oDespesa->o58_subfuncao, array(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131))) {
+                    return '90_11';
+                }elseif ($oDespesa->o58_subfuncao == 301) {
+                    return '90_12';
+                }elseif ($oDespesa->o58_subfuncao == 302) {
+                    return '90_13';
+                }elseif ($oDespesa->o58_subfuncao == 303) {
+                    return '90_14';
+                }elseif ($oDespesa->o58_subfuncao == 304) {
+                    return '90_15';
+                }elseif ($oDespesa->o58_subfuncao == 305) {
+                    return '90_16';
+                }elseif ($oDespesa->o58_subfuncao == 306) {
+                    return '90_17';
+                }else {
+                    return '90_18';
+                }
+            
             }
 
         } elseif($oDespesa->o58_codigo == 155 || $oDespesa->o58_codigo == 255) {
@@ -850,22 +929,43 @@ class Siops {
     }
 
     /**
-     * Realiza De/Para da Natureza da despesa com tabela elerecsiope composta pela Natureza Receita e Descrição
+     * Realiza De/Para da Natureza da despesa com tabela elerecsiops composta pela Natureza Receita e Descrição
      */
-    public function getNaturRecSiops($natureza) {
+    public function getNaturRecSiops($natureza)
+    {
+        $sSqlNatRec = "SELECT c231_elerecsiops, c231_campo, c231_linha FROM elerecsiops
+                       WHERE c231_anousu = {$this->iAnoUsu}
+                         AND substr(c231_elerecsiops,1,length(rtrim(c231_elerecsiops,'0'))) = substr('{$natureza}',2,length(rtrim(c231_elerecsiops,'0')))
+                       ORDER BY 1 DESC LIMIT 1";
 
-        $clnaturrecsiops    = new cl_naturrecsiops();
-        $rsNaturrecsiops    = db_query($clnaturrecsiops->sql_query_siops(substr($natureza, 1, 14),"", $this->iAnoUsu));
+        $rsNewNaturrecsiops = db_query($sSqlNatRec);
 
-        if (pg_num_rows($rsNaturrecsiops) > 0) {
-            $oNaturrecsiops = db_utils::fieldsMemory($rsNaturrecsiops, 0);
+        if (pg_num_rows($rsNewNaturrecsiops) > 0) {
+            
+            $oNaturrecsiops = db_utils::fieldsMemory($rsNewNaturrecsiops, 0);        
             return $oNaturrecsiops;
+            
         } else {
-            $this->status = 2;
-            if (strpos($this->sMensagem, $natureza) === false){
-                $this->sMensagem .= "{$natureza} ";
+            
+            $clnaturrecsiops    = new cl_naturrecsiops();
+            $rsNaturrecsiops    = db_query($clnaturrecsiops->sql_query_siops(substr($natureza, 1, 14),"", $this->iAnoUsu));
+    
+            if (pg_num_rows($rsNaturrecsiops) > 0) {
+                $oNaturrecsiops = db_utils::fieldsMemory($rsNaturrecsiops, 0);
+                if (substr($oNaturrecsiops->c230_natrecsiops,0,1) == '9') {
+                    $oNaturrecsiops->c231_elerecsiops = substr($oNaturrecsiops->c230_natrecsiops,2,8);
+                } else {
+                    $oNaturrecsiops->c231_elerecsiops = substr($oNaturrecsiops->c230_natrecsiops,0,8);
+                }                
+                return $oNaturrecsiops;
+            } else {
+                $this->status = 2;
+                if (strpos($this->sMensagem, $natureza) === false){
+                    $this->sMensagem .= "{$natureza} ";
+                }
             }
         }
+        
 
     }
 

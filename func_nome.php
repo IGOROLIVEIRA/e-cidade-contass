@@ -492,6 +492,8 @@ if (isset($testanome) && $testanome=='true' && !isset($pesquisa_chave)) {
 								echo "<script>".$funcao_js."(false,\"$z01_nome\",\"$z01_cgc\",\"$z01_incest\",\"$z01_uf\");</script>";
 							}elseif ($filtro==3){
 								echo "<script>".$funcao_js."(false,\"$z01_nome\",\"$z01_cgccpf\",\"$z01_incest\",\"$z01_uf\");</script>";
+							}elseif($filtro==4){
+								echo "<script>".$funcao_js."(false,\"$z01_nome\",\"$z01_cgccpf\",\"$z01_incest\",\"$z01_uf\",\"$z01_email\",\"$z01_telef\");</script>";
 							}else{
 								echo "<script>".$funcao_js."(false,\"$z01_nome\",\"$z01_cgccpf\",\"$z01_incest\",\"$z01_uf\");</script>";
 							}

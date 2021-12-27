@@ -1297,6 +1297,8 @@ class cl_rhpessoal {
                                            and  rh02_instit = ".db_getsession("DB_instit")." ";
      $sql .= "      inner join rhlota        on  rhlota.r70_codigo         = rhpessoalmov.rh02_lota
                                             and  rhlota.r70_instit         = rhpessoalmov.rh02_instit ";
+     $sql .= "      INNER JOIN rhlotavinc ON rhlota.r70_codigo = rhlotavinc.rh25_codigo
+                                            AND rhlotavinc.rh25_anousu = ".db_anofolha();
      $sql .= "      inner join cgm           on  cgm.z01_numcgm            = rhpessoal.rh01_numcgm ";
      $sql .= "      left  join rhfuncao      on  rhfuncao.rh37_funcao      = rhpessoalmov.rh02_funcao
                                             and  rhfuncao.rh37_instit      = rhpessoalmov.rh02_instit ";

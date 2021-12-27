@@ -130,7 +130,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 <form name="form1" method="post" action="<?= $ac ?>">
 
     <fieldset style="width:800px">
-        <legend><strong>Emissão do Empenho</strong></legend>
+        <legend><strong>Emissï¿½o do Empenho</strong></legend>
 
 
         <input type=hidden name=dadosRet value="">
@@ -177,7 +177,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         }
 
                         /*
-                           a opção mantem a seleção escolhida pelo usuario ao trocar o tipo de compra
+                           a opï¿½ï¿½o mantem a seleï¿½ï¿½o escolhida pelo usuario ao trocar o tipo de compra
 
 
                         */
@@ -344,7 +344,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td>
                         <?
-                        $arr  = array('0'=>'Não se aplica','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
+                        $arr  = array('0'=>'Nï¿½o se aplica','1'=>'Benefï¿½cios Previdenciï¿½rios do Poder Executivo','2'=>'Benefï¿½cios Previdenciï¿½rios do Poder Legislativo');
 
                         $sSql = "SELECT si09_tipoinstit AS tipoinstit FROM infocomplementaresinstit WHERE si09_instit = " . db_getsession("DB_instit");
 
@@ -355,8 +355,12 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
                             $aElementos = array('3319001','3319003','3319091','3319092','3319094','3319191','3319192','3319194');
 
+                            if(db_getsession("DB_anousu") > 2021){
+                                $aElementos = array('331900101', '331900102', '331900301', '331900302', '331909102', '331909103', '331909201', '331909203', '331909403', '331909413');
+                            }
+
                             if(count(array_intersect($aElementos, $aCodele)) > 0) {
-                                $arr  = array('0'=>'Selecione','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
+                                $arr  = array('0'=>'Selecione','1'=>'Benefï¿½cios Previdenciï¿½rios do Poder Executivo','2'=>'Benefï¿½cios Previdenciï¿½rios do Poder Legislativo');
                             }
 
                         }
@@ -421,7 +425,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 <tr>
                     <td nowrap valign='top' colspan="2">
                         <fieldset>
-                            <legend><b>Informações da OP</b></legend>
+                            <legend><b>Informaï¿½ï¿½es da OP</b></legend>
                             <?php
                             if (isset($e54_resumo)) {
                                 $e50_obs = $e54_resumo;
@@ -486,15 +490,15 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td>
                         <?
-                        /*$aConvenio = array('2' => 'Não', '1' => 'Sim');
+                        /*$aConvenio = array('2' => 'Nï¿½o', '1' => 'Sim');
                         db_select('e60_convenio', $aConvenio, true, $db_opcao, "");*/
                         ?>
                     </td>
                 </tr>
                 -->
                 <tr>
-                  <td nowrap title="Código c206_sequencial">
-                    <? db_ancora("Convênio","js_pesquisae60_numconvenio(true);",$db_opcao); ?>
+                  <td nowrap title="Cï¿½digo c206_sequencial">
+                    <? db_ancora("Convï¿½nio","js_pesquisae60_numconvenio(true);",$db_opcao); ?>
                   </td>
                   <td>
                       <?
@@ -515,8 +519,8 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                 </tr>-->
                 <tr>
-                    <td nowrap title="Data da Sentença Judical">
-                        <strong>Data da Sentença Judical:</strong>
+                    <td nowrap title="Data da Sentenï¿½a Judical">
+                        <strong>Data da Sentenï¿½a Judical:</strong>
                     </td>
                     <td>
                         <?
@@ -538,18 +542,18 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 <input name="op"
                        type="button"
 
-                       value="Empenhar e não imprimir"
+                       value="Empenhar e nï¿½o imprimir"
                 "<?= ($db_disab == false ? "disabled" : "") ?>" onclick="return js_naoimprimir();" >
             <? } ?>
 
-            <input name="lanc" type="button" id="lanc" value="Lançar autorizações"
+            <input name="lanc" type="button" id="lanc" value="Lanï¿½ar autorizaï¿½ï¿½es"
                    onclick="parent.location.href='emp1_empautoriza001.php';">
 
             <?php $lDisable = empty($e60_numemp) ? "disabled" : ''; ?>
 
-            <input type="button" id="btnLancarCotasMensais" value="Manutenção das Cotas Mensais"
+            <input type="button" id="btnLancarCotasMensais" value="Manutenï¿½ï¿½o das Cotas Mensais"
                    onclick="manutencaoCotasMensais();" <?php echo $lDisable; ?> />
-            <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar autorizações"
+            <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar autorizaï¿½ï¿½es"
                    onclick="js_pesquisa();">
         </center>
 </form>
@@ -610,7 +614,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
     /**
      * funcao para avisar o usuario sobre liquidar empenho dos grupos 7, 8, 10
-     * onde nao ira mais forçar pela ordem de compra
+     * onde nao ira mais forï¿½ar pela ordem de compra
      */
     $('id_1').observe('change', function () {
 
@@ -731,23 +735,23 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 break;
             }
         }
-        //o usuario escolheu liquidar o empenho. entao é obrigatorio informar
-        //a data da nota e o número da mesma;
+        //o usuario escolheu liquidar o empenho. entao ï¿½ obrigatorio informar
+        //a data da nota e o nï¿½mero da mesma;
         if (sValor == 2) {
 
             sNumeroNota = $F('e69_numero');
             sDtNota = $F('e69_dtnota');
             sObs = $F('e50_obs');
             if (sNumeroNota.trim() == '') {
-                alert('Número da nota não pode ser vazio.');
+                alert('Nï¿½mero da nota nï¿½o pode ser vazio.');
                 return false;
             }
             if (sDtNota.trim() == '') {
-                alert('data nota não pode ser vazio.');
+                alert('data nota nï¿½o pode ser vazio.');
                 return false;
             }
             if (sObs.trim() == '') {
-                alert('Informações da OP não deve ser vazia.');
+                alert('Informaï¿½ï¿½es da OP nï¿½o deve ser vazia.');
                 return false;
             }
             return true;
@@ -833,7 +837,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
     function js_pesquisarRecursoDotacao() {
 
-        js_divCarregando("Aguarde, verificando recurso da dotação...", "msgBox");
+        js_divCarregando("Aguarde, verificando recurso da dotaï¿½ï¿½o...", "msgBox");
         var oParam = new Object();
         oParam.exec = "validarRecursoDotacaoPorAutorizacao";
         oParam.iCodigoAutorizacaoEmpenho = $F('e54_autori');
@@ -863,7 +867,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
         var expr = new RegExp("[^0-9\/]+");
         if (document.form1.e54_numerl.value.match(expr)) {
-            alert("Este campo deve ser preenchido somente com números separados por uma / ");
+            alert("Este campo deve ser preenchido somente com nï¿½meros separados por uma / ");
             document.form1.e54_numerl.focus();
             document.form1.e54_numerl.value = '';
         }

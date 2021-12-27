@@ -125,6 +125,7 @@ $xinstit    = explode("-",$db_selinstit);
 
 $arr_niveis = explode(",",$vernivel);
 
+
 //$nivela = substr($nivel,0,1);
 $sele_work = $sele_work.' and w.o58_instit in ('.str_replace('-',', ',$db_selinstit).') ';
 
@@ -252,6 +253,22 @@ $totprojativ_liquidado_acumulado     = 0;
 $totprojativ_pago_acumulado          = 0;
 $totprojativ_atual_a_pagar_liquidado = 0;
 
+// TOTAIS DE CATECONOMICA
+$totcateconomica_dot_ini                 = 0;
+$totcateconomica_suplementado_acumulado  = 0;
+$totcateconomica_reduzido_acumulado      = 0;
+$totcateconomica_atual                   = 0;
+$totcateconomica_empenhado               = 0;
+$totcateconomica_anulado                 = 0;
+$totcateconomica_liquidado               = 0;
+$totcateconomica_pago                    = 0;
+$totcateconomica_atual_a_pagar           = 0;
+$totcateconomica_empenhado_acumulado     = 0;
+$totcateconomica_anulado_acumulado       = 0;
+$totcateconomica_liquidado_acumulado     = 0;
+$totcateconomica_pago_acumulado          = 0;
+$totcateconomica_atual_a_pagar_liquidado = 0;
+
 // TOTAIS DE ELEMENTO
 $totelemento_dot_ini                 = 0;
 $totelemento_suplementado_acumulado  = 0;
@@ -303,7 +320,6 @@ if ($flag_grupo == false) {
   $nivela = 9;
 }
 
-//echo $nivela; exit;
 
 $sql_dotacaosaldo = db_dotacaosaldo($nivelb,2,2,true,$sele_work,$anousu,$dataini,$datafin,8,0,true);
 
@@ -465,38 +481,156 @@ for ($i = 0; $i < count($arr_niveis); $i++) {
     } else {
       $ordem  = "order by o58_codigo,o15_descr";
     }
+  }else if ($nivel == 9) {
+    // cateconomica
+    if (trim($selecao)!="") {
+      $selecao .= ",substr(o58_elemento,1,2) as elemento";
+    } else {
+      $selecao  = " select substr(o58_elemento,1,2) as elemento ";
+    }
+    
+    if (trim($agrupar)!="") {
+      $agrupar .= ",elemento";
+    } else {
+      $agrupar  = " group by elemento ";
+    }
+    
+    if (trim($ordem)!="") {
+      $ordem .= ",elemento ";
+    } else {
+      $ordem  = " order by elemento ";
+    }
   }
 }
 
-$sql_result = $selecao.",
-sum(dot_ini)        as dot_ini,
-sum(saldo_anterior) as saldo_anterior,
-sum(empenhado)      as empenhado,
-sum(anulado)        as anulado,
-sum(liquidado)      as liquidado,
-sum(pago)           as pago,
-sum(suplementado)   as suplementado,
-sum(reduzido)       as reduzido,
-sum(atual)          as atual,
-sum(reservado)      as reservado,
-sum(atual_menos_reservado)   as atual_menos_reservado,
-sum(atual_a_pagar)           as atual_a_pagar,
-sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
-sum(empenhado_acumulado)     as empenhado_acumulado,
-sum(anulado_acumulado)       as anulado_acumulado,
-sum(liquidado_acumulado)     as liquidado_acumulado,
-sum(pago_acumulado)          as pago_acumulado,
-sum(suplementado_acumulado)  as suplementado_acumulado,
-sum(reduzido_acumulado)      as reduzido_acumulado
-from ($sql_dotacaosaldo) as rr ";
+if($nivel != 9 && $nivela != 9){
+      $sql_result = $selecao.",
+      sum(dot_ini)        as dot_ini,
+      sum(saldo_anterior) as saldo_anterior,
+      sum(empenhado)      as empenhado,
+      sum(anulado)        as anulado,
+      sum(liquidado)      as liquidado,
+      sum(pago)           as pago,
+      sum(suplementado)   as suplementado,
+      sum(reduzido)       as reduzido,
+      sum(atual)          as atual,
+      sum(reservado)      as reservado,
+      sum(atual_menos_reservado)   as atual_menos_reservado,
+      sum(atual_a_pagar)           as atual_a_pagar,
+      sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
+      sum(empenhado_acumulado)     as empenhado_acumulado,
+      sum(anulado_acumulado)       as anulado_acumulado,
+      sum(liquidado_acumulado)     as liquidado_acumulado,
+      sum(pago_acumulado)          as pago_acumulado,
+      sum(suplementado_acumulado)  as suplementado_acumulado,
+      sum(reduzido_acumulado)      as reduzido_acumulado
+      from ($sql_dotacaosaldo) as rr 
+      ";
 
-$sql_result .= $agrupar." ";
-$sql_result .= $ordem;
+      if($where != ""){
+        $sql_result .= $where; 
+          
+      }
+       
+      $sql_result .= $agrupar." ";
+      $sql_result .= $ordem;
+           
+      if ($selecao != "") {
+        $result = pg_exec($sql_result);
+      }
+    
+    
+}if($nivel == 9 && $ultimo > 0){
+      $sql_result = $selecao.",
+      sum(dot_ini)        as dot_ini,
+      sum(saldo_anterior) as saldo_anterior,
+      sum(empenhado)      as empenhado,
+      sum(anulado)        as anulado,
+      sum(liquidado)      as liquidado,
+      sum(pago)           as pago,
+      sum(suplementado)   as suplementado,
+      sum(reduzido)       as reduzido,
+      sum(atual)          as atual,
+      sum(reservado)      as reservado,
+      sum(atual_menos_reservado)   as atual_menos_reservado,
+      sum(atual_a_pagar)           as atual_a_pagar,
+      sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
+      sum(empenhado_acumulado)     as empenhado_acumulado,
+      sum(anulado_acumulado)       as anulado_acumulado,
+      sum(liquidado_acumulado)     as liquidado_acumulado,
+      sum(pago_acumulado)          as pago_acumulado,
+      sum(suplementado_acumulado)  as suplementado_acumulado,
+      sum(reduzido_acumulado)      as reduzido_acumulado
+      from ($sql_dotacaosaldo) as rr 
+      ";
 
-//echo $sql_result; exit;
+      if($where != ""){
+        $sql_result .= $where; 
+          
+      }
+       
+      $sql_result .= $agrupar." ";
+      $sql_result .= $ordem;
+    }
+           
+      if ($selecao != "") {
+        $result = pg_exec($sql_result);
 
-if ($selecao != "") {
-  $result = pg_exec($sql_result);
+
+
+
+} if($nivel == 9 && $ultimo == 0){
+      $sql_result = $selecao.",
+      sum(dot_ini)        as dot_ini,
+      sum(saldo_anterior) as saldo_anterior,
+      sum(empenhado)      as empenhado,
+      sum(anulado)        as anulado,
+      sum(liquidado)      as liquidado,
+      sum(pago)           as pago,
+      sum(suplementado)   as suplementado,
+      sum(reduzido)       as reduzido,
+      sum(atual)          as atual,
+      sum(reservado)      as reservado,
+      sum(atual_menos_reservado)   as atual_menos_reservado,
+      sum(atual_a_pagar)           as atual_a_pagar,
+      sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
+      sum(empenhado_acumulado)     as empenhado_acumulado,
+      sum(anulado_acumulado)       as anulado_acumulado,
+      sum(liquidado_acumulado)     as liquidado_acumulado,
+      sum(pago_acumulado)          as pago_acumulado,
+      sum(suplementado_acumulado)  as suplementado_acumulado,
+      sum(reduzido_acumulado)      as reduzido_acumulado
+      from ($sql_dotacaosaldo) as rr group by elemento order by elemento";
+
+      $sql_result2 = "select elemento,
+      sum(dot_ini)        as dot_ini,
+      sum(saldo_anterior) as saldo_anterior,
+      sum(empenhado)      as empenhado,
+      sum(anulado)        as anulado,
+      sum(liquidado)      as liquidado,
+      sum(pago)           as pago,
+      sum(suplementado)   as suplementado,
+      sum(reduzido)       as reduzido,
+      sum(atual)          as atual,
+      sum(reservado)      as reservado,
+      sum(atual_menos_reservado)   as atual_menos_reservado,
+      sum(atual_a_pagar)           as atual_a_pagar,
+      sum(atual_a_pagar_liquidado) as atual_a_pagar_liquidado,
+      sum(empenhado_acumulado)     as empenhado_acumulado,
+      sum(anulado_acumulado)       as anulado_acumulado,
+      sum(liquidado_acumulado)     as liquidado_acumulado,
+      sum(pago_acumulado)          as pago_acumulado,
+      sum(suplementado_acumulado)  as suplementado_acumulado,
+      sum(reduzido_acumulado)      as reduzido_acumulado
+      from ($sql_result) as y group by elemento";
+         
+      $sql_result .= $agrupar." ";
+      $sql_result .= $ordem;
+     
+      if ($selecao != "") {
+        $result = pg_exec($sql_result2);
+      }
+     
 }
 
 $orgao     = "";
@@ -505,6 +639,7 @@ $funcao    = "";
 $subfuncao = "";
 $programa  = "";
 $projativ  = "";
+$cateconomica = "";
 $elemento  = "";
 $codigo    = "";
 
@@ -566,12 +701,13 @@ for ($i=0; $i < pg_numrows($result); $i++) {
   //
   //
   
+  
   if (trim(@$o58_orgao) != "") {
     if ($nivelb == 1) {
       // Ultimo nivel que deve ser impresso
       $flag_imp = true;
     }
-    
+   
     if ($codigo != "" && $codigo != $o58_codigo &&
     $nivelb != 8  && $i > 0) {
       // Imprime total do recurso
@@ -683,7 +819,60 @@ for ($i=0; $i < pg_numrows($result); $i++) {
       
       imprime_cabecalho($alt,$pdf);
     }
+
+    // Inicio Alteração da Ocorrência 15679 
     
+    if ($cateconomica != "" && $cateconomica != $elemento &&
+    $nivelb   != 9  && $i > 0) {
+      // Imprime total do cateconomica
+      
+      
+      $pdf->ln(3);
+      
+      $pdf->cell(10,$alt,'',0,0,"L",0);
+      $pdf->cell(30,$alt,'TOTAL CATEGORIA.',0,0,"L",0,'.');
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_dot_ini,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_suplementado_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_reduzido_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar((($totcateconomica_dot_ini + $totcateconomica_suplementado_acumulado) - $totcateconomica_reduzido_acumulado),'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_atual,'f'),0,1,"R",0);
+      
+      $pdf->cell(40,$alt,"",0,0,"L",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_empenhado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_anulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_liquidado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_pago,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar(($totcateconomica_empenhado_acumulado-$totcateconomica_anulado_acumulado)-$totcateconomica_liquidado_acumulado ,'f'),0,1,"R",0);
+      
+      $pdf->cell(40,$alt,"",0,0,"L",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_empenhado_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_anulado_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_liquidado_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_pago_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_liquidado_acumulado-$totcateconomica_pago_acumulado,'f'),0,1,"R",0);
+      
+      $pdf->ln(3);
+      
+      $totcateconomica_dot_ini                 = 0;
+      $totcateconomica_suplementado_acumulado  = 0;
+      $totcateconomica_reduzido_acumulado      = 0;
+      $totcateconomica_atual                   = 0;
+      $totcateconomica_empenhado               = 0;
+      $totcateconomica_anulado                 = 0;
+      $totcateconomica_liquidado               = 0;
+      $totcateconomica_pago                    = 0;
+      $totcateconomica_atual_a_pagar           = 0;
+      $totcateconomica_empenhado_acumulado     = 0;
+      $totcateconomica_anulado_acumulado       = 0;
+      $totcateconomica_liquidado_acumulado     = 0;
+      $totcateconomica_pago_acumulado          = 0;
+      $totcateconomica_atual_a_pagar_liquidado = 0;
+      
+      imprime_cabecalho($alt,$pdf);
+      
+    }
+    // Fim Alteração da Ocorrência 15679 
+   
     if ($projativ != "" && $projativ != $o58_projativ &&
     $nivelb   != 6  && $i > 0) {
       // Imprime total do projativ
@@ -1583,6 +1772,126 @@ for ($i=0; $i < pg_numrows($result); $i++) {
     $mult_nivel++;
   }
   
+  // Inicio Alteração da Ocorrência 15679 
+    
+  if (trim(@$elemento) != "" && $nivel == 9) {
+           
+    if ($nivelb == 9) {
+      $flag_imp = true;
+      
+    }
+    
+    if ($cateconomica != "" && $cateconomica != $elemento &&
+    $nivelb != 8 && $ultimo >0  && $i > 0                     &&
+    ($totcateconomica_dot_ini                != 0 ||
+    $totcateconomica_suplementado_acumulado != 0 ||
+    $totcateconomica_reduzido_acumulado     != 0 ||
+    $totcateconomica_atual                  != 0 ||
+    $totcateconomica_empenhado              != 0 ||
+    $totcateconomica_anulado                != 0 ||
+    $totcateconomica_liquidado              != 0 ||
+    $totcateconomica_pago                   != 0 ||
+    $totcateconomica_empenhado_acumulado    != 0 ||
+    $totcateconomica_anulado_acumulado      != 0 ||
+    $totcateconomica_liquidado_acumulado    != 0 ||
+    $totcateconomica_pago_acumulado         != 0)) {
+      // Imprime total do cateconomica
+      $pdf->ln(3);
+      
+      $pdf->cell(10,$alt,'',0,0,"L",0);
+      $pdf->cell(30,$alt,'TOTAL CAT ECONOMICA:',0,0,"L",0,'.');
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_dot_ini,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_suplementado_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_reduzido_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar((($totcateconomica_dot_ini + $totcateconomica_suplementado_acumulado) - $totcateconomica_reduzido_acumulado),'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_atual,'f'),0,1,"R",0);
+      
+      $pdf->cell(40,$alt,"",0,0,"L",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_empenhado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_anulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_liquidado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_pago,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar(($totcateconomica_empenhado_acumulado-$totcateconomica_anulado_acumulado)-$totcateconomica_liquidado_acumulado ,'f'),0,1,"R",0);
+      
+      $pdf->cell(40,$alt,"",0,0,"L",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_empenhado_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_anulado_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_liquidado_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_pago_acumulado,'f'),0,0,"R",0);
+      $pdf->cell(30,$alt,db_formatar($totcateconomica_liquidado_acumulado-$totcateconomica_pago_acumulado,'f'),0,1,"R",0);
+      
+      $pdf->ln(3);
+      
+      $totcateconomica_dot_ini                 = 0;
+      $totcateconomica_suplementado_acumulado  = 0;
+      $totcateconomica_reduzido_acumulado      = 0;
+      $totcateconomica_atual                   = 0;
+      $totcateconomica_empenhado               = 0;
+      $totcateconomica_anulado                 = 0;
+      $totcateconomica_liquidado               = 0;
+      $totcateconomica_pago                    = 0;
+      $totcateconomica_atual_a_pagar           = 0;
+      $totcateconomica_empenhado_acumulado     = 0;
+      $totcateconomica_anulado_acumulado       = 0;
+      $totcateconomica_liquidado_acumulado     = 0;
+      $totcateconomica_pago_acumulado          = 0;
+      $totcateconomica_atual_a_pagar_liquidado = 0;
+      
+      imprime_cabecalho($alt,$pdf);
+    }
+          
+      if($elemento == 33)
+            $descricao = "DESPESAS CORRENTES: "; 
+      else if($elemento == 34)
+            $descricao = "DESPESAS CAPITAL: ";
+      else if($elemento == 39)
+            $descricao = "RESERVA DE CONTIGÊNCIA: ";
+      
+    if ($cateconomica != $elemento) {
+      if ($flag_nivel == true) {
+        $pdf->cell(($col*$mult_nivel),$alt,'',0,0,"L",0,'.');
+      }
+      #.db_formatar($o58_projativ,"projativ").'  -  '.$o55_descr,0,1,"L",0);
+      
+      $pdf->cell(10,$alt,$descricao,0,1,"L",0);
+      $pdf->ln(3);
+      
+      $cateconomica = $elemento;
+      
+      
+    } else {
+      if ($flag_imp == true) {
+        if ($flag_nivel == true) {
+          $pdf->cell(($col*$mult_nivel),$alt,'',0,0,"L",0,'.');
+        }
+        $pdf->cell(10,$alt,$descricao,0,1,"L",0);
+        $pdf->ln(3);
+      }
+    }
+          
+    $totcateconomica_dot_ini                 += $dot_ini;
+    $totcateconomica_suplementado_acumulado  += $suplementado_acumulado;
+    $totcateconomica_reduzido_acumulado      += $reduzido_acumulado;
+    $totcateconomica_atual                   += $atual;
+    $totcateconomica_empenhado               += $empenhado;
+    $totcateconomica_anulado                 += $anulado;
+    $totcateconomica_liquidado               += $liquidado;
+    $totcateconomica_pago                    += $pago;
+    $totcateconomica_atual_a_pagar           += $atual_a_pagar;
+    $totcateconomica_empenhado_acumulado     += $empenhado_acumulado;
+    $totcateconomica_anulado_acumulado       += $anulado_acumulado;
+    $totcateconomica_liquidado_acumulado     += $liquidado_acumulado;
+    $totcateconomica_pago_acumulado          += $pago_acumulado;
+    $totcateconomica_atual_a_pagar_liquidado += $liquidado_acumulado-$pago_acumulado;
+    
+    $flag_nivel = true;
+    $mult_nivel++;
+
+    
+  }
+  
+  // Fim Alteração da Ocorrência 15679 
+  
   if (trim(@$o58_elemento) != "") {
     if ($nivelb == 7 && $nivela == 0) {
       $flag_imp = true;
@@ -1698,14 +2007,16 @@ for ($i=0; $i < pg_numrows($result); $i++) {
     $flag_nivel = true;
     $mult_nivel++;
   }
+
   
   if (trim(@$o58_codigo) != "") {
+       
     if ($nivelb == 8) {
       $flag_imp = true;
     }
     
     if ($codigo != "" && $codigo != $o58_codigo &&
-    $nivelb != 8  && $i > 0                 &&
+    $nivelb != 8  && $nivela   == 0  && $i > 0                 &&
     ($totrecurso_dot_ini                != 0 ||
     $totrecurso_suplementado_acumulado != 0 ||
     $totrecurso_reduzido_acumulado     != 0 ||
@@ -1762,19 +2073,17 @@ for ($i=0; $i < pg_numrows($result); $i++) {
       $totrecurso_atual_a_pagar_liquidado = 0;
       
       imprime_cabecalho($alt,$pdf);
-    }
+      }  
     
     $descricao = "RECURSO: ";
     if ($codigo != $o58_codigo) {
       if ($flag_nivel == true) {
         $pdf->cell(($col*$mult_nivel),$alt,'',0,0,"L",0,'.');
       }
-      $pdf->cell(10,$alt,$descricao.db_formatar($o58_codigo,"recurso").'  -  '.$o15_descr,0,1,"L",0);
+      $pdf->cell(10,$alt,$descricao.db_formatar($o58_codigo,"recurso").'  --  '.$o15_descr,0,1,"L",0);
       $pdf->ln(3);
+
       $codigo = $o58_codigo;
-      if ($flag_imp == false) {
-        $flag_lib8 = true;
-      }
     } else {
       if ($flag_imp == true) {
         if ($flag_nivel == true) {
@@ -1802,11 +2111,12 @@ for ($i=0; $i < pg_numrows($result); $i++) {
     
     $flag_nivel = true;
     $mult_nivel++;
+       
   }
   
   if ($flag_imp == true) {
     $pdf->setfont('arial','',7);
-    
+         
     $pdf->cell(40,$alt,'',0,0,"L",0,0);
     $pdf->cell(30,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
     $pdf->cell(30,$alt,db_formatar($suplementado_acumulado,'f'),0,0,"R",0);
@@ -1829,7 +2139,7 @@ for ($i=0; $i < pg_numrows($result); $i++) {
     $pdf->cell(30,$alt,db_formatar($liquidado_acumulado-$pago_acumulado,'f'),0,1,"R",0);
     $pdf->ln(3);
   }
-  
+    
   $totgeraldot_ini                 += $dot_ini;
   $totgeralsuplementado_acumulado  += $suplementado_acumulado;
   $totgeralreduzido_acumulado      += $reduzido_acumulado;
@@ -1962,6 +2272,40 @@ if ($orgao != "" && $nivelb != 1) {
   $pdf->ln(3);
 }
 
+// Inicio Alteração Ocorrência 15679 
+
+if ($cateconomica != "" && $nivelb != 9) {
+  
+  $pdf->ln(3);
+  $pdf->setfont('arial','B',8);
+  
+  $pdf->cell(10,$alt,'',0,0,"L",0);
+  $pdf->cell(30,$alt,'TOTAL DA CATEGORIA',0,0,"L",0,'.');
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_dot_ini,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_suplementado_acumulado,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_reduzido_acumulado,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar((($totcateconomica_dot_ini + $totcateconomica_suplementado_acumulado) - $totcateconomica_reduzido_acumulado),'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_atual,'f'),0,1,"R",0);
+  
+  $pdf->cell(40,$alt,"",0,0,"L",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_empenhado,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_anulado,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_liquidado,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_pago,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar(($totcateconomica_empenhado_acumulado-$totcateconomica_anulado_acumulado)-$totcateconomica_liquidado_acumulado ,'f'),0,1,"R",0);
+  
+  $pdf->cell(40,$alt,"",0,0,"L",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_empenhado_acumulado,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_anulado_acumulado,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_liquidado_acumulado,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_pago_acumulado,'f'),0,0,"R",0);
+  $pdf->cell(30,$alt,db_formatar($totcateconomica_liquidado_acumulado-$totcateconomica_pago_acumulado,'f'),0,1,"R",0);
+  
+  $pdf->ln(3);
+}  
+
+// Fim Alteração Ocorrência 15679 
+
 $pdf->setfont('arial','b',7);
 
 $pdf->Ln(3);
@@ -1988,7 +2332,9 @@ $pdf->cell(30,$alt,db_formatar($totgeralpago_acumulado,'f'),0,0,"R",0);
 $pdf->cell(30,$alt,db_formatar($totgeralatual_a_pagar_liquidado,'f'),0,1,"R",0);
 $pdf->setfont('arial','',7);
 
-if ($nivela > 0) {
+
+
+if ($nivela > 0 && $nivel != 9) {
   $sql_dotacao = db_dotacaosaldo(7,2,2,true,$sele_work,$anousu,$dataini,$datafin,null,null,true);
 
 //  echo $sql_dotacao; exit;
@@ -2023,7 +2369,7 @@ if ($nivela > 0) {
   
 //  echo $sql;  exit;
   $result = pg_exec($sql);
-//  db_criatabela($result);  exit;
+  // db_criatabela($result);  exit;
   
   // TOTAIS GERAIS
   $totgeraldot_ini                   = 0;
@@ -2239,7 +2585,6 @@ if (isset($imprime_filtro) && ($imprime_filtro=='sim')) {
   $parametros = $clselorcdotacao->getParametros();
   $pdf->multicell(190,4,$parametros,1,1,"R",'0');
 }
-
 
 $pdf->Output();
 

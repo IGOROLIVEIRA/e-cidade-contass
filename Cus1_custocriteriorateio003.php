@@ -29,10 +29,24 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
+include("classes/db_custocriteriorateio_classe.php");
 include("dbforms/db_funcoes.php");
-include("dbforms/db_classesgenericas.php");
-$clcriaabas     = new cl_criaabas;
-$db_opcao = 1;
+parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+db_postmemory($HTTP_POST_VARS);
+$clcustocriteriorateio = new cl_custocriteriorateio;
+$db_botao = false;
+$db_opcao = 33;
+if(isset($excluir)){
+  db_inicio_transacao();
+  $db_opcao = 3;
+  $clcustocriteriorateio->excluir($cc08_sequencial);
+  db_fim_transacao();
+}else if(isset($chavepesquisa)){
+   $db_opcao = 3;
+   $result = $clcustocriteriorateio->sql_record($clcustocriteriorateio->sql_query($chavepesquisa)); 
+   db_fieldsmemory($result,0);
+   $db_botao = true;
+}
 ?>
 <html>
 <head>
@@ -42,36 +56,43 @@ $db_opcao = 1;
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
-<table width="790" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
   <tr> 
-    <td width="360">&nbsp;</td>
+    <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
+<table width="790" border="0" cellspacing="0" cellpadding="0">
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-     <?
-	 $clcriaabas->identifica = array("custocriteriorateio"               => "Rateio",
-	                                 "custoplanoanaliticacriteriorateio" => "Plano de Custos",
-	                                 "custocriteriopcmater"              => "Materiais"
-	                                );
-	 $clcriaabas->src = array("custocriteriorateio"=> "Cus1_custocriteriorateio006.php");
-	 $clcriaabas->disabled   = array("custoplanoanaliticacriteriorateio" => "true",
-	                                 "custocriteriopcmater"              => "true"
-	                                 );
-	 $clcriaabas->cria_abas(); 
-       ?> 
-       </td>
-    </tr>
-  </table>
-  <form name="form1">
-  </form>
-      <? 
-	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-      ?>
-  </body>
-  </html>
+    <center>
+	<?
+	include("forms/db_frmcustocriteriorateio.php");
+	?>
+    </center>
+	</td>
+  </tr>
+</table>
+<?
+db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+?>
+</body>
+</html>
+<?
+if(isset($excluir)){
+  if($clcustocriteriorateio->erro_status=="0"){
+    $clcustocriteriorateio->erro(true,false);
+  }else{
+    $clcustocriteriorateio->erro(true,true);
+  }
+}
+if($db_opcao==33){
+  echo "<script>document.form1.pesquisar.click();</script>";
+}
+?>
+<script>
+js_tabulacaoforms("form1","excluir",true,1,"excluir",true);
+</script>

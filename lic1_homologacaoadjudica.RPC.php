@@ -16,6 +16,7 @@ require_once("classes/db_parecerlicitacao_classe.php");
 require_once("classes/db_precomedio_classe.php");
 require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_liclicitasituacao_classe.php");
+require_once("classes/db_liccomissaocgm_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 $oJson             = new services_json();
@@ -25,7 +26,7 @@ $oErro             = new stdClass();
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 
-switch($oParam->exec) {
+switch($oParam->exec) {    
     case 'adjudicarLicitacao':
 
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
@@ -35,6 +36,7 @@ switch($oParam->exec) {
         $clprecomedio          = new cl_precomedio();
         $clcondataconf         = new cl_condataconf;
         $clliclicitasituacao   = new cl_liclicitasituacao;
+        $clliccomissaocgm      = new cl_liccomissaocgm();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -135,6 +137,16 @@ switch($oParam->exec) {
                     $clliclicitasituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
                     $clliclicitasituacao->l11_liclicita   = $l202_licitacao;
                     $clliclicitasituacao->incluir(null);
+
+                    if($oParam->respAdjudicodigo!=""){
+                        $dbquery = "l31_tipo = '7' and l31_licitacao = $oParam->iLicitacao";
+                        $clliccomissaocgm->excluir(null,$dbquery);
+        
+                        $clliccomissaocgm->l31_numcgm = $oParam->respAdjudicodigo;
+                        $clliccomissaocgm->l31_tipo = 7;
+                        $clliccomissaocgm->l31_licitacao = $oParam->iLicitacao;
+                        $clliccomissaocgm->incluir(null);
+                    }
                     db_fim_transacao();
 
                 } else if ($parecer < 1 || empty($parecer)) {
@@ -150,6 +162,50 @@ switch($oParam->exec) {
         }
         break;
 
+    case 'getResponsavel':
+        
+       
+        $clliccomissaocgm     = new cl_liccomissaocgm();
+
+            $comissao = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo',null,"l31_licitacao=$oParam->iLicitacao"));
+            for($i=0;$i<$clliccomissaocgm->numrows;$i++){
+                $comisaoRes = db_utils::fieldsMemory($comissao, $i);
+               if($comisaoRes->l31_tipo==6){
+                    $respRaticodigo = $comisaoRes->l31_numcgm;
+                    $respRatinome = $comisaoRes->z01_nome;
+                }
+            }
+         
+        $oItem         = new stdClass();
+        $oItem->codigo = $respRaticodigo;
+        $oItem->nome   = $respRatinome;
+        $itens[]       = $oItem;  
+        $oRetorno->itens = $itens; 
+
+        break;
+
+        case 'getResponsavelAdju':
+        
+       
+            $clliccomissaocgm     = new cl_liccomissaocgm();
+    
+                $comissao = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo',null,"l31_licitacao=$oParam->iLicitacao"));
+                for($i=0;$i<$clliccomissaocgm->numrows;$i++){
+                    $comisaoRes = db_utils::fieldsMemory($comissao, $i);
+                   if($comisaoRes->l31_tipo==7){
+                        $respRaticodigo = $comisaoRes->l31_numcgm;
+                        $respRatinome = $comisaoRes->z01_nome;
+                    }
+                }
+             
+            $oItem         = new stdClass();
+            $oItem->codigo = $respRaticodigo;
+            $oItem->nome   = $respRatinome;
+            $itens[]       = $oItem;  
+            $oRetorno->itens = $itens; 
+    
+            break;
+
     case 'alteraradjudicarLicitacao':
 
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
@@ -159,6 +215,7 @@ switch($oParam->exec) {
         $clprecomedio          = new cl_precomedio();
         $clcondataconf         = new cl_condataconf;
         $clliclicitasituacao   = new cl_liclicitasituacao;
+        $clliccomissaocgm      = new cl_liccomissaocgm();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -238,6 +295,22 @@ switch($oParam->exec) {
                     }
                     db_inicio_transacao();
                     /**
+                     * Alterar responsável
+                     */
+                    
+                    if($oParam->respAdjudicodigo!=""){
+                        //excluir o reponsavel
+                        $dbquery = "l31_tipo = '7' and l31_licitacao = $oParam->iLicitacao"; 
+                        $clliccomissaocgm->excluir(null,$dbquery);
+        
+                        $clliccomissaocgm->l31_numcgm = $oParam->respAdjudicodigo;
+                        $clliccomissaocgm->l31_tipo = 7;
+                        $clliccomissaocgm->l31_licitacao = $oParam->iLicitacao;
+                        $clliccomissaocgm->incluir(null);
+                     
+                    }
+                    
+                    /**
                      * Alterar ADJUDICACAO
                      */
                     $clhomologacaoadjudica->l202_dataadjudicacao = $oParam->dtAdjudicacao;
@@ -283,6 +356,7 @@ switch($oParam->exec) {
         $clliclicita           = new cl_liclicita();
         $clcondataconf         = new cl_condataconf;
         $clliclicitasituacao   = new cl_liclicitasituacao;
+        $clliccomissaocgm      = new cl_liccomissaocgm();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -326,6 +400,7 @@ switch($oParam->exec) {
             $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 1);
             $clhomologacaoadjudica->excluir($l202_sequencial);
             $clliclicitasituacao->excluir($l11_sequencial);
+            $clliccomissaocgm->excluir(null,"l31_licitacao = {$oParam->iLicitacao} and l31_tipo = '7'");
 
             if ($clhomologacaoadjudica->erro_status == "0") {
                 $erro = $clhomologacaoadjudica->erro_msg;
@@ -336,6 +411,7 @@ switch($oParam->exec) {
                 $oRetorno->message = urlencode($erro);
                 $oRetorno->status = 1;
             }
+             
             db_fim_transacao();
         }catch (Exception $eErro){
             $oRetorno->status = 2;
@@ -345,6 +421,7 @@ switch($oParam->exec) {
 
     case 'getItens':
 
+        
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
         $clliclicita           = new cl_liclicita();
 
@@ -406,6 +483,7 @@ switch($oParam->exec) {
         $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
         $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
 
+
         /**
          * VERIFICO SE A LICITACAO E LOTE
          */
@@ -444,6 +522,7 @@ switch($oParam->exec) {
         $clcondataconf         = new cl_condataconf;
         $clliclicitasituacao   = new cl_liclicitasituacao;
         $clitenshomologacao    = new cl_itenshomologacao();
+        $clliccomissaocgm      = new cl_liccomissaocgm();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -627,6 +706,17 @@ switch($oParam->exec) {
                             $erro = "Homologação salva com sucesso!";
                             $oRetorno->message = urlencode($erro);
                             $oRetorno->status = 1;
+
+                        /*Verifica se é registro de preco*/
+                            $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
+                            $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
+                            $oRetorno->regpreco = $l20_tipnaturezaproced;
+
+                        /*cria consulta da solicitação com licitação*/
+                            $resultsolicita = $clliclicita->sql_record($clliclicita->sql_query_julgamento_licitacao(null,"pc10_numero",null,"l20_codigo = {$l202_licitacao}"));
+                            $pc10_numero = db_utils::fieldsMemory($resultsolicita, 0)->pc10_numero;
+                            $oRetorno->pc10_numero = $pc10_numero;
+
                         }
                         /**
                          * Incluindo nova situação a licitacao Homologada
@@ -640,6 +730,15 @@ switch($oParam->exec) {
                         $clliclicitasituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
                         $clliclicitasituacao->l11_liclicita   = $l202_licitacao;
                         $clliclicitasituacao->incluir(null);
+                    }
+                    if($oParam->respHomologcodigo!=""){
+                        $dbquery = "l31_tipo = '6' and l31_licitacao = $oParam->iLicitacao";
+                        $clliccomissaocgm->excluir(null,$dbquery);
+        
+                        $clliccomissaocgm->l31_numcgm = $oParam->respHomologcodigo;
+                        $clliccomissaocgm->l31_tipo = 6;
+                        $clliccomissaocgm->l31_licitacao = $oParam->iLicitacao;
+                        $clliccomissaocgm->incluir(null);
                     }
                     db_fim_transacao();
 
@@ -665,6 +764,7 @@ switch($oParam->exec) {
         $clcondataconf         = new cl_condataconf;
         $clliclicitasituacao   = new cl_liclicitasituacao;
         $clitenshomologacao    = new cl_itenshomologacao();
+        $clliccomissaocgm     = new cl_liccomissaocgm();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -752,7 +852,16 @@ switch($oParam->exec) {
                     /**
                      * Incluindo HOMOLOGACAO
                      */
-
+                    if($oParam->respHomologcodigo!=""){
+                        //excluir o reponsavel
+                        $dbquery = "l31_tipo = '6' and l31_licitacao = $oParam->iLicitacao";
+                        $clliccomissaocgm->excluir(null,$dbquery);
+        
+                        $clliccomissaocgm->l31_numcgm = $oParam->respHomologcodigo;
+                        $clliccomissaocgm->l31_tipo = 6;
+                        $clliccomissaocgm->l31_licitacao = $oParam->iLicitacao;
+                        $clliccomissaocgm->incluir(null);
+                    }
                     /*inserindo a data de homologacao*/
                     $clhomologacaoadjudica->l202_datahomologacao = $oParam->dtHomologacao;
                     $clhomologacaoadjudica->alterar($oParam->iHomologacao);
@@ -783,12 +892,13 @@ switch($oParam->exec) {
         break;
 
     case 'excluirhomologacao':
-
+        
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
         $clliclicita           = new cl_liclicita();
         $clcondataconf         = new cl_condataconf();
         $clliclicitasituacao   = new cl_liclicitasituacao();
         $clitenshomologacao    = new cl_itenshomologacao();
+        $clliccomissaocgm      = new cl_liccomissaocgm();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -808,6 +918,7 @@ switch($oParam->exec) {
             /**
              * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
              */
+           
 
             if(!empty($l202_dataAdjudicacao)){
                 $anousu = db_getsession('DB_anousu');
@@ -830,6 +941,7 @@ switch($oParam->exec) {
                 db_fieldsmemory($liclicitasituacao, 0);
 
                 db_inicio_transacao();
+ 
 
                 /**
                  * Excluir Itens Homologacao
@@ -951,6 +1063,7 @@ switch($oParam->exec) {
                     $oRetorno->status = 1;
                 }
             }
+            $clliccomissaocgm->excluir(null,"l31_licitacao = {$oParam->iLicitacao} and l31_tipo = '6'");
             db_fim_transacao();
         }catch (Exception $eErro){
             $oRetorno->status = 2;

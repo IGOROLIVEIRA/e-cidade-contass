@@ -9,7 +9,7 @@ use ECidade\RecursosHumanos\ESocial\Model\Formulario\Tipo;
 use Exception;
 
 /**
- * Constrói uma coleção com os dados para o envio do eSocial
+ * Constrï¿½i uma coleï¿½ï¿½o com os dados para o envio do eSocial
  *
  * @package ECidade\RecursosHumanos\ESocial
  */
@@ -20,14 +20,14 @@ class DadosESocial
     private $dados;
 
     /**
-     * Responsável pelo preenchimento do formulário
+     * Responsï¿½vel pelo preenchimento do formulï¿½rio
      *
      * @var mixed
      */
     private $responsavelPreenchimento;
 
     /**
-     * Informa o responsável pelo preenchimento. Se não indormado, busca de todos
+     * Informa o responsï¿½vel pelo preenchimento. Se nï¿½o indormado, busca de todos
      *
      * @param mixed $responsavel
      */
@@ -51,8 +51,8 @@ class DadosESocial
 
         /**
          * @todo Quando for o empregador, temos que buscar os dados da escala do servidor do e-cidade.
-         *       Não é possível representar a escala do servidor no formulário.
-         *       Talvez outras informações de outros cadastros também serão buscadas do e-cidade
+         *       Nï¿½o ï¿½ possï¿½vel representar a escala do servidor no formulï¿½rio.
+         *       Talvez outras informaï¿½ï¿½es de outros cadastros tambï¿½m serï¿½o buscadas do e-cidade
          */
         if ($tipo == Tipo::EMPREGADOR) {
 
@@ -62,7 +62,7 @@ class DadosESocial
     }
 
     /**
-     * Busca os preenchimentos conforme o tipo de formulário informado
+     * Busca os preenchimentos conforme o tipo de formulï¿½rio informado
      *
      * @throws \Exception
      * @return \stdClass[]
@@ -78,15 +78,26 @@ class DadosESocial
                 return $preenchimento->buscarUltimoPreenchimentoServidor($formularioId);
             case Tipo::EMPREGADOR:
                 return $preenchimento->buscarUltimoPreenchimentoEmpregador($formularioId);
+            case Tipo::LOTACAO_TRIBUTARIA:
+                return $preenchimento->buscarUltimoPreenchimentoLotacao($formularioId);
             case Tipo::RUBRICA:
-                return $preenchimento->buscarUltimoPreenchimento($formularioId);
+            case Tipo::CARGO:
+            case Tipo::CARREIRA:
+            case Tipo::FUNCAO:
+            case Tipo::HORARIO:
+            case Tipo::AMBIENTE:
+            case Tipo::PROCESSOSAJ:
+            case Tipo::PORTUARIO:
+            case Tipo::CADASTRAMENTO_INICIAL:
+            case Tipo::ESTABELECIMENTOS:
+                return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId);
             default:
-                throw new Exception('Tipo não encontrado.');
+                throw new Exception('Tipo nï¿½o encontrado.');
         }
     }
 
     /**
-     * Busca as respostas de um preenchimento do formulário
+     * Busca as respostas de um preenchimento do formulï¿½rio
      *
      * @param integer $preenchimentos
      */
@@ -105,8 +116,8 @@ class DadosESocial
 
 
     /**
-     * Identifica o responsável pelo preenchimento
-     * O responsável é a figura "dona" das respostas/ que preencheu o formulário
+     * Identifica o responsï¿½vel pelo preenchimento
+     * O responsï¿½vel ï¿½ a figura "dona" das respostas/ que preencheu o formulï¿½rio
      *
      * @param \stdClass $preenchimento
      * @throws \Exception
@@ -121,8 +132,20 @@ class DadosESocial
                 return $preenchimento->cgm;
             case Tipo::RUBRICA:
                 return $preenchimento->pk;
+            case Tipo::LOTACAO_TRIBUTARIA:
+                return $preenchimento->pk;
+            case Tipo::CARGO:
+            case Tipo::CARREIRA:
+            case Tipo::FUNCAO:
+            case Tipo::HORARIO:
+            case Tipo::AMBIENTE:
+            case Tipo::PROCESSOSAJ:
+            case Tipo::PORTUARIO:
+            case Tipo::CADASTRAMENTO_INICIAL:
+            case Tipo::ESTABELECIMENTOS:
+                return $preenchimento->pk;
             default:
-                throw new Exception('Tipo não encontrado.');
+                throw new Exception('Tipo nï¿½o encontrado.');
         }
     }
 }

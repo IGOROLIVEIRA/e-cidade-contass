@@ -46,18 +46,22 @@ class Formulario extends GenericController implements ResourceInterface {
             }
         }
 
+        $aIdentColunas = $formulario->getIdentificadorColunasPesquisa($this->request->query->get("tipo"));
         foreach ($formulario->getPerguntas() as $pergunta) {
             if ($iColunas > 5) {
                 break;
             }
 
-            $listaColunas[] = $pergunta->getIdentificador();
-            $campo = new \stdClass();
-            $campo->identificador = $pergunta->getIdentificador();
-            $campo->descricao     = $this->removeHtmlContent($pergunta->getDescricao());
-            $campo->tipo          = $pergunta->getTipo();
-            $dados->fields[]      = $campo;
-            $iColunas++;
+            if (count($aIdentColunas) == 0 || in_array($pergunta->getIdentificador(), $aIdentColunas)) {
+                
+                $listaColunas[] = $pergunta->getIdentificador();
+                $campo = new \stdClass();
+                $campo->identificador = $pergunta->getIdentificador();
+                $campo->descricao     = $this->removeHtmlContent($pergunta->getDescricao());
+                $campo->tipo          = $pergunta->getTipo();
+                $dados->fields[]      = $campo;
+                $iColunas++;
+            }
         }
 
         $oDaoAvaliacaoResposta = new \cl_avaliacaogrupoperguntaresposta;
@@ -69,8 +73,16 @@ class Formulario extends GenericController implements ResourceInterface {
             $aWhere[] = "(case when db103_avaliacaotiporesposta in(1,3) then (db106_avaliacaoperguntaopcao = " . ((int) $filtro) . " or db104_descricao ilike '%{$filtro}%')
                         else db106_resposta ilike '%{$filtro}%' end) ";
         }
+        if ($this->request->query->get("coluna") != "") {
+            $coluna = $this->request->query->get("coluna");
+            $aWhere[] = "db103_identificador = '{$coluna}' ";
+        }
         if ($filtrarPorInstituicao && !empty($instituicao)) {
-            $aWhere[] = "(case when db103_identificadorcampo = '". self::FILTRO_INSTITUICAO ."' and db106_resposta = '{$instituicao}' then true end)";
+            $aWhere[] = "COALESCE((SELECT db106_resposta::integer
+                FROM avaliacaogrupoperguntaresposta
+                JOIN avaliacaoresposta ON avaliacaogrupoperguntaresposta.db108_avaliacaoresposta=avaliacaoresposta.db106_sequencial
+                JOIN avaliacaoperguntaopcao ON avaliacaoperguntaopcao.db104_sequencial = avaliacaoresposta.db106_avaliacaoperguntaopcao
+                WHERE db108_avaliacaogruporesposta=db107_sequencial and db104_identificadorcampo = 'instituicao'),0) IN ({$instituicao},0)";
         }
         $sSqlRespostas  = $oDaoAvaliacaoResposta->sql_query_avaliacao(
             null,

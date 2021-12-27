@@ -79,7 +79,7 @@ if (isset($oPost->db_opcaoal)) {
 <table border="0" align="left" width="100%">
   <tr>
     <td nowrap title="<?=@$Tdb102_avaliacao?>">
-      <b>Código da Avaliação:</b>
+      <b>Cï¿½digo da Avaliaï¿½ï¿½o:</b>
     </td>
     <td width="10">
 			<?
@@ -89,7 +89,7 @@ if (isset($oPost->db_opcaoal)) {
     </td>
     <td>
       <?
-        db_input('db101_descricao',50,$Idb101_descricao,true,'text',3,'');
+        db_input('db101_descricao',100,$Idb101_descricao,true,'text',3,'');
       ?>
     </td>
   </tr>
@@ -99,7 +99,7 @@ if (isset($oPost->db_opcaoal)) {
     </td>
     <td colspan="2">
 			<?
-			  db_input('db102_descricao',50,$Idb102_descricao,true,'text',$db_opcao,"")
+			  db_input('db102_descricao',100,$Idb102_descricao,true,'text',$db_opcao,"")
 			?>
     </td>
   </tr>
@@ -108,8 +108,18 @@ if (isset($oPost->db_opcaoal)) {
       <?=@$Ldb102_identificador?>
     </td>
     <td colspan="2">
+      <?
+        db_input('db102_identificador',100,$Idb102_identificador,true,'text',$db_opcao,"")
+      ?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tdb102_identificadorcampo?>">
+      <?=@$Ldb102_identificadorcampo?>
+    </td>
+    <td colspan="2">
 			<?
-			  db_input('db102_identificador',65,$Idb102_identificador,true,'text',$db_opcao,"")
+			  db_input('db102_identificadorcampo',100,$Idb102_identificador,true,'text',$db_opcao,"")
 			?>
     </td>
   </tr>
@@ -144,8 +154,8 @@ if (isset($oPost->db_opcaoal)) {
 			  $chavepri = array("db102_sequencial"=>@$db102_sequencial);
 			  $cliframe_alterar_excluir->chavepri=$chavepri;
 			  $cliframe_alterar_excluir->sql     = $clavaliacaogrupopergunta->sql_query_file(null, "*", "db102_sequencial", $sWhere);
-			  $cliframe_alterar_excluir->campos  ="db102_sequencial,db102_avaliacao,db102_descricao, db102_identificador";
-			  $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
+			  $cliframe_alterar_excluir->campos  ="db102_sequencial,db102_avaliacao,db102_descricao, db102_identificador,db102_identificadorcampo";
+			  $cliframe_alterar_excluir->legenda="ITENS LANï¿½ADOS";
 			  $cliframe_alterar_excluir->iframe_height ="160";
 			  $cliframe_alterar_excluir->iframe_width ="600";
 			  $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
@@ -193,7 +203,7 @@ function js_validaCaracteres() {
 
   if (sValorInicial == '') {
 
-    alert('É necessário informar um identificador');
+    alert('ï¿½ necessï¿½rio informar um identificador');
     $('db102_identificador').focus();
     return false;
   }
@@ -201,19 +211,41 @@ function js_validaCaracteres() {
   if (lResultadoInicial) {
 
     var sValorCaracteres      = $F('db102_identificador').substring(1);
-    var sExpressaoCaracteres  = /^[A-Za-z0-9_]+?$/i;
+    var sExpressaoCaracteres  = /^[A-Za-z0-9_-]+?$/i;
     var sRegExpCaracteres     = new RegExp(sExpressaoCaracteres);
     var lResultadoCaracteres  = sRegExpCaracteres.test(sValorCaracteres);
     if (!lResultadoCaracteres) {
 
-      alert('São permitidas apenas letras, números e/ou caracter "_" (underline)');
+      alert('Sï¿½o permitidas apenas letras, nï¿½meros e/ou caracter "_" (underline)');
       return false;
     }
   } else {
 
-    alert('É permitido apenas letra no caracter inicial');
+    alert('ï¿½ permitido apenas letra no caracter inicial');
     return false;
   }
   return true;
 }
+function montarIdentificador(textoBase) {
+
+        var listaStringTrocar = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+        var listaStringSubstituir = "aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC";
+        var stringIdentificador = "";
+        for (var i = 0; i < textoBase.length; i++) {
+            if (listaStringTrocar.indexOf(textoBase.charAt(i)) != -1) {
+                stringIdentificador += listaStringSubstituir.substr(listaStringTrocar.search(textoBase.substr(i, 1)), 1);
+            } else {
+                stringIdentificador += textoBase.substr(i, 1);
+            }
+        }
+
+        stringIdentificador = stringIdentificador.replace(/[^a-zA-Z 0-9]/g, '');
+        var identificador = stringIdentificador.replace(/ /g, '-').toLowerCase().substr(0, 90);
+        return identificador;
+    }
+    $('db102_descricao').observe('blur', function() {
+        if ($F('db102_identificador') == ''){
+            $('db102_identificador').value = montarIdentificador(this.value);
+        }
+    });
 </script>

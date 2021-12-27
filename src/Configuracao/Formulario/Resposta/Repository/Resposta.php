@@ -24,6 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+
 namespace ECidade\Configuracao\Formulario\Resposta\Repository;
 
 use ECidade\Configuracao\Formulario\Model\Formulario;
@@ -31,6 +32,7 @@ use ECidade\Configuracao\Formulario\Model\Opcao;
 use ECidade\Configuracao\Formulario\Repository\Pergunta;
 use ECidade\Configuracao\Formulario\Resposta\Model\Resposta as RespostaModel;
 use ECidade\Configuracao\Formulario\Resposta\Model\Valor;
+use ECidade\RecursosHumanos\ESocial\Model\Formulario\Tipo;
 
 /**
  * Class Resposta
@@ -140,7 +142,7 @@ class Resposta
             null,
             $campos,
             null,
-            "db107_sequencial in ({$idPreenchimento}) and db103_sequencial in (". implode(', ', $idPerguntas) .") "
+            "db107_sequencial in ({$idPreenchimento}) and db103_sequencial in (" . implode(', ', $idPerguntas) . ") "
         );
 
         $rs = db_query($sql);
@@ -193,12 +195,12 @@ class Resposta
                 // Se a pergunta é do tipo Objetiva devemos validar a resposta como o id da opção respondida
                 if ($resposta->tipo == 1) {
                     if ($respostasCarga[$resposta->pergunta]  == $resposta->opcao_respondida) {
-                        $iOpcoesRespondidas ++;
+                        $iOpcoesRespondidas++;
                     }
                 } else {
                     // Quando a pergunta é descritiva devemos comparar a resposta digitada
                     if ($respostasCarga[$resposta->pergunta]  == $resposta->resposta_texto) {
-                        $iOpcoesRespondidas ++;
+                        $iOpcoesRespondidas++;
                     }
                 }
             }
@@ -236,9 +238,13 @@ class Resposta
                 throw new \Exception("Erro ao salvar os dados da Resposta para o formulário {$resposta->getFormulario()->getNome()}");
             }
             $resposta->setCodigo($oDaoAvaliacaoGrupoResposta->db107_sequencial);
+            self::persitirAvaliacaoGrupoRespostaCgm($oDaoAvaliacaoGrupoResposta->db107_sequencial);
         }
 
         foreach ($resposta->getRespostas() as $valorResposta) {
+
+            self::vincularMatricula($resposta->getCodigo(), $valorResposta);
+
             $iCodigoResposta = $valorResposta->getCodigo();
             $oDaoAvaliacaoResposta = new \cl_avaliacaoresposta();
             $oDaoAvaliacaoResposta->db106_avaliacaoperguntaopcao = $valorResposta->getOpcao()->getCodigo();
@@ -266,6 +272,20 @@ class Resposta
                     throw new \Exception("Erro ao salvar os dados da Resposta para a pergunta {$valorResposta->getPergunta()->getDescricao()}");
                 }
             }
+        }
+    }
+
+    private static function persitirAvaliacaoGrupoRespostaCgm($iAvaliacaoGrupoResposta)
+    {
+        $oDaoDBConfig = new \cl_db_config();
+        $oInstit = $oDaoDBConfig->getParametrosInstituicao();
+        $oDaoAvaliacaoGrupoRespostaCgm = new \cl_avaliacaogruporespostacgm();
+        $oDaoAvaliacaoGrupoRespostaCgm->eso03_avaliacaogruporesposta = $iAvaliacaoGrupoResposta;
+        $oDaoAvaliacaoGrupoRespostaCgm->eso03_cgm                    = $oInstit->numcgm;
+        $oDaoAvaliacaoGrupoRespostaCgm->incluir(null);
+
+        if ($oDaoAvaliacaoGrupoRespostaCgm->erro_status == "0") {
+            throw new DBException("Erro ao vincular cgm ao grupo de respostas\n\n" . $oDaoAvaliacaoGrupoRespostaCgm->erro_sql . PHP_EOL . pg_last_error());
         }
     }
 
@@ -300,7 +320,7 @@ class Resposta
         $oDaoAvaliacaoResposta = new \cl_avaliacaogrupoperguntaresposta;
         $where                 = "db107_sequencial = {$resposta->getCodigo()}";
 
-        $sSqlRespostas = $oDaoAvaliacaoResposta->sql_query_avaliacao(null, "avaliacaoresposta.*, avaliacaoperguntaopcao.*", "db102_sequencial,db103_ordem", $where);
+        $sSqlRespostas = $oDaoAvaliacaoResposta->sql_query_avaliacao(null, "avaliacaoresposta.*, avaliacaoperguntaopcao.*", "db103_ordem", $where);
         $rsRespostas   = db_query($sSqlRespostas);
         if (!$rsRespostas) {
             throw new \BusinessException("Erro ao pesquisar valor das respostas.");
@@ -350,17 +370,24 @@ class Resposta
      */
     public static function remover(\ECidade\Configuracao\Formulario\Resposta\Model\Resposta $resposta)
     {
-
         if (!\db_utils::inTransaction()) {
             throw new \DBException('Sem transação com o banco de dados.');
         }
         if (empty($resposta)) {
             throw new \ParameterException("Resposta não informada.");
         }
+        $oDaoAvaliacaoGrupoRespostaCgm      = new \cl_avaliacaogruporespostacgm();
         $oDaoAvaliacaoResposta              = new \cl_avaliacaoresposta();
         $oDaoAvaliacaoGrupoPerguntaResposta = new \cl_avaliacaogrupoperguntaresposta();
         $oDaoAvaliacaoGrupoResposta         = new \cl_avaliacaogruporesposta();
+
         foreach ($resposta->getRespostas() as $valorResposta) {
+
+            $oDaoAvaliacaoGrupoRespostaCgm->excluir(null, "eso03_avaliacaogruporesposta = {$resposta->getCodigo()}");
+            if ($oDaoAvaliacaoGrupoRespostaCgm->erro_status == 0) {
+                throw new \BusinessException("Erro ao excluir vinculo do grupo respostas com o cgm.");
+            }
+
             $oDaoAvaliacaoGrupoPerguntaResposta->excluir(null, "db108_avaliacaoresposta = {$valorResposta->getCodigo()}");
             if ($oDaoAvaliacaoGrupoPerguntaResposta->erro_status == 0) {
                 throw new \BusinessException("Erro ao excluir vinculo das respostas com o formulário.");
@@ -374,6 +401,31 @@ class Resposta
         $oDaoAvaliacaoGrupoResposta->excluir($resposta->getCodigo());
         if ($oDaoAvaliacaoResposta->erro_status == 0) {
             throw new \BusinessException("Erro ao excluir respostas do formulário. Alguns valores de resposta não foram excluídos.");
+        }
+    }
+
+    /**
+     * Vincula a Matricula da carga de dados as Respostas, Registro S2200
+     * @param Integer $iAvaliacaoGrupoRespostaCodigo
+     * @param \ECidade\Configuracao\Formulario\Resposta\Model\Valor $valorResposta
+     * @throws \Exception
+     */
+    private static function vincularMatricula($iAvaliacaoGrupoRespostaCodigo, $valorResposta)
+    {
+
+        if ($valorResposta->getPergunta()->getIdentificadorCampo() == 'matricula') {
+
+            $oDaoAvaliacaoPergunta = new \cl_avaliacaopergunta;
+            $rsAvaliacaoPergunta = db_query($oDaoAvaliacaoPergunta->sql_query(null, "db101_identificador", null, "db103_sequencial = {$valorResposta->getPergunta()->getCodigo()}"));
+            if (strpos(\db_utils::fieldsMemory($rsAvaliacaoPergunta, 0)->db101_identificador, (string)Tipo::S2200)) {
+                $oDaoAvaliacaoGrupoRespostaMatricula = new \cl_avaliacaogruporespostarhpessoal;
+                $oDaoAvaliacaoGrupoRespostaMatricula->eso02_avaliacaogruporesposta = $iAvaliacaoGrupoRespostaCodigo;
+                $oDaoAvaliacaoGrupoRespostaMatricula->eso02_rhpessoal              = $valorResposta->getValor();
+                $oDaoAvaliacaoGrupoRespostaMatricula->incluir(null);
+                if ($oDaoAvaliacaoGrupoRespostaMatricula->erro_status == 0) {
+                    throw new \Exception("Erro ao vincular respostas a Matrícula {$valorResposta->getValor()}");
+                }
+            }
         }
     }
 }

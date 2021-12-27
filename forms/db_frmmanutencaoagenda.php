@@ -107,7 +107,7 @@ if (count($aParametrosEmpenho) > 0) {
                     <fieldset>
                         <legend>
                             <a id='esconderfiltros' style="-moz-user-select: none;cursor: pointer">
-                                <b>Opções</b>
+                                <b>Opï¿½ï¿½es</b>
                                 <img src='imagens/setabaixo.gif' id='togglefiltros' border='0'>
                             </a>
                         </legend>
@@ -131,7 +131,7 @@ if (count($aParametrosEmpenho) > 0) {
                                                 </td>
                                                 <td>
                                                     <?
-                                                    db_ancora("<b>até:</b>", "js_pesquisae82_codord02(true);", $db_opcao);
+                                                    db_ancora("<b>atï¿½:</b>", "js_pesquisae82_codord02(true);", $db_opcao);
                                                     ?>
                                                 </td>
                                                 <td nowrap align="left">
@@ -215,12 +215,13 @@ if (count($aParametrosEmpenho) > 0) {
                                             </tr>
                                             <tr>
                                                 <td nowrap>
-                                                    <b>Conta pagadora padrão:</b>
+                                                    <b>Conta pagadora padrï¿½o:</b>
                                                 </td>
                                                 <td colspan=3 nowrap>
                                                     <?php
+
                                                     $sWhere = "db83_tipoconta = 1";
-                                                    /* [Extensão] - Filtro da Despesa */
+                                                    /* [Extensï¿½o] - Filtro da Despesa */
 
 
                                                     $sSqlBuscaContaPagadora =
@@ -239,14 +240,16 @@ if (count($aParametrosEmpenho) > 0) {
                                                         db_fieldsmemory($result05, $r);
                                                         $arr[$codtipo] = "{$e83_conta} - {$e83_descr} - {$c61_codigo}";
                                                     }
-                                                    $e83_codtipo = '0';
-                                                    db_select("e83_codtipo", $arr, true, 1, "onchange='js_setContaPadrao(this.value);' style='width:26em'");
+                                                    $e83_codtipo ='0';
+
+                                                    db_select("e83_codtipo",$arr,true,1,"onchange='js_setContaPadrao(this.value);' style='width:26em'");
+
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td nowrap>
-                                                    <b>Forma de Pagamento padrão:</b>
+                                                    <b>Forma de Pagamento padrï¿½o:</b>
                                                 </td>
                                                 <td nowrap>
                                                     <?
@@ -306,7 +309,7 @@ if (count($aParametrosEmpenho) > 0) {
                                                         $aAutorizadas = array(
                                                             1 => "Ambas",
                                                             2 => "Autorizadas",
-                                                            3 => "Não Autorizadas",
+                                                            3 => "Nï¿½o Autorizadas",
                                                         );
                                                     } else {
 
@@ -388,7 +391,7 @@ if (count($aParametrosEmpenho) > 0) {
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>Disponível:</b>
+                                                    <b>Disponï¿½vel:</b>
                                                 </td>
                                                 <td style='text-align:right' valign="">
                                                     <pre>(=)</pre>
@@ -448,21 +451,21 @@ if (count($aParametrosEmpenho) > 0) {
             <tr>
                 <td colspan='4' style='text-align: center'>
                     <fieldset>
-                        <legend><b>Ações</b></legend>
+                        <legend><b>Aï¿½ï¿½es</b></legend>
                         <input name="pesquisar" id='pesquisar' type="button" value="Pesquisar" onclick='js_pesquisarOrdens();' />
                         <input name="atualizar" id='atualizar' type="button" value="Atualizar" onclick='js_configurar()' />
                         <input name="emitecheque" id='emitecheque' type="button" value='Emitir Cheque' onclick='js_janelaEmiteCheque()' disabled="disabled" />
                         <input name="emitetxt" id='emitetxt' type="button" value='Emitir Arquivo Texto' onclick='location.href="emp4_empageconfgera001.php"' />
                         <input name='agruparmovimentos' id='agruparmovimentos' value='Agrupar Movimentos' type='button' />
-                        <input name='relatorioagenda' id='relatorioagenda' value='Relatório' type='button' onclick="js_visualizarRelatorio()" />
+                        <input name='relatorioagenda' id='relatorioagenda' value='Relatï¿½rio' type='button' onclick="js_visualizarRelatorio()" />
                         <?php
 
                         /**
-                         * Podemos remover após o OBN entrar em produção.
+                         * Podemos remover apï¿½s o OBN entrar em produï¿½ï¿½o.
                          */
                         if (db_permissaomenu(db_getsession("DB_anousu"), db_getsession("DB_modulo"), 9755) === "true") {
 
-                            echo "<input name='btnConfigurarMovimentos' id='btnConfigurarMovimentos' value='Configurações de Envio' type='button'";
+                            echo "<input name='btnConfigurarMovimentos' id='btnConfigurarMovimentos' value='Configuraï¿½ï¿½es de Envio' type='button'";
                             echo "onclick=\"window.location='emp4_configuracaoarquivoenvio001.php'\" />";
                         }
 
@@ -492,7 +495,7 @@ if (count($aParametrosEmpenho) > 0) {
                             </label>
                             <input type="checkbox" id='normais' checked onclick='js_showFiltro("normal",this.checked)' />
                             <label for="normais" style='padding:1px;border: 1px solid black;background-color:white'>
-                                <b>Não Atualizados</b>
+                                <b>Nï¿½o Atualizados</b>
                             </label>
                             <input type="checkbox" id='comMovs' checked onclick='js_showFiltro("comMov",this.checked)' />
                             <label for="comMovs" style='padding:1px;border: 1px solid black;background-color:rgb(222, 184, 135)'>
@@ -523,7 +526,7 @@ if (count($aParametrosEmpenho) > 0) {
                                     com Cheque Emitido/Arquivo
                                 </th>
                                 <th class='table_header'>
-                                    Não Configurado
+                                    Nï¿½o Configurado
                                 </th>
                             </thead>
                             <tbody id='totalizadores' style="background-color: white">
@@ -583,24 +586,24 @@ if (count($aParametrosEmpenho) > 0) {
     function js_mostrapagordem1(chave1, z01_cgccpf) {
         if (z01_cgccpf.length == 11) {
             if (z01_cgccpf == '00000000000') {
-                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CPF estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         } else {
             if (z01_cgccpf == '' || z01_cgccpf == null) {
-                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CPF estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
         if (z01_cgccpf.length == 14) {
             if (z01_cgccpf == '00000000000000') {
-                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CNPJ estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         } else {
             if (z01_cgccpf == '' || z01_cgccpf == null) {
-                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CNPJ estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
@@ -635,14 +638,14 @@ if (count($aParametrosEmpenho) > 0) {
     function js_mostrapagordem102(chave1, z01_cgccpf) {
         if (z01_cgccpf.length = 11) {
             if (z01_cgccpf == '00000000000') {
-                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CPF estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
         if (z01_cgccpf.length = 14) {
             if (z01_cgccpf == '00000000000000') {
-                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CNPJ estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
@@ -669,24 +672,24 @@ if (count($aParametrosEmpenho) > 0) {
     function js_mostraempempenho2(chave1, iAnoEmepenho, z01_cgccpf) {
         if (z01_cgccpf.length == 11) {
             if (z01_cgccpf == '00000000000') {
-                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CPF estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         } else {
             if (z01_cgccpf == '' || z01_cgccpf == null) {
-                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CPF estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
         if (z01_cgccpf.length == 14) {
             if (z01_cgccpf == '00000000000000') {
-                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CNPJ estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         } else {
             if (z01_cgccpf == '' || z01_cgccpf == null) {
-                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: Nï¿½mero do CPF estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
@@ -931,7 +934,8 @@ if (count($aParametrosEmpenho) > 0) {
 
         js_removeObj("msgBox");
         js_liberaBotoes(true);
-        var oResponse = eval("(" + oAjax.responseText + ")");
+
+        var oResponse = eval("("+oAjax.responseText+")");
         gridNotas.clearAll(true);
         gridNotas.setStatus("");
         var iRowAtiva = 0;
@@ -945,14 +949,14 @@ if (count($aParametrosEmpenho) > 0) {
 
                     if (CNPJ.length = 11) {
                         if (CNPJ == '00000000000') {
-                            alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                            alert("ERRO: Nï¿½mero do CPF estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                             return false
                         }
                     }
 
                     if (CNPJ.length = 14) {
                         if (CNPJ == '00000000000000') {
-                            alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                            alert("ERRO: Nï¿½mero do CNPJ estï¿½ zerado. Corrija o CGM do fornecedor e tente novamente");
                             return false
                         }
                     }
@@ -988,13 +992,13 @@ if (count($aParametrosEmpenho) > 0) {
                     aLinha[2] = o15_codigo;
 
                     /**
-                     * Cria a expressão regular para efetuar a alteração dos pontos por vazio.
+                     * Cria a expressï¿½o regular para efetuar a alteraï¿½ï¿½o dos pontos por vazio.
                      */
 
                     var sRegExpressao = /\./g;
                     var sConCarPeculiar = e60_concarpeculiar.replace(sRegExpressao, "");
                     /**
-                     *  Caso seja vazio, permite o usuário selecionar um id. Do contrário mostra a concarpeculiar selecionada
+                     *  Caso seja vazio, permite o usuï¿½rio selecionar um id. Do contrï¿½rio mostra a concarpeculiar selecionada
                      */
                     if (sConCarPeculiar == '' || new Number(sConCarPeculiar) == 0) {
                         if (e79_concarpeculiar == '') {
@@ -1113,7 +1117,7 @@ if (count($aParametrosEmpenho) > 0) {
                 $('totalizadores').innerHTML = sTotais;
             }
         } else if (oResponse.status == 2) {
-            gridNotas.setStatus("<b>Não foram encontrados movimentos.</b>");
+            gridNotas.setStatus("<b>Nï¿½o foram encontrados movimentos.</b>");
         }
     }
 
@@ -1223,11 +1227,11 @@ if (count($aParametrosEmpenho) > 0) {
             "Nome",
             "Banco/Ag",
             "Forma Pgto",
-            "Nº Documento",
+            "Nï¿½ Documento",
             "Dt Aut",
             "Valor OP",
             "Vlr Aut",
-            "Retenção",
+            "Retenï¿½ï¿½o",
             "Valor",
             "Cod. Cheque"
         ));
@@ -1288,7 +1292,7 @@ if (count($aParametrosEmpenho) > 0) {
             sDisabled = "disabled='disabled'";
         }
 
-        return "<input value='" + sNumDoc + "' size='13' maxlength='15' id='numdoc" + iCodMov + "' " + sDisabled + ">";
+        return "<input value='"+sNumDoc+"' size='13' maxlength='15' id='numdoc"+iCodMov+"' "+sDisabled+">";
 
     }
 
@@ -1378,7 +1382,7 @@ if (count($aParametrosEmpenho) > 0) {
                 function(oConta, iLinha) {
 
                     var sSelecionado = "";
-                    /*comentado por solicitação de barbara OC 6184*/
+                    /*comentado por solicitaï¿½ï¿½o de barbara OC 6184*/
                     // if (oConta.pc63_contabanco == oConta.conta_historico_fornecedor && iContaForne == "") {
                     //   sSelecionado = " selected ";
                     // } else if (iContaForne != "" && iContaForne == oConta.pc63_contabanco) {
@@ -1472,8 +1476,8 @@ if (count($aParametrosEmpenho) > 0) {
         var aMovimentos = gridNotas.getSelection("object");
         /*
          * Validamos o movimento configurado, conforme a forma de pagamento escolhido.
-         * - cheque, é obrigatorio ter informado a conta pagadora, e o valor;
-         * - Transmissao é obrigatorio ter informado a conta pagadora, e a conta do fornecedor
+         * - cheque, ï¿½ obrigatorio ter informado a conta pagadora, e o valor;
+         * - Transmissao ï¿½ obrigatorio ter informado a conta pagadora, e a conta do fornecedor
          * - Dinheiro , apenas obrigatorio informar  valor.
          * - NDA, ignoramos o registro.
          */
@@ -1484,7 +1488,7 @@ if (count($aParametrosEmpenho) > 0) {
 
         if (aMovimentos.length == 0) {
 
-            alert('Não há nenhum movimento selecionado.');
+            alert('Nï¿½o hï¿½ nenhum movimento selecionado.');
             return false;
 
         }
@@ -1495,18 +1499,18 @@ if (count($aParametrosEmpenho) > 0) {
             return false;
 
         }
+        /*
         if (js_comparadata(sDataDia, $F('e42_dtpagamento'), ">")) {
-
-            alert("Data Informada Inválida.\nData menor que a data do sistema");
+            alert("Data Informada Invï¿½lida.\nData menor que a data do sistema");
             return false;
-
         }
-        var oEnvio = new Object();
-        oEnvio.exec = "configurarPagamento";
-        oEnvio.lEfetuarPagamento = lEfetuarPagamento;
-        oEnvio.dtPagamento = $F('e42_dtpagamento');
-        oEnvio.aMovimentos = new Array();
-        oEnvio.lEmitirOrdeAuxiliar = false;
+        */
+        var oEnvio                   = new Object();
+        oEnvio.exec                  = "configurarPagamento";
+        oEnvio.lEfetuarPagamento     = lEfetuarPagamento;
+        oEnvio.dtPagamento           = $F('e42_dtpagamento');
+        oEnvio.aMovimentos           = new Array();
+        oEnvio.lEmitirOrdeAuxiliar   = false;
         oEnvio.iOPAuxiliarManutencao = "";
         if ($('emitirordemauxiliar').checked) {
             oEnvio.lEmitirOrdeAuxiliar = true;
@@ -1515,7 +1519,7 @@ if (count($aParametrosEmpenho) > 0) {
 
             if (($('opmanutencaoincluir').checked && !$('opmanutencaoexcluir').checked) && oEnvio.lEmitirOrdeAuxiliar) {
 
-                alert('Configurações escolhidas estão em conflito: emitir OrdemAuxiliar e incluir movimentos na ordem auxlilar selecionada.');
+                alert('Configuraï¿½ï¿½es escolhidas estï¿½o em conflito: emitir OrdemAuxiliar e incluir movimentos na ordem auxlilar selecionada.');
                 return false;
 
             } else if ($('opmanutencaoincluir').checked && !$('opmanutencaoexcluir').checked) {
@@ -1524,7 +1528,7 @@ if (count($aParametrosEmpenho) > 0) {
 
             if (($('opmanutencaoexcluir').checked && !$('opmanutencaoincluir').checked) && oEnvio.lEmitirOrdeAuxiliar) {
 
-                alert('Configurações escolhidas estão em conflito: emitir Ordem Auxiliar e Excluir movimentos na ordem auxlilar selecionada.');
+                alert('Configuraï¿½ï¿½es escolhidas estï¿½o em conflito: emitir Ordem Auxiliar e Excluir movimentos na ordem auxlilar selecionada.');
                 return false;
 
             } else if ($('opmanutencaoexcluir').checked && !$('opmanutencaoincluir').checked) {
@@ -1537,21 +1541,21 @@ if (count($aParametrosEmpenho) > 0) {
 
         var aFormasSelecionadas = new Array();
         var lMostraMsgErroRetencao = false;
-        var sMsgRetencaoMesAnterior = "Atenção:\n";
+        var sMsgRetencaoMesAnterior = "Atenï¿½ï¿½o:\n";
         var sVirgula = "";
         for (var iMov = 0; iMov < aMovimentos.length; iMov++) {
 
-            var iForma = aMovimentos[iMov].aCells[9].getValue();
-            var iCodMov = aMovimentos[iMov].aCells[0].getValue();
-            var nValor = new Number(aMovimentos[iMov].aCells[15].getValue());
-            var sConCarPeculiar = aMovimentos[iMov].aCells[4].getValue();
-            var iNota = aMovimentos[iMov].aCells[5].getValue();
-            var iContaFornecedor = aMovimentos[iMov].aCells[8].getValue();
-            var iContaPagadora = aMovimentos[iMov].aCells[6].getValue();
-            var iContaSaltes = js_getContaSaltes($('ctapag' + aMovimentos[iMov].aCells[0].getValue()));
-            var dtAutoriza = $F('e42_dtpagamento');
-            var nValorRetencao = js_strToFloat(aMovimentos[iMov].aCells[14].getValue());
-            var lRetencaoMesAnterior = $('validarretencao' + iCodMov).innerHTML;
+            var iForma               = aMovimentos[iMov].aCells[9].getValue();
+            var iCodMov              = aMovimentos[iMov].aCells[0].getValue();
+            var nValor               = new Number(aMovimentos[iMov].aCells[15].getValue());
+            var sConCarPeculiar      = aMovimentos[iMov].aCells[4].getValue();
+            var iNota                = aMovimentos[iMov].aCells[5].getValue();
+            var iContaFornecedor     = aMovimentos[iMov].aCells[8].getValue();
+            var iContaPagadora       = aMovimentos[iMov].aCells[6].getValue();
+            var iContaSaltes         = js_getContaSaltes( $('ctapag'+aMovimentos[iMov].aCells[0].getValue()) );
+            var dtAutoriza           = $F('e42_dtpagamento');
+            var nValorRetencao       = js_strToFloat(aMovimentos[iMov].aCells[14].getValue());
+            var lRetencaoMesAnterior = $('validarretencao'+iCodMov).innerHTML;
 
             if (iForma != 1 && iForma != 2) {
                 var sNumDoc = aMovimentos[iMov].aCells[10].getValue().trim();
@@ -1559,17 +1563,17 @@ if (count($aParametrosEmpenho) > 0) {
 
             if (iForma == 2) {
 
-                var iCodCheque = aMovimentos[iMov].aCells[16].getValue().trim();
-                var iCheque = aMovimentos[iMov].aCells[10].getValue().trim();
+                var iCodCheque        = aMovimentos[iMov].aCells[16].getValue().trim();
+                var iCheque           = aMovimentos[iMov].aCells[10].getValue().trim();
 
             }
 
             /**
-             * Se for cheque, verifica se o cheque já foi emitido
+             * Se for cheque, verifica se o cheque jï¿½ foi emitido
              */
             if (lEfetuarPagamento && iForma == 2 && aMovimentos[iMov].getClassName() != 'comMov') {
 
-                alert("Para efetuar o pagamento é necessário emitir o cheque.");
+                alert("Para efetuar o pagamento ï¿½ necessï¿½rio emitir o cheque.");
                 return false;
 
             }
@@ -1602,8 +1606,8 @@ if (count($aParametrosEmpenho) > 0) {
             if (lRetencaoMesAnterior == "true") {
 
                 lMostraMsgErroRetencao = true;
-                sMsgRetencaoMesAnterior += sVirgula + "Movimento " + iCodMov + " da OP " + iNota + " possui retenções ";
-                sMsgRetencaoMesAnterior += " configuradas em mês  diferente do mês atual\n";
+                sMsgRetencaoMesAnterior += sVirgula + "Movimento " + iCodMov + " da OP " + iNota + " possui retenï¿½ï¿½es ";
+                sMsgRetencaoMesAnterior += " configuradas em mï¿½s  diferente do mï¿½s atual\n";
                 sVirgula = ", ";
 
             }
@@ -1617,16 +1621,16 @@ if (count($aParametrosEmpenho) > 0) {
             if (sConCarPeculiar == "Selecione") {
                 sConCarPeculiar = '';
             }
-            oMovimento = new Object();
-            oMovimento.iCodForma = iForma;
-            oMovimento.iCodMov = iCodMov;
-            oMovimento.nValor = nValor.valueOf();
-            oMovimento.iContaFornecedor = iContaFornecedor;
-            oMovimento.iContaPagadora = iContaPagadora;
-            oMovimento.iContaSaltes = iContaSaltes;
-            oMovimento.iCodNota = iNota;
-            oMovimento.nValorRetencao = nValorRetencao.valueOf();
-            oMovimento.sConCarPeculiar = sConCarPeculiar;
+            oMovimento                   = new Object();
+            oMovimento.iCodForma         = iForma;
+            oMovimento.iCodMov           = iCodMov;
+            oMovimento.nValor            = nValor.valueOf();
+            oMovimento.iContaFornecedor  = iContaFornecedor;
+            oMovimento.iContaPagadora    = iContaPagadora;
+            oMovimento.iContaSaltes      = iContaSaltes;
+            oMovimento.iCodNota          = iNota;
+            oMovimento.nValorRetencao    = nValorRetencao.valueOf();
+            oMovimento.sConCarPeculiar   = sConCarPeculiar;
 
             if (iForma != 1 && iForma != 2) {
                 oMovimento.sNumDoc = sNumDoc;
@@ -1634,8 +1638,8 @@ if (count($aParametrosEmpenho) > 0) {
 
             if (iForma == 2) {
 
-                oMovimento.iCheque = iCheque;
-                oMovimento.iCodCheque = iCodCheque;
+                oMovimento.iCheque       = iCheque;
+                oMovimento.iCodCheque    = iCodCheque;
 
             }
 
@@ -1649,23 +1653,23 @@ if (count($aParametrosEmpenho) > 0) {
 
         /*
          * For verificando se todas as formas de pagamento para os movimentos selecionados
-         *   sao válidas (diferente de NDA), caso nao seja obrigamos o usuario a corrigir a
+         *   sao vï¿½lidas (diferente de NDA), caso nao seja obrigamos o usuario a corrigir a
          *   forma de pagamento ou desmarcar a opcao de "Efetuar pagamento"
          *
          */
         if (lEfetuarPagamento) {
             for (var iInd = 0; iInd < aFormasSelecionadas.length; iInd++) {
                 if (aFormasSelecionadas[iInd] == "0") {
-                    alert("Não é possível efetuar o pagamento com a forma de pagamento NDA.");
+                    alert("Nï¿½o ï¿½ possï¿½vel efetuar o pagamento com a forma de pagamento NDA.");
                     return false;
                 }
             }
 
             /**
-             * verificamos o parametro para controle de retencões em meses anteriores.
-             * caso seje 0 - não faz nenhuma critica ao usuário. apenas realiza o pagamento.
-             *           1 - Avisa ao usuário e pede uma confirmação para realizar o pagamento.
-             *           2 - Avisa ao usuário e cancela o pagamento do movimento
+             * verificamos o parametro para controle de retencï¿½es em meses anteriores.
+             * caso seje 0 - nï¿½o faz nenhuma critica ao usuï¿½rio. apenas realiza o pagamento.
+             *           1 - Avisa ao usuï¿½rio e pede uma confirmaï¿½ï¿½o para realizar o pagamento.
+             *           2 - Avisa ao usuï¿½rio e cancela o pagamento do movimento
              */
             var sMsgConfirmaPagamento = "Deseja realmente efetuar pagamento para os movimentos selecionados?";
             if (iTipoControleRetencaoMesAnterior == 1) {
@@ -1673,7 +1677,7 @@ if (count($aParametrosEmpenho) > 0) {
                 if (lMostraMsgErroRetencao) {
 
                     sMsgConfirmaPagamento = sMsgRetencaoMesAnterior;
-                    sMsgConfirmaPagamento += "É Recomendável recalcular as retenções.\n";
+                    sMsgConfirmaPagamento += "ï¿½ Recomendï¿½vel recalcular as retenï¿½ï¿½es.\n";
                     sMsgConfirmaPagamento += "Deseja realmente efetuar pagamento para os movimentos selecionados?";
 
                 }
@@ -1682,7 +1686,7 @@ if (count($aParametrosEmpenho) > 0) {
                 if (lMostraMsgErroRetencao) {
 
                     sMsgConfirmaPagamento = sMsgRetencaoMesAnterior;
-                    sMsgRetencaoMesAnterior += "Recalcule as Retenções do movimento.";
+                    sMsgRetencaoMesAnterior += "Recalcule as Retenï¿½ï¿½es do movimento.";
                     alert(sMsgRetencaoMesAnterior);
                     return false;
 
@@ -1829,7 +1833,7 @@ if (count($aParametrosEmpenho) > 0) {
             'emp4_lancaretencoes.php?iNumNota=' + iCodNota + '&nValorBase=' + (nValor + nValorRetido) +
             '&iNumEmp=' + iNumEmp + '&iCodOrd=' + iCodOrd + "&lSession=" + lSession +
             '&dtPagamento=' + dtPagamento + '&iCodMov=' + iCodMov + '&callback=true',
-            'Lancar Retenções',
+            'Lancar Retenï¿½ï¿½es',
             true,
             22,
             0,
@@ -2037,7 +2041,7 @@ if (count($aParametrosEmpenho) > 0) {
 
         /**
          * - O movimento nao pode estar configurado.
-         * - Não pode haver retencoes lançadas para o movimento
+         * - Nï¿½o pode haver retencoes lanï¿½adas para o movimento
          */
         var oParam = new Object();
         oParam.exec = "agruparMovimentos";
@@ -2061,14 +2065,14 @@ if (count($aParametrosEmpenho) > 0) {
             }
             if (aMovimentos[i].getClassName() != "normal") {
 
-                alert('Movimento ' + iMovimento + ' da OP ' + iOP + ' Está Configurada.');
+                alert('Movimento ' + iMovimento + ' da OP ' + iOP + ' Estï¿½ Configurada.');
                 return false;
 
             }
 
             if (nValorRetencao != 0) {
 
-                alert('Movimento ' + iMovimento + ' da OP ' + iOP + ' possui retenções lancadas.');
+                alert('Movimento ' + iMovimento + ' da OP ' + iOP + ' possui retenï¿½ï¿½es lancadas.');
                 return false;
 
             }
@@ -2182,7 +2186,7 @@ if (count($aParametrosEmpenho) > 0) {
             function(oRetorno, lErro) {
 
                 if (!oRetorno.possuiCadastro) {
-                    alert("IP " + oRetorno.ip_usuario.urlDecode() + " não cadastrado como autenticadora.");
+                    alert("IP " + oRetorno.ip_usuario.urlDecode() + " nï¿½o cadastrado como autenticadora.");
                 }
             }
         ).setMessage('Aguarde, verificando cadastro de autenticadora...').execute();
@@ -2231,18 +2235,18 @@ if (count($aParametrosEmpenho) > 0) {
 
     function selecionarConta(elemento, iCodMov) {
 
-        iContaPagadoraPadrao = document.getElementById("contapagpadrao" + iCodMov).value;
-        iContaSelecionada = elemento.getElementsByTagName("div")[0].textContent;
-        sDescConta = elemento.getElementsByTagName("span")[0].textContent
+        iContaPagadoraPadrao    = document.getElementById("contapagpadrao"+iCodMov).value;
+        iContaSelecionada       = elemento.getElementsByTagName("div")[0].textContent;
+        sDescConta              = elemento.getElementsByTagName("span")[0].textContent
 
         if (iContaPagadoraPadrao != '') {
 
             if (iContaSelecionada != iContaPagadoraPadrao) {
 
-                sMsgConfirm = 'A conta selecionada é diferente da Conta Pagadora informada anteriormente. ';
-                sMsgConfirm += 'Essa ação substituirá os dados. \n \nDeseja prosseguir?';
+                sMsgConfirm = 'A conta selecionada ï¿½ diferente da Conta Pagadora informada anteriormente. ';
+                sMsgConfirm += 'Essa aï¿½ï¿½o substituirï¿½ os dados. \n \nDeseja prosseguir?';
 
-                if (!confirm(sMsgConfirm)) {
+                if (!confirm(sMsgConfirm)){
                     return false;
                 } else {
                     js_atualizaContaPagadoraPadrao(iContaSelecionada, iCodMov);
@@ -2267,9 +2271,9 @@ if (count($aParametrosEmpenho) > 0) {
 
         js_divCarregando("Aguarde, Atualizando Conta Pagadora.", "msgBox");
 
-        var oAjax = new Ajax.Request('emp4_manutencaoPagamentoRPC.php', {
-            method: 'post',
-            parameters: 'json=' + Object.toJSON(oParam),
+        var oAjax  = new Ajax.Request('emp4_manutencaoPagamentoRPC.php', {
+            method    : 'post',
+            parameters: 'json='+Object.toJSON(oParam),
             onComplete: js_retornoAtualizaContaPagadoraPadrao
         });
 
@@ -2295,17 +2299,17 @@ if (count($aParametrosEmpenho) > 0) {
 
         if (aMovimentos.length > 0) {
 
-            var dtBase = $F('e42_dtpagamento');
-            var iCheque = $('iCheque').value;
+            var dtBase      = $F('e42_dtpagamento');
+            var iCheque     = $('iCheque').value;
 
             windowChequeItem = new windowAux('wndChequeItem', 'Emitir Cheque', 520, 180);
 
             var sContent = "<div class='subcontainer' style='margin-top:30px;'>";
-            sContent += "   <fieldset><legend>Informação para o cheque</legend>";
+            sContent += "   <fieldset><legend>Informaï¿½ï¿½o para o cheque</legend>";
             sContent += "       <table>";
             sContent += "           <tr>";
             sContent += "               <td>";
-            sContent += "                   <b>Número do Cheque: </b>";
+            sContent += "                   <b>Nï¿½mero do Cheque: </b>";
             sContent += "                   <input id='numerocheque' name='numerocheque' type='text' value='" + iCheque + "' size='9'";
             sContent += "                       oninput='js_ValidaCampos(this,1,\"\",\"\",\"\",event);'>";
             sContent += "                   <b>Data:</b>";
@@ -2349,7 +2353,7 @@ if (count($aParametrosEmpenho) > 0) {
         dtData = $('dtcheque').value;
 
         if (iNumCheque == '') {
-            alert('Informe o Número do cheque!');
+            alert('Informe o Nï¿½mero do cheque!');
             return false;
         }
 
@@ -2387,33 +2391,33 @@ if (count($aParametrosEmpenho) > 0) {
         });
 
         if (!lCredorUnico) {
-            alert('Só é permitido gerar mais de um cheque para o mesmo credor!');
+            alert('Sï¿½ ï¿½ permitido gerar mais de um cheque para o mesmo credor!');
             return false;
         }
 
         if (!lContaPagadoraUnica) {
-            alert('Só é permitido gerar mais de um cheque para a mesma conta pagadora!');
+            alert('Sï¿½ ï¿½ permitido gerar mais de um cheque para a mesma conta pagadora!');
             return false;
         }
 
         oCheque = new Object();
-        oParam = new Object();
+        oParam  = new Object();
 
-        oCheque.sCredor = encodeURIComponent(aMovimentos[0][7]);
-        oCheque.dtData = dtData;
-        oCheque.aTotCheques = [];
-        oCheque.numeroCheque = iNumCheque;
-        oCheque.aNotasLiquidacao = aNotas;
+        oCheque.sCredor             = encodeURIComponent(aMovimentos[0][7]);
+        oCheque.dtData              = dtData;
+        oCheque.aTotCheques         = [];
+        oCheque.numeroCheque        = iNumCheque;
+        oCheque.aNotasLiquidacao    = aNotas;
 
-        oParam.exec = 'emitirCheque';
-        oParam.params = [];
-        oParam.params[0] = oCheque;
+        oParam.exec         = 'emitirCheque';
+        oParam.params       = [];
+        oParam.params[0]    = oCheque;
 
-        js_divCarregando("Aguarde, Efetuando emissão do cheques.", "msgBox");
+        js_divCarregando("Aguarde, Efetuando emissï¿½o do cheques.","msgBox");
 
-        var oAjax = new Ajax.Request('emp4_agendaPagamentoRPC.php', {
-            method: 'post',
-            parameters: 'json=' + Object.toJSON(oParam),
+        var oAjax  = new Ajax.Request('emp4_agendaPagamentoRPC.php', {
+            method    : 'post',
+            parameters: 'json='+Object.toJSON(oParam),
             onComplete: js_retornoEmissaoCheque
         });
 
@@ -2435,7 +2439,7 @@ if (count($aParametrosEmpenho) > 0) {
                 js_pesquisarOrdens();
 
             } else {
-                alert('Cheque não emitido.');
+                alert('Cheque nï¿½o emitido.');
             }
 
         } else {
@@ -2448,16 +2452,16 @@ if (count($aParametrosEmpenho) > 0) {
 
         var aData = strData.split('/');
 
-        var strData = '<input type="text" id="' + sNomeInput + '" value="' + strData + '" name="' + sNomeInput + '" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" style="width: 70px;" >';
-        strData += '<input value="D" type="button" name="dtjs_' + sNomeInput + '" onclick="pegaPosMouse(event);show_calendar(\'' + sNomeInput + '\',\'none\'); " >';
-        strData += '<input name="' + sNomeInput + '_dia" type="hidden" title="" id="' + sNomeInput + '_dia" value="' + aData[0] + '" size="2"  maxlength="2" >';
-        strData += '<input name="' + sNomeInput + '_mes" type="hidden" title="" id="' + sNomeInput + '_mes" value="' + aData[1] + '" size="2"  maxlength="2" >';
-        strData += '<input name="' + sNomeInput + '_ano" type="hidden" title="" id="' + sNomeInput + '_ano" value="' + aData[2] + '" size="4"  maxlength="4" >';
+        var	strData  = '<input type="text" id="'+sNomeInput+'" value="'+strData+'" name="'+sNomeInput+'" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" style="width: 70px;" >';
+            strData += '<input value="D" type="button" name="dtjs_'+sNomeInput+'" onclick="pegaPosMouse(event);show_calendar(\''+sNomeInput+'\',\'none\'); " >';
+            strData += '<input name="'+sNomeInput+'_dia" type="hidden" title="" id="'+sNomeInput+'_dia" value="'+aData[0]+'" size="2"  maxlength="2" >';
+            strData += '<input name="'+sNomeInput+'_mes" type="hidden" title="" id="'+sNomeInput+'_mes" value="'+aData[1]+'" size="2"  maxlength="2" >';
+            strData += '<input name="'+sNomeInput+'_ano" type="hidden" title="" id="'+sNomeInput+'_ano" value="'+aData[2]+'" size="4"  maxlength="4" >';
 
-        var sStringFunction = "js_comparaDatas" + sNomeInput + " = function(dia,mes,ano){ \n";
-        sStringFunction += "  var objData        = document.getElementById('" + sNomeInput + "'); \n";
-        sStringFunction += "  objData.value      = dia+'/'+mes+'/'+ano; \n";
-        sStringFunction += "} \n";
+        var sStringFunction  = "js_comparaDatas"+sNomeInput+" = function(dia,mes,ano){ \n";
+            sStringFunction += "  var objData        = document.getElementById('"+sNomeInput+"'); \n";
+            sStringFunction += "  objData.value      = dia+'/'+mes+'/'+ano; \n";
+            sStringFunction += "} \n";
 
         var script = document.createElement("SCRIPT");
         script.innerHTML = sStringFunction;

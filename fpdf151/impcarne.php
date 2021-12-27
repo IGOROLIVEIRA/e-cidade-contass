@@ -103,6 +103,8 @@ include("assinatura.php");
  *  MODELO 76  -
  *  MODELO 77  -
  *  MODELO 78  - EMPENHOS FOLHA
+ *  MODELO 100 - MODELO DE RECIBO DE IPTU
+ *  MODELO 102 - MODELO DE RECIBO DE IPTU
  *
  */
 class db_impcarne extends cl_assinatura

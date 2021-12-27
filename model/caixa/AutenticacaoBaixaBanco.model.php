@@ -162,10 +162,11 @@ class AutenticacaoBaixaBanco {
   	                                          corrente.k12_autent,
                                               corrente.k12_conta,
                                               k02_codrec,
-  	                                          cornump.k12_valor as total_receita",
+  	                                          round((cornump.k12_valor - coalesce((select sum(vlrrec) from disrec_desconto_integral where codcla = corcla.k12_codcla 
+                             and k00_receit = cornump.k12_receit),0)),2) as total_receita",
                                               null,
                                               "{$sWhereReceitas}");
-
+    
     $rsReceitasBaixaBanco = db_query($sSqlDisrec);
     if (!$rsReceitasBaixaBanco) {
       throw new BusinessException("Não foi possível localizar as receitas a serem arrecadadas.");

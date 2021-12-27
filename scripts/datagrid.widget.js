@@ -1,7 +1,7 @@
 require_once('estilos/grid.style.css');
 /**
- * @fileoverview Esse arquivo define classes para a construção de uma datagrid
- * para visualizaçao de dados tabulares
+ * @fileoverview Esse arquivo define classes para a construï¿½ï¿½o de uma datagrid
+ * para visualizaï¿½ao de dados tabulares
  *
  * @author Iuri Guntchnigg iuri@dbseller.com.br
  * @version  $Revision: 1.92 $
@@ -129,7 +129,7 @@ function DBGrid(sName) {
   var sImgSelection    = "espaco.gif";
 
   /**
-   * callback paraa seleção de colunas
+   * callback paraa seleï¿½ï¿½o de colunas
    * @type string
    * @private
    */
@@ -172,7 +172,7 @@ function DBGrid(sName) {
   this.gridContainerWidth = null;
 
   /**
-   * Armazena a propriedade oFooter criada quando a grid tem um rodapé de totalizadores
+   * Armazena a propriedade oFooter criada quando a grid tem um rodapï¿½ de totalizadores
    * @type Object tableRow
    */
   this.oFooter;
@@ -180,7 +180,7 @@ function DBGrid(sName) {
   this.fCallBackSelectAll = null;
 
   /**
-   * Callback que será chamado apos a seleção de um checkbox
+   * Callback que serï¿½ chamado apos a seleï¿½ï¿½o de um checkbox
    * @type {function}
    */
   this.fnCallbackSelectSingle = null;
@@ -194,7 +194,7 @@ function DBGrid(sName) {
   }
 
   /**
-   * Callback para execucao apos a seleção do checkbox
+   * Callback para execucao apos a seleï¿½ï¿½o do checkbox
    * @param fnCallbackSelectSingle
    */
   this.setCallbackSingle = function (fnCallbackSelectSingle) {
@@ -205,9 +205,9 @@ function DBGrid(sName) {
 
 
    /**
-   * Metodo para alinha o rodapé se este existir
+   * Metodo para alinha o rodapï¿½ se este existir
    *
-   * @param {Object} Objéto da tabela do Cabeçalho
+   * @param {Object} Objï¿½to da tabela do Cabeï¿½alho
    * @return void
    *
    */
@@ -252,9 +252,9 @@ function DBGrid(sName) {
 
 
    /**
-   * Retorna um {integer} com a primeira linha que estivér visível.
+   * Retorna um {integer} com a primeira linha que estivï¿½r visï¿½vel.
    *
-   * @param {Object} Objéto da tabela do Body
+   * @param {Object} Objï¿½to da tabela do Body
    * @return Integer
    *
    */
@@ -264,7 +264,7 @@ function DBGrid(sName) {
     var iFirstLineValid = 0;
     var iLinhasColspan  = 0;
 
-    // Percorre as linhas da tabela localizando e retornando a primeira linha visível.
+    // Percorre as linhas da tabela localizando e retornando a primeira linha visï¿½vel.
     for (var iCont = 0; iCont < oBody.rows.length; iCont++) {
 
       if (oBody.rows[iCont].style.display != "none") {
@@ -281,13 +281,21 @@ function DBGrid(sName) {
     return iFirstLineValid;
   }
 
+    /**
+     * Pesquisa de conteudo das colunas
+     * @type boolean
+     * @private
+     */
+    this.hasPesquisaConteudo  = false;
+
+    var me = this;
 
   /**
-   * Garante que as colunas permaneçam alinhadas
+   * Garante que as colunas permaneï¿½am alinhadas
    *
-   * @param {Object} Objéto da tabela do header
-   * @param {Object} Objéto da tabela do Body
-   * @param {Object} Objéto da tabela do Footer
+   * @param {Object} Objï¿½to da tabela do header
+   * @param {Object} Objï¿½to da tabela do Body
+   * @param {Object} Objï¿½to da tabela do Footer
    * @return void
    *
    */
@@ -305,11 +313,11 @@ function DBGrid(sName) {
     // Itera sobre todas as colunas criadas
     for (var iCont = 0; iCont < me.aHeaders.length; iCont++) {
 
-      // Garante que só será trabalhado sobre as colunas visiveis
+      // Garante que sï¿½ serï¿½ trabalhado sobre as colunas visiveis
       if (oBody.rows[iFirstLineValid].cells[iCont].style.display != "none" &&
         oHeader.rows[me.iHeaderLineModel].cells[iCont].style.display != "none" ) {
 
-        //Se oa coluna x do Header e a Conluna x do Body for do mesmo tamanho, passa para o próxima volta do laço
+        //Se oa coluna x do Header e a Conluna x do Body for do mesmo tamanho, passa para o prï¿½xima volta do laï¿½o
         if (oBody.rows[iFirstLineValid].cells[iCont].scrollWidth == oHeader.rows[me.iHeaderLineModel].cells[iCont].scrollWidth) {
           continue;
         }
@@ -329,9 +337,9 @@ function DBGrid(sName) {
      me.iHeaderLineModel = iHeaderLineModel;
   }
   /**
-   * Instancia os objétos das tabelas (Header, Body e Footer) e seta o tamnho do Container em cada uma delas,
+   * Instancia os objï¿½tos das tabelas (Header, Body e Footer) e seta o tamnho do Container em cada uma delas,
    * garantindo assim que todas tenham o mesmo tamanho.
-   * Garante que as tabelas não iram mudar de tamanho e realiza chamada para método alinhar as colunas.
+   * Garante que as tabelas nï¿½o iram mudar de tamanho e realiza chamada para mï¿½todo alinhar as colunas.
    *
    * @return void
    *
@@ -339,7 +347,7 @@ function DBGrid(sName) {
   this.resizeCols = function() {
 
      /**
-      * Caso a grid não seja renderizada antes do carregamento, o valor de "me.gridContainerWidth" será 0.
+      * Caso a grid nï¿½o seja renderizada antes do carregamento, o valor de "me.gridContainerWidth" serï¿½ 0.
       * Esse teste verifica este caso e atribui seu width inicial.
       */
      if (me.gridContainerWidth <= 0) {
@@ -360,7 +368,7 @@ function DBGrid(sName) {
    * adiciona uma linha ao corpo da grid
    * @param {Array} aRow array com as colunas da linha
    * @param {boolean} lRender renderiza apos adicionar a coluna
-   * @param {boolean} Se o checkbox está desabilitado
+   * @param {boolean} Se o checkbox estï¿½ desabilitado
    * @return void
    * @see tableRow
    */
@@ -403,7 +411,7 @@ function DBGrid(sName) {
 
      }
 
-     //Iteramos sobre as posições do array Criado.
+     //Iteramos sobre as posiï¿½ï¿½es do array Criado.
      for (var iLength = 0; iLength < aRow.length; iLength++) {
 
         sId        = this.sName+'row'+iRowCount+'cell'+iLength;
@@ -504,7 +512,7 @@ function DBGrid(sName) {
   }
 
   /**
-   * Renderiza a grid no nó especificado no parametro
+   * Renderiza a grid no nï¿½ especificado no parametro
    * @param  {HTMLNode} oNode onde a grid sera incluida.
    * @return void
    * @type   void
@@ -608,64 +616,74 @@ function DBGrid(sName) {
       }
     }
 
-    sFooter += "</tr>";
-    return sFooter;
-  }
-  /**
-   * Define o tamanho das celulas
-   * @param  {array} aWidths array com o tamanho de cada celula ();
-   * @return Void
-   */
+    /**
+     * Renderiza a grid no nï¿½ especificado no parametro
+     * @param  {HTMLNode} oNode onde a grid sera incluida.
+     * @return void
+     * @type   void
+     */
+    this.show = function (oNode) {
 
-  this.setCellWidth = function (aWidths) {
-    this.aWidths = aWidths;
-  }
+        var sGrid = "<div class='gridcontainer' id='grid"+this.sName+"'>";
+        sGrid    += "<div class='header-container' >";
+        sGrid    += "<div class='grid-resize'>";
+        sGrid    += "<img src='"+this._IMGPATH+"/"+sImgSelection+"' border='0' onclick='"+sCallBackCols+"'>";
+        sGrid    += "<div style='clear: both;'></div>" // LIMPA O FLOAT DA IMAGEM
+        sGrid    += "</div>"  //FECHA DIV "grid-resize"
+        sGrid    += "<table class='table-header' rel='ignore-css'  id='table"+this.sName+"header'>";
+        sGrid    += this.renderHeader();
+        sGrid    += "</table>"; // FECHA TABELA DO HEADER table-header
+        sGrid    += "</div>";   // FECHA DIV "header-container"
+        // FIM DO HEADER    ---    INICIO DO BODY
+        sGrid    += "<div id='body-container-"+this.sName+"' class='body-container' style='height:"+me.iHeight+"px;'>";
+        sGrid    += "<table  class='table-body'  id='"+this.sName+"body'>";
+        sGrid    += this.renderRows(true, false);
+        sGrid    += "</table>"; // FECHA TABELA DO HEADER table-body
+        sGrid    += "</div>";    // FECHA DIV "body-container"
+        // FIM DO BODY     ----    INICIO DO FOOTER
+        sGrid    += "<div class='footer-container' >";
+        sGrid    += "<table class='table-footer'  id='table"+this.sName+"footer'>";
+        if (this.hasTotalizador) {
+            sGrid+= this.renderFooter();
+        }
+        sGrid    += "<tr style='text-align:left;'>";
+        sGrid    += "<td colspan='"+(this.aHeaders.length+2)+"'><div style='border:1px inset white;height:100%;padding:2px'>";
+        sGrid    += "<span> Total de Registros:</span><span style='color:blue;padding:3px' id='"+this.sName+"numrows'>0</span>";
+        sGrid    += "<span style='border-left:1px inset #eeeee2' id='"+this.sName+"status'>&nbsp;</span>&nbsp;";
+        if (this.hasTotalValue){
+            sGrid    += "<span style='padding-left: 58%'> Valor Total:</span><span style='color:#000;padding:3px' id='"+this.sName+"totalValue'>0.00</span>";
+        }
+        if (this.hasPesquisaConteudo){
+            sGrid    += "<span style='margin-right: 5px'> <input type='button' id='"+this.sName+"recomecar' ";
+            sGrid    += "onclick='$(\"filtro\").value = \"\";$(\""+this.sName+"pesquisaConteudo\").value = \"\"; btnPesquisarDados.click();' value='Recomeï¿½ar'></span>";
+            sGrid    += "<span style='margin-right: 5px'> Indique o Conteï¿½do:</span>";
+            sGrid    += "<span><input type='text' id='"+this.sName+"pesquisaConteudo' style='width: 160px'><span>";
+        }
 
-  /**
-   * define o alinhamento global das celulas
-   * @param  {array} aAligns array com oAlinhamento de cada celula;
-   * @return Void
-   * @type void
-   */
+        sGrid    += "</div></td></tr>";
+        sGrid    += "</table>"; //  FECHA TABLE "table_footer"
+        sGrid    += "</div>";   //  FECHA DIV "footer-container"
+        //
+        sGrid    += "</div>";   //  FECHA DIV "container"
 
-  this.setCellAlign = function(aAligns) {
-    this.aAligns = aAligns;
-  }
 
-  /**
-   * Seta se a grid mostrara um checkbox, no inicio de cada linha
-   * @param integer iCell Posição da array que contem o valor da checkbox (sera usado com indice.)
-   */
-  this.setCheckbox = function(iCell) {
 
-     this.hasCheckbox   = true;
-     this.checkBoxValue = iCell;
+        /*
+         * Se foi escolhido mostrar as colunas,
+         * mudamos a imagem, e criamos o dropdown com as colunas a serem escolhidas;
+         */
+        me.gridContainer      =  oNode;
+        me.gridContainerWidth =  oNode.scrollWidth - 25;
+        if (this.lAllowSelectCol) {
+            sGrid += this.drawSelectCol();
+        }
+        oNode.innerHTML = sGrid;
 
-  }
-  /**
-   * Define a altura
-   * @param {integer} iHeight define a altura
-   * @return void
-   */
-  this.setHeight = function (iHeight) {
-     this.iHeight = iHeight;
-  }
+        $("table"+this.sName+"header").style.width = me.gridContainerWidth;
+        $(this.sName+"body").style.width           = me.gridContainerWidth;
+        $("table"+this.sName+"footer").style.width = me.gridContainerWidth;
 
-  /**
-   * retorna as linhas da grid que estao marcadas como selecionadas
-   * @param {string} sTipoRetorno define como sera o retorno do metodo. caso object retorna os objetos tableRow selecionados
-   * caso array, retornara um array com os valores das linhas selecionadas.
-   *
-   * @return array
-   */
-  this.getSelection = function (sTipoRetorno) {
-
-    if (sTipoRetorno == null ) {
-       sTipoRetorno = "array";
-    }
-    var aSelecionados = new Array();
-    if (sTipoRetorno == "array") {
-      for (var iItensLength = 0; iItensLength < this.aRows.length; iItensLength++) {
+        // Subtrai o tamanho do scroll
 
         with (this.aRows[iItensLength]) {
           if (isSelected) {
@@ -699,7 +717,7 @@ function DBGrid(sName) {
    *
    * Busca elementos pela className
    * @param {string} searchClass nome da classe que deve ser pesquisada
-   * @param {string} domNode nó que deve iniciar a busca default é document.
+   * @param {string} domNode nï¿½ que deve iniciar a busca default ï¿½ document.
    * @param {string} tagName tag que deve ser verificada default "*"
    *
    * @return array com todos os objetos encontrados
@@ -839,7 +857,7 @@ function DBGrid(sName) {
   };
 
   /**
-   * reseta as informações da grid,
+   * reseta as informaï¿½ï¿½es da grid,
    * @param {bool} lDeleteRows se exclui as linhas cadastradas. caso false apenas limpa o corpo da grid
    * @return void
    */
@@ -902,7 +920,7 @@ function DBGrid(sName) {
   /**
    * Mostra a opcao para marcar todos os checkboxes
    *
-   * @param {bool} lSelectAll true para mostrar a opção
+   * @param {bool} lSelectAll true para mostrar a opï¿½ï¿½o
    * @see #getSelectAll
    * @return void;
    */
@@ -913,7 +931,7 @@ function DBGrid(sName) {
 
   }
   /**
-   * retorna se deve  mostrar opção para selecionar todos os checkbox
+   * retorna se deve  mostrar opï¿½ï¿½o para selecionar todos os checkbox
    * @see #setSelectAll
    * @type bool
    * @return boolean
@@ -925,7 +943,7 @@ function DBGrid(sName) {
   /**
    * Realiza a soma de valores de toda uma coluna;
    * @param  {int} iCol Indice da coluna.
-   * @param  {bool} lInSelection se leva em consideração apenas o que está selecionado
+   * @param  {bool} lInSelection se leva em consideraï¿½ï¿½o apenas o que estï¿½ selecionado
    * @type   Number
    * @return total da soma das colunas;
    */
@@ -1041,8 +1059,8 @@ function DBGrid(sName) {
     var y = el.offsetHeight;
 
     /*
-     * calculamos a distancia do dropdown em relação a página,
-     * para podemos renderiza-lo na posição correta.
+     * calculamos a distancia do dropdown em relaï¿½ï¿½o a pï¿½gina,
+     * para podemos renderiza-lo na posiï¿½ï¿½o correta.
      */
     while (el.offsetParent && el.id.toUpperCase() != 'wndAuxiliar') {
 
@@ -1058,13 +1076,13 @@ function DBGrid(sName) {
     x += new Number(el.offsetLeft);
     y += new Number(el.offsetTop)+4;
     /*
-     * Pegamos a largura do dropdown, e diminuimos da posiçao do cursors
+     * Pegamos a largura do dropdown, e diminuimos da posiï¿½ao do cursors
      */
     var iTamObj = $('columns'+this.sName).scrollWidth-1;
     $('columns'+this.sName).style.left = x - iTamObj;
     $('columns'+this.sName).style.top  = y;
     /*
-     * decidimos se mostramos ou não o dropdown, conforme o seu estado.
+     * decidimos se mostramos ou nï¿½o o dropdown, conforme o seu estado.
      */
     if ($('columns'+this.sName).style.visibility == 'visible') {
       $('columns'+this.sName).style.visibility = 'hidden';
@@ -1199,7 +1217,7 @@ function DBGrid(sName) {
     return $(this.sName+'status').innerHTML;
   }
   this.clickRow = function() {
-    
+
   };
 }
 
@@ -1257,7 +1275,7 @@ function tableCell(sContent, sId, sWidth, sClasse) {
   this.content = sContent;
 
   /**
-   * Adiciona uma class na TD através do Id passado.
+   * Adiciona uma class na TD atravï¿½s do Id passado.
    */
   this.addClassName = function(sClass){
 
@@ -1269,7 +1287,7 @@ function tableCell(sContent, sId, sWidth, sClasse) {
   }
 
   /**
-   * Remove a class na TD através do ID passado
+   * Remove a class na TD atravï¿½s do ID passado
    */
   this.removeClassName = function( sClass){
     if ($(me.sId)) {
@@ -1349,7 +1367,7 @@ function tableCell(sContent, sId, sWidth, sClasse) {
   }
 
   /**
-   * Seta o conteúdo da célula e altera em tela
+   * Seta o conteï¿½do da cï¿½lula e altera em tela
    * @param string sContent
    */
   this.setContent = function(sContent) {
@@ -1372,7 +1390,7 @@ function tableCell(sContent, sId, sWidth, sClasse) {
 
   /**
    * Retorna o valor da celula.
-   * analisa o no filho da celula, para decidir qual informação deve pegar.
+   * analisa o no filho da celula, para decidir qual informaï¿½ï¿½o deve pegar.
    * @return string
    */
   this.getValue = function() {
@@ -1392,7 +1410,7 @@ function tableCell(sContent, sId, sWidth, sClasse) {
         sValue = $F(oCelulaAtiva.childNodes[0].id);
         break;
 
-      case "#text" : //nó padrao, a TD possui apenas texto, sem nenhuma tag html.
+      case "#text" : //nï¿½ padrao, a TD possui apenas texto, sem nenhuma tag html.
 
         sValue = oCelulaAtiva.childNodes[0].nodeValue;
         break;
@@ -1441,9 +1459,9 @@ function tableCell(sContent, sId, sWidth, sClasse) {
   }
 
   /**
-   * Define a Utilização de Colspan pela Célula
+   * Define a Utilizaï¿½ï¿½o de Colspan pela Cï¿½lula
    * @param lUtilizaColspan      bool
-   * @param iQuantidadeMesclagem integer - Quantidade de Colunas que vão ser mescladas
+   * @param iQuantidadeMesclagem integer - Quantidade de Colunas que vï¿½o ser mescladas
    */
   this.setUseColspan     = function( lUtilizaColspan, iQuantidadeMesclagem ) {
 
@@ -1452,9 +1470,9 @@ function tableCell(sContent, sId, sWidth, sClasse) {
   }
 
   /**
-   * Adiciona um evento à ser chamado
+   * Adiciona um evento ï¿½ ser chamado
    * @param sEvento - Evento desejado - EX: onclick, onmousein
-   * @param sFuncao - Função à ser executada
+   * @param sFuncao - Funï¿½ï¿½o ï¿½ ser executada
    */
   this.adicionarEvento = function(sEvento, sFuncao) {
 
@@ -1480,7 +1498,7 @@ function tableHeader(sContent, sWidth, iCol, classe, sGridCollNumber) {
   this.content = sContent;
 
   /**
-   * Define se a coluna está visível ou não
+   * Define se a coluna estï¿½ visï¿½vel ou nï¿½o
    * @type bool
    */
   this.lDisplayed = true;
@@ -1584,7 +1602,7 @@ function tableRow (sId) {
   var me          = this;
 
   /**
-   * Adiciona uma class na TD através do Id passado.
+   * Adiciona uma class na TD atravï¿½s do Id passado.
    */
   this.addClassName = function(sClass){
 
@@ -1595,7 +1613,7 @@ function tableRow (sId) {
   }
 
   /**
-   * Remove a class na TD através do ID passado
+   * Remove a class na TD atravï¿½s do ID passado
    */
   this.removeClassName = function( sClass){
 

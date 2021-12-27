@@ -26,7 +26,7 @@
  */
 
 
-//MODULO: licitação
+//MODULO: licitaï¿½ï¿½o
 $cllicitaparam->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
@@ -34,7 +34,7 @@ $cllicitaparam->rotulo->label();
 <table>
  <tr>
  <td>
- <fieldset><legend><b>Parâmetros<b></legend>
+ <fieldset><legend><b>Parï¿½metros<b></legend>
 <table border="0">
   <tr>
   <tr>
@@ -62,7 +62,7 @@ $cllicitaparam->rotulo->label();
   </tr>
   <tr>
     <td>
-       <strong>Disp. licitação na web até o julgamento:</strong>
+       <strong>Disp. licitaï¿½ï¿½o na web atï¿½ o julgamento:</strong>
     </td>
     <td>
       <?
@@ -74,7 +74,7 @@ $cllicitaparam->rotulo->label();
   </tr>
     <tr>
         <td>
-            <strong>Emitir usuário no relatório de adjudicação:</strong>
+            <strong>Emitir usuï¿½rio no relatï¿½rio de adjudicaï¿½ï¿½o:</strong>
         </td>
         <td>
             <?
@@ -92,6 +92,17 @@ $cllicitaparam->rotulo->label();
     <td>
       <?
       db_input('l12_qtdediasliberacaoweb', 5, 0, true, 'text', $db_opcao);
+      ?>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong>Validaï¿½ï¿½o no Cadastro de Fornecedores</strong>
+    </td>
+    <td>
+      <?
+        $x = array("f"=>"NAO","t"=>"SIM");
+        db_select('l12_validacadfornecedor',$x,true,$db_opcao,"");
       ?>
     </td>
   </tr>

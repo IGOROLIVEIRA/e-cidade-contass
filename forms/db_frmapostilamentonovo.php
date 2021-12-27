@@ -60,7 +60,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
                 <td>
                     <?
-                    $x = array("01" => "Reajuste de preço previsto no contrato", "02" => "Atualizações, compensações ou penalizações", "03" => "Empenho de dotações orçamentárias suplementares");
+                    $x = array("01" => "Reajuste de preï¿½o previsto no contrato", "02" => "Atualizaï¿½ï¿½es, compensaï¿½ï¿½es ou penalizaï¿½ï¿½es", "03" => "Empenho de dotaï¿½ï¿½es orï¿½amentï¿½rias suplementares");
                     db_select('si03_tipoapostila', $x, true, $db_opcao, "onchange='js_changeTipoApostila(this.value)'");
                     //db_input('si03_tipoapostila',1,$Isi03_tipoapostila,true,'text',$db_opcao,"")
                     ?>
@@ -83,7 +83,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
                 <td>
                     <?
-                    $x = array("1" => "Acréscimo de valor", "2" => "Decréscimo de valor", "3" => "Não houve alteração de valor");
+                    $x = array("1" => "Acrï¿½scimo de valor", "2" => "Decrï¿½scimo de valor", "3" => "Nï¿½o houve alteraï¿½ï¿½o de valor");
                     db_select('si03_tipoalteracaoapostila', $x, true, $db_opcao, "");
                     ?>
                 </td>
@@ -101,7 +101,7 @@ $clrotulo->label("ac16_resumoobjeto");
             <tr>
                 <td colspan='2'>
                     <fieldset class="separator">
-                        <legend>Vigência</legend>
+                        <legend>Vigï¿½ncia</legend>
                         <table border='0'>
                             <tr>
                                 <td><label class="bold">Inicial:</td>
@@ -160,7 +160,7 @@ $clrotulo->label("ac16_resumoobjeto");
     oGridItens.setCheckbox(0);
     oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
     oGridItens.setCellWidth(["3%", "25%", "8%", "8%"]);
-    oGridItens.setHeader(["Cód", "Item", "Qtde Anterior", "Vl Unit Anterior", "Quantidade", "Vl Unitário", "Vl Total", "Vl Apostilado", "Qt Aditada", "Dotações", "Seq"]);
+    oGridItens.setHeader(["Cï¿½d", "Item", "Qtde Anterior", "Vl Unit Anterior", "Quantidade", "Vl Unitï¿½rio", "Vl Total", "Vl Apostilado", "Qt Aditada", "Dotaï¿½ï¿½es", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
     oGridItens.aHeaders[9].lDisplayed = false;
     oGridItens.setHeight(300);
@@ -278,7 +278,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         if (iAcordo == "") {
 
-            alert('Acordo não informado!');
+            alert('Acordo nï¿½o informado!');
             return false;
         }
 
@@ -367,7 +367,7 @@ $clrotulo->label("ac16_resumoobjeto");
             var oBotaoDotacao = document.createElement("input");
             oBotaoDotacao.type = "button";
             oBotaoDotacao.id = "dotacoes" + iSeq;
-            oBotaoDotacao.value = "Dotações";
+            oBotaoDotacao.value = "Dotaï¿½ï¿½es";
             oBotaoDotacao.disabled = false;
             oBotaoDotacao.setAttribute("onclick", "ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
             aLinha[9] = oBotaoDotacao.outerHTML;
@@ -446,19 +446,19 @@ $clrotulo->label("ac16_resumoobjeto");
         }
 
         oDadosItem = oGridItens.aRows[iLinha];
-        windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotações Item', 430, 380);
+        windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotaï¿½ï¿½es Item', 430, 380);
 
         var sContent = "<div class=\"subcontainer\">";
-        sContent += "<fieldset><legend>Adicionar Dotação</legend>";
+        sContent += "<fieldset><legend>Adicionar Dotaï¿½ï¿½o</legend>";
         sContent += "  <table>";
         sContent += "   <tr>";
         sContent += "     <td>";
         sContent += "     <a href='#' class='dbancora' style='text-decoration: underline;'";
-        sContent += "       onclick='pesquisao47_coddot(true);'><b>Dotação:</b></a>";
+        sContent += "       onclick='pesquisao47_coddot(true);'><b>Dotaï¿½ï¿½o:</b></a>";
         sContent += "     </td>";
         sContent += "     <td id='inputdotacao'></td>";
         sContent += "     <td>";
-        sContent += "      <b>Saldo Dotação:</b>";
+        sContent += "      <b>Saldo Dotaï¿½ï¿½o:</b>";
         sContent += "     </td>";
         sContent += "     <td id='inputsaldodotacao'></td>";
         sContent += "   </tr>";
@@ -480,7 +480,7 @@ $clrotulo->label("ac16_resumoobjeto");
         windowDotacaoItem.setContent(sContent);
         oMessageBoard = new DBMessageBoard('msgboard1',
             'Adicionar Dotacoes',
-            'Dotações Item ' + oDadosItem.aCells[2].getValue() + " (valor: <b>" +
+            'Dotaï¿½ï¿½es Item ' + oDadosItem.aCells[2].getValue() + " (valor: <b>" +
             oDadosItem.aCells[5].getValue() + "</b>)",
             $('windowwndDotacoesItem_content'));
 
@@ -511,7 +511,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oGridDotacoes = new DBGrid('gridDotacoes');
         oGridDotacoes.nameInstance = 'oGridDotacoes';
         oGridDotacoes.setCellWidth(['20%', '60%', '20%']);
-        oGridDotacoes.setHeader(["Dotação", "Valor", "&nbsp;"]);
+        oGridDotacoes.setHeader(["Dotaï¿½ï¿½o", "Valor", "&nbsp;"]);
         oGridDotacoes.setCellAlign(["center", "right", "Center"]);
         oGridDotacoes.setHeight(100);
         oGridDotacoes.hasTotalizador = true;
@@ -559,7 +559,7 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     /**
-     * Atualiza a informação das dotações do item
+     * Atualiza a informaï¿½ï¿½o das dotaï¿½ï¿½es do item
      */
     function atualizarItemDotacao(iLinha, iDotacao, oValor) {
 
@@ -585,7 +585,7 @@ $clrotulo->label("ac16_resumoobjeto");
      */
     function removerDotacao(iLinha, iDotacao) {
 
-        if (confirm("Remover dotação do item?")) {
+        if (confirm("Remover dotaï¿½ï¿½o do item?")) {
 
             aItensPosicao[iLinha].dotacoes.splice(iDotacao, 1);
             preencheGridDotacoes(iLinha);
@@ -596,7 +596,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         if (oTxtDotacao.getValue() == "") {
 
-            alert("Campo dotação é de preenchimento obrigatório.");
+            alert("Campo dotaï¿½ï¿½o ï¿½ de preenchimento obrigatï¿½rio.");
             js_pesquisao47_coddot(true);
             return false;
         }
@@ -608,7 +608,7 @@ $clrotulo->label("ac16_resumoobjeto");
          */
         /*if (nValor == 0) {
 
-            alert('Campo Valor é de preenchimento obrigatório.');
+            alert('Campo Valor ï¿½ de preenchimento obrigatï¿½rio.');
             $('oTxtValorDotacao').focus();
             return false;
         }*/
@@ -629,7 +629,7 @@ $clrotulo->label("ac16_resumoobjeto");
         });
 
         if (nValorTotal > (aItensPosicao[iLinha].quantidade * aItensPosicao[iLinha].valorunitario)) {
-            alert("Valor Dotações maior que valor do item.");
+            alert("Valor Dotaï¿½ï¿½es maior que valor do item.");
             return false;
         }
 
@@ -642,7 +642,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             if (oDotacaoItem.dotacao == oDotacao.dotacao) {
                 lInserir = false;
-                alert("Dotação já incluida para o item.");
+                alert("Dotaï¿½ï¿½o jï¿½ incluida para o item.");
             }
         });
 
@@ -662,7 +662,7 @@ $clrotulo->label("ac16_resumoobjeto");
         var oParam = new Object();
         oParam.exec = "getSaldoDotacao";
         oParam.iDotacao = iDotacao;
-        js_divCarregando('Aguarde, pesquisando saldo Dotações', 'msgBox');
+        js_divCarregando('Aguarde, pesquisando saldo Dotaï¿½ï¿½es', 'msgBox');
         var oAjax = new Ajax.Request(
             "con4_contratos.RPC.php", {
                 method: 'post',
@@ -683,12 +683,12 @@ $clrotulo->label("ac16_resumoobjeto");
     function mostraSaldo(chave) {
 
         var arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_saldos', arq, 'Saldo da dotaï¿½ï¿½o', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 
     /**
-     * calcula os valores da dotação conforme o valor modificado pelo usuario
+     * calcula os valores da dotaï¿½ï¿½o conforme o valor modificado pelo usuario
      */
     function salvarInfoDotacoes(iLinha) {
 
@@ -749,7 +749,7 @@ $clrotulo->label("ac16_resumoobjeto");
             js_OpenJanelaIframe('',
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot',
-                'Pesquisa de Dotações',
+                'Pesquisa de Dotaï¿½ï¿½es',
                 true, 0);
 
             $('Jandb_iframe_orcdotacao').style.zIndex = '100000000';
@@ -758,7 +758,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'pesquisa_chave=' + document.form1.o47_coddot.value +
                 '&funcao_js=parent.' + me.sInstance + '.mostraorcdotacao',
-                'Pesquisa de Dotações',
+                'Pesquisa de Dotaï¿½ï¿½es',
                 false
             );
         }
@@ -788,19 +788,19 @@ $clrotulo->label("ac16_resumoobjeto");
         var iSelecionados = [];
 
         /**
-         * @todo incluir aqui todas as validações de campos obrigatórios para o SICOM contratos
+         * @todo incluir aqui todas as validaï¿½ï¿½es de campos obrigatï¿½rios para o SICOM contratos
          */
 
         if ($("si03_numapostilamento").value == "") {
-            return alert("Obrigatório informar o  Numero Seq. Apostila.");
+            return alert("Obrigatï¿½rio informar o  Numero Seq. Apostila.");
         }
 
         if ($("si03_dataapostila").value == "") {
-            return alert("Obrigatório informar a data da Apostila.");
+            return alert("Obrigatï¿½rio informar a data da Apostila.");
         }
 
         if ($("si03_descrapostila").value == "") {
-            return alert("Obrigatório informar a descrição da Apostila.");
+            return alert("Obrigatï¿½rio informar a descriï¿½ï¿½o da Apostila.");
         }
 
         oGridItens.getRows().forEach(function(oRow) {
@@ -817,7 +817,7 @@ $clrotulo->label("ac16_resumoobjeto");
         var oApostila = new Object();
         oApostila.dataapostila = $("si03_dataapostila").value;
         oApostila.tipoapostila = $("si03_tipoapostila").value;
-        oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
+        oApostila.descrapostila = $("si03_descrapostila").value;
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
 
@@ -878,7 +878,7 @@ $clrotulo->label("ac16_resumoobjeto");
                     /*if (oDotacao.valor == 0) {
 
                         lAditar = false;
-                        return alert("Os Valores das dotações para o item " + oItem.descricaoitem.urlDecode() + " não podem estar zeradas.");
+                        return alert("Os Valores das dotaï¿½ï¿½es para o item " + oItem.descricaoitem.urlDecode() + " nï¿½o podem estar zeradas.");
                     }*/
                     nValorDotacao += Number(oDotacao.valor);
                 });
@@ -886,7 +886,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 if (lAditar && nValorDotacao.toFixed(2) != oItemAdicionar.valor.toFixed(2)) {
 
                     lAditar = false;
-                    return alert("O valor da soma das Dotações do item " + oItem.descricaoitem.urlDecode() + " deve ser igual ao Valor Total do item.");
+                    return alert("O valor da soma das Dotaï¿½ï¿½es do item " + oItem.descricaoitem.urlDecode() + " deve ser igual ao Valor Total do item.");
                 }
 
                 oItemAdicionar.dotacoes = oItem.dotacoes;
@@ -903,7 +903,7 @@ $clrotulo->label("ac16_resumoobjeto");
             return false;
         }
 
-        new AjaxRequest(sUrlRpc, JSON.stringify(oParam), function(oRetorno, lErro) {
+        new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
                 if (lErro) {
                     return alert(oRetorno.message.urlDecode());

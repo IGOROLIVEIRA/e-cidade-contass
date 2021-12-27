@@ -25,6 +25,11 @@ class cl_precoreferencia {
    var $si01_tipoprecoreferencia = 0; 
    var $si01_justificativa = null;
    var $si01_cotacaoitem = 0; 
+   var $si01_tipoCotacao = 0; 
+   var $si01_numcgmCotacao = 0;
+   var $si01_tipoOrcamento = 0; 
+   var $si01_numcgmOrcamento = 0;
+
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si01_sequencial = int8 = codigo sequencial 
@@ -32,7 +37,9 @@ class cl_precoreferencia {
                  si01_datacotacao = date = data da cotacao 
                  si01_tipoprecoreferencia = int8 = Tipo de Preco de Referencia 
                  si01_justificativa = text = Justificativa
-                 si01_cotacaoitem = int4 = Cotação Item  
+                 si01_cotacaoitem = int4 = Cotação Item
+                 si01_tipo = int = Tipo de responsável
+                 si01_numcgm = int  =   Num CGM responsável
                  ";
    //funcao construtor da classe 
    function cl_precoreferencia() { 
@@ -65,6 +72,10 @@ class cl_precoreferencia {
        $this->si01_tipoprecoreferencia = ($this->si01_tipoprecoreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_tipoprecoreferencia"]:$this->si01_tipoprecoreferencia);
        $this->si01_justificativa = ($this->si01_justificativa == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_justificativa"]:$this->si01_justificativa);
        $this->si01_cotacaoitem = ($this->si01_cotacaoitem == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_cotacaoitem"]:$this->si01_cotacaoitem);
+       $this->si01_tipoCotacao = ($this->si01_tipoCotacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_tipoCotacao"]:$this->si01_tipoCotacao);
+       $this->si01_numcgmCotacao = ($this->si01_numcgmCotacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_numcgmCotacao"]:$this->si01_numcgmCotacao);
+       $this->si01_tipoOrcamento = ($this->si01_tipoOrcamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_tipoOrcamento"]:$this->si01_tipoOrcamento);
+       $this->si01_numcgmOrcamento = ($this->si01_numcgmOrcamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_numcgmOrcamento"]:$this->si01_numcgmOrcamento);
      }else{
        $this->si01_sequencial = ($this->si01_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si01_sequencial"]:$this->si01_sequencial);
      }
@@ -108,6 +119,25 @@ class cl_precoreferencia {
        $this->erro_status = "0";
        return false;
      }
+
+    if($this->si01_numcgmCotacao == null ){ 
+      $this->erro_sql = " Campo Responsável pela Cotação não Informado.";
+      $this->erro_campo = "si01_numcgmCotacao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if($this->si01_numcgmOrcamento == null ){ 
+      $this->erro_sql = " Campo Responsável pelo Recurso Orçamentário não Informado.";
+      $this->erro_campo = "si01_numcgmOrcamento";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      
      $sSql = "select distinct pc21_orcamforne from pcproc 
               join pcprocitem on pc80_codproc = pc81_codproc 
@@ -171,7 +201,11 @@ class cl_precoreferencia {
                                       ,si01_datacotacao 
                                       ,si01_tipoprecoreferencia 
                                       ,si01_justificativa
-                                      ,si01_cotacaoitem 
+                                      ,si01_cotacaoitem
+                                      ,si01_tipoCotacao 
+                                      ,si01_numcgmCotacao
+                                      ,si01_tipoOrcamento 
+                                      ,si01_numcgmOrcamento 
                        )
                 values (
                                 $this->si01_sequencial 
@@ -179,7 +213,11 @@ class cl_precoreferencia {
                                ,".($this->si01_datacotacao == "null" || $this->si01_datacotacao == ""?"null":"'".$this->si01_datacotacao."'")." 
                                ,$this->si01_tipoprecoreferencia 
                                ,'$this->si01_justificativa'
-                               ,$this->si01_cotacaoitem 
+                               ,$this->si01_cotacaoitem
+                               ,$this->si01_tipoCotacao 
+                               ,$this->si01_numcgmCotacao
+                               ,$this->si01_tipoOrcamento 
+                               ,$this->si01_numcgmOrcamento  
                       )";
      $result = db_query($sql); 
      
@@ -247,7 +285,7 @@ class cl_precoreferencia {
          $this->erro_status = "0";
          return false;
        }
-     }
+     } 
      if(trim($this->si01_processocompra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_processocompra"])){ 
        $sql  .= $virgula." si01_processocompra = $this->si01_processocompra ";
        $virgula = ",";
@@ -261,6 +299,71 @@ class cl_precoreferencia {
          return false;
        }
      }
+     if(trim($this->si01_cotacaoitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_cotacaoitem"])){ 
+      $sql  .= $virgula." si01_cotacaoitem = $this->si01_cotacaoitem ";
+      $virgula = ",";
+      if(trim($this->si01_cotacaoitem) == null ){ 
+        $this->erro_sql = " Campo cotaçãop por item nao Informado.";
+        $this->erro_campo = "si01_cotacaoitem";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if(trim($this->si01_numcgmCotacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_numcgmCotacao"])){ 
+      $sql  .= $virgula." si01_numcgmCotacao = $this->si01_numcgmCotacao ";
+      $virgula = ",";
+      if(trim($this->si01_numcgmCotacao) == null ){ 
+        $this->erro_sql = " Campo cotaçãop por item nao Informado.";
+        $this->erro_campo = "si01_numcgmCotacao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if(trim($this->si01_numcgmOrcamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_numcgmOrcamento"])){ 
+      $sql  .= $virgula." si01_numcgmOrcamento = $this->si01_numcgmOrcamento ";
+      $virgula = ",";
+      if(trim($this->si01_numcgmOrcamento) == null ){ 
+        $this->erro_sql = " Campo cotaçãop por item nao Informado.";
+        $this->erro_campo = "si01_numcgmOrcamento";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if(trim($this->si01_tipoCotacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_tipoCotacao"])){ 
+      $sql  .= $virgula." si01_tipoCotacao = $this->si01_tipoCotacao ";
+      $virgula = ",";
+      if(trim($this->si01_tipoCotacao) == null ){ 
+        $this->erro_sql = " Campo cotaçãop por item nao Informado.";
+        $this->erro_campo = "si01_tipoCotacao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if(trim($this->si01_tipoOrcamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_tipoOrcamento"])){ 
+      $sql  .= $virgula." si01_tipoOrcamento = $this->si01_tipoOrcamento ";
+      $virgula = ",";
+      if(trim($this->si01_tipoOrcamento) == null ){ 
+        $this->erro_sql = " Campo cotaçãop por item nao Informado.";
+        $this->erro_campo = "si01_tipoOrcamento";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      if(trim($this->si01_datacotacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_datacotacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si01_datacotacao_dia"] !="") ){ 
        $sql  .= $virgula." si01_datacotacao = '$this->si01_datacotacao' ";
        $virgula = ",";
@@ -318,13 +421,19 @@ class cl_precoreferencia {
 	          $virgula = ",";
         }
      }else{
-        $this->erro_sql = " Campo Justificativa não Informada.";
-        $this->erro_campo = "si01_justificativa";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
+      if(trim($this->si01_justificativa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_justificativa"])){ 
+        $sql  .= $virgula." si01_justificativa = '$this->si01_justificativa' ";
+        $virgula = ",";
+        if(trim($this->si01_justificativa) == null ){ 
+          $this->erro_sql = " Campo Justificativa não Informada.";
+          $this->erro_campo = "si01_justificativa";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
+      }
      }
 
      $sql .= " where ";

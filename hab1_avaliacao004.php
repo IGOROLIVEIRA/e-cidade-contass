@@ -110,7 +110,7 @@ if (isset($incluir)) {
   } else {
   	
     db_msgbox($erro_msg);
-    db_redireciona("hab1_avaliacao005.php?liberaaba=true&chavepesquisa=$db101_sequencial");
+    db_redireciona("hab1_avaliacao005.php?liberaaba=true&chavepesquisa=$db101_sequencial&iTipoAvaliacao=$db101_avaliacaotipo");
   }
 }
 ?>

@@ -30,25 +30,76 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_pcforne_classe.php");
-include("classes/db_pcfornecon_classe.php");
 include("classes/db_pcfornemov_classe.php");
 include("classes/db_pcfornecert_classe.php");
+include("classes/db_cgm_classe.php");
+include("classes/db_licitaparam_classe.php");
+include("classes/db_pcfornecon_classe.php");
+
 $clpcforne = new cl_pcforne;
-  /*
+$cllicitaparam = new cl_licitaparam;
 $clpcfornecon = new cl_pcfornecon;
-$clpcfornemov = new cl_pcfornemov;
-$clpcfornecert = new cl_pcfornecert;
-  */
+$clcgm = new cl_cgm;
+
 db_postmemory($HTTP_POST_VARS);
-   $db_opcao = 22;
+$db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
   $sqlerro=false;
-  db_inicio_transacao();
-  $clpcforne->alterar($pc60_numcgm);
-  if($clpcforne->erro_status==0){
-    $sqlerro=true;
+
+  $rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null,"*",null,"l12_instit = ".db_getsession('DB_instit')));
+        db_fieldsmemory($rsParamLic, 0)->l12_validacadfornecedor;
+
+        if($l12_validacadfornecedor == "t"){
+
+          if($z01_telef == ""){
+            db_msgbox("Usu�rio: Campo Email n�o informado !");
+            $sqlerro = true;
+          }
+
+          if($z01_email == ""){
+            db_msgbox("Usu�rio: Campo Telefone n�o informado !");
+            $sqlerro = true;
+          }
+
+          /**
+           * Verifica conta bancaria
+           */
+          $rsContaBancaria = $clpcfornecon->sql_record($clpcfornecon->sql_query(null,"*",null,"pc63_numcgm={$pc60_numcgm}"));
+          //db_criatabela($rsContaBancaria);exit;
+          if(pg_numrows($rsContaBancaria) == 0) {
+            db_msgbox("Usu�rio: E necessario cadastrar ao menos uma conta bancaria !");
+            $sqlerro = true;
+
+            echo "
+              <script>
+                  function js_db_libera(){
+                    parent.document.formaba.pcfornecon.disabled=false;
+                    top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$pc60_numcgm."';
+                ";
+            echo"}\n
+                js_db_libera();
+              </script>\n
+            ";
+          }
+        }
+  /**
+  * alterando email e telefone OC15701
+  */
+  if($sqlerro == false){
+    $clcgm->z01_numcgm = $pc60_numcgm;
+    $clcgm->z01_email = $z01_email;
+    $clcgm->z01_telef = $z01_telef;
+    $clcgm->alterar($pc60_numcgm);
   }
+  db_inicio_transacao();
+  if($sqlerro == false){
+    $clpcforne->alterar($pc60_numcgm);
+    if($clpcforne->erro_status==0){
+      $sqlerro=true;
+    }
+  }
+
   $erro_msg = $clpcforne->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 2;

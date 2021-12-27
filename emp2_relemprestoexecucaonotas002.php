@@ -1,4 +1,4 @@
-<?php
+<?php 
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBseller Servicos de Informatica
@@ -58,7 +58,6 @@ function retorna_desdob($elemento, $e64_codele, $clorcelemento)
     return pg_query($clorcelemento->sql_query_file(null, null, "o56_elemento as estrutural,o56_descr as descr", null, "o56_codele = $e64_codele and o56_elemento like '$elemento%'"));
 }
 
-
 $troca = 1;
 
 function cabecalho(&$pdf, &$troca)
@@ -70,11 +69,11 @@ function cabecalho(&$pdf, &$troca)
         $tam2 = "5";
         $pdf->addpage("L");
         $pdf->SetFont('Arial', 'B', 7);
-        $pdf->Cell(80, $tam, "Dados cadastrais dos empenhos", 1, 0, "C", 1);
-        $pdf->Cell(40, $tam, "Saldos a pagar anteriores", 1, 0, "C", 1);
+        $pdf->Cell(80, $tam, "Dados dos Empenhos", 1, 0, "C", 1);
+        $pdf->Cell(40, $tam, "Inscrição", 1, 0, "C", 1);
         $alturacabecalho = $pdf->gety();
         $distanciacabecalho = $pdf->getx();
-        $pdf->Cell(100, $tam2, "Movimentação dos restos a pagar no período", 1, 1, "C", 1);
+        $pdf->Cell(100, $tam2, "Movimentação dos Restos a Pagar no Período", 1, 1, "C", 1);
         $pdf->setxy($distanciacabecalho, $alturacabecalho + 5);
         $pdf->Cell(40, $tam2, "Anulação", 1, 0, "C", 1);
         $alturacabecalho2 = $pdf->gety();
@@ -83,22 +82,22 @@ function cabecalho(&$pdf, &$troca)
         $pdf->setxy($distanciacabecalho2 + 20, $alturacabecalho2);
         $pdf->Cell(40, $tam2, "Pagamento", 1, "TLR", "C", 1);
         $pdf->setxy($distanciacabecalho + 100, $alturacabecalho);
-        $pdf->Cell(60, $tam, "Saldo a pagar finais", 1, 1, "C", 1);
+        $pdf->Cell(60, $tam, "Saldo Final de Restos a Pagar", 1, 1, "C", 1);
 
-        $pdf->Cell(15, $tam2, "Empenho", 1, 0, "C", 1);
-        $pdf->Cell(15, $tam2, "Emissão", 1, 0, "C", 1);
+        $pdf->Cell(15, $tam2, "Número", 1, 0, "C", 1); 
+        $pdf->Cell(15, $tam2, "Data", 1, 0, "C", 1);
         $pdf->Cell(50, $tam2, "Credor", 1, 0, "C", 1);
 
-        $pdf->Cell(20, $tam2, "RP não proc", 1, 0, "C", 1);
-        $pdf->Cell(20, $tam2, "RP proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Não Proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Proc", 1, 0, "C", 1);
 
-        $pdf->Cell(20, $tam2, "RP não proc", 1, 0, "C", 1);
-        $pdf->Cell(20, $tam2, "RP proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Não Proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Proc", 1, 0, "C", 1);
         $pdf->setx($pdf->getx() + 20);
-        $pdf->Cell(20, $tam2, "RP não proc", 1, 0, "C", 1);
-        $pdf->Cell(20, $tam2, "RP proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Não Proc", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "RP Proc", 1, 0, "C", 1);
 
-        $pdf->Cell(20, $tam2, "A liquidar ", 1, 0, "C", 1);
+        $pdf->Cell(20, $tam2, "A Liquidar ", 1, 0, "C", 1);
         $pdf->Cell(20, $tam2, "Liquidados ", 1, 0, "C", 1);
         $pdf->Cell(20, $tam2, "Geral ", 1, 1, "C", 1);
 
@@ -230,10 +229,11 @@ $tam = "10";
 $tam2 = "5";
 
 //filtro por posição
-//$dtini = db_getsession("DB_anousu").'-01-01';
-$dtini = $dtini_ano . "-" . $dtini_mes . "-" . $dtini_dia;
+// $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
+              
+$pdtini = $dtini_ano . "-" . "01". "-" . "01";
+$dtini = $dtini_ano . "-" . $dtini_mes. "-" . $dtini_dia;
 $dtfim = $dtfim_ano . "-" . $dtfim_mes . "-" . $dtfim_dia;
-
 
 //filtro por agrupamento
 $arr_tipos = explode(",",$vertipos);
@@ -371,12 +371,13 @@ if(stristr($sql_order, 'e60_anousu') === FALSE) {
 } else {
   $sql_order .= " , e60_codemp::bigint";
 }
-
+ 
 
 //filtro por restos a pagar
 $sql_where_externo = " ";
 if ($commov == "0") {//geral
     $sql_where_externo .= "  ";
+    
 }
 
 if ($commov == "1") {//com movimento até a data
@@ -426,6 +427,15 @@ if ($listacredor != "") {
 
 $sql_where_externo .= " and " . $sql_filtro;
 
+// Primeira consulta
+$sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $pdtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
+$resconsulta = $clempresto->sql_record($sqlempresto);//die($sqlempresto);
+if ($clempresto->numrows == 0) {
+    db_redireciona("db_erros.php?fechar=true&db_erro=Sem movimentação de restos a pagar.");
+    exit;
+}
+$rowsconsulta  = $clempresto->numrows;
+// fim primeira
 $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
 
 $res = $clempresto->sql_record($sqlempresto);//die($sqlempresto);
@@ -434,6 +444,7 @@ if ($clempresto->numrows == 0) {
     exit;
 }
 
+//echo $sqlempresto; exit;
 $rows = $clempresto->numrows;
 
 //variaveis agrupamentos
@@ -550,11 +561,17 @@ $vprojativ = "";
 $uIndice = count($arr_tipos)-1;
 if ($formato != "csv") {
     for ($x = 0; $x < $rows; $x++) {
+        db_fieldsmemory($resconsulta, $x);
+        // inicio criando variaveis auxiliares para receber o valor da primentira consulta
+        $auxliquidado_anterior = ($e91_vlremp - $e91_vlranu - $e91_vlrliq) + ($e91_vlrliq - $e91_vlrpag);
+        $auxapagargeral = ($auxliquidado_anterior - $vlranu - $vlrpag - $vlrpagnproc);
+        $auxaliquidargeral = $e91_vlremp - (($e91_vlranu + $vlranu) + ($vlrliq + $e91_vlrliq - $vlranuliq));
+       
+        // fim
         db_fieldsmemory($res, $x);
-
         cabecalho($pdf, $troca);
         $troca = 0;
-
+                      
         if (substr($arr_tipos[$uIndice],0,2) == "ex") {
 
           if ($vexerciciosub != $e60_anousu) {
@@ -590,6 +607,7 @@ if ($formato != "csv") {
               $vexerciciosub = $e60_anousu;
           }
         }
+        
 
         //subtotal
         if(substr($arr_tipos[$uIndice],0,2) == "or") {
@@ -1445,15 +1463,17 @@ if ($formato != "csv") {
         $total_mov_liquida += ($vlrliq);
         $total_mov_pagmento += $vlrpag;
         $total_mov_pagnproc += $vlrpagnproc;
-        $liquidado_anterior = ($e91_vlremp - $e91_vlranu - $e91_vlrliq) + ($e91_vlrliq - $e91_vlrpag);
-        $apagargeral = ($liquidado_anterior - $vlranu - $vlrpag - $vlrpagnproc);
-        $aliquidargeral = $e91_vlremp - (($e91_vlranu + $vlranu) + ($vlrliq + $e91_vlrliq - $vlranuliq));
+
+        // Dados recebidos da varievesi aux;
+        $liquidado_anterior = $auxliquidado_anterior; 
+        $apagargeral = $auxapagargeral;
+        $aliquidargeral=$auxaliquidargeral;      
         $liquidados = ($apagargeral - $aliquidargeral);
         $total_aliquidar_finais = $total_aliquidar_finais + $aliquidargeral;
         $total_liquidados_finais = $total_liquidados_finais + abs($liquidados);
         $total_geral_finais = ($total_geral_finais + $apagargeral);
-
-        if ($impressao == '0') {
+       
+        if ($impressao == '0') { 
             //dados cadastrais dos empenhos
             $pdf->Cell(15, $tam, ($e60_codemp . "/" . $e60_anousu), "TBR", 0, "R", 0);//empenho
             $pdf->Cell(15, $tam, db_formatar($e60_emiss, 'd'), 1, 0, "C", 0);//emissao
@@ -1468,11 +1488,12 @@ if ($formato != "csv") {
             $pdf->Cell(20, $tam, db_formatar(abs($vlranuliqnaoproc), 'f'), 1, 0, "R", 0);//anulacao -> rp nao proc
 
             $pdf->Cell(20, $tam, db_formatar(abs($vlranuliq), 'f'), 1, 0, "R", 0);//anulacao -> rp proc
-
+           
             if ($c70_anousu == $anoatual) {
                 $pdf->Cell(20, $tam, db_formatar(abs($vlrliq), 'f'), 1, 0, "R", 0);//liquidado=rpproc
-
+               
             } else {
+                           
                 $pdf->Cell(20, $tam, db_formatar("0", 'f'), 1, 0, "R", 0);//liquidado=rpproc
             }
 
@@ -1591,7 +1612,7 @@ if ($formato != "csv") {
         $total_aliquidar_finais = $total_aliquidar_finais + $aliquidargeral;
         $total_liquidados_finais = $total_liquidados_finais + abs($liquidados);
         $total_geral_finais = ($total_geral_finais + $apagargeral);
-
+       
         fputs($fp, ($e60_codemp . "/" . $e60_anousu) . ";" . db_formatar($e60_emiss, 'd') . ";" . $z01_nome . ";" . db_formatar(abs($e91_vlremp - $e91_vlranu - $e91_vlrliq), 'f') . ";");
         fputs($fp, db_formatar(abs($e91_vlrliq - $e91_vlrpag), 'f') . ";" . db_formatar(abs($vlranuliqnaoproc), 'f') . ";" . db_formatar(abs($vlranuliq), 'f') . ";" . ($c70_anousu == $anoatual ? db_formatar(abs($vlrliq), 'f') : 0) . ";");
         fputs($fp, db_formatar(abs($vlrpagnproc), 'f') . ";" . db_formatar(abs($vlrpag), 'f') . ";" . db_formatar(abs($aliquidargeral), 'f') . ";" . db_formatar(abs($liquidados), 'f') . ";" . db_formatar(abs($apagargeral), 'f') . "\n");

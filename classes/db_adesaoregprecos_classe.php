@@ -1007,7 +1007,7 @@ class cl_adesaoregprecos {
      return $result;
    }
    // funcao do sql 
-   function sql_query ( $si06_sequencial=null,$campos="si06_sequencial, si06_orgaogerenciador, si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgmf.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data",$ordem=null,$dbwhere=""){ 
+   function sql_query ( $si06_sequencial=null,$campos="si06_sequencial, si06_orgaogerenciador, si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgm.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);

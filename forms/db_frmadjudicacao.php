@@ -8,6 +8,11 @@ $clpcprocitem       = new cl_pcprocitem;
 $clrotulo           = new rotulocampo;
 
 $clrotulo->label("l20_codigo");
+
+    db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
+    db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js, widgets/DBHint.widget.js");
+    db_app::load("estilos.css, grid.style.css");
+    
 ?>
 <form name="form1" method="post" action="">
     <table border="0">
@@ -38,6 +43,20 @@ $clrotulo->label("l20_codigo");
             </td>
         </tr>
         <tr>
+                                    <td nowrap title="respAdjudicodigo">
+                                        <?
+                                        db_ancora("Resp. Adjudicação:","js_pesquisal31_numcgm(true,'respAdjudicodigo','respAdjudinome');",$db_opcao)
+
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('respAdjudicodigo',10,$Il20_codepartamento,true,'text',$db_opcao,"onchange='js_pesquisal31_numcgm(false);';");
+                                        db_input('respAdjudinome',45,$Il20_descricaodep,true,'text',3,"");
+                                        ?>
+                                    </td>
+        </tr>
+        <tr>
             <td nowrap title="<?=@$Tl202_dataadjudicacao?>">
                 <?=@$Ll202_dataadjudicacao?>
             </td>
@@ -60,6 +79,7 @@ $clrotulo->label("l20_codigo");
         }
         ?>
         <input type="button" value="Pesquisar" onclick="js_pesquisal202_licitacao(true);">
+        <!--<input type="button" value="Gerar Relatório" onclick="js_gerarRelatorio(true);">-->
     </div>
     <br>
     <fieldset>
@@ -147,12 +167,55 @@ $clrotulo->label("l20_codigo");
             document.form1.l202_dataadjudicacao.value = dataAdju;
         }
         db_iframe_liclicita.hide();
+        js_getReponsavel();
         js_init()
     }
 
     function js_init() {
         js_showGrid();
         js_getItens();
+    }
+
+    function js_gerarRelatorio(){
+        
+        var iHeight = 200;
+        var iWidth  = 300;
+        windowDotacaoItem = new windowAux('wndDotacoesItem',
+            'Gerar Relagório ',
+            iWidth,
+            iHeight
+        );
+       
+        var sContent  = "<div style='margin-top:30px;'>";
+        sContent     += "<fieldset>"; 
+        sContent     += "<legend>Gerar Relatório de Adjudicação em:</legend>";
+        sContent     += "  <div id=''>";
+        sContent     += "  <input type='checkbox' id='pdf' name='PDF'>";
+        sContent     += "  <label>PDF</label>";
+        sContent     += "  </div>";
+        sContent     += "  <div id=''>";
+        sContent     += "  <input type='checkbox' id='word' name='WORD'>";
+        sContent     += "  <label>WORD</label>";
+        sContent     += "  </div>";
+        sContent     += "</fieldset>";
+        sContent     += "<center>";
+        sContent     += "<input type='button' id='btnGerar' value='Confirmar' onclick='gerar()'>";
+        sContent     += "</center>";
+        sContent     += "</div>";
+        windowDotacaoItem.setContent(sContent);
+        windowDotacaoItem.show();
+       
+    }
+
+    function gerar(mostra){
+        let pdf = document.getElementById("pdf");
+        var ilicita = document.getElementById("l202_licitacao").value;
+        if(pdf.checked){
+            jan = window.open('lic1_adjudicacaolicitacao004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&quant_casas=2&tipoprecoreferencia=',
+                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+	   jan.moveTo(0,0);
+        }
+        windowDotacaoItem.hide();
     }
 
     function js_getItens() {
@@ -226,6 +289,35 @@ $clrotulo->label("l20_codigo");
         }
     }
 
+    function js_getReponsavel() {
+        
+        var oParam = new Object();
+        oParam.iLicitacao   = $F('l202_licitacao');
+        oParam.exec = "getResponsavelAdju";
+        //js_divCarregando('Aguarde, pesquisando Itens', 'msgBox');
+        var oAjax = new Ajax.Request(
+            'lic1_homologacaoadjudica.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_retornoGetResponsavel
+            }
+        );
+    }
+
+    function js_retornoGetResponsavel(oAjax) {
+
+        //js_removeObj('msgBox');
+        
+
+        var oRetornoitens = JSON.parse(oAjax.responseText);
+        oRetornoitens.itens.each(function(oLinha, iLinha) {
+                document.getElementById("respAdjudicodigo").value = oLinha.codigo;
+                document.getElementById("respAdjudinome").value = oLinha.nome;
+
+        });
+
+    }
+
     function js_pesquisa(homologacao=false){
         if(!homologacao){
             js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&situacao=1&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
@@ -248,7 +340,12 @@ $clrotulo->label("l20_codigo");
         var oParam = new Object();
         oParam.iLicitacao    = $F('l202_licitacao');
         oParam.dtAdjudicacao = $F('l202_dataadjudicacao');
+        oParam.respAdjudicodigo = $F('respAdjudicodigo');
         oParam.exec = "adjudicarLicitacao";
+        if(oParam.respAdjudicodigo==""){
+            alert('Campo Responsável pela Adjudicação não informado'); 
+            return false;
+        }
         js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
         var oAjax = new Ajax.Request(
             'lic1_homologacaoadjudica.RPC.php', {
@@ -268,6 +365,8 @@ $clrotulo->label("l20_codigo");
             document.getElementById('l202_licitacao').value = '';
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_dataadjudicacao').value = '';
+            document.getElementById('respAdjudicodigo').value = '';
+            document.getElementById('respAdjudinome').value = '';
         }else{
             alert(oRetorno.message.urlDecode());
         }
@@ -277,7 +376,12 @@ $clrotulo->label("l20_codigo");
         var oParam = new Object();
         oParam.iLicitacao = $F('l202_licitacao');
         oParam.dtAdjudicacao = $F('l202_dataadjudicacao');
+        oParam.respAdjudicodigo = $F('respAdjudicodigo');
         oParam.exec = "alteraradjudicarLicitacao";
+        if(oParam.respAdjudicodigo==""){
+            alert('Campo Responsável pela Adjudicação não informado'); 
+            return false;
+        }
         js_divCarregando('Aguarde, Adjudicando Licitacao', 'msgBox');
         var oAjax = new Ajax.Request(
             'lic1_homologacaoadjudica.RPC.php', {
@@ -297,6 +401,8 @@ $clrotulo->label("l20_codigo");
             document.getElementById('l202_licitacao').value = '';
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_dataadjudicacao').value = '';
+            document.getElementById('respAdjudicodigo').value = '';
+            document.getElementById('respAdjudinome').value = '';
         }else{
             alert(oRetorno.message.urlDecode());
         }
@@ -326,9 +432,44 @@ $clrotulo->label("l20_codigo");
             document.getElementById('l202_licitacao').value = '';
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_dataadjudicacao').value = '';
+            document.getElementById('respAdjudicodigo').value = '';
+            document.getElementById('respAdjudinome').value = '';
         }else{
             alert(oRetorno.message.urlDecode());
         }
+    }
+    var varNumCampo;
+    var varNomeCampo;
+    function js_pesquisal31_numcgm(mostra,numCampo,nomeCampo){
+        varNumCampo = numCampo;
+        varNomeCampo = nomeCampo;
+        
+        if(mostra==true){
+            js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&filtro=1','Pesquisa',true,'0','1');
+        }else{
+            numcgm = document.getElementById("respAdjudicodigo").value;
+            if(numcgm != ''){
+                js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?pesquisa_chave='+numcgm+'&funcao_js=parent.js_mostracgm&filtro=1','Pesquisa',false);
+            }else{
+                document.getElementById("respAdjudicodigo").value = ""; 
+            }
+        }
+    }
+    
+    function js_mostracgm(erro,chave){
+        document.getElementById("respAdjudinome").value = chave; 
+        if(erro==true){ 
+          //  document.form1.l31_numcgm.focus(); 
+          document.getElementById("respAdjudinome").value = "";
+          document.getElementById("respAdjudicodigo").value = "";
+          alert("Responsável não encontrado");
+        }
+    }
+    function js_mostracgm1(chave1,chave2){
+
+    document.getElementById(varNumCampo).value = chave1;
+    document.getElementById(varNomeCampo).value = chave2;
+    db_iframe_cgm.hide(); 
     }
     js_showGrid();
 </script>

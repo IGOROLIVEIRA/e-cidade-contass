@@ -195,7 +195,7 @@ AjaxRequest.prototype.execute = function() {
         }
 
     } else {
-        oRequest.parameters = 'json=' + Object.toJSON(this.oParameters);
+        oRequest.parameters = 'json=' + Object.toJSON(this.oParameters).replace('%','');
     }
 
     new Ajax.Request(this.sPathFile, oRequest);

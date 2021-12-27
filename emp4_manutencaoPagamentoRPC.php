@@ -162,7 +162,7 @@ require_once("model/orcamento/ReceitaOrcamentaria.model.php");
 require_once("model/orcamento/Recurso.model.php");
 require_once("model/orcamento/TribunalEstrutura.model.php");
 require_once("model/orcamento/Unidade.model.php");
-
+require_once("std/DBDate.php");
 
 require_once 'model/impressaoAutenticacao.php';
 
@@ -174,7 +174,7 @@ switch ($oParam->exec) {
 
   case "getMovimentos":
 
-    // variavel de controle para configuração de arquivos padrao OBN
+    // variavel de controle para configuraï¿½ï¿½o de arquivos padrao OBN
     $lArquivoObn = false;
     $lTrazContasFornecedor = true;
     $lTrazContasRecurso    = true;
@@ -269,7 +269,7 @@ switch ($oParam->exec) {
       $sWhere   .= " and e03_numeroprocesso = '{$sProcesso}'";
     }
 
-    // validamos se é configuracao OBN
+    // validamos se ï¿½ configuracao OBN
     if ($lArquivoObn == true) {
       $sWhere .= " and empagemovforma.e97_codforma = 3 ";
     }
@@ -285,7 +285,7 @@ switch ($oParam->exec) {
     $lContaUnicaFundeb = false;
     $aParametrosCaixa = db_stdClass::getParametro("caiparametro", array(db_getsession("DB_instit")));
 
-    if (count($aParametrosCaixa) > 0) {
+	if (count($aParametrosCaixa) > 0) {
       $lContaUnicaFundeb = $aParametrosCaixa[0]->k29_cotaunicafundeb == "t" ? true : false;
     }
 
@@ -401,7 +401,7 @@ switch ($oParam->exec) {
         $iCodigoOrdemAuxiliar =  $oAgenda->autorizarPagamento($oParam->dtPagamento);
       }
       /*
-       * Adiciona o Movimento na ordem auxiliar escolhida pelo usuário
+       * Adiciona o Movimento na ordem auxiliar escolhida pelo usuï¿½rio
        */
       if (isset($oParam->iOPAuxiliarManutencao) && $oParam->iOPAuxiliarManutencao != "") {
         $iCodigoOrdemAuxiliar = $oParam->iOPAuxiliarManutencao;
@@ -413,7 +413,10 @@ switch ($oParam->exec) {
 
         $oAgenda->configurarPagamentos($oParam->dtPagamento, $oMovimento, $iCodigoOrdemAuxiliar, $oParam->lEmitirOrdeAuxiliar, $oParam->lEfetuarPagamento);
 
-        if (isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "") {
+        if ( isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "" ) {
+
+            $oContaTesouraria = new contaTesouraria($oMovimento->iContaSaltes);
+            $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
 
           $oContaTesouraria = new contaTesouraria($oMovimento->iContaSaltes);
           $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
@@ -423,9 +426,9 @@ switch ($oParam->exec) {
         $iCodMov   = $oMovimento->iCodMov;
 
         /**
-         * Verificamos se o codigo do movimento está vinculado a algum tipo de transmissão. caso esteja, deletamos os
-         * detalhes pois o usuário pode ter alterado o valor a ser pago no movimento, entrando assim em conflito com os
-         * detalhes (códigos de barras) lançados na configuração de envio.
+         * Verificamos se o codigo do movimento estï¿½ vinculado a algum tipo de transmissï¿½o. caso esteja, deletamos os
+         * detalhes pois o usuï¿½rio pode ter alterado o valor a ser pago no movimento, entrando assim em conflito com os
+         * detalhes (cï¿½digos de barras) lanï¿½ados na configuraï¿½ï¿½o de envio.
          */
         $oDaoEmpAgeMovTipoTransmissao   = db_utils::getDao('empagemovtipotransmissao');
         $sSqlBuscaConfiguracaoMovimento = $oDaoEmpAgeMovTipoTransmissao->sql_query_file(null, "*", null, "e25_empagemov = {$iCodMov}");
@@ -435,7 +438,7 @@ switch ($oParam->exec) {
           $oDaoDetalheTransmissao = new cl_empagemovdetalhetransmissao();
           $oDaoDetalheTransmissao->excluir(null, "e74_empagemov = {$iCodMov}");
           if ($oDaoDetalheTransmissao->erro_status == "0") {
-            throw new BusinessException("Não foi possível excluir as configurações do movimento {$iCodMov}.");
+            throw new BusinessException("Nï¿½o foi possï¿½vel excluir as configuraï¿½ï¿½es do movimento {$iCodMov}.");
           }
         } else {
 
@@ -463,12 +466,21 @@ switch ($oParam->exec) {
       	if ($oParam->lEfetuarPagamento) {
 
 			if ($iCodForma == 2 && $oMovimento->iCheque == '' && $oMovimento->iCodCheque == '') {
-				throw new Exception("ERRO [2] - Para efetuar o pagamento é necessário emitir o cheque.");
+				throw new Exception("ERRO [2] - Para efetuar o pagamento ï¿½ necessï¿½rio emitir o cheque.");
 			}
 
 			foreach ($oParam->aMovimentos as $oMovimento) {
 
-				$oOrdemPagamento = new ordemPagamento($oMovimento->iCodNota);
+        if (!empty($oParam->dtPagamento) && $oParam->dtPagamento != '//') {
+          $dtAuxData = new DBDate($oParam->dtPagamento);
+          $dtAuxData = $dtAuxData->getDate();
+          $data = $dtAuxData; // aqui ele atribui a data_para_pagamento enviada pelo usuï¿½rio
+          unset($dtAuxData);
+        } else {
+            $data = date("Y-m-d", db_getsession("DB_datausu"));
+        }
+
+				$oOrdemPagamento = new ordemPagamento($oMovimento->iCodNota, $data);
 
 				if (isset($oMovimento->iCheque) && trim($oMovimento->iCheque) != '') {
 					$oOrdemPagamento->setCheque($oMovimento->iCheque);
@@ -509,7 +521,7 @@ switch ($oParam->exec) {
 
   case "getMovimentosSlip":
 
-    // variavel de controle para configuração de arquivos padrao OBN
+    // variavel de controle para configuraï¿½ï¿½o de arquivos padrao OBN
     $lArquivoObn = false;
     if (!empty($oParam->params[0]->lObn)) {
       $lArquivoObn = true;
@@ -635,7 +647,7 @@ switch ($oParam->exec) {
             db_inicio_transacao();
 
             /**
-             * Altera conta pagadora padrão que foi definida na liquidação
+             * Altera conta pagadora padrï¿½o que foi definida na liquidaï¿½ï¿½o
              */
             if (isset($oParam->iCodMov) && $oParam->iCodMov != '') {
 
