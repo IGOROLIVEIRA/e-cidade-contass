@@ -29,7 +29,7 @@ class Oc16192 extends AbstractMigration
 
         ALTER TABLE orcsuplemval ADD COLUMN o47_numerocontratoop varchar(30);
 
-        ALTER TABLE orcsuplemval ADD COLUMN o47_dataassinaturacop date;
+        ALTER TABLE orcsuplemval ADD COLUMN o47_dataassinaturacop date; 
         
 
         COMMIT;

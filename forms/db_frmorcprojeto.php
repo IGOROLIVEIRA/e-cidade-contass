@@ -60,10 +60,12 @@ $clrotulo->label("o45_numlei");
               <td nowrap title="<?= @$To39_descr ?>"><?= @$Lo39_descr ?></td>
               <td><? db_textarea('o39_descr', 0, 67, $Io39_descr, true, 'text', $db_opcao, "") ?></td>
             </tr>
+            <?php if (db_getsession('DB_anousu') > 2021) { ?>
             <tr>
               <td nowrap title="<?= @$To39_justi ?>"><?= @$Lo39_justi ?></td>
               <td><? db_textarea('o39_justi', 0, 67, $Io39_justi, true, 'text', $db_opcao, "") ?></td>
             </tr>
+            <?php } ?>
             <tr>
               <td nowrap title="<?= @$To39_codlei ?>"><? db_ancora(@$Lo39_codlei, "js_pesquisao39_codlei(true);", $db_opcao); ?></td>
               <td>
@@ -73,6 +75,7 @@ $clrotulo->label("o45_numlei");
                 <input type="hidden" id="bModalidadeAplic" value="<?= $bModalidadeAplic ?>" name="bModalidadeAplic">
               </td>
             </tr>
+
             <?php
             //echo $clorcsuplem->sql_query(null,"distinct o48_tiposup","o46_codsup","orcprojeto.o39_codproj = {$o39_codproj}" );
             $res = $clorcsuplem->sql_record($clorcsuplem->sql_query(null, "distinct o48_tiposup", "", "orcprojeto.o39_codproj = {$o39_codproj}"));

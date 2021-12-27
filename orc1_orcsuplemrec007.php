@@ -66,12 +66,13 @@ if (isset($incluir)) {
 			$valorcodigo  = substr($o70_codigo, 0, 2);
 			$valorconsulta = substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 2);
 			// Condicional para recursos
-
+			
 			if (($o70_codigo != 100 and $o70_codigo != 101 and $o70_codigo != 102) or ($o70_codigo != 118 and $o70_codigo != 119)) {
-
+				
 				if (substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 3) == 100 or substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 3) == 101 or substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 3) == 102) {
-
+				
 					if ($valorcodigo != $valorconsulta or ($o70_codigo != 100 and $o70_codigo != 101 and $o70_codigo != 102)) {
+
 						db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
 						$sqlerro = true;
 						$limpa_dados = false;
@@ -90,6 +91,11 @@ if (isset($incluir)) {
 						$sqlerro = true;
 						$limpa_dados = false;
 					}
+				}
+				else if($o70_codigo != substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 3)) {
+					db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+						$sqlerro = true;
+						$limpa_dados = false;
 				}
 			}
 		}

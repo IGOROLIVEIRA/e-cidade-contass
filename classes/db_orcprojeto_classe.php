@@ -149,7 +149,7 @@ class cl_orcprojeto
       $this->erro_status = "0";
       return false;
     }
-    if ($this->o39_justi == null) {
+    if ($this->o39_justi == null and db_getsession("DB_anousu")>2021) {
       $this->erro_sql = " É obrigatório informar a justificativa do decreto e ato administrativo.";
       $this->erro_campo = "o39_justi";
       $this->erro_banco = "";
@@ -364,18 +364,20 @@ class cl_orcprojeto
         return false;
       }
     }
-    if (trim($this->o39_justi) != "" || isset($GLOBALS["HTTP_POST_VARS"]["o39_justi"])) {
-      $sql  .= $virgula . " o39_justi = '$this->o39_justi' ";
-      $virgula = ",";
-      if (trim($this->o39_justi) == null) {
-        $this->erro_sql = " É obrigatório informar a justificativa do decreto e ato administrativo.";
-        $this->erro_campo = "o39_justi";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
+    if ( db_getsession("DB_anousu")>2021){
+        if (trim($this->o39_justi) != "" || isset($GLOBALS["HTTP_POST_VARS"]["o39_justi"])) {
+          $sql  .= $virgula . " o39_justi = '$this->o39_justi' ";
+          $virgula = ",";
+          if (trim($this->o39_justi) == null) {
+            $this->erro_sql = " É obrigatório informar a justificativa do decreto e ato administrativo.";
+            $this->erro_campo = "o39_justi";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+          }
+        }
     }
     if (trim($this->o39_codlei) != "" || isset($GLOBALS["HTTP_POST_VARS"]["o39_codlei"])) {
       $sql  .= $virgula . " o39_codlei = $this->o39_codlei ";
