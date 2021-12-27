@@ -218,7 +218,7 @@ class slip {
          $rsRecursos      = $oDaoSlipRecurso->sql_record($sSqlRecursos);
          $aRecursos       = db_utils::getCollectionByRecord($rsRecursos);
          foreach ($aRecursos as $oRecurso) {
-           $this->addRecurso($oRecurso->k29_recurso, $oRecurso->k29_valor);
+           $this->addRecurso($oRecurso->k29_sequencial, $oRecurso->k29_valor);
          }
 
       } else {

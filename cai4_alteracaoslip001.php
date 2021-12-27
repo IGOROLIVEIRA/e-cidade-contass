@@ -133,7 +133,7 @@ function js_retornoGetDados(oAjax) {
 	js_removeObj('msgBox');
 	var oRetorno = eval("("+oAjax.responseText+")");
 
-    console.log(oRetorno);
+
   if (oRetorno.status == "2") {
 	  alert(oRetorno.message.urlDecode());
 	  return false;
@@ -147,9 +147,6 @@ function js_retornoGetDados(oAjax) {
   oDBViewSlipPagamento.setAlteracao(true);
   oDBViewSlipPagamento.oTxtCodigoSlip.setValue(oRetorno.iCodigoSlip);
   oDBViewSlipPagamento.getDadosTransferencia();
-
-  oDBViewSlipPagamento.oTxtFonteInputCodigo.setValue(oRetorno.iFonteRecurso);
-  oDBViewSlipPagamento.pesquisaFonte(false);
 
   oDBViewSlipPagamento.pesquisaCaracteristicaPeculiarCredito(false);
   oDBViewSlipPagamento.pesquisaCaracteristicaPeculiarDebito(false);
@@ -338,8 +335,6 @@ function js_alteraComponentes() {
   	$('oTxtCaracteristicaCreditoInputDescricao').value = '';
   	$('oTxtHistoricoInputCodigo').value    = '';
   	$('oTxtHistoricoInputDescricao').value = '';
-    $('oTxtFonteInputCodigo').value = '';
-    $('oTxtFonteInputDescricao').value = '';
   	$('oTxtValorInput').value = '';
   	$('observacao_oDBViewSlipPagamento').value = '';
   }
