@@ -11,7 +11,7 @@ if ($db_opcao==1) {
 
 $sSQL = " SELECT o15_codigo, o15_codtri, o15_descr FROM orctiporec WHERE o15_codtri IN ('122','123','124','142','163') ORDER BY o15_codigo ";
 
-if(db_getsession("DB_anousu") > 2020){
+if(db_getsession("DB_anousu") > 2021){
     $sSQL = " SELECT o15_codigo, o15_codtri, o15_descr FROM orctiporec WHERE o15_codtri IN ('122','123','124','142','163', '163', '171', '172', '173','176', '177', '178', '181', '182', '183') ORDER BY o15_codigo ";
 }
 $tpCadastros = db_utils::getCollectionByRecord(db_query($sSQL));
