@@ -432,7 +432,7 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        
+
         if($this->ac16_acordocategoria == null ){
             $this->ac16_acordocategoria = "0";
         }
@@ -1415,6 +1415,7 @@ class cl_acordo {
         $sSql .= "       from acordo";
         $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
         $sSql .= "            inner join liclicita ON liclicita.l20_codigo = acordo.ac16_licitacao";
+        $sSql .= "            inner join cgm on z01_numcgm = ac16_contratado  ";
         $sSql .= "  where 1 = 1 ";
         $sSql .= " {$sWhere} {$sOrder} ";
 
@@ -2189,6 +2190,24 @@ class cl_acordo {
 
     }
 
+    function sql_query_lancamentos_contrato($sCampos = "*", $iAcordo = null) {
+
+        $sWhere = " WHERE 1 = 1 ";
+
+        if (!empty($iAcordo)) {
+            $sWhere .= " AND c87_acordo = {$iAcordo} ";
+        }
+
+        $sSql = " SELECT DISTINCT {$sCampos}
+                FROM conlancam
+                JOIN conlancamacordo ON c87_codlan = c70_codlan
+                JOIN conlancamdoc ON c71_codlan = c87_codlan
+                {$sWhere} ";
+
+        return $sSql;
+
+    }
+
     /**
      * Retorna toda a movimentação do acordo com seus saldo.
      * @param $iAcordo
@@ -2288,4 +2307,3 @@ class cl_acordo {
     }
 
 }
-?>

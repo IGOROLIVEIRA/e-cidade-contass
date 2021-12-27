@@ -175,7 +175,7 @@ switch($oParam->exec) {
 
   case "getMovimentos" :
 
-    // variavel de controle para configurao de arquivos padrao OBN
+    // variavel de controle para configuração de arquivos padrao OBN
     $lArquivoObn = false;
     $lTrazContasFornecedor = true;
     $lTrazContasRecurso    = true;
@@ -275,7 +275,7 @@ switch($oParam->exec) {
       $sWhere   .= " and e03_numeroprocesso = '{$sProcesso}'";
     }
 
-    // validamos se  configuracao OBN
+    // validamos se é configuracao OBN
     if ($lArquivoObn == true) {
       $sWhere .= " and empagemovforma.e97_codforma = 3 ";
     }
@@ -358,6 +358,9 @@ switch($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
+            if ($oMovimento->iRecurso)
+                $oTransferencia->setFonteRecurso($oMovimento->iRecurso);
+            
 		  if (isset($oMovimento->iCodCheque) && $oMovimento->iCodCheque != '') {
 			$oTransferencia->setCheque($oMovimento->iCodCheque);
 		  }
@@ -409,7 +412,7 @@ switch($oParam->exec) {
         $iCodigoOrdemAuxiliar =  $oAgenda->autorizarPagamento($oParam->dtPagamento);
       }
       /*
-       * Adiciona o Movimento na ordem auxiliar escolhida pelo usurio
+       * Adiciona o Movimento na ordem auxiliar escolhida pelo usuário
        */
       if (isset($oParam->iOPAuxiliarManutencao) && $oParam->iOPAuxiliarManutencao != "") {
         $iCodigoOrdemAuxiliar = $oParam->iOPAuxiliarManutencao;
@@ -432,9 +435,9 @@ switch($oParam->exec) {
         $iCodMov   = $oMovimento->iCodMov;
 
         /**
-         * Verificamos se o codigo do movimento est vinculado a algum tipo de transmisso. caso esteja, deletamos os
-         * detalhes pois o usurio pode ter alterado o valor a ser pago no movimento, entrando assim em conflito com os
-         * detalhes (cdigos de barras) lanados na configurao de envio.
+         * Verificamos se o codigo do movimento está vinculado a algum tipo de transmissão. caso esteja, deletamos os
+         * detalhes pois o usuário pode ter alterado o valor a ser pago no movimento, entrando assim em conflito com os
+         * detalhes (códigos de barras) lançados na configuração de envio.
          */
         $oDaoEmpAgeMovTipoTransmissao   = db_utils::getDao('empagemovtipotransmissao');
         $sSqlBuscaConfiguracaoMovimento = $oDaoEmpAgeMovTipoTransmissao->sql_query_file(null, "*", null, "e25_empagemov = {$iCodMov}");
@@ -444,7 +447,7 @@ switch($oParam->exec) {
           $oDaoDetalheTransmissao = new cl_empagemovdetalhetransmissao();
           $oDaoDetalheTransmissao->excluir(null, "e74_empagemov = {$iCodMov}");
           if ($oDaoDetalheTransmissao->erro_status == "0") {
-            throw new BusinessException("No foi possvel excluir as configuraes do movimento {$iCodMov}.");
+            throw new BusinessException("Não foi possível excluir as configurações do movimento {$iCodMov}.");
           }
 
         } else {
@@ -473,7 +476,7 @@ switch($oParam->exec) {
       	if ($oParam->lEfetuarPagamento) {
 
 			if ($iCodForma == 2 && $oMovimento->iCheque == '' && $oMovimento->iCodCheque == '') {
-				throw new Exception("ERRO [2] - Para efetuar o pagamento  necessrio emitir o cheque.");
+				throw new Exception("ERRO [2] - Para efetuar o pagamento é necessário emitir o cheque.");
 			}
 
 			foreach ($oParam->aMovimentos as $oMovimento) {
@@ -531,7 +534,7 @@ switch($oParam->exec) {
 
   case "getMovimentosSlip":
 
-    // variavel de controle para configurao de arquivos padrao OBN
+    // variavel de controle para configuração de arquivos padrao OBN
     $lArquivoObn = false;
     if (!empty($oParam->params[0]->lObn)) {
       $lArquivoObn = true;
@@ -664,7 +667,7 @@ switch($oParam->exec) {
             db_inicio_transacao();
 
             /**
-             * Altera conta pagadora padro que foi definida na liquidao
+             * Altera conta pagadora padrão que foi definida na liquidação
              */
             if (isset($oParam->iCodMov) && $oParam->iCodMov != '') {
 

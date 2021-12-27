@@ -36,7 +36,7 @@ include("dbforms/db_classesgenericas.php");
 include("classes/db_orcsuplemrec_classe.php");
 include("classes/db_orcsuplemval_classe.php");
 include("classes/db_orcprojeto_classe.php");
-include("classes/db_orcreceita_classe.php"); 
+include("classes/db_orcreceita_classe.php");
 db_app::import("orcamento.suplementacao.*");
 db_postmemory($HTTP_POST_VARS);
 
@@ -57,46 +57,61 @@ $db_opcao = 1;
 $limpa_dados = false;
 $sqlerro = false;
 
-if(isset($incluir)){
+if (isset($incluir)) {
 
-	if ( $tiposup == 1004 || $tiposup == 1009 ) {
-
-		$sSqlFonte  = $clorcsuplemval->sql_query($o46_codsup,db_getsession("DB_anousu"),null, "o58_codigo");
+	if ($tiposup == 1004 || $tiposup == 1009 || $tiposup == 1019) {
+		$sSqlFonte  = $clorcsuplemval->sql_query($o46_codsup, db_getsession("DB_anousu"), null, "o58_codigo");
 		$rsFonte    = db_query($sSqlFonte);
-
 		if (pg_num_rows($rsFonte) > 0) {
-	
-			if ( $o70_codigo != db_utils::fieldsMemory($rsFonte, 0)->o58_codigo ) {
+			$valorcodigo  = substr($o70_codigo, 0, 2);
+			$valorconsulta = substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 2);
+			// Condicional para recursos
 
-				db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
-				$sqlerro = true;
-				$limpa_dados = false;
+			if (($o70_codigo != 100 and $o70_codigo != 101 and $o70_codigo != 102) or ($o70_codigo != 118 and $o70_codigo != 119)) {
 
+				if (substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 3) == 100 or substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 3) == 101 or substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 3) == 102) {
+
+					if ($valorcodigo != $valorconsulta or ($o70_codigo != 100 and $o70_codigo != 101 and $o70_codigo != 102)) {
+						db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+						$sqlerro = true;
+						$limpa_dados = false;
+					}
+				}
+				if (substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 3) == 118 or substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 3) == 119) {
+					if ($valorcodigo != $valorconsulta or ($o70_codigo != 118 and $o70_codigo != 119)) {
+						db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+						$sqlerro = true;
+						$limpa_dados = false;
+					}
+				}
+				if ($valorconsulta > 11) {
+					if ($valorcodigo != $valorconsulta) {
+						db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+						$sqlerro = true;
+						$limpa_dados = false;
+					}
+				}
 			}
-	
 		}
-
 	}
-
-  	if ( !$sqlerro ) {
-	  
+	if (!$sqlerro) {
 		$limpa_dados = true;
-   		// usuario clicou no botao incluir da tela
-   		db_inicio_transacao();
+		// usuario clicou no botao incluir da tela
+		db_inicio_transacao();
 
-   		if (isset($o85_codrec) && $o85_codrec != "") {
-     
+		if (isset($o85_codrec) && $o85_codrec != "") {
+
 			$clorcsuplemrec->o85_anousu = $anousu;
 			$clorcsuplemrec->o85_codrec = $o85_codrec;
 			$clorcsuplemrec->o85_codsup = $o46_codsup;
-			$clorcsuplemrec->incluir($o46_codsup,$o85_codrec);
-			   
-			if ($clorcsuplemrec->erro_status == 0){
-      			$sqlerro = true;
-      			$limpa_dados = false;
-   			}
- 		} else if (isset($o06_sequencial) && $o06_sequencial != "") {
-    
+			$clorcsuplemrec->incluir($o46_codsup, $o85_codrec);
+
+			if ($clorcsuplemrec->erro_status == 0) {
+				$sqlerro = true;
+				$limpa_dados = false;
+			}
+		} else if (isset($o06_sequencial) && $o06_sequencial != "") {
+
 			/**
 			 * incluimos a projecao para criarmos a suplementação
 			 */
@@ -105,51 +120,50 @@ if(isset($incluir)){
 			$oDaoReceitaPPA->o137_ppaestimativareceita = $o06_sequencial;
 			$oDaoReceitaPPA->o137_valor                = abs($o85_valor);
 			$oDaoReceitaPPA->incluir(null);
-			
-			if ($oDaoReceitaPPA->erro_status == 0) {			
+
+			if ($oDaoReceitaPPA->erro_status == 0) {
 				$sqlerro = true;
 				db_msgbox($oDaoReceitaPPA->erro_msg);
 				$limpa_dados = false;
-			}   
+			}
 		}
 		db_fim_transacao($sqlerro);
-		  
 	}
- 
-}elseif(isset($opcao) && $opcao=="excluir" ){
-   $limpa_dados = true;
-   db_inicio_transacao();
-   $sqlerro  = false;
-   
-   if ($tipo == 1) {
-   $clorcsuplemrec->excluir($o46_codsup,$o85_codrec);
-   if ($clorcsuplemrec->erro_status == 0){
-      $sqlerro = true;
-      $limpa_dados = false;
-   }  
-   db_msgbox($clorcsuplemrec->erro_msg);
-   } else if ($tipo == 2) {
-     
-     $oDaoReceitaPPA = db_utils::getDao("orcsuplemreceitappa");
-     $oDaoReceitaPPA->excluir($o85_codrec);
-     if ($oDaoReceitaPPA->erro_status == 0) {
-      $sqlerro = true;
-     }
-     db_msgbox($oDaoReceitaPPA->erro_msg); 
-   }
-   db_fim_transacao($sqlerro);
-}   
+} elseif (isset($opcao) && $opcao == "excluir") {
 
-if ($limpa_dados ==true){
-    $o85_codrec="";
-    $o50_estrutreceita=""; 
-    $o57_descr="";  
-    $o70_codigo=""; 
-    $o15_descr="";    
-    $total_rec="";  
-    $o85_valor = "";
+	$limpa_dados = true;
+	db_inicio_transacao();
+	$sqlerro  = false;
+
+	if ($tipo == 1) {
+		$clorcsuplemrec->excluir($o46_codsup, $o85_codrec);
+		if ($clorcsuplemrec->erro_status == 0) {
+			$sqlerro = true;
+			$limpa_dados = false;
+		}
+		db_msgbox($clorcsuplemrec->erro_msg);
+	} else if ($tipo == 2) {
+
+		$oDaoReceitaPPA = db_utils::getDao("orcsuplemreceitappa");
+		$oDaoReceitaPPA->excluir($o85_codrec);
+		if ($oDaoReceitaPPA->erro_status == 0) {
+			$sqlerro = true;
+		}
+		db_msgbox($oDaoReceitaPPA->erro_msg);
+	}
+	db_fim_transacao($sqlerro);
 }
-  
+
+if ($limpa_dados == true) {
+	$o85_codrec = "";
+	$o50_estrutreceita = "";
+	$o57_descr = "";
+	$o70_codigo = "";
+	$o15_descr = "";
+	$total_rec = "";
+	$o85_valor = "";
+}
+
 /**
  * verifica o tipo da Suplementacao
  */
@@ -164,42 +178,45 @@ $soma_receitas  = $oSuplementacao->getValorReceita();
 //--------------------------------------
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+	<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Expires" CONTENT="0">
+	<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+	<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+	<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+	<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-    <center>
-	<?
-	   include("forms/db_frmorcsuplemrec.php");
-	?>
-    </center>
-	</td>
-  </tr>
-</table>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+	<table width="790" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+				<center>
+					<?
+					include("forms/db_frmorcsuplemrec.php");
+					?>
+				</center>
+			</td>
+		</tr>
+	</table>
 
 </body>
+
 </html>
 <?
-if(isset($incluir)){
-  if($clorcsuplemrec->erro_status=="0"){
-    $clorcsuplemrec->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($clorcsuplemrec->erro_campo!=""){
-      echo "<script> document.form1.".$clorcsuplemrec->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clorcsuplemrec->erro_campo.".focus();</script>";
-    };
-  }else{
-    $clorcsuplemrec->erro(true,false);
-  };
+if (isset($incluir)) {
+	if ($clorcsuplemrec->erro_status == "0") {
+		$clorcsuplemrec->erro(true, false);
+		$db_botao = true;
+		echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+		if ($clorcsuplemrec->erro_campo != "") {
+			echo "<script> document.form1." . $clorcsuplemrec->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+			echo "<script> document.form1." . $clorcsuplemrec->erro_campo . ".focus();</script>";
+		};
+	} else {
+		$clorcsuplemrec->erro(true, false);
+	};
 };
 ?>

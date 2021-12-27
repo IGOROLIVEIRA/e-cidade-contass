@@ -162,7 +162,6 @@ if ($oParam->e30_liberaempenho == 't') {
 
 //FIM OC 7037
 
-
 switch ($objJson->method) {
 
   case "getEmpenhos":

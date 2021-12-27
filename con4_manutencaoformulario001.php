@@ -468,6 +468,7 @@ db_menu();
             oCollectionDados.clear();
             js_divCarregando('Aguarde, pesquisando dados...', 'msgDiv');
             var request = new HTTPRequest();
+
             filter = null;
             if (!empty(data)) {
                 filter = [{
@@ -493,7 +494,7 @@ db_menu();
                 tipo: iTipo,
                 coluna: sCampo
             }).then(function(data) {
-
+                console.log(data);
                 js_removeObj('msgDiv');
 
                 if (buildGrid) {
@@ -565,6 +566,10 @@ db_menu();
         exports.pesquisar = pesquisar;
         exports.salvarFormulario = salvarFormulario;
         getUltimoGrupoResposta();
+
+
+        pesquisar(iCodigoFormulario, instituicao, iTipo);
+
 
     })(window);
 </script>

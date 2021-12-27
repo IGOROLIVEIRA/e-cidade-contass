@@ -74,14 +74,16 @@ if (USE_PCASP) {
                    conplanoconta_deb.c63_banco as banco_debito,
                    conplanoconta_deb.c63_agencia||'-'||conplanoconta_deb.c63_dvagencia as agencia_debito,
                    conplanoconta_deb.c63_conta||'-'||conplanoconta_deb.c63_dvconta as conta_debito,
-                   case when
-                        conplanoconta_cred.c63_codcon is not null then reduz_credito.c61_codigo::text
-                        else ''
-                   end as fonte_credito,
-                   case when
-                        conplanoconta_deb.c63_codcon is not null then reduz_debito.c61_codigo::text
-                        else ''
-                   end as fonte_debito
+                   case
+                   when conplanoconta_cred.c63_codcon is not null AND recurso.k29_recurso is not null then recurso.k29_recurso:: text
+                   when conplanoconta_cred.c63_codcon is not null then reduz_credito.c61_codigo :: text
+                   else ''
+               end as fonte_credito,
+               case
+                   when conplanoconta_deb.c63_codcon is not null AND recurso.k29_recurso is not null then recurso.k29_recurso:: text
+                   when conplanoconta_deb.c63_codcon is not null then reduz_debito.c61_codigo :: text
+                   else ''
+               end as fonte_debito
             from slip
                  left join db_usuarios on db_usuarios.id_usuario = slip.k17_id_usuario
                  left join sliptipooperacaovinculo         on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
@@ -114,6 +116,7 @@ if (USE_PCASP) {
                  and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',controle.si166_dataini) AND DATE_PART('YEAR',controle.si166_datafim)
                  and controle.si166_dataini <= k17_data
                  and controle.si166_datafim >= k17_data
+                 left join sliprecurso recurso on recurso.k29_slip = slip.k17_codigo AND k29_valor = slip.k17_valor
                  left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
                  left join identificacaoresponsaveis ordenador on ordenador.si166_instit= k17_instit and ordenador.si166_tiporesponsavel=1
                  and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',ordenador.si166_dataini) AND DATE_PART('YEAR',ordenador.si166_datafim)
@@ -325,7 +328,7 @@ try {
     /*OC4401*/
     $pdf->usuario = $nome;
     /*FIM - OC4401*/
-
+    
     $pdf->logo     = $logo;
     $pdf->nomeinst = $nomeinst;
     $pdf->ender    = $ender;
@@ -339,6 +342,7 @@ try {
     $pdf->objpdf->AliasNbPages();
     $pdf->imprime();
     $pdf->objpdf->Output();
+
 } catch (Exception $oErro) {
     $sErro = str_replace("\n", '\n', $oErro->getMessage());
 

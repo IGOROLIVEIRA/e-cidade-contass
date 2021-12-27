@@ -230,6 +230,7 @@ class cl_sliprecurso {
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_msg   .= $sql;
          $this->erro_status = "0";
          return false;
        }

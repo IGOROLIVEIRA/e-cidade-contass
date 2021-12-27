@@ -102,6 +102,8 @@ abstract class Transferencia {
    */
   protected $sProcessoAdministrativo;
 
+    protected $iFonteRecurso;
+
   /**
    * Construtor da classe
    */
@@ -212,7 +214,7 @@ abstract class Transferencia {
     $rsBuscaCorrente         = db_query($sSqlBuscaContaCorrente);
 
     if (pg_num_rows($rsBuscaCorrente) == 0) {
-      throw new Exception("NÃ£o foi possÃ­vel buscar os dados da autenticaÃ§Ã£o para execuÃ§Ã£o dos lanÃ§amentos contÃ¡beis.");
+      throw new Exception("Não foi possÃ­vel buscar os dados da autenticação para execício dos lançamentos contábeis.");
     }
 
     $oDadosAutenticao        = db_utils::fieldsMemory($rsBuscaCorrente, 0);
@@ -226,7 +228,9 @@ abstract class Transferencia {
     );
 
     $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
-    $oContaCorrenteDetalhe->setRecurso(new Recurso($oContaPlano->getRecurso()));
+    // $oContaCorrenteDetalhe->setRecurso(new Recurso($oContaPlano->getRecurso()));
+    if ($this->getFonteRecursos() != null) 
+        $oContaCorrenteDetalhe->setRecurso($this->getFonteRecursos());
     $oContaCorrenteDetalhe->setContaBancaria(null);
     $oContaCorrenteDetalhe->setCredor(CgmFactory::getInstanceByCgm($this->getCodigoCgm()));
 
@@ -1192,6 +1196,8 @@ abstract class Transferencia {
 
     $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
     $oContaCorrenteDetalhe->setRecurso(new Recurso($oAutenticacao->getContaPagadora()->getRecurso()));
+    if ($this->getFonteRecursos() != null) 
+        $oContaCorrenteDetalhe->setRecurso($this->getFonteRecursos());
     $oContaCorrenteDetalhe->setContaBancaria(null);
     $oContaCorrenteDetalhe->setCredor(CgmFactory::getInstanceByCgm($this->getCodigoCgm()));
 
@@ -1219,4 +1225,19 @@ abstract class Transferencia {
     $this->iCodigoLancamento =  $oEventoContabil->getCodigoLancamento();
     return true;
   }
+
+    /**
+     * Permite definir a fonte de recursos
+     * @param iFonteRecursos
+    */
+    public function setFonteRecurso($iFonteRecurso) {
+        $this->iFonteRecurso = new Recurso($iFonteRecurso);
+    }
+
+    public function getFonteRecursos() {
+        if ($this->getCodigoSlip() != null)
+            foreach ($this->oSlip->getRecursos() as $iRecurso => $nValor)
+                return new Recurso($iRecurso);
+        return $this->iFonteRecurso;
+    }
 }

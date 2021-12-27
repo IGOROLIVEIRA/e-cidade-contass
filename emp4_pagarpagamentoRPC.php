@@ -286,7 +286,7 @@ switch ($oParam->exec) {
         break;
 
     case "pagarSlip" :
-        // Condio para slip sem cheque, retirada do arquivo emp4_empagepagamento001.php
+        // Condição para slip sem cheque, retirada do arquivo emp4_empagepagamento001.php
         $oRetorno = new stdClass();
         $oRetorno->status = 1;
         $oRetorno->message = "";
@@ -335,7 +335,7 @@ switch ($oParam->exec) {
                                 $sSqlBuscaTipoOperacao = $oDaoSlipTipoOperacao->sql_query_file($codigo);
                                 $rsBuscaTipoOperacao   = $oDaoSlipTipoOperacao->sql_record($sSqlBuscaTipoOperacao);
                                 if ($oDaoSlipTipoOperacao->numrows == 0) {
-                                    throw new Exception("Não foi possível localizar o tipo de operação do slip {$codigo}.");
+                                    throw new Exception("Não foi possí­vel localizar o tipo de operação do slip {$codigo}.");
                                 }
                                 $sSqlAutenticadora = $oDaocfautent->sql_query_file(null, "k11_id, k11_tipautent", '', "k11_ipterm = '{$ip}' and k11_instit = " . db_getsession("DB_instit"));
                                 $rsAutenticador = $oDaocfautent->sql_record($sSqlAutenticadora);
@@ -481,17 +481,17 @@ switch ($oParam->exec) {
         $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
 
         if ($oFimPeriodoContabil->c99_data != '' && $dtDataLancamento->getTimeStamp() < db_strtotime($oFimPeriodoContabil->c99_data)) {
-            throw new Exception("Data informada inferior à data do fim do período contábil.");
+            throw new Exception("Data informada inferior à data do fim do perí­odo contábil.");
         }
 
       }
 
       if ($iAnoLancamento != $oOrdemPagamento->getDataPagamento()->c70_anousu) {
-        throw new Exception("Não é possível estornar pagamentos de anos anteriores.");
+        throw new Exception("Não é possí­vel estornar pagamentos de anos anteriores.");
       }
 
       if ($dtDataLancamento->getTimeStamp() < db_strtotime($oOrdemPagamento->getDataPagamento()->c70_data)) {
-        throw new Exception("Não é possível estornar com data anterior ao pagamento.");
+        throw new Exception("Não é possí­vel estornar com data anterior ao pagamento.");
       }
 
       if ($oParam->lEstornarPgto) {
@@ -624,7 +624,7 @@ switch ($oParam->exec) {
      $oRetorno->sAutenticacao = urlEncode($oParam->sString);
    } else {
       $oRetorno->status         = 2;
-      $oRetorno->message        = urlencode("Não foi possível encontrar Impressora");
+      $oRetorno->message        = urlencode("Não foi possí­vel encontrar Impressora");
       $oRetorno->sAutenticacao = urlEncode($oParam->sString);
    }
    echo $oJson->encode($oRetorno);

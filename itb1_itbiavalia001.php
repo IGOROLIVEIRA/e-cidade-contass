@@ -24,7 +24,8 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
  */
-
+//ini_set('display_errors', 1);
+//error_reporting(E_ALL);
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -38,6 +39,9 @@ include("classes/db_itbidadosimovel_classe.php");
 include("classes/db_itbiavalia_classe.php");
 include("classes/db_itbiavaliaformapagamentovalor_classe.php");
 include("classes/db_paritbi_classe.php");
+require_once("classes/db_arrecad_classe.php");
+require_once("classes/db_arrematric_classe.php");
+require_once("classes/db_numpref_classe.php");
 
 $oPost = db_utils::postMemory($_POST);
 $oGet  = db_utils::postMemory($_GET);
@@ -47,11 +51,17 @@ $clitbiavaliaformapagamentovalor = new cl_itbiavaliaformapagamentovalor();
 $clitbi		 	  	 	  	     = new cl_itbi();
 $clitbidadosimovel				 = new cl_itbidadosimovel();
 $clparitbi 		   				   = new cl_paritbi();
+$clarrecad                 = new cl_arrecad();
+$clarrematric              = new cl_arrematric;
+$clnumpref                 = new cl_numpref();
 
 $tipo     = "";
 $db_opcao = 2;
 $db_botao = false;
 $lSqlErro = false;
+
+$config = db_query("select * from db_config where codigo = ".db_getsession("DB_instit"));
+db_fieldsmemory($config,0);
 
 if( isset($oPost->liberar) ){
  
@@ -89,6 +99,79 @@ if( isset($oPost->liberar) ){
     $sMsgErro = $clitbiavalia->erro_msg;
     
   }
+
+if ($db21_usadebitoitbi == 't') {
+
+  if (! $lSqlErro) {
+
+    $sqlCGM = <<<SQL
+        select itbinomecgm.it21_numcgm
+          from itbi
+              inner join itbinome on itbinome.it03_guia = itbi.it01_guia
+              inner join itbinomecgm on itbinomecgm.it21_itbinome = itbinome.it03_seq
+                  where itbinome.it03_tipo = 'C' and itbi.it01_guia = $clitbiavalia->it14_guia order by itbinomecgm.it21_numcgm limit 1;
+SQL;
+
+    $resultCgm = db_query($sqlCGM);
+    $oDadoCGM = db_utils::fieldsMemory($resultCgm,0);
+
+    $clarrecad->k00_numcgm = $oDadoCGM->it21_numcgm;
+    $clarrecad->k00_dtoper = date('Y-m-d',db_getsession('DB_datausu'));
+    $clarrecad->k00_receit = 3;
+    $clarrecad->k00_hist   = 707;
+    $clarrecad->k00_valor  = $clitbiavalia->it14_valorpaga;
+    $clarrecad->k00_dtvenc = $clitbiavalia->it14_dtvenc;
+    $clarrecad->k00_numpre = $clnumpref->sql_numpre();
+    $clarrecad->k00_numpar = 1;
+    $clarrecad->k00_numtot = 1;
+    $clarrecad->k00_numdig = '0';
+    $clarrecad->k00_tipo   = 29;
+    $clarrecad->k00_tipojm = '0';
+    $clarrecad->incluir();
+
+    if ($clarrecad->erro_status == 0) {
+      $lSqlErro = true;
+    }
+
+    $sMsgErro = $clarrecad->erro_msg;
+
+    $sSQL = <<<SQL
+
+        BEGIN;
+
+        INSERT INTO arrecad_itbi (k00_numpre, it01_guia) VALUES ($clarrecad->k00_numpre, $clitbiavalia->it14_guia);
+
+        COMMIT;
+
+SQL;
+
+    $result = db_query($sSQL);
+
+    if ($result == false) {
+        $lSqlErro = true;
+        $sMsgErro = "Erro salvar dados em arrecad_itbi";
+    }
+
+  }
+
+  if (! $lSqlErro && $oGet->tipo == "urbano") {
+
+    $resultMatric = db_query("select it06_matric from itbimatric where it06_guia = {$clitbiavalia->it14_guia};");
+    $oDadoMatric = db_utils::fieldsMemory($resultMatric, 0);
+
+    $clarrematric->k00_numpre = $clarrecad->k00_numpre;
+    $clarrematric->k00_matric = $oDadoMatric->it06_matric;
+    $clarrematric->k00_perc   = 100;
+    $clarrematric->incluir($clarrecad->k00_numpre, $oDadoMatric->it06_matric);
+
+    if($clarrematric->erro_status == 0){
+        $lSqlErro = true;
+        $sMsgErro = $clarrematric->erro_msg;
+    }
+
+  }
+}
+
   if ( !$lSqlErro ) {
   		
     $aListaFormaPag = explode("|",$oPost->listaFormas);
@@ -109,6 +192,7 @@ if( isset($oPost->liberar) ){
  	  
  	  if ( $clitbiavaliaformapagamentovalor->erro_status == 0 ) {
  		$lSqlErro = true;
+        $sMsgErro = $clitbiavaliaformapagamentovalor->erro_msg;
  	    break;	
  	  }
  	}
@@ -207,11 +291,11 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 if ( isset($oPost->liberar) ) {
 	
   if( $lSqlErro ){
-  	
+    db_msgbox($sMsgErro);
     $clitbiavalia->erro(true,false);
     $db_botao=true;
   
-    echo "<script> document.form1.db_opcao.disabled=false;</script>";
+    //echo "<script> document.form1.db_opcao.disabled=false;</script>";
     if($clitbiavalia->erro_campo!=""){
       echo "<script> document.form1.".$clitbiavalia->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clitbiavalia->erro_campo.".focus();</script>";

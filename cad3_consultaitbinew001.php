@@ -36,7 +36,9 @@ db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 $cllote = new cl_lote;
 $clrotulo = new rotulocampo;
+$clrotulo->label("j01_unidade");
 $clrotulo->label("j01_matric");
+$clrotulo->label("j34_distrito");
 $clrotulo->label("j34_setor");
 $clrotulo->label("j14_codigo");
 $clrotulo->label("j14_nome");
@@ -46,6 +48,8 @@ $clrotulo->label("j34_lote");
 $clrotulo->label("z01_numcgm");
 $clrotulo->label("z01_nome");
 $db_opcao=1;
+$config = db_query("select * from db_config where codigo = ".db_getsession("DB_instit"));
+db_fieldsmemory($config,0);
 ?>
 <html>
 <head>
@@ -59,6 +63,7 @@ $db_opcao=1;
 </head>
 <body bgcolor=#CCCCCC>
 <form name="form1" method="post" action="cad3_consultaitbinew001.php">
+<input type="hidden" value="<?=$db21_usadistritounidade?>" id="db21_usadistritounidade" />
 <center>
 <fieldset style="margin: 30px auto 10px; width: 600px;">
 <legend><strong>Consulta ITBI</strong></legend>
@@ -154,25 +159,46 @@ $db_opcao=1;
      ?>
     </td>
   </tr>
-  <tr>
-    <td title="<?=@$Tj34_setor?>">
-       <?=$Lj34_setor?>
-    </td>
-    <td> 
-    <?
-     db_input('j34_setor',10,$Ij34_setor,true,'text',$db_opcao);
-     ?>
-     <?=$Lj34_quadra?>
-     <?
-       db_input('j34_quadra',10,$Ij34_quadra,true,'text',$db_opcao);
-     ?>
-     
-     <?=$Lj34_lote?>
-     <?
-       db_input('j34_lote',10,$Ij34_lote,true,'text',$db_opcao);
-     ?>
-    </td>
-  </tr>
+  <?php if (!empty($db21_usadistritounidade) && $db21_usadistritounidade == 't') : ?>
+    <tr>
+        <?=$Lj34_distrito?>&nbsp;
+        <? db_input('j34_distrito',5,$Ij34_setor,true,'text',$db_opcao); ?>
+        &nbsp;
+        <?=$Lj34_setor?>&nbsp;
+        <? db_input('j34_setor',5,$Ij34_setor,true,'text',$db_opcao); ?>
+        &nbsp;
+        <?=$Lj34_quadra?>&nbsp;
+        <? db_input('j34_quadra',5,$Ij34_quadra,true,'text',$db_opcao);?>
+        &nbsp;
+        <?=$Lj34_lote?>&nbsp;
+        <? db_input('j34_lote',5,$Ij34_lote,true,'text',$db_opcao); ?>
+        &nbsp;
+        <?=$Lj01_unidade?>&nbsp;
+        <? db_input('j01_unidade',5,$Ij01_unidade,true,'text',$db_opcao); ?>
+        </td>
+    </tr>
+    <?php else : ?>
+    <tr>
+        <td title="<?=@$Tj34_setor?>">
+           <?=$Lj34_setor?>
+        </td>
+        <td>
+        <?
+         db_input('j34_setor',10,$Ij34_setor,true,'text',$db_opcao);
+         ?>
+         <?=$Lj34_quadra?>
+         <?
+           db_input('j34_quadra',10,$Ij34_quadra,true,'text',$db_opcao);
+         ?>
+
+         <?=$Lj34_lote?>
+         <?
+           db_input('j34_lote',10,$Ij34_lote,true,'text',$db_opcao);
+         ?>
+        </td>
+    </tr>
+    <?php endif ?>
+
   <tr> 
     <td title="<?=@$Tj14_nome?>"> 
        <?
@@ -255,6 +281,10 @@ function js_consultaitbi() {
        querystring += '&setorloc='+document.form1.setor.value;
        querystring += '&quadraloc='+document.form1.quadra.value;
        querystring += '&loteloc='+document.form1.lote.value;
+       if (document.form1.db21_usadistritounidade.value == 't') {
+            querystring += '&distrito='+document.form1.j34_distrito.value;
+            querystring += '&unidade='+document.form1.j01_unidade.value;
+       }
      }else{
        querystring  = 'matric=';
        querystring += '&setor=';
@@ -264,6 +294,8 @@ function js_consultaitbi() {
        querystring += '&setorloc=';
        querystring += '&quadraloc=';
        querystring += '&loteloc=';
+       querystring += '&unidade=';
+       querystring += '&distrito=';
      }
      querystring += '&adquirente='+document.form1.adquirente.value;
      querystring += '&transmitente='+document.form1.transmitente.value;

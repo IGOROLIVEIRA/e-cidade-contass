@@ -474,6 +474,7 @@ class cl_empageslip {
      $sql .= "	    inner join conplanoreduz x on x.c61_reduz = s.k17_debito and x.c61_anousu = ".db_getsession("DB_anousu");
      $sql .= "	    inner join conplano z on z.c60_codcon = x.c61_codcon and z.c60_anousu = x.c61_anousu ";
      $sql .= "	    inner join slipnum o on o.k17_codigo = s.k17_codigo";
+     $sql .= "       left join sliprecurso recurso on recurso.k29_slip = s.k17_codigo AND k29_valor = s.k17_valor ";
      $sql .= "	    left join conplanoreduz ctapag on ctapag.c61_reduz = s.k17_credito and ctapag.c61_anousu = ".db_getsession("DB_anousu");
      $sql .= "	    left join cgm on z01_numcgm = o.k17_numcgm";
      $sql .= "	    left join  empageconf on e86_codmov=e81_codmov ";

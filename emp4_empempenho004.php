@@ -604,8 +604,8 @@ if(isset($incluir)) {
 
             $aElementos = array('3319001','3319003','3319091','3319092','3319094','3319191','3319192','3319194');
 
-            if ( ($tipoinstit == 5 || $tipoinstit == 6) && 
-                (in_array(substr($o56_elemento, 0 , -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0 , -6), $aElementos) && db_getsession("DB_anousu") >= 2021) ) 
+            if ( ($tipoinstit == 5 || $tipoinstit == 6) &&
+                (in_array(substr($o56_elemento, 0 , -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0 , -6), $aElementos) && db_getsession("DB_anousu") >= 2021) )
                 ) {
                 if($e60_tipodespesa != 0) {
                     $clempempenho->e60_tipodespesa = $e60_tipodespesa;
@@ -1032,9 +1032,7 @@ if(isset($incluir)) {
                 $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
                 $oContaCorrenteDetalhe->setRecurso($oDotacao->getDadosRecurso());
 
-                /**
-                 * Valida parametro de integracao da contabilidade com contratos
-                 */
+
                 $oEventoContabil     = new EventoContabil($c71_coddoc, $anousu);
                 $oLancamentoAuxiliar = new LancamentoAuxiliarEmpenho();
                 $oLancamentoAuxiliar->setCaracteristicaPeculiar($clempempenho->e60_concarpeculiar);
@@ -1048,37 +1046,44 @@ if(isset($incluir)) {
                 $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
                 $oEventoContabil->executaLancamento($oLancamentoAuxiliar);
 
-                /**
-                 * Pesquisa contrato do empenho
-                 * - caso exista gera lancamento
+                 /**
+                 * Valida parametro de integracao da contabilidade com contratos
                  */
-                $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
-                $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
-                if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
+                // após 2021 este lançamento será feito no modulo de contratos.
+                if(db_getsession('DB_anousu') < 2022){
+                    /**
+                     * Pesquisa contrato do empenho
+                     * - caso exista gera lancamento
+                     */
+                    $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
+                    $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
+                    if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
 
-                    $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
-                    $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null, "e100_acordo", null, "e100_numemp = {$e60_numemp}");
+                        $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+                        $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null, "e100_acordo", null, "e100_numemp = {$e60_numemp}");
 
-                    $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+                        $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
 
-                    if ($oDaoEmpenhoContrato->numrows > 0) {
+                        if ($oDaoEmpenhoContrato->numrows > 0) {
 
-                        $iCodigoAcordo         = db_utils::fieldsMemory($rsContrato, 0)->e100_acordo;
-                        $oAcordo               = new Acordo($iCodigoAcordo);
-                        $oEventoContabilAcordo = new EventoContabil(900, $anousu);
+                            $iCodigoAcordo         = db_utils::fieldsMemory($rsContrato, 0)->e100_acordo;
+                            $oAcordo               = new Acordo($iCodigoAcordo);
+                            $oEventoContabilAcordo = new EventoContabil(900, $anousu);
 
-                        $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
-                        $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
-                        $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
-                        $oLancamentoAuxiliarAcordo->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
-                        $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
+                            $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
+                            $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
+                            $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
+                            $oLancamentoAuxiliarAcordo->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
+                            $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
-                        $oContaCorrente = new ContaCorrenteDetalhe();
-                        $oContaCorrente->setAcordo($oAcordo);
-                        $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrente);
-                        $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+                            $oContaCorrente = new ContaCorrenteDetalhe();
+                            $oContaCorrente->setAcordo($oAcordo);
+                            $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrente);
+                            $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+                        }
                     }
                 }
+
 
             } catch (Exception $eErro) {
 
