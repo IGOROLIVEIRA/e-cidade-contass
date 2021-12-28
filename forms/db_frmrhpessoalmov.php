@@ -107,7 +107,7 @@ if (isset($db_opcaoal)) {
 
 ?>
 <style>
-    /* Ajusta o tamanho dos campos do fieldset da aba de movimentaï¿½ï¿½es */
+    /* Ajusta o tamanho dos campos do fieldset da aba de movimentações */
     #rh02_tipcatprof,
     #rh02_salari,
     #rh02_fpagto {
@@ -163,8 +163,8 @@ if (isset($db_opcaoal)) {
                         ?>
                         <table width="100%" border="0">
                             <tr>
-                                <td nowrap title="Ano / Mï¿½s exercï¿½cio">
-                                    <b>Exercï¿½cio:</b>
+                                <td nowrap title="Ano / Mês exercício">
+                                    <b>Exercício:</b>
                                 </td>
                                 <td nowrap>
                                     <?
@@ -310,15 +310,15 @@ if (isset($db_opcaoal)) {
                                         0 => "Selecione",
                                         1 => "Filho(a)",
                                         2 => "Neto(a)",
-                                        3 => "Cï¿½njuge",
-                                        4 => "Filho(a)invï¿½lido",
-                                        5 => "Mï¿½e",
+                                        3 => "Cônjuge",
+                                        4 => "Filho(a)inválido",
+                                        5 => "Mãe",
                                         6 => "Pai",
-                                        7 => "Viï¿½vo(a)",
+                                        7 => "Viúvo(a)",
                                         8 => "Companheiro(a)",
                                         9 => "Enteado(a)",
                                         10 => "Tutelado/curatelado(a)",
-                                        11 => "Outras Situaï¿½ï¿½es"
+                                        11 => "Outras Situações"
                                     );
                                     db_select("rh02_tipoparentescoinst", $iparentesco, true, $db_opcao, "onchange='js_desctipoparentescoinst()'");
                                     ?>
@@ -419,7 +419,7 @@ if (isset($db_opcaoal)) {
                                         '20' => '20 - Trab rural vinc a empr pessoa juridica - CLT p/tempo indeterminado',
                                         '25' => '25 - Trab rural vinc a empr pessoa fisica  - CLT p/tempo indeterminado',
                                         '30' => '30 - Serv regido pelo regime juridico unico (Fed,est,munic) e militar',
-                                        '31' => '31 - Serv regido pelo Regime Jurï¿½dico ï¿½nico (fed,est,munic) e militar,vinc a RGPS',
+                                        '31' => '31 - Serv regido pelo Regime Jurídico Único (fed,est,munic) e militar,vinc a RGPS',
                                         '35' => '35 - Serv publico nao-efetivo',
                                         '40' => '40 - Trabalhador avulso',
                                         '50' => '50 - Trab temporario, regido pela Lei n. 6.019 de 03.01.74',
@@ -445,7 +445,7 @@ if (isset($db_opcaoal)) {
                                 </td>
                                 <td nowrap>
                                     <?
-                                    $arr_tipsal = array('M' => 'Mensal', 'Q' => 'Quinzenal', 'D' => 'Diï¿½rio', 'H' => 'Hora');
+                                    $arr_tipsal = array('M' => 'Mensal', 'Q' => 'Quinzenal', 'D' => 'Diário', 'H' => 'Hora');
                                     db_select("rh02_tipsal", $arr_tipsal, true, $db_opcao);
                                     ?>
                                 </td>
@@ -474,7 +474,7 @@ if (isset($db_opcaoal)) {
                                 <td nowrap>
                                     <?
                                     $arr_fpagto = array(
-                                        '3' => 'Crï¿½dito em conta',
+                                        '3' => 'Crédito em conta',
                                         '1' => 'Dinheiro',
                                         '2' => 'Cheque',
                                         '4' => 'Cheque/Pagamento Administrativo'
@@ -515,14 +515,14 @@ if (isset($db_opcaoal)) {
                                     <?
                                     $arr_ocorre = array(
                                         '' => 'Nunca esteve exposta',
-                                        '01' => '01 - Nï¿½o exposto no momento, mas jï¿½ esteve',
+                                        '01' => '01 - Não exposto no momento, mas já esteve',
                                         '02' => '02 - Exposta (aposentadoria esp. 15 anos)',
                                         '03' => '03 - Exposta (aposentadoria esp. 20 anos)',
                                         '04' => '04 - Exposta (aposentadoria esp. 25 anos)',
-                                        '05' => '05 - Mais de um vï¿½nculo (ou fonte pagadora) - Nï¿½o exposiï¿½ï¿½o a agente nocivo',
-                                        '06' => '06 - Mais de um vï¿½nculo (ou fonte pagadora) - Exposta (aposentadoria esp. 15 anos)',
-                                        '07' => '07 - Mais de um vï¿½nculo (ou fonte pagadora) - Exposta (aposentadoria esp. 20 anos)',
-                                        '08' => '08 - Mais de um vï¿½nculo (ou fonte pagadora) - Exposta (aposentadoria esp. 25 anos)'
+                                        '05' => '05 - Mais de um vínculo (ou fonte pagadora) - Não exposição a agente nocivo',
+                                        '06' => '06 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 15 anos)',
+                                        '07' => '07 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 20 anos)',
+                                        '08' => '08 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 25 anos)'
                                     );
                                     db_select("rh02_ocorre", $arr_ocorre, true, $db_opcao);
                                     ?>
@@ -536,7 +536,7 @@ if (isset($db_opcaoal)) {
                                 </td>
                                 <td nowrap>
                                     <? $clrotulo->label("rh02_deficientefisico");
-                                    $aDeficiente = array('f' => 'Nï¿½o', 't' => 'Sim');
+                                    $aDeficiente = array('f' => 'Não', 't' => 'Sim');
                                     db_select("rh02_deficientefisico", $aDeficiente, true, $db_opcao, "onchange='js_informarTipoDeficiencia()'");
                                     ?>
                                 </td>
@@ -581,18 +581,18 @@ if (isset($db_opcaoal)) {
                                 </td>
                                 <td colspan="2" nowrap>
                                     <?
-                                    $aReab = array('f' => 'Nï¿½o', 't' => 'Sim');
+                                    $aReab = array('f' => 'Não', 't' => 'Sim');
                                     db_select("rh02_reabreadap", $aReab, true, $db_opcao, "", "", "", "");
                                     ?>
                                 </td>
                             </tr>
                             <tr id="row_rh02_cotadeficiencia" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
-                                <td nowrap title="Cota de Pessoas com Deficiï¿½ncia" align="left">
-                                    <strong>Cota de Pessoas com Deficiï¿½ncia:</strong>
+                                <td nowrap title="Cota de Pessoas com Deficiência" align="left">
+                                    <strong>Cota de Pessoas com Deficiência:</strong>
                                 </td>
                                 <td colspan="2" nowrap>
                                     <?
-                                    $aCotaDef = array('f' => 'Nï¿½o', 't' => 'Sim');
+                                    $aCotaDef = array('f' => 'Não', 't' => 'Sim');
                                     db_select("rh02_cotadeficiencia", $aCotaDef, true, $db_opcao, "", "", "", "");
                                     ?>
                                 </td>
@@ -603,7 +603,7 @@ if (isset($db_opcaoal)) {
                                 </td>
                                 <td colspan="1" nowrap>
                                     <? $clrotulo->label("rh02_portadormolestia ");
-                                    $aMolestia = array('f' => 'Nï¿½o', 't' => 'Sim');
+                                    $aMolestia = array('f' => 'Não', 't' => 'Sim');
                                     db_select("rh02_portadormolestia", $aMolestia, true, $db_opcao, "onchange='js_informarLaudoPortadorMolestia()'");
                                     ?>
 
@@ -618,12 +618,12 @@ if (isset($db_opcaoal)) {
                                                                                                                                                                                     ?>
                                     </span>
                                 </td>
-                                <td nowrap title="Plano de Segregaï¿½ï¿½o da Massa" align="left">
-                                    <strong>Plano de Segregaï¿½ï¿½o da Massa:</strong>
+                                <td nowrap title="Plano de Segregação da Massa" align="left">
+                                    <strong>Plano de Segregação da Massa:</strong>
                                 </td>
                                 <td colspan="1" nowrap>
                                     <?
-                                    $aPlanSegreg = array('0' => 'Selecione', '1' => 'Fundo em capitalizaï¿½ï¿½o', '2' => 'Fundo em repartiï¿½ï¿½o', '3' => 'Mantido pelo Tesouro');
+                                    $aPlanSegreg = array('0' => 'Selecione', '1' => 'Fundo em capitalização', '2' => 'Fundo em repartição', '3' => 'Mantido pelo Tesouro');
                                     db_select("rh02_plansegreg", $aPlanSegreg, true, $db_opcao, "", "", "", "");
                                     ?>
                                 </td>
@@ -668,14 +668,14 @@ if (isset($db_opcaoal)) {
                                 </td>
                                 <td>
                                     <?php
-                                    $aAbonoPermanencia = array('f' => 'Nï¿½o', 't' => 'Sim');
+                                    $aAbonoPermanencia = array('f' => 'Não', 't' => 'Sim');
                                     db_select('rh02_abonopermanencia', $aAbonoPermanencia, true, $db_opcao, "onchange='js_abonopermanencia()'");
                                     ?>
                                 </td>
                             </tr>
                             <tr id="datainicio" <? echo ($GLOBALS['rh02_abonopermanencia'] == 't') ? '' : 'style="display: none;"' ?>>
-                                <td nowrap title="Data Inï¿½cio">
-                                    <strong>Data Inï¿½cio:</strong>
+                                <td nowrap title="Data Início">
+                                    <strong>Data Início:</strong>
                                 </td>
                                 <td nowrap>
                                     <?
@@ -690,7 +690,7 @@ if (isset($db_opcaoal)) {
             <tr>
                 <td align="center">
                     <fieldset id="ctnHoras">
-                        <legend align="left"><b>Horï¿½rio de Trabalho</b></legend>
+                        <legend align="left"><b>Horário de Trabalho</b></legend>
                         <center>
                             <table width="100%">
                                 <tr>
@@ -718,17 +718,17 @@ if (isset($db_opcaoal)) {
                                     <td>
                                         <?php
                                         $aTipoJornada = array(
-                                            '0' => 'Selecione', '2' => 'Jornada 12 x 36 (12 horas de trabalho seguidas de 36 horas ininterruptas de descanso', '3' => 'Jornada com horï¿½rio diï¿½rio fixo e folga variï¿½vel', '4' => 'Jornada com horï¿½rio diï¿½rio fixo e folga fixa (no domingo)', '5' => 'Jornada com horï¿½rio diï¿½rio fixo e folga fixa (exceto no domingo)', '6' => 'Jornada com horï¿½rio diï¿½rio fixo e folga fixa (em outro dia da semana), com folga adicional ', '7' => 'Turno ininterrupto de revezamento', '9' => 'Demais tipos de jornada'
+                                            '0' => 'Selecione', '2' => 'Jornada 12 x 36 (12 horas de trabalho seguidas de 36 horas ininterruptas de descanso', '3' => 'Jornada com horário diário fixo e folga variável', '4' => 'Jornada com horário diário fixo e folga fixa (no domingo)', '5' => 'Jornada com horário diário fixo e folga fixa (exceto no domingo)', '6' => 'Jornada com horário diário fixo e folga fixa (em outro dia da semana), com folga adicional ', '7' => 'Turno ininterrupto de revezamento', '9' => 'Demais tipos de jornada'
                                         );
                                         db_select("rh02_tipojornada", $aTipoJornada, true, $db_opcao, "", "", "", "");
                                         ?>
                                     </td>
                                     <td>
-                                        <strong>Possui Horï¿½rio Noturno:</strong>
+                                        <strong>Possui Horário Noturno:</strong>
                                     </td>
                                     <td>
                                         <?php
-                                        $aHorarioNoturno = array('f' => 'Nï¿½o', 't' => 'Sim');
+                                        $aHorarioNoturno = array('f' => 'Não', 't' => 'Sim');
                                         db_select("rh02_horarionoturno", $aHorarioNoturno, true, $db_opcao, "", "", "", "");
                                         ?>
                                     </td>
@@ -761,7 +761,7 @@ if (isset($db_opcaoal)) {
             <tr>
                 <td align="center">
                     <fieldset id="ctnRescisao">
-                        <legend align="left"><b>Rescisï¿½o</b></legend>
+                        <legend align="left"><b>Rescisão</b></legend>
                         <center>
                             <table width="100%">
                                 <tr>
@@ -836,7 +836,7 @@ if (isset($db_opcaoal)) {
                                     <td><B>Empenhos Gerados: </B></td>
                                     <td colspan="3">
                                         <?
-                                        db_select('rh05_empenhado', array("f" => "Nï¿½o", "t" => "Sim",), 1, 1);
+                                        db_select('rh05_empenhado', array("f" => "Não", "t" => "Sim",), 1, 1);
                                         ?>
                                     </td>
                                 </tr>
@@ -876,7 +876,7 @@ if (isset($db_opcaoal)) {
             <tr>
                 <td align="center">
                     <fieldset id="ctnDadosCedencia">
-                        <legend align="left"><b>Dados Cedï¿½ncia</b></legend>
+                        <legend align="left"><b>Dados Cedência</b></legend>
                         <center>
                             <table width="100%">
                                 <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
@@ -897,8 +897,8 @@ if (isset($db_opcaoal)) {
                                             }
                                         </script>
                                     </td>
-                                    <td nowrap title="Matricula do Trabalhador no ï¿½rgï¿½o Cedente">
-                                        <strong>Matricula do Trabalhador no ï¿½rgï¿½o Cedente:</strong>
+                                    <td nowrap title="Matricula do Trabalhador no órgão Cedente">
+                                        <strong>Matricula do Trabalhador no órgão Cedente:</strong>
                                     </td>
                                     <td nowrap>
                                         <?
@@ -907,8 +907,8 @@ if (isset($db_opcaoal)) {
                                     </td>
                                 </tr>
                                 <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
-                                    <td nowrap title="Data de Admissï¿½o no ï¿½rgï¿½o Cedente">
-                                        <strong>Data de Admissï¿½o no ï¿½rgï¿½o Cedente:</strong>
+                                    <td nowrap title="Data de Admissão no órgão Cedente">
+                                        <strong>Data de Admissão no órgão Cedente:</strong>
                                     </td>
                                     <td nowrap>
                                         <?
@@ -933,22 +933,22 @@ if (isset($db_opcaoal)) {
                                         <?
                                         $tipcatprof = array(
                                             0 => 'Nenhum',
-                                            1 => 'Docente habilitado em curso de nï¿½vel mï¿½dio',
+                                            1 => 'Docente habilitado em curso de nível médio',
                                             2 => 'Docente habilitado em curso de pedagogia',
                                             3 => 'Docente habilitado em curso de licenciatura plena',
-                                            4 => 'Docente habilitado em programa especial de formaï¿½ï¿½o pedagï¿½gica de docentes',
-                                            5 => 'Docente pï¿½s-graduado em cursos de especializaï¿½ï¿½o para formaï¿½ï¿½o de docentes para educaï¿½ï¿½o profissional tï¿½cnica de nï¿½vel mï¿½dio',
-                                            6 => 'Docente graduado bacharel e tecnï¿½logo com diploma de mestrado ou doutorado na ï¿½rea do componente curricular da educaï¿½ï¿½o profissional tï¿½cnica de nï¿½vel mï¿½dio',
-                                            7 => 'Docente professor indï¿½gena sem prï¿½via formaï¿½ï¿½o pedagï¿½gica',
-                                            8 => 'Docente instrutor, tradutor e intï¿½rprete de libras.',
+                                            4 => 'Docente habilitado em programa especial de formação pedagógica de docentes',
+                                            5 => 'Docente pós-graduado em cursos de especialização para formação de docentes para educação profissional técnica de nível médio',
+                                            6 => 'Docente graduado bacharel e tecnólogo com diploma de mestrado ou doutorado na área do componente curricular da educação profissional técnica de nível médio',
+                                            7 => 'Docente professor indígena sem prévia formação pedagógica',
+                                            8 => 'Docente instrutor, tradutor e intérprete de libras.',
                                             9 => 'Docente professor de comunidade quilombola',
-                                            10 => 'Profissionais nï¿½o habilitados, porï¿½m autorizados a exercer a docï¿½ncia em carï¿½ter precï¿½rio e provisï¿½rio na educaï¿½ï¿½o infantil e nos anos iniciais do ensino fundamental.',
-                                            11 => 'Profissionais graduados, bacharï¿½is e tecnï¿½logos autorizados a atuar como docentes, em carï¿½ter precï¿½rio e provisï¿½rio, nos anos finais do ensino fundamental e no ensino mï¿½dio e mï¿½dio integrado ï¿½ educaï¿½ï¿½o.',
-                                            12 => 'Profissionais experientes, nï¿½o graduados, autorizados a atuar como docentes, em carï¿½ter precï¿½rio e provisï¿½rio, no ensino mï¿½dio e mï¿½dio integrado ï¿½ educaï¿½ï¿½o profissional tï¿½cnica de nï¿½vel mï¿½dio.',
-                                            13 => 'Profissionais em efetivo exercï¿½cio no ï¿½mbito da educaï¿½ï¿½o infantil e ensino fundamental.',
+                                            10 => 'Profissionais não habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.',
+                                            11 => 'Profissionais graduados, bacharéis e tecnólogos autorizados a atuar como docentes, em caráter precário e provisório, nos anos finais do ensino fundamental e no ensino médio e médio integrado à educação.',
+                                            12 => 'Profissionais experientes, não graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.',
+                                            13 => 'Profissionais em efetivo exercício no âmbito da educação infantil e ensino fundamental.',
                                             14 => 'Auxiliar/Assistente Educacional',
-                                            15 => 'Profissionais que exercem funï¿½ï¿½es de secretaria escolar, alimentaï¿½ï¿½o escolar (merendeiras), multimeios didï¿½ticos e infraestrutura.',
-                                            16 => 'Profissionais que atuam na realizaï¿½ï¿½o das atividades requeridos nos ambientes de secretaria, de manutenï¿½ï¿½o em geral.',
+                                            15 => 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.',
+                                            16 => 'Profissionais que atuam na realização das atividades requeridos nos ambientes de secretaria, de manutenção em geral.',
                                         );
                                         db_select("rh02_tipcatprof", $tipcatprof, true, $db_opcao, "");
                                         ?>
@@ -958,10 +958,10 @@ if (isset($db_opcaoal)) {
                                         $segatuacao = array(
                                             0 => 'Selecione',
                                             1 => 'Creche',
-                                            2 => 'Prï¿½-escola',
+                                            2 => 'Pré-escola',
                                             3 => 'Fundamental 1',
                                             4 => 'Fundamental 2',
-                                            5 => 'Mï¿½dio',
+                                            5 => 'Médio',
                                             6 => 'Profissional',
                                             7 => 'Administrativo',
                                             8 => 'EJA',
@@ -973,7 +973,7 @@ if (isset($db_opcaoal)) {
                                 </tr>
                                 <?
                                 $aArtSiopeOpcao = array(
-                                    'f' => 'Nï¿½o',
+                                    'f' => 'Não',
                                     't' => 'Sim',
                                 );
                                 $cldbsyscampo = db_utils::getDao('db_syscampo');
@@ -1064,7 +1064,7 @@ if (isset($db_opcaoal)) {
             var sMensagem = 'recursoshumanos.pessoal.db_frmrhpessoalmov.';
 
             /**
-             * Instancia componente de dados da conta bancï¿½ria
+             * Instancia componente de dados da conta bancária
              */
             var oContaBancariaServidor = new DBViewContaBancariaServidor($F('db83_sequencial'), 'oContaBancariaServidor', <?= $lExcluir ?>);
             oContaBancariaServidor.show('ctnContaBancariaServidor');
@@ -1098,7 +1098,7 @@ if (isset($db_opcaoal)) {
             }
 
             $('inputOperacao').onkeyup = function(event) {
-                return js_ValidaCampos(this, 1, 'Cï¿½digo da Operaï¿½ï¿½o', false, false, event);
+                return js_ValidaCampos(this, 1, 'Código da Operação', false, false, event);
             }
 
             function js_disabledtipoapos(vinculo) {
@@ -1461,7 +1461,7 @@ if (isset($db_opcaoal)) {
             function js_verificaconta() {
 
                 /**
-                 * Vï¿½lida se o campo salï¿½rio ï¿½ negativo
+                 * Válida se o campo salário é negativo
                  */
                 var salario = parseFloat(document.form1.rh02_salari.value.trim());
                 if (salario < 0) {
@@ -1486,7 +1486,7 @@ if (isset($db_opcaoal)) {
                         document.form1.rh02_tipojornada.value == 0 ||
                         document.form1.rh02_jornadadetrabalho.value == ''
                     ) {
-                        alert('Os campos de Horï¿½rio de Trabalho sï¿½o obrigatï¿½rios');
+                        alert('Os campos de Horário de Trabalho são obrigatórios');
                         return false;
                     }
                 }
@@ -1572,7 +1572,7 @@ if (isset($db_opcaoal)) {
                 if (document.form1.tipadm.value == 3 || document.form1.tipadm.value == 4) {
                     if (document.form1.rh02_cnpjcedente.value != "") {
                         if (js_verificaCNPJ(document.form1.rh02_cnpjcedente) == false) {
-                            alert("Usuï¿½rio: \n\nInforme o CNPJ Cedente.\n\nAdministrador:");
+                            alert("Usuário: \n\nInforme o CNPJ Cedente.\n\nAdministrador:");
                             return false;
                         }
                     }
@@ -1785,7 +1785,7 @@ if (isset($db_opcaoal)) {
                 }
             }
             /**
-             * Verifica se foi selecionado algum valor de salï¿½rio ou uma funï¿½ï¿½o padrï¿½o para o calculo
+             * Verifica se foi selecionado algum valor de salário ou uma função padrão para o calculo
              */
             function js_validaPadraoPrevidencia(bAvisoPrevidencia) {
 
@@ -1811,8 +1811,8 @@ if (isset($db_opcaoal)) {
             }
 
             /**
-             * Habilita select para informar tipo de deficiï¿½ncia
-             * no caso de informar sim como deficiente fï¿½sico
+             * Habilita select para informar tipo de deficiência
+             * no caso de informar sim como deficiente físico
              */
             function js_informarTipoDeficiencia() {
 
@@ -1827,7 +1827,7 @@ if (isset($db_opcaoal)) {
                     } else {
                         nodeCotaDeficiencia.hide();
                     }
-                } else if (nodeDeficiente.value == 'f' || nodeDeficiente.value.toLowerCase().indexOf('nï¿½o') > -1) {
+                } else if (nodeDeficiente.value == 'f' || nodeDeficiente.value.toLowerCase().indexOf('não') > -1) {
                     nodeTipoDeficiencia.hide();
                     nodeCotaDeficiencia.hide();
                 }
@@ -1854,7 +1854,7 @@ if (isset($db_opcaoal)) {
 
                 if (nodePortadorMolestia.value == 't' || nodePortadorMolestia.value.toLowerCase().indexOf('sim') > -1) {
                     nodeLaudoMolestia.show();
-                } else if (nodePortadorMolestia.value == 'f' || nodePortadorMolestia.value.toLowerCase().indexOf('nï¿½o') > -1) {
+                } else if (nodePortadorMolestia.value == 'f' || nodePortadorMolestia.value.toLowerCase().indexOf('não') > -1) {
                     nodeLaudoMolestia.hide();
                 }
             }
@@ -1865,13 +1865,13 @@ if (isset($db_opcaoal)) {
 
                 if (nodeAbonoPermanencia.value == 't' || nodeAbonoPermanencia.value.toLowerCase().indexOf('sim') > -1) {
                     nodeDataInicio.show();
-                } else if (nodeAbonoPermanencia.value == 'f' || nodeAbonoPermanencia.value.toLowerCase().indexOf('nï¿½o') > -1) {
+                } else if (nodeAbonoPermanencia.value == 'f' || nodeAbonoPermanencia.value.toLowerCase().indexOf('não') > -1) {
                     nodeDataInicio.hide();
                 }
             }
 
             /**
-             * Valida tipo de deficiï¿½ncia
+             * Valida tipo de deficiência
              */
             function js_validaTipoDeficiencia() {
 
@@ -1887,7 +1887,7 @@ if (isset($db_opcaoal)) {
 
                     }
 
-                } else if (nodeDeficiente.value == 'f' || nodeDeficiente.value.toLowerCase().indexOf('nï¿½o') > -1) {
+                } else if (nodeDeficiente.value == 'f' || nodeDeficiente.value.toLowerCase().indexOf('não') > -1) {
 
                     nodeTipoDeficiencia.value = 0;
                     js_ProcCod_rh02_tipodeficiencia('rh02_tipodeficiencia', 'rh02_tipodeficienciadescr');
@@ -1940,7 +1940,7 @@ if (isset($db_opcaoal)) {
 
             js_disabdata("<?= ($rh05_taviso) ?>");
 
-            // Informaï¿½ï¿½es das mensagens de sugestï¿½o para o padrï¿½o de previdï¿½ncia
+            // Informações das mensagens de sugestão para o padrão de previdência
             var aEventoShow = new Array('onMouseover', 'onFocus');
             var aEventoHide = new Array('onMouseout', 'onBlur');
             var oDbHintPadraoPrev = new DBHint('oDbHintPadraoPrev');
@@ -1951,7 +1951,7 @@ if (isset($db_opcaoal)) {
             oDbHintPadraoPrev.make($('rh03_padraoprev'));
             oDbHintPadraoPrev.make($('r02_descrprev'));
 
-            // Hint de aviso para alteraï¿½ï¿½es na tabela de previdï¿½ncia
+            // Hint de aviso para alterações na tabela de previdência
             var oDbHintTabelaPrev = new DBHint('oDbHintTabelaPrev');
             oDbHintTabelaPrev.setText(_M(sMensagem + 'suggest_tabela_prev'));
             oDbHintTabelaPrev.setShowEvents(aEventoShow);
