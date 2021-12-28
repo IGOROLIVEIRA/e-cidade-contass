@@ -39,7 +39,7 @@ try {
 }
 
 
-$clabre_arquivo = new cl_abre_arquivo("tmp/Edital_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("Edital_$iLicitacao.$extensao");
 
 if ($clabre_arquivo->arquivo != false) {
 
@@ -82,7 +82,7 @@ if ($clabre_arquivo->arquivo != false) {
     fclose($clabre_arquivo->arquivo);
 }
 
-$clabre_arquivo = new cl_abre_arquivo("tmp/Itens_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("Itens_$iLicitacao.$extensao");
 
 if ($clabre_arquivo->arquivo != false) {
 
@@ -125,7 +125,7 @@ if ($clabre_arquivo->arquivo != false) {
     fclose($clabre_arquivo->arquivo);
 }
 
-$clabre_arquivo = new cl_abre_arquivo("tmp/Lote_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("Lote_$iLicitacao.$extensao");
 
 if ($clabre_arquivo->arquivo != false) {
 
@@ -156,16 +156,22 @@ if ($clabre_arquivo->arquivo != false) {
     fclose($clabre_arquivo->arquivo);
 }
 $aArquivosGerados = array();
-$aArquivosGerados[] =  strtoupper("tmp/Edital_$iLicitacao.$extensao");
-$aArquivosGerados[] =  strtoupper("tmp/Itens_$iLicitacao.$extensao");
-$aArquivosGerados[] =  strtoupper("tmp/Lote_$iLicitacao.$extensao");
+$aArquivosGerados[] =  strtoupper("Edital_$iLicitacao.$extensao");
+$aArquivosGerados[] =  strtoupper("Itens_$iLicitacao.$extensao");
+$aArquivosGerados[] =  strtoupper("Lote_$iLicitacao.$extensao");
 
-$sNomeArquivo = "export_process";
+$sNomeAbsoluto = "export_process";
 
-compactaArquivos($aArquivosGerados, $sNomeArquivo);
+//compactaArquivos($aArquivosGerados, $sNomeArquivo);
+
+      foreach($aArquivosGerados as $sArquivo) {
+        $sArquivos .= " $sArquivo";
+      }
+      system("rm -f {$sNomeAbsoluto}.zip");
+      system("bin/zip -q {$sNomeAbsoluto}.zip $sArquivos 2> /tmp/erro.txt");
 
 echo "<script>";
-echo "  jan = window.open('db_download.php?arquivo=" . "tmp/export_process.zip" . "','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
+echo "  jan = window.open('db_download.php?arquivo=" . "export_process.zip" . "','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
 echo "  jan.moveTo(0,0);";
 echo "</script>";
 
