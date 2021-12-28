@@ -122,12 +122,12 @@ if ($clusuarios > 0) {
                     ?>
                     <? if (in_array($usuario, $aUsuAdm)) : ?>
 
-                        <b>Cï¿½digo Anterior: </b>
+                        <b>Código Anterior: </b>
                         <?
                         db_input('ve01_codigoant', 10, 1, true, 'text', $db_opcao, "");
                         ?>
 
-                        <b>Cï¿½digo da Unidade: </b>
+                        <b>Código da Unidade: </b>
                         <?
                         db_input('ve01_codunidadesub', 10, 1, true, 'text', $db_opcao, "", "", "", "", 8);
                         ?>
@@ -141,10 +141,10 @@ if ($clusuarios > 0) {
                     <?
                     $x = array(
                         0 => 'Selecione',
-                        3 => 'Veï¿½culos',
+                        3 => 'Veóculos',
                         1 => 'Aeronaves',
-                        2 => 'Embarcaï¿½ï¿½es',
-                        4 => 'Maquinï¿½rio',
+                        2 => 'Embarcaçães',
+                        4 => 'Maquinório',
                         5 => 'Equipamentos',
                         99 => 'Outros'
                     );
@@ -163,7 +163,7 @@ if ($clusuarios > 0) {
                 <td nowrap title="<?= @$Tsi04_especificacao ?>">
                     <?
                     //$x = array('1'=>'Aeronaves');
-                    $x = array('0' => 'Selecione', '3' => 'Veï¿½culo de Passeio', '4' => 'Utilitï¿½rio (Camionete)', '5' => 'ï¿½nibus', '6' => 'Caminho', '7' => 'Motocicleta', '8' => 'Van');
+                    $x = array('0' => 'Selecione', '3' => 'Veóculo de Passeio', '4' => 'Utilitório (Camionete)', '5' => 'ónibus', '6' => 'Caminho', '7' => 'Motocicleta', '8' => 'Van');
                     db_select('si04_especificacao', $x, true, $db_opcao, "");
                     ?>
                 </td>
@@ -172,7 +172,7 @@ if ($clusuarios > 0) {
                 <td> <?= @$Lsi04_situacao ?> </td>
                 <td nowrap title="<?= @$Tsi04_situacao ?>">
                     <?
-                    $x = array('1' => 'Compï¿½e o patrimï¿½nio do municipio (veiculo prï¿½prio)', '2' => 'Terceirizado ou contratado', '3' => 'Cedido, emprï¿½stimo de outro ente, convï¿½nio, acordo ou ajuste');
+                    $x = array('1' => 'Compóe o património do municipio (veiculo próprio)', '2' => 'Terceirizado ou contratado', '3' => 'Cedido, empróstimo de outro ente, convónio, acordo ou ajuste');
                     db_select('si04_situacao', $x, true, $db_opcao, "onchange='js_situacao();'");
                     ?>
                 </td>
@@ -195,7 +195,7 @@ if ($clusuarios > 0) {
             </tr>
 
             <tr>
-                <td> <b>Descriï¿½ï¿½o:<b> </td>
+                <td> <b>Descrição:<b> </td>
                 <td nowrap title="<?= @$Tsi04_descricao ?>">
                     <?
                     db_textarea('si04_descricao', 8, 70, $Isi04_descricao, true, 'text', $db_opcao, "", "", "", 100);
@@ -440,18 +440,18 @@ if ($clusuarios > 0) {
                                 }
 
                         ?>
-                                <input title=" Combustï¿½vel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
+                                <input title=" Combustóvel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
                             <?
                             } else {
-                                $valor = "Nenhum combustï¿½vel cadastrado.";
+                                $valor = "Nenhum combustóvel cadastrado.";
                             ?>
-                                <input title=" Combustï¿½vel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
+                                <input title=" Combustóvel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
                             <?
                             }
                         } else {
-                            $valor = "Nenhum combustï¿½vel cadastrado.";
+                            $valor = "Nenhum combustóvel cadastrado.";
                             ?>
-                            <input title=" Combustï¿½vel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
+                            <input title=" Combustóvel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
                         <?
                         }
                         ?>
@@ -530,7 +530,7 @@ if ($clusuarios > 0) {
     </td>
     <td>
 <?
-$x = array('1' => 'Sim', '0' => 'Nï¿½o');
+$x = array('1' => 'Sim', '0' => 'Nóo');
 db_select('ve01_ativo', $x, true, $db_opcao, "");
 ?>
     </td>
@@ -573,7 +573,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
     function js_submit() {
         if (document.form1.si04_situacao.value == 2 || document.form1.si04_situacao.value == 3) {
             if (document.form1.si04_numcgm.value == null || document.form1.si04_numcgm.value == "") {
-                alert('CGM  obrigatï¿½rio');
+                alert('CGM  obrigatório');
                 document.form1.si04_numcgm.focus();
                 return false;
             }
@@ -600,7 +600,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
             if (document.form1.si04_situacao.value == 2 || document.form1.si04_situacao.value == 3) {
                 js_OpenJanelaIframe('', 'db_iframe_nomes', 'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true, '0');
             } else {
-                alert('CGM deve ser selecionado quando a situaï¿½ï¿½o for \n Terceirizado/contratado ou \n Compï¿½e o patrimï¿½nio do municipio (veiculo prï¿½prio)');
+                alert('CGM deve ser selecionado quando a situação for \n Terceirizado/contratado ou \n Compóe o património do municipio (veiculo próprio)');
                 return false;
             }
         } else {
@@ -608,7 +608,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
                 if (document.form1.si04_situacao.value == 2 || document.form1.si04_situacao.value == 3) {
                     js_OpenJanelaIframe('', 'db_iframe_nomes', 'func_nome.php?pesquisa_chave=' + document.form1.si04_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false, '0', '1', '775', '390');
                 } else {
-                    alert('CGM deve ser selecionado quando a situaï¿½ï¿½o for \n Terceirizado/contratado ou \n Compï¿½e o patrimï¿½nio do municipio (veiculo prï¿½prio)');
+                    alert('CGM deve ser selecionado quando a situação for \n Terceirizado/contratado ou \n Compóe o património do municipio (veiculo próprio)');
                     document.form1.si04_numcgm.value = "";
                     return false;
                 }
@@ -649,15 +649,15 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
         if (valor == '2') {
             combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
-            combo.options[0] = new Option("Embarcaï¿½ï¿½es", "2");
+            combo.options[0] = new Option("Embarcaçães", "2");
         }
         if (valor == '3') {
             combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
             combo.options[0] = new Option("Selecione", "0");
-            combo.options[1] = new Option("Veï¿½culo de passeio", "3");
-            combo.options[2] = new Option("Utilitï¿½rio (Camionete)", "4");
-            combo.options[3] = new Option("ï¿½nibus", "5");
+            combo.options[1] = new Option("Veóculo de passeio", "3");
+            combo.options[2] = new Option("Utilitório (Camionete)", "4");
+            combo.options[3] = new Option("ónibus", "5");
             combo.options[4] = new Option("Caminho", "6");
             combo.options[5] = new Option("Motocicleta", "7");
             combo.options[6] = new Option("Van", "8");
@@ -669,7 +669,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
             combo.options[1] = new Option("Trator de Esteira", "9");
             combo.options[2] = new Option("Trator de Pneu", "10");
             combo.options[3] = new Option("Moto niveladora", "11");
-            combo.options[4] = new Option("Pï¿½-Carregadeira", "12");
+            combo.options[4] = new Option("Pó-Carregadeira", "12");
             combo.options[5] = new Option("Retro Escavadeira", "13");
             combo.options[6] = new Option("Mini Carregadeira", "14");
             combo.options[7] = new Option("Escavadeira", "15");
@@ -700,17 +700,17 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
 
     }
 
-    function js_hideElements(valor){
+    function js_hideElements(valor) {
         let aClasses = document.getElementsByClassName('tr__hidden');
 
-        if([1, 2, 4, 5, 99].includes(Number(valor))){
+        if ([1, 2, 4, 5, 99].includes(Number(valor))) {
             document.getElementsByClassName('tr__numcgm')[0].style.display = 'none';
         } else {
             document.getElementsByClassName('tr__numcgm')[0].style.display = '';
         }
 
-        for (let count=0; count < aClasses.length; count++){
-            if([1, 2, 5, 99].includes(Number(valor))){
+        for (let count = 0; count < aClasses.length; count++) {
+            if ([1, 2, 5, 99].includes(Number(valor))) {
                 aClasses[count].style.display = 'none';
             } else {
                 aClasses[count].style.display = '';
@@ -732,7 +732,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
             $query .= "&ve06_veiculos=" . $ve01_codigo;
         }
         ?>
-        js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiculoscomb', 'vei2_veiculoscomb001.php?<?= $query ?>', 'Combustï¿½veis', true);
+        js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiculoscomb', 'vei2_veiculoscomb001.php?<?= $query ?>', 'Combustóveis', true);
     }
 
     function js_pesquisave01_veiccadmodelo(mostra) {
