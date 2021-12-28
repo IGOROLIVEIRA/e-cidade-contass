@@ -923,7 +923,7 @@ if (isset($rh02_seqpes)) {
 
     echo "<script>
           parent.document.formaba.rhpeslocaltrab.disabled=false;
-          top.corpo.iframe_rhpeslocaltrab.location.href='pes1_rhpeslocaltrab001.php?rh56_seqpes=" . @$rh02_seqpes . "&rh02_regist={$rh02_regist}';
+          (window.CurrentWindow || parent.CurrentWindow || top).corpo.iframe_rhpeslocaltrab.location.href='pes1_rhpeslocaltrab001.php?rh56_seqpes=" . @$rh02_seqpes . "&rh02_regist={$rh02_regist}';
        ";
     if (
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4507) == 'true' ||
@@ -931,7 +931,7 @@ if (isset($rh02_seqpes)) {
     ) {
 
         echo "parent.document.formaba.rhpontofixo.disabled=false;\n";
-        echo "top.corpo.iframe_rhpontofixo.location.href='pes1_rhpessoalponto001.php?ponto=fx&r90_regist=" . @$rh02_regist . "'\n";
+        echo "(window.CurrentWindow || parent.CurrentWindow || top).corpo.iframe_rhpontofixo.location.href='pes1_rhpessoalponto001.php?ponto=fx&r90_regist=" . @$rh02_regist . "'\n";
     }
     if (
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4506)  == 'true' ||
@@ -939,7 +939,7 @@ if (isset($rh02_seqpes)) {
     ) {
 
         echo "parent.document.formaba.rhpontosalario.disabled=false;\n";
-        echo "top.corpo.iframe_rhpontosalario.location.href='pes1_rhpessoalponto001.php?ponto=fs&r90_regist=" . @$rh02_regist . "'\n";
+        echo "(window.CurrentWindow || parent.CurrentWindow || top).corpo.iframe_rhpontosalario.location.href='pes1_rhpessoalponto001.php?ponto=fs&r90_regist=" . @$rh02_regist . "'\n";
     }
 
     echo "</script>";
