@@ -38,8 +38,9 @@ try {
     db_redireciona('db_erros.php?fechar=true&db_erro=' . $oErro->getMessage());
 }
 
+system("cd tmp; rm -f *.$extensao; cd ..");
 
-$clabre_arquivo = new cl_abre_arquivo("Edital_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("tmp/Edital_$iLicitacao.$extensao");
 
 if ($clabre_arquivo->arquivo != false) {
 
@@ -70,7 +71,7 @@ if ($clabre_arquivo->arquivo != false) {
         fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iExercício, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iExercicioEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($sProcessoObjeto, $vir, $del));
@@ -82,7 +83,7 @@ if ($clabre_arquivo->arquivo != false) {
     fclose($clabre_arquivo->arquivo);
 }
 
-$clabre_arquivo = new cl_abre_arquivo("Itens_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("tmp/Itens_$iLicitacao.$extensao");
 
 if ($clabre_arquivo->arquivo != false) {
 
@@ -113,7 +114,7 @@ if ($clabre_arquivo->arquivo != false) {
         fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iExercício, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iExercicioEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($sProcessoObjeto, $vir, $del));
@@ -125,7 +126,7 @@ if ($clabre_arquivo->arquivo != false) {
     fclose($clabre_arquivo->arquivo);
 }
 
-$clabre_arquivo = new cl_abre_arquivo("Lote_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("tmp/Lote_$iLicitacao.$extensao");
 
 if ($clabre_arquivo->arquivo != false) {
 
@@ -156,9 +157,9 @@ if ($clabre_arquivo->arquivo != false) {
     fclose($clabre_arquivo->arquivo);
 }
 $aArquivosGerados = array();
-$aArquivosGerados[] =  strtoupper("Edital_$iLicitacao.$extensao");
-$aArquivosGerados[] =  strtoupper("Itens_$iLicitacao.$extensao");
-$aArquivosGerados[] =  strtoupper("Lote_$iLicitacao.$extensao");
+$aArquivosGerados[] = "Edital_$iLicitacao.$extensao";
+$aArquivosGerados[] = "Itens_$iLicitacao.$extensao";
+$aArquivosGerados[] = "Lote_$iLicitacao.$extensao";
 
 $sNomeAbsoluto = "export_process";
 
@@ -167,11 +168,12 @@ $sNomeAbsoluto = "export_process";
       foreach($aArquivosGerados as $sArquivo) {
         $sArquivos .= " $sArquivo";
       }
-      system("rm -f {$sNomeAbsoluto}.zip");
-      system("bin/zip -q {$sNomeAbsoluto}.zip $sArquivos 2> /tmp/erro.txt");
+
+      system("cd tmp; rm -f {$sNomeAbsoluto}.zip; cd ..");
+      system("cd tmp; ../bin/zip -q {$sNomeAbsoluto}.zip $sArquivos 2> erro.txt; cd ..");
 
 echo "<script>";
-echo "  jan = window.open('db_download.php?arquivo=" . "export_process.zip" . "','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
+echo "  jan = window.open('db_download.php?arquivo=" . "tmp/{$sNomeAbsoluto}.zip" . "','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
 echo "  jan.moveTo(0,0);";
 echo "</script>";
 
