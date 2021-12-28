@@ -96,200 +96,155 @@ if (!empty($chaves) && isset($chaves)) {
         }
     }
 
-  if (trim($cods) == ""){
-    $info = explode('#',$chaves);
-    $vir  = "";
-    for($xx = 0; $xx < count($info); $xx++){
-      if (trim($info[$xx]) != ""){
-        $cods .= $vir.$info[$xx];
-        $vir   = ",";
-      }
-    }
+    if (trim($cods) == "") {
+        $info = explode('#', $chaves);
+        $vir  = "";
+        for ($xx = 0; $xx < count($info); $xx++) {
+            if (trim($info[$xx]) != "") {
+                $cods .= $vir . $info[$xx];
+                $vir   = ",";
+            }
+        }
 
-    if (trim($cods) != "") {
-        echo "<script>
+        if (trim($cods) != "") {
+            echo "<script>
  		if (parent.document.form1.cods.value!=''){
  		  parent.document.form1.cods.value=$cods;
  		}
    	    </script>";
-    }
-
-    if (isset($incluir) && trim($incluir) != "") {
-
-        $sqlerro = false;
-        db_inicio_transacao();
-
-        if ($sqlerro == false) {
-
-            $res_lote     = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null, "l21_codpcprocitem", null, "l21_codliclicita=$licitacao"));
-            $numrows_lote = $clliclicitemlote->numrows;
-
-            if ($numrows_lote > 0) {
-                $itens_incluidos = "";
-                $separador       = "";
-                for ($x = 0; $x < $numrows_lote; $x++) {
-                    db_fieldsmemory($res_lote, $x);
-                    $itens_incluidos .= $separador . $l21_codpcprocitem;
-                    $separador        = ", ";
-                }
-
-                if (strlen(trim($itens_incluidos)) > 0) {
-                    $arr_itens = split(",", $itens_incluidos);
-                }
-            }
-
-            $dbwhere = " ";
-            if (strlen(trim(@$itens_incluidos)) > 0) {
-                $dbwhere = " and l21_codpcprocitem not in ($itens_incluidos)";
-            }
-
-            $clliclicitem->excluir(null, "l21_codliclicita=$licitacao $dbwhere");
-            if ($clliclicitem->erro_status == 0) {
-                $sqlerro = true;
-                $erro_msg = $clliclicitem->erro_msg;
-            }
         }
 
+        if (isset($incluir) && trim($incluir) != "") {
 
-        //echo "FIM ".$cods; exit;
-        if ($sqlerro == false) {
-            $dados = split('#', $chaves);
-            $sql_ult_ordem  = "select l21_ordem ";
-            $sql_ult_ordem .= "from liclicitem ";
-            $sql_ult_ordem .= "where l21_codliclicita=$licitacao ";
-            $sql_ult_ordem .= "order by l21_codigo desc limit 1";
+            $sqlerro = false;
+            db_inicio_transacao();
 
-            //echo $sql_ult_ordem; exit;
+            if ($sqlerro == false) {
 
-            $res_ult_ordem  = @db_query($sql_ult_ordem);
+                $res_lote     = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null, "l21_codpcprocitem", null, "l21_codliclicita=$licitacao"));
+                $numrows_lote = $clliclicitemlote->numrows;
 
-            if (pg_numrows($res_ult_ordem) > 0) {
-                $seq = pg_result($res_ult_ordem, 0, "l21_ordem");
-                $seq++;
-            } else {
-                $seq = 1;
-            }
-
-            // print_r($dados); exit;
-            $sequenciallote = 0;
-            for ($w = 0; $w < count($dados); $w++) {
-                if (trim($dados[$w]) != "") {
-                    if ($sqlerro == false) {
-                        $achou = false;
-                        for ($x = 0; $x < count(@$arr_itens); $x++) {
-                            if (trim($arr_itens[$x]) == trim($dados[$w])) {
-                                $achou = true;
-                                break;
-                            }
-                        }
-
-                        if ($achou == false) {
-                            $clliclicitem->l21_codliclicita  = $licitacao;
-                            $clliclicitem->l21_codpcprocitem = $dados[$w];
-                            $clliclicitem->l21_situacao      = "0";
-                            $clliclicitem->l21_ordem         = $seq;
-                            $clliclicitem->incluir(null);
-                            if ($clliclicitem->erro_status == 0) {
-                                $erro_msg = $clliclicitem->erro_msg;
-                                $sqlerro = true;
-                                break;
-                            }
-
-                            $seq++;
-                        }
+                if ($numrows_lote > 0) {
+                    $itens_incluidos = "";
+                    $separador       = "";
+                    for ($x = 0; $x < $numrows_lote; $x++) {
+                        db_fieldsmemory($res_lote, $x);
+                        $itens_incluidos .= $separador . $l21_codpcprocitem;
+                        $separador        = ", ";
                     }
 
-                    if ($sqlerro == false) {
-                        if ($achou == false) {
+                    if (strlen(trim($itens_incluidos)) > 0) {
+                        $arr_itens = split(",", $itens_incluidos);
+                    }
+                }
 
-                            $coditem = $clliclicitem->l21_codigo;
+                $dbwhere = " ";
+                if (strlen(trim(@$itens_incluidos)) > 0) {
+                    $dbwhere = " and l21_codpcprocitem not in ($itens_incluidos)";
+                }
 
-                            /**
-                             * Vincula os itens ao lote
-                             **/
-                            $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_sol($coditem, "pc11_codigo, pc68_nome"));
-                            if ($clliclicitem->numrows > 0) {
-                                db_fieldsmemory($res_liclicitem, 0);
-                            }
+                $clliclicitem->excluir(null, "l21_codliclicita=$licitacao $dbwhere");
+                if ($clliclicitem->erro_status == 0) {
+                    $sqlerro = true;
+                    $erro_msg = $clliclicitem->erro_msg;
+                }
+            }
 
-                            $clliclicitemlote->l04_liclicitem = $coditem;
 
-                            /**
-                             * Tipo de julgamento por item
-                             */
-                            if ($tipojulg == 1) {
-                                $clliclicitemlote->l04_descricao = "LOTE_AUTOITEM_" . $pc11_codigo;
-                            }
+            //echo "FIM ".$cods; exit;
+            if ($sqlerro == false) {
+                $dados = split('#', $chaves);
+                $sql_ult_ordem  = "select l21_ordem ";
+                $sql_ult_ordem .= "from liclicitem ";
+                $sql_ult_ordem .= "where l21_codliclicita=$licitacao ";
+                $sql_ult_ordem .= "order by l21_codigo desc limit 1";
 
-                            /**
-                             * Tipo de julgamento Global
-                             */
-                            if ($tipojulg == 2) {
-                                $clliclicitemlote->l04_descricao = "GLOBAL";
-                            }
+                //echo $sql_ult_ordem; exit;
 
-                            /**
-                             * Tipo de julgamento por Lote
-                             * pega o lote do processo de compras e ja vem sugerido
-                             */
-                            // Comentado por causa da Oc13887
-                            // if ($tipojulg == 3) {
-                            //   $clliclicitemlote->l04_descricao = $pc68_nome;
-                            // }
+                $res_ult_ordem  = @db_query($sql_ult_ordem);
 
-                            if (!empty($clliclicitemlote->l04_descricao) && in_array($tipojulg, array(1, 2))) {
-                                $sequenciallote++;
-                                $clliclicitemlote->l04_seq = $sequenciallote;
-                                $clliclicitemlote->incluir(null);
+                if (pg_numrows($res_ult_ordem) > 0) {
+                    $seq = pg_result($res_ult_ordem, 0, "l21_ordem");
+                    $seq++;
+                } else {
+                    $seq = 1;
+                }
 
-                                if ($clliclicitemlote->erro_status == 0) {
-                                    $erro_msg = $clliclicitemlote->erro_msg;
-                                    $sqlerro  = true;
+                // print_r($dados); exit;
+                $sequenciallote = 0;
+                for ($w = 0; $w < count($dados); $w++) {
+                    if (trim($dados[$w]) != "") {
+                        if ($sqlerro == false) {
+                            $achou = false;
+                            for ($x = 0; $x < count(@$arr_itens); $x++) {
+                                if (trim($arr_itens[$x]) == trim($dados[$w])) {
+                                    $achou = true;
                                     break;
                                 }
                             }
-                        }
-                    }
-                }
-            }
-        }
-        // $sqlerro  = true;
-        db_fim_transacao(false);
 
-        if ($sqlerro == false) {
-            $res_pcorcam = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "pc22_codorc", null, "l20_codigo = $licitacao limit 1"));
-            if ($clpcorcamitem->numrows > 0) {   // Tem orçamento para esta Licitacao
-                db_inicio_transacao();
-
-                db_fieldsmemory($res_pcorcam, 0);
-
-                for ($x = 0; $x < count($dados); $x++) {
-                    if (trim($dados[$x]) != "") {
-                        $clpcorcamitemlic->sql_record($clpcorcamitemlic->sql_query(null, "*", null, "pc81_codprocitem = " . $dados[$x]));
-
-                        if ($clpcorcamitemlic->numrows == 0) {
-                            $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codpcprocitem = " . $dados[$x]));
-                            if ($clliclicitem->numrows > 0) {
-                                db_fieldsmemory($res_liclicitem, 0);
-
-                                $clpcorcamitem->pc22_codorc = $pc22_codorc;
-                                $clpcorcamitem->incluir(null);
-                                if ($clpcorcamitem->erro_status == 0) {
-                                    $sqlerro  = true;
-                                    $erro_msg = $clpcorcamitem->erro_msg;
+                            if ($achou == false) {
+                                $clliclicitem->l21_codliclicita  = $licitacao;
+                                $clliclicitem->l21_codpcprocitem = $dados[$w];
+                                $clliclicitem->l21_situacao      = "0";
+                                $clliclicitem->l21_ordem         = $seq;
+                                $clliclicitem->incluir(null);
+                                if ($clliclicitem->erro_status == 0) {
+                                    $erro_msg = $clliclicitem->erro_msg;
+                                    $sqlerro = true;
                                     break;
                                 }
 
-                                if ($sqlerro == false) {
-                                    $pc22_orcamitem = $clpcorcamitem->pc22_orcamitem;
+                                $seq++;
+                            }
+                        }
 
-                                    $clpcorcamitemlic->pc26_orcamitem  = $pc22_orcamitem;
-                                    $clpcorcamitemlic->pc26_liclicitem = $l21_codigo;
-                                    $clpcorcamitemlic->incluir(null);
+                        if ($sqlerro == false) {
+                            if ($achou == false) {
 
-                                    if ($clpcorcamitemlic->erro_status == 0) {
+                                $coditem = $clliclicitem->l21_codigo;
+
+                                /**
+                                 * Vincula os itens ao lote
+                                 **/
+                                $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_sol($coditem, "pc11_codigo, pc68_nome"));
+                                if ($clliclicitem->numrows > 0) {
+                                    db_fieldsmemory($res_liclicitem, 0);
+                                }
+
+                                $clliclicitemlote->l04_liclicitem = $coditem;
+
+                                /**
+                                 * Tipo de julgamento por item
+                                 */
+                                if ($tipojulg == 1) {
+                                    $clliclicitemlote->l04_descricao = "LOTE_AUTOITEM_" . $pc11_codigo;
+                                }
+
+                                /**
+                                 * Tipo de julgamento Global
+                                 */
+                                if ($tipojulg == 2) {
+                                    $clliclicitemlote->l04_descricao = "GLOBAL";
+                                }
+
+                                /**
+                                 * Tipo de julgamento por Lote
+                                 * pega o lote do processo de compras e ja vem sugerido
+                                 */
+                                // Comentado por causa da Oc13887
+                                // if ($tipojulg == 3) {
+                                //   $clliclicitemlote->l04_descricao = $pc68_nome;
+                                // }
+
+                                if (!empty($clliclicitemlote->l04_descricao) && in_array($tipojulg, array(1, 2))) {
+                                    $sequenciallote++;
+                                    $clliclicitemlote->l04_seq = $sequenciallote;
+                                    $clliclicitemlote->incluir(null);
+
+                                    if ($clliclicitemlote->erro_status == 0) {
+                                        $erro_msg = $clliclicitemlote->erro_msg;
                                         $sqlerro  = true;
-                                        $erro_msg = $clpcorcamitemlic->erro_msg;
                                         break;
                                     }
                                 }
@@ -297,43 +252,88 @@ if (!empty($chaves) && isset($chaves)) {
                         }
                     }
                 }
-
-                db_fim_transacao(false);
             }
-        }
-        if ($sqlerro == false) {
-            db_msgbox("Inclusão Efetivada com Sucesso!!");
-            echo "<script>parent.parent.iframe_liclicita.bloquearRegistroPreco();</script>";
-            if (isset($tipojulg) && trim($tipojulg) != "" && $tipojulg == 3) {
-                echo "<script>
+            // $sqlerro  = true;
+            db_fim_transacao(false);
+
+            if ($sqlerro == false) {
+                $res_pcorcam = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "pc22_codorc", null, "l20_codigo = $licitacao limit 1"));
+                if ($clpcorcamitem->numrows > 0) {   // Tem orçamento para esta Licitacao
+                    db_inicio_transacao();
+
+                    db_fieldsmemory($res_pcorcam, 0);
+
+                    for ($x = 0; $x < count($dados); $x++) {
+                        if (trim($dados[$x]) != "") {
+                            $clpcorcamitemlic->sql_record($clpcorcamitemlic->sql_query(null, "*", null, "pc81_codprocitem = " . $dados[$x]));
+
+                            if ($clpcorcamitemlic->numrows == 0) {
+                                $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codpcprocitem = " . $dados[$x]));
+                                if ($clliclicitem->numrows > 0) {
+                                    db_fieldsmemory($res_liclicitem, 0);
+
+                                    $clpcorcamitem->pc22_codorc = $pc22_codorc;
+                                    $clpcorcamitem->incluir(null);
+                                    if ($clpcorcamitem->erro_status == 0) {
+                                        $sqlerro  = true;
+                                        $erro_msg = $clpcorcamitem->erro_msg;
+                                        break;
+                                    }
+
+                                    if ($sqlerro == false) {
+                                        $pc22_orcamitem = $clpcorcamitem->pc22_orcamitem;
+
+                                        $clpcorcamitemlic->pc26_orcamitem  = $pc22_orcamitem;
+                                        $clpcorcamitemlic->pc26_liclicitem = $l21_codigo;
+                                        $clpcorcamitemlic->incluir(null);
+
+                                        if ($clpcorcamitemlic->erro_status == 0) {
+                                            $sqlerro  = true;
+                                            $erro_msg = $clpcorcamitemlic->erro_msg;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    db_fim_transacao(false);
+                }
+            }
+            if ($sqlerro == false) {
+                db_msgbox("Inclusão Efetivada com Sucesso!!");
+                echo "<script>parent.parent.iframe_liclicita.bloquearRegistroPreco();</script>";
+                if (isset($tipojulg) && trim($tipojulg) != "" && $tipojulg == 3) {
+                    echo "<script>
                         parent.parent.iframe_liclicitemlote.location.href = 'lic1_liclicitemlote001.php?licitacao=$licitacao&tipojulg=$tipojulg';\n
                         parent.parent.document.formaba.liclicitemlote.disabled=false;
 
                  </script>";
-            }
-
-            $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital, l47_sequencial', '', 'l20_codigo = ' . $licitacao);
-            $rsSql = $clliclancedital->sql_record($sSql);
-
-            $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
-            $nroedital = db_utils::fieldsMemory($rsSql, 0)->l20_nroedital;
-            $sequencial = db_utils::fieldsMemory($rsSql, 0)->l47_sequencial;
-
-            if (in_array(intval($natureza_objeto), array(1, 7)) && $licitacao && !$sequencial) {
-                if ($tipojulg != 3) {
-                    echo "<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
-                } else {
-                    echo "<script> parent.parent.mo_camada('liclicitemlote'); </script>";
                 }
+
+                $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital, l47_sequencial', '', 'l20_codigo = ' . $licitacao);
+                $rsSql = $clliclancedital->sql_record($sSql);
+
+                $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
+                $nroedital = db_utils::fieldsMemory($rsSql, 0)->l20_nroedital;
+                $sequencial = db_utils::fieldsMemory($rsSql, 0)->l47_sequencial;
+
+                if (in_array(intval($natureza_objeto), array(1, 7)) && $licitacao && !$sequencial) {
+                    if ($tipojulg != 3) {
+                        echo "<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
+                    } else {
+                        echo "<script> parent.parent.mo_camada('liclicitemlote'); </script>";
+                    }
+                }
+            } else {
+                //db_msgbox(@$erro_msg);
+                db_msgbox("Operação Cancelada!!Contate Suporte!!");
             }
-        } else {
-            //db_msgbox(@$erro_msg);
-            db_msgbox("Operação Cancelada!!Contate Suporte!!");
+            $incluir = "";
         }
-        $incluir = "";
     }
 }
-
 ?>
 <html>
 

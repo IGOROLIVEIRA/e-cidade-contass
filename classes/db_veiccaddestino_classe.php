@@ -331,4 +331,3 @@ class cl_veiccaddestino {
      return $sql;
   }
 }
-?>

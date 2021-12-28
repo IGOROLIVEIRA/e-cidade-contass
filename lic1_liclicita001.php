@@ -345,7 +345,7 @@ if (isset($incluir)) {
 			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
 			$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao; //OC3770
-			$clliclicita->incluir(null);
+			$clliclicita->incluir(null, null);
 
 			if ($clliclicita->erro_status == "0") {
 				$erro_msg = $clliclicita->erro_msg;
@@ -355,9 +355,9 @@ if (isset($incluir)) {
 
 		if (!$sqlerro && $lprocsis == 's') {
 
-            $clliclicitaproc->l34_liclicita    = $clliclicita->l20_codigo;
-            $clliclicitaproc->l34_protprocesso = $l34_protprocesso;
-            $clliclicitaproc->incluir(null);
+			$clliclicitaproc->l34_liclicita    = $clliclicita->l20_codigo;
+			$clliclicitaproc->l34_protprocesso = $l34_protprocesso;
+			$clliclicitaproc->incluir(null);
 
 			if ($clliclicitaproc->erro_status == 0) {
 				$erro_msg = $clliclicitaproc->erro_msg;
