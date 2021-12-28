@@ -95,7 +95,7 @@ class DBHttpRequest
     public function getResponseCode()
     {
         if (!isset($this->responseHeaders['response_code'])) {
-            throw new \Exception('Requisiï¿½ï¿½o nï¿½o executada.');
+            throw new \Exception('Requisição não executada.');
         }
         return $this->responseHeaders['response_code'];
     }
@@ -131,9 +131,10 @@ class DBHttpRequest
             ),
         );
 
-        if (!empty($options['proxy'])) {
-            $contextOptions['http']['proxy'] = $options['proxy'];
-        }
+        // Com essa parte nao funcionou
+        // if (!empty($options['proxy'])) {
+        //     $contextOptions['http']['proxy'] = $options['proxy'];
+        // }
 
         if (!empty($options['headers'])) {
             $contextOptions['http']['header'] = $this->headersToString();
@@ -143,6 +144,8 @@ class DBHttpRequest
             $contextOptions['http']['content'] = $options['body'];
         }
 
+        // echo $url.' contextOptions ';
+        // print_r($contextOptions);exit;
         $context = stream_context_create($contextOptions);
         $result  = @file_get_contents($url, false, $context);
 
@@ -152,7 +155,7 @@ class DBHttpRequest
 
         if ($result === false) {
             $error = error_get_last();
-            throw new BusinessException("Erro ao executar requisiï¿½ï¿½o:\nRetorno: " . $error['message']);
+            throw new BusinessException("Erro ao executar requisição:\nRetorno: " . $error['message']);
         }
         // print_r($result);
         return $result;
