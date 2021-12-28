@@ -141,10 +141,10 @@ if ($clusuarios > 0) {
                     <?
                     $x = array(
                         0 => 'Selecione',
-                        3 => 'Veóculos',
+                        3 => 'Veículos',
                         1 => 'Aeronaves',
-                        2 => 'Embarcaçães',
-                        4 => 'Maquinório',
+                        2 => 'Embarcações',
+                        4 => 'Maquinário',
                         5 => 'Equipamentos',
                         99 => 'Outros'
                     );
@@ -163,7 +163,7 @@ if ($clusuarios > 0) {
                 <td nowrap title="<?= @$Tsi04_especificacao ?>">
                     <?
                     //$x = array('1'=>'Aeronaves');
-                    $x = array('0' => 'Selecione', '3' => 'Veóculo de Passeio', '4' => 'Utilitório (Camionete)', '5' => 'ónibus', '6' => 'Caminho', '7' => 'Motocicleta', '8' => 'Van');
+                    $x = array('0' => 'Selecione', '3' => 'Veículo de Passeio', '4' => 'Utilitário (Camionete)', '5' => 'Ônibus', '6' => 'Caminho', '7' => 'Motocicleta', '8' => 'Van');
                     db_select('si04_especificacao', $x, true, $db_opcao, "");
                     ?>
                 </td>
@@ -172,7 +172,7 @@ if ($clusuarios > 0) {
                 <td> <?= @$Lsi04_situacao ?> </td>
                 <td nowrap title="<?= @$Tsi04_situacao ?>">
                     <?
-                    $x = array('1' => 'Compóe o património do municipio (veiculo próprio)', '2' => 'Terceirizado ou contratado', '3' => 'Cedido, empróstimo de outro ente, convónio, acordo ou ajuste');
+                    $x = array('1' => 'Compõe o patrimônio do municipio (veiculo próprio)', '2' => 'Terceirizado ou contratado', '3' => 'Cedido, empréstimo de outro ente, convênio, acordo ou ajuste');
                     db_select('si04_situacao', $x, true, $db_opcao, "onchange='js_situacao();'");
                     ?>
                 </td>
@@ -440,18 +440,18 @@ if ($clusuarios > 0) {
                                 }
 
                         ?>
-                                <input title=" Combustóvel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
+                                <input title=" Combustível Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
                             <?
                             } else {
-                                $valor = "Nenhum combustóvel cadastrado.";
+                                $valor = "Nenhum combustível cadastrado.";
                             ?>
-                                <input title=" Combustóvel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
+                                <input title=" Combustível Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
                             <?
                             }
                         } else {
-                            $valor = "Nenhum combustóvel cadastrado.";
+                            $valor = "Nenhum combustível cadastrado.";
                             ?>
-                            <input title=" Combustóvel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
+                            <input title=" Combustível Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?= $valor ?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
                         <?
                         }
                         ?>
@@ -530,7 +530,7 @@ if ($clusuarios > 0) {
     </td>
     <td>
 <?
-$x = array('1' => 'Sim', '0' => 'Nóo');
+$x = array('1' => 'Sim', '0' => 'Não');
 db_select('ve01_ativo', $x, true, $db_opcao, "");
 ?>
     </td>
@@ -600,7 +600,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
             if (document.form1.si04_situacao.value == 2 || document.form1.si04_situacao.value == 3) {
                 js_OpenJanelaIframe('', 'db_iframe_nomes', 'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true, '0');
             } else {
-                alert('CGM deve ser selecionado quando a situação for \n Terceirizado/contratado ou \n Compóe o património do municipio (veiculo próprio)');
+                alert('CGM deve ser selecionado quando a situação for \n Terceirizado/contratado ou \n Compõe o patrimônio do municipio (veiculo próprio)');
                 return false;
             }
         } else {
@@ -608,7 +608,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
                 if (document.form1.si04_situacao.value == 2 || document.form1.si04_situacao.value == 3) {
                     js_OpenJanelaIframe('', 'db_iframe_nomes', 'func_nome.php?pesquisa_chave=' + document.form1.si04_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false, '0', '1', '775', '390');
                 } else {
-                    alert('CGM deve ser selecionado quando a situação for \n Terceirizado/contratado ou \n Compóe o património do municipio (veiculo próprio)');
+                    alert('CGM deve ser selecionado quando a situação for \n Terceirizado/contratado ou \n Compõe o patrimônio do municipio (veiculo próprio)');
                     document.form1.si04_numcgm.value = "";
                     return false;
                 }
@@ -649,15 +649,15 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
         if (valor == '2') {
             combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
-            combo.options[0] = new Option("Embarcaçães", "2");
+            combo.options[0] = new Option("Embarcações", "2");
         }
         if (valor == '3') {
             combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
             combo.options[0] = new Option("Selecione", "0");
-            combo.options[1] = new Option("Veóculo de passeio", "3");
-            combo.options[2] = new Option("Utilitório (Camionete)", "4");
-            combo.options[3] = new Option("ónibus", "5");
+            combo.options[1] = new Option("Veículo de passeio", "3");
+            combo.options[2] = new Option("Utilitário (Camionete)", "4");
+            combo.options[3] = new Option("Ônibus", "5");
             combo.options[4] = new Option("Caminho", "6");
             combo.options[5] = new Option("Motocicleta", "7");
             combo.options[6] = new Option("Van", "8");
@@ -669,7 +669,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
             combo.options[1] = new Option("Trator de Esteira", "9");
             combo.options[2] = new Option("Trator de Pneu", "10");
             combo.options[3] = new Option("Moto niveladora", "11");
-            combo.options[4] = new Option("Pó-Carregadeira", "12");
+            combo.options[4] = new Option("Pá-Carregadeira", "12");
             combo.options[5] = new Option("Retro Escavadeira", "13");
             combo.options[6] = new Option("Mini Carregadeira", "14");
             combo.options[7] = new Option("Escavadeira", "15");
@@ -737,10 +737,10 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
 
     function js_pesquisave01_veiccadmodelo(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiccadmodelo', 'func_veiccadmodelo.php?funcao_js=parent.js_mostraveiccadmodelo1|ve22_codigo|ve22_descr', 'Pesquisa', true);
+            js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_veiccadmodelo', 'func_veiccadmodelo.php?funcao_js=parent.js_mostraveiccadmodelo1|ve22_codigo|ve22_descr', 'Pesquisa', true);
         } else {
             if (document.form1.ve01_veiccadmodelo.value != '') {
-                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiccadmodelo', 'func_veiccadmodelo.php?pesquisa_chave=' + document.form1.ve01_veiccadmodelo.value + '&funcao_js=parent.js_mostraveiccadmodelo', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_veiccadmodelo', 'func_veiccadmodelo.php?pesquisa_chave=' + document.form1.ve01_veiccadmodelo.value + '&funcao_js=parent.js_mostraveiccadmodelo', 'Pesquisa', false);
             } else {
                 document.form1.ve22_descr.value = '';
             }
@@ -763,10 +763,10 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
 
     function js_pesquisave06_veiccadcomb(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiccadcomb', 'func_veiccadcomb.php?funcao_js=parent.js_mostraveiccadcomb1|ve26_codigo|ve26_descr', 'Pesquisa', true);
+            js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_veiccadcomb', 'func_veiccadcomb.php?funcao_js=parent.js_mostraveiccadcomb1|ve26_codigo|ve26_descr', 'Pesquisa', true);
         } else {
             if (document.form1.ve06_veiccadcomb.value != '') {
-                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiccadcomb', 'func_veiccadcomb.php?pesquisa_chave=' + document.form1.ve06_veiccadcomb.value + '&funcao_js=parent.js_mostraveiccadcomb', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_veiccadcomb', 'func_veiccadcomb.php?pesquisa_chave=' + document.form1.ve06_veiccadcomb.value + '&funcao_js=parent.js_mostraveiccadcomb', 'Pesquisa', false);
             } else {
                 document.form1.ve26_descr.value = '';
             }
@@ -789,10 +789,10 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
 
     function js_pesquisave01_ceplocalidades(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_ceplocalidades', 'func_ceplocalidades.php?funcao_js=parent.js_mostraceplocalidades1|cp05_codlocalidades|cp05_localidades', 'Pesquisa', true);
+            js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_ceplocalidades', 'func_ceplocalidades.php?funcao_js=parent.js_mostraceplocalidades1|cp05_codlocalidades|cp05_localidades', 'Pesquisa', true);
         } else {
             if (document.form1.ve01_ceplocalidades.value != '') {
-                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_ceplocalidades', 'func_ceplocalidades.php?pesquisa_chave=' + document.form1.ve01_ceplocalidades.value + '&funcao_js=parent.js_mostraceplocalidades', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_ceplocalidades', 'func_ceplocalidades.php?pesquisa_chave=' + document.form1.ve01_ceplocalidades.value + '&funcao_js=parent.js_mostraceplocalidades', 'Pesquisa', false);
             } else {
                 document.form1.cp05_localidades.value = '';
             }
@@ -815,10 +815,10 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
 
     function js_pesquisave40_veiccadcentral(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiccadcentral', 'func_veiccadcentral.php?funcao_js=parent.js_mostraveiccadcentral1|ve36_sequencial|descrdepto', 'Pesquisa', true);
+            js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_veiccadcentral', 'func_veiccadcentral.php?funcao_js=parent.js_mostraveiccadcentral1|ve36_sequencial|descrdepto', 'Pesquisa', true);
         } else {
             if (document.form1.ve40_veiccadcentral.value != '') {
-                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiccadcentral', 'func_veiccadcentral.php?pesquisa_chave=' + document.form1.ve40_veiccadcentral.value + '&funcao_js=parent.js_mostraveiccadcentral', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_veiccadcentral', 'func_veiccadcentral.php?pesquisa_chave=' + document.form1.ve40_veiccadcentral.value + '&funcao_js=parent.js_mostraveiccadcentral', 'Pesquisa', false);
             } else {
                 document.form1.descrdepto.value = '';
             }
@@ -841,10 +841,10 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
 
     function js_pesquisave03_bem(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_bens', 'func_bens.php?funcao_js=parent.js_mostrabens1|t52_bem|t52_descr', 'Pesquisa', true);
+            js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_bens', 'func_bens.php?funcao_js=parent.js_mostrabens1|t52_bem|t52_descr', 'Pesquisa', true);
         } else {
             if (document.form1.ve03_bem.value != '') {
-                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_bens', 'func_bens.php?pesquisa_chave=' + document.form1.ve03_bem.value + '&funcao_js=parent.js_mostrabens', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_bens', 'func_bens.php?pesquisa_chave=' + document.form1.ve03_bem.value + '&funcao_js=parent.js_mostrabens', 'Pesquisa', false);
             } else {
                 document.form1.t52_descr.value = '';
             }
@@ -866,7 +866,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
     }
 
     function js_pesquisa() {
-        js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiculos', 'func_veiculos.php?funcao_js=parent.js_preenchepesquisa|ve01_codigo&instit=true', 'Pesquisa', true, '0');
+        js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_veiculos', 'func_veiculos.php?funcao_js=parent.js_preenchepesquisa|ve01_codigo&instit=true', 'Pesquisa', true, '0');
     }
 
     function js_preenchepesquisa(chave) {

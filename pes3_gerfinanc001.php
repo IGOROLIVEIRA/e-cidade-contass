@@ -64,7 +64,7 @@ $clrotulo->label('rh37_descr');
 $lPermisaoCadastroServidor = db_permissaomenu(db_getsession('DB_anousu'), 952, 4356);
 
 /*
- * Variï¿½vel que controla se campos sï¿½o editï¿½veis ou nï¿½o.
+ * Variável que controla se campos são editáveis ou não.
  */
 
 if (!isset($lReadOnly)){
@@ -263,7 +263,7 @@ $iMesImplantacao = $aImplantacao[1];
       $com_debitos = true;
       if(isset($HTTP_POST_VARS["pesquisar"]) || isset($matricula) ) {
           echo "<form id='formatu' name=\"formatu\" action=\"pes3_gerfinanc001.php".($lReadOnly ? "?lReadOnly=true" :"")."\" method=\"post\">\n";
-          //aqui ï¿½ pra se clicar no link da matricula em cai3_gerfinanc002.php
+          //aqui é pra se clicar no link da matricula em cai3_gerfinanc002.php
           if(isset($matricula) && !empty($matricula))
           $HTTP_POST_VARS["r01_regist"] = $matricula;
 
@@ -285,7 +285,7 @@ $iMesImplantacao = $aImplantacao[1];
           if(pg_numrows($result) == 0) {
             echo "
                     <script>
-                      alert('Funcionï¿½rio sem cï¿½lculo')
+                      alert('Funcionário sem cálculo')
                     </script>";
             db_redireciona("pes3_gerfinanc001.php");
               // exit;
@@ -298,7 +298,7 @@ $iMesImplantacao = $aImplantacao[1];
          $matricula = $HTTP_POST_VARS["r01_regist"];
             $iInstit   = db_getsession("DB_instit");
 
-          ///////// VERIFICA SE A MATRï¿½CULA POSSUI SALï¿½RIO
+          ///////// VERIFICA SE A MATRÍCULA POSSUI SALÁRIO
 
           if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
             $matricula = $HTTP_POST_VARS["r01_regist"];
@@ -344,7 +344,7 @@ $iMesImplantacao = $aImplantacao[1];
             }
           }
 
-            ///////// VERIFICA SE A MATRï¿½CULA POSSUI SUPLEMENTAR
+            ///////// VERIFICA SE A MATRÍCULA POSSUI SUPLEMENTAR
             if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
               $iInstit = db_getsession("DB_instit");
               $sSql    = "SELECT *
@@ -364,7 +364,7 @@ $iMesImplantacao = $aImplantacao[1];
               }
             }
 
-            ///////// VERIFICA SE A MATRï¿½CULA POSSUI Fï¿½RIAS
+            ///////// VERIFICA SE A MATRÍCULA POSSUI FÉRIAS
            $resultgerffer = db_query("select *
                                     from gerffer
                                 where     r31_regist = $matricula
@@ -376,7 +376,7 @@ $iMesImplantacao = $aImplantacao[1];
           }else{
               $temferias = false;
           }
-            ///////// VERIFICA SE A MATRï¿½CULA POSSUI RESCISAO
+            ///////// VERIFICA SE A MATRÍCULA POSSUI RESCISAO
            $resultgerfres = db_query("select *
                                     from gerfres
                                       where     r20_regist = $matricula
@@ -388,7 +388,7 @@ $iMesImplantacao = $aImplantacao[1];
           }else{
               $temrescisao = false;
           }
-            ///////// VERIFICA SE A MATRï¿½CULA POSSUI ADIANTAMENTO
+            ///////// VERIFICA SE A MATRÍCULA POSSUI ADIANTAMENTO
            $resultgerfadi = db_query("select *
                                     from gerfadi
                                 where     r22_regist = $matricula
@@ -400,7 +400,7 @@ $iMesImplantacao = $aImplantacao[1];
           }else{
               $temadiantamento = false;
           }
-            ///////// VERIFICA SE A MATRï¿½CULA POSSUI 13 SALï¿½RIO
+            ///////// VERIFICA SE A MATRÍCULA POSSUI 13 SALÁRIO
            $resultgerfs13 = db_query("select *
                                     from gerfs13
                                 where     r35_regist = $matricula
@@ -413,7 +413,7 @@ $iMesImplantacao = $aImplantacao[1];
               $tem13salario = false;
           }
 
-          ///////// VERIFICA SE A MATRï¿½CULA POSSUI COMPLEMENTAR
+          ///////// VERIFICA SE A MATRÍCULA POSSUI COMPLEMENTAR
           if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
             $iInstit = db_getsession("DB_instit");
             $sSql = "SELECT *
@@ -446,7 +446,7 @@ $iMesImplantacao = $aImplantacao[1];
             }
           }
 
-            ///////// VERIFICA SE A MATRï¿½CULA POSSUI ponto fixo
+            ///////// VERIFICA SE A MATRÍCULA POSSUI ponto fixo
            $resultgerffx = db_query("select *
                                    from gerffx
                                where     r53_regist = $matricula
@@ -458,7 +458,7 @@ $iMesImplantacao = $aImplantacao[1];
           }else{
               $tempontofixo = false;
           }
-            ///////// VERIFICA SE A MATRï¿½CULA POSSUI ajuste previdencia
+            ///////// VERIFICA SE A MATRÍCULA POSSUI ajuste previdencia
            $resultpreviden = db_query("select *
                                        from rhpessoalmov
                                             inner join rhpessoal on rh01_regist = rh02_regist
@@ -475,7 +475,7 @@ $iMesImplantacao = $aImplantacao[1];
               $temajustepreviden = false;
           }
 
-            //////// VERIFICA SE A MATRï¿½CULA POSSUI ajuste irf
+            //////// VERIFICA SE A MATRÍCULA POSSUI ajuste irf
            $resultajusteir = db_query("select *
                                         from rhpessoalmov
                                         inner join rhpessoal on rh01_regist = rh02_regist
@@ -492,7 +492,7 @@ $iMesImplantacao = $aImplantacao[1];
               $temajusteir = false;
           }
         }
-            ///////// VERIFICA SE A MATRï¿½CULA POSSUI PROVISï¿½O DE Fï¿½RIAS
+            ///////// VERIFICA SE A MATRÍCULA POSSUI PROVISÃO DE FÉRIAS
            $resultgerfprovfer = db_query("select *
                                     from gerfprovfer
                                 where     r93_regist = $matricula
@@ -504,7 +504,7 @@ $iMesImplantacao = $aImplantacao[1];
           }else{
               $temgerfprovfer = false;
           }
-            ///////// VERIFICA SE A MATRï¿½CULA POSSUI PROVISï¿½O 13
+            ///////// VERIFICA SE A MATRÍCULA POSSUI PROVISÃO 13
            $resultgerfprovs13 = db_query("select *
                                     from gerfprovs13
                                 where     r94_regist = $matricula
@@ -542,10 +542,10 @@ $iMesImplantacao = $aImplantacao[1];
                     <tr>
                       <td width="33%">
 
-                       <!-- Informaï¿½ï¿½es Matricula -->
+                       <!-- Informações Matricula -->
                        <form action="">
                          <fieldset style="height:89%">
-                           <legend>Informaï¿½ï¿½es do Servidor</legend>
+                           <legend>Informações do Servidor</legend>
 
                           <table width="90%" >
                             <tr>
@@ -597,13 +597,13 @@ $iMesImplantacao = $aImplantacao[1];
                               </td>
                             </tr>
                             <tr>
-                              <td nowrap class="tabcols"><strong>Endereï¿½o:</strong></td>
+                              <td nowrap class="tabcols"><strong>Endereço:</strong></td>
                               <td nowrap>
                                 <?php db_input('z01_ender', null, $Sz01_ender, true, 'text', 3, 'class="field-size6"'); ?>
                               </td>
                             </tr>
                             <tr>
-                              <td nowrap class="tabcols"><strong>Municï¿½pio:</strong></td>
+                              <td nowrap class="tabcols"><strong>Município:</strong></td>
                               <td>
                                 <?php db_input('z01_munic', 24, $Sz01_munic, true, 'text', 3, "", "", "", "width: 194px;"); ?>
                                 <strong class="tabcols">
@@ -643,19 +643,19 @@ $iMesImplantacao = $aImplantacao[1];
                            echo "<input type=\"hidden\" name=\"k00_numpre\"  value=\"".$HTTP_POST_VARS["k00_numpre"]."\">";
                          ?>
                        </form>
-                       <!-- Informaï¿½ï¿½es Matricula / Fim-->
+                       <!-- Informações Matricula / Fim-->
 
                       </td>
                       <td width="67%" height="100%" valign="top">
 
                         <!-- Calculo Pontos -->
                         <fieldset>
-                        <legend>Informaï¿½ï¿½es Cï¿½lculo</legend>
+                        <legend>Informações Cálculo</legend>
                         <table>
                           <tr class="links">
                             <td valign="top" width="33,3%" height="90%">
                               <fieldset>
-                                <legend>Cï¿½lculos:</legend>
+                                <legend>Cálculos:</legend>
 
                                 <?php
                                   $aCalculos = array();
@@ -667,10 +667,10 @@ $iMesImplantacao = $aImplantacao[1];
                                       $xopcao = 'salario';
                                     }
 
-                                    $aCalculos['salario'] = array("sLabel" => "SALï¿½RIO");
+                                    $aCalculos['salario'] = array("sLabel" => "SALÁRIO");
 
                                     if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()){
-                                      $aCalculos['salario'] = array("sLabel" => "SALï¿½RIO/SUPLEMENTAR");
+                                      $aCalculos['salario'] = array("sLabel" => "SALÁRIO/SUPLEMENTAR");
                                     }
                                   }
 
@@ -679,7 +679,7 @@ $iMesImplantacao = $aImplantacao[1];
                                     if (empty($xopcao)) {
                                       $xopcao = 'rescisao';
                                     }
-                                    $aCalculos['rescisao'] = array("sLabel" => "RESCISï¿½O");
+                                    $aCalculos['rescisao'] = array("sLabel" => "RESCISÃO");
                                   }
 
                                   if(@$temferias == true ){
@@ -687,7 +687,7 @@ $iMesImplantacao = $aImplantacao[1];
                                     if (empty($xopcao)) {
                                       $xopcao = 'ferias';
                                     }
-                                    $aCalculos['ferias'] = array("sLabel" => "Fï¿½RIAS");
+                                    $aCalculos['ferias'] = array("sLabel" => "FÉRIAS");
                                   }
 
                                   if (@$tem13salario == true ) {
@@ -695,7 +695,7 @@ $iMesImplantacao = $aImplantacao[1];
                                     if (empty($xopcao)) {
                                       $xopcao = '13salario';
                                     }
-                                    $aCalculos['13salario'] = array("sLabel" => "13o. SALï¿½RIO");
+                                    $aCalculos['13salario'] = array("sLabel" => "13o. SALÁRIO");
                                   }
 
                                   if (@$temadiantamento == true ) {
@@ -727,7 +727,7 @@ $iMesImplantacao = $aImplantacao[1];
                                     if (empty($xopcao)) {
                                       $xopcao = 'gerfprovfer';
                                     }
-                                    $aCalculos['gerfprovfer'] = array("sLabel" => "PROV. Fï¿½RIAS");
+                                    $aCalculos['gerfprovfer'] = array("sLabel" => "PROV. FÉRIAS");
                                   }
 
                                   if (@$temgerfprovs13 == true ){
@@ -735,7 +735,7 @@ $iMesImplantacao = $aImplantacao[1];
                                     if (empty($xopcao)) {
                                       $xopcao = 'gerfprovs13';
                                     }
-                                    $aCalculos['gerfprovs13'] = array("sLabel" => "PROV. 13o. SALï¿½RIO");
+                                    $aCalculos['gerfprovs13'] = array("sLabel" => "PROV. 13o. SALÁRIO");
                                   }
 
                                   if (@$temajustepreviden == true ) {
@@ -743,7 +743,7 @@ $iMesImplantacao = $aImplantacao[1];
                                     if (empty($xopcao)) {
                                       $xopcao = 'previden';
                                     }
-                                    $aCalculos['previden'] = array("sLabel" => "AJUSTE PREVIDï¿½NCIA");
+                                    $aCalculos['previden'] = array("sLabel" => "AJUSTE PREVIDÊNCIA");
                                   }
 
                                   if (@$temajusteir == true ) {
@@ -770,15 +770,15 @@ $iMesImplantacao = $aImplantacao[1];
 
       /**
        * TIPOS de PONTO:
-       * Salï¿½rio      : fs
+       * Salário      : fs
        * Adiantamento : fa
-       * Fï¿½rias       : fe
-       * Rescisï¿½o     : fr
+       * Férias       : fe
+       * Rescisão     : fr
        * 13o          : f13
        * Complementar : com
        * Fixo         : fx
        */
-      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ponto','pes1_pontofx001.php?lConsulta=1&sPonto='+sPonto+'&iMatricula='+iMatricula+'&sChama='+sChama+'&sMuda='+sMuda+'&funcao_js=parent.js_preenche|0|1|2|3','Manutenï¿½ï¿½ do Ponto',true);
+      js_OpenJanelaIframe('top.corpo','db_iframe_ponto','pes1_pontofx001.php?lConsulta=1&sPonto='+sPonto+'&iMatricula='+iMatricula+'&sChama='+sChama+'&sMuda='+sMuda+'&funcao_js=parent.js_preenche|0|1|2|3','Manutençã do Ponto',true);
     }
 
     </script>
@@ -805,7 +805,7 @@ $iMesImplantacao = $aImplantacao[1];
               }
 
               $lPermiteManutecao             = (db_permissaomenu( $iAnoUsu, 952, 4506 ) == "true" && $lFolhaAberta) ;
-              $aPontos['salario']            = array("sLabel" => "SALï¿½RIO", "lPermiteManutencao" => $lPermiteManutecao);
+              $aPontos['salario']            = array("sLabel" => "SALÁRIO", "lPermiteManutencao" => $lPermiteManutecao);
             }
 
             if (isset($lTemSuplementar)) {
@@ -821,26 +821,26 @@ $iMesImplantacao = $aImplantacao[1];
                 $lFolhaAberta                = FolhaPagamentoRescisao::hasFolhaAberta($oCompetenciaFolha);
               }
               $lPermiteManutecao             = db_permissaomenu( $iAnoUsu, 952, 4510 ) == "true" && $lFolhaAberta;
-              $aPontos['rescisao']           = array("sLabel" => "RESCISï¿½O", "lPermiteManutencao" => $lPermiteManutecao);
+              $aPontos['rescisao']           = array("sLabel" => "RESCISÃO", "lPermiteManutencao" => $lPermiteManutecao);
             }
 
             if ( @$temferias ) {
 
-              // Remove a opï¿½ï¿½o de editar o ponto de fï¿½rias caso o salï¿½rio e a complementar estejam fechados
+              // Remove a opção de editar o ponto de férias caso o salário e a complementar estejam fechados
               if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
                 if ( !FolhaPagamentoSalario::hasFolhaAberta($oCompetenciaFolha)
                   || !FolhaPagamentoComplementar::hasFolhaAberta($oCompetenciaFolha) ) {
 
-                  $aPontos['ferias'] = array("sLabel" => "Fï¿½RIAS", "lPermiteManutencao" => false);
+                  $aPontos['ferias'] = array("sLabel" => "FÉRIAS", "lPermiteManutencao" => false);
                 } else {
 
                 $lPermiteManutecao = db_permissaomenu( $iAnoUsu, 952, 4509) == "true";
-                $aPontos['ferias'] = array("sLabel" => "Fï¿½RIAS", "lPermiteManutencao" => $lPermiteManutecao);
+                $aPontos['ferias'] = array("sLabel" => "FÉRIAS", "lPermiteManutencao" => $lPermiteManutecao);
                 }
               } else {
 
                 $lPermiteManutecao = db_permissaomenu( $iAnoUsu, 952, 4509) == "true";
-                $aPontos['ferias'] = array("sLabel" => "Fï¿½RIAS", "lPermiteManutencao" => $lPermiteManutecao);
+                $aPontos['ferias'] = array("sLabel" => "FÉRIAS", "lPermiteManutencao" => $lPermiteManutecao);
               }
             }
 
@@ -850,7 +850,7 @@ $iMesImplantacao = $aImplantacao[1];
                 $lFolhaAberta                = FolhaPagamento13o::hasFolhaAberta($oCompetenciaFolha);
               }
               $lPermiteManutecao             = db_permissaomenu( $iAnoUsu, 952, 4511 ) == "true" && $lFolhaAberta;
-              $aPontos['13salario']          = array("sLabel" => "13ï¿½ SALï¿½RIO", "lPermiteManutencao" => $lPermiteManutecao);
+              $aPontos['13salario']          = array("sLabel" => "13º SALÁRIO", "lPermiteManutencao" => $lPermiteManutecao);
             }
 
             if ( @$temadiantamento ) {
@@ -881,19 +881,19 @@ $iMesImplantacao = $aImplantacao[1];
             if ( @$temgerfprovfer ) {
 
               $lPermiteManutecao  = null;
-              $aPontos['provfer'] = array("sLabel" => "PROV. DE Fï¿½RIAS", "lPermiteManutencao" => $lPermiteManutecao);
+              $aPontos['provfer'] = array("sLabel" => "PROV. DE FÉRIAS", "lPermiteManutencao" => $lPermiteManutecao);
             }
 
             if ( @$temgerfprovs13 ) {
 
               $lPermiteManutecao  = null;
-              $aPontos['provs13'] = array("sLabel" => "PROV. DE 13ï¿½", "lPermiteManutencao" => $lPermiteManutecao);
+              $aPontos['provs13'] = array("sLabel" => "PROV. DE 13º", "lPermiteManutencao" => $lPermiteManutecao);
             }
 
             if ( @$temajustepreviden ) {
 
               $lPermiteManutecao        = null;
-              $aPrevidencia['previden'] = array("sLabel" => "AJUSTE PREVIDEï¿½NCIA", "lPermiteManutencao" => $lPermiteManutecao);
+              $aPrevidencia['previden'] = array("sLabel" => "AJUSTE PREVIDEÊNCIA", "lPermiteManutencao" => $lPermiteManutecao);
             }
 
             if ( @$temajusteir ) {
@@ -1176,17 +1176,17 @@ $iMesImplantacao = $aImplantacao[1];
                         <table width="100%" border="0">
                           <tr>
                             <td nowrap class="tabcols">
-                              <strong># - Incidï¿½ncia da Base </strong>
+                              <strong># - Incidência da Base </strong>
                             </td>
                           </tr>
                           <tr>
                             <td nowrap class="tabcols">
-                              <strong>B - Fï¿½rmula com a Base</strong>
+                              <strong>B - Fórmula com a Base</strong>
                             </td>
                           </tr>
                           <tr>
                             <td nowrap class="tabcols">
-                              <strong>* - Nï¿½mero da Fï¿½rmula Escolhida </strong>
+                              <strong>* - Número da Fórmula Escolhida </strong>
                             </td>
                           </tr>
                         </table>
@@ -1234,7 +1234,7 @@ $iMesImplantacao = $aImplantacao[1];
                   if(isset($rubric)){
                     $novapesquisa = "pes3_codfinanc001.php";
                     echo "
-                    <input name='retornar' type='button' id='voltar' value='Voltar' title='Voltar para consulta financeira por cï¿½digo' onclick='location.href=\"pes3_codfinanc002.php?rubric=".$rubric."&ano=".$ano."&mes=".$mes."&opcao=".$xopcao."\"'>
+                    <input name='retornar' type='button' id='voltar' value='Voltar' title='Voltar para consulta financeira por código' onclick='location.href=\"pes3_codfinanc002.php?rubric=".$rubric."&ano=".$ano."&mes=".$mes."&opcao=".$xopcao."\"'>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     ";
                   }else if(isset($funcao)){
@@ -1246,7 +1246,7 @@ $iMesImplantacao = $aImplantacao[1];
                   }else if(isset($lotacao)){
                     $novapesquisa = "pes3_consrhlotacao001.php";
                     echo "
-                    <input name='retornar' type='button' id='voltar' value='Voltar' title='Voltar para consulta lotaï¿½ï¿½o' onclick='location.href=\"pes3_consrhlotacao002.php?lotacao=".$lotacao."&ano=".$ano."&mes=".$mes."\"'>
+                    <input name='retornar' type='button' id='voltar' value='Voltar' title='Voltar para consulta lotação' onclick='location.href=\"pes3_consrhlotacao002.php?lotacao=".$lotacao."&ano=".$ano."&mes=".$mes."\"'>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     ";
                   }
@@ -1280,14 +1280,14 @@ $iMesImplantacao = $aImplantacao[1];
 
               <input class="field-size2" type="button"    name="vars1" value="Bases"            onclick="js_Pesquisa('Bases');" >
               <input class="field-size2" type="button"    name="vars2" value="Diversos"         onclick="js_Pesquisa('Diversos');" >
-              <input class="field-size2" type="button"    name="vars"  value="Variï¿½veis"        onclick="js_Pesquisa('Variaveis');" >
+              <input class="field-size2" type="button"    name="vars"  value="Variáveis"        onclick="js_Pesquisa('Variaveis');" >
               <input class="field-size3" type="button"    name="vars3" value="Cheques Emitidos" onclick="js_Pesquisa('ChequesEmitidos');" >
               <input class="field-size3" name="retornar"  type="button" id="retornar" value="Nova Pesquisa" title="Inicio da Consulta" onclick="location.href='<?=($novapesquisa)?>'">
               <input class="field-size2" name="pesquisar" type="submit" id="pesquisar"  title="Atualiza a Consulta" value="Atualizar">
               <input class="field-size2" name="imprimir"  type="button" id="imprimir" value="Imprimir" title="Imprimir" onclick="js_relatorio();">
               <?}?>
               <span id="boxToglePeriodo">
-                <a id="togglePeriodo"  <? echo $lReadOnly ? "" : "href=''"; ?>><strong>Perï¿½odo:</strong></a>
+                <a id="togglePeriodo"  <? echo $lReadOnly ? "" : "href=''"; ?>><strong>Período:</strong></a>
                 <span id="ctnPeriodoAno"></span>
                 <span id="ctnPeriodoMes"></span>
                 <span id="ctnPeriodoInput">
@@ -1369,7 +1369,7 @@ function iframeLoaded(iSize) {
 
 var   oGet         = js_urlToObject(window.location.search);
 /*
- * Variï¿½vel que controla se campos sï¿½o editï¿½veis ou nï¿½o.
+ * Variável que controla se campos são editáveis ou não.
  */
 var   lReadOnly    = oGet.lReadOnly;
 
@@ -1426,7 +1426,7 @@ function js_buscarMatricula() {
     return
   }
 
-  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_rhpessoal', 'func_rhpessoal.php?pesquisa_chave=' + iMatriculaPesquisar + '&funcao_js=parent.js_retornoBuscaMatricula', 'Pesquisa', false);
+  js_OpenJanelaIframe('top.corpo', 'db_iframe_rhpessoal', 'func_rhpessoal.php?pesquisa_chave=' + iMatriculaPesquisar + '&funcao_js=parent.js_retornoBuscaMatricula', 'Pesquisa', false);
 }
 
 /**
@@ -1456,7 +1456,7 @@ function js_retornoBuscaMatricula(sNomeServidor, lErro) {
 
   if ( lErro ) {
 
-    alert('Matrï¿½cula nï¿½o encontrada.');
+    alert('Matrícula não encontrada.');
     $('r01_regist').value = iMatricula;
     return false;
   }
@@ -1491,7 +1491,7 @@ var iAnoLimite      = parseFloat($F('anoLimite'));
 var iMesLimite      = parseFloat($F('mesLimite'));
 
 /**
- * Ano e Mï¿½s de implantaï¿½ï¿½o do sistema
+ * Ano e Mês de implantação do sistema
  */
 var iAnoImplantacao = parseFloat($F('anoImplantacao'));
 var iMesImplantacao = parseFloat($F('mesImplantacao'));
@@ -1548,7 +1548,7 @@ for(var i = 0; i < aAnos.length; i++){
 oComboAno.show( $('ctnPeriodoAno') );
 
 /**
- * Cria select do mï¿½s
+ * Cria select do mês
  */
 var oComboMes = new DBComboBox('oComboMes', 'oComboMes', new Array(), '40');
 
@@ -1616,7 +1616,7 @@ oComboMes.show($('ctnPeriodoMes'));
   }
   /**
    * Select ano
-   * verifica se ï¿½ ano limite(atual) ou inicial(data da implantaï¿½ï¿½o do sistema)
+   * verifica se é ano limite(atual) ou inicial(data da implantação do sistema)
    * atualiza valor do imput #ano
    */
   oSelectAno.observe('change', function() {
@@ -1644,7 +1644,7 @@ oComboMes.show($('ctnPeriodoMes'));
   });
 
   /**
-   * Select mï¿½s
+   * Select mês
    * atualiza do valor do input #mes
    */
   oSelectMes.observe('change', function() {
@@ -1694,7 +1694,7 @@ oComboMes.show($('ctnPeriodoMes'));
   });
 
   /**
-   * Input mï¿½s
+   * Input mês
    */
   oInputMes.observe('focus', function() {
     this.value = '';
@@ -1847,9 +1847,9 @@ function js_verificaregistro(){
 
 function js_pesquisaregist(mostra){
      if(mostra==true){
-       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome','Pesquisa',true);
+       js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome','Pesquisa',true);
      }else{
-       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+$F('r01_regist')+'&funcao_js=parent.js_mostraregist','Pesquisa',false);
+       js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+$F('r01_regist')+'&funcao_js=parent.js_mostraregist','Pesquisa',false);
 //     db_iframepessoal.jan.location.href =               'func_rhpessoal.php?pesquisa_chave='+document.form1.r01_regist.value+'&funcao_js=parent.js_mostraregist';
 
      }
@@ -1887,7 +1887,7 @@ function js_mostracgm() {
 }
 
 
-// esta funcao ï¿½ utilizada quando clicar na matricula apï¿½s pesquisar
+// esta funcao é utilizada quando clicar na matricula após pesquisar
 // a mesma
 function js_mostrapessoal() {
 
@@ -1896,7 +1896,7 @@ function js_mostrapessoal() {
   db_iframepessoal.show();
   db_iframepessoal.focus();
 }
-// esta funcao ï¿½ utilizada quando clicar na inscricao apï¿½s pesquisar
+// esta funcao é utilizada quando clicar na inscricao após pesquisar
 // a mesma
 
 
@@ -1957,7 +1957,7 @@ function js_relatorio(){
 
 function js_Pesquisa(solicitacao) {
   var descricao_janela = 'CONSULTAS';
-  js_OpenJanelaIframe('CurrentWindow.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro=<?=$r01_regist?>&ano=<?=$ano?>&mes=<?=$mes?>',descricao_janela,true,'20');
+  js_OpenJanelaIframe('top.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro=<?=$r01_regist?>&ano=<?=$ano?>&mes=<?=$mes?>',descricao_janela,true,'20');
 }
 
 </script>
