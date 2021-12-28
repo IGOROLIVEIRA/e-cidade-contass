@@ -54,7 +54,7 @@ if(isset($alterar)){
 ?>
     <script>
        parent.document.formaba.veicmotoristascentral.disabled=false;
-       CurrentWindow.corpo.iframe_veicmotoristascentral.location.href='vei1_veiccentralmotoristas001.php?ve41_veicmotoristas=<?=@$chavepesquisa?>';
+       (window.CurrentWindow || parent.CurrentWindow || top).corpo.iframe_veicmotoristascentral.location.href='vei1_veiccentralmotoristas001.php?ve41_veicmotoristas=<?=@$chavepesquisa?>';
 <?
    if (isset($liberaaba) && $liberaaba == true){
 ?>
