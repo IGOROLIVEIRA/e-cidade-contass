@@ -193,7 +193,7 @@ $clcredenciamentotermo->rotulo->label();
 
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_licitacao',
-                'func_liclicita.php?situacao=10&credenciamentotermo=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_dtpubratificacao|l20_veicdivulgacao',
+                'func_liclicita.php?situacao=10&credenciamentotermo=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_dtpubratificacao|l20_condicoespag',
                 'Pesquisa Licitações', true);
         }
     }
@@ -202,7 +202,7 @@ $clcredenciamentotermo->rotulo->label();
      */
     function js_preencheLicitacao(codigo, dtpublica, veicpublica) {
         var aDate = dtpublica.split('-');
-
+        console.log(veicpublica);
         document.form1.l212_licitacao.value = codigo;
         document.form1.l212_dtpublicacao.value = aDate[2] + '/' + aDate[1] + '/' + aDate[0];
         document.form1.l212_veiculodepublicacao.value = veicpublica;

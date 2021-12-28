@@ -180,7 +180,7 @@ $clrotulo->label("pc01_descrmater");
                 if (elementos.elementos.length != 0) {
                     elementos.elementos.forEach(function(oElementos, ele) {
                         let option = document.createElement('option');
-                        option.value = oElementos.pc07_codele;
+                        option.value = oElementos.o56_elemento;
                         option.text = oElementos.o56_descr.urlDecode();
                         select.append(option);
                     })
@@ -259,7 +259,7 @@ $clrotulo->label("pc01_descrmater");
                 console.log(qtdSolicitada);
 
                 if (qtdSolicitada > qtdDisponivel) {
-                    alert('Quantidade não disponivel');
+                    alert('Qtd. Solicitada maior que a Qtd. Disponível!');
                     return false;
                 }
                 oDados.id = $(this).find("td").eq(2).html();

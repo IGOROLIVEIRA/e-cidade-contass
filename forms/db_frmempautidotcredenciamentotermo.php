@@ -203,31 +203,31 @@ if ($clempautitem->numrows == 0) {
                         </tr>
                         <td>Valor reservado:</td>
                         <td> <? db_input('reservado', 13, "", true, 'text', 3, ""); ?></td>
-                        </tr>
-                        <tr>
-                            <td>Valor disponível: </td>
-                            <td><? db_input('atudo', 13, "", true, 'text', 3, ""); ?></td>
-                        </tr>
-                        <tr>
-                            <td><?= $RLe54_valor ?></td>
-                            <?
-                            $result = $clempautitem->sql_record($clempautitem->sql_query_file($e56_autori, null, "sum(e55_vltot) as e54_valor"));
-                            db_fieldsmemory($result, 0);
-                            if (isset($atual_menos_reservado) && isset($e54_valor)) {
-                                $tot = number_format((floatval($atual_menos_reservado) - floatval($e54_valor)), 2, ",", ".");
-                            }
-                            $e54_valor = number_format(floatval($e54_valor), 2, ",", ".");
-
-                            ?>
-                            <td><? db_input('e54_valor', 13, "", true, 'text', 3, ""); ?></td>
-
-                            <? db_input('c99_data', 13, "", true, 'hidden', 3, ""); ?>
-                            <? db_input('dtSistema', 13, "", true, 'hidden', 3, ""); ?>
-
-                        </tr>
-                    </table>
-                </td>
             </tr>
+            <tr>
+                <td>Valor disponível: </td>
+                <td><? db_input('atudo', 13, "", true, 'text', 3, ""); ?></td>
+            </tr>
+            <tr>
+                <td><?= $RLe54_valor ?></td>
+                <?
+                $result = $clempautitem->sql_record($clempautitem->sql_query_file($e56_autori, null, "sum(e55_vltot) as e54_valor"));
+                db_fieldsmemory($result, 0);
+                if (isset($atual_menos_reservado) && isset($e54_valor)) {
+                    $tot = number_format((floatval($atual_menos_reservado) - floatval($e54_valor)), 2, ",", ".");
+                }
+                $e54_valor = number_format(floatval($e54_valor), 2, ",", ".");
+
+                ?>
+                <td><? db_input('e54_valor', 13, "", true, 'text', 3, ""); ?></td>
+
+                <? db_input('c99_data', 13, "", true, 'hidden', 3, ""); ?>
+                <? db_input('dtSistema', 13, "", true, 'hidden', 3, ""); ?>
+
+            </tr>
+        </table>
+        </td>
+        </tr>
         </table>
     </center>
     <input name="confirmar" type="submit" id="db_opcao" value="<?= ($db_botao_c == false ? "Incluir" : "Atualizar") ?>" onclick="return js_verifica();" <?= ($db_botao == false ? "disabled" : "") ?>>
@@ -235,9 +235,9 @@ if ($clempautitem->numrows == 0) {
     <?
     $permissao_lancar = db_permissaomenu(db_getsession("DB_anousu"), 398, 3489);
     if ($permissao_lancar == "true") {
-        ?>
+    ?>
         <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="top.corpo.iframe_empautoriza.js_lanc_empenho();" <?= ($db_botao == false || $db_botao_c == false ? "disabled" : "") ?>>
-        <?
+    <?
     }
     ?>
     <input name="relatorio" type="button" id="db_opcao" value="Relatório de autorização" onclick="top.corpo.iframe_empautoriza.js_relatorio();" <?= ($db_botao == false || $db_botao_c == false ? "disabled" : "") ?>>
@@ -313,9 +313,8 @@ if (isset($tot) && $tot < 0 && empty($cancelar) && isset($pesquisa_dot)) {
     }
 
     function js_pesquisao47_coddot(mostra) {
-        elemento = '';
+        elemento = top.corpo.iframe_empautitem.document.form1.pc07_codele.value;
         query = '';
-        // console.log(elemento);
         if (elemento != '') {
             query = "elemento=" + elemento + "&";
         }

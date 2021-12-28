@@ -15,7 +15,7 @@ switch ($oParam->exec) {
 
     case 'getFornecedores':
         $iAnoSessao      = db_getsession('DB_anousu');
-        if($oParam->idbopcao == "1"){
+        if ($oParam->idbopcao == "1") {
             $sqlFornecedor = "SELECT DISTINCT z01_numcgm,
                                           z01_nome,
                                           l20_dtpubratificacao
@@ -23,7 +23,7 @@ switch ($oParam->exec) {
             INNER JOIN cgm ON z01_numcgm = l205_fornecedor
             INNER JOIN liclicita on l20_codigo = l205_licitacao
             WHERE l205_licitacao ={$oParam->iLicitacao}";
-        }else{
+        } else {
             $sqlFornecedor = "SELECT z01_numcgm,
                                      z01_nome,
                                      l20_dtpubratificacao
@@ -38,13 +38,13 @@ switch ($oParam->exec) {
         $oFornecedor = db_utils::getCollectionByRecord($rsFornecedor);
         $oRetorno->fornecedores = $oFornecedor;
 
-    break;
+        break;
 
     case 'getItensCredenciamento':
 
-        if($oParam->iFornecedor == null){
+        if ($oParam->iFornecedor == null) {
             $where = "WHERE credenciamentotermo.l212_sequencial = $oParam->iCodtermo order by pc11_seq";
-        }else{
+        } else {
             $where = "WHERE l20_codigo = $oParam->iLicitacao and l205_fornecedor = $oParam->iFornecedor order by pc11_seq";
         }
 
@@ -96,7 +96,7 @@ switch ($oParam->exec) {
             $itens[]                                = $oItem;
         }
         $oRetorno->itens = $itens;
-    break;
+        break;
 
     case 'getNumeroTermo':
         $iAnoSessao      = db_getsession('DB_anousu');
@@ -104,9 +104,9 @@ switch ($oParam->exec) {
         $sql = "select max(l212_numerotermo) as numeromaximo from credenciamentotermo";
         $rsNumTermo  = db_query($sql);
         $iNumTermo = db_utils::fieldsMemory($rsNumTermo, 0)->numeromaximo;
-        if($iNumTermo == ""){
+        if ($iNumTermo == "") {
             $iNum = 1;
-        }else{
+        } else {
             $ultimonum = explode("/", $iNumTermo);
             $iNum = $ultimonum[0] + 1;
         }
@@ -115,6 +115,6 @@ switch ($oParam->exec) {
 
         $oRetorno->numerotermo = $iNumTermoAno;
 
-    break;
+        break;
 }
 echo $oJson->encode($oRetorno);

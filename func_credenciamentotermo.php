@@ -40,7 +40,7 @@ $clcredenciamentotermo = new cl_credenciamentotermo;
 
         $campos = "l212_sequencial,l20_codigo,l212_numerotermo,l212_anousu,z01_numcgm,z01_nome,l212_dtinicio,l212_dtfim,l212_dtpublicacao,l212_observacao,l20_edital,l20_numero,l20_anousu,pc50_codcom,l03_descr";
 
-        $sql = $clcredenciamentotermo->sql_query(null, $campos, null, $Where);
+        $sql = $clcredenciamentotermo->sql_query(null, $campos, 'l212_numerotermo desc', $Where);
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';

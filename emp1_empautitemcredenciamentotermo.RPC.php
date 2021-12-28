@@ -11,6 +11,7 @@ require_once("classes/db_matunid_classe.php");
 require_once("classes/db_empautitem_classe.php");
 require_once("classes/db_liclicitem_classe.php");
 require_once("classes/db_credenciamentosaldo_classe.php");
+require_once("classes/db_orcelemento_classe.php");
 
 $oJson                = new services_json();
 $oParam               = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -77,7 +78,7 @@ switch ($_POST["action"]) {
                 AND l21_codigo = l213_itemlicitacao
                 WHERE l20_codigo = {$licitacao}
                     AND l205_fornecedor = {$fornecedor}
-                    AND pc07_codele = {$codele}
+                    AND o56_elemento = '{$codele}'
                     AND pc24_pontuacao = 1
                 GROUP BY pc11_seq,
                          pc01_codmater,
@@ -122,14 +123,14 @@ switch ($_POST["action"]) {
                 $itemRows[] = $selectunid;
                 $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
                 $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
-                if($oDadosEmpAutItem->e55_vlrun != "") {
+                if ($oDadosEmpAutItem->e55_vlrun != "") {
                     $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
-                }else{
+                } else {
                     $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
                 }
-                if($oDadosEmpAutItem->e55_vltot != ""){
+                if ($oDadosEmpAutItem->e55_vltot != "") {
                     $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='background-color: #DEB887; width: 80px' />";
-                }else{
+                } else {
                     $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='' readonly style='background-color: #DEB887; width: 80px' />";
                 }
                 $employeeData[] = $itemRows;
@@ -151,7 +152,8 @@ switch ($_POST["action"]) {
         $iAnoSessao         = db_getsession('DB_anousu');
 
         $sqlElementosTabela = "SELECT DISTINCT pc07_codele,
-                                               o56_descr
+                                               o56_descr,
+                                               o56_elemento
                     FROM credenciamento
                     INNER JOIN liclicita ON l20_codigo = l205_licitacao
                     INNER JOIN liclicitem ON (l21_codliclicita,l21_codpcprocitem) = (l20_codigo,l205_item)
@@ -187,6 +189,7 @@ switch ($_POST["action"]) {
 
             $oElementos = new stdClass();
             $oElementos->pc07_codele = $oDados->pc07_codele;
+            $oElementos->o56_elemento = $oDados->o56_elemento;
             $oElementos->o56_descr = urlencode($oDados->o56_descr);
             $oRetorno->elementos[]  = $oElementos;
         }
@@ -194,7 +197,7 @@ switch ($_POST["action"]) {
         break;
 
     case 'salvar':
-
+        $clorcelemento = new cl_orcelemento();
         $licitacao  = $_POST["licitacao"];
         $fornecedor = $_POST["fornecedor"];
         db_inicio_transacao();
@@ -215,7 +218,7 @@ switch ($_POST["action"]) {
                         LEFT  JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
                         LEFT  JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
                         LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-                        where l21_codliclicita = $licitacao and pc01_codmater =".$item['id'];
+                        where l21_codliclicita = $licitacao and pc01_codmater =" . $item['id'];
             $rsDadosItemLiclicitem      = $oDaoSysArqCamp->sql_record($sSqlItemlic);
             $oDadositem = db_utils::fieldsMemory($rsDadosItemLiclicitem, 0);
 
@@ -223,9 +226,16 @@ switch ($_POST["action"]) {
 
             $vlrunit = $item['vlrunit'];
 
+            /**
+             * get codelemento item
+             */
+            $iAnoSessao = db_getsession('DB_anousu');
+            $rsElemento = $clorcelemento->sql_record($clorcelemento->sql_query(null, $iAnoSessao, "o56_codele", null, "o56_elemento = '{$_POST['codele']}' and o56_anousu = {$iAnoSessao}"));
+            $oDadoElemento = db_utils::fieldsMemory($rsElemento, 0);
+
             if (pg_numrows($rsItem) == 0) {
 
-                $clempautitem->e55_codele = $_POST['codele'];
+                $clempautitem->e55_codele = $oDadoElemento->o56_codele;
                 $clempautitem->e55_item   = $item['id'];
                 $clempautitem->e55_descr  = $item['descr'];
                 $clempautitem->e55_quant  = $item['qtd'];
@@ -250,7 +260,6 @@ switch ($_POST["action"]) {
                 $cl_credenciamentosaldo->l213_itemlicitacao = $oDadositem->l21_codigo;
                 $cl_credenciamentosaldo->l213_qtdlicitada = $oDadositem->pc11_quant;
                 $cl_credenciamentosaldo->incluir();
-
             } else {
 
                 $clempautitem->e55_autori = $_POST['autori'];
@@ -273,7 +282,7 @@ switch ($_POST["action"]) {
                 /**
                  * getcredenciamento saldo
                  */
-                $rsCredenciamentoSaldo = $cl_credenciamentosaldo->sql_record($cl_credenciamentosaldo->sql_query(null,"l213_sequencial",null,"l213_licitacao = {$licitacao} and l213_contratado = {$fornecedor} and l213_item = ".$item['id']));
+                $rsCredenciamentoSaldo = $cl_credenciamentosaldo->sql_record($cl_credenciamentosaldo->sql_query(null, "l213_sequencial", null, "l213_licitacao = {$licitacao} and l213_contratado = {$fornecedor} and l213_item = " . $item['id']));
 
                 $oDadosCredenciamentoSaldo = db_utils::fieldsMemory($rsCredenciamentoSaldo, 0);
 
@@ -311,7 +320,7 @@ switch ($_POST["action"]) {
         foreach ($_POST['dados'] as $item) :
             $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
-            if (pg_numrows($rsItem) > 0){
+            if (pg_numrows($rsItem) > 0) {
                 $clempautitem->excluir(null, null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id']);
             }
 
@@ -320,7 +329,7 @@ switch ($_POST["action"]) {
              */
             $cl_credenciamentosaldo = new cl_credenciamentosaldo();
 
-            $rsCredenciamentoSaldo = $cl_credenciamentosaldo->sql_record($cl_credenciamentosaldo->sql_query(null,"l213_sequencial",null,"l213_licitacao = {$licitacao} and l213_contratado = {$fornecedor} and l213_item = ".$item['id']));
+            $rsCredenciamentoSaldo = $cl_credenciamentosaldo->sql_record($cl_credenciamentosaldo->sql_query(null, "l213_sequencial", null, "l213_licitacao = {$licitacao} and l213_contratado = {$fornecedor} and l213_item = " . $item['id']));
 
             $oDadosCredenciamentoSaldo = db_utils::fieldsMemory($rsCredenciamentoSaldo, 0);
 
@@ -346,8 +355,8 @@ switch ($_POST["action"]) {
     case "verificaSaldoCriterio":
 
         try {
-            $oRetorno->itens   = verificaSaldoCriterioDisponivel($_POST['e55_autori'],$_POST['tabela']);
-//      $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori']);
+            $oRetorno->itens   = verificaSaldoCriterioDisponivel($_POST['e55_autori'], $_POST['tabela']);
+            //      $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori']);
         } catch (Exception $e) {
             $oRetorno->erro = $e->getMessage();
             $oRetorno->status   = 2;
@@ -356,7 +365,8 @@ switch ($_POST["action"]) {
         break;
 }
 
-function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
+function verificaSaldoCriterioDisponivel($e55_autori, $tabela)
+{
     $sqlTotal = "SELECT DISTINCT pc23_valor
                     FROM liclicitem
                     LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
@@ -406,9 +416,9 @@ function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
     $rsConsultaUtilizado = db_query($sqlUtilizado);
     $oDadosTotalUtilizado = db_utils::getCollectionByRecord($rsConsultaUtilizado);
 
-    if($oDadosTotalUtilizado[0]->totalitens == ""){
+    if ($oDadosTotalUtilizado[0]->totalitens == "") {
         $disponivel = $oDadosTotal[0]->pc23_valor;
-    }else{
+    } else {
         $disponivel = $oDadosTotal[0]->pc23_valor - $oDadosTotalUtilizado[0]->totalitens;
     }
 

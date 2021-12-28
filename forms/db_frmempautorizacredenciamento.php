@@ -64,21 +64,21 @@ db_app::load("DBFormCache.js");
             <input id="e57_codhist" name="e57_codhist" value="0" type="hidden">
             <input id="e54_anousu" name="e54_anousu" value="<?= $e54_anousu ?>" type="hidden">
             <tr>
-                <td nowrap title="<?=@$Tl212_numerotermo?>">
+                <td nowrap title="<?= @$Te54_numerotermo ?>">
                     <?
-                    db_ancora('Nº do Termo:',"js_pesquisa_termocredenciamento(true)",$db_opcao);
+                    db_ancora('Nº do Termo:', "js_pesquisa_termocredenciamento(true)", $db_opcao);
                     ?>
                 </td>
                 <td>
                     <?
-                    db_input('l212_numerotermo',10,$Il212_numerotermo,true,'text',3,"onchange='js_pesquisa_termocredenciamento(false)'");
+                    db_input('e54_numerotermo', 10, $Ie54_numerotermo, true, 'text', 3, "onchange='js_pesquisa_termocredenciamento(false)'");
                     ?>
                 </td>
             </tr>
             <tr style="display: none;">
                 <td>
                     <?
-                    db_input('l212_sequencial',10,$Il212_sequencial,true,'text',3,"");
+                    db_input('l212_sequencial', 10, $Il212_sequencial, true, 'text', 3, "");
                     ?>
                 </td>
             </tr>
@@ -153,7 +153,7 @@ db_app::load("DBFormCache.js");
             <?
             $anousu = db_getsession("DB_anousu");
             if ($anousu > 2007) {
-                ?>
+            ?>
                 <tr>
                     <td nowrap title="<?= @$Te54_concarpeculiar ?>">
                         <?
@@ -168,7 +168,7 @@ db_app::load("DBFormCache.js");
                     </td>
                 </tr>
 
-                <?
+            <?
             } else {
                 $e54_concarpeculiar = 0;
                 db_input("e54_concarpeculiar", 10, 0, true, "hidden", 3, "");
@@ -199,9 +199,9 @@ db_app::load("DBFormCache.js");
             <?
             $permissao_lancar = db_permissaomenu(db_getsession("DB_anousu"), 398, 3489);
             if ($permissao_lancar == "true") {
-                ?>
+            ?>
                 <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="js_lanc_empenho();">
-                <?
+        <?
             }
         }
         ?>
@@ -215,7 +215,6 @@ db_app::load("DBFormCache.js");
 
 </form>
 <script>
-
     function js_pesquisa() {
         <?
         if ($db_opcao == 2 || $db_opcao == 22) {
@@ -229,7 +228,7 @@ db_app::load("DBFormCache.js");
 
     function js_preenchepesquisa(chave) {
         db_iframe_<?= $iframe ?>.hide();
-        location.href = 'lic1_gerarempautorizacedrenciamento005.php?chavepesquisa='+chave;
+        location.href = 'lic1_gerarempautorizacedrenciamento005.php?chavepesquisa=' + chave;
     }
 
 
@@ -260,23 +259,22 @@ db_app::load("DBFormCache.js");
     }
 
     function js_pesquisa_termocredenciamento(mostra) {
-        if(mostra==true){
+        if (mostra == true) {
 
             js_OpenJanelaIframe('top.corpo.iframe_empautoriza',
                 'db_iframe_credenciamentotermo',
                 'func_credenciamentotermo.php?virgente=true&autoriza=false&funcao_js=parent.js_preenchertermocredenciamento|l212_numerotermo|l212_sequencial|l20_edital|l20_numero|l20_anousu|z01_numcgm|z01_nome|l03_descr|l20_codigo|pc50_codcom',
-                'Pesquisa Termo Credenciamento',true, '0', '1');
+                'Pesquisa Termo Credenciamento', true, '0', '1');
         }
     }
 
     /**
      * funcao para preencher termo de credenciamento da ancora
      */
-    function js_preenchertermocredenciamento(codigo,seqtermo,edital,numero,ano,cgm,nome,tipocompra,codlicitacao,codtipocom)
-    {
-        document.form1.l212_numerotermo.value = codigo;
+    function js_preenchertermocredenciamento(codigo, seqtermo, edital, numero, ano, cgm, nome, tipocompra, codlicitacao, codtipocom) {
+        document.form1.e54_numerotermo.value = codigo;
         document.form1.l212_sequencial.value = seqtermo;
-        document.form1.e54_numerll.value = edital+'/'+ano;
+        document.form1.e54_numerll.value = edital + '/' + ano;
         document.form1.e54_nummodalidade.value = numero;
         document.form1.e54_numcgm.value = cgm;
         document.form1.z01_nome.value = nome;

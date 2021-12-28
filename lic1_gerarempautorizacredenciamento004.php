@@ -198,7 +198,7 @@ if (isset($incluir)) {
         $clempautoriza->e54_anulad = null;
         $clempautoriza->e54_concarpeculiar = $e54_concarpeculiar;
         $clempautoriza->e54_tipodespesa = $e54_tipodespesa;
-        $clempautoriza->e54_termocredenciamento = $l212_sequencial;
+        $clempautoriza->e54_numerotermo = $e54_numerotermo;
 
 
         $clempautoriza->incluir(null);
