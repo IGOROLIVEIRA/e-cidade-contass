@@ -432,6 +432,10 @@ $db_opcao = 1;
     oParam.k145_numeroprocesso = encodeURIComponent(tagString($F("k145_numeroprocesso")));
     oParam.lBuscaCheque        = true;
 
+    // Teste de Informação
+    console.log("Mostrando o oParam");
+    console.log(oParam);
+
     var sParam           = js_objectToJson(oParam);
     js_divCarregando("Aguarde, pesquisando Movimentos.","msgBox");
     url       = 'emp4_manutencaoPagamentoRPC.php';
@@ -455,6 +459,10 @@ $db_opcao = 1;
     gridNotas.clearAll(true);
     var iRowAtiva     = 0;
     var iTotalizador  = 0;
+
+    // Teste de retorno
+    console.log("Mostrando o oResponse");
+    console.log(oResponse);
 
     if (oResponse.status == 1) {
 
@@ -986,6 +994,7 @@ $db_opcao = 1;
       oMovimento.nValor           = nValor;
       oMovimento.iContaFornecedor = iContaFornecedor;
       oMovimento.iContaPagadora   = iContaPagadora;
+      oMovimento.iRecurso         = iRecurso;
       oMovimento.iCodNota         = iNota;
       oMovimento.nValorRetencao   = 0
 
@@ -1016,6 +1025,12 @@ $db_opcao = 1;
 	// console.log(oEnvio);return false;
     js_divCarregando("Aguarde, Configurando Movimentos.","msgBox");
     js_liberaBotoes(false);
+
+    // Teste do oRetorno
+    console.log("Mostrando o oEnvio");
+    console.log(oEnvio);
+    console.log("Mostrando a url " + url);
+
     var sJson = js_objectToJson(oEnvio);
     var oAjax = new Ajax.Request(
       url,
@@ -1032,6 +1047,11 @@ $db_opcao = 1;
     js_removeObj("msgBox");
     js_liberaBotoes(true);
     var oRetorno = eval("("+oAjax.responseText+")");
+
+    // Teste do oRetorno
+    console.log("Mostrando o oRetorno");
+    console.log(oRetorno);
+
     if (oRetorno.status == 1) {
 
       alert("Movimentos atualizados com sucesso!");

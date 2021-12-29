@@ -358,6 +358,12 @@ switch($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
+            $rsSlipFonte = db_query("SELECT k29_recurso FROM sliprecurso WHERE k29_slip = {$oMovimento->iCodNota}");
+
+            if (pg_numrows($rsSlipFonte) == 0) {
+                throw new Exception("Para efetuar esse procedimento é necessário informar a fonte de recursos no cadastro do Slip");
+            }
+                
             if ($oMovimento->iRecurso)
                 $oTransferencia->setFonteRecurso($oMovimento->iRecurso);
             
