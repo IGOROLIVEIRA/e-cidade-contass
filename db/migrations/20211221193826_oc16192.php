@@ -27,9 +27,7 @@ class Oc16192 extends AbstractMigration
         VALUES 
                 ((SELECT codarq FROM db_sysarquivo WHERE nomearq='orcprojeto'), (select codcam from db_syscampo where nomecam = 'o39_justi'), 14, 0);       
 
-        ALTER TABLE orcsuplemval ADD COLUMN o47_numerocontratoop varchar(30);
 
-        ALTER TABLE orcsuplemval ADD COLUMN o47_dataassinaturacop date; 
         
 
         COMMIT;

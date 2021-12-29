@@ -181,8 +181,6 @@ if (isset($incluir)) {
         $motivo  = db_query("
     select o50_motivosuplementacao from orcparametro where o50_anousu = ".db_getsession("DB_anousu"));
         $aMotivo = db_utils::getCollectionByRecord($motivo);
-        $clorcsuplemval->o47_numerocontratoop = $o47_numerocontratoop;
-        $clorcsuplemval->o47_dataassinaturacop = $o47_dataassinaturacop;
         if ($aMotivo[0]->o50_motivosuplementacao == 't') {
             $clorcsuplemval->o47_motivo = "{$o47_motivo}";
         }

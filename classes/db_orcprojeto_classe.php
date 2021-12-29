@@ -149,14 +149,33 @@ class cl_orcprojeto
       $this->erro_status = "0";
       return false;
     }
-    if ($this->o39_justi == null and db_getsession("DB_anousu")>2021) {
-      $this->erro_sql = " É obrigatório informar a justificativa do decreto e ato administrativo.";
-      $this->erro_campo = "o39_justi";
+    if ($this->o39_data == null) {
+      $this->erro_sql = " Campo Data do Decreto não Informado.";
+      $this->erro_campo = "o39_data";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
+    }
+    if(db_getsession("DB_anousu")>2021){
+      if (!preg_match('/[A-Za-z]/', $this->o39_justi) and strlen($this->o39_justi) >0){
+        $this->erro_sql = " Informe uma justificativa válida!";
+          $this->erro_campo = "o39_justi";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
+          return false;
+        } else if ($this->o39_justi == null ) {
+          $this->erro_sql = " É obrigatório informar a justificativa do decreto e ato administrativo.";
+          $this->erro_campo = "o39_justi";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
     }
     if ($this->o39_codlei == null) {
       $this->erro_sql = " Campo codigo da lei nao Informado.";
@@ -229,15 +248,6 @@ class cl_orcprojeto
     if ($this->o39_numero == null) {
       $this->erro_sql = " Campo Número do Decreto não Informado.";
       $this->erro_campo = "o39_numero";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->o39_data == null) {
-      $this->erro_sql = " Campo Data do Decreto não Informado.";
-      $this->erro_campo = "o39_data";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -368,17 +378,28 @@ class cl_orcprojeto
         if (trim($this->o39_justi) != "" || isset($GLOBALS["HTTP_POST_VARS"]["o39_justi"])) {
           $sql  .= $virgula . " o39_justi = '$this->o39_justi' ";
           $virgula = ",";
-          if (trim($this->o39_justi) == null) {
-            $this->erro_sql = " É obrigatório informar a justificativa do decreto e ato administrativo.";
+          
+          if (!preg_match('/[A-Za-z]/', $this->o39_justi) and strlen($this->o39_justi) >0){
+            $this->erro_sql = " Informe uma justificativa válida!";
             $this->erro_campo = "o39_justi";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
-          }
+          
+        } else if ($this->o39_justi == null ) {
+          $this->erro_sql = " É obrigatório informar a justificativa do decreto e ato administrativo.";
+          $this->erro_campo = "o39_justi";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
+          return false;
         }
-    }
+        }
+      }
+    
     if (trim($this->o39_codlei) != "" || isset($GLOBALS["HTTP_POST_VARS"]["o39_codlei"])) {
       $sql  .= $virgula . " o39_codlei = $this->o39_codlei ";
       $virgula = ",";

@@ -40,20 +40,7 @@
       alert('Você deve selecionar uma C.Peculiar/Cod de Aplicação antes de incluir a Suplementação!');
       return false;
     }
-    <?php if( db_getsession("DB_anousu")>2021 and ($tiposup == 1002 or $tiposup == 1007) ){ ?>
-    if (document.getElementById('o47_numerocontratoop').value == '') {
-      
-      alert('Para suplementações onde a origem do recurso for operação de crédito é obrigatório informar o número do contrato e sua respectiva data de assinatura');
-      return false;
-    }
-
-    if (document.getElementById('o47_dataassinaturacop').value == '') {
-
-        alert('Para suplementações onde a origem do recurso for operação de crédito é obrigatório informar o número do contrato e sua respectiva data de assinatura');
-        return false;
-    }
-    <?php } ?>
-
+    
     if (document.getElementById('o50_motivosuplementacao').value == 't') {
       if (document.getElementById('o47_motivo').value == '') {
 
@@ -128,25 +115,6 @@
               <td><b>Valor a Suplementar:</b></td>
               <td><? db_input('o47_valor', 10, $Io47_valor, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
             </tr>
-            <?php if( db_getsession("DB_anousu")>2021 and ($tiposup == 1002 or $tiposup == 1007)) { ?>
-            <tr>
-              <td><b>N° do Contrato da Operação de Crédito:</b></td>
-              <td><? db_input('o47_numerocontratoop', 10, $Io47_numerocontratotoop, true, 'text', 1, '', '', '', 'text-align:right');  ?> </td>
-            </tr>
-            <tr>
-              <td><b>Data de Assinatura do Contrato OP:</b></td>
-              <td><? 
-                      
-                      $data = explode("-", $o47_dataassinaturacop);
-                      $o47_dataassinaturacop_dia = $data[2];
-                      $o47_dataassinaturacop_mes = $data[1];
-                      $o47_dataassinaturacop_ano = $data[0];
-                      db_inputdata('o47_dataassinaturacop', @$o47_dataassinaturacop_dia, @$o47_dataassinaturacop_mes, @$o47_dataassinaturacop_ano, true, 'text', $db_opcao);
-                      
-                  ?> 
-              </td>
-            </tr> 
-            <?php } ?> 
             <?php
             //OC2785
             $motivo  = db_query("

@@ -30,9 +30,10 @@ $clorcprojeto->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("o45_numlei");
 ?>
+<fieldset>
 <form name="form1" method="post" action="" onsubmit="js_validaSubmit();">
   <center>
-    <table border=0 style="border:1px solid #999999; width:100%;">
+    <table border=0 style="border:0px solid #999999; width:100%;margin:auto;">
       <tr>
         <td valign=top>
 
@@ -135,6 +136,7 @@ $clrotulo->label("o45_numlei");
 
   </center>
 </form>
+</fieldset>
 <script>
   function js_validaTipoSup() {
 
