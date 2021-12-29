@@ -39,8 +39,13 @@ try {
 }
 
 system("cd tmp; rm -f *.$extensao; cd ..");
+$numeroEdital = $aEditalLicitacao[0]->numeroedital;
+$anoProcessoLicitatorio = $aEditalLicitacao[0]->anoprocessolicitatorio;
+$anoEdital = $aEditalLicitacao[0]->anoedital;
+$cnpj = $aEditalLicitacao[0]->cnpj;
+$codigotcemg = $aEditalLicitacao[0]->codigotcemg;
 
-$clabre_arquivo = new cl_abre_arquivo("tmp/Edital_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("tmp/Edital_".$numeroEdital."_".$anoEdital."_".$iLicitacao."_".$anoProcessoLicitatorio.".".$extensao);
 
 if ($clabre_arquivo->arquivo != false) {
 
@@ -51,18 +56,18 @@ if ($clabre_arquivo->arquivo != false) {
 
     foreach ($aEditalLicitacao as $iItens => $oItens) {
 
-        $iTipoRegistro                   = '1';
-        $iCodigoOrgao                    = '01';
-        $iTipoOrgao                      = '01';
+        $iTipoRegistro                   = $oItens->tiporegistro;
+        $iCodigoOrgao                    = $oItens->codigotcemg;
+        $iTipoOrgao                      = $oItens->tipodeinstituicao;
         $iCnpj                           = $oItens->cnpj;
-        $sNomeOrgao                      = $oItens->nomeorgao;
+        $sNomeOrgao                      = $oItens->nomedainstituicao;
         $iProcessoLicitatorio            = $oItens->processolicitatorio;
         $iExercicio                      = $oItens->anoprocessolicitatorio;
-        $iNroEdital                      = $oItens->processolicitatorio;
-        $iExercicioEdital                = $oItens->anoprocessolicitatorio;
-        $sProcessoObjeto                 = '';
-        $iNaturezaObjeto                 = '';
-        $iRegistroPreco                  = '';
+        $iNroEdital                      = $oItens->numeroedital;
+        $iExercicioEdital                = $oItens->anoedital;
+        $sProcessoObjeto                 = $oItens->objeto;
+        $iNaturezaObjeto                 = $oItens->naturezadoobjeto;
+        $iRegistroPreco                  = $oItens->registrodepreco;
 
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
@@ -83,7 +88,7 @@ if ($clabre_arquivo->arquivo != false) {
     fclose($clabre_arquivo->arquivo);
 }
 
-$clabre_arquivo = new cl_abre_arquivo("tmp/Itens_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("tmp/Itens_".$iLicitacao."_".$anoProcessoLicitatorio."_".$cnpj.".".$extensao);
 
 if ($clabre_arquivo->arquivo != false) {
 
@@ -94,39 +99,36 @@ if ($clabre_arquivo->arquivo != false) {
 
     foreach ($aItensLicitacao as $iItens => $oItens) {
 
-        $iTipoRegistro                   = '1';
-        $iCodigoOrgao                    = '01';
-        $iTipoOrgao                      = '01';
+        $iTipoRegistro                   = $oItens->tiporegistro;
         $iCnpj                           = $oItens->cnpj;
-        $sNomeOrgao                      = $oItens->nomeorgao;
         $iProcessoLicitatorio            = $oItens->processolicitatorio;
         $iExercicio                      = $oItens->anoprocessolicitatorio;
-        $iNroEdital                      = $oItens->processolicitatorio;
-        $iExercicioEdital                = $oItens->anoprocessolicitatorio;
-        $sProcessoObjeto                 = '';
-        $iNaturezaObjeto                 = '';
-        $iRegistroPreco                  = '';
+        $iCodMater                       = $oItens->codigodoitem;
+        $iOrdem                          = $oItens->sequencialdoitemnoprocesso;
+        $sDescrItem                      = $oItens->descricaodoitem;
+        $sUnidadeMedida                  = $oItens->unidadedemedida;
+        $iQtdLicitada                    = $oItens->quantidadelicitada;
+        $iValorUnitMedio                 = $oItens->valorunitariomedio;
+        $iCodigodolote                   = $oItens->codigodolote;
 
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iTipoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iExercicioEdital, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($sProcessoObjeto, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNaturezaObjeto, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iCodMater, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iOrdem, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($sDescrItem, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($sUnidadeMedida, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iQtdLicitada, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iValorUnitMedio, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iCodigodolote, $vir, $del));
         fputs($clabre_arquivo->arquivo, "\n");
     }
 
     fclose($clabre_arquivo->arquivo);
 }
 
-$clabre_arquivo = new cl_abre_arquivo("tmp/Lote_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("tmp/Lote_".$iLicitacao."_".$anoProcessoLicitatorio."_".$cnpj.".".$extensao);
 
 if ($clabre_arquivo->arquivo != false) {
 
@@ -137,31 +139,30 @@ if ($clabre_arquivo->arquivo != false) {
 
     foreach ($aEditalLicitacao as $iItens => $oItens) {
 
-        $iTipoRegistro                   = '1';
-        $iCodigoOrgao                    = '01';
-        $iTipoOrgao                      = '01';
-        $iCnpj                           = $oItens->cnpj;
-        $sNomeOrgao                      = $oItens->nomeorgao;
+        $iTipoRegistro                   = $oItens->tiporegistro;
         $iProcessoLicitatorio            = $oItens->processolicitatorio;
+        $iExercicio                      = $oItens->anoprocessolicitatorio;
+        $iLote                           = $oItens->codigodolote;
+        $iCodItem                        = $oItens->codigodoitemvinculadoaolote;
+        $sDescrLote                      = $oItens->descricaodolote;
 
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iTipoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iLote, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iCodItem, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($sDescrLote, $vir, $del));
         fputs($clabre_arquivo->arquivo, "\n");
     }
 
     fclose($clabre_arquivo->arquivo);
 }
 $aArquivosGerados = array();
-$aArquivosGerados[] = "Edital_$iLicitacao.$extensao";
-$aArquivosGerados[] = "Itens_$iLicitacao.$extensao";
-$aArquivosGerados[] = "Lote_$iLicitacao.$extensao";
+$aArquivosGerados[] = "Edital_".$numeroEdital."_".$anoEdital."_".$iLicitacao."_".$anoProcessoLicitatorio.".".$extensao;
+$aArquivosGerados[] = "Itens_".$iLicitacao."_".$anoProcessoLicitatorio."_".$cnpj.".".$extensao;
+$aArquivosGerados[] = "Lote_".$iLicitacao."_".$anoProcessoLicitatorio."_".$cnpj.".".$extensao;
 
-$sNomeAbsoluto = "export_process";
+$sNomeAbsoluto = $cnpj."_".$codigotcemg."_".$anoProcessoLicitatorio;
 
 //compactaArquivos($aArquivosGerados, $sNomeArquivo);
 
@@ -193,5 +194,5 @@ function formatarCampo($valor, $separador, $delimitador)
     $valor = str_replace("\n", " ", $valor);
     $valor = str_replace("\r", " ", $valor);
 
-    return "{$del}{$valor}{$del}{$separador}";
+    return "{$valor}{$del}";
 }

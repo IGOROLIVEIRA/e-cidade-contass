@@ -73,13 +73,20 @@ class licitacao
         }
         $oDaoLicitem  = db_utils::getDao("liclicita");
         $sCampos = "
-        db_config.codigo as tipodoorgao,
-	    db_config.nomeinst as nomeorgao,
+        '1' as tiporegistro,
+        si09_codorgaotce as codigotcemg,
+        si09_tipoinstit as tipodeinstituicao,
         cgc as cnpj,
+        nomeinst as nomedainstituicao,
         l20_edital as processolicitatorio,
         l20_anousu as anoprocessolicitatorio,
-        pc01_codmater as codigodoitem,
-        l21_ordem as sequencialdoitemnoprocesso";
+        l20_nroedital as numeroedital,
+        l20_exercicioedital as anoedital,
+        l20_objeto as objeto,
+        l20_naturezaobjeto as naturezadoobjeto,
+        Case
+            when l20_usaregistropreco = 't' then 'SIM'
+            when l20_usaregistropreco = 'f' then 'NAO' end as registrodepreco";
 
         $rsItens  = $oDaoLicitem->sql_record(
             $oDaoLicitem->sql_query_licitacao_exporta(
@@ -111,8 +118,7 @@ class licitacao
         }
         $oDaoLicitem  = db_utils::getDao("liclicita");
         $sCampos = "
-        db_config.codigo as tipodoorgao,
-	    db_config.nomeinst as nomeorgao,
+        '1' as tiporegistro,
         cgc as cnpj,
         l20_edital as processolicitatorio,
         l20_anousu as anoprocessolicitatorio,
@@ -122,19 +128,6 @@ class licitacao
         WHEN pc01_complmater IS NOT NULL
         AND pc01_complmater != pc01_descrmater THEN pc01_descrmater ||'. '|| pc01_complmater
         ELSE pc01_descrmater END AS descricaodoitem,
-        m61_descr as unidadedemedida,
-        pc11_quant as quantidadelicitada,
-        case
-            when pc80_criterioadjudicacao = 3 then si02_vlprecoreferencia
-            else si02_vlpercreferencia end as valorunitariomedio,
-        case
-            when l20_tipojulg = 3 then l04_descricao
-            else ' ' end as codigodolote,
-        cgc as cnpj,
-        l20_edital as processolicitatorio,
-        l20_anousu as anoprocessolicitatorio,
-        pc01_codmater as codigodoitem,
-        l21_ordem as sequencialdoitemnoprocesso,
         m61_descr as unidadedemedida,
         pc11_quant as quantidadelicitada,
         case
@@ -174,8 +167,7 @@ class licitacao
         }
         $oDaoLicitem  = db_utils::getDao("liclicita");
         $sCampos = "
-        db_config.codigo as tipodoorgao,
-	    db_config.nomeinst as nomeorgao,
+        '1' as tiporegistro,
         l20_edital as processolicitatorio,
         l20_anousu as anoprocessolicitatorio,
         l04_codigo as codigodolote,

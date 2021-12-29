@@ -66,9 +66,11 @@ $clrotulo->label("l20_numero");
                 return false;
             }
 
-            jan = window.open('con1_exportaprocessos002.php?' + sQuery, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            //location.href = 'con1_exportaprocessos002.php?' + sQuery;
+
+            jan = window.open('con1_exportaprocessos002.php?' + sQuery);
             jan.moveTo(0, 0);
-            //document.form1.l20_codigo.value = '';
+            document.form1.l20_codigo.value = '';
 
         }
     </script>
