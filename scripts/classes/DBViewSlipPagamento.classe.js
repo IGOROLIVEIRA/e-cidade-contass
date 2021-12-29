@@ -259,7 +259,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   me.oTxtProcessoInput.setMaxLength(15);
   me.oTxtValorInput                          = new DBTextField('oTxtValorInput', me.sNomeInstancia+'.oTxtValorInput', '', 24);
 
-  
+
   me.oTxtValorInput.addEvent("onKeyPress", "return js_teclas(event,this)");
 
 
@@ -282,6 +282,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   me.oTxtContaDebitoCodigo.setReadOnly(me.lReadOnly);
   me.oTxtHistoricoInputCodigo.setReadOnly(me.lReadOnly);
   me.oTxtHistoricoInputDescricao.setReadOnly(me.lReadOnly);
+  me.oTxtFonteInputCodigo.setReadOnly(me.lReadOnly);
   me.oTxtProcessoInput.setReadOnly(me.lReadOnly);
   me.oTxtValorInput.setReadOnly(me.lReadOnly);
   me.oTxtCodigoFinalidadeFundeb.setReadOnly(me.lReadOnly);
