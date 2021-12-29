@@ -64,10 +64,10 @@ switch ($oParam->exec) {
 			$oRetorno->dtData                 = $oSlip->getData();
             if ($oSlip->getFonteRecursos()) {
                 $oRetorno->iFonteRecurso          = $oSlip->getFonteRecursos()->getCodigoRecurso();
+            } else {
+                $oRetorno->iFonteRecurso          = '';
             }
             
-            $oRetorno->iFonteRecurso          = '';
-
 			$oRetorno->sCaracteristicaDebito  = $oSlip->getCaracteristicaPeculiarDebito();
 			$oRetorno->sCaracteristicaCredito = $oSlip->getCaracteristicaPeculiarCredito();
 
