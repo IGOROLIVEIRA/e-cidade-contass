@@ -254,11 +254,9 @@ $clrotulo->label("pc01_descrmater");
 
             if ($(this).find("input[type='checkbox']").is(":checked")) {
                 var qtdDisponivel = $(this).find("td").eq(5).find("input").val();
-                console.log(qtdDisponivel);
                 var qtdSolicitada = $(this).find("td").eq(7).find("input").val();
-                console.log(qtdSolicitada);
 
-                if (qtdSolicitada > qtdDisponivel) {
+                if (Number(qtdSolicitada) > Number(qtdDisponivel)) {
                     alert('Qtd. Solicitada maior que a Qtd. Disponível!');
                     return false;
                 }

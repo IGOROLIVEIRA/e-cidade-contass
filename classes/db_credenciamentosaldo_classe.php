@@ -24,6 +24,8 @@ class cl_credenciamentosaldo {
     public $l213_qtdcontratada = 0;
     public $l213_contratado = 0;
     public $l213_acordo = 0;
+    public $l213_autori = 0;
+
     // cria propriedade com as variaveis do arquivo
     public $campos = "
                  l213_sequencial = int4 = Sequencial 
@@ -34,6 +36,7 @@ class cl_credenciamentosaldo {
                  l213_qtdcontratada = float8 = Qtd. Contratada
                  l213_contratado    = int4 = contratado
                  l213_acordo = int4 = acordo 
+                 l213_autori = int4 = autorizacao
                  ";
 
     //funcao construtor da classe
@@ -64,6 +67,7 @@ class cl_credenciamentosaldo {
             $this->l213_qtdcontratada = ($this->l213_qtdcontratada == ""?@$GLOBALS["HTTP_POST_VARS"]["l213_qtdcontratada"]:$this->l213_qtdcontratada);
             $this->l213_contratado = ($this->l213_contratado == ""?@$GLOBALS["HTTP_POST_VARS"]["l213_contratado"]:$this->l213_contratado);
             $this->l213_acordo = ($this->l213_acordo == ""?@$GLOBALS["HTTP_POST_VARS"]["l213_acordo"]:$this->l213_acordo);
+            $this->l213_autori = ($this->l213_autori == ""?@$GLOBALS["HTTP_POST_VARS"]["l213_autori"]:$this->l213_autori);
         }
     }
 
@@ -153,6 +157,7 @@ class cl_credenciamentosaldo {
                                       ,l213_qtdcontratada
                                       ,l213_contratado 
                                       ,l213_acordo
+                                      ,l213_autori
                                        
                        )
                 values (
@@ -164,6 +169,7 @@ class cl_credenciamentosaldo {
                                ,$this->l213_qtdcontratada
                                ,$this->l213_contratado 
                                ,$this->l213_acordo 
+                               ,$this->l213_autori 
                       )";
         $result = db_query($sql);
         if ($result==false) {
@@ -430,4 +436,3 @@ class cl_credenciamentosaldo {
         return $sql;
     }
 }
-?>

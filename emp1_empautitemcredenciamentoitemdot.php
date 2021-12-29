@@ -75,155 +75,155 @@ if (isset($confirmar)) {
     $res = pg_query($sql);
 
     $sqlerro = false;
-//    $sSQLitenstabela = "
-//  SELECT sum(pc23_valor) as totalitenstabela
-//  FROM pcorcamitem
-//    INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
-//    LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
-//    INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
-//    INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
-//    INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
-//    INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
-//    INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-//    INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-//    LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
-//    LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-//    LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-//    LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-//    LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-//    LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
-//      AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
-//    LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
-//      AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
-//    LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
-//    LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
-//    LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-//    LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
-//      AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
-//    WHERE l21_codliclicita = (select e54_codlicitacao from empautoriza where e54_autori = {$e56_autori})
-//        AND pc21_numcgm = (select e54_numcgm from empautoriza where e54_autori = {$e56_autori})
-//  ";
-//
-//    $sSQLitensautorizacao = "
-//      select sum(e55_vltot) as totalitensautorizacao
-//      from empautitem
-//       inner join empautoriza on e54_autori = e55_autori
-//        where e54_codlicitacao = (
-//                                  select e54_codlicitacao
-//                                   from empautoriza
-//                                    where e54_autori = {$e56_autori}
-//                                  )
-//              AND e54_autori = {$e56_autori}
-//  ";
+    //    $sSQLitenstabela = "
+    //  SELECT sum(pc23_valor) as totalitenstabela
+    //  FROM pcorcamitem
+    //    INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
+    //    LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
+    //    INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
+    //    INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
+    //    INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+    //    INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+    //    INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+    //    INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+    //    LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
+    //    LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+    //    LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+    //    LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+    //    LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+    //    LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
+    //      AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
+    //    LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
+    //      AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
+    //    LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+    //    LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
+    //    LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+    //    LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
+    //      AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
+    //    WHERE l21_codliclicita = (select e54_codlicitacao from empautoriza where e54_autori = {$e56_autori})
+    //        AND pc21_numcgm = (select e54_numcgm from empautoriza where e54_autori = {$e56_autori})
+    //  ";
+    //
+    //    $sSQLitensautorizacao = "
+    //      select sum(e55_vltot) as totalitensautorizacao
+    //      from empautitem
+    //       inner join empautoriza on e54_autori = e55_autori
+    //        where e54_codlicitacao = (
+    //                                  select e54_codlicitacao
+    //                                   from empautoriza
+    //                                    where e54_autori = {$e56_autori}
+    //                                  )
+    //              AND e54_autori = {$e56_autori}
+    //  ";
 
-//    $rsConsultaT       = db_query($sSQLitenstabela);
-//    $rsConsultaA       = db_query($sSQLitensautorizacao);
-//    $oItensTabela      = db_utils::fieldsMemory($rsConsultaT, 0)->totalitenstabela;
-//    $oItensAutorizacao = db_utils::fieldsMemory($rsConsultaA, 0)->totalitensautorizacao;
+    //    $rsConsultaT       = db_query($sSQLitenstabela);
+    //    $rsConsultaA       = db_query($sSQLitensautorizacao);
+    //    $oItensTabela      = db_utils::fieldsMemory($rsConsultaT, 0)->totalitenstabela;
+    //    $oItensAutorizacao = db_utils::fieldsMemory($rsConsultaA, 0)->totalitensautorizacao;
 
     $sqlerro = false;
-//    if ($oItensTabela < $oItensAutorizacao) {
-//        $sqlerro = true;
-//        $clempautidot->erro_status = 0;
-//        $clempautidot->erro_msg = "O valor total dos itens da autorização não pode ser maior que o valor total Adjudicado!";
-//    } else {
+    //    if ($oItensTabela < $oItensAutorizacao) {
+    //        $sqlerro = true;
+    //        $clempautidot->erro_status = 0;
+    //        $clempautidot->erro_msg = "O valor total dos itens da autorização não pode ser maior que o valor total Adjudicado!";
+    //    } else {
 
-        //rotina para verificar o saldo
-        $result = $clempautitem->sql_record($clempautitem->sql_query_file($e56_autori, null, "sum(e55_vltot) as e54_valor"));
-        db_fieldsmemory($result, 0);
-
-
-        //===================================================>>
-        //*******rotina que verifica sem ainda existe saldo disponivel******************//
-        //rotina para calcular o saldo final
-        $result = db_dotacaosaldo(8, 2, 2, "true", "o58_coddot=$o47_coddot", db_getsession("DB_anousu"));
-        db_fieldsmemory($result, 0);
-
-        $tot = ((0 + $atual_menos_reservado) - (0 + $e54_valor));
-        if ($tot < 0) {
-            $sqlerro = true;
-            $clempautidot->erro_status = 0;
-            $clempautidot->erro_msg = "Dotação sem saldo disponível. Verifique!";
-        }
-        //fim
-        //====================================================================================================>>
+    //rotina para verificar o saldo
+    $result = $clempautitem->sql_record($clempautitem->sql_query_file($e56_autori, null, "sum(e55_vltot) as e54_valor"));
+    db_fieldsmemory($result, 0);
 
 
+    //===================================================>>
+    //*******rotina que verifica sem ainda existe saldo disponivel******************//
+    //rotina para calcular o saldo final
+    $result = db_dotacaosaldo(8, 2, 2, "true", "o58_coddot=$o47_coddot", db_getsession("DB_anousu"));
+    db_fieldsmemory($result, 0);
 
-        if ($sqlerro == false) {
-            $result = $clempautidot->sql_record($clempautidot->sql_query_file($e56_autori));
-            $clempautidot->e56_coddot = $o47_coddot;
-            $numrows_verifica = $clempautidot->numrows;
-            if ($numrows_verifica > 0) {
-                if ($e56_orctiporec == 0) {
-                    $clempautidot->e56_orctiporec = "null";
-                }
-                $clempautidot->alterar($e56_autori);
-                if ($clempautidot->erro_status == 0) {
-                    $sqlerro = true;
-                }
-            } else {
+    $tot = ((0 + $atual_menos_reservado) - (0 + $e54_valor));
+    if ($tot < 0) {
+        $sqlerro = true;
+        $clempautidot->erro_status = 0;
+        $clempautidot->erro_msg = "Dotação sem saldo disponível. Verifique!";
+    }
+    //fim
+    //====================================================================================================>>
 
-                if ($e56_orctiporec == 0) {
-                    $clempautidot->e56_orctiporec = "null";
-                }
-                $clempautidot->incluir($e56_autori);
-                if ($clempautidot->erro_status == 0) {
-                    $sqlerro = true;
-                }
+
+
+    if ($sqlerro == false) {
+        $result = $clempautidot->sql_record($clempautidot->sql_query_file($e56_autori));
+        $clempautidot->e56_coddot = $o47_coddot;
+        $numrows_verifica = $clempautidot->numrows;
+        if ($numrows_verifica > 0) {
+            if ($e56_orctiporec == 0) {
+                $clempautidot->e56_orctiporec = "null";
             }
-        }
-        //rotina que inclui na tabela orcreserva
-        if ($sqlerro == false) {
-            $result = $clorcreservaaut->sql_record($clorcreservaaut->sql_query_file(null, "o83_codres as o80_codres", "", "o83_autori=$e56_autori"));
-            $numrows_verifica = $clorcreservaaut->numrows;
-            if ($numrows_verifica > 0) {
-                db_fieldsmemory($result, 0);
+            $clempautidot->alterar($e56_autori);
+            if ($clempautidot->erro_status == 0) {
+                $sqlerro = true;
             }
+        } else {
 
-            $clorcreserva->o80_anousu =  db_getsession("DB_anousu");
-            $clorcreserva->o80_coddot = $o47_coddot;
-            $clorcreserva->o80_dtfim  = date('Y', db_getsession('DB_datausu')) . "-12-31";
-            $clorcreserva->o80_dtini  = date('Y-m-d', db_getsession('DB_datausu'));
-            $clorcreserva->o80_dtlanc =  date('Y-m-d', db_getsession('DB_datausu'));
-            $clorcreserva->o80_valor  = $e54_valor;
-            $clorcreserva->o80_descr  = "Reserva da autorização $e56_autori";
-
-            if ($numrows_verifica > 0) {
-                $clorcreserva->o80_codres  = $o80_codres;
-                $clorcreserva->alterar($o80_codres);
-            } else {
-                $o80_codres = '';
-                $clorcreserva->incluir($o80_codres);
-                $o80_codres = $clorcreserva->o80_codres;
+            if ($e56_orctiporec == 0) {
+                $clempautidot->e56_orctiporec = "null";
             }
-            if ($clorcreserva->erro_status == 0) {
+            $clempautidot->incluir($e56_autori);
+            if ($clempautidot->erro_status == 0) {
                 $sqlerro = true;
             }
         }
-        db_msgbox($clorcreserva->erro_msg);
-        //fim
+    }
+    //rotina que inclui na tabela orcreserva
+    if ($sqlerro == false) {
+        $result = $clorcreservaaut->sql_record($clorcreservaaut->sql_query_file(null, "o83_codres as o80_codres", "", "o83_autori=$e56_autori"));
+        $numrows_verifica = $clorcreservaaut->numrows;
+        if ($numrows_verifica > 0) {
+            db_fieldsmemory($result, 0);
+        }
 
-        //rotina da tabela orcreservaaut
-        if ($sqlerro == false) {
-            if ($numrows_verifica == 0) {
-                $clorcreservaaut->o83_codres = $o80_codres;
-                $clorcreservaaut->o83_autori = $e56_autori;
-                $clorcreservaaut->incluir($o80_codres);
+        $clorcreserva->o80_anousu =  db_getsession("DB_anousu");
+        $clorcreserva->o80_coddot = $o47_coddot;
+        $clorcreserva->o80_dtfim  = date('Y', db_getsession('DB_datausu')) . "-12-31";
+        $clorcreserva->o80_dtini  = date('Y-m-d', db_getsession('DB_datausu'));
+        $clorcreserva->o80_dtlanc =  date('Y-m-d', db_getsession('DB_datausu'));
+        $clorcreserva->o80_valor  = $e54_valor;
+        $clorcreserva->o80_descr  = "Reserva da autorização $e56_autori";
 
-                if ($clorcreservaaut->erro_status == 0) {
-                    $sqlerro = true;
-                }
+        if ($numrows_verifica > 0) {
+            $clorcreserva->o80_codres  = $o80_codres;
+            $clorcreserva->alterar($o80_codres);
+        } else {
+            $o80_codres = '';
+            $clorcreserva->incluir($o80_codres);
+            $o80_codres = $clorcreserva->o80_codres;
+        }
+        if ($clorcreserva->erro_status == 0) {
+            $sqlerro = true;
+        }
+    }
+    db_msgbox($clorcreserva->erro_msg);
+    //fim
 
-                if ($clorcreservaaut->erro_status == 4) {
-                    $orcreservaauterro_msg = $clorcreservaaut->erro_msg;
-                    $sqlerro = true;
-                }
+    //rotina da tabela orcreservaaut
+    if ($sqlerro == false) {
+        if ($numrows_verifica == 0) {
+            $clorcreservaaut->o83_codres = $o80_codres;
+            $clorcreservaaut->o83_autori = $e56_autori;
+            $clorcreservaaut->incluir($o80_codres);
+
+            if ($clorcreservaaut->erro_status == 0) {
+                $sqlerro = true;
+            }
+
+            if ($clorcreservaaut->erro_status == 4) {
+                $orcreservaauterro_msg = $clorcreservaaut->erro_msg;
+                $sqlerro = true;
             }
         }
-        //fim
-        $db_botao_c = true;
-//    }
+    }
+    //fim
+    $db_botao_c = true;
+    //    }
     //db_fim_transacao($sqlerro);
 } else if (isset($cancelar)) {
     $sqlerro = false;
@@ -310,17 +310,17 @@ if (isset($confirmar)) {
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-            <center>
-                <?
-                include("forms/db_frmempautidotcredenciamentotermo.php");
-                ?>
-            </center>
-        </td>
-    </tr>
-</table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+                <center>
+                    <?
+                    include("forms/db_frmempautidotcredenciamentotermo.php");
+                    ?>
+                </center>
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>
@@ -372,11 +372,7 @@ if (isset($confirmar) || isset($cancelar)) {
         echo "<script>top.corpo.iframe_empautret.setValorNota($e54_valor);</script>";
     }
 }
-if (!isset($o47_coddot) || (isset($o47_coddot) && trim($o47_coddot) == "")) {
-    echo "<script>
-          js_pesquisao47_coddot(true);
-        </script>";
-}
+
 echo "<script>
           var time;
           function js_seleciona_campo_confirma(){

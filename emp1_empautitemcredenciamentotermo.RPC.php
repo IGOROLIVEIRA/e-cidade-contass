@@ -12,6 +12,7 @@ require_once("classes/db_empautitem_classe.php");
 require_once("classes/db_liclicitem_classe.php");
 require_once("classes/db_credenciamentosaldo_classe.php");
 require_once("classes/db_orcelemento_classe.php");
+require_once("classes/db_empautitempcprocitem_classe.php");
 
 $oJson                = new services_json();
 $oParam               = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -19,6 +20,8 @@ $oParam               = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oDaoSysArqCamp         = new cl_db_sysarqcamp();
 $clmatunid              = new cl_matunid;
 $clempautitem           = new cl_empautitem;
+$clempautitempcprocitem = new cl_empautitempcprocitem();
+
 
 
 switch ($_POST["action"]) {
@@ -208,7 +211,7 @@ switch ($_POST["action"]) {
              * get Codigo do item na liclicitem
              */
             $sSqlItemlic = "
-                        SELECT l21_codigo,pc01_descrmater,pc11_quant
+                        SELECT l21_codigo,pc01_descrmater,pc11_quant,pc81_codprocitem
                         FROM liclicitem
                         INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
                         INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
@@ -249,6 +252,11 @@ switch ($_POST["action"]) {
                 $proximoSequen = db_utils::fieldsMemory($clempautitem->sql_record($clempautitem->sql_query(null, null, "case when max(e55_sequen)+ 1 is null then 1 else max(e55_sequen)+ 1 end as e55_sequen", null, "e55_autori = " . $_POST['autori'])), 0)->e55_sequen;
                 $clempautitem->incluir($_POST['autori'], $proximoSequen);
 
+                $clempautitempcprocitem->e73_autori = $clempautitem->e55_autori;
+                $clempautitempcprocitem->e73_sequen = $Seq + 1;
+                $clempautitempcprocitem->e73_pcprocitem = $oDadositem->pc81_codprocitem;
+                $clempautitempcprocitem->incluir(null);
+
                 /**
                  * inserindo na tabela de saldos do credenciamento
                  */
@@ -259,6 +267,7 @@ switch ($_POST["action"]) {
                 $cl_credenciamentosaldo->l213_contratado = $fornecedor;
                 $cl_credenciamentosaldo->l213_itemlicitacao = $oDadositem->l21_codigo;
                 $cl_credenciamentosaldo->l213_qtdlicitada = $oDadositem->pc11_quant;
+                $cl_credenciamentosaldo->l213_autori = $_POST['autori'];
                 $cl_credenciamentosaldo->incluir();
             } else {
 
@@ -321,6 +330,8 @@ switch ($_POST["action"]) {
             $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
             if (pg_numrows($rsItem) > 0) {
+                db_fieldsmemory($rsItem, 0);
+                $clempautitempcprocitem->excluir(null, "e73_pcprocitem = {$e73_pcprocitem}");
                 $clempautitem->excluir(null, null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id']);
             }
 

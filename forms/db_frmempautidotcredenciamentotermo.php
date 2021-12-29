@@ -78,7 +78,7 @@ if ($clempautitem->numrows == 0) {
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?= @$To47_coddot ?>"> <? db_ancora(@$Lo47_coddot, "js_pesquisao47_coddot(true);", $db_opcao_item); ?> </td>
+                <td nowrap title="<?= @$To47_coddot ?>"> <? db_ancora(@$Lo47_coddot, "js_pesquisao47_coddot(true);", 1); ?> </td>
                 <td><? db_input('o47_coddot', 8, $Io47_coddot, true, 'text', 3); ?> </td>
                 <td><input type="button" name="dot" value="Processar" onclick="js_dot();" <?= ($db_botao == false ? "disabled" : "") ?>> </td>
                 <td> &nbsp; </td>
@@ -230,17 +230,17 @@ if ($clempautitem->numrows == 0) {
         </tr>
         </table>
     </center>
-    <input name="confirmar" type="submit" id="db_opcao" value="<?= ($db_botao_c == false ? "Incluir" : "Atualizar") ?>" onclick="return js_verifica();" <?= ($db_botao == false ? "disabled" : "") ?>>
+    <input name="confirmar" type="submit" id="db_opcao" value="<?= ($db_botao_c == false ? "Incluir" : "Atualizar") ?>" onclick="return js_verifica();">
     <input name="cancelar" type="submit" id="db_opcao" value="Cancelar" <?= ($db_botao_c == false ? "disabled" : "") ?>>
     <?
     $permissao_lancar = db_permissaomenu(db_getsession("DB_anousu"), 398, 3489);
     if ($permissao_lancar == "true") {
     ?>
-        <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="top.corpo.iframe_empautoriza.js_lanc_empenho();" <?= ($db_botao == false || $db_botao_c == false ? "disabled" : "") ?>>
+        <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="top.corpo.iframe_empautoriza.js_lanc_empenho();">
     <?
     }
     ?>
-    <input name="relatorio" type="button" id="db_opcao" value="Relatório de autorização" onclick="top.corpo.iframe_empautoriza.js_relatorio();" <?= ($db_botao == false || $db_botao_c == false ? "disabled" : "") ?>>
+    <input name="relatorio" type="button" id="db_opcao" value="Relatório de autorização" onclick="top.corpo.iframe_empautoriza.js_relatorio();">
 </form>
 <?
 if (isset($nops)) {

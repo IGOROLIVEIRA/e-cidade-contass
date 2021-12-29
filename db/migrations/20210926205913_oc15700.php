@@ -86,6 +86,7 @@ class Oc15700 extends AbstractMigration
                     INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Termo de Credenciamento%'),(select max(id_item) from db_itensmenu),4,381);
                     
                     ALTER table credenciamentosaldo alter COLUMN l213_acordo DROP NOT NULL;
+                    ALTER TABLE credenciamentosaldo ADD COLUMN l213_autori int8;
                     
                     ALTER TABLE empautoriza ADD COLUMN e54_numerotermo int8;
                     ";

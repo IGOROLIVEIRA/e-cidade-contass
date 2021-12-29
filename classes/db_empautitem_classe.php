@@ -569,6 +569,9 @@ class cl_empautitem
     $sql .= " from empautitem ";
     $sql .= "      inner join orcelemento  on  orcelemento.o56_codele = empautitem.e55_codele and orcelemento.o56_anousu = " . db_getsession("DB_anousu");
     $sql .= "      inner join empautoriza  on  empautoriza.e54_autori = empautitem.e55_autori";
+    $sql .= "      left join empautitempcprocitem on empautitempcprocitem.e73_sequen = empautitem.e55_sequen";
+    $sql .= "                                     and empautitempcprocitem.e73_autori = empautitem.e55_autori";
+    $sql .= "      left join pcprocitem on  pcprocitem.pc81_codprocitem    = empautitempcprocitem.e73_pcprocitem";
     $sql .= "      inner join pcmater  on  pcmater.pc01_codmater = empautitem.e55_item";
     $sql .= "      inner join cgm  on  cgm.z01_numcgm = empautoriza.e54_numcgm";
     $sql .= "      inner join db_config  on  db_config.codigo = empautoriza.e54_instit";
