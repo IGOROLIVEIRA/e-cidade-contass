@@ -360,7 +360,7 @@ switch($oParam->exec) {
 
             $rsSlipFonte = db_query("SELECT k29_recurso FROM sliprecurso WHERE k29_slip = {$oMovimento->iCodNota}");
 
-            if (pg_numrows($rsSlipFonte) == 0) {
+            if (pg_numrows($rsSlipFonte) == 0 && db_getsession("DB_anousu") >= 2022) {
                 throw new Exception("Para efetuar esse procedimento é necessário informar a fonte de recursos no cadastro do Slip");
             }
                 

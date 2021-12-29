@@ -133,7 +133,6 @@ function js_retornoGetDados(oAjax) {
 	js_removeObj('msgBox');
 	var oRetorno = eval("("+oAjax.responseText+")");
 
-    console.log(oRetorno);
   if (oRetorno.status == "2") {
 	  alert(oRetorno.message.urlDecode());
 	  return false;
@@ -143,12 +142,13 @@ function js_retornoGetDados(oAjax) {
   oDBViewSlipPagamento = new DBViewSlipPagamento("oDBViewSlipPagamento", oRetorno.iTipoOperacao, 1, $('ctnSlipPagamento'), null, lComponenteReadOnly);
   oDBViewSlipPagamento.show();
   oDBViewSlipPagamento.setPCASPAtivo('<?php echo db_getsession('DB_use_pcasp');?>');
+  oDBViewSlipPagamento.setAno('<?php echo db_getsession('DB_anousu'); ?>');
   oDBViewSlipPagamento.start();
   oDBViewSlipPagamento.setAlteracao(true);
   oDBViewSlipPagamento.oTxtCodigoSlip.setValue(oRetorno.iCodigoSlip);
   oDBViewSlipPagamento.getDadosTransferencia();
 
-  console.log(oRetorno);
+
   oDBViewSlipPagamento.oTxtFonteInputCodigo.setValue(oRetorno.iFonteRecurso);
   oDBViewSlipPagamento.pesquisaFonte(false);
 

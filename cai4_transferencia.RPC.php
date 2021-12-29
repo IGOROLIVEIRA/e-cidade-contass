@@ -67,7 +67,7 @@ switch ($oParam->exec) {
             } else {
                 $oRetorno->iFonteRecurso          = '';
             }
-            
+
 			$oRetorno->sCaracteristicaDebito  = $oSlip->getCaracteristicaPeculiarDebito();
 			$oRetorno->sCaracteristicaCredito = $oSlip->getCaracteristicaPeculiarCredito();
 
@@ -190,9 +190,11 @@ switch ($oParam->exec) {
       $oTransferencia = TransferenciaFactory::getInstance($oParam->iCodigoTipoOperacao, $iCodigoSlip);
       $oTransferencia->setContaDebito($oParam->k17_debito);
       $oTransferencia->setContaCredito($oParam->k17_credito);
-      $oTransferencia->setFonteRecurso($oParam->iCodigoFonte);
+        if ($oParam->iCodigoFonte)
+            $oTransferencia->setFonteRecurso($oParam->iCodigoFonte);
       $oTransferencia->setValor(str_replace(",", ".", $oParam->k17_valor));
-      $oTransferencia->adicionarRecurso($oParam->iCodigoFonte, str_replace(",", ".", trim($oParam->k17_valor)));
+        if ($oParam->iCodigoFonte)
+            $oTransferencia->adicionarRecurso($oParam->iCodigoFonte, str_replace(",", ".", trim($oParam->k17_valor)));
       $oTransferencia->setHistorico($oParam->k17_hist);
       $oTransferencia->setObservacao(addslashes(db_stdClass::normalizeStringJsonEscapeString($oParam->k17_texto)));
       $oTransferencia->setTipoPagamento(0);
