@@ -350,6 +350,7 @@ contrato = function () {
         var oRetorno = eval("("+oResponse.responseText+")");
         if(oRetorno.status == 2){
             alert(oRetorno.message.urlDecode());
+            location.href = 'aco1_acordo004.php';
             return false;
         }
     }

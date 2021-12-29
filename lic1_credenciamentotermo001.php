@@ -16,6 +16,26 @@ if (isset($incluir)) {
 
     try {
 
+        if ($l212_licitacao == null) {
+            throw new Exception("Usuário: Selecione uma Licitação!");
+            $sqlerro = true;
+        }
+
+        if ($l212_fornecedor == "0") {
+            throw new Exception("Usuário: Selecione um Fornecedor!");
+            $sqlerro = true;
+        }
+
+        if ($l212_dtinicio == null) {
+            throw new Exception("Usuário: Campo Vigência não informado!");
+            $sqlerro = true;
+        }
+
+        if ($l212_dtfim == null) {
+            throw new Exception("Usuário: Campo Vigência não informado!");
+            $sqlerro = true;
+        }
+
         $resultNumeroTermo = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null, "l212_numerotermo", "l212_numerotermo desc limit 1", "l212_numerotermo = $l212_numerotermo"));
 
         if (pg_num_rows($resultNumeroTermo) > 0) {

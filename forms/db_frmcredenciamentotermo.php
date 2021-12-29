@@ -314,7 +314,7 @@ $clcredenciamentotermo->rotulo->label();
             aLinha[1] = oLinha.pc11_seq;
             aLinha[2] = oLinha.pc01_descrmater.urlDecode();
             aLinha[3] = oLinha.m61_descr;
-            aLinha[4] = oLinha.varlortotal;
+            aLinha[4] = oLinha.varlortotal.toFixed(2);
             oGridItens.addRow(aLinha);
 
             var sTextEvent = " ";
