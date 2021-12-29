@@ -259,6 +259,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   me.oTxtProcessoInput.setMaxLength(15);
   me.oTxtValorInput                          = new DBTextField('oTxtValorInput', me.sNomeInstancia+'.oTxtValorInput', '', 24);
 
+  
   me.oTxtValorInput.addEvent("onKeyPress", "return js_teclas(event,this)");
 
 

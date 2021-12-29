@@ -148,6 +148,7 @@ function js_retornoGetDados(oAjax) {
   oDBViewSlipPagamento.oTxtCodigoSlip.setValue(oRetorno.iCodigoSlip);
   oDBViewSlipPagamento.getDadosTransferencia();
 
+  console.log(oRetorno);
   oDBViewSlipPagamento.oTxtFonteInputCodigo.setValue(oRetorno.iFonteRecurso);
   oDBViewSlipPagamento.pesquisaFonte(false);
 
