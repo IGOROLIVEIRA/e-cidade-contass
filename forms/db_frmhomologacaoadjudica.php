@@ -9,6 +9,10 @@ $clrotulo           = new rotulocampo;
 
 
 $clrotulo->label("l20_codigo");
+
+db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
+db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js, widgets/DBHint.widget.js");
+db_app::load("estilos.css, grid.style.css");
 ?>
 <form name="form1" method="post" action="">
     <table border="0">
@@ -60,6 +64,7 @@ $clrotulo->label("l20_codigo");
                 <?
                 db_inputdata('l202_datahomologacao',@$l202_datahomologacao_dia,@$l202_datahomologacao_mes,@$l202_datahomologacao_ano,true,'text',$db_opcao,"")
                 ?>
+                <input type="hidden" id="valor">
             </td>
         </tr>
     </table>
@@ -75,6 +80,7 @@ $clrotulo->label("l20_codigo");
         }
         ?>
         <input type="button" value="Pesquisar" onclick="js_pesquisal202_licitacao(true);">
+        <input type="button" value="Gerar Relatório" onclick="js_gerarRelatorio(true);"> 
     </div>
     <br>
     <fieldset>
@@ -250,6 +256,7 @@ $clrotulo->label("l20_codigo");
                 aDadosHintGridlote.push(oDadosHintlote);
             });
             document.getElementById('gridItenstotalValue').innerText = js_formatar(nTotal, 'f');
+            document.getElementById('valor').value = js_formatar(nTotal, 'f');
 
             oGridItens.renderRows();
 
@@ -274,6 +281,58 @@ $clrotulo->label("l20_codigo");
             });
 
         }
+    }
+
+    function js_gerarRelatorio(){
+        
+        var iHeight = 200;
+        var iWidth  = 300;
+        windowDotacaoItem = new windowAux('wndDotacoesItem',
+            'Gerar Relagório ',
+            iWidth,
+            iHeight
+        );
+       
+        var sContent  = "<div style='margin-top:30px;'>";
+        sContent     += "<fieldset>"; 
+        sContent     += "<legend>Gerar Relatório de Homologação em:</legend>";
+        sContent     += "  <div id=''>";
+        sContent     += "  <input type='checkbox' id='pdf' name='PDF'>";
+        sContent     += "  <label>PDF</label>";
+        sContent     += "  </div>";
+        sContent     += "  <div id=''>";
+        sContent     += "  <input type='checkbox' id='word' name='WORD'>";
+        sContent     += "  <label>WORD</label>";
+        sContent     += "  </div>";
+        sContent     += "</fieldset>";
+        sContent     += "<center>";
+        sContent     += "<input type='button' id='btnGerar' value='Confirmar' onclick='gerar()'>";
+        sContent     += "</center>";
+        sContent     += "</div>";
+        windowDotacaoItem.setContent(sContent);
+        windowDotacaoItem.show();
+       
+    }
+
+    function gerar(){
+        var pdf = document.getElementById("pdf");
+        var word = document.getElementById("word");
+        var ilicita = document.getElementById("l202_licitacao").value; 
+        var sequencial = document.getElementById("l202_sequencial").value;
+        var nome = document.getElementById("respHomolognome").value;  
+        var data = document.getElementById("l202_datahomologacao").value;
+        var valor = document.getElementById('valor').value;
+        
+        if(pdf.checked){
+            jan = window.open('lic1_homologacaoadjudica004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&sequencial='+sequencial+'&data='+data+'&valor='+valor+'&quant_casas=2&tipoprecoreferencia=',
+                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+	   jan.moveTo(0,0);
+        }else if(word.checked){   
+    jan = window.open('lic1_homologacaoadjudica005.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&sequencial='+sequencial+'&data='+data+'&valor='+valor+'&quant_casas=2&tipoprecoreferencia=',
+                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+	   jan.moveTo(0,0);
+        }
+        windowDotacaoItem.destroy();
     }
 
     function js_getReponsavel() {

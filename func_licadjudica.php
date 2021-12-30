@@ -118,8 +118,14 @@ $sWhereContratos = " and 1 = 1 ";
             if(isset($adjudicacao) && trim($adjudicacao) == "2"){
                 $dbwhere .= "l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NULL AND l20_licsituacao = 13 AND";
             }
+            /**
+             * Apresentação para emissão de relatório
+             */
+            if(isset($adjudicacao) && trim($adjudicacao) == "3"){
+                $dbwhere .= " l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NULL AND l20_licsituacao != 1 AND";
+            }
 
-            $sWhereModalidade = "";
+            $sWhereModalidade = ""; 
 
             if (isset($iModalidadeLicitacao) && !empty($iModalidadeLicitacao)) {
                 $sWhereModalidade = "and l20_codtipocom = {$iModalidadeLicitacao}";
@@ -186,7 +192,7 @@ $sWhereContratos = " and 1 = 1 ";
                         $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere $whereHab");
                     }
                 }
-
+                
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js);
 
 
