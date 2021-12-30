@@ -84,7 +84,7 @@ if(isset($incluir)){
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 
 
-<table width="1000" border="0" cellspacing="0" cellpadding="0">
+<table width="1000" border="0" style="margin:auto;" cellspacing="0" cellpadding="0">
   <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
@@ -107,6 +107,22 @@ if(isset($incluir)){
     if($clorcprojeto->erro_campo!=""){
       echo "<script> document.form1.".$clorcprojeto->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clorcprojeto->erro_campo.".focus();</script>";
+      echo "<script> document.getElementById('o39_tiposuplementacao').value = $o39_tiposuplementacao;</script>";
+      echo "<script> document.getElementById('o39_tiposuplementacaodescr').value = $o39_tiposuplementacaodescr;</script>";
+      if ($o39_tiposuplementacao == 1001 || $o39_tiposuplementacao == 1002 || $o39_tiposuplementacao == 1003 || $o39_tiposuplementacao == 1004) {
+        
+        echo "<script> document.getElementById('o39_usalimite').value = 't';</script>";
+        echo "<script> document.getElementById('o39_usalimite_select_descr').value = 'Sim';</script>";
+  
+      } else {
+  
+        echo "<script> document.getElementById('o39_usalimite').value = 'f';</script>";
+        echo "<script> document.getElementById('o39_usalimite_select_descr').value = 'Não';</script>";
+  
+      }
+      echo "<script> document.getElementById('o39_usalimite_select_descr').value = $o39_usalimite_select_descr;</script>";
+      echo "<script>alert($o39_usalimite); </script>";
+      
     };
   }else{
     $clorcprojeto->erro(true,false);
