@@ -1,4 +1,4 @@
-<?
+<?   
 /*
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2014  DBSeller Servicos de Informatica             
@@ -528,14 +528,15 @@ class cl_saltes
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
         $virgula = ",";
-      }
-    } else {
+      } 
+    } else {  
       $sql .= $campos;
     }
     $sql .= " from saltes ";
     $sql .= "      inner join conplanoreduz  on  conplanoreduz.c61_reduz = saltes.k13_reduz and c61_anousu=" . db_getsession("DB_anousu");
     $sql .= "      inner join conplanoexe    on  conplanoexe.c62_reduz = conplanoreduz.c61_reduz and c62_anousu=c61_anousu";
     $sql .= "      left  join conplanoconta  on  conplanoconta.c63_codcon = conplanoreduz.c61_codcon  and conplanoconta.c63_anousu=conplanoreduz.c61_anousu";
+    $sql .= "      left join contabancaria on contabancaria.db83_conta = conplanoconta.c63_conta";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($k13_conta != null) {
@@ -611,7 +612,7 @@ class cl_saltes
     $sql .= "      inner join conplanoexe  on  conplanoexe.c62_reduz = conplanoreduz.c61_reduz and c61_anousu=c62_anousu";
     $sql .= "      inner join conplano     on  conplanoreduz.c61_codcon = conplano.c60_codcon and c61_anousu=c60_anousu";
     $sql .= "      left  join conplanoconta  on  conplanoconta.c63_codcon = conplanoreduz.c61_codcon  and conplanoconta.c63_anousu=conplanoreduz.c61_anousu";
-    $sql .= "      inner join contabancaria on contabancaria.db83_conta = conplanoconta.c63_conta";
+    $sql .= "      left join contabancaria on contabancaria.db83_conta = conplanoconta.c63_conta";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($k13_conta != null) {

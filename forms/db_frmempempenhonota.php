@@ -347,20 +347,24 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         $arr  = array('0'=>'Não se aplica','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
 
                         $sSql = "SELECT si09_tipoinstit AS tipoinstit FROM infocomplementaresinstit WHERE si09_instit = " . db_getsession("DB_instit");
-          
+
                         $rsResult = db_query($sSql);
                         db_fieldsMemory($rsResult, 0);
-                        
+
                         if ($tipoinstit == 5 || $tipoinstit == 6) {
 
                             $aElementos = array('3319001','3319003','3319091','3319092','3319094','3319191','3319192','3319194');
-                            
+
+                            if(db_getsession("DB_anousu") > 2021){
+                                $aElementos = array('331900101', '331900102', '331900301', '331900302', '331909102', '331909103', '331909201', '331909203', '331909403', '331909413');
+                            }
+
                             if(count(array_intersect($aElementos, $aCodele)) > 0) {
                                 $arr  = array('0'=>'Selecione','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
                             }
-                            
-                        }                        
-                        
+
+                        }
+
                         db_select("e60_tipodespesa", $arr, true, 1);
                         ?>
                     </td>

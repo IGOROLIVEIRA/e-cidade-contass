@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal                  
  *  Copyright (C) 2009  DBselller Servicos de Informatica             
  *                            www.dbseller.com.br                     
  *                         e-cidade@dbseller.com.br                   
@@ -23,6 +23,6 @@
  *  
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
- */
-
-$campos = "distinct saltes.k13_conta,saltes.k13_reduz,saltes.k13_descr,saltes.k13_saldo,c63_banco,c63_agencia,c63_dvagencia,c63_conta,c63_dvconta,saltes.k13_vlratu,saltes.k13_datvlr,c61_codigo,db83_numerocontratooc,db83_dataassinaturacop, db83_conta";
+ */   
+     
+$campos = "distinct  saltes.k13_reduz, saltes.k13_conta, saltes.k13_descr,saltes.k13_saldo,c63_banco,c63_agencia,c63_dvagencia,c63_conta,c63_dvconta,saltes.k13_vlratu,saltes.k13_datvlr,c61_codigo,db83_numerocontratooc,db83_dataassinaturacop, db83_conta";
