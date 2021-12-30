@@ -353,8 +353,15 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td id="licitacao1">
                                         <?
                                         $arr_tipo = array(
-                                            "0" => "Selecione", "1" => "1- Menor Preço", "2" => "2- Melhor Técnica",
-                                            "3" => "3- Técnica e Preço", "4" => "4- Maior Lance ou Oferta"
+                                            "0" => "Selecione",
+                                            "1" => "1- Menor Preço",
+                                            "2" => "2- Melhor Técnica",
+                                            "3" => "3- Técnica e Preço",
+                                            "4" => "4- Maior Lance ou Oferta",
+                                            "5" => "5- Maior Oferta de Preço",
+                                            "6" => "6- Maior Retorno Econômico",
+                                            "7" => "7- Maior desconto",
+                                            "8" => "8- Melhor técnica ou conteúdo artístico"
                                         );
                                         db_select("l20_tipliticacao", $arr_tipo, true, $db_opcao);
                                         ?>
@@ -458,7 +465,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr id="disputa">
+                                <tr id="disputa" style="display: none;">
                                     <td nowrap title="Modo de disputa">
                                         <b>Modo de disputa: </b>
                                     </td>
@@ -1363,38 +1370,37 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById('linha_nroedital').style.display = 'none';
         }
 
-        let tiposLicitacoes = document.getElementById('l20_tipliticacao').options;
         let listaExecucoes = document.getElementById('l20_regimexecucao').options;
 
-        if (anousu >= 2020) {
-            if (oRetorno.tribunal == 107) {
-                tiposLicitacoes.add(new Option("5- Maior Oferta de Preço", 5));
-                tiposLicitacoes.add(new Option("6- Maior Retorno Econômico", 6));
-                tiposLicitacoes.add(new Option("7- Maior desconto", 7));
-                tiposLicitacoes.add(new Option("8- Melhor técnica ou conteúdo artístico", 8));
-            } else {
-                /* Remove tipos de licitações */
-                if (tiposLicitacoes.item(6)) {
-                    tiposLicitacoes.remove(6);
-                }
-                if (tiposLicitacoes.item(5)) {
-                    tiposLicitacoes.remove(5);
-                }
+        /*
+                let tiposLicitacoes = document.getElementById('l20_tipliticacao').options;
 
-            }
-        }
+                if (anousu >= 2020) {
+                    if (oRetorno.tribunal == 107) {
+                    
+                    } else {
+                        /* Remove tipos de licitações 
+                        if (tiposLicitacoes.item(6)) {
+                            tiposLicitacoes.remove(6);
+                        }
+                        if (tiposLicitacoes.item(5)) {
+                            tiposLicitacoes.remove(5);
+                        }
 
-        if ($F('l20_equipepregao') != '') {
-            let modalidade = document.form1.modalidade_tribunal.value; //document.form1.l20_codtipocomdescr.value;
-
-            if (modalidade == 52 || modalidade == 53) {
-                verificaMembrosModalidade("pregao");
-            } else if (modalidade == 48 || modalidade == 49 || modalidade == 50) {
-                verificaMembrosModalidade("outros");
-            }
-        }
-
+                    }*/
     }
+
+    if ($F('l20_equipepregao') != '') {
+        let modalidade = document.form1.modalidade_tribunal.value; //document.form1.l20_codtipocomdescr.value;
+
+        if (modalidade == 52 || modalidade == 53) {
+            verificaMembrosModalidade("pregao");
+        } else if (modalidade == 48 || modalidade == 49 || modalidade == 50) {
+            verificaMembrosModalidade("outros");
+        }
+    }
+
+
     /*adequando os campos para evitar  o preenchimento pelo usuario caso nao seja um tipo de  INEXIGIBILIDADE*/
     // document.getElementById("l20_veicdivulgacao").disabled=true;
     // document.getElementById("l20_dtpubratificacao").disabled=true;
