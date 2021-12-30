@@ -274,7 +274,7 @@ function js_preenchepesquisa(chave){
 	      		} elseif ($o200_tipoleialteracao == 2) {
 	      			array_push($aWhere, "1002","1003","1004","1005","1006","1007","1008","1009","1010","1012");
 	      		} elseif ($o200_tipoleialteracao == 3) {
-	      			array_push($aWhere, "1014","1015","1016");
+	      			array_push($aWhere, "1014", "1015", "1016", "1001", "1002" , "1003");
 	      		} elseif ($o200_tipoleialteracao == 4) {
 	      			$aWhere[] = "1017";
 	      		} elseif ($o200_tipoleialteracao == 5) {
