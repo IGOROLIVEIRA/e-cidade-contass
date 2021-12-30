@@ -52,7 +52,7 @@ if ($clabre_arquivo->arquivo != false) {
     $vir = $separador;
     $del = $delimitador;
 
-    fputs($clabre_arquivo->arquivo, "\n");
+    fputs($clabre_arquivo->arquivo, "");
 
     foreach ($aEditalLicitacao as $iItens => $oItens) {
 
@@ -72,7 +72,6 @@ if ($clabre_arquivo->arquivo != false) {
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
@@ -95,7 +94,7 @@ if ($clabre_arquivo->arquivo != false) {
     $vir = $separador;
     $del = $delimitador;
 
-    fputs($clabre_arquivo->arquivo, "\n");
+    fputs($clabre_arquivo->arquivo, "");
 
     foreach ($aItensLicitacao as $iItens => $oItens) {
 
@@ -135,7 +134,7 @@ if ($clabre_arquivo->arquivo != false) {
     $vir = $separador;
     $del = $delimitador;
 
-    fputs($clabre_arquivo->arquivo, "\n");
+    fputs($clabre_arquivo->arquivo, "");
 
     foreach ($aEditalLicitacao as $iItens => $oItens) {
 
