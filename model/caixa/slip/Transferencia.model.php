@@ -45,13 +45,13 @@ abstract class Transferencia {
   protected $oSlip;
 
   /**
-   * Tipo de opera√ß√£o da tansferencia
+   * Tipo de operaÁ„o da tansferencia
    * @var integer
    */
   protected $iTipoOperacao;
 
   /**
-   * C√≥digo do Lan√ßamento cont√°bil executado pela transferencia
+   * CÛdigo do LanÁamento cont·bil executado pela transferencia
    * @var integer
    */
   protected $iCodigoLancamento;
@@ -74,13 +74,13 @@ abstract class Transferencia {
    */
 
   /**
-   * string para autentica√ß√£o
+   * string para autenticaÁ„o
    * @var string
    */
   private $sStringAutenticacao;
 
   /**
-   * Data da autentica√ß√£o
+   * Data da autenticaÁ„o
    * @var date
    */
   private $dtDataAutenticacao;
@@ -92,7 +92,7 @@ abstract class Transferencia {
   private $oFinalidadePagamentoFundebCredito;
 
   /**
-   * Conta cr√©dito do plano de contas
+   * Conta crÈdito do plano de contas
    * @var ContaPlanoPCASP
    */
   private $oContaPlanoCredito;
@@ -112,7 +112,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna o c√≥digo do lan√ßamento
+   * Retorna o cÛdigo do lanÁamento
    * @return integer
    */
   public function getCodigoLancamento() {
@@ -214,7 +214,7 @@ abstract class Transferencia {
     $rsBuscaCorrente         = db_query($sSqlBuscaContaCorrente);
 
     if (pg_num_rows($rsBuscaCorrente) == 0) {
-      throw new Exception("N„o foi poss√≠vel buscar os dados da autenticaÁ„o para execÌcio dos lanÁamentos cont·beis.");
+      throw new Exception("N?o foi possÌvel buscar os dados da autentica??o para exec?cio dos lan?amentos cont?beis.");
     }
 
     $oDadosAutenticao        = db_utils::fieldsMemory($rsBuscaCorrente, 0);
@@ -262,7 +262,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna o tipo de operacao que usu√°rio incluiu de acordo com a tabela sliptipooperacao
+   * Retorna o tipo de operacao que usu·rio incluiu de acordo com a tabela sliptipooperacao
    * @throws Exception
    * @return integer codigo do tipo da operacao (sliptipooperacao)
    */
@@ -271,13 +271,13 @@ abstract class Transferencia {
     if (empty($this->iTipoOperacao)) {
 
       /*
-       * Busca o tipo de inclus√£o para descobrirmos qual documento vamos executar
+       * Busca o tipo de inclus„o para descobrirmos qual documento vamos executar
        */
       $oDaoSlipTipoOperacao  = db_utils::getDao('sliptipooperacaovinculo');
       $sSqlBuscaTipoOperacao = $oDaoSlipTipoOperacao->sql_query_file($this->getCodigoSlip());
       $rsBuscaTipoOperacao   = $oDaoSlipTipoOperacao->sql_record($sSqlBuscaTipoOperacao);
       if ($oDaoSlipTipoOperacao->numrows == 0) {
-        throw new Exception("N√£o foi poss√≠vel localizar o tipo de opera√ß√£o do slip {$this->getCodigoSlip()}.");
+        throw new Exception("N„o foi possÌvel localizar o tipo de operaÁ„o do slip {$this->getCodigoSlip()}.");
       }
       $iTipoOperacao       = db_utils::fieldsMemory($rsBuscaTipoOperacao, 0)->k153_slipoperacaotipo;
       $this->iTipoOperacao = $iTipoOperacao;
@@ -316,11 +316,11 @@ abstract class Transferencia {
     $sSqlExecutaAutenticacao = "select fc_auttransf({$iCodigoSlip}, '{$dtSessao}', '{$iIp}', true, {$this->getCheque()}, {$iCodigoInstituicao}) as fc_autenticacao";
     $rsExecutaAutenticacao = db_query($sSqlExecutaAutenticacao);
     if (!$rsExecutaAutenticacao) {
-      throw new Exception("N√£o foi poss√≠vel realizar a autentica√ß√£o");
+      throw new Exception("N„o foi possÌvel realizar a autenticaÁ„o");
     }
     $sStringAutenticacao = db_utils::fieldsMemory($rsExecutaAutenticacao, 0)->fc_autenticacao;
     if (substr($sStringAutenticacao, 0, 1) != 1) {
-      throw new Exception("N√£o foi poss√≠vel executar a autentica√ß√£o.\n\n{$sStringAutenticacao}");
+      throw new Exception("N„o foi possÌvel executar a autenticaÁ„o.\n\n{$sStringAutenticacao}");
     }
 
     $this->setIDTerminal($iCodigoTerminal);
@@ -332,9 +332,9 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna o documento por tipo de inclus√£o
+   * Retorna o documento por tipo de inclus„o
    * @throws Exception
-   * @return integer - Codigo do documento que ser√° executado no lan√ßamento cont√°bil
+   * @return integer - Codigo do documento que ser· executado no lanÁamento cont·bil
    */
   public function getDocumentoPorTipoInclusao() {
 
@@ -369,7 +369,7 @@ abstract class Transferencia {
         break;
 
       /**
-       * Cau√ß√£o
+       * CauÁ„o
        */
       case 7:
         $iCodigoDocumento = 150;
@@ -385,7 +385,7 @@ abstract class Transferencia {
         break;
 
       /**
-       * Dep√≥sito de Diversas Origens
+       * DepÛsito de Diversas Origens
        */
       case 11:
         $iCodigoDocumento = 160;
@@ -439,7 +439,7 @@ abstract class Transferencia {
   }
 
   /**
-   * C√≥digo sequencial do Slip
+   * CÛdigo sequencial do Slip
    * @return int
    */
   public function getCodigoSlip() {
@@ -654,14 +654,14 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna a institui√ß√£o que criou a transferencia
+   * Retorna a instituiÁ„o que criou a transferencia
    * @return integer
    */
   public function getInstituicao() {
     return $this->oSlip->getInstituicao();
   }
   /**
-   * Seta a institui√ß√£o que criou a transferencia
+   * Seta a instituiÁ„o que criou a transferencia
    * @param integer
    */
   public function setInstituicao($iInstituicao) {
@@ -701,7 +701,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Seta o tipo de opera√ß√£o
+   * Seta o tipo de operaÁ„o
    * @param integer $iTipoOperacao
    */
   public function setTipoOperacao($iTipoOperacao) {
@@ -709,7 +709,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna o tipo de opera√ß√£o de um slip
+   * Retorna o tipo de operaÁ„o de um slip
    * @return integer
    */
   public function getTipoOperacao() {
@@ -791,7 +791,7 @@ abstract class Transferencia {
     $sLocalizacao = "contabilidade.caixa.Transferencia.";
 
     if (empty($this->oFinalidadePagamentoFundebCredito)) {
-      throw new BusinessException("N√£o √© poss√≠vel executar o m√©todo. Objetos FinalidadePagamentoFundeb n√£o foram setados.");
+      throw new BusinessException("N„o È possÌvel executar o mÈtodo. Objetos FinalidadePagamentoFundeb n„o foram setados.");
     }
 
     if ($this->getDataAutenticacao() != "") {
@@ -873,7 +873,7 @@ abstract class Transferencia {
   protected function vinculaSlipTipoDeOperacao() {
 
     /**
-     * Excluimos o v√≠nculo para incluirmos novamente
+     * Excluimos o vÌnculo para incluirmos novamente
      */
     $this->excluiVinculoTipoDeOperacao();
 
@@ -891,7 +891,7 @@ abstract class Transferencia {
   }
 
   /**
-   * M√©todo que verifica se o slip j√° possui alguma autentica√ß√£o
+   * MÈtodo que verifica se o slip j· possui alguma autenticaÁ„o
    * @return boolean
    */
   public function possuiAutenticacao() {
@@ -906,7 +906,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Exclui o slip em caso de n√£o ter sido autenticado nenhuma vez.
+   * Exclui o slip em caso de n„o ter sido autenticado nenhuma vez.
    * @throws BusinessException
    * @return boolean true
    */
@@ -914,7 +914,7 @@ abstract class Transferencia {
 
     /**
      * OC 12180
-     * Exclus√£o de Slips anulados ou n√£o autenticados.
+     * Exclus„o de Slips anulados ou n„o autenticados.
      */
     if ($this->possuiAutenticacao()) {
             $oDaoLancamento      = new cl_conlancamslip();
@@ -1028,7 +1028,7 @@ abstract class Transferencia {
   $sql = "select fc_removeslip($iCodSlip, $resultSlip->ano, $resultSlip->k17_instit)";
 
       /*
-       * exclus√£o movimenta√ß√£o caixa/tesouraria
+       * exclus„o movimentaÁ„o caixa/tesouraria
        */
       db_inicio_transacao();
 
@@ -1041,7 +1041,7 @@ abstract class Transferencia {
       $sqlExcluirautentslip = db_query($sqlExcluirautentslip);
 
       /*
-       * exclus√£o lancamentos contabeis vinculados ao slip
+       * exclus„o lancamentos contabeis vinculados ao slip
        */
 
       $rsCodLan = db_query("select c84_conlancam from conlancamslip WHERE c84_slip = $iCodSlip");
@@ -1188,7 +1188,7 @@ abstract class Transferencia {
 
 
   /**
-   * Executa o lan√ßamento na contabilidade com os dados autenticados na tesouraria
+   * Executa o lanÁamento na contabilidade com os dados autenticados na tesouraria
    * @param AutenticacaoTesouraria $oAutenticacao
    * @return bool
    */

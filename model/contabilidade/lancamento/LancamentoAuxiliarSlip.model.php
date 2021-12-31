@@ -166,11 +166,6 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
     $oContaPlano           = ContaPlanoPCASPRepository::getContaPorReduzido($oLancamentoSlip->c82_reduz, $oLancamentoSlip->c70_anousu);
     $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
     $oContaCorrenteDetalhe->setRecurso(new Recurso($oContaPlano->getRecurso()));
-
-    foreach ($oSlisp->getRecursos() as $iRecurso => $nValor) {
-        $oContaCorrenteDetalhe->setRecurso(new Recurso($iRecurso));
-    }
-    
     $oContaCorrenteDetalhe->setContaBancaria($oContaPlano->getContaBancaria());
     if (!empty($oLancamentoSlip->c76_numcgm)) {
       $oContaCorrenteDetalhe->setCredor(CgmFactory::getInstanceByCgm($oLancamentoSlip->c76_numcgm));

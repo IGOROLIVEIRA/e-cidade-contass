@@ -881,9 +881,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
 
     if (me.iTipoTransferencia == 1) {
       oParam.iCodigoInstituicaoDestino = me.oTxtInstituicaoDestinoCodigo.getValue();
-    } 
-
-    console.log(oParam);
+    }
 
     new Ajax.Request(me.sUrlRpc,
                     {method: 'post',
@@ -1078,19 +1076,6 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   };
 
   /**
-   * Lookup de pesquisa do Fonte
-   */
-   me.pesquisaFonte = function (lMostra) {
-
-    var sUrlHistorico = "func_orctiporec.php?pesquisa_chave="+me.oTxtFonteInputCodigo.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preencheFonte";
-
-    if (lMostra) {
-      sUrlHistorico = "func_orctiporec.php?funcao_js=parent."+me.sNomeInstancia+".completaFonte|o15_codigo|o15_descr";
-    }
-    js_OpenJanelaIframe("", 'db_iframe_fonte', sUrlHistorico, "Pesquisa Histórico", lMostra);
-  };
-
-  /**
    * Preenche a descricao Historico
    */
   me.preencheHistorico = function (sDescricao, lErro) {
@@ -1110,24 +1095,6 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     me.oTxtHistoricoInputDescricao.setValue(sDescricao);
     db_iframe_conhist.hide();
   };
-
-  
-  /**
-   * Completa os fonte
-   */
-   me.completaFonte = function (iCodigoFonte, sDescricao) {
-        me.oTxtFonteInputCodigo.setValue(iCodigoFonte);
-        me.oTxtFonteInputDescricao.setValue(sDescricao);
-        db_iframe_fonte.hide();
-  };
-
-    me.preencheFonte = function (chave, erro) {
-        me.oTxtFonteInputDescricao.setValue(chave);
-        if (erro==true) {
-            me.oTxtFonteInputCodigo.focus();
-            me.oTxtFonteInputCodigo.value = '';
-        }
-    };
 
   /**
    * Abre lookup de pesquisa do CGM
@@ -1359,6 +1326,28 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     me.getDadosTransferencia();
   };
 
+  me.pesquisaFonte = function (lMostra) {
+    var sUrlHistorico = "func_orctiporec.php?pesquisa_chave="+me.oTxtFonteInputCodigo.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preencheFonte";
+
+    if (lMostra) {
+        sUrlHistorico = "func_orctiporec.php?funcao_js=parent."+me.sNomeInstancia+".completaFonte|o15_codigo|o15_descr";
+    }
+    js_OpenJanelaIframe("", 'db_iframe_fonte', sUrlHistorico, "Pesquisa Histórico", lMostra);
+};
+
+me.completaFonte = function (iCodigoFonte, sDescricao) {
+    me.oTxtFonteInputCodigo.setValue(iCodigoFonte);
+    me.oTxtFonteInputDescricao.setValue(sDescricao);
+    db_iframe_fonte.hide();
+};
+
+me.preencheFonte = function (chave, erro) {
+    me.oTxtFonteInputDescricao.setValue(chave);
+    if (erro==true) {
+        me.oTxtFonteInputCodigo.focus();
+        me.oTxtFonteInputCodigo.value = '';
+    }
+};
 
   /**
    * Busca os dados da instituicao de origem
