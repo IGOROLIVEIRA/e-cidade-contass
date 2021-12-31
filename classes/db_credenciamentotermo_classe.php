@@ -137,7 +137,7 @@ class cl_credenciamentotermo
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l212_fornecedor == null) {
+        if ($this->l212_fornecedor == "0") {
             $this->erro_sql = " Campo l212_fornecedor não informado.";
             $this->erro_campo = "l212_fornecedor";
             $this->erro_banco = "";
