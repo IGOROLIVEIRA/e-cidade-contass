@@ -125,7 +125,7 @@ switch ($oParam->exec) {
             $oHomologacao->cancelar();
             $oAcordo                   = new Acordo($oHomologacao->getAcordo());
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-            $sHistorico = "Valor referente a cancelamento da homologação do contrato de código: {$oParam->codigo}.";
+            $sHistorico = "Valor referente a cancelamento da homologação do contrato de código: {$oAcordo->getCodigoAcordo()}.";
             $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
 
             db_fim_transacao(false);
