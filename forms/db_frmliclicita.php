@@ -373,10 +373,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             "2" => "2- Melhor Técnica",
                                             "3" => "3- Técnica e Preço",
                                             "4" => "4- Maior Lance ou Oferta",
-                                            "5" => "5- Maior Oferta de Preço",
-                                            "6" => "6- Maior Retorno Econômico",
-                                            "7" => "7- Maior desconto",
-                                            "8" => "8- Melhor técnica ou conteúdo artístico"
+                                            "5" => "5- Maior Oferta de Preço"
                                         );
                                         db_select("l20_tipliticacao", $arr_tipo, true, $db_opcao);
                                         ?>
@@ -1219,8 +1216,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 document.getElementById("natureOB").style.display = "none";
                 document.getElementById("natureOB1").style.display = "none";
             } else {
-                //document.getElementById("l20_tipliticacao").disabled=false;
-                //document.getElementById("l20_naturezaobjeto").disabled=false;
                 document.getElementById("licitacao1").style.display = "table-cell";
                 document.getElementById("tipolicitacao").style.display = "table-cell";
                 document.getElementById("natureOB").style.display = "table-cell";
@@ -1298,6 +1293,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respAberProcesso").style.display = "none";
             document.getElementById("respEmissaoEdi").style.display = "none";
             document.getElementById("respPublic").style.display = "none";
+            document.getElementById("disputa").style.display = "none";
 
         } else {
 
@@ -1310,6 +1306,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("diario").style.display = '';
             document.getElementById("dtpubedital").style.display = '';
             document.getElementById("linkedital").style.display = '';
+            document.getElementById("disputa").style.display = '';
 
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display = 'inline';
@@ -1371,23 +1368,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         let listaExecucoes = document.getElementById('l20_regimexecucao').options;
-
-        /*
-                let tiposLicitacoes = document.getElementById('l20_tipliticacao').options;
-
-                if (anousu >= 2020) {
-                    if (oRetorno.tribunal == 107) {
-                    
-                    } else {
-                        /* Remove tipos de licitações 
-                        if (tiposLicitacoes.item(6)) {
-                            tiposLicitacoes.remove(6);
-                        }
-                        if (tiposLicitacoes.item(5)) {
-                            tiposLicitacoes.remove(5);
-                        }
-
-                    }*/
     }
 
     if ($F('l20_equipepregao') != '') {
@@ -2034,10 +2014,19 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 
     function js_verificalei(lei) {
+        let opcoesreg = document.getElementById('l20_tipliticacao').options;
+
         if (lei == 1) {
             document.getElementById('disputa').style.display = '';
-        } else {
+            opcoesreg.add(new Option('6- Maior Retorno Econômico'), 6);
+            opcoesreg.add(new Option('7- Maior desconto'), 7);
+            opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico'), 8);
+        }
+        if (lei == 2) {
             document.getElementById('disputa').style.display = 'none';
+            opcoesreg.remove(6);
+            opcoesreg.remove(7);
+            opcoesreg.remove(8);
         }
     }
 
