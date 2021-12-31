@@ -358,6 +358,15 @@ switch($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
+            $rsSlipFonte = db_query("SELECT k29_recurso FROM sliprecurso WHERE k29_slip = {$oMovimento->iCodNota}");
+
+            if (pg_numrows($rsSlipFonte) == 0 && db_getsession("DB_anousu") >= 2022) {
+                throw new Exception("Para efetuar o pagamento é necessário alterar o Slip informando a respectiva fonte de recursos");
+            }
+                
+            if (isset($oMovimento->iRecurso) && $oMovimento->iRecurso != '')
+                $oTransferencia->setFonteRecurso($oMovimento->iRecurso);
+            
 		  if (isset($oMovimento->iCodCheque) && $oMovimento->iCodCheque != '') {
 			$oTransferencia->setCheque($oMovimento->iCodCheque);
 		  }

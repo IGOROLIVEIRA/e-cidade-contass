@@ -251,9 +251,16 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   me.oTxtHistoricoInputCodigo.addEvent('onChange', ";"+me.sNomeInstancia+".pesquisaHistorico(false);");
   me.oTxtHistoricoInputDescricao             = new DBTextField('oTxtHistoricoInputDescricao', me.sNomeInstancia+'.oTxtHistoricoInputDescricao', '', 56);
 
+    //if (me.iAno >= 2022) {
+        me.oTxtFonteInputCodigo                = new DBTextField('oTxtFonteInputCodigo', me.sNomeInstancia+'.oTxtFonteInputCodigo', '', me.iTamanhoCampo);
+        me.oTxtFonteInputCodigo.addEvent('onChange', ";"+me.sNomeInstancia+".pesquisaFonte(false);");
+        me.oTxtFonteInputDescricao             = new DBTextField('oTxtFonteInputDescricao', me.sNomeInstancia+'.oTxtFonteInputDescricao', '', 56);
+    //}
+
   me.oTxtProcessoInput                       = new DBTextField('oTxtProcessoInput', me.sNomeInstancia+'.oTxtProcessoInput', '', me.iTamanhoCampo);
   me.oTxtProcessoInput.setMaxLength(15);
   me.oTxtValorInput                          = new DBTextField('oTxtValorInput', me.sNomeInstancia+'.oTxtValorInput', '', 24);
+
 
   me.oTxtValorInput.addEvent("onKeyPress", "return js_teclas(event,this)");
 
@@ -277,6 +284,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   me.oTxtContaDebitoCodigo.setReadOnly(me.lReadOnly);
   me.oTxtHistoricoInputCodigo.setReadOnly(me.lReadOnly);
   me.oTxtHistoricoInputDescricao.setReadOnly(me.lReadOnly);
+  me.oTxtFonteInputCodigo.setReadOnly(me.lReadOnly);
   me.oTxtProcessoInput.setReadOnly(me.lReadOnly);
   me.oTxtValorInput.setReadOnly(me.lReadOnly);
   me.oTxtCodigoFinalidadeFundeb.setReadOnly(me.lReadOnly);
@@ -580,7 +588,30 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     me.oTxtHistoricoInputDescricao.setReadOnly(true);
     me.oTxtHistoricoInputDescricao.show(oCellHistoricoInputDescricao);
 
-
+    /**
+     * Label Fonte
+     */
+    if (me.iAno >= 2022 || me.lAlteracao == true) {
+        var oRowFonte             = oTabela.insertRow(iLinhaTabela); iLinhaTabela++;
+        var oCellFonteLabel       = oRowFonte.insertCell(0);
+        oCellFonteLabel.id        = "td_fonte_"+me.sNomeInstancia;
+        oCellFonteLabel.innerHTML = "<b><a href='#' onclick='"+me.sNomeInstancia+".pesquisaFonte(true);'>Fonte de Recursos:</a></b>";
+    }
+    /**
+     * Codigo Fonte
+     */
+    if (me.iAno >= 2022 || me.lAlteracao == true) {
+        var oCellFonteInputCodigo = oRowFonte.insertCell(1);
+        me.oTxtFonteInputCodigo.show(oCellFonteInputCodigo);
+    }
+    /**
+     * Descricao Historico
+     */
+    if (me.iAno >= 2022 || me.lAlteracao == true) {
+        var oCellFonteInputDescricao = oRowFonte.insertCell(2);
+        me.oTxtFonteInputDescricao.setReadOnly(true);
+        me.oTxtFonteInputDescricao.show(oCellFonteInputDescricao);
+    }
     /**
      * Label Processo
      */
@@ -763,6 +794,13 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
       }
     }
 
+    if (me.iAno >= 2022) {
+        if (me.oTxtFonteInputCodigo.getValue() == "") {
+            alert("Fonte não informada.");
+            return false;
+        }
+    }
+
     if (me.iTipoTransferencia == 1) {
 
       if (me.oTxtInstituicaoDestinoCodigo.getValue() == "") {
@@ -821,6 +859,8 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     oParam.k17_valor                      = me.oTxtValorInput.getValue();
     oParam.k17_hist                       = me.oTxtHistoricoInputCodigo.getValue();
     oParam.iCGM                           = me.oTxtFavorecidoInputCodigo.getValue();
+    if (me.iAno >= 2022 || me.lAlteracao == true)
+        oParam.iCodigoFonte = me.oTxtFonteInputCodigo.getValue();
     oParam.sCaracteristicaPeculiarDebito  = me.oTxtCaracteristicaDebitoInputCodigo.getValue();
     oParam.sCaracteristicaPeculiarCredito = me.oTxtCaracteristicaCreditoInputCodigo.getValue();
     oParam.k17_texto                      = encodeURIComponent(tagString(me.getObservacao()));
@@ -1286,6 +1326,28 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     me.getDadosTransferencia();
   };
 
+  me.pesquisaFonte = function (lMostra) {
+    var sUrlHistorico = "func_orctiporec.php?pesquisa_chave="+me.oTxtFonteInputCodigo.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preencheFonte";
+
+    if (lMostra) {
+        sUrlHistorico = "func_orctiporec.php?funcao_js=parent."+me.sNomeInstancia+".completaFonte|o15_codigo|o15_descr";
+    }
+    js_OpenJanelaIframe("", 'db_iframe_fonte', sUrlHistorico, "Pesquisa Histórico", lMostra);
+};
+
+me.completaFonte = function (iCodigoFonte, sDescricao) {
+    me.oTxtFonteInputCodigo.setValue(iCodigoFonte);
+    me.oTxtFonteInputDescricao.setValue(sDescricao);
+    db_iframe_fonte.hide();
+};
+
+me.preencheFonte = function (chave, erro) {
+    me.oTxtFonteInputDescricao.setValue(chave);
+    if (erro==true) {
+        me.oTxtFonteInputCodigo.focus();
+        me.oTxtFonteInputCodigo.value = '';
+    }
+};
 
   /**
    * Busca os dados da instituicao de origem
@@ -1500,6 +1562,13 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   me.getCodigoSlip = function () {
     return me.iCodigoSlip;
   };
+
+    /**
+     * Seta o ano da sessão
+     */
+    me.setAno = function (iAno) {
+        me.iAno = iAno;
+    }
 
   /**
    * Seta se o PCASP esta ativo
