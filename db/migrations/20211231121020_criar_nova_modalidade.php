@@ -16,7 +16,7 @@ class CriarNovaModalidade extends AbstractMigration
     {
         $sql = "
             begin;
-                insert into cflicita values(nextval('cflicita_l03_codigo_seq'),'DIALOGO COMPETITIVO','H',23,'{$instit}','f',110);
+                insert into cflicita values(nextval('cflicita_l03_codigo_seq'),'DIALOGO COMPETITIVO','H',(select max(pc50_codcom) from pctipocompra),'{$instit}','f',110);
             commit;
         ";
         $this->execute($sql);
