@@ -17,7 +17,7 @@ class Oc16129 extends AbstractMigration
             ALTER TABLE liclicita ADD COLUMN l20_mododisputa int8;
             ALTER TABLE adesaoregprecos ADD COLUMN si06_leidalicitacao int8;
             insert into pctipocompratribunal values(110,8,'Diálogo competitivo','MG');
-            insert into pctipocompra values(23,'DIALOGO COMPETITIVO',110);
+            insert into pctipocompra values((select max(pc50_codcom) from pctipocompra)+1,'DIALOGO COMPETITIVO',110);
         ";
         $this->execute($sql);
     }
