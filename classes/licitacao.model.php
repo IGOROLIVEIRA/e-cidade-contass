@@ -86,7 +86,8 @@ class licitacao
         l20_naturezaobjeto as naturezadoobjeto,
         Case
             when l20_usaregistropreco = 't' then 'SIM'
-            when l20_usaregistropreco = 'f' then 'NAO' end as registrodepreco";
+            when l20_usaregistropreco = 'f' then 'NAO' end as registrodepreco,
+        l20_tipojulg";
 
         $rsItens  = $oDaoLicitem->sql_record(
             $oDaoLicitem->sql_query_licitacao_exporta(
@@ -141,7 +142,7 @@ class licitacao
             $oDaoLicitem->sql_query_licitacao_exporta(
                 null,
                 $sCampos,
-                "l20_edital",
+                "l21_ordem asc",
                 "l20_codigo = {$this->iCodLicitacao}"
             )
         );

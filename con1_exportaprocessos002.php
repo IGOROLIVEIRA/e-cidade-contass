@@ -136,24 +136,27 @@ if ($clabre_arquivo->arquivo != false) {
 
     fputs($clabre_arquivo->arquivo, "");
 
-    foreach ($aEditalLicitacao as $iItens => $oItens) {
+    if ($aEditalLicitacao[0]->l20_tipojulg == 3) {
+        foreach ($aLoteLicitacao as $iItens => $oItens) {
+            $iTipoRegistro                   = $oItens->tiporegistro;
+            $iProcessoLicitatorio            = $oItens->processolicitatorio;
+            $iExercicio                      = $oItens->anoprocessolicitatorio;
+            $iLote                           = $oItens->codigodolote;
+            $iCodItem                        = $oItens->codigodoitemvinculadoaolote;
+            $sDescrLote                      = $oItens->descricaodolote;
 
-        $iTipoRegistro                   = $oItens->tiporegistro;
-        $iProcessoLicitatorio            = $oItens->processolicitatorio;
-        $iExercicio                      = $oItens->anoprocessolicitatorio;
-        $iLote                           = $oItens->codigodolote;
-        $iCodItem                        = $oItens->codigodoitemvinculadoaolote;
-        $sDescrLote                      = $oItens->descricaodolote;
-
-        fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iLote, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iCodItem, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($sDescrLote, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($iLote, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($iCodItem, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($sDescrLote, $vir, $del));
+            fputs($clabre_arquivo->arquivo, "\n");
+        }
+    }else{
+        fputs($clabre_arquivo->arquivo, '99');
         fputs($clabre_arquivo->arquivo, "\n");
     }
-
     fclose($clabre_arquivo->arquivo);
 }
 $aArquivosGerados = array();
