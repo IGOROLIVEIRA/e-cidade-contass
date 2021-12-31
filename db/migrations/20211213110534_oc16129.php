@@ -15,10 +15,9 @@ class Oc16129 extends AbstractMigration
             ALTER TABLE liclicita ADD COLUMN l20_dtpulicacaoedital date;
             ALTER TABLE liclicita ADD COLUMN l20_linkedital varchar(200);
             ALTER TABLE liclicita ADD COLUMN l20_mododisputa int8;
-
             ALTER TABLE adesaoregprecos ADD COLUMN si06_leidalicitacao int8;
-
-
+            insert into pctipocompratribunal values(110,8,'Diálogo competitivo','MG');
+            insert into pctipocompra values(23,'DIALOGO COMPETITIVO',110);
         ";
         $this->execute($sql);
     }
@@ -33,7 +32,6 @@ class Oc16129 extends AbstractMigration
             ALTER TABLE liclicita DROP COLUMN l20_dtpulicacaoedital;
             ALTER TABLE liclicita DROP COLUMN l20_linkedital;
             ALTER TABLE liclicita DROP COLUMN l20_mododisputa;
-
             ALTER TABLE adesaoregprecos DROP COLUMN si06_leidalicitacao;
         ";
         $this->execute($sql);

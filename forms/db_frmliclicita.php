@@ -293,6 +293,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td nowrap title="<?= @$Tl20_leidalicitacao ?>" id="leidalicitacao">
+                                        <strong>Lei da Licitação:</strong>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $arr_tipo = array(
+                                            "0" => "Selecione",
+                                            "1" => "1 - Lei 14.133/2021",
+                                            "2" => "2 - Lei 8.666/1993 e outras"
+                                        );
+                                        db_select("l20_leidalicitacao", $arr_tipo, true, $db_opcao, "onchange='js_verificalei(this.value);'");
+                                        ?>
+                                    </td>
+                                </tr>
                                 <tr style="display:none;" id="respAvaliaBens">
                                     <td nowrap title="respAvaliBenscodigo">
                                         <?
@@ -367,23 +382,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-
-                                <tr>
-                                    <td nowrap title="<?= @$Tl20_leidalicitacao ?>" id="leidalicitacao">
-                                        <strong>Lei da Licitação:</strong>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $arr_tipo = array(
-                                            "0" => "Selecione",
-                                            "1" => "1 - Lei 14.133/2021",
-                                            "2" => "2 - Lei 8.666/1993 e outras"
-                                        );
-                                        db_select("l20_leidalicitacao", $arr_tipo, true, $db_opcao, "onchange='js_verificalei(this.value);'");
-                                        ?>
-                                    </td>
-                                </tr>
-
 
                                 <tr>
                                     <td nowrap title="<?= @$Tl20_tipnaturezaproced ?>" id="tipnaturezaproced">
@@ -472,6 +470,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td>
                                         <?
                                         $aDisputas = array(
+                                            "0" => "Selecione",
                                             "1" => "Aberto",
                                             "2" => "Fechado",
                                             "3" => "Conjunto"
@@ -618,6 +617,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td>
                                         <?
                                         $aDiarios = array(
+                                            "0" => "Selecione",
                                             "1" => "Município",
                                             "2" => "Estado",
                                             "3" => "União"
