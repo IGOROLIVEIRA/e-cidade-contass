@@ -4141,7 +4141,6 @@ class Acordo
      */
     public function apostilar($aItens, $oApostila, $dtVigenciaInicial, $dtVigenciaFinal, $aSelecionados)
     {
-
         $nValorItens = 0;
         $nValorLancamentoContabil = 0;
 
@@ -4190,6 +4189,7 @@ class Acordo
 
         $sAtualDtInicial = new DBDate($this->getDataInicial());
         $sAtualDtFim     = new DBDate($this->getDataFinal());
+
         $this->setDataInicial($dtVigenciaInicial);
         $this->setDataFinal($dtVigenciaFinal);
         $this->salvarAlteracoesContrato();
@@ -4268,10 +4268,10 @@ class Acordo
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
         $sHistorico = "Valor referente ao apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de código: {$this->getCodigoAcordo()}.";
         if ($nValorLancamentoContabil < 0) {
-            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $this->getDataAssinatura());
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oApostila->dataapostila);
         }
         if ($nValorLancamentoContabil > 0) {
-            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $this->getDataAssinatura());
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oApostila->dataapostila);
         }
 
         return $this;
