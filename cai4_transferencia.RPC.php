@@ -190,10 +190,10 @@ switch ($oParam->exec) {
       $oTransferencia = TransferenciaFactory::getInstance($oParam->iCodigoTipoOperacao, $iCodigoSlip);
       $oTransferencia->setContaDebito($oParam->k17_debito);
       $oTransferencia->setContaCredito($oParam->k17_credito);
-        if ($oParam->iCodigoFonte)
+        if (isset($oParam->iCodigoFonte) && $oParam->iCodigoFonte != '')
             $oTransferencia->setFonteRecurso($oParam->iCodigoFonte);
       $oTransferencia->setValor(str_replace(",", ".", $oParam->k17_valor));
-        if ($oParam->iCodigoFonte)
+        if (isset($oParam->iCodigoFonte) && $oParam->iCodigoFonte != '')
             $oTransferencia->adicionarRecurso($oParam->iCodigoFonte, str_replace(",", ".", trim($oParam->k17_valor)));
       $oTransferencia->setHistorico($oParam->k17_hist);
       $oTransferencia->setObservacao(addslashes(db_stdClass::normalizeStringJsonEscapeString($oParam->k17_texto)));
@@ -384,6 +384,9 @@ switch ($oParam->exec) {
       $oRetorno->iTipoPagamento         = $oTransferencia->getTipoPagamento();
       $oRetorno->iSituacao              = $oTransferencia->getSituacao();
       $oRetorno->dtData                 = $oTransferencia->getData();
+
+      $rsSlipFonte = db_query("SELECT k29_recurso FROM sliprecurso WHERE k29_slip = {$oParam->k17_codigo}");
+      $oRetorno->iCodigoFonte = db_utils::fieldsMemory($rsSlipFonte, 0)->k29_recurso ? db_utils::fieldsMemory($rsSlipFonte, 0)->k29_recurso : '';
 
       $oRetorno->sCaracteristicaDebito  = $oTransferencia->getCaracteristicaPeculiarDebito();
       $oRetorno->sCaracteristicaCredito = $oTransferencia->getCaracteristicaPeculiarCredito();

@@ -228,7 +228,7 @@ abstract class Transferencia {
     );
 
     $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
-    // $oContaCorrenteDetalhe->setRecurso(new Recurso($oContaPlano->getRecurso()));
+    $oContaCorrenteDetalhe->setRecurso(new Recurso($oContaPlano->getRecurso()));
     if ($this->getFonteRecursos() != null) 
         $oContaCorrenteDetalhe->setRecurso($this->getFonteRecursos());
     $oContaCorrenteDetalhe->setContaBancaria(null);

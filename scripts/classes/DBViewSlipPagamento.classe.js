@@ -284,8 +284,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
   me.oTxtContaDebitoCodigo.setReadOnly(me.lReadOnly);
   me.oTxtHistoricoInputCodigo.setReadOnly(me.lReadOnly);
   me.oTxtHistoricoInputDescricao.setReadOnly(me.lReadOnly);
-    if (me.iAno >= 2022)
-        me.oTxtFonteInputCodigo.setReadOnly(me.lReadOnly);
+  me.oTxtFonteInputCodigo.setReadOnly(me.lReadOnly);
   me.oTxtProcessoInput.setReadOnly(me.lReadOnly);
   me.oTxtValorInput.setReadOnly(me.lReadOnly);
   me.oTxtCodigoFinalidadeFundeb.setReadOnly(me.lReadOnly);
@@ -592,7 +591,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     /**
      * Label Fonte
      */
-    if (me.iAno >= 2022) {
+    if (me.iAno >= 2022 || me.lAlteracao == true) {
         var oRowFonte             = oTabela.insertRow(iLinhaTabela); iLinhaTabela++;
         var oCellFonteLabel       = oRowFonte.insertCell(0);
         oCellFonteLabel.id        = "td_fonte_"+me.sNomeInstancia;
@@ -601,14 +600,14 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     /**
      * Codigo Fonte
      */
-    if (me.iAno >= 2022) {
+    if (me.iAno >= 2022 || me.lAlteracao == true) {
         var oCellFonteInputCodigo = oRowFonte.insertCell(1);
         me.oTxtFonteInputCodigo.show(oCellFonteInputCodigo);
     }
     /**
      * Descricao Historico
      */
-    if (me.iAno >= 2022) {
+    if (me.iAno >= 2022 || me.lAlteracao == true) {
         var oCellFonteInputDescricao = oRowFonte.insertCell(2);
         me.oTxtFonteInputDescricao.setReadOnly(true);
         me.oTxtFonteInputDescricao.show(oCellFonteInputDescricao);
@@ -860,7 +859,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     oParam.k17_valor                      = me.oTxtValorInput.getValue();
     oParam.k17_hist                       = me.oTxtHistoricoInputCodigo.getValue();
     oParam.iCGM                           = me.oTxtFavorecidoInputCodigo.getValue();
-    if (me.iAno >= 2022)
+    if (me.iAno >= 2022 || me.lAlteracao == true)
         oParam.iCodigoFonte = me.oTxtFonteInputCodigo.getValue();
     oParam.sCaracteristicaPeculiarDebito  = me.oTxtCaracteristicaDebitoInputCodigo.getValue();
     oParam.sCaracteristicaPeculiarCredito = me.oTxtCaracteristicaCreditoInputCodigo.getValue();

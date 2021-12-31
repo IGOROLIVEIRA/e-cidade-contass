@@ -140,11 +140,11 @@ function js_retornoGetDados(oAjax) {
 
   $('ctnSlipPagamento').innerHTML = "";
   oDBViewSlipPagamento = new DBViewSlipPagamento("oDBViewSlipPagamento", oRetorno.iTipoOperacao, 1, $('ctnSlipPagamento'), null, lComponenteReadOnly);
+  oDBViewSlipPagamento.setAno('<?php echo db_getsession('DB_anousu');?>');
+  oDBViewSlipPagamento.setAlteracao(true);
   oDBViewSlipPagamento.show();
   oDBViewSlipPagamento.setPCASPAtivo('<?php echo db_getsession('DB_use_pcasp');?>');
-  oDBViewSlipPagamento.setAno('<?php echo db_getsession('DB_anousu'); ?>');
   oDBViewSlipPagamento.start();
-  oDBViewSlipPagamento.setAlteracao(true);
   oDBViewSlipPagamento.oTxtCodigoSlip.setValue(oRetorno.iCodigoSlip);
   oDBViewSlipPagamento.getDadosTransferencia();
 
