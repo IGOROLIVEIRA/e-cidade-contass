@@ -96,9 +96,9 @@ $db_opcao_inf=1;
           <tr>
             <td><?db_ancora("<b>Conta Pagadora:</b>","js_pesquisa_contapagadora(true);",1);?></td>
             <td>
-                <? 
-                    db_input("e83_conta",13,1,true,"text",4,"onchange='js_pesquisa_contapagadora(false);'"); 
-                    db_input("e83_codtipo",5,1,true,"hidden");    
+                <?
+                    db_input("e83_conta",13,1,true,"text",4,"onchange='js_pesquisa_contapagadora(false);'");
+                    db_input("e83_codtipo",5,1,true,"hidden");
                 ?>
             </td>
             <td colspan='3'><? db_input("e83_descr",50,"",true,"text",3); ?></td>
@@ -307,14 +307,14 @@ function js_saida(oAjax){
     $('e60_vlrliq').value = obj.e60_vlrliq;
     $('historico').value  = obj.e60_resumo.urlDecode();
     $('saldo_disp').value = obj.saldo_dis;
-    $('sEstrutElemento').value = obj.sEstrutural;    
+    $('sEstrutElemento').value = obj.sEstrutural;
     saida                 = '';
     iTotNotas             = 0;
     $('dados').innerHTML  = '';
     estrutural            = obj.sEstrutural;
     $('e50_compdesp').value = '';
     $('e83_conta').value    = '';
-    $('e83_descr').value    = ''; 
+    $('e83_descr').value    = '';
     $('e83_codtipo').value  = '';
 
     if (obj.aItensPendentesPatrimonio.length > 0) {
@@ -343,7 +343,7 @@ function js_saida(oAjax){
 		                        js_strToFloat(obj.data[i].e70_vlranu)-js_strToFloat(obj.data[i].e53_vlrpag)).toFixed(2);
 
           aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
-        
+
             if (aMatrizEntrada.indexOf(estrutural) !== -1) {
                document.getElementById('competDespLabel').style.display = "table-cell";
                document.getElementById('competDespInput').style.display = "table-cell";
@@ -457,11 +457,11 @@ function js_marcaLinha(obj){
 function js_liquidar(metodo){
 
    if (metodo == "liquidarAjax") {
-       
+
        aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
-       
+
        if (aMatrizEntrada.indexOf($F('sEstrutElemento')) !== -1) {
-       
+
            if ($F('e50_compdesp') == ''){
                alert('Campo Competência da Despesa deve ser informado.');
                $('e50_compdesp').focus();
@@ -470,7 +470,7 @@ function js_liquidar(metodo){
                return false;
            }
        }
-   }  
+   }
 
    itens = js_getElementbyClass(form1,'chkmarca');
    notas = '';
@@ -651,15 +651,15 @@ function in_array(valor,vetor){
 };
 
 function js_pesquisa_contapagadora(mostra) {
-	
+
     if (mostra==true) {
         js_OpenJanelaIframe('top.corpo','db_iframe_empagetipo','func_empagetipo.php?e60_numemp='+$('e60_numemp').value+'&funcao_js=parent.js_mostracontapagadora1|e83_codtipo|e83_conta|e83_descr','Pesquisa',true);
     } else {
-    
-        if ($('e83_conta').value != '') { 
+
+        if ($('e83_conta').value != '') {
             js_OpenJanelaIframe('top.corpo','db_iframe_empagetipo','func_empagetipo.php?pesquisa_chave='+$('e83_conta').value+'&e60_numemp='+$('e60_numemp').value+'&e83_conta='+$('e83_conta').value+'&funcao_js=parent.js_mostracontapagadora','Pesquisa',false);
         } else {
-            $('e83_descr').value    = ''; 
+            $('e83_descr').value    = '';
             $('e83_codtipo').value  = '';
         }
     }
@@ -667,23 +667,23 @@ function js_pesquisa_contapagadora(mostra) {
 }
 
 function js_mostracontapagadora(chave1,chave2,erro) {
-    
-    $('e83_descr').value    = chave1; 
-    $('e83_codtipo').value  = chave2; 
-    if (erro == true) { 
-        
-        $('e83_codtipo').value = ''; 
+
+    $('e83_descr').value    = chave1;
+    $('e83_codtipo').value  = chave2;
+    if (erro == true) {
+
+        $('e83_codtipo').value = '';
         $('e83_conta').value    = '';
-        $('e83_codtipo').focus(); 
+        $('e83_codtipo').focus();
 
     }
 
 }
 
 function js_mostracontapagadora1(chave1,chave2,chave3) {
-        
-    $('e83_codtipo').value  = chave1;  
-    $('e83_conta').value    = chave2;  
+
+    $('e83_codtipo').value  = chave1;
+    $('e83_conta').value    = chave2;
     $('e83_descr').value    = chave3;
     db_iframe_empagetipo.hide();
 

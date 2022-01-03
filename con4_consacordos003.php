@@ -550,8 +550,9 @@ db_app::import("configuracao.DBDepartamento");
         js_OpenJanelaIframe('top.corpo', 'db_iframe_pesquisa_processo', 'com3_pesquisaprocessocompras003.php?pc80_codproc=' + iCodigoProcesso, 'Pesquisa Processo de Compras', true);
     }
 
-    function js_consultaAditamento(iCodAcordo, iCodAditamento) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_pesquisa_aditamento', 'func_aditamentonovo.php?ac16_sequencial=' + iCodAcordo + '&ac26_sequencial=' + iCodAditamento + '&aditamento=true', 'Pesquisa Aditamentos', true);
+    function js_consultaAditamento(iCodAcordo, iCodAditamento, iCodAditamentoAnterior) {
+        console.log(iCodAditamentoAnterior);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_pesquisa_aditamento', 'func_aditamentonovo.php?ac16_sequencial=' + iCodAcordo + '&ac26_sequencial=' + iCodAditamento + '&adanterior=' + iCodAditamentoAnterior + '&aditamento=true', 'Pesquisa Aditamentos', true);
     }
 
     function js_consultaApostilamento(iCodApostilamento) {

@@ -58,8 +58,12 @@ $clrotulo->label("db83_sequencial");
 $clrotulo->label("rh01_reajusteparidade");
 $clrotulo->label("rh03_padraoprev");
 $clrotulo->label("r02_descrprev");
+$clrotulo->label("jt_nome");
 
 const REGIME_CLT = 2;
+
+if (empty($GLOBALS['rh01_tipadm']))
+    $GLOBALS['rh01_tipadm'] = $tipadm;
 
 if (isset($db_opcaoal)) {
 
@@ -504,24 +508,6 @@ if (isset($db_opcaoal)) {
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?= @$Trh02_hrsmen ?>">
-                                    <?= @$Lrh02_hrsmen ?>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_input('rh02_hrsmen', 4, $Irh02_hrsmen, true, 'text', $db_opcao, "")
-                                    ?>
-                                </td>
-                                <td nowrap title="<?= @$Trh02_hrssem ?>" align="right">
-                                    <?= @$Lrh02_hrssem ?>
-                                </td>
-                                <td nowrap align="left">
-                                    <?
-                                    db_input('rh02_hrssem', 4, $Irh02_hrssem, true, 'text', $db_opcao, "")
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td nowrap title="<?= @$Trh02_ocorre ?>">
                                     <?= @$Lrh02_ocorre ?>
                                 </td>
@@ -697,8 +683,73 @@ if (isset($db_opcaoal)) {
                                     ?>
                                 </td>
                             </tr>
-
                         </table>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <fieldset id="ctnHoras">
+                        <legend align="left"><b>Horário de Trabalho</b></legend>
+                        <center>
+                            <table width="100%">
+                                <tr>
+                                    <td nowrap title="<?= @$Trh02_hrsmen ?>">
+                                        <?= @$Lrh02_hrsmen ?>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_input('rh02_hrsmen', 4, $Irh02_hrsmen, true, 'text', $db_opcao, "")
+                                        ?>
+                                    </td>
+                                    <td nowrap title="<?= @$Trh02_hrssem ?>" align="right">
+                                        <?= @$Lrh02_hrssem ?>
+                                    </td>
+                                    <td nowrap align="left">
+                                        <?
+                                        db_input('rh02_hrssem', 4, $Irh02_hrssem, true, 'text', $db_opcao, "")
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Tipo de Jornada:</strong>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $aTipoJornada = array(
+                                            '0' => 'Selecione', '2' => 'Jornada 12 x 36 (12 horas de trabalho seguidas de 36 horas ininterruptas de descanso', '3' => 'Jornada com horário diário fixo e folga variável', '4' => 'Jornada com horário diário fixo e folga fixa (no domingo)', '5' => 'Jornada com horário diário fixo e folga fixa (exceto no domingo)', '6' => 'Jornada com horário diário fixo e folga fixa (em outro dia da semana), com folga adicional ', '7' => 'Turno ininterrupto de revezamento', '9' => 'Demais tipos de jornada'
+                                        );
+                                        db_select("rh02_tipojornada", $aTipoJornada, true, $db_opcao, "", "", "", "");
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <strong>Possui Horário Noturno:</strong>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $aHorarioNoturno = array('f' => 'Não', 't' => 'Sim');
+                                        db_select("rh02_horarionoturno", $aHorarioNoturno, true, $db_opcao, "", "", "", "");
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap title="Jornada de trabalho">
+                                        <?
+                                        db_ancora('Jornada de Trabalho', "js_pesquisarh02_jornadadetrabalho(true);", $db_opcao);
+                                        ?>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_input('rh02_jornadadetrabalho', 6, 1, true, 'text', $db_opcao, "onchange='js_pesquisarh02_jornadadetrabalho(false);'");
+                                        ?>
+                                        <?
+                                        db_input('jt_nome', 34, 1, true, 'text', 3, '');
+                                        ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
                     </fieldset>
                 </td>
             </tr>
@@ -815,6 +866,54 @@ if (isset($db_opcaoal)) {
                                     <td colspan="3">
                                         <?php db_input('rh05_trct', 10, $Irh05_trct, true, 'text', $db_opcao); ?>
                                         <?php db_input('db83_sequencial', 10, $Idb83_sequencial, true, 'hidden', $db_opcao, ""); ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <fieldset id="ctnDadosCedencia">
+                        <legend align="left"><b>Dados Cedência</b></legend>
+                        <center>
+                            <table width="100%">
+                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
+                                    <td nowrap title="CNPJ Cedente">
+                                        <strong>CNPJ Cedente:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?php
+                                        db_input('rh02_cnpjcedente', 14, 1, true, 'text', $db_opcao, "  onBlur='js_verificaCNPJ(this)' onKeyDown='return js_controla_tecla_enter(this,event);' onKeyUp='js_limpa(this)'", '', '', '', '14');
+                                        ?>
+                                        <script type="text/javascript">
+                                            function js_limpa(obj) {
+                                                x = obj.value;
+                                                y = x.replace('.', '');
+                                                y = y.replace('/', '');
+                                                y = y.replace('-', '');
+                                                document.form1.rh02_cnpjcedente.value = y;
+                                            }
+                                        </script>
+                                    </td>
+                                    <td nowrap title="Matricula do Trabalhador no órgão Cedente">
+                                        <strong>Matricula do Trabalhador no órgão Cedente:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_input('rh02_mattraborgcedente', 10, 1, true, 'text', $db_opcao);
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr id="tipadm" <? echo (in_array($GLOBALS['rh01_tipadm'], array('3', '4'))) ? '' : 'style="display: none;"' ?>>
+                                    <td nowrap title="Data de Admissão no órgão Cedente">
+                                        <strong>Data de Admissão no órgão Cedente:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_inputdata('rh02_dataadmisorgcedente', @$rh02_dataadmisorgcedente_dia, @$rh02_dataadmisorgcedente_mes, @$rh02_dataadmisorgcedente_ano, true, 'text', $db_opcao, "")
+                                        ?>
                                     </td>
                                 </tr>
                             </table>
@@ -944,6 +1043,7 @@ if (isset($db_opcaoal)) {
             </tr>
             <tr>
                 <td align="center">
+                    <input type="hidden" name="tipadm" value="<?= $GLOBALS['rh01_tipadm'] ?>">
                     <input type="hidden" name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" />
                     <input type="button" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> <? if ($db_opcao != 3) echo "onclick='js_validaDados();'"; ?>>
                 </td>
@@ -1098,6 +1198,34 @@ if (isset($db_opcaoal)) {
                 document.form1.rh02_funcao.value = chave1;
                 document.form1.rh37_descr.value = chave2;
                 db_iframe_rhfuncao.hide();
+            }
+
+            function js_pesquisarh02_jornadadetrabalho(mostra) {
+                if (mostra == true) {
+                    js_OpenJanelaIframe('top.corpo.iframe_rhpessoalmov', 'db_iframejornadadetrabalho', 'func_jornadadetrabalho.php?funcao_js=parent.js_mostrajornadadetrabalho1|jt_sequencial|jt_nome&instit=<?= (db_getsession("DB_instit")) ?>', 'Pesquisa', true, '0');
+                } else {
+                    if (document.form1.rh02_jornadadetrabalho.value != '') {
+                        js_OpenJanelaIframe('top.corpo.iframe_rhpessoalmov', 'db_iframejornadadetrabalho', 'func_jornadadetrabalho.php?pesquisa_chave=' + document.form1.rh02_jornadadetrabalho.value + '&funcao_js=parent.js_mostrajornadadetrabalho&instit=<?= (db_getsession("DB_instit")) ?>', 'Pesquisa', false, '0');
+                    } else {
+                        document.form1.jt_nome.value = '';
+                    }
+                }
+            }
+
+            function js_mostrajornadadetrabalho(chave1, chave2, erro) {
+                document.form1.rh02_jornadadetrabalho.value = chave1;
+                document.form1.jt_nome.value = chave2;
+                if (erro == true) {
+                    document.form1.rh02_jornadadetrabalho.focus();
+                    document.form1.rh02_jornadadetrabalho.value = '';
+                    document.form1.jt_nome.value = '';
+                }
+            }
+
+            function js_mostrajornadadetrabalho1(chave1, chave2) {
+                document.form1.rh02_jornadadetrabalho.value = chave1;
+                document.form1.jt_nome.value = chave2;
+                db_iframejornadadetrabalho.hide();
             }
 
             function js_pesquisarh02_lota(mostra) {
@@ -1327,6 +1455,7 @@ if (isset($db_opcaoal)) {
                         clearInterval(validaDados)
                     }
                 }, 500);
+
             }
 
             function js_verificaconta() {
@@ -1350,6 +1479,18 @@ if (isset($db_opcaoal)) {
                         return false;
                     }
                 }
+
+                if (document.form1.rh30_vinculo.value == 'A') {
+                    if (document.form1.rh02_hrsmen.value == '' ||
+                        document.form1.rh02_hrssem.value == '' ||
+                        document.form1.rh02_tipojornada.value == 0 ||
+                        document.form1.rh02_jornadadetrabalho.value == ''
+                    ) {
+                        alert('Os campos de Horário de Trabalho são obrigatórios');
+                        return false;
+                    }
+                }
+
 
                 if (document.form1.rh02_fpagto.value > 1 || document.form1.inputCodigoBanco.value != "") {
 
@@ -1426,6 +1567,15 @@ if (isset($db_opcaoal)) {
                     alert(_M(sMensagem + 'erro_diasgozoferias_minimo'));
                     document.form1.rh02_diasgozoferias.focus();
                     return false;
+                }
+
+                if (document.form1.tipadm.value == 3 || document.form1.tipadm.value == 4) {
+                    if (document.form1.rh02_cnpjcedente.value != "") {
+                        if (js_verificaCNPJ(document.form1.rh02_cnpjcedente) == false) {
+                            alert("Usuário: \n\nInforme o CNPJ Cedente.\n\nAdministrador:");
+                            return false;
+                        }
+                    }
                 }
 
                 document.form1.submit();
@@ -1839,6 +1989,7 @@ if (isset($db_opcaoal)) {
             var oToogleContaBancaria = new DBToogle('ctnContaBancaria', true);
             var oToogleRescisao = new DBToogle('ctnRescisao', true);
             var oToogleSiope = new DBToogle('ctnSiope', false);
+            var oToogleDadosCedencia = new DBToogle('ctnDadosCedencia', false);
 
             function js_verifica_lotacao() {
                 let oParam = new Object();
@@ -1858,6 +2009,17 @@ if (isset($db_opcaoal)) {
                 oToogleSiope.show(oRetorno.lShow);
             }
             js_verifica_lotacao();
+
+            function js_verificaCNPJ(cnpj) {
+                if (cnpj.value.length == 14) {
+                    return js_TestaNI(cnpj, 1);
+                }
+                if (cnpj.value != "") {
+                    cnpj.select();
+                    cnpj.focus();
+                }
+                return false;
+            }
         </script>
         <?
 

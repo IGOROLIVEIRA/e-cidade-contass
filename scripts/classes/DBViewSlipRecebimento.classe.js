@@ -6,7 +6,7 @@
  * @param iTipoTransferencia - Codigo da transferencia (tabela: sliptipooperacao)
  * @param oDivDestino        - Objeto onde este objeto (DBViewSlipPagamento) sera adicionado
  */
-DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino, lEstorno) {
+DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino, lEstorno, iAno = null) {
 
   var me                              = this;
   me.sNomeInstancia                   = sNomeInstancia;
@@ -23,7 +23,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   me.sParametroContaCredito           = "";
   me.lContaDebito                     = false;
   me.lContaCredito                    = false;
-
+  me.iAno = iAno;
   /**
    * Define o tipo de transferencia
    */
@@ -50,7 +50,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
       me.sPesquisaContaDebito  = "Saltes";
     break;
   }
-
+ 
   /**
    * Código Slip
    */
@@ -97,15 +97,22 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   me.oTxtContaDebitoCodigo.addEvent("onChange", ";" + me.sNomeInstancia + ".pesquisaConta" + me.sPesquisaContaDebito + "(false, false);");
   me.oTxtContaDebitoDescricao                = new DBTextField("oTxtContaDebitoDescricao",  me.sNomeInstancia + ".oTxtContaDebitoDescricao",  "", 56);
 
+
+
+
   /**
    * Histórico
    */
+  
   me.oTxtHistoricoInputCodigo                = new DBTextField('oTxtHistoricoInputCodigo', me.sNomeInstancia+'.oTxtHistoricoInputCodigo', '', 8);
   me.oTxtHistoricoInputCodigo.addEvent('onChange', ";"+me.sNomeInstancia+".pesquisaHistorico(false);");
   me.oTxtHistoricoInputDescricao             = new DBTextField('oTxtHistoricoInputDescricao', me.sNomeInstancia+'.oTxtHistoricoInputDescricao', '', 56);
 
+    me.oTxtFonteInputCodigo = new DBTextField('oTxtFonteInputCodigo', me.sNomeInstancia+'.oTxtFonteInputCodigo', '', 8);
+    me.oTxtFonteInputCodigo.addEvent('onChange', ";"+me.sNomeInstancia+".pesquisaFonte(false);");
+    me.oTxtFonteInputDescricao = new DBTextField('oTxtFonteInputDescricao', me.sNomeInstancia+'.oTxtFonteInputDescricao', '', 56);
 
-  /**
+    /**
    * Processo administrativo
    */
   me.oTxtProcessoInput                      = new DBTextField('oTxtProcessoInput', me.sNomeInstancia+'.oTxtProcessoInput', '', 8);
@@ -310,11 +317,40 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     me.oTxtHistoricoInputDescricao.setReadOnly(true);
     me.oTxtHistoricoInputDescricao.show(oCellHistoricoInputDescricao);
 
+        /**
+        * Label Fonte
+        */
+        if (me.iAno >= 2022) {
+            var oRowFonte             = oTabela.insertRow(7);
+            var oCellFonteLabel       = oRowFonte.insertCell(0);
+            oCellFonteLabel.id        = "td_fonte_"+me.sNomeInstancia;
+            oCellFonteLabel.innerHTML = "<b><a href='#' onclick='"+me.sNomeInstancia+".pesquisaFonte(true);'>Fonte de Recursos:</a></b>";
+        }
+
+        /**
+         * Codigo Fonte
+         */
+        if (me.iAno >= 2022) {
+            var oCellFonteInputCodigo = oRowFonte.insertCell(1);
+            me.oTxtFonteInputCodigo.show(oCellFonteInputCodigo);
+        }
+
+        /**
+         * Descricao Fonte
+         */
+        if (me.iAno >= 2022) {
+            var oCellFonteInputDescricao = oRowFonte.insertCell(2);
+            me.oTxtFonteInputDescricao.setReadOnly(true);
+            me.oTxtFonteInputDescricao.show(oCellFonteInputDescricao);
+        }
 
     /**
      * Label Processo
      */
-    var oRowProcesso                 = oTabela.insertRow(7);
+    if (me.iAno >= 2022)
+        var oRowProcesso = oTabela.insertRow(8);
+    else
+        var oRowProcesso = oTabela.insertRow(7);
     var oCellProcessoLabel           = oRowProcesso.insertCell(0);
         oCellProcessoLabel.innerHTML = "<strong>Processo Administrativo:</strong>";
 
@@ -326,7 +362,11 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     /**
      * Label Valor
      */
-    var oRowValor             = oTabela.insertRow(8);
+    if (me.iAno >= 2022)
+        var oRowValor = oTabela.insertRow(9);
+    else
+        var oRowValor = oTabela.insertRow(8);
+
     var oCellValorLabel       = oRowValor.insertCell(0);
     oCellValorLabel.innerHTML = "<b>Valor:</b>";
 
@@ -416,6 +456,13 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
       return false;
     }
 
+    if (me.iAno >= 2022) {
+        if (me.oTxtFonteInputCodigo.getValue() == "") {
+            alert("Fonte não informada.");
+            return false;
+        }
+    }
+
     js_divCarregando("Aguarde, salvando dados do recebimento da transferência...", "msgBox");
     var oParam                            = new Object();
     oParam.exec                           = "receberSlip";
@@ -430,7 +477,8 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     oParam.k17_valor                      = me.oTxtValorInput.getValue();
     oParam.k17_texto                      = encodeURIComponent(me.getObservacao());
     oParam.k145_numeroprocesso            = encodeURIComponent(tagString(me.oTxtProcessoInput.getValue())) ;
-
+    if (me.iAno >= 2022)
+        oParam.iCodigoFonte = me.oTxtFonteInputCodigo.getValue();
     oParam.lEstorno                       = me.lEstorno;
 
 
@@ -717,7 +765,6 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   me.preencheDadosSlipRecebimento = function (oAjax) {
 
     var oRetorno = eval("("+oAjax.responseText.urlDecode()+")");
-
     $('labelContaDebito').innerHTML  = "<b>Conta Débito:</b>";
     $('labelContaCredito').innerHTML = "<b>Conta Crédito:</b>";
     me.oTxtContaCreditoCodigo.setValue(oRetorno.iContaCredito);
@@ -750,6 +797,10 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     me.oTxtCaracteristicaCreditoInputCodigo.setValue(oRetorno.sCaracteristicaCredito);
     me.pesquisaCaracteristicaPeculiarCredito(false);
     me.oTxtCaracteristicaCreditoInputCodigo.setReadOnly(true);
+
+    me.oTxtFonteInputCodigo.setValue(oRetorno.iCodigoFonte);
+    me.pesquisaFonte(false);
+    me.oTxtFonteInputCodigo.setReadOnly(true);
 
     me.oTxtHistoricoInputCodigo.setValue(oRetorno.iHistorico);
     me.pesquisaHistorico(false);
@@ -786,6 +837,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     me.oDivContainerCampos.style.display = '';
 
     var oRetorno = eval("("+oAjax.responseText+")");
+    console.log(oRetorno);
     me.oTxtInstituicaoOrigemCodigo.setValue(oRetorno.iInstituicaoOrigem);
     $('oTxtDescricaoInstituicaoOrigem').value = oRetorno.sDescricaoInstituicaoOrigem.urlDecode();
     $('oTxtCNPJInstituicaoOrigem').value = oRetorno.sCNPJ.urlDecode();
@@ -897,6 +949,35 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     }
     js_OpenJanelaIframe("", 'db_iframe_conhist', sUrlHistorico, "Pesquisa Histórico", lMostra);
   };
+
+
+  /**
+   * Lookup de pesquisa do Fonte
+   */
+  
+   
+    me.pesquisaFonte = function (lMostra) {
+        var sUrlHistorico = "func_orctiporec.php?pesquisa_chave="+me.oTxtFonteInputCodigo.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preencheFonte";
+
+        if (lMostra) {
+            sUrlHistorico = "func_orctiporec.php?funcao_js=parent."+me.sNomeInstancia+".completaFonte|o15_codigo|o15_descr";
+        }
+        js_OpenJanelaIframe("", 'db_iframe_fonte', sUrlHistorico, "Pesquisa Histórico", lMostra);
+    };
+
+    me.completaFonte = function (iCodigoFonte, sDescricao) {
+        me.oTxtFonteInputCodigo.setValue(iCodigoFonte);
+        me.oTxtFonteInputDescricao.setValue(sDescricao);
+        db_iframe_fonte.hide();
+    };
+
+    me.preencheFonte = function (chave, erro) {
+        me.oTxtFonteInputDescricao.setValue(chave);
+        if (erro==true) {
+            me.oTxtFonteInputCodigo.focus();
+            me.oTxtFonteInputCodigo.value = '';
+        }
+    };
 
   /**
    * Preenche a descrição histórico
@@ -1057,6 +1138,10 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
 
     me.oTxtHistoricoInputCodigo.setValue('');
     me.oTxtHistoricoInputDescricao.setValue('');
+
+    me.oTxtFonteInputCodigo.setValue('');
+    me.oTxtFonteInputDescricao.setValue('');
+
     me.oTxtValorInput.setValue('');
     me.setObservacao('');
 
@@ -1065,6 +1150,13 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     }
   };
 
+
+    /**
+     * Seta o ano da sessão
+     */
+     me.setAno = function (iAno) {
+        me.iAno = parseInt(iAno);
+    }
 
   /**
    * Funcoes que só devem ser executadas após o componente estar montado na tela

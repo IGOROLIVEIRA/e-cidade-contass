@@ -57,7 +57,7 @@ $oPDF->Open();
 $oPDF->AliasNbPages();
 $total = 0;
 $oPDF->setfillcolor(235);
-$oPDF->setfont('arial','b',8);
+$oPDF->setfont('arial', 'b', 8);
 $oPDF->setfillcolor(235);
 $troca    = 1;
 $alt      = 4;
@@ -67,83 +67,80 @@ $valortot = 0;
 $cor      = 0;
 $dbinstit = db_getsession("DB_instit");
 
-$oLibDocumento = new libdocumento(9005,null);
+$oLibDocumento = new libdocumento(9005, null);
 
-if ( $oLibDocumento->lErro ){
+if ($oLibDocumento->lErro) {
     die($oLibDocumento->sMsgErro);
 }
 $campos = "l20_codigo,l20_edital,l20_anousu,l20_numero,l20_datacria,l20_objeto,cgmrepresentante.z01_nome AS nome,cgmrepresentante.z01_cgccpf AS cpf,l44_descricao";
-$rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query_equipepregao(null,$campos,"l20_codigo","l20_codigo=$l20_codigo and l31_tipo = '6' and l20_instit = $dbinstit"));
+$rsLicitacao   = $clliclicita->sql_record($clliclicita->sql_query_equipepregao(null, $campos, "l20_codigo", "l20_codigo=$l20_codigo and l20_instit = $dbinstit"));
 
-if ($clliclicita->numrows == 0){
+if ($clliclicita->numrows == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não julgada, ou licitação revogada');
     exit;
 }
-db_fieldsmemory($rsLicitacao,0);
+db_fieldsmemory($rsLicitacao, 0);
 $head3 = "TERMO DE RATIFICAÇÃO ";
-$head4 = strtoupper($l44_descricao)." : $l20_edital/".substr($l20_anousu,0,4);
+$head4 = strtoupper($l44_descricao) . " : $l20_edital/" . substr($l20_anousu, 0, 4);
 $head5 = "SEQUENCIAL: $l20_codigo";
 $oPDF->addpage();
-$oPDF->setfont('arial','b',12);
+$oPDF->setfont('arial', 'b', 12);
 $oPDF->ln();
-$oPDF->cell(0,5,"TERMO DE RATIFICAÇÃO",0,1,"C",0);
+$oPDF->cell(0, 5, "TERMO DE RATIFICAÇÃO", 0, 1, "C", 0);
 $oPDF->ln(3);
-$oPDF->setfont('arial','b',10);
+$oPDF->setfont('arial', 'b', 10);
 //$oPDF->cell(0,5,"PROCESSO LICITATÓRIO Nº : $l20_edital/".substr($l20_anousu,0,4),0,1,"C",0);
 //$oPDF->cell(0,5,strtoupper($l44_descricao)." Nº : $l20_numero/".substr($l20_anousu,0,4),0,1,"C",0);
-$oPDF->setfont('arial','',8);
+$oPDF->setfont('arial', '', 8);
 $oPDF->ln(2);
-$olicitacao = db_utils::fieldsMemory($rsLicitacao,0);
+$olicitacao = db_utils::fieldsMemory($rsLicitacao, 0);
 
-$result_orc=$clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo,"pc22_codorc as orcamento"));
-db_fieldsmemory($result_orc,0);
-$result_forne=$clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"*",null,"pc21_codorc=$orcamento"));
-$numrows_forne=$clpcorcamforne->numrows;
+$result_orc = $clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo, "pc22_codorc as orcamento"));
+db_fieldsmemory($result_orc, 0);
+$result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento"));
+$numrows_forne = $clpcorcamforne->numrows;
 
-for($x = 0; $x < $numrows_forne;$x++){
-    db_fieldsmemory($result_forne,$x);
-    $result_itens=$clpcorcamitem->sql_record($clpcorcamitem->sql_query_homologados(null,"distinct l21_ordem,pc22_orcamitem,pc11_resum,pc01_descrmater","l21_ordem","pc22_codorc=$orcamento"));
-    $numrows_itens=$clpcorcamitem->numrows;
-    for($w=0;$w<$numrows_itens;$w++){
-        db_fieldsmemory($result_itens,$w);
-        $result_valor=$clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null,null,"pc23_valor,pc23_quant,pc23_vlrun,pc24_pontuacao",null,"pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem and pc24_pontuacao=1"));
-        if ($clpcorcamval->numrows>0){
-            db_fieldsmemory($result_valor,0);
+for ($x = 0; $x < $numrows_forne; $x++) {
+    db_fieldsmemory($result_forne, $x);
+    $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_homologados(null, "distinct l21_ordem,pc22_orcamitem,pc11_resum,pc01_descrmater", "l21_ordem", "pc22_codorc=$orcamento"));
+    $numrows_itens = $clpcorcamitem->numrows;
+    for ($w = 0; $w < $numrows_itens; $w++) {
+        db_fieldsmemory($result_itens, $w);
+        $result_valor = $clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc23_quant,pc23_vlrun,pc24_pontuacao", null, "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem and pc24_pontuacao=1"));
+        if ($clpcorcamval->numrows > 0) {
+            db_fieldsmemory($result_valor, 0);
             $totallicitacao += $pc23_valor;
         }
     }
 }
 $sqlinstit = "select nomeinst from db_config where codigo = $dbinstit";
 $resdescrintit = @pg_query($sqlinstit);
-db_fieldsmemory($resdescrintit,0);
+db_fieldsmemory($resdescrintit, 0);
 
 $oLibDocumento->l20_edital    = $olicitacao->l20_edital;
 $oLibDocumento->l20_numero    = $olicitacao->l20_numero;
-$oLibDocumento->l20_datacria  = substr($olicitacao->l20_anousu,0,4);
+$oLibDocumento->l20_datacria  = substr($olicitacao->l20_anousu, 0, 4);
 $oLibDocumento->l20_codigo    = $olicitacao->l20_codigo;
 $oLibDocumento->l20_objeto    = $olicitacao->l20_objeto;
 $oLibDocumento->z01_cgccpf    = $olicitacao->cpf;
 $oLibDocumento->z01_nome      = $olicitacao->nome;
 $oLibDocumento->l20_anousu    = $olicitacao->l20_anousu;
 $oLibDocumento->l44_descricao = strtoupper($olicitacao->l44_descricao);
-$oLibDocumento->totallicitacao= trim(db_formatar($totallicitacao,"f"));
+$oLibDocumento->totallicitacao = trim(db_formatar($totallicitacao, "f"));
 $oLibDocumento->instit        = $nomeinst;
 
 $sSqlDbConfig = $cldbconfig->sql_query(null, "*", null, "codigo = {$dbinstit}");
 $result_munic = $cldbconfig->sql_record($sSqlDbConfig);
-db_fieldsmemory($result_munic,0);
+db_fieldsmemory($result_munic, 0);
 
 $aParagrafos = $oLibDocumento->getDocParagrafos();
 //echo "<pre>";
 // for percorrendo os paragrafos do documento
 foreach ($aParagrafos as $oParag) {
-    if ($oParag->oParag->db02_tipo == "3" ){
+    if ($oParag->oParag->db02_tipo == "3") {
         eval($oParag->oParag->db02_texto);
-    }else{
-        $oParag->writeText( $oPDF );
+    } else {
+        $oParag->writeText($oPDF);
     }
-
 }
 $oPDF->Output();
-
-?>

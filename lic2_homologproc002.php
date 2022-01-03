@@ -72,7 +72,7 @@ if ( $oLibDocumento->lErro ){
    die($oLibDocumento->sMsgErro);
 }
 $campos = "l20_codigo,l20_edital,l20_anousu,l20_numero,l20_datacria,l20_objeto,cgmrepresentante.z01_nome AS nome,cgmrepresentante.z01_cgccpf AS cpf,l44_descricao";
-$rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query_equipepregao(null,$campos,"l20_codigo","l20_codigo=$l20_codigo and l31_tipo = '6' and l20_instit = $dbinstit"));
+$rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query_equipepregao(null,$campos,"l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit"));
 
 if ($clliclicita->numrows == 0){
   db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não julgada, ou licitação revogada');
@@ -309,5 +309,3 @@ if ($numrows == 0){
     $oPDF->cell(90,$alt,"ASSINATURA",0,1,"C",0);
 }
 $oPDF->Output();
-
-?>

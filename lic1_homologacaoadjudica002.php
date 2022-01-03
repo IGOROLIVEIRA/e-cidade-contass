@@ -11,9 +11,11 @@ include("dbforms/db_funcoes.php");
 include("classes/db_condataconf_classe.php");
 include("classes/db_liclicitasituacao_classe.php");
 include("classes/db_licitemobra_classe.php");
+include("classes/db_liccomissaocgm_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 $clhomologacaoadjudica = new cl_homologacaoadjudica;
+$clliccomissaocgm     = new cl_liccomissaocgm;
 $db_opcao = "2";
 
 ?>

@@ -43,24 +43,26 @@
         white-space: nowrap
     }
 
-    #listMunicipios{
+    #listMunicipios {
         width: 180px;
     }
 
-    #z01_incmunici, #z01_ultalt{
+    #z01_incmunici,
+    #z01_ultalt {
         width: 118px;
     }
 
-    #municipio, #z01_sexo{
+    #municipio,
+    #z01_sexo {
         width: 118px;
     }
 
-    #z01_dtfalecimento{
+    #z01_dtfalecimento {
         width: 95px;
     }
 
-    #z01_identdtexp{
-        width:88px;
+    #z01_identdtexp {
+        width: 88px;
     }
 </style>
 <?php
@@ -70,12 +72,12 @@ if ($db_opcao == 33 || $db_opcao == 3) {
     $btnDisabled = "disabled";
 }
 
-$clrotulo = new rotulocampo ( );
+$clrotulo = new rotulocampo();
 $cldb_uf  = new cl_db_uf;
-$clrotulo->label ('z03_tipoempresa');
-$clrotulo->label ('rh70_sequencial');
-$clrotulo->label ('rh70_descr');
-$clrotulo->label ('db12_uf');
+$clrotulo->label('z03_tipoempresa');
+$clrotulo->label('rh70_sequencial');
+$clrotulo->label('rh70_descr');
+$clrotulo->label('db12_uf');
 $oPost = db_utils::postMemory($_POST);
 
 if (isset($oPost->cpf) && trim($oPost->cpf) != '') {
@@ -88,19 +90,19 @@ if (isset($oPost->cnpj) && trim($oPost->cnpj) != '') {
 
 $ov02_sequencial = "";
 $ov02_seq = "";
-if (isset ( $oPost->ov02_sequencial ) && trim ( $oPost->ov02_sequencial ) != "") {
+if (isset($oPost->ov02_sequencial) && trim($oPost->ov02_sequencial) != "") {
     $ov02_sequencial = $oPost->ov02_sequencial;
 }
-if (isset ( $oPost->ov02_seq ) && trim ( $oPost->ov02_seq ) != "") {
+if (isset($oPost->ov02_seq) && trim($oPost->ov02_seq) != "") {
     $ov02_seq = $oPost->ov02_seq;
 }
 $funcaoRetorno = "";
-if (isset ( $oGet->funcaoRetorno ) && trim ( $oGet->funcaoRetorno ) != "") {
+if (isset($oGet->funcaoRetorno) && trim($oGet->funcaoRetorno) != "") {
     $funcaoRetorno = $oGet->funcaoRetorno;
 }
 
 if ($db_opcao == 22 || $db_opcao == 2) {
-    $z01_incmunici =$oCgm->z01_incmunici;
+    $z01_incmunici = $oCgm->z01_incmunici;
 }
 
 /**
@@ -112,51 +114,52 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
 ?>
 <form action="" method="post" name="form1" id="form1">
-    <input type="hidden" name="ov02_sequencial" id="ov02_sequencial" value="<?=$ov02_sequencial?>" />
-    <input type="hidden" name="ov02_seq" id="ov02_seq" value="<?=$ov02_seq?>" />
+    <input type="hidden" name="ov02_sequencial" id="ov02_sequencial" value="<?= $ov02_sequencial ?>" />
+    <input type="hidden" name="ov02_seq" id="ov02_seq" value="<?= $ov02_seq ?>" />
     <table>
         <tr>
             <td rowspan="5" valign="top">
                 <img src="imagens/none1.jpeg" width="95" height="120" id='fotocgm' style="border: 1px inset white" />
             </td>
             <td>
-                <fieldset><legend> <strong>Dados Gerais</strong> </legend>
+                <fieldset>
+                    <legend> <strong>Dados Gerais</strong> </legend>
                     <table>
                         <tr>
-                            <td title='<?=$Tz01_numcgm?>' nowrap>
-                                <?=$Lz01_numcgm?>
+                            <td title='<?= $Tz01_numcgm ?>' nowrap>
+                                <?= $Lz01_numcgm ?>
                             </td>
                             <td>
                                 <?
-                                db_input ( 'z01_numcgm', 10, $Iz01_numcgm, true, 'text', 3 );
+                                db_input('z01_numcgm', 10, $Iz01_numcgm, true, 'text', 3);
                                 ?>
                             </td>
                             <td align="right">
-                                <?=@$Lz01_ultalt?>
+                                <?= @$Lz01_ultalt ?>
                             </td>
                             <td align="left">
                                 <?
-                                $z01_ultalt_ano = date ( 'Y', db_getsession ( "DB_datausu" ) );
-                                $z01_ultalt_mes = date ( 'm', db_getsession ( "DB_datausu" ) );
-                                $z01_ultalt_dia = date ( 'd', db_getsession ( "DB_datausu" ) );
-                                db_inputdata ( 'z01_ultalt', @$z01_ultalt_dia, @$z01_ultalt_mes, @$z01_ultalt_ano, true, 'text', 3 );
+                                $z01_ultalt_ano = date('Y', db_getsession("DB_datausu"));
+                                $z01_ultalt_mes = date('m', db_getsession("DB_datausu"));
+                                $z01_ultalt_dia = date('d', db_getsession("DB_datausu"));
+                                db_inputdata('z01_ultalt', @$z01_ultalt_dia, @$z01_ultalt_mes, @$z01_ultalt_ano, true, 'text', 3);
                                 ?>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <?=@$Lz01_cadast?>
+                                <?= @$Lz01_cadast ?>
                             </td>
                             <td align="left">
                                 <?
 
                                 if ($db_opcao == 1) {
-                                    $z01_cadast = date ( 'd/m/Y', db_getsession ( "DB_datausu" ) );
+                                    $z01_cadast = date('d/m/Y', db_getsession("DB_datausu"));
                                 } else if ($db_opcao == 2 || $db_opcao == 22) {
                                     $z01_cadast     = implode("/", array_reverse(explode("-", $oCgm->z01_cadast)));
                                 }
 
-                                db_input ( 'z01_cadast', 10, @$Iz01_cadast, true, 'text', 3, "", '', '', '', 11 );
+                                db_input('z01_cadast', 10, @$Iz01_cadast, true, 'text', 3, "", '', '', '', 11);
                                 ?>
                             </td>
                             <td nowrap title="CGM do Município" align="right">
@@ -164,8 +167,8 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                             </td>
                             <td align="right">
                                 <?
-                                $x = array ("t" => "Sim", "f" => "Não" );
-                                db_select ( 'municipio', $x, true, $db_opcao, 'onChange="js_alteraMunicipio();"  " style="width:95%;text-align:left;"' );
+                                $x = array("t" => "Sim", "f" => "Não");
+                                db_select('municipio', $x, true, $db_opcao, 'onChange="js_alteraMunicipio();"  " style="width:95%;text-align:left;"');
                                 ?>
                             </td>
                         </tr>
@@ -175,80 +178,80 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
                         if ($lPessoaFisica) {
 
-                            ?>
+                        ?>
                             <tr>
                                 <td title="CPF"><strong>CPF:</strong></td>
                                 <td align="left">
                                     <?
 
-                                    if (isset ( $oPost->cpf ) && strlen ( $oPost->cpf ) == 11) {
+                                    if (isset($oPost->cpf) && strlen($oPost->cpf) == 11) {
                                         $z01_cpf = $oPost->cpf;
                                     }
 
-                                    db_input ( 'z01_cpf', 15, @$Iz01_cpf, true, 'text', $db_opcao, "onBlur='js_verificaCGCCPF(this);'", '', '', 'text-align:left;', 11 );
+                                    db_input('z01_cpf', 15, @$Iz01_cpf, true, 'text', $db_opcao, "onBlur='js_verificaCGCCPF(this);'", '', '', 'text-align:left;', 11);
 
                                     ?>
                                 </td>
-                                <td align="right" title="<?=@$Tz01_ident?>">
-                                    <?=@$Lz01_ident?>
+                                <td align="right" title="<?= @$Tz01_ident ?>">
+                                    <?= @$Lz01_ident ?>
                                 </td>
                                 <td align="right">
                                     <?
-                                    db_input ( 'z01_ident', 15, $Iz01_ident, true, 'text', $db_opcao );
+                                    db_input('z01_ident', 15, $Iz01_ident, true, 'text', $db_opcao);
                                     ?>
                                 </td>
 
                             </tr>
                             <tr>
                                 <td>
-                                    <?=@$Lz01_identorgao?>
+                                    <?= @$Lz01_identorgao ?>
                                 </td>
                                 <td align="left">
                                     <?
-                                    if (isset ( $oPost->cpf ) && strlen ( $oPost->cpf ) == 11) {
+                                    if (isset($oPost->cpf) && strlen($oPost->cpf) == 11) {
                                         $z01_cpf = $oPost->cpf;
                                     }
 
-                                    db_input ( 'z01_identorgao', 15, @$Iz01_identorgao, true, 'text', $db_opcao );
+                                    db_input('z01_identorgao', 15, @$Iz01_identorgao, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                                 <td align="right">
-                                    <?=@$Lz01_identdtexp?>
+                                    <?= @$Lz01_identdtexp ?>
                                 </td>
                                 <td align="right">
                                     <?
-                                    db_inputdata ('z01_identdtexp', @$z01_identdtexp_dia, @$z01_identdtexp_mes, @$z01_identdtexp_ano, true, 'text', $db_opcao );
+                                    db_inputdata('z01_identdtexp', @$z01_identdtexp_dia, @$z01_identdtexp_mes, @$z01_identdtexp_ano, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
-                            <tr title="<?=@$Lz01_incest?>">
+                            <tr title="<?= @$Lz01_incest ?>">
                                 <td nowrap="nowrap">
-                                    <?=@$Lz01_incest?>
+                                    <?= @$Lz01_incest ?>
                                 </td>
                                 <td>
                                     <?
-                                    db_input ( 'z01_incest', 15, @$Iz01_incest, true, 'text', $db_opcao );
+                                    db_input('z01_incest', 15, @$Iz01_incest, true, 'text', $db_opcao);
                                     ?>
                                 </td>
-                                <td align="right"><b >Inscrição Municipal:</b></td>
-                                <td align="right" >
+                                <td align="right"><b>Inscrição Municipal:</b></td>
+                                <td align="right">
                                     <?
-                                    db_input ( 'z01_incmunici', 11, $z01_incmunici, true, 'text', $db_opcao);
+                                    db_input('z01_incmunici', 11, $z01_incmunici, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title=<?=@$Tz01_nome?>>
-                                    <?=@$Lz01_nome?>
+                                <td nowrap title=<?= @$Tz01_nome ?>>
+                                    <?= @$Lz01_nome ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_nome?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_nome ?>" colspan="3">
                                     <?
-                                    db_input ( 'z01_nome', 50, $Iz01_nome, true, 'text', $db_opcao, 'onblur=js_copiaNome();', '', '', 'width: 100%;');
+                                    db_input('z01_nome', 50, $Iz01_nome, true, 'text', $db_opcao, 'onblur=js_copiaNome();', '', '', 'width: 100%;');
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title='<?=@$Tz03_tipoempresa?>'>
+                                <td nowrap title='<?= @$Tz03_tipoempresa ?>'>
                                     <strong>Tipo Empresa:</strong>
                                 </td>
                                 <td colspan="3" nowrap="nowrap">
@@ -260,38 +263,38 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                             <tr>
 
                             <tr>
-                                <td nowrap title=<?=@$Tz01_pai?>>
-                                    <?=@$Lz01_pai?>
+                                <td nowrap title=<?= @$Tz01_pai ?>>
+                                    <?= @$Lz01_pai ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_pai?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_pai ?>" colspan="3">
                                     <?
-                                    db_input ( 'z01_pai', 50, $Iz01_pai, true, 'text', $db_opcao );
+                                    db_input('z01_pai', 50, $Iz01_pai, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title=<?=@$Tz01_mae?>>
-                                    <?=@$Lz01_mae?>
+                                <td nowrap title=<?= @$Tz01_mae ?>>
+                                    <?= @$Lz01_mae ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_mae?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_mae ?>" colspan="3">
                                     <?
-                                    db_input ( 'z01_mae', 50, $Iz01_mae, true, 'text', $db_opcao );
+                                    db_input('z01_mae', 50, $Iz01_mae, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr style="display: none">
-                                <td nowrap title=<?=@$Tz01_naturalidade?> >
-                                    <?=@$Lz01_naturalidade?>
+                                <td nowrap title=<?= @$Tz01_naturalidade ?>>
+                                    <?= @$Lz01_naturalidade ?>
                                 </td>
-                                <td  nowrap title="<?=@$Tz01_naturalidade?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_naturalidade ?>" colspan="3">
                                     <?
-                                    db_input ( 'z01_naturalidade', 50, $Iz01_naturalidade, true, 'text', $db_opcao);
+                                    db_input('z01_naturalidade', 50, $Iz01_naturalidade, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
 
                             <tr>
-                                <td  title="naturalidade" >
+                                <td title="naturalidade">
                                     <b>Naturalidade </b>
                                     <b>UF:</b>
                                 </td>
@@ -299,52 +302,53 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                 <td colspan="3">
                                     <div>
                                         <?
-                                        $result_uf = $cldb_uf->sql_record($cldb_uf->sql_query_file(null,"db12_uf as uf, db12_nome as ufdescr"));
-                                        db_selectrecord("uf",$result_uf,true,$db_opcao,"","","","Selecione - Selecione");
-                                        db_fieldsmemory($result_uf,0);
+                                        $result_uf = $cldb_uf->sql_record($cldb_uf->sql_query_file(null, "db12_uf as uf, db12_nome as ufdescr"));
+                                        db_selectrecord("uf", $result_uf, true, $db_opcao, "", "", "", "Selecione - Selecione");
+                                        db_fieldsmemory($result_uf, 0);
                                         ?>
                                         &nbsp&nbsp&nbsp
                                         <b style="align: right">Cidade:</b>
 
                                         <?
-                                        db_select('listMunicipios','', true, $db_opcao, "onchange='js_retornaCodigoIbge()'");
+                                        db_select('listMunicipios', '', true, $db_opcao, "onchange='js_retornaCodigoIbge()'");
                                         ?>
                                         &nbsp&nbsp
                                         <b>Código IBGE:</b>
                                         &nbsp&nbsp
 
                                         <?
-                                        db_input ('z01_ibge', 15, '', true, 'text', 3);
+                                        db_input('z01_ibge', 15, '', true, 'text', 3);
                                         ?>
 
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=$Tz01_nasc?>" >
-                                    <?=$Lz01_nasc?>
+                                <td nowrap title="<?= $Tz01_nasc ?>">
+                                    <?= $Lz01_nasc ?>
                                 </td>
-                                <td nowrap title="<?=$Tz01_nasc?>">
+                                <td nowrap title="<?= $Tz01_nasc ?>">
                                     <?
-                                    db_inputdata ( 'z01_nasc', @$z01_nasc_dia, @$z01_nasc_mes, @$z01_nasc_ano, true, 'text', $db_opcao );
+                                    db_inputdata('z01_nasc', @$z01_nasc_dia, @$z01_nasc_mes, @$z01_nasc_ano, true, 'text', $db_opcao);
                                     ?>
                                 </td>
-                                <td nowrap title="<?=$Tz01_dtfalecimento?>" align="right">
-                                    <?=$Lz01_dtfalecimento?>
+                                <td nowrap title="<?= $Tz01_dtfalecimento ?>" align="right">
+                                    <?= $Lz01_dtfalecimento ?>
                                 </td>
-                                <td nowrap title="<?=$Tz01_dtfalecimento?>" align="right">
+                                <td nowrap title="<?= $Tz01_dtfalecimento ?>" align="right">
                                     <?
-                                    db_inputdata ( 'z01_dtfalecimento', @$z01_dtfalecimento_dia, @$z01_dtfalecimento_mes, @$z01_dtfalecimento_ano, true, 'text', $db_opcao );
+                                    db_inputdata('z01_dtfalecimento', @$z01_dtfalecimento_dia, @$z01_dtfalecimento_mes, @$z01_dtfalecimento_ano, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=$Tz01_estciv?>">
-                                    <?=$Lz01_estciv?>
+                                <td nowrap title="<?= $Tz01_estciv ?>">
+                                    <?= $Lz01_estciv ?>
                                 </td>
-                                <td nowrap title="<?=$Tz01_estciv?>">
+                                <td nowrap title="<?= $Tz01_estciv ?>">
                                     <?
-                                    $x = array ("1" => "Solteiro",
+                                    $x = array(
+                                        "1" => "Solteiro",
                                         "2" => "Casado",
                                         "3" => "Viúvo",
                                         "4" => "Divorciado",
@@ -353,27 +357,27 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                         "7" => "União Estavel"
                                     );
 
-                                    db_select ( 'z01_estciv', $x, true, $db_opcao, 'style="width:125px;"' );
+                                    db_select('z01_estciv', $x, true, $db_opcao, 'style="width:125px;"');
                                     ?>
                                 </td>
-                                <td nowrap title="<?=$Tz01_sexo?>" align="right">
-                                    <?=$Lz01_sexo?>
+                                <td nowrap title="<?= $Tz01_sexo ?>" align="right">
+                                    <?= $Lz01_sexo ?>
                                 </td>
-                                <td nowrap title="<?=$Tz01_sexo?>" align="right">
+                                <td nowrap title="<?= $Tz01_sexo ?>" align="right">
                                     <?
-                                    $sex = array ("M" => "Masculino", "F" => "Feminino" );
-                                    db_select ( 'z01_sexo', $sex, true, $db_opcao, 'style="width:125px;"' );
+                                    $sex = array("M" => "Masculino", "F" => "Feminino");
+                                    db_select('z01_sexo', $sex, true, $db_opcao, 'style="width:125px;"');
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=$Tz01_nacion?>">
-                                    <?=$Lz01_nacion?>
+                                <td nowrap title="<?= $Tz01_nacion ?>">
+                                    <?= $Lz01_nacion ?>
                                 </td>
-                                <td nowrap title="<?=$Tz01_nacion?>">
+                                <td nowrap title="<?= $Tz01_nacion ?>">
                                     <?
-                                    $x = array ("1" => "Brasileira", "2" => "Estrangeira" );
-                                    db_select ( 'z01_nacion', $x, true, $db_opcao, 'style="width:125px;"' );
+                                    $x = array("1" => "Brasileira", "2" => "Estrangeira");
+                                    db_select('z01_nacion', $x, true, $db_opcao, 'style="width:125px;"');
                                     ?>
                                 </td>
                                 <td nowrap title="CGM do Município" align="right">
@@ -381,18 +385,18 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                 </td>
                                 <td nowrap title="Cgm do Município" align="right">
                                     <?
-                                    $x = array ("t" => "Sim", "f" => "Não" );
-                                    db_select ( 'municipio', $x, true, $db_opcao, 'onChange="js_alteraMunicipio();" " style="width:125;"' );
+                                    $x = array("t" => "Sim", "f" => "Não");
+                                    db_select('municipio', $x, true, $db_opcao, 'onChange="js_alteraMunicipio();" " style="width:125;"');
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title=<?=@$Tz01_escolaridade?>>
-                                    <?=@$Lz01_escolaridade?>
+                                <td nowrap title=<?= @$Tz01_escolaridade ?>>
+                                    <?= @$Lz01_escolaridade ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_escolaridade?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_escolaridade ?>" colspan="3">
                                     <?
-                                    $aEscolaridade = array (
+                                    $aEscolaridade = array(
                                         '0' => 'SEM DEFINIÇÃO',
                                         '1' => 'ANALFABETO',
                                         '2' => 'FUNDAMENTAL INCOMPLETO',
@@ -404,75 +408,74 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                         '8' => 'MESTRADO',
                                         '9' => 'DOUTORADO'
                                     );
-                                    db_select ( 'z01_escolaridade', $aEscolaridade, true, 1, 'style="width:100%;"');
+                                    db_select('z01_escolaridade', $aEscolaridade, true, 1, 'style="width:100%;"');
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=@$Tz01_telef?>">
-                                    <?=@$Lz01_telef?>
+                                <td nowrap title="<?= @$Tz01_telef ?>">
+                                    <?= @$Lz01_telef ?>
                                 </td>
                                 <td nowrap>
                                     <?
-                                    db_input ( 'z01_telef', 15, $Iz01_telef, true, 'text', $db_opcao );
+                                    db_input('z01_telef', 15, $Iz01_telef, true, 'text', $db_opcao);
                                     ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_telcel?>" align="right">
-                                    <?=@$Lz01_telcel?>
+                                <td nowrap title="<?= @$Tz01_telcel ?>" align="right">
+                                    <?= @$Lz01_telcel ?>
                                 </td>
                                 <td nowrap align="right">
                                     <?
-                                    db_input ( 'z01_telcel', 15, $Iz01_telcel, true, 'text', $db_opcao );
+                                    db_input('z01_telcel', 15, $Iz01_telcel, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
-                            <tr title="<?=@$Tz01_fax?>">
-                                <td nowrap >
-                                    <?=@$Lz01_fax?>
+                            <tr title="<?= @$Tz01_fax ?>">
+                                <td nowrap>
+                                    <?= @$Lz01_fax ?>
                                 </td>
                                 <td colspan="1">
                                     <?
-                                    db_input ( 'z01_fax', 15, $Iz01_fax, true, 'text', $db_opcao );
+                                    db_input('z01_fax', 15, $Iz01_fax, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=@$Tz01_email?>">
-                                    <?=@$Lz01_email?>
+                                <td nowrap title="<?= @$Tz01_email ?>">
+                                    <?= @$Lz01_email ?>
                                 </td>
                                 <td colspan="1">
                                     <?
-                                    db_input ( 'z01_email', 50, $Iz01_email, true, 'text', $db_opcao );
+                                    db_input('z01_email', 50, $Iz01_email, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
                                 <td nowrap title="">
-                                    <strong><?=@$Lz01_notificaemail?></strong>
+                                    <strong><?= @$Lz01_notificaemail ?></strong>
                                 </td>
-                                <td nowrap title="<?=$Tz01_notificaemail?>">
+                                <td nowrap title="<?= $Tz01_notificaemail ?>">
                                     <?
-                                    $x = array ("t" => "Sim", "f" => "Não" );
-                                    db_select ('z01_notificaemail', $x, true, $db_opcao, 'style="width:35%;"' );
+                                    $x = array("t" => "Sim", "f" => "Não");
+                                    db_select('z01_notificaemail', $x, true, $db_opcao, 'style="width:35%;"');
                                     ?>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="4">
-                                    <fieldset class="rfieldsetinterno"><legend> <strong>Endereço Primário</strong></legend>
+                                    <fieldset class="rfieldsetinterno">
+                                        <legend> <strong>Endereço Primário</strong></legend>
                                         <div align="center">
                                             <?
-                                            db_input ( 'idEnderPrimario', 10, '', true, 'hidden', $db_opcao );
-                                            db_input ( 'endPrimario', 52, '', true, 'text', 3 );
+                                            db_input('idEnderPrimario', 10, '', true, 'hidden', $db_opcao);
+                                            db_input('endPrimario', 52, '', true, 'text', 3);
                                             ?>
-                                            <input type="button" value="Lançar" id="btnLancarEndPrimario" onclick="js_lancaEnderPrimario();"
-                                                <?=$btnDisabled?> />
-                                            <input type="button" value="Excluir" id="btnExcluirEndPrimario" onclick="js_ExcluiEnderPrimario();"
-                                                <?=$btnDisabled?> />
+                                            <input type="button" value="Lançar" id="btnLancarEndPrimario" onclick="js_lancaEnderPrimario();" <?= $btnDisabled ?> />
+                                            <input type="button" value="Excluir" id="btnExcluirEndPrimario" onclick="js_ExcluiEnderPrimario();" <?= $btnDisabled ?> />
                                         </div>
-                                        <div title='<?=@$Tz01_cxpostal?>'>
-                                            <div style='font-weight: bold; width: 150px; float: left; margin-top: 5px;'><?=@$Lz01_cxpostal?> </div>
-                                            <div style=' margin-top: 5px;'><? db_input("z01_cxpostal",10,null,true,'text',$db_opcao); ?></div>
+                                        <div title='<?= @$Tz01_cxpostal ?>'>
+                                            <div style='font-weight: bold; width: 150px; float: left; margin-top: 5px;'><?= @$Lz01_cxpostal ?> </div>
+                                            <div style=' margin-top: 5px;'><? db_input("z01_cxpostal", 10, null, true, 'text', $db_opcao); ?></div>
                                             <div style='clear: left; display: none;'></div>
                                         </div>
                                     </fieldset>
@@ -480,22 +483,24 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                             </tr>
                             <tr>
                                 <td colspan="4">
-                                    <fieldset class="fieldsetinterno"><legend> <strong>Dados do Emprego:</strong></legend></fieldset>
+                                    <fieldset class="fieldsetinterno">
+                                        <legend> <strong>Dados do Emprego:</strong></legend>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title=<?=@$Tz01_profis?>>
-                                    <?=@$Lz01_profis?>
+                                <td nowrap title=<?= @$Tz01_profis ?>>
+                                    <?= @$Lz01_profis ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_profis?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_profis ?>" colspan="3">
                                     <?
-                                    db_input ( 'z01_profis', 50, $Iz01_profis, true, 'text', $db_opcao );
+                                    db_input('z01_profis', 50, $Iz01_profis, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
 
-                            <tr title="<?=@$Trh70_descr?>">
-                                <td  align="left" nowrap  >
+                            <tr title="<?= @$Trh70_descr ?>">
+                                <td align="left" nowrap>
                                     <strong>
                                         <?
                                         db_ancora("CBO", "js_pesquisaCbo(true);", $db_opcao);
@@ -511,69 +516,69 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                             </tr>
 
                             <tr>
-                                <td nowrap title=<?=@$Tz01_pis?> >
-                                    <?=@$Lz01_pis?>
+                                <td nowrap title=<?= @$Tz01_pis ?>>
+                                    <?= @$Lz01_pis ?>
                                 </td>
-                                <td colspan="4" nowrap title="<?=@$Tz01_pis?>" >
+                                <td colspan="4" nowrap title="<?= @$Tz01_pis ?>">
                                     <?
-                                    db_input ( 'z01_pis', 15, $Iz01_pis, true, 'text', $db_opcao, "onblur = js_validaPis(this.value);" );
+                                    db_input('z01_pis', 15, $Iz01_pis, true, 'text', $db_opcao, "onblur = js_validaPis(this.value);");
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=$Tz01_trabalha?>">
-                                    <?=$Lz01_trabalha?>
+                                <td nowrap title="<?= $Tz01_trabalha ?>">
+                                    <?= $Lz01_trabalha ?>
                                 </td>
-                                <td nowrap title="<?=$Tz01_trabalha?>">
+                                <td nowrap title="<?= $Tz01_trabalha ?>">
                                     <?
-                                    $x = array ("t" => "Sim", "f" => "Não" );
-                                    db_select ( 'z01_trabalha', $x, true, $db_opcao, 'style="width:80%;text-align:left;"' );
+                                    $x = array("t" => "Sim", "f" => "Não");
+                                    db_select('z01_trabalha', $x, true, $db_opcao, 'style="width:80%;text-align:left;"');
                                     ?>
                                 </td>
-                                <td nowrap title="<?=$Lz01_renda?>" align="right">
-                                    <?=$Lz01_renda?>
+                                <td nowrap title="<?= $Lz01_renda ?>" align="right">
+                                    <?= $Lz01_renda ?>
                                 </td>
                                 <td nowrap title="Cgm do Município" align="right">
                                     <?
-                                    db_input ( 'z01_renda', 15, $Iz01_renda, true, 'text', $db_opcao );
+                                    db_input('z01_renda', 15, $Iz01_renda, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title=<?=@$Tz01_localtrabalho?>>
-                                    <?=@$Lz01_localtrabalho?>
+                                <td nowrap title=<?= @$Tz01_localtrabalho ?>>
+                                    <?= @$Lz01_localtrabalho ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_localtrabalho?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_localtrabalho ?>" colspan="3">
                                     <?
-                                    db_input ( 'z01_localtrabalho', 50, $Iz01_localtrabalho, true, 'text', $db_opcao );
+                                    db_input('z01_localtrabalho', 50, $Iz01_localtrabalho, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=@$Tz01_telcon?>">
-                                    <?=@$Lz01_telcon?>
+                                <td nowrap title="<?= @$Tz01_telcon ?>">
+                                    <?= @$Lz01_telcon ?>
                                 </td>
                                 <td nowrap>
                                     <?
-                                    db_input ( 'z01_telcon', 15, $Iz01_telcon, true, 'text', $db_opcao );
+                                    db_input('z01_telcon', 15, $Iz01_telcon, true, 'text', $db_opcao);
                                     ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_celcon?>" align="right">
-                                    <?=@$Lz01_celcon?>
+                                <td nowrap title="<?= @$Tz01_celcon ?>" align="right">
+                                    <?= @$Lz01_celcon ?>
                                 </td>
                                 <td nowrap align="right">
                                     <?
-                                    db_input ( 'z01_celcon', 15, $Iz01_celcon, true, 'text', $db_opcao );
+                                    db_input('z01_celcon', 15, $Iz01_celcon, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=@$Tz01_emailc?>">
-                                    <?=@$Lz01_emailc?>
+                                <td nowrap title="<?= @$Tz01_emailc ?>">
+                                    <?= @$Lz01_emailc ?>
                                 </td>
                                 <td nowrap colspan="3">
                                     <?
-                                    db_input ( 'z01_emailc', 50, $Iz01_emailc, true, 'text', $db_opcao );
+                                    db_input('z01_emailc', 50, $Iz01_emailc, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
@@ -583,17 +588,15 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                         <legend><strong>Endereço Secundário</strong></legend>
                                         <div align="center">
                                             <?
-                                            db_input ( 'idEnderSecundario', 10, '', true, 'hidden', $db_opcao );
-                                            db_input ( 'endSecundario', 52, '', true, 'text', 3 );
+                                            db_input('idEnderSecundario', 10, '', true, 'hidden', $db_opcao);
+                                            db_input('endSecundario', 52, '', true, 'text', 3);
                                             ?>
-                                            <input type="button" value="Lançar" id="btnLancarEndSecundario" onclick="js_lancaEnderSecundario();"
-                                                <?=$btnDisabled?> />
-                                            <input type="button" value="Excluir" id="btnExcluirEndSecundario" onclick="js_ExcluiEnderSecundario();"
-                                                <?=$btnDisabled?> />
+                                            <input type="button" value="Lançar" id="btnLancarEndSecundario" onclick="js_lancaEnderSecundario();" <?= $btnDisabled ?> />
+                                            <input type="button" value="Excluir" id="btnExcluirEndSecundario" onclick="js_ExcluiEnderSecundario();" <?= $btnDisabled ?> />
                                         </div>
-                                        <div title="<?=$Tz01_cxposcon?>">
+                                        <div title="<?= $Tz01_cxposcon ?>">
                                             <div style='font-weight: bold; width: 150px; float: left; margin-top: 5px;'>Caixa Postal: </div>
-                                            <div style=' margin-top: 5px;'><? db_input("z01_cxposcon",10,null,true,'text',$db_opcao); ?></div>
+                                            <div style=' margin-top: 5px;'><? db_input("z01_cxposcon", 10, null, true, 'text', $db_opcao); ?></div>
                                             <div style='clear: left; display: none;'></div>
                                         </div>
                                     </fieldset>
@@ -604,81 +607,81 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                     <fieldset>
                                         <legend><strong>Observações</strong></legend>
                                         <?
-                                        if($db_opcao == 1) {
-                                            db_textarea('z01_obs', 5, 107, null, true, '',$db_opcao,'','',"#E6E4F1",'100');
-                                        }else{
-                                            db_textarea('z01_obs', 5, 107, null, true, '',$db_opcao,'', '', '', '100');
+                                        if ($db_opcao == 1) {
+                                            db_textarea('z01_obs', 5, 107, null, true, '', $db_opcao, '', '', "#E6E4F1", '100');
+                                        } else {
+                                            db_textarea('z01_obs', 5, 107, null, true, '', $db_opcao, '', '', '', '100');
                                         }
                                         ?>
                                     </fieldset>
                                 </td>
                             </tr>
 
-                            <?php
+                        <?php
 
                         } else {
 
-                            ?>
+                        ?>
 
                             <!-- ******************************** Fim de pessoa Fisica ***************************************************** -->
                             <!-- Inicio pessoa Jurídica -->
 
                             <tr>
-                                <td nowrap title="<?=@$Tz01_cgc?>"><strong>CNPJ:</strong></td>
+                                <td nowrap title="<?= @$Tz01_cgc ?>"><strong>CNPJ:</strong></td>
                                 <td>
                                     <?
 
-                                    if (isset ( $oPost->cnpj ) && strlen ( $oPost->cnpj ) == 14) {
+                                    if (isset($oPost->cnpj) && strlen($oPost->cnpj) == 14) {
                                         $z01_cgc = $oPost->cnpj;
                                     }
 
-                                    db_input ( 'z01_cgc', 15, @$Iz01_cgc, true, 'text', $db_opcao, "onBlur='js_verificaCGCCPF(this);js_testanome(\"\",\"\",this.value)'", '', '', 'text-align:left;' );
+                                    db_input('z01_cgc', 15, @$Iz01_cgc, true, 'text', $db_opcao, "onBlur='js_verificaCGCCPF(this);js_testanome(\"\",\"\",this.value)'", '', '', 'text-align:left;');
                                     ?>
                                 </td>
 
                             </tr>
                             <tr>
-                                <td nowrap title=<?=@$Tz01_nome?>>
-                                    <?=@$Lz01_nome?>
+                                <td nowrap title=<?= @$Tz01_nome ?>>
+                                    <?= @$Lz01_nome ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_nome?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_nome ?>" colspan="3">
                                     <?
-                                    db_input ( 'z01_nome', 50, $Iz01_nome, true, 'text', $db_opcao, 'onBlur="js_ToUperCampos(\'z01_nome\');js_copiaNome();" onkeyup="";' );
+                                    db_input('z01_nome', 50, $Iz01_nome, true, 'text', $db_opcao, 'onBlur="js_ToUperCampos(\'z01_nome\');js_copiaNome();" onkeyup="";');
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title=<?=@$Tz01_nomecomple?>>
-                                    <?=@$Lz01_nomecomple?>
+                                <td nowrap title=<?= @$Tz01_nomecomple ?>>
+                                    <?= @$Lz01_nomecomple ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_nomecomple?>" colspan=3>
+                                <td nowrap title="<?= @$Tz01_nomecomple ?>" colspan=3>
                                     <?
-                                    db_input ( 'z01_nomecomple', 50, $Iz01_nomecomple, true, 'text', $db_opcao, "onkeyup=''; onblur='js_ToUperCampos(\"z01_nomecomple\");'");
+                                    db_input('z01_nomecomple', 50, $Iz01_nomecomple, true, 'text', $db_opcao, "onkeyup=''; onblur='js_ToUperCampos(\"z01_nomecomple\");'");
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title=<?=@$Tz01_nomefanta?>>
-                                    <?=@$Lz01_nomefanta?>
+                                <td nowrap title=<?= @$Tz01_nomefanta ?>>
+                                    <?= @$Lz01_nomefanta ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_nomefanta?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_nomefanta ?>" colspan="3">
                                     <?
-                                    db_input ( 'z01_nomefanta', 50, $Iz01_nomefanta, true, 'text', $db_opcao, "onkeyup=''; onblur='js_ToUperCampos(\"z01_nomefanta\");'" );
+                                    db_input('z01_nomefanta', 50, $Iz01_nomefanta, true, 'text', $db_opcao, "onkeyup=''; onblur='js_ToUperCampos(\"z01_nomefanta\");'");
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title=<?=@$Tz01_contato?>>
-                                    <?=@$Lz01_contato?>
+                                <td nowrap title=<?= @$Tz01_contato ?>>
+                                    <?= @$Lz01_contato ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_contato?>" colspan="3">
+                                <td nowrap title="<?= @$Tz01_contato ?>" colspan="3">
                                     <?
-                                    db_input ( 'z01_contato', 50, $Iz01_contato, true, 'text', $db_opcao, "" );
+                                    db_input('z01_contato', 50, $Iz01_contato, true, 'text', $db_opcao, "");
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title='<?=@$Tz03_tipoempresa?>'>
+                                <td nowrap title='<?= @$Tz03_tipoempresa ?>'>
                                     <strong>Tipo Empresa:</strong>
                                 </td>
                                 <td colspan="3" nowrap="nowrap">
@@ -688,135 +691,135 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=@$Tz01_incest?>">
-                                    <?=@$Lz01_incest?>
+                                <td nowrap title="<?= @$Tz01_incest ?>">
+                                    <?= @$Lz01_incest ?>
                                 </td>
                                 <td nowrap>
                                     <?
-                                    db_input ( 'z01_incest', 15, $Iz01_incest, true, 'text', $db_opcao );
+                                    db_input('z01_incest', 15, $Iz01_incest, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                                 <td align="right"><strong>Nire:</strong></td>
                                 <td align="right">
                                     <?
-                                    db_input ( 'z08_nire', 15, '', true, 'text', $db_opcao, '', '', "#E6E4F1" );
+                                    db_input('z08_nire', 15, '', true, 'text', $db_opcao, '', '', "#E6E4F1");
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=@$Tz01_telef?>">
-                                    <?=@$Lz01_telef?>
+                                <td nowrap title="<?= @$Tz01_telef ?>">
+                                    <?= @$Lz01_telef ?>
                                 </td>
                                 <td nowrap>
                                     <?
-                                    db_input ( 'z01_telef', 15, $Iz01_telef, true, 'text', $db_opcao );
+                                    db_input('z01_telef', 15, $Iz01_telef, true, 'text', $db_opcao);
                                     ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_telcel?>" align="right">
-                                    <?=@$Lz01_telcel?>
+                                <td nowrap title="<?= @$Tz01_telcel ?>" align="right">
+                                    <?= @$Lz01_telcel ?>
                                 </td>
                                 <td nowrap align="right">
                                     <?
-                                    db_input ( 'z01_telcel', 15, $Iz01_telcel, true, 'text', $db_opcao );
+                                    db_input('z01_telcel', 15, $Iz01_telcel, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
-                            <tr title="<?=@$Tz01_fax?>">
-                                <td nowrap >
-                                    <?=@$Lz01_fax?>
+                            <tr title="<?= @$Tz01_fax ?>">
+                                <td nowrap>
+                                    <?= @$Lz01_fax ?>
                                 </td>
                                 <td colspan="1">
                                     <?
-                                    db_input ( 'z01_fax', 15, $Iz01_fax, true, 'text', $db_opcao );
+                                    db_input('z01_fax', 15, $Iz01_fax, true, 'text', $db_opcao);
                                     ?>
                                 </td>
-                                <td align="right"><b >Inscrição Municipal:</b></td>
-                                <td align="right" >
+                                <td align="right"><b>Inscrição Municipal:</b></td>
+                                <td align="right">
                                     <?
-                                    db_input ( 'z01_incmunici', 11, $z01_incmunici, true, 'text', $db_opcao);
+                                    db_input('z01_incmunici', 11, $z01_incmunici, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=@$Tz01_email?>">
-                                    <?=@$Lz01_email?>
+                                <td nowrap title="<?= @$Tz01_email ?>">
+                                    <?= @$Lz01_email ?>
                                 </td>
                                 <td colspan="3">
                                     <?
-                                    db_input ( 'z01_email', 50, $Iz01_email, true, 'text', $db_opcao );
+                                    db_input('z01_email', 50, $Iz01_email, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
                                 <td nowrap title="">
-                                    <strong><?=@$Lz01_notificaemail?></strong>
+                                    <strong><?= @$Lz01_notificaemail ?></strong>
                                 </td>
-                                <td nowrap title="<?=$Tz01_notificaemail?>">
+                                <td nowrap title="<?= $Tz01_notificaemail ?>">
                                     <?
-                                    $x = array ("t" => "Sim", "f" => "Não" );
-                                    db_select ('z01_notificaemail', $x, true, $db_opcao, 'style="width:35%;"' );
+                                    $x = array("t" => "Sim", "f" => "Não");
+                                    db_select('z01_notificaemail', $x, true, $db_opcao, 'style="width:35%;"');
                                     ?>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="4">
-                                    <fieldset><legend> <strong>Endereço Primário</strong> </legend>
+                                    <fieldset>
+                                        <legend> <strong>Endereço Primário</strong> </legend>
                                         <div align="center">
                                             <?
-                                            db_input ( 'idEnderPrimario', 10, '', true, 'hidden', $db_opcao );
-                                            db_input ( 'endPrimario', 52, '', true, 'text', 3 );
+                                            db_input('idEnderPrimario', 10, '', true, 'hidden', $db_opcao);
+                                            db_input('endPrimario', 52, '', true, 'text', 3);
                                             ?>
-                                            <input type="button" value="Lançar" id="btnLancarEndPrimario" onclick="js_lancaEnderPrimario();" <?=$btnDisabled?>>
-                                            <input type="button" value="Excluir" id="btnExcluirEndPrimario"onclick="js_ExcluiEnderPrimario();" <?=$btnDisabled?>>
+                                            <input type="button" value="Lançar" id="btnLancarEndPrimario" onclick="js_lancaEnderPrimario();" <?= $btnDisabled ?>>
+                                            <input type="button" value="Excluir" id="btnExcluirEndPrimario" onclick="js_ExcluiEnderPrimario();" <?= $btnDisabled ?>>
                                         </div>
-                                        <div title='<?=@$Tz01_cxpostal?>'>
-                                            <div style='font-weight: bold; width: 150px; float: left; margin-top: 5px;'><?=@$Lz01_cxpostal?> </div>
-                                            <div style=' margin-top: 5px;'><? db_input("z01_cxpostal",10,null,true,'text',$db_opcao); ?></div>
+                                        <div title='<?= @$Tz01_cxpostal ?>'>
+                                            <div style='font-weight: bold; width: 150px; float: left; margin-top: 5px;'><?= @$Lz01_cxpostal ?> </div>
+                                            <div style=' margin-top: 5px;'><? db_input("z01_cxpostal", 10, null, true, 'text', $db_opcao); ?></div>
                                             <div style='clear: left; display: none;'></div>
                                         </div>
                                     </fieldset>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=@$Tz01_telcon?>"> <?=@$Lz01_telcon?> </td>
+                                <td nowrap title="<?= @$Tz01_telcon ?>"> <?= @$Lz01_telcon ?> </td>
                                 <td nowrap>
                                     <?
-                                    db_input ( 'z01_telcon', 15, $Iz01_telcon, true, 'text', $db_opcao );
+                                    db_input('z01_telcon', 15, $Iz01_telcon, true, 'text', $db_opcao);
                                     ?>
                                 </td>
-                                <td nowrap title="<?=@$Tz01_celcon?>" align="right"><?=@$Lz01_celcon?> </td>
+                                <td nowrap title="<?= @$Tz01_celcon ?>" align="right"><?= @$Lz01_celcon ?> </td>
                                 <td nowrap align="right">
                                     <?
-                                    db_input ( 'z01_celcon', 15, $Iz01_celcon, true, 'text', $db_opcao );
+                                    db_input('z01_celcon', 15, $Iz01_celcon, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?=@$Tz01_emailc?>">
-                                    <?=@$Lz01_emailc?>
+                                <td nowrap title="<?= @$Tz01_emailc ?>">
+                                    <?= @$Lz01_emailc ?>
                                 </td>
                                 <td nowrap colspan="3">
                                     <?
-                                    db_input ( 'z01_emailc', 50, $Iz01_emailc, true, 'text', $db_opcao );
+                                    db_input('z01_emailc', 50, $Iz01_emailc, true, 'text', $db_opcao);
                                     ?>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="4">
-                                    <fieldset><legend> <strong>Endereço Secundário</strong> </legend>
+                                    <fieldset>
+                                        <legend> <strong>Endereço Secundário</strong> </legend>
                                         <div align="center">
                                             <?
-                                            db_input ( 'idEnderSecundario', 10, '', true, 'hidden', $db_opcao );
-                                            db_input ( 'endSecundario', 52, '', true, 'text', 3 );
+                                            db_input('idEnderSecundario', 10, '', true, 'hidden', $db_opcao);
+                                            db_input('endSecundario', 52, '', true, 'text', 3);
                                             ?>
-                                            <input type="button" value="Lançar"
-                                                   id="btnLancarEndSecundario" onclick="js_lancaEnderSecundario();"<?=$btnDisabled?>>
-                                            <input type="button" value="Excluir"
-                                                   id="btnExcluirEndSecundario" onclick="js_ExcluiEnderSecundario();" <?=$btnDisabled?>>
+                                            <input type="button" value="Lançar" id="btnLancarEndSecundario" onclick="js_lancaEnderSecundario();" <?= $btnDisabled ?>>
+                                            <input type="button" value="Excluir" id="btnExcluirEndSecundario" onclick="js_ExcluiEnderSecundario();" <?= $btnDisabled ?>>
                                         </div>
-                                        <div title="<?=$Tz01_cxposcon?>">
+                                        <div title="<?= $Tz01_cxposcon ?>">
                                             <div style='font-weight: bold; width: 150px; float: left; margin-top: 5px;'>Caixa Postal: </div>
-                                            <div style=' margin-top: 5px;'><? db_input("z01_cxposcon",10,null,true,'text',$db_opcao); ?></div>
+                                            <div style=' margin-top: 5px;'><? db_input("z01_cxposcon", 10, null, true, 'text', $db_opcao); ?></div>
                                             <div style='clear: left; display: none;'></div>
                                         </div>
                                     </fieldset>
@@ -827,10 +830,10 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                     <fieldset>
                                         <legend><strong>Observações</strong></legend>
                                         <?
-                                        if($db_opcao == 1) {
-                                            db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao,'','',"#E6E4F1", '100');
-                                        }else{
-                                            db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao, '', '', '', '100');
+                                        if ($db_opcao == 1) {
+                                            db_textarea('z01_obs', 5, 80, null, true, '', $db_opcao, '', '', "#E6E4F1", '100');
+                                        } else {
+                                            db_textarea('z01_obs', 5, 80, null, true, '', $db_opcao, '', '', '', '100');
                                         }
                                         ?>
                                     </fieldset>
@@ -838,7 +841,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                             </tr>
 
                             <!-- Fim pessoa Jurídica -->
-                            <?php
+                        <?php
                         }
                         ?>
                     </table>
@@ -847,18 +850,15 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         </tr>
         <tr align="center">
             <td>
-                <input name="btnSubmit" type="button" id="btnSubmit"
-                       value="<?=($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir"))?>"
-                    <?=($db_botao == false ? "disabled" : "")?> onclick="js_validarCGCCPF(this.value)">
+                <input name="btnSubmit" type="button" id="btnSubmit" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="js_validarCGCCPF(this.value)">
                 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
                 <?
-                $lPermissaoMenu = db_permissaomenu ( db_getsession ( "DB_anousu" ), 604, 7901 );
+                $lPermissaoMenu = db_permissaomenu(db_getsession("DB_anousu"), 604, 7901);
                 if ($db_opcao == 2 && $lPermissaoMenu == true) {
-                    ?>
-                    <input name="btnVincular" type="button" id="btnVincular" value="Vincular Cidadao ao CGM"
-                           onclick="js_vinculaCadastroCidadaoCGM();" style="display: none;" />
+                ?>
+                    <input name="btnVincular" type="button" id="btnVincular" value="Vincular Cidadao ao CGM" onclick="js_vinculaCadastroCidadaoCGM();" style="display: none;" />
                     <input name="btnImportar" type="button" id="btnImportar" value="Importar dados do Cidadão" style="display: none;">
-                    <?
+                <?
                 }
                 ?>
             </td>
@@ -869,48 +869,49 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
 
 <script type="text/javascript">
-
     // ================ Bloqueando caracteres especiais no input observação ========= //
 
     var input = document.querySelector("#z01_obs");
     input.addEventListener("keypress", function(e) {
-        if(!checkChar(e)) {
-        e.preventDefault();
-    }
+        if (!checkChar(e)) {
+            e.preventDefault();
+        }
     });
+
     function checkChar(e) {
         var char = String.fromCharCode(e.keyCode);
-    
-        var pattern = '[a-zA-Z0-9]';
+
+
+        var pattern = '^[a-zA-Z0-9 ]+$';
         if (char.match(pattern)) {
-        return true;
-    }
+            return true;
+        }
     }
 
 
 
     var lPessoaFisica = "<?= $lPessoaFisica ?>";
-    if (lPessoaFisica){
+    if (lPessoaFisica) {
         document.getElementById('uf').style.display = 'none';
     } else lPessoaFisica = false;
 
     //========================================    ANCORA DA CBO =========================
 
-    function js_pesquisaCbo(mostra){
+    function js_pesquisaCbo(mostra) {
 
-        if(mostra==true){
-            js_OpenJanelaIframe('','db_iframe_Cbo','func_rhcbo.php?funcao_js=parent.js_mostraCbo|rh70_sequencial|rh70_descr|rh70_estrutural','Pesquisa',true);
-        }else{
-            js_OpenJanelaIframe('','db_iframe_Cbo','func_rhcbo.php?lCadastroCgm=true&pesquisa_chave='+document.form1.rh70_sequencial.value+'&funcao_js=parent.js_mostraCboHide','Pesquisa', false);
+        if (mostra == true) {
+            js_OpenJanelaIframe('', 'db_iframe_Cbo', 'func_rhcbo.php?funcao_js=parent.js_mostraCbo|rh70_sequencial|rh70_descr|rh70_estrutural', 'Pesquisa', true);
+        } else {
+            js_OpenJanelaIframe('', 'db_iframe_Cbo', 'func_rhcbo.php?lCadastroCgm=true&pesquisa_chave=' + document.form1.rh70_sequencial.value + '&funcao_js=parent.js_mostraCboHide', 'Pesquisa', false);
         }
 
     }
 
-    function js_mostraCboHide(chave, chave2, chave3, erro){
+    function js_mostraCboHide(chave, chave2, chave3, erro) {
 
         if (chave2 != false) {
 
-            if(erro==true){
+            if (erro == true) {
 
                 document.form1.rh70_sequencial.value = '';
                 document.form1.rh70_sequencial.focus();
@@ -922,30 +923,30 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         } else {
 
             document.form1.rh70_sequencial.value = '';
-            document.form1.rh70_descr.value      = '';
+            document.form1.rh70_descr.value = '';
 
         }
 
     }
 
-    function js_mostraCbo(chave1,chave2,chave3){
+    function js_mostraCbo(chave1, chave2, chave3) {
 
         document.form1.rh70_sequencial.value = chave1;
-        document.form1.rh70_descr.value      = chave3 + ' - ' + chave2;
+        document.form1.rh70_descr.value = chave3 + ' - ' + chave2;
         db_iframe_Cbo.hide();
 
     }
 
-    parent.document.getElementById('cgm').style.display         = '';
-    parent.document.getElementById('documentos').style.display  = '';
-    parent.document.getElementById('fotos').style.display       = '';
+    parent.document.getElementById('cgm').style.display = '';
+    parent.document.getElementById('documentos').style.display = '';
+    parent.document.getElementById('fotos').style.display = '';
     parent.document.getElementById('contasbanco').style.display = '';
 
 
-    var j14_codigo    = "";
-    var j13_codi      = "";
+    var j14_codigo = "";
+    var j13_codi = "";
 
-    var funcaoRetorno = "<?=$funcaoRetorno?>";
+    var funcaoRetorno = "<?= $funcaoRetorno ?>";
 
     /* -----------------------------------------------------*/
 
@@ -957,20 +958,20 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
     if (lPessoaFisica) {
 
-        $('z01_naturalidade').observe('keyup', function(){
+        $('z01_naturalidade').observe('keyup', function() {
             $('z01_naturalidade').style.textTransform = 'uppercase';
         });
     } else {
 
-        $('z01_nome').observe('keyup', function(){
+        $('z01_nome').observe('keyup', function() {
             $('z01_nome').style.textTransform = 'uppercase';
         });
 
-        $('z01_nomecomple').observe('keyup', function(){
+        $('z01_nomecomple').observe('keyup', function() {
             $('z01_nomecomple').style.textTransform = 'uppercase';
         });
 
-        $('z01_nomefanta').observe('keyup', function(){
+        $('z01_nomefanta').observe('keyup', function() {
             $('z01_nomefanta').style.textTransform = 'uppercase';
         });
 
@@ -980,52 +981,52 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
     /*-----------------------------------Trata do endereço primário ----------------------------------- */
     /* Função do onclick do botão Lancar do endereço primário */
     //func_ruas.php
-    function js_ruas(){
+    function js_ruas() {
         js_OpenJanelaIframe('', 'db_iframe',
             'func_ruas.php?rural=1&funcao_js=parent.js_preenchepesquisaruas|j14_codigo|j14_nome',
-            'Pesquisa',true,0,0);
+            'Pesquisa', true, 0, 0);
     }
 
-    function js_ruas1(){
+    function js_ruas1() {
         js_OpenJanelaIframe('', 'db_iframe',
             'func_ruas.php?rural=1&funcao_js=parent.js_preenchepesquisaruas1|j14_codigo|j14_nome',
-            'Pesquisa',true,0,0);
+            'Pesquisa', true, 0, 0);
     }
 
-    function js_preenchepesquisaruas(chave,chave1){
+    function js_preenchepesquisaruas(chave, chave1) {
         j14_codigo = chave;
         db_iframe.hide();
         js_bairro();
     }
 
-    function js_preenchepesquisaruas1(chave,chave1){
+    function js_preenchepesquisaruas1(chave, chave1) {
 
         j14_codigo = chave;
         db_iframe.hide();
         js_bairro1();
     }
 
-    function js_bairro(){
+    function js_bairro() {
         js_OpenJanelaIframe('', 'db_iframe_bairro',
             'func_bairro.php?rural=1&funcao_js=parent.js_preenchebairro|j13_codi|j13_descr',
             'Pesquisa', true);
     }
 
-    function js_bairro1(){
+    function js_bairro1() {
         js_OpenJanelaIframe('', 'db_iframe_bairro',
             'func_bairro.php?rural=1&funcao_js=parent.js_preenchebairro1|j13_codi|j13_descr',
             'Pesquisa', true);
     }
 
 
-    function js_preenchebairro(chave,chave1){
+    function js_preenchebairro(chave, chave1) {
 
         j13_codi = chave;
         db_iframe_bairro.hide();
         js_abreEnderPrimario();
     }
 
-    function js_preenchebairro1(chave,chave1){
+    function js_preenchebairro1(chave, chave1) {
 
         j13_codi = chave;
         db_iframe_bairro.hide();
@@ -1033,9 +1034,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
     }
 
 
-    function js_lancaEnderPrimario(){
+    function js_lancaEnderPrimario() {
 
-        j13_codi   = '';
+        j13_codi = '';
         j14_codigo = '';
 
         //Tem que validar se o cgm é do municipio ai tem que selecionar a rua e o bairro
@@ -1050,10 +1051,10 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
     function js_abreEnderPrimario() {
 
         var ov02_sequencial = $F('ov02_sequencial');
-        var ov02_seq        = $F('ov02_seq');
+        var ov02_seq = $F('ov02_seq');
 
         var idEnderPrimario = '';
-        if ($F('idEnderPrimario') != ""){
+        if ($F('idEnderPrimario') != "") {
 
             idEnderPrimario = $F('idEnderPrimario');
         }
@@ -1063,7 +1064,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         var lEnderMunic = $F('municipio') == 't' ? true : false;
         oEnderPrimario.setTipoValidacao(2);
         oEnderPrimario.setEnderecoMunicipio(lEnderMunic);
-        oEnderPrimario.setCallBackFunction(function () {js_lancaEnderPrimarioCallBack()});
+        oEnderPrimario.setCallBackFunction(function() {
+            js_lancaEnderPrimarioCallBack()
+        });
         oEnderPrimario.setCodigoBairroMunicipio(j13_codi);
         oEnderPrimario.setCodigoRuaMunicipio(j14_codigo);
         oEnderPrimario.setCodigoCidadao(ov02_sequencial, ov02_seq);
@@ -1086,14 +1089,14 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
             js_removeObj('msgBox');
 
-            var oRetorno = eval('('+oAjax.responseText+')');
+            var oRetorno = eval('(' + oAjax.responseText + ')');
 
-            var sExpReg  = new RegExp('\\\\n','g');
+            var sExpReg = new RegExp('\\\\n', 'g');
 
             if (oRetorno.endereco == false) {
 
                 var strMessageUsuario = "Falha ao ler o endereço cadastrado! ";
-                js_messageBox(strMessageUsuario,'');
+                js_messageBox(strMessageUsuario, '');
                 return false;
             } else {
 
@@ -1106,9 +1109,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
     /*-----------------------------------Fim do endereço primário ----------------------------------- */
 
     /*-----------------------------------Trata do endereço secundário-------------------------------- */
-    function js_lancaEnderSecundario(){
+    function js_lancaEnderSecundario() {
 
-        j13_codi   = '';
+        j13_codi = '';
         j14_codigo = '';
 
         //Tem que validar se o cgm é do municipio ai tem que selecionar a rua e o bairro
@@ -1119,7 +1122,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
     function js_abreEnderSecundario() {
 
         var idEnderSecundario = '';
-        if ($F('idEnderSecundario') != ""){
+        if ($F('idEnderSecundario') != "") {
             idEnderSecundario = $F('idEnderSecundario');
         }
 
@@ -1127,7 +1130,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         oEnderSecundario.setObjetoRetorno($('idEnderSecundario'));
 
         oEnderSecundario.setTipoValidacao(2);
-        oEnderSecundario.setCallBackFunction(function () {js_lancaEnderSecundarioCallBack()});
+        oEnderSecundario.setCallBackFunction(function() {
+            js_lancaEnderSecundarioCallBack()
+        });
         oEnderSecundario.setCodigoBairroMunicipio(j13_codi);
         oEnderSecundario.setCodigoRuaMunicipio(j14_codigo);
 
@@ -1147,14 +1152,14 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
             js_removeObj('msgBox');
 
-            var oRetorno = eval('('+oAjax.responseText+')');
+            var oRetorno = eval('(' + oAjax.responseText + ')');
 
-            var sExpReg  = new RegExp('\\\\n','g');
+            var sExpReg = new RegExp('\\\\n', 'g');
 
             if (oRetorno.endereco == false) {
 
                 var strMessageUsuario = "Falha ao ler o endereço cadastrado! ";
-                js_messageBox(strMessageUsuario,'');
+                js_messageBox(strMessageUsuario, '');
                 return false;
             } else {
 
@@ -1166,51 +1171,54 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
     /*-----------------------------------Fim do endereço secundário ----------------------------------- */
 
-    function js_pesquisaTipoEmpresa(mostra){
-        if(mostra==true){
+    function js_pesquisaTipoEmpresa(mostra) {
+        if (mostra == true) {
 
             var funcao = 'parent.js_mostraTipoEmpresa1|db98_sequencial|db98_descricao';
-            js_OpenJanelaIframe('','db_iframe_tipoempresa',
-                'func_tipoempresa.php?funcao_js='+funcao,
-                'Pesquisa',true,0,0);
-        }else{
-            if($F('z03_tipoempresa') != ''){
+            js_OpenJanelaIframe('', 'db_iframe_tipoempresa',
+                'func_tipoempresa.php?funcao_js=' + funcao,
+                'Pesquisa', true, 0, 0);
+        } else {
+            if ($F('z03_tipoempresa') != '') {
 
-                var pesquisaChave =  $F('z03_tipoempresa');
-                var funcao        =  'parent.js_mostraTipoEmpresa';
+                var pesquisaChave = $F('z03_tipoempresa');
+                var funcao = 'parent.js_mostraTipoEmpresa';
                 js_OpenJanelaIframe('',
                     'db_iframe_tipoempresa',
-                    'func_tipoempresa.php?pesquisa_chave='+pesquisaChave+'&funcao_js='+funcao,
-                    'Pesquisa',false,0,0);
-            }else{
+                    'func_tipoempresa.php?pesquisa_chave=' + pesquisaChave + '&funcao_js=' + funcao,
+                    'Pesquisa', false, 0, 0);
+            } else {
                 $('db98_descricao').value = '';
             }
         }
     }
-    function js_mostraTipoEmpresa(chave,erro){
+
+    function js_mostraTipoEmpresa(chave, erro) {
         $('db98_descricao').value = chave;
-        if(erro==true){
+        if (erro == true) {
             $('z03_tipoempresa').focus();
             $('z03_tipoempresa').value = '';
         }
     }
-    function js_mostraTipoEmpresa1(chave1,chave2){
+
+    function js_mostraTipoEmpresa1(chave1, chave2) {
         $('z03_tipoempresa').value = chave1;
         $('db98_descricao').value = chave2;
         db_iframe_tipoempresa.hide();
     }
 
-    function js_pesquisa(){
+    function js_pesquisa() {
         js_OpenJanelaIframe('',
             'func_nome',
             'func_nome.php?funcao_js=parent.js_preenchepesquisa|0&ifrname=func_nome',
-            'Pesquisa',true,'0','1');
+            'Pesquisa', true, '0', '1');
     }
-    function js_preenchepesquisa(chave){
+
+    function js_preenchepesquisa(chave) {
         func_nome.hide();
         <?
         if ($db_opcao != 1) {
-            echo " location.href = '" . basename ( $GLOBALS ["HTTP_SERVER_VARS"] ["PHP_SELF"] ) . "?chavepesquisa='+chave";
+            echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
         }
         ?>
     }
@@ -1224,17 +1232,17 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         sUrlRpc = "prot1_cadgeralmunic.RPC.php";
 
         var oCidadao = new Object();
-        oCidadao.exec            = 'findCidadao';
+        oCidadao.exec = 'findCidadao';
         oCidadao.ov02_sequencial = chavePesquisa;
 
         var msgDiv = "Aguarde ... Carregando dados do Cidadão.";
-        js_divCarregando(msgDiv,'msgBox');
+        js_divCarregando(msgDiv, 'msgBox');
 
         var oAjax = new Ajax.Request(
-            sUrlRpc,
-            { parameters: 'json='+Object.toJSON(oCidadao),
+            sUrlRpc, {
+                parameters: 'json=' + Object.toJSON(oCidadao),
                 method: 'post',
-                onComplete : js_retornoFindCidadao
+                onComplete: js_retornoFindCidadao
             }
 
         );
@@ -1243,31 +1251,31 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
     function js_retornoFindCidadao(oAjax) {
 
         js_removeObj('msgBox');
-        var oRetorno = eval('('+oAjax.responseText+')');
+        var oRetorno = eval('(' + oAjax.responseText + ')');
 
-        var sExpReg  = new RegExp('\\\\n','g');
+        var sExpReg = new RegExp('\\\\n', 'g');
 
         if (oRetorno.status == 2) {
 
-            alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
+            alert(oRetorno.message.urlDecode().replace(sExpReg, '\n'));
             parent.location.href = "prot1_cadgeralmunic001.php";
             return false;
         } else {
 
             if (oRetorno.cidadao.ov02_cnpjcpf.length == 11) {
-                $('z01_cpf').value            = oRetorno.cidadao.ov02_cnpjcpf;
-                $('z01_ident').value          = oRetorno.cidadao.z01_ident;
+                $('z01_cpf').value = oRetorno.cidadao.ov02_cnpjcpf;
+                $('z01_ident').value = oRetorno.cidadao.z01_ident;
             } else if (oRetorno.cidadao.ov02_cnpjcpf.length == 14) {
 
-                $('z01_cgc').value           = oRetorno.cidadao.ov02_cnpjcpf;
-                $('z01_nomecomple').value    = oRetorno.cidadao.z01_nome.urlDecode();
+                $('z01_cgc').value = oRetorno.cidadao.ov02_cnpjcpf;
+                $('z01_nomecomple').value = oRetorno.cidadao.z01_nome.urlDecode();
             }
 
-            $('z01_nome').value           = oRetorno.cidadao.z01_nome.urlDecode();
-            $('z01_telef').value          = oRetorno.cidadao.z01_telef;
-            $('z01_email').value          = oRetorno.cidadao.z01_email.urlDecode();
-            $('ov02_sequencial').value    = oRetorno.cidadao.ov02_sequencial;
-            $('ov02_seq').value           = oRetorno.cidadao.ov02_seq;
+            $('z01_nome').value = oRetorno.cidadao.z01_nome.urlDecode();
+            $('z01_telef').value = oRetorno.cidadao.z01_telef;
+            $('z01_email').value = oRetorno.cidadao.z01_email.urlDecode();
+            $('ov02_sequencial').value = oRetorno.cidadao.ov02_sequencial;
+            $('ov02_seq').value = oRetorno.cidadao.ov02_seq;
 
             if (oRetorno.endereco != false) {
 
@@ -1282,17 +1290,17 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         sUrlRpc = "prot1_cadgeralmunic.RPC.php";
 
         var oCgm = new Object();
-        oCgm.exec   = 'findCgm';
+        oCgm.exec = 'findCgm';
         oCgm.numcgm = chavePesquisa;
 
         var msgDiv = "Aguarde ...";
-        js_divCarregando(msgDiv,'msgBox');
+        js_divCarregando(msgDiv, 'msgBox');
 
         var oAjax = new Ajax.Request(
-            sUrlRpc,
-            { parameters: 'json='+Object.toJSON(oCgm),
+            sUrlRpc, {
+                parameters: 'json=' + Object.toJSON(oCgm),
                 method: 'post',
-                onComplete : js_retornoFindCgm
+                onComplete: js_retornoFindCgm
             }
 
         );
@@ -1300,13 +1308,13 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
     function js_retornoFindCgm(oAjax) {
         js_removeObj('msgBox');
-        var oRetorno = eval('('+oAjax.responseText+')');
+        var oRetorno = eval('(' + oAjax.responseText + ')');
 
-        var sExpReg  = new RegExp('\\\\n','g');
+        var sExpReg = new RegExp('\\\\n', 'g');
 
         if (oRetorno.status == 2) {
 
-            alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
+            alert(oRetorno.message.urlDecode().replace(sExpReg, '\n'));
             parent.location.href = "prot1_cadgeralmunic002.php";
             return false;
         } else {
@@ -1330,11 +1338,11 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                 if (oRetorno.cidadaocgm != false) {
 
                     var ov02_sequencial = oRetorno.cidadaocgm[0].ov03_cidadao;
-                    var ov02_seq        = oRetorno.cidadaocgm[0].ov03_seq;
-                    var ov03_numcgm     = oRetorno.cidadaocgm[0].ov03_numcgm;
+                    var ov02_seq = oRetorno.cidadaocgm[0].ov03_seq;
+                    var ov03_numcgm = oRetorno.cidadaocgm[0].ov03_numcgm;
                     $('btnVincular').style.display = 'none';
                     $('btnImportar').style.display = '';
-                    $('btnImportar').observe('click',function() {
+                    $('btnImportar').observe('click', function() {
                         js_MICidadao(ov02_sequencial, ov02_seq, ov03_numcgm);
                     });
                 } else {
@@ -1365,15 +1373,15 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
     function js_PreencheEndereco(aEndereco) {
 
         var iNumEndereco = aEndereco.length;
-        for (var iInd=0; iInd < iNumEndereco; iInd++) {
+        for (var iInd = 0; iInd < iNumEndereco; iInd++) {
 
             var sEndereco = "";
             sEndereco += aEndereco[iInd].srua.urlDecode();
-            sEndereco += ",  nº " +aEndereco[iInd].snumero.urlDecode();
-            sEndereco += " "      +aEndereco[iInd].scomplemento.urlDecode();
-            sEndereco += " - "    +aEndereco[iInd].sbairro.urlDecode();
-            sEndereco += " - "    +aEndereco[iInd].smunicipio.urlDecode();
-            sEndereco += " - "    +aEndereco[iInd].ssigla.urlDecode();
+            sEndereco += ",  nº " + aEndereco[iInd].snumero.urlDecode();
+            sEndereco += " " + aEndereco[iInd].scomplemento.urlDecode();
+            sEndereco += " - " + aEndereco[iInd].sbairro.urlDecode();
+            sEndereco += " - " + aEndereco[iInd].smunicipio.urlDecode();
+            sEndereco += " - " + aEndereco[iInd].ssigla.urlDecode();
 
             if (aEndereco[iInd].stipo == 'P') {
 
@@ -1391,48 +1399,48 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
         if (oCgm.lfisico == true) {
 
-            $('z01_numcgm').value         = oCgm.z01_numcgm;
-            $('z01_cpf').value            = oCgm.z01_cpf;
-            $('z01_ident').value          = oCgm.z01_ident;
-            $('z01_nome').value           = oCgm.z01_nome.urlDecode();
-            $('z01_pai').value            = oCgm.z01_pai.urlDecode();
-            $('z01_mae').value            = oCgm.z01_mae.urlDecode();
-            $('z01_nasc').value           = js_formatar(oCgm.z01_nasc,'d','');
-            $('z01_estciv').value         = oCgm.z01_estciv;
-            $('z01_sexo').value           = oCgm.z01_sexo;
-            $('z01_nacion').value         = oCgm.z01_nacion;
-            $('z01_profis').value         = oCgm.z01_profis.urlDecode();
-            $('z01_telef').value          = oCgm.z01_telef;
-            $('z01_telcel').value         = oCgm.z01_telcel;
-            $('z01_email').value          = oCgm.z01_email.urlDecode();
-            $('z01_telcon').value         = oCgm.z01_telcon;
-            $('z01_celcon').value         = oCgm.z01_celcon;
-            $('z01_emailc').value         = oCgm.z01_emailc.urlDecode();
-            $('z01_dtfalecimento').value  = js_formatar(oCgm.z01_dtfalecimento,'d','');
-            $('z01_identdtexp').value     = js_formatar(oCgm.z01_identdtexp,'d','');
-            $('z01_naturalidade').value   = oCgm.z01_naturalidade.urlDecode();
-            $('z01_escolaridade').value   = oCgm.z01_escolaridade.urlDecode();
-            $('z01_identorgao').value     = oCgm.z01_identorgao.urlDecode();
-            $('z01_trabalha').value       = oCgm.z01_trabalha == true ? 't' : 'f';
-            $('z01_localtrabalho').value  = oCgm.z01_localtrabalha.urlDecode();
-            $('z01_renda').value          = oCgm.z01_renda;
-            $('z01_pis').value            = oCgm.z01_pis;
-            $('rh70_sequencial').value    = oCgm.z04_rhcbo;
+            $('z01_numcgm').value = oCgm.z01_numcgm;
+            $('z01_cpf').value = oCgm.z01_cpf;
+            $('z01_ident').value = oCgm.z01_ident;
+            $('z01_nome').value = oCgm.z01_nome.urlDecode();
+            $('z01_pai').value = oCgm.z01_pai.urlDecode();
+            $('z01_mae').value = oCgm.z01_mae.urlDecode();
+            $('z01_nasc').value = js_formatar(oCgm.z01_nasc, 'd', '');
+            $('z01_estciv').value = oCgm.z01_estciv;
+            $('z01_sexo').value = oCgm.z01_sexo;
+            $('z01_nacion').value = oCgm.z01_nacion;
+            $('z01_profis').value = oCgm.z01_profis.urlDecode();
+            $('z01_telef').value = oCgm.z01_telef;
+            $('z01_telcel').value = oCgm.z01_telcel;
+            $('z01_email').value = oCgm.z01_email.urlDecode();
+            $('z01_telcon').value = oCgm.z01_telcon;
+            $('z01_celcon').value = oCgm.z01_celcon;
+            $('z01_emailc').value = oCgm.z01_emailc.urlDecode();
+            $('z01_dtfalecimento').value = js_formatar(oCgm.z01_dtfalecimento, 'd', '');
+            $('z01_identdtexp').value = js_formatar(oCgm.z01_identdtexp, 'd', '');
+            $('z01_naturalidade').value = oCgm.z01_naturalidade.urlDecode();
+            $('z01_escolaridade').value = oCgm.z01_escolaridade.urlDecode();
+            $('z01_identorgao').value = oCgm.z01_identorgao.urlDecode();
+            $('z01_trabalha').value = oCgm.z01_trabalha == true ? 't' : 'f';
+            $('z01_localtrabalho').value = oCgm.z01_localtrabalha.urlDecode();
+            $('z01_renda').value = oCgm.z01_renda;
+            $('z01_pis').value = oCgm.z01_pis;
+            $('rh70_sequencial').value = oCgm.z04_rhcbo;
             //Novos Campos
-            $('z01_fax').value            = oCgm.z01_fax.urlDecode();
-            $('z01_cxpostal').value       = oCgm.z01_cxpostal;
-            $('z01_cxposcon').value       = oCgm.z01_cxposcon;
-            $('z01_incest').value         = oCgm.z01_incest;
-            $('z01_obs').value            = oCgm.z01_obs.urlDecode();
-            $('z01_notificaemail').value  = oCgm.z01_notificaemail;
+            $('z01_fax').value = oCgm.z01_fax.urlDecode();
+            $('z01_cxpostal').value = oCgm.z01_cxpostal;
+            $('z01_cxposcon').value = oCgm.z01_cxposcon;
+            $('z01_incest').value = oCgm.z01_incest;
+            $('z01_obs').value = oCgm.z01_obs.urlDecode();
+            $('z01_notificaemail').value = oCgm.z01_notificaemail;
 
-            if (oCgm.z01_ibge.urlDecode() != null){
-                $('z01_ibge').value         = oCgm.z01_ibge.urlDecode();
+            if (oCgm.z01_ibge.urlDecode() != null) {
+                $('z01_ibge').value = oCgm.z01_ibge.urlDecode();
                 js_preencheUf(oCgm.z01_ibge.urlDecode())
             }
 
             if (oCgm.z01_foto != null) {
-                $('fotocgm').src = 'func_mostrarimagem.php?oid='+oCgm.z01_foto;
+                $('fotocgm').src = 'func_mostrarimagem.php?oid=' + oCgm.z01_foto;
             } else {
                 $('fotocgm').src = 'imagens/none1.jpeg';
             }
@@ -1441,29 +1449,29 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
         } else if (oCgm.lfisico == false) {
 
-            $('z01_numcgm').value     = oCgm.z01_numcgm;
-            $('z01_cgc').value        = oCgm.z01_cgc
-            $('z01_incest').value     = oCgm.z01_incest
-            $('z01_telef').value      = oCgm.z01_telef
-            $('z01_telcel').value     = oCgm.z01_telcel
-            $('z01_email').value      = oCgm.z01_email.urlDecode();
-            $('z01_telcon').value     = oCgm.z01_telcon
-            $('z01_celcon').value     = oCgm.z01_celcon
-            $('z01_emailc').value     = oCgm.z01_emailc.urlDecode();
-            $('z01_contato').value    = oCgm.z01_contato.urlDecode();
-            $('z01_nomefanta').value  = oCgm.z01_nomefanta.urlDecode();
+            $('z01_numcgm').value = oCgm.z01_numcgm;
+            $('z01_cgc').value = oCgm.z01_cgc
+            $('z01_incest').value = oCgm.z01_incest
+            $('z01_telef').value = oCgm.z01_telef
+            $('z01_telcel').value = oCgm.z01_telcel
+            $('z01_email').value = oCgm.z01_email.urlDecode();
+            $('z01_telcon').value = oCgm.z01_telcon
+            $('z01_celcon').value = oCgm.z01_celcon
+            $('z01_emailc').value = oCgm.z01_emailc.urlDecode();
+            $('z01_contato').value = oCgm.z01_contato.urlDecode();
+            $('z01_nomefanta').value = oCgm.z01_nomefanta.urlDecode();
             $('z01_nomecomple').value = oCgm.z01_nomecomple.urlDecode();
-            $('z01_nome').value       = oCgm.z01_nome.urlDecode();
-            $('z08_nire').value       = oCgm.nire;
+            $('z01_nome').value = oCgm.z01_nome.urlDecode();
+            $('z08_nire').value = oCgm.nire;
             //Novos Campos
-            $('z01_fax').value        = oCgm.z01_fax;
-            $('z01_cxpostal').value   = oCgm.z01_cxpostal;
-            $('z01_cxposcon').value   = oCgm.z01_cxposcon;
-            $('z01_obs').value        = oCgm.z01_obs.urlDecode();
+            $('z01_fax').value = oCgm.z01_fax;
+            $('z01_cxpostal').value = oCgm.z01_cxpostal;
+            $('z01_cxposcon').value = oCgm.z01_cxposcon;
+            $('z01_obs').value = oCgm.z01_obs.urlDecode();
             $('z01_notificaemail').value = oCgm.z01_notificaemail;
 
             if (oCgm.z01_foto != null) {
-                $('fotocgm').src = 'func_mostrarimagem.php?oid='+oCgm.z01_foto;
+                $('fotocgm').src = 'func_mostrarimagem.php?oid=' + oCgm.z01_foto;
             } else {
                 $('fotocgm').src = 'imagens/none1.jpeg';
             }
@@ -1471,50 +1479,50 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
     }
 
     /*------------------ Funções de Validação do formulário ---------------------------------*/
-    function js_tamnome(){
+    function js_tamnome() {
 
-        var nome  = $('z01_nome').value;
-        var tam   = nome.split(" ");
+        var nome = $('z01_nome').value;
+        var tam = nome.split(" ");
         var passa = true;
-        if (tam.length<2){
+        if (tam.length < 2) {
 
             var strMessageUsuario = "Nome inconsistente (regra 1)!";
-            js_messageBox(strMessageUsuario,'');
-            $('z01_nome').value="";
+            js_messageBox(strMessageUsuario, '');
+            $('z01_nome').value = "";
             $('z01_nome').focus;
-            passa=false;
-        }else if (1 == 2){
+            passa = false;
+        } else if (1 == 2) {
 
-            for (i=0;i<tam.length;i++){
+            for (i = 0; i < tam.length; i++) {
 
-                if (pessoa=='f'){
+                if (pessoa == 'f') {
 
-                    if (tam[0].length<2 || tam[1].length<2){
+                    if (tam[0].length < 2 || tam[1].length < 2) {
 
                         alert("Nome inconsistente (regra 2)!");
-                        $('z01_nome').value="";
+                        $('z01_nome').value = "";
                         $('z01_nome').focus;
-                        passa=false;
+                        passa = false;
                         break;
                     }
                 }
             }
         }
-        if(lPessoaFisica == false){
+        if (lPessoaFisica == false) {
 
             nomecomple = $('z01_nomecomple').value;
             tamcomple = nomecomple.split(" ");
-            if (tamcomple.length<2){
+            if (tamcomple.length < 2) {
 
                 alert("Nome Completo inconsistente (regra 3)!");
-                $('z01_nomecomple').value="";
+                $('z01_nomecomple').value = "";
                 $('z01_nomecomple').focus;
-                passa=false;
+                passa = false;
             }
         }
-        if (passa==true){
+        if (passa == true) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -1539,21 +1547,24 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
         js_divCarregando("Aguarde verificando CPF/CNPJ.", "msgBox");
 
-        var oPesquisa = {exec : "findCpfCnpj", iCpfCnpj : cgcCpf};
+        var oPesquisa = {
+            exec: "findCpfCnpj",
+            iCpfCnpj: cgcCpf
+        };
         var sUrlRpc = "prot1_cadgeralmunic.RPC.php";
         var oParametros = {
-            parameters: 'json='+Object.toJSON(oPesquisa),
+            parameters: 'json=' + Object.toJSON(oPesquisa),
             method: 'post',
-            onComplete : function(oAjax) {
+            onComplete: function(oAjax) {
 
                 js_removeObj("msgBox");
-                var oRetorno = eval('('+oAjax.responseText+')');
+                var oRetorno = eval('(' + oAjax.responseText + ')');
 
                 if (oRetorno.z01_numcgm == false || oRetorno.z01_numcgm == $F('z01_numcgm')) {
                     return js_sendForm(btnValue)
                 }
 
-                alert("usuário:\n\n Cnpj/Cpf já cadastrado para o CGM "+oRetorno.z01_numcgm);
+                alert("usuário:\n\n Cnpj/Cpf já cadastrado para o CGM " + oRetorno.z01_numcgm);
             }
         };
 
@@ -1570,66 +1581,66 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             if (retornoValidacao == true && lPessoaFisica == true) {
 
                 var oIncluir = new Object();
-                oIncluir.exec          = 'incluirAlterar';
+                oIncluir.exec = 'incluirAlterar';
                 oIncluir.lPessoaFisica = true;
-                oIncluir.action        = "incluir";
+                oIncluir.action = "incluir";
                 if (btnValue == "Alterar") {
-                    oIncluir.action        = "alterar";
+                    oIncluir.action = "alterar";
                 }
 
-                var oPessoa               = new Object();
-                oPessoa.z01_numcgm        = $F('z01_numcgm').trim();
-                oPessoa.z01_cgccpf        = $F('z01_cpf');
-                oPessoa.z01_ident         = $F('z01_ident');
-                oPessoa.z01_nome          = tagString($F('z01_nome'));
-                oPessoa.z01_nomecomple    = tagString($F('z01_nome'));
-                oPessoa.z01_pai           = tagString($F('z01_pai'));
-                oPessoa.z01_mae           = tagString($F('z01_mae'));
-                oPessoa.z01_nasc          = js_formatar($F('z01_nasc'),'d');
-                oPessoa.z01_estciv        = $F('z01_estciv');
-                oPessoa.z01_sexo          = $F('z01_sexo');
-                oPessoa.z01_nacion        = $F('z01_nacion');
-                oPessoa.z01_profis        = tagString($F('z01_profis'));
-                oPessoa.z01_telef         = $F('z01_telef');
-                oPessoa.z01_telcel        = $F('z01_telcel');
-                oPessoa.z01_email         = tagString($F('z01_email'));
+                var oPessoa = new Object();
+                oPessoa.z01_numcgm = $F('z01_numcgm').trim();
+                oPessoa.z01_cgccpf = $F('z01_cpf');
+                oPessoa.z01_ident = $F('z01_ident');
+                oPessoa.z01_nome = tagString($F('z01_nome'));
+                oPessoa.z01_nomecomple = tagString($F('z01_nome'));
+                oPessoa.z01_pai = tagString($F('z01_pai'));
+                oPessoa.z01_mae = tagString($F('z01_mae'));
+                oPessoa.z01_nasc = js_formatar($F('z01_nasc'), 'd');
+                oPessoa.z01_estciv = $F('z01_estciv');
+                oPessoa.z01_sexo = $F('z01_sexo');
+                oPessoa.z01_nacion = $F('z01_nacion');
+                oPessoa.z01_profis = tagString($F('z01_profis'));
+                oPessoa.z01_telef = $F('z01_telef');
+                oPessoa.z01_telcel = $F('z01_telcel');
+                oPessoa.z01_email = tagString($F('z01_email'));
                 oPessoa.z01_notificaemail = $F('z01_notificaemail');
-                oPessoa.z01_telcon        = $F('z01_telcon');
-                oPessoa.z01_celcon        = $F('z01_celcon');
-                oPessoa.z01_emailc        = tagString($F('z01_emailc'));
-                oPessoa.z01_cadast        = js_formatar($F('z01_cadast'),'d');
-                oPessoa.z01_ultalt        = js_formatar($F('z01_ultalt'),'d');
-                oPessoa.z01_dtfalecimento = js_formatar($F('z01_dtfalecimento'),'d');
-                oPessoa.z01_identdtexp    = js_formatar($F('z01_identdtexp'),'d');
-                oPessoa.z01_identorgao    = tagString($F('z01_identorgao'));
-                oPessoa.z01_naturalidade  = tagString($F('z01_naturalidade').trim());
-                oPessoa.z01_ibge          = $F('z01_ibge').trim();
+                oPessoa.z01_telcon = $F('z01_telcon');
+                oPessoa.z01_celcon = $F('z01_celcon');
+                oPessoa.z01_emailc = tagString($F('z01_emailc'));
+                oPessoa.z01_cadast = js_formatar($F('z01_cadast'), 'd');
+                oPessoa.z01_ultalt = js_formatar($F('z01_ultalt'), 'd');
+                oPessoa.z01_dtfalecimento = js_formatar($F('z01_dtfalecimento'), 'd');
+                oPessoa.z01_identdtexp = js_formatar($F('z01_identdtexp'), 'd');
+                oPessoa.z01_identorgao = tagString($F('z01_identorgao'));
+                oPessoa.z01_naturalidade = tagString($F('z01_naturalidade').trim());
+                oPessoa.z01_ibge = $F('z01_ibge').trim();
                 oPessoa.z01_localtrabalho = tagString($F('z01_localtrabalho'));
-                oPessoa.z01_renda         = tagString($F('z01_renda'));
-                oPessoa.z01_pis           = tagString($F('z01_pis'));
-                oPessoa.z01_trabalha      = $F('z01_trabalha');
-                oPessoa.z01_fax           = $F('z01_fax');
-                oPessoa.z01_cxpostal      = $F('z01_cxpostal');
-                oPessoa.z01_cxposcon      = $F('z01_cxposcon');
-                oPessoa.z01_incest        = $F('z01_incest');
-                oPessoa.z01_obs           = $F('z01_obs');
-                oPessoa.z04_rhcbo         = $F('rh70_sequencial');
-                oPessoa.z01_incmunici     = $F('z01_incmunici');
-                oPessoa.z01_escolaridade  = $F('z01_escolaridade');
+                oPessoa.z01_renda = tagString($F('z01_renda'));
+                oPessoa.z01_pis = tagString($F('z01_pis'));
+                oPessoa.z01_trabalha = $F('z01_trabalha');
+                oPessoa.z01_fax = $F('z01_fax');
+                oPessoa.z01_cxpostal = $F('z01_cxpostal');
+                oPessoa.z01_cxposcon = $F('z01_cxposcon');
+                oPessoa.z01_incest = $F('z01_incest');
+                oPessoa.z01_obs = $F('z01_obs');
+                oPessoa.z04_rhcbo = $F('rh70_sequencial');
+                oPessoa.z01_incmunici = $F('z01_incmunici');
+                oPessoa.z01_escolaridade = $F('z01_escolaridade');
 
                 var oEndereco = new Object();
-                oEndereco.idEndPrimario   = $F('idEnderPrimario');
+                oEndereco.idEndPrimario = $F('idEnderPrimario');
                 oEndereco.idEndSecundario = $F('idEnderSecundario');
 
                 var oTipoEmpresa = new Object();
                 oTipoEmpresa.iTipoEmpresa = $F('z03_tipoempresa');
 
-                var oCidadao             = new Object();
+                var oCidadao = new Object();
                 oCidadao.ov02_sequencial = $F('ov02_sequencial');
-                oCidadao.ov02_seq        = $F('ov02_seq');
+                oCidadao.ov02_seq = $F('ov02_seq');
 
-                oIncluir.pessoa   = new Object();
-                oIncluir.pessoa   = oPessoa;
+                oIncluir.pessoa = new Object();
+                oIncluir.pessoa = oPessoa;
 
                 oIncluir.endereco = new Object();
                 oIncluir.endereco = oEndereco;
@@ -1645,72 +1656,72 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             } else if (retornoValidacao && lPessoaFisica == false) {
 
                 var oIncluir = new Object();
-                oIncluir.exec          = 'incluirAlterar';
+                oIncluir.exec = 'incluirAlterar';
                 oIncluir.lPessoaFisica = false;
-                oIncluir.action        = "incluir";
+                oIncluir.action = "incluir";
                 if (btnValue == "Alterar") {
-                    oIncluir.action        = "alterar";
+                    oIncluir.action = "alterar";
                 }
 
                 var oPessoa = new Object();
-                oPessoa.z01_numcgm        = $F('z01_numcgm').trim();
-                oPessoa.z01_cgccpf        = $F('z01_cgc');
-                oPessoa.z01_nome          = tagString($F('z01_nome'));
-                oPessoa.z01_contato       = tagString($F('z01_contato'));
-                oPessoa.z01_incest        = $F('z01_incest');
-                oPessoa.z01_telef         = $F('z01_telef');
-                oPessoa.z01_telcel        = $F('z01_telcel');
-                oPessoa.z01_email         = tagString($F('z01_email'));
+                oPessoa.z01_numcgm = $F('z01_numcgm').trim();
+                oPessoa.z01_cgccpf = $F('z01_cgc');
+                oPessoa.z01_nome = tagString($F('z01_nome'));
+                oPessoa.z01_contato = tagString($F('z01_contato'));
+                oPessoa.z01_incest = $F('z01_incest');
+                oPessoa.z01_telef = $F('z01_telef');
+                oPessoa.z01_telcel = $F('z01_telcel');
+                oPessoa.z01_email = tagString($F('z01_email'));
                 oPessoa.z01_notificaemail = $F('z01_notificaemail');
-                oPessoa.z01_telcon        = $F('z01_telcon');
-                oPessoa.z01_celcon        = $F('z01_celcon');
-                oPessoa.z01_fax           = $F('z01_fax');
-                oPessoa.z01_cxpostal      = $F('z01_cxpostal');
-                oPessoa.z01_cxposcon      = $F('z01_cxposcon');
-                oPessoa.z01_emailc        = tagString($F('z01_emailc'));
-                oPessoa.z01_cadast        = js_formatar($F('z01_cadast'),'d');
-                oPessoa.z01_ultalt        = js_formatar($F('z01_ultalt'),'d');
-                oPessoa.z01_nomecomple    = tagString($F('z01_nomecomple'));
-                oPessoa.z01_nomefanta     = tagString($F('z01_nomefanta'));
-                oPessoa.z01_obs           = $F('z01_obs');
-                oPessoa.z01_incmunici     = $F('z01_incmunici');
+                oPessoa.z01_telcon = $F('z01_telcon');
+                oPessoa.z01_celcon = $F('z01_celcon');
+                oPessoa.z01_fax = $F('z01_fax');
+                oPessoa.z01_cxpostal = $F('z01_cxpostal');
+                oPessoa.z01_cxposcon = $F('z01_cxposcon');
+                oPessoa.z01_emailc = tagString($F('z01_emailc'));
+                oPessoa.z01_cadast = js_formatar($F('z01_cadast'), 'd');
+                oPessoa.z01_ultalt = js_formatar($F('z01_ultalt'), 'd');
+                oPessoa.z01_nomecomple = tagString($F('z01_nomecomple'));
+                oPessoa.z01_nomefanta = tagString($F('z01_nomefanta'));
+                oPessoa.z01_obs = $F('z01_obs');
+                oPessoa.z01_incmunici = $F('z01_incmunici');
 
-                var oEndereco             = new Object();
-                oEndereco.idEndPrimario   = $F('idEnderPrimario');
+                var oEndereco = new Object();
+                oEndereco.idEndPrimario = $F('idEnderPrimario');
                 oEndereco.idEndSecundario = $F('idEnderSecundario');
 
-                var oTipoEmpresa          = new Object();
+                var oTipoEmpresa = new Object();
                 oTipoEmpresa.iTipoEmpresa = $F('z03_tipoempresa');
 
-                var oNire                 = new Object();
-                oNire.z08_nire            = $F('z08_nire');
+                var oNire = new Object();
+                oNire.z08_nire = $F('z08_nire');
 
-                var oCidadao              = new Object();
-                oCidadao.ov02_sequencial  = $F('ov02_sequencial');
-                oCidadao.ov02_seq         = $F('ov02_seq');
+                var oCidadao = new Object();
+                oCidadao.ov02_sequencial = $F('ov02_sequencial');
+                oCidadao.ov02_seq = $F('ov02_seq');
 
-                oIncluir.pessoa           = new Object();
-                oIncluir.pessoa           = oPessoa;
+                oIncluir.pessoa = new Object();
+                oIncluir.pessoa = oPessoa;
 
-                oIncluir.endereco         = new Object();
-                oIncluir.endereco         = oEndereco;
+                oIncluir.endereco = new Object();
+                oIncluir.endereco = oEndereco;
 
-                oIncluir.tipoEmpresa     = new Object();
-                oIncluir.tipoEmpresa     = oTipoEmpresa;
+                oIncluir.tipoEmpresa = new Object();
+                oIncluir.tipoEmpresa = oTipoEmpresa;
 
-                oIncluir.nire            = new Object();
-                oIncluir.nire            = oNire;
+                oIncluir.nire = new Object();
+                oIncluir.nire = oNire;
 
-                oIncluir.cidadao         = new Object();
-                oIncluir.cidadao         = oCidadao;
+                oIncluir.cidadao = new Object();
+                oIncluir.cidadao = oCidadao;
 
                 js_AjaxCgm(oIncluir, js_retornoIncluirJuridica);
 
             }
         } else if (btnValue == 'Excluir') {
 
-            var oExcluir        = new Object();
-            oExcluir.exec       = 'excluir';
+            var oExcluir = new Object();
+            oExcluir.exec = 'excluir';
             oExcluir.z01_numcgm = $F('z01_numcgm');
 
             js_AjaxCgm(oExcluir, js_retornoExcluirCgm);
@@ -1720,28 +1731,27 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
     // Busca a descrição e a UF com base no código do IBGE
 
-    function js_preencheUf(ibge){
+    function js_preencheUf(ibge) {
         var oParam = new Object();
         oParam.exec = 'getDescrUf';
         oParam.ibge = ibge;
         var oAjax = new Ajax.Request(
-            sUrlRpc,
-            {
+            sUrlRpc, {
                 asynchronous: false,
-                parameters: 'json='+Object.toJSON(oParam),
+                parameters: 'json=' + Object.toJSON(oParam),
                 method: 'post',
                 onComplete: js_retornoDescrUf
             }
         );
     }
 
-    function js_retornoDescrUf(oAjax){
-        let oRetorno = eval("("+oAjax.responseText+")");
+    function js_retornoDescrUf(oAjax) {
+        let oRetorno = eval("(" + oAjax.responseText + ")");
         let ufs = document.getElementById('uf');
         let descricao = oRetorno.descricao;
 
-        for(let cont=0; cont < ufs.length; cont++){
-            if(ufs[cont].value == oRetorno.sigla){
+        for (let cont = 0; cont < ufs.length; cont++) {
+            if (ufs[cont].value == oRetorno.sigla) {
                 document.getElementById('ufdescr').selectedIndex = cont;
             }
         }
@@ -1753,33 +1763,33 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
         js_removeObj("msgBox");
 
-        var oRetorno = eval("("+oAjax.responseText+")");
-        var sExpReg  = new RegExp('\\\\n','g');
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+        var sExpReg = new RegExp('\\\\n', 'g');
 
         if (oRetorno.status == 2) {
 
-            alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
+            alert(oRetorno.message.urlDecode().replace(sExpReg, '\n'));
             return false;
         } else if (oRetorno.status == 1) {
 
-            alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
+            alert(oRetorno.message.urlDecode().replace(sExpReg, '\n'));
             location.href = 'prot1_cadgeralmunic006.php';
             return false;
         }
 
     }
 
-    function js_AjaxCgm(oSend,jsRetorno) {
+    function js_AjaxCgm(oSend, jsRetorno) {
         var msgDiv = "Aguarde ...";
-        js_divCarregando(msgDiv,'msgBox');
+        js_divCarregando(msgDiv, 'msgBox');
 
         var sUrlRpc = "prot1_cadgeralmunic.RPC.php";
 
         var oAjax = new Ajax.Request(
-            sUrlRpc,
-            { parameters: 'json='+Object.toJSON(oSend),
+            sUrlRpc, {
+                parameters: 'json=' + Object.toJSON(oSend),
                 method: 'post',
-                onComplete : jsRetorno
+                onComplete: jsRetorno
             }
 
         );
@@ -1789,27 +1799,27 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
         js_removeObj("msgBox");
 
-        var oRetorno = eval("("+oAjax.responseText+")");
-        var sExpReg  = new RegExp('\\\\n','g');
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+        var sExpReg = new RegExp('\\\\n', 'g');
 
         if (oRetorno.status == 2) {
 
-            alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
+            alert(oRetorno.message.urlDecode().replace(sExpReg, '\n'));
         } else if (oRetorno.status == 1) {
 
-            alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
+            alert(oRetorno.message.urlDecode().replace(sExpReg, '\n'));
             if (oRetorno.action == 'incluir') {
                 if (funcaoRetorno != '') {
 
-                    eval(funcaoRetorno+'('+oRetorno.z01_numcgm+');');
+                    eval(funcaoRetorno + '(' + oRetorno.z01_numcgm + ');');
 
                 } else {
-                    location.href = 'prot1_cadgeralmunic005.php?chavepesquisa='+oRetorno.z01_numcgm;
+                    location.href = 'prot1_cadgeralmunic005.php?chavepesquisa=' + oRetorno.z01_numcgm;
                 }
             } else {
 
                 if (funcaoRetorno != '') {
-                    eval(funcaoRetorno+'('+oRetorno.z01_numcgm+');');
+                    eval(funcaoRetorno + '(' + oRetorno.z01_numcgm + ');');
 
                 } else {
 
@@ -1826,28 +1836,28 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
         js_removeObj("msgBox");
 
-        var oRetorno = eval("("+oAjax.responseText+")");
-        var sExpReg  = new RegExp('\\\\n','g');
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+        var sExpReg = new RegExp('\\\\n', 'g');
 
         if (oRetorno.status == 2) {
 
-            alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
+            alert(oRetorno.message.urlDecode().replace(sExpReg, '\n'));
             return false;
         } else if (oRetorno.status == 1) {
-            alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
+            alert(oRetorno.message.urlDecode().replace(sExpReg, '\n'));
             if (oRetorno.action == 'incluir') {
                 if (funcaoRetorno != '') {
 
-                    eval(funcaoRetorno+'('+oRetorno.z01_numcgm+');');
+                    eval(funcaoRetorno + '(' + oRetorno.z01_numcgm + ');');
 
                 } else {
 
-                    location.href = 'prot1_cadgeralmunic005.php?chavepesquisa='+oRetorno.z01_numcgm;
+                    location.href = 'prot1_cadgeralmunic005.php?chavepesquisa=' + oRetorno.z01_numcgm;
                 }
             } else {
                 if (funcaoRetorno != '') {
 
-                    eval(funcaoRetorno+'('+oRetorno.z01_numcgm+');');
+                    eval(funcaoRetorno + '(' + oRetorno.z01_numcgm + ');');
 
                 } else {
 
@@ -1859,19 +1869,19 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
     }
 
-    function js_validaEmail(email){
+    function js_validaEmail(email) {
 
         var email = email;
         var expReg0 = new RegExp("[A-Za-z0-9_.-]+@([A-Za-z0-9_]+\.)+[A-Za-z]{2,4}");
         var expReg1 = new RegExp("[!#$%*<>,:;?°ºª~/|]");
 
-        if(email.match(expReg1)!= null || email.indexOf('\\') != -1 || email.indexOf(' ') != -1){
-            alert('Usuário:\n\nEmail informado não é válido ou esta vazio!\n\n exemplo de email: xxx@xx.xx\n\n Email pode conter: \n  letras, números, hifen(-), sublinhado _\n\n Email não pode conter:\n  caracteres especiais, virgula(,), ponto e virgula (;), dois pontos (:) \n\nAdministrador:\n\n') ;
+        if (email.match(expReg1) != null || email.indexOf('\\') != -1 || email.indexOf(' ') != -1) {
+            alert('Usuário:\n\nEmail informado não é válido ou esta vazio!\n\n exemplo de email: xxx@xx.xx\n\n Email pode conter: \n  letras, números, hifen(-), sublinhado _\n\n Email não pode conter:\n  caracteres especiais, virgula(,), ponto e virgula (;), dois pontos (:) \n\nAdministrador:\n\n');
             return false;
         }
 
-        if(email.match(expReg0)==null){
-            alert('Usuário:\n\nEmail informado não é válido ou esta vazio!\n\n exemplo de email: xxx@xx.xx\n\n Email pode conter: \n  letras, números, hifen(-), sublinhado _\n\n Email não pode conter:\n  caracteres especiais, virgula(,), ponto e virgula (;), dois pontos (:) \n\nAdministrador:\n\n') ;
+        if (email.match(expReg0) == null) {
+            alert('Usuário:\n\nEmail informado não é válido ou esta vazio!\n\n exemplo de email: xxx@xx.xx\n\n Email pode conter: \n  letras, números, hifen(-), sublinhado _\n\n Email não pode conter:\n  caracteres especiais, virgula(,), ponto e virgula (;), dois pontos (:) \n\nAdministrador:\n\n');
             return false;
         }
         return true;
@@ -1883,9 +1893,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         /**
          * Caso email seja preenchido valida email
          */
-        if ( $F('z01_email') != '' ) {
+        if ($F('z01_email') != '') {
 
-            if ( !js_validaEmail($F('z01_email')) ) {
+            if (!js_validaEmail($F('z01_email'))) {
                 return false;
             }
         }
@@ -1893,9 +1903,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         /**
          * valida email comercial
          */
-        if ( $F('z01_emailc') != '' ) {
+        if ($F('z01_emailc') != '') {
 
-            if ( !js_validaEmail($F('z01_emailc')) ) {
+            if (!js_validaEmail($F('z01_emailc'))) {
                 return false;
             }
         }
@@ -1909,7 +1919,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             /*Valida cpf*/
             if ($F('z01_cpf').trim() == "") {
                 var strMessageUsuario = "Campo CPF não informado !";
-                js_messageBox(strMessageUsuario,'');
+                js_messageBox(strMessageUsuario, '');
                 $('z01_cpf').focus();
                 return false;
             }
@@ -1917,7 +1927,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             /*Valida nome*/
             if ($F('z01_nome').trim() == "") {
                 var strMessageUsuario = "Campo Nome não informado!";
-                js_messageBox(strMessageUsuario,'');
+                js_messageBox(strMessageUsuario, '');
                 $('z01_nome').focus();
                 return false;
             }
@@ -1930,7 +1940,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             /*Valida Endereco Primário*/
             if ($F('idEnderPrimario').trim() == "") {
                 var strMessageUsuario = "Endereço Primário não informado!";
-                js_messageBox(strMessageUsuario,'');
+                js_messageBox(strMessageUsuario, '');
                 $('endPrimario').focus();
                 js_lancaEnderPrimario();
                 return false;
@@ -1939,9 +1949,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             /**
              * Data de nascimento nao pode ser maior que a de falecimento
              */
-            if ( $F('z01_dtfalecimento') != '' && $F('z01_nasc') != '' ) {
+            if ($F('z01_dtfalecimento') != '' && $F('z01_nasc') != '') {
 
-                var mValidaDatas = js_diferenca_datas(js_formatar($F('z01_nasc'), 'd'),js_formatar($F('z01_dtfalecimento'), 'd'), 3);
+                var mValidaDatas = js_diferenca_datas(js_formatar($F('z01_nasc'), 'd'), js_formatar($F('z01_dtfalecimento'), 'd'), 3);
 
                 /**
                  * Data de falecimento menor
@@ -1949,7 +1959,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                  */
                 if (mValidaDatas != 'i' && mValidaDatas) {
 
-                    js_messageBox('Data de falecimento não pode ser menor que data de nascimento.','');
+                    js_messageBox('Data de falecimento não pode ser menor que data de nascimento.', '');
                     $('z01_dtfalecimento').focus();
                     return false;
                 }
@@ -1958,7 +1968,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             /**
              * Caso valor da renda possua hifen
              */
-            if ( $F('z01_renda') != '' && $F('z01_renda').indexOf('-') != -1 ) {
+            if ($F('z01_renda') != '' && $F('z01_renda').indexOf('-') != -1) {
 
                 alert('Valor para renda inválido.');
                 return false;
@@ -1969,21 +1979,21 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                 /*Valida obs*/
                 if ($F('z01_obs').trim() == "") {
                     var strMessageUsuario = "Observações não informado!";
-                    js_messageBox(strMessageUsuario,'');
+                    js_messageBox(strMessageUsuario, '');
                     $('z01_obs').focus();
                     return false;
                 }
             }
 
-            if ($('ufdescr').selectedIndex != 0){
-                if ($('listMunicipios').selectedIndex != 0 ){
-                    if ($F('z01_ibge').trim() == ''){
+            if ($('ufdescr').selectedIndex != 0) {
+                if ($('listMunicipios').selectedIndex != 0) {
+                    if ($F('z01_ibge').trim() == '') {
                         var strMessageUsuario = 'Código IBGE não informado!';
                         js_messageBox(strMessageUsuario, '');
                         $('listMunicipios').focus();
                         return false;
                     }
-                } else{
+                } else {
                     var strMessageUsuario = 'Cidade não informada!';
                     js_messageBox(strMessageUsuario, '');
                     $('listMunicipios').focus();
@@ -1998,7 +2008,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             /*Valida cpf*/
             if ($F('z01_cgc').trim() == "") {
                 var strMessageUsuario = "Campo CNPJ não informado !";
-                js_messageBox(strMessageUsuario,'');
+                js_messageBox(strMessageUsuario, '');
                 $('z01_cgc').focus();
                 return false;
             }
@@ -2006,7 +2016,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             /*Valida nome*/
             if ($F('z01_nome').trim() == "") {
                 var strMessageUsuario = "Campo Nome não informado!";
-                js_messageBox(strMessageUsuario,'');
+                js_messageBox(strMessageUsuario, '');
                 $('z01_nome').focus();
                 return false;
             }
@@ -2019,7 +2029,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             /*Valida nome*/
             if ($F('z01_nomecomple').trim() == "") {
                 var strMessageUsuario = "Campo Nome Completo não informado!";
-                js_messageBox(strMessageUsuario,'');
+                js_messageBox(strMessageUsuario, '');
                 $('z01_nomecomple').focus();
                 return false;
             }
@@ -2031,7 +2041,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             /*Valida Endereco Primário*/
             if ($F('idEnderPrimario').trim() == "") {
                 var strMessageUsuario = "Endereço Primário não informado!";
-                js_messageBox(strMessageUsuario,'');
+                js_messageBox(strMessageUsuario, '');
                 $('endPrimario').focus();
                 js_lancaEnderPrimario();
                 return false;
@@ -2042,7 +2052,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                 /*Valida obs*/
                 if ($F('z01_obs').trim() == "") {
                     var strMessageUsuario = "Observações não informado!";
-                    js_messageBox(strMessageUsuario,'');
+                    js_messageBox(strMessageUsuario, '');
                     $('z01_obs').focus();
                     return false;
                 }
@@ -2052,47 +2062,48 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         } else {
 
             var strMessageUsuario = "Tipo de Pessoa indefinido para o cadastro!";
-            js_messageBox(strMessageUsuario,'');
+            js_messageBox(strMessageUsuario, '');
             return false;
         }
     }
 
-    function js_messageBox(strMessageUsuario,strMessageAdministrador) {
+    function js_messageBox(strMessageUsuario, strMessageAdministrador) {
 
-        var strMessage  = "usuário:";
+        var strMessage = "usuário:";
         strMessage += "\n\n\t" + strMessageUsuario + "\n\n";
         strMessage += "administrador:";
         strMessage += "\n\n" + strMessageAdministrador + "\n\n";
 
         alert(strMessage);
     }
+
     function js_copiaNome() {
 
-        if($('z01_nomecomple')) {
+        if ($('z01_nomecomple')) {
 
             $('z01_nomecomple').value = $F('z01_nome');
         }
     }
     /*----------------------------Funções para manipular o cidadao----------------------*/
 
-    function js_importaCadastroCidadao(){
+    function js_importaCadastroCidadao() {
 
-        js_OpenJanelaIframe('','db_iframe_cidadao',
+        js_OpenJanelaIframe('', 'db_iframe_cidadao',
             'func_cidadaovinculos.php?funcao_js=parent.js_mostracidadao1|0|4&liberado=true&ativo=true&vinculocgm=false',
-            'Pesquisa',true);
+            'Pesquisa', true);
 
     }
 
-    function js_MICidadao(ov02_sequencial, ov02_seq, ov03_numcgm){
+    function js_MICidadao(ov02_sequencial, ov02_seq, ov03_numcgm) {
 
         var sQuery = "";
         sQuery += "importa=true";
-        sQuery += "&ov02_sequencial="+ov02_sequencial;
-        sQuery += "&ov02_seq="+ov02_seq;
-        sQuery += "&ov03_numcgm="+ov03_numcgm;
-        js_OpenJanelaIframe('','db_iframe',
-            'prot1_cidadaocgmdetalhe.php?'+sQuery,
-            'Pesquisa',true);
+        sQuery += "&ov02_sequencial=" + ov02_sequencial;
+        sQuery += "&ov02_seq=" + ov02_seq;
+        sQuery += "&ov03_numcgm=" + ov03_numcgm;
+        js_OpenJanelaIframe('', 'db_iframe',
+            'prot1_cidadaocgmdetalhe.php?' + sQuery,
+            'Pesquisa', true);
     }
 
     function js_retornoAlteraCgmCidadao() {
@@ -2101,16 +2112,16 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         js_findCgm($F('z01_numcgm'));
     }
 
-    function js_vinculaCadastroCidadaoCGM(){
+    function js_vinculaCadastroCidadaoCGM() {
 
-        js_OpenJanelaIframe('','db_iframe_cidadao',
+        js_OpenJanelaIframe('', 'db_iframe_cidadao',
             'func_cidadaovinculos.php?funcao_js=parent.js_vinculaCidadaoCGM|0|1&liberado=true&ativo=true&vinculocgm=false',
-            'Pesquisa',true
+            'Pesquisa', true
         );
 
     }
 
-    function js_vinculaCidadaoCGM(ov02_sequencial,ov02_seq){
+    function js_vinculaCidadaoCGM(ov02_sequencial, ov02_seq) {
 
         db_iframe_cidadao.hide();
 
@@ -2118,40 +2129,39 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
         oVincular.acao = 'vincular';
         oVincular.ov03_cidadao = ov02_sequencial;
-        oVincular.ov03_seq     = ov02_seq;
-        oVincular.ov03_numcgm  = $F('z01_numcgm');
+        oVincular.ov03_seq = ov02_seq;
+        oVincular.ov03_numcgm = $F('z01_numcgm');
 
         var sDados = Object.toJSON(oVincular);
         var msgDiv = 'Aguarde vinculando Cidadão ao CGM.....';
-        js_divCarregando(msgDiv,'msgBox');
+        js_divCarregando(msgDiv, 'msgBox');
 
         sUrl = 'ouv1_cidadao.RPC.php';
-        var sQuery = 'dados='+sDados;
-        var oAjax   = new Ajax.Request( sUrl, {
-                method: 'post',
-                parameters: sQuery,
-                onComplete: js_retornoVincularDados
-            }
-        );
+        var sQuery = 'dados=' + sDados;
+        var oAjax = new Ajax.Request(sUrl, {
+            method: 'post',
+            parameters: sQuery,
+            onComplete: js_retornoVincularDados
+        });
 
     }
 
-    function js_retornoVincularDados(oAjax){
+    function js_retornoVincularDados(oAjax) {
 
         js_removeObj("msgBox");
 
-        var aRetorno = eval("("+oAjax.responseText+")");
+        var aRetorno = eval("(" + oAjax.responseText + ")");
 
-        var sExpReg  = new RegExp('\\\\n','g');
+        var sExpReg = new RegExp('\\\\n', 'g');
 
-        alert(aRetorno.message.urlDecode().replace(sExpReg,'\n'));
+        alert(aRetorno.message.urlDecode().replace(sExpReg, '\n'));
 
-        if ( aRetorno.status == 0){
+        if (aRetorno.status == 0) {
             return false;
-        }else if ( aRetorno.status == 1) {
+        } else if (aRetorno.status == 1) {
 
             var z01_numcgm = aRetorno.ov03_numcgm;
-            location.href = 'prot1_cadgeralmunic005.php?chavepesquisa='+z01_numcgm;
+            location.href = 'prot1_cadgeralmunic005.php?chavepesquisa=' + z01_numcgm;
         }
 
     }
@@ -2183,7 +2193,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
     function js_alteraMunicipio() {
 
-        if($F('idEnderPrimario') != ''){
+        if ($F('idEnderPrimario') != '') {
 
             if (confirm('usuario:\n\nO endereço primário será excluído !\n\nDeseja continuar ?\n\n')) {
 
@@ -2202,23 +2212,23 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         }
     }
 
-    function js_validaPis(pis){
+    function js_validaPis(pis) {
 
-        if (pis != ''){
+        if (pis != '') {
 
-            if (!js_ChecaPIS(pis)){
+            if (!js_ChecaPIS(pis)) {
 
                 alert("Pis inválido.Verifique.");
                 document.form1.z01_pis.focus();
                 document.form1.z01_pis.value = '';
-                return(false);
+                return (false);
             } else {
-                return(true);
+                return (true);
             }
         }
     }
 
-    document.addEventListener('DOMContentLoaded',function(){
+    document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('ufdescr').onchange = () => {
             var descrMunicipios = document.getElementById('ufdescr');
             js_pesquisaMunicipios(null);
@@ -2227,7 +2237,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             if (descrMunicipios.text == 'DISTRITO FEDERAL')
                 document.getElementById('listMunicipios').selectedIndex = 1;
 
-            if(descrMunicipios.selectedIndex == 0){
+            if (descrMunicipios.selectedIndex == 0) {
                 document.getElementById('listMunicipios').selectedIndex = 0;
             }
         };
@@ -2236,35 +2246,34 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             js_retornaCodigoIbge();
         }
 
-    },false);
+    }, false);
 
 
 
-    function js_pesquisaMunicipios(municipio=null){
+    function js_pesquisaMunicipios(municipio = null) {
 
         let element = document.getElementById('ufdescr');
         let option = element.options[element.selectedIndex].text;
 
-        var sUrlRpc   = 'prot1_cadgeralmunic.RPC.php';
-        var oParam    = new Object();
+        var sUrlRpc = 'prot1_cadgeralmunic.RPC.php';
+        var oParam = new Object();
         oParam.estado = option;
-        oParam.exec   = 'buscaMunicipios';
+        oParam.exec = 'buscaMunicipios';
 
         if (municipio != '' && municipio != undefined)
             oParam.cidade = municipio;
 
         var oAjax = new Ajax.Request(sUrlRpc, {
-                method: 'post',
-                asynchronous: false,
-                parameters:'json='+Object.toJSON(oParam),
-                onComplete: js_preencheCidade
-            }
-        );
+            method: 'post',
+            asynchronous: false,
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_preencheCidade
+        });
     }
 
-    function js_preencheCidade(obj){
+    function js_preencheCidade(obj) {
         var params = JSON.parse(obj.request.parameters.json);
-        var resposta = eval('('+obj.responseText+')');
+        var resposta = eval('(' + obj.responseText + ')');
 
         var municipios = document.getElementById('listMunicipios');
         var ufs = document.getElementById('ufdescr');
@@ -2273,28 +2282,27 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         listaMunicipios = resposta.municipios;
         municipios.add(new Option('Selecione'));
 
-        if(listaMunicipios.length == 1 && ufs.selectedIndex == 7){
-            var ob       = document.createElement('option');
-            ob.value     = listaMunicipios.sequencial;
-            ob.text      = 'BRASÍLIA';
+        if (listaMunicipios.length == 1 && ufs.selectedIndex == 7) {
+            var ob = document.createElement('option');
+            ob.value = listaMunicipios.sequencial;
+            ob.text = 'BRASÍLIA';
             municipios.appendChild(ob);
             municipios.selectedIndex = 1;
             js_retornaCodigoIbge();
-        }
-        else{
+        } else {
             listamunictratado = listaMunicipios.filter(item => item.descricao !== undefined && item.descricao !== null);
 
             listamunictratado.forEach((item, index) => {
-                var obj   = document.createElement('option');
+                var obj = document.createElement('option');
                 obj.value = item.sequencial;
-                obj.text  = item.descricao.urlDecode();
+                obj.text = item.descricao.urlDecode();
                 municipios.appendChild(obj);
 
             });
         }
 
         for (let cont = 0; cont < municipios.length; cont++) {
-            if (municipios.options[cont].text == params.cidade){
+            if (municipios.options[cont].text == params.cidade) {
                 municipios.selectedIndex = cont;
                 js_retornaCodigoIbge();
             }
@@ -2306,31 +2314,29 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
     }
 
-    function js_retornaCodigoIbge(){
-        var element   = document.getElementById('ufdescr');
-        var option    = element.options[element.selectedIndex].text;
-        var oParam    = new Object();
+    function js_retornaCodigoIbge() {
+        var element = document.getElementById('ufdescr');
+        var option = element.options[element.selectedIndex].text;
+        var oParam = new Object();
 
         let cidade = document.getElementById('listMunicipios');
 
         oParam.cidade = cidade.options[cidade.selectedIndex].text;
         oParam.estado = option;
-        oParam.exec   = 'getCodigoIbge';
-        var sUrlRpc   = 'prot1_cadgeralmunic.RPC.php';
+        oParam.exec = 'getCodigoIbge';
+        var sUrlRpc = 'prot1_cadgeralmunic.RPC.php';
 
         var oAjax = new Ajax.Request(sUrlRpc, {
-                method: 'post',
-                parameters:'json='+Object.toJSON(oParam),
-                onComplete: js_preencheCodigoIbge
-            }
-        );
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_preencheCodigoIbge
+        });
     }
 
-    function js_preencheCodigoIbge(obj){
+    function js_preencheCodigoIbge(obj) {
         let oRetorno = JSON.parse(obj.responseText);
 
         if (oRetorno.codigo != null)
             document.getElementById('z01_ibge').value = oRetorno.codigo;
     }
-
 </script>

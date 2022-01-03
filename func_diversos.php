@@ -109,7 +109,7 @@ $cldiversos->rotulo->label("dv05_numcgm");
                     $sql = $cldiversos->sql_query_func("", $campos, "dv05_coddiver", " dv05_coddiver like '$chave_dv05_coddiver%' and dv05_instit = " . db_getsession('DB_instit') . "");
                 } else if (isset($chave_dv05_numcgm) && (trim($chave_dv05_numcgm) != "")) {
                     $sql = $cldiversos->sql_query_func("", $campos, "dv05_numcgm", " dv05_numcgm like '$chave_dv05_numcgm%' and dv05_instit = " . db_getsession('DB_instit') . " ");
-                    /////// inscriÁ„o /////////////////////
+                    /////// inscri√ß√£o /////////////////////
                 } else if (isset($chave_k00_inscr) && (trim($chave_k00_inscr) != "")) {
                     $sql = $cldiversos->sql_query_func("", $campos, "k00_inscr", " k00_inscr like '$chave_k00_inscr%' and dv05_instit = " . db_getsession('DB_instit') . " ");
                     /////// matricula /////////////////////
@@ -118,10 +118,8 @@ $cldiversos->rotulo->label("dv05_numcgm");
                     //////////////////////////////////////*/
                 } else if (isset($pesquisar)) {
                     $sql = $cldiversos->sql_query_func("", $campos, "dv05_coddiver desc", " dv05_instit = " . db_getsession('DB_instit') . " ");
-                }
-                if (isset($sql)) {
-                    db_lovrot($sql, 15, "()", "", $funcao_js);
-                }
+                }                
+                    db_lovrot($sql, 15, "()", "", $funcao_js);                
             } else {
                 if ($pesquisa_chave != null && $pesquisa_chave != "") {
                     $result = $cldiversos->sql_record($cldiversos->sql_query_func($pesquisa_chave, "*", null, " dv05_instit = " . db_getsession('DB_instit') . " and diversos.dv05_coddiver = $pesquisa_chave"));
@@ -129,7 +127,7 @@ $cldiversos->rotulo->label("dv05_numcgm");
                         db_fieldsmemory($result, 0);
                         echo "<script>" . $funcao_js . "('$z01_nome',false);</script>";
                     } else {
-                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n„o Encontrado',true);</script>";
+                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") n√£o Encontrado',true);</script>";
                     }
                 } else {
                     echo "<script>" . $funcao_js . "('',false);</script>";

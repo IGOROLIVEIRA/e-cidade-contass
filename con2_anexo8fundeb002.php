@@ -223,7 +223,7 @@ function getPagamentoComplementacaoInfantil($dtini, $dtfim, $instits)
     return  $valorEmpPago;
 }
 
-function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
+function getSaldoPlanoContaFonteFundeb($nFonte, $dtIni, $dtFim, $aInstits){
     $where = " c61_instit in ({$aInstits})" ;
     $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
@@ -245,7 +245,7 @@ function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
     return $nTotalAnterior;
 }
 
-function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
+function getRestosSemDisponilibidadeFundeb($aFontes, $dtIni, $dtFim, $aInstits) {
     $iSaldoRestosAPagarSemDisponibilidade = 0;
 
     foreach($aFontes as $sFonte){
@@ -259,7 +259,7 @@ function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
         foreach($aEmpRestos as $oEmpResto){
             $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
         }
-        $nTotalAnterior = getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits);
+        $nTotalAnterior = getSaldoPlanoContaFonteFundeb($sFonte, $dtIni, $dtFim, $aInstits);
         $nSaldo = 0;
         if($nValorRpPago > $nTotalAnterior){
             $nSaldo = $nValorRpPago - $nTotalAnterior ;
@@ -1497,10 +1497,10 @@ ob_start();
                     <td class="s45" dir="ltr" colspan="5">12 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE
                         FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932736)</td>
                     <?php
-                        $nRPNPAnteriorSemDispFonte118 = getRestosSemDisponilibidade(array("'118','119'"), $dtini, $dtfim, $instits);
+                        $nRPNPAnteriorSemDispFonte118 = getRestosSemDisponilibidadeFundeb(array("'118','119'"), $dtini, $dtfim, $instits);
                         $nRPNPAnteriorSemDispFonte119 = 0;//getRestosSemDisponilibidade(array("'119'"), $dtini, $dtfim, $instits);
-                        $nRPNPAnteriorSemDispFonte166 = getRestosSemDisponilibidade(array("'166'"), $dtini, $dtfim, $instits);
-                        $nRPNPAnteriorSemDispFonte167 = getRestosSemDisponilibidade(array("'167'"), $dtini, $dtfim, $instits);
+                        $nRPNPAnteriorSemDispFonte166 = getRestosSemDisponilibidadeFundeb(array("'166'"), $dtini, $dtfim, $instits);
+                        $nRPNPAnteriorSemDispFonte167 = getRestosSemDisponilibidadeFundeb(array("'167'"), $dtini, $dtfim, $instits);
                         echo "<td class='s38' dir='ltr'>";
                         echo db_formatar($nRPNPAnteriorSemDispFonte118,"f");
                         echo "</td>";

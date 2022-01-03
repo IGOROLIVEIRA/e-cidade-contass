@@ -80,6 +80,10 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
 
     $sql = $oDaoAcordo->sql_query_lancamentos_empenhocontrato("c71_coddoc", $this->getEmpenho()->getNumero());
 
+    if(db_getsession("DB_anousu") > 2021){
+        $sql = $oDaoAcordo->sql_query_lancamentos_contrato("c71_coddoc", $this->getAcordo()->getCodigoAcordo());
+    }
+
     $result = db_query($sql);
 
     $aDocumentos = array();
