@@ -4,7 +4,7 @@ use Phinx\Migration\AbstractMigration;
 
 class AddNaturezasRubricas extends AbstractMigration
 {
-    protected $arrNatureza = [       
+    protected $arrNatureza = array(       
 '1089' => 'Cesta básica ou refeição, não vinculada ao PAT ',
 '1022' => 'Férias - Abono ou gratificação de férias não excedente a 20 dias',
 '1216' => 'Adicional de localidade',
@@ -101,7 +101,7 @@ class AddNaturezasRubricas extends AbstractMigration
 '9911' => 'Assistência Médica',
 '9950' => 'Horas extraordinárias - Banco de horas',
 '9951' => 'Horas compensadas - Banco de horas'
-];
+);
 
     public function up()
     {
