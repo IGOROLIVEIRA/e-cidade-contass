@@ -136,7 +136,8 @@ class licitacao
             else si02_vlpercreferencia end as valorunitariomedio,
         case
             when l20_tipojulg = 3 then l04_descricao
-            else ' ' end as codigodolote";
+            else ' ' end as codigodolote,
+        l21_reservado";
 
         $rsItens  = $oDaoLicitem->sql_record(
             $oDaoLicitem->sql_query_licitacao_exporta(
@@ -173,7 +174,8 @@ class licitacao
         l20_anousu as anoprocessolicitatorio,
         l04_codigo as codigodolote,
         l04_liclicitem as codigodoitemvinculadoaolote,
-        l04_descricao as descricaodolote";
+        l04_descricao as descricaodolote,
+        l21_reservado";
 
         $rsItens  = $oDaoLicitem->sql_record(
             $oDaoLicitem->sql_query_licitacao_exporta(

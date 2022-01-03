@@ -81,6 +81,8 @@ if ($clabre_arquivo->arquivo != false) {
         fputs($clabre_arquivo->arquivo, formatarCampo($sProcessoObjeto, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iNaturezaObjeto, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
+
         fputs($clabre_arquivo->arquivo, "\n");
     }
 
@@ -110,6 +112,13 @@ if ($clabre_arquivo->arquivo != false) {
         $iValorUnitMedio                 = $oItens->valorunitariomedio;
         $iCodigodolote                   = $oItens->codigodolote;
 
+        if($oItens->l21_reservado != 'f')
+            $sReservado = 'Sim';
+        else
+            $sReservado = 'Nao';
+
+        //$sReservado = $oItens->l21_reservado;
+
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
@@ -121,6 +130,8 @@ if ($clabre_arquivo->arquivo != false) {
         fputs($clabre_arquivo->arquivo, formatarCampo($iQtdLicitada, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iValorUnitMedio, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCodigodolote, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($sReservado, $vir, $del));
+
         fputs($clabre_arquivo->arquivo, "\n");
     }
 
@@ -145,12 +156,20 @@ if ($clabre_arquivo->arquivo != false) {
             $iCodItem                        = $oItens->codigodoitemvinculadoaolote;
             $sDescrLote                      = $oItens->descricaodolote;
 
+            if($oItens->l21_reservado != 'f')
+                $sReservado = 'Sim';
+            else
+                $sReservado = 'Nao';
+
+            //$sReservado = $oItens->l21_reservado;
+
             fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
             fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
             fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
             fputs($clabre_arquivo->arquivo, formatarCampo($iLote, $vir, $del));
             fputs($clabre_arquivo->arquivo, formatarCampo($iCodItem, $vir, $del));
             fputs($clabre_arquivo->arquivo, formatarCampo($sDescrLote, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($sReservado, $vir, $del));
             fputs($clabre_arquivo->arquivo, "\n");
         }
     }else{

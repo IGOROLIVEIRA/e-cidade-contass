@@ -3614,12 +3614,12 @@ class cl_liclicita
         join pcmater on pc16_codmater = pc01_codmater
         join solicitemunid on pc17_codigo=pc11_codigo
         join matunid on m61_codmatunid=pc17_unid
-        join pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-        join pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-        join pcorcamval ON pc22_orcamitem = pc23_orcamitem
-        join itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-        join precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-        left join liclicitemlote on l04_liclicitem=l21_codigo";
+        left JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+        left JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+        left JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+        left JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+        left JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+        LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo";
 
         if (!empty($dbwhere)) {
             $sql .= " where {$dbwhere} ";
