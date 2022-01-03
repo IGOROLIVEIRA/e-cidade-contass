@@ -4,107 +4,113 @@ use Phinx\Migration\AbstractMigration;
 
 class AddNaturezasRubricas extends AbstractMigration
 {
+    protected $arrNatureza = [       
+'1089' => 'Cesta básica ou refeição, não vinculada ao PAT ',
+'1022' => 'Férias - Abono ou gratificação de férias não excedente a 20 dias',
+'1216' => 'Adicional de localidade',
+'1351' => 'Bolsa de estudo - Médico residente',
+'1404' => 'Auxílio babá',
+'1405' => 'Assistência médica',
+'1207' => 'Comissões, porcentagens, produção',
+'1208' => 'Gueltas ou gorjetas - Repassadas por fornecedores ou clientes',
+'1209' => 'Gueltas ou gorjetas - Repassadas pelo empregador',
+'1210' => 'Gratificação por acordo ou convenção coletiva',
+'1217' => 'Gratificação de curso/concurso',
+'1225' => 'Quebra de caixa',
+'1230' => 'Remuneração do dirigente sindical',
+'1300' => 'PLR - Participação em Lucros ou Resultados',
+'1352' => 'Bolsa de estudo ou pesquisa',
+'1401' => 'Abono',
+'1406' => 'Auxílio-creche',
+'1006' => 'Intervalos intra e inter jornadas não concedidos',
+'1007' => 'Luvas e premiações',
+'1009' => 'Salário-família - Complemento',
+'1010' => 'Salário in natura - Pagos em bens ou serviços',
+'1011' => 'Sobreaviso e prontidão',
+'1021' => 'Férias - Abono ou gratificação de férias superior a 20 dias',
+'1214' => 'Adicional de penosidade',
+'1005' => 'Direito de arena',
+'1080' => 'Stock option',
+'1412' => 'Abono permanência',
+'1601' => 'Ajuda de custo - Aeronauta',
+'1603' => 'Ajuda de custo',
+'1604' => 'Ajuda de custo - Acima de 50% da remuneração mensal',
+'1619' => 'Ajuda compensatória - Lei 14.020/2020',
+'1800' => 'Alimentação concedida em pecúnia',
+'1802' => 'Etapas (marítimos)',
+'1806' => 'Alimentação em ticket ou cartão, vinculada ao PAT',
+'1807' => 'Alimentação em ticket ou cartão, não vinculada ao PAT',
+'1809' => 'Cesta básica ou refeição, não vinculada ao PAT',
+'1899' => 'Outros auxílios',
+'2501' => 'Prêmios',
+'2502' => 'Liberalidades concedidas em mais de duas parcelas anuais',
+'2510' => 'Direitos autorais e intelectuais',
+'2801' => 'Quarentena remunerada',
+'2901' => 'Empréstimos',
+'2902' => 'Vestuário e equipamentos',
+'2999' => 'Arredondamentos',
+'3505' => 'Retiradas (pró-labore) de diretores empregados',
+'3508' => 'Retiradas (pró-labore) de proprietários ou sócios',
+'3509' => 'Honorários a conselheiros',
+'1411' => 'Auxílio-natalidade',
+'1650' => 'Diárias de viagem',
+'1808' => 'Cesta básica ou refeição, vinculada ao PAT',
+'3510' => 'Gratificação (jeton)',
+'3511' => 'Gratificação eleitoral',
+'3520' => 'Remuneração de cooperado',
+'3525' => 'Côngruas, prebendas e afins',
+'4010' => 'Complementação salarial de auxílio-doença',
+'4011' => 'Complemento de salário-mínimo - RPPS',
+'5501' => 'Adiantamento de salário',
+'5510' => 'Adiantamento de benefícios previdenciários',
+'6105' => 'Indenização recebida a título de incentivo a demissão',
+'6107' => 'Indenização por quebra de estabilidade',
+'6119' => 'Indenização rescisória - Lei 14.020/2020',
+'9243' => 'Cesta básica ou refeição, vinculada ao PAT - Desconto',
+'6103' => 'Indenização do art. 14 da Lei 5.889/1973',
+'7003' => 'Proventos - Reserva',
+'7004' => 'Proventos - Reforma',
+'7005' => 'Pensão Militar',
+'7006' => 'Auxílio-reclusão',
+'7007' => 'Pensões especiais',
+'7008' => 'Complementação de aposentadoria/ pensão',
+'9202' => 'Contribuição militar',
+'9207' => 'Faltas',
+'9208' => 'Atrasos',
+'9211' => 'DSR sobre faltas',
+'9212' => 'DSR sobre atrasos',
+'9220' => 'Alimentação - Desconto',
+'9224' => 'FAPI - Parte do empregado',
+'9226' => 'Desconto de férias - Abono',
+'9233' => 'Contribuição sindical - Confederativa',
+'9240' => 'Alimentação concedida em pecúnia - Desconto',
+'9241' => 'Alimentação em ticket ou cartão, vinculada ao PAT - Desconto',
+'9242' => 'Alimentação em ticket ou cartão, não vinculada ao PAT - Desconto',
+'9244' => 'Cesta básica ou refeição, não vinculada ao PAT - Desconto',
+'9255' => 'Empréstimos do empregador - Desconto',
+'9260' => 'FIES - Desconto',
+'9291' => 'Abate-teto',
+'9292' => 'Ressarcimento ao erário',
+'9293' => 'Honorários advocatícios',
+'9294' => 'Redutor EC 41/03',
+'9909' => 'Base de cálculo da contribuição previdenciária - Aposentados e Pensionistas',
+'9905' => 'Serviço militar',
+'9906' => 'Remuneração no exterior',
+'9907' => 'Total da contribuição da previdenciária patronal - RPPS',
+'9910' => 'Seguros',
+'9911' => 'Assistência Médica',
+'9950' => 'Horas extraordinárias - Banco de horas',
+'9951' => 'Horas compensadas - Banco de horas'
+];
+
     public function up()
     {
-        $sql  = "
-        INSERT INTO rubricasesocial values ('1089','Cesta básica ou refeição, não vinculada ao PAT ');
-INSERT INTO rubricasesocial values ('1022','Férias - Abono ou gratificação de férias não excedente a 20 dias');
-INSERT INTO rubricasesocial values ('1216','Adicional de localidade');
-INSERT INTO rubricasesocial values ('1351','Bolsa de estudo - Médico residente');
-INSERT INTO rubricasesocial values ('1404','Auxílio babá');
-INSERT INTO rubricasesocial values ('1405','Assistência médica');
-INSERT INTO rubricasesocial values ('1207','Comissões, porcentagens, produção');
-INSERT INTO rubricasesocial values ('1208','Gueltas ou gorjetas - Repassadas por fornecedores ou clientes');
-INSERT INTO rubricasesocial values ('1209','Gueltas ou gorjetas - Repassadas pelo empregador');
-INSERT INTO rubricasesocial values ('1210','Gratificação por acordo ou convenção coletiva');
-INSERT INTO rubricasesocial values ('1217','Gratificação de curso/concurso');
-INSERT INTO rubricasesocial values ('1225','Quebra de caixa');
-INSERT INTO rubricasesocial values ('1230','Remuneração do dirigente sindical');
-INSERT INTO rubricasesocial values ('1300','PLR - Participação em Lucros ou Resultados');
-INSERT INTO rubricasesocial values ('1352','Bolsa de estudo ou pesquisa');
-INSERT INTO rubricasesocial values ('1401','Abono');
-INSERT INTO rubricasesocial values ('1406','Auxílio-creche');
-INSERT INTO rubricasesocial values ('1006','Intervalos intra e inter jornadas não concedidos');
-INSERT INTO rubricasesocial values ('1007','Luvas e premiações');
-INSERT INTO rubricasesocial values ('1009','Salário-família - Complemento');
-INSERT INTO rubricasesocial values ('1010','Salário in natura - Pagos em bens ou serviços');
-INSERT INTO rubricasesocial values ('1011','Sobreaviso e prontidão');
-INSERT INTO rubricasesocial values ('1021','Férias - Abono ou gratificação de férias superior a 20 dias');
-INSERT INTO rubricasesocial values ('1214','Adicional de penosidade');
-INSERT INTO rubricasesocial values ('1005','Direito de arena');
-INSERT INTO rubricasesocial values ('1080','Stock option');
-INSERT INTO rubricasesocial values ('1412','Abono permanência');
-INSERT INTO rubricasesocial values ('1601','Ajuda de custo - Aeronauta');
-INSERT INTO rubricasesocial values ('1603','Ajuda de custo');
-INSERT INTO rubricasesocial values ('1604','Ajuda de custo - Acima de 50% da remuneração mensal');
-INSERT INTO rubricasesocial values ('1619','Ajuda compensatória - Lei 14.020/2020');
-INSERT INTO rubricasesocial values ('1800','Alimentação concedida em pecúnia');
-INSERT INTO rubricasesocial values ('1802','Etapas (marítimos)');
-INSERT INTO rubricasesocial values ('1806','Alimentação em ticket ou cartão, vinculada ao PAT');
-INSERT INTO rubricasesocial values ('1807','Alimentação em ticket ou cartão, não vinculada ao PAT');
-INSERT INTO rubricasesocial values ('1809','Cesta básica ou refeição, não vinculada ao PAT');
-INSERT INTO rubricasesocial values ('1899','Outros auxílios');
-INSERT INTO rubricasesocial values ('2501','Prêmios');
-INSERT INTO rubricasesocial values ('2502','Liberalidades concedidas em mais de duas parcelas anuais');
-INSERT INTO rubricasesocial values ('2510','Direitos autorais e intelectuais');
-INSERT INTO rubricasesocial values ('2801','Quarentena remunerada');
-INSERT INTO rubricasesocial values ('2901','Empréstimos');
-INSERT INTO rubricasesocial values ('2902','Vestuário e equipamentos');
-INSERT INTO rubricasesocial values ('2999','Arredondamentos');
-INSERT INTO rubricasesocial values ('3505','Retiradas (pró-labore) de diretores empregados');
-INSERT INTO rubricasesocial values ('3508','Retiradas (pró-labore) de proprietários ou sócios');
-INSERT INTO rubricasesocial values ('3509','Honorários a conselheiros');
-INSERT INTO rubricasesocial values ('1411','Auxílio-natalidade');
-INSERT INTO rubricasesocial values ('1650','Diárias de viagem');
-INSERT INTO rubricasesocial values ('1808','Cesta básica ou refeição, vinculada ao PAT');
-INSERT INTO rubricasesocial values ('3510','Gratificação (jeton)');
-INSERT INTO rubricasesocial values ('3511','Gratificação eleitoral');
-INSERT INTO rubricasesocial values ('3520','Remuneração de cooperado');
-INSERT INTO rubricasesocial values ('3525','Côngruas, prebendas e afins');
-INSERT INTO rubricasesocial values ('4010','Complementação salarial de auxílio-doença');
-INSERT INTO rubricasesocial values ('4011','Complemento de salário-mínimo - RPPS');
-INSERT INTO rubricasesocial values ('5501','Adiantamento de salário');
-INSERT INTO rubricasesocial values ('5510','Adiantamento de benefícios previdenciários');
-INSERT INTO rubricasesocial values ('6105','Indenização recebida a título de incentivo a demissão');
-INSERT INTO rubricasesocial values ('6107','Indenização por quebra de estabilidade');
-INSERT INTO rubricasesocial values ('6119','Indenização rescisória - Lei 14.020/2020');
-INSERT INTO rubricasesocial values ('9243','Cesta básica ou refeição, vinculada ao PAT - Desconto');
-INSERT INTO rubricasesocial values ('6103','Indenização do art. 14 da Lei 5.889/1973');
-INSERT INTO rubricasesocial values ('7003','Proventos - Reserva');
-INSERT INTO rubricasesocial values ('7004','Proventos - Reforma');
-INSERT INTO rubricasesocial values ('7005','Pensão Militar');
-INSERT INTO rubricasesocial values ('7006','Auxílio-reclusão');
-INSERT INTO rubricasesocial values ('7007','Pensões especiais');
-INSERT INTO rubricasesocial values ('7008','Complementação de aposentadoria/ pensão');
-INSERT INTO rubricasesocial values ('9202','Contribuição militar');
-INSERT INTO rubricasesocial values ('9207','Faltas');
-INSERT INTO rubricasesocial values ('9208','Atrasos');
-INSERT INTO rubricasesocial values ('9211','DSR sobre faltas');
-INSERT INTO rubricasesocial values ('9212','DSR sobre atrasos');
-INSERT INTO rubricasesocial values ('9220','Alimentação - Desconto');
-INSERT INTO rubricasesocial values ('9224','FAPI - Parte do empregado');
-INSERT INTO rubricasesocial values ('9226','Desconto de férias - Abono');
-INSERT INTO rubricasesocial values ('9233','Contribuição sindical - Confederativa');
-INSERT INTO rubricasesocial values ('9240','Alimentação concedida em pecúnia - Desconto');
-INSERT INTO rubricasesocial values ('9241','Alimentação em ticket ou cartão, vinculada ao PAT - Desconto');
-INSERT INTO rubricasesocial values ('9242','Alimentação em ticket ou cartão, não vinculada ao PAT - Desconto');
-INSERT INTO rubricasesocial values ('9244','Cesta básica ou refeição, não vinculada ao PAT - Desconto');
-INSERT INTO rubricasesocial values ('9255','Empréstimos do empregador - Desconto');
-INSERT INTO rubricasesocial values ('9260','FIES - Desconto');
-INSERT INTO rubricasesocial values ('9291','Abate-teto');
-INSERT INTO rubricasesocial values ('9292','Ressarcimento ao erário');
-INSERT INTO rubricasesocial values ('9293','Honorários advocatícios');
-INSERT INTO rubricasesocial values ('9294','Redutor EC 41/03');
-INSERT INTO rubricasesocial values ('9909','Base de cálculo da contribuição previdenciária - Aposentados e Pensionistas');
-INSERT INTO rubricasesocial values ('9905','Serviço militar');
-INSERT INTO rubricasesocial values ('9906','Remuneração no exterior');
-INSERT INTO rubricasesocial values ('9907','Total da contribuição da previdenciária patronal - RPPS');
-INSERT INTO rubricasesocial values ('9910','Seguros');
-INSERT INTO rubricasesocial values ('9911','Assistência Médica');
-INSERT INTO rubricasesocial values ('9950','Horas extraordinárias - Banco de horas');
-INSERT INTO rubricasesocial values ('9951','Horas compensadas - Banco de horas');
-;
-        ";
+        $sql = "";
+        foreach ($this->arrNatureza as $codNatureza => $descNatureza) {
+            if($this->checkNatureza($codNatureza)) {
+                $sql .= "INSERT INTO rubricasesocial values ('{$codNatureza}','{$descNatureza}');";
+            }
+        }
         $this->execute($sql);
     }
 
@@ -209,5 +215,14 @@ DELETE FROM rubricasesocial WHERE e990_sequencial = '9950';
 DELETE FROM rubricasesocial WHERE e990_sequencial = '9951';
         ";
         $this->execute($sql);
+    }
+
+    private function checkNatureza($cod)
+    {
+        $result = $this->fetchRow("SELECT * FROM rubricasesocial WHERE e990_sequencial = '{$cod}'");
+        if (empty($result)) {
+            return true;
+        }
+        return false; 
     }
 }
