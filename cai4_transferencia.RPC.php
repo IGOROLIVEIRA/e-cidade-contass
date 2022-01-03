@@ -116,10 +116,8 @@ switch ($oParam->exec) {
 			  $oRetorno->k145_numeroprocesso = urlencode($oDadosSlipProcesso->k145_numeroprocesso);
 			}
 
-
-
 			/*
-			 * descri??o dos demais campos:
+			 * descrição dos demais campos:
 			 *
 			 * conta debito
 			 * caracteristica debito
@@ -164,7 +162,7 @@ switch ($oParam->exec) {
         db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
         $dtlancamento = date("Y-m-d",db_getsession("DB_datausu"));
         if($dtlancamento < $z09_datacadastro){
-          throw new Exception("Usu?rio: A data de cadastro do CGM informado ? superior a data do procedimento que est? sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+          throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
         }
 
       }
@@ -211,10 +209,10 @@ switch ($oParam->exec) {
 
       $oTransferencia->salvar();
 
-      // Opera??es que devem realizar lan?amento cont?bil na inclus?o
+      // Operações que devem realizar lançamento contábil na inclusão
       $aTipoOperacao = array(5,6,7,8,11,12,17);
 
-       // Faz lan?amento cont?bil para os tipos de opera??o descritos acima
+       // Faz lançamento contábil para os tipos de operação descritos acima
        // ou quando for um recebimento de pagamento de uma transferencia
       if (in_array($oParam->iCodigoTipoOperacao, $aTipoOperacao)) {
 
@@ -227,7 +225,7 @@ switch ($oParam->exec) {
       $iParametroFundeb     = ParametroCaixa::getCodigoRecursoFUNDEB($iInstituicaoSessao);
 
       if (empty($oParam->sCodigoFinalidadeFundeb) && $iRecursoContaCredito === $iParametroFundeb) {
-        throw new BusinessException("N?o foi informado o c?digo da finalidade do FUNDEB para a conta cr?dito.");
+        throw new BusinessException("Não foi informado o código da finalidade do FUNDEB para a conta crédito.");
       } else if ( !empty($oParam->sCodigoFinalidadeFundeb) && $iRecursoContaCredito === $iParametroFundeb) {
 
         $oFinalidadePagamento = FinalidadePagamentoFundeb::getInstanciaPorCodigo($oParam->sCodigoFinalidadeFundeb);
@@ -241,7 +239,7 @@ switch ($oParam->exec) {
         LancamentoAuxiliarSlip::vinculaSlipInscricao($iCodigoSlip, $oParam->iInscricao);
       }
 
-      $oRetorno->message     = urlencode("Transfer?ncia {$oTransferencia->getCodigoSlip()} salva com sucesso.");
+      $oRetorno->message     = urlencode("Transferência {$oTransferencia->getCodigoSlip()} salva com sucesso.");
       $oRetorno->iCodigoSlip = $oTransferencia->getCodigoSlip();
       db_fim_transacao(false);
 
@@ -262,7 +260,7 @@ switch ($oParam->exec) {
       db_inicio_transacao();
       $oTransferencia = TransferenciaFactory::getInstance(null, $oParam->iCodigoSlip);
       $oTransferencia->excluir();
-      $oRetorno->message = urlencode("Slip exclu?do com sucesso.");
+      $oRetorno->message = urlencode("Slip excluído com sucesso.");
 
       db_fim_transacao(false);
 
@@ -276,7 +274,7 @@ switch ($oParam->exec) {
     break;
 
   /**
-   * Recebe um slip originado em outro departamento e executa os lan?amentos contabeis
+   * Recebe um slip originado em outro departamento e executa os lançamentos contabeis
    */
   case "receberSlip":
 
@@ -299,15 +297,15 @@ switch ($oParam->exec) {
       $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($oParam->k145_numeroprocesso));
       
       /**
-       * Verifica qual transfer?ncia financeira o slip ? origin?rio
-       * Usa essa informa??o para que a transfer?ncia seja marcada como recebida, na tabela transferenciafinanceirarecebimento
+       * Verifica qual transferência financeira o slip é originário
+       * Usa essa informação para que a transferência seja marcada como recebida, na tabela transferenciafinanceirarecebimento
        */
       $oDaoTransferenciaFinanceira = db_utils::getDao('transferenciafinanceira');
       $sSqlTransferenciaFinanceira = $oDaoTransferenciaFinanceira->sql_query_file(null, "*", null, "k150_slip = {$oParam->iCodigoSlipRecebido}");
       $rsTransferenciaFinanceira   = $oDaoTransferenciaFinanceira->sql_record($sSqlTransferenciaFinanceira);
 
       if ($oDaoTransferenciaFinanceira->erro_status == "0") {
-        throw new Exception("N?o foi poss?vel receber a transa??o.\n\nErro T?cnico 1: {$oDaoConPlano->erro_msg}");
+        throw new Exception("Não foi possível receber a transação.\n\nErro Técnico 1: {$oDaoConPlano->erro_msg}");
       }
 
       $iCodigoTransferencia = db_utils::fieldsMemory($rsTransferenciaFinanceira,0)->k150_sequencial;
@@ -317,7 +315,7 @@ switch ($oParam->exec) {
       }
 
       $oTransferencia->receberTransferencia($iCodigoTransferencia);
-      $oRetorno->message     = urlencode("Transfer?ncia {$iCodigoTransferencia} recebida com sucesso.");
+      $oRetorno->message     = urlencode("Transferência {$iCodigoTransferencia} recebida com sucesso.");
       $oRetorno->iCodigoSlip = $oTransferencia->getCodigoSlip();
 
       db_fim_transacao(false);
@@ -333,7 +331,7 @@ switch ($oParam->exec) {
   break;
 
   /**
-   * Anula um slip e executa os lancamentos cont?beis, caso haja necessidade
+   * Anula um slip e executa os lancamentos contábeis, caso haja necessidade
    */
   case "anularSlip" :
 
@@ -345,7 +343,7 @@ switch ($oParam->exec) {
       $oTransferencia->anular($oParam->sMotivo);
 
       /**
-       * Verifica exist?ncia de lan?amento cont?bil
+       * Verifica existência de lançamento contábil
        */
       $oDaoLancamentoSlip  = db_utils::getDao('conlancamslip');
       $sSqlLancamento      = $oDaoLancamentoSlip->sql_query_file(null, "*", null, "c84_slip = {$oParam->k17_codigo}");
@@ -368,7 +366,7 @@ switch ($oParam->exec) {
   break;
 
   /**
-   * Retorna os dados da transfer?ncia que ser?o apresentados no front-end
+   * Retorna os dados da transferência que serão apresentados no front-end
    */
   case "getDadosTransferencia" :
 
@@ -451,7 +449,7 @@ switch ($oParam->exec) {
       $rsDadosSaltes  = $oDaoSaltes->sql_record($sSqlSaltes);
 
       if ($oDaoSaltes->erro_status == "0") {
-        throw new Exception("N?o foi poss?vel localizar as contas cr?dito.");
+        throw new Exception("Não foi possível localizar as contas crédito.");
       }
 
       if ($oDaoSaltes->numrows > 0) {
@@ -508,7 +506,7 @@ switch ($oParam->exec) {
       $rsBuscaTransferencia              = $oDaoTransferenciaFinanceira->sql_record($sSqlBuscaTransferenciasPendentes);
 
       if ($oDaoTransferenciaFinanceira->numrows == 0) {
-        throw new Exception("Nenhuma transfer?ncia para a institui??o.");
+        throw new Exception("Nenhuma transferência para a instituição.");
       }
 
       $aTransferenciasRecebimento = array();
@@ -519,7 +517,7 @@ switch ($oParam->exec) {
         $sSqlBuscaDescricaoHistorico = $oDaoHistorico->sql_query_file($oDadoTransferencia->k17_hist);
         $rsBuscaHistorico            = $oDaoHistorico->sql_record($sSqlBuscaDescricaoHistorico);
         if ($oDaoHistorico->numrows == 0) {
-          throw new Exception("N?o foi poss?vel localizar o hist?rico.");
+          throw new Exception("Não foi possível localizar o histórico.");
         }
 
         $oDadoTransferencia->c50_compl = urlencode(db_utils::fieldsMemory($rsBuscaHistorico, 0)->c50_descr);
@@ -552,7 +550,7 @@ switch ($oParam->exec) {
 
       $oDaoRecebimento = db_utils::getDao('transferenciafinanceirarecebimento');
       /**
-       * Busca todas transfer?ncias com Situa??o igual a 2
+       * Busca todas transferências com Situação igual a 2
        * Slip Autenticado
        */
       $sWhere          = "slip.k17_instit = {$iInstituicaoSessao} and slip.k17_situacao = 2";
@@ -560,7 +558,7 @@ switch ($oParam->exec) {
       $rsRecebimento   = $oDaoRecebimento->sql_record($sSqlRecebimento);
 
       if ($oDaoRecebimento->erro_status == "0") {
-        throw new Exception("N?o h? transfer?ncias para efetuar recebimento.");
+        throw new Exception("Não há transferências para efetuar recebimento.");
       }
 
 
@@ -573,18 +571,18 @@ switch ($oParam->exec) {
         $oTransferenciaFinanceira = new TransferenciaFinanceira($oConsulta->k17_codigo);
 
         /**
-         *  Se n?o possuir recebimento, ela deve ser listada na Grid
+         *  Se não possuir recebimento, ela deve ser listada na Grid
          */
         $oTransferencia = new stdClass();
 
-        //Seta Propriedade C?digo do slip e valor da transfer?ncia
+        //Seta Propriedade Código do slip e valor da transferência
         $oTransferencia->k17_codigo = $oConsulta->k17_codigo;
         $oTransferencia->nValor     = db_formatar($oConsulta->k17_valor,"f");
         $oTransferencia->k17_data   = $oTransferenciaFinanceira->getData();
 
 
 
-        //Busca e seta Institui??o Origem
+        //Busca e seta Instituição Origem
         $iInstitOrigem       = $oConsulta->k17_instit;
         $oDaoInstituicao     = db_utils::getDao('db_config');
         $sSqlInstituicao     = $oDaoInstituicao->sql_query(null, "nomeinst" , null, "codigo = {$iInstitOrigem}");
@@ -594,7 +592,7 @@ switch ($oParam->exec) {
 
         $oTransferencia->sInstituicaoOrigem = $sInstituicaoOrigem;
 
-        //Busca e seta descri??o Hist?rico
+        //Busca e seta descrição Histórico
         $iHistorico     = $oConsulta->k17_hist;
         $oDaoHistorico  = db_utils::getDao('conhist');
         $sSQLHistorico  = $oDaoHistorico->sql_query($iHistorico,"c50_descr");
@@ -620,7 +618,7 @@ switch ($oParam->exec) {
   /**
    * Retornas as contas de um evento contabil de ordem 1
    *
-   * Valido se o parametro lContaCredito esta setado e ? 'true', caso seja, alteramos o m?todo que ser? utilizado para
+   * Valido se o parametro lContaCredito esta setado e é 'true', caso seja, alteramos o método que será utilizado para
    * buscar as contas
    */
   case "getContaEventoContabil";
@@ -628,7 +626,7 @@ switch ($oParam->exec) {
     try {
 
       /*
-       * Verifico que m?todo utilizar para buscar as contas na conplano
+       * Verifico que método utilizar para buscar as contas na conplano
        */
       $sMetodoConta = 'getContaDebito';
       if (isset($oParam->lContaCredito) && $oParam->lContaCredito == true) {
@@ -653,7 +651,7 @@ switch ($oParam->exec) {
             $rsDadosConta   = $oDaoConPlano->sql_record($sSqlDadosConta);
 
             if ($oDaoConPlano->erro_status == "0") {
-              throw new Exception("N?o foi poss?vel localizar as contas para d?bito.");
+              throw new Exception("Não foi possível localizar as contas para débito.");
             }
 
             if ($oDaoConPlano->numrows > 0) {
@@ -677,7 +675,7 @@ switch ($oParam->exec) {
   break;
 
   /**
-   * Busca conta do lan?amento da inscri??o
+   * Busca conta do lançamento da inscrição
    * quando for do tipo baixa de pagamento
    */
   case "getContaFavorecido":
@@ -694,7 +692,7 @@ switch ($oParam->exec) {
     $rsLancamentoInscricao   = $oDAOInscricaoPassivo->sql_record($sSqlLancamentoInscricao);
 
     if ($oDAOInscricaoPassivo->numrows != 1) {
-      throw new Exception("N?o foi poss?vel localizar a conta vinculada ? inscri??o");
+      throw new Exception("Não foi possível localizar a conta vinculada à inscrição");
     }
 
     $oDadosLancamentoInscricao = db_utils::fieldsMemory( $rsLancamentoInscricao, 0);
@@ -712,7 +710,7 @@ switch ($oParam->exec) {
     $oRetorno->sFavorecido = urlencode($oCgm->getNome());
 
     /**
-     * Resgata o valor total da inscri??o
+     * Resgata o valor total da inscrição
      */
     $oInscricaoPassivo              = new InscricaoPassivoOrcamento($oParam->iInscricao);
     $aItensInscricao                = $oInscricaoPassivo->getItens();
@@ -807,7 +805,7 @@ switch ($oParam->exec) {
 echo $oJson->encode($oRetorno);
 
 /**
- * Retorna o c?digo do documento para executar na inclus?o de um slip
+ * Retorna o código do documento para executar na inclusão de um slip
  * @param integer $iTipoOperacao
  * @return integer
  */
@@ -837,7 +835,7 @@ function getDocumentoPorTipoInclusao($iTipoOperacao) {
 		break;
 
     /**
-     * Cau??o
+     * Caução
      */
   	case 7:
   	case 8:
@@ -849,7 +847,7 @@ function getDocumentoPorTipoInclusao($iTipoOperacao) {
 	  break;
 
 	  /**
-	   * Dep?sito de Diversas Origens
+	   * Depósito de Diversas Origens
 	   */
   	case 11:
   	case 12:
