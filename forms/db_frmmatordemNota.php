@@ -676,9 +676,6 @@ if ($lBloquear) {
 
         $('quantidade' + sequencia).on('change', function(event, ui) {
           var temp = parseFloat($('valor_total').innerText) + parseFloat($('valor' + sequencia).value);
-          console.log('temp' + temp);
-          console.log('formata valor: ' + formataValor);
-
           $("valor_total").innerText = formataValor + --(temp);
         });
         return;
@@ -701,18 +698,13 @@ if ($lBloquear) {
 
 
       let resultado = formataValor(temp.toFixed(2));
-      console.log(parseFloat($('valor_total').innerText));
-      console.log(parseFloat(vlr_unitario));
-      console.log(parseFloat(qtd_anterior));
-      console.log('temp ' + temp);
-      console.log('resultado' + resultado);
+
 
       $("valor_total").innerText = resultado;
 
     } else {
 
       if ($('tr' + obj.id).className === 'marcado') {
-        console.log('aqui')
 
         $('tr' + obj.id).className = 'normal';
 
@@ -732,7 +724,6 @@ if ($lBloquear) {
           temp = parseFloat($('valor_total').innerText) - formataValor($('quantidade' + sequencia).value) * vlr_unitario;
         }
 
-        //console.log('formata valor: ' + formataValor);
         $("valor_total").innerText = formataValor(temp.toFixed(2));
       }
     }
