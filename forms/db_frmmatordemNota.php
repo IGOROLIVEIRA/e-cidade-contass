@@ -660,15 +660,14 @@ if ($lBloquear) {
 
 
   function js_marcaLinha(obj, sequencia) {
-    console.log('obj: ' + obj);
-    console.log('sequencia: ' + sequencia);
-    console.log('seq valor: ' + $('valor' + sequencia).value);
-    console.log('seq quantidade: ' + ($('quantidade' + sequencia).value));
+
     var vlr_anterior = $('valor' + sequencia).value;
     var qtd_anterior = 0;
     if ($('quantidade' + sequencia).value) {
       qtd_anterior = formataValor($('quantidade' + sequencia).value);
     }
+
+
 
     var vlr_unitario = $("vlrunitario" + sequencia).value;
     if (obj.checked) {
@@ -694,6 +693,11 @@ if ($lBloquear) {
         var temp = parseFloat($('valor_total').innerText) + $('valor' + sequencia).value * parseFloat(qtd_anterior);
 
       }
+
+      if (!document.getElementById('quantidade' + sequencia).hasAttribute('readonly')) {
+        temp = parseFloat($('valor_total').innerText) + formataValor($('quantidade' + sequencia).value) * vlr_unitario;
+      }
+
 
 
       let resultado = formataValor(temp.toFixed(2));
@@ -722,6 +726,10 @@ if ($lBloquear) {
         } else {
           var temp = parseFloat($("valor_total").innerText) - $('valor' + sequencia).value * parseFloat(qtd_anterior);
 
+        }
+
+        if (!document.getElementById('quantidade' + sequencia).hasAttribute('readonly')) {
+          temp = parseFloat($('valor_total').innerText) - formataValor($('quantidade' + sequencia).value) * vlr_unitario;
         }
 
         //console.log('formata valor: ' + formataValor);
