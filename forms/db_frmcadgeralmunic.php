@@ -869,19 +869,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
 
 <script type="text/javascript">
-    // ================ Bloqueando caracteres especiais no input observação ========= //
-
-    // var input = document.querySelector("#z01_obs");
-    // input.addEventListener("keypress", function(e) {
-    //     if (!checkChar(e)) {
-    //         e.preventDefault();
-    //     }
-    // });
 
     function checkChar(e) {
         var char = String.fromCharCode(e.keyCode);
-
-
         var pattern = '^[a-zA-Z0-9 ]+$';
         if (char.match(pattern)) {
             return true;
