@@ -289,9 +289,13 @@ switch ($oParam->exec) {
       $oTransferencia->setContaCredito($oParam->k17_credito);
       $oTransferencia->setCaracteristicaPeculiarCredito($oParam->sCaracteristicaPeculiarCredito);
       $oTransferencia->setHistorico($oParam->k17_hist);
-      $oTransferencia->setFonteRecurso($oParam->iCodigoFonte);
       $oTransferencia->setValor(str_replace(",", ".", trim($oParam->k17_valor)));
-      $oTransferencia->adicionarRecurso($oParam->iCodigoFonte, str_replace(",", ".", trim($oParam->k17_valor)));
+        // Condição de fonte de recursos
+        if (isset($oParam->iCodigoFonte) && $oParam->iCodigoFonte != '')
+            $oTransferencia->setFonteRecurso($oParam->iCodigoFonte);
+        if (isset($oParam->iCodigoFonte) && $oParam->iCodigoFonte != '')
+            $oTransferencia->adicionarRecurso($oParam->iCodigoFonte, str_replace(",", ".", trim($oParam->k17_valor)));
+            
       $oTransferencia->setObservacao(db_stdClass::normalizeStringJsonEscapeString($oParam->k17_texto));
       $oTransferencia->setData(date("Y-m-d",db_getsession("DB_datausu")));
       $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($oParam->k145_numeroprocesso));
