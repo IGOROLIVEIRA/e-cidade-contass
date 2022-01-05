@@ -146,7 +146,7 @@ db_fieldsmemory($rsCgm, 0);
       </tr>
       <tr>
         <td nowrap title="<?= @$Tpc60_numeroregistro ?>">
-          <strong>Nï¿½mero Registro no Orgão: </strong>
+          <strong>Número Registro no Orgão: </strong>
         </td>
         <td>
           <?

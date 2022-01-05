@@ -152,7 +152,7 @@ if ($db_opcao == 1) {
         </td>
         <td>
           <?
-          db_select("l03_usaregistropreco", array("t" => "Sim", "f" => "Nï¿½o"), true, $db_opcao);
+          db_select("l03_usaregistropreco", array("t" => "Sim", "f" => "Não"), true, $db_opcao);
           ?>
         </td>
       </tr>
