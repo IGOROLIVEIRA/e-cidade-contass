@@ -2881,34 +2881,33 @@ class empenho {
       }
 
     }
-    // a partir de 2022 os lançamento serão feitos no contrato.
-    if(db_getsession("DB_anousu") < 2022){
-        /**
-         * Lancamentos do contrato
-         * - busca contrato do empenho, caso encontre, efetua lançamento
-         */
-        $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
-        $oInstituicao     = new Instituicao(db_getsession('DB_instit'));
 
-        $oDaoAcordo = db_utils::getDao('acordo');
+    /**
+     * Lancamentos do contrato
+     * - busca contrato do empenho, caso encontre, efetua lançamento
+     */
+    $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
+    $oInstituicao     = new Instituicao(db_getsession('DB_instit'));
 
-        $sql = $oDaoAcordo->sql_query_lancamentos_empenhocontrato("c71_coddoc", $this->numemp);
+    $oDaoAcordo = db_utils::getDao('acordo');
 
-        $result = db_query($sql);
+    $sql = $oDaoAcordo->sql_query_lancamentos_empenhocontrato("c71_coddoc", $this->numemp);
 
-        $aDocumentos = array();
+    $result = db_query($sql);
 
-        for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) {
+    $aDocumentos = array();
+
+    for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) {
         $aDocumentos[] =  db_utils::fieldsMemory($result,$iCont)->c71_coddoc;
-        }
+    }
 
-        $acordoLancamento = true;
+    $acordoLancamento = true;
 
-        if (!in_array(900,$aDocumentos)) {
+    if (!in_array(900,$aDocumentos)) {
         $acordoLancamento = false;
-        }
+    }
 
-        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
+    if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao))) {
 
         $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
         $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null,
@@ -2921,47 +2920,49 @@ class empenho {
         if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
 
             try {
+                // a partir de 2022 os lançamento serão feitos no contrato.
+                $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
+                if(db_getsession("DB_anousu") < 2022 && $acordoLancamento == true){
 
-            $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
-            $oEventoContabilAcordo = new EventoContabil(903, $iAnoUsu);
-            $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
-            $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
-            $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
-            $oLancamentoAuxiliarAcordo->setValorTotal(round($nValorAnular, 2));
+                    $oEventoContabilAcordo = new EventoContabil(903, $iAnoUsu);
+                    $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
+                    $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
+                    $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
+                    $oLancamentoAuxiliarAcordo->setValorTotal(round($nValorAnular, 2));
 
-            $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
-            $oContaCorrenteDetalhe->setAcordo($oAcordo);
-            $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
-            $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
-            $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
+                    $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
+                    $oContaCorrenteDetalhe->setAcordo($oAcordo);
+                    $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
+                    $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+                    $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
-            $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
-
-            /**
-             * Incluir novamente saldo da quantidade autorizada do acordo
-             */
-            $oDaoEmpempAut   = db_utils::getDao("empempaut");
-            $rsDaoEmpempAut  = $oDaoEmpempAut->sql_record($oDaoEmpempAut->sql_query_file($this->numemp,"distinct e61_autori as autori"));
-            if ($oDaoEmpempAut->numrows > 0){
-                $oDaoEmpempitem  = db_utils::getDao("empempitem");
-                $aItensAcordo = array();
-                foreach ($aItens as $oItem) {
-                $rsEmpempItem = $oDaoEmpempitem->sql_record($oDaoEmpempitem->sql_query_file(null,null,"e62_item",null,"e62_sequencial = {$oItem->e62_sequencial}"));
-                $iCodMaterial = db_utils::fieldsmemory($rsEmpempItem, 0)->e62_item;
-                $aItensAcordo[$iCodMaterial] = clone($oItem);
-                $aItensAcordo[$iCodMaterial]->pc01_codmater = $iCodMaterial;
+                    $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
                 }
-                $oAcordo->anularAutorizacao(db_utils::fieldsMemory($rsDaoEmpempAut,0)->autori, $aItensAcordo);
+                /**
+                 * Incluir novamente saldo da quantidade autorizada do acordo
+                 */
+                $oDaoEmpempAut   = db_utils::getDao("empempaut");
+                $rsDaoEmpempAut  = $oDaoEmpempAut->sql_record($oDaoEmpempAut->sql_query_file($this->numemp,"distinct e61_autori as autori"));
+                if ($oDaoEmpempAut->numrows > 0){
+                    $oDaoEmpempitem  = db_utils::getDao("empempitem");
+                    $aItensAcordo = array();
+                    foreach ($aItens as $oItem) {
+                    $rsEmpempItem = $oDaoEmpempitem->sql_record($oDaoEmpempitem->sql_query_file(null,null,"e62_item",null,"e62_sequencial = {$oItem->e62_sequencial}"));
+                    $iCodMaterial = db_utils::fieldsmemory($rsEmpempItem, 0)->e62_item;
+                    $aItensAcordo[$iCodMaterial] = clone($oItem);
+                    $aItensAcordo[$iCodMaterial]->pc01_codmater = $iCodMaterial;
+                    }
+                    $oAcordo->anularAutorizacao(db_utils::fieldsMemory($rsDaoEmpempAut,0)->autori, $aItensAcordo);
 
-            }
+                }
             } catch (Exception $eErro) {
 
             $this->lSqlErro = true;
             $this->sErroMsg = "({$eErro->getMessage()})";
             }
         }
-        }
     }
+
 
     /*
      ** fim dos lancamentos Contabeis e verificamos se o usuario solicitou a recriacao do saldo...
@@ -3536,25 +3537,28 @@ class empenho {
             $acordoLancamento = true;
         }
 
-        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) && $acordoLancamento == true) {
+        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) ) {
 
               try {
 
                   $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
-                  $oEventoContabilAcordo = new EventoContabil(903, $iAnoUsu);
-                  $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
-                  $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
-                  $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
-                  $oLancamentoAuxiliarAcordo->setValorTotal(round($nValorEstornado, 2));
+                  if($iAnoUsu < 2022 && $acordoLancamento == true){
 
-                  $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
-                  $oContaCorrenteDetalhe->setAcordo($oAcordo);
-                  $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
-                  $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
-                  $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
+                    $oEventoContabilAcordo = new EventoContabil(903, $iAnoUsu);
+                    $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
+                    $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
+                    $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
+                    $oLancamentoAuxiliarAcordo->setValorTotal(round($nValorEstornado, 2));
 
-                  $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+                    $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
+                    $oContaCorrenteDetalhe->setAcordo($oAcordo);
+                    $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
+                    $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+                    $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
+                    $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+
+                  }
                   /**
                    * Incluir novamente saldo da quantidade autorizada do acordo
                    */
