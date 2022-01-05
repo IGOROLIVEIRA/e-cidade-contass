@@ -1266,6 +1266,21 @@ class cl_acordo {
         }else{
             $sql2 = $dbwhere;
         }
+        if($ac16_sequencial!=""){
+            $sql3 = " delete from conlancamacordo where c87_acordo = $ac16_sequencial";
+            $result2 = db_query($sql3);
+            if($result2==false){
+                $this->erro_banco = str_replace("\n","",@pg_last_error());
+                $this->erro_sql   = "conlancamacordo não excluido. Exclusão Abortada.\\n";
+                $this->erro_sql .= "Valores : ".$ac16_sequencial;
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                $this->numrows_excluir = 0;
+                return false;
+            }
+        }
+       
         $result = db_query($sql.$sql2);
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());

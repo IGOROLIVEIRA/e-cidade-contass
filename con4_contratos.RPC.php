@@ -35,6 +35,8 @@ require_once("classes/db_acordoposicaoperiodo_classe.php");
 require_once("classes/db_acordoitemprevisao_classe.php");
 require_once("classes/db_credenciamentosaldo_classe.php");
 require_once("classes/db_pcfornereprlegal_classe.php");
+require_once("classes/db_empempenhocontrato_classe.php");
+require_once("classes/db_empelemento_classe.php");
 require_once('model/AcordoComissao.model.php');
 require_once('model/Acordo.model.php');
 require_once('model/AcordoItem.model.php');
@@ -1603,7 +1605,8 @@ switch ($oParam->exec) {
          * @param integer iAcordo - Código do Acordo
          */
     case 'excluirAcordo':
-
+        $clempempenhocontrato = new cl_empempenhocontrato();
+        $clempelemento = new cl_empelemento();
         try {
 
             if (!isset($oParam->iAcordo) || empty($oParam->iAcordo)) {
@@ -1611,6 +1614,16 @@ switch ($oParam->exec) {
             }
 
             db_inicio_transacao();
+
+            $result1 = $clempempenhocontrato->sql_record($clempempenhocontrato->sql_query(null,"e100_numemp","","e100_acordo=$oParam->iAcordo"));
+            db_fieldsmemory($result1,0);
+            
+            $result = $clempelemento->sql_record($clempelemento->sql_query($e100_numemp,null,"*","e64_codele"));
+            db_fieldsmemory($result,0);
+
+            if($e64_vlremp!=$e64_vlranu){
+                throw new ParameterException(_M($sCaminhoMensagens . 'Acordo não pode ser excluido.'));  
+            }
 
             $oAcordo = new Acordo($oParam->iAcordo);
             $oAcordo->remover();

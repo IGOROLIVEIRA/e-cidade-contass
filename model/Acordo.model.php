@@ -3563,9 +3563,11 @@ class Acordo
             throw new BusinessException("Não foi possível apagar as dependências do acordo {$this->getCodigo()}.");
         }
 
+        /*
+        Retirada dessa validação OC15013
         if ($this->possuiLancamentoContabil()) {
             throw new BusinessException("O acordo {$this->getCodigo()} possui lançamento contábil vinculado. Procedimento abortado.");
-        }
+        }*/
 
         $oDataInicial = new DBDate($this->getDataInicial());
         $oDataFinal   = new DBDate($this->getDataFinal());
