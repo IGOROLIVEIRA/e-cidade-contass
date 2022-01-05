@@ -379,7 +379,7 @@ ORDER BY nroprocessolicitatorio
          * @todo checar a obrigatoriedade do pcdotac
          */
         $sSql11 = "
-              SELECT DISTINCT
+              SELECT DISTINCT '11' AS tipoRegistro,
                       infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                       (SELECT CASE
                           WHEN o41_subunidade != 0
@@ -415,6 +415,11 @@ ORDER BY nroprocessolicitatorio
                     LIMIT 1) AS codUnidadeSubResp,
                     liclicita.l20_anousu AS exercicioLicitacao,
                     liclicita.l20_edital AS nroProcessoLicitatorio,
+                    infocomplementaresinstit.si09_codorgaotce AS codOrgao,
+                    orcdotacao.o58_orgao,
+                    orcdotacao.o58_unidade,
+                    orcdotacao.o58_funcao AS codFuncao,
+                    orcdotacao.o58_subfuncao AS codSubFuncao,
                     obrasdadoscomplementareslote.db150_codobra AS codObraLocal,
                     obrasdadoscomplementareslote.db150_classeobjeto AS classeObjeto,
                     obrasdadoscomplementareslote.db150_atividadeobra AS tipoAtividadeObra,
@@ -423,33 +428,32 @@ ORDER BY nroprocessolicitatorio
                     obrasdadoscomplementareslote.db150_atividadeservicoesp AS tipoAtividadeServEspecializado,
                     obrasdadoscomplementareslote.db150_descratividadeservicoesp AS dscAtividadeServEspecializado,
                     obrasdadoscomplementareslote.db150_sequencial AS dscAtividadeServEspecializado,
-                    orcdotacao.o58_funcao AS codFuncao,
-                    orcdotacao.o58_subfuncao AS codSubFuncao,
                     CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico,
                     l04_descricao as lote
                 FROM liclicita
                 INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
                 INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
                 LEFT JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
+                INNER JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu
+                AND pcdotac.pc13_coddot=orcdotacao.o58_coddot)
+                INNER JOIN orcunidade ON o41_anousu = o58_anousu
+                AND o41_orgao = o58_orgao
+                AND o41_unidade = o58_unidade
+                INNER JOIN orcorgao ON o40_orgao = o41_orgao
+                AND o40_anousu = l20_anousu
+                AND o40_instit = l20_instit
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN db_depart ON l20_codepartamento = coddepto
                 INNER JOIN db_departorg ON db01_coddepto = coddepto AND db01_anousu = " . db_getsession('DB_anousu') . "
-                INNER JOIN db_config ON (instit=codigo)
-                INNER JOIN orcorgao ON o40_instit = codigo
-                INNER JOIN orcdotacao on (o58_anousu, o58_orgao)=(o40_anousu, o40_orgao) and o58_anousu=l20_anousu
-                INNER JOIN orcunidade ON db01_orgao=o41_orgao AND db01_unidade = o41_unidade AND db01_anousu = o41_anousu
+                INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
                 INNER JOIN obrascodigos ON obrascodigos.db151_liclicita = liclancedital.l47_liclicita
                 INNER JOIN obrasdadoscomplementareslote ON db150_codobra = obrascodigos.db151_codigoobra
                 LEFT JOIN liclicitemlote on l04_codigo = db150_lote
               WHERE db_config.codigo = " . db_getsession('DB_instit') . "
-              AND l03_pctipocompratribunal NOT IN ('100',
-                                                    '101',
-                                                    '102',
-                                                    '103',
-                                                    '106')
+              AND l03_pctipocompratribunal NOT IN ('100','101','102','103','106')
               AND liclicita.l20_edital = $oDados10->nroprocessolicitatorio
 				    ORDER BY obrasdadoscomplementareslote.db150_codobra";
 
