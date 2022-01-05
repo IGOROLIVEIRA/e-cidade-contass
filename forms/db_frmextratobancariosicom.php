@@ -133,7 +133,7 @@ db_app::load("widgets/windowAux.widget.js");
                                                 echo "<td>{$conta->ativa}</td>";
                                                 echo "<td>";
                                                 echo "<input type='file' name='arquivo-{$conta->reduzido}'/>&nbsp&nbsp"; 
-                                                echo "<input type='button' value='Enviar' onclick=\"micoxUpload(this.form,'upload_extrato_bancario_sicom.php?cnpj={$conta->cnpj}&reduzido={$conta->reduzido}&ano=" . db_getsession("DB_anousu") . "','retorno-{$conta->reduzido}','Carregando...','Erro ao carregar')\" />";  
+                                                echo "<input type='button' value='Enviar' onclick=\"micoxUpload(this.form,'upload_extrato_bancario_sicom.php?cnpj={$conta->cnpj}&orgao={$conta->orgao}&reduzido={$conta->reduzido}&ano=" . db_getsession("DB_anousu") . "','retorno-{$conta->reduzido}','Carregando...','Erro ao carregar')\" />";  
                                                 echo "</td>";
                                                 echo "<td id='retorno-{$conta->reduzido}'><span class='{$conta->situacao}'>{$conta->situacao}</span></td>";
                                                 echo "</tr>";

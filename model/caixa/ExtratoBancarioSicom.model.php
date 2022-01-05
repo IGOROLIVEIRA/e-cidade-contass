@@ -46,6 +46,7 @@ class ExtratoBancarioSicom {
     {
         $sql = "
             SELECT DISTINCT
+                si09_codorgaotce orgao,
                 z01_cgccpf cnpj,
                 saltes.k13_reduz reduzido,
                 saltes.k13_descr descricao,
@@ -78,6 +79,7 @@ class ExtratoBancarioSicom {
             LEFT JOIN conplanocontabancaria ON c60_codcon = c56_codcon
                 AND c60_anousu = {$this->ano}
             LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
+            LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
         WHERE
             c61_instit = {$this->instituicao}
             AND c62_anousu = {$this->ano}
@@ -87,6 +89,7 @@ class ExtratoBancarioSicom {
 
         while ($data = pg_fetch_object($result)) {
             $data->situacao = $this->setSituacao($data);
+            $data->orgao = str_pad($data->orgao, 2, "0", STR_PAD_LEFT);
             $this->contasHabilitadas[$data->reduzido] = $data;
         }
     }
@@ -99,7 +102,7 @@ class ExtratoBancarioSicom {
 
     public function setSituacao($conta)
     {
-        $diretorio = "extratobancariosicom/{$conta->cnpj}/{$this->ano}/{$conta->reduzido}.pdf";
+        $diretorio = "extratobancariosicom/{$conta->cnpj}/{$this->ano}/CTB_{$conta->orgao}_{$conta->reduzido}.pdf";
     
         if (file_exists($diretorio)) {
             return 'enviado';

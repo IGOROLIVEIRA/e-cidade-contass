@@ -1,6 +1,7 @@
 <?php
 $cnpj = $_GET['cnpj'];
 $ano = $_GET['ano'];
+$orgao = $_GET['orgao'];
 $reduzido = $_GET['reduzido'];
 $nomeArquivo = "arquivo-{$reduzido}";
 $erro = false;
@@ -11,7 +12,7 @@ if (strtolower(end(explode('.', $_FILES["$nomeArquivo"]['name']))) != "pdf") {
     $erro = true;
 } else {
     $diretorio = "extratobancariosicom/{$cnpj}/{$ano}";
-    $novoNome = "{$diretorio}/{$reduzido}.pdf";
+    $novoNome = "{$diretorio}/CTB_{$orgao}_{$reduzido}.pdf";
 
     if (!is_dir($diretorio)) {
         mkdir($diretorio, 0777, true);
