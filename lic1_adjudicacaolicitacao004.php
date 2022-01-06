@@ -114,6 +114,7 @@
     $tipojulgamento = $resultLici->l20_tipojulg;
     $oLibDocumento->l20_edital = $resultLici->l20_edital;
     $oLibDocumento->l20_anousu = $resultLici->l20_anousu;
+    $oLibDocumento->l20_objeto = $resultLici->l20_objeto;
 
     $oLibDocumento->l20_numero = $resultLici->l20_numero;
     $oLibDocumento->z01_nome = $nome;
@@ -517,7 +518,11 @@ HTML;
         $data = date('d/m/Y');
         $data = explode("/",$data);
 
-        switch ($data[1]) {
+        $anousu = date("Y",db_getsession("DB_datausu"));
+	    $mesusu = date("m",db_getsession("DB_datausu"));
+	    $diausu = date("d",db_getsession("DB_datausu"));
+
+        switch ($mesusu) {
             case 1:
                 $mes = "Janeiro";
                 break;
@@ -575,7 +580,7 @@ HTML;
         <br>
         <br>
         <div style="text-align: right; margin-right: 5px;">
-            <? echo $resultado->munic;?>, <?echo $data[0]?> de <?echo $mes;?> de <?echo $data[2];?>
+            <? echo $resultado->munic;?>, <?echo $diausu?> de <?echo $mes;?> de <?echo $anousu;?>
         </div>
         <?php
 

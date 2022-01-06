@@ -43,11 +43,11 @@ class Oc15732criacaoParagrafos extends AbstractMigration
                         (SELECT MAX(db02_idparag)+1
                          FROM db_paragrafo),
                      'ADJUDICACAO RELATORIO',
-                     'PROCESSO LICITATÓRIO Nº : #$l20_edital#/#$l20_anousu# 
-                     PREGÃO PRESENCIAL Nº : #$l20_numero#/#$l20_anousu#
-                     OBJETO: TESTE LICITAÇÃO NORMAL - HOMOLOGAÇÃO 
+                     'PROCESSO LICITATÓRIO Nº : #\$l20_edital#/#\$l20_anousu# 
+                     PREGÃO PRESENCIAL Nº : #\$l20_numero#/#\$l20_anousu#
+                     OBJETO: #\$l20_objeto# 
                      
-                                     Sr.(a), #$z01_nome# no uso de suas atribuições legais e com base no  processo Licitatório acima identificado, resolve adjudicar o julgamento proferido pela comissão de Licitação em favor do(s) licitante(s) na forma abaixo:',
+                                     Sr.(a), #\$z01_nome# no uso de suas atribuições legais e com base no  processo Licitatório acima identificado, resolve adjudicar o julgamento proferido pela comissão de Licitação em favor do(s) licitante(s) na forma abaixo:',
                      0,
                      0,
                      1,
@@ -55,18 +55,18 @@ class Oc15732criacaoParagrafos extends AbstractMigration
                      0,
                      'J',
                      1,
-                     $instit); 
+                     $instit);  
 
                      INSERT INTO db_paragrafopadrao
             VALUES (
                         (SELECT MAX(db61_codparag)+1
                          FROM db_paragrafopadrao),
                          'ADJUDICACAO RELATORIO',
-                         'PROCESSO LICITATÓRIO Nº : #$l20_edital#/#$l20_anousu# 
-                         PREGÃO PRESENCIAL Nº : #$l20_numero#/#$l20_anousu#
-                         OBJETO: TESTE LICITAÇÃO NORMAL - HOMOLOGAÇÃO 
+                         'PROCESSO LICITATÓRIO Nº : #\$l20_edital#/#\$l20_anousu# 
+                         PREGÃO PRESENCIAL Nº : #\$l20_numero#/#\$l20_anousu#
+                         OBJETO: #\$l20_objeto#
                          
-                                         Sr.(a), #$z01_nome# no uso de suas atribuições legais e com base no  processo Licitatório acima identificado, resolve adjudicar o julgamento proferido pela comissão de Licitação em favor do(s) licitante(s) na forma abaixo:',
+                                         Sr.(a), #\$z01_nome# no uso de suas atribuições legais e com base no  processo Licitatório acima identificado, resolve adjudicar o julgamento proferido pela comissão de Licitação em favor do(s) licitante(s) na forma abaixo:',
                      0,
                      0,
                      1,
@@ -79,7 +79,7 @@ class Oc15732criacaoParagrafos extends AbstractMigration
                     insert into db_docparag values ((select max(db03_docum) from db_documento),(SELECT MAX(db02_idparag)FROM db_paragrafo),1);
             
             commit;
-        SQL;
+SQL;
         $this->execute($sql);
     }
 
@@ -96,11 +96,11 @@ class Oc15732criacaoParagrafos extends AbstractMigration
                         (SELECT MAX(db02_idparag)+1
                          FROM db_paragrafo),
                          'HOMOLOGACAO RELATORIO',
-                         'PROCESSO LICITATÓRIO Nº : #$l20_edital#/#$l20_anousu# 
-                         PREGÃO PRESENCIAL Nº : #$l20_numero#/#$l20_anousu#
-                         OBJETO: #l20_objeto#
+                         'PROCESSO LICITATÓRIO Nº : #\$l20_edital#/#\$l20_anousu# 
+                         PREGÃO PRESENCIAL Nº : #\$l20_numero#/#\$l20_anousu#
+                         OBJETO: #\$l20_objeto#
                           
-                                         Sr.(a), #$z01_nome# CPF no #$z01_cpf#, nos usos das suas atribuições legais e nos termos da legislação em vigor, resolve HOMOLOGAR ao(s) licitante(s) vencedor(es) o(s) item(s) no valor total de R$ #$valor_total# conforme relacionado(s).',
+                                         Sr.(a), #\$z01_nome# CPF no #\$z01_cpf#, nos usos das suas atribuições legais e nos termos da legislação em vigor, resolve HOMOLOGAR ao(s) licitante(s) vencedor(es) o(s) item(s) no valor total de R$ #\$valor_total# conforme relacionado(s).',
                      0,
                      0,
                      1,
@@ -108,18 +108,18 @@ class Oc15732criacaoParagrafos extends AbstractMigration
                      0,
                      'J',
                      1,
-                     $instit);
+                     $instit); 
 
                      INSERT INTO db_paragrafopadrao
             VALUES (
                         (SELECT MAX(db61_codparag)+1
                          FROM db_paragrafopadrao),
                          'HOMOLOGACAO RELATORIO',
-                     'PROCESSO LICITATÓRIO Nº : #$l20_edital#/#$l20_anousu# 
-                     PREGÃO PRESENCIAL Nº : #$l20_numero#/#$l20_anousu#
-                     OBJETO: #l20_objeto#
+                     'PROCESSO LICITATÓRIO Nº : #\$l20_edital#/#\$l20_anousu# 
+                     PREGÃO PRESENCIAL Nº : #\$l20_numero#/#\$l20_anousu#
+                     OBJETO: #\$l20_objeto#
                       
-                                     Sr.(a), #$z01_nome# CPF no #$z01_cpf#, nos usos das suas atribuições legais e nos termos da legislação em vigor, resolve HOMOLOGAR ao(s) licitante(s) vencedor(es) o(s) item(s) no valor total de R$ #$valor_total# conforme relacionado(s).',
+                                     Sr.(a), #\$z01_nome# CPF no #\$z01_cpf#, nos usos das suas atribuições legais e nos termos da legislação em vigor, resolve HOMOLOGAR ao(s) licitante(s) vencedor(es) o(s) item(s) no valor total de R$ #\$valor_total# conforme relacionado(s).',
                      0,
                      0,
                      1,
@@ -132,7 +132,7 @@ class Oc15732criacaoParagrafos extends AbstractMigration
                     insert into db_docparag values ((select max(db03_docum) from db_documento),(SELECT MAX(db02_idparag)FROM db_paragrafo),1);
             
             commit;
-        SQL;
+SQL;
         $this->execute($sql);
     }
 }

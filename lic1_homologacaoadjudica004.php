@@ -21,8 +21,9 @@
     parse_str($HTTP_SERVER_VARS['QUERY_STRING']);  
     db_postmemory($HTTP_POST_VARS);
 
-    $result = $cldb_documento->sql_record($cldb_documento->sql_query("","*","","db03_descr like 'HOMOLOGACACAO RELATORIO'"));
-    $result1 = db_utils::fieldsMemory($result, 0);
+    $result = $cldb_documento->sql_record($cldb_documento->sql_query("","*","","db03_descr like 'HOMOLOGACAO RELATORIO'"));
+    $result1 = db_utils::fieldsMemory($result, 0); 
+    
 
     $oPDF = new PDF();
     $oPDF->Open();
@@ -134,6 +135,7 @@
     $tipojulgamento = $resultLici->l20_tipojulg;
     $oLibDocumento->l20_edital = $resultLici->l20_edital;
     $oLibDocumento->l20_anousu = $resultLici->l20_anousu;
+    $oLibDocumento->l20_objeto = $resultLici->l20_objeto;
 
     $oLibDocumento->l20_numero = $resultLici->l20_numero;
     $oLibDocumento->z01_nome = $nome;
@@ -540,7 +542,11 @@ HTML;
         $data = date('d/m/Y');
         $data = explode("/",$data);
 
-        switch ($data[1]) {
+        $anousu = date("Y",db_getsession("DB_datausu"));
+	    $mesusu = date("m",db_getsession("DB_datausu"));
+	    $diausu = date("d",db_getsession("DB_datausu"));
+
+        switch ($mesusu) {
             case 1:
                 $mes = "Janeiro";
                 break;
@@ -593,12 +599,13 @@ HTML;
 
         $resultado = $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession('DB_instit')));
         $resultado = db_utils::fieldsMemory($resultado, 0);
+        $teste = db_getsession("DB_datausu");
         
         ?>
         <br>
         <br>
         <div style="text-align: right;margin-right: 5px;">
-            <? echo $resultado->munic;?>, <?echo $data[0]?> de <?echo $mes;?> de <?echo $data[2];?>
+            <? echo $resultado->munic;?>, <?echo $diausu?> de <?echo $mes;?> de <?echo $anousu;?>
         </div>
         <?php
 
