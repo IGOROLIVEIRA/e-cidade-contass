@@ -556,7 +556,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 
 
       <tr id='ctnServicoQuantidade' style="display:none;">
-        <td><strong>Serviï¿½o Controlado por Quantidades: </strong></td>
+        <td><strong>Serviço Controlado por Quantidades: </strong></td>
         <td>
           <?php
 
@@ -758,7 +758,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       <tr>
         <td>
           <center>
-            <b>Se apï¿½s cadastrar um item esse permanecer em vermelho, o cadastro esta incorreto.</b>
+            <b>Se após cadastrar um item esse permanecer em vermelho, o cadastro esta incorreto.</b>
           </center>
         </td>
       </tr>
@@ -1313,7 +1313,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
    *
    js_verificaServico()
    js_habilitaCamposServico(sServicoQuantidade)
-     aqui iremos verificar se o item ï¿½ serviï¿½o, agora se for sera possivel
+     aqui iremos verificar se o item ï¿½ serviço, agora se for sera possivel
      alterar quantidades, unidades
      e o usuario ainda terï¿½ que definir se ele serï¿½ controlado por quantidade ou
      como ï¿½ hoje, controlando apenas pelo valor total
@@ -1364,7 +1364,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     var lServico = $F('pc01_servico');
 
     if (sServicoQuantidade == '' && lServico == 't') {
-      alert('Selecione a forma de controle da quantidade do serviï¿½o');
+      alert('Selecione a forma de controle da quantidade do serviço');
       $('pc11_servicoquantidade').focus;
       $('pc11_servicoquantidade').style.backgroundColor = '#99A9AE';
       return false;

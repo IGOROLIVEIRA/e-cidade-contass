@@ -88,225 +88,226 @@ $sWhere          = "exists (select pc11_quant, pc23_valor
 $sWhereContratos = " and 1 = 1 ";
 ?>
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <tr>
-        <td height="63" align="center" valign="top">
-            <table width="35%" border="0" align="center" cellspacing="0">
-                <form name="form2" method="post" action="" >
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?=$Tl20_codigo?>">
-                            <?=$Ll20_codigo?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-                            <?
-                            db_input("l20_codigo",10,$Il20_codigo,true,"text",4,"","chave_l20_codigo");
-                            ?>
-                        </td>
-                    </tr>
+    <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
+        <tr>
+            <td height="63" align="center" valign="top">
+                <table width="35%" border="0" align="center" cellspacing="0">
+                    <form name="form2" method="post" action="">
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tl20_codigo ?>">
+                                <?= $Ll20_codigo ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("l20_codigo", 10, $Il20_codigo, true, "text", 4, "", "chave_l20_codigo");
+                                ?>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?=$Tl20_edital?>">
-                            <?=$Ll20_edital?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-                            <?
-                            db_input("l20_edital",10,$Il20_edital,true,"text",4,"","chave_l20_edital");
-                            ?>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tl20_edital ?>">
+                                <?= $Ll20_edital ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("l20_edital", 10, $Il20_edital, true, "text", 4, "", "chave_l20_edital");
+                                ?>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?=$Tl20_numero?>">
-                            <?=$Ll20_numero?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-                            <?
-                            db_input("l20_numero",10,$Il20_numero,true,"text",4,"","chave_l20_numero");
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tl20_numero ?>">
+                                <?= $Ll20_numero ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("l20_numero", 10, $Il20_numero, true, "text", 4, "", "chave_l20_numero");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
 
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?=$Tl03_descr?>">
-                            <?=$Ll03_descr?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-                            <?
-                            db_input("l03_descr",60,$Il03_descr,true,"text",4,"","chave_l03_descr");
-                            db_input("param",10,"",false,"hidden",3);
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right">
-                            <b>Ano:</b>
-                        </td>
-                        <td>
-                            <?php
-                            db_input("l20_anousu", 10, "int", true, "text", 1, null, null, null, null, 4);
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" align="center">
-                            <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                            <input name="limpar" type="reset" id="limpar" value="Limpar" >
-                            <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_liclicita.hide();">
-                        </td>
-                    </tr>
-                </form>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td align="center" valign="top">
-            <?
-            $and            = "and ";
-            $dbwhere        = "";
-            /* if (isset($tipo) && trim($tipo)!=""){
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tl03_descr ?>">
+                                <?= $Ll03_descr ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("l03_descr", 60, $Il03_descr, true, "text", 4, "", "chave_l03_descr");
+                                db_input("param", 10, "", false, "hidden", 3);
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                <b>Ano:</b>
+                            </td>
+                            <td>
+                                <?php
+                                db_input("l20_anousu", 10, "int", true, "text", 1, null, null, null, null, 4);
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                                <input name="limpar" type="reset" id="limpar" value="Limpar">
+                                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_liclicita.hide();">
+                            </td>
+                        </tr>
+                    </form>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="top">
+                <?
+                $and            = "and ";
+                $dbwhere        = "";
+                /* if (isset($tipo) && trim($tipo)!=""){
                $dbwhere   = "l08_altera is true and";
              }*/
 
 
-            if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1"){
+                if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1") {
 
-                $dbwhere .= "l20_licsituacao in ($situacao) and ";
-            }else{
-				if($situacao == '10'){
-					$dbwhere .= " l20_licsituacao = 10 AND ";
-				}elseif($situacao){
-					$dbwhere .= " l20_licsituacao = 1 AND ";
-				}
-            }
-
-            if (!empty($oGet->validasaldo)){
-                $dbwhere .= " $sWhere and ";
-            }
-
-            $sWhereModalidade = "";
-            if (!empty($iModalidadeLicitacao)) {
-                $sWhereModalidade = "and l20_codtipocom = {$iModalidadeLicitacao}";
-            }
-
-            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}";
-            if (isset($lContratos) && $lContratos == 1 ) {
-                $sWhereContratos .= " and ac24_sequencial is null ";
-            }
-
-            if ($validafornecedor == "1"){
-                if($dbwhere != ""){
-                    $dbwhere .= " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
-                }else{
-                    $dbwhere .= " exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
-                }
-
-            }
-
-            if($obras == "true"){
-              $dbwhere .= " l20_naturezaobjeto in (1,7) and";
-            }
-
-			if($credenciamento == 'true'){
-//			    $dbwhere .= $dbwhere ? ' AND ' : ' ';
-				$dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND ";
-			}
-
-            if($listacred == 'false'){
-                $dbwhere .= " l03_pctipocompratribunal NOT IN (102, 103) AND ";
-            }
-
-			if($ratificacao == 'true'){
-				$dbwhere .= " l20_dtpubratificacao IS NOT NULL AND ";
-            }elseif($ratificacao == 'false'){
-				$dbwhere .= " l20_dtpubratificacao IS NULL AND ";
-            }
-
-			if($enviada == 'true'){
-				$dbwhere .= " (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
-                                      else true end) AND ";
-            }
-
-			if(!isset($pesquisa_chave)){
-
-                if(isset($campos)==false){
-
-                    if(file_exists("funcoes/db_func_liclicita.php")==true){
-                        include("funcoes/db_func_liclicita.php");
-                    }else{
-                        $campos = "liclicita.*, liclicitasituacao.l11_sequencial";
+                    $dbwhere .= "l20_licsituacao in ($situacao) and ";
+                } else {
+                    if ($situacao == '10') {
+                        $dbwhere .= " l20_licsituacao = 10 AND ";
+                    } elseif ($situacao) {
+                        $dbwhere .= " l20_licsituacao = 1 AND ";
                     }
                 }
 
-                if($dispensas){
-					$campos = "distinct liclicita.l20_codigo,
+                if (!empty($oGet->validasaldo)) {
+                    $dbwhere .= " $sWhere and ";
+                }
+
+                $sWhereModalidade = "";
+                if (!empty($iModalidadeLicitacao)) {
+                    $sWhereModalidade = "and l20_codtipocom = {$iModalidadeLicitacao}";
+                }
+
+                $dbwhere_instit = "l20_instit = " . db_getsession("DB_instit") . "{$sWhereModalidade}";
+                if (isset($lContratos) && $lContratos == 1) {
+                    $sWhereContratos .= " and ac24_sequencial is null ";
+                }
+
+                if ($validafornecedor == "1") {
+                    if ($dbwhere != "") {
+                        $dbwhere .= " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
+                    } else {
+                        $dbwhere .= " exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
+                    }
+                }
+
+                if ($obras == "true") {
+                    $dbwhere .= " l20_naturezaobjeto in (1,7) and";
+                }
+
+                if ($credenciamento == 'true') {
+                    //			    $dbwhere .= $dbwhere ? ' AND ' : ' ';
+                    $dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND ";
+                }
+
+                if ($listacred == 'false') {
+                    $dbwhere .= " l03_pctipocompratribunal NOT IN (102, 103) AND ";
+                }
+
+                if ($ratificacao == 'true') {
+                    $dbwhere .= " l20_dtpubratificacao IS NOT NULL AND ";
+                } elseif ($ratificacao == 'false') {
+                    $dbwhere .= " l20_dtpubratificacao IS NULL AND ";
+                }
+
+                if ($enviada == 'true') {
+                    $dbwhere .= " (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
+                                      else true end) AND ";
+                }
+
+                if (!isset($pesquisa_chave)) {
+
+                    if (isset($campos) == false) {
+
+                        if (file_exists("funcoes/db_func_liclicita.php") == true) {
+                            include("funcoes/db_func_liclicita.php");
+                        } else {
+                            $campos = "liclicita.*, liclicitasituacao.l11_sequencial";
+                        }
+                    }
+
+                    if ($dispensas) {
+                        $campos = "distinct liclicita.l20_codigo,
 					                    liclicita.l20_edital,
                                         l20_anousu,
                                         pctipocompra.pc50_descr,
                                         liclicita.l20_numero, ";
 
-					if(db_getsession('DB_anousu') >= 2021){
-					    $campos .= " case when l20_nroedital is not null then l20_nroedital::varchar
+                        if (db_getsession('DB_anousu') >= 2021) {
+                            $campos .= " case when l20_nroedital is not null then l20_nroedital::varchar
                                         else '-' END as l20_nroedital, ";
-                    }
+                        }
 
-					if(!$ocultacampos) {
+                        if (!$ocultacampos) {
 
-						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                            $campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
                                         liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
                                         liclicita.l20_dtpublic as dl_Data_Publicação_DO,
                                         liclicita.l20_objeto";
-					}else{
-						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                        } else {
+                            $campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
                                         liclicita.l20_objeto";
+                        }
                     }
-                }
 
-//                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
-//                $campos .= ", l03_codcom as tipcom";
-//                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
-                $campos .= ', l08_descr as dl_Situação';
-                if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
-                    $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
-                }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
-                    $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere l20_numero=$chave_l20_numero  and $dbwhere_instit");
-                }else if(isset($chave_l03_descr) && (trim($chave_l03_descr)!="") ){
-                    $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere l03_descr like '$chave_l03_descr%'  and $dbwhere_instit");
-                }else if(isset($chave_l03_codigo) && (trim($chave_l03_codigo)!="") ){
-                    $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere l03_codigo=$chave_l03_codigo  and $dbwhere_instit");
-                }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
-                    $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere l20_edital=$chave_l20_edital  and $dbwhere_instit");
-                }else if(isset($l20_anousu) && (trim($l20_anousu)!="")){
-                    $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere $dbwhere_instit and l20_anousu = {$l20_anousu}");
-                }else{
-                    $sql = $clliclicita->sql_queryContratos("",$campos,"l20_codigo","$dbwhere $dbwhere_instit");
-//          $sql = $clliclicita->sql_queryContratos("",$campos,"l20_codigo","$dbwhere $dbwhere_instit  and l20_anousu = {$iAnoSessao}");
-                }
-
-                if (isset($param) && trim($param) != ""){
-
-                    $dbwhere = " and (e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))";
-                    if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
-                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere l20_codigo = $chave_l20_codigo");
-                    }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
-                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere l20_numero=$chave_l20_numero");
-                    }else if(isset($chave_l03_descr) && (trim($chave_l03_descr)!="") ){
-                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere l03_descr like '$chave_l03_descr%'");
-                    }else if(isset($chave_l03_codigo) && (trim($chave_l03_codigo)!="") ){
-                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere l03_codigo=$chave_l03_codigo");
+                    //                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
+                    //                $campos .= ", l03_codcom as tipcom";
+                    //                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
+                    $campos .= ', l08_descr as dl_Situação';
+                    if (isset($chave_l20_codigo) && (trim($chave_l20_codigo) != "")) {
+                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
+                    } else if (isset($chave_l20_numero) && (trim($chave_l20_numero) != "")) {
+                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l20_numero=$chave_l20_numero  and $dbwhere_instit");
+                    } else if (isset($chave_l03_descr) && (trim($chave_l03_descr) != "")) {
+                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l03_descr like '$chave_l03_descr%'  and $dbwhere_instit");
+                    } else if (isset($chave_l03_codigo) && (trim($chave_l03_codigo) != "")) {
+                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l03_codigo=$chave_l03_codigo  and $dbwhere_instit");
+                    } else if (isset($chave_l20_edital) && (trim($chave_l20_edital) != "")) {
+                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere l20_edital=$chave_l20_edital  and $dbwhere_instit");
+                    } else if (isset($l20_anousu) && (trim($l20_anousu) != "")) {
+                        $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere $dbwhere_instit and l20_anousu = {$l20_anousu}");
                     } else {
-                        $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","$dbwhere 1=1");
+                        $sql = $clliclicita->sql_queryContratos("", $campos, "l20_codigo", "$dbwhere $dbwhere_instit");
+                        //          $sql = $clliclicita->sql_queryContratos("",$campos,"l20_codigo","$dbwhere $dbwhere_instit  and l20_anousu = {$iAnoSessao}");
                     }
-                }
 
-                if (isset($criterioadjudicacao) && $criterioadjudicacao == true) {
-                    $sql = "
+                    if (isset($param) && trim($param) != "") {
+
+                        $dbwhere = " and (e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))";
+                        if (isset($chave_l20_codigo) && (trim($chave_l20_codigo) != "")) {
+                            $sql = $clliclicitem->sql_query_inf(null, $campos, "l20_codigo", "$dbwhere l20_codigo = $chave_l20_codigo");
+                        } else if (isset($chave_l20_numero) && (trim($chave_l20_numero) != "")) {
+                            $sql = $clliclicitem->sql_query_inf(null, $campos, "l20_codigo", "$dbwhere l20_numero=$chave_l20_numero");
+                        } else if (isset($chave_l03_descr) && (trim($chave_l03_descr) != "")) {
+                            $sql = $clliclicitem->sql_query_inf(null, $campos, "l20_codigo", "$dbwhere l03_descr like '$chave_l03_descr%'");
+                        } else if (isset($chave_l03_codigo) && (trim($chave_l03_codigo) != "")) {
+                            $sql = $clliclicitem->sql_query_inf(null, $campos, "l20_codigo", "$dbwhere l03_codigo=$chave_l03_codigo");
+                        } else {
+                            $sql = $clliclicitem->sql_query_inf("", $campos, "l20_codigo", "$dbwhere 1=1");
+                        }
+                    }
+
+                    if (isset($criterioadjudicacao) && $criterioadjudicacao == true) {
+                        $sql = "
           SELECT DISTINCT liclicita.l20_codigo,
           liclicita.l20_edital,
           l20_anousu,
@@ -342,19 +343,19 @@ $sWhereContratos = " and 1 = 1 ";
               LEFT JOIN acordoliclicitem       ON liclicitem.l21_codigo       = acordoliclicitem.ac24_liclicitem
               LEFT JOIN pcprocitem             ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
               LEFT JOIN pcproc                 ON pcproc.pc80_codproc         = pcprocitem.pc81_codproc
-                WHERE l20_instit = ".db_getsession("DB_instit")."
+                WHERE l20_instit = " . db_getsession("DB_instit") . "
                   AND (pc80_criterioadjudicacao = 1 OR pc80_criterioadjudicacao = 2)
                     ORDER BY l20_codigo
           ";
-                }
-
-                if (isset($edital) && $edital == true) {
-                    $sWhere = '';
-                    if($aguardando_envio){
-                      $sWhere = ' AND liclicita.l20_cadinicial = 1';
                     }
 
-                    $sql = "
+                    if (isset($edital) && $edital == true) {
+                        $sWhere = '';
+                        if ($aguardando_envio) {
+                            $sWhere = ' AND liclicita.l20_cadinicial = 1';
+                        }
+
+                        $sql = "
                       SELECT DISTINCT liclicita.l20_codigo,
                             liclicita.l20_edital,
                             (CASE WHEN l20_nroedital IS NULL THEN '-'
@@ -396,7 +397,7 @@ $sWhereContratos = " and 1 = 1 ";
                         LEFT JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
                         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
                         LEFT JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
-                        WHERE l20_instit = ".db_getsession('DB_instit')."
+                        WHERE l20_instit = " . db_getsession('DB_instit') . "
                            AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
                                      AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
                                      WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
@@ -405,30 +406,27 @@ $sWhereContratos = " and 1 = 1 ";
                             AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
                         ORDER BY l20_codigo
           ";
-                }
-                $aRepassa = array();
-                db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
-
-            } else {
-
-
-                if ($pesquisa_chave != null && $pesquisa_chave != "") {
-
-                    if (isset($param) && trim($param) != ""){
-
-                        $result = $clliclicitem->sql_record($clliclicitem->sql_query_inf($pesquisa_chave));
-
-                        if ($clliclicitem->numrows!=0) {
-
-                            db_fieldsmemory($result,0);
-                            echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
-                        }else{
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
-                        }
                     }
+                    $aRepassa = array();
+                    db_lovrot($sql . ' desc ', 15, "()", "", $funcao_js, null, 'NoMe', $aRepassa, false);
+                } else {
 
-                    else if (isset($criterioadjudicacao) && $criterioadjudicacao == true) {
-                        $sql = "
+
+                    if ($pesquisa_chave != null && $pesquisa_chave != "") {
+
+                        if (isset($param) && trim($param) != "") {
+
+                            $result = $clliclicitem->sql_record($clliclicitem->sql_query_inf($pesquisa_chave));
+
+                            if ($clliclicitem->numrows != 0) {
+
+                                db_fieldsmemory($result, 0);
+                                echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
+                            } else {
+                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                            }
+                        } else if (isset($criterioadjudicacao) && $criterioadjudicacao == true) {
+                            $sql = "
               SELECT DISTINCT liclicita.l20_codigo,
               liclicita.l20_edital,
               l20_anousu,
@@ -452,19 +450,19 @@ $sWhereContratos = " and 1 = 1 ";
                   LEFT JOIN acordoliclicitem       ON liclicitem.l21_codigo       = acordoliclicitem.ac24_liclicitem
                   LEFT JOIN pcprocitem             ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
                   LEFT JOIN pcproc                 ON pcproc.pc80_codproc         = pcprocitem.pc81_codproc
-                    WHERE l20_instit = ".db_getsession("DB_instit")."
+                    WHERE l20_instit = " . db_getsession("DB_instit") . "
                       AND pc80_criterioadjudicacao = 1
                       AND liclicita.l20_codigo = {$pesquisa_chave}
                         ORDER BY l20_codigo
               ";
-                        $result = $clliclicita->sql_record($sql);
-                        if($clliclicita->numrows != 0){
+                            $result = $clliclicita->sql_record($sql);
+                            if ($clliclicita->numrows != 0) {
 
-                            db_fieldsmemory($result,0);
-                            echo "<script>".$funcao_js."('$l20_edital','$l20_anousu','$l03_codcom',false);</script>";
-                        }
-                    } else if($autoriza == true){
-                        $sql = "
+                                db_fieldsmemory($result, 0);
+                                echo "<script>" . $funcao_js . "('$l20_edital','$l20_anousu','$l03_codcom',false);</script>";
+                            }
+                        } else if ($autoriza == true) {
+                            $sql = "
               SELECT DISTINCT liclicita.l20_numero,
               liclicita.l20_edital,
               liclicita.l20_objeto,
@@ -490,67 +488,66 @@ $sWhereContratos = " and 1 = 1 ";
                   LEFT JOIN acordoliclicitem       ON liclicitem.l21_codigo       = acordoliclicitem.ac24_liclicitem
                   LEFT JOIN pcprocitem             ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
                   LEFT JOIN pcproc                 ON pcproc.pc80_codproc         = pcprocitem.pc81_codproc
-                    WHERE l20_instit = ".db_getsession("DB_instit")."
+                    WHERE l20_instit = " . db_getsession("DB_instit") . "
                       AND liclicita.l20_codigo = {$pesquisa_chave}
               ";
-                        $result = $clliclicita->sql_record($sql);
+                            $result = $clliclicita->sql_record($sql);
 
-                        if($clliclicita->numrows != 0){
-                            db_fieldsmemory($result,0);
-                            echo "<script>".$funcao_js."('$l20_objeto','$l20_numero','$l20_edital','$l20_anousu','$l03_codcom','$l03_pctipocompratribunal',false);</script>";
-                        }
-                    }
-                    else {
-                        if($obras == "true"){
-                          if($licitacaosistema == "1"){
-                              $result = $clliclicita->sql_record($clliclicita->sql_query(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
-
-                              if($clliclicita->numrows != 0){
-                                  db_fieldsmemory($result,0);
-                                  echo "<script>".$funcao_js."($l20_numero','$l20_numero','$l03_descr',false);</script>";
-                              } else {
-                                  echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
-                              }
-                          }else{
-                              $result = $cllicobraslicitacao->sql_record($cllicobraslicitacao->sql_query($pesquisa_chave));
-                              if($cllicobraslicitacao->numrows!=0){
-                                  db_fieldsmemory($result,0);
-                                  echo "<script>".$funcao_js."('$l44_descricao','$obr07_objeto','$l20_numero',$false);</script>";
-                              }else{
-                                  echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
-                              }
-                          }
-                        }else{
-                          $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
-
-                          if($clliclicita->numrows != 0){
-                            db_fieldsmemory($result,0);
-                            if($tipoproc == "true"){
-                              echo "<script>".$funcao_js."('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
-                            }else{
-                              echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
+                            if ($clliclicita->numrows != 0) {
+                                db_fieldsmemory($result, 0);
+                                echo "<script>" . $funcao_js . "('$l20_objeto','$l20_numero','$l20_edital','$l20_anousu','$l03_codcom','$l03_pctipocompratribunal',false);</script>";
                             }
-                          } else {
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
-                          }
-                        }
-                    }
+                        } else {
+                            if ($obras == "true") {
+                                if ($licitacaosistema == "1") {
+                                    $result = $clliclicita->sql_record($clliclicita->sql_query(null, "*", null, "$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
 
-                } else {
-                    echo "<script>".$funcao_js."('',false);</script>";
+                                    if ($clliclicita->numrows != 0) {
+                                        db_fieldsmemory($result, 0);
+                                        echo "<script>" . $funcao_js . "($l20_numero','$l20_numero','$l03_descr',false);</script>";
+                                    } else {
+                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado','Chave(" . $pesquisa_chave . ") não Encontrado','Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                                    }
+                                } else {
+                                    $result = $cllicobraslicitacao->sql_record($cllicobraslicitacao->sql_query($pesquisa_chave));
+                                    if ($cllicobraslicitacao->numrows != 0) {
+                                        db_fieldsmemory($result, 0);
+                                        echo "<script>" . $funcao_js . "('$l44_descricao','$obr07_objeto','$l20_numero',$false);</script>";
+                                    } else {
+                                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                                    }
+                                }
+                            } else {
+                                $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null, "*", null, "$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
+
+                                if ($clliclicita->numrows != 0) {
+                                    db_fieldsmemory($result, 0);
+                                    if ($tipoproc == "true") {
+                                        echo "<script>" . $funcao_js . "('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
+                                    } else {
+                                        echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
+                                    }
+                                } else {
+                                    echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                                }
+                            }
+                        }
+                    } else {
+                        echo "<script>" . $funcao_js . "('',false);</script>";
+                    }
                 }
-            }
-            ?>
-        </td>
-    </tr>
-</table>
+                ?>
+            </td>
+        </tr>
+    </table>
 </body>
+
 </html>
 <?
-if(!isset($pesquisa_chave)){
-    ?>
+if (!isset($pesquisa_chave)) {
+?>
     <script>
     </script>
-    <?
+<?
 }
 ?>

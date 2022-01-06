@@ -55,23 +55,6 @@ if (isset($pactoplano) && $pactoplano != "") {
     $sWhere .= " (o15_tipo = 1  or o58_codigo = {$oPlano->o16_orctiporec})";
   }
 }
-/**
- * comentado por robson
- * retirado condiï¿½ï¿½o pois nï¿½o estava permitindo retornar dotaï¿½ï¿½es na hora
- * de empenhar
- */
-/*else{
-  $result=db_dotacaosaldo(8,2,2,"true","" ,db_getsession("DB_anousu"),'','','','',false);
-  for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
-    if(db_utils::fieldsMemory($result, $iCont)->atual_menos_reservado == 0) {
-      $aDados[] = db_utils::fieldsMemory($result, $iCont)->o58_coddot;
-    }
-  }
-  $Dados = implode(',',$aDados);
-  $sWhere .= " o58_coddot not in ($Dados)";
-}*/
-// variï¿½vel que determina o obrigatoriedade de digitar departamento
-//$obriga_depto = "sim";
 
 if (empty($elemento)) {
   $elemento = null;
@@ -137,6 +120,7 @@ if (!isset($filtroquery)) {
         $erro = "Sem permissï¿½o para esta dotaï¿½ï¿½o!";
       }
     }
+  }
 }
 ?>
 <html>
@@ -177,7 +161,7 @@ if (!isset($filtroquery)) {
     function js_origempermissao() {
 
       var sUrl = 'func_origempermissao.php';
-      js_OpenJanelaIframe('parent', 'db_iframe_origempermissao', sUrl, 'Origem Permissï¿½o', true, '0', 1);
+      js_OpenJanelaIframe('parent', 'db_iframe_origempermissao', sUrl, 'Origem Permissão', true, '0', 1);
     }
   </script>
 </head>
