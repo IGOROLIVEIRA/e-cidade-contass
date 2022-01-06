@@ -105,7 +105,7 @@ if(isset($_POST["processar"])) {
         
 
         $i = 0;
-        for($row=8;$row<=$highestRow;$row++){
+        for($row=7;$row<=$highestRow;$row++){
 
             $cell = $objWorksheet -> getCellByColumnAndRow (0,$row);
             $nota = $cell->getValue();
@@ -115,41 +115,44 @@ if(isset($_POST["processar"])) {
             if($data==""){
                 break;
             }
+
+            $data = explode("/",$data);
+            $data = $data[2]."-".$data[1]."-".$data[0];
             
-            $data = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($data+1));
+            //$data = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($data+1));
 
             $cell = $objWorksheet -> getCellByColumnAndRow (2,$row);
             $hora = $cell->getValue();
             $hora = explode(":", $hora);
             $hora = $hora[0].":".$hora[1];
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (4,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (3,$row);
             $placa = $cell->getValue();
             $placa = explode("-", $placa);
             $placa = $placa[0]."".$placa[1];
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (23,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (12,$row);
             $valor = $cell->getValue();
 
             $cell = $objWorksheet -> getCellByColumnAndRow (6,$row);
             $secretaria = $cell->getValue();
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (9,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (5,$row);
             $motorista = $cell->getValue();
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (8,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (4,$row);
             $motoristaNome = $cell->getValue();
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (18,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (9,$row);
             $medidasaida = $cell->getValue();
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (19,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (10,$row);
             $litros = $cell->getValue();
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (20,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (11,$row);
             $vUnitario = $cell->getValue();
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (7,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (8,$row);
             $combust = $cell->getValue();
 
             if(strtotime($dataI) <= strtotime($data) && strtotime($data) <= strtotime($dataF) ){
@@ -220,9 +223,7 @@ if(isset($_POST["processar"])) {
                         }
                     }
                     $arrayItensPlanilha[] = $objItensPlanilha;
-                
-            }
-            
+            }  
     }
 
     
@@ -298,15 +299,18 @@ if(isset($_POST["processar"])) {
                                     </td>
                                 </tr>
                                 <tr >
-                                    <td colspan="2" >
-                                    <div style="margin-left: 150px;"><input name ='processar' type='submit' id="Processar" value="Processar"></div>
+                                    <td colspan="2">
+                                    <div style="margin-left: 145px;">
+                                        <input name ='processar' type='submit' id="Processar" value="Processar">
+                                        <input name ='exportar' type='button' id="exportar" value="Planilha" onclick="gerar()">
+                                    </div>
+                                   
                                     </td>
-                                    
                                 </tr>
                             </table>
                         </form> 
                         
-                        <div id='anexo' style=''></div>
+                        <div id='anexo'></div>
                     </fieldset>
                     
                 </td>
@@ -532,6 +536,10 @@ if(isset($_POST["processar"])) {
     
 <script>
 
+    function gerar(){
+        alert("teste");
+        window.location.href = "vei1_xlsabastecimentoPlanilha.php";
+    }
 
     function js_verificarEmpenho(){
         var nControle = 0;
