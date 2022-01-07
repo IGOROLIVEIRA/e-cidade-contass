@@ -304,7 +304,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
     
             $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
-            
+           
             $array1 = array();
             $op = 0;
             for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {

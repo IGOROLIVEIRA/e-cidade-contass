@@ -122,7 +122,7 @@ $sWhereContratos = " and 1 = 1 ";
              * Apresentação para emissão de relatório
              */
             if(isset($adjudicacao) && trim($adjudicacao) == "3"){
-                $dbwhere .= " l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NOT NULL AND l20_licsituacao != 1 AND";
+                $dbwhere .= " l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NOT NULL AND l20_licsituacao in (10,13) AND l20_codtipocom NOT IN (10,15,29,30) AND l20_usaregistropreco = false AND";
             }
 
             $sWhereModalidade = ""; 
@@ -177,6 +177,7 @@ $sWhereContratos = " and 1 = 1 ";
                 }else{
                     $sql = $clliclicita->sql_queryContratosContass(""," " .$campos,"l20_codigo","$dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
                 }
+                
                 if (isset($param) && trim($param) != ""){
                     $dbwhere = " and (e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))";
                     if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
