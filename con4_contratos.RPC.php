@@ -1610,7 +1610,7 @@ switch ($oParam->exec) {
         try {
 
             if (!isset($oParam->iAcordo) || empty($oParam->iAcordo)) {
-                throw new ParameterException(_M($sCaminhoMensagens . 'acordo_nao_informado'));
+                throw new ParameterException(_M($sCaminhoMensagens . 'acordo_nao_informado')); 
             }
 
             db_inicio_transacao();

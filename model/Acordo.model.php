@@ -3575,7 +3575,7 @@ class Acordo
         /**
          * Valida se existe execução dentro do período do contrato, não permitindo a remoção
          */
-        if (!$this->verificaSeTemExecucaoPeriodo(null, $oDataInicial, $oDataFinal)) {
+        if (!$this->verificaSeTemExecucaoPeriodo(null, $oDataInicial, $oDataFinal)) { 
 
             $oDados               = new stdClass();
             $oDados->sDataInicial = $oDataInicial->getDate(DBDate::DATA_PTBR);
