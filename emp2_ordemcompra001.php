@@ -67,15 +67,15 @@ $clrotulo->label("m51_codordem");
       <form name="form1" method="post" action="">
         <table align="center">
 
-          <tr>
+          <tr id="ordemdecompra">
             <td nowrap><b>
                 <? db_ancora('Ordem de ', "js_pesquisa_matordem(true);", 1); ?>
               </b>
             </td>
             <td>
-              <? db_input('m51_codordem', 8, $Im51_codordem, true, 'text', 4, "onchange='js_pesquisa_matordem(false);'", "m51_codordem_ini")  ?>
+              <? db_input('m51_codordem', 12, $Im51_codordem, true, 'text', 4, "onchange='js_pesquisa_matordem(false);'", "m51_codordem_ini")  ?>
               <strong> à </strong>
-              <? db_input('m51_codordem', 8, $Im51_codordem, true, 'text', 4, "", "m51_codordem_fim")  ?>
+              <? db_input('m51_codordem', 12, $Im51_codordem, true, 'text', 4, "", "m51_codordem_fim")  ?>
             </td>
           </tr>
 
@@ -93,7 +93,7 @@ $clrotulo->label("m51_codordem");
             </td>
           </tr>
 
-          <tr>
+          <tr id="fornecedor">
             <td align="left" nowrap title="<?= $Tz01_numcgm ?>">
               <? db_ancora("Fornecedor", "js_pesquisa_cgm(true);", 1); ?>
             </td>
@@ -135,6 +135,8 @@ $clrotulo->label("m51_codordem");
         document.form1.m51_codordem_ini.focus();
       } else {
         document.form1.m51_codordem_fim.value = document.form1.m51_codordem_ini.value;
+        document.getElementById('periodos').style.display = "none";
+        document.getElementById('fornecedor').style.display = "none";
       }
     }
 
@@ -142,6 +144,8 @@ $clrotulo->label("m51_codordem");
       document.form1.m51_codordem_fim.value = chave1;
       document.form1.m51_codordem_ini.value = chave1;
       db_iframe_matordem.hide();
+      document.getElementById('periodos').style.display = "none";
+      document.getElementById('fornecedor').style.display = "none";
     }
 
     function js_pesquisa_cgm(mostra) {
@@ -151,6 +155,7 @@ $clrotulo->label("m51_codordem");
       } else {
         if (document.form1.m51_numcgm.value != '') {
           js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm_empenho.php?pesquisa_chave=' + document.form1.m51_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+          document.getElementById('ordemdecompra').style.display = "none";
         } else {
           document.form1.z01_nome.value = '';
         }
@@ -162,6 +167,7 @@ $clrotulo->label("m51_codordem");
       if (erro == true) {
         document.form1.z01_nome.value = '';
         document.form1.m51_numcgm.focus();
+        document.getElementById('ordemdecompra').style.display = "none";
       }
     }
 
@@ -169,6 +175,7 @@ $clrotulo->label("m51_codordem");
       document.form1.m51_numcgm.value = chave1;
       document.form1.z01_nome.value = chave2;
       db_iframe_cgm.hide();
+      document.getElementById('ordemdecompra').style.display = "none";
     }
 
     function js_mandadados() {
