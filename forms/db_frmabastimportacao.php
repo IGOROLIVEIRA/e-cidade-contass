@@ -310,7 +310,7 @@ if(isset($_POST["processar"])) {
                             </table>
                         </form> 
                         
-                        <div id='anexo'></div>
+                        <div id='anexo'></div> 
                     </fieldset>
                     
                 </td>
