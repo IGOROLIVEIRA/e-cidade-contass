@@ -123,6 +123,7 @@ function js_emite(){
 	qry += "&contribuinte="+sCgms;
 	qry += "&emparlamentar="+document.form1.emparlamentar.value;
 	qry += "&regrepasse="+document.form1.regrepasse.value;
+	qry += "&formarrecadacao="+document.form1.formarrecadacao.value;
 
 	jan = window.open('cai2_correceitas002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	jan.moveTo(0,0);
@@ -319,6 +320,17 @@ function js_emite(){
 								<option value = '0'>Todas</option>
 								<option value = '1'>Sim</option>
 								<option value = '2'>Não</option>
+						</td>
+					</tr>
+					<tr>
+						<td align="right" nowrap>
+							<strong>Forma de Arrecadação:</strong> 
+						</td>
+						<td>
+							<select name="formarrecadacao" style="width: 175px;">
+								<option value = '0'>Todas</option>
+								<option value = '1'>Via arquivo bancário</option>
+								<option value = '2'>Exceto via arquivo bancário</option>
 						</td>
 					</tr>
 					<tr>

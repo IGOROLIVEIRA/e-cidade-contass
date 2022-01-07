@@ -64,10 +64,13 @@ if (isset($imprimirword)) {
 }
 
 if (isset($alterar)) {
-    $clprecoreferencia->si01_tipoCotacao  = 3;
-    $clprecoreferencia->si01_tipoOrcamento  = 4;
-    $clprecoreferencia->si01_numcgmCotacao = $respCotacaocodigo;
-    $clprecoreferencia->si01_numcgmOrcamento = $respOrcacodigo;
+    if($respCotacaocodigo!=""&& $respOrcacodigo!=""){
+        $clprecoreferencia->si01_tipoCotacao  = 3;
+        $clprecoreferencia->si01_tipoOrcamento  = 4;
+        $clprecoreferencia->si01_numcgmCotacao = $respCotacaocodigo;
+        $clprecoreferencia->si01_numcgmOrcamento = $respOrcacodigo;
+    }
+    
     db_inicio_transacao();
     $db_opcao = 2;
     $clprecoreferencia->si01_justificativa = $si01_justificativa;

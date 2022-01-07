@@ -62,6 +62,11 @@ switch ($oParam->exec) {
 			$oRetorno->iTipoPagamento         = $oSlip->getTipoPagamento();
 			$oRetorno->iSituacao              = $oSlip->getSituacao();
 			$oRetorno->dtData                 = $oSlip->getData();
+            if ($oSlip->getFonteRecursos()) {
+                $oRetorno->iFonteRecurso          = $oSlip->getFonteRecursos()->getCodigoRecurso();
+            } else {
+                $oRetorno->iFonteRecurso          = '';
+            }
 
 			$oRetorno->sCaracteristicaDebito  = $oSlip->getCaracteristicaPeculiarDebito();
 			$oRetorno->sCaracteristicaCredito = $oSlip->getCaracteristicaPeculiarCredito();
@@ -110,8 +115,6 @@ switch ($oParam->exec) {
 			  $oDadosSlipProcesso = db_utils::fieldsMemory($rsSlipProcesso, 0);
 			  $oRetorno->k145_numeroprocesso = urlencode($oDadosSlipProcesso->k145_numeroprocesso);
 			}
-
-
 
 			/*
 			 * descrição dos demais campos:
@@ -185,7 +188,11 @@ switch ($oParam->exec) {
       $oTransferencia = TransferenciaFactory::getInstance($oParam->iCodigoTipoOperacao, $iCodigoSlip);
       $oTransferencia->setContaDebito($oParam->k17_debito);
       $oTransferencia->setContaCredito($oParam->k17_credito);
+        if (isset($oParam->iCodigoFonte) && $oParam->iCodigoFonte != '')
+            $oTransferencia->setFonteRecurso($oParam->iCodigoFonte);
       $oTransferencia->setValor(str_replace(",", ".", $oParam->k17_valor));
+        if (isset($oParam->iCodigoFonte) && $oParam->iCodigoFonte != '')
+            $oTransferencia->adicionarRecurso($oParam->iCodigoFonte, str_replace(",", ".", trim($oParam->k17_valor)));
       $oTransferencia->setHistorico($oParam->k17_hist);
       $oTransferencia->setObservacao(addslashes(db_stdClass::normalizeStringJsonEscapeString($oParam->k17_texto)));
       $oTransferencia->setTipoPagamento(0);
@@ -283,10 +290,16 @@ switch ($oParam->exec) {
       $oTransferencia->setCaracteristicaPeculiarCredito($oParam->sCaracteristicaPeculiarCredito);
       $oTransferencia->setHistorico($oParam->k17_hist);
       $oTransferencia->setValor(str_replace(",", ".", trim($oParam->k17_valor)));
+        // Condição de fonte de recursos
+        if (isset($oParam->iCodigoFonte) && $oParam->iCodigoFonte != '')
+            $oTransferencia->setFonteRecurso($oParam->iCodigoFonte);
+        if (isset($oParam->iCodigoFonte) && $oParam->iCodigoFonte != '')
+            $oTransferencia->adicionarRecurso($oParam->iCodigoFonte, str_replace(",", ".", trim($oParam->k17_valor)));
+            
       $oTransferencia->setObservacao(db_stdClass::normalizeStringJsonEscapeString($oParam->k17_texto));
       $oTransferencia->setData(date("Y-m-d",db_getsession("DB_datausu")));
       $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($oParam->k145_numeroprocesso));
-
+      
       /**
        * Verifica qual transferência financeira o slip é originário
        * Usa essa informação para que a transferência seja marcada como recebida, na tabela transferenciafinanceirarecebimento
@@ -373,6 +386,9 @@ switch ($oParam->exec) {
       $oRetorno->iTipoPagamento         = $oTransferencia->getTipoPagamento();
       $oRetorno->iSituacao              = $oTransferencia->getSituacao();
       $oRetorno->dtData                 = $oTransferencia->getData();
+
+      $rsSlipFonte = db_query("SELECT k29_recurso FROM sliprecurso WHERE k29_slip = {$oParam->k17_codigo}");
+      $oRetorno->iCodigoFonte = db_utils::fieldsMemory($rsSlipFonte, 0)->k29_recurso ? db_utils::fieldsMemory($rsSlipFonte, 0)->k29_recurso : '';
 
       $oRetorno->sCaracteristicaDebito  = $oTransferencia->getCaracteristicaPeculiarDebito();
       $oRetorno->sCaracteristicaCredito = $oTransferencia->getCaracteristicaPeculiarCredito();
