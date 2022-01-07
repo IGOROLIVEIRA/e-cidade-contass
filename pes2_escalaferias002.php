@@ -448,6 +448,7 @@ for ($i = 0; $i < $iTotalFuncionarios; $i++) {
   $sSqlFeriasCadastradas .= "   and r30_anousu = {$iAno}";
   $sSqlFeriasCadastradas .= "   and r30_mesusu = {$iMes} ";
   $sSqlFeriasCadastradas .= "   and r30_regist = {$oDados->rh01_regist}";
+  $sSqlFeriasCadastradas .= "   and r30_tip1 != '05'";
   $sSqlFeriasCadastradas .= " order by r30_perai asc";
   
   $nUltimaData = '';
