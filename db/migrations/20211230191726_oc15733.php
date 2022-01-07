@@ -4,29 +4,11 @@ use Phinx\Migration\AbstractMigration;
 
 class Oc15733 extends AbstractMigration
 {
-    /**
-     * Change Method.
-     *
-     * Write your reversible migrations using this method.
-     *
-     * More information on writing migrations is available here:
-     * http://docs.phinx.org/en/latest/migrations.html#the-abstractmigration-class
-     *
-     * The following commands can be used in this method and Phinx will
-     * automatically reverse them when rolling back:
-     *
-     *    createTable
-     *    renameTable
-     *    addColumn
-     *    renameColumn
-     *    addIndex
-     *    addForeignKey
-     *
-     * Remember to call "create()" or "update()" and NOT "save()" when working
-     * with the Table class.
-     */
-    public function change()
-    {
 
+    public function up()
+    {
+        $sql = "INSERT into db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alterar dotação credenciamento','Alterar dotação credenciamento','ac04_alteradotacaocredenciamento001.php',1,1,'Alterar dotação credenciamento','t');
+         INSERT into db_menu values (8289,(select max(id_item) from db_itensmenu),10,8251);";
+        $this->execute($sql);
     }
 }
