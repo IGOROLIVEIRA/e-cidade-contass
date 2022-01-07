@@ -635,32 +635,30 @@ switch ($oParam->exec) {
                     $sMessagemInvalido = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
                     $lAcordoValido = true;
                 }
-
             }
 
             /**
              * Controle de cadastro de fornecedor
              */
 
-            
-            $result_tipoparticipacao3=$clpcfornereprlegal->sql_record($clpcfornereprlegal->sql_query("","*","","pc81_cgmforn = {$oParam->contrato->iContratado}"));
+
+            $result_tipoparticipacao3 = $clpcfornereprlegal->sql_record($clpcfornereprlegal->sql_query("", "*", "", "pc81_cgmforn = {$oParam->contrato->iContratado}"));
             $resulta     = db_utils::fieldsMemory($result_tipoparticipacao3, 0);
             //$result_tipoparticipacao3 = db_query("select pc81_cgmforn from pcfornereprlegal where pc81_cgmforn = {$oParam->contrato->iContratado}");
-            if($resulta->pc81_tipopart!=3 && $resulta->pc81_tipopart!=4 && $resulta->pc81_tipopart!=5){
+            if ($resulta->pc81_tipopart != 3 && $resulta->pc81_tipopart != 4 && $resulta->pc81_tipopart != 5) {
                 $result_tipoparticipacao1 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 1");
-            
-                if(pg_num_rows($result_tipoparticipacao1) == 0){
+
+                if (pg_num_rows($result_tipoparticipacao1) == 0) {
                     throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
                 }
 
                 $result_tipoparticipacao2 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 2");
 
-                if(pg_num_rows($result_tipoparticipacao2) == 0){
+                if (pg_num_rows($result_tipoparticipacao2) == 0) {
                     throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
                 }
-
             }
-            
+
 
             $oLicitacao = db_utils::getDao('liclicita');
             $rsLicitacao   = $oLicitacao->sql_record($oLicitacao->sql_query_file($oParam->contrato->iLicitacao, 'l20_naturezaobjeto'));
@@ -968,6 +966,14 @@ switch ($oParam->exec) {
 
             $oContrato->atualizaValorContratoPorTotalItens();
 
+            $codigoContrato = $oContrato->getCodigoAcordo();
+            $resultadoSelect = db_query("select ac26_sequencial from acordoposicao where ac26_acordo = {$codigoContrato}");
+            $acordoPosicao = db_utils::fieldsMemory($resultadoSelect, 0);
+            $resultadoSelect = db_query("select SUM(ac20_valortotal) from acordoitem where ac20_acordoposicao = {$acordoPosicao->ac26_sequencial}");
+            $valorTotal = db_utils::fieldsMemory($resultadoSelect, 0);
+
+            db_query("update acordo set ac16_valor = {$valorTotal->sum} where ac16_sequencial = {$codigoContrato}");
+
             db_fim_transacao(false);
         } catch (Exception $eErro) {
 
@@ -1168,6 +1174,14 @@ switch ($oParam->exec) {
                 $oItemContrato->save();
 
                 $oContrato->atualizaValorContratoPorTotalItens();
+
+                $codigoContrato = $oContrato->getCodigoAcordo();
+                $resultadoSelect = db_query("select ac26_sequencial from acordoposicao where ac26_acordo = {$codigoContrato}");
+                $acordoPosicao = db_utils::fieldsMemory($resultadoSelect, 0);
+                $resultadoSelect = db_query("select SUM(ac20_valortotal) from acordoitem where ac20_acordoposicao = {$acordoPosicao->ac26_sequencial}");
+                $valorTotal = db_utils::fieldsMemory($resultadoSelect, 0);
+
+                db_query("update acordo set ac16_valor = {$valorTotal->sum} where ac16_sequencial = {$codigoContrato}");
 
                 db_fim_transacao(false);
             }
