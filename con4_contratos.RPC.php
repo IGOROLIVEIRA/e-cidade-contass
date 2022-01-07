@@ -1614,7 +1614,9 @@ switch ($oParam->exec) {
             }
 
             db_inicio_transacao();
-
+            /**
+             * Alteração OC15013
+             */
             $result1 = $clempempenhocontrato->sql_record($clempempenhocontrato->sql_query(null,"e100_numemp","","e100_acordo=$oParam->iAcordo"));
             db_fieldsmemory($result1,0);
             

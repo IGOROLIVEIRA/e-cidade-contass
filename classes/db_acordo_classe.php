@@ -1266,6 +1266,9 @@ class cl_acordo {
         }else{
             $sql2 = $dbwhere;
         }
+        /**
+         * Alteração Oc15013
+         */
         if($ac16_sequencial!=""){
             $sql3 = " delete from conlancamacordo where c87_acordo = $ac16_sequencial";
             $result2 = db_query($sql3);
