@@ -959,6 +959,158 @@ class Addmenunperiodicos extends AbstractMigration
             (db104_sequencial, db104_avaliacaopergunta, db104_descricao, db104_aceitatexto, db104_identificador, db104_peso, db104_valorresposta, db104_identificadorcampo)
             VALUES(4000994, 4000591, '', true, 'cpfDep-4000994', 0, '', 'cpfDep');
 
+            -- Auto-generated SQL script #202201071402
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=26
+                WHERE db102_sequencial=4000204;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=27
+                WHERE db102_sequencial=4000205;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=28
+                WHERE db102_sequencial=4000206;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=29
+                WHERE db102_sequencial=4000207;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=21
+                WHERE db102_sequencial=4000208;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=30
+                WHERE db102_sequencial=4000209;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=31
+                WHERE db102_sequencial=4000210;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=32
+                WHERE db102_sequencial=4000211;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=33
+                WHERE db102_sequencial=4000212;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=34
+                WHERE db102_sequencial=4000213;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=16
+                WHERE db102_sequencial=4000447;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=25
+                WHERE db102_sequencial=4000203;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=35
+                WHERE db102_sequencial=4000214;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=36
+                WHERE db102_sequencial=4000215;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=37
+                WHERE db102_sequencial=4000216;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=38
+                WHERE db102_sequencial=4000217;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=39
+                WHERE db102_sequencial=4000218;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=3
+                WHERE db102_sequencial=4000190;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=4
+                WHERE db102_sequencial=4000191;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=5
+                WHERE db102_sequencial=4000192;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=6
+                WHERE db102_sequencial=4000193;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=17
+                WHERE db102_sequencial=4000195;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=18
+                WHERE db102_sequencial=4000196;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=19
+                WHERE db102_sequencial=4000197;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=7
+                WHERE db102_sequencial=4000194;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=22
+                WHERE db102_sequencial=4000199;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=10
+                WHERE db102_sequencial=4000441;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=11
+                WHERE db102_sequencial=4000442;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=12
+                WHERE db102_sequencial=4000443;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=13
+                WHERE db102_sequencial=4000444;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=14
+                WHERE db102_sequencial=4000445;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=15
+                WHERE db102_sequencial=4000446;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=9
+                WHERE db102_sequencial=4000440;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=23
+                WHERE db102_sequencial=4000201;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=24
+                WHERE db102_sequencial=4000202;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=20
+                WHERE db102_sequencial=4000198;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=22
+                WHERE db102_sequencial=4000200;
+            UPDATE habitacao.avaliacaogrupopergunta
+                SET db102_ordem=8
+                WHERE db102_sequencial=4000439;
+
+            -- Auto-generated SQL script #202201071429
+            UPDATE habitacao.avaliacaopergunta
+                SET db103_perguntaidentificadora=false
+                WHERE db103_sequencial=4000554;
+            UPDATE habitacao.avaliacaopergunta
+                SET db103_perguntaidentificadora=false
+                WHERE db103_sequencial=4000553;
+            UPDATE habitacao.avaliacaopergunta
+                SET db103_perguntaidentificadora=false
+                WHERE db103_sequencial=4000559;
+
+                -- Auto-generated SQL script #202201071433
+                UPDATE habitacao.avaliacaopergunta
+                    SET db103_perguntaidentificadora=true
+                    WHERE db103_sequencial=4000599;
+
+                    -- Auto-generated SQL script #202201071606
+                    UPDATE habitacao.avaliacaopergunta
+                        SET db103_camposql='dsclograd2'
+                        WHERE db103_sequencial=4000571;
+                    UPDATE habitacao.avaliacaopergunta
+                        SET db103_camposql='nrlograd2'
+                        WHERE db103_sequencial=4000572;
+                    UPDATE habitacao.avaliacaopergunta
+                        SET db103_camposql='bairro2'
+                        WHERE db103_sequencial=4000574;
+
+                        -- Auto-generated SQL script #202201071857
+                        UPDATE habitacao.avaliacaopergunta
+                            SET db103_camposql='tpinscestab'
+                            WHERE db103_sequencial=4000642;
+
+                        -- Auto-generated SQL script #202201071858
+                        UPDATE habitacao.avaliacaopergunta
+                            SET db103_camposql='nrinscestab'
+                            WHERE db103_sequencial=4000643;
 
         COMMIT;
         ";
