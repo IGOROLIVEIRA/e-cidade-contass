@@ -114,6 +114,7 @@
     $tipojulgamento = $resultLici->l20_tipojulg;
     $oLibDocumento->l20_edital = $resultLici->l20_edital;
     $oLibDocumento->l20_anousu = $resultLici->l20_anousu;
+    $oLibDocumento->l20_objeto = $resultLici->l20_objeto;
 
     $oLibDocumento->l20_numero = $resultLici->l20_numero;
     $oLibDocumento->z01_nome = $nome;
@@ -303,7 +304,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
     
             $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
-            
+           
             $array1 = array();
             $op = 0;
             for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
@@ -517,7 +518,11 @@ HTML;
         $data = date('d/m/Y');
         $data = explode("/",$data);
 
-        switch ($data[1]) {
+        $anousu = date("Y",db_getsession("DB_datausu"));
+	    $mesusu = date("m",db_getsession("DB_datausu"));
+	    $diausu = date("d",db_getsession("DB_datausu"));
+
+        switch ($mesusu) {
             case 1:
                 $mes = "Janeiro";
                 break;
@@ -575,7 +580,7 @@ HTML;
         <br>
         <br>
         <div style="text-align: right; margin-right: 5px;">
-            <? echo $resultado->munic;?>, <?echo $data[0]?> de <?echo $mes;?> de <?echo $data[2];?>
+            <? echo $resultado->munic;?>, <?echo $diausu?> de <?echo $mes;?> de <?echo $anousu;?>
         </div>
         <?php
 

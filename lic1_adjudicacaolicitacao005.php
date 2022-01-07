@@ -95,6 +95,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
     $tipojulgamento = $resultLici->l20_tipojulg;
     $oLibDocumento->l20_edital = $resultLici->l20_edital;
     $oLibDocumento->l20_anousu = $resultLici->l20_anousu;
+    $oLibDocumento->l20_objeto = $resultLici->l20_objeto;
 
     $oLibDocumento->l20_numero = $resultLici->l20_numero;
     $oLibDocumento->z01_nome = $nome;
@@ -463,8 +464,11 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
 <?php
 $data = date('d/m/Y');
         $data = explode("/",$data);
+        $anousu = date("Y",db_getsession("DB_datausu"));
+	    $mesusu = date("m",db_getsession("DB_datausu"));
+	    $diausu = date("d",db_getsession("DB_datausu"));
 
-        switch ($data[1]) {
+        switch ($mesusu) {
             case 1:
                 $mes = "Janeiro";
                 break;
@@ -522,7 +526,7 @@ $data = date('d/m/Y');
         <br>
         <br>
         <div style="text-align: right;">
-            <? echo $resultado->munic;?>, <?echo $data[0]?> de <?echo $mes;?> de <?echo $data[2];?>
+            <? echo $resultado->munic;?>, <?echo $diausu?> de <?echo $mes;?> de <?echo $anousu;?>
         </div>
 
         <?php
