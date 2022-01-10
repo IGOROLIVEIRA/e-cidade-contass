@@ -2059,17 +2059,11 @@ class cl_liclicita
         }
 
         if (trim($this->l20_dtpulicacaopncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaopncp"])) {
-
-            if (trim($this->l20_dtpulicacaopncp) == null and $tribunal == 100 and $tribunal == 101 and $tribunal == 102 and $tribunal == 103) {
-                $this->erro_sql = " Campo Data data publicacao pncp nao Informado.";
-                $this->erro_campo = "l20_dtpulicacaopncp";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
+            if ($this->l20_dtpulicacaopncp == null) {
+                $sql .= $virgula . " l20_dtpulicacaopncp = null";
+                $virgula = ",";
             } else {
-                $sql .= $virgula . " l20_dtpulicacaopncp ='$this->l20_dtpulicacaopncp' ";
+                $sql .= $virgula . " l20_dtpulicacaopncp = '$this->l20_dtpulicacaopncp'";
                 $virgula = ",";
             }
         }
@@ -2104,31 +2098,18 @@ class cl_liclicita
         }
 
         if (trim($this->l20_dtpulicacaoedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaoedital"])) {
-            $sql .= $virgula . " l20_dtpulicacaoedital = '$this->l20_dtpulicacaoedital'";
-            $virgula = ",";
-            if (trim($this->l20_dtpulicacaoedital) == null) {
-                $this->erro_sql = " Data Publicacao Edital não Informado.";
-                $this->erro_campo = "l20_dtpulicacaoedital";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
+            if ($this->l20_dtpulicacaoedital == null) {
+                $sql .= $virgula . " l20_dtpulicacaoedital = null";
+                $virgula = ",";
+            } else {
+                $sql .= $virgula . " l20_dtpulicacaoedital = '$this->l20_dtpulicacaoedital'";
+                $virgula = ",";
             }
         }
 
         if (trim($this->l20_linkedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_linkedital"])) {
             $sql .= $virgula . " l20_linkedital = '$this->l20_linkedital'";
             $virgula = ",";
-            if (trim($this->l20_linkedital) == null) {
-                $this->erro_sql = " Campo Link de Publicação Edital não Informado.";
-                $this->erro_campo = "l20_linkedital";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
         }
 
         if (trim($this->l20_mododisputa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_mododisputa"])) {
@@ -2217,7 +2198,7 @@ class cl_liclicita
             // }
         }
         $result = db_query($sql);
-        //die($sql);
+
 
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
