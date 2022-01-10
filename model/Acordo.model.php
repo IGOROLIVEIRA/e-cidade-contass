@@ -61,7 +61,7 @@ class Acordo
     protected $iCodigoAcordo;
 
     /**
-     * Data da inclusï¿½o do acordo
+     * Data da inclusão do acordo
      *
      * @var string
      */
@@ -225,7 +225,7 @@ class Acordo
     protected $sFormaFornecimento;
 
     /**
-     * veiculo de divulgaï¿½ï¿½o
+     * veiculo de divulgação
      *
      * @var string
      */
@@ -245,7 +245,7 @@ class Acordo
     protected $sCpfsignatariocontratante;
 
     /**
-     * situaï¿½ï¿½o do contrato
+     * situação do contrato
      *
      * @var integer
      */
@@ -438,7 +438,7 @@ class Acordo
 
 
     /**
-     * Situacao da vigï¿½ncia do acordo acordo.ac16_semvigencia
+     * Situacao da vigência do acordo acordo.ac16_semvigencia
      * @var boolean
      */
     private $lSituacaoVigencia;
@@ -651,7 +651,7 @@ class Acordo
         }
     }
 
-    /**retorna a descriï¿½ï¿½o da situaï¿½ï¿½o
+    /**retorna a descrição da situação
      * return string
      */
     public function getDescricaoSituacao()
@@ -668,7 +668,7 @@ class Acordo
         return $this->sDesricaoSituacao;
     }
 
-    /**retorna a descriï¿½ï¿½o do tipo
+    /**retorna a descrição do tipo
      * return string
      */
     public function getDescricaoTipo()
@@ -890,7 +890,7 @@ class Acordo
     }
 
     /**
-     * retorna a instituiï¿½ï¿½o do contrato
+     * retorna a instituição do contrato
      * @return integer
      */
     public function getInstit()
@@ -1206,7 +1206,7 @@ class Acordo
 
     /**
      * define o cpf do signatario contratante
-     * Sempre serï¿½ o cpf do prefeito/presidente da camara que deve ser configurado no cadastro da instituiï¿½ï¿½o
+     * Sempre serï¿½ o cpf do prefeito/presidente da camara que deve ser configurado no cadastro da instituição
      *
      * @return $this
      * @throws Exception
@@ -1217,7 +1217,7 @@ class Acordo
         $iCgm = db_utils::fieldsMemory(db_query($sSql), 0)->si09_gestor;
 
         if ($iCgm == "") {
-            throw new Exception("O CPF do Siganatario Contratante nï¿½o estï¿½ corretamente configurado no cadastro desta instutuiï¿½ï¿½o. Acesse: Cofiguraï¿½ï¿½es->Cadastro->Instuiï¿½ï¿½o->Alteraï¿½ï¿½o.");
+            throw new Exception("O CPF do Siganatario Contratante não estï¿½ corretamente configurado no cadastro desta instutuição. Acesse: Cofigurações->Cadastro->Instuição->Alteração.");
         }
 
         $this->sCpfsignatariocontratante = CgmFactory::getInstanceByCgm($iCgm)->getCgccpf();
@@ -1487,21 +1487,19 @@ class Acordo
 
         if (empty($iGarantia)) {
 
-            throw new Exception("Garantia nï¿½o informada");
+            throw new Exception("Garantia não informada");
         }
         $aGarantias      = $this->getGarantias();
         $iTotalGarantias = count($aGarantias);
 
 
-        if($iTotalGarantias==1){
+        if ($iTotalGarantias == 1) {
 
-                $oDaoAcordoGarantia = db_utils::getDao("acordoacordogarantia");
-                $oDaoAcordoGarantia->excluir(null, "ac12_acordo={$this->getCodigoAcordo()}");
-                $this->aGarantias = "";
-                $op=1;
-
-
-        }else{
+            $oDaoAcordoGarantia = db_utils::getDao("acordoacordogarantia");
+            $oDaoAcordoGarantia->excluir(null, "ac12_acordo={$this->getCodigoAcordo()}");
+            $this->aGarantias = "";
+            $op = 1;
+        } else {
 
             $oDaoGarantias = db_utils::getDao("acordoacordogarantia");
             $sSqlGarantias = $oDaoGarantias->sql_query(null, "ac12_acordogarantia,
@@ -1570,20 +1568,17 @@ class Acordo
 
         if (empty($iPenalidade)) {
 
-            throw new Exception("penalidade nï¿½o informada");
+            throw new Exception("penalidade não informada");
         }
         $aPenalidades      = $this->getPenalidades();
         $iTotalPenalidades = count($aPenalidades);
 
-        if($iTotalPenalidades==1){
+        if ($iTotalPenalidades == 1) {
 
             $oDaoPenalidades = db_utils::getDao("acordoacordopenalidade");
             $oDaoPenalidades->excluir(null, "ac15_acordo={$this->getCodigoAcordo()}");
             $this->aPenalidades = "";
-
-
-
-    }else{
+        } else {
 
             $oDaoPenalidades = db_utils::getDao("acordoacordopenalidade");
             $sSqlPenalidades = $oDaoPenalidades->sql_query(null, "ac15_acordopenalidade,
@@ -1615,7 +1610,7 @@ class Acordo
     }
 
     /**
-     * Salva Contrato na Inclusï¿½o ou em suas Alteraï¿½ï¿½es
+     * Salva Contrato na Inclusão ou em suas Alterações
      */
     public function save()
     {
@@ -1629,7 +1624,7 @@ class Acordo
     }
 
     /**
-     * Mï¿½todo que inclui vigencia para posiï¿½ï¿½o atual do acordo
+     * Mï¿½todo que inclui vigencia para posição atual do acordo
      * @param DBDate $oDataFim
      * @param DBDate $oDataInicio
      */
@@ -1640,7 +1635,7 @@ class Acordo
         $oDaoAcordoVigencia->excluir(null, "ac18_acordoposicao={$oPosicao->getCodigo()}");
 
         if ($oDaoAcordoVigencia->erro_status == 0) {
-            throw new Exception("Erro ao definir vigï¿½ncia do contrato.\n{$oDaoAcordoVigencia->erro_msg}");
+            throw new Exception("Erro ao definir vigência do contrato.\n{$oDaoAcordoVigencia->erro_msg}");
         }
 
         $oDaoAcordoVigencia->ac18_acordoposicao = $oPosicao->getCodigo();
@@ -1650,7 +1645,7 @@ class Acordo
         $oDaoAcordoVigencia->incluir(null);
 
         if ($oDaoAcordoVigencia->erro_status == 0) {
-            throw new Exception("Erro ao definir vigï¿½ncia do contrato.\n{$oDaoAcordoVigencia->erro_msg}");
+            throw new Exception("Erro ao definir vigência do contrato.\n{$oDaoAcordoVigencia->erro_msg}");
         }
 
         $oDaoAcordo = db_utils::getDao('acordo');
@@ -1728,9 +1723,9 @@ class Acordo
              */
             $oDaoAcordo->ac16_anousu = $this->getAno();
             /**
-             * validamos a nï¿½meracao do acordo.
-             * nï¿½o podera ser um numero menor ou igual ao maior numero de contrato do grupo e do Tipo instrumento,
-             * dentro da instiuiï¿½ï¿½o.
+             * validamos a némeracao do acordo.
+             * não podera ser um numero menor ou igual ao maior numero de contrato do grupo e do Tipo instrumento,
+             * dentro da instiuição.
              */
             $sWhereNumeracao         = "cast(ac16_numero as bigint) = {$this->getNumero()} ";
             $sWhereNumeracao .= " and ac16_acordogrupo  = {$this->getGrupo()}  ";
@@ -1742,9 +1737,9 @@ class Acordo
             $rsValidaNumeracao = $oDaoAcordo->sql_record($sSqlValidaNumero);
             if ($oDaoAcordo->numrows > 0) {
 
-                $sErroMensagem = "A nï¿½meraï¿½ï¿½o informada para esse contrato ï¿½ invï¿½lida.\n";
-                $sErroMensagem .= "Jï¿½ existem contratos com essa nï¿½meraï¿½ï¿½o.\n";
-                $sErroMensagem .= "Nï¿½mero sugerido para esse contrato: " . $this->getProximoNumeroContrato($this->getGrupo());
+                $sErroMensagem = "A númeração informada para esse contrato é inválida.\n";
+                $sErroMensagem .= "Já existem contratos com essa númeração.\n";
+                $sErroMensagem .= "Número sugerido para esse contrato: " . $this->getProximoNumeroContrato($this->getGrupo());
                 throw new Exception($sErroMensagem);
             }
             $oDaoAcordo->incluir(null);
@@ -1757,7 +1752,7 @@ class Acordo
                 throw new Exception("Erro ao salvar acordo.\nErro: {$oDaoAcordo->erro_msg}");
             }
             /**
-             * Atualizamos o nï¿½mero do contrato no grupo
+             * Atualizamos o número do contrato no grupo
              */
             $oDaoGrupoContrato = db_utils::getDao("acordogruponumeracao");
             $sWhere            = "ac03_anousu = {$this->getAno()} and ac03_instit = {$this->getInstit()} ";
@@ -1766,7 +1761,7 @@ class Acordo
             $rsNumeracao   = $oDaoGrupoContrato->sql_record($sSqlNumeracao);
             if ($oDaoGrupoContrato->numrows == 0) {
 
-                $sMensagem = "Nï¿½meraï¿½ao para o grupo {$this->getGrupo()} nï¿½o foi encontrado.\nInclusï¿½o do contrato abortada";
+                $sMensagem = "Númeração para o grupo {$this->getGrupo()} não foi encontrado.\nInclusão do contrato abortada";
                 throw new Exception($sMensagem);
             }
 
@@ -1776,12 +1771,12 @@ class Acordo
             $oDaoGrupoContrato->alterar($oNumeracaoGrupo->ac03_sequencial);
             if ($oDaoGrupoContrato->erro_status == 0) {
 
-                $sMensagem = "Houve um erro ao atualizar nï¿½meraï¿½ï¿½o.\nVerifique o cadastro do grupo escolhido para esse contrato ";
-                $sMensagem .= "e sua numeraï¿½ï¿½o\nErro Tï¿½cnico: {$oDaoGrupoContrato->erro_msg} ";
+                $sMensagem = "Houve um erro ao atualizar númeração.\nVerifique o cadastro do grupo escolhido para esse contrato ";
+                $sMensagem .= "e sua numeração\nErro Técnico: {$oDaoGrupoContrato->erro_msg} ";
                 throw new Exception($sMensagem);
             }
             /**
-             * incluimos uma movimentaï¿½ï¿½o para o contrato do tipo 1 - Inclusï¿½o do Contrato
+             * incluimos uma movimentação para o contrato do tipo 1 - Inclusão do Contrato
              */
             $oDaoAcordoMovimentacao                              = db_utils::getDao("acordomovimentacao");
             $oDaoAcordoMovimentacao->ac10_datamovimento          = date("Y-m-d", db_getsession("DB_datausu"));
@@ -1789,12 +1784,12 @@ class Acordo
             $oDaoAcordoMovimentacao->ac10_acordo                 = $this->getCodigoAcordo();
             $oDaoAcordoMovimentacao->ac10_hora                   = db_hora();
             $oDaoAcordoMovimentacao->ac10_id_usuario             = db_getsession("DB_id_usuario");
-            $oDaoAcordoMovimentacao->ac10_obs                    = "Inclusï¿½o do contrato";
+            $oDaoAcordoMovimentacao->ac10_obs                    = "Inclusão do contrato";
             $oDaoAcordoMovimentacao->incluir(null);
             if ($oDaoAcordoMovimentacao->erro_status == 0) {
 
-                $sMensagem = "Houve um erro ao inicializar movimentaï¿½ï¿½o do contrato.\n inclusï¿½o do contrato cancelada";
-                $sMensagem .= "\nErro Tï¿½cnico: {$oDaoGrupoContrato->erro_msg} ";
+                $sMensagem = "Houve um erro ao inicializar movimentação do contrato.\n inclusão do contrato cancelada";
+                $sMensagem .= "\nErro Técnico: {$oDaoGrupoContrato->erro_msg} ";
                 throw new Exception($sMensagem);
             }
             if ($this->getDataAssinatura() != "") {
@@ -1807,7 +1802,7 @@ class Acordo
                 $oAssinatura->save();
             }
             /**
-             * incluimos uma posiï¿½ï¿½o inicial para o contrato:
+             * incluimos uma posição inicial para o contrato:
              */
             $oPosicao = new AcordoPosicao();
             $oPosicao->setAcordo($this->iCodigoAcordo);
@@ -1877,7 +1872,7 @@ class Acordo
         $sSqlNumeroContrato = $oDaoGrupoContrato->sql_query_file(null, "ac03_numero", null, $sWhere);
         $rsNumeroContrato   = $oDaoGrupoContrato->sql_record($sSqlNumeroContrato);
         if ($oDaoGrupoContrato->numrows == 0) {
-            throw new Exception("Nï¿½o existe numeraï¿½ï¿½o cadastrada para o grupo {$iGrupoContrato}");
+            throw new Exception("não existe numeração cadastrada para o grupo {$iGrupoContrato}");
         }
 
         $iNumero = db_utils::fieldsMemory($rsNumeroContrato, 0)->ac03_numero + 1;
@@ -1900,7 +1895,7 @@ class Acordo
         $rsResultado = $oDaoAcordoVigencia->sql_record($sSql);
 
         if ($oDaoAcordoVigencia->numrows == 0) {
-            throw new DBException("Erro Tï¿½cnico: erro ao buscar dados vigï¿½ncia original do contrato");
+            throw new DBException("Erro Técnico: erro ao buscar dados vigência original do contrato");
         }
         $oStdDados                         = db_utils::fieldsMemory($rsResultado, 0);
         $this->DataInicialVigenciaOriginal = new DBDate($oStdDados->ac18_datainicio);
@@ -1918,7 +1913,7 @@ class Acordo
         $rsResultado = $oDaoAcordoVigencia->sql_record($sSql);
 
         if ($oDaoAcordoVigencia->numrows == 0) {
-            throw new DBException("Erro Tï¿½cnico: erro ao buscar dados vigï¿½ncia original do contrato");
+            throw new DBException("Erro Técnico: erro ao buscar dados vigência original do contrato");
         }
         $oStdDados                         = db_utils::fieldsMemory($rsResultado, 0);
         $this->DataInicialVigenciaOriginal = new DBDate($oStdDados->ac18_datainicio);
@@ -1943,7 +1938,7 @@ class Acordo
             $sSqlultimaPosicao = $oDaoPosicao->sql_query_file(null, "ac26_sequencial", 'ac26_numero desc limit 1', $sWhere);
             $rsPosicao         = $oDaoPosicao->sql_record($sSqlultimaPosicao);
             if ($oDaoPosicao->numrows == 0) {
-                throw new Exception("Acordo sem posiï¿½ï¿½es definidas.");
+                throw new Exception("Acordo sem posições definidas.");
             }
 
             $iCodigoPosicao       = db_utils::fieldsMemory($rsPosicao, 0)->ac26_sequencial;
@@ -2200,7 +2195,7 @@ class Acordo
                     $nValorAutorizacao += round($oItemAutorizacao->valorunitario * $oItemAutorizacao->quantidade, 2);
                 }
                 /**
-                 * Gera a autorizaï¿½ï¿½o de empenho
+                 * Gera a autorização de empenho
                  */
                 $oAutorizacaoEmpenho = new AutorizacaoEmpenho();
                 $oAutorizacaoEmpenho->setCaracteristicaPeculiar($oDadosAutorizacao->iCaracteristicaPeculiar);
@@ -2264,7 +2259,7 @@ class Acordo
                     $oDaoAcordoItemExecutado->ac29_datafinal   = date("Y-m-d", db_getsession("DB_datausu"));
                     $oDaoAcordoItemExecutado->incluir(null);
                     if ($oDaoAcordoItemExecutado->erro_status == 0) {
-                        throw new Exception("Erro ao salvar movimetanï¿½ï¿½o do acordo!\nErro:{$oDaoAcordoItemExecutado->erro_msg}");
+                        throw new Exception("Erro ao salvar movimetação do acordo!\nErro:{$oDaoAcordoItemExecutado->erro_msg}");
                     }
 
                     /**
@@ -2276,7 +2271,7 @@ class Acordo
                     $oDaoAcordoItemExecutadoAut->ac19_sequen              = $iCodigoItem;
                     $oDaoAcordoItemExecutadoAut->incluir(null);
                     if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
-                        throw new Exception("Erro ao salvar movimentaï¿½ï¿½o do acordo!\nErro:{$oDaoAcordoItemExecutadoAut->erro_msg}");
+                        throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoAcordoItemExecutadoAut->erro_msg}");
                     }
 
                     /**
@@ -2289,7 +2284,7 @@ class Acordo
                     $oDaoExecucaoDotacao->ac32_valor      = $oDaoAcordoItemExecutado->ac29_valor;
                     $oDaoExecucaoDotacao->incluir(null);
                     if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
-                        throw new Exception("Erro ao salvar movimentaï¿½ï¿½o do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
+                        throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
                     }
 
                     $iSeq++;
@@ -2304,7 +2299,7 @@ class Acordo
 
                 if ($oDaoAcordoEmpautoriza->erro_status == 0) {
 
-                    $sMensagemErro = "[ 1 ] - Erro ao vincular a autorizaï¿½ï¿½o ao acordo.\n\n";
+                    $sMensagemErro = "[ 1 ] - Erro ao vincular a autorização ao acordo.\n\n";
                     $sMensagemErro .= $oDaoAcordoEmpautoriza->erro_msg;
                     throw new Exception($sMensagemErro);
                 }
@@ -2328,10 +2323,10 @@ class Acordo
     {
 
         if (empty($iAutorizacao)) {
-            throw new Exception("Codigo da autorizaï¿½ï¿½o nï¿½o informado.");
+            throw new Exception("Codigo da autorização não informado.");
         }
         if (!db_utils::inTransaction()) {
-            throw new Exception("Nenhuma transaï¿½ï¿½o com o banco de dados aberta.\nProcessamento cancelado.");
+            throw new Exception("Nenhuma transação com o banco de dados aberta.\nProcessamento cancelado.");
         }
         /*
          * Verifica se a autorizacao ï¿½ do contrato,
@@ -2369,7 +2364,7 @@ class Acordo
                     $oDaoAcordoItemExecutado->ac29_datafinal   = date("Y-m-d", db_getsession("DB_datausu"));
                     $oDaoAcordoItemExecutado->incluir(null);
                     if ($oDaoAcordoItemExecutado->erro_status == 0) {
-                        throw new Exception("Erro ao salvar movimentaï¿½ï¿½o do acordo!\nErro:{$oDaoAcordoItemExecutado->erro_msg}");
+                        throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoAcordoItemExecutado->erro_msg}");
                     }
                     /**
                      * Vinculamos a autorizacao ao item do acordo
@@ -2380,7 +2375,7 @@ class Acordo
                     $oDaoAcordoItemExecutadoAut->ac19_sequen              = $oItem->itemautorizacao;
                     $oDaoAcordoItemExecutadoAut->incluir(null);
                     if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
-                        throw new Exception("Erro ao salvar movimentaï¿½ï¿½o do acordo!\nErro:{$oDaoAcordoItemExecutadoAut->erro_msg}");
+                        throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoAcordoItemExecutadoAut->erro_msg}");
                     }
 
                     $oDaoExecucaoDotacao                  = db_utils::getDao("acordoitemexecutadodotacao");
@@ -2390,7 +2385,7 @@ class Acordo
                     $oDaoExecucaoDotacao->ac32_valor      = $oDaoAcordoItemExecutado->ac29_valor;
                     $oDaoExecucaoDotacao->incluir(null);
                     if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
-                        throw new Exception("Erro ao salvar movimentaï¿½ï¿½o do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
+                        throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
                     }
                 }
                 //$oItemContrato = $this->getUltimaPosicao()->getItemByCodigo($oItem->codigo);
@@ -2442,10 +2437,10 @@ class Acordo
     {
 
         if (empty($iAutorizacao)) {
-            throw new Exception("Codigo da autorizaï¿½ï¿½o nï¿½o informado.");
+            throw new Exception("Codigo da autorização não informado.");
         }
         if (!db_utils::inTransaction()) {
-            throw new Exception("Nenhuma transaï¿½ï¿½o com o banco de dados aberta.\nProcessamento cancelado.");
+            throw new Exception("Nenhuma transação com o banco de dados aberta.\nProcessamento cancelado.");
         }
         /*
          * Verifica se a autorizacao ï¿½ do contrato,
@@ -2484,7 +2479,7 @@ class Acordo
                 $oDaoAcordoItemExecutado->ac29_datafinal   = date("Y-m-d", db_getsession("DB_datausu"));
                 $oDaoAcordoItemExecutado->incluir(null);
                 if ($oDaoAcordoItemExecutado->erro_status == 0) {
-                    throw new Exception("Erro ao salvar movimentaï¿½ï¿½o do acordo!\nErro:{$oDaoAcordoItemExecutado->erro_msg}");
+                    throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoAcordoItemExecutado->erro_msg}");
                 }
                 /**
                  * Vinculamos a autorizacao ao item do acordo
@@ -2495,7 +2490,7 @@ class Acordo
                 $oDaoAcordoItemExecutadoAut->ac19_sequen              = $oItem->itemautorizacao;
                 $oDaoAcordoItemExecutadoAut->incluir(null);
                 if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
-                    throw new Exception("Erro ao salvar movimentaï¿½ï¿½o do acordo!\nErro:{$oDaoAcordoItemExecutadoAut->erro_msg}");
+                    throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoAcordoItemExecutadoAut->erro_msg}");
                 }
 
                 $oDaoExecucaoDotacao                  = db_utils::getDao("acordoitemexecutadodotacao");
@@ -2505,7 +2500,7 @@ class Acordo
                 $oDaoExecucaoDotacao->ac32_valor      = $oDaoAcordoItemExecutado->ac29_valor;
                 $oDaoExecucaoDotacao->incluir(null);
                 if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
-                    throw new Exception("Erro ao salvar movimentaï¿½ï¿½o do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
+                    throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
                 }
                 //$oItemContrato = $this->getUltimaPosicao()->getItemByCodigo($oItem->codigo);
                 $aDotacoes    = array();
@@ -2689,9 +2684,9 @@ class Acordo
             for ($iAdesao = 0; $iAdesao < $oDaoAcordo->numrows; $iAdesao++) {
 
                 $iCodigoAdesao    = db_utils::fieldsMemory($rsAdesaovinculada, $iAdesao)->si06_sequencial;
-                $rsAdesao = $oDaoAdesaoregpreco->sql_record($oDaoAdesaoregpreco->sql_query($iCodigoAdesao,"si06_sequencial,si06_objetoadesao,si06_dataadesao,coddepto||'-'||descrdepto as departamento"));
+                $rsAdesao = $oDaoAdesaoregpreco->sql_record($oDaoAdesaoregpreco->sql_query($iCodigoAdesao, "si06_sequencial,si06_objetoadesao,si06_dataadesao,coddepto||'-'||descrdepto as departamento"));
 
-                for($i = 0; $i < $oDaoAdesaoregpreco->numrows; $i++){
+                for ($i = 0; $i < $oDaoAdesaoregpreco->numrows; $i++) {
 
                     $oDadosAdesao = db_utils::fieldsMemory($rsAdesao, $i);
                     $oStdAdesao   = new stdClass();
@@ -2722,22 +2717,22 @@ class Acordo
 
                 $iCodigoLicitacao    = db_utils::fieldsMemory($rsLicitacaoOutrosOrgaos, $iLicitacaoOutrosOrgaos)->lic211_sequencial;
 
-                $rsLicitacao = $oDaoliclicitaoutrosorgaos->sql_record($oDaoliclicitaoutrosorgaos->sql_query($iCodigoLicitacao,"lic211_sequencial,lic211_tipo"));
+                $rsLicitacao = $oDaoliclicitaoutrosorgaos->sql_record($oDaoliclicitaoutrosorgaos->sql_query($iCodigoLicitacao, "lic211_sequencial,lic211_tipo"));
 
-                for($i = 0; $i < $oDaoliclicitaoutrosorgaos->numrows; $i++){
+                for ($i = 0; $i < $oDaoliclicitaoutrosorgaos->numrows; $i++) {
 
                     $oDadosLicitacao = db_utils::fieldsMemory($rsLicitacao, $i);
 
-                    if($oDadosLicitacao->lic211_tipo == "5"){
-                        $tipo = "5 - Licitaï¿½ï¿½o realizada por outro ï¿½rgï¿½o ou entidade";
-                    }elseif($oDadosLicitacao->lic211_tipo == "6"){
+                    if ($oDadosLicitacao->lic211_tipo == "5") {
+                        $tipo = "5 - Licitação realizada por outro ï¿½rgï¿½o ou entidade";
+                    } elseif ($oDadosLicitacao->lic211_tipo == "6") {
                         $tipo = "6 - Dispensa ou Inexigibilidade realizada por outro ï¿½rgï¿½o ou entidade";
-                    }elseif($oDadosLicitacao->lic211_tipo == "7"){
-                        $tipo = "7 - Licitaï¿½ï¿½o - Regime Diferenciado de Contrataï¿½ï¿½es";
-                    }elseif($oDadosLicitacao->lic211_tipo == "8"){
-                        $tipo = "8 - Licitaï¿½ï¿½o realizada por consorcio pï¿½blico ";
-                    }elseif($oDadosLicitacao->lic211_tipo == "9"){
-                        $tipo = "9 - Licitaï¿½ï¿½o realizada por outro ente da federaï¿½ï¿½o ";
+                    } elseif ($oDadosLicitacao->lic211_tipo == "7") {
+                        $tipo = "7 - Licitação - Regime Diferenciado de Contratações";
+                    } elseif ($oDadosLicitacao->lic211_tipo == "8") {
+                        $tipo = "8 - Licitação realizada por consorcio pï¿½blico ";
+                    } elseif ($oDadosLicitacao->lic211_tipo == "9") {
+                        $tipo = "9 - Licitação realizada por outro ente da federação ";
                     }
 
                     $oStdLicitacao   = new stdClass();
@@ -2748,7 +2743,6 @@ class Acordo
 
                     $this->aLicitacaoOutrosOrgaos[]     = $oStdLicitacao;
                 }
-
             }
         }
 
@@ -3113,7 +3107,7 @@ class Acordo
         }
 
         /**
-         * cancelamos a ultima posiï¿½ï¿½o do acordo.
+         * cancelamos a ultima posição do acordo.
          */
         if ($iTipoAditamento != 5) {
             $this->getUltimaPosicao(true)->setSituacao(3);
@@ -3167,7 +3161,7 @@ class Acordo
             7
         ))) {
             /**
-             * Verifica se houve alteraï¿½ï¿½o do perï¿½odo de vigï¿½ncia do contrato
+             * Verifica se houve alteração do perï¿½odo de vigência do contrato
              */
             $sNovaDtInicial = DateTime::createFromFormat('d/m/Y', $this->getDataInicial());
             $sNovaDtFim = DateTime::createFromFormat('d/m/Y', $this->getDataFinal());
@@ -3207,7 +3201,7 @@ class Acordo
                     7
                 ))) {
                     /**
-                     * Verifica se houve alteraï¿½ï¿½o do perï¿½odo de execuï¿½ï¿½o do ï¿½tem.
+                     * Verifica se houve alteração do perï¿½odo de execuï¿½ï¿½o do ï¿½tem.
                      */
                     $sNovaDtExecucaoInicio = DateTime::createFromFormat('d/m/Y', $oItem->dtexecucaoinicio);
                     $sNovaDtExecucaoFim = DateTime::createFromFormat('d/m/Y', $oItem->dtexecucaofim);
@@ -3243,7 +3237,7 @@ class Acordo
             //                    7
             //                )) && in_array($oItem->codigoitem, $aSelecionados) && empty($oItem->tipoalteracaoitem)) {
             //                /**
-            //                 * Verifica se houve alteraï¿½ï¿½o de quantidade/valor
+            //                 * Verifica se houve alteração de quantidade/valor
             //                 */
             //                if ($oItem->quantidade > $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario > $oItemContrato->getValorUnitario()) {
             //                    $aTiposAlteracao[] = AcordoPosicao::TIPO_ACRESCIMOITEM;
@@ -3293,27 +3287,27 @@ class Acordo
         $iTipoAditamento = $iTipoalteracaoAditivo != "" ? $iTipoalteracaoAditivo : $iTipoAditamento;
 
         if ($iTipoAditamento == "") {
-            throw new BusinessException("Nenhuma alteraï¿½ï¿½o realizada.");
+            throw new BusinessException("Nenhuma alteração realizada.");
         }
 
         $oNovaPosicao->setTipo($iTipoAditamento);
         $oNovaPosicao->save();
 
-        if($nValorLancamentoContabil == 0){
+        if ($nValorLancamentoContabil == 0) {
             return $this;
         }
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
         $sHistorico = "Valor referente ao aditivo {$oNovaPosicao->getNumeroAditamento()} do contrato de cï¿½digo: {$this->getCodigoAcordo()}.";
-        if($nValorLancamentoContabil > 0){
+        if ($nValorLancamentoContabil > 0) {
             $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $dtAssinatura);
-        }else{
+        } else {
             $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $dtAssinatura);
         }
         return $this;
     }
 
     /**
-     * retorna as movimentaï¿½ï¿½es realizas pelo acordo.
+     * retorna as movimentações realizas pelo acordo.
      *
      * @return array
      */
@@ -3397,7 +3391,7 @@ class Acordo
     }
 
     /**
-     * Seta a unidade de tempo (dia/mes) referente ao perï¿½odo de vigï¿½ncia
+     * Seta a unidade de tempo (dia/mes) referente ao perï¿½odo de vigência
      * @param integer $iTipoUnidadeTempoVigencia
      */
     public function setTipoUnidadeTempoVigencia($iTipoUnidadeTempoVigencia)
@@ -3427,7 +3421,7 @@ class Acordo
     }
 
     /**
-     * Retorna a unidade de tempo (dia/mes) referente ao perï¿½odo de vigï¿½ncia
+     * Retorna a unidade de tempo (dia/mes) referente ao perï¿½odo de vigência
      * @param integer $iTipoUnidadeTempoVigencia
      */
     public function getTipoUnidadeTempoVigencia()
@@ -3454,7 +3448,7 @@ class Acordo
     public static function getDescricaoCategoriaAcordo($iCategoria = 0)
     {
 
-        $sCategoria    = 'Nï¿½o Informado';
+        $sCategoria    = 'não Informado';
         $oDaoCategoria = db_utils::getDao("acordocategoria");
         $sSqlCategoria = $oDaoCategoria->sql_query_file(null, "*", null, "ac50_sequencial = {$iCategoria}");
 
@@ -3536,7 +3530,7 @@ class Acordo
         }
 
         if (!$oDaoAcordo->apagaDependencias($this->getCodigoAcordo())) {
-            throw new BusinessException("Nï¿½o foi possï¿½vel apagar as dependï¿½ncias do acordo {$this->getCodigo()}.");
+            throw new BusinessException("não foi possï¿½vel apagar as dependï¿½ncias do acordo {$this->getCodigo()}.");
         }
 
         if ($this->possuiLancamentoContabil()) {
@@ -3547,7 +3541,7 @@ class Acordo
         $oDataFinal   = new DBDate($this->getDataFinal());
 
         /**
-         * Valida se existe execuï¿½ï¿½o dentro do perï¿½odo do contrato, nï¿½o permitindo a remoï¿½ï¿½o
+         * Valida se existe execuï¿½ï¿½o dentro do perï¿½odo do contrato, não permitindo a remoï¿½ï¿½o
          */
         if (!$this->verificaSeTemExecucaoPeriodo(null, $oDataInicial, $oDataFinal)) {
 
@@ -3558,7 +3552,7 @@ class Acordo
         }
 
         /**
-         * Busca as movimentaï¿½ï¿½es canceladas de um acordo, removendo-as
+         * Busca as movimentações canceladas de um acordo, removendo-as
          */
         $oDaoAcordoMovimentacaoCancela   = new cl_acordomovimentacaocancela();
         $sWhereAcordoMovimentacaoCancela = "ac10_acordo = {$this->getCodigoAcordo()}";
@@ -3580,7 +3574,7 @@ class Acordo
         }
 
         /**
-         * Remove as movimentaï¿½ï¿½es vinculadas ao acordo
+         * Remove as movimentações vinculadas ao acordo
          */
         $oDaoAcordoMovimentacao   = new cl_acordomovimentacao();
         $sWhereACordoMovimentacao = "ac10_acordo = {$this->getCodigoAcordo()}";
@@ -3591,7 +3585,7 @@ class Acordo
         }
 
         /**
-         * Percorre as posiï¿½ï¿½es do acordo, removendo as mesmas
+         * Percorre as posições do acordo, removendo as mesmas
          */
         foreach ($this->getPosicoes() as $oAcordoPosicao) {
             $oAcordoPosicao->remover();
@@ -3645,12 +3639,12 @@ class Acordo
     }
 
     /**
-     * Realiza a paralisaï¿½ï¿½o de um Contrato
+     * Realiza a paralisação de um Contrato
      *
-     * @param DBDate $oDataInicio data de inicio da Paralisaï¿½ï¿½o
-     * @param string $sObervacao Observaï¿½ï¿½o
+     * @param DBDate $oDataInicio data de inicio da Paralisação
+     * @param string $sObervacao Observação
      * @throws BusinessException contrato jï¿½ esta paralizado
-     * @throws DBException Nï¿½o existe transaï¿½ï¿½o ativa
+     * @throws DBException não existe transação ativa
      * @return AcordoParalisacao
      */
     public function paralisar(DBDate $oDataInicio, $sObervacao)
@@ -3673,7 +3667,7 @@ class Acordo
     }
 
     /**
-     * Retorna todas as paralisaï¿½ï¿½es do contrato
+     * Retorna todas as paralisações do contrato
      * @return AcordoParalisacao[]
      * @throws DBException
      */
@@ -3698,7 +3692,7 @@ class Acordo
     }
 
     /**
-     * Retorna a ï¿½ltima paralisaï¿½ï¿½o do acordo
+     * Retorna a ï¿½ltima paralisação do acordo
      * @return AcordoParalisacao|null
      */
     public function getUltimaParalisacao()
@@ -3793,7 +3787,7 @@ class Acordo
 
     /**
      *
-     * funï¿½ï¿½o para reativar um contrato apos um periodo de paralisaï¿½ï¿½o
+     * funï¿½ï¿½o para reativar um contrato apos um periodo de paralisação
      *
      * @param array $aPeriodos periodos a serem recriados
      * @param object $oDataAtivacao data da reativacao
@@ -3899,7 +3893,7 @@ class Acordo
 
     /**
      * Valida se o nï¿½mero do aditivo ï¿½ vï¿½lido.
-     * Se jï¿½ existir um numero de aditivo para o contrato o sistema nï¿½o permite a inclusï¿½o do aditamento.
+     * Se jï¿½ existir um numero de aditivo para o contrato o sistema não permite a inclusão do aditamento.
      * @param $iContrato
      * @param $sNumeroAditivo
      * @return $sNumeroAditivo
@@ -3913,7 +3907,7 @@ class Acordo
         $rsNumeroAditivo = db_query($sSql);
 
         if (pg_num_rows($rsNumeroAditivo) > 0) {
-            throw new Exception("A numeraï¿½ï¿½o {$sNumeroAditivo} jï¿½ existe para o contrato {$iContrato}. A prï¿½xima numeraï¿½ï¿½o disponï¿½vel ï¿½: " . $this->getProximoNumeroAditivo($iContrato));
+            throw new Exception("A numeração {$sNumeroAditivo} jï¿½ existe para o contrato {$iContrato}. A prï¿½xima numeração disponï¿½vel ï¿½: " . $this->getProximoNumeroAditivo($iContrato));
         }
 
         return $sNumeroAditivo;
@@ -3921,7 +3915,7 @@ class Acordo
 
     /**
      * Valida se o nï¿½mero do apostilamento ï¿½ vï¿½lido.
-     * Se jï¿½ existir um numero de apostilamento para o contrato o sistema nï¿½o permite a inclusï¿½o do apostilamento.
+     * Se jï¿½ existir um numero de apostilamento para o contrato o sistema não permite a inclusão do apostilamento.
      * @param $iContrato
      * @param $sNumeroApostilamento
      * @return $sNumeroApostilamento
@@ -3936,7 +3930,7 @@ class Acordo
         $rsNumeroApostilamento = db_query($sSql);
 
         if (pg_num_rows($rsNumeroApostilamento) > 0) {
-            throw new Exception("Jï¿½ existe uma posiï¿½ï¿½o com numeraï¿½ï¿½o {$sNumeroApostilamento} e contrato {$iContrato}.");
+            throw new Exception("Jï¿½ existe uma posição com numeração {$sNumeroApostilamento} e contrato {$iContrato}.");
         }
 
         return $sNumeroApostilamento;
@@ -4071,7 +4065,7 @@ class Acordo
     }
 
     /**
-     * retorna os itens na possiï¿½ï¿½o inicial
+     * retorna os itens na possição inicial
      * @return Acordoitem[]
      */
     public function getItensPosicaoInicial()
@@ -4105,7 +4099,7 @@ class Acordo
     }
 
     /**
-     * Funï¿½ï¿½o que verifica se a data de assinatura do acordo ï¿½ anterior a data de homologaï¿½ï¿½o da licitaï¿½ï¿½o
+     * Funï¿½ï¿½o que verifica se a data de assinatura do acordo ï¿½ anterior a data de homologação da licitação
      * @param $iLicitacao
      * @param $sDataAssinatura
      * @param $bDispensa
@@ -4146,7 +4140,7 @@ class Acordo
             $nValorLancamentoContabil += round($oItem->valorapostilado, 2);
         }
         /**
-         * cancelamos a ultima posiï¿½ï¿½o do acordo.
+         * cancelamos a ultima posição do acordo.
          */
         $this->getUltimaPosicao(true)->setSituacao(3);
 
@@ -4243,7 +4237,7 @@ class Acordo
             if (($oItem->valorapostilado < 0 && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA)
                 || ($oItem->valorapostilado > 0 && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_DECRESCIMOVALOR_APOSTILA)
             ) {
-                throw new Exception("Valor do item Cod {$oItem->codigoitem} nï¿½o compatï¿½vel com o Tipo de alteraï¿½ï¿½o Apostila.");
+                throw new Exception("Valor do item Cod {$oItem->codigoitem} não compatï¿½vel com o Tipo de alteração Apostila.");
             }
 
             foreach ($oItem->dotacoes as $oDotacao) {
@@ -4257,16 +4251,16 @@ class Acordo
             $oNovoItem->save(false);
         }
 
-        if($nValorLancamentoContabil == 0){
+        if ($nValorLancamentoContabil == 0) {
             return $this;
         }
 
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
         $sHistorico = "Valor referente ao apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de cï¿½digo: {$this->getCodigoAcordo()}.";
-        if($nValorLancamentoContabil < 0){
+        if ($nValorLancamentoContabil < 0) {
             $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $this->getDataAssinatura());
         }
-        if($nValorLancamentoContabil > 0){
+        if ($nValorLancamentoContabil > 0) {
             $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $this->getDataAssinatura());
         }
 

@@ -167,7 +167,7 @@ for ($i = 0; $i < $iNumRowsItens; $i++) {
 
   $oItem->valor = $oItem->valorfinanceiro;
 
-  criaNopai($oGrupo, &$aGrupos, $oItem);
+  criaNopai($oGrupo, $aGrupos, $oItem);
 
   if (strlen($oItem->material) > $iMaximaCodigo) {
      $iMaximaCodigo = strlen($oItem->material);
@@ -205,7 +205,7 @@ function criaNopai($oGrupo, &$aGrupos, $oItem) {
       $aGrupos[$oGrupo->getEstruturaPai()->getEstrutural()]->quantidade += $oItem->quantidade;
       $aGrupos[$oGrupo->getEstruturaPai()->getEstrutural()]->valor      += $oItem->valor;
     }
-    criaNopai($oGrupo->getEstruturaPai(), &$aGrupos, $oItem);
+    criaNopai($oGrupo->getEstruturaPai(), $aGrupos, $oItem);
   }
 }
 
@@ -321,4 +321,3 @@ $pdf->Cell(20 , $iAlt, $nQuantidadeTotal             , "T", 0, "R", 0);
 $pdf->Cell(30 , $iAlt, db_formatar($nValorTotal, "f"), "T", 1, "R");
 
 $pdf->Output();
-?>

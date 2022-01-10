@@ -57,21 +57,21 @@ if (isset($oParametros->quebra) && $oParametros->quebra == "S") {
 
 if ($oParametros->listamatestoquetipo != "") {
   $sWhere  = " m80_codtipo in ({$oParametros->listamatestoquetipo}) ";
-}else{
+} else {
   //$sWhere  = " m80_codtipo in (5, 17, 19, 21) ";
   $sWhere  = " m81_tipo = 2 ";
 }
 $sWhere .= " and m71_servico is false";
-$sWhere .= " and instit=".db_getsession('DB_instit');
-if ($oParametros->listaorgao!= "") {
+$sWhere .= " and instit=" . db_getsession('DB_instit');
+if ($oParametros->listaorgao != "") {
 
- $sWhere .= " and o40_orgao in ({$oParametros->listaorgao}) ";
- $sWhere .= " and o40_anousu = ".db_getsession('DB_anousu');
- $sWhere .= " and o40_instit=".db_getsession('DB_instit');
+  $sWhere .= " and o40_orgao in ({$oParametros->listaorgao}) ";
+  $sWhere .= " and o40_anousu = " . db_getsession('DB_anousu');
+  $sWhere .= " and o40_instit=" . db_getsession('DB_instit');
 }
 
 if ($oParametros->listadepart != "") {
-  if (isset ($oParametros->verdepart) && $oParametros->verdepart == "com") {
+  if (isset($oParametros->verdepart) && $oParametros->verdepart == "com") {
     $sWhere .= " and m80_coddepto in ({$oParametros->listadepart})";
   } else {
     $sWhere .= " and m80_coddepto not in ({$oParametros->listadepart})";
@@ -79,7 +79,7 @@ if ($oParametros->listadepart != "") {
 }
 
 if ($oParametros->listamat != "") {
-  if (isset ($oParametros->vermat) && $oParametros->vermat == "com") {
+  if (isset($oParametros->vermat) && $oParametros->vermat == "com") {
     $sWhere .= " and m70_codmatmater in ({$oParametros->listamat})";
   } else {
     $sWhere .= " and m70_codmatmater not in ({$oParametros->listamat})";
@@ -87,7 +87,7 @@ if ($oParametros->listamat != "") {
 }
 
 if ($oParametros->listausu != "") {
-  if (isset ($oParametros->verusu) && $oParametros->verusu == "com") {
+  if (isset($oParametros->verusu) && $oParametros->verusu == "com") {
     $sWhere .= " and m80_login in ({$oParametros->listausu})";
   } else {
     $sWhere .= " and m80_login not in ({$oParametros->listausu})";
@@ -95,10 +95,9 @@ if ($oParametros->listausu != "") {
 }
 
 
-if ( isset($oParametros->listadepartDestino) && !empty($oParametros->listadepartDestino)) {
-  
+if (isset($oParametros->listadepartDestino) && !empty($oParametros->listadepartDestino)) {
+
   $sWhere .= " and  m40_depto in ($oParametros->listadepartDestino) ";
-  
 }
 
 
@@ -109,37 +108,37 @@ if ( isset($oParametros->listadepartDestino) && !empty($oParametros->listadepart
 $sInnerJoinGrupos = '';
 $sFiltroGrupo     = '';
 
-if ( isset($oParametros->grupos) && trim($oParametros->grupos) != "" )  {
-  
+if (isset($oParametros->grupos) && trim($oParametros->grupos) != "") {
+
   $sWhere  .= " and materialestoquegrupo.m65_db_estruturavalor in ({$oParametros->grupos}) ";
   $sInnerJoinGrupos = " 
          inner join matmatermaterialestoquegrupo on matmater.m60_codmater = matmatermaterialestoquegrupo.m68_matmater 
          inner join materialestoquegrupo on matmatermaterialestoquegrupo.m68_materialestoquegrupo = materialestoquegrupo.m65_sequencial 
   ";
-  
+
   $sFiltroGrupo     = 'Filtro por Grupos/Subgrupos';
-  $head4 = $sFiltroGrupo;//"Relatório de Saída de Material por Departamento";
-  
+  $head4 = $sFiltroGrupo; //"Relatório de Saída de Material por Departamento";
+
 }
 
-$sDataIni = implode('-',array_reverse(explode('/',$oParametros->dataini)));
-$sDataFin = implode('-',array_reverse(explode('/',$oParametros->datafin)));
+$sDataIni = implode('-', array_reverse(explode('/', $oParametros->dataini)));
+$sDataFin = implode('-', array_reverse(explode('/', $oParametros->datafin)));
 
-if ((trim($oParametros->dataini) != "--") && ( trim($oParametros->datafin) != "--")) {
+if ((trim($oParametros->dataini) != "--") && (trim($oParametros->datafin) != "--")) {
 
   $sWhere .= " and m80_data between '{$sDataIni}' and '{$sDataFin}' ";
-  $info    = "De ".$oParametros->dataini." até ".$oParametros->datafin;
+  $info    = "De " . $oParametros->dataini . " at� " . $oParametros->datafin;
 } else if (trim($oParametros->dataini) != "--") {
 
   $sWhere .= " and m80_data >= '{$sDataIni}' ";
-  $info  = "Apartir de ".$oParametros->dataini;
+  $info  = "Apartir de " . $oParametros->dataini;
 } else if (trim($oParametros->datafin) != "--") {
 
   $sWhere .= " and m80_data <= '{$sDataFin}' ";
-  $info   = "Até ".$oParametros->datafin;
+  $info   = "At� " . $oParametros->datafin;
 }
 $info_listar_serv = " LISTAR: TODOS";
-$head3 = "Relatório de Saída de Material por Departamento";
+$head3 = "Relat�rio de Sa�da de Material por Departamento";
 $head5 = "$info";
 $head7 = "$info_listar_serv";
 
@@ -167,9 +166,9 @@ $sSqlSaidas  .= "       inner join matmater            on m70_codmatmater       
 $sSqlSaidas  .= "       inner join matestoquetipo      on m80_codtipo             = m81_codtipo  ";
 $sSqlSaidas  .= "       left  join db_depart           on m70_coddepto            = coddepto  ";
 $sSqlSaidas  .= "       left  join db_departorg        on db01_coddepto           = db_depart.coddepto  ";
-$sSqlSaidas  .= "                                     and db01_anousu             = ".db_getsession("DB_anousu");
+$sSqlSaidas  .= "                                     and db01_anousu             = " . db_getsession("DB_anousu");
 $sSqlSaidas  .= "       left  join orcorgao            on o40_orgao               = db_departorg.db01_orgao ";
-$sSqlSaidas  .= "                                     and o40_anousu              = ".db_getsession("DB_anousu");
+$sSqlSaidas  .= "                                     and o40_anousu              = " . db_getsession("DB_anousu");
 $sSqlSaidas  .= "       left  join matestoquetransf    on m83_matestoqueini       = m80_codigo   ";
 $sSqlSaidas  .= "       left  join matestoqueinimeiari on m49_codmatestoqueinimei = m82_codigo  ";
 $sSqlSaidas  .= "       left  join atendrequiitem      on m49_codatendrequiitem   = m43_codigo  ";

@@ -148,7 +148,7 @@ echo "
      </script>
      ";
 /**
- * Verificamos se a solicitaï¿½ï¿½o ï¿½ de um registro de preco(pc10_solicitacaotipo = 5);
+ * Verificamos se a solicitação é de um registro de preco(pc10_solicitacaotipo = 5);
  * devemos trazer na lookup dos itens somente os itens que fazem parte do registro de preco
  */
 $oDaoSolicitaVInculo         = db_utils::getDao("solicitavinculo");
