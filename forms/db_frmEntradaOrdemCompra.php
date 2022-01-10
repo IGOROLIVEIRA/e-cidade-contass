@@ -2230,7 +2230,7 @@ if (count($aParametrosEmpenho) > 0) {
       return verificaChave();
     } else {
       alert("Chave de Acesso inválida ");
-      // $('e69_chaveacesso').value = '';
+      $('e69_chaveacesso').value = '';
       return false;
     }
 
