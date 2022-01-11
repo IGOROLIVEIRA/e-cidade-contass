@@ -105,44 +105,45 @@ db_app::load("widgets/windowAux.widget.js");
 
                         <table width="100%">
                             <tr>
-                            <div class='grid_planilha' id='grid_planilha' style='margin: 0 auto; width: 100%; text-align: center'>
-                                <table id='tabela-lancamentos'>
-                                    <thead>
-                                        <tr>
-                                            <th>Código CTB</th>
-                                            <th>Descrição</th>
-                                            <th>Banco</th>
-                                            <th>Agência</th>
-                                            <th>Conta</th>
-                                            <th>Tipo</th>
-                                            <th>Ativa</th>
-                                            <th>Anexo</th>
-                                            <th>Situação</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                            foreach ($extratoBancario->getContasHabilitadas() as $conta) {
-                                                echo "<tr>";
-                                                echo "<td>{$conta->reduzido}</td>";
-                                                echo "<td>{$conta->descricao}</td>";
-                                                echo "<td>{$conta->banco}</td>";
-                                                echo "<td>{$conta->agencia}-{$conta->digito_agencia}</td>";
-                                                echo "<td>{$conta->conta}-{$conta->digito_conta}</td>";
-                                                echo "<td>{$conta->tipo}</td>";
-                                                echo "<td>{$conta->ativa}</td>";
-                                                echo "<td>";
-                                                echo "<input type='file' name='arquivo-{$conta->reduzido}'/>&nbsp&nbsp"; 
-                                                echo "<input type='button' value='Enviar' onclick=\"micoxUpload(this.form,'upload_extrato_bancario_sicom.php?cnpj={$conta->cnpj}&orgao={$conta->orgao}&reduzido={$conta->reduzido}&ano=" . db_getsession("DB_anousu") . "','retorno-{$conta->reduzido}','Carregando...','Erro ao carregar')\" />";  
-                                                echo "</td>";
-                                                echo "<td id='retorno-{$conta->reduzido}'><span class='{$conta->situacao}'>{$conta->situacao}</span></td>";
-                                                echo "</tr>";
-                                            }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </tr>
+                                <td>
+                                    <center>
+                                        <b>Ano Referência:</b>
+                                        <select name="ano" id="ano" onchange='buscarExtrato()'>
+                                            <option value="0" selected="selected">Selecione</option>
+                                            <?php
+                                                for ($i = 2021; $i <= date("Y"); $i++) {
+                                                    echo "<option value='{$i}'><b>$i</b></option>";
+                                                }    
+                                            ?>
+                                        </select>
+                                        <input type="button" value="Relatório de Conferência" onclick="js_gerarRelatorio();"/>
+                                    </center>
+                                </td>
+                            </tr>
+                            <tr>
+                                <div class='grid_planilha' id='grid_planilha' style='margin: 0 auto; width: 100%; text-align: center'>
+                                    <table id='tabela-lancamentos'>
+                                        <thead>
+                                            <tr>
+                                                <th>Reduzido</th>
+                                                <th>Código TCE</th>
+                                                <th>Agrupados</th>
+                                                <th>Descrição</th>
+                                                <th>Banco</th>
+                                                <th>Agência</th>
+                                                <th>Conta</th>
+                                                <th>Tipo</th>
+                                                <th>Data Limite</th>
+                                                <th>Anexo</th>
+                                                <th>Situação</th>
+                                                <th>Download</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id='retorno'>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </tr>
                         </table>
                     </fieldset>
                 </td>
@@ -158,3 +159,61 @@ db_app::load("widgets/windowAux.widget.js");
             background-color: #FFFFCC;
             display:none;' id='ajudaItem'>
 </div>
+<script>
+    function js_gerarRelatorio(){
+        jan = window.open('con4_contasextratobancariosicom.php?ano=' + document.getElementById("ano").value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+        jan.moveTo(0,0);
+	}
+
+    function buscarExtrato() {
+        js_divCarregando("Aguarde, processando Lançamentos.", "msgBox");
+        $('retorno').innerHTML = "";
+        oParam = new Object();
+        oParam.ano = document.getElementById("ano").value;        
+        var sParam = js_objectToJson(oParam);
+        url = 'cai4_extratobancariosicom.RPC.php';
+        var sJson = '{"exec": "getContas", "params": ['+ sParam + ']}';
+        var oAjax = new Ajax.Request(url,
+            {
+                method    : 'post',
+                parameters: 'json=' + sJson,
+                onComplete: js_retorno
+            }
+        );
+    }
+
+    function js_retorno(oAjax) {
+        js_removeObj('msgBox');
+        var ano = document.getElementById("ano").value;        
+        var oRetorno = eval("("+oAjax.responseText+")");
+        console.log(oRetorno);
+        if (oRetorno.status == 1) {
+            var sContent = '';
+            oRetorno.contas.forEach(function (data, index) {
+                sContent +=  "           <tr>";
+                sContent +=  "<td>" + data.reduzido + "</td>";
+                sContent +=  "<td>" + data.codtce + "</td>";
+                if (data.contas === undefined) {
+                    sContent +=  "<td></td>";
+                } else {
+                    sContent +=  "<td>" + data.contas + "</td>";
+                }
+                sContent +=  "<td>" + data.descricao + "</td>";
+                sContent +=  "<td>" + data.banco + "</td>";
+                sContent +=  "<td>" + data.agencia + "-" + data.digito_agencia + "</td>";
+                sContent +=  "<td>" + data.conta + "-" + data.digito_conta + "</td>";
+                sContent +=  "<td>" + data.tipo + "</td>";
+                sContent +=  "<td>" + data.limite + "</td>";
+                sContent +=  "<td>";
+                sContent +=  "<input type='file' name='arquivo-" + data.codtce + "'/>&nbsp&nbsp"; 
+                sContent +=  "<input type='button' value='Enviar' onclick=\"micoxUpload(this.form,'upload_extrato_bancario_sicom.php?cnpj=" + data.cnpj + "&orgao=" + data.orgao + "&reduzido=" + data.codtce + "&ano=" + ano + "','retorno-" + data.reduzido + "','Carregando...','Erro ao carregar')\" />";  
+                sContent +=  "</td>";
+                sContent +=  "<td id='retorno-" + data.reduzido + "'><span class='" + data.situacao + "'>" + data.situacao + "</span></td>";
+                var download = data.situacao == 'enviado' ? "<a target='_blank' href='extratobancariosicom/" + data.cnpj + "/" + ano + "/CTB_" + data.orgao + "_" + data.codtce + ".pdf'>DOWNLOAD</a>" : "";
+                sContent +=  "<td>" + download + "</td>";
+                sContent += "           </tr>";
+                $('retorno').innerHTML = sContent;
+            });
+        }
+    }
+</script>

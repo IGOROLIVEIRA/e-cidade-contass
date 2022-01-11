@@ -47,6 +47,7 @@ class ExtratoBancarioSicom {
         $sql = "
             SELECT DISTINCT
                 si09_codorgaotce orgao,
+                c61_codtce as codtce,
                 z01_cgccpf cnpj,
                 saltes.k13_reduz reduzido,
                 saltes.k13_descr descricao,
@@ -57,52 +58,74 @@ class ExtratoBancarioSicom {
                 c63_dvconta digito_conta,
                 CASE
                     WHEN contabancaria.db83_tipoconta = 1 THEN 'Corrente'
-                    WHEN contabancaria.db83_tipoconta = 2 THEN 'Poupança'
-                    WHEN contabancaria.db83_tipoconta = 3 THEN 'Aplicação'
-                    WHEN contabancaria.db83_tipoconta = 4 THEN 'Salário'
+                    WHEN contabancaria.db83_tipoconta = 2 THEN 'Poupanca'
+                    WHEN contabancaria.db83_tipoconta = 3 THEN 'Aplicacao'
+                    WHEN contabancaria.db83_tipoconta = 4 THEN 'Salario'
                 END as tipo,
-                CASE
-                    WHEN k13_limite IS NULL THEN 'SIM'
-                    ELSE 'NAO'
-                END ativa
+                k13_limite limite
             FROM saltes
-            INNER JOIN conplanoreduz ON conplanoreduz.c61_reduz = saltes.k13_reduz
+            JOIN conplanoreduz ON k13_reduz = c61_reduz
                 AND c61_anousu = {$this->ano}
+            JOIN conplanoconta ON c63_codcon = c61_codcon
+                AND c63_anousu = c61_anousu
+            JOIN conplano ON c60_codcon = c61_codcon
+                AND c60_anousu = c61_anousu
+            JOIN orctiporec ON c61_codigo = o15_codigo
+            LEFT JOIN conplanocontabancaria ON c56_codcon = c61_codcon
+                AND c56_anousu = c61_anousu
+            LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
+            LEFT JOIN convconvenios ON db83_numconvenio = c206_sequencial
+            LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
             INNER JOIN db_config ON codigo = conplanoreduz.c61_instit
             INNER JOIN cgm ON z01_numcgm = db_config.numcgm
-            INNER JOIN conplanoexe ON conplanoexe.c62_reduz = conplanoreduz.c61_reduz
-                AND c61_anousu = c62_anousu
-            INNER JOIN conplano ON conplanoreduz.c61_codcon = conplano.c60_codcon
-                AND c61_anousu = c60_anousu
-            LEFT JOIN conplanoconta ON conplanoconta.c63_codcon = conplanoreduz.c61_codcon
-                AND conplanoconta.c63_anousu = conplanoreduz.c61_anousu
-            LEFT JOIN conplanocontabancaria ON c60_codcon = c56_codcon
-                AND c60_anousu = {$this->ano}
-            LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
-            LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
         WHERE
             c61_instit = {$this->instituicao}
-            AND c62_anousu = {$this->ano}
+            AND c61_anousu = {$this->ano}
             AND (k13_limite IS NULL OR k13_limite BETWEEN '{$this->ano}-01-01'
-                AND '{$this->ano}-12-31') ";
+                AND '{$this->ano}-12-31') 
+        ORDER BY c63_banco, c63_agencia, c63_conta, tipo";
+
         $result = db_query($sql);
 
         while ($data = pg_fetch_object($result)) {
-            $data->situacao = $this->setSituacao($data);
-            $data->orgao = str_pad($data->orgao, 2, "0", STR_PAD_LEFT);
-            $this->contasHabilitadas[$data->reduzido] = $data;
+            $data = $this->tratarConta($data);
+            $chave = $this->buscarChave($data);
+            if (array_key_exists($chave, $this->contasHabilitadas)) {
+                $this->contasHabilitadas[$chave]->contas[] = $data->reduzido;
+            } else {
+                $this->contasHabilitadas[$chave] = $data;
+            }
         }
+    }
+
+    public function buscarChave($conta) {
+        $chave  = $conta->orgao;
+        $chave .= intval($conta->banco);
+        $chave .= intval($conta->agencia);
+        $chave .= intval($conta->digito_agencia);
+        $chave .= intval($conta->conta);
+        $chave .= intval($conta->digito_conta);
+        $chave .= $conta->tipo;
+        return $chave;
+    }
+
+    public function tratarConta($conta) {
+        $conta->orgao = str_pad($conta->orgao, 2, "0", STR_PAD_LEFT);
+        $conta->codtce = $conta->codtce ? $conta->codtce : $conta->reduzido;
+        $conta->situacao = $this->setSituacao($conta);
+        $conta->limite = $conta->limite ? date("d/m/Y", strtotime($conta->limite)) : "";
+        return $conta;
     }
 
     public function getContasHabilitadas()
     {
-        sort($this->contasHabilitadas);
+        // sort($this->contasHabilitadas);
         return $this->contasHabilitadas;
     }
 
     public function setSituacao($conta)
     {
-        $diretorio = "extratobancariosicom/{$conta->cnpj}/{$this->ano}/CTB_{$conta->orgao}_{$conta->reduzido}.pdf";
+        $diretorio = "extratobancariosicom/{$conta->cnpj}/{$this->ano}/CTB_{$conta->orgao}_{$conta->codtce}.pdf";
     
         if (file_exists($diretorio)) {
             return 'enviado';
