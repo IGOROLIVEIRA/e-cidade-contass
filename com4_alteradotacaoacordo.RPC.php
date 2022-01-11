@@ -38,7 +38,7 @@ require_once("model/Dotacao.model.php");
 
 
 $oJson             = new services_json();
-$oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
+$oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
 
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
@@ -46,7 +46,7 @@ $oRetorno->message = 1;
 $lErro             = false;
 $sMensagem         = "";
 
-switch($oParam->exec) {
+switch ($oParam->exec) {
 
 	case "alteraDotacoesAcordo":
 
@@ -60,7 +60,7 @@ switch($oParam->exec) {
 
 			foreach ($oParam->aItens as $oItem) {
 
-				if(count($oAcordo->getAutorizacoes('', $oItem->iAnoDotacao))){
+				if (count($oAcordo->getAutorizacoes('', $oItem->iAnoDotacao))) {
 					throw new Exception('O contrato já possui autorização de empenho no ano vigente.');
 				}
 
@@ -69,7 +69,6 @@ switch($oParam->exec) {
 			}
 
 			db_fim_transacao(false);
-
 		} catch (Exception $eErro) {
 
 			$oRetorno->status = 2;
@@ -120,7 +119,7 @@ switch($oParam->exec) {
 							JOIN acordoitem ON ac22_acordoitem = ac20_sequencial
 							JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
 							JOIN acordoposicaotipo ON ac26_acordoposicaotipo = ac27_sequencial
-							JOIN orcelemento ON o56_codele = ac20_elemento AND o56_anousu = o58_anousu
+							JOIN orcelemento ON o56_codele = o58_codele AND o56_anousu = o58_anousu
 							JOIN acordo ON ac26_acordo = ac16_sequencial
 							JOIN cgm ON ac16_contratado = z01_numcgm
 							JOIN pcmater ON ac20_pcmater = pc01_codmater
@@ -171,14 +170,11 @@ switch($oParam->exec) {
 						if (!isset($aItensDotacao[$iCodigoDotacao])) {
 							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
 						}
-
 					}
-
 				}
 
 				$oRetorno->aDotacoes = $aItensDotacao;
 				$oRetorno->iAnoSessao = db_getsession("DB_anousu");
-
 			}
 		}
 		break;
