@@ -625,6 +625,13 @@ function cancelaClassificacao($iCodCla) {
         }
 
         /*
+         * Excluímos os registros da disrec_desconto_integral
+        */
+        $delete = "delete from disrec_desconto_integral where codcla = " . $iCodCla;
+        pg_exec("begin");
+        pg_exec($delete);
+        pg_exec("end");
+        /*
          * Excluímos os registros da discla
          */
         $oDaoDisCla->excluir($iCodCla);
