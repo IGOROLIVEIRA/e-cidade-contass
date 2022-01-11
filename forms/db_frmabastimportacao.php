@@ -112,6 +112,12 @@ if(isset($_POST["processar"])) {
 
             $cell = $objWorksheet -> getCellByColumnAndRow (1,$row);
             $data = $cell->getValue();
+
+            $resul = date();
+           
+            echo "<pre>";
+            var_dump($data);
+            exit;
             if($data==""){
                 break;
             }
@@ -131,7 +137,7 @@ if(isset($_POST["processar"])) {
             $placa = explode("-", $placa);
             $placa = $placa[0]."".$placa[1];
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (12,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (10,$row);
             $valor = $cell->getValue();
 
             $cell = $objWorksheet -> getCellByColumnAndRow (6,$row);
@@ -225,8 +231,6 @@ if(isset($_POST["processar"])) {
                     $arrayItensPlanilha[] = $objItensPlanilha;
             }  
     }
-
-    
 }
 ?>
 
@@ -300,9 +304,9 @@ if(isset($_POST["processar"])) {
                                 </tr>
                                 <tr >
                                     <td colspan="2">
-                                    <div style="margin-left: 145px;">
+                                    <div style="margin-left: 130px;">
                                         <input name ='processar' type='submit' id="Processar" value="Processar">
-                                        <input name ='exportar' type='button' id="exportar" value="Planilha" onclick="gerar()">
+                                        <input name ='exportar' type='button' id="exportar" value="Gerar Planilha" onclick="gerar()">
                                     </div>
                                    
                                     </td>
@@ -310,7 +314,7 @@ if(isset($_POST["processar"])) {
                             </table>
                         </form> 
                         
-                        <div id='anexo'></div> 
+                        <div id='anexo'></div>  
                     </fieldset>
                     
                 </td>
@@ -336,7 +340,7 @@ if(isset($_POST["processar"])) {
                            </th>
                            
                            <th style="border: 0px solid red; width:200px; background:#ffffff;">
-                               Secretária
+                               Secretaria
                            </th>
                            <th style="background:#ffffff;">
                                Empenho
@@ -537,7 +541,6 @@ if(isset($_POST["processar"])) {
 <script>
 
     function gerar(){
-        alert("teste");
         window.location.href = "vei1_xlsabastecimentoPlanilha.php";
     }
 
