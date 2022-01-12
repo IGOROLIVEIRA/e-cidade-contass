@@ -66,7 +66,33 @@ $clrotulo->label("l20_numero");
                 return false;
             }
 
-            jan = window.open('con1_exportaprocessos002.php?' + sQuery, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            //location.href = 'con1_exportaprocessos002.php?' + sQuery;
+
+            jan = window.open('con1_importaprocessos002.php?' + sQuery);
+            jan.moveTo(0, 0);
+            document.form1.l20_codigo.value = '';
+
+        }
+
+        function js_importa() {
+
+            var codigo = document.form1.l20_codigo.value;
+            var delimitador = document.form1.delimitador.value;
+            var extensao = document.form1.extensao.value;
+
+            var sQuery = 'l20_codigo=' + codigo;
+            sQuery += '&delimitador=' + delimitador;
+            sQuery += '&extensao=' + extensao
+
+            if (codigo == '' || codigo == null) {
+
+                alert("Selecione uma Licitação.");
+                return false;
+            }
+
+            //location.href = 'con1_exportaprocessos002.php?' + sQuery;
+
+            jan = window.open('con1_importaprocessos002.php?' + sQuery);
             jan.moveTo(0, 0);
             document.form1.l20_codigo.value = '';
 
@@ -77,7 +103,7 @@ $clrotulo->label("l20_numero");
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
     <center>
-        <form name="form1" method="post" action="">
+        <form name="form1" method="post" action="" enctype="multipart/form-data">
             <fieldset style="margin-top: 50px; width: 400px;">
 
                 <table align="center" border='0'>
@@ -179,7 +205,7 @@ $clrotulo->label("l20_numero");
                         </tr>
                         <tr>
                             <td colspan="2" align="center">
-                                <input name="emite3" id="emite3" type="button" value="Processar" onclick="">
+                                <input name="emite3" id="emite3" type="button" value="Processar" onclick="js_importa()">
                             </td>
                         </tr>
                     </table>

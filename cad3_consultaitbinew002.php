@@ -73,6 +73,12 @@ $clrotulo->label("j13_descr");
   if(isset($lote) && $lote != ""){
      $where .= " and j34_lote = '" . str_pad($lote,4,"0",STR_PAD_LEFT) ."'";
   }
+  if(isset($unidade) && $unidade != ""){
+     $where .= " and j01_unidade = '" . str_pad($unidade,4,"0",STR_PAD_LEFT) ."'";
+  }
+  if(isset($distrito) && $distrito != ""){
+     $where .= " and j34_distrito = '" . str_pad($distrito,4,"0",STR_PAD_LEFT) ."'";
+  }
   
 	if(isset($setorloc) || isset($quadraloc) || isset($loteloc)) {
 				

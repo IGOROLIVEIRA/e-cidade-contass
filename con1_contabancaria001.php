@@ -46,34 +46,37 @@ if (isset($incluir)) {
 }
 ?>
 <html>
-<head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table align="center" style="margin-top:20px;">
-  <tr> 
-    <td> 
-    <center>
-			<?
-			  include("forms/db_frmcontabancaria.php");
-			?>
-    </center>
-	</td>
-  </tr>
-</table>
 
-<?php
-db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
-?>
+<head>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+</head>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table align="center" style="margin-top:20px;">
+    <tr>
+      <td>
+        <center>
+          <?
+          include("forms/db_frmcontabancaria.php");
+          ?>
+        </center>
+      </td>
+    </tr>
+  </table>
+
+  <?php
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 
 </body>
+
 </html>
 <script>
-js_tabulacaoforms("form1", "db83_descricao", true, 1, "db83_descricao", true);
+  js_tabulacaoforms("form1", "db83_descricao", true, 1, "db83_descricao", true);
 </script>
 <?
 if (isset($incluir)) {
@@ -84,12 +87,12 @@ if (isset($incluir)) {
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
 
-    if ($clcontabancaria->erro_campo!="") {
+    if ($clcontabancaria->erro_campo != "") {
 
-      echo "<script> document.form1.".$clcontabancaria->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clcontabancaria->erro_campo.".focus();</script>";
+      echo "<script> document.form1." . $clcontabancaria->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clcontabancaria->erro_campo . ".focus();</script>";
     }
-  }else{
+  } else {
     $clcontabancaria->erro(true, true);
   }
 }

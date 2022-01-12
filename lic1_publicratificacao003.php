@@ -3,6 +3,7 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
+include("classes/db_liccomissaocgm_classe.php");
 $clliclicita = new cl_liclicita();
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -10,6 +11,7 @@ db_postmemory($HTTP_POST_VARS);
 
 $clliclicita = new cl_liclicita();
 $clhomologacaoadjudica = new cl_homologacaoadjudica();
+$clliccomissaocgm     = new cl_liccomissaocgm(); 
 
 $db_botao = false;
 $db_opcao = 33;

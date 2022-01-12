@@ -9,7 +9,7 @@ db_postmemory($HTTP_POST_VARS);
 $clapostilamento = new cl_apostilamentonovo;
 $db_opcao = 1;
 $db_botao = true;
-if(isset($incluir)){
+if (isset($incluir)) {
   $clapostilamento->si03_acordo = $ac16_sequencial;
   db_inicio_transacao();
   $clapostilamento->incluir(null);
@@ -19,46 +19,49 @@ if(isset($incluir)){
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<center>
-	<?
-	include("forms/db_frmapostilamentonovo.php");
-	?>
-</center>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <center>
+    <?
+    include("forms/db_frmapostilamentonovo.php");
+    ?>
+  </center>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
+
 </html>
 
 <?
-if(isset($incluir)){
-  if($clapostilamento->erro_status=="0"){
-    $clapostilamento->erro(true,false);
-    $db_botao=true;
+if (isset($incluir)) {
+  if ($clapostilamento->erro_status == "0") {
+    $clapostilamento->erro(true, false);
+    $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($clapostilamento->erro_campo!=""){
-      echo "<script> document.form1.".$clapostilamento->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clapostilamento->erro_campo.".focus();</script>";
+    if ($clapostilamento->erro_campo != "") {
+      echo "<script> document.form1." . $clapostilamento->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clapostilamento->erro_campo . ".focus();</script>";
     }
-  }else{
+  } else {
     //$clapostilamento->erro(true,true);
     db_msgbox("Inclusao efetuada com Sucesso");
   }

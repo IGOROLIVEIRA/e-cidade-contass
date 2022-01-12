@@ -11,7 +11,8 @@ include("classes/db_liclicita_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clparecerlicitacao = new cl_parecerlicitacao;
-$pctipocompra = new cl_pctipocompra;
+$pctipocompra = new cl_pctipocompra; 
+
 $db_opcao = 22;
 $db_botao = false;
 $recebeAlteracao = true;
@@ -172,8 +173,9 @@ if (isset($alterar)) {
     echo "<script>alert('Inclusão abortada. Verifique os fornecedores habilitados!');</script>";
     $db_botao = true;
   } else {
+    
       db_inicio_transacao();
-      $clparecerlicitacao->alterar($l200_sequencial);
+      $clparecerlicitacao->alterar($l200_sequencial); 
       db_fim_transacao();
   }
 

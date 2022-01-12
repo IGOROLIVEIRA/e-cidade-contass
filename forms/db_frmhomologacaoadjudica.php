@@ -7,7 +7,12 @@ $cliframe_seleciona = new cl_iframe_seleciona;
 $clpcprocitem       = new cl_pcprocitem;
 $clrotulo           = new rotulocampo;
 
+
 $clrotulo->label("l20_codigo");
+
+db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
+db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js, widgets/DBHint.widget.js");
+db_app::load("estilos.css, grid.style.css");
 ?>
 <form name="form1" method="post" action="">
     <table border="0">
@@ -38,6 +43,20 @@ $clrotulo->label("l20_codigo");
             </td>
         </tr>
         <tr>
+                                    <td nowrap title="respHomologcodigo">
+                                        <?
+                                        db_ancora("Resp. pela Homologação:","js_pesquisal31_numcgm(true,'respHomologcodigo','respHomolognome');",$db_opcao)
+
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('respHomologcodigo',10,$IrespHomologcodigo,true,'text',$db_opcao,"onchange='js_pesquisal31_numcgm(false);';");
+                                        db_input('respHomolognome',45,$IrespHomolognome,true,'text',3,"");
+                                        ?>
+                                    </td>
+        </tr>
+        <tr>
             <td nowrap title="<?=@$Tl202_datahomologacao?>">
                 <?=@$Ll202_datahomologacao?>
             </td>
@@ -45,6 +64,7 @@ $clrotulo->label("l20_codigo");
                 <?
                 db_inputdata('l202_datahomologacao',@$l202_datahomologacao_dia,@$l202_datahomologacao_mes,@$l202_datahomologacao_ano,true,'text',$db_opcao,"")
                 ?>
+                <input type="hidden" id="valor">
             </td>
         </tr>
     </table>
@@ -60,6 +80,7 @@ $clrotulo->label("l20_codigo");
         }
         ?>
         <input type="button" value="Pesquisar" onclick="js_pesquisal202_licitacao(true);">
+        <input type="button" value="Gerar Relatório" onclick="js_gerarRelatorio(true);"> 
     </div>
     <br>
     <fieldset>
@@ -142,6 +163,7 @@ $clrotulo->label("l20_codigo");
         document.form1.l202_licitacao.value = chave1;
         document.form1.pc50_descr.value = chave2;
         let opcao = "<?= $db_opcao?>";
+        js_getReponsavel();
         if(opcao != 1){
             aData = chave4.split('-');
             let dataHomo =  aData[2]+'/'+aData[1]+'/'+aData[0];
@@ -149,6 +171,7 @@ $clrotulo->label("l20_codigo");
             document.form1.l202_sequencial.value = chave5;
         }
         db_iframe_liclicita.hide();
+        
         js_init()
     }
 
@@ -233,6 +256,7 @@ $clrotulo->label("l20_codigo");
                 aDadosHintGridlote.push(oDadosHintlote);
             });
             document.getElementById('gridItenstotalValue').innerText = js_formatar(nTotal, 'f');
+            document.getElementById('valor').value = js_formatar(nTotal, 'f');
 
             oGridItens.renderRows();
 
@@ -259,6 +283,87 @@ $clrotulo->label("l20_codigo");
         }
     }
 
+    function js_gerarRelatorio(){
+        
+        var iHeight = 200;
+        var iWidth  = 300;
+        windowDotacaoItem = new windowAux('wndDotacoesItem',
+            'Gerar Relagório ',
+            iWidth,
+            iHeight
+        );
+       
+        var sContent  = "<div style='margin-top:30px;'>";
+        sContent     += "<fieldset>"; 
+        sContent     += "<legend>Gerar Relatório de Homologação em:</legend>";
+        sContent     += "  <div id=''>";
+        sContent     += "  <input type='checkbox' id='pdf' name='PDF'>";
+        sContent     += "  <label>PDF</label>";
+        sContent     += "  </div>";
+        sContent     += "  <div id=''>";
+        sContent     += "  <input type='checkbox' id='word' name='WORD'>";
+        sContent     += "  <label>WORD</label>";
+        sContent     += "  </div>";
+        sContent     += "</fieldset>";
+        sContent     += "<center>";
+        sContent     += "<input type='button' id='btnGerar' value='Confirmar' onclick='gerar()'>";
+        sContent     += "</center>";
+        sContent     += "</div>";
+        windowDotacaoItem.setContent(sContent);
+        windowDotacaoItem.show();
+       
+    }
+
+    function gerar(){
+        var pdf = document.getElementById("pdf");
+        var word = document.getElementById("word");
+        var ilicita = document.getElementById("l202_licitacao").value; 
+        var sequencial = document.getElementById("l202_sequencial").value;
+        var nome = document.getElementById("respHomolognome").value;  
+        var data = document.getElementById("l202_datahomologacao").value;
+        var valor = document.getElementById('valor').value;
+        
+        if(pdf.checked){
+            jan = window.open('lic1_homologacaoadjudica004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&sequencial='+sequencial+'&data='+data+'&valor='+valor+'&quant_casas=2&tipoprecoreferencia=',
+                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+	   jan.moveTo(0,0);
+        }else if(word.checked){   
+    jan = window.open('lic1_homologacaoadjudica005.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&sequencial='+sequencial+'&data='+data+'&valor='+valor+'&quant_casas=2&tipoprecoreferencia=',
+                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+	   jan.moveTo(0,0);
+        }
+        windowDotacaoItem.destroy();
+    }
+
+    function js_getReponsavel() {
+        
+        var oParam = new Object();
+        oParam.iLicitacao   = $F('l202_licitacao');
+        oParam.exec = "getResponsavel";
+        //js_divCarregando('Aguarde, pesquisando Itens', 'msgBox');
+        var oAjax = new Ajax.Request(
+            'lic1_homologacaoadjudica.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_retornoGetResponsavel
+            }
+        );
+    }
+
+    function js_retornoGetResponsavel(oAjax) {
+
+        //js_removeObj('msgBox');
+        
+
+        var oRetornoitens = JSON.parse(oAjax.responseText);
+        oRetornoitens.itens.each(function(oLinha, iLinha) {
+                document.getElementById("respHomologcodigo").value = oLinha.codigo;
+                document.getElementById("respHomolognome").value = oLinha.nome;
+
+        });
+
+    }
+
     function js_salvarHomologacao(){
 
         var aItens = oGridItens.getSelection("object");
@@ -271,6 +376,13 @@ $clrotulo->label("l20_codigo");
         oParam.iLicitacao    = $F('l202_licitacao');
         oParam.dtHomologacao = $F('l202_datahomologacao');
         oParam.iHomologacao  = $F('l202_sequencial');
+        oParam.respHomologcodigo  = $F('respHomologcodigo');
+
+        if(oParam.respHomologcodigo==""){
+            alert('Campo Responsável pela Homologação não informado'); 
+            return false;
+        }
+
         oParam.aItens        = new Array();
         oParam.exec = "homologarLicitacao";
 
@@ -303,10 +415,8 @@ $clrotulo->label("l20_codigo");
             document.getElementById('l202_licitacao').value = '';
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_datahomologacao').value = '';
-            if(oRetorno.regpreco == 2){
-                alert('Confira a vigência do Registro de preço');
-                window.location.href = 'com4_vigenciaregistropreco001.php?pc54_solicita='+oRetorno.pc10_numero;
-            }
+            document.getElementById('respHomologcodigo').value = '';
+            document.getElementById('respHomolognome').value = '';
         }else{
             alert(oRetorno.message.urlDecode());
         }
@@ -316,7 +426,12 @@ $clrotulo->label("l20_codigo");
         var oParam = new Object();
         oParam.iLicitacao    = $F('l202_licitacao');
         oParam.dtHomologacao = $F('l202_datahomologacao');
-        oParam.iHomologacao  = $F('l202_sequencial');
+        oParam.iHomologacao  = $F('l202_sequencial'); 
+        oParam.respHomologcodigo  = $F('respHomologcodigo');
+        if(oParam.respHomologcodigo==""){
+            alert('Campo Responsável pela Homologação não informado'); 
+            return false;
+        }
         oParam.exec = "alterarHomologacao";
         js_divCarregando('Aguarde, alterando Homologando', 'msgBox');
         var oAjax = new Ajax.Request(
@@ -338,6 +453,8 @@ $clrotulo->label("l20_codigo");
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_datahomologacao').value = '';
             document.getElementById('l202_sequencial').value = '';
+            document.getElementById('respHomologcodigo').value = '';
+            document.getElementById('respHomolognome').value = '';
         }else{
             alert(oRetorno.message.urlDecode());
         }
@@ -386,6 +503,8 @@ $clrotulo->label("l20_codigo");
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_datahomologacao').value = '';
             document.getElementById('l202_sequencial').value = '';
+            document.getElementById("respHomolognome").value = "";
+            document.getElementById("respHomologcodigo").value = "";
         }else{
             alert(oRetorno.message.urlDecode());
         }
@@ -393,6 +512,41 @@ $clrotulo->label("l20_codigo");
 
     function js_somaItens(){
     }
+
+    var varNumCampo;
+    var varNomeCampo;
+    function js_pesquisal31_numcgm(mostra,numCampo,nomeCampo){
+        varNumCampo = numCampo;
+        varNomeCampo = nomeCampo;
+        
+        if(mostra==true){
+            js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&filtro=1','Pesquisa',true,'0','1');
+        }else{
+            
+            numcgm = document.getElementById("respHomologcodigo").value;
+            if(numcgm != ''){
+                js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?pesquisa_chave='+numcgm+'&funcao_js=parent.js_mostracgm&filtro=1','Pesquisa',false);
+            }else{
+                document.getElementById(numCampo).value = ""; 
+            }
+        }
+    }
+    
+    function js_mostracgm(erro,chave){
+        document.getElementById("respHomolognome").value = chave; 
+        if(erro==true){ 
+          //  document.form1.l31_numcgm.focus(); 
+          document.getElementById("respHomolognome").value = "";
+          document.getElementById("respHomologcodigo").value = "";
+          alert("Responsável não encontrado");
+        }
+    }
+    function js_mostracgm1(chave1,chave2){
+
+    document.getElementById(varNumCampo).value = chave1;
+    document.getElementById(varNomeCampo).value = chave2;
+    db_iframe_cgm.hide(); 
+    } 
 
     js_showGrid();
 </script>

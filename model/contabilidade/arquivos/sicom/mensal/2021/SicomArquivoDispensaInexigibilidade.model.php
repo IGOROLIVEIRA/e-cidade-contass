@@ -638,28 +638,147 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		AND liclicita.l20_codigo= {$oDados10->codlicitacao} AND liccomissaocgm.l31_tipo in('1','2','3','4','8')";
 
       $rsResult14 = db_query($sSql); //db_criatabela($rsResult14);echo $sSql;
-
+      $aLicitacoes1 = array();
+      $tipoRes = 0;
       for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
 
         $dispensa14 = new cl_dispensa142021();
         $oDados14 = db_utils::fieldsMemory($rsResult14, $iCont14);
 
-        $dispensa14->si78_tiporegistro = 14;
-        $dispensa14->si78_reg10 = $dispensa10->si74_sequencial;
-        $dispensa14->si78_codorgaoresp = $oDados14->codorgaoresp;
-        $dispensa14->si78_codunidadesubres = $oDados14->codunidadesubresp;
-        $dispensa14->si78_exercicioprocesso = $oDados14->exerciciolicitacao;
-        $dispensa14->si78_nroprocesso = $oDados14->nroprocessolicitatorio;
-        $dispensa14->si78_tipoprocesso = $oDados14->tipoprocesso;
-        $dispensa14->si78_tiporesp = $oDados14->tiporesp;
-        $dispensa14->si78_nrocpfresp = $oDados14->nrocpfresp;
-        $dispensa14->si78_instit = db_getsession("DB_instit");
-        $dispensa14->si78_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        if($oDados14->tiporesp==7){
+            if($tipoRes==0){
+                  $dispensa14->si78_tiporegistro = 14;
+                  $dispensa14->si78_reg10 = $dispensa10->si74_sequencial;
+                  $dispensa14->si78_codorgaoresp = $oDados14->codorgaoresp;
+                  $dispensa14->si78_codunidadesubres = $oDados14->codunidadesubresp;
+                  $dispensa14->si78_exercicioprocesso = $oDados14->exerciciolicitacao;
+                  $dispensa14->si78_nroprocesso = $oDados14->nroprocessolicitatorio;
+                  $dispensa14->si78_tipoprocesso = $oDados14->tipoprocesso;
+                  $dispensa14->si78_tiporesp = $oDados14->tiporesp;
+                  $dispensa14->si78_nrocpfresp = $oDados14->nrocpfresp;
+                  $dispensa14->si78_instit = db_getsession("DB_instit");
+                  $dispensa14->si78_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+          
+                  $dispensa14->incluir(null);
+                  if ($dispensa14->erro_status == 0) {
+                    throw new Exception($dispensa14->erro_msg);
+                  }
+                  if (!in_array($oDados10->codlicitacao, $aLicitacoes1)) {
+                    $aLicitacoes1[] = $oDados10->codlicitacao;
+          
+                    $slq1 = "select * from precoreferencia where si01_processocompra = (select pc81_codproc from pcprocitem where pc81_codprocitem = (select max(l21_codpcprocitem) from liclicitem where l21_codliclicita = $oDados10->codlicitacao))";
+                          $rsResult10Preco = db_query($slq1);
+                          $oDados10Preco = db_utils::fieldsMemory($rsResult10Preco, 0);
+          
+                          if($oDados10Preco->si01_tipocotacao!=""){
+          
+                            $slq2 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmcotacao";
+                            $rsResultCPF = db_query($slq2);
+                            $rsResultCPF = db_utils::fieldsMemory($rsResultCPF, 0);
+          
+                              $dispensa14->si78_tiporegistro = 14;
+                              $dispensa14->si78_reg10 = $dispensa10->si74_sequencial;
+                              $dispensa14->si78_codorgaoresp = $oDados14->codorgaoresp;
+                              $dispensa14->si78_codunidadesubres = $oDados14->codunidadesubresp;
+                              $dispensa14->si78_exercicioprocesso = $oDados14->exerciciolicitacao;
+                              $dispensa14->si78_nroprocesso = $oDados14->nroprocessolicitatorio;
+                              $dispensa14->si78_tipoprocesso = $oDados14->tipoprocesso;
+                              $dispensa14->si78_tiporesp = 2;
+                              $dispensa14->si78_nrocpfresp = $rsResultCPF->z01_cgccpf;
+                              $dispensa14->si78_instit = db_getsession("DB_instit");
+                              $dispensa14->si78_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                              $dispensa14->incluir(null);
+          
+                            $slq3 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmorcamento";
+                            $rsResultCPF1 = db_query($slq3);
+                            $rsResultCPF1 = db_utils::fieldsMemory($rsResultCPF1, 0);
+          
+                              $dispensa14->si78_tiporegistro = 14;
+                              $dispensa14->si78_reg10 = $dispensa10->si74_sequencial;
+                              $dispensa14->si78_codorgaoresp = $oDados14->codorgaoresp;
+                              $dispensa14->si78_codunidadesubres = $oDados14->codunidadesubresp;
+                              $dispensa14->si78_exercicioprocesso = $oDados14->exerciciolicitacao;
+                              $dispensa14->si78_nroprocesso = $oDados14->nroprocessolicitatorio;
+                              $dispensa14->si78_tipoprocesso = $oDados14->tipoprocesso;
+                              $dispensa14->si78_tiporesp = 3;
+                              $dispensa14->si78_nrocpfresp = $rsResultCPF1->z01_cgccpf;
+                              $dispensa14->si78_instit = db_getsession("DB_instit");
+                              $dispensa14->si78_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                              $dispensa14->incluir(null);
+          
+                          }
+                  }
+                  $tipoRes = 1;
+              
+            }  
+        
+          
+        }else{
 
-        $dispensa14->incluir(null);
-        if ($dispensa14->erro_status == 0) {
-          throw new Exception($dispensa14->erro_msg);
+            $dispensa14->si78_tiporegistro = 14;
+            $dispensa14->si78_reg10 = $dispensa10->si74_sequencial;
+            $dispensa14->si78_codorgaoresp = $oDados14->codorgaoresp;
+            $dispensa14->si78_codunidadesubres = $oDados14->codunidadesubresp;
+            $dispensa14->si78_exercicioprocesso = $oDados14->exerciciolicitacao;
+            $dispensa14->si78_nroprocesso = $oDados14->nroprocessolicitatorio;
+            $dispensa14->si78_tipoprocesso = $oDados14->tipoprocesso;
+            $dispensa14->si78_tiporesp = $oDados14->tiporesp;
+            $dispensa14->si78_nrocpfresp = $oDados14->nrocpfresp;
+            $dispensa14->si78_instit = db_getsession("DB_instit");
+            $dispensa14->si78_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
+            $dispensa14->incluir(null);
+            if ($dispensa14->erro_status == 0) {
+              throw new Exception($dispensa14->erro_msg);
+            }
+            if (!in_array($oDados10->codlicitacao, $aLicitacoes1)) {
+              $aLicitacoes1[] = $oDados10->codlicitacao;
+
+              $slq1 = "select * from precoreferencia where si01_processocompra = (select pc81_codproc from pcprocitem where pc81_codprocitem = (select max(l21_codpcprocitem) from liclicitem where l21_codliclicita = $oDados10->codlicitacao))";
+                    $rsResult10Preco = db_query($slq1);
+                    $oDados10Preco = db_utils::fieldsMemory($rsResult10Preco, 0);
+
+                    if($oDados10Preco->si01_tipocotacao!=""){
+
+                      $slq2 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmcotacao";
+                      $rsResultCPF = db_query($slq2);
+                      $rsResultCPF = db_utils::fieldsMemory($rsResultCPF, 0);
+
+                        $dispensa14->si78_tiporegistro = 14;
+                        $dispensa14->si78_reg10 = $dispensa10->si74_sequencial;
+                        $dispensa14->si78_codorgaoresp = $oDados14->codorgaoresp;
+                        $dispensa14->si78_codunidadesubres = $oDados14->codunidadesubresp;
+                        $dispensa14->si78_exercicioprocesso = $oDados14->exerciciolicitacao;
+                        $dispensa14->si78_nroprocesso = $oDados14->nroprocessolicitatorio;
+                        $dispensa14->si78_tipoprocesso = $oDados14->tipoprocesso;
+                        $dispensa14->si78_tiporesp = 2;
+                        $dispensa14->si78_nrocpfresp = $rsResultCPF->z01_cgccpf;
+                        $dispensa14->si78_instit = db_getsession("DB_instit");
+                        $dispensa14->si78_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                        $dispensa14->incluir(null);
+
+                      $slq3 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmorcamento";
+                      $rsResultCPF1 = db_query($slq3);
+                      $rsResultCPF1 = db_utils::fieldsMemory($rsResultCPF1, 0);
+
+                        $dispensa14->si78_tiporegistro = 14;
+                        $dispensa14->si78_reg10 = $dispensa10->si74_sequencial;
+                        $dispensa14->si78_codorgaoresp = $oDados14->codorgaoresp;
+                        $dispensa14->si78_codunidadesubres = $oDados14->codunidadesubresp;
+                        $dispensa14->si78_exercicioprocesso = $oDados14->exerciciolicitacao;
+                        $dispensa14->si78_nroprocesso = $oDados14->nroprocessolicitatorio;
+                        $dispensa14->si78_tipoprocesso = $oDados14->tipoprocesso;
+                        $dispensa14->si78_tiporesp = 3;
+                        $dispensa14->si78_nrocpfresp = $rsResultCPF1->z01_cgccpf;
+                        $dispensa14->si78_instit = db_getsession("DB_instit");
+                        $dispensa14->si78_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                        $dispensa14->incluir(null);
+
+                    }
+          }
         }
+        
+        
       }
 
       $sSql = "select DISTINCT '15' as tipoRegistro,

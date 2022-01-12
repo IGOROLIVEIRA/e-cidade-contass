@@ -63,33 +63,26 @@ if (isset($incluir)) {
 		$sSqlFonte  = $clorcsuplemval->sql_query($o46_codsup, db_getsession("DB_anousu"), null, "o58_codigo");
 		$rsFonte    = db_query($sSqlFonte);
 		if (pg_num_rows($rsFonte) > 0) {
-			$valorcodigo  = substr($o70_codigo, 0, 2);
-			$valorconsulta = substr(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo, 0, 2);
-			// Condicional para recursos
-			if (($o70_codigo != 100 and $o70_codigo != 101 and $o70_codigo != 102) or ($o70_codigo != 118 and $o70_codigo != 119)) {
-				if ($valorconsulta == 10) {
-					if ($valorcodigo != $valorconsulta or ($o70_codigo != 100 and $o70_codigo != 101 and $o70_codigo != 102)) {
-						db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
-						$sqlerro = true;
-						$limpa_dados = false;
-					}
+			if ($o70_codigo != db_utils::fieldsMemory($rsFonte, 0)->o58_codigo) {
+			if(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 100 or db_utils::fieldsMemory($rsFonte, 0)->o58_codigo ==101 or db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 102){
+				if($o70_codigo != 100 and $o70_codigo != 101 and $o70_codigo != 102){
+					db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+					$sqlerro = true;
+					$limpa_dados = false;
 				}
-				if ($valorconsulta == 11) {
-					if ($valorcodigo != $valorconsulta or ($o70_codigo != 118 and $o70_codigo != 119)) {
-						db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
-						$sqlerro = true;
-						$limpa_dados = false;
-					}
+			}else if(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 118 or db_utils::fieldsMemory($rsFonte, 0)->o58_codigo ==119){
+				if($o70_codigo != 118 and $o70_codigo != 119){
+					db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+					$sqlerro = true;
+					$limpa_dados = false;
 				}
-				if ($valorconsulta > 11) {
-					if ($valorcodigo != $valorconsulta) {
-						db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
-						$sqlerro = true;
-						$limpa_dados = false;
-					}
+			}else if ($o70_codigo != db_utils::fieldsMemory($rsFonte, 0)->o58_codigo) {
+				db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+				$sqlerro = true;
+				$limpa_dados = false;
 				}
-			}
 		}
+	}
 	}
 	if (!$sqlerro) {
 		$limpa_dados = true;

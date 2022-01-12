@@ -129,7 +129,13 @@ class cl_liclicita
     var $l20_exercicioedital = null;
     /* Valor 1 para cadastro inicial da Licitação - demanda para atender o SICOM 2020 */
     var $l20_cadinicial = null;
-
+    var $l20_leidalicitacao = null;
+    var $l20_dtpulicacaopncp = null;
+    var $l20_linkpncp = null;
+    var $l20_diariooficialdivulgacao = null;
+    var $l20_dtpulicacaoedital = null;
+    var $l20_linkedital = null;
+    var $l20_mododisputa = null;
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -194,6 +200,13 @@ class cl_liclicita
                  l20_nroedital = int8 = Número Edital Licitação
                  l20_cadinicial = int8 = Identificador cadastro inicial
                  l20_exercicioedital = int8 = Exercício do Edital
+                 l20_leidalicitacao = int8 = Lei de licitacao
+                 l20_dtpulicacaopncp = date = Data Publicação Termo Ratificação
+                 l20_linkpncp = text = Prorrogacao
+                 l20_diariooficialdivulgacao = int8 = Lei de licitacao
+                 l20_dtpulicacaoedital = date = Data Publicação Termo Ratificação
+                 l20_linkedital = text = Prorrogacao
+                 l20_mododisputa = int8 = Lei de licitacao
                  ";
 
     //funcao construtor da classe
@@ -340,6 +353,31 @@ class cl_liclicita
             $this->l20_nroedital = ($this->l20_nroedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_nroedital"] : $this->l20_nroedital);
             $this->l20_cadinicial = ($this->l20_cadinicial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_cadinicial"] : $this->l20_cadinicial);
             $this->l20_exercicioedital = ($this->l20_exercicioedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_exercicioedital"] : $this->l20_exercicioedital);
+            $this->l20_leidalicitacao = ($this->l20_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_leidalicitacao"] : $this->l20_leidalicitacao);
+
+            if ($this->l20_dtpulicacaopncp == "") {
+                $this->l20_dtpulicacaopncp_dia = ($this->l20_dtpulicacaopncp_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaopncp_dia"] : $this->l20_dtpulicacaopncp_dia);
+                $this->l20_dtpulicacaopncp_mes = ($this->l20_dtpulicacaopncp_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaopncp_mes"] : $this->l20_dtpulicacaopncp_mes);
+                $this->l20_dtpulicacaopncp_ano = ($this->l20_dtpulicacaopncp_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaopncp_ano"] : $this->l20_dtpulicacaopncp_ano);
+                if ($this->l20_dtpulicacaopncp_dia != "") {
+                    $this->l20_dtpulicacaopncp = $this->l20_dtpulicacaopncp_ano . "-" . $this->l20_dtpulicacaopncp_mes . "-" . $this->l20_dtpulicacaopncp_dia;
+                }
+            }
+
+            $this->l20_linkpncp = ($this->l20_linkpncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_linkpncp"] : $this->l20_linkpncp);
+            $this->l20_diariooficialdivulgacao = ($this->l20_diariooficialdivulgacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_diariooficialdivulgacao"] : $this->l20_diariooficialdivulgacao);
+
+            if ($this->l20_dtpulicacaoedital == "") {
+                $this->l20_dtpulicacaoedital_dia = ($this->l20_dtpulicacaoedital_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaoedital_dia"] : $this->l20_dtpulicacaoedital_dia);
+                $this->l20_dtpulicacaoedital_mes = ($this->l20_dtpulicacaoedital_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaoedital_mes"] : $this->l20_dtpulicacaoedital_mes);
+                $this->l20_dtpulicacaoedital_ano = ($this->l20_dtpulicacaoedital_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaoedital_ano"] : $this->l20_dtpulicacaoedital_ano);
+                if ($this->l20_dtpulicacaoedital_dia != "") {
+                    $this->l20_dtpulicacaoedital = $this->l20_dtpulicacaoedital_ano . "-" . $this->l20_dtpulicacaoedital_mes . "-" . $this->l20_dtpulicacaoedital_dia;
+                }
+            }
+
+            $this->l20_linkedital = ($this->l20_linkedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_linkedital"] : $this->l20_linkedital);
+            $this->l20_mododisputa = ($this->l20_mododisputa == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_mododisputa"] : $this->l20_mododisputa);
         } else {
             $this->l20_codigo = ($this->l20_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codigo"] : $this->l20_codigo);
         }
@@ -915,6 +953,14 @@ class cl_liclicita
             return false;
         }
 
+        if (($this->l20_leidalicitacao == null) || ($this->l20_leidalicitacao == "0")) {
+            $this->erro_sql = " Campo l20_leidalicitacao nao informado.";
+            $this->erro_banco = "l20_leidalicitacao.";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
 
         if ($convite != "" || $convite != null) {
             $sql = "select  l45_data from  licpregao  inner join liclicita on liclicita.l20_equipepregao=licpregao.l45_sequencial where l20_codigo= $this->l20_codigo";
@@ -995,11 +1041,16 @@ class cl_liclicita
                 ,l20_nroedital
                 ,l20_cadinicial
                 ,l20_exercicioedital
+                ,l20_leidalicitacao
+                ,l20_dtpulicacaopncp
+                ,l20_linkpncp
+                ,l20_diariooficialdivulgacao
+                ,l20_dtpulicacaoedital
+                ,l20_linkedital
+                ,l20_mododisputa
                        )
                 values (
-
-
-                         $this->l20_codigo
+                 $this->l20_codigo
                 ,$this->l20_edital
                 ,$this->l20_codtipocom
                 ,$this->l20_numero
@@ -1053,6 +1104,13 @@ class cl_liclicita
                 ,$this->l20_nroedital
                 ,$this->l20_cadinicial
                 ,$this->l20_exercicioedital
+                ,$this->l20_leidalicitacao
+                ," . ($this->l20_dtpulicacaopncp == "null" || $this->l20_dtpulicacaopncp == "" ? "null" : "'" . $this->l20_dtpulicacaopncp . "'") . "
+                ,'$this->l20_linkpncp'
+                ,$this->l20_diariooficialdivulgacao
+                ," . ($this->l20_dtpulicacaoedital == "null" || $this->l20_dtpulicacaoedital == "" ? "null" : "'" . $this->l20_dtpulicacaoedital . "'") . "
+                ,'$this->l20_linkedital'
+                ,$this->l20_mododisputa
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -1599,7 +1657,6 @@ class cl_liclicita
             $virgula = ",";
         }
 
-        //echo
         if (trim($this->l20_correto != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_correto"]))) {
             $sql .= $virgula . " l20_correto = '$this->l20_correto' ";
             $virgula = ",";
@@ -1987,6 +2044,106 @@ class cl_liclicita
             }
         }
 
+        if (trim($this->l20_leidalicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_leidalicitacao"])) {
+            $sql .= $virgula . " l20_leidalicitacao = $this->l20_leidalicitacao ";
+            $virgula = ",";
+            if (trim($this->l20_leidalicitacao) == null) {
+                $this->erro_sql = " Campo Lei de Licitação não Informado.";
+                $this->erro_campo = "l20_leidalicitacao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->l20_dtpulicacaopncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaopncp"])) {
+
+            if (trim($this->l20_dtpulicacaopncp) == null and $tribunal == 100 and $tribunal == 101 and $tribunal == 102 and $tribunal == 103) {
+                $this->erro_sql = " Campo Data data publicacao pncp nao Informado.";
+                $this->erro_campo = "l20_dtpulicacaopncp";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else {
+                $sql .= $virgula . " l20_dtpulicacaopncp ='$this->l20_dtpulicacaopncp' ";
+                $virgula = ",";
+            }
+        }
+
+        if (trim($this->l20_linkpncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_linkpncp"])) {
+            if (trim($this->l20_linkpncp) == null and $tribunal == 100 and $tribunal == 101 and $tribunal == 102 and $tribunal == 103) {
+                $this->erro_sql = " Campo Link PNCP nao Informado.";
+                $this->erro_campo = "l20_linkpncp";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else {
+                $sql .= $virgula . " l20_linkpncp ='$this->l20_linkpncp' ";
+                $virgula = ",";
+            }
+        }
+
+        if (trim($this->l20_diariooficialdivulgacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_diariooficialdivulgacao"])) {
+            $sql .= $virgula . " l20_diariooficialdivulgacao = '$this->l20_diariooficialdivulgacao'";
+            $virgula = ",";
+            if (trim($this->l20_diariooficialdivulgacao) == null) {
+                $this->erro_sql = " Campo Diario Oficial de divulgacao não Informado.";
+                $this->erro_campo = "l20_diariooficialdivulgacao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->l20_dtpulicacaoedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaoedital"])) {
+            $sql .= $virgula . " l20_dtpulicacaoedital = '$this->l20_dtpulicacaoedital'";
+            $virgula = ",";
+            if (trim($this->l20_dtpulicacaoedital) == null) {
+                $this->erro_sql = " Data Publicacao Edital não Informado.";
+                $this->erro_campo = "l20_dtpulicacaoedital";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->l20_linkedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_linkedital"])) {
+            $sql .= $virgula . " l20_linkedital = '$this->l20_linkedital'";
+            $virgula = ",";
+            if (trim($this->l20_linkedital) == null) {
+                $this->erro_sql = " Campo Link de Publicação Edital não Informado.";
+                $this->erro_campo = "l20_linkedital";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->l20_mododisputa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_mododisputa"])) {
+            $sql .= $virgula . " l20_mododisputa = '$this->l20_mododisputa'";
+            $virgula = ",";
+            if (trim($this->l20_mododisputa) == null) {
+                $this->erro_sql = " Campo Modo Disputa não Informado.";
+                $this->erro_campo = "l20_mododisputa";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
 
         $sql .= " where ";
         if ($l20_codigo != null) {
@@ -2060,6 +2217,7 @@ class cl_liclicita
             // }
         }
         $result = db_query($sql);
+        //die($sql);
 
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -3614,12 +3772,12 @@ class cl_liclicita
         join pcmater on pc16_codmater = pc01_codmater
         join solicitemunid on pc17_codigo=pc11_codigo
         join matunid on m61_codmatunid=pc17_unid
-        join pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-        join pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-        join pcorcamval ON pc22_orcamitem = pc23_orcamitem
-        join itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-        join precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-        left join liclicitemlote on l04_liclicitem=l21_codigo";
+        left JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+        left JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+        left JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+        left JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+        left JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+        LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo";
 
         if (!empty($dbwhere)) {
             $sql .= " where {$dbwhere} ";

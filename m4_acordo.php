@@ -712,6 +712,7 @@ if (isset($alterar)) {
 
 </body>
 
+
 </html>
 <div style='position:absolute;top: 200px; left:15px;
             border:1px solid black;

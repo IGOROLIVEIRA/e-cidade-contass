@@ -424,15 +424,27 @@ switch($oParam->exec) {
                 foreach($oAcordoPosicao->getItens() as $oItenAditado){
                     $nValorLancamentoContabil += $oItenAditado->getValorAditado();
                 }
+                // echo "<pre>";print_r($oAcordoPosicao);exit;
+                $dataLancamento = date("Y-m-d", db_getsession("DB_datausu"));
                 if($nValorLancamentoContabil != 0){
                     $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-                    $sHistorico = "Valor referente a exclusão da posição {$oPosicao->codigo} do contrato de código: {$oAcordoPosicao->getAcordo()}.";
-                    if($nValorLancamentoContabil > 0){
-                        $oAcordoLancamentoContabil->registraControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $oAcordoPosicao->getDataAssinatura());
+                    $sHistorico = "Valor referente a estorno da posição {$oPosicao->codigo} do contrato de código: {$oAcordoPosicao->getAcordo()}.";
+                    if($oAcordoPosicao->getNumeroAditamento()){
+                        if($nValorLancamentoContabil < 0){
+                            $oAcordoLancamentoContabil->registraControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $dataLancamento);
+                        }
+                        if($nValorLancamentoContabil > 0){
+                            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $dataLancamento);
+                        }
+                    }else{
+                        if($nValorLancamentoContabil > 0){
+                            $oAcordoLancamentoContabil->registraControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $dataLancamento);
+                        }
+                        if($nValorLancamentoContabil < 0){
+                            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $dataLancamento);
+                        }
                     }
-                    if($nValorLancamentoContabil < 0){
-                        $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $oAcordoPosicao->getDataAssinatura());
-                    }
+
                 }
 
                 $oAcordoPosicao->remover();

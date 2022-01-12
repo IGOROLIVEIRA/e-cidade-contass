@@ -60,10 +60,10 @@ if (!isset($db_opcao)){
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
      <?
      if(db_getsession('DB_anousu') >= 2016 ) {
-         $clcriaabas->identifica = array("liclicita" => "Licitação", "resplicita" => "Responsáveis", "liclicitem" => "Itens", "liclicitemlote" => "Lotes");
-         $clcriaabas->sizecampo = array("liclicita" => "20", "resplicita" => "20", "liclicitem" => "20", "liclicitemlote" => "20");
-         $clcriaabas->title = array("liclicita" => "Licitação", "resplicita" => "Responsáveis", "liclicitem" => "Itens da Licitação", "liclicitemlote" => "Lote de itens");
-         $clcriaabas->src = array("liclicita" => "lic1_liclicita002.php", "resplicita" => "lic1_resplicitacao001.php", "liclicitem" => "lic1_liclicitemalt002.php", "liclicitemlote" => "lic1_liclicitemlote001.php");
+         $clcriaabas->identifica = array("liclicita" => "Licitação","liclicitem" => "Itens", "liclicitemlote" => "Lotes");
+         $clcriaabas->sizecampo = array("liclicita" => "20", "liclicitem" => "20", "liclicitemlote" => "20");
+         $clcriaabas->title = array("liclicita" => "Licitação","liclicitem" => "Itens da Licitação", "liclicitemlote" => "Lote de itens");
+         $clcriaabas->src = array("liclicita" => "lic1_liclicita002.php","liclicitem" => "lic1_liclicitemalt002.php", "liclicitemlote" => "lic1_liclicitemlote001.php");
          $clcriaabas->disabled = array("liclicitem" => "true", "resplicita" => "true", "liclicitemlote" => "true");
          $clcriaabas->cria_abas();
      }else{

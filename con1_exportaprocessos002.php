@@ -38,142 +38,164 @@ try {
     db_redireciona('db_erros.php?fechar=true&db_erro=' . $oErro->getMessage());
 }
 
+system("cd tmp; rm -f *.$extensao; cd ..");
+$numeroEdital = $aEditalLicitacao[0]->numeroedital;
+$anoProcessoLicitatorio = $aEditalLicitacao[0]->anoprocessolicitatorio;
+$anoEdital = $aEditalLicitacao[0]->anoedital;
+$cnpj = $aEditalLicitacao[0]->cnpj;
+$codigotcemg = $aEditalLicitacao[0]->codigotcemg;
 
-$clabre_arquivo = new cl_abre_arquivo("tmp/Edital_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("tmp/Edital_" . $numeroEdital . "_" . $anoEdital . "_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "." . $extensao);
 
 if ($clabre_arquivo->arquivo != false) {
 
     $vir = $separador;
     $del = $delimitador;
 
-    fputs($clabre_arquivo->arquivo, "\n");
+    fputs($clabre_arquivo->arquivo, "");
 
     foreach ($aEditalLicitacao as $iItens => $oItens) {
 
-        $iTipoRegistro                   = '1';
-        $iCodigoOrgao                    = '01';
-        $iTipoOrgao                      = '01';
+        $iTipoRegistro                   = $oItens->tiporegistro;
+        $iCodigoOrgao                    = $oItens->codigotcemg;
+        $iTipoOrgao                      = $oItens->tipodeinstituicao;
         $iCnpj                           = $oItens->cnpj;
-        $sNomeOrgao                      = $oItens->nomeorgao;
+        $sNomeOrgao                      = $oItens->nomedainstituicao;
         $iProcessoLicitatorio            = $oItens->processolicitatorio;
         $iExercicio                      = $oItens->anoprocessolicitatorio;
-        $iNroEdital                      = $oItens->processolicitatorio;
-        $iExercicioEdital                = $oItens->anoprocessolicitatorio;
-        $sProcessoObjeto                 = '';
-        $iNaturezaObjeto                 = '';
-        $iRegistroPreco                  = '';
+        $iNroEdital                      = $oItens->numeroedital;
+        $iExercicioEdital                = $oItens->anoedital;
+        $sProcessoObjeto                 = $oItens->objeto;
+        $iNaturezaObjeto                 = $oItens->naturezadoobjeto;
+        $iRegistroPreco                  = $oItens->registrodepreco;
 
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iExercício, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iExercicioEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($sProcessoObjeto, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iNaturezaObjeto, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
+
         fputs($clabre_arquivo->arquivo, "\n");
     }
 
     fclose($clabre_arquivo->arquivo);
 }
 
-$clabre_arquivo = new cl_abre_arquivo("tmp/Itens_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("tmp/Itens_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "_" . $cnpj . "." . $extensao);
 
 if ($clabre_arquivo->arquivo != false) {
 
     $vir = $separador;
     $del = $delimitador;
 
-    fputs($clabre_arquivo->arquivo, "\n");
+    fputs($clabre_arquivo->arquivo, "");
 
     foreach ($aItensLicitacao as $iItens => $oItens) {
 
-        $iTipoRegistro                   = '1';
-        $iCodigoOrgao                    = '01';
-        $iTipoOrgao                      = '01';
+        $iTipoRegistro                   = $oItens->tiporegistro;
         $iCnpj                           = $oItens->cnpj;
-        $sNomeOrgao                      = $oItens->nomeorgao;
         $iProcessoLicitatorio            = $oItens->processolicitatorio;
         $iExercicio                      = $oItens->anoprocessolicitatorio;
-        $iNroEdital                      = $oItens->processolicitatorio;
-        $iExercicioEdital                = $oItens->anoprocessolicitatorio;
-        $sProcessoObjeto                 = '';
-        $iNaturezaObjeto                 = '';
-        $iRegistroPreco                  = '';
+        $iCodMater                       = $oItens->codigodoitem;
+        $iOrdem                          = $oItens->sequencialdoitemnoprocesso;
+        $sDescrItem                      = $oItens->descricaodoitem;
+        $sUnidadeMedida                  = $oItens->unidadedemedida;
+        $iQtdLicitada                    = $oItens->quantidadelicitada;
+        $iValorUnitMedio                 = $oItens->valorunitariomedio;
+        $iCodigodolote                   = $oItens->codigodolote;
+
+        if ($oItens->l21_reservado != 'f')
+            $sReservado = 'Sim';
+        else
+            $sReservado = 'Nao';
+
+        //$sReservado = $oItens->l21_reservado;
 
         fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iTipoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iExercício, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iExercicioEdital, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($sProcessoObjeto, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNaturezaObjeto, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iCodMater, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iOrdem, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($sDescrItem, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($sUnidadeMedida, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iQtdLicitada, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iValorUnitMedio, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($iCodigodolote, $vir, $del));
+        fputs($clabre_arquivo->arquivo, formatarCampo($sReservado, $vir, $del));
+
         fputs($clabre_arquivo->arquivo, "\n");
     }
 
     fclose($clabre_arquivo->arquivo);
 }
 
-$clabre_arquivo = new cl_abre_arquivo("tmp/Lote_$iLicitacao.$extensao");
+$clabre_arquivo = new cl_abre_arquivo("tmp/Lote_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "_" . $cnpj . "." . $extensao);
 
 if ($clabre_arquivo->arquivo != false) {
 
     $vir = $separador;
     $del = $delimitador;
 
-    fputs($clabre_arquivo->arquivo, "\n");
+    fputs($clabre_arquivo->arquivo, "");
 
-    foreach ($aEditalLicitacao as $iItens => $oItens) {
+    if ($aEditalLicitacao[0]->l20_tipojulg == 3) {
+        foreach ($aLoteLicitacao as $iItens => $oItens) {
+            $iTipoRegistro                   = $oItens->tiporegistro;
+            $iProcessoLicitatorio            = $oItens->processolicitatorio;
+            $iExercicio                      = $oItens->anoprocessolicitatorio;
+            $iLote                           = $oItens->codigodolote;
+            $iCodItem                        = $oItens->codigodoitemvinculadoaolote;
+            $sDescrLote                      = $oItens->descricaodolote;
 
-        $iTipoRegistro                   = '1';
-        $iCodigoOrgao                    = '01';
-        $iTipoOrgao                      = '01';
-        $iCnpj                           = $oItens->cnpj;
-        $sNomeOrgao                      = $oItens->nomeorgao;
-        $iProcessoLicitatorio            = $oItens->processolicitatorio;
+            if ($oItens->l21_reservado != 'f')
+                $sReservado = 'Sim';
+            else
+                $sReservado = 'Nao';
 
-        fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iTipoOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
+            //$sReservado = $oItens->l21_reservado;
+
+            fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($iLote, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($iCodItem, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($sDescrLote, $vir, $del));
+            fputs($clabre_arquivo->arquivo, formatarCampo($sReservado, $vir, $del));
+            fputs($clabre_arquivo->arquivo, "\n");
+        }
+    } else {
+        fputs($clabre_arquivo->arquivo, '99');
         fputs($clabre_arquivo->arquivo, "\n");
     }
-
     fclose($clabre_arquivo->arquivo);
 }
 $aArquivosGerados = array();
-$aArquivosGerados[] =  "tmp/Edital_$iLicitacao.$extensao";
-$aArquivosGerados[] =  "tmp/Itens_$iLicitacao.$extensao";
-$aArquivosGerados[] =  "tmp/Lote_$iLicitacao.$extensao";
+$aArquivosGerados[] = "Edital_" . $numeroEdital . "_" . $anoEdital . "_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "." . $extensao;
+$aArquivosGerados[] = "Itens_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "_" . $cnpj . "." . $extensao;
+$aArquivosGerados[] = "Lote_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "_" . $cnpj . "." . $extensao;
 
-$sNomeArquivo = "export_process";
-
-$aListaArquivos = " ";
-foreach ($aArquivosGerados as $oArquivo) {
-    $aListaArquivos .= " " . $oArquivo;
-}
-//print_r($aListaArquivos);
-system("rm -f tmp/$sNomeArquivo.zip");
-system("bin/zip -q tmp/$sNomeArquivo.zip $aListaArquivos");
+$sNomeAbsoluto = $cnpj . "_" . $codigotcemg . "_" . $anoProcessoLicitatorio;
 
 //compactaArquivos($aArquivosGerados, $sNomeArquivo);
 
+foreach ($aArquivosGerados as $sArquivo) {
+    $sArquivos .= " $sArquivo";
+}
+
+system("cd tmp; rm -f {$sNomeAbsoluto}.zip; cd ..");
+system("cd tmp; ../bin/zip -q {$sNomeAbsoluto}.zip $sArquivos 2> erro.txt; cd ..");
+
 echo "<script>";
-echo "  jan = window.open('db_download.php?arquivo=" . "tmp/export_process.zip" . "','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
+echo "  jan = window.open('db_download.php?arquivo=" . "tmp/{$sNomeAbsoluto}.zip" . "','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
 echo "  jan.moveTo(0,0);";
 echo "</script>";
 
@@ -193,5 +215,5 @@ function formatarCampo($valor, $separador, $delimitador)
     $valor = str_replace("\n", " ", $valor);
     $valor = str_replace("\r", " ", $valor);
 
-    return "{$del}{$valor}{$del}{$separador}";
+    return "{$valor}{$del}";
 }

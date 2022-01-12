@@ -25,21 +25,22 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_app.utils.php");
-require_once ("std/db_stdClass.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("dbforms/verticalTab.widget.php");
-require_once ("model/Acordo.model.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
+require_once("std/db_stdClass.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("dbforms/db_funcoes.php");
+require_once("dbforms/verticalTab.widget.php");
+require_once("model/Acordo.model.php");
 
 $oGet = db_utils::postMemory($_GET);
 
 ?>
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <?php
@@ -49,66 +50,66 @@ $oGet = db_utils::postMemory($_GET);
     ?>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_grvDetalhes();">
-<center>
-    <table width="100%">
-        <tr>
-            <td>
-                <fieldset>
-                    <div id="grvDetalhes">
 
-                    </div>
-                </fieldset>
-            </td>
-        </tr>
-    </table>
-</center>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_grvDetalhes();">
+    <center>
+        <table width="100%">
+            <tr>
+                <td>
+                    <fieldset>
+                        <div id="grvDetalhes">
+
+                        </div>
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
+    </center>
 </body>
+
 </html>
 <script type="text/javascript">
-
-    var detalhe         = '<?=$oGet->exec; ?>';
-    var ac16_sequencial = '<?=$oGet->ac16_sequencial; ?>';
+    var detalhe = '<?= $oGet->exec; ?>';
+    var ac16_sequencial = '<?= $oGet->ac16_sequencial; ?>';
 
     var sUrlRC = 'ac4_acordoconsulta.RPC.php';
 
-    function js_completaPesquisa(ac16_sequencial,detalhe) {
+    function js_completaPesquisa(ac16_sequencial, detalhe) {
 
-        var oParam             = new Object();
-        oParam.exec            = detalhe+'Consulta';
+        var oParam = new Object();
+        oParam.exec = detalhe + 'Consulta';
 
         if (detalhe == "documentos") {
 
             oParam.exec = "getDocumento";
-            sUrlRC      = "con4_contratos.RPC.php";
+            sUrlRC = "con4_contratos.RPC.php";
         }
         oParam.ac16_sequencial = ac16_sequencial;
-        oParam.detalhe         = detalhe;
+        oParam.detalhe = detalhe;
         var msgDiv = "Aguarde ...";
-        js_divCarregando(msgDiv,'msgBox');
+        js_divCarregando(msgDiv, 'msgBox');
 
-        var oAjax           = new Ajax.Request(sUrlRC,
-            {
-                method: "post",
-                parameters:'json='+Object.toJSON(oParam),
-                onComplete: js_retornoCompletaPesquisa
-            });
+        var oAjax = new Ajax.Request(sUrlRC, {
+            method: "post",
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoCompletaPesquisa
+        });
     }
 
     function js_retornoCompletaPesquisa(oAjax) {
 
-        var aEventsIn  = ["onmouseover"];
+        var aEventsIn = ["onmouseover"];
         var aEventsOut = ["onmouseout"];
         aDadosHintGrid = new Array();
         js_removeObj('msgBox');
 
-        var oRetorno = eval("("+oAjax.responseText+")");
+        var oRetorno = eval("(" + oAjax.responseText + ")");
 
         if (oRetorno.status == 1) {
 
             oGrvDetalhes.clearAll(true);
 
-            if (oRetorno.dados !== false ) {
+            if (oRetorno.dados !== false) {
 
                 var iNumDados = oRetorno.dados.length;
 
@@ -118,15 +119,15 @@ $oGet = db_utils::postMemory($_GET);
                 if (iNumDados > 0) {
 
                     oRetorno.dados.each(
-                        function (oDado, iInd) {
+                        function(oDado, iInd) {
 
-                            switch(oRetorno.detalhe) {
+                            switch (oRetorno.detalhe) {
 
                                 case 'licitacoes':
 
                                     var aRow = new Array();
 
-                                    aRow[0] = "<b><a href='#' onclick='parent.js_consultaLicitacao("+oDado.iCodigoLicitacao+")' title='Consultar Licitacao'>" + oDado.iCodigoLicitacao + "</a></b>";
+                                    aRow[0] = "<b><a href='#' onclick='parent.js_consultaLicitacao(" + oDado.iCodigoLicitacao + ")' title='Consultar Licitacao'>" + oDado.iCodigoLicitacao + "</a></b>";
                                     aRow[1] = decodeURIComponent(oDado.sObjetoLicitacao.replace(/\+/g, ""));
                                     aRow[2] = decodeURIComponent(oDado.sLocalLicitacao.replace(/\+/g, ""));
                                     aRow[3] = js_formatar(oDado.dtCriacaoLicitacao, "d");
@@ -140,7 +141,7 @@ $oGet = db_utils::postMemory($_GET);
 
                                     var aRow = new Array();
 
-                                    aRow[0] = "<b><a href='#' onclick='parent.js_consultaEmpenho("+oDado.iNumeroEmpenho+")' title='Consultar Empenho'>" + oDado.iCodigoEmpenho + " / " + oDado.iAnoEmpenho + "</a></b>";
+                                    aRow[0] = "<b><a href='#' onclick='parent.js_consultaEmpenho(" + oDado.iNumeroEmpenho + ")' title='Consultar Empenho'>" + oDado.iCodigoEmpenho + " / " + oDado.iAnoEmpenho + "</a></b>";
                                     aRow[1] = decodeURIComponent(oDado.sResumoEmpenho.replace(/\+/g, ""));
                                     aRow[2] = oDado.iCaracteristicaPeculiar;
                                     aRow[3] = js_formatar(oDado.iValorEmpenho, "f");
@@ -185,39 +186,39 @@ $oGet = db_utils::postMemory($_GET);
 
                                     aRow[0] = oDado.ordem;
                                     aRow[1] = oDado.codigo;
-                                    aRow[2] = oDado.tipo == '' ? '1 - Inclusão' : oDado.tipo+' - '+oDado.aditamento.urlDecode();
+                                    aRow[2] = oDado.tipo == '' ? '1 - Inclusão' : oDado.tipo + ' - ' + oDado.aditamento.urlDecode();
                                     aRow[3] = oDado.descricao.urlDecode();
                                     aRow[4] = oDado.quantidade;
                                     aRow[5] = oDado.unidademed.urlDecode();
                                     aRow[6] = oDado.vlrUnit;
                                     aRow[7] = oDado.vlrTotal;
                                     oGrvDetalhes.addRow(aRow);
-                                    
-                                    var sTextEvent  = "<b>Unidade: </b>"+oDado.unidademed+"</br>";
-                                    sTextEvent += "<b>Elemento: </b>"+oDado.elemento+"</br>";
+
+                                    var sTextEvent = "<b>Unidade: </b>" + oDado.unidademed + "</br>";
+                                    sTextEvent += "<b>Elemento: </b>" + oDado.elemento + "</br>";
 
                                     if (oDado.observacao !== '') {
-                                        sTextEvent += "<b>Resumo: </b>"+oDado.observacao.urlDecode();
+                                        sTextEvent += "<b>Resumo: </b>" + oDado.observacao.urlDecode();
                                     } else {
                                         sTextEvent += "<b>Resumo: </b> Sem observação";
                                     }
 
-                                    var oDadosHint           = new Object();
-                                    oDadosHint.idLinha   = oGrvDetalhes.aRows[iInd].sId;
-                                    oDadosHint.sText     = sTextEvent;
-                                    aDadosHintGrid.push(oDadosHint); 
+                                    var oDadosHint = new Object();
+                                    oDadosHint.idLinha = oGrvDetalhes.aRows[iInd].sId;
+                                    oDadosHint.sText = sTextEvent;
+                                    aDadosHintGrid.push(oDadosHint);
 
                                     break;
 
                                 case 'empenhamentos':
                                     var aRow = new Array();
 
-                                    aRow[0] = '<a href="#" onclick="parent.js_detalhesAutorizacao('+oDado.codigoAutorizacao+');">'
-                                        +oDado.codigoAutorizacao+'</a>';
-                                    aRow[1] = '<a href="#" onclick="parent.js_detalhesEmpenho(\''+oDado.codigoempenho+'\');">'
-                                        +oDado.empenho+'</a>';
-                                    aRow[2] = js_formatar(oDado.dataEmissao,'d');
-                                    aRow[3] = js_formatar(oDado.dataAnulacao,'d');
+                                    aRow[0] = '<a href="#" onclick="parent.js_detalhesAutorizacao(' + oDado.codigoAutorizacao + ');">' +
+                                        oDado.codigoAutorizacao + '</a>';
+                                    aRow[1] = '<a href="#" onclick="parent.js_detalhesEmpenho(\'' + oDado.codigoempenho + '\');">' +
+                                        oDado.empenho + '</a>';
+                                    aRow[2] = js_formatar(oDado.dataEmissao, 'd');
+                                    aRow[3] = js_formatar(oDado.dataAnulacao, 'd');
                                     aRow[4] = oDado.valor;
 
 
@@ -241,8 +242,14 @@ $oGet = db_utils::postMemory($_GET);
                                 case 'aditamentos':
                                     var aRow = new Array();
 
-                                    aRow[0] = '<a href="#" onclick="parent.js_consultaAditamento('+ac16_sequencial+','+oDado.codigo+');">' +
-                                        oDado.codigo+'</a>';
+                                    indiceAnterior = '0';
+                                    if (iInd > 0) {
+                                        indiceAnterior = oRetorno.dados[iInd - 1]['codigo'];
+
+                                    }
+
+                                    aRow[0] = '<a href="#" onclick="parent.js_consultaAditamento(' + ac16_sequencial + ',' + oDado.codigo + ',' + indiceAnterior + ');">' +
+                                        oDado.codigo + '</a>';
                                     aRow[1] = oDado.vigencia.urlDecode();
                                     aRow[2] = oDado.numeroAditamento.urlDecode();
                                     aRow[3] = oDado.situacao.urlDecode();
@@ -255,8 +262,8 @@ $oGet = db_utils::postMemory($_GET);
                                 case 'apostilamentos':
                                     var aRow = new Array();
 
-                                    aRow[0] = '<a href="#" onclick="parent.js_consultaApostilamento('+oDado.codigo+');">' +
-                                        oDado.codigo+'</a>';
+                                    aRow[0] = '<a href="#" onclick="parent.js_consultaApostilamento(' + oDado.codigo + ');">' +
+                                        oDado.codigo + '</a>';
                                     aRow[1] = oDado.vigencia.urlDecode();
                                     aRow[2] = oDado.numeroAditamento.urlDecode();
                                     aRow[3] = oDado.situacao.urlDecode();
@@ -291,20 +298,20 @@ $oGet = db_utils::postMemory($_GET);
                                 case "documentos":
 
                                     var aLinha = new Array();
-                                    aLinha[0]  = oDado.iCodigo;
-                                    aLinha[1]  = oDado.iAcordo;
-                                    aLinha[2]  = decodeURIComponent(oDado.sDescricao.replace(/\+/g, ""));
-                                    aLinha[3]  = '<input type="button" value="Dowload" onclick="js_documentoDownload('+oDado.iCodigo+')">';
+                                    aLinha[0] = oDado.iCodigo;
+                                    aLinha[1] = oDado.iAcordo;
+                                    aLinha[2] = decodeURIComponent(oDado.sDescricao.replace(/\+/g, ""));
+                                    aLinha[3] = '<input type="button" value="Dowload" onclick="js_documentoDownload(' + oDado.iCodigo + ')">';
                                     oGrvDetalhes.addRow(aLinha);
                                     break;
 
                                 case 'paralisacoes':
 
                                     var aLinha = new Array();
-                                    aLinha[0]  = oDado.datainicial;
-                                    aLinha[1]  = oDado.datafinal;
-                                    aLinha[2]  = oDado.usuario.urlDecode();
-                                    aLinha[3]  = oDado.observacao.urlDecode();
+                                    aLinha[0] = oDado.datainicial;
+                                    aLinha[1] = oDado.datafinal;
+                                    aLinha[2] = oDado.usuario.urlDecode();
+                                    aLinha[3] = oDado.observacao.urlDecode();
                                     oGrvDetalhes.addRow(aLinha);
                                     break;
 
@@ -318,13 +325,13 @@ $oGet = db_utils::postMemory($_GET);
                                     aRow[3] = js_formatar(oDado.vlrTotal, 'f');
                                     oGrvDetalhes.addRow(aRow);
 
-                                    var oDadosHint           = new Object();
-                                    oDadosHint.idLinha   = oGrvDetalhes.aRows[iInd].sId;
-                                    oDadosHint.sText     = sTextEvent;
+                                    var oDadosHint = new Object();
+                                    oDadosHint.idLinha = oGrvDetalhes.aRows[iInd].sId;
+                                    oDadosHint.sText = sTextEvent;
                                     aDadosHintGrid.push(oDadosHint);
 
                                     break;
-                                
+
                                 case 'licrealizadaoutrosorgaos':
 
                                     var aRow = new Array();
@@ -335,9 +342,9 @@ $oGet = db_utils::postMemory($_GET);
                                     aRow[3] = '';
                                     oGrvDetalhes.addRow(aRow);
 
-                                    var oDadosHint           = new Object();
-                                    oDadosHint.idLinha   = oGrvDetalhes.aRows[iInd].sId;
-                                    oDadosHint.sText     = sTextEvent;
+                                    var oDadosHint = new Object();
+                                    oDadosHint.idLinha = oGrvDetalhes.aRows[iInd].sId;
+                                    oDadosHint.sText = sTextEvent;
                                     aDadosHintGrid.push(oDadosHint);
 
                                     break;
@@ -352,9 +359,9 @@ $oGet = db_utils::postMemory($_GET);
                                     aRow[3] = oDado.departamento.urlDecode();
                                     oGrvDetalhes.addRow(aRow);
 
-                                    var oDadosHint           = new Object();
-                                    oDadosHint.idLinha   = oGrvDetalhes.aRows[iInd].sId;
-                                    oDadosHint.sText     = sTextEvent;
+                                    var oDadosHint = new Object();
+                                    oDadosHint.idLinha = oGrvDetalhes.aRows[iInd].sId;
+                                    oDadosHint.sText = sTextEvent;
                                     aDadosHintGrid.push(oDadosHint);
 
                                     break;
@@ -370,7 +377,7 @@ $oGet = db_utils::postMemory($_GET);
 
                         aDadosHintGrid.each(function(oHint, id) {
 
-                            var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
+                            var oDBHint = eval("oDBHint_" + id + " = new DBHint('oDBHint_" + id + "')");
                             oDBHint.setText(oHint.sText);
                             oDBHint.setShowEvents(aEventsIn);
                             oDBHint.setHideEvents(aEventsOut);
@@ -394,6 +401,7 @@ $oGet = db_utils::postMemory($_GET);
     function js_showInfoItem(iLinha) {
         parent.js_showInfoItem(aItens[iLinha]);
     }
+
     function js_grvDetalhes() {
 
         switch (detalhe) {
@@ -403,8 +411,8 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
                 oGrvDetalhes.setCellWidth(['5%', '5%', '20%', '30%', '10%', '10%', '10%', '10%']);
-                oGrvDetalhes.setCellAlign(['left', 'right', 'left' , 'left', 'right', 'right', 'right', 'right']);
-                oGrvDetalhes.setHeader(['Ordem','Código','Adit.','Descrição','Quantidade','Unidade','Valor Unitário','Valor Total']);
+                oGrvDetalhes.setCellAlign(['left', 'right', 'left', 'left', 'right', 'right', 'right', 'right']);
+                oGrvDetalhes.setHeader(['Ordem', 'Código', 'Adit.', 'Descrição', 'Quantidade', 'Unidade', 'Valor Unitário', 'Valor Total']);
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.hasTotalizador = true;
                 oGrvDetalhes.show($('grvDetalhes'));
@@ -425,9 +433,9 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes.renderRows();
                 break;
 
-            /**
-             * Busca os empenhos vinculado ao contrato
-             */
+                /**
+                 * Busca os empenhos vinculado ao contrato
+                 */
             case 'empenhos':
 
                 oGrvDetalhes = new DBGrid('detalhes');
@@ -474,9 +482,9 @@ $oGet = db_utils::postMemory($_GET);
 
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
-                oGrvDetalhes.setCellWidth(new Array('5%', '25%','10%', '30%', '15%','10%'));
+                oGrvDetalhes.setCellWidth(new Array('5%', '25%', '10%', '30%', '15%', '10%'));
                 oGrvDetalhes.setCellAlign(new Array('center', 'center', 'center', 'center', 'center'));
-                oGrvDetalhes.setHeader(new Array('Código', 'Vigência', 'Número', 'Tipo de Alteração', 'Data de Inclusão','Emergencial'));
+                oGrvDetalhes.setHeader(new Array('Código', 'Vigência', 'Número', 'Tipo de Alteração', 'Data de Inclusão', 'Emergencial'));
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.show($('grvDetalhes'));
                 oGrvDetalhes.clearAll(true);
@@ -487,7 +495,7 @@ $oGet = db_utils::postMemory($_GET);
 
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
-                oGrvDetalhes.setCellWidth(new Array('5%', '25%','10%', '30%', '15%'));
+                oGrvDetalhes.setCellWidth(new Array('5%', '25%', '10%', '30%', '15%'));
                 oGrvDetalhes.setCellAlign(new Array('center', 'center', 'center', 'center', 'center'));
                 oGrvDetalhes.setHeader(new Array('Código', 'Vigência', 'Número', 'Tipo de Alteração', 'Data de Inclusão'));
                 oGrvDetalhes.setHeight(230);
@@ -500,7 +508,7 @@ $oGet = db_utils::postMemory($_GET);
 
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
-                oGrvDetalhes.setCellWidth(new Array('5%', '25%','10%', '30%', '15%'));
+                oGrvDetalhes.setCellWidth(new Array('5%', '25%', '10%', '30%', '15%'));
                 oGrvDetalhes.setCellAlign(new Array('center', 'center', 'center', 'center', 'center'));
                 oGrvDetalhes.setHeader(new Array('Código', 'Vigência', 'Número', 'Tipo de Alteração', 'Data de Inclusão'));
                 oGrvDetalhes.setHeight(230);
@@ -540,8 +548,8 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
                 oGrvDetalhes.setCellWidth(new Array('15%', '15%', '30%', '15%'));
-                oGrvDetalhes.setCellAlign(new Array("right","right","left","center"));
-                oGrvDetalhes.setHeader(new Array("Codigo","Acordo","Descricao","Download"));
+                oGrvDetalhes.setCellAlign(new Array("right", "right", "left", "center"));
+                oGrvDetalhes.setHeader(new Array("Codigo", "Acordo", "Descricao", "Download"));
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.show($('grvDetalhes'));
                 oGrvDetalhes.clearAll(true);
@@ -553,8 +561,8 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
                 oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
-                oGrvDetalhes.setCellAlign(['center', 'center', 'center' , 'center']);
-                oGrvDetalhes.setHeader(['Ficha','Cód. orçamentario','Projeto Atividade', 'Fonte de Recurso']);
+                oGrvDetalhes.setCellAlign(['center', 'center', 'center', 'center']);
+                oGrvDetalhes.setHeader(['Ficha', 'Cód. orçamentario', 'Projeto Atividade', 'Fonte de Recurso']);
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.hasTotalizador = true;
                 oGrvDetalhes.show($('grvDetalhes'));
@@ -581,8 +589,8 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
                 oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
-                oGrvDetalhes.setCellAlign(['center', 'center', 'center' , 'center']);
-                oGrvDetalhes.setHeader(['Código','Objeto','Data da Adesão', 'Departamento']);
+                oGrvDetalhes.setCellAlign(['center', 'center', 'center', 'center']);
+                oGrvDetalhes.setHeader(['Código', 'Objeto', 'Data da Adesão', 'Departamento']);
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.hasTotalizador = true;
                 oGrvDetalhes.show($('grvDetalhes'));
@@ -595,8 +603,8 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
                 oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
-                oGrvDetalhes.setCellAlign(['center', 'center', 'center' , 'center']);
-                oGrvDetalhes.setHeader(['Código','Tipo de Licitação','Data', 'Departamento']);
+                oGrvDetalhes.setCellAlign(['center', 'center', 'center', 'center']);
+                oGrvDetalhes.setHeader(['Código', 'Tipo de Licitação', 'Data', 'Departamento']);
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.hasTotalizador = true;
                 oGrvDetalhes.show($('grvDetalhes'));
@@ -609,8 +617,8 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes = new DBGrid('detalhes');
                 oGrvDetalhes.nameInstance = 'oGrvDetalhes';
                 oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
-                oGrvDetalhes.setCellAlign(['left', 'left', 'left' , 'left']);
-                oGrvDetalhes.setHeader(['Código','Descrição','Quantidade', 'Valor']);
+                oGrvDetalhes.setCellAlign(['left', 'left', 'left', 'left']);
+                oGrvDetalhes.setHeader(['Código', 'Descrição', 'Quantidade', 'Valor']);
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.hasTotalizador = true;
                 oGrvDetalhes.show($('grvDetalhes'));
@@ -628,27 +636,27 @@ $oGet = db_utils::postMemory($_GET);
             return false;
         }
 
-        var oParam              = new Object();
-        oParam.exec             = 'downloadDocumento';
-        oParam.acordo           = ac16_sequencial;
+        var oParam = new Object();
+        oParam.exec = 'downloadDocumento';
+        oParam.acordo = ac16_sequencial;
         oParam.iCodigoDocumento = iCodigoDocumento;
-        js_divCarregando('Aguarde... realizando Download do documento','msgbox');
-        var oAjax        = new Ajax.Request(
-            sUrlRC,
-            { asynchronous:false,
-                parameters: 'json='+Object.toJSON(oParam),
+        js_divCarregando('Aguarde... realizando Download do documento', 'msgbox');
+        var oAjax = new Ajax.Request(
+            sUrlRC, {
+                asynchronous: false,
+                parameters: 'json=' + Object.toJSON(oParam),
                 method: 'post',
-                onComplete : js_downloadDocumento
+                onComplete: js_downloadDocumento
             });
     }
 
     function js_downloadDocumento(oAjax) {
 
         js_removeObj("msgbox");
-        var oRetorno = eval('('+oAjax.responseText+")");
+        var oRetorno = eval('(' + oAjax.responseText + ")");
         if (oRetorno.status == 2) {
-            alert("Não foi possivel carregar o documento:\n "+ oRetorno.message);
+            alert("Não foi possivel carregar o documento:\n " + oRetorno.message);
         }
-        window.open("db_download.php?arquivo="+oRetorno.nomearquivo);
+        window.open("db_download.php?arquivo=" + oRetorno.nomearquivo);
     }
 </script>
