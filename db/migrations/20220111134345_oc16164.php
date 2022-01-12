@@ -33,7 +33,7 @@ class Oc16164 extends AbstractMigration
                 INSERT INTO db_itensmenu VALUES ((SELECT MAX(id_item) + 1 FROM db_itensmenu), \'Extratos Bancarios Sicom\', \'Extratos Bancarios Sicom\', 
                     \'cai4_extratobancariosicom001.php\', 1, 1, \'Extratos Bancarios Sicom\', \'t\');
              
-                INSERT INTO db_menu VALUES (32, (SELECT MAX(id_item) FROM db_itensmenu), 464, 39);
+                INSERT INTO db_menu VALUES (32, (SELECT MAX(id_item) FROM db_itensmenu), 465, 39);
                 
                 INSERT INTO db_itensmenu VALUES ((SELECT MAX(id_item) + 1 FROM db_itensmenu), \'Extratos Bancarios\', \'\', \'con4_gerarextratobancario.php\',
                     1, 1, \'\', \'t\');
