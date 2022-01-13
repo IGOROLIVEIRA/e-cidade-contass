@@ -20,6 +20,8 @@
     me.lFinalidadeDePagamentoFundeb = false;
     me.iTamanhoCampo                = 12;
     me.lAlteracao                   = false;
+    me.bTemExercicioDevolucao       = false;
+    me.iLinhaExercicioDevolucao     = 0;
   
     if (lReadOnly == null || lReadOnly == 'undefined') {
       me.lReadOnly = false;
@@ -246,7 +248,11 @@
     me.oTxtCodigoFinalidadeFundeb.addEvent("onChange", ";"+me.sNomeInstancia+".pesquisaFinalidadeFundeb(false);");
   
     me.oTxtDescricaoFinalidadeFundeb = new DBTextField("oTxtDescricaoFinalidadeFundeb",    me.sNomeInstancia + ".oTxtDescricaoFinalidadeFundeb",    "", 56);
-  
+
+    // Criando o campo Exercício da Competência da Devolução
+    me.oTxtExercicioCompetenciaDevolucaoInput = new DBTextField('oTxtExercicioCompetenciaDevolucaoInput', me.sNomeInstancia+'.oTxtExercicioCompetenciaDevolucaoInput', '', me.iTamanhoCampo);
+    me.oTxtExercicioCompetenciaDevolucaoInput.setMaxLength(4);
+
     me.oTxtHistoricoInputCodigo                = new DBTextField('oTxtHistoricoInputCodigo', me.sNomeInstancia+'.oTxtHistoricoInputCodigo', '', me.iTamanhoCampo);
     me.oTxtHistoricoInputCodigo.addEvent('onChange', ";"+me.sNomeInstancia+".pesquisaHistorico(false);");
     me.oTxtHistoricoInputDescricao             = new DBTextField('oTxtHistoricoInputDescricao', me.sNomeInstancia+'.oTxtHistoricoInputDescricao', '', 56);
@@ -257,7 +263,7 @@
   
     me.oTxtProcessoInput                       = new DBTextField('oTxtProcessoInput', me.sNomeInstancia+'.oTxtProcessoInput', '', me.iTamanhoCampo);
     me.oTxtProcessoInput.setMaxLength(15);
-    me.oTxtValorInput                          = new DBTextField('oTxtValorInput', me.sNomeInstancia+'.oTxtValorInput', '', 24);
+    me.oTxtValorInput                          = new DBTextField('oTxtValorInput', me.sNomeInstancia+'.oTxtValorInput', '', me.iTamanhoCampo);
   
   
     me.oTxtValorInput.addEvent("onKeyPress", "return js_teclas(event,this)");
@@ -280,6 +286,7 @@
     me.oTxtContaCreditoDescricao.setReadOnly(me.lReadOnly);
     me.oTxtContaCreditoCodigo.setReadOnly(me.lReadOnly);
     me.oTxtContaDebitoCodigo.setReadOnly(me.lReadOnly);
+    me.oTxtExercicioCompetenciaDevolucaoInput.setReadOnly(me.lReadOnly);
     me.oTxtHistoricoInputCodigo.setReadOnly(me.lReadOnly);
     me.oTxtHistoricoInputDescricao.setReadOnly(me.lReadOnly);
     me.oTxtFonteInputCodigo.setReadOnly(me.lReadOnly);
@@ -578,7 +585,7 @@
        */
       var oCellHistoricoInputCodigo = oRowHistorico.insertCell(1);
       me.oTxtHistoricoInputCodigo.show(oCellHistoricoInputCodigo);
-  
+
       /**
        * Descricao Historico
        */
@@ -610,6 +617,20 @@
           me.oTxtFonteInputDescricao.setReadOnly(true);
           me.oTxtFonteInputDescricao.show(oCellFonteInputDescricao);
       }
+
+        /**
+         * Label Exercício da Competência da Devolução
+        */
+        //me.iLinhaExercicioDevolucao = iLinhaTabela; iLinhaTabela++;
+        var oRowExercicioCompetenciaDevolucao = oTabela.insertRow(iLinhaTabela); iLinhaTabela++;
+        var oCelloRowExercicioCompetenciaDevolucaoLabel = oRowExercicioCompetenciaDevolucao.insertCell(0);
+        oCelloRowExercicioCompetenciaDevolucaoLabel.innerHTML = "<strong>Exercício da Competência da Devolução:</strong>";
+    
+        var oCellExercicioCompetenciaDevolucaoInput = oRowExercicioCompetenciaDevolucao.insertCell(1);
+        oCellExercicioCompetenciaDevolucaoInput.colSpan = "2";
+    
+        me.oTxtExercicioCompetenciaDevolucaoInput.show(oCellExercicioCompetenciaDevolucaoInput);
+        
       /**
        * Label Processo
        */
@@ -621,7 +642,6 @@
           oCellProcessoInput.colSpan   = "2";
   
         me.oTxtProcessoInput.show(oCellProcessoInput);
-  
   
       /**
        * Label Valor
@@ -861,6 +881,7 @@
           oParam.iCodigoFonte = me.oTxtFonteInputCodigo.getValue();
       oParam.sCaracteristicaPeculiarDebito  = me.oTxtCaracteristicaDebitoInputCodigo.getValue();
       oParam.sCaracteristicaPeculiarCredito = me.oTxtCaracteristicaCreditoInputCodigo.getValue();
+        oParam.iExercicioCompetenciaDevolucao = me.oTxtExercicioCompetenciaDevolucaoInput.getValue();
       oParam.k17_texto                      = encodeURIComponent(tagString(me.getObservacao()));
       oParam.sCodigoFinalidadeFundeb        = me.oTxtCodigoFinalidadeFundeb.getValue();
       oParam.k145_numeroprocesso            = encodeURIComponent(tagString(me.oTxtProcessoInput.getValue())) ;
@@ -1007,7 +1028,7 @@
   
         sUrlEvento  = "func_contaeventocontabil.php?iTipoTransferencia="+me.iTipoTransferencia;
         sUrlEvento += "&lContaCredito="+lCredito;
-        sUrlEvento += "&funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|reduzido|descricao";
+        sUrlEvento += "&funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|reduzido|descricao|tem_exercicio_devolucao";
       }
   
       if (me.iInscricaoPassivo != null) {
@@ -1018,10 +1039,11 @@
       js_OpenJanelaIframe("", 'db_iframe_'+sIframe, sUrlEvento, "Pesquisa Contas", lMostra);
     };
   
-    me.completaDebito = function(iReduzido, sDescricao) {
+    me.completaDebito = function(iReduzido, sDescricao, bTemExercicioDevolucao) {
   
       me.oTxtContaDebitoCodigo.setValue(iReduzido);
       me.oTxtContaDebitoDescricao.setValue(sDescricao);
+      me.mostrarExercicioDevolucao(bTemExercicioDevolucao);
   
       var sIframeConta = "db_iframe_" + me.sPesquisaContaDebito;
       var oIframe      = eval(sIframeConta);
@@ -1038,10 +1060,11 @@
   
     };
   
-    me.completaCredito = function(iReduzido, sDescricao) {
+    me.completaCredito = function(iReduzido, sDescricao, bTemExercicioDevolucao) {
   
       me.oTxtContaCreditoCodigo.setValue(iReduzido);
       me.oTxtContaCreditoDescricao.setValue(sDescricao);
+      me.mostrarExercicioDevolucao(bTemExercicioDevolucao);
   
       var sIframeConta = "db_iframe_" + me.sPesquisaContaCredito;
       var oIframe      = eval(sIframeConta);
@@ -1682,6 +1705,10 @@
                         });
   
     };
+
+    me.mostrarExercicioDevolucao = function(bTemExercicioDevolucao) {
+        console.log(bTemExercicioDevolucao);
+    }
   
     this.excluir = function() {
   
