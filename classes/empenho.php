@@ -3531,55 +3531,57 @@ class empenho {
               "e100_numemp = {$this->numemp}"
           );
 
+          $oDaoEmpempenho = db_utils::getDao("empempenho");
+          $sSqlAnoEmp     = $oDaoEmpempenho->sql_query_file(null, "e60_anousu", null, "e60_numemp = {$this->numemp}");
+
           $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+          $rsAnoEmp    = $oDaoEmpempenho->sql_record($sSqlAnoEmp) or die($sSqlAnoEmp);
+          
+          $oAnoEmp     = db_utils::fieldsMemory($rsAnoEmp);
 
-        if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
-            $acordoLancamento = true;
-        }
+          if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
 
-        if ((USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) ) {
+              if ($oAnoEmp->e60_anousu < 2022){
 
-              try {
+                  try {
 
-                  $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
-                  if($iAnoUsu < 2022 && $acordoLancamento == true){
+                      $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
+                      $oEventoContabilAcordo = new EventoContabil(903, $iAnoUsu);
+                      $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
+                      $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
+                      $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
+                      $oLancamentoAuxiliarAcordo->setValorTotal(round($nValorEstornado, 2));
 
-                    $oEventoContabilAcordo = new EventoContabil(903, $iAnoUsu);
-                    $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
-                    $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
-                    $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
-                    $oLancamentoAuxiliarAcordo->setValorTotal(round($nValorEstornado, 2));
+                      $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
+                      $oContaCorrenteDetalhe->setAcordo($oAcordo);
+                      $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
+                      $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+                      $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
-                    $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
-                    $oContaCorrenteDetalhe->setAcordo($oAcordo);
-                    $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
-                    $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
-                    $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
+                      $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
 
-                    $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+                      /**
+                       * Incluir novamente saldo da quantidade autorizada do acordo
+                       */
+                      $oDaoEmpempAut   = db_utils::getDao("empempaut");
+                      $rsDaoEmpempAut  = $oDaoEmpempAut->sql_record($oDaoEmpempAut->sql_query_file($this->numemp,"distinct e61_autori as autori"));
+                      if ($oDaoEmpempAut->numrows > 0){
+                          $oDaoEmpempitem  = db_utils::getDao("empempitem");
+                          $aItensAcordo = array();
+                          foreach ($aItens as $oItem) {
+                              $rsEmpempItem = $oDaoEmpempitem->sql_record($oDaoEmpempitem->sql_query_file(null,null,"e62_item",null,"e62_sequencial = {$oItem->iCodItem}"));
+                              $iCodMaterial = db_utils::fieldsmemory($rsEmpempItem, 0)->e62_item;
+                              $aItensAcordo[$iCodMaterial] = clone($oItem);
+                              $aItensAcordo[$iCodMaterial]->pc01_codmater = $iCodMaterial;
+                          }
+                          $oAcordo->anularAutorizacao(db_utils::fieldsMemory($rsDaoEmpempAut,0)->autori, $aItensAcordo);
 
-                  }
-                  /**
-                   * Incluir novamente saldo da quantidade autorizada do acordo
-                   */
-                  $oDaoEmpempAut   = db_utils::getDao("empempaut");
-                  $rsDaoEmpempAut  = $oDaoEmpempAut->sql_record($oDaoEmpempAut->sql_query_file($this->numemp,"distinct e61_autori as autori"));
-                  if ($oDaoEmpempAut->numrows > 0){
-                      $oDaoEmpempitem  = db_utils::getDao("empempitem");
-                      $aItensAcordo = array();
-                      foreach ($aItens as $oItem) {
-                          $rsEmpempItem = $oDaoEmpempitem->sql_record($oDaoEmpempitem->sql_query_file(null,null,"e62_item",null,"e62_sequencial = {$oItem->iCodItem}"));
-                          $iCodMaterial = db_utils::fieldsmemory($rsEmpempItem, 0)->e62_item;
-                          $aItensAcordo[$iCodMaterial] = clone($oItem);
-                          $aItensAcordo[$iCodMaterial]->pc01_codmater = $iCodMaterial;
                       }
-                      $oAcordo->anularAutorizacao(db_utils::fieldsMemory($rsDaoEmpempAut,0)->autori, $aItensAcordo);
+                  } catch (Exception $eErro) {
 
+                      $this->lSqlErro = true;
+                      $this->sErroMsg = "({$eErro->getMessage()})";
                   }
-              } catch (Exception $eErro) {
-
-                  $this->lSqlErro = true;
-                  $this->sErroMsg = "({$eErro->getMessage()})";
               }
           }
 
