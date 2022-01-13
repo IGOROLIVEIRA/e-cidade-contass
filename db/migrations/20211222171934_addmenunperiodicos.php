@@ -1112,6 +1112,23 @@ class Addmenunperiodicos extends AbstractMigration
                             SET db103_camposql='nrinscestab'
                             WHERE db103_sequencial=4000643;
 
+                            -- Auto-generated SQL script #202201122204
+                            UPDATE habitacao.avaliacaopergunta
+                                SET db103_camposql='ceptemp'
+                                WHERE db103_sequencial=4000650;
+                            UPDATE habitacao.avaliacaopergunta
+                                SET db103_camposql='bairrotemp'
+                                WHERE db103_sequencial=4000649;
+                            UPDATE habitacao.avaliacaopergunta
+                                SET db103_camposql='complementotemp'
+                                WHERE db103_sequencial=4000648;
+                            UPDATE habitacao.avaliacaopergunta
+                                SET db103_camposql='nrlogradtemp'
+                                WHERE db103_sequencial=4000647;
+                            UPDATE habitacao.avaliacaopergunta
+                                SET db103_camposql='dsclogradtemp'
+                                WHERE db103_sequencial=4000646;
+
         COMMIT;
         ";
         $this->execute($sql);
