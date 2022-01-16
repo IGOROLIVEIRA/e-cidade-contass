@@ -25,4 +25,4 @@
  *                                licenca/licenca_pt.txt 
  */   
      
-$campos = "distinct  saltes.k13_reduz, saltes.k13_conta, saltes.k13_descr,saltes.k13_saldo,c63_banco,c63_agencia,c63_dvagencia,c63_conta,c63_dvconta,saltes.k13_vlratu,saltes.k13_datvlr,c61_codigo,db83_numerocontratooc,db83_dataassinaturacop, db83_conta, CASE WHEN c60_tipolancamento = 4 AND c60_subtipolancamento = 2 THEN TRUE ELSE FALSE END tem_exercicio_devolucao ";
+$campos = "distinct  saltes.k13_reduz, saltes.k13_conta, saltes.k13_descr,saltes.k13_saldo,c63_banco,c63_agencia,c63_dvagencia,c63_conta,c63_dvconta,saltes.k13_vlratu,saltes.k13_datvlr,c61_codigo,db83_numerocontratooc,db83_dataassinaturacop, db83_conta, c60_tipolancamento, c60_subtipolancamento ";

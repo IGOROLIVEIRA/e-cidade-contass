@@ -86,7 +86,8 @@ $sql = "         select slip.k17_codigo,
                         THEN r1.c61_codigo
                         ELSE k29_recurso
                     END k29_recurso,
-                             o15_descr
+                             o15_descr,
+                             k17_devolucao
                       from slip
 	                     left join conplanoreduz r1 on r1.c61_reduz       = k17_debito
 	                                               and r1.c61_anousu      = extract(year from k17_data)
@@ -113,7 +114,7 @@ $sql = "         select slip.k17_codigo,
                            left join slipprocesso on slip.k17_codigo = slipprocesso.k145_slip
                 WHERE  slip.k17_codigo = " . $get->slip . "
 		          order by slip.k17_codigo";
-
+ 
 $rsSlip = $clslip->sql_record($sql);
 
 $oSlip = db_utils::fieldsMemory($rsSlip, 0);
@@ -266,6 +267,7 @@ if ( !empty($oFinalidadePagamento) ) {
 			<input type='text' size=80 readonly value='<?=$sDescricaoFinalidadeFundeb; ?>' '>
        </td>
 	  </tr>
+
 		<tr>
 		   <td>
          <?=$Lk17_hist; ?>
@@ -328,8 +330,15 @@ if ( !empty($oFinalidadePagamento) ) {
       <td><input type='text' value="<?=@$aSlip->e81_numdoc; ?>" size=15 readonly></td>
 	  
       
-	  
+    
     </tr>    
+    <?php if ($oSlip->k17_devolucao) { ?>
+    <tr>
+        <td><strong>Exercício da Devolução</strong></td>
+        <td><input type='text' value="<?=$oSlip->k17_devolucao; ?>" size=10 readonly '>
+    </tr>
+    <? } ?>
+   
     
     <tr>
 		  <td valign="top" colspan="6">
