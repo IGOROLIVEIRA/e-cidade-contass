@@ -19,7 +19,7 @@
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
  *  junto com este programa; se nao, escreva para a Free Software     
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
+ *  02111-1307, USA.                                                   
  *  
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
@@ -30,14 +30,18 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("classes/db_contabancaria_classe.php");
+require_once("classes/db_db_operacaodecredito_classe.php");
 require_once("dbforms/db_funcoes.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
 $clcontabancaria = new cl_contabancaria;
+$cloperacaodecredito = new cl_db_operacaodecredito;
 $db_opcao        = 22;
 $db_botao        = false;
+
+$cloperacaodecredito->rotulo->label();
 
 if (isset($alterar)) {
 
@@ -46,39 +50,43 @@ if (isset($alterar)) {
   $db_opcao = 2;
   $clcontabancaria->alterar($db83_sequencial);
 
-  db_fim_transacao();
-} else if(isset($chavepesquisa)) {
 
-   $db_opcao = 2;
-   $result   = $clcontabancaria->sql_record($clcontabancaria->sql_query($chavepesquisa)); 
-   db_fieldsmemory($result,0);
-   $db_botao = true;
+  db_fim_transacao();
+} else if (isset($chavepesquisa)) {
+
+  $db_opcao = 2;
+  $result   = $clcontabancaria->sql_record($clcontabancaria->sql_query($chavepesquisa));
+  db_fieldsmemory($result, 0);
+  $db_botao = true;
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table align="center" style="margin-top:20px;">
-  <tr> 
-    <td> 
-    <center>
-			<?
-			  include("forms/db_frmcontabancaria.php");
-			?>
-    </center>
-	</td>
-  </tr>
-</table>
-<?php
-db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
-?>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table align="center" style="margin-top:20px;">
+    <tr>
+      <td>
+        <center>
+          <?
+          include("forms/db_frmcontabancaria.php");
+          ?>
+        </center>
+      </td>
+    </tr>
+  </table>
+  <?php
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
+
 </html>
 <?
 if (isset($alterar)) {
@@ -89,16 +97,16 @@ if (isset($alterar)) {
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
 
-    if($clcontabancaria->erro_campo != "") {
+    if ($clcontabancaria->erro_campo != "") {
 
-      echo "<script> document.form1.".$clcontabancaria->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clcontabancaria->erro_campo.".focus();</script>";
+      echo "<script> document.form1." . $clcontabancaria->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clcontabancaria->erro_campo . ".focus();</script>";
     }
   } else {
     $clcontabancaria->erro(true, true);
   }
 }
-if($db_opcao == 22) {
+if ($db_opcao == 22) {
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>

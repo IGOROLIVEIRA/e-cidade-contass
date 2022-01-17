@@ -32,7 +32,7 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_saltes_classe.php");
 include("classes/db_contabancaria_classe.php");
-
+ 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clsaltes = new cl_saltes;
@@ -43,8 +43,8 @@ $clcontabancaria->rotulo->label("db83_numerocontratooc");
 $clcontabancaria->rotulo->label("db83_dataassinaturacop");
 $ano = db_getsession("DB_anousu"); //ano 
 
-?>
-<html>
+?>  
+<html> 
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
