@@ -48,6 +48,11 @@ $clrotulo->label("l20_numero");
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/micoxUpload.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 
     <script>
         function js_emite() {
@@ -77,12 +82,14 @@ $clrotulo->label("l20_numero");
         function js_importa() {
 
             var codigo = document.form1.l20_codigo.value;
-            var delimitador = document.form1.delimitador.value;
-            var extensao = document.form1.extensao.value;
+            var delimitador = document.form1.delimitador2.value;
+            var extensao = document.form1.extensao2.value;
+            var file = document.form1.PROC.value;
 
             var sQuery = 'l20_codigo=' + codigo;
             sQuery += '&delimitador=' + delimitador;
             sQuery += '&extensao=' + extensao
+            sQuery += '&file=' + file
 
             if (codigo == '' || codigo == null) {
 
@@ -168,14 +175,15 @@ $clrotulo->label("l20_numero");
                     <legend><strong>Importar Julgamento</strong></legend>
                     <table align="center" border='0'>
                         <tr>
-                            <td valign="top">
-                                <b>Enviar arquivo: </b>
+                            <td>
+                                <input type="file" name="PROC" />
+
+                                <div id="PROC" class="recebe">&nbsp;</div>
                             </td>
-                            <td valign='top' style="height: 25px;">
-                                <?php
-                                db_input("uploadfile", 30, 0, true, "file", 1);
-                                db_input("namefile", 30, 0, true, "hidden", 1);
-                                ?>
+                            <td>
+                                <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivoslic.php','PROC','Carregando...','Erro ao carregar')" />
+
+                                <div>&nbsp;</div>
                             </td>
                         </tr>
                         <tr>
@@ -183,8 +191,9 @@ $clrotulo->label("l20_numero");
                             <td align="left" nowrap>
                                 <?
                                 $aDelimitador = array(
-                                    "1" => "ponto-virgula",
-                                    "2" => "pipe"
+                                    "1" => "pipe",
+                                    "2" => "Ponto e vírgula",
+                                    "3" => "Virgula",
                                 );
                                 db_select('delimitador2', $aDelimitador, true, 1, "");
                                 ?>
