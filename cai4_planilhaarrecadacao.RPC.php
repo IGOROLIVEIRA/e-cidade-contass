@@ -519,6 +519,6 @@ function buscaReceitaFundep() {
 
 	}
 
-}
+} 
 
 echo $oJson->encode($oRetorno);
