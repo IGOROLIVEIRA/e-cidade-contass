@@ -2278,7 +2278,10 @@ if ($oInstit->db21_usasisagua == "t") {
     let sRecurso = $('recurso').value;
     let iAno = $('anoUsu').value;
 
-    return (iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
+    if ($('anoUsu').value>2021) 
+      return (iAno > 2021 && sRecurso == '118' && (sEstrutural == '417515001' || sEstrutural == '417180911')) ? true : false;
+    else
+      return (iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
 
   }
 

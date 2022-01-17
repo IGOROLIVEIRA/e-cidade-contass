@@ -501,7 +501,12 @@ function buscaReceitaFundep() {
 
 	$oDaoTabRec = db_utils::getDao('tabrec');
 	$sCampos 	= "tabrec.k02_codigo, k02_descr, o70_codigo";
-	$sWhere 	= "k02_estorc like '417580111%' and o70_codigo = '119' limit 1";
+
+	if (db_getsession("DB_anousu") > 2021) 
+    $sWhere 	= "k02_estorc like '417515001%' and o70_codigo = '119' limit 1";
+  else
+	  $sWhere 	= "k02_estorc like '417580111%' and o70_codigo = '119' limit 1";
+    
 	$sSqlTabRec = $oDaoTabRec->sql_query_concarpeculiar(null, $sCampos, null, $sWhere);
 	$rsTabRec 	= $oDaoTabRec->sql_record($sSqlTabRec);
 
