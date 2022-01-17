@@ -963,7 +963,8 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoConvenio();
   }
 
-  function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
+  if($('anoUsu').value >= 2022){
+    function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
 
     $('k81_receita').value = iReceita;
     $('k02_drecei').value = sReceita;
@@ -1012,7 +1013,51 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoConta();
     js_mostrarNotificacaoConvenio();
 
-  }
+    }
+}else{
+  function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
+
+      $('k81_receita').value = iReceita;
+      $('k02_drecei').value = sReceita;
+      $('recurso').value = chave3;
+      $('estrutural').value = chave4;
+      $('k02_tipo').value = chave5;
+     
+      if ($('anoUsu').value >= 2022) {
+        if ($('estrutural').value.substr(0, 7) == '4121004' || $('estrutural').value.substr(0, 7) == '4721004' || $('estrutural').value.substr(0, 5) == '41215' || $('estrutural').value.substr(0, 5) == '47215') {
+          if ($('bAtualiza').value == 0) {
+            $('k81_numcgm').value = '';
+            $('z01_nome').value = '';
+          }
+        } else {
+          js_getCgmConta($('k81_conta').value);
+        }
+      } else {
+            if ($('estrutural').value.substr(0, 7) == '4121004' || $('estrutural').value.substr(0, 7) == '4721004' || $('estrutural').value.substr(0, 5) == '41218' || $('estrutural').value.substr(0, 5) == '47218') {
+              if ($('bAtualiza').value == 0) {
+                $('k81_numcgm').value = '';
+                $('z01_nome').value = '';
+              }
+            } else {
+              js_getCgmConta($('k81_conta').value);
+            }
+          }
+
+          if ($('anoUsu').value >= 2020) {
+
+            js_verificaEmendaParlamentar();
+            js_verificaRegularizaRepasse();
+
+          }
+
+          db_iframe_tabrec.hide();
+          js_verificaReceita();
+          js_mostrarNotificacaoEstruturais();
+          js_mostrarNotificacaoConta();
+          js_mostrarNotificacaoConvenio();
+
+        }
+}
 
   /**
    * Pesquisa CGM
@@ -2278,9 +2323,12 @@ if ($oInstit->db21_usasisagua == "t") {
     let sRecurso = $('recurso').value;
     let iAno = $('anoUsu').value;
 
-    return (iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
+    if ($('anoUsu').value>2021) 
+      return (iAno > 2021 && sRecurso == '118' && (sEstrutural == '417515001' || sEstrutural == '417180911')) ? true : false;
+    else
+      return (iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
 
-  }
+  } 
 
   /**
    * Em arrecadações do fundeb, a receita é desdobrada em duas fontes: 
