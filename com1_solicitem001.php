@@ -491,6 +491,7 @@ if (isset($incluir) && $sqlerro == false) {
 
       $clsolicitemunid->pc17_unid = $pc17_unid;
       $clsolicitemunid->pc17_quant = $pc17_quant;
+      $clsolicitemunid->pc17_codigo = $pc11_codigo;
       $clsolicitemunid->incluir($pc11_codigo);
       if ($clsolicitemunid->erro_status == 0) {
         $erro_msg = $clsolicitemunid->erro_msg;
@@ -504,6 +505,7 @@ if (isset($incluir) && $sqlerro == false) {
     if($pc11_servicoquantidade == 'false' && $pc01_servico == "t"){
       $clsolicitemunid->pc17_unid = 999999;
       $clsolicitemunid->pc17_quant = 1;
+      $clsolicitemunid->pc17_codigo = $pc11_codigo;
       $clsolicitemunid->incluir($pc11_codigo);
       if ($clsolicitemunid->erro_status == 0) {
         $erro_msg = $clsolicitemunid->erro_msg;

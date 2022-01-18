@@ -33,11 +33,12 @@
  * @version   $Revision: 1.15 $
  */
 
-require_once ('model/itemSolicitacao.model.php');
-final class ItemEstimativa extends itemSolicitacao {
+require_once('model/itemSolicitacao.model.php');
+final class ItemEstimativa extends itemSolicitacao
+{
 
 
-   /**
+  /**
    * Código do item no registro de preço
    *
    * @var integer;
@@ -52,7 +53,8 @@ final class ItemEstimativa extends itemSolicitacao {
    * @param integer $iMaterial        Codifgo do material (pcmater.pc01_codmater)
    * @return \ItemEstimativa
    */
-  function __construct($iItemSolicitacao = null, $iMaterial = null) {
+  function __construct($iItemSolicitacao = null, $iMaterial = null)
+  {
 
     parent::__construct($iItemSolicitacao, $iMaterial);
     if (!empty($this->iCodigoItemSolicitacao)) {
@@ -61,16 +63,18 @@ final class ItemEstimativa extends itemSolicitacao {
        * Consultamos as informacoes do registro do preco
        */
       $oDaoSolicitemRegistro = db_utils::getDao("solicitemregistropreco");
-      $sSqlRegistro          = $oDaoSolicitemRegistro->sql_query_file(null,"*",
-                                                                      null,
-                                                                      "pc57_solicitem={$this->iCodigoItemSolicitacao}"
-                                                                      );
+      $sSqlRegistro          = $oDaoSolicitemRegistro->sql_query_file(
+        null,
+        "*",
+        null,
+        "pc57_solicitem={$this->iCodigoItemSolicitacao}"
+      );
       $rsRegistro            = $oDaoSolicitemRegistro->sql_record($sSqlRegistro);
       if ($oDaoSolicitemRegistro->numrows > 0) {
 
-         $oItemRegistro               = db_utils::fieldsMemory($rsRegistro, 0);
-         $this->nQuantidadeExecedente = $oItemRegistro->pc57_quantidadeexecedente;
-         $this->iCodigoRegistro       = $oItemRegistro->pc57_sequencial;
+        $oItemRegistro               = db_utils::fieldsMemory($rsRegistro, 0);
+        $this->nQuantidadeExecedente = $oItemRegistro->pc57_quantidadeexecedente;
+        $this->iCodigoRegistro       = $oItemRegistro->pc57_sequencial;
       }
     }
   }
@@ -82,7 +86,8 @@ final class ItemEstimativa extends itemSolicitacao {
    * @throws Exception
    * @return ItemEstimativa
    */
-  public function save($iSolicitacao) {
+  public function save($iSolicitacao)
+  {
 
     parent::save($iSolicitacao);
     /**
@@ -108,7 +113,7 @@ final class ItemEstimativa extends itemSolicitacao {
     if ($oDaoSolicitemRegistro->erro_status == 0) {
 
       $sErroMsg = "Erro ao salvar item {$this->getCodigoMaterial()}!\n";
-      $sErroMsg.= "Erro Retornado:{$oDaoSolicitemRegistro->erro_msg}";
+      $sErroMsg .= "Erro Retornado:{$oDaoSolicitemRegistro->erro_msg}";
       throw new Exception($sErroMsg);
     }
     return $this;
@@ -119,11 +124,12 @@ final class ItemEstimativa extends itemSolicitacao {
    * @param float $nQuantidade Quantidade do item
    * @return ItemEstimativa
    */
-  public function setQuantidade($nQuantidade) {
+  public function setQuantidade($nQuantidade)
+  {
 
     $nPercentual                 = ParametroRegistroPreco::getPercentualExecedente();
     $this->nQuantidade           = $nQuantidade;
-    $this->nQuantidadeExecedente = round((($this->nQuantidade * $nPercentual)/100));
+    $this->nQuantidadeExecedente = round((($this->nQuantidade * $nPercentual) / 100));
     return $this;
   }
 
@@ -131,7 +137,8 @@ final class ItemEstimativa extends itemSolicitacao {
    * Retorna as Quantidades Solicitadas do Item
    * @return float
    */
-  public function getQuantidadesSolicitadas() {
+  public function getQuantidadesSolicitadas()
+  {
 
     $oDaoSolicitem              = db_utils::getDao("solicitem");
     $sCampos                    = "coalesce(sum(registropreco.pc11_quant), 0) as total";
@@ -153,7 +160,8 @@ final class ItemEstimativa extends itemSolicitacao {
    * Retorna os Valores Solicitados do Item
    * @return float
    */
-  public function getValorSolicitado() {
+  public function getValorSolicitado()
+  {
 
     $oDaoSolicitem              = db_utils::getDao("solicitem");
     $sCampos                    = "coalesce(sum(registropreco.pc11_quant * registropreco.pc11_vlrun), 0) as total";
@@ -173,31 +181,32 @@ final class ItemEstimativa extends itemSolicitacao {
    * Verifica a quantidade de itens cedidos/Recebidos.
    * @return stdClass com as quantidades cedidas/recebidas
    */
-  public function  getQuantidadesCedencias() {
+  public function  getQuantidadesCedencias()
+  {
 
-  	$oDaoCedenciaItem            = db_utils::getDao("registroprecocedenciaitem");
-  	$sCampos                     = "coalesce(sum(case when pc36_solicitemorigem = {$this->getCodigoItemSolicitacao()} ";
-  	$sCampos                    .= " then pc36_quantidade else 0 end), 0) as cedidas,                                                                 ";
-  	$sCampos                    .= "coalesce(sum(case when pc36_solicitemdestino = {$this->getCodigoItemSolicitacao()} ";
-  	$sCampos                    .= "  then pc36_quantidade else 0 end), 0) as recebidas                                                                ";
-  	$sWhere                      = "pc36_solicitemorigem     = {$this->getCodigoItemSolicitacao()} ";
-  	$sWhere                     .= "or pc36_solicitemdestino = {$this->getCodigoItemSolicitacao()} ";
-  	$sSqlDadosCedencia           = $oDaoCedenciaItem->sql_query_file(null, $sCampos, null, $sWhere);
-  	$rsDadosCedencia             = $oDaoCedenciaItem->sql_record($sSqlDadosCedencia);
+    $oDaoCedenciaItem            = db_utils::getDao("registroprecocedenciaitem");
+    $sCampos                     = "coalesce(sum(case when pc36_solicitemorigem = {$this->getCodigoItemSolicitacao()} ";
+    $sCampos                    .= " then pc36_quantidade else 0 end), 0) as cedidas,                                                                 ";
+    $sCampos                    .= "coalesce(sum(case when pc36_solicitemdestino = {$this->getCodigoItemSolicitacao()} ";
+    $sCampos                    .= "  then pc36_quantidade else 0 end), 0) as recebidas                                                                ";
+    $sWhere                      = "pc36_solicitemorigem     = {$this->getCodigoItemSolicitacao()} ";
+    $sWhere                     .= "or pc36_solicitemdestino = {$this->getCodigoItemSolicitacao()} ";
+    $sSqlDadosCedencia           = $oDaoCedenciaItem->sql_query_file(null, $sCampos, null, $sWhere);
+    $rsDadosCedencia             = $oDaoCedenciaItem->sql_record($sSqlDadosCedencia);
     $oItemQuantidades            = new stdClass();
     $oDadosCedencia              = db_utils::fieldsMemory($rsDadosCedencia, 0);
     $oItemQuantidades->cedidas   = $oDadosCedencia->cedidas;
     $oItemQuantidades->recebidas = $oDadosCedencia->recebidas;
     unset($oDadosCedencia);
     return $oItemQuantidades;
-
   }
 
   /**
    * Verifica a Quantidade de Itens Que já foram Empenhadas pelo Departamento
    * @return float
    */
-  public function getQuantidadesEmpenhadas() {
+  public function getQuantidadesEmpenhadas()
+  {
 
     $oDaoSolicitem              = db_utils::getDao("solicitem");
     $sCampos                    = "coalesce(sum(e62_quant), 0) as total";
@@ -218,7 +227,8 @@ final class ItemEstimativa extends itemSolicitacao {
    * Verifica o Valor de Itens Que já foram Empenhados
    * @return float
    */
-  public function getValoresEmpenhados() {
+  public function getValoresEmpenhados()
+  {
 
     $oDaoSolicitem              = db_utils::getDao("solicitem");
     $sCampos                    = "coalesce(sum(e62_vltot), 0) as total";
@@ -237,7 +247,8 @@ final class ItemEstimativa extends itemSolicitacao {
    * Retorna as quantidades empenhadas, solicitadas e transferidas do material.
    * @return Object stdClass
    */
-  public function getMovimentacao() {
+  public function getMovimentacao()
+  {
 
     /**
      * Verifica a forma de controle do regiostro de preço
@@ -261,7 +272,7 @@ final class ItemEstimativa extends itemSolicitacao {
     }
 
     $oMovimentacao->saldo = ($oMovimentacao->quantidade + $oMovimentacao->recebidas + $oMovimentacao->execedente) -
-                            ($oMovimentacao->solicitada + $oMovimentacao->cedidas);
+      ($oMovimentacao->solicitada + $oMovimentacao->cedidas);
 
     return $oMovimentacao;
   }
@@ -269,7 +280,8 @@ final class ItemEstimativa extends itemSolicitacao {
   /**
    * Traz as movimentações em valor
    */
-  private function getMovimentacaoValor() {
+  private function getMovimentacaoValor()
+  {
 
     $oMovimentacao = new stdClass();
 
@@ -286,7 +298,8 @@ final class ItemEstimativa extends itemSolicitacao {
   /**
    * Traz as movimentações em quantidade
    */
-  private function getMovimentacaoQuantidade() {
+  private function getMovimentacaoQuantidade()
+  {
 
     $oMovimentacao             = new stdClass();
     $oMovimentacao->quantidade = $this->getQuantidade();
@@ -305,7 +318,8 @@ final class ItemEstimativa extends itemSolicitacao {
    * Retorna todas as cedencias que o item cedeu
    * @return Array
    */
-  public function getCedenciasRealizadas() {
+  public function getCedenciasRealizadas()
+  {
 
     $aCedencias        = array();
     $oDaoCedenciaItens = db_utils::getDao("registroprecocedenciaitem");
@@ -324,7 +338,8 @@ final class ItemEstimativa extends itemSolicitacao {
    * Retorna todas as cedencias que o item recebe
    * @return Array
    */
-  public function getCedenciasRecebidas() {
+  public function getCedenciasRecebidas()
+  {
 
     $aCedencias        = array();
     $oDaoCedenciaItens = db_utils::getDao("registroprecocedenciaitem");
@@ -336,13 +351,13 @@ final class ItemEstimativa extends itemSolicitacao {
     $rsCedencia        = $oDaoCedenciaItens->sql_record($sSqlCedencia);
     $aCedencias        = db_utils::getCollectionByRecord($rsCedencia);
     return $aCedencias;
-
   }
 
   /**
    * retorna a quantidade execedente do item
    */
-  public function getQuantidadeExecedente() {
+  public function getQuantidadeExecedente()
+  {
     return $this->nQuantidadeExecedente;
   }
 
@@ -350,17 +365,19 @@ final class ItemEstimativa extends itemSolicitacao {
    * retorna o codigo do item no registro de preco
    * @return integer
    */
-  public function getCodigoRegistro() {
+  public function getCodigoRegistro()
+  {
     return $this->iCodigoRegistro;
   }
 
-  public function remover() {
+  public function remover()
+  {
 
     /**
      * excluimos o vinculo do item na solicitacao;
      */
     $oDaoSolicitemVinculo = db_utils::getDao("solicitemvinculo");
-    $oDaoSolicitemVinculo->excluir(null,"pc55_solicitemfilho = {$this->getCodigoItemSolicitacao()}");
+    $oDaoSolicitemVinculo->excluir(null, "pc55_solicitemfilho = {$this->getCodigoItemSolicitacao()}");
     if ($oDaoSolicitemVinculo->erro_status == 0) {
       throw new Exception("Erro ao excluir item da Estimativa.");
     }
@@ -373,4 +390,3 @@ final class ItemEstimativa extends itemSolicitacao {
     parent::remover();
   }
 }
-
