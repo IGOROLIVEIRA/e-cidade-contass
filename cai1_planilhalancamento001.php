@@ -441,7 +441,7 @@ if ($oInstit->db21_usasisagua == "t") {
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
 </body>
-
+ 
 </html>
 
 <script>
@@ -451,9 +451,10 @@ if ($oInstit->db21_usasisagua == "t") {
   if ($('anoUsu').value >= 2020) {
     document.getElementById("k81_emparlamentar").options[3].selected = true;
     let lEmendaParlamentarObrigatoria = false;
-  }
+  } 
 
   function js_pesquisak81_convenio(mostra) {
+   
     if (mostra == true) {
       js_OpenJanelaIframe('', 'db_iframe_convconvenios', 'func_convconvenios.php?funcao_js=parent.js_mostrak81_convenio1|c206_sequencial|c206_objetoconvenio', 'Pesquisa', true);
     } else {
@@ -462,7 +463,7 @@ if ($oInstit->db21_usasisagua == "t") {
       } else {
         document.form1.c206_objetoconvenio.value = '';
       }
-    }
+    } 
   }
 
   function js_mostrak81_convenio(chave, erro) {
@@ -714,14 +715,15 @@ if ($oInstit->db21_usasisagua == "t") {
     $('c61_codigo').value = iCodigoRecurso;
     var recursoreceita = $('recurso').value;
     
-    if (iCodigoConta != '' & idb83_numerocontratooc != '') {
-      $('db83_numerocontratooc').value = idb83_numerocontratooc;
-    } 
-    if (idb83_dataassinaturacop != '') {
-      const data = idb83_dataassinaturacop.split('-');
-      $('db83_dataassinaturacop').value = data[2] + "/" + data[1] + "/" + data[0];
-    } 
-    
+    if ($('anoUsu').value >= 2022) {
+        if (iCodigoConta != '' & idb83_numerocontratooc != '') {
+          $('db83_numerocontratooc').value = idb83_numerocontratooc;
+        } 
+        if (idb83_dataassinaturacop != '') {
+          const data = idb83_dataassinaturacop.split('-');
+          $('db83_dataassinaturacop').value = data[2] + "/" + data[1] + "/" + data[0];
+        } 
+  }
     
     iCodRecursoConta = $F('c61_codigo').substr(-3);
 
@@ -801,7 +803,7 @@ if ($oInstit->db21_usasisagua == "t") {
     $('c61_codigo').value = iCodigoRecurso;
     var recursoreceita = $('recurso').value;
     
-    <?php if ($ano >= 2022) { ?>
+    if ($('anoUsu').value >= 2022) {
       if (iCodigoConta != '') {
         $('db83_numerocontratooc').value = idb83_numerocontratooc;
       } else {
@@ -813,8 +815,7 @@ if ($oInstit->db21_usasisagua == "t") {
       } else {
         $('db83_dataassinaturacop').value = '';
       }
-
-      
+     
       if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
         document.getElementById('numerocontrato').style.display = "";
         document.getElementById('datacontrato').style.display = "";
@@ -822,7 +823,8 @@ if ($oInstit->db21_usasisagua == "t") {
         document.getElementById('numerocontrato').style.display = "none";
         document.getElementById('datacontrato').style.display = "none";
       }
-    <?php } ?>
+    }
+
     iCodRecursoConta = $F('c61_codigo').substr(-3);
 
     if ($F('estrutural').substr(0, 3) == '211') {
@@ -861,9 +863,7 @@ if ($oInstit->db21_usasisagua == "t") {
     } else {
 
       if (iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142 || iCodRecursoConta == 163) {
-
         js_getSaltesConvenio(iCodigoConta);
-
       } else {
 
         $('k81_convenio').value = '';
@@ -918,6 +918,7 @@ if ($oInstit->db21_usasisagua == "t") {
     $('estrutural').value = chave4;
     $('k02_tipo').value = chave6;
 
+    if($('anoUsu').value >= 2022){
     var recursoreceita = $('recurso').value;
     if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
         document.getElementById('numerocontrato').style.display = "";
@@ -926,6 +927,7 @@ if ($oInstit->db21_usasisagua == "t") {
         document.getElementById('numerocontrato').style.display = "none";
         document.getElementById('datacontrato').style.display = "none";
     }
+  }
     if (erro) {
       $('k81_receita').focus();
       $('k81_receita').value = '';
