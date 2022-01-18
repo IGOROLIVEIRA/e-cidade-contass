@@ -601,3 +601,13 @@ pmgraomogol:
     environment: production
     only:
         - master
+
+pmmonteazul:
+    stage: deploy
+    script:
+        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmmonteazul.contassconsultoria.com.br "cd /var/www/e-cidade && git checkout . && git pull origin master "'
+        - 'ssh -p22 contass@pmmonteazul.contassconsultoria.com.br "cd /var/www/e-cidade && git checkout . && php deploy_git.php "'
+    environment: production
+    only:
+        - master
