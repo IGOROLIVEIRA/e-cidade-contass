@@ -899,4 +899,3 @@ function imprimeCabecalho(&$oPdf, $iAlt, $iAbertura, $iCompilacao, $lQuebraPagin
   $oPdf->cell(25, $iAlt, "Empenhar"   , "TB", 1, "C", 1);
 
 }
-?>
