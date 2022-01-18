@@ -213,11 +213,11 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
     function js_pesquisal202_licitacao(mostra){
         let opcao = "<?= $db_opcao?>";
-        var situacao = 0;
-        var homologacao = 0;
+        var situacao = 10;
+        var homologacao = 0; 
         if(mostra==true){
             js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
-                '&funcao_js=parent.js_mostraliclicita3|l20_codigo|l20_objeto|l20_numero|l202_datahomologacao|l202_sequencial&validafornecedor=1&homologacao='+homologacao,'Pesquisa',true);
+                '&funcao_js=parent.js_mostraliclicita3|l20_codigo|l20_objeto|l20_numero|l202_datahomologacao|l202_sequencial&validafornecedor=0&homologacao=0'+homologacao,'Pesquisa',true);
         }else{
             if(document.form1.l202_licitacao.value != ''){
                 js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
@@ -248,7 +248,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
             
                 if(mostra==true){
                     js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_licadjudica.php?situacao='+situacao+
-                        '&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|l20_numero|l202_dataadjudicacao&validafornecedor=1&adjudicacao='+adjudicacao,'Pesquisa',true);
+                        '&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|l20_numero|l202_dataadjudicacao&validafornecedor=0&adjudicacao='+adjudicacao,'Pesquisa',true);
                 }else{
                     if(document.form1.l202_licitacao1.value != ''){
                         js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_licadjudica.php?situacao='+situacao+

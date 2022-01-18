@@ -394,7 +394,7 @@ $clcgm->rotulo->label();
       "nValor": nValorCreditoUtilizado,
       "aDebitos": [],
       "iAbatimento": $F("abatimento"),
-      "txtObservacao": $F("txtObservacao").urlEncode(),
+      "txtObservacao": $F("txtObservacao").urlDecode(),
       "iRegraCompensacao": $F("regra_compensacao")
     };
 

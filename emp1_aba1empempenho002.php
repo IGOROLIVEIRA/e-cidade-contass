@@ -122,7 +122,7 @@ if(isset($alterar)){
             $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
             if (!$rsResult) {
                 $sqlerro  = true;
-                $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124 e 142.\n";
+                $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183.\n";
             }
 
         }

@@ -27,8 +27,14 @@
 
 //MODULO: Configuracoes
 $clcontabancaria->rotulo->label();
+$cloperacaodecredito->rotulo->label();
+
 $clrotulo = new rotulocampo;
+
+
+
 $clrotulo->label("db89_codagencia");
+$clrotulo->label("op01_numerocontratoopc");
 $ano = db_getsession("DB_anousu"); //ano 
 
 
@@ -110,34 +116,24 @@ $ano = db_getsession("DB_anousu"); //ano
 						?>
 					</td>
 				</tr>
-				<!-- OC16190 -->
-
+				<!-- OC16314 -->
 				<tr>
-					<td nowrap title="<?= @$Tdb83_numerocontratooc ?>">
-						<?= @$Ldb83_numerocontratooc ?>
+					<td nowrap title="<?= substr(@$Tdb83_numerocontratooc, 18, 50) ?>">
+						<?= db_ancora(substr(@$Ldb83_numerocontratooc, 26, 50), "js_pesquisaop01_db_operacaodecredito(true);", $db_opcao); ?>
 					</td>
-					<td>
-						<?
-						db_input('db83_numerocontratooc', 15, 1, true, 'text', $db_opcao, "");
-						?>
-					</td>
-				</tr>
-				<tr>
 					<td nowrap title="<?= @$Tdb83_dataassinaturacop ?>">
-						<?= @$Ldb83_dataassinaturacop  ?>
-
-					</td>
-					<td>
 						<?
+						db_input('db83_codigoopcredito', 10, $db83_codigoopcredito, true, '', 1, " onchange='js_pesquisaop01_db_operacaodecredito(false);'");
+						db_input('db83_numerocontratooc', 38, $Idb83_numerocontratooc, true, 'text', 3);
 						$data = explode("-", $db83_dataassinaturacop);
-						$db83_dataassinaturacop_dia = $data[2];
+						$db83_dataassinaturacop_dias = $data[2];
 						$db83_dataassinaturacop_mes = $data[1];
 						$db83_dataassinaturacop_ano = $data[0];
-						db_inputdata('db83_dataassinaturacop', @$db83_dataassinaturacop_dia, @$db83_dataassinaturacop_mes, @$db83_dataassinaturacop_ano, true, 'text', $db_opcao);
+						db_input('db83_dataassinaturacop', 10, $Idb83_dataassinaturacop, true, 'text', 3);
 						?>
 					</td>
 				</tr>
-				<!-- OC16190 -->
+				<!-- OC16314 -->
 				<tr>
 					<td nowrap title="<?= @$Tdb83_tipoconta ?>">
 						<?= @$Ldb83_tipoconta ?>
@@ -166,7 +162,7 @@ $ano = db_getsession("DB_anousu"); //ano
 							?>">
 	      <? //=@$Ldb83_convenio
 			?>
-	    </td>
+	    </td> 
 	    <td>
 				<?
 				//$aConvenio = array('2' => 'Não','1' => 'Sim');
@@ -289,24 +285,43 @@ $ano = db_getsession("DB_anousu"); //ano
 			}
 		}
 	}
-
+	function js_pesquisaop01_db_operacaodecredito(mostra) {
+		if (mostra == true) {
+			js_OpenJanelaIframe('top.corpo', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?funcao_js=parent.js_mostraoperacaodecredito1|op01_sequencial|op01_numerocontratoopc|op01_dataassinaturacop|db83_numerocontratooc|db83_dataassinaturacop|db83_codigoopcredito', 'Pesquisa', true);
+		} else {
+			if (document.form1.db83_codigoopcredito.value != '') {
+				js_OpenJanelaIframe('top.corpo', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?pesquisa_chave=' + document.form1.db83_codigoopcredito.value +'&funcao_js=parent.js_mostraoperacaodecredito', 'Pesquisa', false);
+			} else {
+				document.form1.db83_numerocontratooc.value = '';
+				document.form1.db83_dataassinaturacop.value = '';
+			}
+		}	
+	}
 	function js_mostrabancoagencia(chave, chave1, erro) {
-
 		document.form1.db89_codagencia.value = chave;
 		document.form1.db89_digito.value = chave1;
 		document.form1.db83_bancoagencia.value = '';
-
 	}
-
 	function js_mostrabancoagencia1(chave1, chave2, chave3) {
-
 		document.form1.db83_bancoagencia.value = chave1;
 		document.form1.db89_codagencia.value = chave2;
 		document.form1.db89_digito.value = chave3;
-
 		db_iframe_bancoagencia.hide();
-
 	}
+	function js_mostraoperacaodecredito1(chave,chave1,chave2,chave3,chave4) {
+		document.form1.db83_codigoopcredito.value = chave;
+		document.form1.db83_numerocontratooc .value = chave1;
+		var data = chave2.split("-", 3);
+		document.form1.db83_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];
+		db_iframe_db_operacaodecredito.hide();
+	}
+	
+	function js_mostraoperacaodecredito(chave,chave1,erro) {
+		document.form1.db83_numerocontratooc .value = chave;
+		var data = chave1.split("-", 3);
+		document.form1.db83_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];
+	}
+
 
 	function js_pesquisa() {
 		js_OpenJanelaIframe('top.corpo', 'db_iframe_contabancaria', 'func_contabancariacadastro.php?convenio=true&funcao_js=parent.js_preenchepesquisa|db83_sequencial', 'Pesquisa', true);

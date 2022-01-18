@@ -42,6 +42,7 @@ include("classes/db_orcreserva_classe.php");
 include("classes/db_orcsuplemrec_classe.php");
 include("classes/db_orcsuplemval_classe.php");
 include("classes/db_orcsuplementacaoparametro_classe.php");
+include("classes/db_db_operacaodecredito_classe.php");
 db_app::import("orcamento.suplementacao.*");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
@@ -54,6 +55,7 @@ $clorcreserva    = new cl_orcreserva;
 $clorcprojeto    = new cl_orcprojeto;
 $clorcsuplemtipo = new cl_orcsuplemtipo;
 $clcriaabas      = new cl_criaabas;
+$cloperacaodecredito = new cl_db_operacaodecredito;
 
 $clorcprojeto->rotulo->label();
 
@@ -142,7 +144,7 @@ if (isset($chavepesquisa) && $chavepesquisa !="") {
      $rsSuplementacoes     = $clorcsuplem->sql_record($sSqlSuplementacoes);
      $aSuplementacao       = db_utils::getCollectionByRecord($rsSuplementacoes);
      $valorutilizado       = 0;
-     if ($o39_usalimite == 't') {
+     if ($o39_usalimite == 't') { 
 
        foreach ($aSuplementacao as $oSuplem) {
 

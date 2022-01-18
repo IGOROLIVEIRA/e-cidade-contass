@@ -64,10 +64,10 @@ if($tipo == 'c'){
   $head3 = "RELATÓRIO DE CARGOS";
   if($ordem == 'a'){
     $sCampos = " rh37_funcao as quebra2, rh37_descr as quebra1 , rh37_vagas, rh37_funcao||' - '|| rh37_descr as imprime ";
-    $sOrder  = ' order by rh37_descr,z01_nome';
+    $sOrder  = ' order by rh37_descr,rh37_funcao,z01_nome';
   }else{
     $sCampos = " rh37_funcao as quebra1, rh37_descr as quebra2 , rh37_vagas , rh37_funcao||' - '|| rh37_descr as imprime ";
-    $sOrder  = ' order by rh37_funcao,z01_nome';
+    $sOrder  = ' order by rh37_funcao,rh37_descr,z01_nome';
   }
  if(isset($cai) && trim($cai) != "" && isset($caf) && trim($caf) != ""){
     // Se for por intervalos e vier lotação inicial e final
@@ -234,7 +234,7 @@ for( $iRegistro = 0; $iRegistro < pg_numrows($rsDAORhpessoalmov); $iRegistro++ )
     $troca = 0;
   }
    
-  if ( $funcao != $quebra1 ){
+  if ( $funcao != $quebra1.$quebra2 ){
   	
    if($funcao != ''){
      $pdf->ln(1);
@@ -306,7 +306,7 @@ for( $iRegistro = 0; $iRegistro < pg_numrows($rsDAORhpessoalmov); $iRegistro++ )
      $pdf->cell(95,$alt,$imprime,0,1,"L",1);
    }
    
-   $funcao = $quebra1;
+   $funcao = $quebra1.$quebra2;
   }
   
   if($funcion == 't'){

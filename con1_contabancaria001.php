@@ -15,11 +15,11 @@
  *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
  *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
  *  detalhes.                                                         
- *                                                                    
+ *                                                                     
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
  *  junto com este programa; se nao, escreva para a Free Software     
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
+ *  02111-1307, USA.                                                   
  *  
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
@@ -30,13 +30,18 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("classes/db_contabancaria_classe.php");
+require_once("classes/db_db_operacaodecredito_classe.php");
 require_once("dbforms/db_funcoes.php");
 
 db_postmemory($HTTP_POST_VARS);
 
 $clcontabancaria = new cl_contabancaria;
+$cloperacaodecredito = new cl_db_operacaodecredito;
 $db_opcao        = 1;
 $db_botao        = true;
+$cloperacaodecredito->rotulo->label();
+
+$anousu = db_getsession("DB_anousu");
 
 if (isset($incluir)) {
 

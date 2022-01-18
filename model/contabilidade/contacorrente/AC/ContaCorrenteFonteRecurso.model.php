@@ -74,7 +74,7 @@ class ContaCorrenteFonteRecurso extends ContaCorrenteBase implements IContaCorre
     $iReduzido = $this->getContaPlano()->getReduzido();
     $iAnoUsuConplano = $this->getContaPlano()->getAno();
     $iRecurso = $this->oContaCorrenteDetalhe->getRecurso()->getCodigo();
-
+    
     /**
      * Verificamos se já existem os dados na tabela contacorrentedetalhe
      */
