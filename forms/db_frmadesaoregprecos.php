@@ -6,6 +6,28 @@ $clrotulo->label("z01_nome");
 $clrotulo->label("z01_nome");
 $clrotulo->label("z01_nome");
 $clrotulo->label("si06_anoproc");
+
+
+if (strpos($_SERVER['HTTP_REFERER'], 'con4_adesaoitensregprecos002.php')) {
+  $db_opcao = 2;
+  echo "<script> ";
+  echo "parent.document.formaba.db_itens.disabled = true;
+  js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', 'func_adesaoregprecos.php?funcao_js=parent.js_preenchepesquisa|si06_sequencial|si06_anocadastro', 'Pesquisa', true);";
+  echo "</script>";
+}
+
+if (strpos($_SERVER['HTTP_REFERER'], 'con4_adesaoitensregprecos003.php')) {
+  $db_opcao = 3;
+  echo "<script> ";
+  echo "parent.document.formaba.db_itens.disabled = true;
+  js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', 'func_adesaoregprecos.php?funcao_js=parent.js_preenchepesquisa|si06_sequencial|si06_anocadastro', 'Pesquisa', true);";
+  echo "</script>";
+}
+
+if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
+  $db_opcao = 3;
+}
+
 ?>
 <fieldset style="width: 650px; margin-top: 0px;">
   <legend><b>Informações do Orgão Gerenciador</b></legend>
@@ -264,10 +286,13 @@ $clrotulo->label("si06_anoproc");
   </center>
 </fieldset>
 <div align="center">
+
   <? if ($db_opcao == 1 || $db_opcao == 2 || $db_opcao == 22) { ?>
     <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
   <? } ?>
-  <input name="excluir" type="submit" id="db_opcao" value="Excluir">
+  <? if ($db_opcao == 3) { ?>
+    <input name="excluir" type="submit" id="db_opcao" value="Excluir">
+  <? } ?>
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </div>
 </form>
