@@ -170,6 +170,7 @@ class cl_adesaoregprecos
   // funcao para inclusao
   function incluir($si06_sequencial)
   {
+    echo "$this->si06_leidalicitacao";
     $this->atualizacampos();
     if ($this->si06_orgaogerenciador == null) {
       $this->erro_sql = " Campo Orgão Gerenciador nao Informado.";
