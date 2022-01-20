@@ -34,6 +34,19 @@
       alert('Campo Reduzido da dotação é obrigatório!');
       return false;
     }
+    var tiposuplem = "<?php echo $tiposup ?>"; 
+    <?php if (db_getsession("DB_anousu")>2021){ ?>
+    
+    if( tiposuplem == 1002 || tiposuplem == 1007) {
+      if (document.getElementById('o47_codigoopcredito').value == '') {
+          alert('Campo Operação de Crédito não Informado!');
+          return false;
+      }
+    }
+    <?php } ?>  
+
+  
+
 
     if (document.getElementById('o58_concarpeculiar').value == '') {
 
@@ -109,7 +122,7 @@
               <td><? db_input('c58_descr', 40, @$Ic58_descr, true, 'text', 3, ''); ?></td>
             </tr>
             <!-- oc16314 -->
-            <?php $_SESSION['tiposup'] = $tiposup;?>
+            <?php if (db_getsession("DB_anousu")>2021){ ?>
             <?php if (($tiposup == 1002 || $tiposup == 1007)){ ?>
             <tr>
               <td nowrap title="<?= substr(@$Top01_numerocontratoopc, 18, 50) ?>">
@@ -128,6 +141,8 @@
               </td>
 				    </tr>
             <?php } ?>
+            <?php } ?>
+            
             <!-- oc16314 -->
             <tr>
               <td>Saldo: </td>
@@ -195,7 +210,9 @@ if ($aMotivo[0]->o50_motivosuplementacao == 't') {
   $o47_motivo = ",o47_motivo";
   $o47_motivo_union = ", 'A' as o47_motivo";
 }
-if (($tiposup == 1002 || $tiposup == 1007)){
+
+if (db_getsession("DB_anousu")>2021){
+  if (($tiposup == 1002 || $tiposup == 1007)){
     $sSqlTotalSuplementacoes = 
               "select
               distinct fc_estruturaldotacao(o47_anousu,
@@ -225,7 +242,8 @@ if (($tiposup == 1002 || $tiposup == 1007)){
               and o47_valor >= 0
             order by o47_anousu  "
               ;
-} else{
+} }
+else{
     $sSqlTotalSuplementacoes = $clorcsuplemval->sql_query_file(
               "",
               "",
@@ -244,7 +262,7 @@ if (($tiposup == 1002 || $tiposup == 1007)){
             $sSqlTotalSuplementacoes .= "       inner join ppadotacao           on o07_coddot     = o08_sequencial";
             $sSqlTotalSuplementacoes .= " where o136_orcsuplem={$o46_codsup}";
 }
-
+// echo $sSqlTotalSuplementacoes;exit;
 $clorcsuplemval = new cl_orcsuplemval;
 
 $chavepri = "";
@@ -256,10 +274,14 @@ if ($o47_motivo != "") {
 //print_r($sSqlTotalSuplementacoes);die;
 $cliframe_alterar_excluir->chavepri = $chavepri;
 $cliframe_alterar_excluir->sql   =  $sSqlTotalSuplementacoes;
-if (($tiposup == 1002 || $tiposup == 1007))
+
+if (db_getsession("DB_anousu")>2021){
+if (($tiposup == 1002 || $tiposup == 1007)){
   $cliframe_alterar_excluir->campos  = "o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo},o47_numerocontratooc";
-else
+}
+}else{
   $cliframe_alterar_excluir->campos  = "o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo}";  
+}
 $cliframe_alterar_excluir->legenda = "Lista";
 $cliframe_alterar_excluir->iframe_height = "200"; 
 $cliframe_alterar_excluir->opcoes = 3;
@@ -268,6 +290,8 @@ $cliframe_alterar_excluir->iframe_alterar_excluir(1);
 ?>
 </form>
 </center>
+
+
 
 
 <script>
