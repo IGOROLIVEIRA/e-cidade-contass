@@ -286,6 +286,7 @@ function js_preenchepesquisa(chave){
       	} else {
       		array_push($aWhere, "1001","1002","1003","1004","1017","1016","1014","1015");
       	}
+        
 
         if($o39_tiposuplementacao != null){
          $aWhere = array($o39_tiposuplementacao);
