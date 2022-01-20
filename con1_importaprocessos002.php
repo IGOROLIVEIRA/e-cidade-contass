@@ -81,7 +81,7 @@ fclose($file_handle);
 // system("cd tmp; rm -f {$sNomeAbsoluto}.zip; cd ..");
 // system("cd tmp; ../bin/zip -q {$sNomeAbsoluto}.zip $sArquivos 2> erro.txt; cd ..");
 ?>
-<html>
+<!-- <html>
 
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
@@ -90,14 +90,14 @@ fclose($file_handle);
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
 
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.x01_matric.focus();">
-    <?
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.x01_matric.focus();">-->
+<?
 
-    if ($sqlerro == false) {
-        $nomearqdados = "tmp/$sFile[4]";
-        echo "<script>";
-        echo "  listagem = '$nomearqdados#Arquivo Importado|';";
-        echo "  parent.js_montarlista(listagem,'form1');";
-        echo "</script>";
-        return $sqlerro;
-    }
+    // if ($sqlerro == false) {
+    //     $nomearqdados = "tmp/$sFile[4]";
+    //     echo "<script>";
+    //     echo "  listagem = '$nomearqdados#Arquivo Importado|';";
+    //     echo "  parent.js_montarlista(listagem,'form1');";
+    //     echo "</script>";
+    //     return $sqlerro;
+    // }
