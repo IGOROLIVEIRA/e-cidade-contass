@@ -1061,7 +1061,7 @@ if ($situacao == 2) {
                     
                     $oInstit = new Instituicao(db_getsession('DB_instit'));
 
-                    if($hlhposicaonumpre > 0 && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_NOVAPORTEIRINHA) ){
+                    if($hlhposicaonumpre > 0 && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_NOVAPORTEIRINHA || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL) ){
                             if ($lDebugAtivo == true) {
                                 echo "     </br> continuando Guia da HLH";                                    
                             }
