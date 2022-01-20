@@ -49,7 +49,7 @@ $clrotulo          = new rotulocampo;
 $cldbconfig        = new cl_db_config;
 $clrotulo->label('');
 
-parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
+parse_str($HTTP_SERVER_VARS['QUERY_STRING']); 
 db_postmemory($HTTP_SERVER_VARS);
 
 $oPDF = new PDF();
@@ -72,8 +72,7 @@ if ( $oLibDocumento->lErro ){
    die($oLibDocumento->sMsgErro);
 }
 $campos = "l20_codigo,l20_edital,l20_anousu,l20_numero,l20_datacria,l20_objeto,cgmrepresentante.z01_nome AS nome,cgmrepresentante.z01_cgccpf AS cpf,l44_descricao";
-$rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query_equipepregao(null,$campos,"l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit"));
-
+$rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query_equipepregao(null,$campos,"l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l31_tipo = '6'"));
 if ($clliclicita->numrows == 0){
   db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não julgada, ou licitação revogada');
   exit;
