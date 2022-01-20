@@ -171,12 +171,18 @@ $styleCabecalhoCenter = array(
 
 ?>
 
+<?php
+
+header("Content-type: application/vnd.ms-word; charset=UTF-8");
+
+?>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 
 <head>
     <title>Relatório</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html;  charset=iso-8859-1">
 </head>
 <style>
     div {
@@ -207,6 +213,17 @@ $styleCabecalhoCenter = array(
     div.Section1 {
         page: Section1;
     }
+
+    td {
+        font-size: 12px;
+        border: 4px solid black;
+
+    }
+
+    th {
+        border: 1px solid black;
+        background: #F0FFF0;
+    }
 </style>
 
 <body>
@@ -214,37 +231,7 @@ $styleCabecalhoCenter = array(
         <div>
             <strong>Posição do Registro de Preço</strong>
         </div>
-        <div>
-            <p>Abertura: <?= $aDados['oAbertura'] ?></p>
-        </div>
-        <div>
-            <p>Compilação: <?= $oFornecedor['oCompilacao'] ?></p>
-        </div>
-        <div>
-            <p>Licitação: <?= iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $oFornecedor['sLicitacao'])) ?></p>
-        </div>
-
-
-
-
-
         <table>
-
-            <tr>
-                <td><strong>SEQ</strong></td>
-                <td><strong>ITEM</strong></td>
-                <td><strong>DESCRIÇÃO</strong></td>
-                <td><strong>COMPLETO</strong></td>
-                <td><strong>UN</strong></td>
-                <td><strong>VLR. UNIT.</strong></td>
-                <td><strong>FORNECEDOR</strong></td>
-                <td><strong>QTD. MAX/MIN</strong></td>
-                <td><strong>SOLICITADA</strong></td>
-                <td><strong>EMPENHADA</strong></td>
-                <td><strong>A SOLICITAR</strong></td>
-                <td><strong>A EMPENHAR</strong></td>
-            </tr>
-
 
             <?php
             //ini_set('display_errors', 1);
@@ -297,6 +284,9 @@ $styleCabecalhoCenter = array(
                 $nQuantMin                     = (empty($oSolicita->pc57_quantmin)                   ? '0' : $oSolicita->pc57_quantmin);
                 $nQuantMax                     = (empty($oSolicita->pc11_quant)                      ? '0' : $oSolicita->pc11_quant);
                 $nVlrUnitario                  = (empty($oSolicita->oDadosFornecedor->valorunitario) ? '0' : $oSolicita->oDadosFornecedor->valorunitario);
+
+                $oDadosEstimativa->nQuantMin = (empty($oSolicita->pc57_quantmin)                   ? '0' : $oSolicita->pc57_quantmin);
+                $oDadosEstimativa->nQuantMax                     = (empty($oSolicita->pc11_quant)                      ? '0' : $oSolicita->pc11_quant);
 
                 /**
                  * Verifica se controla o registro de preço por valor e altera o conteúdo das colunas
@@ -420,8 +410,34 @@ $styleCabecalhoCenter = array(
                      */
                     foreach ($aDados as $iIndice => $aDadosCompilacao) {
 
+
+
                         if (is_array($aDadosCompilacao)) {
                             $sIndice = 0;
+                            echo "<tr>";
+                            echo "<td colspan=\"7\"> <strong> Abertura: </strong>" .  $aDados['oAbertura'] . " <strong> Compilação: </strong>" .  $aDados['oCompilacao']  . " <strong> Licitação: </strong>" .  iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDados['sLicitacao']))  . " </td>";
+                            echo "<td colspan=\"3\"> <strong> Quantidade  </strong>";
+                            echo "<td colspan=\"2\"> <strong> Saldos  </strong>";
+                            echo "<tr style=\"margin-top:-30px;\">";
+                            echo <<<HTML
+        
+            <tr>
+            <td><strong>SEQ</strong></td>
+                <td><strong>ITEM</strong></td>
+                <td><strong>DESCRIÇÃO</strong></td>
+                <td><strong>COMPLEMENTO</strong></td>
+                <td><strong>UN</strong></td>
+                <td><strong>VLR. UNIT.</strong></td>
+                <td><strong>FORNECEDOR</strong></td>
+                <td><strong>QTD. MAX/MIN</strong></td>
+                <td><strong>SOLICITADA</strong></td>
+                <td><strong>EMPENHADA</strong></td>
+                <td><strong>A SOLICITAR</strong></td>
+                <td><strong>A EMPENHAR</strong></td>
+            </tr>
+
+HTML;
+
                             foreach ($aDadosCompilacao as $sIndice => $aDadosSolicita) {
                                 $sIndice = $sIndice + 4;
 
@@ -447,16 +463,15 @@ $styleCabecalhoCenter = array(
 
 
                                 $lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
-
                                 echo "<tr>";
-
                                 echo "<td>" . $aDadosSolicita['oDados']->iSeq . "</td>";
                                 echo "<td>" . $aDadosSolicita['oDados']->iCodItem . "</td>";
-                                echo "<td>" . substr($aDadosSolicita['oDados']->sDescrItem, 0, 5) . "</td>";
-                                echo "<td>" . 0 . "</td>";
-                                echo "<td>" . 0 . "</td>";
-                                echo "<td>" . 0 . "</td>";
-                                echo "<td>" . 0 . "</td>";
+                                echo "<td>" . substr($aDadosSolicita['oDados']->sDescrItem, 0, 20)  . "</td>";
+                                echo "<td>" . str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)) . "</td>";
+                                echo "<td>" . $aDadosSolicita['oDados']->sUnidade . "</td>";
+                                echo "<td>" . $aDadosSolicita['nTotalVlrUnid'] . "</td>";
+                                echo "<td>" . iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosSolicita['oDados']->sFornecedor)) . "</td>";
+
 
 
 
@@ -476,22 +491,22 @@ $styleCabecalhoCenter = array(
                                 $objWorkSheet->setCellValue($collK, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosSolicita['oDados']->sFornecedor)));
 
                                 if (!$aDadosSolicita['oDados']->lControlaValor) {
-                                    echo "<td>" . 0 . "</td>";
-                                    echo "<td>" . 0 . "</td>";
-                                    echo "<td>" . 0 . "</td>";
-                                    echo "<td>" . 0 . "</td>";
-                                    echo "<td>" . 0 . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->iSolicitada . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->iEmpenhada . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->nSolicitar . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->nEmpenhar . "</td>";
                                     $objWorkSheet->setCellValue($collN, 0);
                                     $objWorkSheet->setCellValue($collO, $aDadosSolicita['oDados']->iSolicitada);
                                     $objWorkSheet->setCellValue($collP, $aDadosSolicita['oDados']->iEmpenhada);
                                     $objWorkSheet->setCellValue($collQ, $aDadosSolicita['oDados']->nSolicitar);
                                     $objWorkSheet->setCellValue($collR, $aDadosSolicita['oDados']->nEmpenhar);
                                 } else {
-                                    echo "<td>" . 0 . "</td>";
-                                    echo "<td>" . 0 . "</td>";
-                                    echo "<td>" . 0 . "</td>";
-                                    echo "<td>" . 0 . "</td>";
-                                    echo "<td>" . 0 . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax  . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->iSolicitada . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->iEmpenhada . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->nSolicitar . "</td>";
+                                    echo "<td>" . $aDadosSolicita['oDados']->nEmpenhar . "</td>";
                                     $objWorkSheet->setCellValue($collN, 0);
                                     $objWorkSheet->setCellValue($collO, $aDadosSolicita['oDados']->iSolicitada);
                                     $objWorkSheet->setCellValue($collP, $aDadosSolicita['oDados']->iEmpenhada);
@@ -500,6 +515,8 @@ $styleCabecalhoCenter = array(
                                 }
 
                                 echo "</tr>";
+
+
 
 
                                 /**
@@ -512,8 +529,21 @@ $styleCabecalhoCenter = array(
                                 $nTotalEmpenhar     += $aDadosSolicita['oDados']->nEmpenhar;
                                 $nTotalRegistros++;
 
+
+
+
+
                                 $objWorkSheet->getStyle($collA . ':' . $collR)->applyFromArray($styleRespostaCabecalho);
                             }
+
+                            echo "<tr>";
+                            echo "<td colspan=\"7\">  </td>";
+                            echo "<td> <strong> Total: </strong> </td>";
+                            echo "<td>" . $nTotalSolicitada . "</td>";
+                            echo "<td>" . $$nTotalEmpenhada . "</td>";
+                            echo "<td>" . $nTotalSolicitar  . "</td>";
+                            echo "<td>" . $nTotalEmpenhar . "</td>";
+                            echo "</tr>";
                         }
                     }
 
@@ -541,7 +571,29 @@ $styleCabecalhoCenter = array(
                 $objWorkSheet = $objPHPExcel->createSheet($contsheet);
 
                 foreach ($aCgms as $index => $oFornecedor) {
-                    echo "b";
+                    echo "<tr>";
+                    echo "<td colspan=\"7\"> <strong> Abertura: </strong>" .  $oFornecedor['oAbertura'] . " <strong> Compilação: </strong>" .  $oFornecedor['oCompilacao']  . " <strong> Licitação: </strong>" .  iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $oFornecedor['sLicitacao']))  . " </td>";
+                    echo "<td colspan=\"3\"> <strong> Quantidade  </strong>";
+                    echo "<td colspan=\"2\"> <strong> Saldos  </strong>";
+                    echo "<tr style=\"margin-top:10px;\">";
+                    echo <<<HTML
+        
+            <tr>
+            <td><strong>SEQ</strong></td>
+                <td><strong>ITEM</strong></td>
+                <td><strong>DESCRIÇÃO</strong></td>
+                <td><strong>COMPLEMENTO</strong></td>
+                <td><strong>UN</strong></td>
+                <td><strong>VLR. UNIT.</strong></td>
+                <td><strong>FORNECEDOR</strong></td>
+                <td><strong>QTD. MAX/MIN</strong></td>
+                <td><strong>SOLICITADA</strong></td>
+                <td><strong>EMPENHADA</strong></td>
+                <td><strong>A SOLICITAR</strong></td>
+                <td><strong>A EMPENHAR</strong></td>
+            </tr>
+
+HTML;
 
                     $nTotalRegistros   = 0;
                     $nTotalSolicitada  = 0;
@@ -591,7 +643,7 @@ $styleCabecalhoCenter = array(
                     $sIndice += !$sIndice ? 5 : 2;
 
                     foreach ($oFornecedor['itens'] as $indice => $aDadosPosRegPreco) {
-                        echo "a";
+
                         //Coordenadas
                         $collA = 'A' . $sIndice;
                         $collB = 'B' . $sIndice;
@@ -626,13 +678,35 @@ $styleCabecalhoCenter = array(
                         $objWorkSheet->mergeCells($collK . ':' . $collM);
                         $objWorkSheet->setCellValue($collK, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosPosRegPreco['oDados']->sFornecedor)));
 
+
+                        echo "<tr>";
+                        echo "<td>" . $aDadosPosRegPreco['oDados']->iSeq . "</td>";
+                        echo "<td>" . $aDadosPosRegPreco['oDados']->iCodItem . "</td>";
+                        echo "<td>" . substr($aDadosPosRegPreco['oDados']->sDescrItem, 0, 20)  . "</td>";
+                        echo "<td>" . str_replace("\\n", "\n", substr(trim($aDadosPosRegPreco['oDados']->sCompl), 0, 20)) . "</td>";
+                        echo "<td>" . $aDadosPosRegPreco['oDados']->sUnidade . "</td>";
+                        echo "<td>" . $aDadosPosRegPreco['nTotalVlrUnid'] . "</td>";
+                        echo "<td>" . iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosPosRegPreco['oDados']->sFornecedor)) . "</td>";
+
+
                         if (!$aDadosPosRegPreco['oDados']->lControlaValor) {
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->iSolicitada . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->iEmpenhada . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->nSolicitar . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->nEmpenhar . "</td>";
                             $objWorkSheet->setCellValue($collN, 0);
                             $objWorkSheet->setCellValue($collO, $aDadosPosRegPreco['oDados']->iSolicitada);
                             $objWorkSheet->setCellValue($collP, $aDadosPosRegPreco['oDados']->iEmpenhada);
                             $objWorkSheet->setCellValue($collQ, $aDadosPosRegPreco['oDados']->nSolicitar);
                             $objWorkSheet->setCellValue($collR, $aDadosPosRegPreco['oDados']->nEmpenhar);
                         } else {
+
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->iSolicitada . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->iEmpenhada . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->nSolicitar . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->nEmpenhar . "</td>";
                             $objWorkSheet->setCellValue($collN, 0);
                             $objWorkSheet->setCellValue($collO, $aDadosPosRegPreco['oDados']->iSolicitada);
                             $objWorkSheet->setCellValue($collP, $aDadosPosRegPreco['oDados']->iEmpenhada);
@@ -661,6 +735,8 @@ $styleCabecalhoCenter = array(
                      * Total Geral soma os totais de cada solicitacao
                      */
 
+                    echo "</tr>";
+
                     $nTotalGeralRegistros   += $nTotalRegistros;
                     $nTotalGeralSolicitada  += $nTotalSolicitada;
                     $nTotalGeralEmpenhada   += $nTotalEmpenhada;
@@ -674,6 +750,15 @@ $styleCabecalhoCenter = array(
 
                     $contsheet++;
                 }
+
+                echo "<tr>";
+                echo "<td colspan=\"7\">  </td>";
+                echo "<td> <strong> Total: </strong> </td>";
+                echo "<td>" . $nTotalSolicitada . "</td>";
+                echo "<td>" . $$nTotalEmpenhada . "</td>";
+                echo "<td>" . $nTotalSolicitar  . "</td>";
+                echo "<td>" . $nTotalEmpenhar . "</td>";
+                echo "</tr>";
             }
 
 
@@ -688,8 +773,7 @@ $styleCabecalhoCenter = array(
 
 <?php
 
-header("Content-type: application/vnd.ms-word; charset=UTF-8");
-header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
+header("Content-Disposition: inline; Filename=Registro de Preço.doc");
 
 /*
 $nomefile = "registro de preco" . '_' . db_getsession('DB_instit') . ".xlsx";

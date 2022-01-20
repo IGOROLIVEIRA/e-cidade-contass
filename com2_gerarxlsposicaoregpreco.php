@@ -216,6 +216,8 @@ for ($iInd = 0; $iInd  < $iRsSql; $iInd++) {
     $nQuantMax                     = (empty($oSolicita->pc11_quant)                      ? '0' : $oSolicita->pc11_quant);
     $nVlrUnitario                  = (empty($oSolicita->oDadosFornecedor->valorunitario) ? '0' : $oSolicita->oDadosFornecedor->valorunitario);
 
+    $oDadosEstimativa->nQuantMin = (empty($oSolicita->pc57_quantmin)                   ? '0' : $oSolicita->pc57_quantmin);
+    $oDadosEstimativa->nQuantMax                     = (empty($oSolicita->pc11_quant)                      ? '0' : $oSolicita->pc11_quant);
     /**
      * Verifica se controla o registro de preço por valor e altera o conteúdo das colunas
      */
@@ -378,13 +380,13 @@ if (!$oGet->fornecedores && $oGet->lQuebraFornecedor == 'f') {
                     $objWorkSheet->setCellValue($collK, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosSolicita['oDados']->sFornecedor)));
 
                     if (!$aDadosSolicita['oDados']->lControlaValor) {
-                        $objWorkSheet->setCellValue($collN, 0);
+                        $objWorkSheet->setCellValue($collN, $aDadosSolicita['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax);
                         $objWorkSheet->setCellValue($collO, $aDadosSolicita['oDados']->iSolicitada);
                         $objWorkSheet->setCellValue($collP, $aDadosSolicita['oDados']->iEmpenhada);
                         $objWorkSheet->setCellValue($collQ, $aDadosSolicita['oDados']->nSolicitar);
                         $objWorkSheet->setCellValue($collR, $aDadosSolicita['oDados']->nEmpenhar);
                     } else {
-                        $objWorkSheet->setCellValue($collN, 0);
+                        $objWorkSheet->setCellValue($collN, $aDadosSolicita['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax);
                         $objWorkSheet->setCellValue($collO, $aDadosSolicita['oDados']->iSolicitada);
                         $objWorkSheet->setCellValue($collP, $aDadosSolicita['oDados']->iEmpenhada);
                         $objWorkSheet->setCellValue($collQ, $aDadosSolicita['oDados']->nSolicitar);
@@ -515,13 +517,13 @@ if (!$oGet->fornecedores && $oGet->lQuebraFornecedor == 'f') {
             $objWorkSheet->setCellValue($collK, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosPosRegPreco['oDados']->sFornecedor)));
 
             if (!$aDadosPosRegPreco['oDados']->lControlaValor) {
-                $objWorkSheet->setCellValue($collN, 0);
+                $objWorkSheet->setCellValue($collN, $aDadosPosRegPreco['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax);
                 $objWorkSheet->setCellValue($collO, $aDadosPosRegPreco['oDados']->iSolicitada);
                 $objWorkSheet->setCellValue($collP, $aDadosPosRegPreco['oDados']->iEmpenhada);
                 $objWorkSheet->setCellValue($collQ, $aDadosPosRegPreco['oDados']->nSolicitar);
                 $objWorkSheet->setCellValue($collR, $aDadosPosRegPreco['oDados']->nEmpenhar);
             } else {
-                $objWorkSheet->setCellValue($collN, 0);
+                $objWorkSheet->setCellValue($collN, $aDadosPosRegPreco['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax);
                 $objWorkSheet->setCellValue($collO, $aDadosPosRegPreco['oDados']->iSolicitada);
                 $objWorkSheet->setCellValue($collP, $aDadosPosRegPreco['oDados']->iEmpenhada);
                 $objWorkSheet->setCellValue($collQ, $aDadosPosRegPreco['oDados']->nSolicitar);
