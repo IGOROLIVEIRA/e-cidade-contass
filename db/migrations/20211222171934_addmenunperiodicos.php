@@ -1129,6 +1129,9 @@ class Addmenunperiodicos extends AbstractMigration
                                 SET db103_camposql='dsclogradtemp'
                                 WHERE db103_sequencial=4000646;
 
+                    INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'rh04_cbo', 'varchar(40)', 'rh04_cbo', '0', 'rh04_cbo', 10, false, false, false, 1, 'text', 'rh04_cbo');
+                    INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select max(codcam) from db_syscampo), 1, (select max(codsequencia) from db_syssequencia));
+                    alter table rhcargo add column rh04_cbo varchar(40);
         COMMIT;
         ";
         $this->execute($sql);
