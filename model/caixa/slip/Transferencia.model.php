@@ -600,6 +600,14 @@ abstract class Transferencia {
     return $this->oSlip->getValor();
   }
 
+  public function getDevolucao() {
+      return $this->oSlip->iExercicioCompetenciaDevolucao;
+  }
+
+  public function setExercicioCompetenciaDevolucao($iExercicio) {
+      $this->oSlip->iExercicioCompetenciaDevolucao = $iExercicio;
+  }
+
   /**
    * @param float $nValor
    */
