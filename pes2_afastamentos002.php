@@ -220,7 +220,10 @@ $aSituacoes = Array(
   6 => "Afastado doença +15 dias",
   7 => "Licença sem vencimento, cessão sem ônus",
   8 => "Afastado doença +30 dias",
-  10 => "Afastado doença -15 dias"
+  10 => "Afastado doença -15 dias",
+  11 => "11 - Licença para concorrer a mandato eletivo",
+  // 12 => "12 - Prorrogação Licença Maternidade",
+  13 => "13 - Outras licenças remuneradas"
 );
 
 $iAltura = 4;
