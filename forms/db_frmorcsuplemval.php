@@ -28,19 +28,32 @@
 <script>
   // --------------------
   function valida_dados() {
-    
+
     if (document.getElementById('o47_coddot').value == '') {
 
       alert('Campo Reduzido da dotação é obrigatório!');
       return false;
     }
+    var tiposuplem = "<?php echo $tiposup ?>"; 
+    <?php if (db_getsession("DB_anousu")>2021){ ?>
+    
+    if( tiposuplem == 1002 || tiposuplem == 1007) {
+      if (document.getElementById('o47_codigoopcredito').value == '') {
+          alert('Campo Operação de Crédito não Informado!');
+          return false;
+      }
+    }
+    <?php } ?>  
+
+  
+
 
     if (document.getElementById('o58_concarpeculiar').value == '') {
 
       alert('Você deve selecionar uma C.Peculiar/Cod de Aplicação antes de incluir a Suplementação!');
       return false;
     }
-    
+
     if (document.getElementById('o50_motivosuplementacao').value == 't') {
       if (document.getElementById('o47_motivo').value == '') {
 
@@ -57,6 +70,7 @@
     document.form1.submit();
 
   }
+
   // --------------------
 </script>
 <form name="form1" method="post" action="">
@@ -107,6 +121,29 @@
               <td><? db_input('o58_concarpeculiar', 10, @$Io58_concarpeculiar, true, 'text', $db_opcao, "onchange='js_pesquisao58_concarpeculiar(false);'");  ?></td>
               <td><? db_input('c58_descr', 40, @$Ic58_descr, true, 'text', 3, ''); ?></td>
             </tr>
+            <!-- oc16314 -->
+            <?php if (db_getsession("DB_anousu")>2021){ ?>
+            <?php if (($tiposup == 1002 || $tiposup == 1007)){ ?>
+            <tr>
+              <td nowrap title="<?= substr(@$Top01_numerocontratoopc, 18, 50) ?>">
+                <?= db_ancora(substr(@$Lop01_numerocontratoopc, 26, 50), "js_pesquisaop01_db_operacaodecredito(true);", $db_opcao); ?>
+              </td>
+              <td nowrap title="<?= @$To47_dataassinaturacop ?>">
+              <? db_input('o47_codigoopcredito', 10, $o47_codigoopcredito, true, '', 1, " onchange='js_pesquisaop01_db_operacaodecredito(false);'");?></td>
+              <td><? 
+                  db_input('o47_numerocontratooc', 40, $Io47_numerocontratooc, true, '', 3);
+                  $data = explode("-", $o47_dataassinaturacop);
+                  $o47_dataassinaturacop_dias = $data[2];
+                  $o47_dataassinaturacop_mes = $data[1];
+                  $o47_dataassinaturacop_ano = $data[0];
+                  db_input('o47_dataassinaturacop', 8, $Io47_dataassinaturacop, true, 'hidden', 3);
+                  ?>
+              </td>
+				    </tr>
+            <?php } ?>
+            <?php } ?>
+            
+            <!-- oc16314 -->
             <tr>
               <td>Saldo: </td>
               <td><? db_input('atual_menos_reservado', 10, '', true, 'text', 3, '', '', '', 'text-align:right');  ?> </td>
@@ -174,24 +211,58 @@ if ($aMotivo[0]->o50_motivosuplementacao == 't') {
   $o47_motivo_union = ", 'A' as o47_motivo";
 }
 
-$sSqlTotalSuplementacoes = $clorcsuplemval->sql_query_file(
-  "",
-  "",
-  "",
-  "fc_estruturaldotacao(o47_anousu,o47_coddot) as o50_estrutdespesa,
-                                              1 as tipo,o47_anousu,o47_coddot,o47_valor{$o47_motivo}",
-  "",
-  "o47_codsup=$o46_codsup
-                                              and o47_valor >= 0"
-);
-$sSqlTotalSuplementacoes .= " union all ";
-$sSqlTotalSuplementacoes .= " select  fc_estruturaldotacaoppa(o08_ano,o08_sequencial) as o50_estrutdespesa , ";
-$sSqlTotalSuplementacoes .= "         2 as tipo,o08_ano, o136_sequencial, o136_valor{$o47_motivo_union}";
-$sSqlTotalSuplementacoes .= "  from orcsuplemdespesappa ";
-$sSqlTotalSuplementacoes .= "       inner join ppaestimativadespesa on o07_sequencial = o136_ppaestimativadespesa";
-$sSqlTotalSuplementacoes .= "       inner join ppadotacao           on o07_coddot     = o08_sequencial";
-$sSqlTotalSuplementacoes .= " where o136_orcsuplem={$o46_codsup}";
-
+if (db_getsession("DB_anousu")>2021){
+  if (($tiposup == 1002 || $tiposup == 1007)){
+    $sSqlTotalSuplementacoes = 
+              "select
+              distinct fc_estruturaldotacao(o47_anousu,
+              o47_coddot) as o50_estrutdespesa,
+              1 as tipo,
+              o47_anousu,
+              o47_coddot,
+              o47_valor,
+              fc_estruturaldotacaoppa(o08_ano,
+              o08_sequencial) as o50_estrutdespesa ,
+              2 as tipo,
+              o08_ano,
+              o136_sequencial,
+              o136_valor,
+              o47_numerocontratooc
+            from
+              orcsuplemval
+            inner join ppaestimativadespesa on
+              o07_coddot = o47_coddot
+            left join orcsuplemdespesappa on
+              o136_ppaestimativadespesa = o07_sequencial
+            inner join ppadotacao on
+              o07_coddot = o08_sequencial
+            where
+              o136_orcsuplem = $o46_codsup or
+              o47_codsup =  $o46_codsup
+              and o47_valor >= 0
+            order by o47_anousu  "
+              ;
+} }
+else{
+    $sSqlTotalSuplementacoes = $clorcsuplemval->sql_query_file(
+              "",
+              "",
+              "",
+              "fc_estruturaldotacao(o47_anousu,o47_coddot) as o50_estrutdespesa,
+                                                          1 as tipo,o47_anousu,o47_coddot,o47_valor{$o47_motivo}",
+              "",
+              "o47_codsup=$o46_codsup
+                                                          and o47_valor >= 0"
+            );
+            $sSqlTotalSuplementacoes .= " union all ";
+            $sSqlTotalSuplementacoes .= " select  fc_estruturaldotacaoppa(o08_ano,o08_sequencial) as o50_estrutdespesa , ";
+            $sSqlTotalSuplementacoes .= "         2 as tipo,o08_ano, o136_sequencial, o136_valor{$o47_motivo_union}";
+            $sSqlTotalSuplementacoes .= "  from orcsuplemdespesappa ";
+            $sSqlTotalSuplementacoes .= "       inner join ppaestimativadespesa on o07_sequencial = o136_ppaestimativadespesa";
+            $sSqlTotalSuplementacoes .= "       inner join ppadotacao           on o07_coddot     = o08_sequencial";
+            $sSqlTotalSuplementacoes .= " where o136_orcsuplem={$o46_codsup}";
+}
+// echo $sSqlTotalSuplementacoes;exit;
 $clorcsuplemval = new cl_orcsuplemval;
 
 $chavepri = "";
@@ -203,9 +274,16 @@ if ($o47_motivo != "") {
 //print_r($sSqlTotalSuplementacoes);die;
 $cliframe_alterar_excluir->chavepri = $chavepri;
 $cliframe_alterar_excluir->sql   =  $sSqlTotalSuplementacoes;
-$cliframe_alterar_excluir->campos  = "o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo}";
-$cliframe_alterar_excluir->legenda = "lista";
-$cliframe_alterar_excluir->iframe_height = "200";
+
+if (db_getsession("DB_anousu")>2021){
+if (($tiposup == 1002 || $tiposup == 1007)){
+  $cliframe_alterar_excluir->campos  = "o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo},o47_numerocontratooc";
+}
+}else{
+  $cliframe_alterar_excluir->campos  = "o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo}";  
+}
+$cliframe_alterar_excluir->legenda = "Lista";
+$cliframe_alterar_excluir->iframe_height = "200"; 
 $cliframe_alterar_excluir->opcoes = 3;
 $cliframe_alterar_excluir->iframe_alterar_excluir(1);
 
@@ -214,10 +292,12 @@ $cliframe_alterar_excluir->iframe_alterar_excluir(1);
 </center>
 
 
+
+
 <script>
 function js_pesquisao47_coddot(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('','db_iframe_orcdotacao','func_orcdotacao.php?funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true,0);
+    js_OpenJanelaIframe('','db_iframe_orcdotacao','func_orcdotacao.php?funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true);
   }else{
     js_OpenJanelaIframe('','db_iframe_orcdotacao','func_orcdotacao.php?pesquisa_chave='+document.form1.o47_coddot.value+'&funcao_js=parent.js_mostraorcdotacao','Pesquisa',false);
   }
@@ -234,14 +314,55 @@ function js_mostraorcdotacao(chave,erro){
     document.form1.pesquisa_dot.click();
   }
 }
-function js_mostraorcdotacao1(chave1) {
+ 
+function js_pesquisaop01_db_operacaodecredito(mostra) {
+      if (mostra == true) {
+        js_OpenJanelaIframe('', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?funcao_js=parent.js_mostraoperacaodecredito1|op01_sequencial|op01_numerocontratoopc|op01_dataassinaturacop|o47_numerocontratooc|o47_dataassinaturacop|o47_codigoopcredito', 'Pesquisa', true);
+      } else {
+        if (document.form1.o47_codigoopcredito.value != '') {
+          js_OpenJanelaIframe('', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?pesquisa_chave=' + document.form1.o47_codigoopcredito.value +'&funcao_js=parent.js_mostraoperacaodecredito', 'Pesquisa', false);
+        } else {
+          document.form1.o47_codigoopcredito.value = '';
+          document.form1.o47_numerocontratooc.value = '';
+          document.form1.o47_dataassinaturacop.value = '';
+        }
+      }	
+	}
+  function js_mostraoperacaodecredito1(chave,chave1,chave2,chave3,chave4) {
+    
+		document.form1.o47_codigoopcredito.value = chave;
+		document.form1.o47_numerocontratooc .value = chave1;
+		var data = chave2.split("-", 3);
+		document.form1.o47_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];
 
+		db_iframe_db_operacaodecredito.hide();
+	}
+  	
+	function js_mostraoperacaodecredito(chave,chave1,erro) {
+		document.form1.o47_numerocontratooc .value = chave;
+		var data = chave1.split("-", 3);
+		document.form1.o47_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];
+  
+	}
+
+function js_mostraorcdotacao1(chave1) {
+  
   if ($('o07_sequencial')) {
     $('o07_sequencial').value = '';
   }
   document.form1.o47_coddot.value = chave1;
   db_iframe_orcdotacao.hide();
   document.form1.pesquisa_dot.click();
+  
+}
+function js_mostracontratoop(chave1) {
+
+if ($('o07_sequencial')) {
+  $('o07_sequencial').value = '';
+}
+document.form1.o47_coddot.value = chave1;
+db_iframe_orcdotacao.hide();
+document.form1.pesquisa_dot.click();
 }
 
 // --------------------------------------
@@ -281,12 +402,8 @@ function js_importa_suplementacao_01(chave1,chave2){
 }
 
 function js_pesquisa_estimativa(mostra) {
-
   if (mostra) {
-    js_OpenJanelaIframe('',
-                        'db_iframe_ppadotacao',
-                        'func_ppadotacaosuplementacao.php?funcao_js=parent.js_mostraestimativa1|o07_sequencial|dotacao',
-                        'Pesquisar Estimativas de Despesa',true,0);
+    js_OpenJanelaIframe('','db_iframe_ppadotacao','func_ppadotacaosuplementacao.php?funcao_js=parent.js_mostraestimativa1|o07_sequencial|dotacao','Pesquisar Estimativas de Despesa',true,0);
   }
 }
 function js_mostraestimativa1(chave1,chave2) {
@@ -301,70 +418,44 @@ function getDadosDotacaoPPA(iDotacao) {
   oParam.iEstimativa = iDotacao;
   oParam.exec        = 'getDadosDotacaoPPA';
   js_divCarregando('Aguarde, pesquisando dados...', 'msgBox');
-  var oAjax          = new Ajax.Request(
-                                        'orc4_suplementacoes.RPC.php',
-                                        {
-                                        method:'post',
-                                        parameters:'json='+Object.toJSON(oParam),
-                                        onComplete: preencheDadosDotacao
-                                        }
-                                       );
+  var oAjax          = new Ajax.Request('orc4_suplementacoes.RPC.php',{method:'post',parameters:'json='+Object.toJSON(oParam),onComplete: preencheDadosDotacao});
 }
-
 function preencheDadosDotacao(oAjax) {
 
 js_removeObj('msgBox');
-oRetorno = eval("("+oAjax.responseText+")");
-if (oRetorno.status == 1) {
-
-  $('o47_coddot').value   = '';
-  $('o58_orgao').value    = oRetorno.dadosdotacao.o08_orgao;
-  $('o40_descr').value    = oRetorno.dadosdotacao.o40_descr.urlDecode();
-  $('o56_elemento').value = oRetorno.dadosdotacao.o56_elemento;
-  $('o56_descr').value    = oRetorno.dadosdotacao.o56_descr.urlDecode();
-  $('o58_codigo').value   = oRetorno.dadosdotacao.o08_recurso;
-  $('o15_descr').value    = oRetorno.dadosdotacao.o15_descr;
-
-} else {
-
-  alert('Estimativa informada não possui estrutura válida.')
-  $('o07_sequencial').value = '';
-}
-}
-
-function js_pesquisao58_concarpeculiar(mostra){
-
-if(mostra==true){
-  js_OpenJanelaIframe('',
-                      'db_iframe_concarpeculiar',
-                      'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr',
-                      'Pesquisa',
-                      true);
-}else{
-   if(document.form1.o58_concarpeculiar.value != ''){
-       js_OpenJanelaIframe('',
-                           'db_iframe_concarpeculiar',
-                           'func_concarpeculiar.php?pesquisa_chave='+document.form1.o58_concarpeculiar.value.trim()+'&funcao_js=parent.js_mostraconcarpeculiar',
-                           'Pesquisa',
-                           false);
-   }else{
-     document.form1.c58_descr.value = '';
-   }
-}
-}
-
-function js_mostraconcarpeculiar(chave,erro){
-document.form1.c58_descr.value = chave;
-if(erro==true){
-  document.form1.o58_concarpeculiar.focus();
-  document.form1.o58_concarpeculiar.value = '';
-}
-}
-
-function js_mostraconcarpeculiar1(chave1,chave2){
-document.form1.o58_concarpeculiar.value =chave1;
-document.form1.c58_descr.value = chave2;
-db_iframe_concarpeculiar.hide();
-}
-
+oRetorno = eval(" ("+oAjax.responseText+")"); 
+if (oRetorno.status==1) { 
+  $('o47_coddot').value='' ; 
+  $('o58_orgao').value=oRetorno.dadosdotacao.o08_orgao; 
+  $('o40_descr').value=oRetorno.dadosdotacao.o40_descr.urlDecode(); 
+  $('o56_elemento').value=oRetorno.dadosdotacao.o56_elemento;
+  $('o56_descr').value=oRetorno.dadosdotacao.o56_descr.urlDecode(); 
+  $('o58_codigo').value=oRetorno.dadosdotacao.o08_recurso; 
+  $('o15_descr').value=oRetorno.dadosdotacao.o15_descr; 
+} else { 
+  alert('Estimativa informada não possui estrutura válida.') ;
+  $('o07_sequencial').value='' ; 
+} } 
+function js_pesquisao58_concarpeculiar(mostra){ 
+  if(mostra==true){ 
+    js_OpenJanelaIframe('', 'db_iframe_concarpeculiar' , 'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr' , 'Pesquisa' , true); 
+  }else{ 
+    if(document.form1.o58_concarpeculiar.value !='' ){ 
+      js_OpenJanelaIframe('', 'db_iframe_concarpeculiar' , 'func_concarpeculiar.php?pesquisa_chave=' +document.form1.o58_concarpeculiar.value.trim()+'&funcao_js=parent.js_mostraconcarpeculiar', 'Pesquisa' , false); 
+      }else{ 
+        document.form1.c58_descr.value='' ; 
+        } 
+     } 
+  } 
+function js_mostraconcarpeculiar(chave,erro){ 
+  document.form1.c58_descr.value=chave; 
+  if(erro==true){ 
+    document.form1.o58_concarpeculiar.focus(); 
+    document.form1.o58_concarpeculiar.value='' ; 
+  } 
+} 
+function js_mostraconcarpeculiar1(chave1,chave2){ 
+    document.form1.o58_concarpeculiar.value=chave1; 
+    document.form1.c58_descr.value=chave2; db_iframe_concarpeculiar.hide(); 
+  } 
 </script>

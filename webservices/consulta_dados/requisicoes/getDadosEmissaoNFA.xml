@@ -32,7 +32,7 @@
   <filtros>
     <filtro label="atividade" condicao="q03_ativ = '$atividade'" obrigatorio="false"/>
     <filtro label="servico" condicao="q136_sequencial = '$servico'" obrigatorio="false"/>
-    <filtro label="exercicio"   condicao = "q136_exercicio = '$exercicio'" obrigatorio="true"                           />
+    <filtro label="exercicio"   condicao = "q136_exercicio = date_part('year', CURRENT_DATE) " obrigatorio="true"                           />
   </filtros>
   <agrupamento campos="" />
   <ordenacao   campos="q03_ativ" />

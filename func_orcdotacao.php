@@ -33,6 +33,9 @@ include("dbforms/db_funcoes.php");
 include("classes/db_orcdotacao_classe.php");
 require("libs/db_liborcamento.php");
 include("classes/db_orcparametro_classe.php");
+include("libs/db_utils.php");
+require("std/db_stdClass.php");
+
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clorcdotacao = new cl_orcdotacao;
@@ -41,6 +44,9 @@ $clorcdotacao->rotulo->label("o58_coddot");
 $clorcdotacao->rotulo->label("o58_orgao");
 $clestrutura = new cl_estrutura;
 $clorcparametro = new cl_orcparametro;
+
+$clorcdotacao->rotulo->label();
+
 ?>
 <html>
 <head>
@@ -49,7 +55,7 @@ $clorcparametro = new cl_orcparametro;
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC"  >
   <tr> 
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
@@ -84,7 +90,7 @@ if(!isset($pesquisa_chave)){
      if(file_exists("funcoes/db_func_orcdotacao.php")==true){
        include("funcoes/db_func_orcdotacao.php");
      }else{
-	$campos = "orcdotacao.*";
+	      $campos = "orcdotacao.*";
      }
   }
   $dbwhere='';
@@ -146,18 +152,22 @@ if(!isset($pesquisa_chave)){
      where  $where_instit  
         and o58_anousu=".db_getsession('DB_anousu')." $dbwhere
      order by dl_estrutural
-     ";
-  // ve se algum campo está preenchido
-  if ((isset($chave_o58_coddot)&&(trim($chave_o58_coddot)!=""))
-       || (isset($o50_estrutdespesa) && ($o50_estrutdespesa!=""))){
-      db_lovrot($sql,15,"()","",$funcao_js);
-  }  
+     "; 
+
+     db_lovrot($sql,15,"()","",$funcao_js);
+  // if ((isset($chave_o58_coddot)&&(trim($chave_o58_coddot)!=""))
+      //  || (isset($o50_estrutdespesa) && ($o50_estrutdespesa!=""))){
+      // db_lovrot($sql,15,"()","",$funcao_js);
+  // } 
+  
 }else{
   if($pesquisa_chave!=null && $pesquisa_chave!=""){
       // Dim result as RecordSet
       $result = $clorcdotacao->sql_record($clorcdotacao->sql_query(db_getsession("DB_anousu"),$pesquisa_chave));
+      
       if($clorcdotacao->numrows!=0){
          db_fieldsmemory($result,0);
+         echo $result;
          echo "<script>".$funcao_js."('$o56_descr',false);</script>";
       }else{
          echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";

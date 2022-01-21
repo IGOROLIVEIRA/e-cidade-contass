@@ -17,7 +17,7 @@ $clliclicita  = new cl_liclicita;
 
 $clliclicita->rotulo->label("l20_codigo");
 $clliclicita->rotulo->label("l20_numero");
-$clliclicita->rotulo->label("l20_edital");
+$clliclicita->rotulo->label("l20_edital"); 
 $clrotulo = new rotulocampo;
 $clrotulo->label("l03_descr");
 
@@ -121,8 +121,8 @@ $sWhereContratos = " and 1 = 1 ";
             /**
              * Apresentação para emissão de relatório
              */
-            if(isset($adjudicacao) && trim($adjudicacao) == "3"){
-                $dbwhere .= " l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NOT NULL AND l20_licsituacao in (10,13) AND l20_codtipocom NOT IN (10,15,29,30) AND l20_usaregistropreco = false AND";
+            if(isset($adjudicacao) && trim($adjudicacao) == "3"){ 
+                $dbwhere .= " l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NOT NULL AND l20_licsituacao in (10,13) AND l20_codtipocom NOT IN (10,15,29,30) AND l03_pctipocompratribunal NOT IN (100,101,102,103) AND l20_usaregistropreco = false AND";
             }
 
             $sWhereModalidade = ""; 
@@ -192,7 +192,7 @@ $sWhereContratos = " and 1 = 1 ";
                         $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere $whereHab");
                     }
                 }
-                
+    
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js);
 
 

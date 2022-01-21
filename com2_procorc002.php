@@ -89,8 +89,8 @@ if($numrows_pcorcamforne==0){
 $result_itens = $clpcorcamitemproc->sql_record($clpcorcamitemproc->sql_query_solicitem(null,null,"distinct pc11_codigo,
                                                                                                   pc11_seq
                                                                                                   ,pc11_quant,                
-                                                                                                  case when pc01_complmater != null then
-                                                                                                  substr((pc01_descrmater ||'. '|| pc01_complmater),1)
+                                                                                                  case when pc01_complmater is not null then
+                                                                                                  pc01_descrmater ||'. '|| pc01_complmater
                                                                                                   else pc01_descrmater end as pc01_descrmater,
                                                                                                   pc01_codmater,
                                                                                                   pc11_resum,
