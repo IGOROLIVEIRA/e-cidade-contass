@@ -1515,7 +1515,7 @@
       document.getElementById("labelContaCredito").innerHTML = "<b>Conta Crédito: </b>";
       me.oTxtContaCreditoCodigo.setReadOnly(true);
       me.oTxtContaDebitoCodigo.setReadOnly(true);
-  
+        me.oTxtExercicioCompetenciaDevolucaoInput.setReadOnly(true);
       me.oTxtHistoricoInputCodigo.setReadOnly(true);
       me.oTxtHistoricoInputDescricao.setReadOnly(true);
       me.oTxtValorInput.setReadOnly(true);

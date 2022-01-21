@@ -129,7 +129,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   /**
    * Valor
    */
-  me.oTxtValorInput                          = new DBTextField('oTxtValorInput', me.sNomeInstancia+'.oTxtValorInput', '', 24);
+  me.oTxtValorInput                          = new DBTextField('oTxtValorInput', me.sNomeInstancia+'.oTxtValorInput', '', 8);
   me.oTxtValorInput.addEvent("onKeyPress", "return js_mask(event,\"0-9|,|-\");");
   me.oTxtValorInput.setReadOnly(true);
 
@@ -352,8 +352,8 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
         /**
          * Label Exercício da Competência da Devolução
         */
-         me.iLinhaExercicioDevolucao = iLinhaTabela;
-         var oRowExercicioCompetenciaDevolucao = oTabela.insertRow(iLinhaTabela); iLinhaTabela++;
+         me.iLinhaExercicioDevolucao = 8;
+         var oRowExercicioCompetenciaDevolucao = oTabela.insertRow(8);
          var oCelloRowExercicioCompetenciaDevolucaoLabel = oRowExercicioCompetenciaDevolucao.insertCell(0);
          oCelloRowExercicioCompetenciaDevolucaoLabel.innerHTML = "<strong>Exercício da Competência da Devolução:</strong>";
      
@@ -367,9 +367,9 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
      * Label Processo
      */
     if (me.iAno >= 2022)
-        var oRowProcesso = oTabela.insertRow(8);
+        var oRowProcesso = oTabela.insertRow(9);
     else
-        var oRowProcesso = oTabela.insertRow(7);
+        var oRowProcesso = oTabela.insertRow(8);
     var oCellProcessoLabel           = oRowProcesso.insertCell(0);
         oCellProcessoLabel.innerHTML = "<strong>Processo Administrativo:</strong>";
 
@@ -382,9 +382,9 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
      * Label Valor
      */
     if (me.iAno >= 2022)
-        var oRowValor = oTabela.insertRow(9);
+        var oRowValor = oTabela.insertRow(10);
     else
-        var oRowValor = oTabela.insertRow(8);
+        var oRowValor = oTabela.insertRow(9);
 
     var oCellValorLabel       = oRowValor.insertCell(0);
     oCellValorLabel.innerHTML = "<b>Valor:</b>";
@@ -1153,7 +1153,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
         if (me.iAno < 2022) 
             return false;
 
-        var oTabela = document.getElementById("table_oDBViewSlipPagamento");
+        var oTabela = document.getElementById("table_oDBViewSlipRecebimento");
         oTabela.rows[me.iLinhaExercicioDevolucao].hidden = true;
         if (me.temExercicioDevolucao())
             oTabela.rows[me.iLinhaExercicioDevolucao].hidden = false;
