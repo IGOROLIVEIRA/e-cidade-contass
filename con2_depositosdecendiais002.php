@@ -85,7 +85,7 @@ $header = <<<HEADER
 HEADER;
 
 $footer = <<<FOOTER
-<div style='border-top:1px solid #000;width:100%;text-align:right;font-family:sans-serif;font-size:10px;height:10px;'>
+<div style='border-top:0px solid #000;width:100%;text-align:right;font-family:sans-serif;font-size:10px;height:10px;'>
   {PAGENO}
 </div>
 FOOTER;
@@ -140,6 +140,7 @@ ob_start();
       $fIPTR = 0;
       $fIPTU = 0;
       $fIRRF = 0;
+      $fIRRF_1 = 0;
       $fITBI = 0;
       $fISS = 0;
       $fFPM = 0;
@@ -152,14 +153,44 @@ ob_start();
       $fIPI = 0;
       $fMJITR = 0;
       $fMJIPTU = 0;
-      $fMJTIBI = 0;
+      $fMJTIBI = 0; 
       $fMJISS = 0;
       $fMJDAIPTU = 0;
-      $fMJDAITBI = 0;
+      $fMJDAIPTU_1 = 0;
+      $fMJDAITBI = 0; 
+      $fMJDAITBI_1 = 0;
       $fMJDAISS = 0;
+      $fMJDAISS_1 = 0;
 
       foreach ($aReceitas as $Receitas) {
+        
+        if(db_getsession('DB_anousu')>2021){
+          if(strstr($Receitas->o57_fonte, '411120111000000'))$fIPTR+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411125001000000'))$fIPTU+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411130311000000'))$fIRRF+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411130341000000'))$fIRRF_1+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411125301000000'))$fITBI+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411145111000000'))$fISS+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '417115111000000'))$fFPM+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '417115121000000'))$fFPMDEZ+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '417115131000000'))$fFPMJUL+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '417115201000000'))$fITR+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '417195101000000'))$fICMS+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '417215001000000'))$fPARTICMS+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '417215101000000'))$fIPVA+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '417215201000000'))$fIPI+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411120112000000'))$fMJITR+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411125002000000'))$fMJIPTU+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411125302000000'))$fMJTIBI+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411145112000000'))$fMJISS+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411125003000000'))$fMJDAIPTU+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411125004000000'))$fMJDAIPTU_1+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411125303000000'))$fMJDAITBI+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411125304000000'))$fMJDAITBI_1+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411145113000000'))$fMJDAISS+=$Receitas->saldo_arrecadado;
+          if(strstr($Receitas->o57_fonte, '411145114000000'))$fMJDAISS_1+=$Receitas->saldo_arrecadado;
 
+        }else{
         if(strstr($Receitas->o57_fonte, '411120111000000'))$fIPTR+=$Receitas->saldo_arrecadado;
         if(strstr($Receitas->o57_fonte, '411180111000000'))$fIPTU+=$Receitas->saldo_arrecadado;
         if(strstr($Receitas->o57_fonte, '411130311000000'))$fIRRF+=$Receitas->saldo_arrecadado;
@@ -181,7 +212,7 @@ ob_start();
         if(strstr($Receitas->o57_fonte, '411180113000000'))$fMJDAIPTU+=$Receitas->saldo_arrecadado;
         if(strstr($Receitas->o57_fonte, '411180143000000'))$fMJDAITBI+=$Receitas->saldo_arrecadado;
         if(strstr($Receitas->o57_fonte, '411180233000000'))$fMJDAISS+=$Receitas->saldo_arrecadado;
-
+        }
       }
       db_query("drop table if exists work_receita");
       criarWorkReceita($sWhereReceita, array($anousu), $aPeriodo[0], $aPeriodo[1]);
@@ -280,7 +311,7 @@ ob_start();
                 <td class="s5 bdleft" colspan="4">&nbsp;</td>
               </tr>
               <tr style='height:20px;'>
-                <td class="s3 bdleft" colspan="2">TRANSF.CONTITUCIONAIS</td>
+                <td class="s3 bdleft" colspan="2">TRANSFERÊNCIAS CONTITUCIONAIS</td>
                 <td class="s4"></td>
                 <td class="s5"></td>
               </tr>
@@ -492,7 +523,7 @@ ob_start();
                 <td class="s10">Saúde</td>
               </tr>
               <tr style='height:20px;'>
-                <td class="s7 bdleft">Tributos Mun.</td>
+                <td class="s7 bdleft">TRIBUTOS MUNICIPAIS</td>
                 <td class="s7"></td>
                 <td class="s6">
                   <?php
@@ -646,7 +677,7 @@ ob_start();
             </tbody>
           </table>
         </div>
-      <?php else: ?>
+      <?php elseif(db_getsession('DB_anousu')>=2018 and db_getsession('DB_anousu')<=2021 ) : ?>
        <div class="wrapper">
         <table class="waffle" cellspacing="0" cellpadding="0">
           <thead>
@@ -898,7 +929,7 @@ ob_start();
             </tr>
             <tr style='height:20px;'>
               <td class="s3 bdleft" colspan="2"></td>
-              <td class="s4"><?=db_formatar(array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS)),"f")?></td>
+              <td class="s4"><?=db_formatar(array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAIPTU_1,$fMJDAITBI,$fMJDAISS)),"f")?></td>
               <td class="s5"></td>
             </tr>
             <tr style='height:20px;'>
@@ -907,7 +938,7 @@ ob_start();
             <tr style='height:20px;'>
               <td class="s8 bdleft"></td>
               <td class="s8"></td>
-              <td class="s9">Educ.</td>
+              <td class="s9">Educação</td>
               <td class="s10">Saúde</td>
             </tr>
             <tr style='height:20px;'>
@@ -915,13 +946,491 @@ ob_start();
               <td class="s7"></td>
               <td class="s6">
                 <?php
-                $fTotalTribMunEduc = (array_sum(array($fIPTR,$fIPTU,$fIRRF,$fITBI,$fISS,$fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS)))*0.25;
+                $fTotalTribMunEduc = (array_sum(array($fIPTR,$fIPTU,$fIRRF,$fITBI,$fISS,$fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAIPTU_1,$fMJDAITBI,$fMJDAISS)))*0.25;
                 echo db_formatar($fTotalTribMunEduc,"f");
                 ?>
               </td>
               <td class="s11">
                 <?php
-                $fTotalTribMunSaude = (array_sum(array($fIPTR,$fIPTU,$fIRRF,$fITBI,$fISS,$fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS)))*0.15;
+                $fTotalTribMunSaude = (array_sum(array($fIPTR,$fIPTU,$fIRRF,$fITBI,$fISS,$fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAIPTU_1,$fMJDAITBI,$fMJDAISS)))*0.15;
+                echo db_formatar($fTotalTribMunSaude,"f");
+                ?>
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s7 bdleft">FPM</td>
+              <td class="s7"></td>
+              <td class="s6">
+                <?php
+                $fTotalFPMEduc = $fFPM*0.06;
+                echo db_formatar($fTotalFPMEduc, "f");
+                ?>
+              </td>
+              <td class="s11">
+                <?php
+                $fTotalFPMSaude = $fFPM*0.16;
+                echo db_formatar($fTotalFPMSaude, "f");
+                ?>
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s7 bdleft">FPM 1% DEZ</td>
+              <td class="s7"></td>
+              <td class="s6">
+                <?php
+                $fTotalFPMDEZEduc = $fFPMDEZ*0.26;
+                echo db_formatar($fTotalFPMDEZEduc, "f");
+                ?>
+              </td>
+              <td class="s11">
+                <?php
+                $fTotalFPMDEZSaude = 0;
+                echo db_formatar($fTotalFPMDEZSaude, "f");
+                ?>
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s7 bdleft">FPM 1% JUL</td>
+              <td class="s7"></td>
+              <td class="s6">
+                <?php
+                $fTotalFPMJULEduc = $fFPMJUL*0.26;
+                echo db_formatar($fTotalFPMJULEduc, "f");
+                ?>
+              </td>
+              <td class="s11">
+                <?php
+                $fTotalFPMJULSaude = 0;
+                echo db_formatar($fTotalFPMJULSaude, "f");
+                ?>
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s7 bdleft">ITR</td>
+              <td class="s7"></td>
+              <td class="s6">
+                <?php
+                $fTotalITREduc = $fITR*0.06;
+                echo db_formatar($fTotalITREduc,"f");
+                ?>
+              </td>
+              <td class="s11">
+                <?php
+                $fTotalITRSaude = $fITR*0.16;
+                echo db_formatar($fTotalITRSaude,"f");
+                ?>
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s7 bdleft">ICMS Export</td>
+              <td class="s7 softmerge">
+                <div class="softmerge-inner" style="width: 131px; left: -1px;"></div>
+              </td>
+              <td class="s6">
+                <?php
+                $fTotalICMSEduc = $fICMS*0.06;
+                echo db_formatar($fTotalICMSEduc,"f");
+                ?>
+              </td>
+              <td class="s11">
+                <?php
+                $fTotalICMSSaude = $fICMS*0.16;
+                echo db_formatar($fTotalICMSSaude,"f");
+                ?>
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s7 bdleft">ICMS Est.</td>
+              <td class="s7"></td>
+              <td class="s6">
+                <?php
+                $fTotalICMSESTEduc = ($fPARTICMS)*0.06;
+                echo db_formatar($fTotalICMSESTEduc,"f");
+                ?>
+              </td>
+              <td class="s11">
+                <?php
+                $fTotalICMSESTSaude = ($fPARTICMS)*0.16;
+                echo db_formatar($fTotalICMSESTSaude,"f");
+                ?>
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s7 bdleft">IPI</td>
+              <td class="s7"></td>
+              <td class="s6">
+                <?php
+                $fTotalIPIEduc = ($fIPI)*0.06;
+                echo db_formatar($fTotalIPIEduc,"f");
+                ?>
+              </td>
+              <td class="s11">
+                <?php
+                $fTotalIPISaude = ($fIPI)*0.16;
+                echo db_formatar($fTotalIPISaude,"f");
+                ?>
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s7 bdleft">IPVA</td>
+              <td class="s7"></td>
+              <td class="s12">
+                <?php
+                $fTotalIPVAEduc = $fIPVA*0.06;
+                echo db_formatar($fTotalIPVAEduc,"f");
+                ?>
+              </td>
+              <td class="s13">
+                <?php
+                $fTotalIPVASaude = $fIPVA*0.16;
+                echo db_formatar($fTotalIPVASaude,"f");
+                ?>
+              </td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s14 bdleft"></td>
+              <td class="s14"></td>
+              <td class="s12"><?=db_formatar(array_sum(array($fTotalFPMEduc,$fTotalITREduc,$fTotalICMSEduc,$fTotalICMSESTEduc,$fTotalIPIEduc,$fTotalIPVAEduc,$fTotalFPMDEZEduc,$fTotalFPMJULEduc,$fTotalTribMunEduc)),"f") ?></td>
+              <td class="s13"><?=db_formatar(array_sum(array($fTotalFPMSaude,$fTotalITRSaude,$fTotalICMSSaude,$fTotalICMSESTSaude,$fTotalIPISaude,$fTotalIPVASaude,$fTotalTribMunSaude)),"f")?></td>
+            </tr>
+          </tbody>
+        </table> 
+      </div>
+      <?php elseif(db_getsession('DB_anousu')>=2022) : ?>
+       <div class="wrapper">
+        <table class="waffle" cellspacing="0" cellpadding="0" >
+          <thead>
+            <tr>
+              <th id="0C0" style="width:28%" class="column-headers-background">&nbsp;</th>
+              <th id="0C1" style="width:28%" class="column-headers-background">&nbsp;</th>
+              <th id="0C2" style="width:28%" class="column-headers-background">&nbsp;</th>
+              <th id="0C3" style="width:20%" class="column-headers-background">&nbsp;</th>
+            </tr>
+          <thead>
+          <tbody>
+            <tr style='height:20px;'>
+              <td class="s0 bdtop bdleft" colspan="4">DE <?=db_formatar($aPeriodo[0],"d")." A ".db_formatar($aPeriodo[1],"d")?></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s1 bdleft" colspan="3"><?=$aPeriodo[2]?></td>
+              <td class="s2"></td>
+            </tr>
+            <tr style='height:20px;' >
+              <td class="s3 bdleft" colspan="2">IMPOSTOS</td>
+              <td class="s4"></td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11120111</td>
+              <td class="s7">IPTR</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fIPTR, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11125001</td>
+              <td class="s7">IPTU</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fIPTU, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11130311</td>
+              <td class="s7">IRRF - TRABALHO</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fIRRF, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11130341</td>
+              <td class="s7">IRRF - OUTROS</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fIRRF_1, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11125301</td>
+              <td class="s7">ITBI</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fITBI, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11145111</td>
+              <td class="s7">ISSQN</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fISS, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s3 bdleft" colspan="2"></td>
+              <td class="s4"><?=db_formatar(array_sum(array($fIPTR,$fIPTU,$fIRRF,$fIRRF_1,$fITBI,$fISS)),"f")?></td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s5 bdleft" colspan="4">&nbsp;</td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s3 bdleft" colspan="2">TRANSF.CONTITUCIONAIS</td>
+              <td class="s4"></td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">17115111</td>
+              <td class="s7">FPM</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fFPM, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">17115121</td>
+              <td class="s7">1% ADIC. DEZ FPM</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fFPMDEZ, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">17115131</td>
+              <td class="s7">1% ADIC. JUL FPM</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fFPMJUL, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">17115201</td>
+              <td class="s7">ITR</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fITR, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">17195101</td>
+              <td class="s7">ICMS EXP.</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fICMS, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">17215001</td>
+              <td class="s7">ICMS EST.</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fPARTICMS, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">17215101</td>
+              <td class="s7">IPVA</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fIPVA, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">17215201</td>
+              <td class="s7">IPI</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fIPI, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s3 bdleft" colspan="2"></td>
+              <td class="s4"><?=db_formatar(array_sum(array($fFPM,$fITR,$fICMS,$fPARTICMS,$fIPVA,$fIPI,$fFPMDEZ,$fFPMJUL)),"f")?></td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s5 bdleft" colspan="4">&nbsp;</td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s3 bdleft" colspan="2">OUTRAS RECEITAS CORRENTES</td>
+              <td class="s4"></td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11120112</td>
+              <td class="s7">Multas IPTR</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJITR, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11125002</td>
+              <td class="s7">Multas IPTU</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJIPTU, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11125302</td>
+              <td class="s7">Multas ITBI</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJTIBI, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11145112</td>
+              <td class="s7">Multas ISSQN</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJISS, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11125003</td>
+              <td class="s7">Dív.Ativa IPTU</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJDAIPTU, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11125303</td>
+              <td class="s7">Dív.Ativa ITBI</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJDAITBI, "f");
+                ?>
+              </td>
+              <td class="s5"></td> 
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11145113</td>
+              <td class="s7">Dív.Ativa ISSQN</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJDAISS, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11125004</td>
+              <td class="s7">M.J Dív.Ativa IPTU</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJDAIPTU_1, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11125304</td>
+              <td class="s7">M.J Dív.Ativa ITBI</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJDAITBI_1, "f");
+                ?>
+              </td> 
+              <td class="s5"></td> 
+            </tr> 
+            <tr style='height:20px;'>
+              <td class="s6 bdleft">11145114</td>
+              <td class="s7">M.J Dív.Ativa ISSQN</td>
+              <td class="s6">
+                <?php
+                echo db_formatar($fMJDAISS_1, "f");
+                ?>
+              </td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s3 bdleft" colspan="2"></td>
+              <td class="s4"><?=db_formatar(array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAIPTU_1,$fMJDAITBI,$fMJDAITBI_1,$fMJDAISS,$fMJDAISS_1)),"f")?></td>
+              <td class="s5"></td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s5 bdleft" colspan="4">&nbsp;</td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s5 bdleft" colspan="4">&nbsp;</td>
+            </tr>
+            <tr style='height:20px;'>
+            
+               <td class="s5 bdleft" colspan="4">&nbsp;</td>
+               
+            </tr>
+            <tr style='height:20px;'>
+             
+              <td class="s5 bdbottom " colspan="4">&nbsp;</td>
+            </tr>
+            <tr style='height:20px;'>
+              <td class="s5 bdtop" colspan="4">&nbsp;</td>
+              
+            </tr>
+            <tr style='height:20px;' >
+            
+              <td class="s8 bdleft"></td>
+              <td class="s8"></td>             
+              <td class="s9">Educ.</td>
+              <td class="s10">Saúde</td>
+              
+            </tr>
+
+            <tr style='height:20px; '>
+              <td class="s7 bdleft">Tributos Mun.</td>
+              <td class="s7"></td>
+              <td class="s6">
+                <?php
+                $fTotalTribMunEduc = (array_sum(array($fIPTR,$fIPTU,$fIRRF,$fIRRF_1,$fITBI,$fISS,$fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAIPTU_1,$fMJDAITBI,$fMJDAITBI_1,$fMJDAISS,$fMJDAISS_1)))*0.25;
+                echo db_formatar($fTotalTribMunEduc,"f");
+                ?>
+              </td>
+              <td class="s11">
+                <?php
+                $fTotalTribMunSaude = (array_sum(array($fIPTR,$fIPTU,$fIRRF,$fIRRF_1,$fITBI,$fISS,$fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAIPTU_1,$fMJDAITBI,$fMJDAITBI_1,$fMJDAISS,$fMJDAISS_1)))*0.15;
                 echo db_formatar($fTotalTribMunSaude,"f");
                 ?>
               </td>
@@ -1064,7 +1573,7 @@ ob_start();
             </tr>
           </tbody>
         </table>
-      </div>
+      </div>  
     <?php endif; ?>
     <?php
     db_query("drop table if exists work_receita");
