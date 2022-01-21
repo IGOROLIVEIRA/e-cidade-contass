@@ -173,7 +173,12 @@ $styleCabecalhoCenter = array(
 
 <?php
 
-header("Content-type: application/vnd.ms-word; charset=UTF-8");
+//header("Content-type: application/vnd.ms-word; charset=UTF-8");
+header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
+
+
+//header("Content-type: application/vnd.ms-word; charset=UTF-8");
 
 ?>
 
@@ -773,7 +778,7 @@ HTML;
 
 <?php
 
-header("Content-Disposition: inline; Filename=Registro de Preço.doc");
+//header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
 
 /*
 $nomefile = "registro de preco" . '_' . db_getsession('DB_instit') . ".xlsx";
