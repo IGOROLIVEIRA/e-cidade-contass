@@ -443,7 +443,7 @@ header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
                 <td><strong>UN</strong></td>
                 <td><strong>VLR. UNIT.</strong></td>
                 <td><strong>FORNECEDOR</strong></td>
-                <td><strong>QTD. MAX/MIN</strong></td>
+                <td><strong>QTD. MIN/MAX</strong></td>
                 <td><strong>SOLICITADA</strong></td>
                 <td><strong>EMPENHADA</strong></td>
                 <td><strong>A SOLICITAR</strong></td>
@@ -585,11 +585,12 @@ HTML;
                 $objWorkSheet = $objPHPExcel->createSheet($contsheet);
 
                 foreach ($aCgms as $index => $oFornecedor) {
-                    echo "<tr class=\"header\" colspan=\"7\">>";
-                    echo "<td class=\"header\" colspan=\"7\"> colspan=\"7\"> <strong> Abertura: </strong>" .  $oFornecedor['oAbertura'] . " <strong> Compilação: </strong>" .  $oFornecedor['oCompilacao']  . " <strong> Licitação: </strong>" .  iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $oFornecedor['sLicitacao']))  . " </td>";
-                    echo "<td class=\"header\" colspan=\"7\"> colspan=\"3\"> <strong> Quantidade  </strong>";
-                    echo "<td class=\"header\" colspan=\"7\"> colspan=\"2\"> <strong> Saldos  </strong>";
-                    echo "<tr style=\"margin-top:10px;\">";
+
+                    echo "<tr class=\"header\" >";
+                    echo "<td class=\"header\" colspan=\"7\"> <strong> Abertura: </strong>" .  $oFornecedor['oAbertura'] . " <strong> Compilação: </strong>" .  $oFornecedor['oCompilacao']  . " <strong> Licitação: </strong>" .  iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $oFornecedor['sLicitacao']))  . " </td>";
+                    echo "<td class=\"header\" colspan=\"3\"> <strong> Quantidade  </strong>";
+                    echo "<td class=\"header\" colspan=\"2\">  <strong> Saldos  </strong>";
+                    echo "<tr>";
                     echo <<<HTML
         
             <tr>
@@ -600,7 +601,7 @@ HTML;
                 <td><strong>UN</strong></td>
                 <td><strong>VLR. UNIT.</strong></td>
                 <td><strong>FORNECEDOR</strong></td>
-                <td><strong>QTD. MAX/MIN</strong></td>
+                <td><strong>QTD. MIN/MAX</strong></td>
                 <td><strong>SOLICITADA</strong></td>
                 <td><strong>EMPENHADA</strong></td>
                 <td><strong>A SOLICITAR</strong></td>
@@ -704,7 +705,7 @@ HTML;
 
 
                         if (!$aDadosPosRegPreco['oDados']->lControlaValor) {
-                            echo "<td>" . $aDadosPosRegPreco['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->nQuantMin . "/" . $aDadosPosRegPreco['oDados']->nQuantMax . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->iSolicitada . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->iEmpenhada . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->nSolicitar . "</td>";
@@ -716,7 +717,7 @@ HTML;
                             $objWorkSheet->setCellValue($collR, $aDadosPosRegPreco['oDados']->nEmpenhar);
                         } else {
 
-                            echo "<td>" . $aDadosPosRegPreco['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax . "</td>";
+                            echo "<td>" . $aDadosPosRegPreco['oDados']->nQuantMin . "/" . $aDadosPosRegPreco['oDados']->nQuantMax . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->iSolicitada . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->iEmpenhada . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->nSolicitar . "</td>";
@@ -769,7 +770,7 @@ HTML;
                 echo "<td class=\"footer\" colspan=\"7\">  </td>";
                 echo "<td class=\"footer\"> <strong> Total: </strong> </td>";
                 echo "<td class=\"footer\"> <strong> " . $nTotalSolicitada . " </strong> </td>";
-                echo "<td class=\"footer\"> <strong> " . $$nTotalEmpenhada . " </strong> </td>";
+                echo "<td class=\"footer\"> <strong> " . $nTotalEmpenhada . " </strong> </td>";
                 echo "<td class=\"footer\"> <strong> " . $nTotalSolicitar  . " </strong> </td>";
                 echo "<td class=\"footer\"> <strong> " . $nTotalEmpenhar . " </strong> </td>";
                 echo "</tr>";
