@@ -171,11 +171,17 @@ $styleCabecalhoCenter = array(
 
 ?>
 
+
+
 <?php
 
-//header("Content-type: application/vnd.ms-word; charset=UTF-8");
-header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+//header('Content-Type: application/octet-stream');
+
+//header("Content-type: application/vnd.oasis.opendocument.text; charset=UTF-8");
+//header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+header("Content-type: application/vnd.ms-word; charset=UTF-8");
 header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
+
 
 
 //header("Content-type: application/vnd.ms-word; charset=UTF-8");
@@ -188,51 +194,53 @@ header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
 <head>
     <title>Relatório</title>
     <meta http-equiv="Content-Type" content="text/html;  charset=iso-8859-1">
+    <style>
+        @page Section1 {
+            size: 595.45pt 841.7pt;
+            margin: .5in .5in .5in .5in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        div.Section1 {
+            page: Section1;
+        }
+
+        @page Section2 {
+            size: 841.7pt 595.45pt;
+            mso-page-orientation: landscape;
+            margin: .5in .5in .5in .5in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        div.Section2 {
+            page: Section2;
+        }
+
+        td {
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .header {
+            border: 1px solid black;
+            background-color: #DCDCDC;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+
+        .footer {
+            margin-top: 10px;
+        }
+    </style>
 </head>
-<style>
-    div {
-        font-size: 14px;
-        /* text-align: center;*/
-        border: 1px solid black;
-    }
 
-    table {
-        font-size: 11px;
-        border: 1px solid black;
-    }
-
-    @page {
-        display: flex;
-        mso-page-orientation: landscape;
-        size: 29.7cm 21cm;
-        margin: 1cm 1cm 1cm 1cm;
-    }
-
-    @page Section1 {
-        mso-header-margin: .5in;
-        mso-footer-margin: .5in;
-        mso-header: h1;
-        mso-footer: f1;
-    }
-
-    div.Section1 {
-        page: Section1;
-    }
-
-    td {
-        font-size: 12px;
-        border: 4px solid black;
-
-    }
-
-    th {
-        border: 1px solid black;
-        background: #F0FFF0;
-    }
-</style>
 
 <body>
-    <div class="Section1">
+    <div class="Section2">
         <div>
             <strong>Posição do Registro de Preço</strong>
         </div>
@@ -419,11 +427,12 @@ header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
 
                         if (is_array($aDadosCompilacao)) {
                             $sIndice = 0;
+
+                            echo "<tr class=\"header\">";
+                            echo "<td class=\"header\" colspan=\"7\"> <strong> Abertura: </strong>" .  $aDados['oAbertura'] . " <strong> Compilação: </strong>" .  $aDados['oCompilacao']  . " <strong> Licitação: </strong>" .  iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDados['sLicitacao']))  . " </td>";
+                            echo "<td class=\"header\" colspan=\"3\"> <strong> Quantidade  </strong>";
+                            echo "<td class=\"header\" colspan=\"2\"> <strong> Saldos  </strong>";
                             echo "<tr>";
-                            echo "<td colspan=\"7\"> <strong> Abertura: </strong>" .  $aDados['oAbertura'] . " <strong> Compilação: </strong>" .  $aDados['oCompilacao']  . " <strong> Licitação: </strong>" .  iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDados['sLicitacao']))  . " </td>";
-                            echo "<td colspan=\"3\"> <strong> Quantidade  </strong>";
-                            echo "<td colspan=\"2\"> <strong> Saldos  </strong>";
-                            echo "<tr style=\"margin-top:-30px;\">";
                             echo <<<HTML
         
             <tr>
@@ -542,12 +551,12 @@ HTML;
                             }
 
                             echo "<tr>";
-                            echo "<td colspan=\"7\">  </td>";
-                            echo "<td> <strong> Total: </strong> </td>";
-                            echo "<td>" . $nTotalSolicitada . "</td>";
-                            echo "<td>" . $$nTotalEmpenhada . "</td>";
-                            echo "<td>" . $nTotalSolicitar  . "</td>";
-                            echo "<td>" . $nTotalEmpenhar . "</td>";
+                            echo "<td class=\"footer\" colspan=\"7\">  </td>";
+                            echo "<td class=\"footer\"> <strong> Total: </strong> </td>";
+                            echo "<td class=\"footer\"> <strong> " . $nTotalSolicitada . " </strong> </td>";
+                            echo "<td class=\"footer\"> <strong> " . $$nTotalEmpenhada . " </strong> </td>";
+                            echo "<td class=\"footer\"> <strong> " . $nTotalSolicitar  . " </strong> </td>";
+                            echo "<td class=\"footer\"> <strong> " . $nTotalEmpenhar . " </strong> </td>";
                             echo "</tr>";
                         }
                     }
@@ -576,10 +585,10 @@ HTML;
                 $objWorkSheet = $objPHPExcel->createSheet($contsheet);
 
                 foreach ($aCgms as $index => $oFornecedor) {
-                    echo "<tr>";
-                    echo "<td colspan=\"7\"> <strong> Abertura: </strong>" .  $oFornecedor['oAbertura'] . " <strong> Compilação: </strong>" .  $oFornecedor['oCompilacao']  . " <strong> Licitação: </strong>" .  iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $oFornecedor['sLicitacao']))  . " </td>";
-                    echo "<td colspan=\"3\"> <strong> Quantidade  </strong>";
-                    echo "<td colspan=\"2\"> <strong> Saldos  </strong>";
+                    echo "<tr class=\"header\" colspan=\"7\">>";
+                    echo "<td class=\"header\" colspan=\"7\"> colspan=\"7\"> <strong> Abertura: </strong>" .  $oFornecedor['oAbertura'] . " <strong> Compilação: </strong>" .  $oFornecedor['oCompilacao']  . " <strong> Licitação: </strong>" .  iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $oFornecedor['sLicitacao']))  . " </td>";
+                    echo "<td class=\"header\" colspan=\"7\"> colspan=\"3\"> <strong> Quantidade  </strong>";
+                    echo "<td class=\"header\" colspan=\"7\"> colspan=\"2\"> <strong> Saldos  </strong>";
                     echo "<tr style=\"margin-top:10px;\">";
                     echo <<<HTML
         
@@ -757,12 +766,12 @@ HTML;
                 }
 
                 echo "<tr>";
-                echo "<td colspan=\"7\">  </td>";
-                echo "<td> <strong> Total: </strong> </td>";
-                echo "<td>" . $nTotalSolicitada . "</td>";
-                echo "<td>" . $$nTotalEmpenhada . "</td>";
-                echo "<td>" . $nTotalSolicitar  . "</td>";
-                echo "<td>" . $nTotalEmpenhar . "</td>";
+                echo "<td class=\"footer\" colspan=\"7\">  </td>";
+                echo "<td class=\"footer\"> <strong> Total: </strong> </td>";
+                echo "<td class=\"footer\"> <strong> " . $nTotalSolicitada . " </strong> </td>";
+                echo "<td class=\"footer\"> <strong> " . $$nTotalEmpenhada . " </strong> </td>";
+                echo "<td class=\"footer\"> <strong> " . $nTotalSolicitar  . " </strong> </td>";
+                echo "<td class=\"footer\"> <strong> " . $nTotalEmpenhar . " </strong> </td>";
                 echo "</tr>";
             }
 
@@ -777,6 +786,8 @@ HTML;
 </html>
 
 <?php
+
+
 
 //header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
 
