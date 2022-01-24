@@ -48,6 +48,10 @@ class cl_orcsuplemval {
    var $o47_valor  = 0;
    var $o47_motivo = null; /*OC2785*/
    var $o47_concarpeculiar = null;
+   var $o47_codigoopcredito = null;
+   var $o47_numerocontratooc = null;
+   var $o47_dataassinaturacop = null;
+   
   
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -56,7 +60,9 @@ class cl_orcsuplemval {
                  o47_coddot = int4 = Reduzido da Dotação
                  o47_valor = float8 = Valor
                  o47_concarpeculiar = varchar(100) = C.Peculiar/ C. Aplicação
-                 
+                 o47_numerocontratooc = Nº do Contrato da Operação de Crédito
+                 o47_dataassinaturacop = Data de Assinatura do Contrato OP
+                 o47_codigoopcredito = Operação de Crédito
                  ";
    //funcao construtor da classe
    function cl_orcsuplemval() {
@@ -81,7 +87,18 @@ class cl_orcsuplemval {
        $this->o47_coddot = ($this->o47_coddot == ""?@$GLOBALS["HTTP_POST_VARS"]["o47_coddot"]:$this->o47_coddot);
        $this->o47_valor = ($this->o47_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["o47_valor"]:$this->o47_valor);
        $this->o47_concarpeculiar = ($this->o47_concarpeculiar == ""?@$GLOBALS["HTTP_POST_VARS"]["o47_concarpeculiar"]:$this->o47_concarpeculiar);
-           
+       $this->o47_numerocontratooc = ($this->o47_numerocontratooc == ""?@$GLOBALS["HTTP_POST_VARS"]["o47_numerocontratooc"]:$this->o47_numerocontratooc);
+       $this->o47_dataassinaturacop = ($this->o47_dataassinaturacop == ""?@$GLOBALS["HTTP_POST_VARS"]["o47_dataassinaturacop"]:$this->o47_dataassinaturacop);
+       $this->o47_codigoopcredito = ($this->o47_codigoopcredito == ""?@$GLOBALS["HTTP_POST_VARS"]["o47_codigoopcredito"]:$this->o47_codigoopcredito);    
+      
+       if ($this->o47_dataassinaturacop == "") {
+        $this->o47_dataassinaturacop_dia = ($this->o47_dataassinaturacop_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["o47_dataassinaturacop_dia"] : $this->o47_dataassinaturacop_dia);
+        $this->o47_dataassinaturacop_mes = ($this->o47_dataassinaturacop_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["o47_dataassinaturacop_mes"] : $this->o47_dataassinaturacop_mes);
+        $this->o47_dataassinaturacop_ano = ($this->o47_dataassinaturacop_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["o47_dataassinaturacop_ano"] : $this->o47_dataassinaturacop_ano);
+        if ($this->o47_dataassinaturacop_dia != "") {
+          $this->o47_dataassinaturacop = $this->o47_dataassinaturacop_ano . "-" . $this->o47_dataassinaturacop_mes . "-" . $this->o47_dataassinaturacop_dia;
+        }
+      }    
       }else{
        $this->o47_codsup = ($this->o47_codsup == ""?@$GLOBALS["HTTP_POST_VARS"]["o47_codsup"]:$this->o47_codsup);
        $this->o47_anousu = ($this->o47_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["o47_anousu"]:$this->o47_anousu);
@@ -100,7 +117,6 @@ class cl_orcsuplemval {
        $this->erro_status = "0";
        return false;
      }
-
      if($this->o47_concarpeculiar == null ){
        $this->erro_sql = " Campo C.Peculiar/ C. Aplicação nao Informado.";
        $this->erro_campo = "o47_concarpeculiar";
@@ -110,6 +126,7 @@ class cl_orcsuplemval {
        $this->erro_status = "0";
        return false;
      }
+            
        $this->o47_codsup = $o47_codsup;
        $this->o47_anousu = $o47_anousu;
        $this->o47_coddot = $o47_coddot;
@@ -137,6 +154,20 @@ class cl_orcsuplemval {
        $this->erro_status = "0";
        return false;
      }
+     
+     if (($this->o47_numerocontratooc) == "" || ($this->o47_numerocontratooc) == null || isset($GLOBALS["HTTP_POST_VARS"]["o47_numerocontratooc"]) == '') {
+          $this->o47_numerocontratooc = 'null';
+
+     }
+     if (($this->o47_codigoopcredito) == "" || ($this->o47_codigoopcredito) == "" || isset($GLOBALS["HTTP_POST_VARS"]["o47_codigoopcredito"]) == '') {
+          $this->o47_codigoopcredito = 'null';    
+     } 
+     if (($this->o47_dataassinaturacop) == "" || ($this->o47_dataassinaturacop) == null  || isset($GLOBALS["HTTP_POST_VARS"]["o47_dataassinaturacop"]) == '') {
+          $this->o47_dataassinaturacop = 'null';
+     }
+    
+     if (($this->o47_numerocontratooc) == "" || ($this->o47_numerocontratooc) == null || isset($GLOBALS["HTTP_POST_VARS"]["o47_numerocontratooc"]) == '') {
+    
      $sql = "insert into orcsuplemval(
                                         o47_codsup
                                       ,o47_anousu
@@ -144,17 +175,52 @@ class cl_orcsuplemval {
                                       ,o47_valor
                                       ,o47_concarpeculiar
                                       ,o47_motivo
+                                      ,o47_numerocontratooc
+                                      ,o47_dataassinaturacop
+                                      ,o47_codigoopcredito
                                       
                     )
                     values ( 
-                    $this->o47_codsup
+                     $this->o47_codsup
                     ,$this->o47_anousu
                     ,$this->o47_coddot
                     ,$this->o47_valor
                     ,'$this->o47_concarpeculiar'
                     ,'$this->o47_motivo'
+                    ,$this->o47_numerocontratooc
+                    ,$this->o47_dataassinaturacop
+                    ,$this->o47_codigoopcredito
                    
             )";
+                    }
+                    else{
+         $sql = "insert into orcsuplemval(
+                        o47_codsup
+                      ,o47_anousu
+                      ,o47_coddot
+                      ,o47_valor
+                      ,o47_concarpeculiar
+                      ,o47_motivo
+                      ,o47_numerocontratooc
+                      ,o47_dataassinaturacop
+                      ,o47_codigoopcredito
+                      
+                      )
+                      values ( 
+                      $this->o47_codsup
+                      ,$this->o47_anousu
+                      ,$this->o47_coddot
+                      ,$this->o47_valor
+                      ,'$this->o47_concarpeculiar'
+                      ,'$this->o47_motivo'
+                      ,'$this->o47_numerocontratooc'
+                      ,'$this->o47_dataassinaturacop'
+                      ,$this->o47_codigoopcredito
+                    
+                  )";               
+
+                    }       
+    //  echo $sql;exit;
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -192,7 +258,11 @@ class cl_orcsuplemval {
        $resac = db_query("insert into db_acount values($acount,787,5326,'','".AddSlashes(pg_result($resaco,0,'o47_coddot'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,787,5327,'','".AddSlashes(pg_result($resaco,0,'o47_valor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,787,18159,'','".AddSlashes(pg_result($resaco,0,'o47_concarpeculiar'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     }
+       $resac = db_query("insert into db_acount values($acount,787,5328,'','".AddSlashes(pg_result($resaco,0,'o47_numerocontratooc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,787,5329,'','".AddSlashes(pg_result($resaco,0,'o47_dataassinaturacop'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,787,5330,'','".AddSlashes(pg_result($resaco,0,'o47_codigoopcredito'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+  
+      }
      return true;
    }
    // funcao para alteracao
@@ -265,6 +335,27 @@ class cl_orcsuplemval {
          return false;
        }
      }
+     if (trim($this->o47_numerocontratooc) != "" || isset($GLOBALS["HTTP_POST_VARS"]["o47_numerocontratooc"]) == null) {
+      $sql  .= $virgula . " o47_numerocontratooc = '$this->o47_numerocontratooc' ";
+      $virgula = ",";
+    } else if (trim($this->o47_numerocontratooc) == "") {
+      $sql  .= $virgula . " o47_numerocontratooc = null ";
+      $virgula = ",";
+    }
+    if (trim($this->o47_codigoopcredito) != "" || isset($GLOBALS["HTTP_POST_VARS"]["o47_codigoopcredito"]) == null) {
+      $sql  .= $virgula . " o47_codigoopcredito = '$this->o47_codigoopcredito' ";
+      $virgula = ",";
+    } else if (trim($this->o47_codigoopcredito) == "") {
+      $sql  .= $virgula . " o47_codigoopcredito = null ";
+      $virgula = ",";
+    }
+    if ($this->o47_dataassinaturacop != ""  || isset($GLOBALS["HTTP_POST_VARS"]["o47_dataassinaturacop"]) == null) {
+      $sql  .= $virgula . " o47_dataassinaturacop = '$this->o47_dataassinaturacop' ";
+      $virgula = ",";
+    } else if (trim($this->o47_dataassinaturacop) == "" || isset($GLOBALS["HTTP_POST_VARS"]["o47_dataassinaturacop"]) == "") {
+      $sql  .= $virgula . " o47_dataassinaturacop = null ";
+      $virgula = ",";
+    }
      $sql .= " where ";
      if($o47_codsup!=null){
        $sql .= " o47_codsup = $this->o47_codsup";
@@ -461,7 +552,7 @@ class cl_orcsuplemval {
      $sql .= "      inner join orcsuplemtipo  on  orcsuplemtipo.o48_tiposup = orcsuplem.o46_tiposup";
      $sql .= "      inner join orcprojeto  on  orcprojeto.o39_codproj = orcsuplem.o46_codlei";
      $sql2 = "";
-     if($dbwhere==""){
+     if($dbwhere==""){ 
        if($o47_codsup!=null ){
          $sql2 .= " where orcsuplemval.o47_codsup = $o47_codsup ";
        }

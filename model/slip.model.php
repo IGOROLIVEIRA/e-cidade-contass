@@ -209,6 +209,7 @@ class slip {
          $this->iTipoAutenticacao  = $oDadosSlip->k17_autent;
          $this->iSlip = $iSlip;
          $this->iInstituicao = $oDadosSlip->k17_instit;
+         $this->iExercicioCompetenciaDevolucao = $oDadosSlip->k17_devolucao;
 
          /**
           * Pesquisamos as informacoes do recurso
@@ -401,6 +402,7 @@ class slip {
     $clslip->k17_dtanu         = "";
     $clslip->k17_tipopagamento = "".$this->getTipoPagamento()."";
     $clslip->k17_situacao      = $this->getSituacao();
+    $clslip->k17_devolucao = $this->iExercicioCompetenciaDevolucao;
 
     if ($this->iSlip == null) {
       $clslip->incluir(null);

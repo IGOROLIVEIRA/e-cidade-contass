@@ -177,14 +177,17 @@ function gerarSQLReceitas($sMes, $sEnte) {
         FROM entesconsorciadosreceitas
         INNER JOIN orcreceita ON c216_receita=o70_codfon
         AND c216_anousu=o70_anousu
-        LEFT JOIN conlancamrec ON c74_anousu=o70_anousu
-        AND c74_codrec=o70_codrec
-        LEFT JOIN conlancam ON c74_codlan=c70_codlan and date_part('MONTH',c70_data) <={$nMes} and date_part('YEAR',c70_data)={$nAno}
-        LEFT JOIN conlancamdoc ON c71_codlan=c70_codlan
         INNER JOIN entesconsorciados ON c216_enteconsorciado=c215_sequencial
         INNER JOIN tipodereceitarateio ON c216_tiporeceita=c218_codigo
+        LEFT JOIN conlancamrec ON c74_anousu=o70_anousu
+        AND c74_codrec=o70_codrec
+        LEFT JOIN conlancam ON c74_codlan=c70_codlan
+        LEFT JOIN conlancamdoc ON c71_codlan=c70_codlan
+        LEFT JOIN conhistdoc on c53_coddoc=c71_coddoc
         WHERE  c216_enteconsorciado={$nEnte} and  c216_anousu={$nAno}
             AND c215_datainicioparticipacao <= '{$nAno}-{$nMes}-01'
+            AND date_part('MONTH',c70_data) <={$nMes} and date_part('YEAR',c70_data)={$nAno}
+            AND c53_tipo in (100, 101)
         GROUP BY c216_tiporeceita,c218_descricao,c216_saldo3112
         ORDER BY c216_tiporeceita ";
 }
@@ -249,7 +252,6 @@ try {
 
 
   }
-
   $rsRelatorioFinanceiro = db_query(gerarSQLReceitas($_GET['mes'], $_GET['c215_sequencial']));
 
   $aDadosConsultaFinanc = db_utils::getCollectionByRecord($rsRelatorioFinanceiro);

@@ -41,7 +41,7 @@ $iAnoSessao = db_getsession("DB_anousu");
  * Verifico que método utilizar para buscar as contas na conplano
  */
 $oDaoConPlano = db_utils::getDao("conplano");
-$sCamposPlano = " c61_reduz as reduzido, c60_descr  as descricao";
+$sCamposPlano = " c61_reduz as reduzido, c60_descr  as descricao, c60_tipolancamento, c60_subtipolancamento";
 $sWherePlano  = "";
 
 $sMetodoConta = 'getContaDebito';

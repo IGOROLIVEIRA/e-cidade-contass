@@ -211,13 +211,13 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         }
     }
 
-    function js_pesquisal202_licitacao(mostra){
-        let opcao = "<?= $db_opcao?>";
+    function js_pesquisal202_licitacao(mostra){ 
+        let opcao = "<?= $db_opcao?>";    
         var situacao = 10;
         var homologacao = 0; 
         if(mostra==true){
             js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
-                '&funcao_js=parent.js_mostraliclicita3|l20_codigo|l20_objeto|l20_numero|l202_datahomologacao|l202_sequencial&validafornecedor=0&homologacao=0'+homologacao,'Pesquisa',true);
+                '&funcao_js=parent.js_mostraliclicita3|l20_codigo|l20_objeto|l20_numero|l202_datahomologacao|l202_sequencial&validafornecedor=0&relatorio=1&homologacao=0'+homologacao,'Pesquisa',true);
         }else{
             if(document.form1.l202_licitacao.value != ''){
                 js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
@@ -297,7 +297,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         );
     }
 
-    function js_retornoGetResponsavel(oAjax) {
+    function js_retornoGetResponsavel(oAjax) { 
         alert("teste");
         //js_removeObj('msgBox');
         
