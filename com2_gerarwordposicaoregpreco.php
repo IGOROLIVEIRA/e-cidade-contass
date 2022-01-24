@@ -10,10 +10,8 @@ require_once("classes/db_pcorcam_classe.php");
 require_once("model/compilacaoRegistroPreco.model.php");
 require_once("model/estimativaRegistroPreco.model.php");
 require_once("model/configuracao/DBDepartamento.model.php");
-include("libs/PHPExcel/Classes/PHPExcel.php");
 $oGet        = db_utils::postMemory($_GET);
 $clpcorcam   = new cl_pcorcam();
-$objPHPExcel = new PHPExcel;
 
 /**
  * matriz de entrada
@@ -136,55 +134,13 @@ if ($iRsSql == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Não existem registros cadastrados.');
 }
 
-$styleCabecalho = array(
-    'font' => array(
-        'size' => 9,
-        'bold' => true,
-    ),
-    'alignment' => array(
-        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-    ),
-);
-
-$styleRespostaCabecalho = array(
-    'font' => array(
-        'size' => 9,
-        'bold' => false,
-    ),
-    'alignment' => array(
-        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-    ),
-);
-
-
-$styleCabecalhoCenter = array(
-    'font' => array(
-        'size' => 9,
-        'bold' => true,
-    ),
-    'alignment' => array(
-        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-    ),
-);
-
-
-
 ?>
 
 
 
 <?php
-
-//header('Content-Type: application/octet-stream');
-
-//header("Content-type: application/vnd.oasis.opendocument.text; charset=UTF-8");
-//header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 header("Content-type: application/vnd.ms-word; charset=UTF-8");
 header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
-
-
-
-//header("Content-type: application/vnd.ms-word; charset=UTF-8");
 
 ?>
 
@@ -247,8 +203,7 @@ header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
         <table>
 
             <?php
-            //ini_set('display_errors', 1);
-            //error_reporting(E_ALL);
+
             if ($oGet->lQuebraFornecedor == 't') {
                 $aCgms = array();
             }
@@ -372,51 +327,11 @@ header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
                 foreach ($aDadosPosRegPreco as $iNroSolicitacao => $aDados) {
 
 
-                    $objWorkSheet = $objPHPExcel->createSheet($contsheet);
-
                     $nTotalRegistros   = 0;
                     $nTotalSolicitada  = 0;
                     $nTotalEmpenhada   = 0;
                     $nTotalSolicitar   = 0;
                     $nTotalEmpenhar    = 0;
-
-                    //Iniciando planilha
-                    $objWorkSheet->setCellValue('A1', 'Abertura:');
-                    $objWorkSheet->setCellValue('C1', $aDados['oAbertura']);
-                    $objWorkSheet->setCellValue('A2', 'Compilacao:');
-                    $objWorkSheet->setCellValue('C2', $aDados['oCompilacao']);
-                    $objWorkSheet->setCellValue('A3', 'Licitacao:');
-                    $objWorkSheet->setCellValue('C3', iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDados['sLicitacao'])));
-                    $objWorkSheet->mergeCells('C3:F3');
-
-                    $objWorkSheet->setCellValue('A4', 'Seq.');
-                    $objWorkSheet->setCellValue('B4', 'Item.');
-                    $objWorkSheet->setCellValue('C4', 'Descricao');
-                    $objWorkSheet->setCellValue('F4', 'Complemento');
-                    $objWorkSheet->setCellValue('I4', 'Unidade');
-                    $objWorkSheet->setCellValue('J4', 'Vlr. Unit.');
-                    $objWorkSheet->setCellValue('K4', 'Fornecedor');
-                    $objWorkSheet->setCellValue('N4', 'Qtd. Max/Min');
-                    $objWorkSheet->setCellValue('O4', 'Solicitada');
-                    $objWorkSheet->setCellValue('P4', 'Empenhada');
-                    $objWorkSheet->setCellValue('Q4', 'a Solicitar');
-                    $objWorkSheet->setCellValue('R4', 'a Empenhar');
-
-                    $objWorkSheet->mergeCells('A1:B1');
-                    $objWorkSheet->mergeCells('A2:B2');
-                    $objWorkSheet->mergeCells('A3:B3');
-                    $objWorkSheet->mergeCells('C4:E4');
-                    $objWorkSheet->mergeCells('F4:H4');
-                    $objWorkSheet->mergeCells('K4:M4');
-
-                    //cabeçalho
-                    $objWorkSheet->getStyle('A1:A3')->applyFromArray($styleCabecalho);
-                    $objWorkSheet->getStyle('C1:C3')->applyFromArray($styleRespostaCabecalho);
-                    $objWorkSheet->getStyle('A4:A4')->applyFromArray($styleCabecalho);
-                    $objWorkSheet->getStyle('B4:M4')->applyFromArray($styleCabecalhoCenter);
-                    $objWorkSheet->getStyle('N4:R4')->applyFromArray($styleCabecalho);
-
-                    $lPreenchimento = 1;
 
                     /**
                      * Percore os registros por dados compilação
@@ -433,50 +348,26 @@ header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
                             echo "<td class=\"header\" colspan=\"3\"> <strong> Quantidade  </strong>";
                             echo "<td class=\"header\" colspan=\"2\"> <strong> Saldos  </strong>";
                             echo "<tr>";
-                            echo <<<HTML
-        
-            <tr>
-            <td><strong>SEQ</strong></td>
-                <td><strong>ITEM</strong></td>
-                <td><strong>DESCRIÇÃO</strong></td>
-                <td><strong>COMPLEMENTO</strong></td>
-                <td><strong>UN</strong></td>
-                <td><strong>VLR. UNIT.</strong></td>
-                <td><strong>FORNECEDOR</strong></td>
-                <td><strong>QTD. MIN/MAX</strong></td>
-                <td><strong>SOLICITADA</strong></td>
-                <td><strong>EMPENHADA</strong></td>
-                <td><strong>A SOLICITAR</strong></td>
-                <td><strong>A EMPENHAR</strong></td>
-            </tr>
 
-HTML;
+                            echo
+                            " <tr>
+                                <td><strong>SEQ</strong></td>
+                                <td><strong>ITEM</strong></td>
+                                <td><strong>DESCRIÇÃO</strong></td>
+                                <td><strong>COMPLEMENTO</strong></td>
+                                <td><strong>UN</strong></td>
+                                <td><strong>VLR. UNIT.</strong></td>
+                                <td><strong>FORNECEDOR</strong></td>
+                                <td><strong>QTD. MIN/MAX</strong></td>
+                                <td><strong>SOLICITADA</strong></td>
+                                <td><strong>EMPENHADA</strong></td>
+                                <td><strong>A SOLICITAR</strong></td>
+                                <td><strong>A EMPENHAR</strong></td>
+                            </tr>";
 
                             foreach ($aDadosCompilacao as $sIndice => $aDadosSolicita) {
                                 $sIndice = $sIndice + 4;
 
-                                //Coordenadas
-                                $collA = 'A' . $sIndice;
-                                $collB = 'B' . $sIndice;
-                                $collC = 'C' . $sIndice;
-                                $collD = 'D' . $sIndice;
-                                $collE = 'E' . $sIndice;
-                                $collF = 'F' . $sIndice;
-                                $collG = 'G' . $sIndice;
-                                $collH = 'H' . $sIndice;
-                                $collI = 'I' . $sIndice;
-                                $collJ = 'J' . $sIndice;
-                                $collK = 'K' . $sIndice;
-                                $collL = 'L' . $sIndice;
-                                $collM = 'M' . $sIndice;
-                                $collN = 'N' . $sIndice;
-                                $collO = 'O' . $sIndice;
-                                $collP = 'P' . $sIndice;
-                                $collQ = 'Q' . $sIndice;
-                                $collR = 'R' . $sIndice;
-
-
-                                $lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
                                 echo "<tr>";
                                 echo "<td>" . $aDadosSolicita['oDados']->iSeq . "</td>";
                                 echo "<td>" . $aDadosSolicita['oDados']->iCodItem . "</td>";
@@ -487,45 +378,18 @@ HTML;
                                 echo "<td>" . iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosSolicita['oDados']->sFornecedor)) . "</td>";
 
 
-
-
-
-
-
-                                $objWorkSheet->setCellValue($collA, $aDadosSolicita['oDados']->iSeq);
-                                $objWorkSheet->setCellValue($collB, $aDadosSolicita['oDados']->iCodItem);
-                                $objWorkSheet->mergeCells($collC . ':' . $collE);
-                                $objWorkSheet->setCellValue($collC, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosSolicita['oDados']->sDescrItem)));
-                                $objWorkSheet->mergeCells($collF . ':' . $collH);
-                                $objWorkSheet->setCellValue($collF, str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)));
-                                $objWorkSheet->setCellValue($collI, $aDadosSolicita['oDados']->sUnidade);
-                                $objWorkSheet->getStyle($collJ)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
-                                $objWorkSheet->setCellValue($collJ, $aDadosSolicita['nTotalVlrUnid']);
-                                $objWorkSheet->mergeCells($collK . ':' . $collM);
-                                $objWorkSheet->setCellValue($collK, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosSolicita['oDados']->sFornecedor)));
-
                                 if (!$aDadosSolicita['oDados']->lControlaValor) {
                                     echo "<td>" . $aDadosSolicita['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax . "</td>";
                                     echo "<td>" . $aDadosSolicita['oDados']->iSolicitada . "</td>";
                                     echo "<td>" . $aDadosSolicita['oDados']->iEmpenhada . "</td>";
                                     echo "<td>" . $aDadosSolicita['oDados']->nSolicitar . "</td>";
                                     echo "<td>" . $aDadosSolicita['oDados']->nEmpenhar . "</td>";
-                                    $objWorkSheet->setCellValue($collN, 0);
-                                    $objWorkSheet->setCellValue($collO, $aDadosSolicita['oDados']->iSolicitada);
-                                    $objWorkSheet->setCellValue($collP, $aDadosSolicita['oDados']->iEmpenhada);
-                                    $objWorkSheet->setCellValue($collQ, $aDadosSolicita['oDados']->nSolicitar);
-                                    $objWorkSheet->setCellValue($collR, $aDadosSolicita['oDados']->nEmpenhar);
                                 } else {
                                     echo "<td>" . $aDadosSolicita['oDados']->nQuantMin . "/" . $aDadosSolicita['oDados']->nQuantMax  . "</td>";
                                     echo "<td>" . $aDadosSolicita['oDados']->iSolicitada . "</td>";
                                     echo "<td>" . $aDadosSolicita['oDados']->iEmpenhada . "</td>";
                                     echo "<td>" . $aDadosSolicita['oDados']->nSolicitar . "</td>";
                                     echo "<td>" . $aDadosSolicita['oDados']->nEmpenhar . "</td>";
-                                    $objWorkSheet->setCellValue($collN, 0);
-                                    $objWorkSheet->setCellValue($collO, $aDadosSolicita['oDados']->iSolicitada);
-                                    $objWorkSheet->setCellValue($collP, $aDadosSolicita['oDados']->iEmpenhada);
-                                    $objWorkSheet->setCellValue($collQ, $aDadosSolicita['oDados']->nSolicitar);
-                                    $objWorkSheet->setCellValue($collR, $aDadosSolicita['oDados']->nEmpenhar);
                                 }
 
                                 echo "</tr>";
@@ -542,12 +406,6 @@ HTML;
                                 $nTotalSolicitar    += $aDadosSolicita['oDados']->nSolicitar;
                                 $nTotalEmpenhar     += $aDadosSolicita['oDados']->nEmpenhar;
                                 $nTotalRegistros++;
-
-
-
-
-
-                                $objWorkSheet->getStyle($collA . ':' . $collR)->applyFromArray($styleRespostaCabecalho);
                             }
 
                             echo "<tr>";
@@ -571,18 +429,12 @@ HTML;
                     $nTotalGeralSolicitar   += $nTotalSolicitar;
                     $nTotalGeralEmpenhar    += $nTotalEmpenhar;
 
-                    // Rename sheet
-                    $abertura = "Abertura" . $aDados['oAbertura'];
-
-                    $objWorkSheet->setTitle("$abertura");
 
                     $contsheet++;
                 }
             } else {
 
                 $sIndice = 0;
-
-                $objWorkSheet = $objPHPExcel->createSheet($contsheet);
 
                 foreach ($aCgms as $index => $oFornecedor) {
 
@@ -591,24 +443,22 @@ HTML;
                     echo "<td class=\"header\" colspan=\"3\"> <strong> Quantidade  </strong>";
                     echo "<td class=\"header\" colspan=\"2\">  <strong> Saldos  </strong>";
                     echo "<tr>";
-                    echo <<<HTML
-        
-            <tr>
-            <td><strong>SEQ</strong></td>
-                <td><strong>ITEM</strong></td>
-                <td><strong>DESCRIÇÃO</strong></td>
-                <td><strong>COMPLEMENTO</strong></td>
-                <td><strong>UN</strong></td>
-                <td><strong>VLR. UNIT.</strong></td>
-                <td><strong>FORNECEDOR</strong></td>
-                <td><strong>QTD. MIN/MAX</strong></td>
-                <td><strong>SOLICITADA</strong></td>
-                <td><strong>EMPENHADA</strong></td>
-                <td><strong>A SOLICITAR</strong></td>
-                <td><strong>A EMPENHAR</strong></td>
-            </tr>
 
-HTML;
+                    echo
+                    " <tr>
+                        <td><strong>SEQ</strong></td>
+                        <td><strong>ITEM</strong></td>
+                        <td><strong>DESCRIÇÃO</strong></td>
+                        <td><strong>COMPLEMENTO</strong></td>
+                        <td><strong>UN</strong></td>
+                        <td><strong>VLR. UNIT.</strong></td>
+                        <td><strong>FORNECEDOR</strong></td>
+                        <td><strong>QTD. MIN/MAX</strong></td>
+                        <td><strong>SOLICITADA</strong></td>
+                        <td><strong>EMPENHADA</strong></td>
+                        <td><strong>A SOLICITAR</strong></td>
+                        <td><strong>A EMPENHAR</strong></td>
+                    </tr>";
 
                     $nTotalRegistros   = 0;
                     $nTotalSolicitada  = 0;
@@ -616,82 +466,12 @@ HTML;
                     $nTotalSolicitar   = 0;
                     $nTotalEmpenhar    = 0;
 
-                    //Iniciando planilha
-
-                    $objWorkSheet->setCellValue('A1', 'Abertura:');
-                    $objWorkSheet->setCellValue('C1', $oFornecedor['oAbertura']);
-                    $objWorkSheet->setCellValue('A2', 'Compilacao:');
-                    $objWorkSheet->setCellValue('C2', $oFornecedor['oCompilacao']);
-                    $objWorkSheet->setCellValue('A3', 'Licitacao:');
-                    $objWorkSheet->setCellValue('C3', iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $oFornecedor['sLicitacao'])));
-                    $objWorkSheet->mergeCells('C3:F3');
-
-                    $objWorkSheet->setCellValue('A4', 'Seq.');
-                    $objWorkSheet->setCellValue('B4', 'Item.');
-                    $objWorkSheet->setCellValue('C4', 'Descricao');
-                    $objWorkSheet->setCellValue('F4', 'Complemento');
-                    $objWorkSheet->setCellValue('I4', 'Unidade');
-                    $objWorkSheet->setCellValue('J4', 'Vlr. Unit.');
-                    $objWorkSheet->setCellValue('K4', 'Fornecedor');
-                    $objWorkSheet->setCellValue('N4', 'Qtd. Max/Min');
-                    $objWorkSheet->setCellValue('O4', 'Solicitada');
-                    $objWorkSheet->setCellValue('P4', 'Empenhada');
-                    $objWorkSheet->setCellValue('Q4', 'a Solicitar');
-                    $objWorkSheet->setCellValue('R4', 'a Empenhar');
-
-                    $objWorkSheet->mergeCells('A1:B1');
-                    $objWorkSheet->mergeCells('A2:B2');
-                    $objWorkSheet->mergeCells('A3:B3');
-                    $objWorkSheet->mergeCells('C4:E4');
-                    $objWorkSheet->mergeCells('F4:H4');
-                    $objWorkSheet->mergeCells('K4:M4');
-
-                    //cabeçalho
-                    $objWorkSheet->getStyle('A1:A3')->applyFromArray($styleCabecalho);
-                    $objWorkSheet->getStyle('C1:C3')->applyFromArray($styleRespostaCabecalho);
-                    $objWorkSheet->getStyle('A4:A4')->applyFromArray($styleCabecalho);
-                    $objWorkSheet->getStyle('B4:M4')->applyFromArray($styleCabecalhoCenter);
-                    $objWorkSheet->getStyle('N4:R4')->applyFromArray($styleCabecalho);
-
-                    $lPreenchimento = 1;
 
                     $sIndice += !$sIndice ? 5 : 2;
 
                     foreach ($oFornecedor['itens'] as $indice => $aDadosPosRegPreco) {
 
-                        //Coordenadas
-                        $collA = 'A' . $sIndice;
-                        $collB = 'B' . $sIndice;
-                        $collC = 'C' . $sIndice;
-                        $collD = 'D' . $sIndice;
-                        $collE = 'E' . $sIndice;
-                        $collF = 'F' . $sIndice;
-                        $collG = 'G' . $sIndice;
-                        $collH = 'H' . $sIndice;
-                        $collI = 'I' . $sIndice;
-                        $collJ = 'J' . $sIndice;
-                        $collK = 'K' . $sIndice;
-                        $collL = 'L' . $sIndice;
-                        $collM = 'M' . $sIndice;
-                        $collN = 'N' . $sIndice;
-                        $collO = 'O' . $sIndice;
-                        $collP = 'P' . $sIndice;
-                        $collQ = 'Q' . $sIndice;
-                        $collR = 'R' . $sIndice;
 
-                        $lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
-
-                        $objWorkSheet->setCellValue($collA, $aDadosPosRegPreco['oDados']->iSeq);
-                        $objWorkSheet->setCellValue($collB, $aDadosPosRegPreco['oDados']->iCodItem);
-                        $objWorkSheet->mergeCells($collC . ':' . $collE);
-                        $objWorkSheet->setCellValue($collC, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosPosRegPreco['oDados']->sDescrItem)));
-                        $objWorkSheet->mergeCells($collF . ':' . $collH);
-                        $objWorkSheet->setCellValue($collF, str_replace("\\n", "\n", substr(trim($aDadosPosRegPreco['oDados']->sCompl), 0, 20)));
-                        $objWorkSheet->setCellValue($collI, $aDadosPosRegPreco['oDados']->sUnidade);
-                        $objWorkSheet->getStyle($collJ)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
-                        $objWorkSheet->setCellValue($collJ, $aDadosPosRegPreco['nTotalVlrUnid']);
-                        $objWorkSheet->mergeCells($collK . ':' . $collM);
-                        $objWorkSheet->setCellValue($collK, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosPosRegPreco['oDados']->sFornecedor)));
 
 
                         echo "<tr>";
@@ -710,11 +490,6 @@ HTML;
                             echo "<td>" . $aDadosPosRegPreco['oDados']->iEmpenhada . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->nSolicitar . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->nEmpenhar . "</td>";
-                            $objWorkSheet->setCellValue($collN, 0);
-                            $objWorkSheet->setCellValue($collO, $aDadosPosRegPreco['oDados']->iSolicitada);
-                            $objWorkSheet->setCellValue($collP, $aDadosPosRegPreco['oDados']->iEmpenhada);
-                            $objWorkSheet->setCellValue($collQ, $aDadosPosRegPreco['oDados']->nSolicitar);
-                            $objWorkSheet->setCellValue($collR, $aDadosPosRegPreco['oDados']->nEmpenhar);
                         } else {
 
                             echo "<td>" . $aDadosPosRegPreco['oDados']->nQuantMin . "/" . $aDadosPosRegPreco['oDados']->nQuantMax . "</td>";
@@ -722,11 +497,6 @@ HTML;
                             echo "<td>" . $aDadosPosRegPreco['oDados']->iEmpenhada . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->nSolicitar . "</td>";
                             echo "<td>" . $aDadosPosRegPreco['oDados']->nEmpenhar . "</td>";
-                            $objWorkSheet->setCellValue($collN, 0);
-                            $objWorkSheet->setCellValue($collO, $aDadosPosRegPreco['oDados']->iSolicitada);
-                            $objWorkSheet->setCellValue($collP, $aDadosPosRegPreco['oDados']->iEmpenhada);
-                            $objWorkSheet->setCellValue($collQ, $aDadosPosRegPreco['oDados']->nSolicitar);
-                            $objWorkSheet->setCellValue($collR, $aDadosPosRegPreco['oDados']->nEmpenhar);
                         }
 
                         /**
@@ -740,7 +510,6 @@ HTML;
                         $nTotalEmpenhar     += $aDadosPosRegPreco['oDados']->nEmpenhar;
                         $nTotalRegistros++;
 
-                        $objWorkSheet->getStyle($collA . ':' . $collR)->applyFromArray($styleRespostaCabecalho);
 
                         $sIndice += 1;
                     }
@@ -757,11 +526,6 @@ HTML;
                     $nTotalGeralEmpenhada   += $nTotalEmpenhada;
                     $nTotalGeralSolicitar   += $nTotalSolicitar;
                     $nTotalGeralEmpenhar    += $nTotalEmpenhar;
-
-                    // Rename sheet
-                    $abertura = "Abertura" . $oFornecedor['oAbertura'];
-
-                    $objWorkSheet->setTitle("$abertura");
 
                     $contsheet++;
                 }
@@ -787,19 +551,3 @@ HTML;
 </html>
 
 <?php
-
-
-
-//header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
-
-/*
-$nomefile = "registro de preco" . '_' . db_getsession('DB_instit') . ".xlsx";
-header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment; filename=$nomefile");
-header("Expires: 0");
-header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
-header("Pragma: public");
-
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-$objWriter->save('php://output');
-*/
