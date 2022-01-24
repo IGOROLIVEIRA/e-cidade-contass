@@ -345,7 +345,7 @@ $clrotulo->label("pc10_numero");
     </tr>
     <tr>
       <td colspan="3" align="center">
-        <input name="emiterel" id="emiterel" type="button" value="Emitir Relátorio" onclick="js_emite();">
+        <input name="emiterel" id="emiterel" type="button" value="Emitir Relatório" onclick="js_emite();">
         <input name="emiterelxls" id="emiterelxls" type="button" value="Exportar xls" onclick="js_emitexls();">
         <input name="emiterelword" id="emiterelword" type="button" value="Exportar word" onclick="js_emiteword();">
       </td>
