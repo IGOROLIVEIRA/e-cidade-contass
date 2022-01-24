@@ -3259,7 +3259,7 @@ class Acordo
             //
             //            }
             $oNovoItem->setQuantidade((float) $oItem->quantidade);
-            $oNovoItem->setValorAditado((float) $oItem->valoraditado); //OC5304
+            $oNovoItem->setValorAditado(round($oItem->valorunitario * $oItem->quantidade, 2)); //OC5304
             $oNovoItem->setQuantiAditada((float) $oItem->quantiaditada); //OC5304
             $oNovoItem->setValorUnitario((float) $oItem->valorunitario);
             $oNovoItem->setValorTotal(round($oItem->valorunitario * $oItem->quantidade, 2));
