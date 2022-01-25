@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 
@@ -13,22 +13,22 @@ use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 class EventoS2200 extends EventoBase
 {
 
-	/**
-	 * 
-	 * @param \stdClass $dados
-	 */
-	function __construct($dados)
-	{
-		parent::__construct($dados);
-	}
+    /**
+     *
+     * @param \stdClass $dados
+     */
+    function __construct($dados)
+    {
+        parent::__construct($dados);
+    }
 
     /**
-	 * Retorna dados no formato necessario para envio
-	 * pela API sped-esocial
-	 * @return array stdClass
-	 */
-	public function montarDados()
-	{
+     * Retorna dados no formato necessario para envio
+     * pela API sped-esocial
+     * @return array stdClass
+     */
+    public function montarDados()
+    {
         $aDadosAPI = array();
 
         foreach ($this->dados as $oDados) {
@@ -162,7 +162,11 @@ class EventoS2200 extends EventoBase
 
             $oDadosAPI->evtAdmissao->deficiencia = empty($oDados->infoDeficiencia) ? null : $oDados->infoDeficiencia;
 
-            $oDadosAPI->evtAdmissao->dependente = $this->buscarDependentes($oDados->vinculo->matricula);
+            $oDadosAPI->evtAdmissao->dependente = null;
+
+            if ($this->buscarDependentes($oDados->vinculo->matricula) != null) {
+                $oDadosAPI->evtAdmissao->dependente = $this->buscarDependentes($oDados->vinculo->matricula);
+            }
 
             $oDadosAPI->evtAdmissao->aposentadoria = empty($oDados->aposentadoria) ? null : $oDados->aposentadoria;
 
@@ -191,13 +195,12 @@ class EventoS2200 extends EventoBase
 
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario = $oDados->infoEstatutario;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->infoDecJud = empty($oDados->infoDecJud) ? null : $oDados->infoDecJud;
-
             }
 
             if (!empty($oDados->infoContrato)) {
 
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato = $oDados->infoContrato;
-                
+
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCargo = empty($oDados->infoContrato->codCargo) ? null : $oDados->codCargo;
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->codFuncao = empty($oDados->infoContrato->codFuncao) ? null : $oDados->infoContrato->codFuncao;
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCarreira = empty($oDados->infoContrato->codCarreira) ? null : $oDados->infoContrato->codCarreira;
@@ -217,10 +220,9 @@ class EventoS2200 extends EventoBase
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->localTrabDom = empty($oDados->localTrabDom) ? null : $oDados->localTrabDom;
 
                 if (empty($oDados->horContratual)) {
-                    
+
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = $oDados->horContratual;
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->horario = $this->buscarHorarios($oDados->vinculo->matricula);
-
                 } else {
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = null;
                 }
@@ -229,11 +231,10 @@ class EventoS2200 extends EventoBase
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->filiacaoSindical[0]->cnpjsindtrab = $oDados->filiacaoSindical->cnpjSindTrab;
                 }
 
-                
+
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->alvaraJudicial = empty($oDados->alvaraJudicial) ? null : $oDados->alvaraJudicial;
 
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->observacoes = empty($oDados->observacoes) ? null : array($oDados->observacoes);
-
             }
 
             $oDadosAPI->evtAdmissao->vinculo->sucessaoVinc = empty($oDados->sucessaoVinc) ? null : $oDados->sucessaoVinc;
@@ -245,29 +246,31 @@ class EventoS2200 extends EventoBase
             $oDadosAPI->evtAdmissao->vinculo->afastamento = empty($oDados->afastamento) ? null : $oDados->afastamento;
 
             $oDadosAPI->evtAdmissao->vinculo->desligamento = empty($oDados->desligamento) ? null : $oDados->desligamento;
-
+            // echo '<pre>';
+            // print_r($oDadosAPI);
+            // exit;
             $aDadosAPI[] = $oDadosAPI;
-
         }
 
         return $aDadosAPI;
-	}
+    }
 
     /**
      * Retorna dados dos dependentes no formato necessario para envio
      * pela API sped-esocial
      * @return array stdClass
      */
-    private function buscarDependentes($matricula) {
+    private function buscarDependentes($matricula)
+    {
 
         $oDaorhdepend = \db_utils::getDao("rhdepend");
-        $sqlDependentes = $oDaorhdepend->sql_query_file(null,"*","rh31_codigo","rh31_regist = {$matricula}");
+        $sqlDependentes = $oDaorhdepend->sql_query_file(null, "*", "rh31_codigo", "rh31_regist = {$matricula}");
         $rsDependentes = db_query($sqlDependentes);
         if (pg_num_rows($rsDependentes) == 0) {
             return null;
         }
         $aDependentes = array();
-        for ($iCont=0; $iCont < pg_num_rows($rsDependentes); $iCont++) {
+        for ($iCont = 0; $iCont < pg_num_rows($rsDependentes); $iCont++) {
             $oDependentes = \db_utils::fieldsMemory($rsDependentes, $iCont);
             $oDependFormatado = new \stdClass;
             switch ($oDependentes->rh31_gparen) {
@@ -282,7 +285,7 @@ class EventoS2200 extends EventoBase
                 case 'A':
                     $oDependFormatado->tpDep = '09';
                     break;
-                
+
                 default:
                     $oDependFormatado->tpDep = '99';
                     break;
@@ -305,7 +308,8 @@ class EventoS2200 extends EventoBase
      * pela API sped-esocial
      * @return array stdClass
      */
-    private function buscarHorarios($matricula) {
+    private function buscarHorarios($matricula)
+    {
 
         $aHorarios = array();
         $oDaoJornada = \db_utils::getDao("jornada");
@@ -313,7 +317,7 @@ class EventoS2200 extends EventoBase
         if (pg_num_rows($rsHorarios) == 0) {
             return null;
         }
-        for ($iCont=0; $iCont < pg_num_rows($rsHorarios); $iCont++) { 
+        for ($iCont = 0; $iCont < pg_num_rows($rsHorarios); $iCont++) {
             $oHorarioFormatado = new \stdClass;
             $oHorario = \db_utils::fieldsMemory($rsHorarios, $iCont);
             $oHorarioFormatado->codHorContrat = $oHorario->rh188_sequencial;
@@ -321,41 +325,43 @@ class EventoS2200 extends EventoBase
             $aHorarios[] = $oHorarioFormatado;
         }
         return $aHorarios;
-
     }
 
-        /**
+    /**
      * Retorna dados dos afastamentos no formato necessario para envio
      * pela API sped-esocial
      * @return array stdClass
      */
-    private function buscarAfastamentos($matricula) {
+    private function buscarAfastamentos($matricula)
+    {
 
-          
-        $acodMotAfastEsocial = array('O1' => '01',
-                                     'O2' => '01',
-                                     'O3' => '01',
-                                     'P1' => '03',
-                                     'P2' => '01',
-                                     'Q1' => '17',
-                                     'Q2' => '35',
-                                     'Q3' => '19',
-                                     'Q4' => '20',
-                                     'Q5' => '20',
-                                     'Q6' => '20',
-                                     'R' => '29',
-                                     'U3' => '06',
-                                     'W' => '24',
-                                     'X' => '21');
 
-        $acodMotAfastEcidade = array('O1','O2','O3','P1','P2','Q1','Q2','Q3','Q4','Q5','Q6','R','U3','W','X'); 
+        $acodMotAfastEsocial = array(
+            'O1' => '01',
+            'O2' => '01',
+            'O3' => '01',
+            'P1' => '03',
+            'P2' => '01',
+            'Q1' => '17',
+            'Q2' => '35',
+            'Q3' => '19',
+            'Q4' => '20',
+            'Q5' => '20',
+            'Q6' => '20',
+            'R' => '29',
+            'U3' => '06',
+            'W' => '24',
+            'X' => '21'
+        );
+
+        $acodMotAfastEcidade = array('O1', 'O2', 'O3', 'P1', 'P2', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'R', 'U3', 'W', 'X');
         $aAfastamentos = array();
         $oDaoAfasta = \db_utils::getDao("afasta");
-        $rsAfastamentos = db_query($oDaoAfasta->sql_query_file(null,"*",null,"r45_regist = {$matricula} AND r45_codafa IN ('".implode("','",$acodMotAfastEcidade)."')"));
+        $rsAfastamentos = db_query($oDaoAfasta->sql_query_file(null, "*", null, "r45_regist = {$matricula} AND r45_codafa IN ('" . implode("','", $acodMotAfastEcidade) . "')"));
         if (pg_num_rows($rsAfastamentos) == 0) {
             return null;
         }
-        for ($iCont=0; $iCont < pg_num_rows($rsAfastamentos); $iCont++) { 
+        for ($iCont = 0; $iCont < pg_num_rows($rsAfastamentos); $iCont++) {
             $oAfastamentoFormatado = new \stdClass;
             $oAfastamento = \db_utils::fieldsMemory($rsAfastamentos, $iCont);
             $oAfastamentoFormatado->dtIniAfast = $oAfastamento->r45_dtafas;
@@ -363,7 +369,5 @@ class EventoS2200 extends EventoBase
             $aAfastamentos[] = $oAfastamentoFormatado;
         }
         return $aAfastamentos;
-
     }
-
 }
