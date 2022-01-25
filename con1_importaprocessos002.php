@@ -40,9 +40,11 @@ if ($delimitador == "1") {
     $del = ",";
 }
 
-//echo $oLicitacao->getDados()->pc21_orcamforne;
-//echo $oLicitacao->getDados()->pc22_orcamitem;
-//exit;
+// echo 'orcamforne: ' . $oLicitacao->getDados()->pc21_orcamforne . ' ';
+// echo 'orcamitem: ' . $oLicitacao->getDados()->pc22_orcamitem;
+// echo '<pre>';
+// print_r($oLicitacao->getDados());
+// exit;
 
 $file_handle = fopen("tmp/$sFile[4]", "r");
 while (!feof($file_handle)) {
