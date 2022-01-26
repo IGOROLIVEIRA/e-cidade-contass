@@ -126,7 +126,9 @@ return array(
     ),
     'dependente' => array(
         'properties' => array(
-            'tpDep' => 'tpDep',
+            'tpDep' => array(
+                'nome_api' => 'tpdep'
+            ),
             'nmDep' => 'nmDep',
             'dtNascto' => 'dtNascto',
             'cpfDep' => 'cpfDep',
@@ -206,7 +208,7 @@ return array(
                 'tpInclContr' => 'tpInclContr',
                 'type' => 'int'
             )
-            
+
         )
     ),
     'ideTomadorServ' => array(
@@ -333,7 +335,7 @@ return array(
             'tmpParc' => 'tmpParc',
             'type' => 'int'
         )
-        
+
     ),
     'horario' => array(
         'properties' => array(

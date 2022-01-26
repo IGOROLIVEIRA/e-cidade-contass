@@ -270,6 +270,7 @@ try {
                 // exit('alguma coisa');
                 $formatter = FormatterFactory::get($arquivo);
                 $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
+                // echo '<pre>';
                 // var_dump($dadosTabela);
                 // exit;
                 /**

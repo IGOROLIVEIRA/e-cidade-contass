@@ -29,6 +29,8 @@ class EventoS2200 extends EventoBase
      */
     public function montarDados()
     {
+        // echo 'tst';
+        // exit;
         $aDadosAPI = array();
 
         foreach ($this->dados as $oDados) {
@@ -162,10 +164,18 @@ class EventoS2200 extends EventoBase
 
             $oDadosAPI->evtAdmissao->deficiencia = empty($oDados->infoDeficiencia) ? null : $oDados->infoDeficiencia;
 
-            $oDadosAPI->evtAdmissao->dependente = null;
+            // print_r($oDadosAPI->evtAdmissao->dependente);
+            // exit;
+            // print_r(empty($oDadosAPI->evtAdmissao->dependente));
+            // exit;
 
-            if ($this->buscarDependentes($oDados->vinculo->matricula) != null) {
-                $oDadosAPI->evtAdmissao->dependente = $this->buscarDependentes($oDados->vinculo->matricula);
+            $oDadosAPI->evtAdmissao->dependente = $this->buscarDependentes($oDados->vinculo->matricula);
+
+
+            if (empty($oDadosAPI->evtAdmissao->dependente)) {
+                // echo 'mat: ' . $oDados->vinculo->matricula;
+                // print_r($oDadosAPI->evtAdmissao->dependente);
+                unset($oDadosAPI->evtAdmissao->dependente);
             }
 
             $oDadosAPI->evtAdmissao->aposentadoria = empty($oDados->aposentadoria) ? null : $oDados->aposentadoria;
@@ -246,12 +256,12 @@ class EventoS2200 extends EventoBase
             $oDadosAPI->evtAdmissao->vinculo->afastamento = empty($oDados->afastamento) ? null : $oDados->afastamento;
 
             $oDadosAPI->evtAdmissao->vinculo->desligamento = empty($oDados->desligamento) ? null : $oDados->desligamento;
-            // echo '<pre>';
-            // print_r($oDadosAPI);
-            // exit;
+
             $aDadosAPI[] = $oDadosAPI;
         }
-
+        // echo '<pre>';
+        // print_r($aDadosAPI);
+        // exit;
         return $aDadosAPI;
     }
 
