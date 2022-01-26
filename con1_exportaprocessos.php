@@ -47,6 +47,7 @@ $clrotulo->label("l20_numero");
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
+
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
@@ -99,9 +100,11 @@ $clrotulo->label("l20_numero");
 
             //location.href = 'con1_exportaprocessos002.php?' + sQuery;
 
-            jan = window.open('con1_importaprocessos002.php?' + sQuery);
+            jan = window.open('con1_importaprocessos002.php?' + sQuery, '',
+                'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0');
             jan.moveTo(0, 0);
-            document.form1.l20_codigo.value = '';
+
+            //document.form1.l20_codigo.value = '';
 
         }
     </script>
