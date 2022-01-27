@@ -504,5 +504,44 @@ class cl_pcproc {
      }
      return $sql;
   }
+
+    function sql_query_dotacao ( $pc80_codproc=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from pcproc ";
+        $sql .= "INNER JOIN pcprocitem ON pcprocitem.pc81_codproc = pcproc.pc80_codproc ";
+        $sql .= "INNER JOIN solicitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo";
+        $sql .= "INNER JOIN pcdotac ON pcdotac.pc13_codigo = solicitem.pc11_codigo";
+        $sql .= "INNER JOIN orcdotacao ON (orcdotacao.o58_anousu,orcdotacao.o58_coddot) = (pcdotac.pc13_anousu,pcdotac.pc13_coddot)";
+        $sql .= "INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($pc80_codproc!=null ){
+                $sql2 .= " where pcproc.pc80_codproc = $pc80_codproc ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
 }
 ?>

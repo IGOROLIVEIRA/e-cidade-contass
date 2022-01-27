@@ -146,4 +146,66 @@ class ESocial
 
         return $result->access_token;
     }
+
+    /**
+     * Retorna o numero do protocolo de envio request realizado
+     *
+     * @return string
+     */
+    public function getProtocoloEnvioLote()
+    {
+        return (string) $this->httpRequest->getObjXml()->dadosRecepcaoLote->protocoloEnvio;
+    }
+
+    /**
+     * Retorna o id do processamento
+     *
+     * @return string
+     */
+    public function getIdProcessamento()
+    {
+        $arrId = current($this->httpRequest->getObjXml()->retornoEventos->evento->attributes());
+        return (string) current($arrId);
+    }
+
+    /**
+     * Retorna o numero do recibo de envio
+     *
+     * @return string
+     */
+    public function getNumeroRecibo()
+    {
+        return $this->httpRequest->getObjXml()->retornoEventos->evento->retornoEvento->eSocial->retornoEvento->recibo->nrRecibo;
+    }
+
+    /**
+     * Retorna descricao da resposta no status
+     *
+     * @return string
+     */
+    public function getDescResposta()
+    {
+        return (string) $this->httpRequest->getObjXml()->status->descResposta;
+    }
+
+    /**
+     * Retorna codigo da resposta da conusulta do envio
+     *
+     * @return string
+     */
+    public function getCdRespostaProcessamento()
+    {
+        return (string) $this->httpRequest->getObjXml()->retornoEventos->evento->retornoEvento->eSocial->retornoEvento->processamento->cdResposta;
+    }
+
+    /**
+     * Retorna descricao da resposta da conusulta do envio
+     *
+     * @return string
+     */
+    public function getDescRespostaProcessamento()
+    {
+        return (string) $this->httpRequest->getObjXml()->retornoEventos->evento->retornoEvento->eSocial->retornoEvento->processamento->ocorrencias->ocorrencia->descricao;
+    }
+
 }

@@ -59,6 +59,8 @@ db_app::import("Dotacao");
 db_app::import("contabilidade.contacorrente.*");
 db_app::import("orcamento.*");
 
+include("classes/db_slip_classe.php");
+
 $oGet     = db_utils::postMemory($_GET);
 $oJson    = new services_json();
 $sStringToParse = str_replace("<aspa>",'\"',str_replace("\\","",$_POST["json"]));
@@ -195,23 +197,190 @@ switch ($oParam->exec) {
     $aOrdensAgenda = $oAgenda->getMovimentosAgenda($sWhere, $sJoin, false, false, ",e83_conta, e83_descr,e91_codcheque, e91_valor");
 
 
-    $oRetono->status           = 2;
-    $oRetono->mensagem         = "";
+    $oRetorno->status           = 2;
+    $oRetorno->mensagem         = "";
     if (count($aOrdensAgenda) > 0) {
 
-      $oRetono->status           = 1;
-      $oRetono->mensagem         = 1;
-      $oRetono->aNotasLiquidacao = $aOrdensAgenda;
-      echo $oJson->encode($oRetono);
+      $oRetorno->status           = 1;
+      $oRetorno->mensagem         = 1;
+      $oRetorno->aNotasLiquidacao = $aOrdensAgenda;
+      echo $oJson->encode($oRetorno);
 
     } else {
 
-      $oRetono->status           = 2;
-      $oRetono->mensagem         = "";
-      echo $oJson->encode($oRetono);
+      $oRetorno->status           = 2;
+      $oRetorno->mensagem         = "";
+      echo $oJson->encode($oRetorno);
 
     }
     break;
+
+    case "getSlipSemCheque":
+        $clslip = new cl_slip;
+
+        // Montando Condições da Busca
+        $dbwhere = '(e97_codforma = 1 or  e97_codforma = 4) and k17_instit = ' . db_getsession("DB_instit");
+        $dbwhere .= ' and k17_dtaut is null and e81_cancelado IS NULL and c60_anousu = ' . db_getsession("DB_anousu");
+        $dbwhere .= ' and k17_situacao = 1 ';
+
+        if (isset($oParam->params[0]->iOrdemIni) && $oParam->params[0]->iOrdemIni != '' && isset($oParam->params[0]->iOrdemFim) && $oParam->params[0]->iOrdemFim != '') {
+            $dbwhere .= " and s.k17_codigo >= " . $oParam->params[0]->iOrdemIni . " and s.k17_codigo <= " . $oParam->params[0]->iOrdemFim;
+        } else if ((empty($oParam->params[0]->iOrdemIni) || (isset($oParam->params[0]->iOrdemIni) && $oParam->params[0]->iOrdemIni == ''))  && isset($oParam->params[0]->iOrdemFim) && $oParam->params[0]->iOrdemFim != '') {
+            $dbwhere .= " and s.k17_codigo <= " . $oParam->params[0]->iOrdemFim;
+        } else if (isset($oParam->params[0]->iOrdemIni) && $oParam->params[0]->iOrdemIni != '') {
+            $dbwhere .= " and s.k17_codigo = " . $oParam->params[0]->iOrdemIni;
+        }
+
+        if (isset($oParam->params[0]->iOrdemBanc) && $oParam->params[0]->iOrdemBanc != '') {
+            $sSqlOrdemSlip = "select k00_slip from ordembancariapagamento where k00_codordembancaria = {$oParam->params[0]->iOrdemBanc}";
+            $rsResultOrdemSlip = db_query($sSqlOrdemSlip);
+            $aOrdemSlip = array();
+            for ($iCont = 0; $iCont < pg_num_rows($rsResultOrdemSlip); $iCont++) {
+                $aOrdemSlip[] = db_utils::fieldsMemory($rsResultOrdemSlip, $iCont)->k00_slip;
+            }
+            $dbwhere .= " and s.k17_codigo in (" . implode(",", $aOrdemSlip) . ") ";
+        }
+
+        if (isset($oParam->params[0]->z01_numcgm) && $oParam->params[0]->z01_numcgm != '') {
+            $dbwhere .= " and z01_numcgm = " . $oParam->params[0]->z01_numcgm;
+        }
+
+        if (isset($oParam->params[0]->dtDataIni) && !isset($oParam->params[0]->dtDataFim)) {
+            $oParam->params[0]->dtDataIni = implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataIni)));
+            if ($oParam->params[0]->dtDataIni != '') {
+                $dbwhere .= " and k17_data = '{$oParam->params[0]->dtDataIni}'";
+            }
+        } else if (isset($oParam->params[0]->dtDataIni) && isset($oParam->params[0]->dtDataFim)) {
+            $oParam->params[0]->dtDataFim = implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataFim)));
+            $oParam->params[0]->dtDataIni = implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataIni)));
+            if ($oParam->params[0]->dtDataFim != '' && $oParam->params[0]->dtDataIni != '') {
+                $dbwhere .= " and k17_data between '{$oParam->params[0]->dtDataFim}'";
+                $dbwhere .= " and '{$oParam->params[0]->dtDataFim}'";
+            }
+        }
+
+        $sql_disabled = $clslip->sql_query_tipo(null, "s.k17_codigo, k17_valor", "", $dbwhere . " and k17_autent > 0");
+        $sql = $clslip->sql_query_tipo(null, "s.k17_codigo, k17_situacao, k17_valor, k17_credito, k17_debito, k17_data, c50_descr, c60_descr, z01_nome, k17_instit,e81_numdoc, e81_codmov, e97_codforma", 's.k17_codigo', $dbwhere);
+        
+        $query = pg_query($sql);
+        while ($oOrdem = pg_fetch_object($query)) {
+            $oOrdem->e81_numdoc = $oOrdem->e81_numdoc ? $oOrdem->e81_numdoc : '';
+            $aOrdensAgenda[] = $oOrdem;
+        }
+
+        // Condição do Slip Sem Cheque
+        $oRetorno->status = 2;
+        $oRetorno->mensagem = "";
+
+        if (count($aOrdensAgenda) > 0) {
+            $oRetorno->status = 1;
+            $oRetorno->mensagem = 1;
+            $oRetorno->aNotasLiquidacao = $aOrdensAgenda;
+            echo $oJson->encode($oRetorno);
+        } else {
+            $oRetorno->status = 2;
+            $oRetorno->mensagem = $oParam->params[0];
+            echo $oJson->encode($oRetorno);
+        }
+
+        break;
+
+    case "pagarSlip" :
+        // Condição para slip sem cheque, retirada do arquivo emp4_empagepagamento001.php
+        $oRetorno = new stdClass();
+        $oRetorno->status = 1;
+        $oRetorno->message = "";
+        if (is_array($oParam->aMovimentos)) {
+            try {
+                db_inicio_transacao();
+                foreach ($oParam->aMovimentos as $oMovimento) {
+                    $codigo = $oMovimento->iCodSlip;
+                    $numslip = $oMovimento->iCodSlip;
+                    $e91_codcheque = '0';
+                    $codigomovimento = '0';
+
+                    if (!empty($oParam->dtPagamento) && $oParam->dtPagamento != '//') {
+                        $dtAuxData = new DBDate($oParam->dtPagamento);
+                        $dtAuxData = $dtAuxData->getDate();
+                        $data = $dtAuxData; // aqui ele atribui a data_para_pagamento enviada pelo usuário
+                        unset($dtAuxData);
+                    } else {
+                        $data = date("Y-m-d", db_getsession("DB_datausu"));
+                    }
+
+                    $ip = db_getsession("DB_ip");
+                    $instit = db_getsession("DB_instit");
+
+                    $sql = "select fc_auttransf($codigo, '" . $data . "', '" . $ip . "', true, $e91_codcheque, " . $instit . ") as verautenticacao";
+                    $result03 = db_query($sql);
+                    
+                    if (pg_numrows($result03) == 0) {
+                        $oRetorno->status = 1;
+                        $oRetorno->mensagem = "Erro ao Autenticar SLIP $numslip!";
+                        break;
+                    } else {
+                      
+                        db_fieldsmemory($result03, 0);
+                        if (substr($verautenticacao, 0, 1) != "1") {
+                            throw new Exception($verautenticacao);
+                            break;
+                        }
+                        
+
+                        if (USE_PCASP) {
+                            try {
+                              
+                                $oDaocfautent = db_utils::getDao('cfautent');
+                                $oDaoSlipTipoOperacao  = db_utils::getDao('sliptipooperacaovinculo');
+                                $sSqlBuscaTipoOperacao = $oDaoSlipTipoOperacao->sql_query_file($codigo);
+                                $rsBuscaTipoOperacao   = $oDaoSlipTipoOperacao->sql_record($sSqlBuscaTipoOperacao);
+                                if ($oDaoSlipTipoOperacao->numrows == 0) {
+                                    throw new Exception("Não foi possí­vel localizar o tipo de operação do slip {$codigo}.");
+                                }
+                                $sSqlAutenticadora = $oDaocfautent->sql_query_file(null, "k11_id, k11_tipautent", '', "k11_ipterm = '{$ip}' and k11_instit = " . db_getsession("DB_instit"));
+                                $rsAutenticador = $oDaocfautent->sql_record($sSqlAutenticadora);
+
+                                if ($oDaocfautent->numrows == '0') {
+                                    throw new Exception("Cadastre o ip {$iIp} como um caixa.");
+                                }
+
+                                $iCodigoTerminal = db_utils::fieldsMemory($rsAutenticador, 0)->k11_id;
+                                $iTipoOperacao = db_utils::fieldsMemory($rsBuscaTipoOperacao, 0)->k153_slipoperacaotipo;
+                                $oTransferencia = TransferenciaFactory::getInstance($iTipoOperacao, $codigo);
+                                $oTransferencia->setDataAutenticacao($data);
+                                $oTransferencia->setIDTerminal($iCodigoTerminal);
+                                $oTransferencia->setNumeroAutenticacao(substr($verautenticacao, 1, 7));
+                                $oTransferencia->executarLancamentoContabil(null, false, $e91_codcheque);
+                                
+                                $oDaoEmpageMov = db_utils::getDao("empagemov");
+                                $oDaoEmpageMov->e81_numdoc = (isset($oMovimento->sNumDoc) && $oMovimento->sNumDoc != '') ? $oMovimento->sNumDoc : '';
+                                $oDaoEmpageMov->e81_codmov = $oMovimento->iCodMov;
+                                $oDaoEmpageMov->alterar($oMovimento->iCodMov);
+
+                                if ($oDaoEmpageMov->erro_status == 0) {
+                                    $sErroMsg = "Erro [8] - Não foi possivel incluir o número do documento ao movimento.";
+                                    throw new Exception($sErroMsg);
+                                }
+
+                                $oRetorno->message = urlencode("Pagamento(s) Efetuado(s) com sucesso!");
+                            } catch (Exception $eErro) {
+                                db_fim_transacao(true);
+                                $oRetorno->status = 2;
+                                $oRetorno->message = urlencode($eErro->getMessage());
+                            }
+                        }
+                    }
+                } 
+            } catch (Exception $eErro) {
+                db_fim_transacao(true);
+                $oRetorno->status = 2;
+                $oRetorno->message = urlencode($eErro->getMessage());
+            }
+        }
+        db_fim_transacao(false);
+        echo $oJson->encode($oRetorno);
+        // Final da slip sem cheque
+        break;
 
     case "pagarMovimento" :
 
@@ -228,16 +397,16 @@ switch ($oParam->exec) {
         db_inicio_transacao();
         foreach ($oParam->aMovimentos as $oMovimento) {
 
-          $oOrdemPagamento = new ordemPagamento($oMovimento->iNotaLiq);
-
           if (!empty($oParam->dtPagamento) && $oParam->dtPagamento != '//') {
-
             $dtAuxData = new DBDate($oParam->dtPagamento);
             $dtAuxData = $dtAuxData->getDate();
-            $oOrdemPagamento->setDataUsu($dtAuxData);
+            $data = $dtAuxData; // aqui ele atribui a data_para_pagamento enviada pelo usuário
             unset($dtAuxData);
-
+          } else {
+              $data = date("Y-m-d", db_getsession("DB_datausu"));
           }
+
+          $oOrdemPagamento = new ordemPagamento($oMovimento->iNotaLiq, $data);
 
           $oOrdemPagamento->setCheque($oMovimento->iCheque);
           $oOrdemPagamento->setChequeAgenda($oMovimento->iCodCheque);
@@ -253,8 +422,20 @@ switch ($oParam->exec) {
           $oAutentica->sAutentica     = $oOrdemPagamento->getRetornoautenticacao();
           $oRetorno->aAutenticacoes[] = $oAutentica;
 
+          $oDaoEmpageMov = db_utils::getDao("empagemov");
+          $oDaoEmpageMov->e81_numdoc = (isset($oMovimento->sNumDoc) && $oMovimento->sNumDoc != '') ? $oMovimento->sNumDoc : '';
+          $oDaoEmpageMov->e81_codmov = $oMovimento->iCodMov;
+          $oDaoEmpageMov->alterar($oMovimento->iCodMov);
+  
+          if ($oDaoEmpageMov->erro_status == 0) {
+              $sErroMsg = "Erro [8] - Não foi possivel incluir o número do documento ao movimento.";
+              throw new Exception($sErroMsg);
+          }
         }
+
         db_fim_transacao(false);
+
+
         $oRetorno->message = urlencode("Pagamento(s) Efetuado(s) com sucesso!");
       }
       catch (Exception $eErro) {
@@ -296,21 +477,21 @@ switch ($oParam->exec) {
       $rsConsultaFimPeriodoContabil     = db_query($sSqlConsultaFimPeriodoContabil);
 
       if (pg_num_rows($rsConsultaFimPeriodoContabil) > 0) {
-      
+
         $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
 
         if ($oFimPeriodoContabil->c99_data != '' && $dtDataLancamento->getTimeStamp() < db_strtotime($oFimPeriodoContabil->c99_data)) {
-            throw new Exception("Data informada inferior à data do fim do período contábil.");    
+            throw new Exception("Data informada inferior à data do fim do perí­odo contábil.");
         }
 
       }
 
       if ($iAnoLancamento != $oOrdemPagamento->getDataPagamento()->c70_anousu) {
-        throw new Exception("Não é possível estornar pagamentos de anos anteriores.");
+        throw new Exception("Não é possí­vel estornar pagamentos de anos anteriores.");
       }
 
       if ($dtDataLancamento->getTimeStamp() < db_strtotime($oOrdemPagamento->getDataPagamento()->c70_data)) {
-        throw new Exception("Não é possível estornar com data anterior ao pagamento.");
+        throw new Exception("Não é possí­vel estornar com data anterior ao pagamento.");
       }
 
       if ($oParam->lEstornarPgto) {
@@ -443,7 +624,7 @@ switch ($oParam->exec) {
      $oRetorno->sAutenticacao = urlEncode($oParam->sString);
    } else {
       $oRetorno->status         = 2;
-      $oRetorno->message        = urlencode("Não foi possível encontrar Impressora");
+      $oRetorno->message        = urlencode("Não foi possí­vel encontrar Impressora");
       $oRetorno->sAutenticacao = urlEncode($oParam->sString);
    }
    echo $oJson->encode($oRetorno);

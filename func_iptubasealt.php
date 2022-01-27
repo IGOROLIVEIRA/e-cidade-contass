@@ -36,6 +36,8 @@ include("classes/db_loteloc_classe.php");
 include("libs/db_app.utils.php");
 
 db_postmemory($_POST);
+db_sel_instit(null, "db21_usadistritounidade");
+
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $cliptubase = new cl_iptubase;
 $cliptubase->rotulo->label("j01_matric");
@@ -53,6 +55,8 @@ $clrotulo->label("j34_lote");
 $clrotulo->label("j06_setorloc");
 $clrotulo->label("j06_quadraloc");  
 $clrotulo->label("j06_lote");
+$clrotulo->label("j34_distrito");
+$clrotulo->label("j01_unidade");
 ?>
 <html>
 <head>
@@ -82,6 +86,16 @@ db_input("j01_matric",8,$Ij01_matric,true,"text",4,"","chave_j01_matric");
 <td colspan=2>
 <table align='center'>
 <tr align='center'> 
+<?php if($db21_usadistritounidade == 't'){ ?>
+  <td width="15%" align="right" nowrap title="<?=$Tj34_distrito?>"> 
+<?=$Lj34_distrito?>
+</td>
+<td width="15%" align="left" nowrap> 
+<?
+db_input("j34_distrito",4,$Ij34_distrito,true,"text",4,"","chave_j34_distrito");
+?>
+</td>
+<?php } ?>
 <td width="15%" align="right" nowrap title="<?=$Tj34_setor?>"> 
 <?=$Lj34_setor?>
 </td>
@@ -106,6 +120,16 @@ db_input("j34_quadra",4,$Ij34_quadra,true,"text",4,"","chave_j34_quadra");
 db_input("j34_lote",4,$Ij34_lote,true,"text",4,"","chave_j34_lote");
 ?>
 </td>
+<?php if($db21_usadistritounidade == 't'){ ?>
+  <td width="15%" align="right" nowrap title="<?=$Tj01_unidade?>"> 
+<?=$Lj01_unidade?>
+</td>
+<td width="15%" align="left" nowrap> 
+<?
+db_input("j34_unidade",4,$Ij01_unidade,true,"text",4,"","chave_j01_unidade");
+?>
+</td>
+<?php } ?>
 </tr>
 </table>
 </td>
@@ -175,6 +199,9 @@ db_input("z01_nome",40,$Iz01_nome,true,'text',4)
 <td align="center" valign="top"> 
 <?
 $txt_where="";
+if (isset($chave_j34_distrito)&& $chave_j34_distrito!=""){
+  $txt_where.="  and lote.j34_distrito='" . str_pad($chave_j34_distrito,4,"0",STR_PAD_LEFT) . "'";
+}
 if (isset($chave_j34_setor)&& $chave_j34_setor!=""){
   $txt_where.="  and lote.j34_setor='" . str_pad($chave_j34_setor,4,"0",STR_PAD_LEFT) . "'";
 }
@@ -184,12 +211,15 @@ if (isset($chave_j34_quadra)&& $chave_j34_quadra!=""){
 if (isset($chave_j34_lote)&& $chave_j34_lote!=""){
   $txt_where.="  and lote.j34_lote='" . str_pad($chave_j34_lote,4,"0",STR_PAD_LEFT) . "'";
 }
+if (isset($chave_j01_unidade)&& $chave_j01_unidade!=""){
+  $txt_where.="  and iptubase.j01_unidade='" . str_pad($chave_j01_unidade,4,"0",STR_PAD_LEFT) . "'";
+}
 
 if(!isset($pesquisa_chave)){
   if(isset($campos)==false){
     $campos = "iptubase.*";
   }
-  $sql = "select distinct j01_matric,z01_nome,case when j39_numero is null then 'Terr' else 'Pred' end as Tipo, case when j39_idcons is null then 0 else j39_idcons end as j39_idcons, case when ruase.j14_codigo is null then ruas.j14_nome else ruase.j14_nome end as j14_nome, case when j39_numero is null then 0 else j39_numero end as j39_numero,j39_compl,j34_setor,j34_quadra,j34_lote 
+  $sql = "select distinct j01_matric,z01_nome,case when j39_numero is null then 'Terr' else 'Pred' end as Tipo, case when j39_idcons is null then 0 else j39_idcons end as j39_idcons, case when ruase.j14_codigo is null then ruas.j14_nome else ruase.j14_nome end as j14_nome, case when j39_numero is null then 0 else j39_numero end as j39_numero,j39_compl,j34_distrito,j34_setor,j34_quadra,j34_lote, j01_unidade  
   from iptubase 
   inner join lote on j34_idbql = j01_idbql 
   left outer join testpri on j49_idbql = j01_idbql
@@ -210,7 +240,7 @@ if(!isset($pesquisa_chave)){
   }else if(isset($z01_nome) && (trim($z01_nome)!="") ){
     $sql2 = " where z01_nome like '$z01_nome%' $txt_where  order by z01_nome";			  
     
-  }else if ((isset($chave_j34_setor)&& $chave_j34_setor!="")||(isset($chave_j34_quadra)&& $chave_j34_quadra!="")||(isset($chave_j34_lote)&& $chave_j34_lote!="")){
+  }else if ((isset($chave_j34_distrito)&& $chave_j34_distrito!="")||(isset($chave_j34_setor)&& $chave_j34_setor!="")||(isset($chave_j34_quadra)&& $chave_j34_quadra!="")||(isset($chave_j34_lote)&& $chave_j34_lote!="")||(isset($chave_j01_unidade)&& $chave_j01_unidade!="")){
     $sql2 = "where 1=1 $txt_where";
   }else if((isset($j05_codigoproprio) && ($j05_codigoproprio != '' )) or 
                  (isset($j06_quadraloc)     && ($j06_quadraloc != ''))      or 

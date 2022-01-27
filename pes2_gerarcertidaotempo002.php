@@ -12,10 +12,14 @@ require_once("libs/db_sql.php");
 require_once("libs/db_libpessoal.php");
 require_once("classes/db_cgm_classe.php");
 require_once("classes/db_afasta_classe.php");
+require_once("classes/db_rhpessoal_classe.php");
 
 db_postmemory($HTTP_GET_VARS);
 
 $oGet = db_utils::postMemory($_GET);
+if (empty($oGet->vinculoselecionados)) {
+    $oGet->vinculoselecionados = '0';
+}
 
 if($oGet->regist == ""){
     $regist = $oGet->numcgm;
@@ -313,9 +317,9 @@ switch($tiporelatorio) {
             $pdf->ln($alt+3);
 
             //busco dados do cgm emissor
-            $oDaoCgmEmissor = new cl_cgm();
-            $sqlEmissor = $oDaoCgmEmissor->sql_query($oGet->emissor,"z01_nome",null,null);
-            $rsNomeEmissor = $oDaoCgmEmissor->sql_record($sqlEmissor);
+            $oDaoEmissor = new cl_rhpessoal();
+            $sqlEmissor = $oDaoEmissor->sql_query_cgmmov($oGet->emissor,"z01_nome",null,null);
+            $rsNomeEmissor = $oDaoEmissor->sql_record($sqlEmissor);
             $oDadosEmissor = db_utils::fieldsMemory($rsNomeEmissor, 0);
 
             //busco afastamento
@@ -341,7 +345,6 @@ switch($tiporelatorio) {
             $pdf->cell($w+40,$alt,"Data Saida"          ,0,0,"C",1);
             $pdf->cell($w+40,$alt,"Data Retorno"        ,0,0,"C",1);
             $pdf->cell($w+30,$alt,"Dias Afastado"       ,0,1,"C",1);
-            $diasAfastado = 1;
             for ($iCont = 0; $iCont < pg_num_rows($rsAfastamentos); $iCont++) {
                 $oDadosResponsavel = db_utils::fieldsMemory($rsAfastamentos, $iCont);
 
@@ -359,6 +362,7 @@ switch($tiporelatorio) {
                 $pdf->cell($w+40,$alt+2,$dtreto                             ,0,0,"C",0);
                 $pdf->cell($w+30,$alt+2,$oPeriodoAfastamento->days + 1      ,0,1,"C",0);
             }
+            $diasAfastado = ($diasAfastado > 0 ? $diasAfastado + 1 : 0);
             //subitraindo dias de falta do periodo
             $dataRecisaocomafasta= date('d/m/Y', strtotime('-'.$diasAfastado.'days', strtotime($date)));
             $dtcertidao = (implode("/",(array_reverse(explode("-",$oGet->datacert)))));
@@ -377,14 +381,12 @@ switch($tiporelatorio) {
 
             $pdf->ln($alt+3);
             $pdf->setfont('arial','b',10);
-            if(pg_num_rows($rsAfastamentos) > 0) {
-                $pdf->cell($w + 50, $alt, "Total de Dias Afastado: ", 0, 0, "L", 0);
-                $pdf->setfont('arial', '', 10);
-                if ($diasAfastado == null) {
-                    $pdf->cell($w + 32, $alt, "Nenhum dia afastado.", 0, 0, "L", 0);
-                } else {
-                    $pdf->cell($w + 32, $alt, "$diasAfastado dias.", 0, 0, "L", 0);
-                }
+            $pdf->cell($w + 50, $alt, "Total de Dias Afastado: ", 0, 0, "L", 0);
+            $pdf->setfont('arial', '', 10);
+            if ($diasAfastado == null) {
+                $pdf->cell($w + 32, $alt, "Nenhum dia afastado.", 0, 0, "L", 0);
+            } else {
+                $pdf->cell($w + 32, $alt, "$diasAfastado dias.", 0, 0, "L", 0);
             }
                 $pdf->ln($alt+4);
                 $pdf->setfont('arial','b',10);
@@ -493,9 +495,9 @@ switch($tiporelatorio) {
         $pdf->ln($alt+3);
 
         //busco dados do cgm emissor
-        $oDaoCgmEmissor = new cl_cgm();
-        $sqlEmissor = $oDaoCgmEmissor->sql_query($oGet->emissor,"z01_nome",null,null);
-        $rsNomeEmissor = $oDaoCgmEmissor->sql_record($sqlEmissor);
+        $oDaoEmissor = new cl_rhpessoal();
+        $sqlEmissor = $oDaoEmissor->sql_query_cgmmov($oGet->emissor,"z01_nome",null,null);
+        $rsNomeEmissor = $oDaoEmissor->sql_record($sqlEmissor);
         $oDadosEmissor = db_utils::fieldsMemory($rsNomeEmissor, 0);
 
         //busco afastamento
@@ -510,6 +512,7 @@ switch($tiporelatorio) {
            WHEN r45_situac = 7 THEN 'Licença sem vencimento, cessão sem ônus'
            WHEN r45_situac = 8 THEN 'Afastado doença +30 dias'
            WHEN r45_situac = 9 THEN 'Licença por Motivo de Afastamento do Cônjuge'
+           WHEN r45_situac = 10 THEN 'Afastado doença -15 dias'
         END AS descrAfastamento","r45_dtafas","r45_anousu = ".db_anofolha()."
         AND r45_mesusu = ".db_mesfolha()."
         AND r45_regist = $oDadosPessoal->rh01_regist and r45_situac in ($oGet->vinculoselecionados)");
@@ -539,7 +542,7 @@ switch($tiporelatorio) {
             $pdf->cell($w+40,$alt+2,$dtreto                             ,0,0,"C",0);
             $pdf->cell($w+30,$alt+2,$oPeriodoAfastamento->days + 1         ,0,1,"C",0);
         }
-        $diasAfastado = $diasAfastado + 1;
+        $diasAfastado = ($diasAfastado > 0 ? $diasAfastado + 1 : 0);
         $pdf->ln($alt+3);
         $pdf->setfont('arial','b',10);
         $pdf->cell($w+50,$alt,"Total de Dias Afastado: "                ,0,0,"L",0);

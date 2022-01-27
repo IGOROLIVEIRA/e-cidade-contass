@@ -126,7 +126,7 @@ $clrotulo->label("o55_rateio");
 	if ( $db_opcao02==1 || $db_opcao02==11 ) {
 
 	?>
-	<input title="Projetos / Atividades do orçamento Campo:o55_projativ" name="o55_projativ"  type="text" id="o55_projativ" value="" size="3"
+	<input title="Projetos / Atividades do orçamento Campo:o55_projativ" name="o55_projativ"  type="text" id="o55_projativ" value="<?=$o55_projativ_old?>" size="3"
  	  maxlength="3" onblur="js_ValidaMaiusculo(this,'f',event);"
       onKeyUp="js_ValidaCampos(this,0,'Projetos / Atividades','f','f',event);"
       onKeyDown="return js_controla_tecla_enter(this,event);"
@@ -351,6 +351,7 @@ $clrotulo->label("o55_rateio");
 <?}else{?>
   <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_orcprojativ.hide();">
 <?}?>
+<input name="Novo" type="button" id="novo" value="Novo" onClick="location.href = 'orc1_orcprojativ011.php'">
 </form>
 <script>
 

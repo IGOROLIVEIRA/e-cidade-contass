@@ -31,6 +31,7 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("q51_numnota");
 $clrotulo->label("q51_dtemiss");
 $clrotulo->label("q54_inscr");
+$clrotulo->label("z01_incest");
 $clrotulo->label("q02_inscr");
 $clrotulo->label("z01_nome");
 $clrotulo->label("z01_cgccpf");
@@ -68,6 +69,16 @@ $db_opcao=3;
       ?>
     </td>
 		</tr>
+    <tr>  
+    <td nowrap title="<?=@$Tz01_incest?>">
+       <?=@$Lz01_incest?>
+    </td>
+    <td> 
+    <? 
+     db_input('q53_incest',15,$Iz01_incest,true,'text',3,"")
+     ?>
+    </td>
+    </tr>
    <tr>
     <td nowrap title="<?=@$Tz01_nome?>">
     <?
@@ -117,7 +128,7 @@ $db_opcao=3;
     </td>
     <td colspan='4'> 
        <?
-        db_input('q53_municipio',50,$Iz01_munic,true,'text',3,"")
+        db_input('q53_munic',50,$Iz01_munic,true,'text',3,"")
        ?>
     </td>
   </tr>

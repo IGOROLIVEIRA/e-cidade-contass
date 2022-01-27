@@ -23,6 +23,7 @@ class cl_cadobras102021 {
   public $si198_tiporesponsavel = 0;
   public $si198_nrodocumento = null;
   public $si198_tiporegistroconselho = 0;
+  public $si198_dscoutroconselho = null;
   public $si198_nroregistroconseprof = null;
   public $si198_numrt = null;
   public $si198_dtinicioatividadeseng_dia = null;
@@ -41,6 +42,7 @@ class cl_cadobras102021 {
                  si198_tiporesponsavel = int8 = Tipo responsavel
                  si198_nrodocumento = text = Numero Documento
                  si198_tiporegistroconselho = int8 = tipoRegistroConselho
+                 si198_dscoutroconselho = text = descricao outro conselho
                  si198_nroregistroconseprof = text = nroregistroconseprof
                  si198_numrt = int8 = numRT
                  si198_dtinicioatividadeseng = date = dtinicioatividadeseng
@@ -76,6 +78,7 @@ class cl_cadobras102021 {
       $this->si198_tiporesponsavel = ($this->si198_tiporesponsavel == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_tiporesponsavel"]:$this->si198_tiporesponsavel);
       $this->si198_nrodocumento = ($this->si198_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_nrodocumento"]:$this->si198_nrodocumento);
       $this->si198_tiporegistroconselho = ($this->si198_tiporegistroconselho == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_tiporegistroconselho"]:$this->si198_tiporegistroconselho);
+      $this->si198_dscoutroconselho = ($this->si198_dscoutroconselho == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_dscoutroconselho"]:$this->si198_dscoutroconselho);
       $this->si198_nroregistroconseprof = ($this->si198_nroregistroconseprof == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_nroregistroconseprof"]:$this->si198_nroregistroconseprof);
       $this->si198_numrt = ($this->si198_numrt == ""?@$GLOBALS["HTTP_POST_VARS"]["si198_numrt"]:$this->si198_numrt);
       if ($this->si198_dtinicioatividadeseng == "") {
@@ -174,6 +177,7 @@ class cl_cadobras102021 {
     if ($this->si198_numrt == null ) {
       $this->si198_numrt = "0";
     }
+
     if ($this->si198_dtinicioatividadeseng == null ) {
       $this->erro_sql = " Campo dtinicioatividadeseng não informado.";
       $this->erro_campo = "si198_dtinicioatividadeseng_dia";
@@ -218,6 +222,7 @@ class cl_cadobras102021 {
                                       ,si198_tiporesponsavel
                                       ,si198_nrodocumento
                                       ,si198_tiporegistroconselho
+                                      ,si198_dscoutroconselho
                                       ,si198_nroregistroconseprof
                                       ,si198_numrt
                                       ,si198_dtinicioatividadeseng
@@ -233,6 +238,7 @@ class cl_cadobras102021 {
                                ,$this->si198_tiporesponsavel
                                ,'$this->si198_nrodocumento'
                                ,$this->si198_tiporegistroconselho
+                               ,'$this->si198_dscoutroconselho'
                                ,'$this->si198_nroregistroconseprof'
                                ,$this->si198_numrt
                                ,".($this->si198_dtinicioatividadeseng == "null" || $this->si198_dtinicioatividadeseng == ""?"null":"'".$this->si198_dtinicioatividadeseng."'")."

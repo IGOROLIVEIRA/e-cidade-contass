@@ -69,8 +69,8 @@ $sizecp  = array();
         <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
             <center>
                 <?
-                $clcriaabas->identifica = array("g1"=>"Relatório");
-                $clcriaabas->title      = array("g1"=>"Relatório");
+                $clcriaabas->identifica = array("g1"=>"Anexo II Educação");
+                $clcriaabas->title      = array("g1"=>"Anexo II Educação");
                 $clcriaabas->src        = array("g1"=>"con2_anexoIIeduc011.php");
                 $clcriaabas->funcao_js  = array("g1"=>"");
                 $clcriaabas->sizecampo  = array("g1"=>"23");

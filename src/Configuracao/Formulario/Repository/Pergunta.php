@@ -65,15 +65,15 @@ class Pergunta
         }
 
         $oDaoAvaliacaoPergunta = new \cl_avaliacaopergunta();
-        $sWhere                = 'db103_sequencial = '.$codigo;
+        $sWhere                = 'db103_sequencial = ' . $codigo;
         $sSqlPerguntas         = $oDaoAvaliacaoPergunta->sql_query(null, "avaliacaopergunta.*", 'db103_ordem', $sWhere);
         $rsPerguntas           = db_query($sSqlPerguntas);
         if (!$rsPerguntas) {
-            throw new \DBException('Erro ao pesquisar Perguntas da pergunta '.$codigo);
+            throw new \DBException('Erro ao pesquisar Perguntas da pergunta ' . $codigo);
         }
         $iTotalLinhas = pg_num_rows($rsPerguntas);
         if ($iTotalLinhas == 0) {
-            throw new \DBException('pergunta '.$codigo. 'não encontrada no sistema.');
+            throw new \DBException('pergunta ' . $codigo . 'não encontrada no sistema.');
         }
         $oPergunta = self::getInstance()->make(\db_utils::fieldsMemory($rsPerguntas, 0));
         self::getInstance()->perguntas[$codigo] = $oPergunta;
@@ -92,15 +92,15 @@ class Pergunta
 
     /**
      *Retorna todas as respostas do Formulário
-    */
+     */
     public static function getPerguntasDoFormulario(FormularioModel $formulario)
     {
         $oDaoAvaliacaoPergunta = new \cl_avaliacaopergunta();
-        $sWhere                = 'db102_avaliacao = '.$formulario->getCodigo();
-        $sSqlPerguntas         = $oDaoAvaliacaoPergunta->sql_query(null, "avaliacaopergunta.*", 'db102_sequencial,db103_ordem', $sWhere);
+        $sWhere                = 'db102_avaliacao = ' . $formulario->getCodigo();
+        $sSqlPerguntas         = $oDaoAvaliacaoPergunta->sql_query(null, "avaliacaopergunta.*", 'db103_ordem', $sWhere);
         $rsPerguntas           = db_query($sSqlPerguntas);
         if (!$rsPerguntas) {
-            throw new \DBException('Erro ao pesquisar Perguntas do formulario '.$formulario->getNome());
+            throw new \DBException('Erro ao pesquisar Perguntas do formulario ' . $formulario->getNome());
         }
         $iTotalLinhas = pg_num_rows($rsPerguntas);
         if ($iTotalLinhas == 0) {
@@ -152,7 +152,7 @@ class Pergunta
         $sSqlOpcoes        = $oDaoPerguntaOpcao->sql_query_file(null, "*", 'db104_sequencial', $where);
         $rsOpcoes          = db_query($sSqlOpcoes);
         if (!$rsOpcoes) {
-            throw new \DBException('Erro ao pesquisar Opções de resposta da pergunta '.$pergunta->getDescricao());
+            throw new \DBException('Erro ao pesquisar Opções de resposta da pergunta ' . $pergunta->getDescricao());
         }
         $opcoes = \db_utils::makeCollectionFromRecord($rsOpcoes, function ($dados) {
 

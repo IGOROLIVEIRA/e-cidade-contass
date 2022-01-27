@@ -53,8 +53,8 @@ if (trim($oGet->t52_ident != "")) {
 
   $oDaoBensPlaca           = db_utils::getDao('bensplaca');
   $sCamposBuscaBemPorPlaca = " t52_bem ";
-  $sWhereBuscaBemPorPlaca  = "     t52_ident  = '{$oGet->t52_ident}' ";
-  $sWhereBuscaBemPorPlaca .= " and t52_instit = " . db_getsession('DB_instit');
+  $sWhereBuscaBemPorPlaca  = "     t41_placaseq  = '{$oGet->t52_ident}' ";
+  $sWhereBuscaBemPorPlaca .= " and t52_instit = " . db_getsession('DB_instit'); 
 
   $sSqlBuscaBemPorPlaca = $oDaoBensPlaca->sql_query(null, $sCamposBuscaBemPorPlaca, null, $sWhereBuscaBemPorPlaca);
   $rsBuscaBemPorPlaca   = $oDaoBensPlaca->sql_record($sSqlBuscaBemPorPlaca);

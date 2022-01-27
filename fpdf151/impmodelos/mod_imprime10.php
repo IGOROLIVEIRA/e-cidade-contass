@@ -34,7 +34,21 @@
 
   $this->objpdf->text(130, ($xlin+2.5) - $linpc,'PROCESSO DE COMPRA N'.CHR(176));
   $this->objpdf->text(165, ($xlin+2.5) - $linpc,db_formatar(pg_result($this->recorddositens,0,$this->Snumeroproc),'s','0',6,'e'));
+  $autori = pg_result($this->recorddositens,0,$this->autori);
 
+  $sqlLicitacao = "SELECT e54_numerl,
+                                e54_nummodalidade
+								FROM empautoriza
+								LEFT JOIN liclicita ON l20_codigo = e54_codlicitacao
+								WHERE e54_autori = " . $autori;
+  $rsLicitacao = db_query($sqlLicitacao);
+  db_fieldsmemory($rsLicitacao,0,true);
+
+  global $e54_numerl;
+  global $e54_nummodalidade;
+
+  $this->objpdf->text(130, ($xlin+6.5),'PROCESSO LICITÓRIO:'.CHR(176));
+  $this->objpdf->text(160, ($xlin+6.5),$e54_numerl ." MODALIDADE: ".$e54_nummodalidade);
   $this->objpdf->text(130, ($xlin+$linpc-2.25), 'TIPO DA COMPRA: ');
   $this->objpdf->text(165, ($xlin+$linpc-2.25) , db_formatar(pg_result($this->recorddositens, 0,
                                                  $this->sTipoCompra), 's' , '0', 6, 'e'));
@@ -248,7 +262,7 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
               AND orcelemento.o56_anousu = empempenho.e60_anousu
               INNER JOIN pcmater ON pcmater.pc01_codmater = empempitem.e62_item
                 WHERE m52_codordem =  ".$this->numordem." and e62_item = ".pg_result($this->recorddositens,$ii,$this->codmater);
-    
+
     $resItens = @db_query($sql);
     $valorItemAnulado = db_utils::fieldsMemory($resItens,0)->m36_vrlanu;
     $valorItem = db_utils::fieldsMemory($resItens,0)->m52_valor;
@@ -385,7 +399,7 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 				                      $descricaoitem."\n",
 				                      db_formatar(pg_result($this->recorddositens,$ii,$this->vlrunitem),'v'," ",$this->numdec),
   			                      db_formatar($valorItemTotal,'f')),3,false,4,0,true);
-     
+
      if($valorItemAnulado > 0){
         $xtotal += $valorItem;
         $xtotal -= $valorItemAnulado;

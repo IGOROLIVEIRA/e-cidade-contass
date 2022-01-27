@@ -18,7 +18,7 @@ class cl_manutencaoacordo
   var $pagina_retorno = null;
   // cria variaveis do arquivo
   var $manutac_sequencial = 0;
-  var $manutac_codunidsubanterior = 0;
+  var $manutac_codunidsubanterior = null;
   var $manutac_acordo = 0;
 
   // cria propriedade com as variaveis do arquivo
@@ -92,7 +92,7 @@ class cl_manutencaoacordo
                        )
                 values (
                          $this->manutac_sequencial
-                ,$this->manutac_codunidsubanterior
+                ,'$this->manutac_codunidsubanterior'
                 ,$this->manutac_acordo
                       )";
 

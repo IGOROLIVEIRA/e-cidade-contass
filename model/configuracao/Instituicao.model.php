@@ -46,6 +46,8 @@ class Instituicao {
   const COD_CLI_SAOJOAOMISSOES = 94;
   const COD_CLI_NOVAPORTEIRINHA = 93;
   const COD_CLI_CURRAL_DE_DENTRO = 96;
+  const COD_CLI_BURITIZEIRO = 89;
+  const COD_CLI_MONTEAZUL = 106;
 
   /**
    * Código da Instituicao

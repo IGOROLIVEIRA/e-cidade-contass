@@ -1,7 +1,7 @@
 <?php
 /*
  *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
+ *  Copyright (C) 2012  DBselller Servicos de Informatica             
  *                            www.dbseller.com.br                     
  *                         e-cidade@dbseller.com.br                   
  *                                                                    
@@ -36,10 +36,10 @@ require_once ('model/ppadespesa.model.php');
  * @subpackage sigfis
  */
 
-class SigfisArquivoProgramaPPA extends SigfisArquivoBase implements iPadArquivoTXTBase {
+class SigfisArquivoProgramaPpa extends SigfisArquivoBase implements iPadArquivoTXTBase {
 	
   protected $iCodigoLayout = 110;
-  protected $sNomeArquivo  = 'programappa';
+  protected $sNomeArquivo  = 'Programappa';
 	
 	public function gerarDados() {
 		
@@ -61,6 +61,10 @@ class SigfisArquivoProgramaPPA extends SigfisArquivoBase implements iPadArquivoT
     
     if (count($oBuscaVersaoPpa) > 0) {
     
+      if (empty($this->sCodigoTribunal)) {
+        throw new Exception("O código do tribunal deve ser informado para geração do arquivo");
+      }
+      
 	    foreach ($oBuscaVersaoPpa as $oVersao) {
 	    	
 	    	$oPpaDespesa     = new ppaDespesa($oVersao->o123_ppaversao);
@@ -119,15 +123,22 @@ class SigfisArquivoProgramaPPA extends SigfisArquivoBase implements iPadArquivoT
 	        $iValorSemSeparador = str_replace('.', '', $fValorDecimal);
 	        
 	        /**
+	         * Manipulmos o campo o54_descr eliminando quebras de linha
+	         */
+	        $sFinalidadePrograma = utf8_decode(str_replace(array('\n', '\r'), ' ', $oInfosPrograma->o54_finali));
+	        
+	        /**
 	         * Montamos o objeto que constituirá a linha do arquivo e após a mesma estar
 	         * pronta jogamos para o array de dados que foi herdado da 'SigfisArquivoBase'
 	         */
 	    		$oDadosLinha = new stdClass();
-	    		$oDadosLinha->cd_subprograma = str_pad($oPrograma->iCodigo,           4, ' ', STR_PAD_LEFT);
-	    		$oDadosLinha->de_subprograma = str_pad($oInfosPrograma->o54_descr,   50, ' ', STR_PAD_RIGHT);
-	    		$oDadosLinha->cd_unidade     = str_pad($iUnidadeGestora,              4, ' ', STR_PAD_LEFT);
-	    		$oDadosLinha->de_objetivo    = str_pad($oInfosPrograma->o54_finali, 120, ' ', STR_PAD_RIGHT);
-	    		$oDadosLinha->vl_SubPrograma = str_pad($iValorSemSeparador,          16, ' ', STR_PAD_LEFT);
+	    		$oDadosLinha->cd_subprograma = str_pad($oPrograma->iCodigo,                    4, ' ', STR_PAD_LEFT);
+	    		$oDadosLinha->Reservado_tce  = str_pad('',                                     2, ' ', STR_PAD_RIGHT);
+	    		$oDadosLinha->de_subprograma = str_pad($oInfosPrograma->o54_descr,            50, ' ', STR_PAD_RIGHT);
+	    		$oDadosLinha->cd_unidade     = str_pad($this->sCodigoTribunal,                 4, ' ', STR_PAD_LEFT);
+	    		$oDadosLinha->Reservado_tce2 = str_pad('',                                     4, ' ', STR_PAD_RIGHT);
+	    		$oDadosLinha->de_objetivo    = str_pad(substr($sFinalidadePrograma, 0, 120), 120, ' ', STR_PAD_RIGHT);
+	    		$oDadosLinha->vl_SubPrograma = str_pad($iValorSemSeparador,                   16, ' ', STR_PAD_LEFT);
 	    		$oDadosLinha->Dt_AnoInicio   = $iAnoInicio;
 	    		$oDadosLinha->Dt_AnoFim      = $iAnoFim;
 	    		$oDadosLinha->codigolinha    = 397;
@@ -136,9 +147,7 @@ class SigfisArquivoProgramaPPA extends SigfisArquivoBase implements iPadArquivoT
 	    	
 	    }
 	    
-    } else {
-    	throw new Exception("Nenhum registro retornado para o ano {$iAnoSessao}.");
-    }
+    } 
     
     return $this->aDados;
 	}

@@ -28,6 +28,17 @@
 //MODULO: pessoal
 //CLASSE DA ENTIDADE afasta
 class cl_afasta { 
+  const SITUACAO_SEM_AFASTAMENTO = 1;
+  const SITUACAO_SEM_REMUNERACAO = 2;
+  const SITUACAO_ACID_TRABALHO_MAIS_15 = 3;
+  const SITUACAO_SERVICO_MILITAR = 4;
+  const SITUACAO_LICENCA_GESTANTE = 5;
+  const SITUACAO_DOENCAO_MAIS_15 = 6;
+  const SITUACAO_SEM_VENCIMENTO = 7;
+  const SITUACAO_DOENCAO_MAIS_30 = 8;
+  const SITUACAO_AFAST_CONJUGE = 9;
+  const SITUACAO_DOENCA_MENOS_15 = 10;
+  const SITUACAO_MANDATO_ELETIVO = 11;
    // cria variaveis de erro 
    var $rotulo     = null; 
    var $query_sql  = null; 
@@ -938,6 +949,24 @@ class cl_afasta {
        }
      }
      return $sql;
+  }
+
+  public function getAfastamentosMes($regist, $ano, $mes) {
+
+    $dataini = "{$ano}-{$mes}-01";
+    $datafim = new DateTime($dataini);
+    $datafim->modify("last day of this month");
+    $sql = "select r45_situac from afasta where r45_anousu = {$ano} and r45_mesusu = {$mes} and ((r45_dtafas between '{$dataini}' and '{$datafim->format('Y-m-d')}' or r45_dtreto between '{$dataini}' and '{$datafim->format('Y-m-d')}') or r45_dtreto > '{$datafim->format('Y-m-d')}') and r45_regist ='{$regist}' order by r45_regist, r45_dtafas";
+    $result = db_query($sql);
+    $arrSituacao = array();
+    for ($cont = 0; $cont < pg_num_rows($result); $cont++) {
+      $arrSituacao[] = db_utils::fieldsMemory($result, $cont)->r45_situac;
+    }
+    return $arrSituacao;
+  }
+
+  public function checkSituacao($regist, $ano, $mes, $situacao) {
+    return in_array($situacao, $this->getAfastamentosMes($regist, $ano, $mes));
   }
 
 }

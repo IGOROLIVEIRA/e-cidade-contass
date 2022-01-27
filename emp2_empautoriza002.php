@@ -161,6 +161,10 @@ if ($anula=='A'){
   $where.=" $a e54_anulad is null ";
   $a="and";
 }
+
+if (isset($o15_codigo) && $o15_codigo != '') {
+    $where .=" $a o58_codigo = {$o15_codigo} ";
+}
   
 
 if($ordem == "e54_autori"){

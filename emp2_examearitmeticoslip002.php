@@ -179,11 +179,13 @@ for ($$iCont = 0; $iCont < pg_num_rows($rsResultSlips); $iCont++) {
   $pdf->Cell(30,$tam,implode("/", array_reverse(explode("-", $oResultSlips->k17_data))),0,0,"C",0);
   $pdf->Cell(30,$tam,implode("/", array_reverse(explode("-", $oResultSlips->k12_data))),0,0,"C",0);
   $pdf->Cell(70,$tam,number_format($oResultSlips->k12_valor,"2",",",""),0,1,"R",0);
+
+  $nTotalizador += $oResultSlips->k12_valor;
 			
 }
 $pdf->SetFont("","B","");
 $pdf->Cell(60,$tam,"Valor Total:",1,0,"C",1);
-$pdf->Cell(190,$tam,number_format($nTotalizador,"2",",","."),1,1,"L",1);	
+$pdf->Cell(190,$tam,number_format($nTotalizador,"2",",","."),1,1,"R",1);	
 $pdf->output();
 	
 	?>

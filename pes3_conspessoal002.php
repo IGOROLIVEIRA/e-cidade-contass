@@ -189,7 +189,7 @@ if($clrhlotaexe->numrows>0){
   db_fieldsmemory($result_rhlotaexe,0);
 }
 
-$result_rhlotavinc = $clrhlotavinc->sql_record($clrhlotavinc->sql_query('',"*",'',"rh25_codigo = $r70_codigo"));
+$result_rhlotavinc = $clrhlotavinc->sql_record($clrhlotavinc->sql_query('',"*",'',"rh25_codigo = $r70_codigo AND rh25_anousu = {$ano}"));
 if($clrhlotavinc->numrows>0){
   db_fieldsmemory($result_rhlotavinc,0);
 }

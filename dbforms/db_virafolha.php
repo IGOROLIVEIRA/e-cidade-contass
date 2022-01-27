@@ -528,11 +528,10 @@ if(isset($desprocess) && $desprocess == "true"){
         $sSqlDeletaCadFeria  = "delete from cadferia";
         $sSqlDeletaCadFeria .= " where r30_anousu = {$dataii_ano} ";
         $sSqlDeletaCadFeria .= "   and r30_mesusu = {$dataii_mes} ";
-        $sSqlDeletaCadFeria .= "   and r30_regist in ( select rh02_regist ";
-        $sSqlDeletaCadFeria .= "                         from rhpessoalmov ";
-        $sSqlDeletaCadFeria .= "                        where rh02_anousu = r30_anousu ";
-        $sSqlDeletaCadFeria .= "                          and rh02_mesusu = r30_mesusu ";
-        $sSqlDeletaCadFeria .= "                          and rh02_instit = ".db_getsession("DB_instit").")";
+        $sSqlDeletaCadFeria .= " and exists (select 1 ";
+        $sSqlDeletaCadFeria .= "               from rhpessoal ";
+        $sSqlDeletaCadFeria .= "              where rh01_regist = r30_regist ";
+        $sSqlDeletaCadFeria .= "                and rh01_instit = ".db_getsession("DB_instit").")";
         $rsDeletaCadFeria    = db_query($sSqlDeletaCadFeria, null, "");
         if ($rsDeletaCadFeria == false) {
 
@@ -560,11 +559,10 @@ if(isset($desprocess) && $desprocess == "true"){
         $sSqlDeletaAfasta  = "delete from afasta";
         $sSqlDeletaAfasta .= " where r45_anousu = {$dataii_ano} ";
         $sSqlDeletaAfasta .= "   and r45_mesusu = {$dataii_mes} ";
-        $sSqlDeletaAfasta .= "   and r45_regist in ( select rh02_regist ";
-        $sSqlDeletaAfasta .= "                         from rhpessoalmov ";
-        $sSqlDeletaAfasta .= "                        where rh02_anousu = r45_anousu ";
-        $sSqlDeletaAfasta .= "                          and rh02_mesusu = r45_mesusu ";
-        $sSqlDeletaAfasta .= "                          and rh02_instit = ".db_getsession("DB_instit").")";
+        $sSqlDeletaAfasta .= "   and r45_regist in ( select rh01_regist ";
+        $sSqlDeletaAfasta .= "                         from rhpessoal ";
+        $sSqlDeletaAfasta .= "                       where rh01_regist = r45_regist ";
+        $sSqlDeletaAfasta .= "                          and rh01_instit = ".db_getsession("DB_instit").")";
         $rsDeletaAfasta    = db_query($sSqlDeletaAfasta, null, "");
         if (!$rsDeletaAfasta) {
 
@@ -1099,7 +1097,10 @@ if($res_exc == false){
     $sWhereAfasta .= "             where rh01_regist = r45_regist "; 
     $sWhereAfasta .= "               and rh01_instit = ".db_getsession("DB_instit").")";	
     $result_test = $clafasta->sql_record($clafasta->sql_query_file (null,"*","",$sWhereAfasta));
-
+    if($clafasta->numrows > 0){
+      $retorno = "Erro ao virar tabela de afastamentos. Existem afastamentos no mês seguinte.\\n\\nFechamento da folha cancelado.\\nPerodo: ".$periodoini1." a ".$periodoini2.".\\n\\nContate o suporte.";
+      $sqlerro = true;
+    }
     if ($clafasta->numrows==0) { 
 
       // Desativa triggers.
@@ -1194,7 +1195,10 @@ if($res_exc == false){
     $sWhereCadFeria .= "              where rh01_regist = r30_regist ";
     $sWhereCadFeria .= "                and rh01_instit = ".db_getsession("DB_instit").")";
     $result_test = $clcadferia->sql_record($clcadferia->sql_query_file (null,"*","",$sWhereCadFeria));
-
+    if($clcadferia->numrows > 0){
+      $retorno = "Erro ao virar tabela de férias. Existem férias no mês seguinte.\\n\\nFechamento da folha cancelado.\\nPerodo: ".$periodoini1." a ".$periodoini2.".\\n\\nContate o suporte.";
+      $sqlerro = true;
+    }
     if ($clcadferia->numrows==0) {
 
       $sWhereCadFeria  = "     r30_anousu = ".$dataii_ano;

@@ -39,6 +39,7 @@ include("classes/db_veiculoscomb_classe.php");
 include("classes/db_veicitensobrig_classe.php");
 include("classes/db_veicutilizacao_classe.php");
 include("classes/db_veicmanutitem_classe.php");
+include("classes/db_empempenho_classe.php");
 
 $clveiculos       = new cl_veiculos;
 $clveicresp       = new cl_veicresp;
@@ -51,6 +52,7 @@ $clveiculoscomb   = new cl_veiculoscomb;
 $clveicitensobrig = new cl_veicitensobrig;
 $clveicutilizacao = new cl_veicutilizacao;
 $clveicmanutitem  = new cl_veicmanutitem;
+$clempempenho     = new cl_empempenho;
 /*
  * Variaveis de parâmetros passadas por get 
 lAbastecimento
@@ -480,7 +482,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
     $pdf->setfont('arial','b',8);
     $pdf->cell(90,$alt,'MANUTENÇÕES :',0,1,"L",0);
   
-    $sCamposVeicmanut  = " distinct ve62_codigo,ve28_descr,ve62_dtmanut,ve62_hora";
+    $sCamposVeicmanut  = " distinct ve62_codigo,ve28_descr,ve62_dtmanut,ve62_hora,ve62_numemp";
     $sCamposVeicmanut .= ",case when (ve62_vlrpecas is null or ve62_vlrpecas = 0) and ve62_tipogasto in (6,7,8) then ve62_valor else ve62_vlrpecas end as ve62_vlrpecas ";
     $sCamposVeicmanut .= ",case when (ve62_vlrmobra is null or ve62_vlrmobra = 0) and ve62_tipogasto in (9) then ve62_valor else ve62_vlrmobra end as ve62_vlrmobra ";
     $sCamposVeicmanut .= ",ve62_medida ";
@@ -491,7 +493,8 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
     $numrows_manut    = $clveicmanut->numrows;
     
     $aManutencao      = array();
-    
+    $aNumEmp          = array();
+
     if ($numrows_manut > 0) {
       for($w = 0; $w < $numrows_manut;$w++) {
     
@@ -524,7 +527,11 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
              $oManutencao->lItens = false;
           }
         }
-        $aManutencao[] = $oManutencao; 
+        $aManutencao[] = $oManutencao;
+        $valor = $aManutencao[$w]->ve62_numemp;
+        $result1 = $clempempenho->sql_record($clempempenho->sql_query("","*",null,"e60_numemp = {$valor}"));
+        $resultManu = db_utils::fieldsMemory($result1,0);
+        $aNumEmp[] = $resultManu->e60_codemp."/".$resultManu->e60_anousu;
       }
     }
     
@@ -560,14 +567,16 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
         $pdf->cell(85,$alt,"Tipo de Serviço",1,0,"C",1);
         $pdf->cell(25,$alt,"Data"           ,1,0,"C",1);
         $pdf->cell(25,$alt,"Hora"           ,1,0,"C",1);
-        $pdf->cell(25,$alt,"Medida"         ,1,1,"C",1);
+        $pdf->cell(25,$alt,"Medida"         ,1,0,"C",1);
+        $pdf->cell(25,$alt,"Empenho"         ,1,1,"C",1);
 
         $pdf->setfont('arial','',7);
         $pdf->cell(15,$alt, $aManutencao[$ind]->ve62_codigo                  ,0,0,"C",$p);
         $pdf->cell(85,$alt, $aManutencao[$ind]->ve28_descr                   ,0,0,"L",$p);
         $pdf->cell(25,$alt, db_formatar($aManutencao[$ind]->ve62_dtmanut,"d"),0,0,"C",$p);
         $pdf->cell(25,$alt, $aManutencao[$ind]->ve62_hora                    ,0,0,"C",$p);
-        $pdf->cell(25,$alt, $aManutencao[$ind]->ve62_medida." ".$ve07_sigla  ,0,1,"C",$p);
+        $pdf->cell(25,$alt, $aManutencao[$ind]->ve62_medida." ".$ve07_sigla  ,0,0,"C",$p);
+        $pdf->cell(25,$alt, $aNumEmp[$ind]                  ,0,1,"C",$p);
 
 
           // -> Imprime Itens de Manutenção
@@ -602,7 +611,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
                   $pdf->setfont('arial','b',8);
                   $pdf->cell(15,$alt,""                  ,0,0,"C",$p);
                   $pdf->cell(15,$alt,"Item."             ,1,0,"C",$p);
-                  $pdf->cell(85,$alt,"Descrição do Item" ,1,0,"C",$p);
+                  $pdf->cell(110,$alt,"Descrição do Item" ,1,0,"C",$p);
                   $pdf->cell(20,$alt,"Quantidade"        ,1,0,"C",$p);
                   $pdf->cell(40,$alt,"Valor Item"        ,1,1,"C",$p);
                 }
@@ -611,14 +620,14 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
               $pdf->setfont('arial','',7);
               $pdf->cell(15,$alt,"",0,0,"C",$p);
               $pdf->cell(15,$alt,$aManutencao[$ind]->aItens[$iItens]->ve64_pcmater                        ,0,0,"C",$p);
-              $pdf->cell(85,$alt,$aManutencao[$ind]->aItens[$iItens]->ve63_descr                          ,0,0,"L",$p);
+              $pdf->cell(110,$alt,$aManutencao[$ind]->aItens[$iItens]->ve63_descr                          ,0,0,"L",$p);
               $pdf->cell(20,$alt,$aManutencao[$ind]->aItens[$iItens]->ve63_quant                          ,0,0,"C",$p);
               $pdf->cell(40,$alt,db_formatar($aManutencao[$ind]->aItens[$iItens]->ve63_vlruni,"f")        ,0,1,"R",$p);
               $iTotalItens++;
 
             }
               $pdf->setfont('arial','b',10);
-              $pdf->cell(150,$alt,"Total:",'T',0,"R",$p,0);
+              $pdf->cell(175,$alt,"Total:",'T',0,"R",$p,0);
               $pdf->cell(25,$alt,db_formatar($iValormanut,"f"),1,0,"L",$p,0);
               $pdf->ln(5);
 

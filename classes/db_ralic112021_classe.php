@@ -185,6 +185,10 @@ class cl_ralic112021
       $this->si181_tipoatividadeservico = 'null';
     }
 
+    if(!$this->si181_tipoatividadeobra){
+      $this->si181_tipoatividadeobra = 'null';
+    }
+
     if(!$this->si181_tipoatividadeservespecializado){
       $this->si181_tipoatividadeservespecializado = 'null';
     }

@@ -79,7 +79,8 @@ $clrotulo->label("o05_valor");
     <td> 
       <?
       db_input('o08_orgao',10,$Io08_orgao,true,'text',$db_opcao," onchange='js_pesquisao08_orgao(false);'");
-      db_input('o40_descr',40,$Io40_descr,true,'text',3,'')
+      db_input("o08_orgao_original",30,0,true,"hidden",1);
+      db_input('o40_descr',40,$Io40_descr,true,'text',3,'');
        ?>
     </td>
   </tr>
@@ -88,13 +89,14 @@ $clrotulo->label("o05_valor");
   <tr>
     <td nowrap title="<?=@$To08_unidade?>">
        <?
-       db_ancora(@$Lo08_unidade,"js_pesquisao08_unidade(true);",1);
+       db_ancora(@$Lo08_unidade,"js_pesquisao08_unidade(true);",$db_opcao);
        ?>
     </td>
     <td> 
       <?
-      db_input('o08_unidade',10,$Io08_unidade,true,'text',1," onchange='js_pesquisao08_unidade(false);'");
-      db_input('o41_descr',40,$Io41_descr,true,'text',3,'')
+      db_input('o08_unidade',10,$Io08_unidade,true,'text',$db_opcao," onchange='js_pesquisao08_unidade(false);'");
+      db_input("o08_unidade_original",30,0,true,"hidden",1);
+      db_input('o41_descr',40,$Io41_descr,true,'text',3,'');
       ?>
     </td>
   </tr>
@@ -106,7 +108,8 @@ $clrotulo->label("o05_valor");
     </td>
     <td> 
 <?
-db_input('o08_funcao',10,$Io08_funcao,true,'text',$db_opcao," onchange='js_pesquisao08_funcao(false);'")
+db_input('o08_funcao',10,$Io08_funcao,true,'text',$db_opcao," onchange='js_pesquisao08_funcao(false);'");
+db_input("o08_funcao_original",30,0,true,"hidden",1);
 ?>
        <?
 db_input('o52_descr',40,$Io52_descr,true,'text',3,'')
@@ -121,7 +124,8 @@ db_input('o52_descr',40,$Io52_descr,true,'text',3,'')
     </td>
     <td> 
 <?
-db_input('o08_subfuncao',10,$Io08_subfuncao,true,'text',$db_opcao," onchange='js_pesquisao08_subfuncao(false);'")
+db_input('o08_subfuncao',10,$Io08_subfuncao,true,'text',$db_opcao," onchange='js_pesquisao08_subfuncao(false);'");
+db_input("o08_subfuncao_original",30,0,true,"hidden",1);
 ?>
        <?
 db_input('o53_descr',40,$Io53_descr,true,'text',3,'')
@@ -136,7 +140,8 @@ db_input('o53_descr',40,$Io53_descr,true,'text',3,'')
     </td>
     <td> 
 <?
-db_input('o08_programa',10,$Io08_programa,true,'text',$db_opcao," onchange='js_pesquisao08_programa(false);'")
+db_input('o08_programa',10,$Io08_programa,true,'text',$db_opcao," onchange='js_pesquisao08_programa(false);'");
+db_input("o08_programa_original",30,0,true,"hidden",1);
 ?>
        <?
 db_input('o54_descr',40,$Io54_anousu,true,'text',3);
@@ -151,7 +156,8 @@ db_input('o54_descr',40,$Io54_anousu,true,'text',3);
     </td>
     <td> 
       <?
-      db_input('o08_projativ',10,$Io08_projativ,true,'text',$db_opcao," onchange='js_pesquisao08_projativ(false);'") 
+      db_input('o08_projativ',10,$Io08_projativ,true,'text',$db_opcao," onchange='js_pesquisao08_projativ(false);'");
+      db_input("o08_projativ_original",30,0,true,"hidden",1);
       ?>
        <?
        db_input('o55_descr',40,$Io55_descr,true,'text',3,'')
@@ -163,8 +169,11 @@ db_input('o54_descr',40,$Io54_anousu,true,'text',3);
   </td>
   </tr>
   </table>
-<input name="alterar"   type="button" id="db_opcao"  value="Alterar"   onclick="js_alterarDotacoes()" >
+  
+<input name="<?= $db_opcao==1 ? "alterar" : "excluir" ?>"   type="<?= $db_opcao==1 ? "button" : "submit" ?>" 
+    id="db_opcao"  value="<?= $db_opcao==1 ? "Alterar" : "Excluir" ?>"  <?= $db_opcao==1 ? "onclick='js_alterarDotacoes()'" : "" ?>  >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+<input name="Novo" type="button" id="novo" value="Novo" onClick="location.href = 'orc4_ppadespesamanual004.php'">
 </center>
 </form>
 </body>
@@ -173,10 +182,10 @@ db_input('o54_descr',40,$Io54_anousu,true,'text',3);
 <script>
 function js_pesquisao08_orgao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcorgao','func_orcorgaodespesa.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr','Pesquisa',true);
   }else{
      if(document.form1.o08_orgao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o08_orgao.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcorgao','func_orcorgaodespesa.php?pesquisa_chave='+document.form1.o08_orgao.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
      }else{
        document.form1.o40_descr.value = ''; 
      }
@@ -253,7 +262,7 @@ function js_pesquisao08_unidade(mostra) {
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo.iframe_ppadotacao',
                         'db_iframe_orcunidade',
-                        'func_orcunidade.php?funcao_js=parent.js_mostraorcunidade1|o41_unidade|o41_descr&'+sFiltro,
+                        'func_orcunidadedespesa.php?funcao_js=parent.js_mostraorcunidade1|o41_unidade|o41_descr&'+sFiltro,
                         'Unidades',
                         true
                        );
@@ -262,7 +271,7 @@ function js_pesquisao08_unidade(mostra) {
      if(document.form1.o08_unidade.value != ''){ 
         js_OpenJanelaIframe('top.corpo.iframe_ppadotacao',
                             'db_iframe_orcunidade',
-                            'func_orcunidade.php?pesquisa_chave='+
+                            'func_orcunidadedespesa.php?pesquisa_chave='+
                              document.form1.o08_unidade.value+'&funcao_js=parent.js_mostraorcunidade&'+sFiltro,
                             'Pesquisa',
                             false);
@@ -332,10 +341,10 @@ function js_mostraorcsubfuncao1(chave1,chave2){
 
 function js_pesquisao08_programa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprograma','func_orcprograma.php?funcao_js=parent.js_mostraorcprograma1|o54_programa|o54_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprograma','func_orcprogramadespesa.php?funcao_js=parent.js_mostraorcprograma1|o54_programa|o54_descr','Pesquisa',true);
   }else{
      if(document.form1.o08_programa.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprograma','func_orcprograma.php?pesquisa_chave='+document.form1.o08_programa.value+'&funcao_js=parent.js_mostraorcprograma','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprograma','func_orcprogramadespesa.php?pesquisa_chave='+document.form1.o08_programa.value+'&funcao_js=parent.js_mostraorcprograma','Pesquisa',false);
      }else{
        document.form1.o54_descr.value = ''; 
      }
@@ -378,10 +387,10 @@ function js_mostraorcprojativ1(chave1,chave2){
 }
 function js_pesquisao08_projativ(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprojativ','func_orcprojativ.php?funcao_js=parent.js_mostraorcprojativ1|o55_projativ|o55_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprojativ','func_orcprojativdespesa.php?funcao_js=parent.js_mostraorcprojativ1|o55_projativ|o55_descr','Pesquisa',true);
   }else{
      if(document.form1.o08_projativ.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprojativ','func_orcprojativ.php?pesquisa_chave='+document.form1.o08_projativ.value+'&funcao_js=parent.js_mostraorcprojativ','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_ppadotacao','db_iframe_orcprojativ','func_orcprojativdespesa.php?pesquisa_chave='+document.form1.o08_projativ.value+'&funcao_js=parent.js_mostraorcprojativ','Pesquisa',false);
      }else{
        document.form1.o55_descr.value = ''; 
      }
@@ -461,7 +470,7 @@ function js_pesquisa() {
                       ,0);
 }
 function js_preenchepesquisa(o40_orgao, o41_unidade, o52_funcao, o53_subfuncao, o54_programa, o55_projativ,o08_ppaversao){
-  
+
   if (db_iframe_ppadotacao) {
     db_iframe_ppadotacao.hide();
   }
@@ -493,7 +502,7 @@ function js_retornoPesquisa(oRequest) {
   var oRetorno = eval("("+oRequest.responseText+")");
   if (oRetorno.status == 1) {
     
-    var a = $$('input[type=text],select');
+    var a = $$('input[type=text],select,input[type=hidden]');
     a.each(function(input,id) {
        
        var valor   = eval("oRetorno."+input.id);
@@ -514,7 +523,9 @@ function js_retornoPesquisa(oRequest) {
       $('db_opcao').disabled = true;
     }  
   }
-  top.corpo.iframe_ppadotacaoele.addValoresGrid(oRetorno.itens); 
+
+  let db_opcao = <?= $db_opcao ?>;
+  top.corpo.iframe_ppadotacaoele.addValoresGrid(oRetorno.itens, db_opcao); 
 }
 
 function js_pesquisao05_ppalei(mostra){
@@ -600,18 +611,17 @@ function js_reload(){
 function js_alterarDotacoes() {
   
   var iTotalDotacoes  = top.corpo.iframe_ppadotacaoele.oGridPPA.getElementsByClass('dotacaonormal').length;
-  if (iTotalDotacoes == 0) {
-  
-    alert('Não há dotações que podem ser modificadas. todas as dotações foram estimadas automaticamente!');
-    return false;
+
+  if (iTotalDotacoes > 0) {
     
-  }
-  var sMsg  = 'As modificações realizadas refletiram em '+iTotalDotacoes+' dotações.\n';
-      sMsg += 'Confirmar as modificações?';
-      
-  if (!confirm(sMsg)) {
-    return false;   
-  }   
+    var sMsg  = 'As modificações realizadas refletiram em '+iTotalDotacoes+' dotações.\n';
+    sMsg += 'Confirmar as modificações?';
+
+    if (!confirm(sMsg)) {
+        return false;   
+    }
+
+  }      
   
   oParam = new Object();
   js_divCarregando('Aguarde, Carregando estimativas','msgbox');

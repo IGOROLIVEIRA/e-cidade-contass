@@ -60,6 +60,7 @@ class cl_veicretirada {
   var $ve60_data = null;
   var $ve60_hora = null;
   var $ve60_medidasaida = 0;
+  var $ve60_importado = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  ve60_codigo = int4 = Código Retirada 
@@ -73,7 +74,8 @@ class cl_veicretirada {
                  ve60_usuario = int4 = Usuário 
                  ve60_data = date = Data 
                  ve60_hora = char(5) = Hora 
-                 ve60_medidasaida = float8 = Medida de saída 
+                 ve60_medidasaida = float8 = Medida de saída
+                 ve60_importado = bool = Importado 
                  ";
   //funcao construtor da classe
   function cl_veicretirada() {
@@ -119,6 +121,7 @@ class cl_veicretirada {
       }
       $this->ve60_hora = ($this->ve60_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_hora"]:$this->ve60_hora);
       $this->ve60_medidasaida = ($this->ve60_medidasaida == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_medidasaida"]:$this->ve60_medidasaida);
+      $this->ve60_importado = ($this->ve60_importado == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_importado"]:$this->ve60_importado);
     }else{
       $this->ve60_codigo = ($this->ve60_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_codigo"]:$this->ve60_codigo);
     }
@@ -226,6 +229,10 @@ class cl_veicretirada {
       $this->erro_status = "0";
       return false;
     }
+    if($this->ve60_importado == null ){ 
+      $this->ve60_importado = 'f';
+    }     
+     
     if($ve60_codigo == "" || $ve60_codigo == null ){
       $result = db_query("select nextval('veicretirada_ve60_codigo_seq')");
       if($result==false){
@@ -271,6 +278,7 @@ class cl_veicretirada {
                                       ,ve60_data
                                       ,ve60_hora
                                       ,ve60_medidasaida
+                                      ,ve60_importado
                        )
                 values (
                                 $this->ve60_codigo
@@ -285,6 +293,7 @@ class cl_veicretirada {
                                ,".($this->ve60_data == "null" || $this->ve60_data == ""?"null":"'".$this->ve60_data."'")."
                                ,'$this->ve60_hora'
                                ,$this->ve60_medidasaida
+                               ,'$this->ve60_importado'
                       )";
     $result = db_query($sql);
     if($result==false){
@@ -514,6 +523,20 @@ class cl_veicretirada {
       if(trim($this->ve60_medidasaida) == null ){
         $this->erro_sql = " Campo Medida de saída nao Informado.";
         $this->erro_campo = "ve60_medidasaida";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+    if(trim($this->ve60_importado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve60_importado"])){
+      $sql  .= $virgula." ve60_importado = '$this->ve60_importado' ";
+      $virgula = ",";
+      if(trim($this->ve60_importado) == null ){
+        $this->erro_sql = " Campo Hora nao Informado.";
+        $this->erro_campo = "ve60_importado";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

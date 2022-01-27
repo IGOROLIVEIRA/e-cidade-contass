@@ -172,7 +172,7 @@ if($exibir_cupom){
     $sCampos .= ', ve71_nota';
 }
 
-$sSqlBuscaAbastecimentos = $clveicabast->sql_query_abast_novo(null, $sCampos, $ordem, $dbwhere, $iCoddepto);
+$sSqlBuscaAbastecimentos = $clveicabast->sql_query_abast_novo(null, $sCampos,"ve70_dtabast,ve70_codigo", $dbwhere, $iCoddepto);
 $result = db_query(" drop table if exists w_relabastecimentoveiculos; create table w_relabastecimentoveiculos as {$sSqlBuscaAbastecimentos} ") or die(pg_last_error());
 
                     if (pg_num_rows(db_query("select * from w_relabastecimentoveiculos")) == 0) {

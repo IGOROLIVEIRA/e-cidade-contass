@@ -157,6 +157,7 @@ switch($oParam->exec) {
                 $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
                 $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
                 $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
+                $cllicobrasresponsaveis->obr05_dscoutroconselho = $oParam->obr05_dscoutroconselho;
                 $cllicobrasresponsaveis->alterar($obr05_sequencial);
 
                 if ($cllicobrasresponsaveis->erro_status == 0) {
@@ -181,6 +182,7 @@ switch($oParam->exec) {
                 }
                 $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
                 $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
+                $cllicobrasresponsaveis->obr05_dscoutroconselho = $oParam->obr05_dscoutroconselho;
                 $cllicobrasresponsaveis->obr05_instit = db_getsession("DB_instit");
                 $cllicobrasresponsaveis->incluir();
 

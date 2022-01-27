@@ -1490,11 +1490,18 @@ function js_troca_valores(entrada){
     document.form1.envia.disabled=true;
     return false;
   } else if(entrada <= 0){
-    alert('Entrada deve ser maior que 0');
-    document.form1.ent.value = '';
-    document.form1.ent.focus();
-    document.form1.envia.disabled=true;
-    return false;
+  	<?php 
+  	$oInstit = new Instituicao(db_getsession('DB_instit'));
+    if($oInstit->getCodigoCliente() != Instituicao::COD_CLI_PMPIRAPORA){ 
+  	?>
+	    alert('Entrada deve ser maior que 0');
+	    document.form1.ent.value = '';
+	    document.form1.ent.focus();
+	    document.form1.envia.disabled=true;
+	    return false;
+    <?php 
+  	} 
+  	?>
   }else{
     
 		var tipo1 = document.form1.tiposparc.value.split("-");

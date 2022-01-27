@@ -39,7 +39,8 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
 
 $sSql = "select * from (SELECT
                 pc01_codmater,
-                pc01_descrmater||'. '||pc01_complmater as pc01_descrmater,
+                case when pc01_complmater is not null and pc01_complmater != pc01_descrmater then pc01_descrmater ||'. '|| pc01_complmater
+		        else pc01_descrmater end as pc01_descrmater,
                 m61_abrev,
                 sum(pc11_quant) as pc11_quant,
                 pc11_reservado
@@ -72,8 +73,13 @@ LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
 LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
 LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
 LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
+left join processocompraloteitem on
+		pc69_pcprocitem = pcprocitem.pc81_codprocitem
+left join processocompralote on
+			pc68_sequencial = pc69_processocompralote
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
 WHERE pc81_codproc = {$codigo_preco}
+  AND pc68_sequencial = $oLotes->pc68_sequencial
   AND pc10_instit = " . db_getsession("DB_instit") . "
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
@@ -128,9 +134,7 @@ $sWhere  = " db02_descr like 'RESPONSÁVEL PELA COTAÇÃO' ";
 $sWhere .= " AND db03_instit = db02_instit ";
 $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
 
-$sSqlCotacao = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
-$rsCotacao = $cl_docparag->sql_record($sSqlCotacao);
-$sAssinaturaCotacao = db_utils::fieldsMemory($rsCotacao, 0)->db02_texto;
+                if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
 
 // echo $sSql;
 // db_criatabela($rsResult);
@@ -262,7 +266,7 @@ ob_start();
 
     <table class="table">
         <tr class="">
-            <td class="item-menu item-menu-color">SEQ</td>
+            <td class="item-menu item-menu-color" style="width:50px">SEQ</td>
             <td class="item-menu item-menu-color">ITEM</td>
             <td class="item-menu item-menu-color">DESCRIÇÃO DO ITEM</td>
             <td class="item-menu item-menu-color"><strong>TAXA/TABELA</strong></td>
@@ -276,7 +280,7 @@ HTML;
     echo <<<HTML
   <div class="table" autosize="1">
     <div class="tr bg_eb">
-      <div class="th col-item align-center">SEQ</div>
+      <div class="th col-item align-center" style="width:49px">SEQ</div>
       <div class="th col-item align-center">ITEM</div>
       <div class="th col-descricao_item align-center">DESCRIÇÃO DO ITEM</div>
       <div class="th col-valor_un align-right">VALOR UN</div>
@@ -460,12 +464,12 @@ HTML;
 
 </html>
 
-<?php
+    <?php
 
-$html = ob_get_contents();
+    $html = ob_get_contents();
 
-ob_end_clean();
-$mPDF->WriteHTML(utf8_encode($html));
-$mPDF->Output();
+    ob_end_clean();
+    $mPDF->WriteHTML(utf8_encode($html));
+    $mPDF->Output();
 
 ?>

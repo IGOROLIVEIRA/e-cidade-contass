@@ -1221,7 +1221,7 @@ if ($sqlerro == false) {
     $sMsg     .= str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$sMsgAdmin." \\n"));
 
 	  $sqlerro = true;
-    //db_msgbox($sMsg);
+    db_msgbox($sMsg);
 	}
 }
 

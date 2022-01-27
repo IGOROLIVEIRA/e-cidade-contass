@@ -263,8 +263,8 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
       if ( isset($lSqlErro) && $lSqlErro === false) {
 
         $sMsg  = "Inclusao efetuada com Sucesso\\n";
-        //$sMsg .= "Processo  : {$iNumeroProcesso}/".db_getsession("DB_anousu")."\\n";
-        $sMsg .= "Processo  : {$p58_numeracao}/".db_getsession("DB_anousu")."\\n";
+        $sMsg .= "Processo  : {$iNumeroProcesso}/".db_getsession("DB_anousu")."\\n";
+        //$sMsg .= "Processo  : {$p58_numeracao}/".db_getsession("DB_anousu")."\\n";
 
         if (!empty($oPost->docs)) {
           $sMsg .= "Documento : {$oPost->docs} \\n";

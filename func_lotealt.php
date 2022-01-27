@@ -23,7 +23,7 @@
  *  
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
- */
+ */ 
 
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
@@ -31,13 +31,26 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_lote_classe.php");
+
 db_postmemory($HTTP_POST_VARS);
+db_sel_instit(null, "db21_usadistritounidade");
 
 if(!isset($pesquisar)){
   parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 }
 $cllote = new cl_lote;
 $cllote->rotulo->label();
+$cliptubase = new cl_iptubase;
+$cliptubase->rotulo->label("j01_unidade");
+
+if($db21_usadistritounidade == 't'){ 
+  $tamanho1 = 9;
+  $tamanho1 = 10;
+}else{
+  $tamanho1 = 5;
+  $tamanho1 = 6;
+}
+
 ?>
 <html>
 <head>
@@ -55,13 +68,23 @@ $cllote->rotulo->label();
             <td align="right" nowrap title="<?=$Tj34_idbql?>">
               <?=$Lj34_idbql?>
             </td>
-            <td colspan="5" align="left" nowrap>
+            <td colspan=<?=$tamanho1?> align="left" nowrap>
               <?
                 db_input("j34_idbql",10,$Ij34_idbql,true,"text",4,"","chave_j34_idbql");
               ?>
             </td>
           </tr>
           <tr>
+            <?php if($db21_usadistritounidade == 't'){ ?>
+            <td align="right" nowrap title="<?=$Tj34_distrito?>">
+              <?=$Lj34_distrito?>
+            </td>
+            <td align="left" nowrap>
+              <?
+                db_input("j34_distrito",10,$Ij34_distrito,true,"text",4,"","chave_j34_distrito");
+              ?>
+            </td>
+            <?php } ?>
             <td align="right" nowrap title="<?=$Tj34_setor?>">
               <?=$Lj34_setor?>
             </td>
@@ -86,9 +109,19 @@ $cllote->rotulo->label();
                 db_input("j34_lote",10,$Ij34_lote,true,"text",4,"","chave_j34_lote");
               ?>
             </td>
+            <?php if($db21_usadistritounidade == 't'){ ?>
+            <td align="left" nowrap>
+              <?=$Lj01_unidade?>
+            </td>
+            <td align="left" nowrap>
+              <?
+                db_input("j01_unidade",10,$Ij01_unidade,true,"text",4,"","chave_j01_unidade");
+              ?>
+            </td>
+            <?php } ?>
           </tr>
           <tr>
-            <td colspan="4" align="center"> <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+            <td colspan=<?=$tamanho2?> align="center"> <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
               <input name="limpar" type="reset" id="limpar" value="Limpar" > </td>
           </tr>
         </form>
@@ -134,6 +167,28 @@ $cllote->rotulo->label();
             $lote   = str_pad($lote,4,"0",STR_PAD_LEFT);
             $chave .= " lote.j34_lote = '$lote' ";
           }
+          if(isset($distrito) && !empty($distrito)) {
+
+            if (!empty($chave)) {
+              $chave .= " and ";
+            }
+            $distrito   = str_pad($distrito,4,"0",STR_PAD_LEFT);
+            $chave .= " lote.j34_distrito = '$distrito' ";
+          }
+          if(isset($unidade) && !empty($unidade)) {
+
+            if (!empty($chave)) {
+              $chave .= " and ";
+            }
+            $unidade   = str_pad($lote,4,"0",STR_PAD_LEFT);
+            $chave .= " iptubase.j01_unidade = '$unidade' ";
+          }
+
+          if($db21_usadistritounidade == 't'){
+            $usadistrito = 'lote.j34_distrito#';
+            $usaunidade  = '#iptubase.j01_unidade';
+          }
+
           if ($chave!="") {
 
              $sCampos  = "distinct on (iptubase.j01_matric) iptubase.j01_matric, iptuant.j40_refant, ";
@@ -141,12 +196,12 @@ $cllote->rotulo->label();
              $sCampos .= "   from fc_busca_envolvidos(false, (select fc_regrasconfig ";
              $sCampos .= "                                      from fc_regrasconfig(1)), 'M', iptubase.j01_matric) ";
              $sCampos .= "                                     limit 1)#";
-             $sCampos .= "j34_idbql#lote.j34_setor#lote.j34_quadra#lote.j34_lote#loteloc.j06_setorloc#";
+             $sCampos .= "j34_idbql#{$usadistrito}lote.j34_setor#lote.j34_quadra#lote.j34_lote{$usaunidade}#loteloc.j06_setorloc#";
              $sCampos .= "loteloc.j06_quadraloc#loteloc.j06_lote#lote.j34_area#lote.j34_bairro#lote.j34_areal#";
              $sCampos .= "lote.j34_totcon#lote.j34_zona#lote.j34_quamat#lote.j34_areapreservada#j14_codigo,j14_tipo,";
              $sCampos .= "j14_nome,$sNumero,j39_compl";
 
-             $sql = $cllote->sql_query_dados_lote("",$sCampos,"iptubase.j01_matric, lote.j34_setor#lote.j34_quadra#lote.j34_lote",$chave);
+             $sql = $cllote->sql_query_dados_lote("",$sCampos,"iptubase.j01_matric, {$usadistrito}lote.j34_setor#lote.j34_quadra#lote.j34_lote{$usaunidade}",$chave);
           }
          } else {
 
@@ -166,6 +221,8 @@ $cllote->rotulo->label();
              $wlote   ="";
              $wquadra ="";
              $wsetor  ="";
+             $wdistrito  ="";
+             $wunidade  ="";
              if (isset($chave_j34_setor) && ($chave_j34_setor!="")) {
 
                $chave_j34_setor = str_pad($chave_j34_setor,4,"0",STR_PAD_LEFT);
@@ -184,6 +241,18 @@ $cllote->rotulo->label();
               $wlote          = $wx."lote.j34_lote='$chave_j34_lote'";
               $wx             = " and ";
             }
+            if (isset($chave_j34_distrito) && ($chave_j34_distrito!="") ) {
+
+              $chave_j34_distrito = str_pad($chave_j34_distrito,4,"0",STR_PAD_LEFT);
+              $wdistrito          = $wx."lote.j34_distrito='$chave_j34_distrito'";
+              $wx             = " and ";
+            }
+            if (isset($chave_j01_unidade) && ($chave_j01_unidade!="") ) {
+
+              $chave_j01_unidade = str_pad($chave_j01_unidade,4,"0",STR_PAD_LEFT);
+              $wunidade          = $wx."iptubase.j01_unidade='$chave_j01_unidade'";
+              $wx             = " and ";
+            }
 
             $sCampos  = "distinct on (iptubase.j01_matric), iptubase.j01_matric, iptuant.j40_refant,";
             $sCampos .= "(select rvnome as z01_nome";
@@ -194,11 +263,11 @@ $cllote->rotulo->label();
 
             if($wx!="") {
             	$sOrdem = "iptubase.j01_matric";
-            	$sSetorQuadraLote = $wsetor.$wquadra.$wlote;
+            	$sSetorQuadraLote = $wdistrito.$wsetor.$wquadra.$wlote.$wunidade;
             	if (!empty($sSetorQuadraLote)) {
             		$sOrdem .= ", {$sSetorQuadraLote}";
             	}
-            	echo $sql;
+            	echo $sql; die();
               $sql = $cllote->sql_query_dados_lote("", $sCampos,"lote.j34_setor",$sOrdem);
             } else  if($wx == "" && isset($pesquisar) || isset($filtroquery)) {
               $sql = $cllote->sql_query_dados_lote("", $sCampos,"lote.j34_idbql","");

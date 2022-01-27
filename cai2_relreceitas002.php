@@ -88,6 +88,7 @@ if ($tipo == 'o') {
   $xxtipo .= "                         and p.k02_anousu             = ".db_getsession("DB_anousu");
   $xxtipo .= " left join conplanoreduz  on conplanoreduz.c61_anousu = p.k02_anousu ";
   $xxtipo .= "                         and conplanoreduz.c61_reduz  = p.k02_reduz ";
+  $xxtipo .= " inner join cornump       on cornump.k12_numpre = f.k00_numpre ";
   
   
   $where .= "  case when o70_instit is null then conplanoreduz.c61_instit = ". db_getsession("DB_instit");

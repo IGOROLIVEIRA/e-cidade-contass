@@ -34,6 +34,7 @@ include("classes/db_recibo_classe.php");
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clrecibo = new cl_recibo;
+
 ?>
 <html>
 <head>
@@ -43,15 +44,21 @@ $clrecibo = new cl_recibo;
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+<?php
+	if (!isset($_GET['dias_pesq'])){
+?>
+<tr> 
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
           <tr> 
-					<td nowrap><b>Dias Emissão Recibo:</b></td>
-
-          <td><input type='text' size=10 value='<?=@$_POST["dias_paga"]==''?30:@$_POST["dias_paga"];?>' name='dias_paga' onkeyUp='return js_teclas(event)'></td>
-					</tr>
+            <td nowrap>
+              <b>Dias Emissão Recibo:</b>
+            </td>
+            <td>
+              <input type='text' size=10 value='<?=$_POST["dias_paga"]==''?30:$_POST["dias_paga"];?>' name='dias_paga' onkeyUp='return js_teclas(event)'>
+            </td>
+          </tr>
 					<tr>
             <td colspan="2" align="center"> 
               <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
@@ -63,6 +70,9 @@ $clrecibo = new cl_recibo;
         </table>
       </td>
   </tr>
+  <?
+  } 
+  ?>
   <tr> 
     <td align="center" valign="top"> 
       <?
@@ -72,9 +82,10 @@ $clrecibo = new cl_recibo;
          
 			}else{
 
-         $iPaga = 30; 
+        $iPaga = isset($_GET['dias_pesq']) === false ? 30 : $_GET['dias_pesq']; 
 
 			}
+
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_recibo.php")==true){
@@ -106,11 +117,3 @@ $clrecibo = new cl_recibo;
 </table>
 </body>
 </html>
-<?
-if(!isset($pesquisa_chave)){
-  ?>
-  <script>
-  </script>
-  <?
-}
-?>

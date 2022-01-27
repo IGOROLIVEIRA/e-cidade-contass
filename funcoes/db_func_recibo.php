@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "recibo.k00_numcgm,recibo.k00_dtoper,recibo.k00_receit,recibo.k00_hist,recibo.k00_valor,recibo.k00_dtvenc,recibo.k00_numpre,recibo.k00_numpar,recibo.k00_numtot,recibo.k00_numdig,recibo.k00_tipo,recibo.k00_tipojm,recibo.k00_codsubrec";
+$campos = "recibo.k00_numpre,recibo.k00_numcgm,z01_nome,recibo.k00_dtoper,recibo.k00_receit,recibo.k00_hist,recibo.k00_valor,recibo.k00_dtvenc,recibo.k00_numpar,recibo.k00_numtot,recibo.k00_tipo,recibo.k00_tipojm,recibo.k00_codsubrec";
 ?>

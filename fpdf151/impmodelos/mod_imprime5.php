@@ -781,6 +781,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
         $seta_altura_pagina_row = $this->objpdf->h - 80;
 
         if ($pagina != 1) {
+            
             $seta_altura_pagina_row = $this->objpdf->h - 70;
         }
 
@@ -947,22 +948,24 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 $this->objpdf->rect($xcol + 8, $xlin + 59, 12, 6, 2, 'DF', '12');
                 $this->objpdf->rect($xcol + 20, $xlin + 59, 15, 6, 2, 'DF', '12');
                 $this->objpdf->rect($xcol + 35, $xlin + 59, 107, 6, 2, 'DF', '12');
-                $this->objpdf->rect($xcol + 142, $xlin + 59, 30, 6, 2, 'DF', '12');
-                $this->objpdf->rect($xcol + 172, $xlin + 59, 30, 6, 2, 'DF', '12');
+                $this->objpdf->rect($xcol + 142, $xlin + 59, 20, 6, 2, 'DF', '12');
+                $this->objpdf->rect($xcol + 162, $xlin + 59, 20, 6, 2, 'DF', '12');
+                $this->objpdf->rect($xcol + 182, $xlin + 59, 20, 6, 2, 'DF', '12');
 
                 $this->objpdf->rect($xcol, $xlin + 64, 8, 262, 2, 'DF', '34');
                 $this->objpdf->rect($xcol + 8, $xlin + 64, 12, 262, 2, 'DF', '34');
                 $this->objpdf->rect($xcol + 20, $xlin + 64, 15, 262, 2, 'DF', '34');
                 $this->objpdf->rect($xcol + 35, $xlin + 64, 107, 262, 2, 'DF', '34');
-                $this->objpdf->rect($xcol + 142, $xlin + 64, 30, 262, 2, 'DF', '34');
-                $this->objpdf->rect($xcol + 172, $xlin + 64, 30, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol + 142, $xlin + 64, 20, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol + 162, $xlin + 64, 20, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol + 182, $xlin + 64, 20, 262, 2, 'DF', '34');
 
                 //$this->objpdf->rect($xcol, $xlin + 205, 142, 10, 2, 'DF', '34');
                 //$this->objpdf->rect($xcol + 142, $xlin + 205, 30, 10, 2, 'DF', '34');
                 //$this->objpdf->rect($xcol + 172, $xlin + 205, 30, 10, 2, 'DF', '34');
 
 
-                $this->objpdf->sety($xlin + 85);
+                $this->objpdf->sety($xlin+70); 
 
                 $alt = 5;
 
@@ -971,8 +974,8 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 $this->objpdf->text($xcol + 22, $xlin + 62, 'QUANT.');
                 $this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
                 $this->objpdf->text($xcol + 145, $xlin + 62, 'UNIDADE');
-                $this->objpdf->text($xcol + 168, $xlin + 62, 'UNITÁRIO');
-                $this->objpdf->text($xcol + 176, $xlin + 62, 'TOTAL');
+                $this->objpdf->text(168, $xlin + 62, 'UNITÁRIO');
+                $this->objpdf->text(190, $xlin + 62, 'TOTAL');
 
                 /*$this->objpdf->text($xcol + 1, $xlin + 62, 'SEQ.');
                 $this->objpdf->text($xcol + 10, $xlin + 62, 'ITEM');

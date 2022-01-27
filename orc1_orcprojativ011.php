@@ -46,7 +46,7 @@ $lSqlErro = false;
 if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir"){
 
   db_inicio_transacao();
-
+  $o55_projativ_old = $o55_projativ;
   $o55_projativ += $digito;
 
   $iAnoUsu       = db_getsession("DB_anousu");
@@ -58,8 +58,8 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir
   $sSqlProjAtiv = "select * from orcprojativ where o55_projativ = $o55_projativ and o55_anousu between {$iAnoUsu} and {$iUltimoAno}";
   $iProjAtiv = db_query($sSqlProjAtiv);
   if (pg_numrows($iProjAtiv) > 0) {
-  	db_msgbox("Inclusão não Efetuada.\\nProjeto/Atividade Já cadastrado com mesmo numero({$o55_projativ}) para outros anos.");
-  	db_redireciona("orc1_orcprojativ011.php");
+    $clorcprojativ->erro_status = 0;
+    $clorcprojativ->erro_msg = "Inclusão não Efetuada.\\nProjeto/Atividade Já cadastrado com mesmo numero({$o55_projativ}) para outros anos.";
   	$lSqlErro = true;
   } else {
 

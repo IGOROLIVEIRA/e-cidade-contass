@@ -67,7 +67,7 @@ $head6 = "TIPO    : ".$sTipo;
 $oRhLota = db_utils::getDao('rhlota');
 
 $sSqlLota = $oRhLota->sql_query_dadosElemento($ano, db_getsession('DB_instit'), $sWhere, $sOrdem);
-
+// die($sSqlLota);
 $rsRhLota = $oRhLota->sql_record($sSqlLota);
 
 if ($oRhLota->numrows == 0){
@@ -112,6 +112,7 @@ foreach (db_utils::getCollectionByRecord($rsRhLota) as $oDados) {
   $oDadosLinha->o54_programa            = $oDados->o54_programa ;
   $oDadosLinha->o54_descr               = $oDados->o54_descr    ;
   $oDadosLinha->c58_descr               = $oDados->c58_descr    ;
+  $oDadosLinha->o58_coddot             = $oDados->o58_coddot;
 
   if($elementoAnterior != $oDadosLinha->r70_estrut){
     $oElementoSecundario                  = new stdClass();
@@ -135,11 +136,12 @@ foreach ($aDados as $oDadosLotacao) {
 
       $pdf->addpage('L');
       $pdf->setfont('arial','b',8);
-      $pdf->cell(25,$alt,'ESTRUTURAL'  ,1,0,"L",1);
+      $pdf->cell(20,$alt,'ESTRUTURAL'  ,1,0,"L",1);
       $pdf->cell(15,$alt,'CÓDIGO'      ,1,0,"L",1);
       $pdf->cell(75,$alt,'DESCRIÇÃO'   ,1,0,"L",1);
-      $pdf->cell(85,$alt,'ÓRGAO'       ,1,0,"L",1);
-      $pdf->cell(75,$alt,'UNIDADE'     ,1,1,"L",1);
+      $pdf->cell(80,$alt,'ÓRGAO'       ,1,0,"L",1);
+      $pdf->cell(73,$alt,'UNIDADE'     ,1,0,"L",1);
+      $pdf->cell(12,$alt,'REDUZ'     ,1,1,"L",1);
 
       if($completo == 's'){
 
@@ -171,16 +173,15 @@ foreach ($aDados as $oDadosLotacao) {
      $pre = 1;
    }
 
-   //$pdf->Cell(275,0,'','T');
-
    $pdf->setfont('arial','B',7);
-   $pdf->cell(25,$alt,$oDadosLotacao->r70_estrut,'T',0,"L",$pre);
+   $pdf->cell(20,$alt,$oDadosLotacao->r70_estrut,'T',0,"L",$pre);
    $pdf->setfont('arial','',7);
 
    $pdf->cell(15,$alt,$oDadosLotacao->r70_codigo,'T',0,"L",$pre);
    $pdf->cell(75,$alt,$oDadosLotacao->r70_descr ,'T',0,"L",$pre);
-   $pdf->cell(85,$alt,db_formatar($oDadosLotacao->o40_orgao,'orgao').' - '.$oDadosLotacao->o40_descr                                                 ,'T',0,"L",$pre);
-   $pdf->cell(75,$alt,db_formatar($oDadosLotacao->o41_orgao,'orgao').db_formatar($oDadosLotacao->o41_unidade,'orgao').' - '.$oDadosLotacao->o41_descr,'T',1,"L",$pre);
+   $pdf->cell(80,$alt,db_formatar($oDadosLotacao->o40_orgao,'orgao').' - '.$oDadosLotacao->o40_descr                                                 ,'T',0,"L",$pre);
+   $pdf->cell(73,$alt,db_formatar($oDadosLotacao->o41_orgao,'orgao').db_formatar($oDadosLotacao->o41_unidade,'orgao').' - '.$oDadosLotacao->o41_descr,'T',0,"L",$pre);
+   $pdf->cell(12,$alt,$oDadosLotacao->o58_coddot,'T',1,"R",$pre);
 
    if ($completo == 's') {
 

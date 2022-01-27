@@ -43,6 +43,8 @@ include("classes/db_gerfres_classe.php");
 include("classes/db_gerfs13_classe.php");
 include("classes/db_gerfsal_classe.php");
 include("classes/db_rhrubretencao_classe.php");
+include("classes/db_rubricasesocial_classe");
+include("classes/db_baserubricasesocial_classe.php");
 
 
 $clrhrubricas = new cl_rhrubricas;
@@ -58,6 +60,8 @@ $clgerfres = new cl_gerfres;
 $clgerfs13 = new cl_gerfs13;
 $clgerfsal = new cl_gerfsal;
 $clrhrubretencao = new cl_rhrubretencao();
+$clrubricasesocial = new cl_rubricasesocial;
+$clbaserubricasesocial = new cl_baserubricasesocial;
 
 db_postmemory($HTTP_POST_VARS);
 $db_opcao = 33;
@@ -140,6 +144,13 @@ if(isset($excluir)){
 		     $sqlerro=true;
 		   }
 	  }
+    if($sqlerro == false){
+       $clbaserubricasesocial->excluir($rh27_rubric,null,db_getsession("DB_instit"));  
+       if($clbaserubricasesocial->erro_status==0){
+        $erro_msg = $clbaserubricasesocial->erro_msg;
+         $sqlerro=true;
+       }
+    }
 	  if($sqlerro == false){
 		  $clrhrubricas->excluir($rh27_rubric,db_getsession("DB_instit"));
 		  $erro_msg = $clrhrubricas->erro_msg;
@@ -176,6 +187,10 @@ if(isset($excluir)){
   if ( $clrhrubretencao->numrows > 0 ) {
     db_fieldsmemory($rsRetencao,0);
   }  
+  $result = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query(null,'e991_rubricasesocial',null,"e991_rubricas = '$rh27_rubric' and  e991_instit = ".db_getsession("DB_instit")));
+  if($clbaserubricasesocial->numrows > 0) { 
+    db_fieldsmemory($result, 0);
+  }
   
 }
 ?>

@@ -44,6 +44,16 @@ if (!isset($oPost->incluir) && !isset($oPost->alterar)){
      unset($_SESSION["dotacaoestimativa"]);
    }
 
+    echo "
+    <script>
+        function js_db_block(){
+            parent.document.formaba.ppadotacaoele.disabled=true;
+    ";
+    echo"}\n
+        js_db_block();
+    </script>\n
+    ";
+
 } else {
 
   $db_opcao = 2;
@@ -254,6 +264,7 @@ db_input('o55_descr',40,$Io55_descr,true,'text',3,'')
   </table>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+<input name="Novo" type="button" id="novo" value="Novo" onClick="location.href = 'orc4_ppadespesamanual004.php'">
 </center>
 </form>
 <script>

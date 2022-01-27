@@ -159,7 +159,7 @@ function js_emite(iTipoRelatorio) {
      sTipoArquivoRelatorio = "pro2_cartahabite003.php";
    }
 
-   jan = window.open(sTipoArquivoRelatorio+'?codigo=<?=$oGet->parametro?>',
+   jan = window.open(sTipoArquivoRelatorio+'?codigo=<?=$oObrasHabite->ob09_codhab?>',
                       '',
                       'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
    jan.moveTo(0,0);

@@ -223,7 +223,7 @@ db_menu( db_getsession("DB_id_usuario"),
         if (mostra == true) {
             js_OpenJanelaIframe( 'top.corpo',
                 'db_iframe_rhpessoal',
-                'func_rhpessoal.php?funcao_js=parent.js_mostraemissor1|rh01_numcgm|z01_nome&instit=<?=(db_getsession("DB_instit"))?>',
+                'func_rhpessoal.php?funcao_js=parent.js_mostraemissor1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>',
                 'Pesquisa',
                 true );
         } else {

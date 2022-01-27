@@ -43,6 +43,7 @@ $q53_nome       = $oTom->z01_nome;
 $q54_inscr      = $oTom->q02_inscr;
 $q61_numcgm     = $oTom->q61_numcgm;
 $q53_cgccpf     = $oTom->z01_cgccpf;
+$q53_incest     = $oTom->z01_incest;
 $q53_endereco   = $oTom->z01_ender;
 $q53_numero     = $oTom->z01_numero;
 $q53_bairro     = $oTom->z01_bairro;

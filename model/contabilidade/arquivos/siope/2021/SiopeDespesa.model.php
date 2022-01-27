@@ -332,7 +332,7 @@ class SiopeDespesa extends Siope {
 
             $iCodPlanilha = $this->getCodPlanilha($oDespesa);
 
-            $sHash = $iCodPlanilha.$oDespesa->o58_codigo.$oDespesa->elemento_siope;
+            $sHash = $iCodPlanilha.substr($oDespesa->o58_codigo,-2).$oDespesa->elemento_siope;
             
             /**
              * Caso específico das fontes 122/222
@@ -342,7 +342,7 @@ class SiopeDespesa extends Siope {
              *      e deduzida no valor da esfera federal (tipo == 1 - sintético)
              */
             
-            if (substr($oDespesa->o58_codigo,1,2) == 22) {
+            if (substr($oDespesa->o58_codigo,-2) == 22) {
                 
                 if ($oDespesa->tipo == 1) {
                     $sHashSintetico = $sHash;

@@ -116,13 +116,13 @@ function js_emite(){
              <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",$db_opcao);  ?>
             </td>
             <td>
-              <? db_input('k17_codigo',10,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false);'")  ?>
+              <? db_input('k17_codigo',10,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false);'","","","",8)  ?>
             </td>
             <td>
               <? db_ancora("<b>Até:</b>","js_pesquisak17_codigo02(true);",$db_opcao);  ?>
     	      </td>
     	      <td>
-              <? db_input('k17_codigo',10,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo02(false);'","k17_codigo02")?>
+              <? db_input('k17_codigo',8,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo02(false);'","k17_codigo02","","",8)?>
             </td>
           </tr>
           <tr>

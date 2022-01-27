@@ -597,17 +597,18 @@ function init_130($opcao){
           // 6 - Afastado Doenca + 15 Dias
           // 5 - licenca maternidade
           // 7 - Licenca sem Vencimento, cessao sem onus
+          // 10 - Afastado doença -15 dias
           $condicaoaux  = " and r90_regist = ".db_sqlformat( $arquivo_rubricas[$Iind]["r90_regist"] );
           $condicaoaux .= " and r90_rubric = ".db_sqlformat( $arquivo_rubricas[$Iind]["r90_rubric"] );
           global $ponto;
           /*echo "<pre>";
           print_r("select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux);
-          db_criatabela("select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux);
+          db_criatabela(db_query("select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux));
           die;*/
           if( db_selectmax("ponto", "select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux)  &&
             ( db_at(db_str($situacao_130,1),"1-3-4") > 0  ||
-            ( db_at(db_str($situacao_130,1),"2-6-7-8") > 0 && !db_empty($dias_pagamento) ) ||
-            ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8") && !db_empty($rubrica_licenca_saude) ) ||
+            ( db_at(db_str($situacao_130,1),"2-6-7-8-10") > 0 && !db_empty($dias_pagamento) ) ||
+            ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8" || db_str($situacao_130,1) == "10") && !db_empty($rubrica_licenca_saude) ) ||
             ( db_str($situacao_130,1) == "5" && !db_empty($rubrica_licenca_maternidade) ) ) )
           {
 
@@ -649,7 +650,7 @@ function init_130($opcao){
           // e feito na geracao do calculo;
           if( !db_empty($dias_pagamento)){
             if( (   db_str($situacao_130,1) == "5" && db_empty($rubrica_licenca_maternidade) )
-              || ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8") && db_empty( $rubrica_licenca_saude     )  )
+              || ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8" || db_str($situacao_130,1) == "10") && db_empty( $rubrica_licenca_saude     )  )
               || db_str($situacao_130,1) == "2"
               || db_str($situacao_130,1) == "3"
               || db_str($situacao_130,1) == "7"
@@ -793,7 +794,7 @@ function init_130($opcao){
               $condicaoaux  = " and r10_regist = ".db_sqlformat( $arquivo_rubricas[$Iind]["r90_regist"] );
               $condicaoaux .= " and r10_rubric = ".db_sqlformat( $arquivo_rubricas[$Iind]["rh27_rubric"] );
               if( db_boolean( $arquivo_rubricas[$Iind]["rh27_calcp"])){
-                $valor_descontar = bb_round( ( $valor_descontar / 30 ) * (30-$F019),2 );
+                $valor_descontar = bb_round( ( $valor_descontar / 30 ) * ((30-$F019)-(30-$dias_pagamento)),2 );
               }
               $matriz2[1] = $valor_descontar;
               db_update( "pontofs", $matriz1,$matriz2,bb_condicaosubpes("r10_").$condicaoaux );
@@ -807,7 +808,7 @@ function init_130($opcao){
               $condicaoaux .= " and r10_rubric = ".db_sqlformat( $arquivo_rubricas[$Iind]["rh27_rubric"]);
               if( db_boolean( $arquivo_rubricas[$Iind]["rh27_calcp"])){
                 if( db_boolean( $arquivo_rubricas[$Iind]["rh27_propq"]) ){
-                  $quantidade = bb_round( ( $quantidade / 30 ) * (30-$F019),2);
+                  $quantidade = bb_round( ( $quantidade / 30 ) * ((30-$F019)-(30-$dias_pagamento)),2);
                 }
               }
               $matriz2[1] = $quantidade;

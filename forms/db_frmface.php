@@ -35,7 +35,7 @@ $clrotulo->label("j14_nome");
  <legend>Face</legend>
 <form	name="form1" method="post" action="">
   <input name="deuok"       type="hidden" id="" value="" />
-  <input name="alterarface" type="hidden" id="" value="" />
+  <input name="alterarface" type="hidden" id="" value="<?=($db_opcao==2||$db_opcao==22) ? 't' : 'f'; ?>" />
 
 <table border="0">
 	<tr>

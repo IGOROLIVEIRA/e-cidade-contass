@@ -181,6 +181,13 @@ function DBGrid(sName) {
      */
     this.oFooter;
 
+    /**
+     * Pesquisa de conteudo das colunas
+     * @type boolean
+     * @private
+     */
+    this.hasPesquisaConteudo  = false;
+
     var me = this;
 
 
@@ -519,6 +526,12 @@ function DBGrid(sName) {
         sGrid    += "<span style='border-left:1px inset #eeeee2' id='"+this.sName+"status'>&nbsp;</span>&nbsp;";
         if (this.hasTotalValue){
             sGrid    += "<span style='padding-left: 58%'> Valor Total:</span><span style='color:#000;padding:3px' id='"+this.sName+"totalValue'>0.00</span>";
+        }
+        if (this.hasPesquisaConteudo){
+            sGrid    += "<span style='margin-right: 5px'> <input type='button' id='"+this.sName+"recomecar' ";
+            sGrid    += "onclick='$(\"filtro\").value = \"\";$(\""+this.sName+"pesquisaConteudo\").value = \"\"; btnPesquisarDados.click();' value='Recomeçar'></span>";
+            sGrid    += "<span style='margin-right: 5px'> Indique o Conteúdo:</span>";
+            sGrid    += "<span><input type='text' id='"+this.sName+"pesquisaConteudo' style='width: 160px'><span>";
         }
 
         sGrid    += "</div></td></tr>";

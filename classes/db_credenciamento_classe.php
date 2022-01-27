@@ -453,6 +453,43 @@ class cl_credenciamento {
             }
         }
     }
+
+    function excluir_cred_licitacao ($licitacao) {
+        $sql = " delete from credenciamento
+                    where l205_licitacao = $licitacao";
+
+        $result = db_query($sql);
+        if($result==false){
+            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_sql   = "Credenciamento nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql .= "Valores : ".$l205_sequencial;
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            $this->numrows_excluir = 0;
+            return false;
+        }else{
+            if(pg_affected_rows($result)==0){
+                $this->erro_banco = "";
+                $this->erro_sql = "Credenciamento nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql .= "Valores : ".$l205_sequencial;
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "1";
+                $this->numrows_excluir = 0;
+                return true;
+            }else{
+                $this->erro_banco = "";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_sql .= "Valores : ".$l205_sequencial;
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "1";
+                $this->numrows_excluir = pg_affected_rows($result);
+                return true;
+            }
+        }
+    }
     // funcao do recordset
     function sql_record($sql) {
         $result = db_query($sql);

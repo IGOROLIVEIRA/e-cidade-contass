@@ -54,11 +54,12 @@ $db_opcao = 1;
       db_app::load("dbautocomplete.widget.js");
       db_app::load("dbcomboBox.widget.js");
       db_app::load("datagrid.widget.js");
+      db_app::load("AjaxRequest.js");
       db_app::load("widgets/DBLookUp.widget.js");
       db_app::load("estilos.css,grid.style.css");
     ?>
   </head>
-  <body onload="$('lbl_rh01_regist').click()">
+  <body>
     <form id="formPesquisarEsocial" method="POST" action="eso4_preenchimento001.php" class="container">
       <fieldset>
         <legend>Conferência dos dados informados pelo servidor:</legend>
@@ -80,6 +81,10 @@ $db_opcao = 1;
         </table>
       </fieldset>
       <input type="button" id="pesquisar" name="pesquisar" value="Pesquisar" />
+
+      <br>
+      <br>
+      <input type="button" id="envioESocial"  name="envioESocial"  value="Enviar para eSocial" />
     </form>
     
     <div id="questionario"></div>
@@ -107,5 +112,17 @@ $db_opcao = 1;
     'sArquivo'          : 'func_rhpessoal.php',
     'oObjetoLookUp'     : 'func_nome'
   });
+
+  $('envioESocial').addEventListener('click', function(){
+
+        var parametros = {'exec': 25};//Codigo Tipo::CADASTRAMENTO_INICIAL
+        new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
+
+            alert(retorno.sMessage);
+            if (retorno.erro) {
+                return false;
+            }
+        }).setMessage('Agendando envio para o eSocial').execute();
+    });
 })();
 </script>

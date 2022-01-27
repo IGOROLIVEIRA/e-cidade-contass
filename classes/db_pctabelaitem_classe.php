@@ -426,7 +426,7 @@ class cl_pctabelaitem {
      return $sql;
   }
 
-  function buscarItensTabela($sWhere) { 
+  function buscarItensTabela($sWhere) {
     $result = $this->sql_record($this->sql_query(null,"pc95_codmater,pc01_descrmater",null,$sWhere));
     $aItens = array();
     for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
@@ -441,7 +441,7 @@ class cl_pctabelaitem {
   }
 
   function buscarTabFonecVencedor($e54_autori, $z01_numcgm) {
-    
+
     $sSQL = "
       SELECT DISTINCT pctabela.pc94_sequencial,
             pcmater.pc01_descrmater
@@ -473,7 +473,7 @@ class cl_pctabelaitem {
           WHERE l20_codigo =
             (SELECT e54_codlicitacao
             FROM empautoriza
-            WHERE e54_autori = $e54_autori)  
+            WHERE e54_autori = $e54_autori)
             AND pc24_pontuacao = 1
             AND z01_numcgm = $z01_numcgm
               ORDER BY pc94_sequencial
@@ -482,7 +482,6 @@ class cl_pctabelaitem {
     $rsResult = db_query($sSQL);
 
     return db_utils::getCollectionByRecord($rsResult);
-    
-  } 
+
+  }
 }
-?>

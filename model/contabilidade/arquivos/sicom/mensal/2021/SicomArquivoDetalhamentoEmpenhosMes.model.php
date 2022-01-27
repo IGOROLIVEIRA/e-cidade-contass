@@ -189,11 +189,13 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
         CASE
         WHEN ac16_sequencial IS NULL THEN 2
+        WHEN ac16_dataassinatura IS NULL THEN 4
         ELSE 1
         END AS despdeccontrato,
         ' '::char AS codorgaorespcontrato,
+        ac16_acordosituacao,
 
-        CASE WHEN ac16_sequencial IS NULL THEN NULL ELSE (SELECT CASE
+        CASE WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL ELSE (SELECT CASE
         WHEN o41_subunidade != 0
         OR NOT NULL THEN lpad((CASE
         WHEN o40_codtri = '0'
@@ -224,16 +226,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         END AS codunidadesubrespcontrato,
 
         CASE
-        WHEN ac16_sequencial IS NULL THEN NULL
-        WHEN ac16_numero IS NULL THEN ac16_numeroacordo
-        ELSE ac16_numero
+        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL
+        WHEN ac16_numeroacordo IS NULL THEN ac16_numero
+        ELSE ac16_numeroacordo
         END AS nrocontrato,
         CASE
-        WHEN ac16_sequencial IS NULL THEN NULL
+        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL
         ELSE ac16_dataassinatura
         END AS dataassinaturacontrato,
         CASE
-        WHEN ac16_sequencial IS NULL THEN NULL
+        WHEN ac16_sequencial IS NULL OR ac16_acordosituacao not in (4,2) THEN NULL
         ELSE ac26_numeroaditamento
         END AS nrosequencialtermoaditivo,
         ac35_dataassinaturatermoaditivo AS dataassinaturatermoaditivo,
@@ -331,27 +333,24 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         JOIN emptipo ON e60_codtipo = e41_codtipo
         JOIN cgm ON e60_numcgm = z01_numcgm
         JOIN orcprojativ ON (o58_anousu, o58_projativ) = (o55_anousu, o55_projativ)
+        LEFT JOIN empempaut ON e61_numemp = e60_numemp
+        LEFT JOIN empautoriza ON e54_autori = e61_autori
         LEFT JOIN pctipocompra ON e60_codcom = pc50_codcom
-        LEFT JOIN cflicita ON pc50_pctipocompratribunal = l03_pctipocompratribunal AND l03_instit = " . db_getsession("DB_instit") . "
-        LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
+        LEFT JOIN cflicita ON pc50_pctipocompratribunal = l03_pctipocompratribunal AND l03_instit = " . db_getsession("DB_instit") . " and pc50_codcom=l03_codcom
         LEFT JOIN liclicita ON (ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0'), l20_anousu::varchar, l03_codigo) = (l20_edital::varchar, ((string_to_array(e60_numerol, '/'))[2])::varchar, l20_codtipocom)
+        LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
         LEFT JOIN orcunidade ON (o58_anousu, o58_orgao, o58_unidade) = (orcunidade.o41_anousu, orcunidade.o41_orgao, orcunidade.o41_unidade)
         LEFT JOIN orcorgao ON (orcorgao.o40_orgao, orcorgao.o40_anousu) = (orcunidade.o41_orgao, orcunidade.o41_anousu)
         LEFT JOIN cgm o ON o.z01_numcgm = orcunidade.o41_orddespesa
         LEFT JOIN homologacaoadjudica ON l20_codigo = l202_licitacao
-        LEFT JOIN empempaut ON e61_numemp = e60_numemp
-        LEFT JOIN empautoriza ON e61_autori = e60_numemp
-
         LEFT JOIN acordoitemexecutadoempautitem on ac19_autori = e61_autori
         LEFT JOIN acordoitemexecutado on ac29_sequencial = ac19_acordoitemexecutado
         LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
         LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
-        LEFT JOIN acordo on ac26_acordo = ac16_sequencial AND ac16_acordosituacao = 4
+        LEFT JOIN acordo on ac26_acordo = ac16_sequencial
         LEFT JOIN acordoposicaoaditamento ON ac35_acordoposicao = ac26_sequencial
-
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-            LEFT JOIN manutencaolicitacao ON manutlic_licitacao = l20_codigo
-
+        LEFT JOIN manutencaolicitacao ON manutlic_licitacao = l20_codigo
         WHERE e60_anousu = " . db_getsession("DB_anousu") . "
         AND o56_anousu = " . db_getsession("DB_anousu") . "
         AND o58_anousu = " . db_getsession("DB_anousu") . "
@@ -360,8 +359,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     $rsEmpenho10 = db_query($sSql);
 
-    //echo $sSql;
-    //db_criatabela($rsEmpenho10);
+    // echo $sSql;
+    // db_criatabela($rsEmpenho10);exit;
 
     $aCaracteres = array("°", chr(13), chr(10), "'", ";");
     // matriz de entrada
@@ -485,7 +484,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
 
 
-        if ($oEmpenho10->despdeccontrato == 1) {
+        if ($oEmpenho10->despdeccontrato == 1 && $oEmpenho10->ac16_acordosituacao == 2) {
+            $oDadosEmpenho10->si106_despdeccontrato = 1; // campo 17
+        } else if ($oEmpenho10->despdeccontrato == 1 || $oEmpenho10->despdeccontrato == 4) {
           $oDadosEmpenho10->si106_despdeccontrato = 4; // campo 17
         } else {
           $oDadosEmpenho10->si106_despdeccontrato = 2; // campo 17
@@ -696,6 +697,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
             FROM empempenho
             JOIN orcdotacao ON e60_coddot = o58_coddot
+                  and e60_anousu = o58_anousu
             JOIN empelemento ON e60_numemp = e64_numemp
             JOIN orcelemento ON e64_codele = o56_codele
             JOIN orctiporec ON o58_codigo = o15_codigo

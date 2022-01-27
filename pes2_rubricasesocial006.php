@@ -58,7 +58,7 @@ if(isset($salvar)){
     $clbaserubricasesocial->incluir();
     if($clbaserubricasesocial->erro_status == 0){
       db_fim_transacao(true);
-      db_msgbox($clbaserubricasesocial->erro_banco);
+      db_msgbox($clbaserubricasesocial->erro_msg);
 
     }
   }
@@ -110,8 +110,8 @@ if(isset($chavepesquisa)){
  }
  $JSONaBasesEsocialOutras = json_encode($JSONaBasesEsocialOutras);
 
- $rubrica = $clrubricasesocial->sql_query($chavepesquisa);
- $orubrica = $clrubricasesocial->sql_record($rubrica);
+ $sSqlRubrica = $clrubricasesocial->sql_query_file($chavepesquisa);
+ $rsRubrica = $clrubricasesocial->sql_record($sSqlRubrica);
 
  $bases = array();
  $basesSelecionados = array();
@@ -128,7 +128,7 @@ if(isset($chavepesquisa)){
    unset($bases[$b->e991_rubricas]);
  }
 
- db_fieldsmemory($orubrica);
+ db_fieldsmemory($rsRubrica);
  $db_botao = true;
 }
 ?>

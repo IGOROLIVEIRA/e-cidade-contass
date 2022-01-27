@@ -71,6 +71,7 @@ if(isset($incluir)){
     $cliptubase->j01_idbql  = $j01_idbql; 
     $cliptubase->j01_codave = "1";
     $cliptubase->j01_fracao = $j01_fracao;
+    $cliptubase->j01_unidade = $j01_unidade;
 	
 	if($cliptubase->j01_fracao > 100){
 	  $sqlerro= true;
@@ -164,6 +165,7 @@ if(isset($incluir)){
     $cliptubase->j01_idbql  = $j01_idbql; 
     $cliptubase->j01_codave = "1";
     $cliptubase->j01_fracao = $j01_fracao; 
+    $cliptubase->j01_unidade = $j01_unidade; 
 	
 	if($cliptubase->j01_fracao > 100){
 	  $sqlerro= true;
@@ -283,7 +285,7 @@ if(isset($incluir)){
   if ($cliptuant->numrows != 0){
      @db_fieldsmemory($resultiptuant,0);
   }
-  $result = $cliptubase->sql_record($cliptubase->sql_query($j01_matric,"j01_numcgm#j01_idbql#j01_codave#j01_fracao#j01_baixa#z01_nome",""));            
+  $result = $cliptubase->sql_record($cliptubase->sql_query($j01_matric,"j01_numcgm#j01_idbql#j01_codave#j01_fracao#j01_baixa#z01_nome#j01_unidade",""));            
   @db_fieldsmemory($result,0);
   $db_opcao=2; 
   $db_opcao_matric=3;

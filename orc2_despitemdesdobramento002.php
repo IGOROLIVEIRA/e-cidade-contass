@@ -196,8 +196,8 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
          */
         $pdf->setfont('arial', 'b', 7);
         $descr = $o56_descr;
-        $pdf->cell(20, $alt, $o58_elemento, 0, 0, "L", 0);
-        $pdf->cell(60, $alt, $descr . '    Recurso: ' . $o58_codigo . '-' . $o15_descr, 0, 1, "L", 0);
+        $pdf->cell(20, $alt,$o58_elemento, 0, 0, "L", 0);
+        $pdf->cell(60, $alt, $descr . '    Recurso: ' . $o58_codigo . '-' . $o15_descr.'    Reduzido: '.$o58_coddot, 0, 1, "L", 0);
 
 
         $pdf->cell(50, $alt, "", 0, 0, "C", 0);

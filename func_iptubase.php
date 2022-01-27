@@ -36,6 +36,7 @@ include("classes/db_loteloc_classe.php");
 include("libs/db_app.utils.php");
 
 db_postmemory($HTTP_POST_VARS);
+db_sel_instit(null, "db21_usadistritounidade");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $cliptubase = new cl_iptubase;
@@ -53,6 +54,8 @@ $clrotulo->label("j40_refant");
 $clrotulo->label("j06_setorloc");
 $clrotulo->label("j06_quadraloc");
 $clrotulo->label("j06_lote");
+$clrotulo->label("j34_distrito");
+$clrotulo->label("j01_unidade");
 
 $sql2 = "";
 $sql3 = "";
@@ -79,6 +82,14 @@ if(isset($j34_lote)){
 
 if(isset($j14_codigo)){
   $j14_codigo = stripslashes($j14_codigo);
+}
+
+if(isset($j34_distrito)){
+  $j34_distrito = stripslashes($j34_distrito);
+}
+
+if(isset($j01_unidade)){
+  $j01_unidade = stripslashes($j01_unidade);
 }
 
 ?>
@@ -139,8 +150,32 @@ if(isset($j14_codigo)){
                 ?>
             </td>
           </tr>
-           <tr>
-
+          <?php if($db21_usadistritounidade == 't'){ ?>
+          <tr>
+            <td width="34%" align="right" nowrap title="<?=$Tj34_setor?>">
+                <?=$Lj34_distrito?>
+                /
+                <?=$Lj34_setor?>
+                /
+                <?=$Lj34_quadra?>
+                /
+                <?=$Lj34_lote?>
+                /
+                <?=$Lj01_unidade?>            
+            </td>
+            <td width="66%" align="left" nowrap>
+                <?
+                db_input("j34_distrito",8,$Ij34_distrito,true,'text',4);
+                db_input("j34_setor",8,$Ij34_setor,true,'text',4);
+                db_input("j34_quadra",8,$Ij34_quadra,true,'text',4);
+                db_input("j34_lote",8,$Ij34_lote,true,'text',4);
+                db_input("j01_unidade",8,$Ij01_unidade,true,'text',4);
+                ?>
+            </td>
+           </tr>
+         <?php } ?>
+         <?php if($db21_usadistritounidade == 'f'){ ?>
+          <tr>
             <td width="34%" align="right" nowrap title="<?=$Tj34_setor?>">
                 <?=$Lj34_setor?>
                 /
@@ -156,6 +191,7 @@ if(isset($j14_codigo)){
                 ?>
             </td>
            </tr>
+         <?php } ?>
             <tr>
 
             <td width="34%" align="right" nowrap title="Quadra e Lote do Registro de Imóveis">
@@ -259,9 +295,26 @@ if(isset($j14_codigo)){
           $j14_codigo = addslashes($j14_codigo);
         }
 
+        if(isset($j34_distrito)){
+          $j34_distrito = addslashes($j34_distrito);
+        }
+
+        if(isset($j01_matric)){
+          $j01_matric = addslashes($j01_matric);
+        }
 
         if(isset($campos)==false){
            $campos = "iptubase.*";
+        }
+
+        if($db21_usadistritounidade == 't'){
+          $temdistrito  = 'j34_distrito,';
+          $temunidade   = 'j01_unidade,';
+          $order_by     = ' order by j34_distrito,j34_setor, j34_quadra, j34_lote, j01_unidade';
+        }else{
+          $temdistrito  = '';
+          $temunidade   = '';
+          $order_by     = ' order by j34_setor, j34_quadra, j34_lote';
         }
           $sSqlPredial = "SELECT DISTINCT j01_matric,
                                           j40_refant,
@@ -280,11 +333,14 @@ if(isset($j14_codigo)){
                                           j04_quadraregimo,
                                           j04_loteregimo,
                                           j39_compl,
+                                          {$temdistrito}
                                           j34_setor,
                                           j34_quadra,
                                           j34_lote,
+                                          {$temunidade}
                                           j01_baixa,
-                                          j39_codigo
+                                          j39_codigo                                          
+                                           
                                 FROM iptubase
                                 LEFT OUTER JOIN iptubaseregimovel ON j04_matric = j01_matric
                                 INNER JOIN lote ON j34_idbql = j01_idbql
@@ -313,11 +369,13 @@ if(isset($j14_codigo)){
                                  j04_quadraregimo,
                                  j04_loteregimo,
                                  j15_compl AS j39_compl,
+                                 {$temdistrito}
                                  j34_setor,
                                  j34_quadra,
                                  j34_lote,
+                                 {$temunidade}
                                  j01_baixa,
-                                 j14_codigo as j39_codigo
+                                 j14_codigo as j39_codigo  
                     FROM iptubase
                     LEFT OUTER JOIN iptubaseregimovel ON j04_matric = j01_matric
                     INNER JOIN lote ON j34_idbql = j01_idbql
@@ -365,7 +423,13 @@ if(isset($j14_codigo)){
           if (isset($j34_lote) && trim($j34_lote)!="") {
             $sql2 .= " and j34_lote = '" . str_pad($j34_lote,4,"0",STR_PAD_LEFT) . "'";
           }
-          $sql3 = " order by j34_setor, j34_quadra, j34_lote";
+          if (isset($j34_distrito) && trim($j34_distrito)!="") {
+            $sql2 .= " and j34_distrito = '" . $j34_distrito . "'";
+          }
+          if (isset($j01_unidade) && trim($j01_unidade)!="") {
+            $sql2 .= " and j01_unidade = '" . $j01_unidade . "'";
+          }
+          $sql3 = $order_by;
         }else if(((isset($j04_quadraregimo) && (trim($j04_quadraregimo)!="")) or ((isset($j04_loteregimo) && (trim($j04_loteregimo)!="")))) ){
           $sql2 = " where 1=1 ";
           if (isset($j04_quadraregimo) && trim($j04_quadraregimo)!="") {

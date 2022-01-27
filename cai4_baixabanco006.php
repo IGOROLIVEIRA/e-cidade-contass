@@ -100,7 +100,7 @@ $oGet = db_utils::postMemory($_GET);
    	db_inicio_transacao();
 
    	if(!isset($oGet->codret) || $oGet->codret == ""){
-   		throw new Exception("C√≥digo do arquivo ({$oGet->codret}) de Retorno Inv√°lido.");
+   		throw new Exception("CÛdigo do arquivo ({$oGet->codret}) de Retorno Inv·lido.");
    	}
      $oInstit = new Instituicao(db_getsession('DB_instit'));
 
@@ -116,7 +116,7 @@ $oGet = db_utils::postMemory($_GET);
          throw new Exception(str_replace("\n", "", substr(pg_last_error(), 0, strpos(pg_last_error(), "CONTEXT"))));
        }
        /**
-        * Quando s√£o importados as guias da JMS, as do ecidade ficam com numpre com tamanho < 6. Para n√£o ficar lixo,
+        * Quando s„o importados as guias da JMS, as do ecidade ficam com numpre com tamanho < 6. Para n„o ficar lixo,
         * setamos o classi = true.
         */
        $sSqlIgnoraGuiasEcidade = "UPDATE disbanco
@@ -125,34 +125,35 @@ $oGet = db_utils::postMemory($_GET);
                                   AND disbanco.codret = {$oGet->codret}";
      }
 
-     if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO) {
+$config = db_query("select * from db_config where codigo = ".db_getsession("DB_instit"));
+db_fieldsmemory($config,0);
 
-       $sSqlEcidadeHLH = "SELECT * FROM disbanco 
-                      INNER JOIN debitos_hlh on  disbanco.k00_numpre = debitos_hlh.numguia::int 
-                      INNER JOIN arrecad on (arrecad.k00_numpre,arrecad.k00_numpar) = (debitos_hlh.k00_numpre,debitos_hlh.k00_numpar) 
-                      WHERE disbanco.k00_numpre = debitos_hlh.numguia::int
-                      AND disbanco.codret = {$oGet->codret}  
-                      AND disbanco.k00_numpre in (SELECT recibopaga.k00_numnov FROM recibopaga 
-                                                    WHERE recibopaga.k00_numnov = debitos_hlh.numguia::int )";
-       $resultEcidadeHLH = db_query($sSqlEcidadeHLH);
-       if( pg_numrows($resultEcidadeHLH) > 0 ) {
-            
-            throw new Exception('Entre com contato com o Suporte, verifique arquivo retorno.');            
+if ($db21_usadebitoitbi == 't') {
 
-       }else{
-            $sSqlIntegracaoHLH = "UPDATE disbanco
-                              SET k00_numpre = debitos_hlh.k00_numpre,
-                                  k00_numpar = debitos_hlh.k00_numpar
-                              FROM debitos_hlh 
-                              INNER JOIN arrecad on (arrecad.k00_numpre,arrecad.k00_numpar) = (debitos_hlh.k00_numpre,debitos_hlh.k00_numpar) 
-                              WHERE disbanco.k00_numpre = debitos_hlh.numguia::int
-                                  AND disbanco.codret = {$oGet->codret} ";
-            if (!db_query($sSqlIntegracaoHLH)) {
-              throw new Exception(str_replace("\n", "", substr(pg_last_error(), 0, strpos(pg_last_error(), "CONTEXT"))));
-            } 
-       }
-       
-     }
+     $sSQL_ITBI = <<<SQL
+              select arrecad_itbi.k00_numpre
+                from itbi
+                    inner join itbinumpre on itbinumpre.it15_guia = itbi.it01_guia
+                    inner join recibo on recibo.k00_numpre = itbinumpre.it15_numpre
+                    inner join arrecad_itbi on arrecad_itbi.it01_guia = itbi.it01_guia
+                        where recibo.k00_numpre = (select k00_numpre from disbanco where codret = $oGet->codret);
+SQL;
+
+    $resultItbi = db_query($sSQL_ITBI);
+    $oDadosArrecadItbi = db_utils::fieldsMemory($resultItbi, 0);
+
+    if (!empty($oDadosArrecadItbi->k00_numpre)) {
+        $sSQL_ALTERA_NUMPRE_ITBI = "UPDATE disbanco
+                                      SET k00_numpre = {$oDadosArrecadItbi->k00_numpre}, k00_numpar = 1
+                                        WHERE disbanco.codret = {$oGet->codret}";
+        $result_itbi = db_query($sSQL_ALTERA_NUMPRE_ITBI);
+
+        if (!$result_itbi) {
+            throw new Exception("Ocorreu um erro ao processar o registro {$oGet->codret}");
+        }
+    }
+}
+
    	$sSql = "select fc_executa_baixa_banco($oGet->codret,'".date("Y-m-d",db_getsession("DB_datausu"))."')";
    	$rsBaixaBanco = db_query($sSql);
    	if (!$rsBaixaBanco) {
@@ -172,7 +173,7 @@ $oGet = db_utils::postMemory($_GET);
    } catch (Exception $oErro) {
 
    	db_fim_transacao(true);
-   	$sMsgRetorno  = "Erro durante o processamento da Classifica√ß√£o da Baixa de Banco!\\n\\n{$oErro->getMessage()}";
+   	$sMsgRetorno  = "Erro durante o processamento da ClassificaÁ„o da Baixa de Banco!\\n\\n{$oErro->getMessage()}";
    	db_msgbox($sMsgRetorno);
 
    }

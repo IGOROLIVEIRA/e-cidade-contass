@@ -100,8 +100,8 @@ if ($oGet->iEmiteRetornados == "0") {
    * Pega todos que tenho data de retorno até o último dia do mês da data selecionada acima,
    * Ou todos que não possuam data de retorno
    */
-  $sWhere .= " and (r45_dtreto is null ) ";
-  //$sWhere .= " and (r45_dtreto is null ) /*or r45_dtreto >= ( '{$iAnoRetorno}' || '-' || {$iMesRetorno} || '-' || ndias({$iAnoRetorno}, {$iMesRetorno}) )::date )*/";
+  $dtRetorno = implode('-', array_reverse(explode('/', $iAfastadosFim)));var_dump($dtRetorno);
+  $sWhere .= " and (r45_dtreto is null  or r45_dtreto >= '$dtRetorno' )";
 
 }
 
@@ -220,7 +220,10 @@ $aSituacoes = Array(
   6 => "Afastado doença +15 dias",
   7 => "Licença sem vencimento, cessão sem ônus",
   8 => "Afastado doença +30 dias",
-  10 => "Afastado doença -15 dias"
+  10 => "Afastado doença -15 dias",
+  11 => "11 - Licença para concorrer a mandato eletivo",
+  // 12 => "12 - Prorrogação Licença Maternidade",
+  13 => "13 - Outras licenças remuneradas"
 );
 
 $iAltura = 4;

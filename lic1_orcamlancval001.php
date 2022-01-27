@@ -120,7 +120,7 @@ if (isset($l20_codigo) && $l20_codigo) {
     if ($oDadosLicitacao->l20_descontotab == 1) {
       echo "<script>alert('Licitação por desconto em tabela');</script>";
       echo "<script>document.location.href=\"lic1_lancavallic001.php\"</script>";
-    } else if (pg_num_rows($rsHabilitacao) < pg_num_rows($rsFornec) && $l03_pctipocompratribunal != 52) {
+    } else if (pg_num_rows($rsHabilitacao) < pg_num_rows($rsFornec) && $l03_pctipocompratribunal != 52 && $l03_pctipocompratribunal != 53) {
       echo "<script>alert('Todos os Fornecedores da licitação devem estar habilitados');</script>";
       echo "<script>document.location.href=\"lic1_fornec001.php?chavepesquisa={$l20_codigo}\"</script>";
     } else {

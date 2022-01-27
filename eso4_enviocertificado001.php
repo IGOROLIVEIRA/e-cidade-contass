@@ -67,6 +67,12 @@ require_once("dbforms/db_funcoes.php");
                         </td>
                     </tr>
                     <tr>
+                        <td><label for="certificado_enviado">Certificado incluído:</label></td>
+                        <td>
+                            <input type="text" id='certificado_enviado' class='readonly field-size1' disabled='disabled'>
+                        </td>
+                    </tr>
+                    <tr>
                         <td><label for="password">Senha do certificado:</label></td>
                         <td><input type="password" id='password' ></td>
                     </tr>
@@ -84,7 +90,7 @@ require_once("dbforms/db_funcoes.php");
 ?>
 <script type="text/javascript">
 
-var empregadores = [];
+var empregador = Object();
 (function(){
 
     new AjaxRequest( 'eso4_esocialapi.RPC.php', {exec : 'getEmpregadores'}, function ( retorno, lErro ) {
@@ -93,14 +99,13 @@ var empregadores = [];
             alert(retorno.sMessage);
             return false;
         }
-        empregadores = retorno.empregadores;
+        empregador = retorno.empregador;
 
-        limpar();
         $('cboEmpregador').length = 0;
-        $('cboEmpregador').add( new Option("Selecione", ''));
-        for (var empregador of empregadores) {
-            $('cboEmpregador').add(new Option(empregador.nome, empregador.cgm));
-        }
+        $('cboEmpregador').add(new Option(empregador.nome, empregador.cgm));
+        $('documento').value = empregador.documento;
+        $('tipo').value = empregador.documento.length == 11 ? 'CPF' : 'CNPJ';
+        $('certificado_enviado').value = empregador.certificado == 1 ? 'SIM' : 'NÃO';
 
 
     }).setMessage('Buscando servidores.').execute();
@@ -108,29 +113,9 @@ var empregadores = [];
 
 function limpar() {
 
-    $('tipo').value = '';
-    $('documento').value = '';
     $('password').value = '';
     document.querySelector(".inputUploadFile").value = '';
 }
-
-$('cboEmpregador').addEventListener('change', function() {
-
-    if ($F('cboEmpregador') == '') {
-        limpar();
-        return;
-    }
-
-    for (var empregador of empregadores) {
-
-        if ($F('cboEmpregador') == empregador.cgm) {
-
-            $('documento').value = empregador.documento;
-            $('tipo').value = empregador.documento.length == 11 ? 'CPF' : 'CNPJ';
-            break;
-        }
-    }
-});
 
 function retornoEnvioArquivo(retorno) {
 
@@ -175,27 +160,22 @@ function validar() {
     return true;
 }
 
-function getDocumento() {
-
-    for (var empregador of empregadores) {
-        if ($F('cboEmpregador') == empregador.cgm) {
-            return empregador.documento;
-        }
-    }
-}
-
 $('btnProcessar').addEventListener('click', function() {
 
     if (!validar()) {
         return;
     }
 
-    var documento = getDocumento();
+    lCertificadoCadastrado = Boolean(Number(empregador.certificado));
+    if (lCertificadoCadastrado === true && !confirm("Deseja alterar o certificado existente?")) {
+        return false;
+    }
+
     var paramentros = {
         'exec' : 'empregador',
         'empregador' : $F('cboEmpregador'),
         'razao_social' : $('cboEmpregador').options[$('cboEmpregador').selectedIndex].innerHTML,
-        'documento' : documento,
+        'documento' : empregador.documento,
         'senha' : $F('password'),
         'sFile' : fileUpload.file,
         'sPath' : fileUpload.filePath
@@ -208,7 +188,8 @@ $('btnProcessar').addEventListener('click', function() {
             return false;
         }
 
-        $('cboEmpregador').value = '';
+        $('certificado_enviado').value = 'SIM';
+        empregador.certificado = 1;
         limpar();
         $('btnProcessar').disabled = false;
     }).setMessage('Enviando dados para ').execute();

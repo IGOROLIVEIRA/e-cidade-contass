@@ -780,7 +780,8 @@ class cl_empagetipo {
     return $sql;
   }
    function sql_query_contas_vinculadas ($e83_codtipo = null, $campos = "*", $ordem = null, $sWhere, $lVinculadas = false, 
-                                        $op = null, $lSomenteCorrente = false, $lContaUnicaFundeb = false, $sWhere2 = null) {
+                                        $op = null, $lSomenteCorrente = false, $lContaUnicaFundeb = false, $sWhere2 = null,
+                                        $numemp = null) {
 
    $sSql = "select ";
     if($campos != "*" ){
@@ -796,10 +797,17 @@ class cl_empagetipo {
     /* PARA ATENDER A Portaria n° 3992/GM/MS/2017 DO MINISTERIO DA SAÚDE. QUE PERMITE PAGAMENTO DESTAS FONTES COM A MESMA CONTA BANCARIA */
     /* Acrescentado fonte 159 e 259 para atender alterações do TCE/MG a partir de 2020 */
     $aFontes = array('148','149','150','151','152', '159', '248','249','250','251','252', '259');
-    $sqlFonteEmp = "select o15_codtri from empempenho inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu=o58_anousu ";
-    $sqlFonteEmp .= " inner join pagordem on e60_numemp=e50_numemp ";
-    $sqlFonteEmp .= " inner join orctiporec on o58_codigo=o15_codigo ";  
-    $sqlFonteEmp .= " where e50_codord = ".$op;
+    $sqlFonteEmp = " select o15_codtri from empempenho ";
+    $sqlFonteEmp .= "   inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu ";    
+    if ($op != null) {
+        $sqlFonteEmp .= " inner join pagordem on e60_numemp=e50_numemp ";
+    }    
+    $sqlFonteEmp .= " inner join orctiporec on o58_codigo=o15_codigo ";
+    if ($numemp != null) {
+        $sqlFonteEmp .= " where e60_numemp = ".$numemp;    
+    } else {
+        $sqlFonteEmp .= " where e50_codord = ".$op;
+    }    
     $rsResultFonteEmp = db_query($sqlFonteEmp);
     $iFonteEmpenho = db_utils::fieldsMemory($rsResultFonteEmp, 0)->o15_codtri;
     if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){
@@ -811,13 +819,17 @@ class cl_empagetipo {
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('154','154','159')) and";
     }elseif($lContaUnicaFundeb && (substr($iFonteEmpenho, 1, 2) == '18' || substr($iFonteEmpenho, 1, 2) == '19')){
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('118','218','119', '219')) and";
+    }elseif(substr($iFonteEmpenho, 1, 2) == '61'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('100','161','261')) and";
+    }elseif(substr($iFonteEmpenho, 1, 2) == '70'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('100','170')) and";  
     }elseif(substr($iFonteEmpenho, 1, 2) != '60'){ // OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100
       $whereFonte = " ";
       $whereFonte2 = " AND (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = c61_codigo) = (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = o58_codigo) ";
     }
 
     $sSql .= "from empagetipo left join ";
-    $sSql .= "( select distinct c61_reduz,C61_CODIGO, c61_anousu from ";
+    $sSql .= "( select distinct c61_codcon, c61_reduz,c61_codigo, c61_anousu from ";
     $sSql .= "  empempenho";
     $sSql .= "  inner join orcdotacao on e60_coddot    = o58_coddot and e60_anousu = o58_anousu";
     $sSql .= "  inner join conplanoreduz on (c61_anousu = o58_anousu or c61_anousu = ".db_getsession("DB_anousu").")";
@@ -830,6 +842,14 @@ class cl_empagetipo {
     }
     $sSql .= " )";
     $sSql .= " as x on e83_conta = c61_reduz";
+
+    if ($lSomenteCorrente) {
+        $sSql .= "  JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                    JOIN conplanocontabancaria ON c60_codcon = c56_codcon AND c60_anousu = c56_anousu
+                    JOIN contabancaria ON c56_contabancaria = db83_sequencial AND db83_tipoconta = 1 ";
+    }
+    
+
     $sSql .= " where c61_reduz is not null ";
     if (USE_PCASP) {
       $sSql .= " and c61_anousu =".db_getsession("DB_anousu");
@@ -854,15 +874,18 @@ class cl_empagetipo {
         $sSql .= " and {$sWhere2} ";
     }
 
-    if ($lSomenteCorrente) {
-        $sSql .= " AND EXISTS (SELECT contabancaria.*,c60_codcon,c60_descr,c61_anousu FROM conplanoreduz 
-        JOIN conplano ON conplanoreduz.c61_codcon = conplano.c60_codcon 
-        AND conplanoreduz.c61_anousu = conplano.c60_anousu
-        JOIN conplanocontabancaria ON conplano.c60_codcon = conplanocontabancaria.c56_codcon 
-        AND conplano.c60_anousu = conplanocontabancaria.c56_anousu
-        JOIN contabancaria ON conplanocontabancaria.c56_contabancaria = contabancaria.db83_sequencial
-        WHERE conplanoreduz.c61_anousu = ". db_getsession('DB_anousu') ." AND contabancaria.db83_tipoconta = 1 AND conplanoreduz.c61_reduz = e83_conta) ";
-    }
+    // if ($lSomenteCorrente) {
+    //     $sSql .= "  JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+    //                 JOIN conplanocontabancaria ON c60_codcon = c56_codcon AND c60_anousu = c56_anousu
+    //                 JOIN contabancaria ON c56_contabancaria = db83_sequencial AND db83_tipoconta = 1 ";
+    //     // $sSql .= " AND EXISTS (SELECT contabancaria.*,c60_codcon,c60_descr,c61_anousu FROM conplanoreduz 
+    //     // JOIN conplano ON conplanoreduz.c61_codcon = conplano.c60_codcon 
+    //     // AND conplanoreduz.c61_anousu = conplano.c60_anousu
+    //     // JOIN conplanocontabancaria ON conplano.c60_codcon = conplanocontabancaria.c56_codcon 
+    //     // AND conplano.c60_anousu = conplanocontabancaria.c56_anousu
+    //     // JOIN contabancaria ON conplanocontabancaria.c56_contabancaria = contabancaria.db83_sequencial
+    //     // WHERE conplanoreduz.c61_anousu = ". db_getsession('DB_anousu') ." AND contabancaria.db83_tipoconta = 1 AND conplanoreduz.c61_reduz = e83_conta) ";
+    // }
 
     return $sSql;
 
@@ -980,6 +1003,46 @@ class cl_empagetipo {
     $sql .= " 	    inner join saltes on k13_conta = e83_conta ";
     $sql .= " 	    inner join conplanoreduz on c61_reduz = k13_reduz and c61_anousu = ".db_getsession("DB_anousu")." and c61_instit=".db_getsession("DB_instit");
     $sql .= " 	    left  join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu ";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($e83_codtipo!=null ){
+        $sql2 .= " where empagetipo.e83_codtipo = $e83_codtipo ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql2 .= ($sql2!=""?" and ":" where ") . " c61_instit = " . db_getsession("DB_instit");
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
+
+  function sql_query_conplano_conta_bancaria ( $e83_codtipo=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from empagetipo ";
+    $sql .= " 	    inner join saltes on k13_conta = e83_conta ";
+    $sql .= " 	    inner join conplanoreduz on c61_reduz = k13_reduz and c61_anousu = ".db_getsession("DB_anousu")." and c61_instit=".db_getsession("DB_instit");
+    $sql .= "       inner join conplano on c61_codcon = c60_codcon and c61_anousu = c60_anousu ";
+    $sql .= "       inner join conplanocontabancaria on c60_codcon = c56_codcon and c60_anousu = c56_anousu ";
+    $sql .= "       inner join contabancaria on c56_contabancaria = db83_sequencial ";
     $sql2 = "";
     if($dbwhere==""){
       if($e83_codtipo!=null ){

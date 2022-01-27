@@ -155,6 +155,7 @@ if (isset ($atualizar)) {
 		if ($sqlerro == true) {
 			break;
 		}
+
 		if ($tipo == 'banco') {
 			//e81_codmov,e82_codord,e81_valor
 			$arr_dad = split("-", $arr_chaves[$d]);
@@ -207,7 +208,7 @@ if (isset ($atualizar)) {
 				$sep = '#';
 				if ($liberado == false and $e == ($numrows03 -1)) {
 					$sqlerro = true;
-					$erro_msg = "O valor da agenda não está  disponivel para ser pago no empenho $e60_codemp/$e60_anousu!\\n Valor da agenda: R$ ".db_formatar($e91_valor, "f")." \\Valor disponível: R$ ".db_formatar($vlrdis, "f");
+					$erro_msg = "O valor da agenda não está disponivel para ser pago no empenho $e60_codemp/$e60_anousu!\\n Valor da agenda: R$ ".db_formatar($e91_valor, "f")." \\Valor disponível: R$ ".db_formatar($vlrdis, "f");
 					break;
 				}
 			}

@@ -58,6 +58,10 @@ if($receitaspor == 2){
 	$head6 = "BAIXA BANCÁRIA: AGRUPADO PELA CLASSIFICAÇÃO";
 }
 
+if ($exibir_retencoes == 'n') {
+    $head7 = "NÃO EXIBIR RETENÇÕES";
+}
+
 
 /// CONTAS MOVIMENTO
 $sql ="	    select   k13_reduz,
@@ -161,10 +165,10 @@ for($linha=0;$linha<$numrows;$linha++){
         0 as receita,
 		null::text as receita_descr,
 		corhist.k12_histcor::text as historico,
-		case 
+		case
             when e86_cheque is not null and e86_cheque <> '0' then 'CHE '||e86_cheque::text
-            when coremp.k12_cheque = 0 then e81_numdoc::text 
-            else 'CHE '||coremp.k12_cheque::text 
+            when coremp.k12_cheque = 0 then e81_numdoc::text
+            else 'CHE '||coremp.k12_cheque::text
             end as numdoc,
 		    null::text as contrapartida,
 		    coremp.k12_codord as ordem,
@@ -198,6 +202,9 @@ for($linha=0;$linha<$numrows;$linha++){
 
 
 ";
+    if ($exibir_retencoes == 'n') {
+        $sqlempenho .= condicao_retencao('empenho');
+    }
 
 	$sqlanalitico = "
   /* RECIBO */
@@ -280,9 +287,13 @@ for($linha=0;$linha<$numrows;$linha++){
                      and (corrente.k12_data between '".$datai."'  and '".$dataf."')
 		                 and corrente.k12_instit = ".db_getsession("DB_instit")."
                      and k12_codcla is null
-                     and k82_seqpla is null
+                     and k82_seqpla is null ";
 
-              ) as x
+    if ($exibir_retencoes == 'n') {
+        $sqlanalitico .= condicao_retencao('recibo');
+    }
+
+    $sqlanalitico .= " ) as x
 		group by
 		       caixa,
 			   data,
@@ -448,7 +459,11 @@ union all
                   select
 	                      corrente.k12_id as caixa,
                         corrente.k12_data as data,
-		                    cornump.k12_valor as valor_debito,
+		                    (cornump.k12_valor::float - round(coalesce((select sum(vlrrec) from disrec_desconto_integral  a
+								inner join discla d on d.codcla  =  a.codcla  
+								where dtaute = corrente.k12_data and a.k00_receit = cornump.k12_receit 
+								and a.codcla = discla.codcla 
+								),0),2)::float) as  valor_debito,
 		                    0 as valor_credito,
 	                      ('Baixa da banco ')::text as tipo_movimentacao,
 		                     discla.codret as codigo,
@@ -495,7 +510,7 @@ union all
                   and corplacaixa.k82_data is null
                   and corplacaixa.k82_autent is null
 
-              ) as x
+              ) as x where valor_debito <> 0
 		group by
 		           caixa,
 		      	   data,
@@ -700,7 +715,7 @@ select caixa,
 		$sqltotal = $sqlempenho.$sqlsintetico.$sqlslip;
 	}
 	$sqltotal = $sqlempenho." union all ".$sqlanalitico.$sqlslip;
-	//die($sqltotal);
+    // die($sqltotal);
 	$resmovimentacao = db_query($sqltotal);
 	// echo $sqltotal;
 	// db_criatabela($resmovimentacao);exit;
@@ -714,14 +729,14 @@ select caixa,
 	//$lPrimeiroDaConta = true;
 	if (pg_numrows($resmovimentacao)>0){
 		for  ($i=0;$i < pg_numrows($resmovimentacao);$i++){
-			
+
 			db_fieldsmemory($resmovimentacao,$i);
 
 			//quando agrupar os pagamentos o sistema vai retirar as retenções do relatorio.
             if($pagempenhos==3){
 				if (  $ordem > 0 and ($k105_corgrupotipo == 5 or $k105_corgrupotipo == 0 or $k105_corgrupotipo == 2)  ) {
 					continue;
-				}	
+				}
 			}
 			if (isset($considerar_retencoes) && $considerar_retencoes == "n") {
 				if ( $ordem > 0 and ( $k105_corgrupotipo == 0 or $k105_corgrupotipo == 2 ) ) {
@@ -880,10 +895,10 @@ select caixa,
 			  $saldo_dia_credito += $valor_credito;
 
 			  $quebra_data = $data;
-			  
+
 			  $aContas[$k13_reduz]->data[$iInd]->movimentacoes[] = $oMovimentacao;
 			}
-			
+
 
 		}
 	}
@@ -1159,7 +1174,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 				}else{
 
 					foreach ($aMovimentacao as $key=>$oValor) {
-						if($oValor->ordem == $oMovimento->ordem && $controle == false 
+						if($oValor->ordem == $oMovimento->ordem && $controle == false
 							&& $oMovimento->tipo == "empenho" && $oValor->tipo == "empenho")
 						{
 
@@ -1201,7 +1216,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 			foreach ($oData->movimentacoes as $oMovimento){
 				$controle = false;
 
-				if($oMovimento->tipo != "empenho" && $oMovimento->tipo != "planilha" 
+				if($oMovimento->tipo != "empenho" && $oMovimento->tipo != "planilha"
 					&& ($oMovimento->tipo != "slip" && !in_array($oMovimento->slipoperacaotipo, array(5,6) ) ) ) {
 
 					$aMovimentacao[] = $oMovimento;
@@ -1209,7 +1224,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 				}else if($oMovimento->tipo == "planilha"){
 
 					foreach ($aMovimentacao as $key=>$oValor) {
-						if($oValor->receita == $oMovimento->receita && $controle == false 
+						if($oValor->receita == $oMovimento->receita && $controle == false
 							&& $oMovimento->tipo == "planilha" && $oValor->tipo == "planilha")
 						{
 							$controle = true;
@@ -1226,7 +1241,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 				}else if($oMovimento->tipo == "slip" && !in_array($oMovimento->slipoperacaotipo, array(5,6) ) ){
 
 					foreach ($aMovimentacao as $key=>$oValor) {
-						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false 
+						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false
 							&& $oMovimento->tipo == "slip" && $oValor->tipo == "slip")
 						{
 							$controle = true;
@@ -1243,7 +1258,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 				}else{
 
 					foreach ($aMovimentacao as $key=>$oValor) {
-						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false 
+						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false
 							&& $oMovimento->tipo == "empenho" && $oValor->tipo == "empenho")
 						{
 
@@ -1342,7 +1357,7 @@ if($imprime_pdf == 'p'){
 
 						$pdf->AddPage("L");
 
-						imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+						imprimeConta($pdf,$oConta,$lImprimeSaldo);
 						imprimeCabecalho($pdf);
 
 					}
@@ -1350,13 +1365,13 @@ if($imprime_pdf == 'p'){
 
 
 					if($lQuebra_Historico){
-						imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+						imprimeConta($pdf,$oConta,$lImprimeSaldo);
 						imprimeCabecalho($pdf);
 						$lQuebra_Historico = false;
 					}
 
 					$pdf->Cell(20,5,db_formatar($oData->data,'d')	,"T",0,"C",0);
-					$pdf->Cell(85,5,$oMovimento->contrapartida,"T",0,"L",0);
+					$pdf->Cell(85,5,substr($oMovimento->contrapartida, 0, 58),"T",0,"L",0);
 					$pdf->Cell(25,5,$oMovimento->planilha			,"T",0,"C",0);
 					$pdf->Cell(25,5,$oMovimento->empenho			,"T",0,"C",0);
 					$pdf->Cell(25,5,$oMovimento->ordem 	== "0" ? "" : $oMovimento->ordem,"T",0,"C",0);
@@ -1373,7 +1388,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+								imprimeConta($pdf,$oConta,$lImprimeSaldo);
 								imprimeCabecalho($pdf);
 
 							}
@@ -1385,7 +1400,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+								imprimeConta($pdf,$oConta,$lImprimeSaldo);
 								imprimeCabecalho($pdf);
 
 							}
@@ -1398,7 +1413,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+								imprimeConta($pdf,$oConta,$lImprimeSaldo);
 								imprimeCabecalho($pdf);
 
 							}
@@ -1830,5 +1845,50 @@ function imprimeTotalMovContaTxt($fp,$saldo_debitado,$saldo_creditado,$saldo_atu
 	$aLinhaTotalMovConta[8] =$saldo_atual    == 0 ? "" : db_formatar($saldo_atual,'f');
 	fputcsv($fp,$aLinhaTotalMovConta,',','"');
 
+}
+
+
+function condicao_retencao($bloco_query) {
+    $sql  = " AND ( ";
+    $sql .= "     SELECT * FROM ( ";
+
+    if ($bloco_query == 'empenho')
+        $sql .= "     SELECT SUM(e23_valorretencao) retencao ";
+    if ($bloco_query == 'recibo')
+        $sql .= "     SELECT e23_valorretencao retencao ";
+
+    $sql .= "         FROM retencaoreceitas ";
+    $sql .= "         INNER JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec ";
+    $sql .= "         INNER JOIN retencaopagordem retencao ON retencao.e20_sequencial = retencaoreceitas.e23_retencaopagordem ";
+    $sql .= "         INNER JOIN tabrec ON tabrec.k02_codigo = retencaotiporec.e21_receita ";
+    $sql .= "         INNER JOIN retencaotipocalc ON retencaotipocalc.e32_sequencial = retencaotiporec.e21_retencaotipocalc ";
+    $sql .= "         INNER JOIN pagordem ON pagordem.e50_codord = retencao.e20_pagordem ";
+    $sql .= "         INNER JOIN pagordemnota ON pagordem.e50_codord = pagordemnota.e71_codord ";
+    $sql .= "         INNER JOIN empnota ON pagordemnota.e71_codnota = empnota.e69_codnota ";
+    $sql .= "         INNER JOIN retencaoempagemov ON e23_sequencial = e27_retencaoreceitas ";
+    $sql .= "         LEFT JOIN empagemovslips ON e27_empagemov = k107_empagemov ";
+    $sql .= "         LEFT JOIN slipempagemovslips ON k107_sequencial = k108_empagemovslips ";
+    $sql .= "         LEFT JOIN retencaocorgrupocorrente ON e23_sequencial = e47_retencaoreceita ";
+    $sql .= "         LEFT JOIN corgrupocorrente ON e47_corgrupocorrente = k105_sequencial ";
+    $sql .= "         LEFT JOIN cornump as numpre ON numpre.k12_data = k105_data ";
+    $sql .= "            AND numpre.k12_autent = k105_autent ";
+    $sql .= "            AND numpre.k12_id = k105_id ";
+    $sql .= "         LEFT JOIN issplannumpre ON numpre.k12_numpre = q32_numpre ";
+
+    if ($bloco_query == 'empenho')
+        $sql .= "     WHERE retencao.e20_pagordem = coremp.k12_codord ";
+    if ($bloco_query == 'recibo') {
+        $sql .= "     WHERE retencao.e20_pagordem = retencaopagordem.e20_pagordem ";
+        $sql .= "        AND numpre.k12_numpre = cornump.k12_numpre ";
+        $sql .= "        AND numpre.k12_numpar = cornump.k12_numpar ";
+    }
+
+    $sql .= "            AND e27_principal IS TRUE ";
+    $sql .= "            AND e23_ativo IS TRUE ";
+    $sql .= "    ) as w ";
+    $sql .= "    WHERE round(retencao, 2) = round(corrente.k12_valor, 2) ";
+    $sql .= " ) IS NULL ";
+
+    return $sql;
 }
 ?>

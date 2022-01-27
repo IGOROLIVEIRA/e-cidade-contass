@@ -1,11 +1,11 @@
 <?php
-require_once ('libs/db_stdlib.php');
-require_once ('libs/db_utils.php');
-require_once ('libs/db_app.utils.php');
-require_once ('libs/db_conecta.php');
-require_once ('libs/db_sessoes.php');
-require_once ('dbforms/db_funcoes.php');
-require_once ('libs/JSON.php');
+require_once('libs/db_stdlib.php');
+require_once('libs/db_utils.php');
+require_once('libs/db_app.utils.php');
+require_once('libs/db_conecta.php');
+require_once('libs/db_sessoes.php');
+require_once('dbforms/db_funcoes.php');
+require_once('libs/JSON.php');
 
 use \ECidade\V3\Extension\Registry;
 use \ECidade\Core\Config as AppConfig;
@@ -43,7 +43,8 @@ Registry::set('app.config', new AppConfig());
     'app.api' => array(
         'centraldeajuda' => 'http://centraldeajuda.dbseller.com.br/help/api/index.php/',
         'esocial' => array(
-            'url' => 'http://172.16.212.213/sped-esocial-master/run.php', // informe a api do eSocial. ESTE IP E DA MAQUINA DE ROBSON. LEMBRAR DE MUDAR.
+            'url' => 'http://34.95.213.240/sped-esocial/run.php', // informe a api do eSocial. ESTE IP E DA MAQUINA DE ROBSON. LEMBRAR DE MUDAR.
+            //'url' => 'http://10.251.27.76/sped-esocial-2.5/run.php',
             'login' => '', // login do cliente
             'password' => '' // senha do cliente
         )
@@ -146,13 +147,13 @@ $oRetorno->iStatus = 1;
 $oRetorno->sMessage = '';
 
 try {
-    db_inicio_transacao();
 
     switch ($oParam->exec) {
         case "getEmpregadores":
-            $campos = ' distinct z01_numcgm as cgm, z01_cgccpf as documento, z01_nome as nome, r70_instit as instituicao';
-            $dao = new cl_rhlota();
-            $sql = $dao->sql_query_lota_cgm(null, $campos, 'z01_numcgm');
+            $campos = ' distinct z01_numcgm as cgm, z01_cgccpf as documento, nomeinst as nome, codigo as instituicao,
+            (select count(*) as certificado from esocialcertificado where rh214_cgm = z01_numcgm) as certificado';
+            $oDaoDbConfig = db_utils::getDao("db_config");
+            $sql = $oDaoDbConfig->sql_query(null, $campos, 'z01_numcgm', 'codigo = ' . db_getsession("DB_instit"));
 
             $rs = db_query($sql);
 
@@ -164,7 +165,7 @@ try {
                 throw new Exception("Não existe empregadores cadastrados na base.");
             }
 
-            $oRetorno->empregadores = db_utils::getCollectionByRecord($rs);
+            $oRetorno->empregador = db_utils::fieldsMemory($rs, 0);
             break;
 
         case "empregador":
@@ -172,19 +173,18 @@ try {
                 throw new Exception("Houve um erro ao realizar upload do arquivo. Tente novamente.");
             }
 
+            db_inicio_transacao();
             $oDaoEsocialcertificado = db_utils::getDao("esocialcertificado");
             $oDaoEsocialcertificado->rh214_cgm = $oParam->empregador;
             $oDaoEsocialcertificado->rh214_senha = base64_encode($oParam->senha);
             $oDaoEsocialcertificado->rh214_certificado = base64_encode(file_get_contents($oParam->sPath));
             $oDaoEsocialcertificado->rh214_instit = db_getsession("DB_instit");
-            $oDaoEsocialcertificado->incluir();
+            $oDaoEsocialcertificado->save();
             if ($oDaoEsocialcertificado->erro_status == 0) {
-                throw new \Exception("Erro ao enviar certificado. ".$oDaoEsocialcertificado->erro_msg);
+                throw new \Exception("Erro ao enviar certificado. " . $oDaoEsocialcertificado->erro_msg);
             }
 
-            // $exportar = new ESocial(Registry::get('app.config'), Recurso::CADASTRO_EMPREGADOR);
-            // $exportar->setDados(array($empregador));
-            // $retorno = $exportar->request();
+            db_fim_transacao(false);
             $oRetorno->sMessage = "Certificado enviado com sucesso.";
 
             unlink($oParam->sPath);
@@ -211,37 +211,94 @@ try {
             $oRetorno->sMessage = "Dados do empregador agendado para envio.";
             break;
 
-        case "agendarTabelaRubricas":
+        case Tipo::RUBRICA:
 
             $dadosESocial = new DadosESocial();
 
             $dao = new cl_db_config();
-            $sql = $dao->sql_query_file(null, "numcgm", null, "codigo = ".db_getsession("DB_instit"));
+            $sql = $dao->sql_query_file(null, "numcgm", null, "codigo = " . db_getsession("DB_instit"));
 
             $rs = db_query($sql);
-            $iCgm = db_utils::fieldsMemory($rs,0)->numcgm;
+            $iCgm = db_utils::fieldsMemory($rs, 0)->numcgm;
 
             $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
             $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA);
 
-            $formatter = FormatterFactory::get(Tipo::RUBRICA);
-            $dadosDoTabelaRubricas = $formatter->formatar($dadosDoPreenchimento);
-            
+            $formatter = FormatterFactory::get(Tipo::S1010);
+            $dadosTabelaRubricas = $formatter->formatar($dadosDoPreenchimento);
+
             /**
              * Limitado array em 50 pois e o maximo que um lote pode enviar
              */
-            foreach (array_chunk($dadosDoTabelaRubricas,50) as $aTabelaRubricas) {
-                $eventoFila = new Evento(TIPO::S1010, $iCgm, $iCgm, $aTabelaRubricas);
+            foreach (array_chunk($dadosTabelaRubricas, 50) as $aTabelaRubricas) {
+                $eventoFila = new Evento(Tipo::S1010, $iCgm, $iCgm, $aTabelaRubricas);
                 $eventoFila->adicionarFila();
             }
 
             $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
             break;
 
+        case "agendarLotacaoTributaria":
+
+            $dadosESocial = new DadosESocial();
+
+            $dadosESocial->setReponsavelPeloPreenchimento($oParam->cgm);
+            $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::LOTACAO_TRIBUTARIA);
+
+            $formatter = FormatterFactory::get(Tipo::S1020);
+            $dadosLotacaoTributaria = $formatter->formatar($dadosDoPreenchimento);
+
+            $eventoFila = new Evento(TIPO::S1020, $oParam->cgm, $oParam->cgm, $dadosLotacaoTributaria[0]);
+            $eventoFila->adicionarFila();
+
+
+            $oRetorno->sMessage = "Dados das Lotações Tributárias agendados para envio.";
+            break;
+
+        case "transmitir":
+
+            $dadosESocial = new DadosESocial();
+
+            db_inicio_transacao();
+
+            $iCgm = $oParam->empregador;
+            foreach ($oParam->arquivos as $arquivo) {
+
+                $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
+                $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo));
+                // var_dump($dadosDoPreenchimento);
+                // exit('alguma coisa');
+                $formatter = FormatterFactory::get($arquivo);
+                $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
+                // var_dump($dadosTabela);
+                // exit;
+                /**
+                 * Limitado array em 50 pois e o maximo que um lote pode enviar
+                 */
+
+                foreach (array_chunk($dadosTabela, 50) as $aTabela) {
+                    $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo);
+                    $eventoFila->adicionarFila();
+                }
+            }
+
+            db_fim_transacao(false);
+
+            ob_start();
+            $response = system("php -q filaEsocial.php");
+            ob_end_clean();
+            $oRetorno->sMessage = "Dados agendados para envio.";
+            break;
+
+        case "consultar":
+            $clesocialenvio = db_utils::getDao("esocialenvio");
+            $oRetorno->lUpdate = $clesocialenvio->checkQueue();
+            break;
     }
-    db_fim_transacao(false);
 } catch (Exception $eErro) {
-    db_fim_transacao(true);
+    if (db_utils::inTransaction()) {
+        db_fim_transacao(true);
+    }
     $oRetorno->iStatus  = 2;
     $oRetorno->sMessage = $eErro->getMessage();
 }

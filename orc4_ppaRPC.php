@@ -806,6 +806,34 @@ if ($oParam->exec == "getParametros") {
 
   echo $oJson->encode($oRetorno);
 
+} elseif ($oParam->exec == "validaEstrutural") {
+
+    include("classes/db_orcfontes_classe.php");
+    $clorcfontes = new cl_orcfontes;
+
+    $oRetorno->status = 1;
+
+    try {
+        
+        $anousu = db_getsession("DB_anousu");
+
+        $fonte = rtrim($oParam->sEstrutural, "0");
+        $tamanho = strlen($fonte);
+        $clorcfontes->sql_record($clorcfontes->sql_query(null,null,"o57_fonte",'',"substr(o57_fonte,1,$tamanho)='$fonte' and o57_anousu = $anousu"));
+
+        if ($clorcfontes->numrows > 1) {
+            $oRetorno->sEstrutural = $fonte;
+            throw new Exception("Selecione o último nível!");
+        }
+
+
+    } catch (Exception $eErro) {
+        $oRetorno->status  = 2;
+        $oRetorno->message = urlencode($eErro->getMessage());
+    }
+
+    echo $oJson->encode($oRetorno);
+    
 }
 
 

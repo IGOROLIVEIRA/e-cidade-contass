@@ -51,22 +51,13 @@ if(isset($alterar)){
     $cldb_usuarios->senha = Encriptacao::encriptaSenha( $senha );
   }
   $cldb_usuarios->nome = "$z01_nome";
+  $cldb_usuarios->login = $login;
   $cldb_usuarios->usuext="1";
   $cldb_usuarios->alterar($id_usuario);
   if($cldb_usuarios->erro_status==0){
     $sqlerro=true;
   }
   $erro_msg = $cldb_usuarios->erro_msg;
-
-  if ($sqlerro==false){
-  	$cldb_usuacgm->id_usuario=$id_usuario;
-  	$cldb_usuacgm->cgmlogin=$login;
-  	$cldb_usuacgm->alterar($id_usuario);
-  	if($cldb_usuacgm->erro_status==0){
-    	$sqlerro=true;
-    	$erro_msg = $cldb_usuacgm->erro_msg;
-  	}
-  }
 
   if ($sqlerro==false){
        if (isset($enviaemail) && $enviaemail == "sim"){
@@ -98,7 +89,7 @@ if(isset($alterar)){
 
   if ($cldb_usuarios->numrows > 0){
        db_fieldsmemory($result,0);
-       $z01_numcgm    = $login;
+       $z01_numcgm    = $cgmlogin;
        $z01_nome      = $nome;
        $senha         = '';
        //$verificasenha = $senha;

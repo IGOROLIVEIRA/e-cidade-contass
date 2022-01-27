@@ -792,6 +792,7 @@ class cl_db_usuarios {
        $sql .= $campos;
      }
      $sql .= " from db_usuarios ";
+     $sql .= " join db_usuacgm on db_usuarios.id_usuario = db_usuacgm.id_usuario ";
      $sql2 = "";
      if($dbwhere==""){
        if($id_usuario!=null ){

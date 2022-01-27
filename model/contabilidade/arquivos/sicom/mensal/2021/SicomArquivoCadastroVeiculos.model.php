@@ -365,7 +365,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                       WHEN (unemp.o41_codtri::INT = 0
                       AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(o58_unidade,3,0)
                       WHEN (unemp.o41_codtri::INT != 0
-                      AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(unveic.o41_subunidade::int,3,0)
+                      AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(unemp.o41_codtri,3,0)
                   ELSE lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)
                   END AS codUnidadeSubEmpenho,
                      e60_codemp AS nroEmpenho,
@@ -373,8 +373,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                      ve62_tipogasto::varchar AS tipoGasto,
                    sum(DISTINCT veicmanutitem.ve63_quant) AS qtdeUtilizada,
                    sum(DISTINCT veicmanutitem.ve63_quant * veicmanutitem.ve63_vlruni) AS vlGasto,
-                     pc01_descrmater AS dscPecasServicos,
-                     pc01_codmater as codmater,
+                   veicmanutitem.ve63_descr AS dscPecasServicos,
+                   veicmanutitem.ve63_codigo as codmater,
                      ve62_atestado::varchar AS atestadoControle,
                      unveic.o41_subunidade AS subunidade,
                      DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo
@@ -428,8 +428,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                            ve62_origemgasto,
                            veicmanut.ve62_tipogasto,
                            veicmanut.ve62_descr,
-                           pc01_codmater,
-                           pc01_descrmater
+                           ve63_codigo,
+                           ve63_descr
                     UNION
                     SELECT '20' AS tipoRegistro,
                     si09_codorgaotce AS codOrgao,
@@ -442,7 +442,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     2 AS origemGasto,
                     CASE WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT = 0) THEN lpad(o58_orgao,2,0)||lpad(unemp.o41_codtri,3,0)
                     WHEN (unemp.o41_codtri::INT = 0 AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(o58_unidade,3,0)
-                    WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(unemp.o41_subunidade::int,3,0)
+                    WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(unemp.o41_codtri,3,0)
                         ELSE lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) END AS codUnidadeSubEmpenho,
                     e60_codemp AS nroEmpenho,
                     e60_emiss::VARCHAR  AS dtEmpenho,
@@ -501,10 +501,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		                     veicabast.ve70_veiculoscomb,
 		                     empveiculos.si05_atestado,
 		                     unveic.o41_subunidade,
-                             unemp.o41_subunidade,
 		                     codmater) as teste";
 
-        $rsResult20 = db_query($sSql);// echo $sSql; db_criatabela($rsResult20);die();
+        $rsResult20 = db_query($sSql);//echo $sSql; db_criatabela($rsResult20);die();
         /**
          * registro 20
          */

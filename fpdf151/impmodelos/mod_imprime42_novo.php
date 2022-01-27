@@ -19,8 +19,15 @@ $this->objpdf->Setfont("times", "b", 9);
 if($this->enderfinstit){
     $this->objpdf->cell(40, 5, $this->enderfinstit." TELEFONE: ".$telefone, 0, 1, 'C');
 }
+
 if($this->emailfinstit){
     $this->objpdf->cell(190, 5, $this->emailfinstit, 0, 1, 'C');
+}
+
+if($this->cgcinstit){
+  $padrao1 = '%%%%%%%%/%%%%-%%';
+  $cgc = vsprintf(str_replace('%', "%s",$padrao1), str_split($this->cgcinstit));
+      $this->objpdf->cell(190, 5, "CNPJ: ".$cgc, 0, 1, 'C');
 }
 
 

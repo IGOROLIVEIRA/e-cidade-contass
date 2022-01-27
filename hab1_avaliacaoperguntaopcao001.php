@@ -57,6 +57,8 @@ if (isset($oPost->incluir)) {
     $clavaliacaoperguntaopcao->db104_identificador     = $oPost->db104_identificador;
     $clavaliacaoperguntaopcao->db104_aceitatexto       = $oPost->db104_aceitatexto;
     $clavaliacaoperguntaopcao->db104_peso              = $oPost->db104_peso;
+    $clavaliacaoperguntaopcao->db104_valorresposta     = $oPost->db104_valorresposta;
+    $clavaliacaoperguntaopcao->db104_identificadorcampo = $oPost->db104_identificadorcampo;
     $clavaliacaoperguntaopcao->incluir(null);
     $erro_msg = $clavaliacaoperguntaopcao->erro_msg;
     if ($clavaliacaoperguntaopcao->erro_status == 0) {
@@ -77,6 +79,8 @@ if (isset($oPost->incluir)) {
     $clavaliacaoperguntaopcao->db104_identificador     = $oPost->db104_identificador;
     $clavaliacaoperguntaopcao->db104_aceitatexto       = $oPost->db104_aceitatexto;
     $clavaliacaoperguntaopcao->db104_peso              = $oPost->db104_peso;
+    $clavaliacaoperguntaopcao->db104_valorresposta     = $oPost->db104_valorresposta;
+    $clavaliacaoperguntaopcao->db104_identificadorcampo = $oPost->db104_identificadorcampo;
     $clavaliacaoperguntaopcao->alterar($clavaliacaoperguntaopcao->db104_sequencial);
     $erro_msg = $clavaliacaoperguntaopcao->erro_msg;
     if ($clavaliacaoperguntaopcao->erro_status == 0) {

@@ -2078,16 +2078,30 @@ order by iptucalc.j23_anousu desc
   </tr>
 
   <?php
-   $sqlreg = " select * from iptubaseregimovel inner join setorregimovel on j69_sequencial = j04_setorregimovel where j04_sequencial = $parametro";
+    $sqlreg = " select iptubase.j01_unidade,lote.j34_distrito, j04_matricregimo, j04_setorregimovel,j69_descr,j04_quadraregimo,
+                j04_loteregimo from iptubaseregimovel 
+                inner join setorregimovel on j69_sequencial = j04_setorregimovel 
+                inner join iptubase on j01_matric = j04_matric 
+                inner join lote on j34_idbql = j01_idbql
+                where j04_sequencial = $parametro";
 					    $resultreg = db_query($sqlreg);
 					    $linhasreg = pg_num_rows($resultreg);
 					    if($linhasreg>0){
 					      db_fieldsmemory($resultreg,0);
-					      ?>
-					      <tr>
+  
+    db_sel_instit(null, "db21_usadistritounidade");   
+
+  ?>
+	<tr>
     <td align="left"  width="90">Matrícula: </td>
     <td align="left"><?=$j04_matricregimo?></td>
   </tr>
+  <?php if($db21_usadistritounidade == 't'){ ?>
+  <tr>
+    <td align="left">Distrito:</td>
+    <td align="left"><?=$j34_distrito?></td>
+  </tr>
+  <?php } ?>
   <tr>
     <td align="left">Setor:</td>
     <td align="left"><?=$j04_setorregimovel?> - <?=$j69_descr?></td>
@@ -2100,6 +2114,12 @@ order by iptucalc.j23_anousu desc
     <td align="left">Lote:</td>
     <td align="left"><?=$j04_loteregimo?></td>
   </tr>
+  <?php if($db21_usadistritounidade == 't'){ ?>
+  <tr>
+    <td align="left">Unidade:</td>
+    <td align="left"><?=$j01_unidade?></td>
+  </tr>
+  <?php } ?>
   <tr>
     <td align="left"></td>
     <td align="left"></td>

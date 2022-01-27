@@ -57,6 +57,7 @@ class cl_veicdevolucao {
    var $ve61_data = null; 
    var $ve61_hora = null; 
    var $ve61_medidadevol = 0; 
+   var $ve61_importado = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  ve61_codigo = int4 = Código Devolução 
@@ -67,7 +68,8 @@ class cl_veicdevolucao {
                  ve61_usuario = int4 = Usuário 
                  ve61_data = date = Data 
                  ve61_hora = char(5) = Hora 
-                 ve61_medidadevol = float8 = Medida de devolução 
+                 ve61_medidadevol = float8 = Medida de devolução
+                 ve61_importado = bool = Importado 
                  ";
    //funcao construtor da classe 
    function cl_veicdevolucao() { 
@@ -110,6 +112,7 @@ class cl_veicdevolucao {
        }
        $this->ve61_hora = ($this->ve61_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["ve61_hora"]:$this->ve61_hora);
        $this->ve61_medidadevol = ($this->ve61_medidadevol == ""?@$GLOBALS["HTTP_POST_VARS"]["ve61_medidadevol"]:$this->ve61_medidadevol);
+       $this->ve61_importado  = ($this->ve61_importado == ""?@$GLOBALS["HTTP_POST_VARS"]["ve61_importado"]:$this->ve61_importado);
      }else{
        $this->ve61_codigo = ($this->ve61_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve61_codigo"]:$this->ve61_codigo);
      }
@@ -189,7 +192,11 @@ class cl_veicdevolucao {
        $this->erro_status = "0";
        return false;
      }
-     
+
+     if($this->ve61_importado == null ){ 
+      $this->ve61_importado = 'f';
+    }   
+       
      if($ve61_codigo == "" || $ve61_codigo == null ){
        $result = db_query("select nextval('veicdevolucao_ve61_codigo_seq')"); 
        if($result==false){
@@ -231,7 +238,8 @@ class cl_veicdevolucao {
                                       ,ve61_usuario 
                                       ,ve61_data 
                                       ,ve61_hora 
-                                      ,ve61_medidadevol 
+                                      ,ve61_medidadevol
+                                      ,ve61_importado 
                        )
                 values (
                                 $this->ve61_codigo 
@@ -242,7 +250,8 @@ class cl_veicdevolucao {
                                ,$this->ve61_usuario 
                                ,".($this->ve61_data == "null" || $this->ve61_data == ""?"null":"'".$this->ve61_data."'")." 
                                ,'$this->ve61_hora' 
-                               ,$this->ve61_medidadevol 
+                               ,$this->ve61_medidadevol
+                               ,'$this->ve61_importado' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -436,6 +445,19 @@ class cl_veicdevolucao {
          return false;
        }
      }
+     if(trim($this->ve61_importado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve61_importado"])){
+      $sql  .= $virgula." ve61_importado = 'f' ";
+      $virgula = ",";
+      if(trim($this->ve61_importado) == null ){
+        $this->erro_sql = " Campo de Importação Informado.";
+        $this->erro_campo = "ve61_importado";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($ve61_codigo!=null){
        $sql .= " ve61_codigo = $this->ve61_codigo";

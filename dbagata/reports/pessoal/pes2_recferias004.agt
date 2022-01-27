@@ -75,21 +75,14 @@
                else  r30_per1f
               end as periodo_gozo_final
             </Select>
-            <From>cadferia
-       inner join rhpessoal      on rhpessoal.rh01_regist    = cadferia.r30_regist
+            <From>cadferia         
+       inner join rhpessoal      on rhpessoal.rh01_regist    = cadferia.r30_regist        
        inner join cgm            on cgm.z01_numcgm           = rhpessoal.rh01_numcgm
-       inner join rhpessoalmov   on rhpessoalmov.rh02_regist = cadferia.r30_regist
-                                and rhpessoalmov.rh02_anousu = cadferia.r30_anousu
-                                and rhpessoalmov.rh02_mesusu = cadferia.r30_mesusu
-        INNER JOIN gerfcom ON gerfcom.r48_anousu = rhpessoalmov.rh02_anousu
-     AND gerfcom.r48_mesusu = rhpessoalmov.rh02_mesusu
-     AND rhpessoalmov.rh02_instit = $instit
-     AND gerfcom.r48_regist = rhpessoalmov.rh02_regist
-     AND gerfcom.r48_instit = rhpessoalmov.rh02_instit
-     LEFT JOIN rhrubricas ON rhrubricas.rh27_rubric = gerfcom.r48_rubric::varchar
-     AND rhrubricas.rh27_instit = $instit
-       inner join rhlota                 on rhlota.r70_codigo                = rhpessoalmov.rh02_lota
-       left  join rhpeslocaltrab on rh56_seqpes = rh02_seqpes
+       inner join rhpessoalmov   on rhpessoalmov.rh02_regist = cadferia.r30_regist        
+                                and rhpessoalmov.rh02_anousu = cadferia.r30_anousu        
+                                and rhpessoalmov.rh02_mesusu = cadferia.r30_mesusu        
+       inner join rhlota                 on rhlota.r70_codigo                = rhpessoalmov.rh02_lota                           
+       left  join rhpeslocaltrab on rh56_seqpes = rh02_seqpes  
                                 and rh56_princ  = 't'
        left  join rhlocaltrab    on rh55_codigo = rh56_localtrab
                                 and rh55_instit = $instit</From>

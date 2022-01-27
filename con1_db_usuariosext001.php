@@ -69,7 +69,7 @@ if(isset($incluir)){
   $erro_msg = $cldb_usuarios->erro_msg;
   if ($sqlerro==false){
   	$cldb_usuacgm->id_usuario=$id_usuario;
-  	$cldb_usuacgm->cgmlogin=$login;
+  	$cldb_usuacgm->cgmlogin=$z01_numcgm;
   	$cldb_usuacgm->incluir($id_usuario);
   	if($cldb_usuacgm->erro_status==0){
     	$sqlerro=true;

@@ -119,6 +119,7 @@ if(isset($incluir)){
 	    if($codigo > 2){
 	      $clinssirf->r33_tipo   = $r33_tipo;
 	      $clinssirf->r33_rubmat = $r33_rubmat;
+	      $clinssirf->r33_rubmat13 = $r33_rubmat13;
 	      $clinssirf->r33_ppatro = $r33_ppatro;
 	      $clinssirf->r33_rubsau = $r33_rubsau;
 	      $clinssirf->r33_rubaci = $r33_rubaci;
@@ -270,6 +271,7 @@ else if(isset($alterar)){
 	      $clinssirf->r33_nome   = $r33_nome;
 	      $clinssirf->r33_tipo   = $r33_tipo;
 	      $clinssirf->r33_rubmat = $r33_rubmat;
+	      $clinssirf->r33_rubmat13 = $r33_rubmat13;
 	      $clinssirf->r33_ppatro = $r33_ppatro;
 	      $clinssirf->r33_rubsau = $r33_rubsau;
 	      $clinssirf->r33_basfer = $r33_basfer;

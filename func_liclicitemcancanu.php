@@ -124,8 +124,6 @@ $clrotulo->label("l03_descr");
            }
         }
 
-        $campos = "distinct ".$campos;
-
         if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
 	         $sql = $clliclicitem->sql_query_anulados(null,$campos,"l20_codigo","l20_codigo=$chave_l20_codigo and l08_altera is true and l07_liclicitem is not null $dbwhere_instit");
         }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){

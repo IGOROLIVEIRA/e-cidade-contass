@@ -324,16 +324,16 @@ if (isset($incluir) && trim($incluir) != "") {
        * Se todos os itens foram vinculados a algum lote redireciona para a rotina de editais
        */
 
-      $sSqlCodigos = "SELECT distinct l21_codigo FROM liclicitem WHERE l21_codliclicita = $licitacao";
-      $rsCodigos   = db_query($sSqlCodigos);
+            $sSqlCodigos = "SELECT distinct l21_codigo FROM liclicitem WHERE l21_codliclicita = $licitacao";
+            $rsCodigos   = db_query($sSqlCodigos);
 
-      $sSqlLotes = "SELECT distinct liclicitemlote.*
+            $sSqlLotes = "SELECT distinct liclicitemlote.*
                     FROM liclicitemlote
                     WHERE l04_liclicitem IN
                          (SELECT l21_codigo
                          FROM liclicitem
                          WHERE l21_codliclicita = $licitacao)";
-      $rsLotes = db_query($sSqlLotes);
+            $rsLotes = db_query($sSqlLotes);
 
       $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital, l47_sequencial', '', 'l20_codigo = ' . $licitacao);
       $rsSql = $clliclancedital->sql_record($sSql);

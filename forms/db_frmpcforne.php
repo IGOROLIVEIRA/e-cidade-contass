@@ -173,6 +173,27 @@ db_fieldsmemory($rsCgm, 0);
 </td>
 </tr>
 <tr>
+    <td nowrap title="<?=@$Tz01_email?>">
+      <strong>Email:</strong>
+    </td>
+    <td> 
+      <?
+      db_input('z01_email',40,$Iz01_email,true,'text',$db_opcao,'');
+      ?>
+    </td>
+  </tr>
+<tr>
+<tr>
+    <td nowrap title="<?=@$Tz01_telef?>">
+      <strong>Telefone:</strong>
+    </td>
+    <td> 
+      <?
+      db_input('z01_telef',40,$Iz01_telef,true,'text',$db_opcao,'');
+      ?>
+    </td>
+  </tr>
+<tr>
   <td nowrap title="<?=@$Tpc60_numerocvm?>">
    <?=@$Lpc60_numerocvm?>
  </td>
@@ -246,20 +267,22 @@ db_fieldsmemory($rsCgm, 0);
   }
   function js_pesquisapc60_numcgm(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo.iframe_pcforne','db_iframe_nomes','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_cgccpf|z01_incest|z01_uf','Pesquisa',true,'0');
+      js_OpenJanelaIframe('top.corpo.iframe_pcforne','db_iframe_nomes','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_cgccpf|z01_incest|z01_uf|z01_email|z01_telef','Pesquisa',true,'0');
     }else{
      if(document.form1.pc60_numcgm.value != ''){
-      js_OpenJanelaIframe('top.corpo.iframe_pcforne','db_iframe_nomes','func_nome.php?pesquisa_chave='+document.form1.pc60_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false,'0','1','775','390');
+      js_OpenJanelaIframe('top.corpo.iframe_pcforne','db_iframe_nomes','func_nome.php?filtro=4&pesquisa_chave='+document.form1.pc60_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false,'0','1','775','390');
     }else{
      document.form1.z01_nome.value = '';
    }
  }
 }
-function js_mostracgm(erro,chave,cpf,incest,uf){
+function js_mostracgm(erro,chave,cpf,incest,uf,email,telefone){
   document.form1.z01_nome.value = chave;
   document.form1.pc60_cnpjcpf.value = cpf;
   document.form1.pc60_inscriestadual.value = incest;
   document.form1.pc60_uf.value = uf;
+  document.form1.z01_email.value = email;
+  document.form1.z01_telef.value = telefone;
 
   if(erro==true){
     document.form1.pc60_numcgm.focus();
@@ -268,12 +291,14 @@ function js_mostracgm(erro,chave,cpf,incest,uf){
     document.form1.pc60_inscriestadual.value = '';
   }
 }
-function js_mostracgm1(chave1,chave2,cpf,incest, uf){
+function js_mostracgm1(chave1,chave2,cpf,incest, uf,email,telefone){
   document.form1.pc60_numcgm.value = chave1;
   document.form1.z01_nome.value = chave2;
   document.form1.pc60_cnpjcpf.value = cpf;
   document.form1.pc60_inscriestadual.value = incest
   document.form1.pc60_uf.value = uf;
+  document.form1.z01_email.value = email;
+  document.form1.z01_telef.value = telefone;
 
   if(document.form1.pc60_cnpjcpf.value.length == 11) {
     document.form1.pc60_obs.style.background = '#e6e4f1';

@@ -54,18 +54,23 @@ class DBHttpRequest
     private $responseHeaders = array();
 
     /**
+     * @var Object
+     */
+    private $objxml;
+
+    /**
      * @param AppConfig $config
      */
     public function __construct(AppConfig $config)
     {
         $this->config = $config;
-        $proxy = $this->config->get('app.proxy');
+        $proxy        = $this->config->get('app.proxy');
 
         $this->options = array(
             'baseUrl' => null,
             'headers' => array(),
-            'method' => 'GET',
-            'body' => null,
+            'method'  => 'GET',
+            'body'    => null,
             'timeout' => 60,
         );
 
@@ -105,8 +110,9 @@ class DBHttpRequest
     {
         $options = DBArray::merge($this->options, $options);
 
-        $this->body = $this->__sendFileWrapper($options['baseUrl'] . $url, $method, $options);
-        if(!strpos($this->body,"Lote Recebido com Sucesso")) {
+        $this->body   = $this->__sendFileWrapper($options['baseUrl'] . $url, $method, $options);
+        $this->objxml = $this->parseXmlToObject($url);
+        if ($this->objxml->status->cdResposta != "201") {
             return false;
         }
         return true;
@@ -121,7 +127,7 @@ class DBHttpRequest
     {
         $contextOptions = array(
             'http' => array(
-            'method' => 'POST',
+                'method' => 'POST',
             ),
         );
 
@@ -141,7 +147,7 @@ class DBHttpRequest
         // echo $url.' contextOptions ';
         // print_r($contextOptions);exit;
         $context = stream_context_create($contextOptions);
-        $result = @file_get_contents($url, false, $context);
+        $result  = @file_get_contents($url, false, $context);
 
         if (!empty($http_response_header)) {
             $this->responseHeaders = $this->parseResponseHeaders($http_response_header);
@@ -151,7 +157,7 @@ class DBHttpRequest
             $error = error_get_last();
             throw new BusinessException("Erro ao executar requisição:\nRetorno: " . $error['message']);
         }
-        print_r($result);
+        // print_r($result);
         return $result;
     }
 
@@ -166,22 +172,47 @@ class DBHttpRequest
         return $headers;
     }
 
-
-    function parseResponseHeaders( $headers )
+    public function parseResponseHeaders($headers)
     {
         $head = array();
-        foreach( $headers as $k=>$v )
-        {
-            $t = explode( ':', $v, 2 );
-            if( isset( $t[1] ) )
-                $head[ trim($t[0]) ] = trim( $t[1] );
-            else
-            {
+        foreach ($headers as $k => $v) {
+            $t = explode(':', $v, 2);
+            if (isset($t[1])) {
+                $head[trim($t[0])] = trim($t[1]);
+            } else {
                 $head[] = $v;
-                if( preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#",$v, $out ) )
+                if (preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#", $v, $out)) {
                     $head['response_code'] = intval($out[1]);
+                }
+
             }
         }
         return $head;
+    }
+
+    public function parseXmlToObject($url)
+    {
+        try {
+            $arrXmlTags = array('<s:envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">','<s:body>','</s:body>','</s:envelope>');
+            $objxml = new SimpleXMLElement(str_ireplace($arrXmlTags,"",$this->body));
+            switch ($url) {
+                case 'run.php':
+                    return $objxml->EnviarLoteEventosResult->eSocial->retornoEnvioLoteEventos;
+                case 'consulta.php':
+                    return $objxml->ConsultarLoteEventosResult->eSocial->retornoProcessamentoLoteEventos;
+                default:
+                    return $objxml->EnviarLoteEventosResult->eSocial->retornoEnvioLoteEventos;
+            }
+        } catch (\Exception $e) {
+            throw new Exception("Erro api :\n{$e->getMessage()} - Retorno API: {$this->body}");
+        }
+    }
+
+    /**
+     * @return object
+     */
+    public function getObjXml()
+    {
+        return $this->objxml;
     }
 }

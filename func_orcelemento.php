@@ -131,12 +131,22 @@ if($clorcparametro->numrows > 0){
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
 	  if(isset($tipo_pesquisa)){
             $result = $clorcelemento->sql_record($clorcelemento->sql_query_conplanoreduz(null,"*",''," o56_anousu = ".db_getsession("DB_anousu")." and o56_codele=$pesquisa_chave $dbwhere "));
-	  }else{
-            $result = $clorcelemento->sql_record($clorcelemento->sql_query_conplanoreduz(null,"*","o56_descr"," o56_anousu = ".db_getsession("DB_anousu")." and  o56_elemento = $pesquisa_chave $dbwhere"));
+	  } elseif (isset($busca_elemento) && $busca_elemento) {
+            $pesquisa_chave = str_pad($pesquisa_chave, 13, "0");
+            $result = $clorcelemento->sql_record($clorcelemento->sql_query_conplanoreduz(null,"*","o56_descr"," o56_anousu = ".db_getsession("DB_anousu")." and  o56_elemento = '$pesquisa_chave' $dbwhere"));
+      } else {
+            $result = $clorcelemento->sql_record($clorcelemento->sql_query_conplanoreduz(null,"*","o56_descr"," o56_anousu = ".db_getsession("DB_anousu")." and  o56_elemento = '$pesquisa_chave' $dbwhere"));
 	  }  
-          if($clorcelemento->numrows!=0){
+          if($clorcelemento->numrows!=0 || $clorcelemento->numrows == 1){
+            
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$o56_descr',false);</script>";
+
+            if (isset($busca_elemento) && $busca_elemento) {
+                echo "<script>".$funcao_js."('$o56_descr',false,'$o56_elemento','$o56_codele');</script>";
+            } else {
+                echo "<script>".$funcao_js."('$o56_descr',false);</script>";
+            }
+            
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

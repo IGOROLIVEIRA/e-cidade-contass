@@ -514,9 +514,15 @@ function imprimeCabecalho(&$oPdf, $alt, $iAbertura, $iCompilacao, $sLicitacao, $
   $oPdf->cell(15, $alt, "Item", 1, 0, "C", 1);
   $oPdf->cell(28, $alt, "Descrição", 1, 0, "C", 1);
   $oPdf->cell(39, $alt, "Complemento", 1, 0, "C", 1);
+<<<<<<< HEAD
   $oPdf->cell(16, $alt, "Unidade", 1, 0, "C", 1);
   $oPdf->cell(16, $alt, ($lControlaValor ? "Valor" : "Vlr Uni."), 1, 0, "C", 1);
   $oPdf->cell(($lControlaValor ? 50 : 32), $alt, "Fornecedor", 1, 0, "C", 1);
+=======
+  $oPdf->cell(16, $alt, "Unidade"    , 1, 0, "C", 1);
+  $oPdf->cell(($lControlaValor ? 50 : 32), $alt, "Fornecedor" , 1, 0, "C", 1);
+  $oPdf->cell(16, $alt, ($lControlaValor ? "Valor" : "Vlr Uni.")   , 1, 0, "C", 1);
+>>>>>>> master
 
   if (!$lControlaValor) {
     $oPdf->cell(18, $alt, "Min/Máx", 1, 0, "C", 1);

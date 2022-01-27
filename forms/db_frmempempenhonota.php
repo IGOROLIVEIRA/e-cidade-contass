@@ -51,7 +51,7 @@ if ($db_opcao == 1) {
 } else if ($db_opcao == 2 || $db_opcao == 22) {
     // $ac="emp1_empautoriza005.php";
 } else if ($db_opcao == 3 || $db_opcao == 33) {
-//  $ac="emp1_empautoriza006.php";
+    //  $ac="emp1_empautoriza006.php";
 }
 $db_disab = true;
 if (isset($chavepesquisa) && $db_opcao == 1) {
@@ -120,7 +120,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 if (pg_numrows($result_tran) == 0) {
                     $db_disab = false;
                 }
-            }// else {
+            } // else {
             //   $db_disab = false;
             //}
         }
@@ -201,7 +201,8 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                             if (isset($e54_codcom) && empty($tipocompra)) {
                                 $tipocompra = $e54_codcom;
                             }
-                            $result = $clcflicita->sql_record($clcflicita->sql_query_file(null, "l03_tipo,l03_descr", '', "l03_codcom=$tipocompra"));
+                            $instit = db_getsession("DB_instit");
+                            $result = $clcflicita->sql_record($clcflicita->sql_query_file(null, "l03_tipo,l03_descr", '', "l03_codcom=$tipocompra and l03_instit = $instit"));
                             if ($clcflicita->numrows > 0) {
                                 db_selectrecord("e54_tipol", $result, true, 1, "", "", "");
                                 $dop = $db_opcao;
@@ -316,7 +317,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
                                         foreach ($oResult as $oRow) {
                                             $aEle[$oRow->o56_codele] = $oRow->o56_descr;
-                                            $aCodele[] = substr($oRow->o56_elemento, 0 , -6);
+                                            $aCodele[] = substr($oRow->o56_elemento, 0, -6);
                                         }
                                     }
 
@@ -344,28 +345,32 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td>
                         <?
-                        $arr  = array('0'=>'Não se aplica','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
+                        $arr  = array('0' => 'Não se aplica', '1' => 'Benefícios Previdenciários do Poder Executivo', '2' => 'Benefícios Previdenciários do Poder Legislativo');
 
                         $sSql = "SELECT si09_tipoinstit AS tipoinstit FROM infocomplementaresinstit WHERE si09_instit = " . db_getsession("DB_instit");
-          
+
                         $rsResult = db_query($sSql);
                         db_fieldsMemory($rsResult, 0);
-                        
+
                         if ($tipoinstit == 5 || $tipoinstit == 6) {
 
-                            $aElementos = array('3319001','3319003','3319091','3319092','3319094','3319191','3319192','3319194');
-                            
-                            if(count(array_intersect($aElementos, $aCodele)) > 0) {
-                                $arr  = array('0'=>'Selecione','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
+                            $aElementos = array('3319001', '3319003', '3319091', '3319092', '3319094', '3319191', '3319192', '3319194');
+
+                            if (db_getsession("DB_anousu") > 2021) {
+                                $aElementos = array('331900101', '331900102', '331900301', '331900302', '331909102', '331909103', '331909201', '331909203', '331909403', '331909413');
                             }
-                            
-                        }                        
-                        
+
+                            if (count(array_intersect($aElementos, $aCodele)) > 0) {
+                                $arr  = array('0' => 'Selecione', '1' => 'Benefícios Previdenciários do Poder Executivo', '2' => 'Benefícios Previdenciários do Poder Legislativo');
+                            }
+                        }
+
                         db_select("e60_tipodespesa", $arr, true, 1);
                         ?>
                     </td>
                 </tr>
-                <?php //var_dump($o56_elemento); ?>
+                <?php //var_dump($o56_elemento); 
+                ?>
                 <tr id="trFinalidadeFundeb" style="display: none;">
                     <td><b>Finalidade:</b></td>
                     <td>
@@ -437,11 +442,11 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 $anousu = db_getsession("DB_anousu");
 
                 if ($anousu > 2007) {
-                    ?>
+                ?>
                     <tr>
                         <td nowrap title="<?= @$Te54_concarpeculiar ?>"><?
-                            db_ancora(@$Le54_concarpeculiar, "js_pesquisae54_concarpeculiar(true);", $db_opcao);
-                            ?></td>
+                                                                        db_ancora(@$Le54_concarpeculiar, "js_pesquisae54_concarpeculiar(true);", $db_opcao);
+                                                                        ?></td>
                         <td>
                             <?
                             if (isset($concarpeculiar) && trim(@$concarpeculiar) != "") {
@@ -453,7 +458,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                             ?>
                         </td>
                     </tr>
-                    <?
+                <?
                 } else {
                     $e54_concarpeculiar = 0;
                     db_input("e54_concarpeculiar", 10, 0, true, "hidden", 3, "");
@@ -472,8 +477,15 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td align="left">
                         <?php
-                        db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text',
-                            $db_opcao, " onchange='js_pesquisaac16_sequencial(false);'");
+                        db_input(
+                            'ac16_sequencial',
+                            10,
+                            $Iac16_sequencial,
+                            true,
+                            'text',
+                            $db_opcao,
+                            " onchange='js_pesquisaac16_sequencial(false);'"
+                        );
                         db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
                         $db_opcao = $db_opcao_antiga;
                         ?>
@@ -481,8 +493,10 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 </tr>
                 <!--
                 <tr>
-                    <td nowrap title="<?//= @$Te60_convenio ?>">
-                        <?//= @$Le60_convenio ?>
+                    <td nowrap title="<? //= @$Te60_convenio 
+                                        ?>">
+                        <? //= @$Le60_convenio 
+                        ?>
                     </td>
                     <td>
                         <?
@@ -493,20 +507,22 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 </tr>
                 -->
                 <tr>
-                  <td nowrap title="Código c206_sequencial">
-                    <? db_ancora("Convênio","js_pesquisae60_numconvenio(true);",$db_opcao); ?>
-                  </td>
-                  <td>
-                      <?
-                      db_input('e60_numconvenio',11,$Ie60_numconvenio,true,'text',$db_opcao,"onChange='js_pesquisae60_numconvenio(false);'");
-                      db_input("c206_objetoconvenio",50,0,true,"text",3);
-                      ?>
-                  </td>
+                    <td nowrap title="Código c206_sequencial">
+                        <? db_ancora("Convênio", "js_pesquisae60_numconvenio(true);", $db_opcao); ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('e60_numconvenio', 11, $Ie60_numconvenio, true, 'text', $db_opcao, "onChange='js_pesquisae60_numconvenio(false);'");
+                        db_input("c206_objetoconvenio", 50, 0, true, "text", 3);
+                        ?>
+                    </td>
                 </tr>
                 <!--
                 <tr>
-                    <td nowrap title="<?//= @$Te60_dataconvenio ?>">
-                        <?//= @$Le60_dataconvenio ?>
+                    <td nowrap title="<? //= @$Te60_dataconvenio 
+                                        ?>">
+                        <? //= @$Le60_dataconvenio 
+                        ?>
                     </td>
                     <td>
                         <?
@@ -520,49 +536,97 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td>
                         <?
-                        db_inputData('e60_datasentenca',@$e60_datasentenca_dia, @$e60_datasentenca_mes,@$e60_datasentenca_ano, true, 'text', $db_opcao);
+                        db_inputData('e60_datasentenca', @$e60_datasentenca_dia, @$e60_datasentenca_mes, @$e60_datasentenca_ano, true, 'text', $db_opcao);
                         ?>
                     </td>
                 </tr>
 
             </table>
-            <input
-                    name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
-                    type="submit"
-                    id="db_opcao"
-                    onclick='return js_valida()' ;
-                    value="<?= ($db_opcao == 1 || $db_opcao == 33 ? "Empenhar e imprimir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>"
-            "<?= ($db_botao == false ? "disabled" : ($db_disab == false ? "disabled" : "")) ?>" >
+            <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" onclick='return js_valida()' ; value="<?= ($db_opcao == 1 || $db_opcao == 33 ? "Empenhar e imprimir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" "<?= ($db_botao == false ? "disabled" : ($db_disab == false ? "disabled" : "")) ?>">
 
             <? if ($db_opcao == 1) { ?>
-                <input name="op"
-                       type="button"
-
-                       value="Empenhar e não imprimir"
-                "<?= ($db_disab == false ? "disabled" : "") ?>" onclick="return js_naoimprimir();" >
+                <input name="op" type="button" value="Empenhar e não imprimir" "<?= ($db_disab == false ? "disabled" : "") ?>" onclick="return js_naoimprimir();">
             <? } ?>
 
-            <input name="lanc" type="button" id="lanc" value="Lançar autorizações"
-                   onclick="parent.location.href='emp1_empautoriza001.php';">
+            <input name="lanc" type="button" id="lanc" value="Lançar autorizações" onclick="parent.location.href='emp1_empautoriza001.php';">
 
             <?php $lDisable = empty($e60_numemp) ? "disabled" : ''; ?>
 
-            <input type="button" id="btnLancarCotasMensais" value="Manutenção das Cotas Mensais"
-                   onclick="manutencaoCotasMensais();" <?php echo $lDisable; ?> />
-            <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar autorizações"
-                   onclick="js_pesquisa();">
+            <input type="button" id="btnLancarCotasMensais" value="Manutenção das Cotas Mensais" onclick="manutencaoCotasMensais();" <?php echo $lDisable; ?> />
+            <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar autorizações" onclick="js_pesquisa();">
         </center>
 </form>
 
 <div id="ctnCotasMensais" class="container" style=" width: 500px;">
 </div>
 <style>
-    #e60_tipodespesa{ width: 282px; }#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}
+    #e60_tipodespesa {
+        width: 282px;
+    }
+
+    #e44_tipo {
+        width: 228px;
+    }
+
+    #e57_codhistdescr {
+        width: 158px;
+    }
+
+    #e54_codtipodescr {
+        width: 158px;
+    }
+
+    #e54_codtipo {
+        width: 67px;
+    }
+
+    #e54_tipol {
+        width: 67px;
+    }
+
+    #e54_tipoldescr {
+        width: 158px;
+    }
+
+    #e54_codcom {
+        width: 67px;
+    }
+
+    #z01_nome {
+        width: 333px;
+    }
+
+    #e54_destin {
+        width: 424px;
+    }
+
+    #e54_gestaut {
+        width: 67px;
+    }
+
+    #e54_nomedodepartamento {
+        width: 354px;
+    }
+
+    #ac16_resumoobjeto {
+        width: 364px;
+    }
+
+    #e60_numconvenio {
+        width: 83px;
+    }
+
+    #e54_resumo {
+        width: 588px;
+    }
+
+    #e50_obs {
+        width: 588px;
+    }
 </style>
 
 <script>
-
-/*===========================================
+    /*===========================================
     =            pesquisa 54_gestaut            =
     ===========================================*/
 
@@ -612,12 +676,14 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
      * funcao para avisar o usuario sobre liquidar empenho dos grupos 7, 8, 10
      * onde nao ira mais forçar pela ordem de compra
      */
-    $('id_1').observe('change', function () {
+    $('id_1').observe('change', function() {
 
         if ($F('lLiquidaMaterialConsumo') == 'true') {
 
             var sGrupo = '<?php echo $sGrupoDesdobramento; ?>';
-            var sMensagem = _M('financeiro.empenho.emp4_empempenho004.liquidacao_item_consumo_imediato', {sGrupo: sGrupo});
+            var sMensagem = _M('financeiro.empenho.emp4_empempenho004.liquidacao_item_consumo_imediato', {
+                sGrupo: sGrupo
+            });
             alert(sMensagem);
         }
     });
@@ -633,6 +699,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             }
         }
     }
+
     function js_mostraconcarpeculiar(chave, erro) {
         document.form1.c58_descr.value = chave;
         if (erro == true) {
@@ -640,11 +707,13 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             document.form1.e54_concarpeculiar.value = '';
         }
     }
+
     function js_mostraconcarpeculiar1(chave1, chave2) {
         document.form1.e54_concarpeculiar.value = chave1;
         document.form1.c58_descr.value = chave2;
         db_iframe_concarpeculiar.hide();
     }
+
     function js_naoimprimir() {
         if (!js_valida()) {
             return false;
@@ -656,6 +725,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         document.form1.appendChild(obj);
         document.form1.incluir.click();
     }
+
     function js_reload(valor) {
         obj = document.createElement('input');
         obj.setAttribute('name', 'tipocompra');
@@ -664,6 +734,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         document.form1.appendChild(obj);
         document.form1.submit();
     }
+
     function js_pesquisae54_numcgm(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('top.corpo.iframe_empempenho', 'db_iframe_cgm', 'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true, 0);
@@ -675,6 +746,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             }
         }
     }
+
     function js_mostracgm(erro, chave) {
         document.form1.z01_nome.value = chave;
         if (erro == true) {
@@ -682,11 +754,13 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             document.form1.e54_numcgm.value = '';
         }
     }
+
     function js_mostracgm1(chave1, chave2) {
         document.form1.e54_numcgm.value = chave1;
         document.form1.z01_nome.value = chave2;
         db_iframe_cgm.hide();
     }
+
     function js_pesquisae54_login(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('top.corpo.iframe_empempenho', 'db_iframe_db_usuarios', 'func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome', 'Pesquisa', true);
@@ -698,6 +772,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             }
         }
     }
+
     function js_mostradb_usuarios(chave, erro) {
         document.form1.nome.value = chave;
         if (erro == true) {
@@ -705,23 +780,27 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             document.form1.e54_login.value = '';
         }
     }
+
     function js_mostradb_usuarios1(chave1, chave2) {
         document.form1.e54_login.value = chave1;
         document.form1.nome.value = chave2;
         db_iframe_db_usuarios.hide();
     }
+
     function js_pesquisa() {
 
         //alert(666);
         js_OpenJanelaIframe('top.corpo.iframe_empempenho', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_preenchepesquisa|e54_autori|e55_codele', 'Pesquisa', true, 0);
     }
+
     function js_preenchepesquisa(chave, chave2) {
         // alert(chave2);
         db_iframe_orcreservaaut.hide();
         <?
-        echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&iElemento='+chave2";
+        echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave+'&iElemento='+chave2";
         ?>
     }
+
     function js_valida() {
         options = document.form1.op;
         sValor = '';
@@ -838,23 +917,22 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         oParam.exec = "validarRecursoDotacaoPorAutorizacao";
         oParam.iCodigoAutorizacaoEmpenho = $F('e54_autori');
 
-        new Ajax.Request('emp4_empenhofinanceiro004.RPC.php',
-            {
-                method: 'post',
-                parameters: 'json=' + Object.toJSON(oParam),
-                onComplete: function (oAjax) {
+        new Ajax.Request('emp4_empenhofinanceiro004.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: function(oAjax) {
 
-                    js_removeObj("msgBox");
-                    var oRetorno = eval("(" + oAjax.responseText + ")");
+                js_removeObj("msgBox");
+                var oRetorno = eval("(" + oAjax.responseText + ")");
 
-                    if (oRetorno.lFundeb) {
-                        $('trFinalidadeFundeb').style.display = '';
-                    } else {
-                        $('trFinalidadeFundeb').style.display = 'none';
-                    }
-
+                if (oRetorno.lFundeb) {
+                    $('trFinalidadeFundeb').style.display = '';
+                } else {
+                    $('trFinalidadeFundeb').style.display = 'none';
                 }
-            });
+
+            }
+        });
     }
 
     js_pesquisarRecursoDotacao();
@@ -870,29 +948,28 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
     }
 
     function js_pesquisae60_numconvenio(mostra) {
-      if(mostra==true){
-        js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?funcao_js=parent.js_mostrae60_numconvenio1|c206_sequencial|c206_objetoconvenio','Pesquisa',true);
-      } else {
-          if(document.form1.e60_numconvenio.value != ''){
-              js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?pesquisa_chave='+document.form1.e60_numconvenio.value+'&funcao_js=parent.js_mostrae60_numconvenio','Pesquisa',false);
-          }else{
-              document.form1.c206_objetoconvenio.value = '';
-          }
-      }
+        if (mostra == true) {
+            js_OpenJanelaIframe('', 'db_iframe_convconvenios', 'func_convconvenios.php?funcao_js=parent.js_mostrae60_numconvenio1|c206_sequencial|c206_objetoconvenio', 'Pesquisa', true);
+        } else {
+            if (document.form1.e60_numconvenio.value != '') {
+                js_OpenJanelaIframe('', 'db_iframe_convconvenios', 'func_convconvenios.php?pesquisa_chave=' + document.form1.e60_numconvenio.value + '&funcao_js=parent.js_mostrae60_numconvenio', 'Pesquisa', false);
+            } else {
+                document.form1.c206_objetoconvenio.value = '';
+            }
+        }
     }
 
-    function js_mostrae60_numconvenio(chave,erro){
+    function js_mostrae60_numconvenio(chave, erro) {
         document.form1.c206_objetoconvenio.value = chave;
-        if(erro==true){
+        if (erro == true) {
             document.form1.e60_numconvenio.focus();
             document.form1.e60_numconvenio.value = '';
         }
     }
 
-    function js_mostrae60_numconvenio1(chave1,chave2){
-        document.form1.e60_numconvenio.value     = chave1;
+    function js_mostrae60_numconvenio1(chave1, chave2) {
+        document.form1.e60_numconvenio.value = chave1;
         document.form1.c206_objetoconvenio.value = chave2;
         db_iframe_convconvenios.hide();
     }
-
 </script>

@@ -74,8 +74,9 @@ if ($alterando == 1 && !empty($j46_codigo) ) {
 
   if( $j46_codigo != "nova" ){
 
-    $resultTipis = $cliptubase->sql_record($cliptuisen->sql_query("", "j45_tipis", "", "j46_codigo = $j46_codigo"));
+    $resultTipis = $cliptubase->sql_record($cliptuisen->sql_query("", "j45_tipis, j45_taxas", "", "j46_codigo = $j46_codigo"));
     $j45_tipis   = db_utils::fieldsMemory($resultTipis,0)->j45_tipis;
+    $j45_taxas   = db_utils::fieldsMemory($resultTipis,0)->j45_taxas;
   }
 }
 
@@ -293,7 +294,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
   <link href="estilos.css" rel="stylesheet" type="text/css">
   <script type="text/javascript">
 
-  <?if(isset($j46_matric)){?>
+  <?php if(isset($j46_matric)){ ?>
 
     function js_trocaid(valor){
 
@@ -301,7 +302,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
         location.href = "cad4_iptuisen002.php?<?=$alterando?'':'alterando=true&'?>j46_matric=<?=$j46_matric?>&j46_codigo="+valor;
       }
     }
-  <?}?>
+  <?php } ?>
 
     function js_carreg(){
 
@@ -315,6 +316,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
     <form name="form1" method="post" action="">
       <input name="dadostaxa" type="hidden" value="">
       <input name="j45_tipis" type="hidden" value="<?php echo $j45_tipis ?>">
+      <input name="j45_taxas" type="hidden" value="<?php echo $j45_taxas ?>">
 
       <fieldset style="width:520px;">
       <legend>Dados de Isenção</legend>
@@ -330,7 +332,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
             <?php } ?>
           </td>
           <td>
-            <?
+            <?php
               db_input('j46_matric',10,$Ij46_matric,true,'text',3," onchange='js_pesquisaj46_matric(false);'");
               db_input('z01_nome',40,$Iz01_nome,true,'text',3,'','z01_nomematri');
             ?>
@@ -341,19 +343,19 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
             <?=@$Lj46_codigo?>
           </td>
           <td>
-            <?
+            <?php
               db_input('j46_codigo',4,"",true,'text',3,"")
             ?>
           </td>
         </tr>
         <tr>
           <td nowrap title="<?=@$Tj46_tipo?>">
-            <?
+            <?php
             db_ancora(@$Lj46_tipo,"js_pesquisaj46_tipo(true);document.form1.j45_descr.value='';",$db_opcao);
             ?>
           </td>
           <td>
-            <?
+            <?php
             db_input('j46_tipo',4,$Ij46_tipo,true,'text',$db_opcao,"onchange='js_pesquisaj46_tipo(false);js_limpanome();'");
             db_input('j45_descr',40,$Ij45_descr,true,'text',3,'');
             ?>
@@ -364,7 +366,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
             <?=@$Lj46_dtini?>
           </td>
           <td>
-            <?
+            <?php
             db_inputdata('j46_dtini',@$j46_dtini_dia,@$j46_dtini_mes,@$j46_dtini_ano,true,'text',$db_opcao,"")
             ?>
           </td>
@@ -374,7 +376,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
            <?=@$Lj46_dtfim?>
           </td>
           <td>
-            <?
+            <?php
               db_inputdata('j46_dtfim',@$j46_dtfim_dia,@$j46_dtfim_mes,@$j46_dtfim_ano,true,'text',$db_opcao)
             ?>
           </td>
@@ -384,7 +386,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
             <?=@$Lj46_perc?>
           </td>
           <td>
-            <?
+            <?php
               db_input('j46_perc',10,$Ij46_perc,true,'text',$db_opcao,"onChange='js_validapercentual(this);'")
             ?>
           </td>
@@ -394,7 +396,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
             <strong>Área do lote:</strong>
           </td>
           <td colspan="2">
-            <?
+            <?php
               $sql_areatot    = "select j34_area from iptubase inner join lote on j34_idbql = j01_idbql where j01_matric = $j46_matric;";
               $result_areatot = $cliptubase->sql_record($sql_areatot);
 
@@ -410,11 +412,11 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
             <strong>Área isenta:</strong>
           </td>
           <td>
-            <?
+            <?php
               db_input('j46_arealo',10,$Ij46_arealo,true,'text',$db_opcao,"onchange = 'js_preenchedif(this.name,this.value,document.form1.j34_area.value);'");
             ?>
             <strong>Diferença:</strong>
-            <?
+            <?php
               db_input('j46_dif',10,$Ij46_arealo,true,'text',3,"");
 
               if (!empty($j34_area) && !empty($j46_arealo)) {
@@ -427,7 +429,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
         </tr>
         <tr>
           <td>
-            <?
+            <?php
               $j46_idusu = db_getsession("DB_id_usuario");
               db_input('j46_idusu',4,$Ij46_idusu,true,'hidden',$db_opcao,"")
             ?>
@@ -435,15 +437,15 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
         </tr>
         <tr>
           <td nowrap title="<?=@$Tp58_codproc?>">
-            <?
+            <?php
               db_ancora(@$Lp58_codproc,"js_pesquisap58_codproc(true);",$db_opcao);
             ?>
           </td>
           <td>
-            <?
+            <?php
               db_input('p58_codproc',10,$Ip58_codproc,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'")
             ?>
-            <?
+            <?php
               db_input('p58_requer',40,$Ip58_requer,true,'text',3,'')
             ?>
           </td>
@@ -568,7 +570,7 @@ if (isset($j46_codigo) && $j46_codigo=="nova") {
     <?php } ?>
   </form>
 </div>
-<?
+<?php
 if (!$alterando) {
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 }
@@ -577,18 +579,19 @@ if (!$alterando) {
 </html>
 <script type="text/javascript">
 
-  var tipoIsencao = document.form1.j45_tipis.value;
-  var alterando   = <?php echo ($alterando == true) ? 1 : 0;?>;
+  const tipoIsencao = document.form1.j45_tipis.value;
+  const isencaoTaxas = document.form1.j45_taxas.value;
+  const alterando   = <?php echo ($alterando == true) ? 1 : 0;?>;
 
-  if (alterando == 1 && (tipoIsencao == 1 || tipoIsencao == 2)) {
+  if (alterando == 1 && tipoIsencao == 1) {
 
-    var elementosTaxas = document.getElementsByClassName('receit');
+    let elementosTaxas = document.getElementsByClassName('receit');
 
     document.form1.j46_perc.readOnly = 'true';
 
-    for (i in elementosTaxas) {
+    for (let i in elementosTaxas) {
 
-      if (isNumeric(i)){
+      if (isNumeric(i) && isencaoTaxas !== 't'){
         elementosTaxas[i].readOnly = 'true';
       }
     }
@@ -601,7 +604,7 @@ if (!$alterando) {
    */
   function js_validarCampo() {
 
-    tipoIsencao = document.form1.j45_tipis.value;
+    let tipoIsencao = document.form1.j45_tipis.value;
 
     if (document.getElementById('j46_tipo').value == "") {
 
@@ -776,14 +779,14 @@ if (!$alterando) {
   function js_pesquisaj46_tipo(mostra){
 
     if(mostra==true){
-      js_OpenJanelaIframe('','db_iframe','func_tipoisen.php?funcao_js=parent.js_mostratipoisen1|0|1|2','Pesquisa',true);
+      js_OpenJanelaIframe('','db_iframe','func_tipoisen.php?funcao_js=parent.js_mostratipoisen1|0|1|2|3','Pesquisa',true);
     }else{
       js_OpenJanelaIframe('','db_iframe','func_tipoisen.php?pesquisa_chave='+document.form1.j46_tipo.value+'&funcao_js=parent.js_mostratipoisen','Pesquisa',false);
     }
 
   }
 
-  function js_alteraValidacaoDataFim(j45_tipis) {
+  function js_alteraValidacaoDataFim(j45_tipis, j45_taxas) {
 
     var elementosTaxas = document.getElementsByClassName('receit');
 
@@ -804,9 +807,9 @@ if (!$alterando) {
       document.form1.j46_perc.value    = '100';
       document.form1.j46_perc.readOnly = 'true';
 
-      for ( i in elementosTaxas) {
+      for (let i in elementosTaxas) {
 
-        if (isNumeric(i)){
+        if (isNumeric(i) && j45_taxas !== 't'){
 
           elementosTaxas[i].value    = '100';
           elementosTaxas[i].readOnly = 'true';
@@ -821,25 +824,27 @@ if (!$alterando) {
     }
   }
 
-  function js_mostratipoisen(chave,tipo,erro){
+  function js_mostratipoisen(chave,tipo,taxas,erro){
 
     document.form1.j45_descr.value = chave;
     document.form1.j45_tipis.value = tipo;
+    document.form1.j45_taxas.value = taxas;
     if(erro==true){
 
       document.form1.j46_tipo.focus();
       document.form1.j46_tipo.value = '';
     }
-    js_alteraValidacaoDataFim(document.form1.j45_tipis.value);
+    js_alteraValidacaoDataFim(document.form1.j45_tipis.value, document.form1.j45_taxas.value);
   }
 
-  function js_mostratipoisen1(chave1,chave2,chave3){
+  function js_mostratipoisen1(chave1,chave2,chave3,chave4){
 
     document.form1.j46_tipo.value  = chave1;
     document.form1.j45_descr.value = chave2;
     document.form1.j45_tipis.value = chave3;
+    document.form1.j45_taxas.value = chave4;
     db_iframe.hide();
-    js_alteraValidacaoDataFim(document.form1.j45_tipis.value);
+    js_alteraValidacaoDataFim(document.form1.j45_tipis.value, document.form1.j45_taxas.value);
   }
 
   function js_pesquisa(){
@@ -932,7 +937,7 @@ if (!$alterando) {
     }
   }
 </script>
-<?
+<?php
 if(isset($incluir)||isset($excluir)||isset($alterar)){
 
   if($cliptuisen->erro_status=="0"){

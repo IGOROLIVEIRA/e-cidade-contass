@@ -26,5 +26,5 @@
  */
 
 //$campos = "fc_solproc(pcproc.pc80_codproc) as DL_Solicitacoes,pcproc.pc80_codproc,pcproc.pc80_data,nome,pcproc.pc80_depto,descrdepto,pcproc.pc80_resumo";
-$campos = "pcproc.pc80_codproc,pcproc.pc80_data,nome,pcproc.pc80_depto,descrdepto,pcproc.pc80_resumo, case when pc80_tipoprocesso = 1 then 'Item'::varchar else 'Lote'::varchar end as pc80_tipoprocesso";
+$campos = "pcproc.pc80_codproc,pcproc.pc80_data,nome,pcproc.pc80_criterioadjudicacao,pcproc.pc80_depto,descrdepto,pcproc.pc80_resumo, case when pc80_tipoprocesso = 1 then 'Item'::varchar else 'Lote'::varchar end as pc80_tipoprocesso";
 ?>

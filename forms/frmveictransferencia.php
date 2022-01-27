@@ -85,7 +85,7 @@ div .formatdiv{
         </div>
 
         <div class="formatdiv" align="left">
-          <strong style="margin-right: 15px;">Secretaria Atual:&nbsp;</strong>
+          <strong style="margin-right: 15px;">Departamento Atual:&nbsp;</strong>
           <select name="departamento_atual" onchange="carregaVeiculos(this.value);" class="formatselect">
               <option value="">SELECIONE...</option>
                 <?php foreach ($aDepartamentos as $aDepartamento) : ?>
@@ -99,7 +99,7 @@ div .formatdiv{
                 <?php endforeach; ?>
           </select>
 
-          <strong class="formatstrong">Secretaria Destino:&nbsp;</strong>
+          <strong class="formatstrong">Departamento Destino:&nbsp;</strong>
           <select name="departamento_destino" class="formatselect">
               <option value="" selected>SELECIONE...</option>
               <?php foreach ($aDepartamentos as $aDepartamento) : ?>
@@ -200,7 +200,7 @@ function carregaVeiculos(departamento_atual) {
     tableVeiculos.innerHTML = trs.join('');
     var totalreg = document.getElementById('formatspan');
     if (veiculos.length == 0) {
-      tableVeiculos.innerHTML = '<tr><td colspan="6">Nenhum veículo encontrado para a secretaria selecionada!</td></tr>';
+      tableVeiculos.innerHTML = '<tr><td colspan="6">Nenhum veículo encontrado para o Departamento selecionado!</td></tr>';
       totalreg.innerHTML      = "";
       document.getElementById('mdtodos').style.display = "none";
     }
@@ -228,12 +228,12 @@ function insereTransferencia() {
 
 
   if (destinoVazio) {
-    alert('Informe Secretaria destino!');
+    alert('Informe Departamento destino!');
     return;
   }
 
   else if (atual == destino) {
-    alert('Secretaria atual e destino não podem ser iguais!');
+    alert('Departamento atual e destino não podem ser iguais!');
     document.form1.departamento_destino.value = "";
     return;
   }

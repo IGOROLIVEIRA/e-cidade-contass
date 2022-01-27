@@ -94,7 +94,18 @@ $cllicitaparam->rotulo->label();
       db_input('l12_qtdediasliberacaoweb', 5, 0, true, 'text', $db_opcao);
       ?>
     </td>
-  </tr>  
+  </tr>
+  <tr>
+    <td>
+      <strong>Validação no Cadastro de Fornecedores</strong>
+    </td>
+    <td> 
+      <?
+        $x = array("f"=>"NAO","t"=>"SIM");
+        db_select('l12_validacadfornecedor',$x,true,$db_opcao,"");
+      ?>
+    </td>
+  </tr>   
   </table>
   </fieldset>
   <td>

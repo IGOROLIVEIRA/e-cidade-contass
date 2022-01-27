@@ -206,28 +206,6 @@ if(!isset($datai_dia) &&
           </tr>
           <tr>
             <td align="right" nowrap>
-              <strong>Quebrar por:</strong>
-            </td>
-            <td align="left">
-              <?
-              $arr_quebra = array("n"=>"Sem quebra","l"=>"Por lotação","c"=>"Por cargo");
-              if(!isset($lota)){
-                $lota = "n";
-              }
-              db_select('lota',$arr_quebra,true,4,"");
-              if(isset($listainativ)){
-                $chk_listainativ = "checked";
-              }else{
-                $chk_listainativ = "";
-              }
-              ?>
-            </td>
-            <td align="left">
-            <input type="checkbox" name="listainativ" value="listainativ"<?=$chk_listainativ?>>Listar inativos
-            </td>
-          </tr>
-          <tr>
-            <td align="right" nowrap>
               <strong>Tipo :</strong>
             </td>
             <td align="left">
@@ -244,6 +222,13 @@ if(!isset($datai_dia) &&
               }
               ?>
             </td>
+            <td align="left">
+            <input type="checkbox" name="listainativ" value="listainativ"<?=$chk_listainativ?>>Listar inativos
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
             <td align="left">
         	      <input type="checkbox" name="listarescis" value="listarescis"<?=$chk_listarescis?>>Listar rescindidos
             </td>
@@ -315,7 +300,6 @@ function js_relatorio2(){
       qry+= "&listapens=s";
     }
     qry+= "&tipo="+F.tipo.value;
-    qry+= "&lota="+F.lota.value;
     qry+= "&quebrapagina="+F.quebra.value;
     selecionados = "";
     virgula_ssel = "";

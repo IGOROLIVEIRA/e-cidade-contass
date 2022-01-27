@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("interfaces/ILancamentoAuxiliar.interface.php");
@@ -80,10 +80,14 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
 
     $sql = $oDaoAcordo->sql_query_lancamentos_empenhocontrato("c71_coddoc", $this->getEmpenho()->getNumero());
 
+    if(db_getsession("DB_anousu") > 2021){
+        $sql = $oDaoAcordo->sql_query_lancamentos_contrato("c71_coddoc", $this->getAcordo()->getCodigoAcordo());
+    }
+
     $result = db_query($sql);
 
     $aDocumentos = array();
-    for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) { 
+    for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) {
       $aDocumentos[] =  db_utils::fieldsMemory($result,$iCont)->c71_coddoc;
     }
 
@@ -188,7 +192,7 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
    */
   public function getEmpenho() {
     return $this->oEmpenhoFinanceiro;
-  } 
+  }
 
   /**
    * Seta o Documento
@@ -205,31 +209,31 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
   public function getDocumento() {
     return $this->iDocumento;
   }
-  
+
   /**
-   * Função da classe que constroi uma instância de LancamentoAuxiliarAcordo, 
+   * Função da classe que constroi uma instância de LancamentoAuxiliarAcordo,
    * de acordo com código do lançamento, passado como parâmetro
    * @param  integer $iCodigoLancamento
    * @return LancamentoAuxiliarAcordo
    */
   public static function getInstance($iCodigoLancamento) {
-    
+
     $oDaoConlancamacordo = db_utils::getDao("conlancamacordo");
     $sCampos             = "c87_acordo, c75_numemp, c70_valor, c70_data, c66_codnota";
     $sSql                = $oDaoConlancamacordo->sql_query_dadoslancamento($iCodigoLancamento, $sCampos);
     $rsResultado         = $oDaoConlancamacordo->sql_record($sSql);
-    
+
     if ($oDaoConlancamacordo->numrows != 1) {
       throw new BusinessException("Erro técnico: erro ao buscar os dados do lançamento do acordo");
     }
-    
-    $oStdLancamentoAcordo  = db_utils::fieldsMemory($rsResultado, 0); 
+
+    $oStdLancamentoAcordo  = db_utils::fieldsMemory($rsResultado, 0);
     $iAcordo               = $oStdLancamentoAcordo->c87_acordo;
     $iEmpenho              = $oStdLancamentoAcordo->c75_numemp;
     $nValorTotal           = $oStdLancamentoAcordo->c70_valor;
     $dtLancamento          = $oStdLancamentoAcordo->c70_data;
     $iCodigoNotaLiquidacao = $oStdLancamentoAcordo->c66_codnota;
-    
+
     /**
      * Seta as propriedades para criar uma instância da classe, de acordo com dados do lançamento
      */
@@ -249,7 +253,7 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
     $oContaCorrenteDetalhe->setEmpenho($oEmpenho);
     $oContaCorrenteDetalhe->setAcordo($oAcordo);
     $oLancamento->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
-    
+
     if (!empty($iCodigoNotaLiquidacao)) {
       $oLancamento->setCodigoNotaLiquidacao($iCodigoNotaLiquidacao);
     }

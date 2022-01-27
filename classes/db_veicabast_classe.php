@@ -62,6 +62,7 @@ class cl_veicabast {
    var $ve70_hora = null; 
    var $ve70_observacao = null; 
    var $ve70_origemgasto = null;
+   var $ve70_importado  = null;    
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ve70_codigo = int4 = Código do Abastecimento 
@@ -78,6 +79,7 @@ class cl_veicabast {
                  ve70_hora = char(5) = Hora da Inclusão do registro 
                  ve70_observacao = text = Observação 
                  ve70_origemgasto = int4 = Origem do Gasto
+                 ve70_importado = bool = Importado
                  ";
    //funcao construtor da classe 
    function cl_veicabast() { 
@@ -125,6 +127,7 @@ class cl_veicabast {
        }
        $this->ve70_hora = ($this->ve70_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_hora"]:$this->ve70_hora);
        $this->ve70_observacao = ($this->ve70_observacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_observacao"]:$this->ve70_observacao);
+       $this->ve70_importado = ($this->ve70_importado == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_importado"]:$this->ve70_importado);
      }else{
        $this->ve70_codigo = ($this->ve70_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_codigo"]:$this->ve70_codigo);
      }
@@ -210,6 +213,10 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
+     if($this->ve70_importado == null ){ 
+      $this->ve70_importado = 'f';
+    } 
+     
      if($this->ve70_hora == null ){ 
        $this->erro_sql = " Campo Hora da Inclusão do registro nao Informado.";
        $this->erro_campo = "ve70_hora";
@@ -265,7 +272,8 @@ class cl_veicabast {
                                       ,ve70_usuario 
                                       ,ve70_data 
                                       ,ve70_hora 
-                                      ,ve70_observacao 
+                                      ,ve70_observacao
+                                      ,ve70_importado 
                        )
                 values (
                                 $this->ve70_codigo 
@@ -281,7 +289,8 @@ class cl_veicabast {
                                ,$this->ve70_usuario 
                                ,".($this->ve70_data == "null" || $this->ve70_data == ""?"null":"'".$this->ve70_data."'")." 
                                ,'$this->ve70_hora' 
-                               ,'$this->ve70_observacao' 
+                               ,'$this->ve70_observacao'
+                               ,'$this->ve70_importado' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -515,6 +524,19 @@ class cl_veicabast {
        $sql  .= $virgula." ve70_observacao = '$this->ve70_observacao' ";
        $virgula = ",";
      }
+     if(trim($this->ve70_importado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_importado"])){
+      $sql  .= $virgula." ve70_importado = '$this->ve70_importado' ";
+      $virgula = ",";
+      if(trim($this->ve70_importado) == null ){
+        $this->erro_sql = " Campo Hora nao Informado.";
+        $this->erro_campo = "ve70_importado";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($ve70_codigo!=null){
        $sql .= " ve70_codigo = $this->ve70_codigo";
@@ -732,6 +754,45 @@ class cl_veicabast {
        }
      }
      return $sql;
+  }
+  function sql_query_valorMax ($ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    $sql .= "from veicabast";
+    if($dbwhere==""){
+      if($ve70_codigo!=null ){
+        $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo "; 
+      } 
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+
+    return $sql;
+
+  }
+  function sql_query_AbasData ($ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select *";
+    
+    $sql .= "from veicabast";
+    if($dbwhere==""){
+      if($ve70_codigo!=null ){
+        $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo "; 
+      } 
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+
+    return $sql;
+
   }
    // funcao do sql 
    function sql_query_file ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 

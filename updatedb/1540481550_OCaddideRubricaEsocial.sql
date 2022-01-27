@@ -1,4 +1,4 @@
-/*BEGIN;                   
+BEGIN;                   
 SELECT fc_startsession();
 
 -- Início do script
@@ -26,5 +26,5 @@ UPDATE avaliacaogrupopergunta SET db102_ordem = 1
 
 -- Fim do script
 
-COMMIT;*/
+COMMIT;
 

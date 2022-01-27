@@ -35,12 +35,16 @@ include("classes/db_rhrubelemento_classe.php");
 include("classes/db_rhrubretencao_classe.php");
 include("classes/db_basesr_classe.php");
 include("classes/db_rhtipomedia_classe.php");
+include("classes/db_rubricasesocial_classe");
+include("classes/db_baserubricasesocial_classe.php");
 
 $clrhrubricas    = new cl_rhrubricas();
 $clrhrubelemento = new cl_rhrubelemento();
 $clrhrubretencao = new cl_rhrubretencao();
 $clbasesr        = new cl_basesr();
 $clrhtipomedia   = new cl_rhtipomedia();
+$clrubricasesocial = new cl_rubricasesocial;
+$clbaserubricasesocial = new cl_baserubricasesocial;
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -92,7 +96,7 @@ if(isset($incluir) || isset($novasrubricas)){
       }
     }
   }else{
-    $arr_codigos = split(",",$novasrubricas);
+    $arr_codigos = explode(",",$novasrubricas);
 
     for($i=0; $i<count($arr_codigos); $i++){
       $rubricainclui = $arr_codigos[$i];
@@ -237,6 +241,17 @@ if(isset($incluir) || isset($novasrubricas)){
        	  break;
         }
       }
+    }
+  }
+
+  if ($sqlerro == false) {
+    $clbaserubricasesocial->e991_rubricasesocial = $e991_rubricasesocial;
+    $clbaserubricasesocial->e991_rubricas = $rh27_rubric;
+    $clbaserubricasesocial->e991_instit =  db_getsession("DB_instit");
+    $clbaserubricasesocial->incluir();
+    if($clbaserubricasesocial->erro_status == 0) {
+      $sqlerro=true;
+      $erro_msg = $clbaserubricasesocial->erro_msg;
     }
   }
 

@@ -1198,7 +1198,8 @@ foreach ($parag as $chave ) {
     $pdf->Cell(20,4," Vlr. Jur. "      ,1,0,"C",1);
     $pdf->Cell(20,4," Vlr. Desc. "     ,1,0,"C",1);
     $pdf->Cell(20,4," Total "          ,1,1,"C",1);
-    $pdf->SetFont('Arial','',7);
+
+
 
     $k00_descrnovo = "";
     $primeiro = true;
@@ -1213,11 +1214,10 @@ foreach ($parag as $chave ) {
     }
 
     $pdf->Cell(20,4,"",0,1,"C",0);
-
+        
     if($pdf->GetY() > ( $pdf->h - 40 )){
       $pdf->AddPage();
     }
-
 
   }elseif(strtoupper($chave->db02_descr) == "TABELA_PARCELA"){
     // terceira tabela
@@ -1270,8 +1270,17 @@ foreach ($parag as $chave ) {
       $linhasdesc = pg_num_rows($resultdesc);
       if($linhasdesc > 0 and $cgc != "29131075000193"){
         db_fieldsmemory($resultdesc,0);
+        
+        $honorarios = 0;
+        $oInstit = new Instituicao(db_getsession('DB_instit'));                    
+        if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
+          $rechonorarios = 718;
+          $honorarios = "select sum(k00_valor) as honorarios from arrecad where k00_receit = ".$rechonorarios." and k00_numpre = ".$v07_numpre ;
+          $resulthonorarios = db_query($honorarios);
+          db_fieldsmemory($resulthonorarios,0);
+        }
 
-        if($desconto > 0){
+        if($desconto > 0){  
           //com desconto
           $entradades    = round($entrada -    (($entrada * $desconto)/100),2);
           $v07_ultpardes = round($v07_ultpar - (($v07_ultpar * $desconto)/100),2);
@@ -1305,9 +1314,13 @@ foreach ($parag as $chave ) {
           $pdf->Cell(50,4,'Valor da entrada ',1,0,"L",0);
           $pdf->Cell(45,4,db_formatar($entrada,'f'),1,1,"R",0);
           $pdf->Cell(50,4,'Valor da ultima parcela','LRB',0,"L",0);
-          $pdf->Cell(45,4,$v07_ultpar,'LRB',1,"R",0);
+          $pdf->Cell(45,4,db_formatar($v07_ultpar,'f'),'LRB',1,"R",0);
           $pdf->Cell(50,4,'Valor das parcelas a partir de ',1,0,"L",0);
           $pdf->Cell(45,4,db_formatar($vlrpar,'f'),1,1,"R",0);
+          if($honorarios > 0){
+            $pdf->Cell(50,4,'Valor dos Honorários ',1,0,"L",0);
+            $pdf->Cell(45,4,db_formatar($honorarios,'f'),1,1,"R",0);  
+          }          
           $pdf->ln(10);
           //tem q calcular o desconto para cada parcela
 

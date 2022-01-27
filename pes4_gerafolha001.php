@@ -110,7 +110,10 @@ db_postmemory($HTTP_POST_VARS);
 
 <input type="hidden" name="hidTipoFolha" id="hidTipoFolha" value="<?php echo (isset($opcao_geral)) ? $opcao_geral : '1'; ?>" />
 <input type="button" name="processar" value="Processar" onclick="return js_validarCalculo();">
-<? if (db_getsession("DB_login") == "dbseller") {
+<? if (db_getsession("DB_login") == "dbseller" 
+  || db_getsession("DB_login") == "rjgs.contass" 
+  || db_getsession("DB_login") == "ifs.contass"
+  || db_getsession("DB_login") == "lc.contass") {
      echo "<input type=\"button\" value=\"Processar com Debug\" onclick=\"js_enviar_dados(2);\">";
    }  
 ?>   

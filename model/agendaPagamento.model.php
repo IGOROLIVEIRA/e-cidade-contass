@@ -2218,7 +2218,7 @@ class agendaPagamento {
 
     $sCampos  .= "e97_codmov,                                             ";
     $sCampos  .= "e83_conta,                                              ";
-    $sCampos  .= "ctapag.c61_codigo,                                      ";
+    $sCampos  .= "CASE WHEN k29_recurso is null THEN ctapag.c61_codigo ELSE k29_recurso END c61_codigo, ";
     $sCampos  .= "(case when z01_nome is  not null then z01_nome          ";
     $sCampos  .= " else '{$oInstit->z01_nome}' end) as z01_nome,          ";
     $sCampos  .= "(case when z01_numcgm is  not null then z01_numcgm      ";

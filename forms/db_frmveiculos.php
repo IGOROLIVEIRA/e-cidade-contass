@@ -691,9 +691,9 @@ if($clusuarios > 0 ){
 
     }
 
-    function js_hideElements(valor){
+    function js_hideElements(valor){    
         let aClasses = document.getElementsByClassName('tr__hidden');
-
+        
         if([1, 2, 4, 5, 99].includes(Number(valor))){
             document.getElementsByClassName('tr__numcgm')[0].style.display = 'none';
         }else{
@@ -701,7 +701,7 @@ if($clusuarios > 0 ){
         }
 
         for (let count=0; count < aClasses.length; count++){
-            if([1, 2, 4, 5, 99].includes(Number(valor))){
+            if([1, 2, 5, 99].includes(Number(valor))){ 
                 aClasses[count].style.display = 'none';
             }else{
                 aClasses[count].style.display = '';

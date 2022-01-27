@@ -48,7 +48,8 @@ $clentesconsorciados = new cl_entesconsorciados;
           }
 
         } else {
-          $sql = $clentesconsorciados->sql_query();
+          $sWhere = "c215_datafimparticipacao is null or date_part('YEAR', c215_datafimparticipacao) = ".db_getsession("DB_anousu");
+          $sql = $clentesconsorciados->sql_query(null, "*", "z01_nome", $sWhere);
           $repassa = array();
           echo '<div class="container">';
           echo '  <fieldset>';
