@@ -8,6 +8,7 @@
     parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
     db_postmemory($HTTP_POST_VARS);
 
+
     switch ($oGet->tipoprecoreferencia) {
         case '2':
             $tipoReferencia = " MAX(pc23_vlrun) ";
@@ -626,7 +627,7 @@ HTML;
                 <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
             </div>
         </div>
-        <?php if ($oGet->impjust == 's') : ?>
+        <?php if ($oGet->impjust == 't') : ?>
             <div class="tr bg_eb">
                 <div class="th col-valor_total-text align-left">
                     Justificativa

@@ -151,7 +151,7 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
 
     //    echo "VALOR TOTAL DOS ITENS;";
     //    echo "R$" . number_format($nTotalItens, 2, ",", ".").";";
-    if ($oGet->impjust == 's') {
+    if ($oGet->impjust == 't') {
         echo "JUSTIFICATIVA;\n";
         echo str_replace(array(';', '.', ','), "", db_utils::fieldsMemory($rsResult, 0)->si01_justificativa);
     }
