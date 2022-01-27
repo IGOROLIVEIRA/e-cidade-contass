@@ -2264,7 +2264,7 @@ order by
              * Calcula as diferenças de de meses entre a data inicial e data final
              */
 
-            $iDiferencaPeriodo  = AcordoPosicao::calculaDiferencaMeses($iAcordo, $oPeriodo->dtDataInicial, $oPeriodo->dtDataFinal);
+            $iDiferencaPeriodo  = 1;
             $oDaoAcordoPosicao  = db_utils::getDao("acordoposicaoperiodo");
 
             /**

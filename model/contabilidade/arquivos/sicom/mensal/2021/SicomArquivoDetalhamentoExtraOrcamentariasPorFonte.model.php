@@ -450,9 +450,9 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 						$oExtMov = db_utils::fieldsMemory($rsExtMov, $linha);
 
                                 $sSql30 = " SELECT '30' as tiporegistro,
-                                                    /*e91_codcheque,*/
-                                                    CASE 
-                                                        WHEN conplano.c60_codsis = 5 
+                                                    c50_descr,
+                                                    CASE
+                                                        WHEN conplano.c60_codsis = 5
                                                         THEN 5
                                                         ELSE e91_codcheque
                                                     END AS e91_codcheque,
@@ -485,6 +485,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                                                         AND corlanc.k12_data = corrente.k12_data
                                                         AND corlanc.k12_autent = corrente.k12_autent
                                             INNER JOIN slip on slip.k17_codigo = corlanc.k12_codigo
+                                            INNER JOIN conhist ON slip.k17_hist = conhist.c50_codhist
                                             INNER JOIN conplanoreduz on slip.k17_credito = conplanoreduz.c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
                                             INNER JOIN conplano ON (conplano.c60_codcon, conplano.c60_anousu) = (conplanoreduz.c61_codcon, conplanoreduz.c61_anousu)
                                             INNER JOIN orctiporec on orctiporec.o15_codigo = conplanoreduz.c61_codigo
@@ -504,12 +505,13 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                                                 AND c86_autent = {$oExtMov->autent} ";
 
 								$rsExt30 = db_query($sSql30) or die($sSql30);
-								// db_criatabela($rsExt30);
+
 								for ($linha30 = 0; $linha30 < pg_num_rows($rsExt30); $linha30++) {
 
 									$oExt30 = db_utils::fieldsMemory($rsExt30, $linha30);
 
 									$Hash30 = $oExt10Agrupado->si124_codext.$oExt30->codfontrecursos.$oExt30->nroop.$oExt30->codunidadesub;
+                                    $oExt30->especificacaoop = (trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oExt30->especificacaoop), 0, 200))) == null ? $oExt30->c50_descr : trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oExt30->especificacaoop), 0, 200))));
 
 									if(!isset($aExt20[$Hash20]->ext30[$Hash30])){
 
@@ -525,7 +527,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 										$cExt30->si126_tipodocumentocredor = $oExt30->tipodocumentocredor;
 										$cExt30->si126_nrodocumentocredor  = $oExt30->nrodocumentocredor;
 										$cExt30->si126_vlop                = $oExt30->vlop;
-										$cExt30->si126_especificacaoop     = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oExt30->especificacaoop), 0, 200)));
+										$cExt30->si126_especificacaoop     = $oExt30->especificacaoop;
 										$cExt30->si126_cpfresppgto         = $cpfRespPGTO;
 										$cExt30->si126_mes                 = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 										$cExt30->si126_instit              = db_getsession("DB_instit");
@@ -569,7 +571,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 			$cExt->si165_codext                = $oExt20->si165_codext;
 			$cExt->si165_codfontrecursos       = $oExt20->si165_codfontrecursos;
 			$cExt->si165_vlsaldoanteriorfonte  = abs($oExt20->si165_vlsaldoanteriorfonte);
-			
+
 			if (($oExt20->si165_vlsaldoanteriorfonte) < 0) {
 				$cExt->si165_natsaldoanteriorfonte = 'C';
 			} elseif ((($oExt20->si165_vlsaldoanteriorfonte) > 0)) {
