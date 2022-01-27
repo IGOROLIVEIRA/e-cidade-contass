@@ -73,8 +73,7 @@ $clrotulo->label("l20_numero");
             }
 
             //location.href = 'con1_exportaprocessos002.php?' + sQuery;
-
-            jan = window.open('con1_importaprocessos002.php?' + sQuery);
+            jan = window.open('con1_exportaprocessos002.php?' + sQuery);
             jan.moveTo(0, 0);
             document.form1.l20_codigo.value = '';
 
