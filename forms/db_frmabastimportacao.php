@@ -112,12 +112,10 @@ if(isset($_POST["processar"])) {
 
             $cell = $objWorksheet -> getCellByColumnAndRow (1,$row);
             $data = $cell->getValue();
+            
+            //data formatada para não precisar vim com formatação de String na palnilha
+            //$data = date('d/m/Y', PHPExcel_Shared_Date::ExcelToPHP( $cell->getValue()));
 
-            $resul = date();
-           
-            echo "<pre>";
-            var_dump($data);
-            exit;
             if($data==""){
                 break;
             }
@@ -129,22 +127,35 @@ if(isset($_POST["processar"])) {
 
             $cell = $objWorksheet -> getCellByColumnAndRow (2,$row);
             $hora = $cell->getValue();
-            $hora = explode(":", $hora);
-            $hora = $hora[0].":".$hora[1];
-
+            $hours = round($hora * 24);
+            $mins = round($hora * 1440) - round($hours * 60);
+            $secs = round($hora * 86400) - round($hours * 3600) - round($mins * 60);
+            $resul = strlen($hours);
+            if($resul==1){
+                $hours = "0".$hours;
+            }
+            $hora = $hours.":".$mins;
+        
             $cell = $objWorksheet -> getCellByColumnAndRow (3,$row);
             $placa = $cell->getValue();
             $placa = explode("-", $placa);
-            $placa = $placa[0]."".$placa[1];
+            $placa = strtoupper($placa[0])."".$placa[1];
 
-            $cell = $objWorksheet -> getCellByColumnAndRow (10,$row);
+            $cell = $objWorksheet -> getCellByColumnAndRow (12,$row);
             $valor = $cell->getValue();
 
             $cell = $objWorksheet -> getCellByColumnAndRow (6,$row);
             $secretaria = $cell->getValue();
 
             $cell = $objWorksheet -> getCellByColumnAndRow (5,$row);
-            $motorista = $cell->getValue();
+            $motorista = (string)$cell->getValue();
+
+            if(strlen($motorista)==14){
+                $valorcpf = explode('.',$motorista);
+                $valorcpf1 = explode('-',$valorcpf[2]);
+                $motorista = $valorcpf[0]."".$valorcpf[1]."".$valorcpf1[0]."".$valorcpf1[1];
+            }
+            
 
             $cell = $objWorksheet -> getCellByColumnAndRow (4,$row);
             $motoristaNome = $cell->getValue();
@@ -160,6 +171,7 @@ if(isset($_POST["processar"])) {
 
             $cell = $objWorksheet -> getCellByColumnAndRow (8,$row);
             $combust = $cell->getValue();
+
 
             if(strtotime($dataI) <= strtotime($data) && strtotime($data) <= strtotime($dataF) ){
 
@@ -302,19 +314,20 @@ if(isset($_POST["processar"])) {
                                     ?>
                                     </td>
                                 </tr>
-                                <tr >
-                                    <td colspan="2">
-                                    <div style="margin-left: 130px;">
-                                        <input name ='processar' type='submit' id="Processar" value="Processar">
-                                        <input name ='exportar' type='button' id="exportar" value="Gerar Planilha" onclick="gerar()">
-                                    </div>
-                                   
-                                    </td>
-                                </tr>
+                                
                             </table>
+                            <div style="margin-left: 120px; margin-top: 10px; width: 220px;">
+                                <div style="width: 70px; float: left;">
+                                    <input name ='processar' type='submit' id="Processar" value="Processar"/>
+                                </div>
+                                <div style="width: 100px; float: left;">
+                                    <input name ='exportar' type='button' id="exportar" value="Gerar Planilha" onclick="gerar()"/>
+                                </div>
+                            </div>
+                            
                         </form> 
                         
-                        <div id='anexo'></div>  
+                        
                     </fieldset>
                     
                 </td>

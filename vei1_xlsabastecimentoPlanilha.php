@@ -129,9 +129,9 @@ $styleItens = array(
 $sheet->setCellValue('A1',str_replace($what, $by, 'IMPORTAÇÃO DE ABASTECIMENTO'));
 
 //merge das cells
-$sheet->mergeCells('A1:M5');
+$sheet->mergeCells('A1:O5');
 //cabeçalho
-$sheet->getStyle('A1:M5')->applyFromArray($styleTitulo);
+$sheet->getStyle('A1:O5')->applyFromArray($styleTitulo);
 
 //itens
 $sheet->setCellValue('A6','Cod. Abast.');
@@ -143,17 +143,24 @@ $sheet->setCellValue('F6','CPF');
 $sheet->setCellValue('G6','Unidade');
 $sheet->setCellValue('H6','Subunidade');
 $sheet->setCellValue('I6','Combustivel');
-$sheet->setCellValue('J6','Qtde. Litros');
-$sheet->setCellValue('K6','Valor');
-$sheet->setCellValue('L6','Status');
-$sheet->setCellValue('M6','Produto');
+$sheet->setCellValue('J6','KM Abast');
+$sheet->setCellValue('K6','Qtde. Litros');
+$sheet->setCellValue('L6','Preco Unit');
+$sheet->setCellValue('M6','Valor');
+$sheet->setCellValue('N6','Status');
+$sheet->setCellValue('O6','Produto');
 
 
-$sheet->getStyle('A6:M6')->applyFromArray($styleItens2);
+$sheet->getStyle('A6:O6')->applyFromArray($styleItens2);
 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
 $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(13);
 $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(13);
 $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(13);
+$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
 
 //cria protecao na planilha
 //senha para alteração
@@ -163,7 +170,7 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(13);
 //$sheet->getProtection()->setInsertRows(false);
 //$sheet->getProtection()->setFormatCells(false);
 
-$objPHPExcel->getActiveSheet()->protectCells('A6:M6', 'php');
+$objPHPExcel->getActiveSheet()->protectCells('A6:O6', 'php');
 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true); 
 
 
@@ -171,11 +178,13 @@ $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);
 $result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant","pc11_seq","pc20_codorc = $pc22_codorc"));
 $numrows_itens = $clpcorcam->numrows;
 
-for ($i = 0; $i < 20; $i ++){
+for ($i = 0; $i < 1; $i ++){
     $numrow = $i + 7;
     $collA = 'A'.$numrow;
     $collB = 'B'.$numrow;
     $collC = 'C'.$numrow;
+    $collD = 'D'.$numrow;
+    $collE = 'E'.$numrow;
     $collF = 'F'.$numrow;
     $collG = 'G'.$numrow;
     $collH = 'H'.$numrow;
@@ -185,18 +194,18 @@ for ($i = 0; $i < 20; $i ++){
     $collL = 'L'.$numrow;
     $collM = 'M'.$numrow;
    
-    $sheet->setCellValue($collA,"");
-    $sheet->setCellValue($collB,iconv('UTF-8', 'ISO-8859-1//IGNORE',"     "));
-    $sheet->setCellValue($collC,"");
-    $sheet->setCellValue($collM,"");
+    //$sheet->setCellValue($collA,"");
+    //$sheet->setCellValue($collB,iconv('UTF-8', 'ISO-8859-1//IGNORE',""));
+    //$sheet->setCellValue($collC,iconv('UTF-8', 'ISO-8859-1//IGNORE',"10:20:30"));
+    //$sheet->setCellValue($collF,iconv('UTF-8', 'ISO-8859-1//IGNORE',"111.111.111-11"));
 
     
    
 
 }
 
-$sheet->getStyle('A7:M26')->applyFromArray($styleItens);
-$sheet->getStyle('A7:M26')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+$sheet->getStyle('A7:O26')->applyFromArray($styleItens);
+$sheet->getStyle('A7:O26')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 $objPHPExcel->getActiveSheet()
     ->getStyle($collB)
     ->getNumberFormat()
