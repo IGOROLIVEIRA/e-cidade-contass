@@ -213,37 +213,74 @@ if ($aMotivo[0]->o50_motivosuplementacao == 't') {
 
 if (db_getsession("DB_anousu")>2021){
   if (($tiposup == 1002 || $tiposup == 1007)){
-    $sSqlTotalSuplementacoes = 
-              "select
-              distinct fc_estruturaldotacao(o47_anousu,
-              o47_coddot) as o50_estrutdespesa,
-              1 as tipo,
-              o47_anousu,
-              o47_coddot,
-              o47_valor,
-              fc_estruturaldotacaoppa(o08_ano,
-              o08_sequencial) as o50_estrutdespesa ,
-              2 as tipo,
-              o08_ano,
-              o136_sequencial,
-              o136_valor,
-              o47_numerocontratooc
-            from
-              orcsuplemval
-            inner join ppaestimativadespesa on
-              o07_coddot = o47_coddot
-            left join orcsuplemdespesappa on
-              o136_ppaestimativadespesa = o07_sequencial
-            inner join ppadotacao on
-              o07_coddot = o08_sequencial
-            where
-              o136_orcsuplem = $o46_codsup or
-              o47_codsup =  $o46_codsup
-              and o47_valor >= 0
-            order by o47_anousu  "
+          $sSqlTotalSuplementacoes = $clorcsuplemval->sql_query_file(
+            "",
+            "",
+            "",
+            "fc_estruturaldotacao(o47_anousu,o47_coddot) as o50_estrutdespesa,
+                                                        1 as tipo,o47_anousu,o47_coddot,o47_valor{$o47_motivo},o47_numerocontratooc",
+            "",
+            "o47_codsup=$o46_codsup
+                                                        and o47_valor >= 0"
+          );
+          $sSqlTotalSuplementacoes .= " union all ";
+          $sSqlTotalSuplementacoes .= " select  fc_estruturaldotacaoppa(o08_ano,o08_sequencial) as o50_estrutdespesa , ";
+          $sSqlTotalSuplementacoes .= "         2 as tipo,o08_ano, o136_sequencial, o136_valor{$o47_motivo_union},o47_numerocontratooc";
+          $sSqlTotalSuplementacoes .= "  from orcsuplemdespesappa ";
+          $sSqlTotalSuplementacoes .= "       inner join ppaestimativadespesa on o07_sequencial = o136_ppaestimativadespesa";
+          $sSqlTotalSuplementacoes .= "       inner join ppadotacao           on o07_coddot     = o08_sequencial";
+          $sSqlTotalSuplementacoes .= "       inner join orcsuplemval         on o47_codsup = o136_orcsuplem";	 
+          $sSqlTotalSuplementacoes .= " where o136_orcsuplem={$o46_codsup}";
+
+
+            //   "select
+            //   distinct fc_estruturaldotacao(o47_anousu,
+            //   o47_coddot) as o50_estrutdespesa,
+            //   1 as tipo,
+            //   o47_anousu,
+            //   o47_coddot,
+            //   o47_valor,
+            //   fc_estruturaldotacaoppa(o08_ano,
+            //   o08_sequencial) as o50_estrutdespesa ,
+            //   2 as tipo,
+            //   o08_ano,
+            //   o136_sequencial,
+            //   o136_valor,
+            //   o47_numerocontratooc
+            // from
+            //   orcsuplemval
+            // inner join ppaestimativadespesa on
+            //   o07_coddot = o47_coddot
+            // left join orcsuplemdespesappa on
+            //   o136_ppaestimativadespesa = o07_sequencial
+            // inner join ppadotacao on
+            //   o07_coddot = o08_sequencial
+            // where
+            //   o136_orcsuplem = $o46_codsup or
+            //   o47_codsup =  $o46_codsup
+            //   and o47_valor >= 0
+            // order by o47_anousu  "
               ;
-} }
-else{
+  } else{
+      $sSqlTotalSuplementacoes = $clorcsuplemval->sql_query_file(
+                "",
+                "",
+                "",
+                "fc_estruturaldotacao(o47_anousu,o47_coddot) as o50_estrutdespesa,
+                                                            1 as tipo,o47_anousu,o47_coddot,o47_valor{$o47_motivo}",
+                "",
+                "o47_codsup=$o46_codsup
+                                                            and o47_valor >= 0"
+              );
+              $sSqlTotalSuplementacoes .= " union all ";
+              $sSqlTotalSuplementacoes .= " select  fc_estruturaldotacaoppa(o08_ano,o08_sequencial) as o50_estrutdespesa , ";
+              $sSqlTotalSuplementacoes .= "         2 as tipo,o08_ano, o136_sequencial, o136_valor{$o47_motivo_union}";
+              $sSqlTotalSuplementacoes .= "  from orcsuplemdespesappa ";
+              $sSqlTotalSuplementacoes .= "       inner join ppaestimativadespesa on o07_sequencial = o136_ppaestimativadespesa";
+              $sSqlTotalSuplementacoes .= "       inner join ppadotacao           on o07_coddot     = o08_sequencial";
+              $sSqlTotalSuplementacoes .= " where o136_orcsuplem={$o46_codsup}";
+} 
+}else{
     $sSqlTotalSuplementacoes = $clorcsuplemval->sql_query_file(
               "",
               "",
@@ -262,7 +299,8 @@ else{
             $sSqlTotalSuplementacoes .= "       inner join ppadotacao           on o07_coddot     = o08_sequencial";
             $sSqlTotalSuplementacoes .= " where o136_orcsuplem={$o46_codsup}";
 }
-// echo $sSqlTotalSuplementacoes;exit;
+
+// echo $sSqlTotalSuplementacoes;
 $clorcsuplemval = new cl_orcsuplemval;
 
 $chavepri = "";
@@ -278,6 +316,8 @@ $cliframe_alterar_excluir->sql   =  $sSqlTotalSuplementacoes;
 if (db_getsession("DB_anousu")>2021){
 if (($tiposup == 1002 || $tiposup == 1007)){
   $cliframe_alterar_excluir->campos  = "o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo},o47_numerocontratooc";
+}else{
+  $cliframe_alterar_excluir->campos  = "o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo}";  
 }
 }else{
   $cliframe_alterar_excluir->campos  = "o47_anousu,o50_estrutdespesa,o47_coddot,o47_valor,tipo{$o47_motivo}";  
