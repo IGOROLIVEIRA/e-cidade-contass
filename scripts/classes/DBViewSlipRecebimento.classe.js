@@ -352,8 +352,11 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
         /**
          * Label Exercício da Competência da Devolução
         */
-         me.iLinhaExercicioDevolucao = 8;
-         var oRowExercicioCompetenciaDevolucao = oTabela.insertRow(8);
+        me.iLinhaExercicioDevolucao = 7;
+        if (me.iAno >= 2022)
+            me.iLinhaExercicioDevolucao = 8;
+    
+         var oRowExercicioCompetenciaDevolucao = oTabela.insertRow(me.iLinhaExercicioDevolucao);
          var oCelloRowExercicioCompetenciaDevolucaoLabel = oRowExercicioCompetenciaDevolucao.insertCell(0);
          oCelloRowExercicioCompetenciaDevolucaoLabel.innerHTML = "<strong>Exercício da Competência da Devolução:</strong>";
      
