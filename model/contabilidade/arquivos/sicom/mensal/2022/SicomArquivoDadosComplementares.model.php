@@ -195,6 +195,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
                     $cldclrf20->si191_tiporegistro = 20;
                     $cldclrf20->si191_reg10 = $cldclrf10->si157_sequencial;
                     $cldclrf20->si191_contopcredito = $dados->c219_contopcredito;
+                    $cldclrf20->si191_dscnumeroinst = $dados->c219_dscnumeroinst;
                     $cldclrf20->si191_dsccontopcredito = $this->removeCaracteres($dados->c219_dsccontopcredito);
                     $cldclrf20->si191_realizopcredito = $dados->c219_realizopcredito;
                     $cldclrf20->si191_tiporealizopcreditocapta = $dados->c219_tiporealizopcreditocapta;
