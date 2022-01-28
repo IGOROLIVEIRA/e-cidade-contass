@@ -101,6 +101,7 @@ class GerarDCLRF extends GerarAM {
 
                         $aCSVDCLRF20['si191_tiporegistro']                = str_pad($aDCLRF['si191_tiporegistro'], 2, "0", STR_PAD_LEFT);
                         $aCSVDCLRF20['si191_contopcredito']               = $aDCLRF['si191_contopcredito'] == 0 ? ' ' : $aDCLRF['si191_contopcredito'];
+                        $aCSVDCLRF20['si191_dscnumeroinst']               = $aDCLRF['si191_dscnumeroinst'];
                         $aCSVDCLRF20['si191_dsccontopcredito']            = $aDCLRF['si191_dsccontopcredito'];
                         $aCSVDCLRF20['si191_realizopcredito']             = $aDCLRF['si191_realizopcredito'] == 0 ? ' ' : $aDCLRF['si191_realizopcredito'];
                         $aCSVDCLRF20['si191_tiporealizopcreditocapta']    = $aDCLRF['si191_tiporealizopcreditocapta'] == 0 ? ' ' : $aDCLRF['si191_tiporealizopcreditocapta'];
