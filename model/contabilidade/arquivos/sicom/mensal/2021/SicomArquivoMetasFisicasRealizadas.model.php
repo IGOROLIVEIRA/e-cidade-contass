@@ -90,7 +90,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
       $sSqlInstit  = "SELECT codigo FROM db_config ";
       $rsInstit    = db_query($sSqlInstit);
 
-      // Lista das institui??es 
+      // Lista das institui??es
       for ($iCont = 0; $iCont < pg_num_rows($rsInstit); $iCont++) {
         $oReceita =  db_utils::fieldsMemory($rsInstit, $iCont);
         $sListaInstit[] = $oReceita->codigo;
@@ -107,8 +107,8 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
                                 p.o55_finali,
                                 pr.o22_descrprod,
                                 p.o55_descrunidade,
-                                p.o55_valorunidade, 
-                                d.o58_orgao as o08_orgao, 
+                                p.o55_valorunidade,
+                                d.o58_orgao as o08_orgao,
                                 d.o58_unidade as o08_unidade,
                                 si09_codorgaotce,
                                 p.o55_valorunidade
@@ -134,8 +134,8 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
       /**
        * pegar estimativas por programa Acao/Projativ
        */
-      $oPPADespesa->setInstituicoes($sListaInstit);
-      $aDespesa = $oPPADespesa->getQuadroEstimativas(null, 6);
+     // $oPPADespesa->setInstituicoes($sListaInstit);
+      //$aDespesa = $oPPADespesa->getQuadroEstimativas(null, 6);
 
       $aDadosAgrupados = array();
       for ($iCont = 0; $iCont < pg_num_rows($rsMetasPPA); $iCont++) {
@@ -145,7 +145,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
         $sHash  = $oMetasPPA->si09_codorgaotce.$org.$unidade.$oMetasPPA->o08_funcao.$oMetasPPA->o08_subfuncao;
         $sHash .= $oMetasPPA->o08_programa.$oMetasPPA->o55_projativ;
 
-        $rsCodTri = db_query("select o41_codtri from orcunidade where o41_unidade =". $oMetasPPA->o08_unidade ." 
+        $rsCodTri = db_query("select o41_codtri from orcunidade where o41_unidade =". $oMetasPPA->o08_unidade ."
           and o41_anousu = ".db_getsession('DB_anousu'));
 
         $oCodTri = db_utils::fieldsMemory($rsCodTri, 0);
@@ -167,7 +167,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
           $unidade = $oCodTriUnid->o41_codtri;
         }
 
-        $rsCodTriOrg = db_query("select o40_codtri from orcorgao where o40_orgao = ". $oMetasPPA->o08_orgao ." 
+        $rsCodTriOrg = db_query("select o40_codtri from orcorgao where o40_orgao = ". $oMetasPPA->o08_orgao ."
             and o40_anousu = ".db_getsession('DB_anousu'));
         $oCodTriOrg = db_utils::fieldsMemory($rsCodTriOrg, 0);
 
