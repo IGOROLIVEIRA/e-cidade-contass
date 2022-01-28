@@ -115,7 +115,7 @@ $oInstit = new Instituicao(db_getsession('DB_instit'));
 
 if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
 $lbProcedencia = 'PROCEDÊNCIA-HISTÓRICO';
-$obsParam = "\nEnquadramento legal: Código Tributário Municipal - Leis Complementares: 1815/2005 e 2.517/2021.";    
+$obsParam = "\nEnquadramento legal: Código Tributário Municipal.\nLeis Complementares: 1815/2005 e 2.517/2021.";    
 } 
 //Fim da inclusão/concatenação na observação da CDA
 
