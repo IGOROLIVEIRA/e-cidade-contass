@@ -59,8 +59,10 @@ $sql = "
 								r38_numcgm,
 								r38_conta,
 								r38_nome,
-								r38_liq 
+								r38_liq,
+                z01_cgccpf 
 				 from folha
+              inner join cgm on r38_numcgm = z01_numcgm
 				      inner join rhlota on to_number(r38_lotac,'9999') = r70_codigo
 							                 and r70_instit = ".db_getsession("DB_instit")."
 							left  join db_bancos on r38_banco = db90_codban 
@@ -78,11 +80,11 @@ header("Content-type: application/csv");
 header("Content-Disposition: attachment; filename=file.csv");
 header("Pragma: no-cache");
 
-echo "MATRIC;CGM;NOME;LIQUIDO;BANCO;AGENCIA;CONTA;\n";
+echo "MATRIC;CGM;CPF;NOME;LIQUIDO;BANCO;AGENCIA;CONTA;\n";
 
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x);
-   echo "$r38_regist;$r38_numcgm;$r38_nome;$r38_liq;$r38_banco;$r38_agenc;$r38_conta;\n";
+   echo "$r38_regist;$r38_numcgm;".db_formatar($z01_cgccpf,'cpf').";$r38_nome;$r38_liq;$r38_banco;$r38_agenc;$r38_conta;\n";
 
    $tot_banco += $r38_liq;
    $tot_age   += $r38_liq;
