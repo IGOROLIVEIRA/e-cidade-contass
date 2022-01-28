@@ -768,7 +768,7 @@ function drawDebitos(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lRe
 
                     $pdf->SetFont('','I',5);
                     $pdf->setX(10);
-                    $pdf->Cell(188,4," 771: $oProcedencias->observacao . $obsParam",1,1,"L",0);
+                    $pdf->Cell(188,4,"Observação: $oProcedencias->observacao . $obsParam",1,1,"L",0);
                     $pdf->SetFont('','',7);
 
                 }
@@ -1062,7 +1062,7 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
 
                     $pdf->SetFont('','I',5);
                     $pdf->setX(10);
-                    $pdf->Cell(188,4,"Observação 1061: $oProcedencias->observacao . $obsParam",1,1,"L",0);
+                    $pdf->Cell(188,4,"Observação: $oProcedencias->observacao . $obsParam",1,1,"L",0);
                     $pdf->SetFont('','',7);
 
                 }
@@ -3184,7 +3184,7 @@ function drawDebitosInflator($pdf, cda $oCertidao, $oPardiv, $sInflator, $lTotal
 
                     $pdf->SetFont('','I',5);
                     $pdf->setX(10);
-                    $pdf->Cell(188,4,"Observação 3167: $oProcedencias->observacao . $obsParam",1,1,"L",0);
+                    $pdf->Cell(188,4,"Observação: $oProcedencias->observacao . $obsParam",1,1,"L",0);
                     $pdf->SetFont('','',7);
 
                 }
