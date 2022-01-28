@@ -372,7 +372,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 					       ' ' as codunidadesubencampatribuic,
 					       e94_motivo as justificativa,
 					       e60_codemp,
-					       e94_ato as atocancelamento,
+					       substr(e94_ato,1,20) as atocancelamento,
                  e94_dataato as dataatocancelamento,o15_codtri as codfontrecursos,
                  e60_numemp
         from conlancamdoc
