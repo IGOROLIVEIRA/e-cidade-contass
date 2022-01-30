@@ -822,8 +822,6 @@ switch ($oParam->exec) {
         break;
 
     case 'insereItens':
-        // ini_set('display_errors', 'On');
-        // error_reporting(E_ALL);
 
         $aItens = $oParam->aItens;
 
@@ -833,6 +831,7 @@ switch ($oParam->exec) {
         $sSqlLicitacao = $clliclicitemlote->sql_query_licitacao(null, "l21_codpcprocitem", null, "l21_codliclicita=$oParam->licitacao");
 
         $rsLote = $clliclicitemlote->sql_record($sSqlLicitacao);
+
         $numrows_lote = $clliclicitemlote->numrows;
 
         if ($numrows_lote > 0) {
@@ -1521,17 +1520,19 @@ switch ($oParam->exec) {
                             /**
                              * Inclus?o na tabela liclicitemlote para o novo item com valor reservado
                              */
-
                             if (!empty($clliclicitemlotereservado->l04_descricao) && in_array($oParam->tipojulg, array(1, 2))) {
 
                                 $oDaoLoteReservado = db_utils::getDao('liclicitemlote');
                                 $sqlItemLote = 'SELECT * from liclicitemlote where l04_liclicitem = ' . $clliclicitemlotereservado->l04_liclicitem;
                                 $rsItemLote = db_query($sqlItemLote);
+                                // echo $sqlItemLote;
+                                // exit;
 
                                 if (!pg_numrows($rsItemLote)) {
 
                                     $oDaoLoteReservado->l04_descricao = $clliclicitemlotereservado->l04_descricao;
                                     $oDaoLoteReservado->l04_liclicitem = $clliclicitemlotereservado->l04_liclicitem;
+                                    $oDaoLoteReservado->l04_seq = $sequenciallote;
                                     $oDaoLoteReservado->incluir();
 
                                     if (!$oDaoLoteReservado->numrows_incluir) {
@@ -1600,7 +1601,6 @@ switch ($oParam->exec) {
                                 /**
                                  * @todo verificar se ser? inclu?do o novo item reservado na pcorcamitemlic
                                  */
-
                                 if (!$sqlerro) {
 
                                     $pc22_orcamitem = $clpcorcamitem->pc22_orcamitem;
