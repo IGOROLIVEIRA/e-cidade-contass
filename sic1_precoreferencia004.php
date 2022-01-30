@@ -9,17 +9,17 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
 
 switch ($oGet->tipoprecoreferencia) {
-  case '2':
-    $tipoReferencia = " MAX(pc23_vlrun) ";
-    break;
+    case '2':
+        $tipoReferencia = " MAX(pc23_vlrun) ";
+        break;
 
-  case '3':
-    $tipoReferencia = " MIN(pc23_vlrun) ";
-    break;
+    case '3':
+        $tipoReferencia = " MIN(pc23_vlrun) ";
+        break;
 
-  default:
-    $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
-    break;
+    default:
+        $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+        break;
 }
 
 /*$sSql = "select distinct pc11_seq,pc01_codmater,pc01_descrmater,si02_vlprecoreferencia,pc23_quant from pcproc
@@ -39,8 +39,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
 
 $sSql = "select * from (SELECT
                 pc01_codmater,
-                case when pc01_complmater is not null and pc01_complmater != pc01_descrmater then pc01_descrmater ||'. '|| pc01_complmater
-		        else pc01_descrmater end as pc01_descrmater,
+                pc01_descrmater||'. '||pc01_complmater as pc01_descrmater,
                 m61_abrev,
                 sum(pc11_quant) as pc11_quant,
                 pc11_reservado
@@ -73,13 +72,8 @@ LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
 LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
 LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
 LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
-left join processocompraloteitem on
-		pc69_pcprocitem = pcprocitem.pc81_codprocitem
-left join processocompralote on
-			pc68_sequencial = pc69_processocompralote
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
 WHERE pc81_codproc = {$codigo_preco}
-  AND pc68_sequencial = $oLotes->pc68_sequencial
   AND pc10_instit = " . db_getsession("DB_instit") . "
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
@@ -134,7 +128,9 @@ $sWhere  = " db02_descr like 'RESPONSÁVEL PELA COTAÇÃO' ";
 $sWhere .= " AND db03_instit = db02_instit ";
 $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
 
-                if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
+$sSqlCotacao = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
+$rsCotacao = $cl_docparag->sql_record($sSqlCotacao);
+$sAssinaturaCotacao = db_utils::fieldsMemory($rsCotacao, 0)->db02_texto;
 
 // echo $sSql;
 // db_criatabela($rsResult);
@@ -147,9 +143,9 @@ $head8 = "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemo
 $mPDF = new Relatorio('', 'A4-L', 0, "", 7, 7, 50);
 
 $mPDF
-  ->addInfo($head3, 2)
-  ->addInfo($head5, 4)
-  ->addInfo($head8, 7);
+    ->addInfo($head3, 2)
+    ->addInfo($head5, 4)
+    ->addInfo($head8, 7);
 
 ob_start();
 
@@ -159,114 +155,114 @@ ob_start();
 <html xmlns="http://www.w3.org/1999/html">
 
 <head>
-  <title>Relatório</title>
-  <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">
-  <style type="text/css">
-    .content {
-      width: 1070px;
-    }
+    <title>Relatório</title>
+    <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">
+    <style type="text/css">
+        .content {
+            width: 1070px;
+        }
 
-    .table {
-      font-size: 10px;
-      background: url("imagens/px_preto.jpg") repeat center;
-      background-repeat: repeat-y;
-      background-position: 0 50px;
-    }
+        .table {
+            font-size: 10px;
+            background: url("imagens/px_preto.jpg") repeat center;
+            background-repeat: repeat-y;
+            background-position: 0 50px;
+        }
 
-    .col-item {
-      width: 45px;
-    }
+        .col-item {
+            width: 45px;
+        }
 
-    .col-descricao_item {
-      width: 650px;
-    }
+        .col-descricao_item {
+            width: 650px;
+        }
 
-    .col-valor_un {
-      width: 80px;
-      padding-right: 5px;
-    }
+        .col-valor_un {
+            width: 80px;
+            padding-right: 5px;
+        }
 
-    .col-quant {
-      width: 60px;
-    }
+        .col-quant {
+            width: 60px;
+        }
 
-    .col-un {
-      width: 45px;
-    }
+        .col-un {
+            width: 45px;
+        }
 
-    .col-total {
-      width: 90px;
-      padding-left: 5px;
-    }
+        .col-total {
+            width: 90px;
+            padding-left: 5px;
+        }
 
-    .col-valor_total-text {
-      width: 925px;
-      padding-left: 5px;
-    }
+        .col-valor_total-text {
+            width: 925px;
+            padding-left: 5px;
+        }
 
-    .col-valor_total-valor {
-      width: 120px;
-      padding-right: 5px;
-    }
+        .col-valor_total-valor {
+            width: 120px;
+            padding-right: 5px;
+        }
 
-    .row .col-un,
-    .row .col-total,
-    .row .col-quant,
-    .row .col-valor_un,
-    .row .col-valor_un {}
+        .row .col-un,
+        .row .col-total,
+        .row .col-quant,
+        .row .col-valor_un,
+        .row .col-valor_un {}
 
-    .linha-vertical {
-      border-top: 2px solid;
-      text-align: center;
-      margin-top: 80px;
-      margin-left: 19%;
-      width: 50%;
-      line-height: 1.3em;
-    }
+        .linha-vertical {
+            border-top: 2px solid;
+            text-align: center;
+            margin-top: 80px;
+            margin-left: 19%;
+            width: 50%;
+            line-height: 1.3em;
+        }
 
 
-    .item-menu {
-      border: 1px solid #000000;
-      text-align: center;
-      font-weight: bold;
-    }
+        .item-menu {
+            border: 1px solid #000000;
+            text-align: center;
+            font-weight: bold;
+        }
 
-    .item-text-descricao {
-      border: 1px solid #000000;
-      text-align: justify;
-    }
+        .item-text-descricao {
+            border: 1px solid #000000;
+            text-align: justify;
+        }
 
-    .item-text {
-      border: 1px solid #000000;
-      text-align: center;
-    }
+        .item-text {
+            border: 1px solid #000000;
+            text-align: center;
+        }
 
-    .item-text-total {
-      font-weight: bold;
-    }
+        .item-text-total {
+            font-weight: bold;
+        }
 
-    .item-menu-color {
-      background: #f5f5f0;
-      font-weight: bold;
-    }
+        .item-menu-color {
+            background: #f5f5f0;
+            font-weight: bold;
+        }
 
-    .item-total-color {
-      background: #f5f5f0;
-      font-weight: bold;
-      width: 935px;
-    }
-  </style>
+        .item-total-color {
+            background: #f5f5f0;
+            font-weight: bold;
+            width: 935px;
+        }
+    </style>
 </head>
 
 <body>
 
-  <?php
-  if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
-    echo <<<HTML
+    <?php
+    if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
+        echo <<<HTML
 
     <table class="table">
         <tr class="">
-            <td class="item-menu item-menu-color" style="width:50px">SEQ</td>
+            <td class="item-menu item-menu-color">SEQ</td>
             <td class="item-menu item-menu-color">ITEM</td>
             <td class="item-menu item-menu-color">DESCRIÇÃO DO ITEM</td>
             <td class="item-menu item-menu-color"><strong>TAXA/TABELA</strong></td>
@@ -276,11 +272,11 @@ ob_start();
             <td class="item-menu item-menu-color">TOTAL/VLR ESTIMADO</td>
         </tr>
 HTML;
-  } else {
-    echo <<<HTML
+    } else {
+        echo <<<HTML
   <div class="table" autosize="1">
     <div class="tr bg_eb">
-      <div class="th col-item align-center" style="width:49px">SEQ</div>
+      <div class="th col-item align-center">SEQ</div>
       <div class="th col-item align-center">ITEM</div>
       <div class="th col-descricao_item align-center">DESCRIÇÃO DO ITEM</div>
       <div class="th col-valor_un align-right">VALOR UN</div>
@@ -289,57 +285,57 @@ HTML;
       <div class="th col-total align-right">TOTAL</div>
     </div>
 HTML;
-  }
-  ?>
-  <?php
-  $nTotalItens = 0;
-
-  for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-
-    $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-
-    //    if($quant_casas){
-    $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $oResult->pc11_quant;
-    //    }
-    // if($quant_casas == 2){
-    //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
-    // }
-    // else $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 3);
-
-    $nTotalItens += $lTotal;
-    $oDadosDaLinha = new stdClass();
-    $oDadosDaLinha->seq = $iCont + 1;
-    $oDadosDaLinha->item = $oResult->pc01_codmater;
-
-    if ($oResult->pc11_reservado == 't')
-      $oDadosDaLinha->descricao = "ITEM ME/EPP - " . $oResult->pc01_descrmater;
-    else
-      $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
-
-    if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
-      $oDadosDaLinha->valorUnitario = "-";
-      $oDadosDaLinha->quantidade = "-";
-      if ($oResult->mediapercentual == 0) {
-        $oDadosDaLinha->mediapercentual = "";
-      } else {
-        $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
-      }
-      $oDadosDaLinha->unidadeDeMedida = "-";
-      $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
-    } else {
-      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
-      $oDadosDaLinha->quantidade = $oResult->pc11_quant;
-      if ($oResult->mediapercentual == 0) {
-        $oDadosDaLinha->mediapercentual = "-";
-      } else {
-        $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
-      }
-      $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-      $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
     }
+    ?>
+    <?php
+    $nTotalItens = 0;
 
-    if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
-      echo <<<HTML
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+        $oResult = db_utils::fieldsMemory($rsResult, $iCont);
+
+        //    if($quant_casas){
+        $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $oResult->pc11_quant;
+        //    }
+        // if($quant_casas == 2){
+        //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
+        // }
+        // else $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 3);
+
+        $nTotalItens += $lTotal;
+        $oDadosDaLinha = new stdClass();
+        $oDadosDaLinha->seq = $iCont + 1;
+        $oDadosDaLinha->item = $oResult->pc01_codmater;
+
+        if ($oResult->pc11_reservado == 't')
+            $oDadosDaLinha->descricao = "ITEM ME/EPP - " . $oResult->pc01_descrmater;
+        else
+            $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+
+        if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
+            $oDadosDaLinha->valorUnitario = "-";
+            $oDadosDaLinha->quantidade = "-";
+            if ($oResult->mediapercentual == 0) {
+                $oDadosDaLinha->mediapercentual = "";
+            } else {
+                $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
+            }
+            $oDadosDaLinha->unidadeDeMedida = "-";
+            $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+        } else {
+            $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+            $oDadosDaLinha->quantidade = $oResult->pc11_quant;
+            if ($oResult->mediapercentual == 0) {
+                $oDadosDaLinha->mediapercentual = "-";
+            } else {
+                $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
+            }
+            $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
+            $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+        }
+
+        if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
+            echo <<<HTML
         <tr class="">
           <td class="item-text">{$oDadosDaLinha->seq}</td>
           <td class="item-text">{$oDadosDaLinha->item}</td>
@@ -352,8 +348,8 @@ HTML;
         </tr>
 
 HTML;
-    } else {
-      echo <<<HTML
+        } else {
+            echo <<<HTML
          <div class="tr row">
           <div class="td col-item align-center">
             {$oDadosDaLinha->seq}
@@ -378,98 +374,98 @@ HTML;
           </div>
         </div>
 HTML;
+        }
     }
-  }
 
-  ?>
+    ?>
 
-  <div style="tr row">
-    <div class="td item-total-color">
-      VALOR TOTAL ESTIMADO
+    <div style="tr row">
+        <div class="td item-total-color">
+            VALOR TOTAL ESTIMADO
+        </div>
+        <div class="td item-menu-color">
+            <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
+        </div>
     </div>
-    <div class="td item-menu-color">
-      <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
+    <?php if ($oGet->impjust == 's') : ?>
+        <div class="tr bg_eb">
+            <div class="th col-valor_total-text align-left">
+                Justificativa
+            </div>
+        </div>
+        <div class="tr">
+            <div class="td">
+                <?= db_utils::fieldsMemory($rsResult, 0)->si01_justificativa; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    </table>
     </div>
-  </div>
-  <?php if ($oGet->impjust == 's') : ?>
-    <div class="tr bg_eb">
-      <div class="th col-valor_total-text align-left">
-        Justificativa
-      </div>
-    </div>
-    <div class="tr">
-      <div class="td">
-        <?= db_utils::fieldsMemory($rsResult, 0)->si01_justificativa; ?>
-      </div>
-    </div>
-  <?php endif; ?>
+    <?php
 
-  </table>
-  </div>
-  <?php
+    $chars = array('ç', 'ã', 'â', 'à', 'á', 'é', 'è', 'ê', 'ó', 'ò', 'ô', 'ú', 'ù');
+    $byChars = array('Ç', 'Ã', 'Â', 'À', 'Á', 'É', 'È', 'Ê', 'Ó', 'Ò', 'Ô', 'Ú', 'Ù');
 
-  $chars = array('ç', 'ã', 'â', 'à', 'á', 'é', 'è', 'ê', 'ó', 'ò', 'ô', 'ú', 'ù');
-  $byChars = array('Ç', 'Ã', 'Â', 'À', 'Á', 'É', 'È', 'Ê', 'Ó', 'Ò', 'Ô', 'Ú', 'Ù');
+    $dadosAssinatura = explode('\n', $sAssinaturaCotacao);
+    $sCotacao = '';
 
-  $dadosAssinatura = explode('\n', $sAssinaturaCotacao);
-  $sCotacao = '';
-
-  if (count($dadosAssinatura) > 1) {
-    $sCotacao = '<div class="linha-vertical">';
-    for ($count = 0; $count < count($dadosAssinatura); $count++) {
-      $sCotacao .= "<strong>" . strtoupper(str_replace($chars, $byChars, $dadosAssinatura[$count])) . "</strong>";
-      $sCotacao .= $count ? '' : "<br/>";
-    }
-    $sCotacao .= "</div>";
-    echo <<<HTML
+    if (count($dadosAssinatura) > 1) {
+        $sCotacao = '<div class="linha-vertical">';
+        for ($count = 0; $count < count($dadosAssinatura); $count++) {
+            $sCotacao .= "<strong>" . strtoupper(str_replace($chars, $byChars, $dadosAssinatura[$count])) . "</strong>";
+            $sCotacao .= $count ? '' : "<br/>";
+        }
+        $sCotacao .= "</div>";
+        echo <<<HTML
             $sCotacao
 HTML;
-  } else {
-    echo <<<HTML
+    } else {
+        echo <<<HTML
                 <div class="linha-vertical">
                     <strong>{$dadosAssinatura[0]}</strong>
                 </div>
 HTML;
-  }
+    }
 
-  ?>
+    ?>
 
 
-  <?php
-  if ($oLinha != null || trim($oLinha) != "") {
-    $dadosLinha = explode('\n', $oLinha);
-    $stringHtml = '';
+    <?php
+    if ($oLinha != null || trim($oLinha) != "") {
+        $dadosLinha = explode('\n', $oLinha);
+        $stringHtml = '';
 
-    if (count($dadosLinha) > 1) {
-      $stringHtml = '<div class="linha-vertical">';
-      for ($count = 0; $count < count($dadosLinha); $count++) {
-        $stringHtml .= "<strong>" . strtoupper(str_replace($chars, $byChars, $dadosLinha[$count])) . "</strong>";
-        $stringHtml .= $count ? '' : "<br/>";
-      }
-      $stringHtml .= "</div>";
-      echo <<<HTML
+        if (count($dadosLinha) > 1) {
+            $stringHtml = '<div class="linha-vertical">';
+            for ($count = 0; $count < count($dadosLinha); $count++) {
+                $stringHtml .= "<strong>" . strtoupper(str_replace($chars, $byChars, $dadosLinha[$count])) . "</strong>";
+                $stringHtml .= $count ? '' : "<br/>";
+            }
+            $stringHtml .= "</div>";
+            echo <<<HTML
             $stringHtml
 HTML;
-    } else {
-      echo <<<HTML
+        } else {
+            echo <<<HTML
                 <div class="linha-vertical">
                     <strong>{$dadosLinha[0]}</strong>
                 </div>
 HTML;
+        }
     }
-  }
-  ?>
+    ?>
 
 </body>
 
 </html>
 
-    <?php
+<?php
 
-    $html = ob_get_contents();
+$html = ob_get_contents();
 
-    ob_end_clean();
-    $mPDF->WriteHTML(utf8_encode($html));
-    $mPDF->Output();
+ob_end_clean();
+$mPDF->WriteHTML(utf8_encode($html));
+$mPDF->Output();
 
 ?>

@@ -113,7 +113,8 @@ $clrotulo->label("nome");
                 itens.document.form1.submit();
                 procs.document.form1.submit();
             } else {
-                alert("Critério de Adjudicação no corresponde com o processo de compra")
+                alert("Critério de Adjudicação não corresponde com o processo de compra")
+                return false;
             }
 
         } else {
@@ -126,6 +127,7 @@ $clrotulo->label("nome");
         itens.js_submit_form();
         itens.document.form1.incluir.value = 'incluir';
         itens.js_insereItens();
+
         return;
 
     }
@@ -133,7 +135,7 @@ $clrotulo->label("nome");
     function js_excluir() {
         if (!document.form1.codprocesso.value) {
             alert('Selecione ao menos um Processo de Compra vinculado!');
-            return;
+            return false;
         }
 
         document.form1.submit();

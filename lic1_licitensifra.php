@@ -184,6 +184,8 @@ $db_botao = true;
 
             parent.parent.iframe_liclicita.bloquearRegistroPreco;
 
+            parent.iframe_liclicitem.location.href = `lic1_liclicitemalt001.php?licitacao=${licitacao}`;
+
             if (tipoJulgamento == '3') {
                 parent.parent.iframe_liclicitemlote.location.href = `lic1_liclicitemlote001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
                 parent.parent.document.formaba.liclicitemlote.disabled = false;
