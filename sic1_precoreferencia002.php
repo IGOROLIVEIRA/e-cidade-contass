@@ -74,7 +74,8 @@ if (isset($alterar)) {
     db_inicio_transacao();
     $db_opcao = 2;
     $clprecoreferencia->si01_justificativa = $si01_justificativa;
-   
+
+    $clitemprecoreferencia->excluir(null,"si02_precoreferencia = $si01_sequencial");
     /**
      * Atualização do valor dos itens do preço referência
      */
@@ -87,6 +88,82 @@ if (isset($alterar)) {
         $sFuncao = "min";
     }
 
+    $sSql = "select pc23_orcamitem,count(pc23_vlrun) as valor
+    from pcproc
+    join pcprocitem on pc80_codproc = pc81_codproc
+    join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
+    join pcorcamitem on pc31_orcamitem = pc22_orcamitem
+    join pcorcamval on pc22_orcamitem = pc23_orcamitem
+    where pc80_codproc = $si01_processocompra and pc23_vlrun != 0 group by pc23_orcamitem";
+
+        $rsResult = db_query($sSql);
+
+
+        $arrayValores = array();
+        $cont = 0;
+
+        for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+            $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
+
+            if ($oPost->si01_cotacaoitem == 1) {
+                if ($oItemOrc->valor >= 1) {
+
+                $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
+                $cont++;
+                }
+            } else if ($oPost->si01_cotacaoitem == 2) {
+                if ($oItemOrc->valor >= 2) {
+
+                    $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
+                    $cont++;
+                }
+            } else if ($oPost->si01_cotacaoitem == 3) {
+                if ($oItemOrc->valor >= 3) {
+
+                    $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
+                    $cont++;
+                }
+            }
+        }
+
+
+        for ($iCont = 0; $iCont < $cont; $iCont++) {
+            $valor = $arrayValores[$iCont];
+            $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
+            round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
+            round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
+                from pcproc
+                join pcprocitem on pc80_codproc = pc81_codproc
+                join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
+                join pcorcamitem on pc31_orcamitem = pc22_orcamitem
+                join pcorcamval on pc22_orcamitem = pc23_orcamitem
+                where pc80_codproc = $si01_processocompra and pc23_orcamitem = $valor group by pc23_orcamitem";
+
+            $rsResultee = db_query($sSql);
+
+            $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
+
+            $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
+            $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
+            $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
+            if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
+            $clitemprecoreferencia->si02_vlpercreferencia = 0;
+            } else if ($oItemOrc->percreferencia1 > 0 && $oItemOrc->percreferencia2 == 0) {
+            $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia1;
+            } else {
+            $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia2;
+            }
+            $clitemprecoreferencia->incluir(null);
+        }
+
+        if ($clitemprecoreferencia->erro_status == 0) {
+
+        $sqlerro = true;
+        $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg;
+        $clprecoreferencia->erro_status = "0";
+        }
+    /*  
     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
                 round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
                 round($sFuncao(pc23_percentualdesconto),2) as percreferencia2,
@@ -106,9 +183,9 @@ if (isset($alterar)) {
         $oItem = db_utils::fieldsMemory($rsResult, $iCont);
         $clitemprecoreferencia->si02_vlprecoreferencia = $oItem->valor;
         $clitemprecoreferencia->alterar($oItem->sequencial);
-    }
+    }*/
 
-    if ($clitemprecoreferencia->numrows_alterar) {
+    if ($clitemprecoreferencia->numrows>0) {
         $clprecoreferencia->alterar($si01_sequencial);
     }
 

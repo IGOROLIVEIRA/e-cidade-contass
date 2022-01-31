@@ -126,18 +126,7 @@ class cl_orcsuplemval {
        $this->erro_status = "0";
        return false;
      }
-     if (($_SESSION['tiposup'] == 1002 || $_SESSION['tiposup'] == 1007)){
-        if($this->o47_numerocontratooc == null ){
-          $this->erro_sql = " Campo Operação de Crédito nao Informado.";
-          $this->erro_campo = "o47_numerocontratooc";
-          $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-          $this->erro_status = "0";
-          return false;
-        }
-     }
-     unset($_SESSION["tiposup"]);  
+            
        $this->o47_codsup = $o47_codsup;
        $this->o47_anousu = $o47_anousu;
        $this->o47_coddot = $o47_coddot;

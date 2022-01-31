@@ -60,6 +60,10 @@ switch($oParam->exec) {
       $oDirf = new Dirf2012($oParam->iAno, $oParam->sCnpj);
 
       $oDirf->setDesdobramentos($oParam->aDesdobramentos);
+
+      /**
+       * Este processar esta em model/pessoal/Dirf.model.php
+       */
       $oDirf->processar($oParam->lProcessaEmpenho);
       $oRetorno->aArquivosInconsistentes = array();
 

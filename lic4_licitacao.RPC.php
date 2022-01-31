@@ -815,6 +815,7 @@ switch ($oParam->exec) {
             $oRetorno->itens[] = $oItem;
         }
 
+        $oRetorno->erro = pg_numrows($rsSql) ? false : true;
 
 
         $oRetorno->erro = pg_numrows($rsSql) ? false : true;

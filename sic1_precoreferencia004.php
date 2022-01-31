@@ -222,8 +222,12 @@ ob_start();
                 m61_abrev,
                 sum(pc11_quant) as pc11_quant,
                 pc69_seq,
+<<<<<<< HEAD
                 pc11_seq,
                 pc11_reservado
+=======
+                pc11_seq
+>>>>>>> OC14189_nova
 from (
 SELECT DISTINCT pc01_servico,
                 pc11_codigo,
@@ -242,8 +246,12 @@ SELECT DISTINCT pc01_servico,
                 pc90_numeroprocesso AS processo_administrativo,
                 (pc11_quant * pc11_vlrun) AS pc11_valtot,
                 m61_usaquant,
+<<<<<<< HEAD
                 pc69_seq,
                 pc11_reservado
+=======
+                pc69_seq
+>>>>>>> OC14189_nova
 FROM solicitem
 INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
 LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
@@ -265,7 +273,11 @@ WHERE pc81_codproc = {$codigo_preco}
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
                 pc11_seq,
+<<<<<<< HEAD
                 pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq,pc11_reservado ) as matquan join
+=======
+                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq ) as matquan join
+>>>>>>> OC14189_nova
 (SELECT DISTINCT
                 pc11_seq,
                 {$tipoReferencia} as si02_vlprecoreferencia,
@@ -294,6 +306,7 @@ JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferenc
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
+<<<<<<< HEAD
 
             $rsResult = db_query($sSql) or die(pg_last_error());
             $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
@@ -317,6 +330,11 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
             //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
             $sWhere .= " AND db03_instit = db02_instit ";
             $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
+=======
+            //die($sSql);
+            $rsResult = db_query($sSql) or die(pg_last_error());
+            $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
+>>>>>>> OC14189_nova
 
             if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
 
@@ -374,11 +392,15 @@ HTML;
                 $oDadosDaLinha = new stdClass();
                 $oDadosDaLinha->seq = $iCont + 1;
                 $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
+<<<<<<< HEAD
                 if ($oResult->pc11_reservado == 't') {
                     $oDadosDaLinha->descricao = '<span style="font-weight: bold;">[ME/EPP]</span> - ' . $oResult->pc01_descrmater;
                 } else {
                     $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
                 }
+=======
+                $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+>>>>>>> OC14189_nova
                 if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
                     $oDadosDaLinha->valorUnitario = "-";
                     $oDadosDaLinha->quantidade = "-";
@@ -386,6 +408,7 @@ HTML;
                         $oDadosDaLinha->mediapercentual = "";
                     } else {
                         $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
+<<<<<<< HEAD
                     }
                     $oDadosDaLinha->unidadeDeMedida = "-";
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
@@ -397,6 +420,19 @@ HTML;
                     } else {
                         $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
                     }
+=======
+                    }
+                    $oDadosDaLinha->unidadeDeMedida = "-";
+                    $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+                } else {
+                    $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                    $oDadosDaLinha->quantidade = $oResult->pc11_quant;
+                    if ($oResult->mediapercentual == 0) {
+                        $oDadosDaLinha->mediapercentual = "-";
+                    } else {
+                        $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
+                    }
+>>>>>>> OC14189_nova
                     $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                 }
@@ -565,12 +601,21 @@ HTML;
         }
         ?>
     <?php
+<<<<<<< HEAD
 
 
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
+=======
+
+
+        for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+            $oResult = db_utils::fieldsMemory($rsResult, $iCont);
+
+>>>>>>> OC14189_nova
             //    if($quant_casas){
             $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $oResult->pc11_quant;
             //    }
@@ -581,6 +626,7 @@ HTML;
 
             $nTotalItens += $lTotal;
             $oDadosDaLinha = new stdClass();
+<<<<<<< HEAD
             $oDadosDaLinha->seq = $oResult->pc11_seq; //$iCont + 1;
             $oDadosDaLinha->item = $oResult->pc01_codmater;
             if ($oResult->pc11_reservado == 't') {
@@ -588,6 +634,11 @@ HTML;
             } else {
                 $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
             }
+=======
+            $oDadosDaLinha->seq = $iCont + 1;
+            $oDadosDaLinha->item = $oResult->pc01_codmater;
+            $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+>>>>>>> OC14189_nova
             if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
                 $oDadosDaLinha->valorUnitario = "-";
                 $oDadosDaLinha->quantidade = "-";
@@ -595,6 +646,7 @@ HTML;
                     $oDadosDaLinha->mediapercentual = "";
                 } else {
                     $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
+<<<<<<< HEAD
                 }
                 $oDadosDaLinha->unidadeDeMedida = "-";
                 $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
@@ -606,6 +658,19 @@ HTML;
                 } else {
                     $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
                 }
+=======
+                }
+                $oDadosDaLinha->unidadeDeMedida = "-";
+                $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+            } else {
+                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                $oDadosDaLinha->quantidade = $oResult->pc11_quant;
+                if ($oResult->mediapercentual == 0) {
+                    $oDadosDaLinha->mediapercentual = "-";
+                } else {
+                    $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
+                }
+>>>>>>> OC14189_nova
                 $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
                 $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
             }

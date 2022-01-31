@@ -1037,7 +1037,7 @@ ob_start();
 
                     <tr style='height:20px;'>
                         <td class="s20 bdleft" colspan="9">02 - Total das Receitas (A+B+C-D)</td>
-                        <td class="s21"><?php $fTotalReceitas = ($fSubTotalImposto + $fSubTotalCorrentes + $fSubTotalOutrasCorrentes) - $fTotalDeducoes;
+                        <td class="s21"><?php $fTotalReceitas = ($fSubTotalImposto + $fSubTotalCorrentes + $fSubTotalOutrasCorrentes) - (abs($fTotalDeducoes));
                                         echo db_formatar($fTotalReceitas, "f"); ?> </td>
                     </tr>
                     <tr style='height:20px;'>
@@ -1483,7 +1483,7 @@ ob_start();
 
                     <tr style='height:20px;'>
                         <td class="s20 bdleft" colspan="9">02 - Total das Receitas (A+B+C-D)</td>
-                        <td class="s21"><?php $fTotalReceitas = ($fSubTotalImposto + $fSubTotalCorrentes + $fSubTotalOutrasCorrentes) - $fTotalDeducoes;
+                        <td class="s21"><?php $fTotalReceitas = ($fSubTotalImposto + $fSubTotalCorrentes + $fSubTotalOutrasCorrentes) - (abs($fTotalDeducoes));
                                         echo db_formatar($fTotalReceitas, "f"); ?> </td>
                     </tr>
                     <tr style='height:20px;'>
