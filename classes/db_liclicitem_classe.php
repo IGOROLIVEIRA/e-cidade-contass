@@ -1,6 +1,31 @@
 <?
 //MODULO: licitação
 //CLASSE DA ENTIDADE liclicitem
+<<<<<<< HEAD
+class cl_liclicitem {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $l21_codigo = 0;
+   var $l21_codliclicita = 0;
+   var $l21_codpcprocitem = 0;
+   var $l21_situacao = 0;
+   var $l21_ordem = 0;
+   var $l21_reservado = null;
+   // cria propriedade com as variaveis do arquivo
+   var $campos = "
+=======
 class cl_liclicitem
 {
     // cria variaveis de erro
@@ -22,14 +47,117 @@ class cl_liclicitem
     var $l21_codpcprocitem = 0;
     var $l21_situacao = 0;
     var $l21_ordem = 0;
+    var $l21_reservado = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
+>>>>>>> OC14189_nova
                  l21_codigo = int8 = Cod. Sequencial
                  l21_codliclicita = int8 = Cod. Sequencial
                  l21_codpcprocitem = int8 = Código sequencial do item no processo
                  l21_situacao = int4 = Situação
                  l21_ordem = int4 = Seqüência
+                 l21_reservado = boolean = Reservado
                  ";
+<<<<<<< HEAD
+   //funcao construtor da classe
+   function cl_liclicitem() {
+     //classes dos rotulos dos campos
+     $this->rotulo = new rotulo("liclicitem");
+     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
+   }
+   //funcao erro
+   function erro($mostra,$retorna) {
+     if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
+        echo "<script>alert(\"".$this->erro_msg."\");</script>";
+        if($retorna==true){
+           echo "<script>location.href='".$this->pagina_retorno."'</script>";
+        }
+     }
+   }
+   // funcao para atualizar campos
+   function atualizacampos($exclusao=false) {
+     if($exclusao==false){
+       $this->l21_codigo = ($this->l21_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_codigo"]:$this->l21_codigo);
+       $this->l21_codliclicita = ($this->l21_codliclicita == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_codliclicita"]:$this->l21_codliclicita);
+       $this->l21_codpcprocitem = ($this->l21_codpcprocitem == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_codpcprocitem"]:$this->l21_codpcprocitem);
+       $this->l21_situacao = ($this->l21_situacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_situacao"]:$this->l21_situacao);
+       $this->l21_ordem = ($this->l21_ordem == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_ordem"]:$this->l21_ordem);
+       $this->l21_reservado = ($this->l21_reservado == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_reservado"]:$this->l21_reservado);
+     }else{
+       $this->l21_codigo = ($this->l21_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_codigo"]:$this->l21_codigo);
+     }
+   }
+   // funcao para inclusao
+   function incluir ($l21_codigo){
+      $this->atualizacampos();
+     if($this->l21_codliclicita == null ){
+       $this->erro_sql = " Campo Cod. Sequencial nao Informado.";
+       $this->erro_campo = "l21_codliclicita";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->l21_codpcprocitem == null ){
+       $this->erro_sql = " Campo Código sequencial do item no processo nao Informado.";
+       $this->erro_campo = "l21_codpcprocitem";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->l21_situacao == null ){
+       $this->erro_sql = " Campo Situação nao Informado.";
+       $this->erro_campo = "l21_situacao";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->l21_ordem == null ){
+       $this->l21_ordem = "1";
+     }
+     if($l21_codigo == "" || $l21_codigo == null ){
+       $result = db_query("select nextval('liclicitem_l21_codigo_seq')");
+       if($result==false){
+         $this->erro_banco = str_replace("\n","",@pg_last_error());
+         $this->erro_sql   = "Verifique o cadastro da sequencia: liclicitem_l21_codigo_seq do campo: l21_codigo";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+       $this->l21_codigo = pg_result($result,0,0);
+     }else{
+       $result = db_query("select last_value from liclicitem_l21_codigo_seq");
+       if(($result != false) && (pg_result($result,0,0) < $l21_codigo)){
+         $this->erro_sql = " Campo l21_codigo maior que último número da sequencia.";
+         $this->erro_banco = "Sequencia menor que este número.";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }else{
+         $this->l21_codigo = $l21_codigo;
+       }
+     }
+     if(($this->l21_codigo == null) || ($this->l21_codigo == "") ){
+       $this->erro_sql = " Campo l21_codigo nao declarado.";
+       $this->erro_banco = "Chave Primaria zerada.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->l21_reservado == null || !$this->l21_reservado){
+        $this->l21_reservado = 'false';
+     }
+
+     $sql = "insert into liclicitem(
+=======
     //funcao construtor da classe
     function cl_liclicitem()
     {
@@ -56,6 +184,7 @@ class cl_liclicitem
             $this->l21_codpcprocitem = ($this->l21_codpcprocitem == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_codpcprocitem"] : $this->l21_codpcprocitem);
             $this->l21_situacao = ($this->l21_situacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_situacao"] : $this->l21_situacao);
             $this->l21_ordem = ($this->l21_ordem == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_ordem"] : $this->l21_ordem);
+            $this->l21_reservado = ($this->l21_reservado == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_reservado"] : $this->l21_reservado);
         } else {
             $this->l21_codigo = ($this->l21_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_codigo"] : $this->l21_codigo);
         }
@@ -126,12 +255,18 @@ class cl_liclicitem
             $this->erro_status = "0";
             return false;
         }
+        if ($this->l21_reservado == null || !$this->l21_reservado) {
+            $this->l21_reservado = 'false';
+        }
+
         $sql = "insert into liclicitem(
+>>>>>>> OC14189_nova
                                        l21_codigo
                                       ,l21_codliclicita
                                       ,l21_codpcprocitem
                                       ,l21_situacao
                                       ,l21_ordem
+                                      ,l21_reservado
                        )
                 values (
                                 $this->l21_codigo
@@ -139,6 +274,7 @@ class cl_liclicitem
                                ,$this->l21_codpcprocitem
                                ,$this->l21_situacao
                                ,$this->l21_ordem
+                               ,'$this->l21_reservado'
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -463,6 +599,241 @@ class cl_liclicitem
         $sql .= "      left  join liclicitemanu    on liclicitemanu.l07_liclicitem    = liclicitem.l21_codigo";
         $sql .= "      left  join licsituacao      on licsituacao.l08_sequencial    = liclicita.l20_licsituacao";
 
+<<<<<<< HEAD
+     $sql2 = "";
+     if($dbwhere==""){
+       if($l21_codigo!=null ){
+         $sql2 .= " where liclicitem.l21_codigo = $l21_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+   function sql_query_file ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from liclicitem ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($l21_codigo!=null ){
+         $sql2 .= " where liclicitem.l21_codigo = $l21_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+   function sql_query_inf ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere="", $lTrazerApenasVencedor = false){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+}
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from liclicitem ";
+     $sql .= "      inner join pcprocitem           on liclicitem.l21_codpcprocitem        = pcprocitem.pc81_codprocitem";
+     $sql .= "      left join pcorcamitemproc      on pc31_pcprocitem                     = pc81_codprocitem";
+     $sql .= "      inner join pcproc               on pcproc.pc80_codproc                 = pcprocitem.pc81_codproc";
+     $sql .= "      left  join itemprecoreferencia  on si02_itemproccompra                 = pcorcamitemproc.pc31_orcamitem";
+     $sql .= "      inner join solicitem            on solicitem.pc11_codigo               = pcprocitem.pc81_solicitem";
+     $sql .= "      inner join solicita             on solicita.pc10_numero                = solicitem.pc11_numero";
+     $sql .= "      inner join db_depart            on db_depart.coddepto                  = solicita.pc10_depto";
+     $sql .= "      left  join liclicita            on liclicita.l20_codigo                = liclicitem.l21_codliclicita";
+     $sql .= "      left  join licsituacao 			on l08_sequencial 					   = l20_licsituacao";
+     $sql .= "      left  join cflicita             on cflicita.l03_codigo                 = liclicita.l20_codtipocom";
+     $sql .= "      left  join pctipocompra         on pctipocompra.pc50_codcom            = cflicita.l03_codcom";
+     $sql .= "      left  join solicitemunid        on solicitemunid.pc17_codigo           = solicitem.pc11_codigo";
+     $sql .= "      left  join matunid              on matunid.m61_codmatunid              = solicitemunid.pc17_unid";
+     $sql .= "      left  join pcorcamitemlic       on l21_codigo                          = pc26_liclicitem ";
+     $sql .= "      left  join pcorcamval           on pc26_orcamitem                      = pc23_orcamitem ";
+     $sql .= "      left join pcorcamjulg    on pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem";
+     $sql .= "                              and pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne";
+     if ($lTrazerApenasVencedor) {
+       $sql .= "  and pcorcamjulg.pc24_pontuacao  = 1";
+     }
+     $sql .= "      left  join pcorcamforne         on pc21_orcamforne                     = pc23_orcamforne ";
+     $sql .= "      left  join cgm                  on pc21_numcgm                         = z01_numcgm ";
+     $sql .= "      left  join db_usuarios          on pcproc.pc80_usuario                 = db_usuarios.id_usuario";
+     $sql .= "      left  join solicitempcmater     on solicitempcmater.pc16_solicitem     = solicitem.pc11_codigo";
+     $sql .= "      left  join pcmater              on pcmater.pc01_codmater               = solicitempcmater.pc16_codmater";
+     $sql .= "      left  join pcsubgrupo           on pcsubgrupo.pc04_codsubgrupo         = pcmater.pc01_codsubgrupo";
+     $sql .= "      left  join pctipo               on pctipo.pc05_codtipo                 = pcsubgrupo.pc04_codtipo";
+     $sql .= "      left  join solicitemele         on solicitemele.pc18_solicitem         = solicitem.pc11_codigo";
+     $sql .= "      left  join orcelemento          on orcelemento.o56_codele              = solicitemele.pc18_codele";
+     $sql .= "                                     and orcelemento.o56_anousu              = ".db_getsession("DB_anousu");
+     $sql .= "      left  join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
+     $sql .= "      left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
+     $sql .= "                                     and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
+     $sql .= "      left  join empautoriza          on empautoriza.e54_autori              = empautitem.e55_autori ";
+     $sql .= "      left  join empempaut            on empempaut.e61_autori                = empautitem.e55_autori ";
+     $sql .= "      left  join empempenho           on empempenho.e60_numemp               = empempaut.e61_numemp ";
+     $sql .= "      left  join pcdotac              on solicitem.pc11_codigo               = pcdotac.pc13_codigo ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($l21_codigo!=null ){
+         $sql2 .= " where liclicitem.l21_codigo = $l21_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+   function sql_query_orc ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from liclicitem ";
+     $sql .= "      inner join pcprocitem  on  liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem";
+     $sql .= "      inner join pcproc  on  pcproc.pc80_codproc = pcprocitem.pc81_codproc";
+     $sql .= "      inner join solicitem  on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
+     $sql .= "      inner join solicita  on  solicita.pc10_numero = solicitem.pc11_numero";
+     $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";
+     $sql .= "      inner join db_usuarios  on  pcproc.pc80_usuario = db_usuarios.id_usuario";
+     $sql .= "      inner join pcdotac on  solicitem.pc11_codigo = pcdotac.pc13_codigo ";
+     $sql .= "      inner join orcdotacao on  o58_coddot = pc13_coddot and pc13_anousu = o58_anousu  ";
+     $sql .= "      inner join orcorgao on o40_orgao = o58_orgao and o40_anousu=o58_anousu ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($l21_codigo!=null ){
+         $sql2 .= " where liclicitem.l21_codigo = $l21_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+   function sql_query_proc ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from liclicitem ";
+     $sql .= "      inner join pcprocitem  on  liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem";
+     $sql .= "      left join  processocompraloteitem on pcprocitem.pc81_codprocitem = pc69_pcprocitem";
+     $sql .= "      left join  processocompralote     on pc69_processocompralote = pc68_sequencial";
+     $sql .= "      inner join pcproc  on  pcproc.pc80_codproc = pcprocitem.pc81_codproc";
+     $sql .= "      inner join solicitem  on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
+     $sql .= "      inner join solicita  on  solicita.pc10_numero = solicitem.pc11_numero";
+     $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";
+     $sql .= "      inner join db_usuarios  on  pcproc.pc80_usuario = db_usuarios.id_usuario";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($l21_codigo!=null ){
+         $sql2 .= " where liclicitem.l21_codigo = $l21_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+   function sql_query_sol ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from liclicitem ";
+     $sql .= "      inner join pcprocitem           on  liclicitem.l21_codpcprocitem    = pcprocitem.pc81_codprocitem";
+     $sql .= "      inner join pcproc               on  pcproc.pc80_codproc             = pcprocitem.pc81_codproc";
+     $sql .= "      inner join solicitem            on  solicitem.pc11_codigo           = pcprocitem.pc81_solicitem";
+     $sql .= "      inner join solicita             on  solicita.pc10_numero            = solicitem.pc11_numero";
+     $sql .= "      inner join db_depart            on  db_depart.coddepto              = solicita.pc10_depto";
+     $sql .= "      inner join db_usuarios          on  solicita.pc10_login             = db_usuarios.id_usuario";
+     $sql .= "      left  join solicitemunid        on  solicitemunid.pc17_codigo       = solicitem.pc11_codigo";
+     $sql .= "      left  join matunid              on  matunid.m61_codmatunid          = solicitemunid.pc17_unid";
+     $sql .= "      left  join solicitempcmater     on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo";
+     $sql .= "      left  join pcmater  				    on  pcmater.pc01_codmater           = solicitempcmater.pc16_codmater";
+     $sql .= "      left  join solicitemele         on  solicitemele.pc18_solicitem     = solicitem.pc11_codigo";
+     $sql .= "      left  join solicitaprotprocesso on solicitaprotprocesso.pc90_solicita  = solicita.pc10_numero ";
+     $sql .= "      left  join processocompraloteitem on processocompraloteitem.pc69_pcprocitem = pcprocitem.pc81_codprocitem ";
+     $sql .= "      left  join processocompralote on processocompralote.pc68_sequencial = processocompraloteitem.pc69_processocompralote ";
+=======
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l21_codigo != null) {
@@ -532,7 +903,7 @@ class cl_liclicitem
         }
         $sql .= " from liclicitem ";
         $sql .= "      inner join pcprocitem           on liclicitem.l21_codpcprocitem        = pcprocitem.pc81_codprocitem";
-        $sql .= "      inner join pcorcamitemproc      on pc31_pcprocitem                     = pc81_codprocitem";
+        $sql .= "      left join pcorcamitemproc      on pc31_pcprocitem                     = pc81_codprocitem";
         $sql .= "      inner join pcproc               on pcproc.pc80_codproc                 = pcprocitem.pc81_codproc";
         $sql .= "      left  join itemprecoreferencia  on si02_itemproccompra                 = pcorcamitemproc.pc31_orcamitem";
         $sql .= "      inner join solicitem            on solicitem.pc11_codigo               = pcprocitem.pc81_solicitem";
@@ -701,6 +1072,7 @@ class cl_liclicitem
         $sql .= "      left  join solicitaprotprocesso on solicitaprotprocesso.pc90_solicita  = solicita.pc10_numero ";
         $sql .= "      left  join processocompraloteitem on processocompraloteitem.pc69_pcprocitem = pcprocitem.pc81_codprocitem ";
         $sql .= "      left  join processocompralote on processocompralote.pc68_sequencial = processocompraloteitem.pc69_processocompralote ";
+>>>>>>> OC14189_nova
 
         $sql2 = "";
         if ($dbwhere == "") {
