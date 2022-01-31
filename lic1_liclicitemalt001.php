@@ -99,10 +99,6 @@ if (!$sqlerro && $codprocesso) {
     );
 
     $rsSolicitem = db_query($sSqlSolicitem);
-<<<<<<< HEAD
-=======
-    //db_criatabela($rsSolicitem);
->>>>>>> OC14189_nova
 
     for ($count = 0; $count < pg_numrows($rsSolicitem); $count++) {
 
@@ -116,10 +112,6 @@ if (!$sqlerro && $codprocesso) {
         $rsOrigem = $oDaoItemOrigem->sql_record($sSqlOrigem);
 
         db_inicio_transacao();
-<<<<<<< HEAD
-=======
-        //db_criatabela($rsOrigem);
->>>>>>> OC14189_nova
         $oItemOrigem = db_utils::fieldsMemory($rsOrigem, 0);
         // $nova_quantidade = floatval($oItemOrigem->pc11_quant) + floatval($oSolicitemReservado->pc11_quant);
 
@@ -130,7 +122,6 @@ if (!$sqlerro && $codprocesso) {
         $result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_altera, l20_usaregistropreco, l20_nroedital, l20_naturezaobjeto"));
         if ($clliclicita->numrows > 0) {
             db_fieldsmemory($result, 0);
-<<<<<<< HEAD
 
             if ($l08_altera == "t") {
                 $db_botao = true;
@@ -142,19 +133,6 @@ if (!$sqlerro && $codprocesso) {
         $oDaoSolicitemControle = db_utils::getDao('solicitem');
         if ($l20_usaregistropreco == "t") {
 
-=======
-
-            if ($l08_altera == "t") {
-                $db_botao = true;
-            }
-            if ($l20_usaregistropreco == "t") {
-                $lRegistroPreco = true;
-            }
-        }
-        $oDaoSolicitemControle = db_utils::getDao('solicitem');
-        if ($l20_usaregistropreco == "t") {
-
->>>>>>> OC14189_nova
             $rsSolicitemControle = $oDaoSolicitemControle->sql_record("select distinct
                   abertura.pc55_solicitempai as vinculopai,
                   abertura.pc55_solicitemfilho as vinculofilho,
@@ -176,11 +154,6 @@ if (!$sqlerro && $codprocesso) {
                   compilacao.pc11_codigo = $oSolicitemReservado->pc11_codigo");
 
             $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
-<<<<<<< HEAD
-=======
-            //db_criatabela($rsSolicitemControle);
-            //exit;
->>>>>>> OC14189_nova
         }
 
         $rsSolicitemControle2 = $oDaoSolicitemControle->sql_record("select pc11_codigo,pc11_reservado,pc11_quant,
@@ -191,20 +164,10 @@ if (!$sqlerro && $codprocesso) {
           pc11_numero = $oSolicitemReservado->pc11_numero
           and pc16_codmater = $oSolicitemReservado->pc16_codmater order by pc11_reservado asc");
 
-<<<<<<< HEAD
         $nova_quantidade2 = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_quant + db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_quant;
         $codNReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_codigo;
         $codReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_codigo;
 
-=======
-        //db_criatabela($rsSolicitemControle2);
-        // exit;
-        $nova_quantidade2 = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_quant + db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_quant;
-        $codNReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 0)->pc11_codigo;
-        $codReservado     = db_utils::fieldsMemory($rsSolicitemControle2, 1)->pc11_codigo;
-        //echo $codNReservado . ' ';
-        //echo $codReservado;
->>>>>>> OC14189_nova
 
 
         if ($l20_usaregistropreco == 't') {
@@ -220,17 +183,8 @@ if (!$sqlerro && $codprocesso) {
             $nova_quantidade3 = db_utils::fieldsMemory($rsSolicitemControle3, 0)->pc11_quant + db_utils::fieldsMemory($rsSolicitemControle3, 1)->pc11_quant;
             $codNReservado2    = db_utils::fieldsMemory($rsSolicitemControle3, 0)->pc11_codigo;
             $codReservado2     = db_utils::fieldsMemory($rsSolicitemControle3, 1)->pc11_codigo;
-<<<<<<< HEAD
         }
 
-=======
-            // echo $nova_quantidade3 . ' ';
-            // echo $codNReservado2 . ' ';
-            // echo $codReservado2;
-        }
-        //echo ' Aki: ' . $oSolicitemReservado->pc11_codigo;
-        //exit;
->>>>>>> OC14189_nova
         if ($l20_usaregistropreco != 't') {
 
             $oDaoPcDotacOrigem = db_utils::getDao('pcdotac');
