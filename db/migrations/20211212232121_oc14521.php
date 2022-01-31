@@ -9,7 +9,7 @@ class Oc14521 extends AbstractMigration
         $sql = <<<SQL
         BEGIN;
         SELECT fc_startsession();
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'exportação de Processos licitatórios', 'exportação de Processos licitatórios', 'con1_exportaprocessos.php', 1, 1, 'exportação de Processos licitatórios', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Exportação de Processos Licitatórios', 'Exportação de Processos Licitatórios', 'con1_exportaprocessos.php', 1, 1, 'Exportação de Processos Licitatórios', 't');
 
         INSERT INTO db_menu VALUES (1797,
                         (SELECT max(id_item) FROM db_itensmenu),
