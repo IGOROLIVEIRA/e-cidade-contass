@@ -183,7 +183,7 @@ if (isset($incluir) && trim($incluir) != "") {
         <?
         if (isset($licitacao) && trim($licitacao) != "") {
             $sql_marca    = "";
-            $campos       = "l21_codigo,pc81_codprocitem,pc01_descrmater,l04_codigo,l04_descricao";
+            $campos       = "pc81_codprocitem,pc01_codmater,pc01_descrmater,pc11_quant,si02_vlprecoreferencia,l04_descricao,l21_reservado";
             $sql          = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0");
             $sql_disabled = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0 and l04_codigo is not null");
 
