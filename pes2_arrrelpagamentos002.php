@@ -55,8 +55,10 @@ $sql = "
 								r38_numcgm,
 								r38_conta,
 								r38_nome,
-								r38_liq 
+								r38_liq,
+                                z01_cgccpf 
 				 from folha
+                      inner join cgm on r38_numcgm = z01_numcgm
 				      inner join rhlota on to_number(r38_lotac,'9999') = r70_codigo
 							                 and r70_instit = ".db_getsession("DB_instit")."
 							left  join db_bancos on r38_banco = db90_codban 
@@ -91,10 +93,10 @@ for($x = 0; $x < pg_numrows($result);$x++){
         if ($xlota != $r38_banco . $r38_agenc . $r70_estrut) {
             $troca = 1;
             $xlota = $r38_banco . $r38_agenc . $r70_estrut;
-            $pdf->cell(125, $alt, '', 'T', 0, "C", 0);
+            $pdf->cell(155, $alt, '', 'T', 0, "C", 0);
             $pdf->cell(15, $alt, 'TOTAL DO BANCO', 'T', 0, "R", 0);
             $pdf->cell(20, $alt, db_formatar($tot_age, 'f'), 'T', 1, "R", 0);
-            $pdf->cell(125, $alt, '', 0, 0, "C", 0);
+            $pdf->cell(155, $alt, '', 0, 0, "C", 0);
             $pdf->cell(15, $alt, 'TOTAL DE FUNC.', 0, 0, "R", 0);
             $pdf->cell(20, $alt, $tot_func, 0, 1, "R", 0);
             $tot_age = 0;
@@ -104,10 +106,10 @@ for($x = 0; $x < pg_numrows($result);$x++){
         if ($xlota != $r38_banco . $r38_agenc) {
             $troca = 1;
             $xlota = $r38_banco . $r38_agenc;
-            $pdf->cell(125, $alt, '', 'T', 0, "C", 0);
+            $pdf->cell(155, $alt, '', 'T', 0, "C", 0);
             $pdf->cell(15, $alt, 'TOTAL DO BANCO', 'T', 0, "R", 0);
             $pdf->cell(20, $alt, db_formatar($tot_age, 'f'), 'T', 1, "R", 0);
-            $pdf->cell(125, $alt, '', 0, 0, "C", 0);
+            $pdf->cell(155, $alt, '', 0, 0, "C", 0);
             $pdf->cell(15, $alt, 'TOTAL DE FUNC.', 0, 0, "R", 0);
             $pdf->cell(20, $alt, $tot_func, 0, 1, "R", 0);
             $tot_age = 0;
@@ -130,6 +132,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
       $pdf->cell(25,$alt,'CONTA',1,0,"L",1);
       $pdf->cell(15,$alt,'MATRIC',1,0,"L",1);
       $pdf->cell(15,$alt,'CGM',1,0,"L",1);
+      $pdf->cell(30,$alt,'CPF',1,0,"L",1);
       $pdf->cell(85,$alt,'NOME',1,0,"L",1);
       $pdf->cell(20,$alt,'LIQUIDO',1,1,"R",1);
       $troca = 0;
@@ -144,6 +147,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
    $pdf->cell(25,$alt,$r38_conta,0,0,"L",$pre);
    $pdf->cell(15,$alt,$r38_regist,0,0,"L",$pre);
    $pdf->cell(15,$alt,$r38_numcgm,0,0,"L",$pre);
+   $pdf->cell(30,$alt,db_formatar($z01_cgccpf,'cpf'),0,0,"L",$pre);
    $pdf->cell(85,$alt,$r38_nome,0,0,"L",$pre);
    $pdf->cell(20,$alt,db_formatar($r38_liq,'f'),0,1,"R",$pre);
    $tot_banco += $r38_liq;
@@ -151,10 +155,10 @@ for($x = 0; $x < pg_numrows($result);$x++){
    $tot_lota  += $r38_liq;
    $tot_func  += 1;
 }
-$pdf->cell(125,$alt,'','T',0,"C",0);
+$pdf->cell(155,$alt,'','T',0,"C",0);
 $pdf->cell(15,$alt,'TOTAL DO BANCO','T',0,"R",0);
 $pdf->cell(20,$alt,db_formatar($tot_age,'f'),'T',1,"R",0);
-$pdf->cell(125,$alt,'',0,0,"C",0);
+$pdf->cell(155,$alt,'',0,0,"C",0);
 $pdf->cell(15,$alt,'TOTAL DE FUNC.',0,0,"R",0);
 $pdf->cell(20,$alt,$tot_func,0,1,"R",0);
 //$pdf->setfont('arial','b',10);

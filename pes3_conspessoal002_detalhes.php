@@ -510,6 +510,10 @@ oHint  = new oDbHint("oHint");
                                            when '7' then 'Sem Vencimentos/Sem Ônus'
                                            when '8' then 'Doença'
                                            when '10' then 'Afastado doença -15 dias'
+                                           when '10' then 'Afastado doença -15 dias'
+                                           when 11 then 'Licença para concorrer a mandato eletivo'
+                                           when 12 then 'Prorrogação Licença Maternidade'
+                                           when 13 then 'Outras licenças remuneradas'
                                       end as r45_situac,
                                       r45_dtafas,
                                       r45_dtreto,

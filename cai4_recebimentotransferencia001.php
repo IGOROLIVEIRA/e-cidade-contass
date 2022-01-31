@@ -65,8 +65,9 @@ $oGet = db_utils::postMemory($_GET);
 <script>
   
   var oDivDestino = $('ctnSlipRecebimento');
-  var oDBViewSlipRecebimento = new DBViewSlipRecebimento("oDBViewSlipRecebimento", 3, oDivDestino,false);
-  //oDBViewSlipRecebimento.show();
+  var oDBViewSlipRecebimento = new DBViewSlipRecebimento("oDBViewSlipRecebimento", 3, oDivDestino,false, <?php echo db_getsession('DB_anousu'); ?>);
+  oDBViewSlipRecebimento.setAno(<?php echo db_getsession('DB_anousu'); ?>);
+  // oDBViewSlipRecebimento.show();
   oDBViewSlipRecebimento.start();
 
 

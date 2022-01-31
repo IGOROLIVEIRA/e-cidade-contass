@@ -121,6 +121,7 @@ switch ($oParam->exec) {
                     //REGISTRO 20
                     $oDaoOperacoesdecreditolrf->c219_dadoscomplementareslrf = $oDaoDadoscomplementareslrf->c218_sequencial;
                     $oDaoOperacoesdecreditolrf->c219_contopcredito = $oParam->operacoesdecredito->c219_contopcredito;
+                    $oDaoOperacoesdecreditolrf->c219_dscnumeroinst = $oParam->operacoesdecredito->c219_dscnumeroinst;
                     $oDaoOperacoesdecreditolrf->c219_dsccontopcredito = $oParam->operacoesdecredito->c219_dsccontopcredito;
                     $oDaoOperacoesdecreditolrf->c219_realizopcredito = $oParam->operacoesdecredito->c219_realizopcredito;
                     $oDaoOperacoesdecreditolrf->c219_tiporealizopcreditocapta = $oParam->operacoesdecredito->c219_tiporealizopcreditocapta;

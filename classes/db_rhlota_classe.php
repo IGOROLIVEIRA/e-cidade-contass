@@ -801,7 +801,7 @@ class cl_rhlota {
 		$sSql .= "     projativ_novo.o55_anousu   as o55_anousu_novo,                                                        ";
     $sSql .= "     coalesce(orcdotacao.o58_coddot,(select o.o58_coddot from 
                     orcdotacao o join orcelemento e on (o.o58_codele, o.o58_anousu) = (e.o56_codele, e.o56_anousu) 
-                    where e.o56_elemento = coalesce(rpad(substr(elemento_novo.o56_elemento,1,7),13,'0'),'3319011000000') and e.o56_anousu=2021
+                    where e.o56_elemento = coalesce(rpad(substr(elemento_novo.o56_elemento,1,7),13,'0'),'3319011000000') and e.o56_anousu={$dAno}
                     and (o.o58_anousu,
                         o.o58_instit,
                         o.o58_orgao,

@@ -25,6 +25,7 @@ class cl_dclrf202021 {
 	var $si191_mes = 0;
 	var $si191_instit = 0;
 	var $si191_reg10 = 0;
+  var $si191_dscnumeroinst = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
    				 si191_sequencial = int8 = Sequencial
@@ -39,6 +40,8 @@ class cl_dclrf202021 {
                  si191_mes = int2 = Mês de referência
                  si191_instit = int8 = Instituição
                  si191_reg10 = int4 = Sequencial DCLRF
+                 si191_dscnumeroinst = int4 = Descrição do número da instituição financeira da operação de crédito contratada
+
                  ";
    //funcao construtor da classe
    function cl_dclrf202021() {
@@ -70,7 +73,8 @@ class cl_dclrf202021 {
 		$this->si191_reg10 = ($this->si191_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_reg10"]:$this->si191_reg10);
 		$this->si191_mes = ($this->si191_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_mes"]:$this->si191_mes);
 		$this->si191_instit = ($this->si191_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_instit"]:$this->si191_instit);
-	 }else{
+    $this->si191_dscnumeroinst = ($this->si191_dscnumeroinst == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_dscnumeroinst"]:$this->si191_dscnumeroinst);  
+  }else{
 		$this->si191_sequencial = ($this->si191_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_sequencial"]:$this->si191_sequencial);
      }
    }
@@ -205,6 +209,7 @@ class cl_dclrf202021 {
                                       ,si191_mes
                                       ,si191_instit
                                       ,si191_reg10
+                                      ,si191_dscnumeroinst
                        )
                 values (
                 				$this->si191_sequencial
@@ -219,6 +224,7 @@ class cl_dclrf202021 {
                                ,$this->si191_mes
                                ,$this->si191_instit
                                ,$this->si191_reg10
+                               ,'$this->si191_dscnumeroinst'
                       )";
        $result = db_query($sql);
      if($result==false){
@@ -293,6 +299,10 @@ class cl_dclrf202021 {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->si191_dscnumeroinst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_dscnumeroinst"])){
+      $sql  .= $virgula." si191_dscnumeroinst = $this->si191_dscnumeroinst ";
+      $virgula = ",";
      }
      if(trim($this->si191_dsccontopcredito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_dsccontopcredito"])){
        $sql  .= $virgula." si191_dsccontopcredito = '$this->si191_dsccontopcredito' ";

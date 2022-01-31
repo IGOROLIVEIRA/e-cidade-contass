@@ -45,7 +45,7 @@ class cl_empageslip {
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e89_codmov = int4 = Movimento
-                 e89_codigo = int4 = Código Slip
+                 e89_codigo = int4 = Cdigo Slip
                  ";
    //funcao construtor da classe
    function cl_empageslip() {
@@ -80,7 +80,7 @@ class cl_empageslip {
      if(($this->e89_codmov == null) || ($this->e89_codmov == "") ){
        $this->erro_sql = " Campo e89_codmov nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -88,7 +88,7 @@ class cl_empageslip {
      if(($this->e89_codigo == null) || ($this->e89_codigo == "") ){
        $this->erro_sql = " Campo e89_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -105,13 +105,13 @@ class cl_empageslip {
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "Slips de agenda ($this->e89_codmov."-".$this->e89_codigo) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "Slips de agenda já Cadastrado";
+         $this->erro_sql   = "Slips de agenda ($this->e89_codmov."-".$this->e89_codigo) nao Includo. Inclusao Abortada.";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_banco = "Slips de agenda j Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }else{
-         $this->erro_sql   = "Slips de agenda ($this->e89_codmov."-".$this->e89_codigo) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql   = "Slips de agenda ($this->e89_codmov."-".$this->e89_codigo) nao Includo. Inclusao Abortada.";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
        $this->erro_status = "0";
@@ -121,7 +121,7 @@ class cl_empageslip {
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->e89_codmov."-".$this->e89_codigo;
-     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+     $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
@@ -149,7 +149,7 @@ class cl_empageslip {
          $this->erro_sql = " Campo Movimento nao Informado.";
          $this->erro_campo = "e89_codmov";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -159,10 +159,10 @@ class cl_empageslip {
        $sql  .= $virgula." e89_codigo = $this->e89_codigo ";
        $virgula = ",";
        if(trim($this->e89_codigo) == null ){
-         $this->erro_sql = " Campo Código Slip nao Informado.";
+         $this->erro_sql = " Campo Cdigo Slip nao Informado.";
          $this->erro_campo = "e89_codigo";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -194,7 +194,7 @@ class cl_empageslip {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Slips de agenda nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->e89_codmov."-".$this->e89_codigo;
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_alterar = 0;
@@ -204,16 +204,16 @@ class cl_empageslip {
          $this->erro_banco = "";
          $this->erro_sql = "Slips de agenda nao foi Alterado. Alteracao Executada.\\n";
          $this->erro_sql .= "Valores : ".$this->e89_codmov."-".$this->e89_codigo;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = 0;
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+         $this->erro_sql = "Alterao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->e89_codmov."-".$this->e89_codigo;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
@@ -261,9 +261,9 @@ class cl_empageslip {
      $result = db_query($sql.$sql2);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Slips de agenda nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql   = "Slips de agenda nao Excludo. Excluso Abortada.\\n";
        $this->erro_sql .= "Valores : ".$e89_codmov."-".$e89_codigo;
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_excluir = 0;
@@ -271,18 +271,18 @@ class cl_empageslip {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "Slips de agenda nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql = "Slips de agenda nao Encontrado. Excluso no Efetuada.\\n";
          $this->erro_sql .= "Valores : ".$e89_codmov."-".$e89_codigo;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = 0;
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+         $this->erro_sql = "Excluso efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$e89_codmov."-".$e89_codigo;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
@@ -297,7 +297,7 @@ class cl_empageslip {
        $this->numrows    = 0;
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Erro ao selecionar os registros.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -306,7 +306,7 @@ class cl_empageslip {
       if($this->numrows==0){
         $this->erro_banco = "";
         $this->erro_sql   = "Record Vazio na Tabela:empageslip";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
@@ -474,6 +474,7 @@ class cl_empageslip {
      $sql .= "	    inner join conplanoreduz x on x.c61_reduz = s.k17_debito and x.c61_anousu = ".db_getsession("DB_anousu");
      $sql .= "	    inner join conplano z on z.c60_codcon = x.c61_codcon and z.c60_anousu = x.c61_anousu ";
      $sql .= "	    inner join slipnum o on o.k17_codigo = s.k17_codigo";
+     $sql .= "       left join sliprecurso recurso on recurso.k29_slip = s.k17_codigo AND k29_valor = s.k17_valor ";
      $sql .= "	    left join conplanoreduz ctapag on ctapag.c61_reduz = s.k17_credito and ctapag.c61_anousu = ".db_getsession("DB_anousu");
      $sql .= "	    left join cgm on z01_numcgm = o.k17_numcgm";
      $sql .= "	    left join  empageconf on e86_codmov=e81_codmov ";

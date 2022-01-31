@@ -27,8 +27,8 @@ pmluislandia        5432    prefeituras
 pmitacambira        5432    prefeituras
 basemodeloppa       5432    prefeituras
 treinamento         5432    prefeituras
+pmsantafeminas      5432    prefeituras
 
-pmsantafeminas         5432    prefeituras2
 pmsaojoaomissoes       5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
 pmmontalvania          5432    prefeituras2
@@ -96,3 +96,9 @@ e-cidade            5432    pmnovaporteirinha
 e-cidade            5432    pmgraomogol
 
 e-cidade            5432    pmburitizeiro
+
+e-cidade            5432    pmmonteazul
+
+e-cidade            5432    pmmontalvania
+
+base_desenvolvimento   5432   teste

@@ -79,7 +79,7 @@ $clrotulo->label("l20_codigo");
         }
         ?>
         <input type="button" value="Pesquisar" onclick="js_pesquisal202_licitacao(true);">
-        <!--<input type="button" value="Gerar Relatório" onclick="js_gerarRelatorio(true);">-->
+        <input type="button" value="Gerar Relatório" onclick="js_gerarRelatorio(true);"> 
     </div>
     <br>
     <fieldset>
@@ -208,14 +208,22 @@ $clrotulo->label("l20_codigo");
     }
 
     function gerar(mostra){
-        let pdf = document.getElementById("pdf");
+        var pdf = document.getElementById("pdf");
+        var word = document.getElementById("word");
         var ilicita = document.getElementById("l202_licitacao").value;
+        var nome = document.getElementById("respAdjudinome").value;  
+        var data = document.getElementById("l202_dataadjudicacao").value;  
         if(pdf.checked){
-            jan = window.open('lic1_adjudicacaolicitacao004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&quant_casas=2&tipoprecoreferencia=',
+            jan = window.open('lic1_adjudicacaolicitacao004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&data='+data+'&quant_casas=2&tipoprecoreferencia=',
+                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+	   jan.moveTo(0,0);
+        }else if(word.checked){
+         
+    jan = window.open('lic1_adjudicacaolicitacao005.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&quant_casas=2&tipoprecoreferencia=',
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
         }
-        windowDotacaoItem.hide();
+        windowDotacaoItem.destroy();
     }
 
     function js_getItens() {

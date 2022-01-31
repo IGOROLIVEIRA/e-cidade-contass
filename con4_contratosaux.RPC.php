@@ -66,7 +66,7 @@ db_app::import("configuracao.DBDepartamento");
 
 $oJson             = new services_json();
 //$oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
-$oParam           = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam           = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 
 
 
@@ -82,7 +82,7 @@ $oRetorno->status  = 1;
 $oRetorno->message = 1;
 $oRetorno->itens   = array();
 
-switch($oParam->exec) {
+switch ($oParam->exec) {
 
     case 'getMembros':
 
@@ -98,7 +98,7 @@ switch($oParam->exec) {
             $oAcordoStd->sDataFinal   = $oAcordo->getDataInicial();
             $oAcordoStd->aMembros     = array();
 
-            foreach($oAcordo->getMembros() as $oM) {
+            foreach ($oAcordo->getMembros() as $oM) {
 
                 $oMemb = new stdClass();
 
@@ -113,12 +113,10 @@ switch($oParam->exec) {
 
 
             $oRetorno->oAcordo = $oAcordoStd;
-
-        }catch (Exception $eErro) {
+        } catch (Exception $eErro) {
 
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
-
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
 
@@ -129,15 +127,13 @@ switch($oParam->exec) {
             $oDaoAcordo                = new cl_acordocomissao();
             $sSql                      = $oDaoAcordo->sql_query(NULL, "*", "", "ac08_sequencial={$oParam->ac08_sequencial}");
             $rsAcordo                  = $oDaoAcordo->sql_record($sSql);
-            $oAcordo                   = db_utils::fieldsMemory($rsAcordo,0 , false, false, true);
+            $oAcordo                   = db_utils::fieldsMemory($rsAcordo, 0, false, false, true);
 
             $oRetorno->oAcordo         = $oAcordo;
-
         } catch (Exception $eErro) {
 
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
-
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
 
@@ -156,12 +152,10 @@ switch($oParam->exec) {
 
             $oRetorno->sAcao   = $oParam->sAcao;
             $oRetorno->oMembro = $oMembroStd;
-
         } catch (Exception $eErro) {
 
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
-
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
 
@@ -173,10 +167,10 @@ switch($oParam->exec) {
 
             $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} and z09_tipo = 1");
             db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
-            $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
+            $z09_datacadastro   = implode("/", (array_reverse(explode("-", $z09_datacadastro))));
             $dtcadastro = $oAcordo->getDataInicial();
 
-            if($dtcadastro < $z09_datacadastro){
+            if ($dtcadastro < $z09_datacadastro) {
                 throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
             }
 
@@ -190,12 +184,10 @@ switch($oParam->exec) {
 
             $oRetorno->message = urlencode("Membro Alterado com sucesso.");
             $oRetorno->iCodigo = $oMembro->getCodigoComissao();
-
         } catch (Exception  $eErro) {
 
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
-
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
 
@@ -207,14 +199,14 @@ switch($oParam->exec) {
 
             $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} and z09_tipo = 1");
             db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
-            $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
+            $z09_datacadastro   = implode("/", (array_reverse(explode("-", $z09_datacadastro))));
             $dtcadastro = $oAcordo->getDataInicial();
 
-            if($dtcadastro < $z09_datacadastro){
+            if ($dtcadastro < $z09_datacadastro) {
                 throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
             }
 
-            if(!$oAcordo->membroExists($oParam->iCodigoCgm)) {
+            if (!$oAcordo->membroExists($oParam->iCodigoCgm)) {
 
                 $oMembro = new AcordoComissaoMembro();
                 $oMembro->setCodigoComissao($oParam->iCodigoComissao);
@@ -227,7 +219,6 @@ switch($oParam->exec) {
 
                 $oRetorno->message = urlencode("Membro incluido com sucesso.");
                 $oRetorno->iCodigo = $oMembro->getCodigoComissao();
-
             } else {
 
                 $oRetorno->message = urlencode("Membro já está presente na comissão.");
@@ -236,8 +227,7 @@ switch($oParam->exec) {
         } catch (Exception  $eErro) {
 
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
-
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
 
@@ -251,13 +241,10 @@ switch($oParam->exec) {
 
             $oRetorno->message = urlencode("Membro excluído com sucesso.");
             $oRetorno->iCodigo = $oMembro->getCodigoComissao();
-
-
         } catch (Exception  $eErro) {
 
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
-
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
 
         break;
@@ -267,12 +254,12 @@ switch($oParam->exec) {
         $oRetorno->aTipoAcordo = array();
         $clacordotipo          = new cl_acordotipo;
         $sCampos               = "acordotipo.ac04_sequencial as codigo, acordotipo.ac04_descricao as descricao";
-        $sSqlTipoAcordo        = $clacordotipo->sql_query(null,$sCampos,null,"");
+        $sSqlTipoAcordo        = $clacordotipo->sql_query(null, $sCampos, null, "");
         $rsSqlTipoAcordo       = $clacordotipo->sql_record($sSqlTipoAcordo);
-        $oRetorno->aTipoAcordo = db_utils::getCollectionByRecord($rsSqlTipoAcordo,false,false,true);
+        $oRetorno->aTipoAcordo = db_utils::getCollectionByRecord($rsSqlTipoAcordo, false, false, true);
         break;
 
-    /*
+        /*
      * Pesquisa Acordo Penalidade
     */
 
@@ -286,17 +273,17 @@ switch($oParam->exec) {
             $oRetorno->sDescricao      = urlencode($oAcordoPenalidade->getDescricao());
             $oRetorno->sObservacao     = urlencode($oAcordoPenalidade->getObservacao());
             $oRetorno->sTextoPadrao    = urlencode($oAcordoPenalidade->getTextoPadrao());
-            $oRetorno->dtValidade      = urlencode(db_formatar($oAcordoPenalidade->getDataLimite(),'d'));
+            $oRetorno->dtValidade      = urlencode(db_formatar($oAcordoPenalidade->getDataLimite(), 'd'));
             $oRetorno->aTiposContratos = $oAcordoPenalidade->getTiposContratos();
-        } catch (Exception $eExeption){
+        } catch (Exception $eExeption) {
 
             $oRetorno->status = 2;
-            $oRetorno->erro   = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
         break;
 
-    /*
+        /*
      * Processa incluir/aterar Acordo Penalidade
     */
     case "salvarPenalidade":
@@ -312,12 +299,12 @@ switch($oParam->exec) {
             //$oAcordoPenalidade->setObservacao(utf8_decode($oParam->observacao));
             //$oAcordoPenalidade->setTextoPadrao(utf8_decode($oParam->textopadrao));
 
-            $oAcordoPenalidade->setDescricao  ( addslashes(db_stdClass::normalizeStringJson( $oParam->descricao  )));
-            $oAcordoPenalidade->setObservacao ( addslashes(db_stdClass::normalizeStringJson( $oParam->observacao )));
-            $oAcordoPenalidade->setTextoPadrao( addslashes(db_stdClass::normalizeStringJson( $oParam->textopadrao)));
+            $oAcordoPenalidade->setDescricao(addslashes(db_stdClass::normalizeStringJson($oParam->descricao)));
+            $oAcordoPenalidade->setObservacao(addslashes(db_stdClass::normalizeStringJson($oParam->observacao)));
+            $oAcordoPenalidade->setTextoPadrao(addslashes(db_stdClass::normalizeStringJson($oParam->textopadrao)));
 
 
-            $dtValidade = implode("-",array_reverse(explode("/",$oParam->datalimite)));
+            $dtValidade = implode("-", array_reverse(explode("/", $oParam->datalimite)));
             $oAcordoPenalidade->setDataLimite($dtValidade);
 
             $oAcordoPenalidade->removeTipoContrato();
@@ -329,16 +316,16 @@ switch($oParam->exec) {
             $oAcordoPenalidade->save();
 
             db_fim_transacao(false);
-        } catch (Exception $eExeption){
+        } catch (Exception $eExeption) {
 
             db_fim_transacao(true);
             $oRetorno->status = 2;
-            $oRetorno->erro   = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
         break;
 
-    /*
+        /*
      * Processa excluir Acordo Penalidade
     */
     case "excluirPenalidade":
@@ -351,16 +338,16 @@ switch($oParam->exec) {
             $oAcordoPenalidade->excluir();
 
             db_fim_transacao(false);
-        } catch (Exception $eExeption){
+        } catch (Exception $eExeption) {
 
             db_fim_transacao(true);
             $oRetorno->status = 2;
-            $oRetorno->erro   = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
         break;
 
-    /*
+        /*
      * PESQUISA GARANTIA
     */
     case "pesquisaGarantia":
@@ -374,18 +361,17 @@ switch($oParam->exec) {
             $oRetorno->oAcordoGarantia->sDescricao      = urlencode($oAcordoGarantia->getDescricao());
             $oRetorno->oAcordoGarantia->sObservacao     = urlencode($oAcordoGarantia->getObservacao());
             $oRetorno->oAcordoGarantia->sTextoPadrao    = urlencode($oAcordoGarantia->getTextoPadrao());
-            $oRetorno->oAcordoGarantia->sDataLimite     = implode("/",array_reverse(explode("-",$oAcordoGarantia->getDataLimite())));
+            $oRetorno->oAcordoGarantia->sDataLimite     = implode("/", array_reverse(explode("-", $oAcordoGarantia->getDataLimite())));
             $oRetorno->oAcordoGarantia->aTiposContratos = $oAcordoGarantia->getTiposContratos();
-
-        } catch (Exception $eExeption){
+        } catch (Exception $eExeption) {
 
             $oRetorno->status = 2;
-            $oRetorno->erro   = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
         break;
 
-    /*
+        /*
      * REALIZA INCLUSAO/EXCLUSAO DE GARANTIA
     */
     case "salvarGarantia":
@@ -394,7 +380,7 @@ switch($oParam->exec) {
 
             db_inicio_transacao();
 
-            $sLimite = implode("-",array_reverse(explode("/",$oParam->sDataLimite)));
+            $sLimite = implode("-", array_reverse(explode("/", $oParam->sDataLimite)));
 
             $oAcordoGarantia = new AcordoGarantia($oParam->iCodigo);
 
@@ -404,9 +390,9 @@ switch($oParam->exec) {
             //$oAcordoGarantia->setTextoPadrao(utf8_decode($oParam->sTextoPadrao));
 
 
-            $oAcordoGarantia->setDescricao  ( addslashes(db_stdClass::normalizeStringJson( $oParam->sDescricao  )));
-            $oAcordoGarantia->setObservacao ( addslashes(db_stdClass::normalizeStringJson( $oParam->sObservacao )));
-            $oAcordoGarantia->setTextoPadrao( addslashes(db_stdClass::normalizeStringJson( $oParam->sTextoPadrao)));
+            $oAcordoGarantia->setDescricao(addslashes(db_stdClass::normalizeStringJson($oParam->sDescricao)));
+            $oAcordoGarantia->setObservacao(addslashes(db_stdClass::normalizeStringJson($oParam->sObservacao)));
+            $oAcordoGarantia->setTextoPadrao(addslashes(db_stdClass::normalizeStringJson($oParam->sTextoPadrao)));
 
 
 
@@ -422,16 +408,16 @@ switch($oParam->exec) {
             $oAcordoGarantia->save();
 
             db_fim_transacao(false);
-        } catch (Exception $eExeption){
+        } catch (Exception $eExeption) {
 
             db_fim_transacao(true);
             $oRetorno->status = 2;
-            $oRetorno->erro   = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
         break;
 
-    /*
+        /*
      * EXCLUI GARANTIA
     */
     case "excluiGarantia":
@@ -444,11 +430,11 @@ switch($oParam->exec) {
             $oAcordoGarantia->excluir();
 
             db_fim_transacao(false);
-        } catch (Exception $eExeption){
+        } catch (Exception $eExeption) {
 
             db_fim_transacao(true);
             $oRetorno->status = 2;
-            $oRetorno->erro   = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
+            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
         break;
@@ -475,7 +461,7 @@ switch($oParam->exec) {
         if (isset($oParam->iContrato) && $oParam->iContrato != '') {
 
             $oDaoAcordoItem = db_utils::getDao("acordoitem");
-            $sSqlAcordoItem = $oDaoAcordoItem->sql_query( null, "*", null, "ac26_acordo = {$oParam->iContrato}");
+            $sSqlAcordoItem = $oDaoAcordoItem->sql_query(null, "*", null, "ac26_acordo = {$oParam->iContrato}");
             $rsAcordoItem   = $oDaoAcordoItem->sql_record($sSqlAcordoItem);
             if ($oDaoAcordoItem->numrows > 0) {
                 $aItensDevolver = '';
@@ -502,7 +488,7 @@ switch($oParam->exec) {
         if (isset($oParam->iContrato) && $oParam->iContrato != '') {
 
             $oDaoAcordoItem = db_utils::getDao("acordoitem");
-            $sSqlAcordoItem = $oDaoAcordoItem->sql_query( null, "*", null, "ac26_acordo = {$oParam->iContrato}");
+            $sSqlAcordoItem = $oDaoAcordoItem->sql_query(null, "*", null, "ac26_acordo = {$oParam->iContrato}");
             $rsAcordoItem   = $oDaoAcordoItem->sql_record($sSqlAcordoItem);
             if ($oDaoAcordoItem->numrows > 0) {
 
@@ -533,7 +519,7 @@ switch($oParam->exec) {
         } catch (Exception $eErro) {
 
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
 
@@ -541,11 +527,11 @@ switch($oParam->exec) {
 
         try {
 
-            $oRetorno->numero = Acordo::getProximoNumeroDoAno($oParam->iAno,$oParam->iInstit);
+            $oRetorno->numero = Acordo::getProximoNumeroDoAno($oParam->iAno, $oParam->iInstit);
         } catch (Exception $eErro) {
 
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
 
@@ -558,7 +544,7 @@ switch($oParam->exec) {
             $lAcordoValido            = true;
             $sMessagemInvalido        = '';
             if ($oParam->contrato->iOrigem == 1 || $oParam->contrato->iOrigem == 2) {
-                if (!isset($_SESSION["dadosSelecaoAcordo"]) ) {
+                if (!isset($_SESSION["dadosSelecaoAcordo"])) {
 
                     $lAcordoValido = false;
                     $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
@@ -569,31 +555,38 @@ switch($oParam->exec) {
                 $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
             }
 
-            if($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 2){
-              if($oParam->contrato->iLicitacao == ""){
-                $lAcordoValido = false;
-                $sMessagemInvalido = "Acordo sem vinculo com Licitação.";
-              }
+            if ($oParam->contrato->iOrigem != "1") {
+                if ($oParam->contrato->iLicitacao == "" || $oParam->contrato->iLicitacao == null) {
+                    $oLicitacao = $_SESSION["dadosSelecaoAcordo"][0];
+                    $oParam->contrato->iLicitacao = $oLicitacao;
+                }
             }
 
-            if($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 4){
-                if($oParam->contrato->iAdesaoregpreco == ""){
+            if ($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 2) {
+                if ($oParam->contrato->iLicitacao == "") {
+                    $lAcordoValido = false;
+                    $sMessagemInvalido = "Acordo sem vinculo com Licitação.";
+                }
+            }
+
+            if ($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 4) {
+                if ($oParam->contrato->iAdesaoregpreco == "") {
                     $lAcordoValido = false;
                     $sMessagemInvalido = "Acordo sem vinculo com Adesão de Registro de Preço.";
                 }
             }
 
-            if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
+            if ($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura) {
                 $lAcordoValido = false;
                 $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
             }
 
-            if($lAcordoValido){
+            if ($lAcordoValido) {
                 $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->contrato->iContratado} and z09_tipo = 1");
                 db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
-                $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
+                $dtsession   = date("Y-m-d", db_getsession("DB_datausu"));
 
-                if($dtsession < $z09_datacadastro){
+                if ($dtsession < $z09_datacadastro) {
                     $sMessagemInvalido = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
                     $lAcordoValido = true;
                 }
@@ -602,10 +595,10 @@ switch($oParam->exec) {
                  * controle de encerramento peri. Patrimonial
                  */
                 $clcondataconf = new cl_condataconf;
-                $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
-                db_fieldsmemory($resultControle,0);
+                $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat'));
+                db_fieldsmemory($resultControle, 0);
 
-                if($dtsession <= $c99_datapat){
+                if ($dtsession <= $c99_datapat) {
                     $sMessagemInvalido = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
                     $lAcordoValido = true;
                 }
@@ -615,11 +608,11 @@ switch($oParam->exec) {
             $rsLicitacao   = $oLicitacao->sql_record($oLicitacao->sql_query_file($oParam->contrato->iLicitacao, 'l20_naturezaobjeto'));
             $iNatureza     = db_utils::fieldsMemory($rsLicitacao, 0)->l20_naturezaobjeto;
 
-            $rsSql = db_query('SELECT ac02_acordonatureza from acordogrupo where ac02_sequencial = '.$oParam->contrato->iGrupo);
+            $rsSql = db_query('SELECT ac02_acordonatureza from acordogrupo where ac02_sequencial = ' . $oParam->contrato->iGrupo);
             $iNaturezaAcordo = db_utils::fieldsMemory($rsSql, 0)->ac02_acordonatureza;
 
-            if(in_array($oParam->contrato->iTipoOrigem, array(2, 3))){
-                if($iNatureza != $iNaturezaAcordo){
+            if (in_array($oParam->contrato->iTipoOrigem, array(2, 3))) {
+                if ($iNatureza != $iNaturezaAcordo) {
                     throw new Exception('Há divergência entre a Natureza do Contrato e a Natureza da Licitação!');
                 }
             }
@@ -627,11 +620,11 @@ switch($oParam->exec) {
             if ($lAcordoValido) {
 
                 $oParam->contrato->nValorContrato = str_replace(',', '.', str_replace(".", "", $oParam->contrato->nValorContrato));
-                if($oParam->contrato->iNumero != "" && $oParam->contrato->iNumero != null){
+                if ($oParam->contrato->iNumero != "" && $oParam->contrato->iNumero != null) {
                     $iNumacordo  = $oParam->contrato->iNumero;
-                }else{
+                } else {
                     $iNumacordo = db_query("select nextval('acordo_ac16_numeroacordo_seq')");
-                    $iNumacordo = pg_result($iNumacordo,0,0);
+                    $iNumacordo = pg_result($iNumacordo, 0, 0);
                 }
 
                 $oContratado = CgmFactory::getInstanceByCgm($oParam->contrato->iContratado);
@@ -646,13 +639,13 @@ switch($oParam->exec) {
                 $oContrato->setInstit(db_getsession("DB_instit"));
                 $oContrato->setLei($oParam->contrato->sLei);
                 $oContrato->setNumero($iNumacordo);
-                if($oParam->contrato->iNumero != "" && $oParam->contrato->iNumero != null) {
+                if ($oParam->contrato->iNumero != "" && $oParam->contrato->iNumero != null) {
                     $oContrato->setNumeroAcordo($oParam->contrato->iNumero);
                 }
                 $oContrato->setOrigem($oParam->contrato->iOrigem);
                 $oContrato->setTipoOrigem($oParam->contrato->iTipoOrigem);
-                $oContrato->setObjeto( db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sObjeto) );
-                $oContrato->setResumoObjeto( db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sResumoObjeto) );
+                $oContrato->setObjeto(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sObjeto));
+                $oContrato->setResumoObjeto(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sResumoObjeto));
                 $oContrato->setDepartamento(db_getsession("DB_coddepto"));
                 $oContrato->setQuantidadeRenovacao($oParam->contrato->iQtdRenovacao);
                 $oContrato->setTipoRenovacao($oParam->contrato->iUnidRenovacao);
@@ -664,10 +657,10 @@ switch($oParam->exec) {
                 $oContrato->setVeiculoDivulgacao($oParam->contrato->sVeiculoDivulgacao);
                 $oContrato->setFormaPagamento($oParam->contrato->sFormaPagamento);
                 $oContrato->setCpfsignatariocontratante();
-                if(!empty($oParam->contrato->iComissao)){
-                  $oContrato->setComissao(new AcordoComissao($oParam->contrato->iComissao));
-                }else{
-                  $oContrato->setComissao(new AcordoComissao(1));
+                if (!empty($oParam->contrato->iComissao)) {
+                    $oContrato->setComissao(new AcordoComissao($oParam->contrato->iComissao));
+                } else {
+                    $oContrato->setComissao(new AcordoComissao(1));
                 }
                 $oContrato->setPeriodoComercial($oParam->contrato->lPeriodoComercial);
                 $oContrato->setCategoriaAcordo($oParam->contrato->iCategoriaAcordo);
@@ -795,12 +788,12 @@ switch($oParam->exec) {
                 $oDaoAcordo->ac16_semvigencia = 'f';
                 $oDaoAcordo->ac16_sequencial = $iContrato;
 
-                if($oParam->contrato->iCodigo == null || $oParam->contrato->iCodigo == "")
+                if ($oParam->contrato->iCodigo == null || $oParam->contrato->iCodigo == "")
                     $oDaoAcordo->ac16_semvigencia = 't';
                 $oDaoAcordo->ac16_sequencial = $iContrato;
 
                 $oDaoAcordo->alterar($iContrato);
-                if($oDaoAcordo->erro_status == 0){
+                if ($oDaoAcordo->erro_status == 0) {
                     throw new Exception($oDaoAcordo->erro_msg);
                 }
                 db_fim_transacao(false);
@@ -812,19 +805,18 @@ switch($oParam->exec) {
 
                 db_fim_transacao(true);
                 $oRetorno->status  = 2;
-                $oRetorno->message = urlencode(str_replace("\\n", "\n",$sMessagemInvalido));
+                $oRetorno->message = urlencode(str_replace("\\n", "\n", $sMessagemInvalido));
             }
         } catch (Exception $eErro) {
 
             db_fim_transacao(true);
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
-
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
 
         break;
 
-    case "getDadosAcordo" :
+    case "getDadosAcordo":
 
         try {
 
@@ -873,21 +865,20 @@ switch($oParam->exec) {
             $oDadosContrato->nValorContrato               = $oContrato->getValorContrato();
 
             $oRetorno->contrato = $oDadosContrato;
-
         } catch (Exception $eErro) {
 
             $oRetorno->status = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
 
-    case "getElementosMateriais" :
+    case "getElementosMateriais":
 
         $oMaterial = new MaterialCompras($oParam->iMaterial);
         $oRetorno->itens  = $oMaterial->getElementos();
         break;
 
-    case "adicionarItem" :
+    case "adicionarItem":
 
         try {
 
@@ -898,11 +889,11 @@ switch($oParam->exec) {
             $oPosicao      = $oContrato->getUltimaPosicao();
 
             foreach ($oPosicao->getItens() as $item) {
-                if($item->getMaterial()->getMaterial() == $oParam->material->iMaterial){
+                if ($item->getMaterial()->getMaterial() == $oParam->material->iMaterial) {
                     throw new Exception("Material já vinculado.");
                 }
             }
-//                    var_dump($oParam->material->aPeriodo);
+            //                    var_dump($oParam->material->aPeriodo);
             $oItemContrato->setCodigoPosicao($oPosicao->getCodigo());
             $oItemContrato->setElemento($oParam->material->iElemento);
             $oItemContrato->setQuantidade($oParam->material->nQuantidade);
@@ -926,11 +917,11 @@ switch($oParam->exec) {
 
             db_fim_transacao(true);
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
 
-    case "getItensAcordo" :
+    case "getItensAcordo":
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
 
@@ -953,14 +944,14 @@ switch($oParam->exec) {
                 $oItem->codigomaterial        = $oItemContrato->getMaterial()->getMaterial();
                 $oItem->quantidade            = $oItemContrato->getQuantidade();
                 $oItem->valorunitario         = $oItemContrato->getValorUnitario();
-                $oItem->valortotal            = $oItemContrato->getValorUnitario()*$oItemContrato->getQuantidade();
+                $oItem->valortotal            = $oItemContrato->getValorUnitario() * $oItemContrato->getQuantidade();
                 $oItem->quantidade            = $oItemContrato->getQuantidade();
                 $oItem->elemento              = $oItemContrato->getElemento();
                 $oItem->marca                 = $oItemContrato->getMarca();
                 $oItem->elementocodigo        = $oItemContrato->getDesdobramento();
-                $oItem->elementodescricao     = urlencode(str_replace("\\n", "\n",urldecode($oItemContrato->getDescricaoElemento())));
+                $oItem->elementodescricao     = urlencode(str_replace("\\n", "\n", urldecode($oItemContrato->getDescricaoElemento())));
                 $oItem->unidade               = $oItemContrato->getUnidade();
-                $oItem->resumo                = urlencode(str_replace("\\n", "\n",urldecode($oItemContrato->getResumo())));
+                $oItem->resumo                = urlencode(str_replace("\\n", "\n", urldecode($oItemContrato->getResumo())));
                 $oItem->tipocontrole          = $oItemContrato->getTipocontrole();
                 $oItem->servicoquantidade     = $oItemContrato->getServicoQuantidade();
                 $oItem->servico               = $oItemContrato->getMaterial()->isServico();
@@ -1001,7 +992,7 @@ switch($oParam->exec) {
         }
         break;
 
-    case "alterarItem" :
+    case "alterarItem":
 
         try {
             if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
@@ -1048,19 +1039,17 @@ switch($oParam->exec) {
                 $oContrato->atualizaValorContratoPorTotalItens('t');
 
                 db_fim_transacao(false);
-
             }
-
         } catch (Exception $eErro) {
 
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
             db_fim_transacao(true);
         }
 
         break;
 
-    case "getDotacoesItens" :
+    case "getDotacoesItens":
 
         $oRetorno->iElementoDotacao = '';
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
@@ -1089,7 +1078,7 @@ switch($oParam->exec) {
         }
         break;
 
-    case "saveDotacaoItens" :
+    case "saveDotacaoItens":
 
         $oRetorno->iElementoDotacao = '';
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
@@ -1125,7 +1114,7 @@ switch($oParam->exec) {
 
                     db_fim_transacao(true);
                     $oRetorno->status = 2;
-                    $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+                    $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
                     $oRetorno->dotacoes = $oItem->getDotacoes();
                 }
             } else {
@@ -1165,7 +1154,7 @@ switch($oParam->exec) {
 
                     db_fim_transacao(true);
                     $oRetorno->status = 2;
-                    $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+                    $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
                 }
             } else {
 
@@ -1175,7 +1164,7 @@ switch($oParam->exec) {
             $oRetorno->dotacoes = $oItem->getDotacoes();
         }
 
-    case "getItensOrigem" :
+    case "getItensOrigem":
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
 
@@ -1191,7 +1180,7 @@ switch($oParam->exec) {
              * Quando o usuario fecha o sistema sem incluir os itens, eles deixavam de aparecer, pois
              * dadosSelecaoAcordo deixava de existir na sessao, entao foi adicionado essa condicao para resolver este problema
              */
-            if(!isset($_SESSION["dadosSelecaoAcordo"]) || count($_SESSION["dadosSelecaoAcordo"]) == 0) {
+            if (!isset($_SESSION["dadosSelecaoAcordo"]) || count($_SESSION["dadosSelecaoAcordo"]) == 0) {
                 $oLicitacao = licitacao::getLicitacoesByFornecedor($oContrato->getContratado()->getCodigo(), true, true);
                 $_SESSION["dadosSelecaoAcordo"][] = $oLicitacao[0]->licitacao;
             }
@@ -1199,12 +1188,18 @@ switch($oParam->exec) {
             if ($oContrato->getOrigem() == 2) {
 
 
-                $aItens = licitacao::getItensPorFornecedor($_SESSION["dadosSelecaoAcordo"],
-                    $oContrato->getContratado()->getCodigo(), 0);
+                $aItens = licitacao::getItensPorFornecedor(
+                    $_SESSION["dadosSelecaoAcordo"],
+                    $oContrato->getContratado()->getCodigo(),
+                    0
+                );
             } else {
 
-                $aItens = ProcessoCompras::getItensPorFornecedor($_SESSION["dadosSelecaoAcordo"],
-                    $oContrato->getContratado()->getCodigo(), 0);
+                $aItens = ProcessoCompras::getItensPorFornecedor(
+                    $_SESSION["dadosSelecaoAcordo"],
+                    $oContrato->getContratado()->getCodigo(),
+                    0
+                );
             }
             $oRetorno->itens = $aItens;
 
@@ -1212,7 +1207,7 @@ switch($oParam->exec) {
         }
         break;
 
-    case "adicionarItensOrigem" :
+    case "adicionarItensOrigem":
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
 
@@ -1226,10 +1221,10 @@ switch($oParam->exec) {
                     db_inicio_transacao();
                     $lErro = false;
 
-                    $iVigenciaInicial = db_formatar($oContrato->getDataInicial(), 'd') ;
+                    $iVigenciaInicial = db_formatar($oContrato->getDataInicial(), 'd');
                     $iVigenciaFinal   = db_formatar($oContrato->getDataFinal(), 'd');
 
-                    foreach ($oParam->aLista as $iIndice => $oItem ) {
+                    foreach ($oParam->aLista as $iIndice => $oItem) {
 
                         // $iExecucaoInicial = db_formatar($oItem->dtInicial  , 'd') ;
                         // $iExecucaoFinal   = db_formatar($oItem->dtFinal  , 'd') ;
@@ -1259,7 +1254,6 @@ switch($oParam->exec) {
 
                             $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem);
                         }
-
                     }
 
                     $oContrato->atualizaValorContratoPorTotalItens('t');
@@ -1269,7 +1263,7 @@ switch($oParam->exec) {
 
                     db_fim_transacao(true);
                     $oRetorno->status = 2;
-                    $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+                    $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
                 }
             }
         }
@@ -1293,8 +1287,7 @@ switch($oParam->exec) {
                 if (isset($oItemOrigem->fracionamentos[$oParam->iFracionamento])) {
 
                     $oItemOrigem->valortotal += $oItemOrigem->fracionamentos[$oParam->iFracionamento]->valortotal;
-                    array_splice($oItemOrigem->fracionamentos, $oParam->iFracionamento,1);
-
+                    array_splice($oItemOrigem->fracionamentos, $oParam->iFracionamento, 1);
                 }
             }
             $oRetorno->itens = $_SESSION["aItensOrigem"];
@@ -1320,19 +1313,18 @@ switch($oParam->exec) {
 
                 db_fim_transacao(true);
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+                $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
             }
-
         }
         break;
 
-    case "getSaldoDotacao" :
+    case "getSaldoDotacao":
 
         $oDotacao             = new Dotacao($oParam->iDotacao, db_getsession("DB_anousu"));
         $oRetorno->saldofinal = $oDotacao->getSaldoFinal();
         break;
 
-    case "getAcordoProgramacaFinanceira" :
+    case "getAcordoProgramacaFinanceira":
 
         if (!empty($oParam->acordo)) {
 
@@ -1341,8 +1333,12 @@ switch($oParam->exec) {
 
             $oAcordoProgramacaoFinanceira = new cl_acordoprogramacaofinanceira();
             $sWhere = "ac34_acordo = {$oParam->acordo}";
-            $sSqlAcordoProgramacaoFinanceira = $oAcordoProgramacaoFinanceira->sql_query(null, "acordoprogramacaofinanceira.*",
-                null, $sWhere);
+            $sSqlAcordoProgramacaoFinanceira = $oAcordoProgramacaoFinanceira->sql_query(
+                null,
+                "acordoprogramacaofinanceira.*",
+                null,
+                $sWhere
+            );
             $rsAcordoProgramacaoFinanceira   = $oAcordoProgramacaoFinanceira->sql_record($sSqlAcordoProgramacaoFinanceira);
             if ($oAcordoProgramacaoFinanceira->numrows > 0) {
                 $oProgramacaoFinanceira = db_utils::fieldsMemory($rsAcordoProgramacaoFinanceira, 0);
@@ -1353,7 +1349,7 @@ switch($oParam->exec) {
         }
         break;
 
-    case "incluirAcordoProgramacaFinanceira" :
+    case "incluirAcordoProgramacaFinanceira":
 
         try {
 
@@ -1361,8 +1357,12 @@ switch($oParam->exec) {
 
             $oAcordoProgramacaoFinanceira = new cl_acordoprogramacaofinanceira();
             $sWhere = "ac34_acordo = {$oParam->acordo} and ac34_programacaofinanceira = {$oParam->codigo}";
-            $sSqlAcordoProgramacaoFinanceira = $oAcordoProgramacaoFinanceira->sql_query(null, "acordoprogramacaofinanceira.*",
-                null, $sWhere);
+            $sSqlAcordoProgramacaoFinanceira = $oAcordoProgramacaoFinanceira->sql_query(
+                null,
+                "acordoprogramacaofinanceira.*",
+                null,
+                $sWhere
+            );
             $rsAcordoProgramacaoFinanceira   = $oAcordoProgramacaoFinanceira->sql_record($sSqlAcordoProgramacaoFinanceira);
             if ($oAcordoProgramacaoFinanceira->numrows == 0) {
 
@@ -1376,7 +1376,7 @@ switch($oParam->exec) {
 
             db_fim_transacao(true);
             $oRetorno->status = 2;
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
         }
         break;
     case "adicionarDocumento":
@@ -1405,7 +1405,7 @@ switch($oParam->exec) {
         $aAcordoDocumento = $oAcordo->getDocumentos();
         $oRetorno->dados  = array();
 
-        for($i = 0; $i < count($aAcordoDocumento); $i++) {
+        for ($i = 0; $i < count($aAcordoDocumento); $i++) {
 
             $oDocumentos      = new stdClass();
             $oDocumentos->iCodigo    = $aAcordoDocumento[$i]->getCodigo();
@@ -1452,47 +1452,47 @@ switch($oParam->exec) {
 
         break;
 
-    /**
-     * Exclui um acordo
-     *
-     * @param integer iAcordo - Código do Acordo
-     */
+        /**
+         * Exclui um acordo
+         *
+         * @param integer iAcordo - Código do Acordo
+         */
     case 'excluirAcordo':
 
         try {
 
-            if ( !isset( $oParam->iAcordo ) || empty( $oParam->iAcordo ) ) {
-                throw new ParameterException( _M( $sCaminhoMensagens.'acordo_nao_informado' ) );
+            if (!isset($oParam->iAcordo) || empty($oParam->iAcordo)) {
+                throw new ParameterException(_M($sCaminhoMensagens . 'acordo_nao_informado'));
             }
 
             db_inicio_transacao();
 
-            $oAcordo = new Acordo( $oParam->iAcordo );
+            $oAcordo = new Acordo($oParam->iAcordo);
             $oAcordo->remover();
 
             db_fim_transacao();
 
-            $oRetorno->message = urlencode( _M( $sCaminhoMensagens.'acordo_excluido' ) );
-        } catch ( ParameterException $oErro ) {
+            $oRetorno->message = urlencode(_M($sCaminhoMensagens . 'acordo_excluido'));
+        } catch (ParameterException $oErro) {
 
-            db_fim_transacao( true );
+            db_fim_transacao(true);
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode( $oErro->getMessage() );
-        } catch ( BusinessException $oErro ) {
+            $oRetorno->message = urlencode($oErro->getMessage());
+        } catch (BusinessException $oErro) {
 
-            db_fim_transacao( true );
+            db_fim_transacao(true);
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode( $oErro->getMessage() );
-        } catch ( DBException $oErro ) {
+            $oRetorno->message = urlencode($oErro->getMessage());
+        } catch (DBException $oErro) {
 
-            db_fim_transacao( true );
+            db_fim_transacao(true);
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode( $oErro->getMessage() );
-        } catch ( Exception $oErro ) {
+            $oRetorno->message = urlencode($oErro->getMessage());
+        } catch (Exception $oErro) {
 
-            db_fim_transacao( true );
+            db_fim_transacao(true);
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode( $oErro->getMessage() );
+            $oRetorno->message = urlencode($oErro->getMessage());
         }
 
         break;
@@ -1504,16 +1504,16 @@ switch($oParam->exec) {
  * @param $bDispensa
  * @return boolean
  */
-function validaDataAssinatura($iLicitacao, $sDataAssinatura, $bDispensa=false){
+function validaDataAssinatura($iLicitacao, $sDataAssinatura, $bDispensa = false)
+{
 
     $sCampo = $bDispensa ? "l20_dtpubratificacao" : "l202_datahomologacao";
     $sSql = "select {$sCampo} from homologacaoadjudica where l202_licitacao = {$iLicitacao}";
     $sDataHomolgacao = db_utils::fieldsMemory(db_query($sSql), 0)->$sCampo;
-    if (strtotime(str_replace("/","-",$sDataAssinatura)) < strtotime($sDataHomolgacao)) {
+    if (strtotime(str_replace("/", "-", $sDataAssinatura)) < strtotime($sDataHomolgacao)) {
         return false;
     }
     return true;
 }
 //echo $oJson->encode($oRetorno);
 echo json_encode($oRetorno);
-?>

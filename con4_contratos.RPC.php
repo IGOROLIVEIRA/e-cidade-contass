@@ -35,6 +35,8 @@ require_once("classes/db_acordoposicaoperiodo_classe.php");
 require_once("classes/db_acordoitemprevisao_classe.php");
 require_once("classes/db_credenciamentosaldo_classe.php");
 require_once("classes/db_pcfornereprlegal_classe.php");
+require_once("classes/db_empempenhocontrato_classe.php");
+require_once("classes/db_empelemento_classe.php");
 require_once('model/AcordoComissao.model.php');
 require_once('model/Acordo.model.php');
 require_once('model/AcordoItem.model.php');
@@ -647,32 +649,30 @@ switch ($oParam->exec) {
                     $sMessagemInvalido = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
                     $lAcordoValido = true;
                 }
-
             }
 
             /**
              * Controle de cadastro de fornecedor
              */
 
-            
-            $result_tipoparticipacao3=$clpcfornereprlegal->sql_record($clpcfornereprlegal->sql_query("","*","","pc81_cgmforn = {$oParam->contrato->iContratado}"));
+
+            $result_tipoparticipacao3 = $clpcfornereprlegal->sql_record($clpcfornereprlegal->sql_query("", "*", "", "pc81_cgmforn = {$oParam->contrato->iContratado}"));
             $resulta     = db_utils::fieldsMemory($result_tipoparticipacao3, 0);
             //$result_tipoparticipacao3 = db_query("select pc81_cgmforn from pcfornereprlegal where pc81_cgmforn = {$oParam->contrato->iContratado}");
-            if($resulta->pc81_tipopart!=3 && $resulta->pc81_tipopart!=4 && $resulta->pc81_tipopart!=5){
+            if ($resulta->pc81_tipopart != 3 && $resulta->pc81_tipopart != 4 && $resulta->pc81_tipopart != 5) {
                 $result_tipoparticipacao1 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 1");
-            
-                if(pg_num_rows($result_tipoparticipacao1) == 0){
+
+                if (pg_num_rows($result_tipoparticipacao1) == 0) {
                     throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
                 }
 
                 $result_tipoparticipacao2 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 2");
 
-                if(pg_num_rows($result_tipoparticipacao2) == 0){
+                if (pg_num_rows($result_tipoparticipacao2) == 0) {
                     throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
                 }
-
             }
-            
+
 
             $oLicitacao = db_utils::getDao('liclicita');
             $rsLicitacao   = $oLicitacao->sql_record($oLicitacao->sql_query_file($oParam->contrato->iLicitacao, 'l20_naturezaobjeto'));
@@ -980,6 +980,14 @@ switch ($oParam->exec) {
 
             $oContrato->atualizaValorContratoPorTotalItens();
 
+            $codigoContrato = $oContrato->getCodigoAcordo();
+            $resultadoSelect = db_query("select ac26_sequencial from acordoposicao where ac26_acordo = {$codigoContrato}");
+            $acordoPosicao = db_utils::fieldsMemory($resultadoSelect, 0);
+            $resultadoSelect = db_query("select SUM(ac20_valortotal) from acordoitem where ac20_acordoposicao = {$acordoPosicao->ac26_sequencial}");
+            $valorTotal = db_utils::fieldsMemory($resultadoSelect, 0);
+
+            db_query("update acordo set ac16_valor = {$valorTotal->sum} where ac16_sequencial = {$codigoContrato}");
+
             db_fim_transacao(false);
         } catch (Exception $eErro) {
 
@@ -1180,6 +1188,14 @@ switch ($oParam->exec) {
                 $oItemContrato->save();
 
                 $oContrato->atualizaValorContratoPorTotalItens();
+
+                $codigoContrato = $oContrato->getCodigoAcordo();
+                $resultadoSelect = db_query("select ac26_sequencial from acordoposicao where ac26_acordo = {$codigoContrato}");
+                $acordoPosicao = db_utils::fieldsMemory($resultadoSelect, 0);
+                $resultadoSelect = db_query("select SUM(ac20_valortotal) from acordoitem where ac20_acordoposicao = {$acordoPosicao->ac26_sequencial}");
+                $valorTotal = db_utils::fieldsMemory($resultadoSelect, 0);
+
+                db_query("update acordo set ac16_valor = {$valorTotal->sum} where ac16_sequencial = {$codigoContrato}");
 
                 db_fim_transacao(false);
             }
@@ -1615,15 +1631,30 @@ switch ($oParam->exec) {
          * @param integer iAcordo - Código do Acordo
          */
     case 'excluirAcordo':
-
+        $clempempenhocontrato = new cl_empempenhocontrato();
+        $clempelemento = new cl_empelemento();
         try {
 
             if (!isset($oParam->iAcordo) || empty($oParam->iAcordo)) {
-                throw new ParameterException(_M($sCaminhoMensagens . 'acordo_nao_informado'));
+                throw new ParameterException(_M($sCaminhoMensagens . 'acordo_nao_informado')); 
             }
 
             db_inicio_transacao();
+            /**
+             * Alteração OC15013
+             */
+            $result1 = $clempempenhocontrato->sql_record($clempempenhocontrato->sql_query(null,"e100_numemp","","e100_acordo=$oParam->iAcordo"));
+            db_fieldsmemory($result1,0);
+            if($e100_numemp!=""){
 
+                $result = $clempelemento->sql_record($clempelemento->sql_query($e100_numemp,null,"*","e64_codele"));
+                db_fieldsmemory($result,0);
+            
+                if($e64_vlremp!=$e64_vlranu){
+                    throw new ParameterException(('Acordo não pode ser excluido.'));  
+                }
+            }
+            
             $oAcordo = new Acordo($oParam->iAcordo);
             $oAcordo->remover();
 

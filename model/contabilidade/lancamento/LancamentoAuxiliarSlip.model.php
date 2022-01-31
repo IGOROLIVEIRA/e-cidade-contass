@@ -31,7 +31,7 @@ require_once("model/contabilidade/lancamento/LancamentoAuxiliarBase.model.php");
 define("URL_LANCAMENTO_AUXILIAR_SLIP", "financeiro.contabilidade.LancamentoAuxiliarSlip.");
 
 /**
- * Executa os lançamentos contabeis auxiliares de um SLIP
+ * Executa os lan?amentos contabeis auxiliares de um SLIP
  * @author Matheus Felini
  * @package contabilidade
  * @subpackage lancamento
@@ -52,7 +52,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   private $nValorTotal;
 
   /**
-   * Texto de observações
+   * Texto de observa??es
    * @var string
    */
   private $sObservacaoHistorico;
@@ -76,7 +76,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   private $iCodigoFavorecido;
 
   /**
-   * Define se o lançamento é um estorno
+   * Define se o lan?amento ? um estorno
    * @var boolean
    */
   private $lEstorno = false;
@@ -88,7 +88,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   private $sCaracteristicaPeculiarCredito;
 
   /**
-   * Característica Peculiar da conta Débito
+   * Caracter?stica Peculiar da conta D?bito
    * @var string
    */
   private $sCaracteristicaPeculiarDebito;
@@ -132,7 +132,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Retorna a instância do lançamento pelo código
+   * Retorna a inst?ncia do lan?amento pelo c?digo
    * @param  integer $iCodigoLancamento
    * @return LancamentoAuxiliarSlip
    */
@@ -166,6 +166,11 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
     $oContaPlano           = ContaPlanoPCASPRepository::getContaPorReduzido($oLancamentoSlip->c82_reduz, $oLancamentoSlip->c70_anousu);
     $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
     $oContaCorrenteDetalhe->setRecurso(new Recurso($oContaPlano->getRecurso()));
+
+    foreach ($oSlisp->getRecursos() as $iRecurso => $nValor) {
+        $oContaCorrenteDetalhe->setRecurso(new Recurso($iRecurso));
+    }
+    
     $oContaCorrenteDetalhe->setContaBancaria($oContaPlano->getContaBancaria());
     if (!empty($oLancamentoSlip->c76_numcgm)) {
       $oContaCorrenteDetalhe->setCredor(CgmFactory::getInstanceByCgm($oLancamentoSlip->c76_numcgm));
@@ -182,8 +187,8 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
     $oDaoConLancamSlip->incluir($this->iCodigoLancamento);
     if ($oDaoConLancamSlip->erro_status == 0) {
 
-      $sMensagemErro  = "Não foi possível vincular o slip ao lançamento.\n\n";
-      $sMensagemErro .= "Erro Técnico: {$oDaoConLancamSlip->erro_msg}";
+      $sMensagemErro  = "N?o foi poss?vel vincular o slip ao lan?amento.\n\n";
+      $sMensagemErro .= "Erro T?cnico: {$oDaoConLancamSlip->erro_msg}";
       throw new BusinessException($sMensagemErro);
     }
   }
@@ -198,8 +203,8 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
 
     if ($oDaoConLancamPag->erro_status == 0) {
 
-      $sErroMsg  = "Não foi possível incluir o pagamento do lançamento.\n\n";
-      $sErroMsg .= "Erro Técnico: {$oDaoConLancamPag->erro_msg}";
+      $sErroMsg  = "N?o foi poss?vel incluir o pagamento do lan?amento.\n\n";
+      $sErroMsg .= "Erro T?cnico: {$oDaoConLancamPag->erro_msg}";
       throw new BusinessException($sErroMsg);
     }
   }
@@ -216,16 +221,16 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
     if ($oDaoConlancamCorrente->erro_status == 0) {
 
       $sData = implode("/",array_reverse(explode("-",$this->getDataAutenticacao())));
-      $sMensagemErro  = "Não foi possível vincular os dados da autenticação. \n\n ";
+      $sMensagemErro  = "N?o foi poss?vel vincular os dados da autentica??o. \n\n ";
       $sMensagemErro .= "Data : {$sData} Terminal : {$this->getIDTerminal()} ";
-      $sMensagemErro .= "Autenticação : {$this->getNumeroAutenticacao()}  ao lançamento.\n\n";
-      $sMensagemErro .= "Erro Técnico: {$oDaoConlancamCorrente->erro_msg}";
+      $sMensagemErro .= "Autentica??o : {$this->getNumeroAutenticacao()}  ao lan?amento.\n\n";
+      $sMensagemErro .= "Erro T?cnico: {$oDaoConlancamCorrente->erro_msg}";
       throw new BusinessException($sMensagemErro);
     }
   }
 
   /**
-   * Seta o código do slip
+   * Seta o c?digo do slip
    * @param integer $iCodigoSlip
    */
   public function setCodigoSlip($iCodigoSlip) {
@@ -233,7 +238,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Retorna o código do slip
+   * Retorna o c?digo do slip
    * @return integer
    */
   public function getCodigoSlip() {
@@ -241,7 +246,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Seta o código do favorecido
+   * Seta o c?digo do favorecido
    * @param integer $iCodigoFavorecido
    */
   public function setFavorecido($iCodigoFavorecido) {
@@ -249,7 +254,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Retorna o código do favorecido
+   * Retorna o c?digo do favorecido
    * @return integer
    */
   public function getFavorecido() {
@@ -265,7 +270,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Retorna o código reduzido
+   * Retorna o c?digo reduzido
    * @return integer
    */
   public function getCodigoReduzido() {
@@ -273,7 +278,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Seta a observação do histórico da operação
+   * Seta a observa??o do hist?rico da opera??o
    * @param string $sObservacaoHistorico
    */
   public function setObservacaoHistorico($sObservacaoHistorico) {
@@ -321,7 +326,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Define valor para quando o lançamento for estorno
+   * Define valor para quando o lan?amento for estorno
    * @param boolean $lEstorno
    */
   public function setEstorno($lEstorno) {
@@ -337,13 +342,13 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Vincula um código de slip com um código de inscricao
+   * Vincula um c?digo de slip com um c?digo de inscricao
    * @param integer $iCodigoSlip
    * @param integer $iCodigoLancamento
    * @throws BusinessException
    *
    *
-   * @todo remover o método deste model e incluir ele no model InscricaoPassivoOrcamento
+   * @todo remover o m?todo deste model e incluir ele no model InscricaoPassivoOrcamento
    */
   static function vinculaSlipInscricao ($iCodigoSlip, $iCodigoInscricao) {
 
@@ -354,14 +359,14 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
 
     if ($oDaoInscricaopassivoslip->erro_status == 0) {
 
-      $sMensagemErro  = "Não foi possível vincular o slip à Inscrição.\n\n";
-      $sMensagemErro .= "Erro Técnico: {$oDaoInscricaopassivoslip->erro_msg}";
+      $sMensagemErro  = "N?o foi poss?vel vincular o slip ? Inscri??o.\n\n";
+      $sMensagemErro .= "Erro T?cnico: {$oDaoInscricaopassivoslip->erro_msg}";
       throw new BusinessException($sMensagemErro);
     }
   }
 
   /**
-   * Seta a característica peculiar da conta débito
+   * Seta a caracter?stica peculiar da conta d?bito
    * @param string $sCaracteristicaPeculiarDebito
    */
   public function setCaracteristicaPeculiarDebito($sCaracteristicaPeculiarDebito) {
@@ -369,7 +374,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Retorna a característica peculiar da conta débito
+   * Retorna a caracter?stica peculiar da conta d?bito
    * @return string
    */
   public function getCaracteristicaPeculiarDebito() {
@@ -377,7 +382,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Seta a característica peculiar da conta crédito
+   * Seta a caracter?stica peculiar da conta cr?dito
    * @param string $sCaracteristicaPeculiarCredito
    */
   public function setCaracteristicaPeculiarCredito($sCaracteristicaPeculiarCredito) {
@@ -385,7 +390,7 @@ class LancamentoAuxiliarSlip  extends LancamentoAuxiliarBase implements ILancame
   }
 
   /**
-   * Retorna a característica peculiar da conta crédito
+   * Retorna a caracter?stica peculiar da conta cr?dito
    * @return string
    */
   public function getCaracteristicaPeculiarCredito() {

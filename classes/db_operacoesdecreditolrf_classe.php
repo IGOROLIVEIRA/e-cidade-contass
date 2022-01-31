@@ -1,3 +1,4 @@
+
 <?
 //MODULO: contabilidade
 //CLASSE DA ENTIDADE operacoesdecreditolrf
@@ -21,6 +22,9 @@ class cl_operacoesdecreditolrf {
    var $c219_tiporealizopcreditoreceb = 0;
    var $c219_tiporealizopcreditoassundir = 0;
    var $c219_tiporealizopcreditoassunobg = 0;
+   var $c219_dscnumeroinst = 0;
+   
+   
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  c219_dadoscomplementareslrf = int4 = Sequencial DCLRF
@@ -31,6 +35,7 @@ class cl_operacoesdecreditolrf {
                  c219_tiporealizopcreditoreceb = int4 = Tipo da realização de operações de créd
                  c219_tiporealizopcreditoassundir = int4 = Tipo da realização de operações de créd
                  c219_tiporealizopcreditoassunobg = int4 = Tipo da realização de operações de créd
+                 c219_dscnumeroinst = varchar(3) = Descrição do número da instituição financeira da operação de crédito contratada
                  ";
    //funcao construtor da classe
    function cl_operacoesdecreditolrf() {
@@ -58,9 +63,12 @@ class cl_operacoesdecreditolrf {
        $this->c219_tiporealizopcreditoreceb = ($this->c219_tiporealizopcreditoreceb == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoreceb"]:$this->c219_tiporealizopcreditoreceb);
        $this->c219_tiporealizopcreditoassundir = ($this->c219_tiporealizopcreditoassundir == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoassundir"]:$this->c219_tiporealizopcreditoassundir);
        $this->c219_tiporealizopcreditoassunobg = ($this->c219_tiporealizopcreditoassunobg == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoassunobg"]:$this->c219_tiporealizopcreditoassunobg);
-     }else{
+       $this->c219_dscnumeroinst = ($this->c219_dscnumeroinst  == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_dscnumeroinst"]:$this->c219_dscnumeroinst);
+      
+      }else{
      }
    }
+  
    // funcao para inclusao
    function incluir (){
       $this->atualizacampos();
@@ -136,6 +144,7 @@ class cl_operacoesdecreditolrf {
                                       ,c219_tiporealizopcreditoreceb
                                       ,c219_tiporealizopcreditoassundir
                                       ,c219_tiporealizopcreditoassunobg
+                                      ,c219_dscnumeroinst 
                        )
                 values (
                                 $this->c219_dadoscomplementareslrf
@@ -146,7 +155,9 @@ class cl_operacoesdecreditolrf {
                                ,$this->c219_tiporealizopcreditoreceb
                                ,$this->c219_tiporealizopcreditoassundir
                                ,$this->c219_tiporealizopcreditoassunobg
+                               ,'$this->c219_dscnumeroinst' 
                       )");
+               
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -206,6 +217,7 @@ class cl_operacoesdecreditolrf {
          return false;
        }
      }
+     if(trim($this->c219_contopcredito)==1){
      if(trim($this->c219_dsccontopcredito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_dsccontopcredito"])){
         if(trim($this->c219_dsccontopcredito)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_dsccontopcredito"])){
            $this->c219_dsccontopcredito = "0" ;
@@ -214,6 +226,10 @@ class cl_operacoesdecreditolrf {
        $virgula = ",";
 
      }
+    }else{
+      $sql  .= $virgula." c219_dsccontopcredito = '' ";
+      $virgula = ",";
+    }
      if(trim($this->c219_realizopcredito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_realizopcredito"])){
         if(trim($this->c219_realizopcredito)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_realizopcredito"])){
            $this->c219_realizopcredito = "0" ;
@@ -294,6 +310,20 @@ class cl_operacoesdecreditolrf {
          return false;
        }
      }
+     
+    if(trim($this->c219_contopcredito)==1){
+        if(trim($this->c219_dscnumeroinst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_dscnumeroinst "])){
+          if(trim($this->c219_dscnumeroinst )=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_dscnumeroinst "])){
+            $this->c219_dscnumeroinst= "" ;
+          }
+        $sql  .= $virgula." c219_dscnumeroinst  = '$this->c219_dscnumeroinst'  ";
+        $virgula = ",";
+          }
+    }else{
+        $sql  .= $virgula." c219_dscnumeroinst  = null  ";
+        $virgula = ",";
+    }     
+
      $sql .= " where c219_dadoscomplementareslrf = $c219_dadoscomplementareslrf ";
      $result = @pg_exec($sql);
      if($result==false){

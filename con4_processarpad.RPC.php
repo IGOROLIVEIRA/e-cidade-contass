@@ -802,6 +802,84 @@ case "processarBalancete" :
 
     break;
 
+    case "processarExtratoBancario" :
+        $sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
+        $rsInst = db_query($sSql);
+        $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+        $iAnoReferencia = db_getsession('DB_anousu');
+        $sSql  = "SELECT si09_codorgaotce AS codorgao, z01_cgccpf AS cnpj
+            FROM db_config
+            LEFT JOIN infocomplementaresinstit ON si09_instit = codigo 
+            INNER JOIN cgm ON z01_numcgm = db_config.numcgm
+            WHERE codigo = ".db_getsession("DB_instit");
+        $rsOrgao = db_query($sSql);
+        $sOrgao = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
+        $sCnpj = db_utils::fieldsMemory($rsOrgao, 0)->cnpj;
+        echo pg_last_error();
+        
+        /*
+         * array para adicionar os arquivos de inslusao de programas
+         */
+        $aArquivoProgramas =  array();
+        /*
+         * gerar arquivos correspondentes a todas as opcoes selecionadas
+         */
+        $oEscritorCSV          = new padArquivoEscritorCSV();
+        $oEscritorProgramasCSV = new padArquivoEscritorCSV();
+        /*
+         * instanciar cada arqivo selecionado e gerar o CSV correspondente
+        */
+        $aArrayArquivos = array();
+        
+        $caminho = "extratobancariosicom/{$sCnpj}/{$iAnoReferencia}";
+        $diretorio = dir($caminho);
+        
+        try {
+            
+            if (!is_dir($caminho)) 
+                throw new Exception("Não existe extrato bancário para geração");
+
+            while($arquivo = $diretorio->read()) {
+                if ($arquivo != '.' && $arquivo != '..') {
+                    $arquivoCTB = $caminho . "/" . $arquivo;
+                    copy($arquivoCTB, $arquivo);
+
+                    $oArquivoZip = new stdClass();
+                    $oArquivoZip->nome    = $arquivo;
+                    $oArquivoZip->caminho = $arquivo;
+                    $aArrayArquivos[] = $oArquivoZip;
+                }     
+            }
+        } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $sGetMessage       = "Arquivo: retornou com erro: \\n \\n {$eErro->getMessage()}";
+            $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+        }
+        
+        $aListaArquivos = " ";
+        foreach ($aArrayArquivos as $oArquivo){
+            $aListaArquivos .= " ".$oArquivo->caminho;
+        }
+
+        system("rm -f EXTRATOS_{$sInst}_{$sOrgao}_12_{$iAnoReferencia}.zip");
+        system("bin/zip -q EXTRATOS_{$sInst}_{$sOrgao}_12_{$iAnoReferencia}.zip $aListaArquivos");
+
+        foreach ($aArrayArquivos as $oArquivo){
+            unlink($oArquivo->caminho);
+        }
+
+        $aArrayArquivos = array();
+
+        $oArquivoZip = new stdClass();
+        $oArquivoZip->nome    = "EXTRATOS_{$sInst}_{$sOrgao}_12_{$iAnoReferencia}.zip";
+        $oArquivoZip->caminho = "EXTRATOS_{$sInst}_{$sOrgao}_12_{$iAnoReferencia}.zip";
+        $aArrayArquivos[] = $oArquivoZip;
+        
+        $oRetorno->itens  = $aArrayArquivos;
+        $oRetorno->message = $aListaArquivos;
+        
+        break;
+
     case "processarFlpgo" :
 
     /*
@@ -824,7 +902,7 @@ case "processarBalancete" :
       $sSql  = "SELECT si09_codorgaotce AS codorgao
       FROM db_config
       LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-      WHERE codigo = ".db_getsession("DB_instit");
+      WHERE codigo = " . db_getsession("DB_instit");
       $rsOrgao = db_query($sSql);
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
       echo pg_last_error();

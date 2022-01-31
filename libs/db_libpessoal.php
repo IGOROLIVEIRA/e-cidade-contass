@@ -982,7 +982,7 @@ function situacao_funcionario($registro = null, $datafim = null)
   $afastado = 1;
   $data_afastamento = date("Y-m-d", db_getsession("DB_datausu"));
   $condicaoaux  = " and ((r45_dtafas between '{$dtini}' and '{$dtfim}' or r45_dtreto between '{$dtini}' and '{$dtfim}') or r45_dtreto > '{$dtfim}')";
-  $condicaoaux .= " and r45_situac != 11 and r45_regist =" . db_sqlformat($registro) . " order by r45_regist, r45_dtafas";
+  $condicaoaux .= " and r45_situac not in (11,13) and r45_regist =" . db_sqlformat($registro) . " order by r45_regist, r45_dtafas";
   global $afasta;
   if (db_selectmax("afasta", "select * from afasta " . bb_condicaosubpes("r45_") . $condicaoaux)) {
 
