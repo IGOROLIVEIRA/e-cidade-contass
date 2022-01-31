@@ -56,7 +56,8 @@ switch ($oParam->exec) {
                     (SELECT si02_vlprecoreferencia
                      FROM itemprecoreferencia
                      WHERE si02_itemproccompra = pcorcamitemproc.pc31_orcamitem) AS pc23_vlrun,
-                                pc23_quant
+                                pc23_quant,
+                                l20_dtpubratificacao
                 FROM credenciamento
                 INNER JOIN liclicita ON l20_codigo = l205_licitacao
                 INNER JOIN liclicitem ON (l21_codliclicita,l21_codpcprocitem) = (l20_codigo,l205_item)
@@ -93,6 +94,7 @@ switch ($oParam->exec) {
             $oItem->pc01_complmater                 = urlencode($oItensLicitacao->pc01_complmater);
             $oItem->m61_descr                       = $oItensLicitacao->m61_descr;
             $oItem->varlortotal                     = $oItensLicitacao->pc23_vlrun * $oItensLicitacao->pc23_quant;
+            $oItem->dtpublicacao                    = $oItensLicitacao->l20_dtpubratificacao;
             $itens[]                                = $oItem;
         }
         $oRetorno->itens = $itens;

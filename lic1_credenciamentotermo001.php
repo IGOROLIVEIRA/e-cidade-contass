@@ -57,6 +57,12 @@ if (isset($incluir)) {
 
         $datacred = DateTime::createFromFormat('d/m/Y', $data);
         $dtiniciotermo = DateTime::createFromFormat('d/m/Y', $l212_dtinicio);
+        $dtfimtermo = DateTime::createFromFormat('d/m/Y', $l212_dtfim);
+
+        if ($dtfimtermo < $dtiniciotermo) {
+            throw new Exception("Usuário: Data de final do termo menor que data de Inicio do termo.");
+            $sqlerro = true;
+        }
 
         if ($dtiniciotermo < $datacred) {
             throw new Exception("Usuário: Data de inicio do termo menor que data de credenciamento.");
@@ -83,6 +89,7 @@ if (isset($incluir)) {
             }
             db_fim_transacao();
             if ($sqlerro == false) {
+                db_msgbox("Termo de Credenciamento Includo com Sucesso!");
                 db_redireciona("lic1_credenciamentotermo002.php?&chavepesquisa=$clcredenciamentotermo->l212_sequencial");
             }
         }

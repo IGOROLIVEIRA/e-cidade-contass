@@ -48,7 +48,7 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('l212_licitacao', 10, $Il212_licitacao, true, 'text', 3, "onchange='js_pesquisa_liclicita(false)'")
+                    db_input('l212_licitacao', 10, $Il212_licitacao, true, 'text', 1, "onchange='js_pesquisa_liclicita(false)'")
                     ?>
                 </td>
             </tr>
@@ -193,8 +193,15 @@ $clcredenciamentotermo->rotulo->label();
 
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_licitacao',
-                'func_liclicita.php?situacao=10&credenciamentotermo=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_dtpubratificacao|l20_condicoespag',
+                'func_liclicita.php?situacao=10&credenciamentotermo=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_dtpubratificacao|l20_veicdivulgacao',
                 'Pesquisa Licitações', true);
+        } else {
+
+            js_OpenJanelaIframe('top.corpo',
+                'db_iframe_licitacao',
+                'func_liclicita.php?situacao=10&credenciamentotermo=true&pesquisa_chave=' +
+                document.form1.l212_licitacao.value + '&funcao_js=parent.js_preencheLicitacao2',
+                'Pesquisa', false);
         }
     }
     /**
@@ -202,11 +209,17 @@ $clcredenciamentotermo->rotulo->label();
      */
     function js_preencheLicitacao(codigo, dtpublica, veicpublica) {
         var aDate = dtpublica.split('-');
-        console.log(veicpublica);
         document.form1.l212_licitacao.value = codigo;
         document.form1.l212_dtpublicacao.value = aDate[2] + '/' + aDate[1] + '/' + aDate[0];
         document.form1.l212_veiculodepublicacao.value = veicpublica;
         db_iframe_licitacao.hide();
+        mostrarFornecedores();
+    }
+
+    function js_preencheLicitacao2(dtpublica, veicpublica) {
+        var aDate = dtpublica.split('-');
+        document.form1.l212_dtpublicacao.value = aDate[2] + '/' + aDate[1] + '/' + aDate[0];
+        document.form1.l212_veiculodepublicacao.value = veicpublica;
         mostrarFornecedores();
     }
 
@@ -309,6 +322,10 @@ $clcredenciamentotermo->rotulo->label();
         var oRetornoitens = JSON.parse(oAjax.responseText);
 
         oRetornoitens.itens.each(function(oLinha, iLinha) {
+
+            var aDate = oLinha.dtpublicacao.split('-');
+            document.form1.l212_dtpublicacao.value = aDate[2] + '/' + aDate[1] + '/' + aDate[0];
+
             var aLinha = new Array();
             aLinha[0] = oLinha.pc01_codmater;
             aLinha[1] = oLinha.pc11_seq;
