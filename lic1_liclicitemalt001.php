@@ -274,10 +274,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoDotac->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
             }
 
             if ($l20_usaregistropreco == 't') {
@@ -295,10 +294,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemRegPreco->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
 
                 $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
                 $oDaoSolicitemRegPreco->excluir('', "pc57_solicitem = $oSolicitemReservado->pc11_codigo");
@@ -306,10 +304,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemRegPreco->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
 
                 //estimativa
                 $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
@@ -319,10 +316,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemRegPreco->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
 
                 $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
                 $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
@@ -333,10 +329,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemRegPreco->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
 
                 $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
                 $oDaoSolicitemRegPreco->excluir('', "pc57_solicitem = $oItemControle->itemdaestimativa");
@@ -344,10 +339,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemRegPreco->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
 
                 //abertura
                 $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
@@ -356,10 +350,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemRegPreco->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
             }
         }
 
@@ -371,10 +364,9 @@ if (!$sqlerro && $codprocesso) {
             if ($sqlerro)
                 $erro_msg = $oDaoSolicitemEle->erro_msg;
 
-            if ($sqlerro) {
-                echo pg_last_error();
-                exit;
-            }
+            //if ($sqlerro) {
+            //  echo pg_last_error();exit;
+            //}
         }
 
 
@@ -385,10 +377,10 @@ if (!$sqlerro && $codprocesso) {
             if ($sqlerro)
                 $erro_msg = $oDaoSolicitemPcMater->erro_msg;
 
-            if ($sqlerro) {
-                echo pg_last_error();
-                exit;
-            }
+            // if ($sqlerro) {
+            //     echo pg_last_error();
+            //     exit;
+            // }
         }
 
         if ($l20_usaregistropreco == 't') {
@@ -400,10 +392,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemPcMater->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
             }
             //abertura
             if (!$sqlerro) {
@@ -413,10 +404,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemPcMater->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
             }
         }
 
@@ -427,10 +417,10 @@ if (!$sqlerro && $codprocesso) {
             if ($sqlerro)
                 $erro_msg = $oDaoSolicitemUnid->erro_msg;
 
-            if ($sqlerro) {
-                echo pg_last_error();
-                exit;
-            }
+            // if ($sqlerro) {
+            //     echo pg_last_error();
+            //     exit;
+            // }
         }
 
         if ($l20_usaregistropreco == 't') {
@@ -442,10 +432,10 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemUnid->erro_msg;
             }
-            if ($sqlerro) {
-                echo pg_last_error();
-                exit;
-            }
+            // if ($sqlerro) {
+            //     echo pg_last_error();
+            //     exit;
+            // }
             //abertura
             if (!$sqlerro) {
                 $oDaoSolicitemUnid = db_utils::getDao('solicitemunid');
@@ -454,10 +444,10 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoSolicitemUnid->erro_msg;
             }
-            if ($sqlerro) {
-                echo pg_last_error();
-                exit;
-            }
+            // if ($sqlerro) {
+            //     echo pg_last_error();
+            //     exit;
+            // }
         }
 
         if (!$sqlerro) {
@@ -468,10 +458,10 @@ if (!$sqlerro && $codprocesso) {
                 $sqlerro = true;
                 $erro_msg = $clpcprocitem->erro_msg;
             }
-            if ($sqlerro) {
-                echo pg_last_error();
-                exit;
-            }
+            // if ($sqlerro) {
+            //     echo pg_last_error();
+            //     exit;
+            // }
         }
 
         if (!$sqlerro) {
@@ -484,10 +474,10 @@ if (!$sqlerro && $codprocesso) {
                 $sqlerro = true;
                 $erro_msg = $clliclicitem->erro_msg;
             }
-            if ($sqlerro) {
-                echo pg_last_error();
-                exit;
-            }
+            // if ($sqlerro) {
+            //     echo pg_last_error();
+            //     exit;
+            // }
         }
 
         if (!$sqlerro) {
@@ -497,10 +487,10 @@ if (!$sqlerro && $codprocesso) {
             if ($sqlerro)
                 $erro_msg = $oDaoPcProcItem->erro_msg;
         }
-        if ($sqlerro) {
-            echo pg_last_error();
-            exit;
-        }
+        // if ($sqlerro) {
+        //     echo pg_last_error();
+        //     exit;
+        // }
 
         if ($l20_usaregistropreco == 't') {
 
@@ -511,10 +501,10 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoVinculo->erro_msg;
             }
-            if ($sqlerro) {
-                echo pg_last_error();
-                exit;
-            }
+            // if ($sqlerro) {
+            //     echo pg_last_error();
+            //     exit;
+            // }
 
             //estimativa
             if (!$sqlerro) {
@@ -533,10 +523,11 @@ if (!$sqlerro && $codprocesso) {
             //   $sqlerro = $oDaoVinculo->erro_status == '0' ? true : false;
             // }
         }
-        if ($sqlerro) {
-            echo pg_last_error();
-            exit;
-        }
+        // if ($sqlerro) {
+        //     echo pg_last_error();
+        //     exit;
+        // }
+
         if (!$sqlerro) {
             //compilação
             $oDaoReservado = db_utils::getDao('solicitem');
@@ -549,10 +540,9 @@ if (!$sqlerro && $codprocesso) {
                 $sqlerro = true;
                 break;
             }
-            if ($sqlerro) {
-                echo pg_last_error();
-                exit;
-            }
+            //if ($sqlerro) {
+            //  echo pg_last_error();exit;
+            //}
             $oDaoReservado = db_utils::getDao('solicitem');
             $oDaoReservado->excluir($oSolicitemReservado->pc11_codigo);
             $sqlerro = $oDaoReservado->erro_status == '0' ? true : false;
@@ -595,10 +585,9 @@ if (!$sqlerro && $codprocesso) {
                     break;
                 }
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
 
                 $oDaoReservado = db_utils::getDao('solicitem');
                 $oDaoReservado->excluir($codReservado2);
@@ -606,10 +595,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoReservado->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
 
                 //abertura
                 $oDaoReservado = db_utils::getDao('solicitem');
@@ -618,10 +606,9 @@ if (!$sqlerro && $codprocesso) {
                 if ($sqlerro)
                     $erro_msg = $oDaoReservado->erro_msg;
 
-                if ($sqlerro) {
-                    echo pg_last_error();
-                    exit;
-                }
+                //if ($sqlerro) {
+                //  echo pg_last_error();exit;
+                //}
             }
         }
     }
