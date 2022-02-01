@@ -108,7 +108,7 @@ if ( isset($_POST["db_opcao"]) && $_POST["db_opcao"] == "Incluir" ) {
   <body style="background-color: #CCCCCC; margin-top: 30px;" >
   <div class="container">
     <?php
-    require_once(Modification::getFile("forms/db_diprbaseprevidencia.php"));
+    include(Modification::getFile("forms/db_diprbaseprevidencia.php"));
     ?>
   </div>
   <?
