@@ -621,3 +621,13 @@ pmmontalvania:
     environment: production
     only:
         - master
+
+codanorte:
+    stage: deploy
+    script:
+        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.101 "cd /var/www/e-cidade && git checkout . && git pull origin master "'
+        - 'ssh -p22 contass@10.251.27.101 "cd /var/www/e-cidade && git checkout . && php deploy_git.php "'
+    environment: production
+    only:
+        - master
