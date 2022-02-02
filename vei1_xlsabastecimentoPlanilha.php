@@ -10,7 +10,7 @@ require_once("std/db_stdClass.php");
 require_once("classes/db_pcorcam_classe.php");
 include("libs/PHPExcel/Classes/PHPExcel.php");
 $oGet        = db_utils::postMemory($_GET);
-$clpcorcam   = new cl_pcorcam();
+$clpcorcam   = new cl_pcorcam(); 
 $objPHPExcel = new PHPExcel;
 
 /**

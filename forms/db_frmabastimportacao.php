@@ -45,7 +45,7 @@ if(isset($_POST["processar"])) {
 
    
 
-    $novo_nome = $_FILES["uploadfile"]["name"];
+    $novo_nome = $_FILES["uploadfile"]["name"]; 
     
     // Nome do novo arquivo
     $nomearq = $_FILES["uploadfile"]["name"];
