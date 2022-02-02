@@ -967,6 +967,7 @@ class slip {
      * @param float   $nValor valor do Recurso
      */
     final public function addRecurso($iRecurso, $nValor = 0) {
+        // Oc16590 - Limpo o array e acrescento apenas o novo recurso para evitar as fontes anteriormente acumuladas
         $this->aRecursos = array();
         $this->aRecursos[$iRecurso] = $nValor;
     }
