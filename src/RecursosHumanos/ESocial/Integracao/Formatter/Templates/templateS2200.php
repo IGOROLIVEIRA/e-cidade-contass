@@ -130,7 +130,7 @@ return array(
             'nmdep' => 'nmdep',
             'dtnascto' => 'dtnascto',
             'cpfdep' => 'cpfdep',
-            'depIRRF' => 'depIRRF',
+            'depirrf' => 'depirrf',
             'depsf' => 'depsf',
             'inctrab' => 'inctrab'
         )
