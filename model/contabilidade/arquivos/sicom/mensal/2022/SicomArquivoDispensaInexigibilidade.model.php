@@ -279,6 +279,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
 
     $sSql = "SELECT DISTINCT l20_codepartamento, '10' as tipoRegistro,
+  l20_leidalicitacao,
 	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
 	(SELECT CASE
     WHEN o41_subunidade != 0
@@ -328,11 +329,15 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	AND DATE_PART('MONTH',l20_dtpubratificacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
     $rsResult10 = db_query($sSql);
-
+    //echo $sSql;
+    //db_criatabela($rsResult10);
+    //exit; 
+    
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $dispensa10 = new cl_dispensa102022();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
+      
 
       $dispensa10->si74_tiporegistro = 10;
       $dispensa10->si74_codorgaoresp = $oDados10->codorgaoresp;
@@ -341,7 +346,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
       $dispensa10->si74_nroprocesso = $oDados10->nroprocessolicitatorio;
       $dispensa10->si74_tipoprocesso = $oDados10->tipoprocesso;
       $dispensa10->si74_dtabertura = $oDados10->dtabertura;
-      $dispensa10->si74_naturezaobjeto = $oDados10->naturezaobjeto;
+      $dispensa10->si74_naturezaobjeto = $oDados10->naturezaobjeto;  
       $dispensa10->si74_objeto = $this->removeCaracteres($oDados10->objeto);
       $dispensa10->si74_justificativa = $this->removeCaracteres($oDados10->justificativa);
       $dispensa10->si74_razao = $this->removeCaracteres($oDados10->razao);
@@ -349,6 +354,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
       $dispensa10->si74_veiculopublicacao = $this->removeCaracteres($oDados10->veiculopublicacao);
       $dispensa10->si74_processoporlote = $oDados10->processoporlote;
       $dispensa10->si74_tipocadastro = !$oDados10->cadInicial ? 1 : $oDados10->cadInicial;
+      $dispensa10->si74_leidalicitacao = $oDados10->l20_leidalicitacao;
       $dispensa10->si74_instit = db_getsession("DB_instit");
       $dispensa10->si74_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 

@@ -1,6 +1,6 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE aberlic102022
+//CLASSE DA ENTIDADE aberlic102022 
 class cl_aberlic102022
 {
   // cria variaveis de erro
@@ -72,7 +72,14 @@ class cl_aberlic102022
   var $si46_limitecontratacao = 0;
   var $si46_mes = 0;
   var $si46_instit = 0;
-  // cria propriedade com as variaveis do arquivo
+  var $si46_leidalicitacao =0;
+  var $si46_dtpulicacaopncp = null;
+  var $si46_linkpncp = null;
+  var $si46_dtpulicacaoedital = null;
+  var $si46_linkedital = null;
+  var $si46_diariooficialdivulgacao =0;
+  var $si46_mododisputa =0;
+  // cria propriedade com as variaveis do arquivo   
   var $campos = "
                  si46_sequencial = int8 = sequencial
                  si46_tiporegistro = int8 = Tipo do registro
@@ -111,6 +118,13 @@ class cl_aberlic102022
                  si46_limitecontratacao = int8 = Limite para a  contratação
                  si46_mes = int8 = Mês
                  si46_instit = int8 = Instituição
+                 si46_leidalicitacao = int8 = Lei da Licitacação 
+                 si46_dtpulicacaopncp = date = Data PNCP
+                 si46_linkpncp = text = Link PNCP
+                 si46_dtpulicacaoedital = date = Data do Edital
+                 si46_linkedital = text = Link do Edital
+                 si46_diariooficialdivulgacao = int8 = Diário Oficla de Divulgação 
+                 si46_mododisputa = Modo Disputa
                  ";
 
   //funcao construtor da classe
@@ -215,6 +229,13 @@ class cl_aberlic102022
       $this->si46_limitecontratacao = ($this->si46_limitecontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_limitecontratacao"] : $this->si46_limitecontratacao);
       $this->si46_mes = ($this->si46_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_mes"] : $this->si46_mes);
       $this->si46_instit = ($this->si46_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_instit"] : $this->si46_instit);
+      $this->si46_leidalicitacao = ($this->si46_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_leidalicitacao"] : $this->si46_leidalicitacao);
+      $this->si46_dtpulicacaopncp = ($this->si46_dtpulicacaopncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_dtpulicacaopncp"] : $this->si46_dtpulicacaopncp);
+      $this->si46_linkpncp = ($this->si46_linkpncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_linkpncp"] : $this->si46_linkpncp);
+      $this->si46_dtpulicacaoedital = ($this->si46_dtpulicacaoedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_dtpulicacaoedital"] : $this->si46_dtpulicacaoedital);
+      $this->si46_linkedital = ($this->si46_linkedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_linkedital"] : $this->si46_linkedital);
+      $this->si46_diariooficialdivulgacao = ($this->si46_diariooficialdivulgacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_diariooficialdivulgacao"] : $this->si46_diariooficialdivulgacao);  
+      $this->si46_mododisputa = ($this->si46_mododisputa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_mododisputa"] : $this->si46_mododisputa); 
     } else {
       $this->si46_sequencial = ($this->si46_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_sequencial"] : $this->si46_sequencial);
     }
@@ -362,6 +383,24 @@ class cl_aberlic102022
 
       return false;
     }
+       
+    if ($this->si46_leidalicitacao == null) { 
+      $this->si46_leidalicitacao = "null";
+    }
+    
+    if ($this->si46_diariooficialdivulgacao == null) {
+      $this->si46_diariooficialdivulgacao = "null";
+    }
+    if ($this->si46_mododisputa == null) {
+      $this->si46_mododisputa = "null";
+    }
+
+    if ($this->si46_dtpulicacaopncp == null) {
+      $this->si46_dtpulicacaopncp = "null";
+    }
+    if ($this->si46_dtpulicacaoedital == null) {
+      $this->si46_dtpulicacaoedital = "null";
+    }
     $sql = "insert into aberlic102022(
                                        si46_sequencial
                                       ,si46_tiporegistro
@@ -400,6 +439,13 @@ class cl_aberlic102022
                                       ,si46_exercicioedital
                                       ,si46_mes
                                       ,si46_instit
+                                      ,si46_leidalicitacao
+                                      ,si46_dtpulicacaopncp
+                                      ,si46_linkpncp
+                                      ,si46_dtpulicacaoedital
+                                      ,si46_linkedital
+                                      ,si46_diariooficialdivulgacao
+                                      ,si46_mododisputa
                        )
                 values (
                                 $this->si46_sequencial
@@ -439,6 +485,13 @@ class cl_aberlic102022
                                ,$this->si46_exercicioedital
                                ,$this->si46_mes
                                ,$this->si46_instit
+                               ,$this->si46_leidalicitacao
+                               ," . ($this->si46_dtpulicacaopncp == "null" || $this->si46_dtpulicacaopncp == "" ? "null" : "'" . $this->si46_dtpulicacaopncp . "'") . "
+                               ,'$this->si46_linkpncp'
+                               ," . ($this->si46_dtpulicacaoedital == "null" || $this->si46_dtpulicacaoedital == "" ? "null" : "'" . $this->si46_dtpulicacaoedital . "'") . "
+                               ,'$this->si46_linkedital'
+                               ,$this->si46_diariooficialdivulgacao
+                               ,$this->si46_mododisputa
                       )";
     
     $result = db_query($sql);
@@ -787,6 +840,34 @@ class cl_aberlic102022
 
         return false;
       }
+    }
+    if (trim($this->si46_leidalicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_leidalicitacao"])) {
+      $sql .= $virgula . " si46_leidalicitacao = $this->si46_leidalicitacao ";
+      $virgula = ",";
+    }
+    if (trim($this->si46_dtpulicacaopncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_dtpulicacaopncp"])) {
+      $sql .= $virgula . " si46_dtpulicacaopncp = $this->si46_dtpulicacaopncp ";
+      $virgula = ",";
+    }
+    if (trim($this->si46_linkpncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_linkpncp"])) {
+      $sql .= $virgula . " si46_linkpncp = $this->si46_linkpncp ";
+      $virgula = ",";
+    }
+    if (trim($this->si46_dtpulicacaoedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_dtpulicacaoedital"])) {
+      $sql .= $virgula . " si46_dtpulicacaoedital = $this->si46_dtpulicacaoedital ";
+      $virgula = ",";
+    }
+    if (trim($this->si46_linkedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_linkedital"])) {
+      $sql .= $virgula . " si46_linkedital = $this->si46_linkedital ";
+      $virgula = ",";
+    }
+    if (trim($this->si46_diariooficialdivulgacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_diariooficialdivulgacao"])) {
+      $sql .= $virgula . " si46_diariooficialdivulgacao = $this->si46_diariooficialdivulgacao ";
+      $virgula = ",";
+    }
+    if (trim($this->si46_mododisputa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_mododisputa"])) {
+      $sql .= $virgula . " si46_mododisputa = $this->si46_modoDisputa ";
+      $virgula = ",";
     }
     $sql .= " where ";
     if ($si46_sequencial != null) {
