@@ -104,7 +104,7 @@ ORDER BY l21_ordem) as x GROUP BY
                 pc80_criterioadjudicacao,
                 pc01_tabela,
                 pc01_taxa,
-                si01_justificativa
+                si01_justificativa 
 FROM pcproc
 JOIN pcprocitem ON pc80_codproc = pc81_codproc
 JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem

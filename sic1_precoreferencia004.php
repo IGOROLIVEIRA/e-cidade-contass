@@ -661,11 +661,15 @@ HTML;
         <div class="td item-total-color">
             VALOR TOTAL ESTIMADO
         </div>
+        <?php echo $nTotalItens ?>
+        <div class="td item-menu-color">
+            <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
+        </div>
+        </div>
         <?php if ($oGet->impjust == 't') : ?>
             <div class="tr bg_eb">
-                <div class="th col-valor_total-text align-left">
-                    Justificativa
-                </div>
+            <div class="th col-valor_total-text align-left">
+                Justificativa
             </div>
         </div>
         <div class="tr">
