@@ -41,7 +41,11 @@ if (pg_num_rows($rsLotes) == 0) {
                 case when pc01_complmater is not null and pc01_complmater != pc01_descrmater then pc01_descrmater ||'. '|| pc01_complmater
 		     else pc01_descrmater end as pc01_descrmater,
                 m61_abrev,
-                sum(pc11_quant) as pc11_quant
+                sum(pc11_quant) as pc11_quant,
+                pc69_seq,
+                pc11_seq,
+                pc11_reservado,
+                l21_ordem
 from (
 SELECT DISTINCT pc01_servico,
                 pc11_codigo,
@@ -59,7 +63,10 @@ SELECT DISTINCT pc01_servico,
                 pc10_numero,
                 pc90_numeroprocesso AS processo_administrativo,
                 (pc11_quant * pc11_vlrun) AS pc11_valtot,
-                m61_usaquant
+                m61_usaquant,
+                pc69_seq,
+                pc11_reservado,
+                l21_ordem
 FROM solicitem
 INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
 LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
@@ -70,18 +77,33 @@ LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
 LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
 LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
 LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
+left join processocompraloteitem on
+		pc69_pcprocitem = pcprocitem.pc81_codprocitem
+left join processocompralote on
+			pc68_sequencial = pc69_processocompralote
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
+left join liclicitem on l21_codpcprocitem = pc81_codprocitem
 WHERE pc81_codproc = {$codigo_preco}
   AND pc10_instit = " . db_getsession("DB_instit") . "
-ORDER BY pc11_seq) as x GROUP BY
+ORDER BY l21_ordem) as x GROUP BY
                 pc01_codmater,
                 pc11_seq,
-                pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
+                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq,pc11_reservado,l21_ordem
+                order by
+                l21_ordem) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
                 {$tipoReferencia} as si02_vlprecoreferencia,
+                                     case when pc80_criterioadjudicacao = 1 then
+                     round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
+                     when pc80_criterioadjudicacao = 2 then
+                     round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
+                     end as mediapercentual,
                 pc01_codmater,
                 si01_datacotacao,
+                pc80_criterioadjudicacao,
+                pc01_tabela,
+                pc01_taxa,
                 si01_justificativa
 FROM pcproc
 JOIN pcprocitem ON pc80_codproc = pc81_codproc
@@ -95,7 +117,8 @@ JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
-GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq";
+GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
+ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by l21_ordem asc";
 
     $rsResult = db_query($sSql) or die(pg_last_error()); //db_criatabela($rsResult);exit;
 
@@ -132,7 +155,12 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
         $oDadosDaLinha = new stdClass();
         $oDadosDaLinha->seq = $iCont + 1;
         $oDadosDaLinha->item = $oResult->pc01_codmater;
-        $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
+        if ($oResult->pc11_reservado == 't') {
+            $oDadosDaLinha->descricao = '[ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
+        } else {
+            $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
+        }
+        //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
         $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
         $oDadosDaLinha->quantidade = $oResult->pc11_quant;
         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
@@ -289,7 +317,12 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
             $oDadosDaLinha = new stdClass();
             $oDadosDaLinha->seq = $iCont + 1;
             $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
-            $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
+            if ($oResult->pc11_reservado == 't') {
+                $oDadosDaLinha->descricao = '[ME/EPP] - ' . str_replace(';', "", $oResult->pc01_descrmater);
+            } else {
+                $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
+            }
+            //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
             $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
             $oDadosDaLinha->quantidade = $oResult->pc11_quant;
             $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;

@@ -67,6 +67,12 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     $this->objpdf->text($xcol +2, $xlin + 30, $nomenclatura);
     $this->objpdf->text($xcol +6, $xlin + 34,  db_formatar(pg_result($this->dados, $iDados, "z01_cgccpf"), $mascara));
 
+    // Oc16590
+    $sFonteRecurso = pg_result($this->dados, $iDados, "k29_recurso") . " - " . pg_result($this->dados, $iDados, "o15_descr");
+    $this->objpdf->text($xcol + 2, $xlin + 41, "Fonte de Recursos");
+    $this->objpdf->text($xcol + 6, $xlin + 45, $sFonteRecurso);
+    // FIM Oc16590
+
     /**
      * Dados bancarios do credor
      */

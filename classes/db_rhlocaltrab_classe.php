@@ -156,9 +156,9 @@ class cl_rhlocaltrab {
                                ,$this->rh55_codigo 
                                ,'$this->rh55_estrut' 
                                ,'$this->rh55_descr' 
-                               ,'$this->rh55_inep' 
+                               ,".(empty($this->rh55_inep) ? 'NULL' : $this->rh55_inep) ."
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -254,7 +254,7 @@ class cl_rhlocaltrab {
        }
      }
      if(trim($this->rh55_inep)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh55_inep"])){ 
-       $sql  .= $virgula." rh55_inep = '$this->rh55_inep' ";
+       $sql  .= $virgula." rh55_inep = ".(empty($this->rh55_inep) ? 'NULL' : $this->rh55_inep) ." ";
        $virgula = ",";
      }
      $sql .= " where ";

@@ -484,6 +484,7 @@ class cl_pcorcamitemproc
         $sql .= "      left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
         $sql .= "                                     and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
         $sql .= "      left  join empautoriza          on empautoriza.e54_autori              = empautitem.e55_autori";
+        $sql .= "      left  join solicitemregistropreco   on  pc57_solicitem = pc11_codigo";
         $sql .= "      left join processocompraloteitem on pc69_pcprocitem = pcprocitem.pc81_codprocitem";
         $sql .= "      left join processocompralote on pc68_sequencial = pc69_processocompralote";
         $sql2 = "";

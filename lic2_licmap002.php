@@ -230,7 +230,7 @@ if ($modelo == 1) {
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(60 + 20 * $cont_quant, $alt, 'TOTAL DE FORNECEDORES  :  ' . $numrows_forne, "T", 1, "L", 0);
     $pdf->ln();
-    $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_descrmater,pc11_resum, pc11_numero", "l21_ordem", "pc22_codorc=$orcamento"));
+    $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_descrmater,pc11_resum, pc11_numero,pc11_reservado", "l21_ordem", "pc22_codorc=$orcamento"));
     $numrows_itens = $clpcorcamitem->numrows;
     $p = 0;
     $troca = 1;
@@ -262,7 +262,11 @@ if ($modelo == 1) {
 
         $pdf->setfont('arial', '', 7);
         $pdf->cell(20, $alt, $l21_ordem, 0, 0, "C", $p);
-        $pdf->cell(100, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 65), 0, 0, "L", $p);
+        if ($pc11_reservado == "t") {
+            $pdf->cell(100, $alt, substr('[ITEM ME/EPP] ' . $pc01_descrmater . " - " . $pc11_resum, 0, 65), 0, 0, "L", $p);
+        } else {
+            $pdf->cell(100, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 65), 0, 0, "L", $p);
+        }
         $result_valor = $clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc24_pontuacao, pc23_percentualdesconto", null, "pc23_orcamitem=$pc22_orcamitem
 	                                                                          and pc24_pontuacao=1"));
 
@@ -301,7 +305,7 @@ if ($modelo == 1) {
     //-----------------------------  MODELO 2  -----------------------------------------------------------------------------------------------------------------//
 
     /*PEGA ITENS*/
-    $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct pc22_orcamitem,pc01_descrmater,pc11_resum,pc11_quant,m61_abrev,l21_ordem, pc11_numero, l20_criterioadjudicacao", "l21_ordem", "pc22_codorc=$orcamento"));
+    $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct pc22_orcamitem,pc01_descrmater,pc11_resum,pc11_quant,m61_abrev,l21_ordem, pc11_numero, l20_criterioadjudicacao,pc11_reservado", "l21_ordem", "pc22_codorc=$orcamento"));
     $numrows_itens = $clpcorcamitem->numrows;
     if ($numrows_itens == 0) {
         db_redireciona('db_erros.php?fechar=true&db_erro=Não existem itens cadastrados.');
@@ -430,7 +434,11 @@ if ($modelo == 1) {
         if (!$l20_criterioadjudicacao == 2 || !$l20_criterioadjudicacao == 1) {
             $pdf->cell(16, $alt, $pc11_numero, 1, 0, "C", 0);
         }
-        $pdf->cell(54, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 27), 1, 0, "L", 0);
+        if ($pc11_reservado == "t") {
+            $pdf->cell(54, $alt, substr('[ITEM ME/EPP] ' . $pc01_descrmater . " - " . $pc11_resum, 0, 27), 1, 0, "L", 0);
+        } else {
+            $pdf->cell(54, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 27), 1, 0, "L", 0);
+        }
         $pdf->cell(10, $alt, $m61_abrev, 1, 0, "C", 0);
         $pdf->cell(15, $alt, $pc11_quant, 1, 0, "C", 0);
 
@@ -814,7 +822,7 @@ if ($modelo == 1) {
         db_fieldsmemory($result_lotes, $x);
         // echo $clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_descrmater,pc11_resum, pc11_numero,l04_seq", "l21_ordem", "pc22_codorc=$orcamento and l04_descricao=$l04_descricao");
         // exit;
-        $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_codmater,pc01_descrmater,pc11_resum, pc11_numero,l04_seq", "l04_seq", "pc22_codorc=$orcamento and l04_descricao='$l04_descricao'"));
+        $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct l21_ordem,pc22_orcamitem,pc01_codmater,pc01_descrmater,pc11_resum, pc11_numero,pc11_reservado,l04_seq", "l04_seq", "pc22_codorc=$orcamento and l04_descricao='$l04_descricao'"));
         $numrows_itens = $clpcorcamitem->numrows;
 
         if ($numrows_itens == 0)
@@ -854,7 +862,12 @@ if ($modelo == 1) {
             $pdf->setfont('arial', '', 7);
             $pdf->cell(20, $alt, $l04_seq, 0, 0, "C", $p);
             $pdf->cell(20, $alt, $pc01_codmater, 0, 0, "C", $p);
-            $pdf->cell(100, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 65), 0, 0, "L", $p);
+            if ($pc11_reservado == "t") {
+                $pdf->cell(100, $alt, substr('[ITEM ME/EPP] ' . $pc01_descrmater . " - " . $pc11_resum, 0, 65), 0, 0, "L", $p);
+            } else {
+                $pdf->cell(100, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 65), 0, 0, "L", $p);
+            }
+            //$pdf->cell(100, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 65), 0, 0, "L", $p);
             $result_valor = $clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc24_pontuacao, pc23_percentualdesconto", null, "pc23_orcamitem=$pc22_orcamitem
 	                                                                          and pc24_pontuacao=1"));
 
@@ -925,10 +938,18 @@ if (isset($imp_descla) && $imp_descla == "S") {
             $pdf->cell(70, $alt, substr($z01_nome, 0, 40), 0, 0, "L", $p);
 
             if ($l20_tipojulg != 1) {
-                $pdf->cell(40, $alt, $l04_descricao, 0, 0, "L", $p);
+                if ($pc11_reservado == "t") {
+                    $pdf->cell(40, $alt, '[ITEM ME/EPP] ' . $l04_descricao, 0, 0, "L", $p);
+                } else {
+                    $pdf->cell(40, $alt, $l04_descricao, 0, 0, "L", $p);
+                }
             } else {
                 $pdf->cell(10, $alt, $l21_ordem, 0, 0, "C", $p);
-                $pdf->cell(80, $alt, $pc01_codmater . " - " . $pc01_descrmater, 0, 0, "L", $p);
+                if ($pc11_reservado == "t") {
+                    $pdf->cell(80, $alt, '[ITEM ME/EPP] ' . $pc01_codmater . " - " . $pc01_descrmater, 0, 0, "L", $p);
+                } else {
+                    $pdf->cell(80, $alt, $pc01_codmater . " - " . $pc01_descrmater, 0, 0, "L", $p);
+                }
             }
 
             $pdf->multicell($tam_justifica, $alt, $pc32_motivo, 0, "J", $p);
