@@ -173,8 +173,6 @@ class EventoS2200 extends EventoBase
 
 
             if (empty($oDadosAPI->evtAdmissao->dependente)) {
-                // echo 'mat: ' . $oDados->vinculo->matricula;
-                // print_r($oDadosAPI->evtAdmissao->dependente);
                 unset($oDadosAPI->evtAdmissao->dependente);
             }
 
@@ -285,27 +283,27 @@ class EventoS2200 extends EventoBase
             $oDependFormatado = new \stdClass;
             switch ($oDependentes->rh31_gparen) {
                 case 'C':
-                    $oDependFormatado->tpDep = '01';
+                    $oDependFormatado->tpdep = '01';
                     break;
                 case 'F':
-                    $oDependFormatado->tpDep = '03';
+                    $oDependFormatado->tpdep = '03';
                     break;
                 case 'P':
                 case 'M':
                 case 'A':
-                    $oDependFormatado->tpDep = '09';
+                    $oDependFormatado->tpdep = '09';
                     break;
 
                 default:
-                    $oDependFormatado->tpDep = '99';
+                    $oDependFormatado->tpdep = '99';
                     break;
             }
-            $oDependFormatado->nmDep = $oDependentes->rh31_nome;
-            $oDependFormatado->dtNascto = $oDependentes->rh31_dtnasc;
-            $oDependFormatado->cpfDep = empty($oDependentes->rh31_cpf) ? null : $oDependentes->rh31_cpf;
+            $oDependFormatado->nmdep = $oDependentes->rh31_nome;
+            $oDependFormatado->dtnascto = $oDependentes->rh31_dtnasc;
+            $oDependFormatado->cpfdep = empty($oDependentes->rh31_cpf) ? null : $oDependentes->rh31_cpf;
             $oDependFormatado->depIRRF = ($oDependentes->rh31_depirrf == "0" ? "N" : "S");
-            $oDependFormatado->depSF = ($oDependentes->rh31_depend == "N" ? "N" : "S");
-            $oDependFormatado->incTrab = ($oDependentes->rh31_depirrf == "N" ? "N" : "S");
+            $oDependFormatado->depsf = ($oDependentes->rh31_depend == "N" ? "N" : "S");
+            $oDependFormatado->inctrab = ($oDependentes->rh31_depirrf == "N" ? "N" : "S");
 
             $aDependentes[] = $oDependFormatado;
         }

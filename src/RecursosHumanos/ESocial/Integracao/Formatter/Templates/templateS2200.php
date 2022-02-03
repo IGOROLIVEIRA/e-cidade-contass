@@ -126,15 +126,13 @@ return array(
     ),
     'dependente' => array(
         'properties' => array(
-            'tpDep' => array(
-                'nome_api' => 'tpdep'
-            ),
-            'nmDep' => 'nmDep',
-            'dtNascto' => 'dtNascto',
-            'cpfDep' => 'cpfDep',
+            'tpdep' => 'tpdep',
+            'nmdep' => 'nmdep',
+            'dtnascto' => 'dtnascto',
+            'cpfdep' => 'cpfdep',
             'depIRRF' => 'depIRRF',
-            'depSF' => 'depSF',
-            'incTrab' => 'incTrab'
+            'depsf' => 'depsf',
+            'inctrab' => 'inctrab'
         )
     ),
     'aposentadoria' => array(
@@ -185,7 +183,7 @@ return array(
                 'type' => 'int'
             ),
             'dtBase' => 'dtBase',
-            'cnpjSindCategProf' => 'cnpjSindCategProf'
+            'cnpjSindCategProf' => 'cnpjsindcategprof'
         )
     ),
     'FGTS' => array(
@@ -278,7 +276,7 @@ return array(
     'remuneracao' => array(
         'properties' => array(
             'vrSalFx' => array(
-                'vrSalFx' => 'vrSalFx',
+                'vrSalFx' => 'vrsalfx',
                 'type' => 'float'
             ),
             'undSalFixo' => array(
