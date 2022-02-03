@@ -150,7 +150,7 @@ function getDespesasCusteadosComSuperavit($aFontes, $dtini, $dtfim, $instits) {
 $nTotalSemDisponbilidade = 0;
 
 
-function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
+function getSaldoPlanoContaFonteAnexo($nFonte, $dtIni, $dtFim, $aInstits){
     $where = " c61_instit in ({$aInstits})" ;
     $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
@@ -172,7 +172,7 @@ function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
     return $nTotalAnterior;
 }
 
-function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
+function getRestosSemDisponilibidadeAnexo($aFontes, $dtIni, $dtFim, $aInstits) {
     $iSaldoRestosAPagarSemDisponibilidade = 0;
 
     foreach($aFontes as $sFonte){
@@ -186,7 +186,7 @@ function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
         foreach($aEmpRestos as $oEmpResto){
             $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
         }
-        $nTotalAnterior = getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits);
+        $nTotalAnterior = getSaldoPlanoContaFonteAnexo($sFonte, $dtIni, $dtFim, $aInstits);
         $nSaldo = 0;
         if($nValorRpPago > $nTotalAnterior){
             $nSaldo = $nValorRpPago - $nTotalAnterior ;
@@ -643,7 +643,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">9 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoTotal = getRestosSemDisponilibidade(array("'101'","'201'","'118','119'","'218','219'"), $dtini, $dtfim, $instits);
+                                    $nValorRecursoTotal = getRestosSemDisponilibidadeAnexo(array("'101'","'201'","'118','119'","'218','219'"), $dtini, $dtfim, $instits);
                                     $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorRecursoTotal;
                                     echo db_formatar($nValorRecursoTotal, "f");
                                 ?>
@@ -653,7 +653,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.1 - RECURSOS DE IMPOSTOS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoImposto = getRestosSemDisponilibidade(array("'101'","'201'"), $dtini, $dtfim, $instits);
+                                    $nValorRecursoImposto = getRestosSemDisponilibidadeAnexo(array("'101'","'201'"), $dtini, $dtfim, $instits);
                                     echo db_formatar($nValorRecursoImposto, "f");
                                 ?>
                             </td>
@@ -662,7 +662,7 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.2 - RECURSOS DO FUNDEB</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoFundeb = getRestosSemDisponilibidade(array("'118','119'","'218','219'"), $dtini, $dtfim, $instits);
+                                    $nValorRecursoFundeb = getRestosSemDisponilibidadeAnexo(array("'118','119'","'218','219'"), $dtini, $dtfim, $instits);
                                     echo db_formatar($nValorRecursoFundeb, "f");
                                 ?>
                             </td>

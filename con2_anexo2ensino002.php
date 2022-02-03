@@ -95,7 +95,7 @@ $aSubFuncao = array(122,272,271,361,365,366,367,843);
 $sFuncao     = "12";
 $aFontes      = array("'101','118','119'");
 
-function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
+function getSaldoPlanoContaFonteAnexo($nFonte, $dtIni, $dtFim, $aInstits){
     $where = " c61_instit in ({$aInstits})" ;
     $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
@@ -117,7 +117,7 @@ function getSaldoPlanoContaFonte($nFonte, $dtIni, $dtFim, $aInstits){
     return $nTotalAnterior;
 }
 
-function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
+function getRestosSemDisponilibidadeAnexo($aFontes, $dtIni, $dtFim, $aInstits) {
     $iSaldoRestosAPagarSemDisponibilidade = 0;
 
     foreach($aFontes as $sFonte){
@@ -131,7 +131,7 @@ function getRestosSemDisponilibidade($aFontes, $dtIni, $dtFim, $aInstits) {
         foreach($aEmpRestos as $oResto){
             $nValorRpPago += $oResto->pagorpp + $oResto->pagorpnp;
         }
-        $nTotalAnterior = getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits);
+        $nTotalAnterior = getSaldoPlanoContaFonteAnexo($sFonte, $dtIni, $dtFim, $aInstits);
         $nSaldo = 0;
         if($nValorRpPago > $nTotalAnterior){
             $nSaldo = $nValorRpPago - $nTotalAnterior ;
@@ -181,7 +181,7 @@ function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dt
     $nValorAplicado = $nValorAplicado + $valorEmpPagoSuperavit;
 
     $aFontes = array("'101'","'201'","'118','119'","'218','219'");
-    $nValorPagoSemDisponibilidade = getRestosSemDisponilibidade($aFontes, $dtini, $dtfim, $instits);
+    $nValorPagoSemDisponibilidade = getRestosSemDisponilibidadeAnexo($aFontes, $dtini, $dtfim, $instits);
 
     $nValorAplicado = $nValorAplicado + $nValorPagoSemDisponibilidade;
 
