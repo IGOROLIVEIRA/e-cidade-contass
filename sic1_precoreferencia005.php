@@ -104,7 +104,7 @@ ORDER BY l21_ordem) as x GROUP BY
                 pc80_criterioadjudicacao,
                 pc01_tabela,
                 pc01_taxa,
-                si01_justificativa
+                si01_justificativa 
 FROM pcproc
 JOIN pcprocitem ON pc80_codproc = pc81_codproc
 JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
@@ -179,7 +179,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
 
     //    echo "VALOR TOTAL DOS ITENS;";
     //    echo "R$" . number_format($nTotalItens, 2, ",", ".").";";
-    if ($oGet->impjust == 's') {
+    if ($oGet->impjust == 't') {
         echo "JUSTIFICATIVA;\n";
         echo str_replace(array(';', '.', ','), "", db_utils::fieldsMemory($rsResult, 0)->si01_justificativa);
     }
