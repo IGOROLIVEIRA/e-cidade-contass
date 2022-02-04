@@ -25,7 +25,7 @@ if (isset($imprimir)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia004.php?impjust=$impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    jan = window.open('sic1_precoreferencia004.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -40,7 +40,7 @@ if (isset($imprimircsv)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia005.php?impjust=$impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    jan = window.open('sic1_precoreferencia005.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -55,7 +55,7 @@ if (isset($imprimirword)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia006.php?impjust=$impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    jan = window.open('sic1_precoreferencia006.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -64,18 +64,21 @@ if (isset($imprimirword)) {
 }
 
 if (isset($alterar)) {
-    if($respCotacaocodigo!=""&& $respOrcacodigo!=""){
+
+    if ($respCotacaocodigo != "" && $respOrcacodigo != "") {
         $clprecoreferencia->si01_tipoCotacao  = 3;
         $clprecoreferencia->si01_tipoOrcamento  = 4;
         $clprecoreferencia->si01_numcgmCotacao = $respCotacaocodigo;
         $clprecoreferencia->si01_numcgmOrcamento = $respOrcacodigo;
     }
-    
+
     db_inicio_transacao();
     $db_opcao = 2;
     $clprecoreferencia->si01_justificativa = $si01_justificativa;
+    $clprecoreferencia->si01_impjustificativa = $si01_impjustificativa;
 
-    $clitemprecoreferencia->excluir(null,"si02_precoreferencia = $si01_sequencial");
+
+    $clitemprecoreferencia->excluir(null, "si02_precoreferencia = $si01_sequencial");
     /**
      * Atualização do valor dos itens do preço referência
      */
@@ -96,41 +99,41 @@ if (isset($alterar)) {
     join pcorcamval on pc22_orcamitem = pc23_orcamitem
     where pc80_codproc = $si01_processocompra and pc23_vlrun != 0 group by pc23_orcamitem";
 
-        $rsResult = db_query($sSql);
+    $rsResult = db_query($sSql);
 
 
-        $arrayValores = array();
-        $cont = 0;
+    $arrayValores = array();
+    $cont = 0;
 
-        for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-            $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
+        $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
 
-            if ($oPost->si01_cotacaoitem == 1) {
-                if ($oItemOrc->valor >= 1) {
+        if ($oPost->si01_cotacaoitem == 1) {
+            if ($oItemOrc->valor >= 1) {
 
                 $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
                 $cont++;
-                }
-            } else if ($oPost->si01_cotacaoitem == 2) {
-                if ($oItemOrc->valor >= 2) {
+            }
+        } else if ($oPost->si01_cotacaoitem == 2) {
+            if ($oItemOrc->valor >= 2) {
 
-                    $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
-                    $cont++;
-                }
-            } else if ($oPost->si01_cotacaoitem == 3) {
-                if ($oItemOrc->valor >= 3) {
+                $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
+                $cont++;
+            }
+        } else if ($oPost->si01_cotacaoitem == 3) {
+            if ($oItemOrc->valor >= 3) {
 
-                    $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
-                    $cont++;
-                }
+                $arrayValores[$cont] = $oItemOrc->pc23_orcamitem;
+                $cont++;
             }
         }
+    }
 
 
-        for ($iCont = 0; $iCont < $cont; $iCont++) {
-            $valor = $arrayValores[$iCont];
-            $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
+    for ($iCont = 0; $iCont < $cont; $iCont++) {
+        $valor = $arrayValores[$iCont];
+        $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
             round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
             round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
                 from pcproc
@@ -140,29 +143,29 @@ if (isset($alterar)) {
                 join pcorcamval on pc22_orcamitem = pc23_orcamitem
                 where pc80_codproc = $si01_processocompra and pc23_orcamitem = $valor group by pc23_orcamitem";
 
-            $rsResultee = db_query($sSql);
+        $rsResultee = db_query($sSql);
 
-            $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
+        $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
 
-            $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
-            $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
-            $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
-            if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
+        $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
+        $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
+        $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
+        if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
             $clitemprecoreferencia->si02_vlpercreferencia = 0;
-            } else if ($oItemOrc->percreferencia1 > 0 && $oItemOrc->percreferencia2 == 0) {
+        } else if ($oItemOrc->percreferencia1 > 0 && $oItemOrc->percreferencia2 == 0) {
             $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia1;
-            } else {
+        } else {
             $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia2;
-            }
-            $clitemprecoreferencia->incluir(null);
         }
+        $clitemprecoreferencia->incluir(null);
+    }
 
-        if ($clitemprecoreferencia->erro_status == 0) {
+    if ($clitemprecoreferencia->erro_status == 0) {
 
         $sqlerro = true;
         $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg;
         $clprecoreferencia->erro_status = "0";
-        }
+    }
     /*  
     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
                 round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
@@ -185,7 +188,7 @@ if (isset($alterar)) {
         $clitemprecoreferencia->alterar($oItem->sequencial);
     }*/
 
-    if ($clitemprecoreferencia->numrows>0) {
+    if ($clitemprecoreferencia->numrows > 0) {
         $clprecoreferencia->alterar($si01_sequencial);
     }
 

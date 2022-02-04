@@ -1,28 +1,29 @@
-<?php
-require_once 'model/relatorios/Relatorio.php';
-include("classes/db_db_docparag_classe.php");
+    <?php
+    require_once 'model/relatorios/Relatorio.php';
+    include("classes/db_db_docparag_classe.php");
 
-// include("fpdf151/pdf.php");
-require("libs/db_utils.php");
-$oGet = db_utils::postMemory($_GET);
-parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
-db_postmemory($HTTP_POST_VARS);
+    // include("fpdf151/pdf.php");
+    require("libs/db_utils.php");
+    $oGet = db_utils::postMemory($_GET);
+    parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
+    db_postmemory($HTTP_POST_VARS);
 
-switch ($oGet->tipoprecoreferencia) {
-    case '2':
-        $tipoReferencia = " MAX(pc23_vlrun) ";
-        break;
 
-    case '3':
-        $tipoReferencia = " MIN(pc23_vlrun) ";
-        break;
+    switch ($oGet->tipoprecoreferencia) {
+        case '2':
+            $tipoReferencia = " MAX(pc23_vlrun) ";
+            break;
 
-    default:
-        $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
-        break;
-}
+        case '3':
+            $tipoReferencia = " MIN(pc23_vlrun) ";
+            break;
 
-$rsLotes = db_query("select distinct  pc68_sequencial,pc68_nome
+        default:
+            $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+            break;
+    }
+
+    $rsLotes = db_query("select distinct  pc68_sequencial,pc68_nome
                         from
                             pcproc
                         join pcprocitem on
@@ -660,12 +661,13 @@ HTML;
         <div class="td item-total-color">
             VALOR TOTAL ESTIMADO
         </div>
+        <?php echo $nTotalItens ?>
         <div class="td item-menu-color">
             <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
         </div>
-    </div>
-    <?php if ($oGet->impjust == 's') : ?>
-        <div class="tr bg_eb">
+        </div>
+        <?php if ($oGet->impjust == 't') : ?>
+            <div class="tr bg_eb">
             <div class="th col-valor_total-text align-left">
                 Justificativa
             </div>
@@ -745,4 +747,8 @@ ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
 
+<<<<<<< HEAD
+    ?>
+=======
 ?>
+>>>>>>> 2121a7036298be4ec8ca0073fabeb2b218a25bb1
