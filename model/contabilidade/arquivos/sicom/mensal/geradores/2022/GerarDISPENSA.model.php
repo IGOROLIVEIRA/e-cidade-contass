@@ -60,7 +60,7 @@ class GerarDISPENSA extends GerarAM
 
       /**
        *
-       * Registros 10, 11, 12, 13, 14, 15
+       * Registros 10, 11, 12, 13, 14, 15   
        */
       for ($iCont = 0; $iCont < pg_num_rows($rsDISPENSA10); $iCont++) {
 
@@ -68,6 +68,7 @@ class GerarDISPENSA extends GerarAM
 
         $aCSVDISPENSA10['si74_tiporegistro'] = $this->padLeftZero($aDISPENSA10['si74_tiporegistro'], 2);
         $aCSVDISPENSA10['si74_tipocadastro'] = $this->padLeftZero($aDISPENSA10['si74_tipocadastro'], 1);
+        $aCSVDISPENSA10['si74_leidalicitacao'] = $this->padLeftZero($aDISPENSA10['si74_leidalicitacao'], 1);
         $aCSVDISPENSA10['si74_codorgaoresp'] = $this->padLeftZero($aDISPENSA10['si74_codorgaoresp'], 2);
         $aCSVDISPENSA10['si74_codunidadesubresp'] = $this->padLeftZero($aDISPENSA10['si74_codunidadesubresp'], 5);
         $aCSVDISPENSA10['si74_exercicioprocesso'] = $this->padLeftZero($aDISPENSA10['si74_exercicioprocesso'], 4);

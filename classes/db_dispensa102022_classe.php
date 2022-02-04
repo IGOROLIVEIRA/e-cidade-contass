@@ -1,6 +1,6 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE dispensa102022
+//CLASSE DA ENTIDADE dispensa102022  
 class cl_dispensa102022
 {
   // cria variaveis de erro
@@ -41,7 +41,8 @@ class cl_dispensa102022
   var $si74_tipocadastro = 0;
   var $si74_mes = 0;
   var $si74_instit = 0;
-  // cria propriedade com as variaveis do arquivo
+  var $si74_leidalicitacao = 0;
+  // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  si74_sequencial = int8 = sequencial 
                  si74_tiporegistro = int8 = Tipo do  registro 
@@ -61,6 +62,7 @@ class cl_dispensa102022
                  si74_processoporlote = int8 = Tipo de cadastro 
                  si74_mes = int8 = Mês 
                  si74_instit = int8 = Instituição 
+                 si74_leidalicitacao = int8 = Lei da Licitação  
                  ";
   
   //funcao construtor da classe
@@ -118,6 +120,7 @@ class cl_dispensa102022
       $this->si74_tipocadastro = ($this->si74_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_tipocadastro"] : $this->si74_tipocadastro);
       $this->si74_mes = ($this->si74_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_mes"] : $this->si74_mes);
       $this->si74_instit = ($this->si74_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_instit"] : $this->si74_instit);
+      $this->si74_leidalicitacao = ($this->si74_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_leidalicitacao"] : $this->si74_leidalicitacao);
     } else {
       $this->si74_sequencial = ($this->si74_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_sequencial"] : $this->si74_sequencial);
     }
@@ -226,7 +229,8 @@ class cl_dispensa102022
                                       ,si74_processoporlote
                                       ,si74_tipocadastro
                                       ,si74_mes 
-                                      ,si74_instit 
+                                      ,si74_instit
+                                      ,si74_leidalicitacao  
                        )
                 values (
                                 $this->si74_sequencial 
@@ -246,7 +250,8 @@ class cl_dispensa102022
                                ,$this->si74_processoporlote 
                                ,$this->si74_tipocadastro 
                                ,$this->si74_mes 
-                               ,$this->si74_instit 
+                               ,$this->si74_instit
+                               ,$this->si74_leidalicitacao  
                       )";
 
     $result = db_query($sql);
@@ -427,6 +432,19 @@ class cl_dispensa102022
       if (trim($this->si74_instit) == null) {
         $this->erro_sql = " Campo Instituição nao Informado.";
         $this->erro_campo = "si74_instit";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->si74_leidalicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si74_leidalicitacao"])) {
+      $sql .= $virgula . " si74_leidalicitacao = $this->si74_leidalicitacao ";
+      $virgula = ",";
+      if (trim($this->si74_leidalicitacao) == null) {
+        $this->erro_sql = " Campo da Lei de Licitação não informado.";
+        $this->erro_campo = "si74_leidalicitacao";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
