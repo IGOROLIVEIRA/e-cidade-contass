@@ -3,7 +3,6 @@ e-cidade			5432	cmbocaiuva
 e-cidade			5432	cmcapitaoeneas
 e-cidade			5432	cmmoc
 e-cidade			5432	fumasa
-e-cidade			5432	arsan
 e-cidade			5432	pmibiracatu
 e-cidade			5433	pmpatis
 e-cidade			5432	pmsaofrancisco
@@ -85,6 +84,7 @@ cisnorte            5432    e-cidade
 cisarp              5432    e-cidade
 hrjanauba           5432    e-cidade
 cmitacambira        5432    e-cidade
+arsan    			5432	e-cidade
 
 pmsaojoaomissoes    5432    e-cidadenovosclientes
 pmsantafeminas      5432    e-cidadenovosclientes
