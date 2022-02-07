@@ -123,18 +123,18 @@ if(isset($_POST["processar"])) {
             $data = explode("/",$data);
             $data = $data[2]."-".$data[1]."-".$data[0];
             
-            //$data = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($data+1));
+            //$hora = PHPExcel_Shared_Date::stringToExcel($data+1);
 
             $cell = $objWorksheet -> getCellByColumnAndRow (2,$row);
-            $hora = $cell->getValue();
-            $hours = round($hora * 24);
-            $mins = round($hora * 1440) - round($hours * 60);
-            $secs = round($hora * 86400) - round($hours * 3600) - round($mins * 60);
-            $resul = strlen($hours);
-            if($resul==1){
-                $hours = "0".$hours;
-            }
-            $hora = $hours.":".$mins;
+            //$hora = $cell->getValue();
+            $val = $cell->getValue();
+
+            $hours = round($val * 24);
+            $mins = round($val * 1440) - round($hours * 60);
+            $secs = round($val * 86400) - round($hours * 3600) - round($mins * 60);
+            $returnValue = (integer) gmmktime($hours+3, $mins, $secs);
+            
+            $hora = date('H:i',$returnValue);
         
             $cell = $objWorksheet -> getCellByColumnAndRow (3,$row);
             $placa = $cell->getValue();
@@ -353,7 +353,7 @@ if(isset($_POST["processar"])) {
                            </th>
                            
                            <th style="border: 0px solid red; width:200px; background:#ffffff;">
-                               Secretaria
+                               Departamento
                            </th>
                            <th style="background:#ffffff;">
                                Empenho
