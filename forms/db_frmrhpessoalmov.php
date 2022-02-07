@@ -163,20 +163,6 @@ if (isset($db_opcaoal)) {
                         ?>
                         <table width="100%" border="0">
                             <tr>
-                                <td nowrap title="Ano / Mês exercício">
-                                    <b>Exercício:</b>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_input('rh02_anousu', 4, $Irh02_anousu, true, 'text', 3, "")
-                                    ?>
-                                    &nbsp;<b>/</b>&nbsp;
-                                    <?
-                                    db_input('rh02_mesusu', 2, $Irh02_mesusu, true, 'text', 3, "")
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td nowrap title="<?= @$Trh02_regist ?>">
                                     <?
                                     db_ancora(@$Lrh02_regist, "js_pesquisarh02_regist(true);", 3);
@@ -193,6 +179,39 @@ if (isset($db_opcaoal)) {
                                     <?
                                     db_input('z01_nome', 34, $Iz01_nome, true, 'text', 3, '');
                                     ?>
+
+                                    <b>Exercício:</b>
+                                    <?
+                                    db_input('rh02_anousu', 4, $Irh02_anousu, true, 'text', 3, "")
+                                    ?>
+                                    &nbsp;<b>/</b>&nbsp;
+                                    <?
+                                    db_input('rh02_mesusu', 2, $Irh02_mesusu, true, 'text', 3, "")
+                                    ?>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Informações Contratuais</legend>
+                        <?
+                        db_input('rh02_seqpes', 6, $Irh02_seqpes, true, 'hidden', 3, "");
+                        ?>
+                        <table width="100%" border="0">
+                            
+                            <tr>
+                                <td nowrap title="<?= @$Trh02_lota ?>">
+                                    <?
+                                    db_ancora(@$Lrh02_lota, "js_pesquisarh02_lota(true);", $db_opcao);
+                                    ?>
+                                </td>
+                                <td nowrap>
+                                    <?
+                                    db_input('rh02_lota', 6, $Irh02_lota, true, 'text', $db_opcao, "onchange='js_pesquisarh02_lota(false);'");
+                                    ?>
+                                    <?
+                                    db_input('r70_descr', 34, $Ir70_descr, true, 'text', 3, '', '', '', "width: 205px");
+                                    ?>
                                 </td>
                                 <td nowrap title="<?= @$Trh02_funcao ?>" align="right">
                                     <?
@@ -208,31 +227,24 @@ if (isset($db_opcaoal)) {
                                     ?>
                                 </td>
                             </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_lota ?>">
+                            <tr id="vinculoorigem" style="display: none">
+                                <td></td>
+                                <td></td>
+                                <td nowrap align="right" id="torigem">
                                     <?
-                                    db_ancora(@$Lrh02_lota, "js_pesquisarh02_lota(true);", $db_opcao);
+                                    $opcaoorigem = 3;
+                                    if ($db_opcao == 1 || $db_opcao == 2) {
+                                        $opcaoorigem = $db_opcao;
+                                    }
+                                    db_ancora(@$Lrh21_regpri, "js_pesquisarh21_regpri(true);", $opcaoorigem);
                                     ?>
                                 </td>
-                                <td nowrap>
+                                <td>
                                     <?
-                                    db_input('rh02_lota', 6, $Irh02_lota, true, 'text', $db_opcao, "onchange='js_pesquisarh02_lota(false);'");
+                                    db_input('rh21_regpri', 6, $Irh21_regpri, true, 'hidden', $opcaoorigem, "onchange='js_pesquisarh21_regpri(false);'")
                                     ?>
                                     <?
-                                    db_input('r70_descr', 34, $Ir70_descr, true, 'text', 3, '');
-                                    ?>
-                                </td>
-                                <td nowrap title="<?= @$Trh20_cargo ?>" align="right">
-                                    <?
-                                    db_ancora(@$Lrh20_cargo, "js_pesquisarh20_cargo(true);", $db_opcao);
-                                    ?>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_input('rh20_cargo', 6, $Irh20_cargo, true, 'text', $db_opcao, "onchange='js_pesquisarh20_cargo(false);'");
-                                    ?>
-                                    <?
-                                    db_input('rh04_descr', 33, $Irh04_descr, true, 'text', 3, '');
+                                    db_input('z01_nome', 33, $Iz01_nome, true, 'hidden', 3, '', 'z01_nomeorigem')
                                     ?>
                                 </td>
                             </tr>
@@ -256,24 +268,48 @@ if (isset($db_opcaoal)) {
                                     db_input('rh30_vinculo', 2, $Irh30_vinculo, true, 'hidden', 3, '');
                                     ?>
                                 </td>
-
-                                <td nowrap align="right" id="torigem">
-                                    <div id="vinculoorigem" style="visibility:hidden">
-                                        <?
-                                        $opcaoorigem = 3;
-                                        if ($db_opcao == 1 || $db_opcao == 2) {
-                                            $opcaoorigem = $db_opcao;
-                                        }
-                                        db_ancora(@$Lrh21_regpri, "js_pesquisarh21_regpri(true);", $opcaoorigem);
-                                        ?>
-                                    </div>
+                                <td nowrap title="<?= @$Trh20_cargo ?>" align="right">
+                                    <?
+                                    db_ancora(@$Lrh20_cargo, "js_pesquisarh20_cargo(true);", $db_opcao);
+                                    ?>
                                 </td>
                                 <td nowrap>
                                     <?
-                                    db_input('rh21_regpri', 6, $Irh21_regpri, true, 'hidden', $opcaoorigem, "onchange='js_pesquisarh21_regpri(false);'")
+                                    db_input('rh20_cargo', 6, $Irh20_cargo, true, 'text', $db_opcao, "onchange='js_pesquisarh20_cargo(false);'");
                                     ?>
                                     <?
-                                    db_input('z01_nome', 33, $Iz01_nome, true, 'hidden', 3, '', 'z01_nomeorigem')
+                                    db_input('rh04_descr', 33, $Irh04_descr, true, 'text', 3, '');
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap title="<?= @$Trh02_tpcont ?>">
+                                    <?
+                                    db_ancora(@$Lrh02_tpcont, "js_pesquisarh02_tpcont(true);", $db_opcao);
+                                    ?>
+                                </td>
+                                <td nowrap id="tipoContrato">
+                                    <?
+                                    db_input('rh02_tpcont', 6, $Irh02_tpcont, true, 'text', $db_opcao, "onchange='js_pesquisarh02_tpcont(false);'")
+                                    ?>
+                                    <?
+                                    db_input('h13_tpcont', 2, $Ih13_tpcont, true, 'text', 3, '');
+                                    ?>
+                                    <?
+                                    db_input('h13_descr', 28, $Ih13_descr, true, 'text', 3, '');
+                                    ?>
+                                </td>
+                                <td nowrap title="<?= @$Trh03_padrao ?>" align="right" id="Labelpadrao">
+                                    <?
+                                    db_ancora(@$Lrh03_padrao, "js_pesquisarh03_padrao(true);", $db_opcao);
+                                    ?>
+                                </td>
+                                <td nowrap id="padrao">
+                                    <?
+                                    db_input('rh03_padrao', 6, $Irh03_padrao, true, 'text', $db_opcao, "onchange='js_pesquisarh03_padrao(false);'")
+                                    ?>
+                                    <?
+                                    db_input('r02_descr', 33, $Ir02_descr, true, 'text', 3, '');
                                     ?>
                                 </td>
                             </tr>
@@ -335,61 +371,16 @@ if (isset($db_opcaoal)) {
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap title="<?= @$Trh02_tipsal ?>">
-                                    <?= @$Lrh01_reajusteparidade ?>
+                                <td nowrap title="<?= @$Trh02_tbprev ?>" id="LabelTabelaPrev">
+                                    <?= @$Lrh02_tbprev ?>
                                 </td>
-                                <td>
-                                    <?php
-                                    $oDaoReajusteParidade = db_utils::getDao('rhreajusteparidade');
-                                    $sSql                 = $oDaoReajusteParidade->sql_query_file(null, '*', 'rh148_sequencial');
-                                    $rsReajusteParidade   = db_query($sSql);
-
-                                    if (!$rsReajusteParidade) {
-                                        throw new DBException('Erro ao buscar os dados da tabela rhreajusteparidade.');
-                                    }
-
-                                    $aTipoReajuste     = array('0' => '');
-                                    $aReajusteParidade = db_utils::getCollectionByRecord($rsReajusteParidade, false, false, true);
-
-                                    foreach ($aReajusteParidade as $oReajusteParidade) {
-                                        $aTipoReajuste[$oReajusteParidade->rh148_sequencial] = $oReajusteParidade->rh148_descricao;
-                                    }
-
-                                    db_select('rh01_reajusteparidade', $aTipoReajuste, true, $db_opcao);
+                                <td nowrap>
+                                    <?
+                                    $result_tbprev = $clinssirf->sql_record($clinssirf->sql_query_file(null, null, " distinct cast(r33_codtab as integer)-2 as r33_codtab,r33_nome", "r33_codtab", "r33_instit = " . db_getsession("DB_instit") . " and r33_codtab between 3 and 6 and r33_mesusu=$rh02_mesusu and r33_anousu=$rh02_anousu "));
+                                    db_selectrecord("rh02_tbprev", $result_tbprev, true, $db_opcao, "", "", "", "0-Nenhum...");
                                     ?>
                                 </td>
-                                <td nowrap title="<?= @$Trh03_padrao ?>" align="right" id="Labelpadrao">
-                                    <?
-                                    db_ancora(@$Lrh03_padrao, "js_pesquisarh03_padrao(true);", $db_opcao);
-                                    ?>
-                                </td>
-                                <td nowrap id="padrao">
-                                    <?
-                                    db_input('rh03_padrao', 6, $Irh03_padrao, true, 'text', $db_opcao, "onchange='js_pesquisarh03_padrao(false);'")
-                                    ?>
-                                    <?
-                                    db_input('r02_descr', 33, $Ir02_descr, true, 'text', 3, '');
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_tpcont ?>">
-                                    <?
-                                    db_ancora(@$Lrh02_tpcont, "js_pesquisarh02_tpcont(true);", $db_opcao);
-                                    ?>
-                                </td>
-                                <td nowrap id="tipoContrato">
-                                    <?
-                                    db_input('rh02_tpcont', 6, $Irh02_tpcont, true, 'text', $db_opcao, "onchange='js_pesquisarh02_tpcont(false);'")
-                                    ?>
-                                    <?
-                                    db_input('h13_tpcont', 2, $Ih13_tpcont, true, 'text', 3, '');
-                                    ?>
-                                    <?
-                                    db_input('h13_descr', 28, $Ih13_descr, true, 'text', 3, '');
-                                    ?>
-                                </td>
-                                <td nowrap align="right" id="LabelPadraoPrev">
+                                <td align="right" nowrap id="LabelPadraoPrev">
                                     <?
                                     db_ancora(@$Lrh03_padraoprev, "js_pesquisarh03_padraoprev(true);", $db_opcao);
                                     ?>
@@ -402,40 +393,6 @@ if (isset($db_opcaoal)) {
                                     <?
                                     $Tr02_descrprev = ''; // Remove title.
                                     db_input('r02_descrprev', 33, @$Ir02_descrprev, true, 'text', 3, '');
-                                    ?>
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_vincrais ?>">
-                                    <?= @$Lrh02_vincrais ?>
-                                </td>
-                                <td nowrap colspan="3">
-                                    <?
-                                    $arr_vincrais = array(
-                                        '00' => '   - Nenhum',
-                                        '10' => '10 - Trab urbano vinc a empr pessoa juridica - CLT p/tempo indeterminado',
-                                        '15' => '15 - Trab urbano vinc a empr pessoa fisica  - CLT p/tempo indeterminado',
-                                        '20' => '20 - Trab rural vinc a empr pessoa juridica - CLT p/tempo indeterminado',
-                                        '25' => '25 - Trab rural vinc a empr pessoa fisica  - CLT p/tempo indeterminado',
-                                        '30' => '30 - Serv regido pelo regime juridico unico (Fed,est,munic) e militar',
-                                        '31' => '31 - Serv regido pelo Regime Jurídico Único (fed,est,munic) e militar,vinc a RGPS',
-                                        '35' => '35 - Serv publico nao-efetivo',
-                                        '40' => '40 - Trabalhador avulso',
-                                        '50' => '50 - Trab temporario, regido pela Lei n. 6.019 de 03.01.74',
-                                        '55' => '55 - Aprendiz contratado na termos do art. 428 da CLT.',
-                                        '60' => '60 - Trab urbano vinc a empr pessoa juridica - CLT p/tempo determinado',
-                                        '65' => '65 - Trab urbano vinc a empr pessoa fisica - CLT p/tempo determinado',
-                                        '70' => '70 - Trab rural vinc a empr pessoa juridica - CLT p/tempo determinado',
-                                        '75' => '75 - Trab rural vinc a empr pessoa fisica - CLT p/tempo determinado',
-                                        '80' => '80 - Diretor sem vinc empregaticio c/ recolhimento do FGTS',
-                                        '90' => '90 - Contrato de trabalho p/prazo determinado Lei 9.601 CLT',
-                                        '90' => '90 - Contrato de Trabalho por Tempo Determinado, reg pela Lei no. 8.745',
-                                        '95' => '95 - Contrato de Trabalho por Tempo Determinado, reg pela Lei no. 8.745 e 9.849',
-                                        '96' => '96 - Contrato de Trabalho por Prazo Determinado, regido por Lei Estadual',
-                                        '97' => '97 - Contrato de Trabalho por Prazo Determinado, regido por Lei Municipal'
-                                    );
-                                    db_select("rh02_vincrais", $arr_vincrais, true, $db_opcao);
                                     ?>
                                 </td>
                             </tr>
@@ -483,17 +440,8 @@ if (isset($db_opcaoal)) {
                                     ?>
                                 </td>
                             </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_tbprev ?>" id="LabelTabelaPrev">
-                                    <?= @$Lrh02_tbprev ?>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    $result_tbprev = $clinssirf->sql_record($clinssirf->sql_query_file(null, null, " distinct cast(r33_codtab as integer)-2 as r33_codtab,r33_nome", "r33_codtab", "r33_instit = " . db_getsession("DB_instit") . " and r33_codtab between 3 and 6 and r33_mesusu=$rh02_mesusu and r33_anousu=$rh02_anousu "));
-                                    db_selectrecord("rh02_tbprev", $result_tbprev, true, $db_opcao, "", "", "", "0-Nenhum...");
-                                    ?>
-                                </td>
-                                <td nowrap title="<?= $Trh19_propi ?>" align="right">
+                            <tr id="disabpropri">
+                                <td nowrap title="<?= $Trh19_propi ?>" >
                                     <? db_ancora(@$Lrh19_propi, "", 3); ?>
                                 </td>
                                 <td nowrap>
@@ -506,141 +454,7 @@ if (isset($db_opcaoal)) {
                                     ?>
                                     <b>%</b>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_ocorre ?>">
-                                    <?= @$Lrh02_ocorre ?>
-                                </td>
-                                <td nowrap colspan="3">
-                                    <?
-                                    $arr_ocorre = array(
-                                        '' => 'Nunca esteve exposta',
-                                        '01' => '01 - Não exposto no momento, mas já esteve',
-                                        '02' => '02 - Exposta (aposentadoria esp. 15 anos)',
-                                        '03' => '03 - Exposta (aposentadoria esp. 20 anos)',
-                                        '04' => '04 - Exposta (aposentadoria esp. 25 anos)',
-                                        '05' => '05 - Mais de um vínculo (ou fonte pagadora) - Não exposição a agente nocivo',
-                                        '06' => '06 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 15 anos)',
-                                        '07' => '07 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 20 anos)',
-                                        '08' => '08 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 25 anos)'
-                                    );
-                                    db_select("rh02_ocorre", $arr_ocorre, true, $db_opcao);
-                                    ?>
-                                </td>
-                            </tr>
-
-
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_deficientefisico ?>" align="left">
-                                    <?= @$Lrh02_deficientefisico ?>
-                                </td>
-                                <td nowrap>
-                                    <? $clrotulo->label("rh02_deficientefisico");
-                                    $aDeficiente = array('f' => 'Não', 't' => 'Sim');
-                                    db_select("rh02_deficientefisico", $aDeficiente, true, $db_opcao, "onchange='js_informarTipoDeficiencia()'");
-                                    ?>
-                                </td>
-                                <td nowrap align="right" title="<?php echo $Trh02_diasgozoferias; ?>">
-                                    <?php echo @$Lrh02_diasgozoferias; ?>
-                                </td>
-                                <td>
-                                    <?php
-
-                                    if (!isset($rh02_diasgozoferias) && $db_opcao == 1) {
-                                        $rh02_diasgozoferias = 30;
-                                    }
-
-                                    db_input('rh02_diasgozoferias', 10, 1, true, 'text', $db_opcao);
-
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr id="row_rh02_tipodeficiencia" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
-                                <td nowrap title="<?= @$Trh02_tipodeficiencia ?>" align="left">
-                                    <?= @$Lrh02_tipodeficiencia ?>
-                                </td>
-                                <td colspan="2" nowrap>
-                                    <?
-                                    $result_tipodeficiencia = $cltipodeficiencia->sql_record($cltipodeficiencia->sql_query_file(null, "rh150_sequencial, rh150_descricao", 'rh150_sequencial asc', null));
-                                    db_selectrecord("rh02_tipodeficiencia", $result_tipodeficiencia, true, $db_opcao, "", "", "", "", "js_informarReab()");
-                                    ?>
-
-                                    <?= @$Lrh02_laudodeficiencia ?>
-                                    <?
-                                    db_input('rh02_laudodeficiencia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
-                                    if (!empty($GLOBALS['rh02_laudodeficiencia'])) {
-                                        db_input('rh02_laudodeficiencia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
-                                    ?> <input type="button" name="imprimir_laudodeficiencia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudodeficiencia');"> <?
-                                                                                                                                                                    }
-                                                                                                                                                                        ?>
-                                </td>
-                            </tr>
-                            <tr id="row_rh02_reabreadap" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
-                                <td nowrap title="Trabalhador Reabilitado/Readaptado" align="left">
-                                    <strong>Trabalhador Reabilitado/Readaptado:</strong>
-                                </td>
-                                <td colspan="2" nowrap>
-                                    <?
-                                    $aReab = array('f' => 'Não', 't' => 'Sim');
-                                    db_select("rh02_reabreadap", $aReab, true, $db_opcao, "", "", "", "");
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr id="row_rh02_cotadeficiencia" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
-                                <td nowrap title="Cota de Pessoas com Deficiência" align="left">
-                                    <strong>Cota de Pessoas com Deficiência:</strong>
-                                </td>
-                                <td colspan="2" nowrap>
-                                    <?
-                                    $aCotaDef = array('f' => 'Não', 't' => 'Sim');
-                                    db_select("rh02_cotadeficiencia", $aCotaDef, true, $db_opcao, "", "", "", "");
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_portadormolestia ?>" align="left">
-                                    <?= @$Lrh02_portadormolestia ?>
-                                </td>
-                                <td colspan="1" nowrap>
-                                    <? $clrotulo->label("rh02_portadormolestia ");
-                                    $aMolestia = array('f' => 'Não', 't' => 'Sim');
-                                    db_select("rh02_portadormolestia", $aMolestia, true, $db_opcao, "onchange='js_informarLaudoPortadorMolestia()'");
-                                    ?>
-
-                                    <span id="laudoportadormolestia" <? echo ($GLOBALS['rh02_portadormolestia'] == 't') ? '' : 'style="display: none;"' ?>>
-                                        <?= @$Lrh02_laudoportadormolestia ?>
-                                        <?
-                                        db_input('rh02_laudoportadormolestia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
-                                        if (!empty($GLOBALS['rh02_laudoportadormolestia'])) {
-                                            db_input('rh02_laudoportadormolestia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
-                                        ?> <input type="button" name="imprimir_laudoportadormolestia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudoportadormolestia');"> <?
-                                                                                                                                                                                }
-                                                                                                                                                                                    ?>
-                                    </span>
-                                </td>
-                                <td nowrap title="Plano de Segregação da Massa" align="left">
-                                    <strong>Plano de Segregação da Massa:</strong>
-                                </td>
-                                <td colspan="1" nowrap>
-                                    <?
-                                    $aPlanSegreg = array('0' => 'Selecione', '1' => 'Fundo em capitalização', '2' => 'Fundo em repartição', '3' => 'Mantido pelo Tesouro');
-                                    db_select("rh02_plansegreg", $aPlanSegreg, true, $db_opcao, "", "", "", "");
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_datalaudomolestia ?>">
-                                    <?= @$Lrh02_datalaudomolestia ?>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_inputdata('rh02_datalaudomolestia', @$rh02_datalaudomolestia_dia, @$rh02_datalaudomolestia_mes, @$rh02_datalaudomolestia_ano, true, 'text', $db_opcao, "")
-                                    ?>
-                                </td>
-
-                            </tr>
-
-
+                            </tr>                            
                             <tr id="tipoapos">
                                 <td nowrap title="<?= $Trh02_rhtipoapos ?>">
                                     <?= @$Lrh02_rhtipoapos ?>
@@ -661,28 +475,6 @@ if (isset($db_opcaoal)) {
                                     ?>
                                 </td>
                             </tr>
-
-                            <tr>
-                                <td>
-                                    <?php echo $Lrh02_abonopermanencia ?>
-                                </td>
-                                <td>
-                                    <?php
-                                    $aAbonoPermanencia = array('f' => 'Não', 't' => 'Sim');
-                                    db_select('rh02_abonopermanencia', $aAbonoPermanencia, true, $db_opcao, "onchange='js_abonopermanencia()'");
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr id="datainicio" <? echo ($GLOBALS['rh02_abonopermanencia'] == 't') ? '' : 'style="display: none;"' ?>>
-                                <td nowrap title="Data Início">
-                                    <strong>Data Início:</strong>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    db_inputdata('rh02_datainicio', @$rh02_datainicio_dia, @$rh02_datainicio_mes, @$rh02_datainicio_ano, true, 'text', $db_opcao, "")
-                                    ?>
-                                </td>
-                            </tr>
                         </table>
                     </fieldset>
                 </td>
@@ -692,7 +484,7 @@ if (isset($db_opcaoal)) {
                     <fieldset id="ctnHoras">
                         <legend align="left"><b>Horário de Trabalho</b></legend>
                         <center>
-                            <table width="100%">
+                            <table width="84%" align="left">
                                 <tr>
                                     <td nowrap title="<?= @$Trh02_hrsmen ?>">
                                         <?= @$Lrh02_hrsmen ?>
@@ -712,7 +504,31 @@ if (isset($db_opcaoal)) {
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td nowrap title="Jornada de trabalho">
+                                        <?
+                                        db_ancora('Jornada de Trabalho:', "js_pesquisarh02_jornadadetrabalho(true);", $db_opcao);
+                                        ?>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        db_input('rh02_jornadadetrabalho', 8, 1, true, 'text', $db_opcao, "onchange='js_pesquisarh02_jornadadetrabalho(false);'");
+                                        ?>
+                                        <?
+                                        db_input('jt_nome', 34, 1, true, 'text', 3, '');
+                                        ?>
+                                    </td>
+                                    <td align="right">
+                                        <strong>Possui Horário Noturno:</strong>
+                                    </td>
                                     <td>
+                                        <?php
+                                        $aHorarioNoturno = array('f' => 'Não', 't' => 'Sim');
+                                        db_select("rh02_horarionoturno", $aHorarioNoturno, true, $db_opcao, "style='width:65';", "", "", "");
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                   <td>
                                         <strong>Tipo de Jornada:</strong>
                                     </td>
                                     <td>
@@ -720,35 +536,218 @@ if (isset($db_opcaoal)) {
                                         $aTipoJornada = array(
                                             '0' => 'Selecione', '2' => 'Jornada 12 x 36 (12 horas de trabalho seguidas de 36 horas ininterruptas de descanso', '3' => 'Jornada com horário diário fixo e folga variável', '4' => 'Jornada com horário diário fixo e folga fixa (no domingo)', '5' => 'Jornada com horário diário fixo e folga fixa (exceto no domingo)', '6' => 'Jornada com horário diário fixo e folga fixa (em outro dia da semana), com folga adicional ', '7' => 'Turno ininterrupto de revezamento', '9' => 'Demais tipos de jornada'
                                         );
-                                        db_select("rh02_tipojornada", $aTipoJornada, true, $db_opcao, "", "", "", "");
+                                        db_select("rh02_tipojornada", $aTipoJornada, true, $db_opcao, "style='width:313;'", "", "", "");
                                         ?>
-                                    </td>
-                                    <td>
-                                        <strong>Possui Horário Noturno:</strong>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        $aHorarioNoturno = array('f' => 'Não', 't' => 'Sim');
-                                        db_select("rh02_horarionoturno", $aHorarioNoturno, true, $db_opcao, "", "", "", "");
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap title="Jornada de trabalho">
-                                        <?
-                                        db_ancora('Jornada de Trabalho', "js_pesquisarh02_jornadadetrabalho(true);", $db_opcao);
-                                        ?>
-                                    </td>
-                                    <td nowrap>
-                                        <?
-                                        db_input('rh02_jornadadetrabalho', 6, 1, true, 'text', $db_opcao, "onchange='js_pesquisarh02_jornadadetrabalho(false);'");
-                                        ?>
-                                        <?
-                                        db_input('jt_nome', 34, 1, true, 'text', 3, '');
-                                        ?>
-                                    </td>
+                                    </td> 
                                 </tr>
                             </table>
+                        </center>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Informações Complementares</legend>
+                        <center>
+                        <table width="74%" align="left">
+                            <tr>
+                                <td nowrap title="<?= @$Trh02_tipsal ?>">
+                                    <?= @$Lrh01_reajusteparidade ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    $oDaoReajusteParidade = db_utils::getDao('rhreajusteparidade');
+                                    $sSql                 = $oDaoReajusteParidade->sql_query_file(null, '*', 'rh148_sequencial');
+                                    $rsReajusteParidade   = db_query($sSql);
+
+                                    if (!$rsReajusteParidade) {
+                                        throw new DBException('Erro ao buscar os dados da tabela rhreajusteparidade.');
+                                    }
+
+                                    $aTipoReajuste     = array("0" => '');
+                                    $aReajusteParidade = db_utils::getCollectionByRecord($rsReajusteParidade, false, false, true);
+
+                                    foreach ($aReajusteParidade as $oReajusteParidade) {
+                                        $aTipoReajuste["{$oReajusteParidade->rh148_sequencial}"] = $oReajusteParidade->rh148_descricao;
+                                    }
+                                    $aTipoReajuste["0"] = "Nenhum";
+
+                                    db_select('rh01_reajusteparidade', $aTipoReajuste, true, $db_opcao);
+                                    ?>
+                                </td>
+                                <td nowrap align="right" title="<?php echo $Trh02_diasgozoferias; ?>">
+                                    <?php echo @$Lrh02_diasgozoferias; ?>
+                                </td>
+                                <td>
+                                    <?php
+
+                                    if (!isset($rh02_diasgozoferias) && $db_opcao == 1) {
+                                        $rh02_diasgozoferias = 30;
+                                    }
+
+                                    db_input('rh02_diasgozoferias', 10, 1, true, 'text', $db_opcao);
+
+                                    ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td nowrap title="<?= @$Trh02_deficientefisico ?>" align="left">
+                                    <?= @$Lrh02_deficientefisico ?>
+                                </td>
+                                <td nowrap>
+                                    <? $clrotulo->label("rh02_deficientefisico");
+                                    $aDeficiente = array('f' => 'Não', 't' => 'Sim');
+                                    db_select("rh02_deficientefisico", $aDeficiente, true, $db_opcao, "onchange='js_informarTipoDeficiencia()'");
+                                    ?>
+                                </td>
+                                <td nowrap title="Plano de Segregação da Massa" align="right">
+                                    <strong>Plano de Segregação da Massa:</strong>
+                                </td>
+                                <td colspan="1" nowrap>
+                                    <?
+                                    $aPlanSegreg = array('0' => 'Selecione', '1' => 'Fundo em capitalização', '2' => 'Fundo em repartição', '3' => 'Mantido pelo Tesouro');
+                                    db_select("rh02_plansegreg", $aPlanSegreg, true, $db_opcao, "", "", "", "");
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr id="row_rh02_tipodeficiencia" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
+                                <td nowrap title="<?= @$Trh02_tipodeficiencia ?>" align="left">
+                                    <?= @$Lrh02_tipodeficiencia ?>
+                                </td>
+                                <td colspan="2" nowrap>
+                                    <?
+                                    $result_tipodeficiencia = $cltipodeficiencia->sql_record($cltipodeficiencia->sql_query_file(null, "rh150_sequencial,rh150_descricao", 'rh150_sequencial asc', null));
+                                    db_selectrecord("rh02_tipodeficiencia", $result_tipodeficiencia, true, $db_opcao, "style='width:115;'", "", "", "", "js_informarReab()", 1);
+                                    ?>
+
+                                    <?= @$Lrh02_laudodeficiencia ?>
+                                    <?
+                                    db_input('rh02_laudodeficiencia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
+                                    if (!empty($GLOBALS['rh02_laudodeficiencia'])) {
+                                        db_input('rh02_laudodeficiencia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
+                                    ?> <input type="button" name="imprimir_laudodeficiencia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudodeficiencia');"> <?
+                                                                                                                                                                    }
+                                                                                                                                                                        ?>
+                                </td>
+                            </tr>
+                            <tr id="row_rh02_cotadeficiencia" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
+                                <td nowrap title="Cota de Pessoas com Deficiência" align="left">
+                                    <strong>Cota de Pessoas com Deficiência:</strong>
+                                </td>
+                                <td nowrap>
+                                    <?
+                                    $aCotaDef = array('f' => 'Não', 't' => 'Sim');
+                                    db_select("rh02_cotadeficiencia", $aCotaDef, true, $db_opcao, "style='width:115;'", "", "", "");
+                                    ?>
+                                </td>
+                            
+                                <td colspan="2" nowrap title="Trabalhador Reabilitado/Readaptado" align="left">
+                                    <span id="row_rh02_reabreadap" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
+                                        <strong>Trabalhador Reabilitado/Readaptado:</strong>
+                                    
+                                        <?
+                                        $aReab = array('f' => 'Não', 't' => 'Sim');
+                                        db_select("rh02_reabreadap", $aReab, true, $db_opcao, "style='width:115;'", "", "", "");
+                                        ?>
+                                    </span>
+                                </td>
+                            </tr>                            
+                            <tr>
+                                <td nowrap title="<?= @$Trh02_portadormolestia ?>" align="left">
+                                    <?= @$Lrh02_portadormolestia ?>
+                                </td>
+                                <td colspan="3" nowrap>
+                                    <? $clrotulo->label("rh02_portadormolestia ");
+                                    $aMolestia = array('f' => 'Não', 't' => 'Sim');
+                                    db_select("rh02_portadormolestia", $aMolestia, true, $db_opcao, "onchange='js_informarLaudoPortadorMolestia()'");
+                                    ?>
+
+                                    <span id="laudoportadormolestia" <? echo ($GLOBALS['rh02_portadormolestia'] == 't') ? '' : 'style="display: none;"' ?>>
+                                        <?= @$Lrh02_laudoportadormolestia ?>
+                                        <?
+                                        db_input('rh02_laudoportadormolestia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
+                                        if (!empty($GLOBALS['rh02_laudoportadormolestia'])) {
+                                            db_input('rh02_laudoportadormolestia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
+                                        ?> <input type="button" name="imprimir_laudoportadormolestia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudoportadormolestia');"> <? } ?>
+                                        
+                                        <?= @$Lrh02_datalaudomolestia ?>
+                                        <?
+                                        db_inputdata('rh02_datalaudomolestia', @$rh02_datalaudomolestia_dia, @$rh02_datalaudomolestia_mes, @$rh02_datalaudomolestia_ano, true, 'text', $db_opcao, "")
+                                        ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <?php echo $Lrh02_abonopermanencia ?>
+                                </td>
+                                <td colspan="3">
+                                    <?php
+                                    $aAbonoPermanencia = array('f' => 'Não', 't' => 'Sim');
+                                    db_select('rh02_abonopermanencia', $aAbonoPermanencia, true, $db_opcao, "onchange='js_abonopermanencia()'");
+                                    ?>
+                                    <span id="datainicio" <? echo ($GLOBALS['rh02_abonopermanencia'] == 't') ? '' : 'style="display: none;"' ?>>
+                                
+                                    <strong>Data Início:</strong>
+                                    <?
+                                    db_inputdata('rh02_datainicio', @$rh02_datainicio_dia, @$rh02_datainicio_mes, @$rh02_datainicio_ano, true, 'text', $db_opcao, "")
+                                    ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap title="<?= @$Trh02_vincrais ?>">
+                                    <?= @$Lrh02_vincrais ?>
+                                </td>
+                                <td nowrap colspan="3">
+                                    <?
+                                    $arr_vincrais = array(
+                                        '00' => '   - Nenhum',
+                                        '10' => '10 - Trab urbano vinc a empr pessoa juridica - CLT p/tempo indeterminado',
+                                        '15' => '15 - Trab urbano vinc a empr pessoa fisica  - CLT p/tempo indeterminado',
+                                        '20' => '20 - Trab rural vinc a empr pessoa juridica - CLT p/tempo indeterminado',
+                                        '25' => '25 - Trab rural vinc a empr pessoa fisica  - CLT p/tempo indeterminado',
+                                        '30' => '30 - Serv regido pelo regime juridico unico (Fed,est,munic) e militar',
+                                        '31' => '31 - Serv regido pelo Regime Jurídico Único (fed,est,munic) e militar,vinc a RGPS',
+                                        '35' => '35 - Serv publico nao-efetivo',
+                                        '40' => '40 - Trabalhador avulso',
+                                        '50' => '50 - Trab temporario, regido pela Lei n. 6.019 de 03.01.74',
+                                        '55' => '55 - Aprendiz contratado na termos do art. 428 da CLT.',
+                                        '60' => '60 - Trab urbano vinc a empr pessoa juridica - CLT p/tempo determinado',
+                                        '65' => '65 - Trab urbano vinc a empr pessoa fisica - CLT p/tempo determinado',
+                                        '70' => '70 - Trab rural vinc a empr pessoa juridica - CLT p/tempo determinado',
+                                        '75' => '75 - Trab rural vinc a empr pessoa fisica - CLT p/tempo determinado',
+                                        '80' => '80 - Diretor sem vinc empregaticio c/ recolhimento do FGTS',
+                                        '90' => '90 - Contrato de trabalho p/prazo determinado Lei 9.601 CLT',
+                                        '90' => '90 - Contrato de Trabalho por Tempo Determinado, reg pela Lei no. 8.745',
+                                        '95' => '95 - Contrato de Trabalho por Tempo Determinado, reg pela Lei no. 8.745 e 9.849',
+                                        '96' => '96 - Contrato de Trabalho por Prazo Determinado, regido por Lei Estadual',
+                                        '97' => '97 - Contrato de Trabalho por Prazo Determinado, regido por Lei Municipal'
+                                    );
+                                    db_select("rh02_vincrais", $arr_vincrais, true, $db_opcao, "style='width:313;'");
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap title="<?= @$Trh02_ocorre ?>">
+                                    <?= @$Lrh02_ocorre ?>
+                                </td>
+                                <td nowrap colspan="3">
+                                    <?
+                                    $arr_ocorre = array(
+                                        '' => 'Nunca esteve exposta',
+                                        '01' => '01 - Não exposto no momento, mas já esteve',
+                                        '02' => '02 - Exposta (aposentadoria esp. 15 anos)',
+                                        '03' => '03 - Exposta (aposentadoria esp. 20 anos)',
+                                        '04' => '04 - Exposta (aposentadoria esp. 25 anos)',
+                                        '05' => '05 - Mais de um vínculo (ou fonte pagadora) - Não exposição a agente nocivo',
+                                        '06' => '06 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 15 anos)',
+                                        '07' => '07 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 20 anos)',
+                                        '08' => '08 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 25 anos)'
+                                    );
+                                    db_select("rh02_ocorre", $arr_ocorre, true, $db_opcao, "style='width:313;'");
+                                    ?>
+                                </td>
+                            </tr>
+                        </table>
                         </center>
                     </fieldset>
                 </td>
@@ -1440,21 +1439,13 @@ if (isset($db_opcaoal)) {
 
             function js_validaDados() {
 
-                var validaDados = setInterval(function() {
+                if (!js_validaTipoDeficiencia()) {
+                    return false;
+                }
 
-                    if (!js_validaTipoDeficiencia()) {
-
-                        clearInterval(validaDados);
-                        return false;
-
-                    }
-
-                    if (oContaBancariaServidor.lStatus || $F('inputCodigoBanco') == '') {
-
-                        js_verificaconta();
-                        clearInterval(validaDados)
-                    }
-                }, 500);
+                if (oContaBancariaServidor.lStatus || $F('inputCodigoBanco') == '') {
+                    js_verificaconta();
+                }
 
             }
 
@@ -1675,14 +1666,14 @@ if (isset($db_opcaoal)) {
                     document.form1.z01_nomeorigem.type = "hidden";
                     document.form1.rh21_regpri.value = "";
                     document.form1.z01_nomeorigem.value = "";
-                    document.getElementById("vinculoorigem").style.visibility = "hidden";
+                    $("vinculoorigem").hide();
                     document.getElementById("torigem").title = "";
                 } else {
                     document.form1.rh21_regpri.type = "text";
                     document.form1.z01_nomeorigem.type = "text";
                     document.form1.rh21_regpri.readOnly = false;
                     document.form1.rh21_regpri.style.backgroundColor = "";
-                    document.getElementById("vinculoorigem").style.visibility = "visible";
+                    $("vinculoorigem").show();
                     document.getElementById("torigem").title = "<?= str_replace("\r", "\\r", str_replace("\n", "\\n", AddSlashes($Trh21_regpri))) ?>";
                 }
             }
@@ -1776,12 +1767,15 @@ if (isset($db_opcaoal)) {
 
             function js_disabpropri(opcao) {
                 if (opcao == "A") {
-                    document.form1.rh19_propi.style.backgroundColor = '#DEB887';
-                    document.form1.rh19_propi.readOnly = true;
-                    document.form1.rh19_propi.value = "";
+                    // document.form1.rh19_propi.style.backgroundColor = '#DEB887';
+                    // document.form1.rh19_propi.readOnly = true;
+                    // document.form1.rh19_propi.value = "";
+                    $('rh19_propi').value = "";
+                    $('disabpropri').hide();
                 } else {
-                    document.form1.rh19_propi.style.backgroundColor = '';
-                    document.form1.rh19_propi.readOnly = false;
+                    // document.form1.rh19_propi.style.backgroundColor = '';
+                    // document.form1.rh19_propi.readOnly = false;
+                    $('disabpropri').show();
                 }
             }
             /**
@@ -1830,6 +1824,8 @@ if (isset($db_opcaoal)) {
                 } else if (nodeDeficiente.value == 'f' || nodeDeficiente.value.toLowerCase().indexOf('não') > -1) {
                     nodeTipoDeficiencia.hide();
                     nodeCotaDeficiencia.hide();
+                    $("rh02_tipodeficiencia").value = 0;
+                    js_informarReab();
                 }
             }
 
@@ -1841,6 +1837,7 @@ if (isset($db_opcaoal)) {
                     nodeReab.show();
                 } else if (nodeTipodeficiente.value == 0) {
                     nodeReab.hide();
+                    $("rh02_reabreadap").value = "f";
                 }
             }
 
@@ -1848,7 +1845,6 @@ if (isset($db_opcaoal)) {
              * Habilita campo para informar o laudo de portador de molestia
              */
             function js_informarLaudoPortadorMolestia() {
-
                 var nodePortadorMolestia = $("rh02_portadormolestia");
                 var nodeLaudoMolestia = $("laudoportadormolestia");
 
@@ -1856,6 +1852,8 @@ if (isset($db_opcaoal)) {
                     nodeLaudoMolestia.show();
                 } else if (nodePortadorMolestia.value == 'f' || nodePortadorMolestia.value.toLowerCase().indexOf('não') > -1) {
                     nodeLaudoMolestia.hide();
+                    $('rh02_datalaudomolestia').value = "";
+                    $('rh02_laudoportadormolestia_file').value = "";
                 }
             }
 
@@ -1881,17 +1879,13 @@ if (isset($db_opcaoal)) {
                 if (nodeDeficiente.value == 't' || nodeDeficiente.value.toLowerCase().indexOf('sim') > -1) {
 
                     if (nodeTipoDeficiencia.value == 0) {
-
                         alert(_M(sMensagem + 'tipo_deficiencia'));
                         return false;
-
                     }
 
                 } else if (nodeDeficiente.value == 'f' || nodeDeficiente.value.toLowerCase().indexOf('não') > -1) {
-
                     nodeTipoDeficiencia.value = 0;
-                    js_ProcCod_rh02_tipodeficiencia('rh02_tipodeficiencia', 'rh02_tipodeficienciadescr');
-
+                    js_ProcCod_rh02_tipodeficiencia('rh02_tipodeficiencia', 'rh02_tipodeficiencia');
                 }
 
                 return true;
@@ -1987,7 +1981,7 @@ if (isset($db_opcaoal)) {
 
             document.getElementById("ctnContaBancariaServidor").firstElementChild.setAttribute("id", "ctnContaBancaria");
             var oToogleContaBancaria = new DBToogle('ctnContaBancaria', true);
-            var oToogleRescisao = new DBToogle('ctnRescisao', true);
+            var oToogleRescisao = new DBToogle('ctnRescisao', ($('rh05_recis').value != '' ? true : false));
             var oToogleSiope = new DBToogle('ctnSiope', false);
             var oToogleDadosCedencia = new DBToogle('ctnDadosCedencia', false);
 
