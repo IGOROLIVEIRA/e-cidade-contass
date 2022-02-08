@@ -47,6 +47,8 @@ class cl_ralic102022
   var $si180_qtdlotes = null;
   var $si180_mes = 0;
   var $si180_instit = 0;
+  var $si180_leidalicitacao = 0;
+  var $si180_mododisputa = 0;
   var $campos = "
                  si180_sequencial = int8 = sequencial
                  si180_tiporegistro = int8 = Tipo do registro
@@ -75,6 +77,8 @@ class cl_ralic102022
                  si180_qtdlotes = integer = Quantidade de lotes
                  si180_mes = int8 = Mês
                  si180_instit = int8 = Instituição
+                 si180_leidalicitacao = int8 = Lei da licitação
+                 si180_mododisputa = int8 = Modo disputa
                  ";
   // cria propriedade com as variaveis do arquivo
 
@@ -135,6 +139,10 @@ class cl_ralic102022
       $this->si180_dscorigemrecurso = ($this->si180_dscorigemrecurso == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_dscorigemrecurso"] : $this->si180_dscorigemrecurso);
       $this->si180_mes = ($this->si180_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_mes"] : $this->si180_mes);
       $this->si180_instit = ($this->si180_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_instit"] : $this->si180_instit);
+      $this->si180_leidalicitacao = ($this->si180_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_leidalicitacao"] : $this->si180_leidalicitacao);
+      $this->si180_mododisputa = ($this->si180_mododisputa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_mododisputa"] : $this->si180_mododisputa);
+
+
       $this->si180_qtdlotes = ($this->si180_qtdlotes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_qtdlotes"] : $this->si180_qtdlotes);
     } else {
       $this->si180_sequencial = ($this->si180_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_sequencial"] : $this->si180_sequencial);
@@ -213,6 +221,27 @@ class cl_ralic102022
 
       return false;
     }
+    if ($this->si180_mododisputa == null) {
+      $this->erro_sql = " Campo modo de disputa nao Informado.";
+      $this->erro_campo = "si180_mododisputa";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
+
+    if ($this->si180_leidalicitacao == null) {
+      $this->erro_sql = " Campo Lei da licitação nao Informado.";
+      $this->erro_campo = "si180_leidalicitacao";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
     if ($si180_sequencial == "" || $si180_sequencial == null) {
       $result = db_query("select nextval('ralic102022_si180_sequencial_seq')");
       if ($result == false) {
@@ -249,7 +278,7 @@ class cl_ralic102022
 
       return false;
     }
-    if($this->si180_exercicioedital == null){
+    if ($this->si180_exercicioedital == null) {
       $this->erro_sql = " Campo si180_exercicioedital nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
@@ -259,16 +288,16 @@ class cl_ralic102022
       return false;
     }
 
-    if($this->si180_bdi == null){
+    if ($this->si180_bdi == null) {
       $this->si180_bdi = 0;
     }
 
-    if($this->si180_vlcontratacao == null){
+    if ($this->si180_vlcontratacao == null) {
       $this->si180_vlcontratacao = 0;
     }
 
-    if($this->si180_qtdlotes == null){
-        $this->si180_qtdlotes = 'null';
+    if ($this->si180_qtdlotes == null) {
+      $this->si180_qtdlotes = 'null';
     }
 
     $sql = "insert into ralic102022(
@@ -299,6 +328,8 @@ class cl_ralic102022
                                       ,si180_qtdlotes
                                       ,si180_mes
                                       ,si180_instit
+                                      ,si180_leidalicitacao
+                                      ,si180_mododisputa
                        )
                 values (
                                 $this->si180_sequencial
@@ -328,6 +359,8 @@ class cl_ralic102022
                                ,$this->si180_qtdlotes
                                ,$this->si180_mes
                                ,$this->si180_instit
+                               ,$this->si180_leidalicitacao
+                               ,$this->si180_mododisputa
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -486,10 +519,41 @@ class cl_ralic102022
         return false;
       }
     }
-    if (trim($this->si180_qtdlotes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_qtdlotes"])) {
-        $sql .= $virgula . " si180_qtdlotes = '$this->si180_qtdlotes' ";
+
+    if (trim($this->si180_mododisputa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_mododisputa"])) {
+      $sql .= $virgula . " si180_mododisputa = $this->si180_mododisputa ";
+      $virgula = ",";
+      if (trim($this->si180_mododisputa) == null) {
+        $this->erro_sql = " Campo modo disputa nao Informado.";
+        $this->erro_campo = "si180_mododisputa";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
+      }
     }
-    
+
+    if (trim($this->si180_leidalicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_leidalicitacao"])) {
+      $sql .= $virgula . " si180_leidalicitacao = $this->si180_leidalicitacao ";
+      $virgula = ",";
+      if (trim($this->si180_leidalicitacao) == null) {
+        $this->erro_sql = " Campo Lei da licitação nao Informado.";
+        $this->erro_campo = "si180_leidalicitacao";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
+      }
+    }
+
+    if (trim($this->si180_qtdlotes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_qtdlotes"])) {
+      $sql .= $virgula . " si180_qtdlotes = '$this->si180_qtdlotes' ";
+    }
+
     $sql .= " where ";
     if ($si180_sequencial != null) {
       $sql .= " si180_sequencial = $this->si180_sequencial";
@@ -693,5 +757,3 @@ class cl_ralic102022
     return $sql;
   }
 }
-
-?>

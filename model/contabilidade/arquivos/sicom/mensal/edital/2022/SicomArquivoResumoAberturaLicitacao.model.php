@@ -196,7 +196,9 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 dscorigemrecurso,
                 sum(vlcontratacao) as vlContratacao,
                 case when tipoJulgamento = 1 THEN 1 else qtdLotes end as qtdLotes,
-                l20_usaregistropreco
+                l20_usaregistropreco,
+                l20_leidalicitacao,
+                l20_mododisputa
 FROM
     (SELECT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                      (CASE
@@ -252,6 +254,8 @@ FROM
                      liclicita.l20_objeto AS Objeto,
                      liclicita.l20_tipojulg AS tipoJulgamento,
                      liclicita.l20_usaregistropreco,
+                     liclicita.l20_leidalicitacao,
+                     liclicita.l20_mododisputa,
                      (SELECT count(*) FROM
                         (SELECT DISTINCT l04_descricao
                             FROM liclicitemlote
@@ -325,12 +329,14 @@ FROM
 GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exerciciolicitacao, nroProcessoLicitatorio,
          tipoCadastradoLicitacao, codmodalidadelicitacao, naturezaprocedimento, nroedital,
          exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, bdi, regimeexecucaoobras,
-         origemrecurso, dscorigemrecurso, qtdLotes, tipoJulgamento, l20_usaregistropreco
+         origemrecurso, dscorigemrecurso, qtdLotes, tipoJulgamento, l20_usaregistropreco,l20_leidalicitacao,l20_mododisputa 
 
 ORDER BY nroprocessolicitatorio
 
                   ";
     $rsResult10 = db_query($sSql);
+
+
 
     /**
      * registro 10
@@ -367,6 +373,8 @@ ORDER BY nroprocessolicitatorio
       $clralic10->si180_qtdlotes = $oDados10->qtdlotes;
       $clralic10->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clralic10->si180_instit = db_getsession("DB_instit");
+      $clralic10->si180_leidalicitacao = $oDados10->l20_leidalicitacao;
+      $clralic10->si180_mododisputa = $oDados10->l20_mododisputa;
       $clralic10->incluir(null);
 
       if ($clralic10->erro_status == 0) {
