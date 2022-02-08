@@ -72,17 +72,10 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     $this->objpdf->text($xcol +2, $xlin + 30, $nomenclatura);
     $this->objpdf->text($xcol +6, $xlin + 34,  db_formatar(pg_result($this->dados, $iDados, "z01_cgccpf"), $mascara));
 
-    // Oc16590
-    $sFonteRecurso = pg_result($this->dados, $iDados, "k29_recurso") . " - " . pg_result($this->dados, $iDados, "o15_descr");
-    $this->objpdf->text($xcol + 2, $xlin + 41, "Fonte de Recursos");
-    $this->objpdf->text($xcol + 6, $xlin + 45, $sFonteRecurso);
-    // FIM Oc16590
-
     /**
      * Dados bancarios do credor
      */
     if (!empty($this->oDadosBancarioCredor)) {
-        $xlin += 10;
         $this->objpdf->text($xcol + 2, $xlin + 42, 'CONTA BANCÁRIA FORNECEDOR');
 
         $sTextoDadosBancariosCredor  = 'Banco: ' . $this->oDadosBancarioCredor->iBanco;
@@ -93,7 +86,14 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
         $sTextoDadosBancariosCredor .= ' - '         . $this->oDadosBancarioCredor->iContaDigito;
 
         $this->objpdf->text($xcol + 6, $xlin + 46,  $sTextoDadosBancariosCredor);
+        $xlin += 12;
     }
+
+    // Oc16590
+    $sFonteRecurso = pg_result($this->dados, $iDados, "k29_recurso") . " - " . pg_result($this->dados, $iDados, "o15_descr");
+    $this->objpdf->text($xcol + 2, $xlin + 41, "Fonte de Recursos");
+    $this->objpdf->text($xcol + 6, $xlin + 45, $sFonteRecurso);
+    // FIM Oc16590
 
     $this->objpdf->text($xcol + 2, $xlin + 54, 'DÉBITO');
     $this->objpdf->text($xcol + 6, $xlin + 58, pg_result($this->dados, $iDados, "k17_debito") . '   -   ' . pg_result($this->dados, $iDados, "descr_debito"));
