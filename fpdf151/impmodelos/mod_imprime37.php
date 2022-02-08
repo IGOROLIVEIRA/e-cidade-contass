@@ -38,7 +38,12 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     }
 
     /// retângulo dos dados da transferência
-    $this->objpdf->rect($xcol, $xlin +2, $xcol +180, 79, 10, 'DF', '1234');
+    // Correção OC16590
+    $comprimento = 79;
+    if (!empty($this->oDadosBancarioCredor))
+        $comprimento += 10;
+    // Final Oc16590
+    $this->objpdf->rect($xcol, $xlin + 2, $xcol +180, $comprimento, 10, 'DF', '1234');
     $this->objpdf->Setfont('Arial', 'B', 9);
     $this->objpdf->text($xcol +2, $xlin +7, 'DATA');
     $this->objpdf->text($xcol +6, $xlin +11,  db_formatar(pg_result($this->dados, $iDados, "k17_data"), 'd'));
@@ -77,7 +82,7 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
      * Dados bancarios do credor
      */
     if (!empty($this->oDadosBancarioCredor)) {
-
+        $xlin += 10;
         $this->objpdf->text($xcol + 2, $xlin + 42, 'CONTA BANCÁRIA FORNECEDOR');
 
         $sTextoDadosBancariosCredor  = 'Banco: ' . $this->oDadosBancarioCredor->iBanco;
