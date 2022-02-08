@@ -35,14 +35,18 @@ include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $cldirp = new cl_dirp;
 $cldb_config = new cl_db_config;
-$db_opcao = 1;
-$db_botao = true;
-
-if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
+$db_opcao = 22;
+$db_botao = false;
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alterar") {
     db_inicio_transacao();
-    $cldirp->c236_orgao = db_getsession("DB_instit");
-    $cldirp->incluir();
+    $db_opcao = 2;
+    $cldirp->alterar($c236_coddirp);
     db_fim_transacao();
+} else if (isset($chavepesquisa)) {
+    $db_opcao = 2;
+    $result = $cldirp->sql_record($cldirp->sql_query($chavepesquisa));
+    db_fieldsmemory($result, 0);
+    $db_botao = true;
 }
 ?>
 <html>
@@ -70,7 +74,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incl
 
 </html>
 <?
-if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alterar") {
     if ($cldirp->erro_status == "0") {
         $cldirp->erro(true, false);
         $db_botao = true;
@@ -83,4 +87,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incl
         $cldirp->erro(true, true);
     };
 };
+if ($db_opcao == 22) {
+    echo "<script>document.form1.pesquisar.click();</script>";
+}
 ?>

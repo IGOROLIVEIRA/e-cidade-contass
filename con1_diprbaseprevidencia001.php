@@ -24,79 +24,29 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
-require_once("libs/db_stdlib.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_usuariosonline.php");
-require_once("classes/db_saltes_classe.php");
-require_once("classes/db_saltescontrapartida_classe.php");
-require_once("classes/db_saltesextra_classe.php");
-require_once("dbforms/db_funcoes.php");
-
-db_postmemory($_POST);
-$oPost = db_utils::postMemory($_POST);
-
-$clsaltes = new cl_saltes;
+include("libs/db_stdlib.php");
+include("libs/db_conecta.php");
+include("libs/db_sessoes.php");
+include("libs/db_utils.php");
+include("libs/db_usuariosonline.php");
+include("classes/db_dirpbaseprevidencia_classe.php");
+include("classes/db_db_config_classe.php");
+include("dbforms/db_funcoes.php");
+db_postmemory($HTTP_POST_VARS);
+$cldirp = new cl_dirpbaseprevidencia;
+$cldb_config = new cl_db_config;
 $db_opcao = 1;
 $db_botao = true;
 
-if ( isset($_POST["db_opcao"]) && $_POST["db_opcao"] == "Incluir" ) {
-
-  $erro=false;
-  db_inicio_transacao();
-
-  $dtImplantacao = explode("/",$k13_dtimplantacao,3);
-  $dtDia         = $dtImplantacao[0];
-  $dtMes         = $dtImplantacao[1];
-  $dtAno         = $dtImplantacao[2];
-  $dtImplantacao = date('Y-m-d', mktime(0,0,0, $dtMes, $dtDia-1, $dtAno));
-
-  $clsaltes->k13_dtimplantacao = $dtImplantacao;
-  $clsaltes->incluir($k13_reduz);
-
-  if ( $clsaltes->erro_status == 0 ) {
-    $erro = true;
-  }
-
-  if ( !$erro && $k103_contrapartida != '' ) {
-
-    $oDaosaltesContra                     = new cl_saltescontrapartida;
-    $oDaosaltesContra->k103_contrapartida = $k103_contrapartida;
-    $oDaosaltesContra->k103_saltes        = $k13_reduz;
-    $oDaosaltesContra->incluir(null);
-
-    if ( $oDaosaltesContra->erro_status == 0 ){
-
-      $clsaltes->erro_status = 0;
-      $clsaltes->erro_msg    = $oDaosaltesContra->erro_msg;
-      $erro                  = true;
-
-    }
-  }
-  if ( !$erro && $k109_saltesextra != '' ) {
-
-    $oDaosaltesExtra                  = new cl_saltesextra;
-    $oDaosaltesExtra->k109_contaextra = $k109_saltesextra;
-    $oDaosaltesExtra->k109_saltes     = $k13_reduz;
-    $oDaosaltesExtra->incluir(null);
-
-    if ($oDaosaltesExtra->erro_status == 0){
-
-      $clsaltes->erro_status = 0;
-      $clsaltes->erro_msg    = $oDaosaltesExtra->erro_msg;
-      $erro                  = true;
-
-    }
-  }
-  /** [ExtensaoFiltroDespesa] Modificacao 1 */
-
-  db_fim_transacao($erro);
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
+    db_inicio_transacao();
+    $cldirp->incluir();
+    db_fim_transacao();
 }
 ?>
-  <html>
-  <head>
+<html>
+
+<head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
@@ -104,35 +54,32 @@ if ( isset($_POST["db_opcao"]) && $_POST["db_opcao"] == "Incluir" ) {
     <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
-  </head>
-  <body style="background-color: #CCCCCC; margin-top: 30px;" >
-  <div class="container">
-    <?php
-    include(Modification::getFile("forms/db_diprbaseprevidencia.php"));
+</head>
+
+<body style="background-color: #CCCCCC; margin-top: 30px;">
+    <div class="container">
+        <?php
+        include("forms/db_diprbaseprevidencia.php");
+        ?>
+    </div>
+    <?
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
     ?>
-  </div>
-  <?
-  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-  ?>
-  </body>
-  </html>
+</body>
+
+</html>
 <?
-if(isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]=="Incluir"){
-
-  if ( $clsaltes->erro_status == "0" ) {
-
-    $clsaltes->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-
-    if($clsaltes->erro_campo!=""){
-
-      echo "<script> document.form1.".$clsaltes->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clsaltes->erro_campo.".focus();</script>";
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
+    if ($cldirp->erro_status == "0") {
+        $cldirp->erro(true, false);
+        $db_botao = true;
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if ($cldirp->erro_campo != "") {
+            echo "<script> document.form1." . $cldirp->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $cldirp->erro_campo . ".focus();</script>";
+        };
+    } else {
+        $cldirp->erro(true, true);
     };
-  } else {
-
-    $clsaltes->erro(true,true);
-  };
 };
 ?>

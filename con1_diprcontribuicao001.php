@@ -25,24 +25,24 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_usuariosonline.php");
-require_once("dbforms/db_funcoes.php");
-
-db_postmemory($_POST);
-$oPost = db_utils::postMemory($_POST);
-
+include("libs/db_stdlib.php");
+include("libs/db_conecta.php");
+include("libs/db_sessoes.php");
+include("libs/db_utils.php");
+include("libs/db_usuariosonline.php");
+include("classes/db_diprcontribuicao_classe.php");
+include("classes/db_db_config_classe.php");
+include("dbforms/db_funcoes.php");
+db_postmemory($HTTP_POST_VARS);
+$cldirp = new cl_dirpcontribuicao;
+$cldb_config = new cl_db_config;
 $db_opcao = 1;
 $db_botao = true;
 
-if (isset($_POST["db_opcao"]) && $_POST["db_opcao"] == "Incluir") {
-    $erro = false;
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
     db_inicio_transacao();
-    // Bloco para salvar os dados fornecidos
-    db_fim_transacao($erro);
+    $cldirp->incluir();
+    db_fim_transacao();
 }
 ?>
 <html>
@@ -70,19 +70,17 @@ if (isset($_POST["db_opcao"]) && $_POST["db_opcao"] == "Incluir") {
 
 </html>
 <?
-if (isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"] == "Incluir") {
-    // Condições de erro no script
-    if ($clsaltes->erro_status == "0") {
-        $clsaltes->erro(true, false);
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
+    if ($cldirp->erro_status == "0") {
+        $cldirp->erro(true, false);
         $db_botao = true;
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-
-        if ($clsaltes->erro_campo != "") {
-            echo "<script> document.form1." . $clsaltes->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
-            echo "<script> document.form1." . $clsaltes->erro_campo . ".focus();</script>";
+        if ($cldirp->erro_campo != "") {
+            echo "<script> document.form1." . $cldirp->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $cldirp->erro_campo . ".focus();</script>";
         };
     } else {
-        $clsaltes->erro(true, true);
+        $cldirp->erro(true, true);
     };
 };
 ?>
