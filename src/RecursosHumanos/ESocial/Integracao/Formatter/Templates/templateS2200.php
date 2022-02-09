@@ -85,7 +85,7 @@ return array(
             'cep' => 'cep',
             'codMunic' => array(
                 'codMunic' => 'codMunic',
-                'type' => 'int'
+                'type' => 'string'
             ),
             'uf' => 'uf'
         )
@@ -165,6 +165,7 @@ return array(
     ),
     'infoCeletista' => array(
         'properties' => array(
+            'infoCeletista' => 'infoCeletista',
             'dtAdm' => 'dtAdm',
             'tpAdmissao' => array(
                 'tpAdmissao' => 'tpAdmissao',
@@ -301,7 +302,7 @@ return array(
         'properties' => array(
             'tpInsc' => array(
                 'tpInsc' => 'tpInsc',
-                'type' => 'int'
+                'type' => 'string'
             ),
             'nrInsc' => 'nrInsc',
             'descComp' => 'descComp'

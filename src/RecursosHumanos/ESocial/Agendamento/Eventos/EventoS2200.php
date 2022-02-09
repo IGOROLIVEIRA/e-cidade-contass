@@ -195,14 +195,17 @@ class EventoS2200 extends EventoBase
                     $oDadosAPI->evtAdmissao->vinculo->infoCeletista->trabTemporario->ideTrabSubstituido = $oDados->ideTrabSubstituido;
                 }
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->aprend = empty($oDados->aprend) ? null : $oDados->aprend;
-            } else {
-                $oDadosAPI->evtAdmissao->vinculo->infoCeletista = null;
             }
+            // else {
+            //     $oDadosAPI->evtAdmissao->vinculo->infoCeletista = null;
+            // }
 
-            if (!empty($oDados->infoEstatutario->indProvim) || $oDados->infoEstatutario->indProvim != 0) {
+            if (!empty($oDados->infoEstatutario)) {
+                if (!empty($oDados->infoEstatutario->indProvim) || $oDados->infoEstatutario->indProvim != 0) {
 
-                $oDadosAPI->evtAdmissao->vinculo->infoEstatutario = $oDados->infoEstatutario;
-                $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->infoDecJud = empty($oDados->infoDecJud) ? null : $oDados->infoDecJud;
+                    $oDadosAPI->evtAdmissao->vinculo->infoEstatutario = $oDados->infoEstatutario;
+                    $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->infoDecJud = empty($oDados->infoDecJud) ? null : $oDados->infoDecJud;
+                }
             }
 
             if (!empty($oDados->infoContrato)) {
@@ -214,14 +217,14 @@ class EventoS2200 extends EventoBase
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCarreira = empty($oDados->infoContrato->codCarreira) ? null : $oDados->infoContrato->codCarreira;
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->dtIngrCarr = empty($oDados->infoContrato->dtIngrCarr) ? null : $oDados->infoContrato->dtIngrCarr;
 
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->vrSalFx = $oDados->remuneracao->vrSalFx;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->undSalFixo = $oDados->remuneracao->undSalFixo;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = $oDados->remuneracao->vrSalFx;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->undSalFixo = $oDados->remuneracao->undSalFixo;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
 
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->tpContr = $oDados->duracao->tpContr;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->dtTerm = empty($oDados->duracao->dtTerm) ? null : $oDados->duracao->dtTerm;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->clauAssec = empty($oDados->duracao->clauAssec) ? null : $oDados->duracao->clauAssec;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->objDet = empty($oDados->duracao->objDet) ? null : $oDados->duracao->objDet;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->tpContr = $oDados->duracao->tpContr;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->dtTerm = empty($oDados->duracao->dtTerm) ? null : $oDados->duracao->dtTerm;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->clauAssec = empty($oDados->duracao->clauAssec) ? null : $oDados->duracao->clauAssec;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->objDet = empty($oDados->duracao->objDet) ? null : $oDados->duracao->objDet;
 
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->localTrabGeral = empty($oDados->localTrabGeral) ? null : $oDados->localTrabGeral;
 
