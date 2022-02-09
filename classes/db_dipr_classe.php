@@ -26,8 +26,8 @@
  */
 
 //MODULO: contabilidade
-//CLASSE DA ENTIDADE dirp
-class cl_dirp
+//CLASSE DA ENTIDADE dipr
+class cl_dipr
 {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -46,10 +46,10 @@ class cl_dirp
     var $c236_codhist = 0;
     var $c236_compl = 'f';
     var $c236_descr = null;
-    var $nomeTabela = "dirp";
+    var $nomeTabela = "dipr";
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-        c236_coddirp int4 NOT NULL,
+        c236_coddipr int4 NOT NULL,
         c236_orgao int8,
         c236_massainstituida bool,
         c236_beneficiotesouro bool,
@@ -60,7 +60,7 @@ class cl_dirp
         c236_numcgmgestora int8 ";
 
     //funcao construtor da classe
-    function cl_dirp()
+    function cl_dipr()
     {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo($this->nomeTabela);
@@ -81,7 +81,7 @@ class cl_dirp
     // funcao para atualizar campos
     function atualizacampos($exclusao = false)
     {
-        $this->c236_coddirp = ($this->c236_coddirp == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_coddirp"] : $this->c236_coddirp);
+        $this->c236_coddipr = ($this->c236_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_coddipr"] : $this->c236_coddipr);
         if ($exclusao == false) {
             $this->c236_orgao = ($this->c236_orgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_orgao"] : $this->c236_orgao);
             $this->c236_massainstituida = ($this->c236_massainstituida == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_massainstituida"] : $this->c236_massainstituida);
@@ -160,7 +160,7 @@ class cl_dirp
         }
         $this->erro_banco = "";
         $this->erro_sql = "Inclusão efetuada com Sucesso\\n";
-        $this->erro_sql .= "Valores : " . $this->c236_coddirp;
+        $this->erro_sql .= "Valores : " . $this->c236_coddipr;
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
@@ -168,14 +168,14 @@ class cl_dirp
         return true;
     }
 
-    function alterar($c236_coddirp = null)
+    function alterar($c236_coddipr = null)
     {
         $this->atualizacampos();
         $sql = " UPDATE {$this->nomeTabela} SET ";
         $virgula = "";
 
         if ($this->verificaCodDirp()) {
-            $sql .= $virgula . " c236_coddirp = {$this->c236_coddirp} ";
+            $sql .= $virgula . " c236_coddipr = {$this->c236_coddipr} ";
             $virgula = ",";            
         }
 
@@ -231,15 +231,15 @@ class cl_dirp
     
         $sql .= " WHERE ";
 
-        if ($c236_coddirp != null) {
-            $sql .= " c236_coddirp = $c236_coddirp ";
+        if ($c236_coddipr != null) {
+            $sql .= " c236_coddipr = $c236_coddipr ";
         }
 
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql = "Despesa do Codigo DIRP não Alterado. Alteracao Abortada.\\n";
-            $this->erro_sql .= "Valores : " . $this->c236_coddirp;
+            $this->erro_sql .= "Valores : " . $this->c236_coddipr;
             $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -269,16 +269,16 @@ class cl_dirp
     }
 
     // funcao para exclusao
-    function excluir($c236_coddirp = null, $dbwhere = null)
+    function excluir($c236_coddipr = null, $dbwhere = null)
     {
         $sql = " DELETE FROM {$this->nomeTabela} WHERE ";
         $sql2 = "";
         if ($dbwhere == null || $dbwhere == "") {
-            if ($c236_coddirp != "") {
+            if ($c236_coddipr != "") {
                 if ($sql2 != "") {
                     $sql2 .= " and ";
                 }
-                $sql2 .= " c236_coddirp = $c236_coddirp ";
+                $sql2 .= " c236_coddipr = $c236_coddipr ";
             }
         } else {
             $sql2 = $dbwhere;
@@ -288,7 +288,7 @@ class cl_dirp
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql = "Despesa do Codigo DIRP não Excluído. Exclusão Abortada.\\n";
-            $this->erro_sql .= "Valores : " . $c236_coddirp;
+            $this->erro_sql .= "Valores : " . $c236_coddipr;
             $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -298,7 +298,7 @@ class cl_dirp
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
                 $this->erro_sql = "Despesa do Codigo DIRP não Encontrado. Exclusão não Efetuada.\\n";
-                $this->erro_sql .= "Valores : " . $c236_coddirp;
+                $this->erro_sql .= "Valores : " . $c236_coddipr;
                 $this->erro_msg  = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -307,7 +307,7 @@ class cl_dirp
             } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : " . $c236_coddirp;
+                $this->erro_sql .= "Valores : " . $c236_coddipr;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -332,7 +332,7 @@ class cl_dirp
         $this->numrows = pg_numrows($result);
         if ($this->numrows == 0) {
             $this->erro_banco = "";
-            $this->erro_sql   = "Record Vazio na Tabela:dirp";
+            $this->erro_sql   = "Record Vazio na Tabela:dipr";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -341,7 +341,7 @@ class cl_dirp
         return $result;
     }
 
-    function sql_query($c236_coddirp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    function sql_query($c236_coddipr = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "SELECT ";
         if ($campos != "*") {
@@ -357,8 +357,8 @@ class cl_dirp
         $sql .= " FROM {$this->nomeTabela} ";
         $sql2 = "";
         if ($dbwhere == "") {
-            if ($c236_coddirp != null) {
-                $sql2 .= " WHERE c236_coddirp = $c236_coddirp ";
+            if ($c236_coddipr != null) {
+                $sql2 .= " WHERE c236_coddipr = $c236_coddipr ";
             }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
@@ -376,7 +376,7 @@ class cl_dirp
         return $sql;
     }
 
-    function sql_query_file($c236_coddirp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    function sql_query_file($c236_coddipr = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -392,8 +392,8 @@ class cl_dirp
         $sql .= " from {$this->nomeTabela} ";
         $sql2 = "";
         if ($dbwhere == "") {
-            if ($c236_coddirp != null) {
-                $sql2 .= " where c236_coddirp = $c236_coddirp ";
+            if ($c236_coddipr != null) {
+                $sql2 .= " where c236_coddipr = $c236_coddipr ";
             }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
@@ -413,8 +413,8 @@ class cl_dirp
 
     function verificaCodDirp()
     {
-        if (trim($this->c236_coddirp) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c236_coddirp"])) {
-            $this->erroCampo("Campo Codigo DIRP não Informado.", "c236_coddirp");
+        if (trim($this->c236_coddipr) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c236_coddipr"])) {
+            $this->erroCampo("Campo Codigo DIRP não Informado.", "c236_coddipr");
             return false;
         }
         return true;

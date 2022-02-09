@@ -29,22 +29,22 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
-include("classes/dirp_classe.php");
+include("classes/dipr_classe.php");
 include("classes/db_db_config_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
-$cldirp = new cl_dirp;
+$cldipr = new cl_dipr;
 $cldb_config = new cl_db_config;
 $db_opcao = 22;
 $db_botao = false;
 if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alterar") {
     db_inicio_transacao();
     $db_opcao = 2;
-    $cldirp->alterar($c236_coddirp);
+    $cldipr->alterar($c236_coddipr);
     db_fim_transacao();
 } else if (isset($chavepesquisa)) {
     $db_opcao = 2;
-    $result = $cldirp->sql_record($cldirp->sql_query($chavepesquisa));
+    $result = $cldipr->sql_record($cldipr->sql_query($chavepesquisa));
     db_fieldsmemory($result, 0);
     $db_botao = true;
 }
@@ -64,7 +64,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
 <body style="background-color: #CCCCCC; margin-top: 30px;">
     <div class="container">
         <?php
-        include("forms/db_dirpcadastro.php");
+        include("forms/db_diprcadastro.php");
         ?>
     </div>
     <?
@@ -75,16 +75,16 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
 </html>
 <?
 if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alterar") {
-    if ($cldirp->erro_status == "0") {
-        $cldirp->erro(true, false);
+    if ($cldipr->erro_status == "0") {
+        $cldipr->erro(true, false);
         $db_botao = true;
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-        if ($cldirp->erro_campo != "") {
-            echo "<script> document.form1." . $cldirp->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
-            echo "<script> document.form1." . $cldirp->erro_campo . ".focus();</script>";
+        if ($cldipr->erro_campo != "") {
+            echo "<script> document.form1." . $cldipr->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $cldipr->erro_campo . ".focus();</script>";
         };
     } else {
-        $cldirp->erro(true, true);
+        $cldipr->erro(true, true);
     };
 };
 if ($db_opcao == 22) {

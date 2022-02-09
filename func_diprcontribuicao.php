@@ -30,10 +30,10 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
-include("classes/db_dirp_classe.php");
+include("classes/db_diprcontribuicao_classe.php");
 db_postmemory($HTTP_POST_VARS);
 parse_str("", $HTTP_SERVER_VARS["QUERY_STRING"]);
-$cldirp = new cl_dirp;
+$cldipr = new cl_diprcontribuicao;
 ?>
 <html>
 
@@ -51,11 +51,11 @@ $cldirp = new cl_dirp;
                     <form name="form2" method="post" action="">
                         <tr>
                             <td width="4%" align="right" nowrap>
-                                Código DIRP
+                                Sequencial
                             </td>
                             <td width="96%" align="left" nowrap>
                                 <?
-                                db_input("c236_coddirp", 8, "0", true, "text", 4, "", "chave_c236_coddirp");
+                                db_input("c237_sequencial", 8, "0", true, "text", 4, "", "chave_c237_sequencial");
                                 ?>
                             </td>
                         </tr>
@@ -63,7 +63,7 @@ $cldirp = new cl_dirp;
                             <td colspan="2" align="center">
                                 <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
                                 <input name="limpar" type="reset" id="limpar" value="Limpar">
-                                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_dirp.hide();">
+                                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_dipr.hide();">
                             </td>
                         </tr>
                     </form>
@@ -75,28 +75,28 @@ $cldirp = new cl_dirp;
                 <?
                 if (!isset($pesquisa_chave)) {
                     if (isset($campos) == false) {
-                        if (file_exists("funcoes/db_func_dirp.php") == true) {
-                            include("funcoes/db_func_dirp.php");
+                        if (file_exists("funcoes/db_func_diprcontribuicao.php") == true) {
+                            include("funcoes/db_func_diprcontribuicao.php");
                         } else {
-                            $campos = "dirp.*";
+                            $campos = "diprbasecontribuicao.*";
                         }
                     }
-                    if (isset($chave_c236_coddirp) && (trim($chave_c236_coddirp) != "")) {
-                        $sql = $cldirp->sql_query($chave_c236_coddirp, $campos, "c236_coddirp");
+                    if (isset($chave_c237_sequencial) && (trim($chave_c237_sequencial) != "")) {
+                        $sql = $cldipr->sql_query($chave_c237_sequencial, $campos, "c237_sequencial");
                     } else {
-                        $sql = $cldirp->sql_query("", $campos, "c236_coddirp", "");
+                        $sql = $cldipr->sql_query("", $campos, "c237_sequencial", "");
                     }
                     $repassa = array();
-                    if (isset($chave_c236_coddirp)) {
-                        $repassa = array("chave_c236_coddirp" => $chave_c236_coddirp);
+                    if (isset($chave_c237_sequencial)) {
+                        $repassa = array("chave_c237_sequencial" => $chave_c237_sequencial);
                     }
                     db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
                 } else {
                     if ($pesquisa_chave != null && $pesquisa_chave != "") {
-                        $result = $cldirp->sql_record($cldirp->sql_query($pesquisa_chave));
-                        if ($cldirp->numrows != 0) {
+                        $result = $cldipr->sql_record($cldipr->sql_query($pesquisa_chave));
+                        if ($cldipr->numrows != 0) {
                             db_fieldsmemory($result, 0);
-                            echo "<script>" . $funcao_js . "('$c236_coddirp', false);</script>";
+                            echo "<script>" . $funcao_js . "('$c237_sequencial', false);</script>";
                         } else {
                             echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
                         }
@@ -120,5 +120,5 @@ if (!isset($pesquisa_chave)) {
 }
 ?>
 <script>
-    js_tabulacaoforms("form2", "chave_c236_coddirp", true, 1, "chave_c236_coddirp", true);
+    js_tabulacaoforms("form2", "chave_c237_sequencial", true, 1, "chave_c237_sequencial", true);
 </script>

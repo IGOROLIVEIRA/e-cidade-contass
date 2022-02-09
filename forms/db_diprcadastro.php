@@ -26,7 +26,7 @@
  */
 
 //MODULO: contabilidade
-$cldirp->rotulo->label();
+$cldipr->rotulo->label();
 ?>
     <form name="form1" method="post" action="">
         <center>
@@ -227,11 +227,11 @@ $cldirp->rotulo->label();
     }
 
     function js_pesquisa() {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_dirp', 'func_dirp.php?funcao_js=parent.js_preenchepesquisa|c236_coddirp', 'Pesquisa', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchepesquisa|c236_coddipr', 'Pesquisa', true);
     }
 
     function js_preenchepesquisa(chave) {
-        db_iframe_dirp.hide();
+        db_iframe_dipr.hide();
         <?
         if ($db_opcao != 1) {
             echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave; ";

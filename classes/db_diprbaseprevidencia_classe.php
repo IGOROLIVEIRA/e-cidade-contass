@@ -26,8 +26,8 @@
  */
 
 //MODULO: contabilidade
-//CLASSE DA ENTIDADE dirp
-class cl_dirpbaseprevidencia
+//CLASSE DA ENTIDADE dipr
+class cl_diprbaseprevidencia
 {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -46,11 +46,11 @@ class cl_dirpbaseprevidencia
     var $c238_codhist = 0;
     var $c238_compl = 'f';
     var $c238_descr = null;
-    var $nomeTabela = "dirpbaseprevidencia";
+    var $nomeTabela = "diprbaseprevidencia";
     // cria propriedade com as variaveis do arquivo
     var $campos = "
         c238_sequencial int4 NOT NULL 
-        c238_coddirp int8,
+        c238_coddipr int8,
         c238_datasicom date,
    	    c238_mescompetencia int4,
         c238_exerciciocompetencia int4,
@@ -65,7 +65,7 @@ class cl_dirpbaseprevidencia
         c238_valororiginalrepassado numeric ";
 
     //funcao construtor da classe
-    function cl_dirpbaseprevidencia()
+    function cl_diprbaseprevidencia()
     {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo($this->nomeTabela);
@@ -88,7 +88,7 @@ class cl_dirpbaseprevidencia
     {
         $this->c238_sequencial = ($this->c238_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_sequencial"] : $this->c238_sequencial);
         if ($exclusao == false) {
-            $this->c238_coddirp = ($this->c238_coddirp == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_coddirp"] : $this->c238_coddirp);
+            $this->c238_coddipr = ($this->c238_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_coddipr"] : $this->c238_coddipr);
             $this->atualizaCampoData("c238_datasicom");
             $this->c238_mescompetencia = ($this->c238_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_mescompetencia"] : $this->c238_mescompetencia);
             $this->c238_exerciciocompetencia = ($this->c238_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_exerciciocompetencia"] : $this->c238_exerciciocompetencia);
@@ -125,7 +125,7 @@ class cl_dirpbaseprevidencia
         $this->atualizacampos();
         if (!$this->verificaCodigoDIRP())
             return false;
-       
+
         if (!$this->verificaDataSICOM())
             return false;
 
@@ -163,7 +163,7 @@ class cl_dirpbaseprevidencia
             return false;
 
         $sql  = "INSERT INTO {$this->nomeTabela} ( ";
-        $sql .= " c238_coddirp, ";
+        $sql .= " c238_coddipr, ";
         $sql .= " c238_datasicom, ";
         $sql .= " c238_mescompetencia, ";
         $sql .= " c238_exerciciocompetencia, ";
@@ -177,7 +177,7 @@ class cl_dirpbaseprevidencia
         $sql .= " c238_valororiginal, ";
         $sql .= " c238_valororiginalrepassado ";
         $sql .= ") VALUES ( ";
-        $sql .= " {$this->c238_coddirp}, ";
+        $sql .= " {$this->c238_coddipr}, ";
         $sql .= " '{$this->c238_datasicom}', ";
         $sql .= " {$this->c238_mescompetencia}, ";
         $sql .= " {$this->c238_exerciciocompetencia}, ";
@@ -230,7 +230,7 @@ class cl_dirpbaseprevidencia
         }
     
         if ($this->verificaCodigoDIRP()) {
-            $sql .= $virgula . " c238_coddirp = {$this->c238_coddirp} ";
+            $sql .= $virgula . " c238_coddipr = {$this->c238_coddipr} ";
             $virgula = ",";   
         }
 
@@ -397,7 +397,7 @@ class cl_dirpbaseprevidencia
         $this->numrows = pg_numrows($result);
         if ($this->numrows == 0) {
             $this->erro_banco = "";
-            $this->erro_sql   = "Record Vazio na Tabela:dirp";
+            $this->erro_sql   = "Record Vazio na Tabela:dipr";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -485,7 +485,7 @@ class cl_dirpbaseprevidencia
 
     public function verificaCodigoDIRP()
     {
-        $nomeCampo = "c238_coddirp";
+        $nomeCampo = "c238_coddipr";
         $descricaoCampo = "Código DIRP";
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }

@@ -150,99 +150,101 @@ SQL;
     public function criarTabelaDIPR() {
         $sql = <<<SQL
             BEGIN;
-            CREATE TABLE "contabilidade"."dirp" (
-                "c236_coddirp" serial,
-                "c236_massainstituida" bool,
-                "c236_beneficiotesouro" bool,
-                "c236_atonormativo" int8,
-                "c236_exercicionormativo" int4,
-                "c236_numcgmexecutivo" int8,
-                "c236_numcgmlegislativo" int8,
-                "c236_numcgmgestora" int8,
-                "c236_orgao" int4,
-                CONSTRAINT "dirpcgmexecutivo_numcgm_fk" FOREIGN KEY ("c236_numcgmexecutivo") REFERENCES "protocolo"."cgm"("z01_numcgm"),
-                CONSTRAINT "dirpcgmlegislativo_numcgm_fk" FOREIGN KEY ("c236_numcgmlegislativo") REFERENCES "protocolo"."cgm"("z01_numcgm"),
-                CONSTRAINT "dirpcgmgestora_numcgm_fk" FOREIGN KEY ("c236_numcgmgestora") REFERENCES "protocolo"."cgm"("z01_numcgm"),
-                PRIMARY KEY ("c236_coddirp")
-            );
+                CREATE SEQUENCE dipr_c236_coddipr_seq;
 
-            CREATE SEQUENCE dirpbasecontribuicao_c237_sequencial_seq;
+                CREATE TABLE "contabilidade"."dipr" (
+                    "c236_coddipr" int4 NOT NULL DEFAULT nextval('dipr_c236_coddipr_seq'::regclass),
+                    "c236_massainstituida" bool,
+                    "c236_beneficiotesouro" bool,
+                    "c236_atonormativo" int8,
+                    "c236_exercicionormativo" int4,
+                    "c236_numcgmexecutivo" int8,
+                    "c236_numcgmlegislativo" int8,
+                    "c236_numcgmgestora" int8,
+                    "c236_orgao" int4,
+                    CONSTRAINT "diprcgmgestora_numcgm_fk" FOREIGN KEY ("c236_numcgmgestora") REFERENCES "protocolo"."cgm"("z01_numcgm"),
+                    CONSTRAINT "diprcgmlegislativo_numcgm_fk" FOREIGN KEY ("c236_numcgmlegislativo") REFERENCES "protocolo"."cgm"("z01_numcgm"),
+                    CONSTRAINT "diprcgmexecutivo_numcgm_fk" FOREIGN KEY ("c236_numcgmexecutivo") REFERENCES "protocolo"."cgm"("z01_numcgm"),
+                    PRIMARY KEY ("c236_coddipr")
+                );
 
-            CREATE TABLE "contabilidade"."dirpbasecontribuicao" (
-                "c237_sequencial" int4 NOT NULL DEFAULT nextval('dirpbasecontribuicao_c237_sequencial_seq'::regclass),
-                "c237_coddirp" int8,
-                "c237_datasicom" date,
-                "c237_basecalculocontribuinte" int4,
-                "c237_exerciciocompetencia" int4,
-                "c237_tipofundo" int4,
-                "c237_remuneracao" numeric,
-                "c237_basecalculoorgao" int4,
-                "c237_valorbasecalculo" numeric,
-                "c237_tipocontribuinte" int4,
-                "c237_aliquota" numeric,
-                "c237_valorcontribuicao" numeric,
-                CONSTRAINT "dirpbasecontribuicao_dirp_fk" FOREIGN KEY ("c237_coddirp") REFERENCES "contabilidade"."dirp"("c236_coddirp"),
-                PRIMARY KEY ("c237_sequencial")
-            );
+                CREATE SEQUENCE diprbasecontribuicao_c237_sequencial_seq;
 
-            CREATE SEQUENCE dirpbaseprevidencia_c238_sequencial_seq;
+                CREATE TABLE "contabilidade"."diprbasecontribuicao" (
+                    "c237_sequencial" int4 NOT NULL DEFAULT nextval('diprbasecontribuicao_c237_sequencial_seq'::regclass),
+                    "c237_coddipr" int8,
+                    "c237_datasicom" date,
+                    "c237_basecalculocontribuinte" int4,
+                    "c237_exerciciocompetencia" int4,
+                    "c237_tipofundo" int4,
+                    "c237_remuneracao" numeric,
+                    "c237_basecalculoorgao" int4,
+                    "c237_valorbasecalculo" numeric,
+                    "c237_tipocontribuinte" int4,
+                    "c237_aliquota" numeric,
+                    "c237_valorcontribuicao" numeric,
+                    CONSTRAINT "diprbasecontribuicao_dipr_fk" FOREIGN KEY ("c237_coddipr") REFERENCES "contabilidade"."dipr"("c236_coddipr"),
+                    PRIMARY KEY ("c237_sequencial")
+                );
 
-            CREATE TABLE "contabilidade"."dirpbaseprevidencia" (
-                "c238_sequencial" int4 NOT NULL DEFAULT nextval('dirpbaseprevidencia_c238_sequencial_seq'::regclass),
-                "c238_coddirp" int8,
-                "c238_datasicom" date,
-                "c238_mescompetencia" int4,
-                "c238_exerciciocompetencia" int4,
-                "c238_tipofundo" int4,
-                "c238_tiporepasse" int4,
-                "c238_tipocontribuicaopatronal" int4,
-                "c238_tipocontribuicaosegurados" int4,
-                "c238_tipocontribuicao" int4,
-                "c238_datarepasse" date,
-                "c238_datavencimentorepasse" date,
-                "c238_valororiginal" numeric,
-                "c238_valororiginalrepassado" numeric,
-                CONSTRAINT "dirpbaseprevidencia_dirp_fk" FOREIGN KEY ("c238_coddirp") REFERENCES "contabilidade"."dirp"("c236_coddirp"),
-                PRIMARY KEY ("c238_sequencial")
-            );
+                CREATE SEQUENCE diprbaseprevidencia_c238_sequencial_seq;
 
-            CREATE SEQUENCE  dirpdeducoes_c239_sequencial_seq;
+                CREATE TABLE "contabilidade"."diprbaseprevidencia" (
+                    "c238_sequencial" int4 NOT NULL DEFAULT nextval('diprbaseprevidencia_c238_sequencial_seq'::regclass),
+                    "c238_coddipr" int8,
+                    "c238_datasicom" date,
+                    "c238_mescompetencia" int4,
+                    "c238_exerciciocompetencia" int4,
+                    "c238_tipofundo" int4,
+                    "c238_tiporepasse" int4,
+                    "c238_tipocontribuicaopatronal" int4,
+                    "c238_tipocontribuicaosegurados" int4,
+                    "c238_tipocontribuicao" int4,
+                    "c238_datarepasse" date,
+                    "c238_datavencimentorepasse" date,
+                    "c238_valororiginal" numeric,
+                    "c238_valororiginalrepassado" numeric,
+                    CONSTRAINT "diprbaseprevidencia_dipr_fk" FOREIGN KEY ("c238_coddipr") REFERENCES "contabilidade"."dipr"("c236_coddipr"),
+                    PRIMARY KEY ("c238_sequencial")
+                );
 
-            CREATE TABLE "contabilidade"."dirpdeducoes" (
-                "c239_sequencial" int4 NOT NULL DEFAULT nextval('dirpdeducoes_c239_sequencial_seq'::regclass),
-                "c239_coddirp" int8,
-                "c239_datasicom" date,
-                "c239_mescompetencia" int4,
-                "c239_exerciciocompetencia" int4,
-                "c239_tipofundo" int4,
-                "c239_tiporepasse" int4,
-                "c239_tipocontribuicaopatronal" int4,
-                "c239_tipocontribuicaosegurados" int4,
-                "c239_tipodeducao" int4,
-                "c239_descricao" text,
-                "c239_valordeducao" numeric,
-                CONSTRAINT "dirpdeducoes_dirp_fk" FOREIGN KEY ("c239_coddirp") REFERENCES "contabilidade"."dirp"("c236_coddirp"),
-                PRIMARY KEY ("c239_sequencial")
-            );
+                CREATE SEQUENCE  diprdeducoes_c239_sequencial_seq;
 
-            CREATE SEQUENCE dirpaportes_c240_sequencial_seq;
+                CREATE TABLE "contabilidade"."diprdeducoes" (
+                    "c239_sequencial" int4 NOT NULL DEFAULT nextval('diprdeducoes_c239_sequencial_seq'::regclass),
+                    "c239_coddipr" int8,
+                    "c239_datasicom" date,
+                    "c239_mescompetencia" int4,
+                    "c239_exerciciocompetencia" int4,
+                    "c239_tipofundo" int4,
+                    "c239_tiporepasse" int4,
+                    "c239_tipocontribuicaopatronal" int4,
+                    "c239_tipocontribuicaosegurados" int4,
+                    "c239_tipodeducao" int4,
+                    "c239_descricao" text,
+                    "c239_valordeducao" numeric,
+                    CONSTRAINT "diprdeducoes_dipr_fk" FOREIGN KEY ("c239_coddipr") REFERENCES "contabilidade"."dipr"("c236_coddipr"),
+                    PRIMARY KEY ("c239_sequencial")
+                );
 
-            CREATE TABLE "contabilidade"."dirpaportes" (
-                "c240_sequencial" int4 NOT NULL DEFAULT nextval('dirpaportes_c240_sequencial_seq'::regclass),
-                "c240_coddirp" int8,
-                "c240_datasicom" date,
-                "c240_mescompetencia" int4,
-                "c240_exerciciocompetencia" int4,
-                "c240_tipofundo" int4,
-                "c240_tipoaporte" int4,
-                "c240_tipocontribuicaopatronal" int4,
-                "c240_descricao" text,
-                "c240_atonormativo" int4,
-                "c240_exercicioatonormativo" int4,
-                "c240_valoraporte" numeric,
-                CONSTRAINT "dirpaportes_dirp_fk" FOREIGN KEY ("c240_coddirp") REFERENCES "contabilidade"."dirp"("c236_coddirp"),
-                PRIMARY KEY ("c240_sequencial")
-            );
+                CREATE SEQUENCE dipraportes_c240_sequencial_seq;
+
+                CREATE TABLE "contabilidade"."dipraportes" (
+                    "c240_sequencial" int4 NOT NULL DEFAULT nextval('dipraportes_c240_sequencial_seq'::regclass),
+                    "c240_coddipr" int8,
+                    "c240_datasicom" date,
+                    "c240_mescompetencia" int4,
+                    "c240_exerciciocompetencia" int4,
+                    "c240_tipofundo" int4,
+                    "c240_tipoaporte" int4,
+                    "c240_tipocontribuicaopatronal" int4,
+                    "c240_descricao" text,
+                    "c240_atonormativo" int4,
+                    "c240_exercicioatonormativo" int4,
+                    "c240_valoraporte" numeric,
+                    CONSTRAINT "dipraportes_dipr_fk" FOREIGN KEY ("c240_coddipr") REFERENCES "contabilidade"."dipr"("c236_coddipr"),
+                    PRIMARY KEY ("c240_sequencial")
+                );
             COMMIT;
 SQL;
         $this->execute($sql);

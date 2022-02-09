@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 //MODULO: contabilidade
-$cldirp->rotulo->label();
+$cldipr->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
     <center>
@@ -35,11 +35,11 @@ $cldirp->rotulo->label();
             <table border="0" width="400;">
                 <tr>
                     <td>
-                        <b><?db_ancora("Código DIRP", "js_pesquisac237_codigodirp(true);", $db_opcao);?></b>
+                        <b><? db_ancora("Código DIRP", "js_pesquisac237_codigodipr(true);", $db_opcao); ?></b>
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c238_coddirp', 14, '', true, 'text', 3, "");
+                        db_input('c238_coddipr', 14, '', true, 'text', 3, "");
                         ?>
                     </td>
                 </tr>
@@ -50,7 +50,7 @@ $cldirp->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_inputdata("c238_datasicom", null, null, null, true, "text", 1);
+                        db_inputdata("c238_datasicom", @$c238_datasicom_dia, @$c238_datasicom_mes, @$c238_datasicom_ano, true, "text", 1);
                         ?>
                     </td>
                 </tr>
@@ -85,7 +85,7 @@ $cldirp->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c238_exerciciocompetencia', 14, $exercicio, true, 'text', $db_opcao, "");
+                        db_input("c238_exerciciocompetencia", 14, "0", true, "text", $db_opcao, "", "", "", "", 4);
                         ?>
                     </td>
                 </tr>
@@ -172,7 +172,7 @@ $cldirp->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_inputdata("c238_datarepasse", null, null, null, true, "text", 1);
+                        db_inputdata("c238_datarepasse", @$c238_datarepasse_dia, @$c238_datarepasse_mes, @$c238_datarepasse_ano, true, "text", 1);
                         ?>
                     </td>
                 </tr>
@@ -183,7 +183,7 @@ $cldirp->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_inputdata("c238_datavencimentorepasse", null, null, null, true, "text", 1);
+                        db_inputdata("c238_datavencimentorepasse", @$c238_datavencimentorepasse_dia, @$c238_datavencimentorepasse_mes, @$c238_datavencimentorepasse_ano, true, "text", 1);
                         ?>
                     </td>
                 </tr>
@@ -221,12 +221,24 @@ $cldirp->rotulo->label();
 </form>
 
 <script>
-    function js_pesquisac237_codigodirp($lmostra) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_dirp', 'func_dirp.php?funcao_js=parent.js_preenchepesquisa|c236_coddirp', 'Pesquisa', true);
+    function js_pesquisac237_codigodipr($lmostra) {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr', 'Pesquisa', true);
+    }
+
+    function js_preenchecoddipr(chave) {
+        db_iframe_dipr.hide();
+        document.form1.c238_coddipr.value = chave;
+    }
+
+    function js_pesquisa() {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_diprbaseprevidencia.php?funcao_js=parent.js_preenchepesquisa|c238_sequencial', 'Pesquisa', true);
     }
 
     function js_preenchepesquisa(chave) {
-        db_iframe_dirp.hide();
-        document.form1.c238_coddirp.value = chave;
+        db_iframe_dipr.hide();
+        <?
+        if ($db_opcao != 1)
+            echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave; ";
+        ?>
     }
 </script>

@@ -26,8 +26,8 @@
  */
 
 //MODULO: contabilidade
-//CLASSE DA ENTIDADE dirp
-class cl_dirpcontribuicao
+//CLASSE DA ENTIDADE dipr
+class cl_diprcontribuicao
 {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -46,11 +46,11 @@ class cl_dirpcontribuicao
     var $c237_codhist = 0;
     var $c237_compl = 'f';
     var $c237_descr = null;
-    var $nomeTabela = "dirpcontribuicao";
+    var $nomeTabela = "diprbasecontribuicao";
     // cria propriedade com as variaveis do arquivo
     var $campos = "
         c237_sequencial serial,
-        c237_coddirp int8,
+        c237_coddipr int8,
         c237_datasicom date,
         c237_basecalculocontribuinte int4,
         c237_mescompetencia int4,
@@ -64,7 +64,7 @@ class cl_dirpcontribuicao
         c237_valorcontribuicao decimal ";
 
     //funcao construtor da classe
-    function cl_dirpcontribuicao()
+    function cl_diprcontribuicao()
     {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo($this->nomeTabela);
@@ -87,8 +87,8 @@ class cl_dirpcontribuicao
     {
         $this->c237_sequencial = ($this->c237_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_sequencial"] : $this->c237_sequencial);
         if ($exclusao == false) {
-            $this->c237_coddirp = ($this->c237_coddirp == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_coddirp"] : $this->c237_coddirp);
-            $this->c237_datasicom = ($this->c237_datasicom == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_datasicom"] : $this->c237_datasicom);
+            $this->c237_coddipr = ($this->c237_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_coddipr"] : $this->c237_coddipr);
+            $this->atualizaCampoData("c237_datasicom");
             $this->c237_basecalculocontribuinte = ($this->c237_basecalculocontribuinte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_basecalculocontribuinte"] : $this->c237_basecalculocontribuinte);
             $this->c237_mescompetencia = ($this->c237_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_mescompetencia"] : $this->c237_mescompetencia);
             $this->c237_exerciciocompetencia = ($this->c237_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_exerciciocompetencia"] : $this->c237_exerciciocompetencia);
@@ -102,13 +102,28 @@ class cl_dirpcontribuicao
         }
     }
 
+    function atualizaCampoData($nomeCampo)
+    {
+        $nomeCampoDia = "{$nomeCampo}_dia";
+        $nomeCampoMes = "{$nomeCampo}_mes";
+        $nomeCampoAno = "{$nomeCampo}_ano";
+        if ($this->$nomeCampo == "") {
+            $this->$nomeCampoDia = ($this->$nomeCampoDia == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoDia] : $this->$nomeCampoDia);
+            $this->$nomeCampoMes = ($this->$nomeCampoMes == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoMes] : $this->$nomeCampoMes);
+            $this->$nomeCampoAno = ($this->$nomeCampoAno == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoAno] : $this->$nomeCampoAno);
+            if ($this->$nomeCampoDia != "") {
+                $this->$nomeCampo = $this->$nomeCampoAno . "-" . $this->$nomeCampoMes . "-" . $this->$nomeCampoDia;
+            }
+        } 
+    }
+
     // funcao para Inclusão
     function incluir()
     {
         $this->atualizacampos();
         if (!$this->verificaCodigoDIRP())
             return false;
-
+ 
         if (!$this->verificaDataSICOM())
             return false;
 
@@ -129,6 +144,9 @@ class cl_dirpcontribuicao
 
         if (!$this->verificaTipoBaseCalculoOrgao())
             return false;
+
+        if (!$this->verificaTipoContribuicao())
+            return false;
         
         if (!$this->verificaValorBaseCalculo())
             return false;
@@ -136,9 +154,11 @@ class cl_dirpcontribuicao
         if (!$this->verificaAliquota())
             return false;
 
+        if (!$this->verificaValorContribuicao())
+            return false;
+
         $sql  = "INSERT INTO {$this->nomeTabela} ( ";
-        $sql .= " c237_sequencial, ";
-        $sql .= " c237_coddirp, ";
+        $sql .= " c237_coddipr, ";
         $sql .= " c237_datasicom, ";
         $sql .= " c237_basecalculocontribuinte, ";
         $sql .= " c237_mescompetencia, ";
@@ -151,9 +171,8 @@ class cl_dirpcontribuicao
         $sql .= " c237_aliquota, ";
         $sql .= " c237_valorcontribuicao ";
         $sql .= ") VALUES ( ";
-        $sql .= " {$this->c237_sequencial}, ";
-        $sql .= " {$this->c237_coddirp}, ";
-        $sql .= " {$this->c237_datasicom}, ";
+        $sql .= " {$this->c237_coddipr}, ";
+        $sql .= " '{$this->c237_datasicom}', ";
         $sql .= " {$this->c237_basecalculocontribuinte}, ";
         $sql .= " {$this->c237_mescompetencia}, ";
         $sql .= " {$this->c237_exerciciocompetencia}, ";
@@ -204,12 +223,12 @@ class cl_dirpcontribuicao
         }
 
         if ($this->verificaCodigoDIRP()) {
-            $sql  .= $virgula . " c237_coddirp = '$this->c237_coddirp' ";
+            $sql  .= $virgula . " c237_coddipr = '$this->c237_coddipr' ";
             $virgula = ",";
         }
 
         if ($this->verificaDataSICOM()) {
-            $sql  .= $virgula . " c237_datasicom = '$this->c237_datasicom' ";
+            $sql  .= $virgula . " c237_datasicom = '{$this->c237_datasicom}' ";
             $virgula = ",";
         }
 
@@ -240,6 +259,26 @@ class cl_dirpcontribuicao
 
         if ($this->verificaTipoBaseCalculoOrgao()) {
             $sql  .= $virgula . " c237_basecalculoorgao = '$this->c237_basecalculoorgao' ";
+            $virgula = ",";
+        }
+
+        if ($this->verificaTipoContribuicao()) {
+            $sql  .= $virgula . " c237_tipocontribuicao = '$this->c237_tipocontribuicao' ";
+            $virgula = ",";
+        }
+
+        if ($this->verificaValorBaseCalculo()) {
+            $sql  .= $virgula . " c237_valorbasecalculo = '$this->c237_valorbasecalculo' ";
+            $virgula = ",";
+        }
+
+        if ($this->verificaAliquota()) {
+            $sql  .= $virgula . " c237_aliquota = '$this->c237_aliquota' ";
+            $virgula = ",";
+        }
+
+        if ($this->verificaValorContribuicao()) {
+            $sql  .= $virgula . " c237_valorcontribuicao = '$this->c237_valorcontribuicao' ";
             $virgula = ",";
         }
 
@@ -346,7 +385,7 @@ class cl_dirpcontribuicao
         $this->numrows = pg_numrows($result);
         if ($this->numrows == 0) {
             $this->erro_banco = "";
-            $this->erro_sql   = "Record Vazio na Tabela:dirp";
+            $this->erro_sql   = "Record Vazio na Tabela:dipr";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -427,107 +466,109 @@ class cl_dirpcontribuicao
 
     function verificaSequencial()
     {
-        if (trim($this->c237_sequencial) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c237_sequencial"])) {
-            $this->erroCampo("Campo Sequencial não Informado.", "c237_sequencial");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_sequencial";
+        $descricaoCampo = "Sequencial";
+        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
     function verificaCodigoDIRP()
     {
-        if (trim($this->c237_coddirp) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c237_coddirp"])) {
-            $this->erroCampo("Campo Código DIRP não Informado.", "c237_coddirp");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_coddipr";
+        $descricaoCampo = "Código DIRP";
+        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
     function verificaDataSICOM()
     {
-        if (trim($this->c237_datasicom) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c237_datasicom"])) {
-            $this->erroCampo("Campo Data Referência SICOM não Informada.", "c237_datasicom");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_datasicom";
+        $descricaoCampo = "Data Referência SICOM";
+        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
     function verificaTipoBaseCalculoContribuicao()
     {
-        if (trim($this->c237_basecalculocontribuinte) == "0") {
-            $this->erroCampo("Campo Tipo Base de Calculo Contribuição não Informado.", "c237_basecalculocontribuinte");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_basecalculocontribuinte";
+        $descricaoCampo = "Tipo Base de Calculo Contribuição";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     function verificaMesCompetencia()
     {
-        if (trim($this->c237_mescompetencia) == "0") {
-            $this->erroCampo("Campo Mês Competencia não Informado.", "c237_mescompetencia");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_mescompetencia";
+        $descricaoCampo = "Mês Competencia";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     function verificaExercicioCompetencia()
     {
-        if (trim($this->c237_exerciciocompetencia) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c237_exerciciocompetencia"])) {
-            $this->erroCampo("Campo Exercicio Competencia não Informado.", "c237_exerciciocompetencia");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_exerciciocompetencia";
+        $descricaoCampo = "Exercicio Competencia";
+        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
     function verificaRemuneracao()
     {
-        if (trim($this->c237_remuneracao) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c237_remuneracao"])) {
-            $this->erroCampo("Campo Remuneração não Informado.", "c237_remuneracao");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_remuneracao";
+        $descricaoCampo = "Remuneração";
+        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
     function verificaTipoFundo()
     {
-        if (trim($this->c237_tipofundo) == "0") {
-            $this->erroCampo("Campo Tipo Fundo Contribuição não Informado.", "c237_tipofundo");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_tipofundo";
+        $descricaoCampo = "Tipo Fundo Contribuição";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     function verificaValorBaseCalculo()
     {
-        if (trim($this->c237_valorbasecalculo) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c237_valorbasecalculo"])) {
-            $this->erroCampo("Campo Valor de Base de Calculo não Informado.", "c237_valorbasecalculo");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_valorbasecalculo";
+        $descricaoCampo = "Valor de Base de Calculo";
+        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
     function verificaAliquota()
     {
-        if (trim($this->c237_aliquota) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c237_aliquota"])) {
-            $this->erroCampo("Campo Valor Aliquota não Informado.", "c237_aliquota");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_aliquota";
+        $descricaoCampo = "Valor Aliquota";
+        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
-    function verificaValorContribuição()
+    function verificaValorContribuicao()
     {
-        if (trim($this->c237_valorcontribuicao) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c237_valorcontribuicao"])) {
-            $this->erroCampo("Campo Valor da Contribuição não Informado.", "c237_valorcontribuicao");
-            return false;
-        }
-        return true;
+        $nomeCampo = "c237_valorcontribuicao";
+        $descricaoCampo = "Valor da Contribuição";
+        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
     function verificaTipoBaseCalculoOrgao()
     {
-        if (trim($this->c237_basecalculoorgao) == "0") {
-            $this->erroCampo("Campo Tipo Base de Calculo Orgão não Informado.", "c237_basecalculoorgao");
+        $nomeCampo = "c237_basecalculoorgao";
+        $descricaoCampo = "Tipo Base de Calculo Orgão";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+    }
+    
+
+    function verificaTipoContribuicao()
+    {
+        $nomeCampo = "c237_tipocontribuinte";
+        $descricaoCampo = "Tipo de Contribuição";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+    }
+
+    public function validacaoCampoTexto($nomeCampo, $descricaoCampo)
+    {
+        if (trim($this->$nomeCampo) == "" AND trim($GLOBALS["HTTP_POST_VARS"][$nomeCampo]) == "") {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;
+    }
+
+    public function validacaoCampoInteiro($nomeCampo, $descricaoCampo)
+    {
+        if ($this->$nomeCampo == 0) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
             return false;
         }
         return true;

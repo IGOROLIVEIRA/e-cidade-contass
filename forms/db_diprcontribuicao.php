@@ -25,42 +25,43 @@
  *                                licenca/licenca_pt.txt
  */
 //MODULO: contabilidade
-$cldirp->rotulo->label();
+$cldipr->rotulo->label();
 ?>
 
 <form name="form1" method="post" action="">
     <center>
         <br />
         <fieldset style="width: 700;">
-            <legend><b></b></legend>
+            <legend><b>Contribuições Previdenciárias Repassadas</b></legend>
             <table border="0" width="700;">
                 <tr>
                     <td>
-                        <b>Data Referência SICOM:</b>
+                        <b><? db_ancora("Código DIRP", "js_pesquisac237_codigodipr(true);", $db_opcao); ?></b>
                     </td>
                     <td nowrap>
                         <?
-                        db_inputdata("dtreferenciasicom", null, null, null, true, "text", 1);
+                        db_input('c237_coddipr', 14, '', true, 'text', 3, "");
                         ?>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <b>CGM Ente:</b>
+                        <b>Data referência SICOM:</b>
                     </td>
                     <td nowrap>
                         <?
-                        db_input('k13_conta', 10, $Ik13_conta, true, 'text', $db_opcao, " onchange='js_pesquisaz01_numcgm(false);'");
-                        db_input('k13_descr', 46, $Ik13_descr, true, 'text', 3, ''); ?>
+                        db_inputdata("c237_datasicom", @$c237_datasicom_dia, @$c237_datasicom_mes, @$c237_datasicom_ano, true, "text", 1);
+                        ?>
                     </td>
                 </tr>
+
 
                 <tr>
                     <td><b>Tipo da base de cálculo da contribuição:</b></td>
                     <td>
                         <?php
-                        db_select('basecalculo', array(0 => "Selecione", '1' => 'Patronal', '2' => 'Segurado'), true, 1, "");
+                        db_select('c237_basecalculocontribuinte', array(0 => "Selecione", '1' => 'Patronal', '2' => 'Segurado'), true, 1, "style='width:200px'");
                         ?>
                     </td>
                 </tr>
@@ -84,7 +85,7 @@ $cldirp->rotulo->label();
                             11 => "Novembro",
                             12 => "Dezembro"
                         );
-                        db_select('basecalculo', $meses, true, 1, "");
+                        db_select('c237_mescompetencia', $meses, true, 1, "style='width:200px'");
                         ?>
                     </td>
                 </tr>
@@ -95,7 +96,7 @@ $cldirp->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('exercicio', 10, $exercicio, true, 'text', $db_opcao, "");
+                        db_input('c237_exerciciocompetencia', 10, $exercicio, true, 'text', $db_opcao, "");
                         ?>
                     </td>
                 </tr>
@@ -104,7 +105,7 @@ $cldirp->rotulo->label();
                     <td><b>Tipo de fundo:</b></td>
                     <td>
                         <?php
-                        db_select('tipofundo', array(0 => "Selecione", '1' => 'Fundo em Capitalização (Plano Previdenciário)', '2' => 'Fundo em Repartição (Plano Financeiro)', '3' => 'Responsabilidade do tesouro municipal'), true, 1, "");
+                        db_select('c237_tipofundo', array(0 => "Selecione", '1' => 'Fundo em Capitalização (Plano Previdenciário)', '2' => 'Fundo em Repartição (Plano Financeiro)', '3' => 'Responsabilidade do tesouro municipal'), true, 1, "style='width:200px'");
                         ?>
                     </td>
                 </tr>
@@ -115,7 +116,7 @@ $cldirp->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('remuneracao', 14, $remuneracao, true, 'text', $db_opcao, 14);
+                        db_input('c237_remuneracao', 14, $remuneracao, true, 'text', $db_opcao, 14);
                         ?>
                     </td>
                 </tr>
@@ -133,7 +134,7 @@ $cldirp->rotulo->label();
                             "3" => "Aposentados",
                             "4" => "Pensionistas"
                         );
-                        db_select('tipobase', $tipoBase, true, 1, "");
+                        db_select('c237_basecalculoorgao', $tipoBase, true, 1, "style='width:200px'");
                         ?>
                     </td>
                 </tr>
@@ -144,7 +145,7 @@ $cldirp->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('remuneracao', 14, $remuneracao, true, 'text', $db_opcao, 14);
+                        db_input('c237_valorbasecalculo', 14, $remuneracao, true, 'text', $db_opcao, 14);
                         ?>
                     </td>
                 </tr>
@@ -160,7 +161,7 @@ $cldirp->rotulo->label();
                             "1" => "Normal",
                             "2" => "Suplementar"
                         );
-                        db_select('tipobase', $tipoBase, true, 1, "");
+                        db_select('c237_tipocontribuinte', $tipoBase, true, 1, "style='width:200px'");
                         ?>
                     </td>
                 </tr>
@@ -171,7 +172,7 @@ $cldirp->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('remuneracao', 14, $remuneracao, true, 'text', $db_opcao, 14);
+                        db_input('c237_aliquota', 14, $remuneracao, true, 'text', $db_opcao, 14);
                         ?>
                     </td>
                 </tr>
@@ -182,7 +183,7 @@ $cldirp->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('remuneracao', 14, $remuneracao, true, 'text', $db_opcao, 14);
+                        db_input('c237_valorcontribuicao', 14, $remuneracao, true, 'text', $db_opcao, 14);
                         ?>
                     </td>
                 </tr>
@@ -195,3 +196,26 @@ $cldirp->rotulo->label();
         <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
     </center>
 </form>
+
+<script>
+        function js_pesquisac237_codigodipr($lmostra) {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr', 'Pesquisa', true);
+    }
+
+    function js_preenchecoddipr(chave) {
+        db_iframe_dipr.hide();
+        document.form1.c237_coddipr.value = chave;
+    }
+
+    function js_pesquisa() {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_diprcontribuicao.php?funcao_js=parent.js_preenchepesquisa|c237_sequencial', 'Pesquisa', true);
+    }
+
+    function js_preenchepesquisa(chave) {
+        db_iframe_dipr.hide();
+        <?
+        if ($db_opcao != 1)
+            echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave; ";
+        ?>
+    }
+</script>

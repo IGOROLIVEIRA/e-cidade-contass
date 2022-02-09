@@ -35,13 +35,19 @@ include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $cldipr = new cl_diprbaseprevidencia;
 $cldb_config = new cl_db_config;
-$db_opcao = 1;
+$db_opcao = 22;
 $db_botao = true;
 
-if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alterar") {
     db_inicio_transacao();
-    $cldipr->incluir();
+    $db_opcao = 2;
+    $cldipr->alterar($c238_sequencial);
     db_fim_transacao();
+} else if (isset($chavepesquisa)) {
+    $db_opcao = 2;
+    $result = $cldipr->sql_record($cldipr->sql_query($chavepesquisa));
+    db_fieldsmemory($result, 0);
+    $db_botao = true;
 }
 ?>
 <html>
@@ -82,4 +88,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incl
         $cldipr->erro(true, true);
     };
 };
+if ($db_opcao == 22) {
+    echo "<script>document.form1.pesquisar.click();</script>";
+}
 ?>
