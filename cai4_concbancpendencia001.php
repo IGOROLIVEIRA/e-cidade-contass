@@ -102,6 +102,7 @@ if (isset($alterar)) {
 $DaoPendencia = new cl_conciliacaobancariapendencia;
 $sqlPendencia = db_query($DaoPendencia->sql_query($sequencial, "*", NULL, ""));
 db_fieldsmemory($sqlPendencia, 0);
+$k173_historico = preg_replace('/\s\s+/', '', $k173_historico);
 if ($k173_numcgm) {
     $sSQL = "SELECT z01_nome FROM cgm WHERE z01_numcgm = {$k173_numcgm}";
     $rsResult = db_query($sSQL);
