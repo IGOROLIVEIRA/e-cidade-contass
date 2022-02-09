@@ -51,35 +51,26 @@ $file_handle = fopen("tmp/$sFile[4]", "r");
 while (!feof($file_handle)) {
     $fieldsAll[] = explode($del, fgets($file_handle));
 }
-// echo '<pre>';
-// print_r($fieldsAll);
-// exit;
+
 fclose($file_handle);
 
-$aData = array();
-$aCnpj = array();
-foreach ($fieldsAll as $data) {
-    $cnpj = trim($data[9]);
-    $pontuacao = $data[8];
-    if (isset($aData[$cnpj])) {
-        $aData[$cnpj][] = $data[8];
-    } else {
-        $aCnpj[] = trim($data[9]);
-        $aData[$cnpj] = array($data[8]);
-    }
-}
+$aSeqPontuacao = array();
 
-for ($x = 1; $x <= count($aCnpj); $x++) {
-    $iVerif = 0;
-    for ($y = 0; $y < count($aCnpj); $y++) {
-        $sCnpj = $aCnpj[$y];
-        if (in_array($x, $aData[$sCnpj])) {
-            $iVerif++;
-            if ($iVerif > 1) {
-                db_redireciona('db_erros.php?fechar=true&db_erro=Pontuação igual em fornecedores diferentes ');
-                break;
-            }
-        }
+$i = 0;
+foreach ($fieldsAll as $fields) {
+
+    if (count($fields) != 10) {
+        db_redireciona('db_erros.php?fechar=true&db_erro=Arquivo inválido ');
+    }
+
+    $seq = $fields[3];
+    $pontuacao = $fields[8];
+
+    if (isset($aSeqPontuacao[$seq][$pontuacao])) {
+        db_redireciona('db_erros.php?fechar=true&db_erro=Pontuação igual em fornecedores diferentes ');
+        break;
+    } else {
+        $aSeqPontuacao[$seq][$pontuacao] = $i++;
     }
 }
 
@@ -132,10 +123,6 @@ for ($cont = 0; $cont < pg_numrows($rsLiclicita); $cont++) {
 }
 
 foreach ($fieldsAll as $fields) {
-
-    if (count($fields) != 10) {
-        db_redireciona('db_erros.php?fechar=true&db_erro=Arquivo inválido ');
-    }
 
     $fields[0] = trim($fields[0]);
     $fields[1] = trim($fields[1]);
