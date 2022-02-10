@@ -32,7 +32,7 @@ $cldipr->rotulo->label();
     <center>
         <br />
         <fieldset style="width: 700;">
-            <legend><b>Contribuições Previdenciárias Repassadas</b></legend>
+            <legend><b>Base de Cálculo da Contribuição Previdenciária por Órgão</b></legend>
             <table border="0" width="700;">
                 <tr>
                     <td>
@@ -107,7 +107,7 @@ $cldipr->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c237_exerciciocompetencia', 10, $exercicio, true, 'text', $db_opcao, "");
+                        db_input('c237_exerciciocompetencia', 10, $exercicio, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 4);
                         ?>
                     </td>
                 </tr>
@@ -127,7 +127,7 @@ $cldipr->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c237_remuneracao', 14, $remuneracao, true, 'text', $db_opcao, 14);
+                        db_input('c237_remuneracao', 14, $remuneracao, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 14);
                         ?>
                     </td>
                 </tr>
@@ -156,7 +156,7 @@ $cldipr->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c237_valorbasecalculo', 14, $remuneracao, true, 'text', $db_opcao, 14);
+                        db_input('c237_valorbasecalculo', 14, $remuneracao, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 14);
                         ?>
                     </td>
                 </tr>
@@ -183,7 +183,7 @@ $cldipr->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c237_aliquota', 14, $remuneracao, true, 'text', $db_opcao, 14);
+                        db_input('c237_aliquota', 14, $remuneracao, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 14);
                         ?>
                     </td>
                 </tr>
@@ -194,7 +194,7 @@ $cldipr->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c237_valorcontribuicao', 14, $remuneracao, true, 'text', $db_opcao, 14);
+                        db_input('c237_valorcontribuicao', 14, $remuneracao, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 14);
                         ?>
                     </td>
                 </tr>

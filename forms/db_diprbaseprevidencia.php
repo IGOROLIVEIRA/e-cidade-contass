@@ -96,7 +96,7 @@ $cldipr->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input("c238_exerciciocompetencia", 14, "0", true, "text", $db_opcao, "", "", "", "", 4);
+                        db_input("c238_exerciciocompetencia", 14, "0", true, "text", $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 4);
                         ?>
                     </td>
                 </tr>
@@ -205,7 +205,7 @@ $cldipr->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c238_valororiginal', 14, 0, true, 'text', $db_opcao, 14);
+                        db_input('c238_valororiginal', 14, null, null, true, "text", "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"");
                         ?>
                     </td>
                 </tr>
@@ -216,7 +216,7 @@ $cldipr->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c238_valororiginalrepassado', 14, 0, true, 'text', $db_opcao, 14);
+                        db_input('c238_valororiginalrepassado', 14, null, null, true, "text", "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"");
                         ?>
                     </td>
                 </tr>

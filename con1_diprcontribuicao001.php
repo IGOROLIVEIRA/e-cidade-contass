@@ -40,9 +40,23 @@ $db_opcao = 1;
 $db_botao = true;
 
 if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
-    db_inicio_transacao();
-    $cldipr->incluir();
-    db_fim_transacao();
+    $resultado = db_query("select c99_data from condataconf where c99_instit = " . db_getsession("DB_instit") . " and c99_anousu = " . db_getsession("DB_anousu"));
+    db_fieldsmemory($resultado, 0)->c99_data;
+    $c99_data = (implode("/", (array_reverse(explode("-", $c99_data)))));
+    if ($sqlerro == false) {
+        $dataEncerramentoContabil = DateTime::createFromFormat('d/m/Y', $c99_data);
+        $dataReferenciaSICOM = DateTime::createFromFormat('d/m/Y', $c237_datasicom);
+
+        if ($dataReferenciaSICOM < $dataEncerramentoContabil) {
+            db_msgbox("Existe encerramento de período contábil para a Data de Referência informada, o procedimento não poderá ser executado");
+            $sqlerro = true;
+        }
+    }
+    if ($sqlerro == false) {
+        db_inicio_transacao();
+        $cldipr->incluir();
+        db_fim_transacao();
+    }
 }
 ?>
 <html>

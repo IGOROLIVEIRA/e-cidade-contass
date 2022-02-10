@@ -94,7 +94,7 @@
                     </td>
                     <td nowrap>
                         <?
-                        db_input("c240_exerciciocompetencia", 14, "0", true, "text", $db_opcao, "", "", "", "", 4);
+                        db_input("c240_exerciciocompetencia", 14, "0", true, "text", $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 4);
                         ?>
                     </td>
                 </tr>
@@ -157,7 +157,7 @@
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c240_exercicioatonormativo', 14, 0, true, 'text', $db_opcao, "");
+                        db_input('c240_exercicioatonormativo', 14, 0, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 4);
                         ?>
                     </td>
                 </tr>
@@ -167,7 +167,7 @@
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c240_valoraporte', 14, 0, true, 'text', $db_opcao, 14);
+                        db_input('c240_valoraporte', 14, 0, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 14);
                         ?>
                     </td>
                 </tr>

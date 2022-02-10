@@ -29,7 +29,7 @@
     <center>
         <br />
         <fieldset style="width: 600;">
-            <legend><b>Contribuições Previdenciárias Repassadas</b></legend>
+            <legend><b>Deduções</b></legend>
             <table border="0" width="600;">
                 <tr>
                     <td>
@@ -94,7 +94,7 @@
                     </td>
                     <td nowrap>
                         <?
-                        db_input("c239_exerciciocompetencia", 14, "0", true, "text", $db_opcao, "", "", "", "", 4);
+                        db_input("c239_exerciciocompetencia", 14, "0", true, "text", $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 4);
                         ?>
                     </td>
                 </tr>
@@ -204,7 +204,7 @@
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c239_valordeducao', 14, 0, true, 'text', $db_opcao, 14);
+                        db_input('c239_valordeducao', 14, 0, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 14);
                         ?>
                     </td>
                 </tr>

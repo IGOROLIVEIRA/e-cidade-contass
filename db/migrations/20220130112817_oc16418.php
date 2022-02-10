@@ -54,19 +54,19 @@ class Oc16418 extends AbstractMigration
             ((select id_item from db_itensmenu where descricao like '%DIPR - Dem. Inf. Previdenciárias e Repasses%'), (select max(id_item) from db_itensmenu), 2, 209);
             
             INSERT INTO db_itensmenu VALUES 
-            ((select max(id_item) + 1 from db_itensmenu), 'Inclusão', 'Inclusão', 'con1_diprbaseprevidencia001.php', 1, 1, 'Inclusão', 't');
+            ((select max(id_item) + 1 from db_itensmenu), 'Inclusão', 'Inclusão', 'con1_diprcontribuicao001.php', 1, 1, 'Inclusão', 't');
                     
             INSERT INTO db_menu VALUES
             ((select id_item from db_itensmenu where descricao like '%Base de Cálculo da Contribuição Previdenciária%'), (select max(id_item) from db_itensmenu), 1, 209);
             
             INSERT INTO db_itensmenu VALUES 
-            ((select max(id_item) + 1 from db_itensmenu), 'Alteração', 'Alteração', 'con1_diprbaseprevidencia002.php', 1, 1, 'Alteração', 't');
+            ((select max(id_item) + 1 from db_itensmenu), 'Alteração', 'Alteração', 'con1_diprcontribuicao002.php', 1, 1, 'Alteração', 't');
             
             INSERT INTO db_menu VALUES
             ((select id_item from db_itensmenu where descricao like '%Base de Cálculo da Contribuição Previdenciária%'), (select max(id_item) from db_itensmenu), 2, 209);
             
             INSERT INTO db_itensmenu VALUES 
-            ((select max(id_item) + 1 from db_itensmenu), 'Exclusão', 'Exclusão', 'con1_diprbaseprevidencia003.php', 1, 1, 'Exclusão', 't');
+            ((select max(id_item) + 1 from db_itensmenu), 'Exclusão', 'Exclusão', 'con1_diprcontribuicao003.php', 1, 1, 'Exclusão', 't');
             
             INSERT INTO db_menu VALUES
             ((select id_item from db_itensmenu where descricao like '%Base de Cálculo da Contribuição Previdenciária%'), (select max(id_item) from db_itensmenu), 2, 209);
@@ -78,19 +78,19 @@ class Oc16418 extends AbstractMigration
             ((select id_item from db_itensmenu where descricao like '%DIPR - Dem. Inf. Previdenciárias e Repasses%'), (select max(id_item) from db_itensmenu), 3, 209);
             
             INSERT INTO db_itensmenu VALUES 
-            ((select max(id_item) + 1 from db_itensmenu), 'Inclusão', 'Inclusão', 'con1_diprcontribuicao001.php', 1, 1, 'Inclusão', 't');
+            ((select max(id_item) + 1 from db_itensmenu), 'Inclusão', 'Inclusão', 'con1_diprbaseprevidencia001.php', 1, 1, 'Inclusão', 't');
                     
             INSERT INTO db_menu VALUES
             ((select id_item from db_itensmenu where descricao like '%Contribuições Previdenciárias Repassadas%'), (select max(id_item) from db_itensmenu), 1, 209);
             
             INSERT INTO db_itensmenu VALUES 
-            ((select max(id_item) + 1 from db_itensmenu), 'Alteração', 'Alteração', 'con1_diprcontribuicao002.php', 1, 1, 'Alteração', 't');
+            ((select max(id_item) + 1 from db_itensmenu), 'Alteração', 'Alteração', 'con1_diprbaseprevidencia002.php', 1, 1, 'Alteração', 't');
             
             INSERT INTO db_menu VALUES
             ((select id_item from db_itensmenu where descricao like '%Contribuições Previdenciárias Repassadas%'), (select max(id_item) from db_itensmenu), 2, 209);
             
             INSERT INTO db_itensmenu VALUES 
-            ((select max(id_item) + 1 from db_itensmenu), 'Exclusão', 'Exclusão', 'con1_diprcontribuicao003.php', 1, 1, 'Exclusão', 't');
+            ((select max(id_item) + 1 from db_itensmenu), 'Exclusão', 'Exclusão', 'con1_diprbaseprevidencia003.php', 1, 1, 'Exclusão', 't');
             
             INSERT INTO db_menu VALUES
             ((select id_item from db_itensmenu where descricao like '%Contribuições Previdenciárias Repassadas%'), (select max(id_item) from db_itensmenu), 2, 209);
@@ -152,6 +152,7 @@ SQL;
     {
         $sql = <<<SQL
             BEGIN;
+                DROP SEQUENCE IF EXISTS dipr_c236_coddipr_seq;
                 CREATE SEQUENCE dipr_c236_coddipr_seq;
 
                 CREATE TABLE "contabilidade"."dipr" (
@@ -170,6 +171,7 @@ SQL;
                     PRIMARY KEY ("c236_coddipr")
                 );
 
+                DROP SEQUENCE IF EXISTS diprbasecontribuicao_c237_sequencial_seq;
                 CREATE SEQUENCE diprbasecontribuicao_c237_sequencial_seq;
 
                 CREATE TABLE "contabilidade"."diprbasecontribuicao" (
@@ -189,6 +191,7 @@ SQL;
                     PRIMARY KEY ("c237_sequencial")
                 );
 
+                DROP SEQUENCE diprbaseprevidencia_c238_sequencial_seq;
                 CREATE SEQUENCE diprbaseprevidencia_c238_sequencial_seq;
 
                 CREATE TABLE "contabilidade"."diprbaseprevidencia" (
@@ -210,6 +213,7 @@ SQL;
                     PRIMARY KEY ("c238_sequencial")
                 );
 
+                DROP SEQUENCE diprdeducoes_c239_sequencial_seq;
                 CREATE SEQUENCE  diprdeducoes_c239_sequencial_seq;
 
                 CREATE TABLE "contabilidade"."diprdeducoes" (
@@ -229,6 +233,7 @@ SQL;
                     PRIMARY KEY ("c239_sequencial")
                 );
 
+                DROP SEQUENCE dipraportes_c240_sequencial_seq;
                 CREATE SEQUENCE dipraportes_c240_sequencial_seq;
 
                 CREATE TABLE "contabilidade"."dipraportes" (
