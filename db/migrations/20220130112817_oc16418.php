@@ -178,6 +178,7 @@ SQL;
                     "c237_sequencial" int4 NOT NULL DEFAULT nextval('diprbasecontribuicao_c237_sequencial_seq'::regclass),
                     "c237_coddipr" int8,
                     "c237_datasicom" date,
+                    "c237_mescompetencia" int8,
                     "c237_basecalculocontribuinte" int4,
                     "c237_exerciciocompetencia" int4,
                     "c237_tipofundo" int4,
