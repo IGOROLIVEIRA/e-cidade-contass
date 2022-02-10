@@ -295,7 +295,7 @@ JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
+ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by l21_ordem asc";
 
                 $rsResult = db_query($sSql) or die(pg_last_error());
                 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
@@ -530,7 +530,7 @@ JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
+ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by l21_ordem asc";
             //die($sSql);
             $rsResult = db_query($sSql) or die(pg_last_error());
             $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
@@ -583,7 +583,7 @@ HTML;
 
                 $nTotalItens += $lTotal;
                 $oDadosDaLinha = new stdClass();
-                $oDadosDaLinha->seq = $oResult->pc11_seq; //$iCont + 1;
+                $oDadosDaLinha->seq = $iCont + 1; //$oResult->pc11_seq; 
                 $oDadosDaLinha->item = $oResult->pc01_codmater;
                 if ($oResult->pc11_reservado == 't') {
                     $oDadosDaLinha->descricao = '<span style="font-weight: bold;">[ME/EPP]</span> - ' . $oResult->pc01_descrmater;
