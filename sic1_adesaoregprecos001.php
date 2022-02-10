@@ -21,16 +21,52 @@ $db_opcao = isset($alterar) ? 2 : 1;
 
 if (isset($incluir) || isset($alterar)) {
 
-  $dataAux = $si06_dataadesao_ano + 1;
-  $resultado = db_query("select * from adesaoregprecos where si06_dataadesao >= '$si06_dataadesao_ano-01-01 00:00:00' 
-  and si06_dataadesao < '$dataAux-01-01 00:00:00' and si06_numeroadm = $si06_numeroadm");
+  if (isset($incluir)) {
+    $dataAux = $si06_dataadesao_ano + 1;
+    $resultado = db_query("select * from adesaoregprecos where si06_dataadesao >= '$si06_dataadesao_ano-01-01 00:00:00' 
+    and si06_dataadesao < '$dataAux-01-01 00:00:00' and si06_numeroadm = $si06_numeroadm");
 
-  $objeto = db_utils::fieldsMemory($resultado, 0);
+    $objeto = db_utils::fieldsMemory($resultado, 0);
 
-  if ($objeto->si06_dataadesao != null) {
-    $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_dataadesao_ano;
-    $sqlerro = true;
+    if ($objeto->si06_dataadesao != null) {
+      $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_dataadesao_ano;
+      $sqlerro = true;
+    }
   }
+
+  if (isset($alterar)) {
+
+    $resultado = db_query("select * from adesaoregprecos where si06_numeroadm = $si06_numeroadm");
+    $objeto = db_utils::fieldsMemory($resultado, 0);
+    $tamanho = pg_num_rows($resultado);
+
+    for ($i = 0; $i < $tamanho; $i++) {
+      $objeto = db_utils::fieldsMemory($resultado, $i);
+      $ano = substr($objeto->si06_dataadesao, 0, strpos($objeto->si06_dataadesao, "-"));
+
+      if ($objeto->si06_dataadesao != null && $si06_dataadesao_ano != $ano) {
+        $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $$ano;
+        $sqlerro = true;
+      }
+    }
+  }
+
+
+  /*
+  if (isset($alterar)){
+    $dataAux = $si06_dataadesao_ano + 1;
+    $resultado = db_query("select * from adesaoregprecos where si06_numeroadm = $si06_numeroadm");
+
+    $objeto = db_utils::fieldsMemory($resultado, 0);
+
+    if ($objeto->si06_dataadesao != null) {
+      $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_dataadesao_ano;
+      $sqlerro = true;
+    }
+  }
+  */
+
+
 
   if (!intval($si06_edital) && !$sqlerro) {
     $erro_msg = 'Valor do campo Edital inválido. Verifique!';
