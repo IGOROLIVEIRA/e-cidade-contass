@@ -1260,7 +1260,6 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                 }
 
                             } else {
-
                                 /*
                                 * DADOS PARA GERAÇÃO DO REGISTRO 31 Célula da Receita ? Execução
                                 * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 31
@@ -3887,11 +3886,17 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $obalreg30->si242_mes = 13;
                     $obalreg30->si242_reg10 = $obalancete10->si177_sequencial;
 
-                    $obalreg30->incluir(null);
-
-                    if ($obalreg30->erro_status == 0) {
-                        throw new Exception($obalreg30->erro_msg);
+                    if($obalreg30->si242_saldoinicialcde!= 0
+                        || $obalreg30->si242_totaldebitoscde!=0
+                        || $obalreg30->si242_totalcreditoscde!=0
+                        || $obalreg30->si242_saldofinalcde!=0){
+                        $obalreg30->incluir(null);
+                        if ($obalreg30->erro_status == 0) {
+                            throw new Exception($obalreg30->erro_msg);
+                        }
                     }
+
+
             }
 
             foreach ($oDado10->reg31 as $reg31) {
@@ -3912,18 +3917,17 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $obalreg31->si243_saldofinalcre = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                     $obalreg31->si243_naturezasaldofinalcre = $saldoFinal == 0 ? $obalreg31->si243_naturezasaldoinicialcre : ($saldoFinal > 0 ? 'D' : 'C');
                     if($this->bEncerramento){
-                        $obalreg31->si243_saldoinicialcre = $obalreg31->si243_saldofinalcde;
-                        $obalreg31->si243_naturezasaldoinicialcre = $obalreg31->si243_naturezasaldofinalcde;
+                        $obalreg31->si243_saldoinicialcre = $obalreg31->si243_saldofinalcre;
+                        $obalreg31->si243_naturezasaldoinicialcre = $obalreg31->si243_naturezasaldofinalcre;
                         $obalreg31->si243_totaldebitoscre = number_format(abs($reg30->si243_totaldebitosencerramento), 2, ".", "");
                         $obalreg31->si243_totalcreditoscre = number_format(abs($reg30->si243_totalcreditosencerramento), 2, ".", "");
-                        $saldoFinalEncerramento = ($saldoFinal + $obalreg31->si243_totaldebitoscde - $obalreg31->si243_totalcreditoscde) == '' ? 0 : ($saldoFinal + $obalreg31->si243_totaldebitoscde - $obalreg31->si243_totalcreditoscde);
+                        $saldoFinalEncerramento = ($saldoFinal + $obalreg31->si243_totaldebitoscre - $obalreg31->si243_totalcreditoscre) == '' ? 0 : ($saldoFinal + $obalreg31->si243_totaldebitoscre - $obalreg31->si243_totalcreditoscre);
                         $obalreg31->si243_saldofinalcre = number_format(abs($saldoFinalEncerramento == '' ? 0 : $saldoFinalEncerramento), 2, ".", "");
-                        $obalreg31->si243_naturezasaldofinalcre = $saldoFinalEncerramento == 0 ? $obalreg31->si243_naturezasaldoinicialcde : ($saldoFinalEncerramento > 0 ? 'D' : 'C');
+                        $obalreg31->si243_naturezasaldofinalcre = $saldoFinalEncerramento == 0 ? $obalreg31->si243_naturezasaldoinicialcre : ($saldoFinalEncerramento > 0 ? 'D' : 'C');
                     }
                     $obalreg31->si243_instit = $reg31->si243_instit;
                     $obalreg31->si243_mes = 13;
                     $obalreg31->si243_reg10 = $obalancete10->si177_sequencial;
-
                     $obalreg31->incluir(null);
 
                     if ($obalreg31->erro_status == 0) {

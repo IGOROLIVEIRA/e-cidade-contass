@@ -3,7 +3,7 @@
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2014  DBselller Servicos de Informatica             
  *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
+ *                         e-cidade@dbseller.com.br                    
  *                                                                    
  *  Este programa e software livre; voce pode redistribui-lo e/ou     
  *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
@@ -22,7 +22,7 @@
  *  02111-1307, USA.                                                  
  *  
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *                                licenca/licenca_pt.txt     
  */
 
 
@@ -30,17 +30,19 @@
 $cldb_operacaodecredito->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("op01_numerocontratoopc");
+$clrotulo->label("op01_sequencial");
+$clrotulo->label("op01_dataassinaturacop");
 ?>
 <form name="form1" method="post" action="">
   <center>
-    <fieldset>
+    <fieldset> 
       <legend align="center">
-        <b>Cadastro de Operação de Crédito</b>
+        <b>Cadastro de Operação de Crédito</b>   
       </legend>
       <table border="0">
         <tr>
           <td nowrap title="<?= @$Top01_sequencial ?>">
-          <b>Sequencial:</b> 
+          <?= @$Lop01_sequencial ?>  
           </td> 
           <td>
             <?
@@ -54,13 +56,13 @@ $clrotulo->label("op01_numerocontratoopc");
           </td>
           <td>
             <?
-            db_input('op01_numerocontratoopc', 30, $Iop01_numerocontratoopc, true, 'text', $db_opcao, "")
+            db_input('op01_numerocontratoopc', 30, 0, true, 'text', $db_opcao, "")
             ?>
           </td>
         </tr>
         <tr>
           <td nowrap title="<?= @$Top01_dataassinaturacop ?>">
-          <b>Data de Assinatura do Contrato OP:</b> 
+          <?= @$Lop01_dataassinaturacop ?>
           </td>
           <td>
             <?

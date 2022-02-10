@@ -1029,7 +1029,7 @@ class cl_liclicita
                 ,l20_subcontratacao
                 ,l20_limitcontratacao
                 ,l20_veicdivulgacao
-                ,l20_clausulapro 
+                ,l20_clausulapro
                 ,l20_codepartamento
                 ,l20_diames
                 ,l20_execucaoentrega
@@ -3736,5 +3736,40 @@ class cl_liclicita
             $aItensPcmater[] = db_utils::fieldsMemory($rsResult, $icont);
         }
         return $aItensPcmater;
+    }
+
+    public function sql_query_licitacao_exporta($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
+        $sql  = " select distinct {$campos} ";
+        $sql .= "  from liclicita
+        join db_depart on coddepto=l20_codepartamento
+        join db_config on codigo=instit
+        join infocomplementaresinstit on si09_instit=instit
+        join liclicitem on l21_codliclicita=l20_codigo
+        join pcprocitem on pc81_codprocitem=l21_codpcprocitem
+        join pcproc on pc80_codproc=pc81_codproc
+        join solicitem on pc11_codigo=pc81_solicitem
+        join solicitempcmater on pc16_solicitem=pc11_codigo
+        join pcmater on pc16_codmater = pc01_codmater
+        join solicitemunid on pc17_codigo=pc11_codigo
+        join matunid on m61_codmatunid=pc17_unid
+        left JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+        left JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+        left JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+        left JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+        left JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+        LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo";
+
+        if (!empty($dbwhere)) {
+            $sql .= " where {$dbwhere} ";
+        } else if (!empty($l20_codigo)) {
+            $sql .= " where liclicita.l20_codigo = $l20_codigo ";
+        }
+
+        if (!empty($ordem)) {
+            $sql .= " order by {$ordem} ";
+        }
+
+        return $sql;
     }
 }

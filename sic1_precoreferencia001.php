@@ -170,7 +170,7 @@ if (isset($incluir)) {
     db_fim_transacao($sqlerro);
     if ($clprecoreferencia->erro_status != 0) {
         echo "<script>
-      jan = window.open('sic1_precoreferencia004.php?impjust=$impjustificativa&codigo_preco='+{$clprecoreferencia->si01_processocompra}+
+      jan = window.open('sic1_precoreferencia004.php?impjust=$si01_impjustificativa&codigo_preco='+{$clprecoreferencia->si01_processocompra}+
       '&tipoprecoreferencia='+$si01_tipoprecoreferencia+'&quant_casas='+$quant_casas,
                     '',
                       'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');

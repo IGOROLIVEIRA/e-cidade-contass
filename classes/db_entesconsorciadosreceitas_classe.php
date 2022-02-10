@@ -29,9 +29,9 @@ class cl_entesconsorciadosreceitas {
                  c216_enteconsorciado = int4 = Ente consorciado
                  c216_tiporeceita = int4 = Tipo receita
                  c216_receita = int4 = Receita
-                 c216_saldo3112 = float4 = Saldo3112
+                 c216_saldo3112 = float8 = Saldo3112
                  c216_anousu = int4 = AnoUso
-                 c216_percentual = float4 = Percentual
+                 c216_percentual = float8 = Percentual
                  ";
 
   //funcao construtor da classe
