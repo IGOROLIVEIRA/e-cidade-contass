@@ -36,6 +36,17 @@ $cldipr->rotulo->label();
             <table border="0" width="700;">
                 <tr>
                     <td>
+                        <b>Sequencial</b>
+                    </td>
+                    <td nowrap>
+                        <?
+                        db_input('c237_sequencial', 14, '', true, 'text', 3, "");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
                         <b><? db_ancora("Código DIRP", "js_pesquisac237_codigodipr(true);", $db_opcao); ?></b>
                     </td>
                     <td nowrap>
@@ -189,7 +200,7 @@ $cldipr->rotulo->label();
                 </tr>
 
             </table>
-        </fieldset>
+            </fieldset>
         <br>
         <input name="db_opcao" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
         &nbsp;

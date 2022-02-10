@@ -26,8 +26,8 @@
  */
 
 //MODULO: contabilidade
-//CLASSE DA ENTIDADE dirp
-class cl_dirpdeducoes
+//CLASSE DA ENTIDADE dipr
+class cl_diprdeducoes
 {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -46,11 +46,11 @@ class cl_dirpdeducoes
     var $c239_codhist = 0;
     var $c239_compl = 'f';
     var $c239_descr = null;
-    var $nomeTabela = "dirpdeducoes";
+    var $nomeTabela = "diprdeducoes";
     // cria propriedade com as variaveis do arquivo
     var $campos = "
         c239_sequencial int4 NOT NULL,
-        c239_coddirp int8,
+        c239_coddipr int8,
         c239_datasicom date,
    	    c239_mescompetencia int4,
         c239_exerciciocompetencia int4,
@@ -59,11 +59,12 @@ class cl_dirpdeducoes
         c239_tipocontribuicaopatronal int4,
         c239_tipocontribuicaosegurados int4,
         c239_tipodeducao int4,
+        c239_tipocontribuicao int4,
         c239_descricao text,
         c239_valordeducao numeric ";
 
     //funcao construtor da classe
-    function cl_dirpdeducoes()
+    function cl_diprdeducoes()
     {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo($this->nomeTabela);
@@ -86,19 +87,34 @@ class cl_dirpdeducoes
     {
         $this->c239_sequencial = ($this->c239_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_sequencial"] : $this->c239_sequencial);
         if ($exclusao == false) {
-            $this->c239_coddirp = ($this->c239_coddirp == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_coddirp"] : $this->c239_coddirp);
-            $this->c239_datasicom = ($this->c239_datasicom == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_datasicom"] : $this->c239_datasicom);
+            $this->c239_coddipr = ($this->c239_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_coddipr"] : $this->c239_coddipr);
+            $this->atualizaCampoData("c239_datasicom");
             $this->c239_mescompetencia = ($this->c239_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_mescompetencia"] : $this->c239_mescompetencia);
             $this->c239_exerciciocompetencia = ($this->c239_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_exerciciocompetencia"] : $this->c239_exerciciocompetencia);
             $this->c239_tipofundo = ($this->c239_tipofundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_tipofundo"] : $this->c239_tipofundo);
             $this->c239_tiporepasse = ($this->c239_tiporepasse == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_tiporepasse"] : $this->c239_tiporepasse);
             $this->c239_tipocontribuicaopatronal = ($this->c239_tipocontribuicaopatronal == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_tipocontribuicaopatronal"] : $this->c239_tipocontribuicaopatronal);
             $this->c239_tipocontribuicaosegurados = ($this->c239_tipocontribuicaosegurados == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_tipocontribuicaosegurados"] : $this->c239_tipocontribuicaosegurados);
+            $this->c239_tipocontribuicao = ($this->c239_tipocontribuicao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_tipocontribuicao"] : $this->c239_tipocontribuicao);
             $this->c239_tipodeducao = ($this->c239_tipodeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_tipodeducao"] : $this->c239_tipodeducao);
             $this->c239_descricao = ($this->c239_descricao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_descricao"] : $this->c239_descricao);
-            $this->c239_datavencimentorepasse = ($this->c239_datavencimentorepasse == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_datavencimentorepasse"] : $this->c239_datavencimentorepasse);
             $this->c239_valordeducao = ($this->c239_valordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_valordeducao"] : $this->c239_valordeducao);
         } 
+    }
+
+    function atualizaCampoData($nomeCampo)
+    {
+        $nomeCampoDia = "{$nomeCampo}_dia";
+        $nomeCampoMes = "{$nomeCampo}_mes";
+        $nomeCampoAno = "{$nomeCampo}_ano";
+        if ($this->$nomeCampo == "") {
+            $this->$nomeCampoDia = ($this->$nomeCampoDia == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoDia] : $this->$nomeCampoDia);
+            $this->$nomeCampoMes = ($this->$nomeCampoMes == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoMes] : $this->$nomeCampoMes);
+            $this->$nomeCampoAno = ($this->$nomeCampoAno == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoAno] : $this->$nomeCampoAno);
+            if ($this->$nomeCampoDia != "") {
+                $this->$nomeCampo = $this->$nomeCampoAno . "-" . $this->$nomeCampoMes . "-" . $this->$nomeCampoDia;
+            }
+        }
     }
 
     // funcao para Inclusão
@@ -129,20 +145,20 @@ class cl_dirpdeducoes
         if (!$this->verificaContribuicaoSegurados())
             return false;
 
+        if (!$this->verificaTipoContribuicao())
+            return false;
+
         if (!$this->verificaTipoDeducao())
             return false;
 
         if (!$this->verificaDescricao())
             return false;
 
-        if (!$this->verificaDataVencimentoRepasse())
-            return false;
-
         if (!$this->verificaValorDeducao())
             return false;
 
         $sql  = " INSERT INTO {$this->nomeTabela} ( ";
-        $sql .= " c239_coddirp, ";
+        $sql .= " c239_coddipr, ";
         $sql .= " c239_datasicom, ";
         $sql .= " c239_mescompetencia, ";
         $sql .= " c239_exerciciocompetencia, ";
@@ -151,19 +167,21 @@ class cl_dirpdeducoes
         $sql .= " c239_tipocontribuicaopatronal, ";
         $sql .= " c239_tipocontribuicaosegurados, ";
         $sql .= " c239_tipodeducao, ";
+        $sql .= " c239_tipocontribuicao, ";   
         $sql .= " c239_descricao, ";
-        $sql .= " c239_valordeducao, ";
+        $sql .= " c239_valordeducao ";
         $sql .= " ) VALUES ( ";
-        $sql .= " {$this->c239_coddirp}, ";
-        $sql .= " {$this->c239_datasicom}, ";
+        $sql .= " {$this->c239_coddipr}, ";
+        $sql .= " '{$this->c239_datasicom}', ";
         $sql .= " {$this->c239_mescompetencia}, ";
         $sql .= " {$this->c239_exerciciocompetencia}, ";
         $sql .= " {$this->c239_tipofundo}, ";
         $sql .= " {$this->c239_tiporepasse}, ";
         $sql .= " {$this->c239_tipocontribuicaopatronal}, ";
         $sql .= " {$this->c239_tipocontribuicaosegurados}, ";
+        $sql .= " {$this->c239_tipocontribuicao}, ";
         $sql .= " {$this->c239_tipodeducao}, ";
-        $sql .= " {$this->c239_descricao}, ";
+        $sql .= " '{$this->c239_descricao}', ";
         $sql .= " {$this->c239_valordeducao}) ";
 
         $result = db_query($sql);
@@ -204,62 +222,62 @@ class cl_dirpdeducoes
             $virgula = ",";            
         }
 
-        if (!$this->verificaCodigoDIRP()) {
-            $sql .= $virgula . " c239_coddirp = {$this->c239_coddirp} ";
+        if ($this->verificaCodigoDIRP()) {
+            $sql .= $virgula . " c239_coddipr = {$this->c239_coddipr} ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaDataSICOM()) {
+        if ($this->verificaDataSICOM()) {
             $sql .= $virgula . " c239_datasicom = '{$this->c239_datasicom}' ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaMesCompetencia()) {
+        if ($this->verificaMesCompetencia()) {
             $sql .= $virgula . " c239_mescompetencia = {$this->c239_mescompetencia} ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaExercicioCompetencia()) {
+        if ($this->verificaExercicioCompetencia()) {
             $sql .= $virgula . " c239_exerciciocompetencia = {$this->c239_exerciciocompetencia} ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaTipoFundo()) {
+        if ($this->verificaTipoFundo()) {
             $sql .= $virgula . " c239_tipofundo = {$this->c239_tipofundo} ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaTipoRepasse()) {
+        if ($this->verificaTipoRepasse()) {
             $sql .= $virgula . " c239_tiporepasse = {$this->c239_tiporepasse} ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaContribuicaoPatronal()) {
+        if ($this->verificaContribuicaoPatronal()) {
             $sql .= $virgula . " c239_tipocontribuicaopatronal = {$this->c239_tipocontribuicaopatronal} ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaContribuicaoSegurados()) {
+        if ($this->verificaContribuicaoSegurados()) {
             $sql .= $virgula . " c239_tipocontribuicaosegurados = {$this->c239_tipocontribuicaosegurados} ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaTipoDeducao()) {
+        if ($this->verificaTipoContribuicao()) {
+            $sql .= $virgula . " c239_tipocontribuicao = {$this->c239_tipocontribuicao} ";
+            $virgula = ",";            
+        }
+
+        if ($this->verificaTipoDeducao()) {
             $sql .= $virgula . " c239_tipodeducao = {$this->c239_tipodeducao} ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaDescricao()) {
+        if ($this->verificaDescricao()) {
             $sql .= $virgula . " c239_descricao = '{$this->c239_descricao}' ";
             $virgula = ",";            
         }
 
-        if (!$this->verificaDataVencimentoRepasse()) {
-            $sql .= $virgula . " c239_datavencimentorepasse = {$this->c239_datavencimentorepasse} ";
-            $virgula = ",";            
-        }
-
-        if (!$this->verificaValorDeducao()) {
+        if ($this->verificaValorDeducao()) {
             $sql .= $virgula . " c239_valordeducao = {$this->c239_valordeducao} ";
             $virgula = ",";            
         }
@@ -276,6 +294,7 @@ class cl_dirpdeducoes
             $this->erro_sql = "Despesa do Codigo DIRP não Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->c239_sequencial;
             $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg  .= $sql;
             $this->erro_msg .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
@@ -367,7 +386,7 @@ class cl_dirpdeducoes
         $this->numrows = pg_numrows($result);
         if ($this->numrows == 0) {
             $this->erro_banco = "";
-            $this->erro_sql   = "Record Vazio na Tabela:dirp";
+            $this->erro_sql   = "Record Vazio na Tabela:dipr";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -455,7 +474,7 @@ class cl_dirpdeducoes
 
     public function verificaCodigoDIRP()
     {
-        $nomeCampo = "c239_coddirp";
+        $nomeCampo = "c239_coddipr";
         $descricaoCampo = "Código DIRP";
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
@@ -471,7 +490,7 @@ class cl_dirpdeducoes
     {
         $nomeCampo = "c239_mescompetencia";
         $descricaoCampo = "Mês Competencia";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     public function verificaExercicioCompetencia()
@@ -485,48 +504,48 @@ class cl_dirpdeducoes
     {
         $nomeCampo = "c239_tipofundo";
         $descricaoCampo = "Tipo Fundo";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     public function verificaTipoRepasse()
     {
         $nomeCampo = "c239_tiporepasse";
         $descricaoCampo = "Tipo Repasse";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     } 
 
     public function verificaContribuicaoPatronal()
     {
         $nomeCampo = "c239_tipocontribuicaopatronal";
         $descricaoCampo = "Tipo Contribuição Patronal";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     public function verificaContribuicaoSegurados()
     {
         $nomeCampo = "c239_tipocontribuicaosegurados";
         $descricaoCampo = "Tipo Contribuição Segurados";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     } 
+
+    public function verificaTipoContribuicao()
+    {
+        $nomeCampo = "c239_tipocontribuicao";
+        $descricaoCampo = "Tipo Contribuição";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+    }
 
     public function verificaTipoDeducao()
     {
         $nomeCampo = "c239_tipodeducao";
         $descricaoCampo = "Tipo Dedução";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     public function verificaDescricao()
     {
         $nomeCampo = "c239_descricao";
         $descricaoCampo = "Descrição";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
-    } 
-
-    public function verificaDataVencimentoRepasse()
-    {
-        $nomeCampo = "c239_datavencimentorepasse";
-        $descricaoCampo = "Data Vencimento do Repasse";
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     } 
 
@@ -539,12 +558,22 @@ class cl_dirpdeducoes
 
     public function validacaoCampoTexto($nomeCampo, $descricaoCampo)
     {
-        if (trim($this->$nomeCampo) == "" AND !isset($GLOBALS["HTTP_POST_VARS"][$nomeCampo])) {
+        if (trim($this->$nomeCampo) == "" AND trim($GLOBALS["HTTP_POST_VARS"][$nomeCampo]) == "") {
             $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
             return false;
         }
         return true;
     }
+
+    public function validacaoCampoInteiro($nomeCampo, $descricaoCampo)
+    {
+        if ($this->$nomeCampo == 0) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;
+    }
+
     function erroCampo($descricao, $campo)
     {
         $this->erro_sql = $descricao;

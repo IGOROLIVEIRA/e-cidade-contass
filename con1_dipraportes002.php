@@ -30,18 +30,18 @@ include("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_utils.php");
 include("libs/db_usuariosonline.php");
-include("classes/db_diprcontribuicao_classe.php");
+include("classes/db_dipraportes_classe.php");
 include("classes/db_db_config_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
-$cldipr = new cl_diprcontribuicao;
+$cldipr = new cl_dipraportes;
 $cldb_config = new cl_db_config;
 $db_opcao = 22;
 $db_botao = false;
 if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alterar") {
     db_inicio_transacao();
     $db_opcao = 2;
-    $cldipr->alterar($c237_sequencial);
+    $cldipr->alterar($c240_sequencial);
     db_fim_transacao();
 } else if (isset($chavepesquisa)) {
     $db_opcao = 2;
@@ -50,8 +50,8 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
     $db_botao = true;
 }
 ?>
-<html>
 
+<html>
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -65,7 +65,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
 <body style="background-color: #CCCCCC; margin-top: 30px;">
     <div class="container">
         <?php
-        include("forms/db_diprcontribuicao.php");
+        include("forms/db_dipraportes.php");
         ?>
     </div>
     <?

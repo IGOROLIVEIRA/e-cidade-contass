@@ -24,27 +24,26 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 include("libs/db_stdlib.php");
 include("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_utils.php");
 include("libs/db_usuariosonline.php");
-include("classes/db_diprcontribuicao_classe.php");
+include("classes/db_diprbaseprevidencia_classe.php");
 include("classes/db_db_config_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
-$cldipr = new cl_diprcontribuicao;
+$cldipr = new cl_diprbaseprevidencia;
 $cldb_config = new cl_db_config;
-$db_opcao = 22;
+$db_opcao = 33;
 $db_botao = false;
-if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alterar") {
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Excluir") {
     db_inicio_transacao();
-    $db_opcao = 2;
-    $cldipr->alterar($c237_sequencial);
+    $db_opcao = 3;
+    $cldipr->excluir($c238_sequencial);
     db_fim_transacao();
 } else if (isset($chavepesquisa)) {
-    $db_opcao = 2;
+    $db_opcao = 3;
     $result = $cldipr->sql_record($cldipr->sql_query($chavepesquisa));
     db_fieldsmemory($result, 0);
     $db_botao = true;
@@ -65,7 +64,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
 <body style="background-color: #CCCCCC; margin-top: 30px;">
     <div class="container">
         <?php
-        include("forms/db_diprcontribuicao.php");
+        include("forms/db_diprbaseprevidencia.php");
         ?>
     </div>
     <?
@@ -88,7 +87,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incl
         $cldipr->erro(true, true);
     };
 };
-if ($db_opcao == 22) {
+if ($db_opcao == 33) {
     echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>

@@ -26,8 +26,8 @@
  */
 
 //MODULO: contabilidade
-//CLASSE DA ENTIDADE dirp
-class cl_dirpaportes
+//CLASSE DA ENTIDADE dipr
+class cl_dipraportes
 {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -46,11 +46,11 @@ class cl_dirpaportes
     var $c240_codhist = 0;
     var $c240_compl = 'f';
     var $c240_descr = null;
-    var $nomeTabela = "dirpaportes";
+    var $nomeTabela = "dipraportes";
     // cria propriedade com as variaveis do arquivo
     var $campos = "
         c240_sequencial int4 NOT NULL
-        c240_coddirp int8,
+        c240_coddipr int8,
         c240_datasicom date,
    	    c240_mescompetencia int4,
         c240_exerciciocompetencia int4,
@@ -63,7 +63,7 @@ class cl_dirpaportes
         c240_valoraporte numeric ";
 
     //funcao construtor da classe
-    function cl_dirpaportes()
+    function cl_dipraportes()
     {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo($this->nomeTabela);
@@ -86,8 +86,8 @@ class cl_dirpaportes
     {
         $this->c240_sequencial = ($this->c240_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_sequencial"] : $this->c240_sequencial);
         if ($exclusao == false) {
-            $this->c240_coddirp = ($this->c240_coddirp == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_coddirp"] : $this->c240_coddirp);
-            $this->c240_datasicom = ($this->c240_datasicom == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_datasicom"] : $this->c240_datasicom);
+            $this->c240_coddipr = ($this->c240_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_coddipr"] : $this->c240_coddipr);
+            $this->atualizaCampoData("c240_datasicom");
             $this->c240_mescompetencia = ($this->c240_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_mescompetencia"] : $this->c240_mescompetencia);
             $this->c240_exerciciocompetencia = ($this->c240_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_exerciciocompetencia"] : $this->c240_exerciciocompetencia);
             $this->c240_tipofundo = ($this->c240_tipofundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_tipofundo"] : $this->c240_tipofundo);
@@ -98,6 +98,21 @@ class cl_dirpaportes
             $this->c240_exercicioatonormativo = ($this->c240_exercicioatonormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_exercicioatonormativo"] : $this->c240_exercicioatonormativo);
             $this->c240_valoraporte = ($this->c240_valoraporte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_valoraporte"] : $this->c240_valoraporte);
         } 
+    }
+
+    function atualizaCampoData($nomeCampo)
+    {
+        $nomeCampoDia = "{$nomeCampo}_dia";
+        $nomeCampoMes = "{$nomeCampo}_mes";
+        $nomeCampoAno = "{$nomeCampo}_ano";
+        if ($this->$nomeCampo == "") {
+            $this->$nomeCampoDia = ($this->$nomeCampoDia == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoDia] : $this->$nomeCampoDia);
+            $this->$nomeCampoMes = ($this->$nomeCampoMes == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoMes] : $this->$nomeCampoMes);
+            $this->$nomeCampoAno = ($this->$nomeCampoAno == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoAno] : $this->$nomeCampoAno);
+            if ($this->$nomeCampoDia != "") {
+                $this->$nomeCampo = $this->$nomeCampoAno . "-" . $this->$nomeCampoMes . "-" . $this->$nomeCampoDia;
+            }
+        }
     }
 
     // funcao para Inclusão
@@ -122,9 +137,6 @@ class cl_dirpaportes
         if (!$this->verificaAporte())
             return false;
 
-        if (!$this->verificaContribuicaoPatronal())
-            return false;
-
         if (!$this->verificaDescricao())
             return false;
 
@@ -138,28 +150,24 @@ class cl_dirpaportes
             return false;
 
         $sql  = " INSERT INTO {$this->nomeTabela} ( ";
-        $sql .= " c240_sequencial, ";
-        $sql .= " c240_coddirp, ";
+        $sql .= " c240_coddipr, ";
         $sql .= " c240_datasicom, ";
         $sql .= " c240_mescompetencia, ";
         $sql .= " c240_exerciciocompetencia, ";
         $sql .= " c240_tipofundo, ";
         $sql .= " c240_tipoaporte, ";
-        $sql .= " c240_tipocontribuicaopatronal, ";
         $sql .= " c240_descricao, ";
         $sql .= " c240_atonormativo, ";
         $sql .= " c240_exercicioatonormativo, ";
         $sql .= " c240_valoraporte ";
         $sql .= " ) VALUES ( ";
-        $sql .= " {$this->c240_sequencial}, ";
-        $sql .= " {$this->c240_coddirp}, ";
-        $sql .= " {$this->c240_datasicom}, ";
+        $sql .= " {$this->c240_coddipr}, ";
+        $sql .= " '{$this->c240_datasicom}', ";
         $sql .= " {$this->c240_mescompetencia}, ";
         $sql .= " {$this->c240_exerciciocompetencia}, ";
         $sql .= " {$this->c240_tipofundo}, ";
         $sql .= " {$this->c240_tipoaporte}, ";
-        $sql .= " {$this->c240_tipocontribuicaopatronal}, ";
-        $sql .= " {$this->c240_descricao}, ";
+        $sql .= " '{$this->c240_descricao}', ";
         $sql .= " {$this->c240_atonormativo}, ";
         $sql .= " {$this->c240_exercicioatonormativo}, ";
         $sql .= " {$this->c240_valoraporte} ) ";
@@ -203,7 +211,7 @@ class cl_dirpaportes
         }
 
         if (!$this->verificaCodigoDIRP()) {
-            $sql .= $virgula . " c240_coddirp = {$this->c240_coddirp} ";
+            $sql .= $virgula . " c240_coddipr = {$this->c240_coddipr} ";
             $virgula = ",";            
         }
 
@@ -232,11 +240,6 @@ class cl_dirpaportes
             $virgula = ",";            
         }
 
-        if (!$this->verificaContribuicaoPatronal()) {
-            $sql .= $virgula . " c240_tipocontribuicaopatronal = {$this->c240_tipocontribuicaopatronal} ";
-            $virgula = ",";            
-        }
-
         if (!$this->verificaDescricao()) {
             $sql .= $virgula . " c240_descricao = '{$this->c240_descricao}' ";
             $virgula = ",";            
@@ -248,7 +251,7 @@ class cl_dirpaportes
         }
 
         if (!$this->verificaExercicioNormativo()) {
-            $sql .= $virgula . " c240_exercicionormativo = {$this->c240_exercicionormativo} ";
+            $sql .= $virgula . " c240_exercicioatonormativo = {$this->c240_exercicioatonormativo} ";
             $virgula = ",";            
         }
 
@@ -359,7 +362,7 @@ class cl_dirpaportes
         $this->numrows = pg_numrows($result);
         if ($this->numrows == 0) {
             $this->erro_banco = "";
-            $this->erro_sql   = "Record Vazio na Tabela:dirp";
+            $this->erro_sql   = "Record Vazio na Tabela:dipr";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -447,7 +450,7 @@ class cl_dirpaportes
 
     public function verificaCodigoDIRP()
     {
-        $nomeCampo = "c240_coddirp";
+        $nomeCampo = "c240_coddipr";
         $descricaoCampo = "Código DIRP";
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
@@ -463,12 +466,12 @@ class cl_dirpaportes
     {
         $nomeCampo = "c240_mescompetencia";
         $descricaoCampo = "Mês da Competência";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     public function verificaExercicioCompetencia()
     {
-        $nomeCampo = "c240_tipofundo";
+        $nomeCampo = "c240_exerciciocompetencia";
         $descricaoCampo = "Exercício da Competencia";
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
@@ -477,21 +480,14 @@ class cl_dirpaportes
     {
         $nomeCampo = "c240_tipofundo";
         $descricaoCampo = "Tipo de Fundo";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     public function verificaAporte()
     {
         $nomeCampo = "c240_tipoaporte";
         $descricaoCampo = "Tipo de Aporte";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
-    }
-
-    public function verificaContribuicaoPatronal()
-    {
-        $nomeCampo = "c240_tipocontribuicaopatronal";
-        $descricaoCampo = "Tipo Contribuição Patronal";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     public function verificaDescricao()
@@ -510,7 +506,7 @@ class cl_dirpaportes
 
     public function verificaExercicioNormativo()
     {
-        $nomeCampo = "c240_exercicionormativo";
+        $nomeCampo = "c240_exercicioatonormativo";
         $descricaoCampo = "Exercício Normativo";
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
@@ -524,12 +520,22 @@ class cl_dirpaportes
 
     public function validacaoCampoTexto($nomeCampo, $descricaoCampo)
     {
-        if (trim($this->$nomeCampo) == "" AND !isset($GLOBALS["HTTP_POST_VARS"][$nomeCampo])) {
+        if (trim($this->$nomeCampo) == "" AND trim($GLOBALS["HTTP_POST_VARS"][$nomeCampo]) == "") {
             $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
             return false;
         }
         return true;
     }
+
+    public function validacaoCampoInteiro($nomeCampo, $descricaoCampo)
+    {
+        if ($this->$nomeCampo == 0) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;
+    }
+
     function erroCampo($descricao, $campo)
     {
         $this->erro_sql = $descricao;

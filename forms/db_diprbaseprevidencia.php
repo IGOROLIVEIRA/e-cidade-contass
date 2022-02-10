@@ -30,9 +30,20 @@ $cldipr->rotulo->label();
 <form name="form1" method="post" action="">
     <center>
         <br />
-        <fieldset style="width: 400;">
+        <fieldset style="width: 700;">
             <legend><b>Contribuições Previdenciárias Repassadas</b></legend>
-            <table border="0" width="400;">
+            <table border="0" width="700;">
+                <tr>
+                    <td>
+                        <b>Sequencial</b>
+                    </td>
+                    <td nowrap>
+                        <?
+                        db_input('c238_sequencial', 14, '', true, 'text', 3, "");
+                        ?>
+                    </td>
+                </tr>
+
                 <tr>
                     <td>
                         <b><? db_ancora("Código DIRP", "js_pesquisac237_codigodipr(true);", $db_opcao); ?></b>
@@ -100,7 +111,7 @@ $cldipr->rotulo->label();
                             2 => "Fundo em Repartição (Plano Financeiro)",
                             3 => "Responsabilidade do tesouro municipal"
                         );
-                        db_select('c238_tipofundo', $arrayTipoFundo, true, 1, "style='width:104px'");
+                        db_select('c238_tipofundo', $arrayTipoFundo, true, 1, "style='width:260px'");
                         ?>
                     </td>
                 </tr>
@@ -130,7 +141,7 @@ $cldipr->rotulo->label();
                             3 => "Aposentados",
                             4 => "Pensionistas"
                         );
-                        db_select('c238_tipocontribuicaopatronal', $arrayTipoRepasse, true, 1, "style='width:104px'");
+                        db_select('c238_tipocontribuicaopatronal', $arrayTipoRepasse, true, 1, "style='width:260px'");
                         ?>
                     </td>
                 </tr>
@@ -198,7 +209,6 @@ $cldipr->rotulo->label();
                         ?>
                     </td>
                 </tr>
-
 
                 <tr>
                     <td>

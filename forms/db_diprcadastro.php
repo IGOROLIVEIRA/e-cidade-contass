@@ -28,99 +28,111 @@
 //MODULO: contabilidade
 $cldipr->rotulo->label();
 ?>
-    <form name="form1" method="post" action="">
-        <center>
-            <br />
-            <fieldset style="width: 800;">
-                <legend><b>Informações Previdenciárias - DIPR</b></legend>
-                <table border="0" width="800;">
-                    <tr>
-                        <td><b>O ente possui segregação da massa instituída por lei?:</b></td>
-                        <td>
-                            <?php
-                            $aSegregacaoLei = array(0 => "Selecione", 't' => "Sim", 'f' => "Não");
-                            db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "style='width:104px'");
-                            ?>
-                        </td>
-                    </tr>
+<form name="form1" method="post" action="">
+    <center>
+        <br />
+        <fieldset style="width: 800;">
+            <legend><b>Informações Previdenciárias - DIPR</b></legend>
+            <table border="0" width="800;">
 
-                    <tr>
-                        <td><b>O município possui beneficiários custeados com recursos do tesouro?:</b></td>
-                        <td>
-                            <?php
-                            $aBeneficiarioTesouro = array(0 => "Selecione", 't' => "Sim", 'f' => "Não");
-                            db_select('c236_beneficiotesouro', $aBeneficiarioTesouro, true, 1, "style='width:104px'");
-                            ?>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        <b>Sequencial</b>
+                    </td>
+                    <td nowrap>
+                        <?
+                        db_input('c236_coddipr', 14, '', true, 'text', 3, "");
+                        ?>
+                    </td>
+                </tr>
 
-                    <tr>
-                        <td><b>Número do ato normativo:</b></td>
-                        <td>
-                            <?php
-                            db_input("c236_atonormativo", 14, "0", true, "text", $db_opcao, "", "", "", "", 6);
-                            ?>
-                        </td>
-                    </tr>
+                <tr>
+                    <td><b>O ente possui segregação da massa instituída por lei?:</b></td>
+                    <td>
+                        <?php
+                        $aSegregacaoLei = array(0 => "Selecione", 't' => "Sim", 'f' => "Não");
+                        db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "style='width:104px'");
+                        ?>
+                    </td>
+                </tr>
 
-                    <tr>
-                        <td><b>Exercício do ato normativo:</b></td>
-                        <td>
-                            <?php
-                            db_input("c236_exercicionormativo", 14, "0", true, "text", $db_opcao, "", "", "", "", 4);
-                            ?>
-                        </td>
-                    </tr>
+                <tr>
+                    <td><b>O município possui beneficiários custeados com recursos do tesouro?:</b></td>
+                    <td>
+                        <?php
+                        $aBeneficiarioTesouro = array(0 => "Selecione", 't' => "Sim", 'f' => "Não");
+                        db_select('c236_beneficiotesouro', $aBeneficiarioTesouro, true, 1, "style='width:104px'");
+                        ?>
+                    </td>
+                </tr>
 
-                    <tr>
-                        <td nowrap>
-                            <?
-                                db_ancora("Administração Direta Executivo", "js_pesquisac236_numcgm(true, 'executivo');", $db_opcao);
-                            ?>
-                        </td>
-                        <td>
-                            <?
-                            db_input('c236_numcgmexecutivo', 14, $Ic236_numcgmexecutico, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'executivo');");
-                            db_input('z01_nomeexecutivo', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomeexecutivo");
-                            ?>
-                        </td>
-                    </tr>
+                <tr>
+                    <td><b>Número do ato normativo:</b></td>
+                    <td>
+                        <?php
+                        db_input("c236_atonormativo", 14, "0", true, "text", $db_opcao, "", "", "", "", 6);
+                        ?>
+                    </td>
+                </tr>
 
-                    <tr>
-                        <td nowrap>
-                            <?
-                                db_ancora("Administração Direta Legislativo", "js_pesquisac236_numcgm(true, 'legislativo');", $db_opcao);
-                            ?>
-                        </td>
-                        <td>
-                            <?
-                            db_input('c236_numcgmlegislativo', 14, $Ic236_numcgmlegislativo, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'legislativo');");
-                            db_input('z01_nomelegislativo', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomelegislativo");
-                            ?>
-                        </td>
-                    </tr>
+                <tr>
+                    <td><b>Exercício do ato normativo:</b></td>
+                    <td>
+                        <?php
+                        db_input("c236_exercicionormativo", 14, "0", true, "text", $db_opcao, "", "", "", "", 4);
+                        ?>
+                    </td>
+                </tr>
 
-                    <tr>
-                        <td nowrap>
-                            <?
-                                db_ancora("Unidade Gestora", "js_pesquisac236_numcgm(true, 'gestora');", $db_opcao);
-                            ?>
-                        </td>
-                        <td>
-                            <?
-                            db_input('c236_numcgmgestora', 14, $Ic236_numcgmgestora, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'gestora');");
-                            db_input('z01_nomegestora', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomegestora");
-                            ?>
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-            <br>
-            <input name="db_opcao" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
-            &nbsp;
-            <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
-        </center>
-    </form>
+                <tr>
+                    <td nowrap>
+                        <?
+                        db_ancora("Administração Direta Executivo", "js_pesquisac236_numcgm(true, 'executivo');", $db_opcao);
+                        ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('c236_numcgmexecutivo', 14, $Ic236_numcgmexecutico, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'executivo');");
+                        db_input('z01_nomeexecutivo', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomeexecutivo");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td nowrap>
+                        <?
+                        db_ancora("Administração Direta Legislativo", "js_pesquisac236_numcgm(true, 'legislativo');", $db_opcao);
+                        ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('c236_numcgmlegislativo', 14, $Ic236_numcgmlegislativo, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'legislativo');");
+                        db_input('z01_nomelegislativo', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomelegislativo");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td nowrap>
+                        <?
+                        db_ancora("Unidade Gestora", "js_pesquisac236_numcgm(true, 'gestora');", $db_opcao);
+                        ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('c236_numcgmgestora', 14, $Ic236_numcgmgestora, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'gestora');");
+                        db_input('z01_nomegestora', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomegestora");
+                        ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <br>
+        <input name="db_opcao" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
+        &nbsp;
+        <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
+    </center>
+</form>
 
 <script>
     campo = "";
@@ -141,7 +153,7 @@ $cldipr->rotulo->label();
         console.log(campo);
         if (campo === "executivo") {
             preencheExecutivoAutomaticamente();
-            return true; 
+            return true;
         }
 
         if (campo === "legislativo") {
@@ -161,7 +173,7 @@ $cldipr->rotulo->label();
             js_OpenJanelaIframe('top.corpo', 'db_iframe_numcgm', 'func_nome.php?pesquisa_chave=' + document.form1.c236_numcgmexecutivo.value + '&funcao_js=top.corpo.js_mostracgm', 'Pesquisa', false);
             console.log("Depois");
             return true;
-        } 
+        }
         document.form1.z01_nomeexecutivo.value = '';
     }
 
@@ -169,7 +181,7 @@ $cldipr->rotulo->label();
         if (document.form1.c236_numcgmlegislativo.value != '') {
             js_OpenJanelaIframe('top.corpo', 'db_iframe_numcgm', 'func_nome.php?pesquisa_chave=' + document.form1.c236_numcgmlegislativo.value + '&funcao_js=top.corpo.js_mostracgm', 'Pesquisa', false);
             return true;
-        } 
+        }
         document.form1.z01_nomelegislativo.value = '';
     }
 
@@ -177,13 +189,13 @@ $cldipr->rotulo->label();
         if (document.form1.c236_numcgmgestora.value != '') {
             js_OpenJanelaIframe('top.corpo', 'db_iframe_numcgm', 'func_nome.php?pesquisa_chave=' + document.form1.c236_numcgmgestora.value + '&funcao_js=top.corpo.js_mostracgm', 'Pesquisa', false);
             return true;
-        } 
+        }
         document.form1.z01_nomegestora.value = '';
     }
 
     function js_mostracgm(erro, chave) {
         console.log("Dentro");
-        if (campo === "executivo" ) {
+        if (campo === "executivo") {
             document.form1.z01_nomeexecutivo.value = chave;
             if (erro == true) {
                 document.form1.c236_numcgmexecutivo.focus();
@@ -191,15 +203,15 @@ $cldipr->rotulo->label();
             }
         }
 
-        if (campo === "legislativo" ) {
+        if (campo === "legislativo") {
             document.form1.z01_nomelegislativo.value = chave;
             if (erro == true) {
                 document.form1.c236_numcgmlegislativo.focus();
                 document.form1.c236_numcgmlegislativo.value = '';
             }
         }
-        
-        if (campo === "gestora" ) {
+
+        if (campo === "gestora") {
             document.form1.z01_nomegestora.value = chave;
             if (erro == true) {
                 document.form1.c236_numcgmgestora.focus();
@@ -209,17 +221,17 @@ $cldipr->rotulo->label();
     }
 
     function js_mostracgm1(chave1, chave2) {
-        if (campo === "executivo" ) {
+        if (campo === "executivo") {
             document.form1.c236_numcgmexecutivo.value = chave1;
             document.form1.z01_nomeexecutivo.value = chave2;
         }
 
-        if (campo === "legislativo" ) {
+        if (campo === "legislativo") {
             document.form1.c236_numcgmlegislativo.value = chave1;
             document.form1.z01_nomelegislativo.value = chave2;
         }
-        
-        if (campo === "gestora" ) {
+
+        if (campo === "gestora") {
             document.form1.c236_numcgmgestora.value = chave1;
             document.form1.z01_nomegestora.value = chave2;
         }
@@ -236,9 +248,9 @@ $cldipr->rotulo->label();
         if ($db_opcao != 1) {
             echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave; ";
         ?>
-            js_pesquisac236_numcgm(false,'executivo');
-            js_pesquisac236_numcgm(false,'legislativo');
-            js_pesquisac236_numcgm(false,'gestora');  
+            js_pesquisac236_numcgm(false, 'executivo');
+            js_pesquisac236_numcgm(false, 'legislativo');
+            js_pesquisac236_numcgm(false, 'gestora');
         <? } ?>
     }
 </script>

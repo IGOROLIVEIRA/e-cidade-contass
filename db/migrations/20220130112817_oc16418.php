@@ -11,7 +11,8 @@ class Oc16418 extends AbstractMigration
         $this->criarCampos();
     }
 
-    public function criarMenu() {
+    public function criarMenu()
+    {
 
         $sql = <<<SQL
         BEGIN;
@@ -147,7 +148,8 @@ SQL;
         $this->execute($sql);
     }
 
-    public function criarTabelaDIPR() {
+    public function criarTabelaDIPR()
+    {
         $sql = <<<SQL
             BEGIN;
                 CREATE SEQUENCE dipr_c236_coddipr_seq;
@@ -272,6 +274,131 @@ SQL;
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c236_numcgmgestora', 'int8', 'Unidade Gestora', '0', 'Unidade Gestora', 11, false, false, false, 1, 'text', 'Unidade Gestora');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c236_orgao', 'int', 'Orgão', '0', 'Orgão', 5, false, false, false, 1, 'text', 'Orgão');
+                
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_sequencial', 'int8', 'Sequencial', '0', 'Sequencial', 11, false, false, false, 5, 'text', 'Sequencial');
+ 
+ 
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
+                    
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_basecalculocontribuinte', 'int4', 'Base Calculo', '0', 'Base Calculo', 1, 
+                    false, false, false, 1, 'text', 'Base Calculo');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_mescompetencia', 'int4', 'Mes Competencia', '0', 'Mes Competencia', 1, 
+                    false, false, false, 1, 'text', 'Mes Competencia');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_exerciciocompetencia', 'int4', 'Exercicio Competencia', '0', 'Exercicio Competencia', 1, 
+                    false, false, false, 1, 'text', 'Exercicio Competencia');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_tipofundo', 'int4', 'Tipo Fundo', '0', 'Tipo Fundo', 1, 
+                    false, false, false, 1, 'text', 'Tipo Fundo');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_remuneracao', 'float', 'Remuneração', '0', 'Remuneração', 1, 
+                    false, false, false, 1, 'text', 'Remuneração');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_basecalculoorgao', 'int4', 'Base Calculo Orgao', '0', 'Base Calculo Orgao', 1, 
+                    false, false, false, 1, 'text', 'Base Calculo Orgao');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_valorbasecalculo', 'float', 'Valor Base Calculo', '0', 'Valor Base Calculo', 1, 
+                    false, false, false, 1, 'text', 'Valor Base Calculo');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_tipocontribuinte', 'int4', 'Tipo Contribuinte', '0', 'Tipo Contribuinte', 1, 
+                    false, false, false, 1, 'text', 'Tipo Contribuinte');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_aliquota', 'float', 'Aliquota', '0', 'Aliquota', 1, 
+                    false, false, false, 1, 'text', 'Aliquota');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_valorcontribuicao', 'float', 'Valor Contribuição', '0', 'Valor Contribuição', 1, 
+                    false, false, false, 1, 'text', 'Valor Contribuição');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_sequencial', 'int8', 'Sequencial', '0', 'Sequencial', 11, false, false, false, 5, 'text', 'Sequencial');
+ 
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
+                            
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
+                    
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_mescompetencia', 'int4', 'Mes Competencia', '0', 'Mes Competencia', 1, 
+                    false, false, false, 1, 'text', 'Mes Competencia');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_exerciciocompetencia', 'int4', 'Exercicio Competencia', '0', 'Exercicio Competencia', 1, 
+                    false, false, false, 1, 'text', 'Exercicio Competencia');
+                    
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_tipofundo', 'int4', 'Tipo Fundo', '0', 'Tipo Fundo', 1, 
+                    false, false, false, 1, 'text', 'Tipo Fundo');
+                    
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_tiporepasse', 'int4', 'Tipo Repasse', '0', 'Tipo Repasse', 1, 
+                    false, false, false, 1, 'text', 'Tipo Repasse');
+            
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_tipocontribuicaopatronal', 'int4', 'Tipo Contribuicao Patronal', '0', 'Tipo Contribuicao Patronal', 1, 
+                    false, false, false, 1, 'text', 'Tipo Contribuicao Patronal');
+  
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_tipocontribuicaosegurados', 'int4', 'Tipo Contriibuicao Segurados', '0', 'Tipo Contriibuicao Segurados', 1, 
+                    false, false, false, 1, 'text', 'Tipo Contriibuicao Segurados');
+                    
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_tipocontribuicao', 'int4', 'Tipo Contribuicao', '0', 'Tipo Contribuicao', 1, 
+                    false, false, false, 1, 'text', 'Tipo Contribuicao');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_datarepasse', 'date', 'Data Repasse', 'null', 'Data Repasse', 10, false, false, false, 1, 'text', 'Data Repasse');
+                      
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_datavencimentorepasse', 'date', 'Data Vencimento', 'null', 'Data Vencimento', 10, false, false, false, 1, 'text', 'Data Vencimento');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_valororiginal', 'float', 'Valor', '0', 'Valor', 1, 
+                    false, false, false, 1, 'text', 'Valor');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_valororiginalrepassado', 'float', 'Valor Repassado', '0', 'Valor Repassado', 1, 
+                    false, false, false, 1, 'text', 'Valor Repassado');      
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_sequencial', 'int8', 'Sequencial', '0', 'Sequencial', 11, false, false, false, 5, 'text', 'Sequencial');
+ 
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
+                
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_mescompetencia', 'int4', 'Mes Competencia', '0', 'Mes Competencia', 1, false, false, false, 1, 'text', 'Mes Competencia');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_exerciciocompetencia', 'int4', 'Exercicio Competencia', '0', 'Exercicio Competencia', 1, false, false, false, 1, 'text', 'Exercicio Competencia');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_tipofundo', 'int4', 'Tipo Fundo', '0', 'Tipo Fundo', 1, false, false, false, 1, 'text', 'Tipo Fundo');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_tiporepasse', 'int4', 'Tipo Repasse', '0', 'Tipo Repasse', 1, false, false, false, 1, 'text', 'Tipo Repasse');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_tipocontribuicaopatronal', 'int4', 'Tipo Contribuicao Patronal', '0', 'Tipo Contribuicao Patronal', 1, false, false, false, 1, 'text', 'Tipo Contribuicao Patronal');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_tipocontribuicaosegurados', 'int4', 'Tipo Contriibuicao Segurados', '0', 'Tipo Contriibuicao Segurados', 1, false, false, false, 1, 'text', 'Tipo Contriibuicao Segurados');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_tipodeducao', 'int4', 'Tipo Dedução', '0', 'Tipo Dedução', 1, false, false, false, 1, 'text', 'Tipo Dedução');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_tipocontribuicao', 'int4', 'Tipo Contribuicao', '0', 'Tipo Contribuicao', 1, false, false, false, 1, 'text', 'Tipo Contribuicao');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_descricao', 'text', 'Descrição', 'null', 'Descrição', 200, false, false, false, 1, 'text', 'Descrição');
+                    
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_valordeducao', 'float', 'Valor Dedução', '0', 'Valor Dedução', 1, false, false, false, 1, 'text', 'Valor Dedução');  
+                
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_sequencial', 'int8', 'Sequencial', '0', 'Sequencial', 11, false, false, false, 5, 'text', 'Sequencial');
+ 
+ 
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
+                    
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_mescompetencia', 'int4', 'Mes Competencia', '0', 'Mes Competencia', 1, false, false, false, 1, 'text', 'Mes Competencia');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_exerciciocompetencia', 'int4', 'Exercicio Competencia', '0', 'Exercicio Competencia', 1, false, false, false, 1, 'text', 'Exercicio Competencia');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_tipofundo', 'int4', 'Tipo Fundo', '0', 'Tipo Fundo', 1, false, false, false, 1, 'text', 'Tipo Fundo');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_tipoaporte', 'int4', 'Tipo Aporte', '0', 'Tipo Aporte', 1, false, false, false, 1, 'text', 'Tipo Aporte');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_tipocontribuicaopatronal', 'int4', 'Tipo Contribuicao Patronal', '0', 'Tipo Contribuicao Patronal', 1, false, false, false, 1, 'text', 'Tipo Contribuicao Patronal');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_descricao', 'text', 'Descrição', 'null', 'Descrição', 200, false, false, false, 1, 'text', 'Descrição');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_atonormativo', 'int4', 'Ato Normativo', '0', 'Ato Normativo', 1, false, false, false, 1, 'text', 'Ato Normativo');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_exercicioatonormativo', 'int4', 'Exercicio Ato Normativo', '0', 'Exercicio Ato Normativo', 1, false, false, false, 1, 'text', 'Exercicio Ato Normativo');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_valoraporte', 'float', 'Valor Aporte', '0', 'Valor Aporte', 1, false, false, false, 1, 'text', 'Valor Aporte');
                 COMMIT;
 SQL;
         $this->execute($sql);
