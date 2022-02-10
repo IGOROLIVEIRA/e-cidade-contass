@@ -349,8 +349,8 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     /*
      * selecionar informacoes registro 20
      */
-    $sSql = "select '20' as  tiporegistro,
-					       c70_codlan as codreduzidomov,
+    $sSql = "select distinct '20' as  tiporegistro,
+                           e94_codanu as codreduzidomov,
 					       si09_codorgaotce as codorgao,
 					       CASE
     WHEN o41_subunidade != 0
@@ -363,33 +363,31 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 					       e60_codemp as nroempenho,
 					       e60_anousu as exercicioempenho,
 					       e60_emiss as dtempenho,
-					       case when c71_coddoc = 32 then 2 else 1 end as tiporestospagar,
+					       case when e91_vlrliq > 0 then 1 else 2 end as tiporestospagar,
 					       '1' as tipomovimento,
-					       c71_data as dtmovimentacao,
+					       e94_data as dtmovimentacao,
 					       ' ' as dotorig,
-					       c70_valor as vlmovimentacao,
+					       e94_valor as vlmovimentacao,
 					       ' ' as codorgaoencampatribuic,
 					       ' ' as codunidadesubencampatribuic,
 					       e94_motivo as justificativa,
 					       e60_codemp,
 					       substr(e94_ato,1,20) as atocancelamento,
-                 e94_dataato as dataatocancelamento,o15_codtri as codfontrecursos,
+                 e94_dataato as dataatocancelamento,
+                 o15_codtri as codfontrecursos,
                  e60_numemp
-        from conlancamdoc
-        join conlancamemp on c71_codlan = c75_codlan
-        join empempenho on c75_numemp = e60_numemp
-        join conlancam on c70_codlan = c71_codlan
-        join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
-        join orcelemento  on o58_codele = o56_codele and o58_anousu = o56_anousu
-        join orctiporec on o58_codigo = o15_codigo
-        join db_config on codigo = e60_instit
-        join empanulado on e94_numemp = e60_numemp and c71_data = e94_data and c70_valor = e94_valor
+        from  empanulado
+        inner join empempenho on e60_numemp = e94_numemp
+        inner join empresto on e91_numemp = e60_numemp and e91_anousu = ".db_getsession("DB_anousu")."
+        inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
+        inner join orcelemento  on o58_codele = o56_codele and o58_anousu = o56_anousu
+        inner join orctiporec on o58_codigo = o15_codigo
+        inner join orcunidade ON o58_orgao=o41_orgao AND o58_unidade=o41_unidade AND o58_anousu = o41_anousu
+        inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+        inner join db_config on codigo = e60_instit
         left join infocomplementaresinstit on codigo = si09_instit
-        JOIN orcunidade ON o58_orgao=o41_orgao
-        AND o58_unidade=o41_unidade
-       AND o58_anousu = o41_anousu
-       JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-        where e60_instit = " . db_getsession("DB_instit") . " and c71_coddoc in (31,32) and c71_data between '{$this->sDataInicial}' and '{$this->sDataFinal}' ";
+        where e60_instit = " . db_getsession("DB_instit") . "
+          and e94_data between '{$this->sDataInicial}' and '{$this->sDataFinal}' ";
 
     $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
 
