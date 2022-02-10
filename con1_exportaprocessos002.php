@@ -40,6 +40,7 @@ try {
 system("cd tmp; rm -f *.$extensao; cd ..");
 $numeroEdital = $aEditalLicitacao[0]->numeroedital;
 $anoProcessoLicitatorio = $aEditalLicitacao[0]->anoprocessolicitatorio;
+$processolicitatorio = $aEditalLicitacao[0]->processolicitatorio;
 $anoEdital = $aEditalLicitacao[0]->anoedital;
 $cnpj = $aEditalLicitacao[0]->cnpj;
 $codigotcemg = $aEditalLicitacao[0]->codigotcemg;
@@ -182,7 +183,7 @@ $aArquivosGerados[] = "Edital_" . $numeroEdital . "_" . $anoEdital . "_" . $iLic
 $aArquivosGerados[] = "Itens_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "_" . $cnpj . "." . $extensao;
 $aArquivosGerados[] = "Lote_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "_" . $cnpj . "." . $extensao;
 
-$sNomeAbsoluto = $cnpj . "_" . $codigotcemg . "_" . $anoProcessoLicitatorio;
+$sNomeAbsoluto = $cnpj . "_" . $codigotcemg . "_" . $processolicitatorio . "_" . $anoProcessoLicitatorio;
 
 //compactaArquivos($aArquivosGerados, $sNomeArquivo);
 
