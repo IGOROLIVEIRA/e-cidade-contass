@@ -28,7 +28,7 @@
 $cldipr->rotulo->label();
 ?>
 
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" onsubmit="return validarCampos()">
     <center>
         <br />
         <fieldset style="width: 100%;">
@@ -57,6 +57,15 @@ $cldipr->rotulo->label();
                 </tr>
 
                 <tr>
+                    <td><b>Tipo de Ente:</b></td>
+                    <td>
+                        <?php
+                        db_select('c237_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
+                        ?>
+                    </td>
+                </tr>
+
+                <tr>
                     <td>
                         <b>Data referência SICOM:</b>
                     </td>
@@ -67,12 +76,11 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
-
                 <tr>
                     <td><b>Tipo da base de cálculo da contribuição:</b></td>
                     <td>
                         <?php
-                        db_select('c237_basecalculocontribuinte', array(0 => "Selecione", '1' => 'Patronal', '2' => 'Segurado'), true, 1, "style='width:200px'");
+                        db_select('c237_basecalculocontribuinte', array(0 => "Selecione", '1' => 'Patronal', '2' => 'Segurado'), true, 1, "style='width:104px' onchange='verificarTipoBaseDeCalculoContribuicao()'");
                         ?>
                     </td>
                 </tr>
@@ -96,7 +104,7 @@ $cldipr->rotulo->label();
                             11 => "Novembro",
                             12 => "Dezembro"
                         );
-                        db_select('c237_mescompetencia', $meses, true, 1, "style='width:200px'");
+                        db_select('c237_mescompetencia', $meses, true, 1, "style='width:104px'");
                         ?>
                     </td>
                 </tr>
@@ -132,7 +140,7 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaBaseCalculoOrgao">
                     <td>
                         <b>Tipo de base de cálculo das contribuições devidas, relativas as folhas do órgão:</b>
                     </td>
@@ -150,7 +158,7 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaBaseCalculoSegurados">
                     <td>
                         <b>Tipo de base de cálculo das contribuições devidas dos segurados:</b>
                     </td>
@@ -226,7 +234,9 @@ $cldipr->rotulo->label();
 </form>
 
 <script>
-        function js_pesquisac237_codigodipr($lmostra) {
+    verificarTipoBaseDeCalculoContribuicao();
+
+    function js_pesquisac237_codigodipr($lmostra) {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr', 'Pesquisa', true);
     }
 
@@ -245,5 +255,58 @@ $cldipr->rotulo->label();
         if ($db_opcao != 1)
             echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave; ";
         ?>
+    }
+
+    function verificarTipoBaseDeCalculoContribuicao()
+    {
+        if (document.form1.c237_basecalculocontribuinte.value === "1") {
+            condicoesPatronal();
+            return;
+        }
+        if (document.form1.c237_basecalculocontribuinte.value === "2") {
+            condicoesSegurados();
+            return;
+        }
+        ocultarLinha('LinhaBaseCalculoOrgao');
+        ocultarLinha('LinhaBaseCalculoSegurados');
+        return;
+    }
+
+    function condicoesPatronal() {
+        ocultarLinha('LinhaBaseCalculoSegurados');
+        mostrarLinha('LinhaBaseCalculoOrgao');
+        return;
+    }
+    
+    function condicoesSegurados() {
+        ocultarLinha('LinhaBaseCalculoOrgao');
+        mostrarLinha('LinhaBaseCalculoSegurados');
+        return;
+    }
+
+    function ocultarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'none');
+        zerarValor(identificador);
+    }
+
+    function mostrarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'table-row');
+    }
+
+    function alterarDisplayDaLinha(identificador, display) {
+        document.getElementById(identificador).style.display = display;
+    }
+
+    function zerarValor(identificador) {
+        document.getElementById(identificador).value = 0;
+    }
+
+    function validarCampos() {
+        if (document.form1.c237_tipocontribuinte.value === "2" && document.form1.c237_basecalculocontribuinte.value != "1") {
+            alert("Tipo de Contribuição Suplementar permitida somente para Tipo de Base de Calculo da Contribuição igual a Patronal.");
+            document.form1.c237_tipocontribuinte.focus();
+            return false;
+        }
+        return true;
     }
 </script>

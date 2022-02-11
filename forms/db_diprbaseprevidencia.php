@@ -27,7 +27,7 @@
 //MODULO: contabilidade
 $cldipr->rotulo->label();
 ?>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" onsubmit="return validarCampos()">
     <center>
         <br />
         <fieldset style="width: 100%;">
@@ -51,6 +51,15 @@ $cldipr->rotulo->label();
                     <td nowrap>
                         <?
                         db_input('c238_coddipr', 14, '', true, 'text', 3, "");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><b>Tipo de Ente:</b></td>
+                    <td>
+                        <?php
+                        db_select('c238_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
                         ?>
                     </td>
                 </tr>
@@ -125,12 +134,12 @@ $cldipr->rotulo->label();
                             1 => "Patronal",
                             2 => "Segurado"
                         );
-                        db_select('c238_tiporepasse', $arrayTipoRepasse, true, 1, "style='width:104px'");
+                        db_select('c238_tiporepasse', $arrayTipoRepasse, true, 1, "style='width:104px' onchange='verificarTipoRepasse()'");
                         ?>
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaContribuicaoPatronal">
                     <td><b>Tipos de contribuição patronal:</b></td>
                     <td>
                         <?php
@@ -146,7 +155,7 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaContribuicaoSegurados">
                     <td><b>Tipos de contribuição segurados:</b></td>
                     <td>
                         <?php
@@ -161,7 +170,7 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaContribuicao">
                     <td><b>Tipos de contribuição:</b></td>
                     <td>
                         <?php
@@ -231,6 +240,8 @@ $cldipr->rotulo->label();
 </form>
 
 <script>
+    verificarTipoRepasse();
+
     function js_pesquisac237_codigodipr($lmostra) {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr', 'Pesquisa', true);
     }
@@ -250,5 +261,61 @@ $cldipr->rotulo->label();
         if ($db_opcao != 1)
             echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave; ";
         ?>
+    }
+
+    function verificarTipoRepasse()
+    {
+        if (document.form1.c238_tiporepasse.value === "1") {
+            condicoesPatronal();
+            return;
+        }
+        if (document.form1.c238_tiporepasse.value === "2") {
+            condicoesSegurados();
+            return;
+        }
+        ocultarLinha('LinhaContribuicaoPatronal');
+        ocultarLinha('LinhaContribuicaoSegurados');
+        ocultarLinha('LinhaContribuicao');
+        return;
+    }
+
+    function condicoesPatronal() {
+        mostrarLinha('LinhaContribuicaoPatronal');
+        ocultarLinha('LinhaContribuicaoSegurados');
+        mostrarLinha('LinhaContribuicao');
+        return;
+    }
+    
+    function condicoesSegurados() {
+        ocultarLinha('LinhaContribuicaoPatronal');
+        mostrarLinha('LinhaContribuicaoSegurados');
+        ocultarLinha('LinhaContribuicao');
+        return;
+    }
+
+    function ocultarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'none');
+        zerarValor(identificador);
+    }
+
+    function mostrarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'table-row');
+    }
+
+    function zerarValor(identificador) {
+        document.getElementById(identificador).value = 0;
+    }
+
+    function alterarDisplayDaLinha(identificador, display) {
+        document.getElementById(identificador).style.display = display;
+    }
+
+    function validarCampos() {
+        if (document.form1.c238_tipocontribuicao.value === "2" && document.form1.c238_tiporepasse.value != "1") {
+            alert("Tipo de Contribuição Suplementar permitida somente para Tipo de Repasse igual a Patronal.");
+            document.form1.c238_tipocontribuicao.focus();
+            return false;
+        }
+        return true;
     }
 </script>

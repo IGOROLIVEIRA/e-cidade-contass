@@ -56,7 +56,6 @@ class cl_dipraportes
         c240_exerciciocompetencia int4,
         c240_tipofundo int4,
         c240_tipoaporte int4,
-        c240_tipocontribuicaopatronal int4,
         c240_descricao text,
         c240_atonormativo int4,
         c240_exercicioatonormativo int4,
@@ -87,17 +86,26 @@ class cl_dipraportes
         $this->c240_sequencial = ($this->c240_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_sequencial"] : $this->c240_sequencial);
         if ($exclusao == false) {
             $this->c240_coddipr = ($this->c240_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_coddipr"] : $this->c240_coddipr);
+            $this->c240_tipoente = ($this->c240_tipoente == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_tipoente"] : $this->c240_tipoente);
             $this->atualizaCampoData("c240_datasicom");
             $this->c240_mescompetencia = ($this->c240_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_mescompetencia"] : $this->c240_mescompetencia);
             $this->c240_exerciciocompetencia = ($this->c240_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_exerciciocompetencia"] : $this->c240_exerciciocompetencia);
             $this->c240_tipofundo = ($this->c240_tipofundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_tipofundo"] : $this->c240_tipofundo);
             $this->c240_tipoaporte = ($this->c240_tipoaporte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_tipoaporte"] : $this->c240_tipoaporte);
-            $this->c240_tipocontribuicaopatronal = ($this->c240_tipocontribuicaopatronal == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_tipocontribuicaopatronal"] : $this->c240_tipocontribuicaopatronal);
-            $this->c240_descricao = ($this->c240_descricao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_descricao"] : $this->c240_descricao);
+            $this->verificarCondicaoDescricao("c240_descricao");
             $this->c240_atonormativo = ($this->c240_atonormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_atonormativo"] : $this->c240_atonormativo);
             $this->c240_exercicioatonormativo = ($this->c240_exercicioatonormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_exercicioatonormativo"] : $this->c240_exercicioatonormativo);
             $this->c240_valoraporte = ($this->c240_valoraporte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_valoraporte"] : $this->c240_valoraporte);
-        } 
+        }
+    }
+
+    function verificarCondicaoDescricao($nomeCampo)
+    {
+        if ($this->c240_tipoaporte != "5") {
+            $this->$nomeCampo = "";
+            return;
+        }
+        $this->$nomeCampo = ($this->nomeCampo == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampo] : $this->$nomeCampo);
     }
 
     function atualizaCampoData($nomeCampo)
@@ -115,11 +123,12 @@ class cl_dipraportes
         }
     }
 
-    // funcao para Inclusão
-    function incluir()
+    function verificacoes()
     {
-        $this->atualizacampos();
         if (!$this->verificaCodigoDIRP())
+            return false;
+
+        if (!$this->verificaTipoEnte())
             return false;
 
         if (!$this->verificaDataSICOM())
@@ -130,7 +139,7 @@ class cl_dipraportes
 
         if (!$this->verificaExercicioCompetencia())
             return false;
-    
+
         if (!$this->verificaTipoFundo())
             return false;
 
@@ -147,6 +156,17 @@ class cl_dipraportes
             return false;
 
         if (!$this->verificaValorAporte())
+            return false;
+
+        return true;
+    }
+
+    // funcao para Inclusão
+    function incluir()
+    {
+        $this->atualizacampos();
+
+        if (!$this->verificacoes())
             return false;
 
         $sql  = " INSERT INTO {$this->nomeTabela} ( ";
@@ -202,62 +222,71 @@ class cl_dipraportes
     function alterar($c240_sequencial = null)
     {
         $this->atualizacampos();
+
+        if (!$this->verificacoes())
+            return false;
+
         $sql = " UPDATE {$this->nomeTabela} SET ";
         $virgula = "";
 
         if ($this->verificaSequencial()) {
             $sql .= $virgula . " c240_sequencial = {$this->c240_sequencial} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
-        if (!$this->verificaCodigoDIRP()) {
+        if ($this->verificaCodigoDIRP()) {
             $sql .= $virgula . " c240_coddipr = {$this->c240_coddipr} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
-        if (!$this->verificaDataSICOM()) {
+        if ($this->verificaTipoEnte()) {
+            $sql .= $virgula . " c240_tipoente = {$this->c240_tipoente} ";
+            $virgula = ",";
+        }
+
+        if ($this->verificaDataSICOM()) {
             $sql .= $virgula . " c240_datasicom = '{$this->c240_datasicom}' ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
-        if (!$this->verificaMesCompetencia()) {
+        if ($this->verificaMesCompetencia()) {
             $sql .= $virgula . " c240_mescompetencia = {$this->c240_mescompetencia} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
-        if (!$this->verificaExercicioCompetencia()) {
+        if ($this->verificaExercicioCompetencia()) {
             $sql .= $virgula . " c240_exerciciocompetencia = {$this->c240_exerciciocompetencia} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
-    
-        if (!$this->verificaTipoFundo()) {
+
+        if ($this->verificaTipoFundo()) {
             $sql .= $virgula . " c240_tipofundo = {$this->c240_tipofundo} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
-        if (!$this->verificaAporte()) {
+        if ($this->verificaAporte()) {
             $sql .= $virgula . " c240_tipoaporte = {$this->c240_tipoaporte} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
-        if (!$this->verificaDescricao()) {
+        if ($this->verificaDescricao()) {
             $sql .= $virgula . " c240_descricao = '{$this->c240_descricao}' ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
-        if (!$this->verificaAtoNormativo()) {
+        if ($this->verificaAtoNormativo()) {
             $sql .= $virgula . " c240_atonormativo = {$this->c240_atonormativo} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
-        if (!$this->verificaExercicioNormativo()) {
+        if ($this->verificaExercicioNormativo()) {
             $sql .= $virgula . " c240_exercicioatonormativo = {$this->c240_exercicioatonormativo} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
-        if (!$this->verificaValorAporte()) {
+        if ($this->verificaValorAporte()) {
             $sql .= $virgula . " c240_valoraporte = {$this->c240_valoraporte} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
         $sql .= " WHERE ";
@@ -455,6 +484,13 @@ class cl_dipraportes
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
+    function verificaTipoEnte()
+    {
+        $nomeCampo = "c240_tipoente";
+        $descricaoCampo = "Tipo Ente";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+    }
+
     public function verificaDataSICOM()
     {
         $nomeCampo = "c240_datasicom";
@@ -494,7 +530,11 @@ class cl_dipraportes
     {
         $nomeCampo = "c240_descricao";
         $descricaoCampo = "Descrição";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        if (trim($this->$nomeCampo) == "" and trim($GLOBALS["HTTP_POST_VARS"][$nomeCampo]) == "" and $this->c240_tipoaporte == 5) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;
     }
 
     public function verificaAtoNormativo()
@@ -520,7 +560,7 @@ class cl_dipraportes
 
     public function validacaoCampoTexto($nomeCampo, $descricaoCampo)
     {
-        if (trim($this->$nomeCampo) == "" AND trim($GLOBALS["HTTP_POST_VARS"][$nomeCampo]) == "") {
+        if (trim($this->$nomeCampo) == "" and trim($GLOBALS["HTTP_POST_VARS"][$nomeCampo]) == "") {
             $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
             return false;
         }

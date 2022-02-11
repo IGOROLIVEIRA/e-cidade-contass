@@ -54,6 +54,15 @@
                 </tr>
 
                 <tr>
+                    <td><b>Tipo de Ente:</b></td>
+                    <td>
+                        <?php
+                        db_select('c240_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
+                        ?>
+                    </td>
+                </tr>
+
+                <tr>
                     <td>
                         <b>Data referência SICOM:</b>
                     </td>
@@ -126,12 +135,12 @@
                             4 => "Transferência para pagamento de beneficios de responsabilidade do tesouro",
                             5 => "Outros aportes ou transferências"
                         );
-                        db_select('c240_tipoaporte', $arrayTipoAporte, true, 1, "");
+                        db_select('c240_tipoaporte', $arrayTipoAporte, true, 1, "onchange='verificarTipoAporte()'");
                         ?>
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaDescricaoAporte">
                     <td>
                         <b>Descrição dos outros aportes ou transferências:</b>
                     </td>
@@ -182,6 +191,8 @@
 
 
 <script>
+    verificarTipoAporte();
+
     function js_pesquisac240_codigodipr($lmostra) {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr', 'Pesquisa', true);
     }
@@ -201,5 +212,44 @@
         if ($db_opcao != 1)
             echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave; ";
         ?>
+    }
+
+    function verificarTipoAporte()
+    {
+        if (document.form1.c240_tipoaporte.value === "5") {
+            condicoesAporte();
+            return;
+        }
+        ocultarLinha('LinhaDescricaoAporte');
+        return;
+    }
+
+    function condicoesAporte() {
+        mostrarLinha('LinhaDescricaoAporte');
+        return;
+    }
+
+    function ocultarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'none');
+        zerarValor(identificador);
+    }
+
+    function mostrarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'table-row');
+    }
+
+    function zerarValor(identificador) {
+        if (identificador == "LinhaDescricaoAporte") {
+            document.form1.c240_descricao.value = "";
+            return;
+        }
+    }
+
+    function alterarDisplayDaLinha(identificador, display) {
+        document.getElementById(identificador).style.display = display;
+    }
+
+    function validarCampos() {
+        return true;
     }
 </script>

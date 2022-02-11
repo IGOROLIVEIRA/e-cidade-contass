@@ -89,6 +89,7 @@ class cl_diprbaseprevidencia
         $this->c238_sequencial = ($this->c238_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_sequencial"] : $this->c238_sequencial);
         if ($exclusao == false) {
             $this->c238_coddipr = ($this->c238_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_coddipr"] : $this->c238_coddipr);
+            $this->c238_tipoente = ($this->c238_tipoente == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_tipoente"] : $this->c238_tipoente);
             $this->atualizaCampoData("c238_datasicom");
             $this->c238_mescompetencia = ($this->c238_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_mescompetencia"] : $this->c238_mescompetencia);
             $this->c238_exerciciocompetencia = ($this->c238_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_exerciciocompetencia"] : $this->c238_exerciciocompetencia);
@@ -221,6 +222,16 @@ class cl_diprbaseprevidencia
     function alterar($c238_sequencial = null)
     {
         $this->atualizacampos();
+     
+        if (!$this->verificaContribuicaoPatronal())
+            return false;
+
+        if (!$this->verificaContribuicaoSegurados())
+            return false;
+
+        if (!$this->verificaTipoContribuicao())
+            return false;
+
         $sql = " UPDATE {$this->nomeTabela} SET ";
         $virgula = "";
 
@@ -232,6 +243,11 @@ class cl_diprbaseprevidencia
         if ($this->verificaCodigoDIRP()) {
             $sql .= $virgula . " c238_coddipr = {$this->c238_coddipr} ";
             $virgula = ",";   
+        }
+
+        if ($this->verificaTipoEnte()) {
+            $sql .= $virgula . " c238_tipoente = {$this->c238_tipoente} ";
+            $virgula = ",";            
         }
 
         if ($this->verificaDataSICOM()) {
@@ -490,6 +506,13 @@ class cl_diprbaseprevidencia
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
+    function verificaTipoEnte()
+    {
+        $nomeCampo = "c238_tipoente";
+        $descricaoCampo = "Tipo Ente";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+    }
+
     public function verificaDataSICOM()
     {
         $nomeCampo = "c238_datasicom";
@@ -529,21 +552,33 @@ class cl_diprbaseprevidencia
     {
         $nomeCampo = "c238_tipocontribuicaopatronal";
         $descricaoCampo = "Tipo Contribuicao Patronal";
-        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+        if ($this->$nomeCampo == 0 AND $this->c238_tiporepasse == 1) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;   
     }
 
     public function verificaContribuicaoSegurados()
     {
         $nomeCampo = "c238_tipocontribuicaosegurados";
         $descricaoCampo = "Tipo Contribuicao Segurado";
-        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+        if ($this->$nomeCampo == 0 AND $this->c238_tiporepasse == 2) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;   
     }
 
     public function verificaTipoContribuicao()
     {
         $nomeCampo = "c238_tipocontribuicao";
         $descricaoCampo = "Tipo de Contribuicao";
-        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+        if ($this->$nomeCampo == 0 AND $this->c238_tiporepasse == 1) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;   
     }
 
     public function verificaDataRepasse()

@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 ?>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" onsubmit="return validarCampos()">
     <center>
         <br />
         <fieldset style="width: 100%;">
@@ -49,6 +49,15 @@
                     <td nowrap>
                         <?
                         db_input('c239_coddipr', 14, '', true, 'text', 3, "");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><b>Tipo de Ente:</b></td>
+                    <td>
+                        <?php
+                        db_select('c239_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
                         ?>
                     </td>
                 </tr>
@@ -123,12 +132,12 @@
                             1 => "Patronal",
                             2 => "Segurado"
                         );
-                        db_select('c239_tiporepasse', $arrayTipoRepasse, true, 1, "style='width:104px'");
+                        db_select('c239_tiporepasse', $arrayTipoRepasse, true, 1, "style='width:104px' onchange='verificarTipoRepasse()'");
                         ?>
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaContribuicaoPatronal">
                     <td><b>Tipos de contribuição patronal:</b></td>
                     <td>
                         <?php
@@ -144,7 +153,7 @@
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaContribuicaoSegurados">
                     <td><b>Tipos de contribuição segurados:</b></td>
                     <td>
                         <?php
@@ -159,7 +168,7 @@
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaContribuicao">
                     <td><b>Tipos de contribuição:</b></td>
                     <td>
                         <?php
@@ -174,17 +183,6 @@
                 </tr>
 
                 <tr>
-                    <td>
-                        <b>Descrição da dedução:</b>
-                    </td>
-                    <td nowrap>
-                        <?
-                        db_textarea('c239_descricao', 3, 101, '', true, "text", $db_opcao, "", "", "", 200);
-                        ?>
-                    </td>
-                </tr>
-
-                <tr>
                     <td><b>Tipos de Dedução:</b></td>
                     <td>
                         <?php
@@ -193,7 +191,18 @@
                             1 => "Pagamento a maior",
                             2 => "Outros valores compensados"
                         );
-                        db_select('c239_tipodeducao', $arrayTipoContribuicao, true, 1, "style='width:200px'");
+                        db_select('c239_tipodeducao', $arrayTipoContribuicao, true, 1, "style='width:200px' onchange='verificarTipoDeducao()'");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr id="LinhaDescricaoDeducao">
+                    <td>
+                        <b>Descrição da dedução:</b>
+                    </td>
+                    <td nowrap>
+                        <?
+                        db_textarea('c239_descricao', 3, 101, '', true, "text", $db_opcao, "", "", "", 200);
                         ?>
                     </td>
                 </tr>
@@ -219,6 +228,9 @@
 
 
 <script>
+    verificarTipoDeducao();
+    verificarTipoRepasse();
+
     function js_pesquisac239_codigodipr($lmostra) {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr', 'Pesquisa', true);
     }
@@ -238,5 +250,86 @@
         if ($db_opcao != 1)
             echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave; ";
         ?>
+    }
+
+    function verificarTipoDeducao()
+    {
+        if (document.form1.c239_tipodeducao.value === "2") {
+            condicoesDeducao();
+            return;
+        }
+        ocultarLinha('LinhaDescricaoDeducao');
+        return;
+    }
+
+    function verificarTipoRepasse()
+    {
+        if (document.form1.c239_tiporepasse.value === "1") {
+            condicoesPatronal();
+            return;
+        }
+        if (document.form1.c239_tiporepasse.value === "2") {
+            condicoesSegurados();
+            return;
+        }
+        ocultarLinha('LinhaContribuicaoPatronal');
+        ocultarLinha('LinhaContribuicaoSegurados');
+        ocultarLinha('LinhaContribuicao');
+        return;
+    }
+
+    function condicoesDeducao() {
+        mostrarLinha('LinhaDescricaoDeducao');
+        return;
+    }
+
+    function condicoesPatronal() {
+        mostrarLinha('LinhaContribuicaoPatronal');
+        ocultarLinha('LinhaContribuicaoSegurados');
+        mostrarLinha('LinhaContribuicao');
+        return;
+    }
+    
+    function condicoesSegurados() {
+        ocultarLinha('LinhaContribuicaoPatronal');
+        mostrarLinha('LinhaContribuicaoSegurados');
+        ocultarLinha('LinhaContribuicao');
+        return;
+    }
+
+    function ocultarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'none');
+        zerarValor(identificador);
+    }
+
+    function mostrarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'table-row');
+    }
+
+    function zerarValor(identificador) {
+        if (identificador == "LinhaDescricaoDeducao") {
+            document.form1.c239_descricao.value = "";
+            return;
+        }
+        if (identificador == "LinhaContribuicaoPatronal") {
+            document.form1.c239_tipocontribuicaopatronal.value = 0;
+            return;
+        }
+        if (identificador == "LinhaContribuicaoSegurados") {
+            document.form1.c239_tipocontribuicaosegurados.value = 0;
+            return;
+        }
+        if (identificador == "c239_tipocontribuicao") {
+            document.form1.c239_tipocontribuicao.value = 0;
+            return;
+        }
+    }
+
+    function alterarDisplayDaLinha(identificador, display) {
+        document.getElementById(identificador).style.display = display;
+    }
+
+    function validarCampos() {
+        return true;
     }
 </script>

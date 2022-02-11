@@ -177,6 +177,7 @@ SQL;
                 CREATE TABLE "contabilidade"."diprbasecontribuicao" (
                     "c237_sequencial" int4 NOT NULL DEFAULT nextval('diprbasecontribuicao_c237_sequencial_seq'::regclass),
                     "c237_coddipr" int8,
+                    "c237_tipoente" int4,
                     "c237_datasicom" date,
                     "c237_mescompetencia" int8,
                     "c237_basecalculocontribuinte" int4,
@@ -199,6 +200,7 @@ SQL;
                 CREATE TABLE "contabilidade"."diprbaseprevidencia" (
                     "c238_sequencial" int4 NOT NULL DEFAULT nextval('diprbaseprevidencia_c238_sequencial_seq'::regclass),
                     "c238_coddipr" int8,
+                    "c238_tipoente" int4,
                     "c238_datasicom" date,
                     "c238_mescompetencia" int4,
                     "c238_exerciciocompetencia" int4,
@@ -221,6 +223,7 @@ SQL;
                 CREATE TABLE "contabilidade"."diprdeducoes" (
                     "c239_sequencial" int4 NOT NULL DEFAULT nextval('diprdeducoes_c239_sequencial_seq'::regclass),
                     "c239_coddipr" int8,
+                    "c239_tipoente" int4,
                     "c239_datasicom" date,
                     "c239_mescompetencia" int4,
                     "c239_exerciciocompetencia" int4,
@@ -228,6 +231,7 @@ SQL;
                     "c239_tiporepasse" int4,
                     "c239_tipocontribuicaopatronal" int4,
                     "c239_tipocontribuicaosegurados" int4,
+                    "c239_tipocontribuicao" int4,
                     "c239_tipodeducao" int4,
                     "c239_descricao" text,
                     "c239_valordeducao" numeric,
@@ -241,12 +245,12 @@ SQL;
                 CREATE TABLE "contabilidade"."dipraportes" (
                     "c240_sequencial" int4 NOT NULL DEFAULT nextval('dipraportes_c240_sequencial_seq'::regclass),
                     "c240_coddipr" int8,
+                    "c240_tipoente" int4,
                     "c240_datasicom" date,
                     "c240_mescompetencia" int4,
                     "c240_exerciciocompetencia" int4,
                     "c240_tipofundo" int4,
                     "c240_tipoaporte" int4,
-                    "c240_tipocontribuicaopatronal" int4,
                     "c240_descricao" text,
                     "c240_atonormativo" int4,
                     "c240_exercicioatonormativo" int4,
@@ -284,9 +288,10 @@ SQL;
                 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_sequencial', 'int8', 'Sequencial', '0', 'Sequencial', 11, false, false, false, 5, 'text', 'Sequencial');
  
- 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
                     
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_tipoente', 'int8', 'Tipo Ente', '0', 'Tipo Ente', 11, false, false, false, 5, 'text', 'Tipo Ente');
+
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_basecalculocontribuinte', 'int4', 'Base Calculo', '0', 'Base Calculo', 1, 
@@ -326,6 +331,8 @@ SQL;
  
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
                             
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_tipoente', 'int8', 'Tipo Ente', '0', 'Tipo Ente', 11, false, false, false, 5, 'text', 'Tipo Ente');
+
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
                     
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_mescompetencia', 'int4', 'Mes Competencia', '0', 'Mes Competencia', 1, 
@@ -363,6 +370,8 @@ SQL;
  
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
                 
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_tipoente', 'int8', 'Tipo Ente', '0', 'Tipo Ente', 11, false, false, false, 5, 'text', 'Tipo Ente');
+
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_mescompetencia', 'int4', 'Mes Competencia', '0', 'Mes Competencia', 1, false, false, false, 1, 'text', 'Mes Competencia');
@@ -390,6 +399,8 @@ SQL;
  
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
                     
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_tipoente', 'int8', 'Tipo Ente', '0', 'Tipo Ente', 11, false, false, false, 5, 'text', 'Tipo Ente');
+
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_mescompetencia', 'int4', 'Mes Competencia', '0', 'Mes Competencia', 1, false, false, false, 1, 'text', 'Mes Competencia');
@@ -399,8 +410,6 @@ SQL;
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_tipofundo', 'int4', 'Tipo Fundo', '0', 'Tipo Fundo', 1, false, false, false, 1, 'text', 'Tipo Fundo');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_tipoaporte', 'int4', 'Tipo Aporte', '0', 'Tipo Aporte', 1, false, false, false, 1, 'text', 'Tipo Aporte');
-
-                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_tipocontribuicaopatronal', 'int4', 'Tipo Contribuicao Patronal', '0', 'Tipo Contribuicao Patronal', 1, false, false, false, 1, 'text', 'Tipo Contribuicao Patronal');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_descricao', 'text', 'Descrição', 'null', 'Descrição', 200, false, false, false, 1, 'text', 'Descrição');
 

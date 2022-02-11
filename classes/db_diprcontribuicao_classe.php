@@ -89,19 +89,38 @@ class cl_diprcontribuicao
         $this->c237_sequencial = ($this->c237_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_sequencial"] : $this->c237_sequencial);
         if ($exclusao == false) {
             $this->c237_coddipr = ($this->c237_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_coddipr"] : $this->c237_coddipr);
+            $this->c237_tipoente = ($this->c237_tipoente == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_tipoente"] : $this->c237_tipoente);
             $this->atualizaCampoData("c237_datasicom");
             $this->c237_basecalculocontribuinte = ($this->c237_basecalculocontribuinte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_basecalculocontribuinte"] : $this->c237_basecalculocontribuinte);
             $this->c237_mescompetencia = ($this->c237_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_mescompetencia"] : $this->c237_mescompetencia);
             $this->c237_exerciciocompetencia = ($this->c237_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_exerciciocompetencia"] : $this->c237_exerciciocompetencia);
             $this->c237_tipofundo = ($this->c237_tipofundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_tipofundo"] : $this->c237_tipofundo);
             $this->c237_remuneracao = ($this->c237_remuneracao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_remuneracao"] : $this->c237_remuneracao);
-            $this->c237_basecalculoorgao = ($this->c237_basecalculoorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_basecalculoorgao"] : $this->c237_basecalculoorgao);
-            $this->c237_basecalculosegurados = ($this->c237_basecalculosegurados == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_basecalculosegurados"] : $this->c237_basecalculosegurados);
+            $this->verificarCondicaoBaseCalculoContribuintePatronal('c237_basecalculoorgao');
+            $this->verificarCondicaoBaseCalculoContribuinteSegurado('c237_basecalculosegurados');
             $this->c237_valorbasecalculo = ($this->c237_valorbasecalculo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_valorbasecalculo"] : $this->c237_valorbasecalculo);
             $this->c237_tipocontribuinte = ($this->c237_tipocontribuinte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_tipocontribuinte"] : $this->c237_tipocontribuinte);
             $this->c237_aliquota = ($this->c237_aliquota == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_aliquota"] : $this->c237_aliquota);
             $this->c237_valorcontribuicao = ($this->c237_valorcontribuicao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_valorcontribuicao"] : $this->c237_valorcontribuicao);
         }
+    }
+
+    public function verificarCondicaoBaseCalculoContribuintePatronal($nomeCampo)
+    {
+        if ($this->c237_basecalculocontribuinte === "2") {
+            $this->$nomeCampo = 0;
+            return;
+        }
+        $this->$nomeCampo = ($this->nomeCampo == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampo] : $this->$nomeCampo);
+    }
+
+    public function verificarCondicaoBaseCalculoContribuinteSegurado($nomeCampo)
+    {
+        if ($this->c237_basecalculocontribuinte === "1") {
+            $this->$nomeCampo = 0;
+            return;
+        }
+        $this->$nomeCampo = ($this->nomeCampo == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampo] : $this->$nomeCampo);
     }
 
     function atualizaCampoData($nomeCampo)
@@ -125,6 +144,9 @@ class cl_diprcontribuicao
         $this->atualizacampos();
         if (!$this->verificaCodigoDIRP())
             return false;
+
+        if (!$this->verificaTipoEnte())
+            return false;
  
         if (!$this->verificaDataSICOM())
             return false;
@@ -138,10 +160,10 @@ class cl_diprcontribuicao
         if (!$this->verificaExercicioCompetencia())
             return false;
 
-        if (!$this->verificaRemuneracao())
+        if (!$this->verificaTipoFundo())
             return false;
 
-        if (!$this->verificaTipoFundo())
+        if (!$this->verificaRemuneracao())
             return false;
 
         if (!$this->verificaTipoBaseCalculoOrgao())
@@ -149,11 +171,11 @@ class cl_diprcontribuicao
 
         if (!$this->verificaTipoBaseCalculoSegurados())
             return false;
-
-        if (!$this->verificaTipoContribuicao())
-            return false;
         
         if (!$this->verificaValorBaseCalculo())
+            return false;
+
+        if (!$this->verificaTipoContribuicao())
             return false;
 
         if (!$this->verificaAliquota())
@@ -221,6 +243,13 @@ class cl_diprcontribuicao
     function alterar($c237_sequencial = null)
     {
         $this->atualizacampos();
+
+        if (!$this->verificaTipoBaseCalculoOrgao())
+            return false;
+    
+        if (!$this->verificaTipoBaseCalculoSegurados())
+            return false;
+
         $sql = " UPDATE {$this->nomeTabela} SET ";
         $virgula = "";
 
@@ -232,6 +261,11 @@ class cl_diprcontribuicao
         if ($this->verificaCodigoDIRP()) {
             $sql  .= $virgula . " c237_coddipr = '$this->c237_coddipr' ";
             $virgula = ",";
+        }
+
+        if ($this->verificaTipoEnte()) {
+            $sql .= $virgula . " c237_tipoente = {$this->c237_tipoente} ";
+            $virgula = ",";            
         }
 
         if ($this->verificaDataSICOM()) {
@@ -271,11 +305,6 @@ class cl_diprcontribuicao
 
         if ($this->verificaTipoBaseCalculoSegurados()) {
             $sql  .= $virgula . " c237_basecalculosegurados = '$this->c237_basecalculosegurados' ";
-            $virgula = ",";
-        }
-
-        if ($this->verificaTipoContribuicao()) {
-            $sql  .= $virgula . " c237_tipocontribuicao = '$this->c237_tipocontribuicao' ";
             $virgula = ",";
         }
 
@@ -490,6 +519,13 @@ class cl_diprcontribuicao
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
+    function verificaTipoEnte()
+    {
+        $nomeCampo = "c237_tipoente";
+        $descricaoCampo = "Tipo Ente";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+    }
+
     function verificaDataSICOM()
     {
         $nomeCampo = "c237_datasicom";
@@ -557,14 +593,22 @@ class cl_diprcontribuicao
     {
         $nomeCampo = "c237_basecalculoorgao";
         $descricaoCampo = "Tipo Base de Calculo Orgão";
-        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+        if ($this->$nomeCampo == 0 AND $this->c237_basecalculocontribuinte == 1) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;
     }
 
     function verificaTipoBaseCalculoSegurados()
     {
         $nomeCampo = "c237_basecalculosegurados";
         $descricaoCampo = "Tipo Base de Calculo Segurados";
-        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+        if ($this->$nomeCampo == 0 AND $this->c237_basecalculocontribuinte == 2) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;
     }
     
 

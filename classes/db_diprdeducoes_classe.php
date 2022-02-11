@@ -88,6 +88,7 @@ class cl_diprdeducoes
         $this->c239_sequencial = ($this->c239_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_sequencial"] : $this->c239_sequencial);
         if ($exclusao == false) {
             $this->c239_coddipr = ($this->c239_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_coddipr"] : $this->c239_coddipr);
+            $this->c239_tipoente = ($this->c239_tipoente == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_tipoente"] : $this->c239_tipoente);
             $this->atualizaCampoData("c239_datasicom");
             $this->c239_mescompetencia = ($this->c239_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_mescompetencia"] : $this->c239_mescompetencia);
             $this->c239_exerciciocompetencia = ($this->c239_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_exerciciocompetencia"] : $this->c239_exerciciocompetencia);
@@ -122,6 +123,9 @@ class cl_diprdeducoes
     {
         $this->atualizacampos();
         if (!$this->verificaCodigoDIRP())
+            return false;
+
+        if (!$this->verificaTipoEnte())
             return false;
 
         if (!$this->verificaDataSICOM())
@@ -214,6 +218,19 @@ class cl_diprdeducoes
     function alterar($c239_sequencial = null)
     {
         $this->atualizacampos();
+
+        if (!$this->verificaContribuicaoPatronal())
+            return false;
+
+        if (!$this->verificaContribuicaoSegurados())
+            return false;
+
+        if (!$this->verificaTipoContribuicao())
+            return false;
+
+        if (!$this->verificaDescricao())
+            return false;      
+
         $sql = " UPDATE {$this->nomeTabela} SET ";
         $virgula = "";
 
@@ -224,6 +241,11 @@ class cl_diprdeducoes
 
         if ($this->verificaCodigoDIRP()) {
             $sql .= $virgula . " c239_coddipr = {$this->c239_coddipr} ";
+            $virgula = ",";            
+        }
+
+        if ($this->verificaTipoEnte()) {
+            $sql .= $virgula . " c239_tipoente = {$this->c239_tipoente} ";
             $virgula = ",";            
         }
 
@@ -479,6 +501,13 @@ class cl_diprdeducoes
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
+    function verificaTipoEnte()
+    {
+        $nomeCampo = "c239_tipoente";
+        $descricaoCampo = "Tipo Ente";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+    }
+
     public function verificaDataSICOM()
     {
         $nomeCampo = "c239_datasicom";
@@ -518,21 +547,33 @@ class cl_diprdeducoes
     {
         $nomeCampo = "c239_tipocontribuicaopatronal";
         $descricaoCampo = "Tipo Contribuição Patronal";
-        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+        if ($this->$nomeCampo == 0 AND $this->c239_tiporepasse == 1) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;   
     }
 
     public function verificaContribuicaoSegurados()
     {
         $nomeCampo = "c239_tipocontribuicaosegurados";
         $descricaoCampo = "Tipo Contribuição Segurados";
-        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+        if ($this->$nomeCampo == 0 AND $this->c239_tiporepasse == 2) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;   
     } 
 
     public function verificaTipoContribuicao()
     {
         $nomeCampo = "c239_tipocontribuicao";
         $descricaoCampo = "Tipo Contribuição";
-        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+        if ($this->$nomeCampo == 0 AND $this->c239_tiporepasse == 1) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;   
     }
 
     public function verificaTipoDeducao()
@@ -546,7 +587,11 @@ class cl_diprdeducoes
     {
         $nomeCampo = "c239_descricao";
         $descricaoCampo = "Descrição";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        if (trim($this->$nomeCampo) == "" AND trim($GLOBALS["HTTP_POST_VARS"][$nomeCampo]) == "" AND $this->c239_tipodeducao == 2) {
+            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
+            return false;
+        }
+        return true;
     } 
 
     public function verificaValorDeducao()
