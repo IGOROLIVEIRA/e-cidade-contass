@@ -1544,6 +1544,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             if ($oContas10->nregobrig == 14) {
 
 
+                $sEstrutural = substr($oContas10->si177_contacontaabil, 0, 4);
+
                 $sSqlRestos = "select distinct
                                     e60_coddot,
                                     si09_codorgaotce as codorgao,
@@ -1555,28 +1557,139 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     o58_programa as codprograma,
                                     o58_projativ as idacao,
                                     o55_origemacao as idsubacao,
-                                    substr(o56_elemento,2,6) as naturezadadespesa,
+                                    substr(o56_elemento,2,12) as naturezadadespesa,
                                     substr(o56_elemento,8,2) as subelemento,
                                     o15_codtri as codfontrecursos,
                                     e60_codemp nroempenho,
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
                                     o58_orgao,o58_unidade
-                                    from  contacorrentedetalhe
+                                    from conlancamval
+                                    inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
+                                    inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
                                     inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
                                     inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                                     inner join empelemento on e64_numemp = e60_numemp
                                     inner join empresto on e91_numemp = e60_numemp
-                                    inner join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+                                    left join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
                                     inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
                                     inner JOIN orctiporec ON o58_codigo = o15_codigo
                                     left join infocomplementaresinstit on  o58_instit = si09_instit
-                                    where c19_reduz IN (" . implode(',', $oContas10->contas) . " )
-                                    and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") ;
+                                    where (c69_credito IN (" . implode(',', $oContas10->contas) . ") OR c69_debito IN (" . implode(',', $oContas10->contas) . "))
+                                    and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
+                if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321" | $sEstrutural == "6313") {
+                    $sSqlRestos .= " union ";
+                    $sSqlRestos .= " select distinct
+                                    e60_coddot,
+                                    si09_codorgaotce as codorgao,
+                                    case when o41_subunidade != 0 or not null then
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
+                                    o58_funcao as codfuncao,
+                                    o58_subfuncao as codsubfuncao,
+                                    o58_programa as codprograma,
+                                    o58_projativ as idacao,
+                                    o55_origemacao as idsubacao,
+                                    substr(o56_elemento,2,12) as naturezadadespesa,
+                                    substr(o56_elemento,8,2) as subelemento,
+                                    o15_codtri as codfontrecursos,
+                                    e60_codemp nroempenho,
+                                    e60_numemp numemp,
+                                    e60_anousu anoinscricao,
+                                    o58_orgao,o58_unidade
+                                    from conlancamval
+                                    inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
+                                    inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
+                                    inner join empempenho on e60_numemp = c19_numemp
+                                    inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
+                                    inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+                                    inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                                    inner join empelemento on e64_numemp = e60_numemp
+                                    inner join empresto on e91_numemp = e60_numemp
+                                    left join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+                                    inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
+                                    inner JOIN orctiporec ON o58_codigo = o15_codigo
+                                    left join infocomplementaresinstit on  o58_instit = si09_instit
+                                    where (c69_credito IN (" . implode(',', $oContas10->contas) . ") OR c69_debito IN (" . implode(',', $oContas10->contas) . "))
+                                    and DATE_PART('YEAR',c69_data) < " . db_getsession("DB_anousu");
+                    /**
+                     * SQL que busca os restos sem movimentação anterior
+                     * Clientes novos
+                     */
+                    $sSqlRestos .= " union select distinct
+                                    e60_coddot,
+                                    si09_codorgaotce as codorgao,
+                                    case when o41_subunidade != 0 or not null then
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
+                                    o58_funcao as codfuncao,
+                                    o58_subfuncao as codsubfuncao,
+                                    o58_programa as codprograma,
+                                    o58_projativ as idacao,
+                                    o55_origemacao as idsubacao,
+                                    substr(o56_elemento,2,12) as naturezadadespesa,
+                                    substr(o56_elemento,8,2) as subelemento,
+                                    o15_codtri as codfontrecursos,
+                                    e60_codemp nroempenho,
+                                    e60_numemp numemp,
+                                    e60_anousu anoinscricao,
+                                    o58_orgao,o58_unidade
+                                    from contacorrentedetalhe
+                                    inner join empempenho on e60_numemp = c19_numemp
+                                    inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
+                                    inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+                                    inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                                    inner join empelemento on e64_numemp = e60_numemp
+                                    inner join empresto on e91_numemp = e60_numemp
+                                    left join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+                                    inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
+                                    inner JOIN orctiporec ON o58_codigo = o15_codigo
+                                    left join infocomplementaresinstit on  o58_instit = si09_instit
+                                    where c19_reduz IN (" . implode(',', $oContas10->contas) . ")
+                                    and c19_conplanoreduzanousu = " . db_getsession("DB_anousu");
+                }
 
-                $rsRestos = db_query($sSqlRestos) or die("erro aqui 2".$sSqlRestos);
+                if (pg_num_rows(pg_query($sSqlRestos)) == 0) {
+
+                    $sSqlRestos = "select distinct
+                                    e60_coddot,
+                                    si09_codorgaotce as codorgao,
+                                    case when o41_subunidade != 0 or not null then
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
+                                    o58_funcao as codfuncao,
+                                    o58_subfuncao as codsubfuncao,
+                                    o58_programa as codprograma,
+                                    o58_projativ as idacao,
+                                    o55_origemacao as idsubacao,
+                                    substr(o56_elemento,2,12) as naturezadadespesa,
+                                    substr(o56_elemento,8,2) as subelemento,
+                                    o15_codtri as codfontrecursos,
+                                    e60_codemp nroempenho,
+                                    e60_numemp numemp,
+                                    e60_anousu anoinscricao,
+                                    o58_orgao,o58_unidade
+                                    from conlancamval
+                                    inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
+                                    inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
+                                    inner join empempenho on e60_numemp = c19_numemp
+                                    inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
+                                    inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+                                    inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                                    inner join empelemento on e64_numemp = e60_numemp
+                                    inner join empresto on e91_numemp = e60_numemp
+                                    left join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+                                    inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
+                                    inner JOIN orctiporec ON o58_codigo = o15_codigo
+                                    left join infocomplementaresinstit on  o58_instit = si09_instit
+                                    where (c69_credito IN (" . implode(',', $oContas10->contas) . ") OR c69_debito IN (" . implode(',', $oContas10->contas) . "))
+                                    and DATE_PART('YEAR',c69_data) < " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
+
+                }
+
+                $rsRestos = db_query($sSqlRestos) or die($sSqlRestos);
 
                 //Constante da contacorrente orçamentária
                 $nContaCorrente = 106;
@@ -1716,22 +1829,37 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                         $oReg14Saldo = db_utils::fieldsMemory($rsReg14saldos, $iContSaldo14);
 
-                        if (!(($oReg14Saldo->saldoanterior == "" || $oReg14Saldo->saldoanterior == 0) && $oReg14Saldo->debitos == "" && $oReg14Saldo->creditos == "" && $oReg14Saldo->creditosencerramento == "" && $oReg14Saldo->debitosencerramento == "")) {
+                        if (!(($oReg14Saldo->saldoanterior == "" || $oReg14Saldo->saldoanterior == 0)
+                             && $oReg14Saldo->debitos == "" && $oReg14Saldo->creditos == ""
+                             && $oReg14Saldo->creditosencerramento == "" && $oReg14Saldo->debitosencerramento == "")) {
 
-                            $sElemento = $oReg14->naturezadadespesa;
+                            $sElemento = substr($oReg14->naturezadadespesa, 0, 6);
                             $sSubElemento = $oReg14->subelemento;
                             /**
                              * percorrer xml elemento despesa
                              */
+                            if($this->iDeParaNatureza == 1) {
 
-                            foreach ($oElementos as $oElemento) {
+                                foreach ($oElementos as $oElemento) {
 
-                                $sElementoXml = $oElemento->getAttribute('elementoEcidade');
+                                    $sElementoXml = $oElemento->getAttribute('elementoEcidade');
+                                    $iElementoXmlDesdobramento = $oElemento->getAttribute('deParaDesdobramento');
 
-                                if ($sElementoXml == $sElemento . $sSubElemento) {
+                                    if ($iElementoXmlDesdobramento != '' && $iElementoXmlDesdobramento == 1) {
 
-                                    $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                    $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
+                                        if($sElementoXml == $oReg14->naturezadadespesa) {
+
+                                            $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                            $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
+
+                                        }
+
+                                    } elseif ($sElementoXml == $sElemento . $sSubElemento) {
+
+                                        $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                        $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
+
+                                    }
 
                                 }
 
@@ -1751,9 +1879,17 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                 $sCodunidadesub = ($sCodunidadesub == '' || $sCodunidadesub == 0 ? $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade) : $sCodunidadesub);
                                 $sCodunidadesubOrig = $sCodunidadesub;
                             }
+                            //OC12114
+                            $saldoFinalRsp      = ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos) == '' ? 0 : ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos);
+                            $bFonteEncerrada    = in_array($oReg14->codfontrecursos, $this->aFontesEncerradas);
 
+                            if ($bFonteEncerrada) {
+                                $iFonte = substr($oReg14->codfontrecursos, 0, 1).'59';
+                            } else {
+                                $iFonte = $oReg14->codfontrecursos;
+                            }
                             $sHash14 = '14' . $oContas10->si177_contacontaabil . $oReg14->codorgao . $sCodunidadesub . $sCodunidadesubOrig . $oReg14->codfuncao . $oReg14->codsubfuncao . $oReg14->codprograma;
-                            $sHash14 .= $oReg14->idacao . $oReg14->idsubacao . $sElemento . $sSubElemento . $oReg14->codfontrecursos . $oReg14->nroempenho . $oReg14->anoinscricao;
+                            $sHash14 .= $oReg14->idacao . $oReg14->idsubacao . $sElemento . $sSubElemento . $iFonte . $oReg14->nroempenho . $oReg14->anoinscricao;
 
                             if (!isset($aContasReg10[$reg10Hash]->reg14[$sHash14])) {
 
@@ -1780,10 +1916,13 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     $obalancete14->si181_codprograma = trim($aDotacaoRpSicom[0]->si177_codprograma);
                                     $obalancete14->si181_idacao = $aDotacaoRpSicom[0]->si177_idacao;
                                     $obalancete14->si181_idsubacao = ($aDotacaoRpSicom[0]->si177_idsubacao == 0 ? "" : $aDotacaoRpSicom[0]->si177_idsubacao);
-                                    $obalancete14->si181_naturezadespesa = $aDotacaoRpSicom[0]->si177_naturezadespesa;
+                                    $obalancete14->si181_naturezadespesa = substr($aDotacaoRpSicom[0]->si177_naturezadespesa,0,6);
                                     $obalancete14->si181_subelemento = $aDotacaoRpSicom[0]->si177_subelemento;
-                                    $obalancete14->si181_codfontrecursos = $aDotacaoRpSicom[0]->si177_codfontrecursos;
-
+                                    if (substr($iFonte, 1, 2) == '59' && in_array($aDotacaoRpSicom[0]->si177_codfontrecursos, $this->aFontesEncerradas)) {
+                                        $obalancete14->si181_codfontrecursos = substr($aDotacaoRpSicom[0]->si177_codfontrecursos, 0, 1).'59';
+                                    } else {
+                                        $obalancete14->si181_codfontrecursos = $aDotacaoRpSicom[0]->si177_codfontrecursos;
+                                    }
                                 } else {
 
 
@@ -1797,7 +1936,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     $obalancete14->si181_idsubacao = $oReg14->idsubacao;
                                     $obalancete14->si181_naturezadespesa = $sElemento;
                                     $obalancete14->si181_subelemento = $sSubElemento;
-                                    $obalancete14->si181_codfontrecursos = $oReg14->codfontrecursos;
+                                    $obalancete14->si181_codfontrecursos = $iFonte;
 
                                 }
 
@@ -1814,8 +1953,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     $obalancete14->si181_totaldebitosencerramento = (empty($oReg14Saldo->debitosencerramento) ? 0 : $oReg14Saldo->debitosencerramento);
                                     $obalancete14->si181_totalcreditosencerramento = (empty($oReg14Saldo->creditosencerramento) ? 0 : $oReg14Saldo->creditosencerramento);
                                 }
-                                $obalancete14->si181_saldofinalrsp = ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos) == '' ? 0 : ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos);
-                                $obalancete14->si181_naturezasaldofinalrsp = ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos) >= 0 ? 'D' : 'C';
+                                $obalancete14->si181_saldofinalrsp = $saldoFinalRsp;
+                                $obalancete14->si181_naturezasaldofinalrsp = $saldoFinalRsp >= 0 ? 'D' : 'C';
                                 $obalancete14->si181_instit = db_getsession("DB_instit");
                                 $obalancete14->si181_mes = $nMes;
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14] = $obalancete14;
@@ -1828,7 +1967,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_totaldebitosencerramento += $oReg14Saldo->debitosencerramento;
                                     $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_totalcreditosencerramento += $oReg14Saldo->creditosencerramento;
                                 }
-                                $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldofinalrsp += ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos) == '' ? 0 : ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos);
+                                $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldofinalrsp += $saldoFinalRsp;
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_naturezasaldofinalrsp = $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldofinalrsp >= 0 ? 'D' : 'C';
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_naturezasaldoinicialrsp = $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldoinicialrsp >= 0 ? 'D' : 'C';
                             }
