@@ -363,7 +363,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 					       e60_codemp as nroempenho,
 					       e60_anousu as exercicioempenho,
 					       e60_emiss as dtempenho,
-					       case when e91_vlrliq > 0 then 1 else 2 end as tiporestospagar,
+					       case when (select count(*) from conlancamemp inner join conlancamdoc on c75_codlan=c71_codlan where c75_numemp=e60_numemp and c71_coddoc=32) > 0 then 2 else 1 end as tiporestospagar,
 					       '1' as tipomovimento,
 					       e94_data as dtmovimentacao,
 					       ' ' as dotorig,
