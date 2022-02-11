@@ -34,7 +34,6 @@ $cldipr->rotulo->label();
         <fieldset style="width: 800;">
             <legend><b>Informações Previdenciárias - DIPR</b></legend>
             <table border="0" width="800;">
-
                 <tr>
                     <td>
                         <b>Sequencial</b>
@@ -51,7 +50,7 @@ $cldipr->rotulo->label();
                     <td>
                         <?php
                         $aSegregacaoLei = array(0 => "Selecione", 't' => "Sim", 'f' => "Não");
-                        db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "style='width:104px'");
+                        db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "style='width:104px' onchange='verificarMassaInstituidaPorLei()'");
                         ?>
                     </td>
                 </tr>
@@ -66,7 +65,7 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaNumeroAtoNormativo">
                     <td><b>Número do ato normativo:</b></td>
                     <td>
                         <?php
@@ -75,7 +74,7 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="LinhaExercicioAtoNormativo">
                     <td><b>Exercício do ato normativo:</b></td>
                     <td>
                         <?php
@@ -93,7 +92,11 @@ $cldipr->rotulo->label();
                     <td>
                         <?
                         db_input('c236_numcgmexecutivo', 14, $Ic236_numcgmexecutico, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'executivo');");
-                        db_input('z01_nomeexecutivo', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomeexecutivo");
+                        if ($c236_numcgmexecutivo) {
+                            $resultado = db_query("select z01_nome as z01_nomeexecutivo from cgm where z01_numcgm = {$c236_numcgmexecutivo}");
+                            db_fieldsmemory($resultado, 0)->z01_nomeexecutivo;
+                        }
+                        db_input('z01_nomeexecutivo', 40, "Teste de Valor", true, 'text', 3, '', "z01_nomeexecutivo");
                         ?>
                     </td>
                 </tr>
@@ -107,6 +110,10 @@ $cldipr->rotulo->label();
                     <td>
                         <?
                         db_input('c236_numcgmlegislativo', 14, $Ic236_numcgmlegislativo, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'legislativo');");
+                        if ($c236_numcgmlegislativo) {
+                            $resultado = db_query("select z01_nome as z01_nomelegislativo from cgm where z01_numcgm = {$c236_numcgmlegislativo}");
+                            db_fieldsmemory($resultado, 0)->z01_nomelegislativo;
+                        }
                         db_input('z01_nomelegislativo', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomelegislativo");
                         ?>
                     </td>
@@ -121,6 +128,10 @@ $cldipr->rotulo->label();
                     <td>
                         <?
                         db_input('c236_numcgmgestora', 14, $Ic236_numcgmgestora, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'gestora');");
+                        if ($c236_numcgmgestora) {
+                            $resultado = db_query("select z01_nome as z01_nomegestora from cgm where z01_numcgm = {$c236_numcgmgestora}");
+                            db_fieldsmemory($resultado, 0)->z01_nomegestora;
+                        }
                         db_input('z01_nomegestora', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomegestora");
                         ?>
                     </td>
@@ -135,72 +146,73 @@ $cldipr->rotulo->label();
 </form>
 
 <script>
+    // Declarando uma variavel global
     campo = "";
+    // Verificando se campos condicionais devem aparecer
+    verificarMassaInstituidaPorLei();
 
     function js_pesquisac236_numcgm(mostra, input) {
         campo = input;
-        console.log(mostra);
-        console.log(campo);
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_numcgm', 'func_nome.php?funcao_js=top.corpo.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true, 0);
-            return true;
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true);
+            return;
         }
         preencheAutomaticamente();
-        return true;
+        return;
     }
 
     function preencheAutomaticamente() {
-        console.log(campo);
         if (campo === "executivo") {
             preencheExecutivoAutomaticamente();
-            return true;
+            return;
         }
 
         if (campo === "legislativo") {
             preencheLegislativoAutomaticamente();
-            return true;
+            return;
         }
 
         if (campo === "gestora") {
             preencheGestoraAutomaticamente();
-            return true;
+            return;
         }
     }
 
     function preencheExecutivoAutomaticamente() {
+        campo = "executivo";
         if (document.form1.c236_numcgmexecutivo.value != '') {
-            console.log("Antes");
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_numcgm', 'func_nome.php?pesquisa_chave=' + document.form1.c236_numcgmexecutivo.value + '&funcao_js=top.corpo.js_mostracgm', 'Pesquisa', false);
-            console.log("Depois");
-            return true;
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?pesquisa_chave=' + document.form1.c236_numcgmexecutivo.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+            return;
         }
         document.form1.z01_nomeexecutivo.value = '';
     }
 
     function preencheLegislativoAutomaticamente() {
+        campo = "legislativo";
         if (document.form1.c236_numcgmlegislativo.value != '') {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_numcgm', 'func_nome.php?pesquisa_chave=' + document.form1.c236_numcgmlegislativo.value + '&funcao_js=top.corpo.js_mostracgm', 'Pesquisa', false);
-            return true;
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?pesquisa_chave=' + document.form1.c236_numcgmlegislativo.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+            return;
         }
         document.form1.z01_nomelegislativo.value = '';
     }
 
     function preencheGestoraAutomaticamente() {
+        campo = "gestora";
         if (document.form1.c236_numcgmgestora.value != '') {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_numcgm', 'func_nome.php?pesquisa_chave=' + document.form1.c236_numcgmgestora.value + '&funcao_js=top.corpo.js_mostracgm', 'Pesquisa', false);
-            return true;
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?pesquisa_chave=' + document.form1.c236_numcgmgestora.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+            return;
         }
         document.form1.z01_nomegestora.value = '';
     }
 
     function js_mostracgm(erro, chave) {
-        console.log("Dentro");
         if (campo === "executivo") {
             document.form1.z01_nomeexecutivo.value = chave;
             if (erro == true) {
                 document.form1.c236_numcgmexecutivo.focus();
                 document.form1.c236_numcgmexecutivo.value = '';
             }
+            return;
         }
 
         if (campo === "legislativo") {
@@ -209,6 +221,7 @@ $cldipr->rotulo->label();
                 document.form1.c236_numcgmlegislativo.focus();
                 document.form1.c236_numcgmlegislativo.value = '';
             }
+            return;
         }
 
         if (campo === "gestora") {
@@ -217,6 +230,7 @@ $cldipr->rotulo->label();
                 document.form1.c236_numcgmgestora.focus();
                 document.form1.c236_numcgmgestora.value = '';
             }
+            return;
         }
     }
 
@@ -235,7 +249,7 @@ $cldipr->rotulo->label();
             document.form1.c236_numcgmgestora.value = chave1;
             document.form1.z01_nomegestora.value = chave2;
         }
-        db_iframe_numcgm.hide();
+        db_iframe_cgm.hide();
     }
 
     function js_pesquisa() {
@@ -248,9 +262,31 @@ $cldipr->rotulo->label();
         if ($db_opcao != 1) {
             echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave; ";
         ?>
-            js_pesquisac236_numcgm(false, 'executivo');
-            js_pesquisac236_numcgm(false, 'legislativo');
-            js_pesquisac236_numcgm(false, 'gestora');
         <? } ?>
+    }
+
+    function verificarMassaInstituidaPorLei()
+    {
+        if (document.form1.c236_massainstituida.value === "f") {
+            ocultarLinha('LinhaNumeroAtoNormativo');
+            ocultarLinha('LinhaExercicioAtoNormativo');
+            return;
+        }
+
+        mostrarLinha('LinhaNumeroAtoNormativo');
+        mostrarLinha('LinhaExercicioAtoNormativo');
+        return;
+    }
+
+    function ocultarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'none');
+    }
+
+    function mostrarLinha(identificador) {
+        alterarDisplayDaLinha(identificador, 'table-row');
+    }
+
+    function alterarDisplayDaLinha(identificador, display) {
+        document.getElementById(identificador).style.display = display;
     }
 </script>

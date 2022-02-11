@@ -30,9 +30,9 @@ $cldipr->rotulo->label();
 <form name="form1" method="post" action="">
     <center>
         <br />
-        <fieldset style="width: 700;">
+        <fieldset style="width: 100%;">
             <legend><b>Contribuições Previdenciárias Repassadas</b></legend>
-            <table border="0" width="700;">
+            <table border="0" width="100%;">
                 <tr>
                     <td>
                         <b>Sequencial</b>
@@ -111,7 +111,7 @@ $cldipr->rotulo->label();
                             2 => "Fundo em Repartição (Plano Financeiro)",
                             3 => "Responsabilidade do tesouro municipal"
                         );
-                        db_select('c238_tipofundo', $arrayTipoFundo, true, 1, "style='width:260px'");
+                        db_select('c238_tipofundo', $arrayTipoFundo, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -141,7 +141,7 @@ $cldipr->rotulo->label();
                             3 => "Aposentados",
                             4 => "Pensionistas"
                         );
-                        db_select('c238_tipocontribuicaopatronal', $arrayTipoRepasse, true, 1, "style='width:260px'");
+                        db_select('c238_tipocontribuicaopatronal', $arrayTipoRepasse, true, 1, "");
                         ?>
                     </td>
                 </tr>

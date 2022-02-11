@@ -58,6 +58,7 @@ class cl_diprcontribuicao
         c237_tipofundo int4,
         c237_remuneracao decimal,
         c237_basecalculoorgao int4,
+        c237_basecalculosegurados int4,
         c237_valorbasecalculo decimal,
         c237_tipocontribuinte int4,
         c237_aliquota decimal,
@@ -95,6 +96,7 @@ class cl_diprcontribuicao
             $this->c237_tipofundo = ($this->c237_tipofundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_tipofundo"] : $this->c237_tipofundo);
             $this->c237_remuneracao = ($this->c237_remuneracao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_remuneracao"] : $this->c237_remuneracao);
             $this->c237_basecalculoorgao = ($this->c237_basecalculoorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_basecalculoorgao"] : $this->c237_basecalculoorgao);
+            $this->c237_basecalculosegurados = ($this->c237_basecalculosegurados == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_basecalculosegurados"] : $this->c237_basecalculosegurados);
             $this->c237_valorbasecalculo = ($this->c237_valorbasecalculo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_valorbasecalculo"] : $this->c237_valorbasecalculo);
             $this->c237_tipocontribuinte = ($this->c237_tipocontribuinte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_tipocontribuinte"] : $this->c237_tipocontribuinte);
             $this->c237_aliquota = ($this->c237_aliquota == "" ? @$GLOBALS["HTTP_POST_VARS"]["c237_aliquota"] : $this->c237_aliquota);
@@ -145,6 +147,9 @@ class cl_diprcontribuicao
         if (!$this->verificaTipoBaseCalculoOrgao())
             return false;
 
+        if (!$this->verificaTipoBaseCalculoSegurados())
+            return false;
+
         if (!$this->verificaTipoContribuicao())
             return false;
         
@@ -166,6 +171,7 @@ class cl_diprcontribuicao
         $sql .= " c237_tipofundo, ";
         $sql .= " c237_remuneracao, ";
         $sql .= " c237_basecalculoorgao, ";
+        $sql .= " c237_basecalculosegurados, ";
         $sql .= " c237_valorbasecalculo, ";
         $sql .= " c237_tipocontribuinte, ";
         $sql .= " c237_aliquota, ";
@@ -179,6 +185,7 @@ class cl_diprcontribuicao
         $sql .= " {$this->c237_tipofundo}, ";
         $sql .= " {$this->c237_remuneracao}, ";
         $sql .= " {$this->c237_basecalculoorgao}, ";
+        $sql .= " {$this->c237_basecalculosegurados}, ";
         $sql .= " {$this->c237_valorbasecalculo}, ";
         $sql .= " {$this->c237_tipocontribuinte}, ";
         $sql .= " {$this->c237_aliquota}, ";
@@ -259,6 +266,11 @@ class cl_diprcontribuicao
 
         if ($this->verificaTipoBaseCalculoOrgao()) {
             $sql  .= $virgula . " c237_basecalculoorgao = '$this->c237_basecalculoorgao' ";
+            $virgula = ",";
+        }
+
+        if ($this->verificaTipoBaseCalculoSegurados()) {
+            $sql  .= $virgula . " c237_basecalculosegurados = '$this->c237_basecalculosegurados' ";
             $virgula = ",";
         }
 
@@ -545,6 +557,13 @@ class cl_diprcontribuicao
     {
         $nomeCampo = "c237_basecalculoorgao";
         $descricaoCampo = "Tipo Base de Calculo Orgão";
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+    }
+
+    function verificaTipoBaseCalculoSegurados()
+    {
+        $nomeCampo = "c237_basecalculosegurados";
+        $descricaoCampo = "Tipo Base de Calculo Segurados";
         return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
     

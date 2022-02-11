@@ -31,9 +31,9 @@ $cldipr->rotulo->label();
 <form name="form1" method="post" action="">
     <center>
         <br />
-        <fieldset style="width: 700;">
+        <fieldset style="width: 100%;">
             <legend><b>Base de Cálculo da Contribuição Previdenciária por Órgão</b></legend>
-            <table border="0" width="700;">
+            <table border="0" width="100%;">
                 <tr>
                     <td>
                         <b>Sequencial</b>
@@ -107,7 +107,7 @@ $cldipr->rotulo->label();
                     </td>
                     <td nowrap>
                         <?
-                        db_input('c237_exerciciocompetencia', 10, $exercicio, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 4);
+                        db_input('c237_exerciciocompetencia', 14, $exercicio, true, 'text', $db_opcao, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"", "", "", "", 4);
                         ?>
                     </td>
                 </tr>
@@ -116,7 +116,7 @@ $cldipr->rotulo->label();
                     <td><b>Tipo de fundo:</b></td>
                     <td>
                         <?php
-                        db_select('c237_tipofundo', array(0 => "Selecione", '1' => 'Fundo em Capitalização (Plano Previdenciário)', '2' => 'Fundo em Repartição (Plano Financeiro)', '3' => 'Responsabilidade do tesouro municipal'), true, 1, "style='width:200px'");
+                        db_select('c237_tipofundo', array(0 => "Selecione", '1' => 'Fundo em Capitalização (Plano Previdenciário)', '2' => 'Fundo em Repartição (Plano Financeiro)', '3' => 'Responsabilidade do tesouro municipal'), true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -145,7 +145,24 @@ $cldipr->rotulo->label();
                             "3" => "Aposentados",
                             "4" => "Pensionistas"
                         );
-                        db_select('c237_basecalculoorgao', $tipoBase, true, 1, "style='width:200px'");
+                        db_select('c237_basecalculoorgao', $tipoBase, true, 1, "");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <b>Tipo de base de cálculo das contribuições devidas dos segurados:</b>
+                    </td>
+                    <td nowrap>
+                        <?php
+                        $tipoBase = array(
+                            "0" => "Selecione",
+                            "1" => "Servidores",
+                            "2" => "Aposentados",
+                            "3" => "Pensionistas"
+                        );
+                        db_select('c237_basecalculosegurados', $tipoBase, true, 1, "");
                         ?>
                     </td>
                 </tr>

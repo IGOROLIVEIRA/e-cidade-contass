@@ -28,9 +28,9 @@
 <form name="form1" method="post" action="">
     <center>
         <br />
-        <fieldset style="width: 600;">
+        <fieldset style="width: 100%;">
             <legend><b>Aportes e transferencias de Recursos</b></legend>
-            <table border="0" width="600;">
+            <table border="0" width="100%;">
                 <tr>
                     <td>
                         <b>Sequencial</b>
@@ -109,7 +109,7 @@
                             2 => "Fundo em Repartição (Plano Financeiro)",
                             3 => "Responsabilidade do tesouro municipal"
                         );
-                        db_select('c240_tipofundo', $arrayTipoFundo, true, 1, "style='width:260px'");
+                        db_select('c240_tipofundo', $arrayTipoFundo, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -126,7 +126,7 @@
                             4 => "Transferência para pagamento de beneficios de responsabilidade do tesouro",
                             5 => "Outros aportes ou transferências"
                         );
-                        db_select('c240_tipoaporte', $arrayTipoAporte, true, 1, "style='width:260px'");
+                        db_select('c240_tipoaporte', $arrayTipoAporte, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -137,7 +137,7 @@
                     </td>
                     <td nowrap>
                         <?
-                        db_textarea('c240_descricao', 2, 40, '', true, "text", $db_opcao, "", "", "", 200);
+                        db_textarea('c240_descricao', 2, 68, '', true, "text", $db_opcao, "", "", "", 200);
                         ?>
                     </td>
                 </tr>

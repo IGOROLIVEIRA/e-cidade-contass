@@ -86,12 +86,24 @@ class cl_dipr
             $this->c236_orgao = ($this->c236_orgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_orgao"] : $this->c236_orgao);
             $this->c236_massainstituida = ($this->c236_massainstituida == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_massainstituida"] : $this->c236_massainstituida);
             $this->c236_beneficiotesouro = ($this->c236_beneficiotesouro == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_beneficiotesouro"] : $this->c236_beneficiotesouro);
+            $this->verificarCondicaoMassaInstituidaPorLei('c236_atonormativo');
+            $this->verificarCondicaoMassaInstituidaPorLei('c236_exercicionormativo');
             $this->c236_atonormativo = ($this->c236_atonormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_atonormativo"] : $this->c236_atonormativo);
             $this->c236_exercicionormativo = ($this->c236_exercicionormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_exercicionormativo"] : $this->c236_exercicionormativo);
             $this->c236_numcgmexecutivo = ($this->c236_numcgmexecutivo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmexecutivo"] : $this->c236_numcgmexecutivo);
             $this->c236_numcgmlegislativo = ($this->c236_numcgmlegislativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmlegislativo"] : $this->c236_numcgmlegislativo);
             $this->c236_numcgmgestora = ($this->c236_numcgmgestora == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmgestora"] : $this->c236_numcgmgestora);
         }
+    }
+
+    // Condição que não permite salvar os dados caso a massa instituída por lei seja sim
+    public function verificarCondicaoMassaInstituidaPorLei($nomeCampo)
+    {
+        if ($this->c236_massainstituida === "f") {
+            $this->$nomeCampo = "null";
+            return;
+        }
+        $this->$nomeCampo = ($this->nomeCampo == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampo] : $this->$nomeCampo);
     }
 
     // funcao para Inclusão
@@ -129,7 +141,7 @@ class cl_dipr
         $sql .= "c236_atonormativo, ";
         $sql .= "c236_exercicionormativo, ";
         $sql .= "c236_numcgmexecutivo, ";
-        $sql .= "c236_numcgmlegislativo, ";    
+        $sql .= "c236_numcgmlegislativo, ";
         $sql .= "c236_numcgmgestora ";
         $sql .= ") VALUES ( ";
         $sql .= "{$this->c236_orgao}, ";
@@ -171,12 +183,19 @@ class cl_dipr
     function alterar($c236_coddipr = null)
     {
         $this->atualizacampos();
+
+        if (!$this->verificaAtoNormativo())
+            return false;
+
+        if (!$this->verificaExercicioNormativo())
+            return false;
+
         $sql = " UPDATE {$this->nomeTabela} SET ";
         $virgula = "";
 
         if ($this->verificaCodDirp()) {
             $sql .= $virgula . " c236_coddipr = {$this->c236_coddipr} ";
-            $virgula = ",";            
+            $virgula = ",";
         }
 
         if ($this->verificaOrgao()) {
@@ -194,41 +213,31 @@ class cl_dipr
             $virgula = ",";
         }
 
-        if (trim($this->c236_atonormativo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c236_atonormativo"])) {
-            $sql  .= $virgula . " c236_atonormativo = '$this->c236_atonormativo' ";
+        if ($this->verificaAtoNormativo()) {
+            $sql  .= $virgula . " c236_atonormativo = $this->c236_atonormativo ";
             $virgula = ",";
-            if (!$this->verificaAtoNormativo())
-                return false;
-        }    
+        }
 
-        if (trim($this->c236_exercicionormativo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c236_exercicionormativo"])) {
-            $sql  .= $virgula . " c236_exercicionormativo = '$this->c236_exercicionormativo' ";
+        if ($this->verificaExercicioNormativo()) {
+            $sql  .= $virgula . " c236_exercicionormativo = $this->c236_exercicionormativo ";
             $virgula = ",";
-            if (!$this->verificaExercicioNormativo())
-                return false;
-        }    
+        }
 
-        if (trim($this->c236_numcgmexecutivo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c236_numcgmexecutivo"])) {
+        if ($this->verificaCgmExecutivo()) {
             $sql  .= $virgula . " c236_numcgmexecutivo = '$this->c236_numcgmexecutivo' ";
             $virgula = ",";
-            if (!$this->verificaCgmExecutivo())
-                return false;
-        }    
+        }
 
-        if (trim($this->c236_numcgmlegislativo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c236_numcgmlegislativo"])) {
+        if ($this->verificaCgmLegislativo()) {
             $sql  .= $virgula . " c236_numcgmlegislativo = '$this->c236_numcgmlegislativo' ";
             $virgula = ",";
-            if (!$this->verificaCgmLegislativo())
-                return false;
-        }    
+        }
 
-        if (trim($this->c236_numcgmgestora) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c236_numcgmgestora"])) {
+        if ($this->verificaCgmGestora()) {
             $sql  .= $virgula . " c236_numcgmgestora = '$this->c236_numcgmgestora' ";
             $virgula = ",";
-            if (!$this->verificaCgmGestora())
-                return false;
-        }    
-    
+        }
+
         $sql .= " WHERE ";
 
         if ($c236_coddipr != null) {
@@ -413,7 +422,7 @@ class cl_dipr
 
     function verificaCodDirp()
     {
-        if (trim($this->c236_coddipr) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c236_coddipr"])) {
+        if (trim($this->c236_coddipr) == "" and !isset($GLOBALS["HTTP_POST_VARS"]["c236_coddipr"])) {
             $this->erroCampo("Campo Codigo DIRP não Informado.", "c236_coddipr");
             return false;
         }
@@ -422,7 +431,7 @@ class cl_dipr
 
     function verificaOrgao()
     {
-        if (trim($this->c236_orgao) == "" AND !isset($GLOBALS["HTTP_POST_VARS"]["c236_orgao"])) {
+        if (trim($this->c236_orgao) == "" and !isset($GLOBALS["HTTP_POST_VARS"]["c236_orgao"])) {
             $this->erroCampo("Campo Orgão não Informado.", "c236_orgao");
             return false;
         }
@@ -449,7 +458,7 @@ class cl_dipr
 
     function verificaAtoNormativo()
     {
-        if ($this->c236_atonormativo == null) {
+        if ($this->c236_atonormativo == null and $this->c236_massainstituida != "f") {
             $this->erroCampo("Campo Ato Normativo não Informado.", "c236_atonormativo");
             return false;
         }
@@ -458,7 +467,7 @@ class cl_dipr
 
     function verificaExercicioNormativo()
     {
-        if ($this->c236_exercicionormativo == null) {
+        if ($this->c236_exercicionormativo == null and $this->c236_massainstituida === "t") {
             $this->erroCampo("Campo Exercicio Normativo não Informado.", "c236_exercicionormativo");
             return false;
         }

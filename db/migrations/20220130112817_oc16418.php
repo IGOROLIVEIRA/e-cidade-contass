@@ -184,6 +184,7 @@ SQL;
                     "c237_tipofundo" int4,
                     "c237_remuneracao" numeric,
                     "c237_basecalculoorgao" int4,
+                    "c237_basecalculosegurados" int4,
                     "c237_valorbasecalculo" numeric,
                     "c237_tipocontribuinte" int4,
                     "c237_aliquota" numeric,
@@ -305,6 +306,9 @@ SQL;
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_basecalculoorgao', 'int4', 'Base Calculo Orgao', '0', 'Base Calculo Orgao', 1, 
                     false, false, false, 1, 'text', 'Base Calculo Orgao');
+
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_basecalculosegurados', 'int4', 'Base Calculo Segurados', '0', 'Base Calculo Segurados', 1, 
+                    false, false, false, 1, 'text', 'Base Calculo Segurados');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_valorbasecalculo', 'float', 'Valor Base Calculo', '0', 'Valor Base Calculo', 1, 
                     false, false, false, 1, 'text', 'Valor Base Calculo');

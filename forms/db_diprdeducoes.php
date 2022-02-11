@@ -28,9 +28,9 @@
 <form name="form1" method="post" action="">
     <center>
         <br />
-        <fieldset style="width: 600;">
+        <fieldset style="width: 100%;">
             <legend><b>Deduções</b></legend>
-            <table border="0" width="600;">
+            <table border="0" width="100%;">
                 <tr>
                     <td>
                         <b>Sequencial</b>
@@ -109,7 +109,7 @@
                             2 => "Fundo em Repartição (Plano Financeiro)",
                             3 => "Responsabilidade do tesouro municipal"
                         );
-                        db_select('c239_tipofundo', $arrayTipoFundo, true, 1, "style='width:200px'");
+                        db_select('c239_tipofundo', $arrayTipoFundo, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -139,7 +139,7 @@
                             3 => "Aposentados",
                             4 => "Pensionistas"
                         );
-                        db_select('c239_tipocontribuicaopatronal', $arrayTipoRepasse, true, 1, "style='width:200px'");
+                        db_select('c239_tipocontribuicaopatronal', $arrayTipoRepasse, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -179,7 +179,7 @@
                     </td>
                     <td nowrap>
                         <?
-                        db_textarea('c239_descricao', 6, 50, '', true, "text", $db_opcao, "", "", "", 200);
+                        db_textarea('c239_descricao', 3, 101, '', true, "text", $db_opcao, "", "", "", 200);
                         ?>
                     </td>
                 </tr>
