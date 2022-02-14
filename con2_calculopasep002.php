@@ -116,30 +116,35 @@ foreach ($aReceitas as $Receitas) {
     }
     // Oc16641 - Atualização de Receitas para 2022
     if (db_getsession("DB_anousu") >= 2022) {
-        $fTC1 = atualizaSaldo($fTC1, $Receitas, array(17170000000000, 17240000000000, 17320000000000, 24140000000000, 24220000000000, 24320000000000));
+        $fTC1 = atualizaSaldo($fTC1, $Receitas, array(417170000000000, 417240000000000, 417320000000000, 424140000000000, 424220000000000, 424320000000000));
         $fTC2 = 0; // Removido da soma individual
         $fTC3 = 0; // Removido da soma individual
         $fTC4 = 0; // Removido da soma individual
-        $fTCons = atualizaSaldo($fTCons, $Receitas, array(17395000000000));
-        $fPFM = atualizaSaldo($fPFM, $Receitas, array(17115111000000, 17115121000000, 17115131000000));
-        $fFEP = atualizaSaldo($fFEP, $Receitas, array(17125241000000));
-        $fICMS = atualizaSaldo($fICMS, $Receitas, array(17195101000000));
-        $fITR = atualizaSaldo($fITR, $Receitas, array(17115201000000));
-        $fCFM = atualizaSaldo($fCFM, $Receitas, array(17225101000000, 17125101000000));
-        $fCIDE = atualizaSaldo($fCIDE, $Receitas, array(17215301000000));
-        $fCFH = atualizaSaldo($fCFH, $Receitas, array(17125001000000));
-        $fFEX = atualizaSaldo($fFEX, $Receitas, array(17199901000000));
-        $fIPM = atualizaSaldo($fIPM, $Receitas, array(17215201000000));
-        $fTEUEDM = atualizaSaldo($fTEUEDM, $Receitas, array(49500000000000));
-        $fRCI = atualizaSaldo($fRCI, $Receitas, array(47000000000000));
+        $fTCons = atualizaSaldo($fTCons, $Receitas, array(417395000000000));
+        $fPFM = atualizaSaldo($fPFM, $Receitas, array(417115111000000, 417115121000000, 417115131000000));
+        $fFEP = atualizaSaldo($fFEP, $Receitas, array(417125241000000));
+        $fICMS = atualizaSaldo($fICMS, $Receitas, array(417195101000000));
+        $fITR = atualizaSaldo($fITR, $Receitas, array(417115201000000));
+        $fCFM = atualizaSaldo($fCFM, $Receitas, array(417225101000000, 417125101000000));
+        $fCIDE = atualizaSaldo($fCIDE, $Receitas, array(417215301000000));
+        $fCFH = atualizaSaldo($fCFH, $Receitas, array(417125001000000));
+        $fFEX = atualizaSaldo($fFEX, $Receitas, array(417199901000000));
+        $fIPM = atualizaSaldo($fIPM, $Receitas, array(417215201000000));
+        $fTEUEDM = atualizaSaldo($fTEUEDM, $Receitas, array(495000000000000));
+        $fRCI = atualizaSaldo($fRCI, $Receitas, array(470000000000000));
     }
 }
 
 function atualizaSaldo($valor, $receitas, $naturezas)
 {
-    foreach ($naturezas as $natureza)
-        if (strstr($receitas->o57_fonte, $natureza)) $valor += $receitas->saldo_arrecadado;
-
+    // echo "<pre>";
+    foreach ($naturezas as $natureza) {
+        if ($receitas->o57_fonte == $natureza) {
+            $valor += abs($receitas->saldo_arrecadado);
+            // echo "Natureza Encontrada: $natureza Valor: $receitas->saldo_arrecadado <br/>";
+        }
+    }
+    // echo "</pre>";
     return $valor;
 }
 
