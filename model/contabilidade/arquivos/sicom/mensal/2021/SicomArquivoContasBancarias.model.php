@@ -219,21 +219,20 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
     for ($iCont = 0; $iCont < pg_num_rows($rsContas); $iCont++) {
 
-      $oRegistro10 = db_utils::fieldsMemory($rsContas, $iCont);
+        $oRegistro10 = db_utils::fieldsMemory($rsContas, $iCont);
 
 
-      $aHash = $oRegistro10->si09_codorgaotce;
-      $aHash .= intval($oRegistro10->c63_banco);
-      $aHash .= intval($oRegistro10->c63_agencia);
-      $aHash .= $oRegistro10->c63_dvagencia;
-      $aHash .= intval($oRegistro10->c63_conta);
-      $aHash .= $oRegistro10->c63_dvconta;
-      $aHash .= $oRegistro10->tipoconta;
-      if ($oRegistro10->si09_codorgaotce == 5) {
-        $aHash .= $oRegistro10->tipoaplicacao;
-      }
-
-      if ($oRegistro10->si09_tipoinstit != 5) {
+        $aHash = $oRegistro10->si09_codorgaotce;
+        $aHash .= intval($oRegistro10->c63_banco);
+        $aHash .= intval($oRegistro10->c63_agencia);
+        $aHash .= $oRegistro10->c63_dvagencia;
+        $aHash .= intval($oRegistro10->c63_conta);
+        $aHash .= $oRegistro10->c63_dvconta;
+        $aHash .= $oRegistro10->tipoconta;
+        if ($oRegistro10->si09_codorgaotce == 5) {
+            $aHash .= $oRegistro10->tipoaplicacao;
+            $aHash .= $oRegistro10->nroseqaplicacao;
+        }
 
         if (!isset($aBancosAgrupados[$aHash])) {
 
@@ -370,7 +369,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $oDtCadastro = db_utils::fieldsMemory($rsResultDtCad, 0);
 
           /*
-           * condição adicionada para criar um registro das contas bancaria de aplicação que foram alteradas o tipo de aplicação no MES de 01/2018
+           * condi��o adicionada para criar um registro das contas bancaria de aplica��es que foram alteradas o tipo de aplicação no MES de 01/2018
            * a tabela acertactb será preenchida pelo menu CONTABILAIDE > PROCEDIMENTOS > DUPLICAR CTB
            */
           if (pg_num_rows($rsResultVerifica) != 0 && (db_getsession("DB_anousu") == 2018 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1)) {
@@ -418,13 +417,6 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 			$aBancosAgrupados[$aHash]->contas[] = $oConta;
         }
-
-
-      } else {
-        /*
-         * FALTA AGRUPA AS CONTAS QUANDO A INSTIUICAO FOR IGUAL A 5 RPPS
-         */
-      }
 
     }
 
