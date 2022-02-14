@@ -53,7 +53,8 @@ class cl_regadesao102022
   var $si67_nroedital = 0;
   var $si67_mes = 0;
   var $si67_instit = 0;
-  // cria propriedade com as variaveis do arquivo
+  var $si67_leidalicitacao = 0;
+  // cria propriedade com as variaveis do arquivo   
   var $campos = "
                  si67_sequencial = int8 = sequencial 
                  si67_tiporegistro = int8 = Tipo do  registro 
@@ -78,7 +79,8 @@ class cl_regadesao102022
                  si67_nroedital = int8 = Número do edital 
                  si67_exercicioedital = int8 = Exercício do edital 
                  si67_mes = int8 = Mês 
-                 si67_instit = int8 = Instituição 
+                 si67_instit = int8 = Instituição
+                 si67_leidalicitacao = int8 = Lei da Licitação  
                  ";
   
   //funcao construtor da classe
@@ -156,6 +158,7 @@ class cl_regadesao102022
       $this->si67_exercicioedital = ($this->si67_exercicioedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_exercicioedital"] : $this->si67_exercicioedital);
       $this->si67_mes = ($this->si67_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_mes"] : $this->si67_mes);
       $this->si67_instit = ($this->si67_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_instit"] : $this->si67_instit);
+      $this->si67_leidalicitacao = ($this->si67_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_leidalicitacao"] : $this->si67_leidalicitacao);
     } else {
       $this->si67_sequencial = ($this->si67_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_sequencial"] : $this->si67_sequencial);
     }
@@ -292,7 +295,8 @@ class cl_regadesao102022
                                       ,si67_nroedital 
                                       ,si67_exercicioedital 
                                       ,si67_mes 
-                                      ,si67_instit 
+                                      ,si67_instit
+                                      ,si67_leidalicitacao 
                        )
                 values (
                                 $this->si67_sequencial 
@@ -318,7 +322,8 @@ class cl_regadesao102022
                                ,$this->si67_nroedital 
                                ,$this->si67_exercicioedital 
                                ,$this->si67_mes 
-                               ,$this->si67_instit 
+                               ,$this->si67_instit
+                               ,$this->si67_leidalicitacao  
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -544,6 +549,19 @@ class cl_regadesao102022
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
         return false;
+      }
+    }
+    if (trim($this->si67_leidalicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_leidalicitacao"])) {
+      $sql .= $virgula . " si67_leidalicitacao = $this->si67_leidalicitacao ";
+      $virgula = ",";
+      if (trim($this->si67_leidalicitacao) == null) {
+        $this->erro_sql = " Campo da Licitação não Informado.";
+        $this->erro_campo = "si67_leidalicitacao";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+        return false; 
       }
     }
     $sql .= " where ";
