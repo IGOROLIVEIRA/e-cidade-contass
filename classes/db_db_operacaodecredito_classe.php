@@ -159,15 +159,7 @@ class cl_db_operacaodecredito
     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
-    $resaco = $this->sql_record($this->sql_query_file($this->op01_sequencial));
-    if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = pg_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = pg_query("insert into db_acountkey values($acount,1009244,'$this->op01_sequencial','I')");
-      $resac = pg_query("insert into db_acount values($acount,1010192,1009244,'','" . pg_result($resaco, 0, 'op01_sequencial') . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = pg_query("insert into db_acount values($acount,1010192,1009245,'','" . pg_result($resaco, 0, 'op01_numerocontratoopc') . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = pg_query("insert into db_acount values($acount,1010192,1009246,'','" . pg_result($resaco, 0, 'op01_dataassinaturacop') . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+    
     return true;
   }
   // funcao para alteracao
@@ -234,18 +226,6 @@ class cl_db_operacaodecredito
     }
     $sql .= " where  op01_sequencial = $this->op01_sequencial
 ";
-    $resaco = $this->sql_record($this->sql_query_file($this->op01_sequencial));
-    if ($this->numrows > 0) {
-      $resac = pg_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = pg_query("insert into db_acountkey values($acount,1009244,'$this->op01_sequencial','A')");
-      if (isset($GLOBALS["HTTP_POST_VARS"]["op01_sequencial"]))
-        $resac = pg_query("insert into db_acount values($acount,1010192,1009244,'" . pg_result($resaco, 0, 'op01_sequencial') . "','$this->op01_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      if (isset($GLOBALS["HTTP_POST_VARS"]["op01_numerocontratoopc"]))
-        $resac = pg_query("insert into db_acount values($acount,1010192,1009245,'" . pg_result($resaco, 0, 'op01_numerocontratoopc') . "','$this->op01_numerocontratoopc'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      if (isset($GLOBALS["HTTP_POST_VARS"]["op01_dataassinaturacop"]))
-        $resac = pg_query("insert into db_acount values($acount,1010192,1009246,'" . pg_result($resaco, 0, 'op01_dataassinaturacop') . "','$this->op01_dataassinaturacop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
     $result = @pg_exec($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -275,23 +255,15 @@ class cl_db_operacaodecredito
       }
     }
   }
-  // funcao para exclusao 
-  function excluir($op01_sequencial = null)
+  // funcao para exclusao  
+  function excluir($op01_sequencial = null)  
   {
     $this->atualizacampos(true);
-    $resaco = $this->sql_record($this->sql_query_file($this->op01_sequencial));
-    if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = pg_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = pg_query("insert into db_acountkey values($acount,1009244,'$this->op01_sequencial','E')");
-      $resac = pg_query("insert into db_acount values($acount,1010192,1009244,'','" . pg_result($resaco, 0, 'op01_sequencial') . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = pg_query("insert into db_acount values($acount,1010192,1009245,'','" . pg_result($resaco, 0, 'op01_numerocontratoopc') . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = pg_query("insert into db_acount values($acount,1010192,1009246,'','" . pg_result($resaco, 0, 'op01_dataassinaturacop') . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+
     $sql = " delete from db_operacaodecredito
                     where ";
     $sql2 = "";
-    if ($this->op01_sequencial != "") {
+    if ($this->op01_sequencial != "") {  
       if ($sql2 != "") {
         $sql2 .= " and ";
       }

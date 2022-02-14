@@ -35,16 +35,16 @@ switch ($_POST["action"]) {
         LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
         AND orcelemento.o56_anousu = $iAnoSessao
         where pc94_sequencial = $tabela";
-       
+
 
         $rsEleTabela = db_query($sqlElementosTabela);
-        
+
         $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
-        if(pg_numrows($rsEleTabela)>0){
-            foreach($oElementos as $row){
-                if($row->pc07_codele==$codele){
-                    
-                   $elementonum = $row->o56_elemento;
+        if (pg_numrows($rsEleTabela) > 0) {
+            foreach ($oElementos as $row) {
+                if ($row->pc07_codele == $codele) {
+
+                    $elementonum = $row->o56_elemento;
                 }
             }
         }
@@ -226,7 +226,7 @@ switch ($_POST["action"]) {
 
                 $itemRows  = array();
 
-                
+
 
                 $selectunid = "";
                 $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
@@ -240,9 +240,9 @@ switch ($_POST["action"]) {
                 $selectunid .= "</select>";
 
                 $selectservico = "";
-                if($oDadosEmpAutItem->e55_vlrun != "") {
+                if ($oDadosEmpAutItem->e55_vlrun != "") {
                     $selectservico = "<select id='servico_{$oDados->pc01_codmater}' disabled onchange='js_servico(this)' >";
-                }else{
+                } else {
                     $selectservico = "<select id='servico_{$oDados->pc01_codmater}' onchange='js_servico(this)' >";
                 }
 
@@ -270,16 +270,15 @@ switch ($_POST["action"]) {
                 if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
                     $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
                 } else {
-                    if($oDadosEmpAutItem->e55_vlrun != "") {
+                    if ($oDadosEmpAutItem->e55_vlrun != "") {
                         $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
-                    }else{
+                    } else {
                         $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
-
                     }
                 }
-                if($oDadosEmpAutItem->e55_vlrun != "") {
+                if ($oDadosEmpAutItem->e55_vlrun != "") {
                     $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' readonly onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='background-color: #DEB887; width: 80px' />";
-                }else{
+                } else {
                     $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
                 }
 
@@ -287,9 +286,9 @@ switch ($_POST["action"]) {
                     $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='0' onkeyup='js_calcula(this)' readonly maxlength='2' style='background-color: #DEB887; width: 80px' />";
                 else
                     $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
-                if($oDadosEmpAutItem->e55_vlrun != "") {
+                if ($oDadosEmpAutItem->e55_vlrun != "") {
                     $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='background-color: #DEB887; width: 80px' />";
-                }else{
+                } else {
                     $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='width: 80px' />";
                 }
                 $itemRows[] = "<input type='hidden' id='elemtNum' value='{$elementonum}' />";
@@ -315,42 +314,41 @@ switch ($_POST["action"]) {
         $squery = "select e55_codele from empautitem where e55_autori = $autori";
         $rsEle = db_query($squery);
 
-        if(pg_numrows($rsEle)>0){
+        if (pg_numrows($rsEle) > 0) {
             $oEle = db_utils::getCollectionByRecord($rsEle);
 
-            foreach($oEle as $row){
+            foreach ($oEle as $row) {
                 $codEle = $row->e55_codele;
             }
         }
-        
-    
+
+
         $sqlElementosTabela = "select distinct pc07_codele,o56_descr,o56_elemento from pctabela 
         inner join pctabelaitem on pc95_codtabela = pc94_sequencial
         inner join pcmaterele on pc07_codmater = pc95_codmater
         LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
         AND orcelemento.o56_anousu = $iAnoSessao
         where pc94_sequencial = $tabela";
-       
+
 
         $rsEleTabela = db_query($sqlElementosTabela);
-        
+
         $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
-        if(pg_numrows($rsEle)>0){
+        if (pg_numrows($rsEle) > 0) {
             $rsElemen = array();
-            foreach($oElementos as $row){
-                if($row->pc07_codele==$codEle){
-                    $rsElemen[0]->pc07_codele = $row->pc07_codele; 
-                    $rsElemen[0]->o56_descr = $row->o56_descr; 
+            foreach ($oElementos as $row) {
+                if ($row->pc07_codele == $codEle) {
+                    $rsElemen[0]->pc07_codele = $row->pc07_codele;
+                    $rsElemen[0]->o56_descr = $row->o56_descr;
                     $rsElemen[0]->o56_elemento = $row->o56_elemento;
                 }
             }
-            
-            $oRetorno->elementos = $rsElemen;
 
-        }else{
+            $oRetorno->elementos = $rsElemen;
+        } else {
             $oRetorno->elementos = $oElementos;
         }
-        
+
 
         break;
 
@@ -441,8 +439,8 @@ switch ($_POST["action"]) {
     case "verificaSaldoCriterio":
 
         try {
-            $oRetorno->itens   = verificaSaldoCriterioDisponivel($_POST['e55_autori'],$_POST['tabela']);
-//      $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori']);
+            $oRetorno->itens   = verificaSaldoCriterioDisponivel($_POST['e55_autori'], $_POST['tabela']);
+            //      $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori']);
         } catch (Exception $e) {
             $oRetorno->erro = $e->getMessage();
             $oRetorno->status   = 2;
@@ -451,7 +449,8 @@ switch ($_POST["action"]) {
         break;
 }
 
-function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
+function verificaSaldoCriterioDisponivel($e55_autori, $tabela)
+{
     $sqlTotal = "SELECT DISTINCT pc23_valor
                     FROM liclicitem
                     LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
@@ -487,23 +486,38 @@ function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
 
     $oDadosTotal = db_utils::getCollectionByRecord($rsConsultaTotal);
 
-
     $sqlUtilizado = "SELECT sum(e55_vltot) AS totalitens
                         FROM empautitem
                         INNER JOIN empautoriza ON e54_autori = e55_autori
+                        LEFT join empempaut ON e61_autori = e54_autori
+                        LEFT join empempenho ON e60_numemp = e61_numemp
+                        INNER join empempitem ON e62_numemp = e60_numemp
+                        AND e62_item = e55_item
+                        LEFT join empanulado ON e94_numemp = e60_numemp
+                        LEFT join empanuladoitem ON e37_empempitem = e62_sequencial
                         INNER JOIN pctabelaitem ON pctabelaitem.pc95_codmater = empautitem.e55_item
                         INNER JOIN pctabela ON pctabela.pc94_sequencial = pctabelaitem.pc95_codtabela
+                        LEFT JOIN liclicita ON liclicita.l20_codigo = empautoriza.e54_autori
+                        LEFT JOIN liclicitem ON liclicitem.l21_codliclicita = liclicita.l20_codigo
+                        LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+                        LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+                        LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+                        LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+                        LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                        AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
                         WHERE e54_codlicitacao =
                                 (SELECT e54_codlicitacao
                                  FROM empautoriza
-                                 WHERE e54_autori = $e55_autori )
-                            AND pc94_sequencial = $tabela";
+                                 WHERE e54_autori = $e55_autori)
+                                 AND e54_anulad IS NULL
+                                 AND e37_sequencial IS NULL  
+                                 AND pc94_sequencial = $tabela";
     $rsConsultaUtilizado = db_query($sqlUtilizado);
     $oDadosTotalUtilizado = db_utils::getCollectionByRecord($rsConsultaUtilizado);
 
-    if($oDadosTotalUtilizado[0]->totalitens == ""){
+    if ($oDadosTotalUtilizado[0]->totalitens == "") {
         $disponivel = $oDadosTotal[0]->pc23_valor;
-    }else{
+    } else {
         $disponivel = $oDadosTotal[0]->pc23_valor - $oDadosTotalUtilizado[0]->totalitens;
     }
 

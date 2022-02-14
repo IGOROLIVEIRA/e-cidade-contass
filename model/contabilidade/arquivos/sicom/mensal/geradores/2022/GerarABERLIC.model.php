@@ -53,7 +53,7 @@ class GerarABERLIC extends GerarAM
 
             /**
              *
-             * Registros 10, 11, 12
+             * Registros 10, 11, 12   
              */
             
             for ($iCont = 0; $iCont < pg_num_rows($rsABERLIC10); $iCont++) {
@@ -61,6 +61,7 @@ class GerarABERLIC extends GerarAM
 
                 $aCSVABERLIC10['si46_tiporegistro']               = $this->padLeftZero($aABERLIC10['si46_tiporegistro'], 2);
                 $aCSVABERLIC10['si46_tipocadastro']               = $this->padLeftZero($aABERLIC10['si46_tipocadastro'], 1);
+                $aCSVABERLIC10['si46_leidalicitacao']             = $this->padLeftZero($aABERLIC10['si46_leidalicitacao'], 1);
                 $aCSVABERLIC10['si46_codorgaoresp']               = $this->padLeftZero($aABERLIC10['si46_codorgaoresp'], 2);
                 $aCSVABERLIC10['si46_codunidadesubresp']          = $this->padLeftZero($aABERLIC10['si46_codunidadesubresp'], 5);
                 $aCSVABERLIC10['si46_exerciciolicitacao']         = $this->padLeftZero($aABERLIC10['si46_exerciciolicitacao'], 4);
@@ -71,13 +72,19 @@ class GerarABERLIC extends GerarAM
                 $aCSVABERLIC10['si46_naturezaprocedimento']       = $this->padLeftZero($aABERLIC10['si46_naturezaprocedimento'], 1);
                 $aCSVABERLIC10['si46_dtabertura']                 = $this->sicomDate($aABERLIC10['si46_dtabertura']);
                 $aCSVABERLIC10['si46_dteditalconvite']            = $this->sicomDate($aABERLIC10['si46_dteditalconvite']);
+                $aCSVABERLIC10['si46_dtpulicacaopncp']            = $this->sicomDate($aABERLIC10['si46_dtpulicacaopncp']);
+                $aCSVABERLIC10['si46_linkpncp']                   = substr($aABERLIC10['si46_linkpncp'], 0, 200);
+                $aCSVABERLIC10['si46_diariooficialdivulgacao']    = $aABERLIC10['si46_diariooficialdivulgacao'];
                 $aCSVABERLIC10['si46_dtpublicacaoeditaldo']       = $this->sicomDate($aABERLIC10['si46_dtpublicacaoeditaldo']);
+                $aCSVABERLIC10['si46_dtpulicacaoedital']          = $this->sicomDate($aABERLIC10['si46_dtpulicacaoedital']);
+                $aCSVABERLIC10['si46_linkedital']                 = substr($aABERLIC10['si46_linkedital'], 0, 200);
                 $aCSVABERLIC10['si46_dtpublicacaoeditalveiculo1'] = $this->sicomDate($aABERLIC10['si46_dtpublicacaoeditalveiculo1']);
                 $aCSVABERLIC10['si46_veiculo1publicacao']         = substr($aABERLIC10['si46_veiculo1publicacao'], 0, 50);
                 $aCSVABERLIC10['si46_dtpublicacaoeditalveiculo2'] = $this->sicomDate($aABERLIC10['si46_dtpublicacaoeditalveiculo2']);
                 $aCSVABERLIC10['si46_veiculo2publicacao']         = substr($aABERLIC10['si46_veiculo2publicacao'], 0, 50);
                 $aCSVABERLIC10['si46_dtrecebimentodoc']           = $this->sicomDate($aABERLIC10['si46_dtrecebimentodoc']);
                 $aCSVABERLIC10['si46_tipolicitacao']              = $aABERLIC10['si46_tipolicitacao'] == 0 ? ' ' : substr($aABERLIC10['si46_tipolicitacao'], 0, 1);
+                $aCSVABERLIC10['si46_mododisputa']                = $aABERLIC10['si46_mododisputa'];
                 $aCSVABERLIC10['si46_naturezaobjeto']             = $aABERLIC10['si46_naturezaobjeto'] == 0 ? ' ' : substr($aABERLIC10['si46_naturezaobjeto'], 0, 1);
                 $aCSVABERLIC10['si46_objeto']                     = substr($aABERLIC10['si46_objeto'], 0, 500);
                 $aCSVABERLIC10['si46_regimeexecucaoobras']        = $aABERLIC10['si46_regimeexecucaoobras'] == 0 ? ' ' : substr($aABERLIC10['si46_regimeexecucaoobras'], 0, 1);
