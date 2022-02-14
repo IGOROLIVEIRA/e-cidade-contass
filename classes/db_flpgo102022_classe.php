@@ -30,11 +30,10 @@ class cl_flpgo102022 {
     var $si195_datobitoinstituidor = null;
     var $si195_tipodependencia = 0;
     var $si195_dscdependencia = null;
-    var $si195_datafastpreliminar_dia = null;
-    var $si195_datafastpreliminar_mes = null;
-    var $si195_datafastpreliminar_ano = null;
-    var $si195_dscsituacao = null;
-    var $si195_indpensionistaprevidenciario = null;
+    var $si195_datfastpreliminar_dia = null;
+    var $si195_datfastpreliminar_mes = null;
+    var $si195_datfastpreliminar_ano = null;
+    var $si195_indpensionista = null;
     var $si195_datconcessaoaposentadoriapensao_dia = null;
     var $si195_datconcessaoaposentadoriapensao_mes = null;
     var $si195_datconcessaoaposentadoriapensao_ano = null;
@@ -42,7 +41,6 @@ class cl_flpgo102022 {
     var $si195_dsccargo = null;
     var $si195_codcargo = 0;
     var $si195_sglcargo = null;
-    var $si195_dscsiglacargo = null;
     var $si195_dscapo = null;
     var $si195_natcargo = 0;
     var $si195_dscnatcargo  = null;
@@ -85,14 +83,12 @@ class cl_flpgo102022 {
                  si195_datobitoinstituidor = date = Data de óbito do instituidor
                  si195_tipodependencia = int8 = Tipo de dependência do pensionista
                  si195_dscdependencia = varchar(150) = Descricao da dependencia do pensionista
-                 si195_dscsituacao = varchar(150) = Descrição da situação do servidor público
-                 si195_indpensionistaprevidenciario = int8 = Indica se a pensao e de natureza
+                 si195_indpensionista = int8 = Indica se a pensao e de natureza
                  si195_datconcessaoaposentadoriapensao = date = Data de concessão da aposentadoria
-                 si195_si195_datafastpreliminar = date = Data do afastamento preeliminar a aposentadoria
+                 si195_datfastpreliminar = date = Data do afastamento preeliminar a aposentadoria
                  si195_dsccargo = varchar(120) = Nome do cargo
                  si195_codcargo = int8 = Código do cargo
                  si195_sglcargo = varchar(3) = Sigla de Cargo
-                 si195_dscsiglacargo = varchar(150) = Descrição do tipo de cargo, função, emprego
                  si195_dscapo = varchar(3) = Descrição do tipo de cargo do agente político
                  si195_natcargo = int8 = Natureza do Cargo
                  si195_dscnatcargo = varchar(150) = Descrição do Cargo
@@ -153,22 +149,21 @@ class cl_flpgo102022 {
                     $this->si195_datconcessaoaposentadoriapensao = $this->si195_datconcessaoaposentadoriapensao_ano."-".$this->si195_datconcessaoaposentadoriapensao_mes."-".$this->si195_datconcessaoaposentadoriapensao_dia;
                 }
             }
-            if($this->si195_si195_datafastpreliminar == ""){
-                $this->si195_si195_datafastpreliminar_dia = ($this->si195_si195_datafastpreliminar_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_si195_datafastpreliminar_dia"]:$this->si195_si195_datafastpreliminar_dia);
-                $this->si195_si195_datafastpreliminar_mes = ($this->si195_si195_datafastpreliminar_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_si195_datafastpreliminar_mes"]:$this->si195_si195_datafastpreliminar_mes);
-                $this->si195_si195_datafastpreliminar_ano = ($this->si195_si195_datafastpreliminar_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_si195_datafastpreliminar_ano"]:$this->si195_si195_datafastpreliminar_ano);
-                if($this->si195_si195_datafastpreliminar_dia != ""){
-                    $this->si195_si195_datafastpreliminar = $this->si195_si195_datafastpreliminar_ano."-".$this->si195_si195_datafastpreliminar_mes."-".$this->si195_si195_datafastpreliminar_dia;
+            if($this->si195_datfastpreliminar == ""){
+                $this->si195_datfastpreliminar_dia = ($this->si195_datfastpreliminar_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datfastpreliminar_dia"]:$this->si195_datfastpreliminar_dia);
+                $this->si195_datfastpreliminar_mes = ($this->si195_datfastpreliminar_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datfastpreliminar_mes"]:$this->si195_datfastpreliminar_mes);
+                $this->si195_datfastpreliminar_ano = ($this->si195_datfastpreliminar_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datfastpreliminar_ano"]:$this->si195_datfastpreliminar_ano);
+                if($this->si195_datfastpreliminar_dia != ""){
+                    $this->si195_datfastpreliminar = $this->si195_datfastpreliminar_ano."-".$this->si195_datfastpreliminar_mes."-".$this->si195_datfastpreliminar_dia;
                 }
             }
             $this->si195_tipodependencia = ($this->si195_tipodependencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_tipodependencia"]:$this->si195_tipodependencia);
             $this->si195_dscdependencia = ($this->si195_dscdependencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscdependencia"]:$this->si195_dscdependencia);
-            $this->si195_dscsituacao = ($this->si195_dscsituacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscsituacao"]:$this->si195_dscsituacao);
-            $this->si195_indpensionistaprevidenciario = ($this->si195_indpensionistaprevidenciario == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indpensionistaprevidenciario"]:$this->si195_indpensionistaprevidenciario);
+            $this->si195_indpensionista = ($this->si195_indpensionista == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indpensionista"]:$this->si195_indpensionista);
+            $this->si195_optouafastpreliminar = ($this->si195_optouafastpreliminar == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_optouafastpreliminar"]:$this->si195_optouafastpreliminar);
             $this->si195_dsccargo = ($this->si195_dsccargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dsccargo"]:$this->si195_dsccargo);
             $this->si195_codcargo = ($this->si195_codcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codcargo"]:$this->si195_codcargo);
             $this->si195_sglcargo = ($this->si195_sglcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_sglcargo"]:$this->si195_sglcargo);
-            $this->si195_dscsiglacargo = ($this->si195_dscsiglacargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscsiglacargo"]:$this->si195_dscsiglacargo);
             $this->si195_dscapo = ($this->si195_dscapo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscapo"]:$this->si195_dscapo);
             $this->si195_natcargo = ($this->si195_natcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_natcargo"]:$this->si195_natcargo);
             $this->si195_dscnatcargo = ($this->si195_dscnatcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscnatcargo"]:$this->si195_dscnatcargo);
@@ -369,14 +364,13 @@ class cl_flpgo102022 {
                                       ,si195_datobitoinstituidor
                                       ,si195_tipodependencia
                                       ,si195_dscdependencia
-                                      ,si195_datafastpreliminar
-                                      ,si195_dscsituacao
-                                      ,si195_indpensionistaprevidenciario
+                                      ,si195_optouafastpreliminar
+                                      ,si195_datfastpreliminar
+                                      ,si195_indpensionista
                                       ,si195_datconcessaoaposentadoriapensao
                                       ,si195_dsccargo
                                       ,si195_codcargo
                                       ,si195_sglcargo
-                                      ,si195_dscsiglacargo
                                       ,si195_dscapo
                                       ,si195_natcargo
                                       ,si195_dscnatcargo
@@ -407,14 +401,13 @@ class cl_flpgo102022 {
                                ,".($this->si195_datobitoinstituidor== "null" || $this->si195_datobitoinstituidor == ""?"null":"'".$this->si195_datobitoinstituidor."'")."
                                ,".($this->si195_tipodependencia== "null" || $this->si195_tipodependencia == ""?"0":"'".$this->si195_tipodependencia."'")."
                                ,'$this->si195_dscdependencia'
-                               ,".($this->si195_datafastpreliminar == "null" || $this->si195_datafastpreliminar == ""?"null":"'".$this->si195_datafastpreliminar."'")."
-                               ,'$this->si195_dscsituacao'
-                               ,".($this->si195_indpensionistaprevidenciario == null ? 'NULL' : $this->si195_indpensionistaprevidenciario)." 
+                               ,$this->si195_optouafastpreliminar
+                               ,".($this->si195_datfastpreliminar == "null" || $this->si195_datfastpreliminar == ""?"null":"'".$this->si195_datfastpreliminar."'")."
+                               ,".($this->si195_indpensionista == null ? 'NULL' : $this->si195_indpensionista)." 
                                ,".($this->si195_datconcessaoaposentadoriapensao == "null" || $this->si195_datconcessaoaposentadoriapensao == ""?"null":"'".$this->si195_datconcessaoaposentadoriapensao."'")."
                                ,'$this->si195_dsccargo'
                                ,$this->si195_codcargo
                                ,'$this->si195_sglcargo'
-                               ,'$this->si195_dscsiglacargo'
                                ,'$this->si195_dscapo'
                                ,".($this->si195_natcargo == "null" || $this->si195_natcargo == ""?"null":"'".$this->si195_natcargo."'")."
                                ,'$this->si195_dscnatcargo'
@@ -590,16 +583,16 @@ class cl_flpgo102022 {
                 return false;
             }
         }
-        if(trim($this->si195_dscsituacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_dscsituacao"])) {
-            $sql .= $virgula . " si195_dscsituacao = '$this->si195_dscsituacao' ";
-            $virgula = ",";
-        }
         if(trim($this->si195_dscdependencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_dscdependencia"])) {
             $sql .= $virgula . " si195_dscdependencia = '$this->si195_dscdependencia' ";
             $virgula = ",";
         }
-        if(trim($this->si195_indpensionistaprevidenciario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_indpensionistaprevidenciario"])) {
-            $sql .= $virgula . " si195_indpensionistaprevidenciario = '$this->si195_indpensionistaprevidenciario' ";
+        if(trim($this->si195_optouafastpreliminar)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_optouafastpreliminar"])) {
+            $sql .= $virgula . " si195_optouafastpreliminar = '$this->si195_optouafastpreliminar' ";
+            $virgula = ",";
+        }
+        if(trim($this->si195_indpensionista)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_indpensionista"])) {
+            $sql .= $virgula . " si195_indpensionista = '$this->si195_indpensionista' ";
             $virgula = ",";
         }
         if(trim($this->si195_datconcessaoaposentadoriapensao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_datconcessaoaposentadoriapensao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si195_datconcessaoaposentadoriapensao_dia"] !="") ){
@@ -608,6 +601,15 @@ class cl_flpgo102022 {
         }     else{
             if(isset($GLOBALS["HTTP_POST_VARS"]["si195_datconcessaoaposentadoriapensao_dia"])){
                 $sql  .= $virgula." si195_datconcessaoaposentadoriapensao = null ";
+                $virgula = ",";
+            }
+        }
+        if(trim($this->si195_datfastpreliminar)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_datfastpreliminar_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si195_datfastpreliminar_dia"] !="") ){
+            $sql  .= $virgula." si195_datfastpreliminar = '$this->si195_datfastpreliminar' ";
+            $virgula = ",";
+        }     else{
+            if(isset($GLOBALS["HTTP_POST_VARS"]["si195_datfastpreliminar_dia"])){
+                $sql  .= $virgula." si195_datfastpreliminar = null ";
                 $virgula = ",";
             }
         }
@@ -623,10 +625,6 @@ class cl_flpgo102022 {
                 $this->erro_status = "0";
                 return false;
             }
-        }
-        if(trim($this->si195_dscsiglacargo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_dscsiglacargo"])){
-            $sql  .= $virgula." si195_dscsiglacargo = '$this->si195_dscsiglacargo' ";
-            $virgula = ",";
         }
 
         if(trim($this->si195_indcessao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_indcessao"])){
