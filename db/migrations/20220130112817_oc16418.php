@@ -290,7 +290,7 @@ SQL;
  
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
                     
-                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_tipoente', 'int8', 'Tipo Ente', '0', 'Tipo Ente', 11, false, false, false, 5, 'text', 'Tipo Ente');
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_tipoente', 'int8', 'Ente', '0', 'Ente', 11, false, false, false, 5, 'text', 'Ente');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c237_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
 
@@ -331,7 +331,7 @@ SQL;
  
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
                             
-                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_tipoente', 'int8', 'Tipo Ente', '0', 'Tipo Ente', 11, false, false, false, 5, 'text', 'Tipo Ente');
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_tipoente', 'int8', 'Ente', '0', 'Ente', 11, false, false, false, 5, 'text', 'Ente');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c238_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
                     
@@ -370,7 +370,7 @@ SQL;
  
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
                 
-                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_tipoente', 'int8', 'Tipo Ente', '0', 'Tipo Ente', 11, false, false, false, 5, 'text', 'Tipo Ente');
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_tipoente', 'int8', 'Ente', '0', 'Ente', 11, false, false, false, 5, 'text', 'Ente');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c239_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
 
@@ -399,7 +399,7 @@ SQL;
  
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_coddipr', 'int8', 'Código DIRP', '0', 'Códigp DIPR', 11, false, false, false, 5, 'text', 'Código DIRP');
                     
-                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_tipoente', 'int8', 'Tipo Ente', '0', 'Tipo Ente', 11, false, false, false, 5, 'text', 'Tipo Ente');
+                    INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_tipoente', 'int8', 'Ente', '0', 'Ente', 11, false, false, false, 5, 'text', 'Ente');
 
                     INSERT INTO db_syscampo VALUES ((select max(codcam) + 1 from db_syscampo), 'c240_datasicom', 'date', 'Data SICOM', 'null', 'Data SICOM', 10, false, false, false, 1, 'text', 'Data SICOM');
 

@@ -57,7 +57,7 @@ $cldipr->rotulo->label();
                 </tr>
 
                 <tr>
-                    <td><b>Tipo de Ente:</b></td>
+                    <td><b>Ente:</b></td>
                     <td>
                         <?php
                         db_select('c237_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
@@ -67,7 +67,7 @@ $cldipr->rotulo->label();
 
                 <tr>
                     <td>
-                        <b>Data referência SICOM:</b>
+                        <b>Data referência para o Sicom:</b>
                     </td>
                     <td nowrap>
                         <?
@@ -80,7 +80,7 @@ $cldipr->rotulo->label();
                     <td><b>Tipo da base de cálculo da contribuição:</b></td>
                     <td>
                         <?php
-                        db_select('c237_basecalculocontribuinte', array(0 => "Selecione", '1' => 'Patronal', '2' => 'Segurado'), true, 1, "style='width:104px' onchange='verificarTipoBaseDeCalculoContribuicao()'");
+                        db_select('c237_basecalculocontribuinte', array(0 => "Selecione", '1' => 'Patronal', '2' => 'Segurado'), true, 1, "onchange='verificarTipoBaseDeCalculoContribuicao()'");
                         ?>
                     </td>
                 </tr>
@@ -104,7 +104,7 @@ $cldipr->rotulo->label();
                             11 => "Novembro",
                             12 => "Dezembro"
                         );
-                        db_select('c237_mescompetencia', $meses, true, 1, "style='width:104px'");
+                        db_select('c237_mescompetencia', $meses, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -197,7 +197,7 @@ $cldipr->rotulo->label();
                             "1" => "Normal",
                             "2" => "Suplementar"
                         );
-                        db_select('c237_tipocontribuinte', $tipoBase, true, 1, "style='width:200px'");
+                        db_select('c237_tipocontribuinte', $tipoBase, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -237,12 +237,15 @@ $cldipr->rotulo->label();
     verificarTipoBaseDeCalculoContribuicao();
 
     function js_pesquisac237_codigodipr($lmostra) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr', 'Pesquisa', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr|c236_massainstituida', 'Pesquisa', true);
     }
 
-    function js_preenchecoddipr(chave) {
+    function js_preenchecoddipr(chave, massa) {
         db_iframe_dipr.hide();
         document.form1.c237_coddipr.value = chave;
+        document.form1.c237_tipofundo.value = 0;
+        if (massa == 'f')
+            document.form1.c237_tipofundo.value = 1;
     }
 
     function js_pesquisa() {

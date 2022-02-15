@@ -51,6 +51,7 @@ class cl_diprbaseprevidencia
     var $campos = "
         c238_sequencial int4 NOT NULL 
         c238_coddipr int8,
+        c238_tipoente int4,
         c238_datasicom date,
    	    c238_mescompetencia int4,
         c238_exerciciocompetencia int4,
@@ -166,6 +167,7 @@ class cl_diprbaseprevidencia
         $sql  = "INSERT INTO {$this->nomeTabela} ( ";
         $sql .= " c238_coddipr, ";
         $sql .= " c238_datasicom, ";
+        $sql .= " c238_tipoente, ";
         $sql .= " c238_mescompetencia, ";
         $sql .= " c238_exerciciocompetencia, ";
         $sql .= " c238_tipofundo, ";
@@ -180,6 +182,7 @@ class cl_diprbaseprevidencia
         $sql .= ") VALUES ( ";
         $sql .= " {$this->c238_coddipr}, ";
         $sql .= " '{$this->c238_datasicom}', ";
+        $sql .= " {$this->c238_tipoente}, ";
         $sql .= " {$this->c238_mescompetencia}, ";
         $sql .= " {$this->c238_exerciciocompetencia}, ";
         $sql .= " {$this->c238_tipofundo}, ";

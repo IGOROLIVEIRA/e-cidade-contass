@@ -52,6 +52,7 @@ class cl_diprdeducoes
         c239_sequencial int4 NOT NULL,
         c239_coddipr int8,
         c239_datasicom date,
+        c239_tipoente int4,
    	    c239_mescompetencia int4,
         c239_exerciciocompetencia int4,
         c239_tipofundo int4,
@@ -163,6 +164,7 @@ class cl_diprdeducoes
 
         $sql  = " INSERT INTO {$this->nomeTabela} ( ";
         $sql .= " c239_coddipr, ";
+        $sql .= " c239_tipoente, ";
         $sql .= " c239_datasicom, ";
         $sql .= " c239_mescompetencia, ";
         $sql .= " c239_exerciciocompetencia, ";
@@ -176,6 +178,7 @@ class cl_diprdeducoes
         $sql .= " c239_valordeducao ";
         $sql .= " ) VALUES ( ";
         $sql .= " {$this->c239_coddipr}, ";
+        $sql .= " {$this->c239_tipoente}, ";
         $sql .= " '{$this->c239_datasicom}', ";
         $sql .= " {$this->c239_mescompetencia}, ";
         $sql .= " {$this->c239_exerciciocompetencia}, ";

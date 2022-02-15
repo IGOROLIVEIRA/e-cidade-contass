@@ -51,6 +51,7 @@ class cl_dipraportes
     var $campos = "
         c240_sequencial int4 NOT NULL
         c240_coddipr int8,
+        c240_tipoente int4,
         c240_datasicom date,
    	    c240_mescompetencia int4,
         c240_exerciciocompetencia int4,
@@ -172,6 +173,7 @@ class cl_dipraportes
         $sql  = " INSERT INTO {$this->nomeTabela} ( ";
         $sql .= " c240_coddipr, ";
         $sql .= " c240_datasicom, ";
+        $sql .= " c240_tipoente, ";
         $sql .= " c240_mescompetencia, ";
         $sql .= " c240_exerciciocompetencia, ";
         $sql .= " c240_tipofundo, ";
@@ -183,6 +185,7 @@ class cl_dipraportes
         $sql .= " ) VALUES ( ";
         $sql .= " {$this->c240_coddipr}, ";
         $sql .= " '{$this->c240_datasicom}', ";
+        $sql .= " {$this->c240_tipoente}, "; 
         $sql .= " {$this->c240_mescompetencia}, ";
         $sql .= " {$this->c240_exerciciocompetencia}, ";
         $sql .= " {$this->c240_tipofundo}, ";

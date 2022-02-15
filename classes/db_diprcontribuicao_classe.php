@@ -52,6 +52,7 @@ class cl_diprcontribuicao
         c237_sequencial serial,
         c237_coddipr int8,
         c237_datasicom date,
+        c237_tipoente int4,
         c237_basecalculocontribuinte int4,
         c237_mescompetencia int4,
         c237_exerciciocompetencia int4,
@@ -187,6 +188,7 @@ class cl_diprcontribuicao
         $sql  = "INSERT INTO {$this->nomeTabela} ( ";
         $sql .= " c237_coddipr, ";
         $sql .= " c237_datasicom, ";
+        $sql .= " c237_tipoente, ";
         $sql .= " c237_basecalculocontribuinte, ";
         $sql .= " c237_mescompetencia, ";
         $sql .= " c237_exerciciocompetencia, ";
@@ -201,6 +203,7 @@ class cl_diprcontribuicao
         $sql .= ") VALUES ( ";
         $sql .= " {$this->c237_coddipr}, ";
         $sql .= " '{$this->c237_datasicom}', ";
+        $sql .= " {$this->c237_tipoente}, ";
         $sql .= " {$this->c237_basecalculocontribuinte}, ";
         $sql .= " {$this->c237_mescompetencia}, ";
         $sql .= " {$this->c237_exerciciocompetencia}, ";

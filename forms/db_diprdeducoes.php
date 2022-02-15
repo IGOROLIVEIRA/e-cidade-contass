@@ -54,7 +54,7 @@
                 </tr>
 
                 <tr>
-                    <td><b>Tipo de Ente:</b></td>
+                    <td><b>Ente:</b></td>
                     <td>
                         <?php
                         db_select('c239_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
@@ -64,7 +64,7 @@
 
                 <tr>
                     <td>
-                        <b>Data referência SICOM:</b>
+                        <b>Data referência para o Sicom:</b>
                     </td>
                     <td nowrap>
                         <?
@@ -92,7 +92,7 @@
                             11 => "Novembro",
                             12 => "Dezembro"
                         );
-                        db_select('c239_mescompetencia', $meses, true, 1, "style='width:104px'");
+                        db_select('c239_mescompetencia', $meses, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -124,7 +124,7 @@
                 </tr>
 
                 <tr>
-                    <td><b>Tipos de Repasse:</b></td>
+                    <td><b>Tipo de Repasse:</b></td>
                     <td>
                         <?php
                         $arrayTipoRepasse = array(
@@ -132,13 +132,13 @@
                             1 => "Patronal",
                             2 => "Segurado"
                         );
-                        db_select('c239_tiporepasse', $arrayTipoRepasse, true, 1, "style='width:104px' onchange='verificarTipoRepasse()'");
+                        db_select('c239_tiporepasse', $arrayTipoRepasse, true, 1, "onchange='verificarTipoRepasse()'");
                         ?>
                     </td>
                 </tr>
 
                 <tr id="LinhaContribuicaoPatronal">
-                    <td><b>Tipos de contribuição patronal:</b></td>
+                    <td><b>Tipo de contribuição patronal:</b></td>
                     <td>
                         <?php
                         $arrayTipoRepasse = array(
@@ -154,7 +154,7 @@
                 </tr>
 
                 <tr id="LinhaContribuicaoSegurados">
-                    <td><b>Tipos de contribuição segurados:</b></td>
+                    <td><b>Tipo de contribuição segurados:</b></td>
                     <td>
                         <?php
                         $arrayTipoContribuicaoSegurados = array(
@@ -163,13 +163,13 @@
                             2 => "Aposentados",
                             3 => "Pensionistas"
                         );
-                        db_select('c239_tipocontribuicaosegurados', $arrayTipoContribuicaoSegurados, true, 1, "style='width:104px'");
+                        db_select('c239_tipocontribuicaosegurados', $arrayTipoContribuicaoSegurados, true, 1, "");
                         ?>
                     </td>
                 </tr>
 
                 <tr id="LinhaContribuicao">
-                    <td><b>Tipos de contribuição:</b></td>
+                    <td><b>Tipo de contribuição:</b></td>
                     <td>
                         <?php
                         $arrayTipoContribuicao = array(
@@ -177,13 +177,13 @@
                             1 => "Normal",
                             2 => "Suplementar"
                         );
-                        db_select('c239_tipocontribuicao', $arrayTipoContribuicao, true, 1, "style='width:104px'");
+                        db_select('c239_tipocontribuicao', $arrayTipoContribuicao, true, 1, "");
                         ?>
                     </td>
                 </tr>
 
                 <tr>
-                    <td><b>Tipos de Dedução:</b></td>
+                    <td><b>Tipo de Dedução:</b></td>
                     <td>
                         <?php
                         $arrayTipoContribuicao = array(
@@ -191,7 +191,7 @@
                             1 => "Pagamento a maior",
                             2 => "Outros valores compensados"
                         );
-                        db_select('c239_tipodeducao', $arrayTipoContribuicao, true, 1, "style='width:200px' onchange='verificarTipoDeducao()'");
+                        db_select('c239_tipodeducao', $arrayTipoContribuicao, true, 1, "onchange='verificarTipoDeducao()'");
                         ?>
                     </td>
                 </tr>
@@ -238,6 +238,9 @@
     function js_preenchecoddipr(chave) {
         db_iframe_dipr.hide();
         document.form1.c239_coddipr.value = chave;
+        document.form1.c239_tipofundo.value = 0;
+        if (massa == 'f')
+            document.form1.c239_tipofundo.value = 1;
     }
 
     function js_pesquisa() {

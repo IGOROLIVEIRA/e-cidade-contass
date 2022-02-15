@@ -54,7 +54,7 @@
                 </tr>
 
                 <tr>
-                    <td><b>Tipo de Ente:</b></td>
+                    <td><b>Ente:</b></td>
                     <td>
                         <?php
                         db_select('c240_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
@@ -64,7 +64,7 @@
 
                 <tr>
                     <td>
-                        <b>Data referência SICOM:</b>
+                        <b>Data referência para o Sicom:</b>
                     </td>
                     <td nowrap>
                         <?
@@ -92,7 +92,7 @@
                             11 => "Novembro",
                             12 => "Dezembro"
                         );
-                        db_select('c240_mescompetencia', $meses, true, 1, "style='width:104px'");
+                        db_select('c240_mescompetencia', $meses, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -200,6 +200,9 @@
     function js_preenchecoddipr(chave) {
         db_iframe_dipr.hide();
         document.form1.c240_coddipr.value = chave;
+        document.form1.c240_tipofundo.value = 0;
+        if (massa == 'f')
+            document.form1.c240_tipofundo.value = 1;
     }
 
     function js_pesquisa() {

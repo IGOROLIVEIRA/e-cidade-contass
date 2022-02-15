@@ -56,7 +56,7 @@ $cldipr->rotulo->label();
                 </tr>
 
                 <tr>
-                    <td><b>Tipo de Ente:</b></td>
+                    <td><b>Ente:</b></td>
                     <td>
                         <?php
                         db_select('c238_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
@@ -66,7 +66,7 @@ $cldipr->rotulo->label();
 
                 <tr>
                     <td>
-                        <b>Data referência SICOM:</b>
+                        <b>Data referência para o Sicom:</b>
                     </td>
                     <td nowrap>
                         <?
@@ -94,7 +94,7 @@ $cldipr->rotulo->label();
                             11 => "Novembro",
                             12 => "Dezembro"
                         );
-                        db_select('c238_mescompetencia', $meses, true, 1, "style='width:104px'");
+                        db_select('c238_mescompetencia', $meses, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -126,7 +126,7 @@ $cldipr->rotulo->label();
                 </tr>
 
                 <tr>
-                    <td><b>Tipos de repasse:</b></td>
+                    <td><b>Tipo de repasse:</b></td>
                     <td>
                         <?php
                         $arrayTipoRepasse = array(
@@ -134,13 +134,13 @@ $cldipr->rotulo->label();
                             1 => "Patronal",
                             2 => "Segurado"
                         );
-                        db_select('c238_tiporepasse', $arrayTipoRepasse, true, 1, "style='width:104px' onchange='verificarTipoRepasse()'");
+                        db_select('c238_tiporepasse', $arrayTipoRepasse, true, 1, "onchange='verificarTipoRepasse()'");
                         ?>
                     </td>
                 </tr>
 
                 <tr id="LinhaContribuicaoPatronal">
-                    <td><b>Tipos de contribuição patronal:</b></td>
+                    <td><b>Tipo de contribuição patronal:</b></td>
                     <td>
                         <?php
                         $arrayTipoRepasse = array(
@@ -156,7 +156,7 @@ $cldipr->rotulo->label();
                 </tr>
 
                 <tr id="LinhaContribuicaoSegurados">
-                    <td><b>Tipos de contribuição segurados:</b></td>
+                    <td><b>Tipo de contribuição segurados:</b></td>
                     <td>
                         <?php
                         $arrayTipoContribuicaoSegurados = array(
@@ -165,13 +165,13 @@ $cldipr->rotulo->label();
                             2 => "Aposentados",
                             3 => "Pensionistas"
                         );
-                        db_select('c238_tipocontribuicaosegurados', $arrayTipoContribuicaoSegurados, true, 1, "style='width:104px'");
+                        db_select('c238_tipocontribuicaosegurados', $arrayTipoContribuicaoSegurados, true, 1, "");
                         ?>
                     </td>
                 </tr>
 
                 <tr id="LinhaContribuicao">
-                    <td><b>Tipos de contribuição:</b></td>
+                    <td><b>Tipo de contribuição:</b></td>
                     <td>
                         <?php
                         $arrayTipoContribuicao = array(
@@ -180,7 +180,7 @@ $cldipr->rotulo->label();
                             2 => "Aposentados",
                             3 => "Pensionistas"
                         );
-                        db_select('c238_tipocontribuicao', $arrayTipoContribuicao, true, 1, "style='width:104px'");
+                        db_select('c238_tipocontribuicao', $arrayTipoContribuicao, true, 1, "");
                         ?>
                     </td>
                 </tr>
@@ -249,6 +249,9 @@ $cldipr->rotulo->label();
     function js_preenchecoddipr(chave) {
         db_iframe_dipr.hide();
         document.form1.c238_coddipr.value = chave;
+        document.form1.c238_tipofundo.value = 0;
+        if (massa == 'f')
+            document.form1.c238_tipofundo.value = 1;  
     }
 
     function js_pesquisa() {
