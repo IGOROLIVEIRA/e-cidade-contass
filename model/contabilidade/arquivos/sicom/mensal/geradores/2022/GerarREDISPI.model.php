@@ -57,7 +57,7 @@ class GerarREDISPI extends GerarAM
                 $aCSVREDISPI10['si183_tipoprocesso']                          = substr($aREDISPI10['si183_tipoprocesso'], 0, 12);
                 $aCSVREDISPI10['si183_tipocadastradodispensainexigibilidade'] = substr($aREDISPI10['si183_tipocadastradodispensainexigibilidade'], 0, 12);
                 $aCSVREDISPI10['si183_dsccadastrolicitatorio']                = substr($aREDISPI10['si183_dsccadastrolicitatorio'], 0, 12);
-                $aCSVREDISPI10['si183_leidalicitacao']                        = $this->padLeftZero($aREDISPI10['si183_leidalicitacao'], 3);
+                $aCSVREDISPI10['si183_leidalicitacao']                        = $this->padLeftZero($aREDISPI10['si183_leidalicitacao'], 1);
                 $aCSVREDISPI10['si183_dtabertura']                            = $this->sicomDate($aREDISPI10['si183_dtabertura']);
                 $aCSVREDISPI10['si183_naturezaobjeto']                        = $aREDISPI10['si183_naturezaobjeto'] == 0 ? ' ' : substr($aREDISPI10['si183_naturezaobjeto'], 0, 1);
                 $aCSVREDISPI10['si183_objeto']                                = substr($aREDISPI10['si183_objeto'], 0, 500);
