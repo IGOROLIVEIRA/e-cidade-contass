@@ -87,7 +87,7 @@ class cl_redispi102022
     }
   }
 
-  // funcao para atualizar campos
+  //  funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
     if ($exclusao == false) {

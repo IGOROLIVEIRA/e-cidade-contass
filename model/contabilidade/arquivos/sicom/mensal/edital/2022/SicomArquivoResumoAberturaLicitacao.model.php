@@ -383,7 +383,7 @@ ORDER BY nroprocessolicitatorio
 
       if ($oDados10->naturezaobjeto == 1) {
         /**
-         * Selecionar informações do registro 11
+         *  Selecionar informações do registro 11
          * @todo checar a obrigatoriedade do pcdotac
          */
         $sSql11 = "

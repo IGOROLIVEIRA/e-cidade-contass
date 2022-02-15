@@ -149,7 +149,7 @@ class cl_ralic102022
     }
   }
 
-  // funcao para inclusao
+  //funcao para inclusao
   function incluir($si180_sequencial)
   {
     $this->atualizacampos();
