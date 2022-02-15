@@ -1,4 +1,4 @@
-function dbViewItensLicitacao(sNomeInstance, oNode) {
+function dbViewItensLicitacao(sNomeInstance, oNode, destinacaoExclusiva) {
 
     var me = this, aItensPosicao = new Array();
 
