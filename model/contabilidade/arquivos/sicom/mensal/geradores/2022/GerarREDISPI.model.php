@@ -42,7 +42,7 @@ class GerarREDISPI extends GerarAM
 
             /**
              *
-             * Registros 10, 11, 12
+             *  Registros 10, 11 ,12
              */
             for ($iCont = 0; $iCont < pg_num_rows($rsREDISPI10); $iCont++) {
 

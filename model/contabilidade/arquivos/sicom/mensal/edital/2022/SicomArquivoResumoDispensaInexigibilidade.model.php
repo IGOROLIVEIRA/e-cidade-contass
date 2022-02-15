@@ -50,7 +50,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
   }
 
   /**
-   *metodo para passar os dados das Acoes e Metas para o $this->aDados
+   * metodo para passar os dados das Acoes e Metas para o $this->aDados
    */
   public function getCampos()
   {

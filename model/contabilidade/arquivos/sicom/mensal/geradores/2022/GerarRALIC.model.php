@@ -38,7 +38,7 @@ class GerarRALIC extends GerarAM
 
       /**
        *
-       * Registros 10, 11, 12
+       *  Registros 10, 11,12
        */
       for ($iCont = 0; $iCont < pg_num_rows($rsRALIC10); $iCont++) {
 

@@ -82,7 +82,7 @@ class cl_ralic102022
                  ";
   // cria propriedade com as variaveis do arquivo
 
-  //funcao construtor da classe
+  // funcao construtor da classe
   function cl_ralic102022()
   {
     //classes dos rotulos dos campos
@@ -90,7 +90,7 @@ class cl_ralic102022
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
-  //funcao erro
+  // funcao erro
   function erro($mostra, $retorna)
   {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {

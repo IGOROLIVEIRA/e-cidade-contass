@@ -48,7 +48,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
   }
 
   /**
-   *metodo para passar os dados das Acoes e Metas pada o $this->aDados
+   * metodo para passar os dados das Acoes e Metas pada o $this->aDados
    */
   public function getCampos()
   {
