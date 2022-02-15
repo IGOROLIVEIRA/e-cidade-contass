@@ -29,10 +29,11 @@ class EventoS2200 extends EventoBase
      */
     public function montarDados()
     {
-        // echo 'tst';
-        // exit;
         $aDadosAPI = array();
-
+        // echo '<pre>';
+        // print_r($this->dados);
+        // exit;
+        $iSequencial = 1;
         foreach ($this->dados as $oDados) {
 
             if (!empty($oDados->RIC) && empty($oDados->RIC->dtExped)) {
@@ -125,7 +126,7 @@ class EventoS2200 extends EventoBase
 
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtAdmissao                      = new \stdClass;
-            $oDadosAPI->evtAdmissao->sequencial          = 1;
+            $oDadosAPI->evtAdmissao->sequencial          = $iSequencial;
             $oDadosAPI->evtAdmissao->indRetif            = 1;
             $oDadosAPI->evtAdmissao->nrRecibo            = null;
             $oDadosAPI->evtAdmissao->cpfTrab             = $oDados->trabalhador->cpfTrab;
@@ -195,28 +196,23 @@ class EventoS2200 extends EventoBase
                     $oDadosAPI->evtAdmissao->vinculo->infoCeletista->trabTemporario->ideTrabSubstituido = $oDados->ideTrabSubstituido;
                 }
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->aprend = empty($oDados->aprend) ? null : $oDados->aprend;
-            }
-            // else {
-            //     $oDadosAPI->evtAdmissao->vinculo->infoCeletista = null;
-            // }
-
-            if (!empty($oDados->infoEstatutario)) {
-                if (!empty($oDados->infoEstatutario->indProvim) || $oDados->infoEstatutario->indProvim != 0) {
-
-                    $oDadosAPI->evtAdmissao->vinculo->infoEstatutario = $oDados->infoEstatutario;
-                    $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->infoDecJud = empty($oDados->infoDecJud) ? null : $oDados->infoDecJud;
-                }
+            } else {
+                //if (!empty($oDados->infoEstatutario->indProvim) || $oDados->infoEstatutario->indProvim != 0) {
+                $oDadosAPI->evtAdmissao->vinculo->infoEstatutario = $oDados->infoEstatutario;
+                //$oDadosAPI->evtAdmissao->vinculo->infoEstatutario->infoDecJud = empty($oDados->infoDecJud) ? null : $oDados->infoDecJud;
+                //}
             }
 
             if (!empty($oDados->infoContrato)) {
 
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato = $oDados->infoContrato;
 
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCargo = empty($oDados->infoContrato->codCargo) ? null : $oDados->codCargo;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->codFuncao = empty($oDados->infoContrato->codFuncao) ? null : $oDados->infoContrato->codFuncao;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCarreira = empty($oDados->infoContrato->codCarreira) ? null : $oDados->infoContrato->codCarreira;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->dtIngrCarr = empty($oDados->infoContrato->dtIngrCarr) ? null : $oDados->infoContrato->dtIngrCarr;
-
+                // $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCargo = empty($oDados->infoContrato->codCargo) ? null : $oDados->codCargo;
+                // $oDadosAPI->evtAdmissao->vinculo->infoContrato->codFuncao = empty($oDados->infoContrato->codFuncao) ? null : $oDados->infoContrato->codFuncao;
+                // $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCarreira = empty($oDados->infoContrato->codCarreira) ? null : $oDados->infoContrato->codCarreira;
+                // $oDadosAPI->evtAdmissao->vinculo->infoContrato->dtIngrCarr = empty($oDados->infoContrato->dtIngrCarr) ? null : $oDados->infoContrato->dtIngrCarr;
+                // print_r($oDados->remuneracao);
+                // exit;
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = $oDados->remuneracao->vrSalFx;
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->undSalFixo = $oDados->remuneracao->undSalFixo;
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
@@ -230,35 +226,36 @@ class EventoS2200 extends EventoBase
 
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->localTrabDom = empty($oDados->localTrabDom) ? null : $oDados->localTrabDom;
 
-                if (empty($oDados->horContratual)) {
+                // if (empty($oDados->horContratual)) {
 
-                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = $oDados->horContratual;
-                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->horario = $this->buscarHorarios($oDados->vinculo->matricula);
-                } else {
-                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = null;
-                }
+                //     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = $oDados->horContratual;
+                //     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->horario = $this->buscarHorarios($oDados->vinculo->matricula);
+                // } else {
+                //     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = null;
+                // }
 
-                if (!empty($oDados->filiacaoSindical->cnpjSindTrab)) {
-                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->filiacaoSindical[0]->cnpjsindtrab = $oDados->filiacaoSindical->cnpjSindTrab;
-                }
+                // if (!empty($oDados->filiacaoSindical->cnpjSindTrab)) {
+                //     $oDadosAPI->evtAdmissao->vinculo->infoContrato->filiacaoSindical[0]->cnpjsindtrab = $oDados->filiacaoSindical->cnpjSindTrab;
+                // }
 
 
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->alvaraJudicial = empty($oDados->alvaraJudicial) ? null : $oDados->alvaraJudicial;
+                // $oDadosAPI->evtAdmissao->vinculo->infoContrato->alvaraJudicial = empty($oDados->alvaraJudicial) ? null : $oDados->alvaraJudicial;
 
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->observacoes = empty($oDados->observacoes) ? null : array($oDados->observacoes);
+                // $oDadosAPI->evtAdmissao->vinculo->infoContrato->observacoes = empty($oDados->observacoes) ? null : array($oDados->observacoes);
             }
 
-            $oDadosAPI->evtAdmissao->vinculo->sucessaoVinc = empty($oDados->sucessaoVinc) ? null : $oDados->sucessaoVinc;
+            // $oDadosAPI->evtAdmissao->vinculo->sucessaoVinc = empty($oDados->sucessaoVinc) ? null : $oDados->sucessaoVinc;
 
-            $oDadosAPI->evtAdmissao->vinculo->transfDom = empty($oDados->transfDom) ? null : $oDados->transfDom;
+            // $oDadosAPI->evtAdmissao->vinculo->transfDom = empty($oDados->transfDom) ? null : $oDados->transfDom;
 
-            $oDadosAPI->evtAdmissao->vinculo->mudancaCPF = empty($oDados->mudancaCPF) ? null : $oDados->mudancaCPF;
+            // $oDadosAPI->evtAdmissao->vinculo->mudancaCPF = empty($oDados->mudancaCPF) ? null : $oDados->mudancaCPF;
 
-            $oDadosAPI->evtAdmissao->vinculo->afastamento = empty($oDados->afastamento) ? null : $oDados->afastamento;
+            // $oDadosAPI->evtAdmissao->vinculo->afastamento = empty($oDados->afastamento) ? null : $oDados->afastamento;
 
-            $oDadosAPI->evtAdmissao->vinculo->desligamento = empty($oDados->desligamento) ? null : $oDados->desligamento;
+            // $oDadosAPI->evtAdmissao->vinculo->desligamento = empty($oDados->desligamento) ? null : $oDados->desligamento;
 
             $aDadosAPI[] = $oDadosAPI;
+            $iSequencial++;
         }
         // echo '<pre>';
         // print_r($aDadosAPI);

@@ -244,34 +244,24 @@ return array(
     ),
     'infoEstatutario' => array(
         'properties' => array(
-            'indProvim' => array(
-                'indProvim' => 'indProvim',
-                'type' => 'int'
-            ),
-            'dtNomeacao' => 'dtNomeacao',
-            'dtPosse' => 'dtPosse',
+            'tpProv' => 'tpProv',
             'dtExercicio' => 'dtExercicio',
-            'tpPlanRP' => array(
-                'tpPlanRP' => 'tpPlanRP',
-                'type' => 'int'
-            )
-        )
-    ),
-    'infoDecJud' => array(
-        'properties' => array(
-            'nrProcJud' => 'nrProcJud'
+            'tpPlanRP' => 'tpPlanRP',
+            'indAbonoPerm' => 'indAbonoPerm',
         )
     ),
     'infoContrato' => array(
         'properties' => array(
-            'codCargo' => 'codCargo',
-            'codFuncao' => 'codFuncao',
+            'nmCargo' => 'nmCargo',
+            'cboCargo' => 'cboCargo',
+            'dtIngrcargo' => 'dtIngrcargo',
+            'nmFuncao' => 'nmFuncao',
+            'cboFuncao' => 'cboFuncao',
+            'acumCargo' => 'acumCargo',
             'codCateg' => array(
                 'codCateg' => 'codCateg',
                 'type' => 'int'
             ),
-            'codCarreira' => 'codCarreira',
-            'dtIngrCarr' => 'dtIngrCarr'
         )
     ),
     'remuneracao' => array(
@@ -309,6 +299,7 @@ return array(
         )
     ),
     'localTrabDom' => array(
+        'nome_api' => 'localtempdom',
         'properties' => array(
             'tpLograd' => 'tpLograd',
             'dscLograd' => 'dscLograd',
