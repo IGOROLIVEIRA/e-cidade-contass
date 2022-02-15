@@ -1060,7 +1060,7 @@ class obrasDadosComplementares
   static function checkTable($iLicitacao)
   {
 
-    $sSql = " SELECT distinct l20_anousu, l20_tipojulg
+    $sSql = " SELECT distinct l20_tipojulg, l20_datacria
 					FROM liclicitemlote
 					INNER JOIN liclicitem ON l04_liclicitem = l21_codigo
 					INNER JOIN liclicita ON l20_codigo = l21_codliclicita
@@ -1069,10 +1069,10 @@ class obrasDadosComplementares
     $rsSql = db_query($sSql);
     $oLicitacao = db_utils::fieldsMemory($rsSql, 0);
 
-    $ano = date("Y", db_getsession("DB_datausu"));
-    $mes = date("m", db_getsession("DB_datausu"));
+    //$ano = date("Y", db_getsession("DB_datausu"));
+    //$mes = date("m", db_getsession("DB_datausu"));
 
-    $table_base = ($oLicitacao->l20_anousu >= 2021 && $mes >= 05) ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+    $table_base = ($oLicitacao->l20_datacria >= '2021-05-01') ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
 
     return $table_base;
   }
