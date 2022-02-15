@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf.php");
@@ -203,7 +203,9 @@ if ($oPost->sDadosFornecedor == 's') {
 
 
 
-$sqlperiodo  = "  select empempenho.e60_numemp::integer as e60_numemp,                                             ";
+$sqlperiodo  = "  select empempenho.e60_numemp::integer as e60_numemp,                                               ";
+$sqlperiodo .= " 	       e94_motivo,                                                                               ";
+$sqlperiodo .= " 	       e50_obs,                                                                                  ";
 $sqlperiodo .= " 	       e60_resumo,                                                                               ";
 $sqlperiodo .= " 	       e60_destin,                                                                               ";
 $sqlperiodo .= " 	       e60_codemp,                                                                               ";
@@ -270,11 +272,15 @@ $sqlperiodo .= "   left join  emphist 		    on emphist.e40_codhist        = empe
 $sqlperiodo .= "   inner join pctipocompra 	on pctipocompra.pc50_codcom   = empempenho.e60_codcom                  ";
 $sqlperiodo .= "   left join empresto		    on e60_numemp                 = e91_numemp                             ";
 $sqlperiodo .= "                           and e60_anousu                 = e91_anousu                             ";
+$sqlperiodo .= "   left join pagordem on e50_numemp = e60_numemp                                                   ";
+$sqlperiodo .= "   left join empanulado on e94_numemp = e60_numemp                                                 ";
 $sqlperiodo .= "  where $xtipo $where_credor                                                                       ";
 $sqlperiodo .= "    and c70_data between '$dataini' and '$datafin'                                                 ";
 $sqlperiodo .= "    and $sele_work                                                                                 ";
 $sqlperiodo .= "    $instits                                                                                       ";
 $sqlperiodo .= "  group by e60_numemp,                                                                             ";
+$sqlperiodo .= "           e94_motivo,                                                                             ";
+$sqlperiodo .= "           e50_obs,                                                                             ";
 $sqlperiodo .= "           e60_resumo,                                                                             ";
 $sqlperiodo .= "           e60_destin,                                                                             ";
 $sqlperiodo .= "           e60_codemp,                                                                             ";
@@ -302,7 +308,7 @@ $sqlperiodo .= "           o15_descr,                                           
 $sqlperiodo .= "           e60_codcom,                                                                             ";
 $sqlperiodo .= "           pc50_descr,                                                                             ";
 $sqlperiodo .= "           c70_data,                                                                               ";
-$sqlperiodo .= " 	         c70_codlan,                                                                             ";
+$sqlperiodo .= " 	       c70_codlan,                                                                             ";
 $sqlperiodo .= "           c53_tipo,                                                                               ";
 $sqlperiodo .= "           c53_descr,                                                                              ";
 $sqlperiodo .= "           {$sCampos}                                                                              ";
@@ -417,8 +423,14 @@ for ($x=0; $x < $rows;$x++){
   }
 
   if ($com_mov == 's') {
-
-    $pdf->multiCell(0,$tam,'HISTÓRICO : '.$e60_resumo,0,"L",$pre);
+    $resumo = $e50_obs;
+    if($c53_tipo == 10){
+        $resumo = $e60_resumo;
+    }
+    if($c53_tipo == 11){
+        $resumo = $e94_motivo;
+    }
+    $pdf->multiCell(0,$tam,'HISTÓRICO : '.$resumo,0,"L",$pre);
     if ($e60_destin != '') {
        $pdf->multiCell(0,$tam,'DESTINO : '.$e60_destin,0,"L",$pre);
     }
