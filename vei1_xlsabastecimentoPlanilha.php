@@ -152,15 +152,19 @@ $sheet->setCellValue('O6','Produto');
 
 
 $sheet->getStyle('A6:O6')->applyFromArray($styleItens2);
-$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10); 
+$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(17);
+$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(17);
+$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(50);
 $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(13);
 $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(13);
 $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(13);
 $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
 $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
 $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
-$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(17);
+$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(60);
+$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(60);
 
 //cria protecao na planilha
 //senha para alteração
@@ -204,8 +208,8 @@ for ($i = 0; $i < 1; $i ++){
 
 }
 
-$sheet->getStyle('A7:O26')->applyFromArray($styleItens);
-$sheet->getStyle('A7:O26')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+$sheet->getStyle('A7:O1000')->applyFromArray($styleItens);
+$sheet->getStyle('A7:O1000')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);    
 $objPHPExcel->getActiveSheet()
     ->getStyle($collB)
     ->getNumberFormat()

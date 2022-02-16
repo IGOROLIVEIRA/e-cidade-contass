@@ -313,7 +313,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_anousu = " . db_getsession("DB_anousu") . ") as x
+                             where  c60_anousu = " . db_getsession("DB_anousu") . ") as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 
         $rsReg10 = db_query($sqlReg10) or die("Erro 20 ".$sqlReg10);
@@ -557,7 +557,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 					                o58_programa as codprograma,
 					                o58_projativ as idacao,
 					                o55_origemacao as idsubacao,
-					                substr(o56_elemento,2,6) as naturezadadespesa,
+					                substr(o56_elemento,2,12) as naturezadadespesa,
 					                substr(o56_elemento,8,2) as subelemento,
 								    o15_codtri as codfontrecursos,
 								    e60_numemp,
@@ -581,9 +581,9 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 					  left join infocomplementaresinstit on  o58_instit = si09_instit
 					  where o58_instit = " . db_getsession('DB_instit') . " and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}
 					  and (c69_credito in (" . implode(',', $oContas10->contas) . ") or c69_debito in (" . implode(',', $oContas10->contas) . "))";
-                    //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
+                        //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
 
-                    $nContaCorrente = 102;
+                        $nContaCorrente = 102;
 
                 } else {
 
@@ -859,50 +859,50 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     }
                                 } else {
 
-                                    /**
-                                     * percorrer xml elemento despesa
-                                     */
-                                    if($this->iDeParaNatureza == 1) {
+ /**
+                                 * percorrer xml elemento despesa
+                                 */
+                                if($this->iDeParaNatureza == 1) {
 
-                                        foreach ($oElementos as $oElemento) {
+                                    foreach ($oElementos as $oElemento) {
 
-                                            $sElementoXml = $oElemento->getAttribute('elementoEcidade');
-                                            $iElementoXmlDesdobramento = $oElemento->getAttribute('deParaDesdobramento');
+                                        $sElementoXml = $oElemento->getAttribute('elementoEcidade');
+                                        $iElementoXmlDesdobramento = $oElemento->getAttribute('deParaDesdobramento');
 
-                                            if ($nContaCorrente == 101) {
-                                                if (substr($sElementoXml, 0, 6) == $sElemento) {
-                                                    $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                                    $sSubElemento = '00';
-                                                }
-                                            } else {
-                                                if ($iElementoXmlDesdobramento != '' && $iElementoXmlDesdobramento == 1) {
-                                                    if($sElementoXml == $oReg11->naturezadadespesa) {
-                                                        $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                                        $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
-                                                    }
-                                                } elseif ($sElementoXml == $sElemento . $sSubElemento) {
+                                        if ($nContaCorrente == 101) {
+                                            if (substr($sElementoXml, 0, 6) == $sElemento) {
+                                                $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                                $sSubElemento = '00';
+                                            }
+                                        } else {
+                                            if ($iElementoXmlDesdobramento != '' && $iElementoXmlDesdobramento == 1) {
+                                                if($sElementoXml == $oReg11->naturezadadespesa) {
                                                     $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
                                                     $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
                                                 }
-
+                                            } elseif ($sElementoXml == $sElemento . $sSubElemento) {
+                                                $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                                $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
                                             }
 
                                         }
 
                                     }
 
-                                    /**
-                                     * Verifica se a contacontabil faz parte do Orçamento por modalidade de aplicação e trata o elemento.
-                                     */
-                                    if (in_array(substr($oContas10->si177_contacontaabil, 0, 5), $aContasModalidadeAplicacao)) {
+                                }
 
-                                        if ($oReg11->si08_orcmodalidadeaplic == 1) {
-                                            $sElemento = substr($sElemento, 0, 4) . "00";
-                                        }
+                                /**
+                                 * Verifica se a contacontabil faz parte do OrÃ§amento por modalidade de aplicaÃ§Ã£o e trata o elemento.
+                                 */
+                                if (in_array(substr($oContas10->si177_contacontaabil, 0, 5), $aContasModalidadeAplicacao)) {
+
+                                    if ($oReg11->si08_orcmodalidadeaplic == 1) {
+                                        $sElemento = substr($sElemento, 0, 4) . "00";
                                     }
+                                }
 
-                                    $sHash30 = '30' . $oContas10->si177_contacontaabil . $oReg11->codorgao . $oReg11->codunidadesub . $oReg11->codfuncao . $oReg11->codsubfuncao . $oReg11->codprograma;
-                                    $sHash30 .= $oReg11->idacao . $oReg11->idsubacao . $sElemento . $sSubElemento . $oReg11->codfontrecursos;
+                                $sHash30 = '30' . $oContas10->si177_contacontaabil . $oReg11->codorgao . $oReg11->codunidadesub . $oReg11->codfuncao . $oReg11->codsubfuncao . $oReg11->codprograma;
+                                $sHash30 .= $oReg11->idacao . $oReg11->idsubacao . $sElemento . $sSubElemento . $oReg11->codfontrecursos;
 
                                     if (!isset($aContasReg10[$reg10Hash]->reg30[$sHash30])) {
 
