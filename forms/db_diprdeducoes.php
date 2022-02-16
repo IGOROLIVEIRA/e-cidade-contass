@@ -232,10 +232,10 @@
     verificarTipoRepasse();
 
     function js_pesquisac239_codigodipr($lmostra) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr', 'Pesquisa', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr|c236_massainstituida', 'Pesquisa', true);
     }
 
-    function js_preenchecoddipr(chave) {
+    function js_preenchecoddipr(chave, massa) {
         db_iframe_dipr.hide();
         document.form1.c239_coddipr.value = chave;
         document.form1.c239_tipofundo.value = 0;

@@ -78,7 +78,7 @@ $cldipr = new cl_diprcontribuicao;
                         if (file_exists("funcoes/db_func_diprcontribuicao.php") == true) {
                             include("funcoes/db_func_diprcontribuicao.php");
                         } else {
-                            $campos = "diprbasecontribuicao.*";
+                            $campos = " diprbasecontribuicao.* ";
                         }
                     }
                     if (isset($chave_c237_sequencial) && (trim($chave_c237_sequencial) != "")) {

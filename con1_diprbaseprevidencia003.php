@@ -78,7 +78,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Excl
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
         select {
-            width: 260px;
+            width: 280px;
         }
     </style>
 </head>

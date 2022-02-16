@@ -31,9 +31,9 @@ $cldipr->rotulo->label();
 <form name="form1" method="post" action="">
     <center>
         <br />
-        <fieldset style="width: 800;">
+        <fieldset style="width: 850px;">
             <legend><b>Informações Previdenciárias - DIPR</b></legend>
-            <table border="0" width="800;">
+            <table border="0" width="850px;">
                 <tr>
                     <td>
                         <b>Sequencial</b>
@@ -50,7 +50,7 @@ $cldipr->rotulo->label();
                     <td>
                         <?php
                         $aSegregacaoLei = array(0 => "Selecione", 't' => "Sim", 'f' => "Não");
-                        db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "style='width:104px' onchange='verificarMassaInstituidaPorLei()'");
+                        db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "style='width:120px' onchange='verificarMassaInstituidaPorLei()'");
                         ?>
                     </td>
                 </tr>
@@ -60,7 +60,7 @@ $cldipr->rotulo->label();
                     <td>
                         <?php
                         $aBeneficiarioTesouro = array(0 => "Selecione", 't' => "Sim", 'f' => "Não");
-                        db_select('c236_beneficiotesouro', $aBeneficiarioTesouro, true, 1, "style='width:104px'");
+                        db_select('c236_beneficiotesouro', $aBeneficiarioTesouro, true, 1, "style='width:120px'");
                         ?>
                     </td>
                 </tr>
