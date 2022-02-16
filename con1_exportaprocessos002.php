@@ -81,7 +81,6 @@ if ($clabre_arquivo->arquivo != false) {
         fputs($clabre_arquivo->arquivo, formatarCampo($sProcessoObjeto, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iNaturezaObjeto, $vir, $del));
         fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
-        fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
 
         fputs($clabre_arquivo->arquivo, "\n");
     }
