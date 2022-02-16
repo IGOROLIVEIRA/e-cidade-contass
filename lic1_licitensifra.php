@@ -150,11 +150,19 @@ $db_botao = true;
 
         aSelecionados.forEach(elemento => {
 
+
+
+
             let item = new Object();
             item.codigo = elemento.aCells[1].getContent();
             item.sequencial = elemento.aCells[2].getContent();
             item.codprocitem = elemento.aCells[9].getContent();
             item.codproc = document.form1.codproc.value;
+
+            numeroId = parseInt(item.sequencial) - 1;
+            idMeepp = "meEpp" + numeroId;
+            valorMeepp = document.forms["form1"][idMeepp].value;
+
 
             if (document.getElementById(elemento.aCells[7].sId).children[0].selectedIndex) {
                 item.qtdexclusiva = document.getElementById(elemento.aCells[8].sId).children[0].value;
@@ -162,8 +170,9 @@ $db_botao = true;
                 item.qtdexclusiva = 0;
             }
 
-            if (item.qtdexclusiva == "") {
+            if (item.qtdexclusiva == "" && valorMeepp == 1) {
                 alert('Qtde Exclusiva do item ' + item.codigo + ' precisa ser preenchida!');
+                return;
             }
 
 
