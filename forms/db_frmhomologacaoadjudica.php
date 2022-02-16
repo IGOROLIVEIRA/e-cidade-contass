@@ -10,6 +10,29 @@ $clrotulo           = new rotulocampo;
 
 $clrotulo->label("l20_codigo");
 
+if(isset($_GET['lic'])){
+    $valor = $_GET['lic'];
+    $l202_licitacao = $_GET['lic'];
+    $l202_sequencial = $_GET['seq'];
+    $pc50_descr = $_GET['descricao'];
+    $respHomologcodigo = $_GET['codigo'];
+    $respHomolognome = $_GET['nome'];
+    $l202_datahomologacao = $_GET['data'];
+
+    $valordata = explode('/',$l202_datahomologacao);
+
+    $l202_datahomologacao_dia = $valordata[0];
+    $l202_datahomologacao_mes =  $valordata[1];
+    $l202_datahomologacao_ano =  $valordata[2];
+
+    ?>
+    <input type="hidden" id="teste2" value="<?echo $valor;?>">
+<?php    
+}else{?>
+    <input type="hidden" id="teste2" value="2">
+<?php    
+}
+
 db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
 db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js, widgets/DBHint.widget.js");
 db_app::load("estilos.css, grid.style.css");
@@ -127,8 +150,16 @@ db_app::load("estilos.css, grid.style.css");
             homologacao = 2;
         }
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
+            valida = document.getElementById('teste2').value;
+            if(valida==2){
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
                 '&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|l20_numero|l202_datahomologacao|l202_sequencial&validafornecedor=1&homologacao='+homologacao,'Pesquisa',true);
+            }else{
+                document.getElementById('teste2').value = 2;
+                js_init()
+                
+            }
+            
         }else{
             if(document.form1.l202_licitacao.value != ''){
                 js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
@@ -382,6 +413,10 @@ db_app::load("estilos.css, grid.style.css");
             alert('Campo Responsável pela Homologação não informado'); 
             return false;
         }
+        if(oParam.dtHomologacao==""){
+            alert('Campo Data da Homologação não informado'); 
+            return false;
+        }
 
         oParam.aItens        = new Array();
         oParam.exec = "homologarLicitacao";
@@ -411,12 +446,25 @@ db_app::load("estilos.css, grid.style.css");
         var oRetorno = JSON.parse(oAjax.responseText);
         if(oRetorno.status == '1'){
             alert(oRetorno.message.urlDecode());
-            oGridItens.clearAll(true);
-            document.getElementById('l202_licitacao').value = '';
-            document.getElementById('pc50_descr').value = '';
-            document.getElementById('l202_datahomologacao').value = '';
-            document.getElementById('respHomologcodigo').value = '';
-            document.getElementById('respHomolognome').value = '';
+            //oGridItens.clearAll(true);
+            document.getElementById('l202_sequencial').value = oRetorno.sequencial;
+            //document.getElementById('pc50_descr').value = '';
+            //document.getElementById('l202_datahomologacao').value = '';
+            //document.getElementById('respHomologcodigo').value = '';
+            //document.getElementById('respHomolognome').value = '';
+            if(oRetorno.regpreco == 2){
+                alert('Confira a vigência do registro de preço');
+                window.location.replace('com4_vigenciaregistropreco001.php?pc54_solicita='+oRetorno.pc10_numero); 
+            }else{
+                licitacao = $F('l202_licitacao');
+            descricao = $F('pc50_descr');
+            data = $F('l202_datahomologacao');
+            codigo = $F('respHomologcodigo');
+            nome = $F('respHomolognome');
+            sequencial = oRetorno.sequencial;
+            window.location.replace("lic1_homologacaoadjudica002.php?lic="+licitacao+"&seq="+sequencial+"&nome="+nome+"&codigo="+codigo+"&descricao="+descricao+"&data="+data);  
+            }
+            
         }else{
             alert(oRetorno.message.urlDecode());
         }
