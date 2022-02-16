@@ -162,6 +162,11 @@ $db_botao = true;
                 item.qtdexclusiva = 0;
             }
 
+            if (item.qtdexclusiva == "") {
+                alert('Qtde Exclusiva do item ' + item.codigo + ' precisa ser preenchida!');
+            }
+
+
             aItensFormatados.push(item);
 
         });
