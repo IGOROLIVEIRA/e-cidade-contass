@@ -33,9 +33,9 @@ require_once("classes/db_empparametro_classe.php");
 require_once("classes/db_pcprocitem_classe.php");
 require_once("classes/db_empautitem_classe.php");
 
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
-require_once ("libs/exceptions/BusinessException.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
+require_once("libs/exceptions/BusinessException.php");
 
 $oGet = db_utils::postMemory($_GET);
 $oConfiguracaoGed = GerenciadorEletronicoDocumentoConfiguracao::getInstance();
@@ -49,7 +49,7 @@ if ($oConfiguracaoGed->utilizaGED()) {
         $oGet->e54_autori_fim = $oGet->e54_autori;
     }
 
-    if ( !empty($oGet->dtInicial) || !empty($oGet->dtFinal) || $oGet->e54_autori_ini != $oGet->e54_autori_fim) {
+    if (!empty($oGet->dtInicial) || !empty($oGet->dtFinal) || $oGet->e54_autori_ini != $oGet->e54_autori_fim) {
 
         $sMsgErro  = "O parâmetro para utilização do GED (Gerenciador Eletrônico de Documentos) está ativado.<br><br>";
         $sMsgErro .= "Neste não é possível informar interválos de códigos ou datas.<br><br>";
@@ -59,30 +59,29 @@ if ($oConfiguracaoGed->utilizaGED()) {
 }
 
 
-$clempparametro	= new cl_empparametro;
+$clempparametro    = new cl_empparametro;
 $clpcprocitem   = new cl_pcprocitem;
 $clempautitem = new cl_empautitem;
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //echo($HTTP_SERVER_VARS['QUERY_STRING']); exit;
 
-$sql = "select * from orcparametro where o50_anousu = ".db_getsession("DB_anousu");
+$sql = "select * from orcparametro where o50_anousu = " . db_getsession("DB_anousu");
 $result = db_query($sql);
-db_fieldsmemory($result,0);
+db_fieldsmemory($result, 0);
 //echo " [1] " . db_criatabela($result) . "<br>------------------<br>";
 
 $usa_sub = $o50_subelem;
 
-$sqlpref = "select * from db_config where codigo = ".db_getsession("DB_instit");
+$sqlpref = "select * from db_config where codigo = " . db_getsession("DB_instit");
 $resultpref = db_query($sqlpref);
-db_fieldsmemory($resultpref,0);
+db_fieldsmemory($resultpref, 0);
 //echo " [2] " . db_criatabela($resultpref). "<br>------------------<br>";
 $dbwhere = '1=1 ';
 
 if (isset($e54_autori)) {
 
     $dbwhere = "   e54_autori  = $e54_autori";
-
 } else if (isset($e54_autori_ini) && $e54_autori_ini != "" || isset($e54_autori_fim) && $e54_autori_fim != "") {
 
     $dbwhereautori = "";
@@ -92,7 +91,7 @@ if (isset($e54_autori)) {
 
     if (isset($e54_autori_fim) && $e54_autori_fim != "") {
 
-        if( trim($dbwhereautori) == "") {
+        if (trim($dbwhereautori) == "") {
             $dbwhereautori = " and  e54_autori<$e54_autori_fim";
         } else {
             if ($e54_autori_fim != $e54_autori_ini) {
@@ -103,19 +102,17 @@ if (isset($e54_autori)) {
         }
     }
     $dbwhere .= $dbwhereautori;
-
 } else if (isset($sDocAutorizacoes) && trim($sDocAutorizacoes) != "") {
     /**
      * Adicionado para recupearar uma STRING já tratada para ser utilizada como IN na busca das autorizações.
      */
     $dbwhere .= " and e54_autori in ({$sDocAutorizacoes}) ";
-
 } else {
 
-    if( isset($dtini_dia) ){
+    if (isset($dtini_dia)) {
         $dbwhere .= " and e54_emiss>='$dtini_ano-$dtini_mes-$dtini_dia'";
     }
-    if( isset($dtfim_dia) ){
+    if (isset($dtfim_dia)) {
         $dbwhere .= " and e54_emiss<='$dtfim_ano-$dtfim_mes-$dtfim_dia'";
     }
 }
@@ -154,7 +151,7 @@ $sqlmater = "
 
 		  inner join orcdotacao 	on  o58_coddot = empautidot.e56_coddot
 					  and o58_anousu = e54_anousu
-					  and o58_instit = ".db_getsession("DB_instit")."
+					  and o58_instit = " . db_getsession("DB_instit") . "
 
 		  inner join orcsubfuncao on orcsubfuncao.o53_subfuncao = orcdotacao.o58_subfuncao
 		  inner join orcprograma  on orcprograma.o54_programa   = orcdotacao.o58_programa and
@@ -193,22 +190,22 @@ $sqlmater = "
 $result = db_query($sqlmater);
 
 $newResult = $result;
-if (pg_numrows($result)==0){
+if (pg_numrows($result) == 0) {
     db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum Registro Encontrado ! ");
     exit;
-}else{
-    db_fieldsmemory($result,0);
+} else {
+    db_fieldsmemory($result, 0);
 
-    $sResumo = db_utils::fieldsMemory($result,0)->e54_resumo;
+    $sResumo = db_utils::fieldsMemory($result, 0)->e54_resumo;
 
     //echo " [3] " . db_criatabela($result). "<br>------------------<br>";
     //echo $e54_resumo. "<br>";
-    if ($e54_anulad!=""){
+    if ($e54_anulad != "") {
         db_redireciona("db_erros.php?fechar=true&db_erro=Autorização Anulada !");
         exit;
     }
     $result_item = $clempautitem->sql_record($clempautitem->sql_query_file($e54_autori));
-    if ($clempautitem->numrows==0){
+    if ($clempautitem->numrows == 0) {
         db_redireciona("db_erros.php?fechar=true&db_erro=Autorização Sem Itens !");
         exit;
     }
@@ -221,26 +218,26 @@ if (pg_numrows($result)==0){
 //exit;
 
 //rotina que pega o numero de vias
-$result02 = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"),"e30_nroviaaut,e30_numdec"));
+$result02 = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"), "e30_nroviaaut,e30_numdec"));
 
-if($clempparametro->numrows>0){
-    db_fieldsmemory($result02,0);
+if ($clempparametro->numrows > 0) {
+    db_fieldsmemory($result02, 0);
     //echo " [4] " . db_criatabela($result02). "<br>------------------<br>";
 
 }
 
 $pdf = new scpdf();
 $pdf->Open();
-$pdf1 = new db_impcarne($pdf,'5');
+$pdf1 = new db_impcarne($pdf, '5');
 //$pdf1->modelo = 5;
-$pdf1->nvias= @$e30_nroviaaut;
-$pdf1->objpdf->SetTextColor(0,0,0);
+$pdf1->nvias = @$e30_nroviaaut;
+$pdf1->objpdf->SetTextColor(0, 0, 0);
 $autorizacoes = array();
 
-for ($i = 0;$i < pg_numrows($newResult);$i++) {
+for ($i = 0; $i < pg_numrows($newResult); $i++) {
     db_fieldsmemory($newResult, $i);
 
-    $sqlitem = " select distinct (pc01_descrmater||' '||(case when pc11_resum is null then pc01_complmater else pc11_resum end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
+    $sqlitem = " select distinct (pc01_descrmater||'. '||(case when pc01_complmater is null or pc01_complmater!=pc01_descrmater then pc01_complmater else '' end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
 inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
 inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem = pcorcamitem.pc22_orcamitem
 inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem
@@ -427,13 +424,13 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
      */
 
     //tipo Direta
-    if($e54_tipoautorizacao == 1) {
+    if ($e54_tipoautorizacao == 1) {
         $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
             $arr_numerl = split("/", $e54_numerl);
-            $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
-            $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+            $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
+            $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
         }
         $pdf1->descr_tipocompra = $pc50_descr;
         $pdf1->descr_modalidade = '';
@@ -441,42 +438,42 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 
     //tipo licitacao de outros orgaos
 
-    if($e54_tipoautorizacao == 2){
+    if ($e54_tipoautorizacao == 2) {
         $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
             $arr_numerl = split("/", $e54_numerl);
-            $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
-            $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+            $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
+            $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
         }
-        $pdf1->descr_tipocompra = substr($pc50_descr,0,36);
+        $pdf1->descr_tipocompra = substr($pc50_descr, 0, 36);
         $pdf1->descr_modalidade = '';
     }
 
     //tipo licitacao
-    if($e54_tipoautorizacao == 3){
+    if ($e54_tipoautorizacao == 3) {
         $sqlLic = "select l20_codigo,l20_numero,l20_anousu,l20_edital from empautoriza
 				inner join liclicita on l20_codigo = e54_codlicitacao
 				where e54_autori = {$e54_autori}";
-				$result_empaut = db_query($sqlLic);
+        $result_empaut = db_query($sqlLic);
 
         if ($result_empaut != 0) {
             db_fieldsmemory($result_empaut, 0);
-            $pdf1->edital_licitacao = $l20_edital.'/'.$l20_anousu;
-            $pdf1->modalidade = $l20_numero.'/'.$l20_anousu;
+            $pdf1->edital_licitacao = $l20_edital . '/' . $l20_anousu;
+            $pdf1->modalidade = $l20_numero . '/' . $l20_anousu;
         }
         $pdf1->descr_tipocompra = $pc50_descr;
         $pdf1->descr_modalidade = '';
     }
 
     //tipo Adesao regpreco
-    if($e54_tipoautorizacao == 4){
+    if ($e54_tipoautorizacao == 4) {
         $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
             $arr_numerl = split("/", $e54_numerl);
-            $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
-            $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+            $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
+            $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
         }
         $pdf1->descr_tipocompra = $pc50_descr;
         $pdf1->descr_modalidade = '';
@@ -490,13 +487,12 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
     $pdf1->acordo = $oAcordo->ac16_numeroacordo;
     $pdf1->anoacordo = $oAcordo->ac16_anousu;
 
-    if (isset($resumo_lic)&&$resumo_lic!=""){
-        if (isset($e54_resumo) && trim($e54_resumo) != ""){
-            $pdf1->resumo     = trim($e54_resumo);//trim($sResumo);
+    if (isset($resumo_lic) && $resumo_lic != "") {
+        if (isset($e54_resumo) && trim($e54_resumo) != "") {
+            $pdf1->resumo     = trim($e54_resumo); //trim($sResumo);
         } else {
             $pdf1->resumo     = trim($resumo_lic);
         }
-
     } else {
 
         if (isset($e54_resumo) && trim($e54_resumo) != "") {
@@ -511,30 +507,30 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
     //$pdf1->resumo  = substr(str_replace("\n", " ", $pdf1->resumo), 0, 400);
     $pdf1->resumo  = substr($pdf1->resumo, 0, 400);
 
-        // autorização manual
-        // seleciona o tipo de licitação
-        $rpc = db_query("select l03_descr from cflicita inner join liclicita on l20_codtipocom=l03_codigo where l03_codcom=$e54_codcom and l03_tipo='$e54_tipol'");
-        if (pg_numrows($rpc) > 0 ){
-            $result = pg_result($rpc,0,0);
+    // autorização manual
+    // seleciona o tipo de licitação
+    $rpc = db_query("select l03_descr from cflicita inner join liclicita on l20_codtipocom=l03_codigo where l03_codcom=$e54_codcom and l03_tipo='$e54_tipol'");
+    if (pg_numrows($rpc) > 0) {
+        $result = pg_result($rpc, 0, 0);
 
-            if($e54_tipoautorizacao == 2 || $e54_tipoautorizacao == 4){
-                $pdf1->descr_licitacao = '';
-            }else {
-                $pdf1->descr_licitacao = pg_result($rpc, 0, 0);
-            }
+        if ($e54_tipoautorizacao == 2 || $e54_tipoautorizacao == 4) {
+            $pdf1->descr_licitacao = '';
+        } else {
+            $pdf1->descr_licitacao = pg_result($rpc, 0, 0);
         }
+    }
 
     $pdf1->cnpj            = $z01_cgccpf;
     $pdf1->analitico       = "o56_elemento";
     $pdf1->descr_analitico = "o56_descr";
     $pdf1->Snumeroproc     = "pc81_codproc";
     $pdf1->Snumero         = "pc11_numero";
-    if(!empty($e60_numemp))
-        $pdf1->Scodemp         = trim($e60_codemp)."/$e60_anousu";
+    if (!empty($e60_numemp))
+        $pdf1->Scodemp         = trim($e60_codemp) . "/$e60_anousu";
     else
         $pdf1->Scodemp         = "";
 
-    if(!isset($informa_adic) || trim($informa_adic)=="" || $informa_adic == null){
+    if (!isset($informa_adic) || trim($informa_adic) == "" || $informa_adic == null) {
         $informa_adic = "AM";
     }
 
@@ -542,9 +538,9 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
     $pdf1->imprime();
 }
 
-if(isset($argv[1])){
+if (isset($argv[1])) {
     $pdf1->objpdf->Output("/tmp/teste.pdf");
-}else{
+} else {
 
     if ($oConfiguracaoGed->utilizaGED()) {
 
@@ -565,9 +561,8 @@ if(isset($argv[1])){
             $oStdDadosGED->valor = $e54_autori_ini;
             $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$e54_autori_ini}.pdf");
             $oGerenciador->moverArquivo(array($oStdDadosGED));
-
         } catch (Exception $eErro) {
-            db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
+            db_redireciona("db_erros.php?fechar=true&db_erro=" . $eErro->getMessage());
         }
     } else {
         $pdf1->objpdf->Output();
