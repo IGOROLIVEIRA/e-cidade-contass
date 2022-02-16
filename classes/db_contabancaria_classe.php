@@ -274,7 +274,7 @@ class cl_contabancaria
       return false;
     }
     if (($this->db83_numerocontratooc == null) || ($this->db83_numerocontratooc == "")) {
-      $this->db83_numerocontratooc = 0;
+      $this->db83_numerocontratooc = null;
     }
     if (($this->db83_codigoopcredito == null) || ($this->db83_codigoopcredito == "")) {
       $this->db83_codigoopcredito = null;
