@@ -114,14 +114,13 @@ $db_botao = true;
 
                         $destinacaoExclusiva = db_query("select l20_destexclusiva from liclicita where l20_codigo = $licitacao;");
                         $destinacaoExclusiva = pg_result($destinacaoExclusiva, 0, 'l20_destexclusiva');
-                        echo $destinacaoExclusiva;
 
                         ?>
 
                         <script>
                             if (document.form1.codproc.value) {
                                 let licitacao = document.form1.licitacao.value;
-                                var oItensLicitacao = new dbViewItensLicitacao('oItensLicitacao', document.getElementById('itens'), <?php $destinacaoExclusiva ?>);
+                                var oItensLicitacao = new dbViewItensLicitacao('oItensLicitacao', document.getElementById('itens'), <?php echo $destinacaoExclusiva; ?>);
                                 let objeto = new Object();
                                 objeto.iLicitacao = document.form1.licitacao.value;
                                 objeto.iProcCompra = document.form1.codproc.value;
