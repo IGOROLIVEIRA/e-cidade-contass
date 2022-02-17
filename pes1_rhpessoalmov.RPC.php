@@ -33,7 +33,7 @@ require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 
 $oJson    = new services_json();
-$oParam   = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam   = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 
 $oRetorno = new stdClass();
 $oRetorno->iStatus = 1;
@@ -45,21 +45,24 @@ try {
         case 'consultaLotacaoRecurso':
             $oRetorno->lShow = false;
             $oDaoRhlotavinc = db_utils::getDao('rhlotavinc');
-            $rsRhlotavinc = $oDaoRhlotavinc->sql_record($oDaoRhlotavinc->sql_query_file(null, "rh25_recurso", null, "rh25_codigo = {$oParam->iLotacao} AND rh25_anousu = ".db_getsession("DB_anousu")));
-            if (in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118','1118','218','166', '266','119','1119','219','167', '267', '101')) ) {
+            $rsRhlotavinc = $oDaoRhlotavinc->sql_record($oDaoRhlotavinc->sql_query_file(null, "rh25_recurso", null, "rh25_codigo = {$oParam->iLotacao} AND rh25_anousu = " . db_getsession("DB_anousu")));
+            if (in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118', '1118', '218', '166', '266', '119', '1119', '219', '167', '267', '101'))) {
                 $oRetorno->lShow = true;
             }
             break;
-        
+        case 'getTipoBeneficio':
+            $clrhpessoalmov    = new cl_rhpessoalmov;
+            $result = $clrhpessoalmov->sql_record($clrhpessoalmov->sql_query(null, null, "rh02_tipobeneficio,rh02_descratobeneficio", "", "rh02_regist=$oParam->rh02_regist and rh02_anousu=$oParam->rh02_anousu and rh02_mesusu=$oParam->rh02_mesusu and rh02_instit = " . db_getsession('DB_instit')));
+            $oResult = db_utils::fieldsMemory($result, 0);
+            $oRetorno = $oResult;
+            break;
+
         default:
             break;
     }
-
-} catch ( Exception $eException ) {
+} catch (Exception $eException) {
     $oRetorno->iStatus = 2;
-    $oRetorno->sMsg    = urlencode(str_replace("\\n","\n",$eException->getMessage()));
+    $oRetorno->sMsg    = urlencode(str_replace("\\n", "\n", $eException->getMessage()));
 }
 
 echo $oJson->encode($oRetorno);
-
-?>
