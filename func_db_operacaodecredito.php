@@ -2,7 +2,7 @@
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
+include("libs/db_usuariosonline.php");  
 include("dbforms/db_funcoes.php");
 include("classes/db_db_operacaodecredito_classe.php");
 db_postmemory($HTTP_POST_VARS);
@@ -10,6 +10,12 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $cldb_operacaodecredito = new cl_db_operacaodecredito;
 $cldb_operacaodecredito->rotulo->label("op01_numerocontratoopc");
 $cldb_operacaodecredito->rotulo->label("op01_sequencial");
+
+$cldb_operacaodecredito->rotulo->label(); 
+$clrotulo = new rotulocampo;
+$clrotulo->label("op01_numerocontratoopc");
+$clrotulo->label("op01_sequencial");
+$clrotulo->label("op01_dataassinaturacop"); 
 ?>
 <html>
 
@@ -27,7 +33,7 @@ $cldb_operacaodecredito->rotulo->label("op01_sequencial");
           <form name="form2" method="post" action="">
             <tr>
               <td width="4%" align="right" nowrap title="<?= $Top01_sequencial ?>">
-                <?= $Lop01_sequencial ?>
+              <?= @$Lop01_sequencial ?>    
               </td>
               <td width="96%" align="left" nowrap>
                 <?
@@ -37,7 +43,7 @@ $cldb_operacaodecredito->rotulo->label("op01_sequencial");
             </tr>
             <tr>
               <td width="4%" align="right" nowrap title="<?= $Top01_numerocontratoopc ?>">
-                <?= $Lop01_numerocontratoopc ?>
+              <?= @$Lop01_numerocontratoopc ?>
               </td>
               <td width="96%" align="left" nowrap>
                 <?

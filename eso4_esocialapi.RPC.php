@@ -266,10 +266,13 @@ try {
 
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
                 $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo));
+                // echo '<pre>';
                 // var_dump($dadosDoPreenchimento);
-                // exit('alguma coisa');
+                // exit;
+
                 $formatter = FormatterFactory::get($arquivo);
                 $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
+                // echo '<pre>';
                 // var_dump($dadosTabela);
                 // exit;
                 /**

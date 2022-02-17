@@ -80,9 +80,9 @@ if(isset($excluir)){
 <?php
 $sContass = explode(".",db_getsession("DB_login"));
 
-if ($sContass[1] != 'contass') {
+if (db_getsession("DB_login") == 'dbseller') {
 
-  echo "<br><center><br><H2>Essa rotina apenas pode ser usada por usuários da contass</h2></center>";
+  echo "<br><center><br><H2>Essa rotina não pode ser usada por usuários dbseller</h2></center>";
 } else {
   ?>
 
@@ -120,7 +120,7 @@ if ($sContass[1] != 'contass') {
 
   </div>
   <script>
-   
+
     function js_pesquisa_empenho(mostra) {
 
       if (mostra == true) {

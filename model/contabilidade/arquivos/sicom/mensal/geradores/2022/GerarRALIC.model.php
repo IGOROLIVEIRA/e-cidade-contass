@@ -38,7 +38,7 @@ class GerarRALIC extends GerarAM
 
       /**
        *
-       * Registros 10, 11, 12
+       *  Registros 10,11,12
        */
       for ($iCont = 0; $iCont < pg_num_rows($rsRALIC10); $iCont++) {
 
@@ -51,13 +51,15 @@ class GerarRALIC extends GerarAM
         $aCSVRALIC10['si180_nroprocessolicitatorio']     =  substr($aRALIC10['si180_nroprocessolicitatorio'], 0, 12);
         $aCSVRALIC10['si180_tipocadastradolicitacao']    = $this->padLeftZero($aRALIC10['si180_tipocadastradolicitacao'], 1);
         $aCSVRALIC10['si180_dsccadastrolicitatorio']     = substr($aRALIC10['si180_dsccadastrolicitatorio'], 0, 150);
-        $aCSVRALIC10['si180_codmodalidadelicitacao']     = $this->padLeftZero($aRALIC10['si180_codmodalidadelicitacao'], 1);
+        $aCSVRALIC10['si180_leidalicitacao']             = $this->padLeftZero($aRALIC10['si180_leidalicitacao'], 1);
+        $aCSVRALIC10['si180_codmodalidadelicitacao']     = "0" . $this->padLeftZero($aRALIC10['si180_codmodalidadelicitacao'], 1);
         $aCSVRALIC10['si180_naturezaprocedimento']       = $this->padLeftZero($aRALIC10['si180_naturezaprocedimento'], 1);
         $aCSVRALIC10['si180_nroedital']                  = $aRALIC10['si180_nroedital'];
         $aCSVRALIC10['si180_exercicioedital']            = $aRALIC10['si180_exercicioedital'];
         $aCSVRALIC10['si180_dtpublicacaoeditaldo']       = $this->sicomDate($aRALIC10['si180_dtpublicacaoeditaldo']);
         $aCSVRALIC10['si180_link']                       = substr($aRALIC10['si180_link'], 0, 150);
         $aCSVRALIC10['si180_tipolicitacao']              = $this->padLeftZero($aRALIC10['si180_tipolicitacao'], 1);
+        $aCSVRALIC10['si180_mododisputa']                = $aRALIC10['si180_mododisputa'] == 0 ? ' ' : $aRALIC10['si180_mododisputa'];
         $aCSVRALIC10['si180_naturezaobjeto']             = $aRALIC10['si180_naturezaobjeto'] == 0 ? ' ' : $aRALIC10['si180_naturezaobjeto'];
         $aCSVRALIC10['si180_objeto']                     = substr($aRALIC10['si180_objeto'], 0, 500);
         $aCSVRALIC10['si180_regimeexecucaoobras']        = $aRALIC10['si180_regimeexecucaoobras'] == 0 ? '' : $aRALIC10['si180_regimeexecucaoobras'];

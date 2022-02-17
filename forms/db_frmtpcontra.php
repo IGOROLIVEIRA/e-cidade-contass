@@ -91,7 +91,7 @@ db_input('h13_descr',40,$Ih13_descr,true,'text',$db_opcao,"")
             $x = array('1' => 'CEF - Efetivo','2' => 'CRA - Comissionado de recrutamento amplo',
                 '3' => 'CRR - Comissionado de recrutamento restrito','4' => 'FPU - Função pública',
                 '5' => 'EPU - Emprego público', '6' => 'APO - Agente político', '7' => 'STP - Servidor temporário',
-                '8' => 'OTC - Outros tipos de cargo');
+                '9' => 'AGH – Agente Honorífico','10' => 'EST – Estagiário/Aluno aprendiz','8' => 'OTC - Outros tipos de cargo');
             db_select("h13_tipocargo",$x,true,$db_opcao,"onchange='js_showAPO()'");
             ?>
         </td>

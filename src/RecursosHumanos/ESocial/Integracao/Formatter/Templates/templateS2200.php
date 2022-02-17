@@ -85,7 +85,7 @@ return array(
             'cep' => 'cep',
             'codMunic' => array(
                 'codMunic' => 'codMunic',
-                'type' => 'int'
+                'type' => 'string'
             ),
             'uf' => 'uf'
         )
@@ -126,13 +126,13 @@ return array(
     ),
     'dependente' => array(
         'properties' => array(
-            'tpDep' => 'tpDep',
-            'nmDep' => 'nmDep',
-            'dtNascto' => 'dtNascto',
-            'cpfDep' => 'cpfDep',
-            'depIRRF' => 'depIRRF',
-            'depSF' => 'depSF',
-            'incTrab' => 'incTrab'
+            'tpdep' => 'tpdep',
+            'nmdep' => 'nmdep',
+            'dtnascto' => 'dtnascto',
+            'cpfdep' => 'cpfdep',
+            'depirrf' => 'depirrf',
+            'depsf' => 'depsf',
+            'inctrab' => 'inctrab'
         )
     ),
     'aposentadoria' => array(
@@ -165,6 +165,7 @@ return array(
     ),
     'infoCeletista' => array(
         'properties' => array(
+            'infoCeletista' => 'infoCeletista',
             'dtAdm' => 'dtAdm',
             'tpAdmissao' => array(
                 'tpAdmissao' => 'tpAdmissao',
@@ -183,7 +184,7 @@ return array(
                 'type' => 'int'
             ),
             'dtBase' => 'dtBase',
-            'cnpjSindCategProf' => 'cnpjSindCategProf'
+            'cnpjSindCategProf' => 'cnpjsindcategprof'
         )
     ),
     'FGTS' => array(
@@ -206,7 +207,7 @@ return array(
                 'tpInclContr' => 'tpInclContr',
                 'type' => 'int'
             )
-            
+
         )
     ),
     'ideTomadorServ' => array(
@@ -243,40 +244,30 @@ return array(
     ),
     'infoEstatutario' => array(
         'properties' => array(
-            'indProvim' => array(
-                'indProvim' => 'indProvim',
-                'type' => 'int'
-            ),
-            'dtNomeacao' => 'dtNomeacao',
-            'dtPosse' => 'dtPosse',
+            'tpProv' => 'tpProv',
             'dtExercicio' => 'dtExercicio',
-            'tpPlanRP' => array(
-                'tpPlanRP' => 'tpPlanRP',
-                'type' => 'int'
-            )
-        )
-    ),
-    'infoDecJud' => array(
-        'properties' => array(
-            'nrProcJud' => 'nrProcJud'
+            'tpPlanRP' => 'tpPlanRP',
+            'indAbonoPerm' => 'indAbonoPerm',
         )
     ),
     'infoContrato' => array(
         'properties' => array(
-            'codCargo' => 'codCargo',
-            'codFuncao' => 'codFuncao',
+            'nmCargo' => 'nmCargo',
+            'cboCargo' => 'cboCargo',
+            'dtIngrcargo' => 'dtIngrcargo',
+            'nmFuncao' => 'nmFuncao',
+            'cboFuncao' => 'cboFuncao',
+            'acumCargo' => 'acumCargo',
             'codCateg' => array(
                 'codCateg' => 'codCateg',
                 'type' => 'int'
             ),
-            'codCarreira' => 'codCarreira',
-            'dtIngrCarr' => 'dtIngrCarr'
         )
     ),
     'remuneracao' => array(
         'properties' => array(
             'vrSalFx' => array(
-                'vrSalFx' => 'vrSalFx',
+                'vrSalFx' => 'vrsalfx',
                 'type' => 'float'
             ),
             'undSalFixo' => array(
@@ -301,13 +292,14 @@ return array(
         'properties' => array(
             'tpInsc' => array(
                 'tpInsc' => 'tpInsc',
-                'type' => 'int'
+                'type' => 'string'
             ),
             'nrInsc' => 'nrInsc',
             'descComp' => 'descComp'
         )
     ),
     'localTrabDom' => array(
+        'nome_api' => 'localtempdom',
         'properties' => array(
             'tpLograd' => 'tpLograd',
             'dscLograd' => 'dscLograd',
@@ -333,7 +325,7 @@ return array(
             'tmpParc' => 'tmpParc',
             'type' => 'int'
         )
-        
+
     ),
     'horario' => array(
         'properties' => array(

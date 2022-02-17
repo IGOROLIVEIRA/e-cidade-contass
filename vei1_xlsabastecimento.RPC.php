@@ -613,19 +613,17 @@ switch($oParam->exec) {
                 $resultMotorista = db_utils::fieldsMemory($resultadoMotorita, 0);
 
                 
-                
                 //Identifica Cod do motorista
                 $resultadoMotCod = $clveicmotoristas->sql_record($clveicmotoristas->sql_query(null,"*",null,"ve05_numcgm = $resultMotorista->z01_numcgm"));
                 $resultMotCod = db_utils::fieldsMemory($resultadoMotCod, 0);
-                
+
                 //Verifica codigo do departamento de cada veiculo.
                 $resultCodDepart =  $clveiccentral->sql_record($clveiccentral->sql_query_file(null,"*",null,"ve40_veiculos = $codigoVeic"));
                 $resultCodDeparto = db_utils::fieldsMemory($resultCodDepart, 0);
 
                 $resultDeparta =  $clveiccadcentral->sql_record($clveiccadcentral->sql_query_file(null,"*",null,"ve36_sequencial = $resultCodDeparto->ve40_veiccadcentral"));
                 $resultDepartaCod = db_utils::fieldsMemory($resultDeparta, 0);
-
-                
+            
                 // Incluir a retirada do veiculo
                 
                 $clveicretirada->ve60_veiculo              = $codigoVeic;
