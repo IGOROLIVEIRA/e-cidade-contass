@@ -164,6 +164,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     $sSqlGeral = "select  10 as tiporegistro,
 					     k13_reduz as codctb,
 					     c61_codtce as codtce,
+                         si09_tipoinstit,
 					     si09_codorgaotce,
 				             c63_banco,
 				             c63_agencia,
@@ -219,21 +220,22 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
     for ($iCont = 0; $iCont < pg_num_rows($rsContas); $iCont++) {
 
-      $oRegistro10 = db_utils::fieldsMemory($rsContas, $iCont);
+        $oRegistro10 = db_utils::fieldsMemory($rsContas, $iCont);
 
 
-      $aHash = $oRegistro10->si09_codorgaotce;
-      $aHash .= intval($oRegistro10->c63_banco);
-      $aHash .= intval($oRegistro10->c63_agencia);
-      $aHash .= $oRegistro10->c63_dvagencia;
-      $aHash .= intval($oRegistro10->c63_conta);
-      $aHash .= $oRegistro10->c63_dvconta;
-      $aHash .= $oRegistro10->tipoconta;
-      if ($oRegistro10->si09_codorgaotce == 5) {
-        $aHash .= $oRegistro10->tipoaplicacao;
-      }
+        $aHash = $oRegistro10->si09_codorgaotce;
+        $aHash .= intval($oRegistro10->c63_banco);
+        $aHash .= intval($oRegistro10->c63_agencia);
+        $aHash .= $oRegistro10->c63_dvagencia;
+        $aHash .= intval($oRegistro10->c63_conta);
+        $aHash .= $oRegistro10->c63_dvconta;
+        $aHash .= $oRegistro10->tipoconta;
 
-      if ($oRegistro10->si09_tipoinstit != 5) {
+        // para instituição previdencia.
+        if ($oRegistro10->si09_tipoinstit == 5) {
+            $aHash .= $oRegistro10->tipoaplicacao;
+            $aHash .= $oRegistro10->nroseqaplicacao;
+        }
 
         if (!isset($aBancosAgrupados[$aHash])) {
 
@@ -268,6 +270,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                               AND si95_contabancaria = '$oRegistro10->c63_conta'
                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
                               AND si95_tipoconta::int = $oRegistro10->tipoconta
+                              AND si95_tipoaplicacao::int = $oRegistro10->tipoaplicacao
+                              AND si95_nroseqaplicacao    = $oRegistro10->nroseqaplicacao
                               AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
                               AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
@@ -279,6 +283,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
                                AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
                                AND si95_tipoconta::int = $oRegistro10->tipoconta
+                               AND si95_tipoaplicacao::int = $oRegistro10->tipoaplicacao
+                               AND si95_nroseqaplicacao    = $oRegistro10->nroseqaplicacao
                                AND si95_instit = " . db_getsession('DB_instit');
 		  $sSqlVerifica .= " UNION ";
 		  $sSqlVerifica .= " SELECT 'ctb102019' AS ano, si95_codctb, si95_nroconvenio FROM ctb102019 ";
@@ -289,6 +295,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
                                AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
                                AND si95_tipoconta::int = $oRegistro10->tipoconta
+                               AND si95_tipoaplicacao::int = $oRegistro10->tipoaplicacao
+                               AND si95_nroseqaplicacao    = $oRegistro10->nroseqaplicacao
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102018' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102018 ";
@@ -299,6 +307,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
                                AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
                                AND si95_tipoconta::int = $oRegistro10->tipoconta
+                               AND si95_tipoaplicacao::int = $oRegistro10->tipoaplicacao
+                               AND si95_nroseqaplicacao    = $oRegistro10->nroseqaplicacao
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102017' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102017 ";
@@ -309,6 +319,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
                                AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
                                AND si95_tipoconta::int = $oRegistro10->tipoconta
+                               AND si95_tipoaplicacao::int = $oRegistro10->tipoaplicacao
+                               AND si95_nroseqaplicacao    = $oRegistro10->nroseqaplicacao
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102016' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102016 ";
@@ -319,6 +331,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
                                AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
                                AND si95_tipoconta::int = $oRegistro10->tipoconta
+                               AND si95_tipoaplicacao::int = $oRegistro10->tipoaplicacao
+                               AND si95_nroseqaplicacao    = $oRegistro10->nroseqaplicacao
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102015' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102015 ";
@@ -329,6 +343,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
                                AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
                                AND si95_tipoconta::int = $oRegistro10->tipoconta
+                               AND si95_tipoaplicacao::int = $oRegistro10->tipoaplicacao
+                               AND si95_nroseqaplicacao    = $oRegistro10->nroseqaplicacao
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
           $sSqlVerifica .= " SELECT 'ctb102014' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102014 ";
@@ -339,6 +355,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_contabancaria = '$oRegistro10->c63_conta'
                                AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
                                AND si95_tipoconta::int = $oRegistro10->tipoconta
+                               AND si95_tipoaplicacao::int = $oRegistro10->tipoaplicacao
+                               AND si95_nroseqaplicacao    = $oRegistro10->nroseqaplicacao
                                AND si95_instit = " . db_getsession('DB_instit');
 
           $rsResultVerifica = db_query($sSqlVerifica);
@@ -370,7 +388,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $oDtCadastro = db_utils::fieldsMemory($rsResultDtCad, 0);
 
           /*
-           * condiÃ§Ã£o adicionada para criar um registro das contas bancaria de aplicaÃ§Ã£o que foram alteradas o tipo de aplicaÃ§Ã£o no MES de 01/2018
+           * condição adicionada para criar um registro das contas bancaria de aplicações que foram alteradas o tipo de aplicaÃ§Ã£o no MES de 01/2018
            * a tabela acertactb serÃ¡ preenchida pelo menu CONTABILAIDE > PROCEDIMENTOS > DUPLICAR CTB
            */
           if (pg_num_rows($rsResultVerifica) != 0 && (db_getsession("DB_anousu") == 2018 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1)) {
@@ -418,13 +436,6 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 			$aBancosAgrupados[$aHash]->contas[] = $oConta;
         }
-
-
-      } else {
-        /*
-         * FALTA AGRUPA AS CONTAS QUANDO A INSTIUICAO FOR IGUAL A 5 RPPS
-         */
-      }
 
     }
 
