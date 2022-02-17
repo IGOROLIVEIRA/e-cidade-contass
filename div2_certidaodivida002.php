@@ -920,7 +920,7 @@ function drawDebitos(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lRe
                 $pdf->Cell(10,5,$oDebito->livro."/".$oDebito->folha,1,0,"C",0);
                 $pdf->Cell(15,5,ucfirst($oDebito->origem)."/{$oDebito->codigoorigem}",1,0,"C",0);
                 if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-                    $pdf->Cell(30,5,$oDebito->procedencia . ' - ' . $oDebito->procedenciaHist,1,0,"L",0);
+                    $pdf->Cell(30,5,substr($oDebito->procedencia,0,12) . '-' . substr($oDebito->procedenciaHist,0,12),1,0,"L",0);
                 }else{
                     $pdf->Cell(30,5,$oDebito->procedencia,1,0,"L",0);
                 };
@@ -1216,7 +1216,7 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
                 $pdf->Cell(10,5,$oDebito->exercicio,1,0,"C",0);
                 $pdf->Cell(9,5,$oDebito->numpar,1,0,"C",0);
                 if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-                    $pdf->Cell(30,5,$oDebito->procedencia . ' - ' . $oDebito->procedenciaHist,1,0,"L",0);
+                    $pdf->Cell(30,5,substr($oDebito->procedencia,0,12) . '-' . substr($oDebito->procedenciaHist,0,12),1,0,"L",0);
                 }else{
                     $pdf->Cell(30,5,$oDebito->procedencia,1,0,"L",0);
                 };
@@ -1238,12 +1238,12 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
                     $pdf->Cell(17,5,db_formatar(getValorHonorarios($oDebito->valorcorrigido),'f'),1,0,"R",0);
                     $pdf->Cell(20,5,db_formatar($oDebito->valorcorrigido+getValorHonorarios($oDebito->valorcorrigido),'f'),1,1,"R",0);
 
-                }
+                }                               
                 if ( $oPardiv->v04_imphistcda == "t" && isset($oDebito->observacao)) {
                     
                     $pdf->SetFont('','I',5);
                     $pdf->setX(10);
-
+                  
                     $pdf->SetAligns(array('J'));
                     $pdf->SetWidths(array(194));
                     $pdf->Row_multicell(array("Observação: {$oDebito->observacao} . {$obsParam}"),4,true,4,0,true,true,3,3);
@@ -1527,7 +1527,7 @@ function drawDebitosOrigemCorrigido(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotal
             $pdf->Cell(10,5,$oDebito->livro."/".$oDebito->folha      ,1,0,"C",0);
             $pdf->Cell(12,5,ucfirst($oDebito->origem)."/{$oDebito->codigoorigem}",1,0,"C",0);
             if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-                $pdf->Cell(27,5,$oDebito->procedencia . ' - ' . $oDebito->procedenciaHist,1,0,"L",0);
+                $pdf->Cell(27,5,substr($oDebito->procedencia,0,11) . '-' . substr($oDebito->procedenciaHist,0,11),1,0,"L",0);
             }else{
                 $pdf->Cell(27,5,$oDebito->procedencia,1,0,"L",0);
             };
@@ -1777,7 +1777,7 @@ function drawDebitosOrigemCorrigidoData(pdf3 $pdf, cda $oCertidao, $oPardiv, $lT
             $pdf->Cell(10,5,$oDebito->livro."/".$oDebito->folha       ,1,0,"C",0);
             $pdf->Cell(17,5,$oDebito->origemdebito                    ,1,0,"C",0);
             if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-                $pdf->Cell(27,5,$oDebito->procedencia . ' - ' . $oDebito->procedenciaHist,1,0,"L",0);
+                $pdf->Cell(27,5,substr($oDebito->procedencia,0,11) . '-' . substr($oDebito->procedenciaHist,0,11),1,0,"L",0);
             }else{
                 $pdf->Cell(27,5,$oDebito->procedencia,1,0,"L",0);
             };
@@ -2015,7 +2015,7 @@ function drawDebitosComposicao(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
             $pdf->Cell(10,5,$oDebito->livro."/".$oDebito->folha      ,1,0,"C",0);
             $pdf->Cell(12,5,ucfirst($oDebito->origem)."/{$oDebito->codigoorigem}",1,0,"C",0);
             if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-                $pdf->Cell(27,5,$oDebito->procedencia . ' - ' . $oDebito->procedenciaHist,1,0,"L",0);
+                $pdf->Cell(27,5,substr($oDebito->procedencia,0,11) . '-' . substr($oDebito->procedenciaHist,0,11),1,0,"L",0);
             }else{
                 $pdf->Cell(27,5,$oDebito->procedencia,1,0,"L",0);
             };           

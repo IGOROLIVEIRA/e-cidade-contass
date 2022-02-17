@@ -217,6 +217,8 @@ if($rp == 'n'){
 
 $sqlperiodo = "
 select 	empempenho.e60_numemp::integer as e60_numemp,
+    e94_motivo,
+    e50_obs,
 	e60_resumo,
 	e60_destin,
 	e60_codemp,
@@ -280,6 +282,8 @@ select 	empempenho.e60_numemp::integer as e60_numemp,
 	inner join pctipocompra 	on pctipocompra.pc50_codcom = empempenho.e60_codcom
 	left join empresto		on e60_numemp = e91_numemp
 					and ".db_getsession("DB_anousu")." = e91_anousu
+    left join pagordem on e50_numemp = e60_numemp
+    left join empanulado on e94_numemp = e60_numemp
 where $xtipo $where_credor
   and c70_data between '$dataini' and '$datafin'
   and $filtro and e60_instit in $instits
@@ -358,8 +362,16 @@ for ($x = 0; $x < $rows; $x++) {
      $pdf->Cell(0,$tam,'',0,1,"C",$pre);
   }
   $pdf->Cell(0,$tam,'CREDOR : '.$e60_numcgm.' - '.$z01_nome,0,1,"L",$pre);
+
   if($com_mov == 's'){
-    $pdf->multiCell(0,$tam,'HISTÓRICO : '.$e60_resumo,0,"L",$pre);
+    $resumo = $e50_obs;
+    if($c53_tipo == 10){
+        $resumo = $e60_resumo;
+    }
+    if($c53_tipo == 11){
+        $resumo = $e94_motivo;
+    }
+    $pdf->multiCell(0,$tam,'HISTÓRICO : '.$resumo,0,"L",$pre);
     if($e60_destin != ''){
        $pdf->multiCell(0,$tam,'DESTINO : '.$e60_destin,0,"L",$pre);
     }
