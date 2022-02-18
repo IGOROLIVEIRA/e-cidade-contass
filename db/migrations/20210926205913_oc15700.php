@@ -89,6 +89,8 @@ class Oc15700 extends AbstractMigration
                     ALTER TABLE credenciamentosaldo ADD COLUMN l213_autori int8;
                     
                     ALTER TABLE empautoriza ADD COLUMN e54_numerotermo int8;
+
+                    
                     ";
         $this->execute($sql);
     }
