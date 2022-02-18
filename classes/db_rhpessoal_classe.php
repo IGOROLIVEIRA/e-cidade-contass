@@ -787,42 +787,43 @@ class cl_rhpessoal
       }
     }
 
-    if (trim($this->rh01_matorgaobeneficio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_matorgaobeneficio"])) {
-      if (trim($this->rh01_matorgaobeneficio) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh01_matorgaobeneficio"])) {
-        $this->rh01_matorgaobeneficio = "0";
+    if ($this->rh01_tipadm == "5" || $this->rh01_tipadm == "6") {
+      if (trim($this->rh01_matorgaobeneficio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_matorgaobeneficio"])) {
+        if (trim($this->rh01_matorgaobeneficio) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh01_matorgaobeneficio"])) {
+          $this->rh01_matorgaobeneficio = "0";
+        }
+        $sql  .= $virgula . " rh01_matorgaobeneficio = $this->rh01_matorgaobeneficio ";
+        $virgula = ",";
       }
-      $sql  .= $virgula . " rh01_matorgaobeneficio = $this->rh01_matorgaobeneficio ";
-      $virgula = ",";
-    }
 
-    if (trim($this->rh01_concedido) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_concedido"])) {
-      $sql  .= $virgula . " rh01_concedido = '$this->rh01_concedido' ";
-      $virgula = ",";
-      if (trim($this->rh01_concedido) == null) {
-        $this->erro_sql = " Campo Concedido por determinação judicial não informado.";
-        $this->erro_campo = "rh01_concedido";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
+      if (trim($this->rh01_concedido) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_concedido"])) {
+        $sql  .= $virgula . " rh01_concedido = '$this->rh01_concedido' ";
+        $virgula = ",";
+        if (trim($this->rh01_concedido) == null) {
+          $this->erro_sql = " Campo Concedido por determinação judicial não informado.";
+          $this->erro_campo = "rh01_concedido";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
+      }
+
+      if (trim($this->rh01_cnpjrespmatricula) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_cnpjrespmatricula"])) {
+        $sql  .= $virgula . " rh01_cnpjrespmatricula = '$this->rh01_cnpjrespmatricula' ";
+        $virgula = ",";
+        if (trim($this->rh01_cnpjrespmatricula) == null) {
+          $this->erro_sql = " Campo Responsável Pela Matrícula não informado.";
+          $this->erro_campo = "rh01_cnpjrespmatricula";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
       }
     }
-
-    if (trim($this->rh01_cnpjrespmatricula) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_cnpjrespmatricula"])) {
-      $sql  .= $virgula . " rh01_cnpjrespmatricula = '$this->rh01_cnpjrespmatricula' ";
-      $virgula = ",";
-      if (trim($this->rh01_cnpjrespmatricula) == null) {
-        $this->erro_sql = " Campo Responsável Pela Matrícula não informado.";
-        $this->erro_campo = "rh01_cnpjrespmatricula";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
     $sql .= " where ";
     if ($rh01_regist != null) {
       $sql .= " rh01_regist = $this->rh01_regist";
