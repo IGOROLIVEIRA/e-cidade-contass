@@ -54,7 +54,7 @@ class GerarREGADESAO extends GerarAM
       
       /**
        *
-       * Registros 10, 11, 12, 13, 14, 15
+       * Registros 10, 11, 12, 13, 14, 15   
        */
       for ($iCont = 0; $iCont < pg_num_rows($rsREGADESAO10); $iCont++) {
         
@@ -62,6 +62,7 @@ class GerarREGADESAO extends GerarAM
 
         $aCSVREGADESAO10['si67_tiporegistro']               = $this->padLeftZero($aREGADESAO10['si67_tiporegistro'], 2);
         $aCSVREGADESAO10['si67_tipocadastro']               = !$aREGADESAO10['si67_tipocadastro'] ? '' : $this->padLeftZero($aREGADESAO10['si67_tipocadastro'], 1);
+        $aCSVREGADESAO10['si67_leidalicitacao']             =    str_pad($aREGADESAO10['si67_leidalicitacao'], 1, "0", STR_PAD_LEFT);
         $aCSVREGADESAO10['si67_codorgao']                   = $this->padLeftZero($aREGADESAO10['si67_codorgao'], 2);
         $aCSVREGADESAO10['si67_codunidadesub']              = $this->padLeftZero($aREGADESAO10['si67_codunidadesub'], 5);
         $aCSVREGADESAO10['si67_nroprocadesao']              = substr($aREGADESAO10['si67_nroprocadesao'], 0, 12);

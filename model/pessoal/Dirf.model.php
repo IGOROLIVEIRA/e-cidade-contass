@@ -750,6 +750,7 @@ class Dirf {
                 $oPessoa->aValorGrupo[1] -= $folhaSalarioBaseInativo->r14_valor;
               } else {
                 $oPessoa->aValorGrupo[1] -= $D902;
+                $oPessoa->aValorGrupo[7] = $D902;
               }
 
             } else {

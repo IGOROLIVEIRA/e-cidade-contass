@@ -10,37 +10,37 @@ require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
  */
 class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    * Código do layout. (db_layouttxt.db50_codigo)
    *
    * @var Integer
    */
   protected $iCodigoLayout = 142;
-  
+
   /**
    * Nome do arquivo a ser criado
    *
    * @var String
    */
   protected $sNomeArquivo = 'REC';
-  
+
   /**
    * Código da Pespectiva. (ppaversao.o119_sequencial)
    *
    * @var Integer
    */
   protected $iCodigoPespectiva;
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * retornar o codio do layout
    *
@@ -50,7 +50,7 @@ class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements i
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    *
@@ -58,7 +58,7 @@ class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements i
    */
   public function getCampos()
   {
-    
+
     $aElementos[10] = array(
       "tipoRegistro",
       "codReceita",
@@ -75,34 +75,34 @@ class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements i
       "codFontRecursos",
       "valorFonte"
     );
-    
+
     return $aElementos;
   }
-  
+
   /**
    * Gerar os dados necessarios para o arquivo
    *
    */
   public function gerarDados()
   {
-    
+
     /**
      * Realizar a selecao das instiuicoes cadastradas
      */
     $sSqlOrgaos = "SELECT * FROM db_config left join infocomplementaresinstit on si09_instit = codigo";
-    
+
     $rsInst = db_query($sSqlOrgaos);
-    
+
     /*
      * RUBRICAS DE RECEITAS ACEITAS PELO TCE-MG
      * */
     $aRectce = array('111202', '111208', '172136', '191138', '191139', '191140', '191308', '191311', '191312', '191313', '193104', '193111', '193112', '193113', '172401', '247199', '247299', '176299', '172199', '172134', '160099', '112299', '176202', '242201', '242202', '222900', '193199', '191199', '176101', '160004', '132810', '132820', '132830', '192210', '242102', '247101', '172402', '172233');
-    
+
     for ($iContador = 0; $iContador < pg_num_rows($rsInst); $iContador++) {
-      
+
       $oInstit = db_utils::fieldsMemory($rsInst, $iContador);
-      
-      
+
+
       /*
        * SQL RETORNA RECEITA ORCADA PARA CADA INSTITUICAO DENTRO DO FOR
       */
@@ -115,29 +115,29 @@ class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements i
       $sSqlReceita .= "WHERE f.o57_anousu = " . db_getsession("DB_anousu");
       $sSqlReceita .= " AND cp.c60_anousu = " . db_getsession("DB_anousu");
       $sSqlReceita .= " AND r.o70_instit = $oInstit->codigo";
-      
+
       $rsReceita = db_query($sSqlReceita);
       //db_criatabela($rsReceita);
       $aDadosAgrupados = array();
       for ($iCont = 0; $iCont < pg_num_rows($rsReceita); $iCont++) {
-        
+
         $oReceita = db_utils::fieldsMemory($rsReceita, $iCont);
-        
-        
+
+
         if (in_array(substr($oReceita->o57_fonte, 1, 6), $aRectce)) {
           $rubricarec = substr($oReceita->o57_fonte, 1, 6) . "00";
         } else {
           if (substr($oReceita->o57_fonte, 0, 2) == '49') {
             $rubricarec = substr($oReceita->o57_fonte, 3, 8);
-            
+
           } else {
             $rubricarec = substr($oReceita->o57_fonte, 1, 8);
           }
         }
         $iIdentDeducao = (substr($oReceita->o57_fonte, 0, 2) == 49) ? substr($oReceita->c60_estrut, 1, 2) : " ";
-        
+
         $sHash = "10" . $iIdentDeducao . $rubricarec;
-        
+
         if (!isset($aDadosAgrupados[$sHash])) {
           $oDadosReceita = new stdClass();
           $oDadosReceita->tipoRegistro          = 10;
@@ -147,19 +147,19 @@ class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements i
           $oDadosReceita->eDeducaoDeReceita     = (substr($oReceita->o57_fonte, 0, 2) == 49) ? "1" : "2";
           $oDadosReceita->identificadorDeducao  = $iIdentDeducao;
           $oDadosReceita->naturezaReceita       = str_pad($rubricarec, 8, "0", STR_PAD_LEFT);
-          $oDadosReceita->especificacao         = substr($oReceita->o57_descr, 0, 100);
+          $oDadosReceita->especificacao         = substr($this->removeCaracteres($oReceita->o57_descr), 0, 100);
           $oDadosReceita->vlPrevisto            = 0;
           $oDadosReceita->FonteRecurso = array();
-          
-          
+
+
           $aDadosAgrupados[$sHash] = $oDadosReceita;
-          
+
         } else {
           $oDadosReceita = $aDadosAgrupados[$sHash];
         }
-        
+
         $sHash11 = str_pad($oReceita->o15_codtri, 3, "0", STR_PAD_LEFT);
-        
+
         if (!isset($oDadosReceita->FonteRecurso[$sHash11])) {
           $oDadosFonteRecurso = new stdClass();
           $oDadosFonteRecurso->tipoRegistro   = 11;
@@ -167,33 +167,33 @@ class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements i
           $oDadosFonteRecurso->codReceita     = $oDadosReceita->codReceita;
           $oDadosFonteRecurso->codFontRecursos = str_pad($oReceita->o15_codtri, 3, "0", STR_PAD_LEFT);
           $oDadosFonteRecurso->valorFonte     = 0;
-          
+
           $oDadosReceita->FonteRecurso[$sHash11] = $oDadosFonteRecurso;
         } else {
           $oDadosFonteRecurso = $oDadosReceita->FonteRecurso[$sHash11];
         }
         $oDadosFonteRecurso->valorFonte += $oReceita->o70_valor;
-        
+
         $oDadosReceita->vlPrevisto += $oReceita->o70_valor;
-        
+
       }
-      
-      
+
+
       //echo '<pre>';
       //print_r($aDadosAgrupados);
-      
+
       /**
        * passar todos os dados registro 10 para o $this->aDados[]
        */
-      
+
       foreach ($aDadosAgrupados as $oDado) {
         if ($oDado->vlPrevisto != 0) {
-          
+
           $oDadosReceita = clone $oDado;
           unset($oDadosReceita->FonteRecurso);
           $oDadosReceita->vlPrevisto = number_format(abs($oDadosReceita->vlPrevisto), 2, ",", "");
           $this->aDados[] = $oDadosReceita;
-          
+
           /**
            * passar todos os dados registro 11 para o $this->aDados[]
            */
@@ -207,7 +207,7 @@ class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements i
       }
     }
   }
-  
+
   /**
    *
    * passar valor para o $this->iCodigoPespectiva
@@ -217,7 +217,7 @@ class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements i
   {
     $this->iCodigoPespectiva = $iCodigoPespectiva;
   }
-  
+
   /**
    *
    * retornar o valor do $this->iCodigoPespectiva

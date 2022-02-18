@@ -269,6 +269,7 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
             top.corpo.dadoscomplementares.c218_dscmedidasadotadas = "";
         }
         top.corpo.operacoesdecredito.c219_contopcredito = top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value;
+        top.corpo.operacoesdecredito.c219_dscnumeroinst = top.corpo.iframe_operacoesdecredito.document.form1.c219_dscnumeroinst.value;
         top.corpo.operacoesdecredito.c219_dsccontopcredito = top.corpo.iframe_operacoesdecredito.document.form1.c219_dsccontopcredito.value;
         top.corpo.operacoesdecredito.c219_realizopcredito = top.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.value;
         top.corpo.operacoesdecredito.c219_tiporealizopcreditocapta = top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.value;

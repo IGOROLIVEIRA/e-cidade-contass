@@ -1833,7 +1833,7 @@ class cl_empautoriza
 
             $rsDeleta = db_query($sSqlDeleta);
         }*/
-  
+
         /*
          * Alteramos a situação da autorização de empenho para anulada
          */

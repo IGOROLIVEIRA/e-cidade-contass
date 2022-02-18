@@ -21,6 +21,19 @@ $cloperacoesdecreditolrf->rotulo->label();
             ?>
           </td>
         </tr>
+        <? if(db_getsession('DB_anousu')>=2021){ ?>
+        <tr id="descricaoInstituicao" style="display:none;">
+            <td nowrap >
+             <b>Descrição do número da instituição financeira da operação de crédito contratada:</b>
+           </td>
+           <td>
+            <?
+            db_input('c219_dscnumeroinst', 3,1,true,'text',1, "", "", "", "", 3);
+
+            ?>
+          </td>
+        </tr>
+       <? } ?> 
         <tr id="descricaoOcorrencia" style="display:none;">
           <td colspan="2" >
             <fieldset><legend><b>Descrição da Ocorrência:</b></legend>
@@ -100,18 +113,38 @@ $cloperacoesdecreditolrf->rotulo->label();
 </form>
 <script>
   function js_habilitaDescricao(){
+    var ano = "<?php echo db_getsession('DB_anousu'); ?>";
     if(document.form1.c219_contopcredito.value == 1){
       document.getElementById("descricaoOcorrencia").style.display = "";
+      if(ano>=2021){
+        document.getElementById("descricaoInstituicao").style.display = "";
+      }  
     }else{
       document.getElementById("descricaoOcorrencia").style.display = "none";
+      if(ano>=2021){
+        document.getElementById("descricaoInstituicao").style.display = "none";
+      }
     }
-  }
+    }
+  
   function js_incluirDados(){
+    var ano = "<?php echo db_getsession('DB_anousu'); ?>";
+    var opcao = "<?php echo $db_opcao; ?>";
    /*VALIDAÇÕES*/
    if(document.form1.c219_contopcredito.value == "0"){
     alert('O campo "Contratação de Operação que não atendeu limites Art. 33 LC 101/2000" não foi preenchido.');
     return false;
    }
+   if(ano>=2021 & opcao!= 3){
+      if(document.form1.c219_contopcredito.value == "1" & document.form1.c219_dscnumeroinst.value == ""){
+        alert('O campo "Descrição do número da instituição financeira da operação de crédito contratada" não foi preenchido.');
+        return false;
+      }
+      if(document.form1.c219_contopcredito.value == "1" & document.form1.c219_dscnumeroinst.value.length < 3){
+        alert('O campo "Descrição do número da instituição financeira da operação de crédito contratada" deve conter 3 números.'); 
+        return false;
+      }
+  }
    if(document.form1.c219_realizopcredito.value == "0"){
     alert('O campo "Realização de Operações de crédito vedadas pelo Art. 37 LC 101/2000" não foi preenchido.');
     return false;
@@ -133,6 +166,17 @@ $cloperacoesdecreditolrf->rotulo->label();
     return false;
    }
    top.corpo.operacoesdecredito.c219_contopcredito = document.form1.c219_contopcredito.value;
+  //  alert(document.form1.c219_contopcredito.value);
+  //  if(document.form1.c219_contopcredito.value == 1){ 
+  //   alert(document.form1.c219_contopcredito.value);
+  //     // top.corpo.operacoesdecredito.c219_dscnumeroinst = "1";
+  //     // top.corpo.operacoesdecredito.c219_dsccontopcredito = "2";
+  //   }else{
+  //     alert(document.form1.c219_contopcredito.value);
+  //     // top.corpo.operacoesdecredito.c219_dscnumeroinst = document.form1.c219_dscnumeroinst.value;
+  //     // top.corpo.operacoesdecredito.c219_dsccontopcredito = document.form1.c219_dsccontopcredito.value;
+  //   }_
+   top.corpo.operacoesdecredito.c219_dscnumeroinst = document.form1.c219_dscnumeroinst.value;
    top.corpo.operacoesdecredito.c219_dsccontopcredito = document.form1.c219_dsccontopcredito.value;
    top.corpo.operacoesdecredito.c219_realizopcredito = document.form1.c219_realizopcredito.value;
    top.corpo.operacoesdecredito.c219_tiporealizopcreditocapta = document.form1.c219_tiporealizopcreditocapta.value;

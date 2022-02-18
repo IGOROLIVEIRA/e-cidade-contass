@@ -50,7 +50,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
   }
 
   /**
-   *metodo para passar os dados das Acoes e Metas para o $this->aDados
+   *  metodo para passar os dados das Acoes e Metas para o $this->aDados
    */
   public function getCampos()
   {
@@ -167,7 +167,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
       }
     }
 
-    $sSql = "SELECT DISTINCT '10' AS tipoRegistro,
+    $sSql = "SELECT DISTINCT '10' AS tipoRegistro,l20_leidalicitacao,
                      infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                      (SELECT CASE
                                 WHEN o41_subunidade != 0 OR NOT NULL
@@ -216,6 +216,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                                 liclicita.l20_razao AS razao,
                                 liclicita.l20_tipojulg,
                                 liclicita.l20_usaregistropreco,
+                                case when liclicita.l20_naturezaobjeto = '1' or liclicita.l20_naturezaobjeto = '7' then liclicita.l20_regimexecucao else 0 end AS regimeExecucaoObras,
                                 obrasdadoscomplementareslote.db150_bdi AS bdi,
                                 liclancedital.l47_linkpub as linkpub,
                                 (SELECT SUM(si02_vlprecoreferencia * pc11_quant)
@@ -273,7 +274,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 WHERE db_config.codigo = " . db_getsession('DB_instit') . " AND liclancedital.l47_dataenvio = '" . $this->sDataFinal . "'
                     AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
 ";
-    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
+    $rsResult10 = db_query($sSql); //db_criatabela($rsResult10);die($sSql);
 
     /**
      * registro 10
@@ -305,6 +306,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
         $clredispi10->si183_bdi = $oDados10->bdi;
         $clredispi10->si183_link = $oDados10->linkpub;
         $clredispi10->si183_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $clredispi10->si183_leidalicitacao = $oDados10->l20_leidalicitacao;
+        $clredispi10->si183_regimeexecucaoobras = $oDados10->regimeexecucaoobras;
         $clredispi10->si183_instit = db_getsession("DB_instit");
 
         $clredispi10->incluir(null);

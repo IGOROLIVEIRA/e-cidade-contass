@@ -8,6 +8,7 @@
     parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
     db_postmemory($HTTP_POST_VARS);
 
+
     switch ($oGet->tipoprecoreferencia) {
         case '2':
             $tipoReferencia = " MAX(pc23_vlrun) ";
@@ -68,6 +69,7 @@
     // echo $sSql;
 
     // db_criatabela($rsResult);
+    // exit;
 
     $sSql = "select si01_datacotacao FROM pcproc
 JOIN pcprocitem ON pc80_codproc = pc81_codproc
@@ -222,7 +224,8 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                 m61_abrev,
                 sum(pc11_quant) as pc11_quant,
                 pc69_seq,
-                pc11_seq
+                pc11_seq,
+                pc11_reservado
 from (
 SELECT DISTINCT pc01_servico,
                 pc11_codigo,
@@ -241,7 +244,8 @@ SELECT DISTINCT pc01_servico,
                 pc90_numeroprocesso AS processo_administrativo,
                 (pc11_quant * pc11_vlrun) AS pc11_valtot,
                 m61_usaquant,
-                pc69_seq
+                pc69_seq,
+                pc11_reservado
 FROM solicitem
 INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
 LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
@@ -263,7 +267,7 @@ WHERE pc81_codproc = {$codigo_preco}
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
                 pc11_seq,
-                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq ) as matquan join
+                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq,pc11_reservado ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
                 {$tipoReferencia} as si02_vlprecoreferencia,
@@ -284,7 +288,7 @@ JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
 JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
 JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
 JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-JOIN solicitem ON pc81_solicitem = pc11_codigo
+JOIN solicitem ON pc81_solicitem = pc11_codigo 
 JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
 JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
@@ -292,9 +296,29 @@ JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferenc
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
-                //die($sSql);
+
                 $rsResult = db_query($sSql) or die(pg_last_error());
                 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
+                // die($sSql);
+                $rsResult = db_query($sSql) or die(pg_last_error());
+                $oLinha = null;
+
+                $sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
+                //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+                $sWhere .= " AND db03_instit = db02_instit ";
+                $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
+
+                $cl_docparag = new cl_db_docparag;
+
+                $sAssinatura = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
+                $rs = $cl_docparag->sql_record($sAssinatura);
+                $oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
+
+
+                $sWhere  = " db02_descr like 'RESPONSÁVEL PELA COTAÇÃO' ";
+                //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+                $sWhere .= " AND db03_instit = db02_instit ";
+                $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
 
                 if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
 
@@ -352,7 +376,11 @@ HTML;
                     $oDadosDaLinha = new stdClass();
                     $oDadosDaLinha->seq = $iCont + 1;
                     $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
-                    $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+                    if ($oResult->pc11_reservado == 't') {
+                        $oDadosDaLinha->descricao = '<span style="font-weight: bold;">[ME/EPP]</span> - ' . $oResult->pc01_descrmater;
+                    } else {
+                        $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+                    }
                     if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
                         $oDadosDaLinha->valorUnitario = "-";
                         $oDadosDaLinha->quantidade = "-";
@@ -427,7 +455,9 @@ HTML;
                 m61_abrev,
                 sum(pc11_quant) as pc11_quant,
                 pc69_seq,
-                pc11_seq
+                pc11_seq,
+                pc11_reservado,
+                l21_ordem
 from (
 SELECT DISTINCT pc01_servico,
                 pc11_codigo,
@@ -446,7 +476,9 @@ SELECT DISTINCT pc01_servico,
                 pc90_numeroprocesso AS processo_administrativo,
                 (pc11_quant * pc11_vlrun) AS pc11_valtot,
                 m61_usaquant,
-                pc69_seq
+                pc69_seq,
+                pc11_reservado,
+                l21_ordem
 FROM solicitem
 INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
 LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
@@ -462,12 +494,15 @@ left join processocompraloteitem on
 left join processocompralote on
 			pc68_sequencial = pc69_processocompralote
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
+left join liclicitem on l21_codpcprocitem = pc81_codprocitem
 WHERE pc81_codproc = {$codigo_preco}
   AND pc10_instit = " . db_getsession("DB_instit") . "
-ORDER BY pc11_seq) as x GROUP BY
+ORDER BY l21_ordem) as x GROUP BY
                 pc01_codmater,
                 pc11_seq,
-                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq ) as matquan join
+                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq,pc11_reservado,l21_ordem
+                order by
+                l21_ordem) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
                 {$tipoReferencia} as si02_vlprecoreferencia,
@@ -548,9 +583,13 @@ HTML;
 
                 $nTotalItens += $lTotal;
                 $oDadosDaLinha = new stdClass();
-                $oDadosDaLinha->seq = $iCont + 1;
+                $oDadosDaLinha->seq = $iCont + 1; //$oResult->pc11_seq; 
                 $oDadosDaLinha->item = $oResult->pc01_codmater;
-                $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+                if ($oResult->pc11_reservado == 't') {
+                    $oDadosDaLinha->descricao = '<span style="font-weight: bold;">[ME/EPP]</span> - ' . $oResult->pc01_descrmater;
+                } else {
+                    $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+                }
                 if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
                     $oDadosDaLinha->valorUnitario = "-";
                     $oDadosDaLinha->quantidade = "-";
@@ -622,11 +661,12 @@ HTML;
             <div class="td item-total-color">
                 VALOR TOTAL ESTIMADO
             </div>
+            <?php echo $nTotalItens ?>
             <div class="td item-menu-color">
                 <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
             </div>
         </div>
-        <?php if ($oGet->impjust == 's') : ?>
+        <?php if ($oGet->impjust == 't') : ?>
             <div class="tr bg_eb">
                 <div class="th col-valor_total-text align-left">
                     Justificativa

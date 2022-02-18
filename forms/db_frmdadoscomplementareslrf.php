@@ -485,6 +485,7 @@ $cldadoscomplementareslrf->rotulo->label();
                     js_buscarMedidas(oRetornoMedidas);
 
                     top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value = oRetorno.c219_contopcredito;
+                    top.corpo.iframe_operacoesdecredito.document.form1.c219_dscnumeroinst.value = oRetorno.c219_dscnumeroinst;
                     top.corpo.iframe_operacoesdecredito.document.form1.c219_dsccontopcredito.value = oRetorno.c219_dsccontopcredito;
                     top.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.value = oRetorno.c219_realizopcredito;
                     top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.value = oRetorno.c219_tiporealizopcreditocapta;
@@ -534,6 +535,7 @@ $cldadoscomplementareslrf->rotulo->label();
 
 
                     top.corpo.operacoesdecredito.c219_contopcredito = oRetorno.c219_contopcredito;
+                    top.corpo.operacoesdecredito.c219_dscnumeroinst = oRetorno.c219_dscnumeroinst;
                     top.corpo.operacoesdecredito.c219_dsccontopcredito = oRetorno.c219_dsccontopcredito;
                     top.corpo.operacoesdecredito.c219_realizopcredito = oRetorno.c219_realizopcredito;
                     top.corpo.operacoesdecredito.c219_tiporealizopcreditocapta = oRetorno.c219_tiporealizopcreditocapta;

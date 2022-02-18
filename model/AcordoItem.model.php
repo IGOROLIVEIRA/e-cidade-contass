@@ -1402,7 +1402,7 @@ order by
 
             if ($oDaoAcordoItemDotacao->erro_status == 0) {
 
-                $sErroMsg  = "Erro ao salvar item ({$this->getMaterial()->getDescricao()}).\n";
+                $sErroMsg  = "Erro ao salvar item ({$this->getMaterial()->getMaterial()}).\n";
                 $sErroMsg .= "Não foi possivel incluir dotacao ({$oDotacao->dotacao})\n.{$oDaoAcordoItemDotacao->erro_msg}";
                 throw new Exception($sErroMsg);
             }

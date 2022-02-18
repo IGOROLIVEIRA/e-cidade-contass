@@ -835,7 +835,8 @@ class cda {
      $sqlDadosDivida .= "       v03_descr, ";
      $sqlDadosDivida .= "       v13_dtemis, ";
      $sqlDadosDivida .= "       v24_procedagrupa, ";
-     $sqlDadosDivida .= "       v03_tributaria ";
+     $sqlDadosDivida .= "       v03_tributaria, ";
+     $sqlDadosDivida .= "       k01_descr ";
      $sqlDadosDivida .= "  from certdiv  ";
      $sqlDadosDivida .= "       inner join divida           on v14_coddiv             = v01_coddiv ";
      $sqlDadosDivida .= "                                  and v01_instit             = ".db_getsession('DB_instit');
@@ -848,7 +849,10 @@ class cda {
      $sqlDadosDivida .= "       left join arreinscr         on arreinscr.k00_numpre   =  divida.v01_numpre ";
      $sqlDadosDivida .= "       left join proced            on proced.v03_codigo      = divida.v01_proced ";
      $sqlDadosDivida .= "                                  and proced.v03_instit      = ".db_getsession('DB_instit');
-     $sqlDadosDivida .= "       left join procedenciaagrupa on   v03_codigo           = v24_proced ";
+     $sqlDadosDivida .= "       left join procedenciaagrupa on v03_codigo             = v24_proced ";
+     $sqlDadosDivida .= "       left join arrecad           on arrecad.k00_numpre     = divida.v01_numpre";
+     $sqlDadosDivida .= "                                  and arrecad.k00_numpar     = divida.v01_numpar";
+     $sqlDadosDivida .= "       left join histcalc          on histcalc.k01_codigo    = arrecad.k00_hist";
      $sqlDadosDivida .= " where v14_certid = {$this->getCodigo()}";
      $sqlDadosDivida .= " order by v03_tributaria,v01_exerc, v01_proced,v01_numpre,v01_numpar,v24_procedagrupa ";
 
@@ -1061,6 +1065,7 @@ class cda {
            }
 
            $oDividaCda->procedencia       = $oDivida->v03_descr;
+           $oDividaCda->procedenciaHist   = $oDivida->k01_descr;
            $oDividaCda->codigoprocedencia = $oDivida->v01_proced;
 
            $dDataLancamento = $this->getDataLancamentoDebito($oDadosDebitoAtualizado->k00_numpre, $oDadosDebitoAtualizado->k00_numpar);

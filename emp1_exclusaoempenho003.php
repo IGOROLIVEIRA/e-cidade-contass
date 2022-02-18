@@ -123,7 +123,7 @@ db_fieldsmemory($resultUsuario,0);
           </td>
           <td>
             <?php
-              db_input('e60_numemp',8,$Ie60_codemp,true,'text',$db_opcao," onchange='js_pesquisae60_numemp(false);'");
+              db_input('e60_numemp',8,$Ie60_codemp,true,'text',3," onchange='js_pesquisae60_numemp(false);'");
               db_input('z01_nome',30,$Iz01_nome,true,'text',3,'');
               db_input('e60_anousu',4,$Ie60_anousu,true,'hidden',3,'');
             ?>

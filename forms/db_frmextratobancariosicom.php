@@ -100,7 +100,6 @@ db_app::load("widgets/windowAux.widget.js");
         <table  border =0 style='width:90%'>
             <tr>
                 <td>
-                    <center><h1 style='color:red'>ATENÇÃO: POR EXIGÊNCIA DO TCE/MG O ARQUIVO A SER ANEXADO DEVE POSSUIR ASSINATURA COM O CERTIFICADO DIGITAL.</h1></center>
                     <fieldset>
                         <legend><b>Extratos Bancários Sicom</b></legend>
 

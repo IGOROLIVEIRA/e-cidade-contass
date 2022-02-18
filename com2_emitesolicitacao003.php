@@ -426,7 +426,7 @@ for ($contador = 0; $contador < $numrows_solicita; $contador++) {
 
     $sCampos  = " distinct fc_estruturaldotacao(pc13_anousu,pc13_coddot) as estrutural, o55_projativ, o55_descr, ";
     $sCampos .= " o15_codigo, o15_descr, b.o56_descr as descrestrutural, pc13_codigo, pc13_anousu, pc13_coddot, pc13_quant, ";
-    $sCampos .= " pc13_valor, b.o56_elemento as do56_elemento, pc01_servico, pc11_seq, pc11_codigo, pc11_quant, ";
+    $sCampos .= " pc13_valor, b.o56_elemento as do56_elemento, pc01_servico, pc11_seq, pc11_codigo, pc11_quant,pc11_reservado, ";
     $sCampos .= " pc11_vlrun, pc11_prazo, pc11_pgto, pc11_resum, pc11_just, a.o56_descr as descrele,o41_descr, ";
     $sCampos .= " m61_abrev, m61_descr, pc17_quant, pc01_codmater, pc01_descrmater||'-'||pc01_complmater as pc01_descrmater, (pc13_valor/pc13_quant) as pc13_valtot, ";
     $sCampos .= " (pc11_vlrun*pc11_quant) as pc11_valtot, m61_usaquant,a.o56_elemento as so56_elemento ";
@@ -532,4 +532,3 @@ if(isset($argv[1])){
         $pdf1->objpdf->Output();
     }
 }
-?>
