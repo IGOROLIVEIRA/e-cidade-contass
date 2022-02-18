@@ -41,7 +41,7 @@ $clrotulo->label("db90_descr");
 $clrotulo->label("rh50_oid");
 $clrotulo->label("rh116_descricao");
 $clrotulo->label("rh164_datafim");
-
+$clrotulo->label("rh01_cnpjrespmatricula");
 $rh01_instit = db_getsession("DB_instit");
 
 $mostra = 1;
@@ -296,10 +296,10 @@ if (($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
               </tr>
               <tr id="respMat" style="display: none;">
                 <td>
-                  <strong>Responsável Pela Matrícula:</strong>
+                  <strong>CNPJ Órgão Responsável Pela Matrícula:</strong>
                 </td>
                 <td>
-                  <?php db_input('rh01_cnpjrespmatricula', 14, $Irh01_cnpjrespmatricula, true, 'text', $db_opcao); ?>
+                  <?php db_input('rh01_cnpjrespmatricula', 14, 1, true, 'text', 4); ?>
                 </td>
               </tr>
               <tr id="martOrg" style="display: none;">

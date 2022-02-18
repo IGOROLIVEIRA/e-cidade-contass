@@ -2127,8 +2127,9 @@ if (isset($db_opcaoal)) {
                 let value = document.getElementById('rh02_rhtipoapos').value;
                 let rh01_admiss = '<?= $rh01_admiss ?>';
                 let opcoesbeneficio = document.getElementById('rh02_tipobeneficio').options;
-                document.getElementById('tipobeneficio').style.display = '';
-
+                if (oRetorno.rh02_tipobeneficio != undefined) {
+                    document.getElementById('tipobeneficio').style.display = '';
+                }
                 if (value == 2 || value == 3 || value == 5 && rh01_admiss >= '2021-11-21') {
                     opcoesbeneficio.length = 0;
                     opcoesbeneficio.add(new Option('Aposentadoria por idade e tempo de contribuição - Proventos com integralidade, revisão pela paridade', '0101'));

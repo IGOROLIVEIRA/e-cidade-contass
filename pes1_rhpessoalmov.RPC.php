@@ -53,8 +53,11 @@ try {
         case 'getTipoBeneficio':
             $clrhpessoalmov    = new cl_rhpessoalmov;
             $result = $clrhpessoalmov->sql_record($clrhpessoalmov->sql_query(null, null, "rh02_tipobeneficio,rh02_descratobeneficio", "", "rh02_regist=$oParam->rh02_regist and rh02_anousu=$oParam->rh02_anousu and rh02_mesusu=$oParam->rh02_mesusu and rh02_instit = " . db_getsession('DB_instit')));
-            $oResult = db_utils::fieldsMemory($result, 0);
-            $oRetorno = $oResult;
+            if ($oResult) {
+                $oResult = db_utils::fieldsMemory($result, 0);
+            } else {
+                $oRetorno = 0;
+            }
             break;
 
         default:
