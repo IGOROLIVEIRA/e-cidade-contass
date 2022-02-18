@@ -356,7 +356,7 @@ if (isset($chavepesquisa)) {
          top.corpo.iframe_rhpesdoc.location.href='pes1_rhpesdoc001.php?rh16_regist=" . @$rh01_regist . "&z01_nome=$z01_nome&rhimp=" . @$rhimp . "';
          
          parent.document.formaba.rhpessoalmov.disabled=false;
-         top.corpo.iframe_rhpessoalmov.location.href='pes1_rhpessoalmov001.php?rh02_regist=" . @$rh01_regist . "&z01_nome=$z01_nome';
+         top.corpo.iframe_rhpessoalmov.location.href='pes1_rhpessoalmov001.php?rh02_regist=" . @$rh01_regist . "&rh01_admiss=" . @$rh01_admiss . "&z01_nome=$z01_nome';
  
          parent.document.formaba.rhdepend.disabled=false;
          top.corpo.iframe_rhdepend.location.href='pes1_rhdepend001.php?rh31_regist=" . @$rh01_regist . "&vmenu=true&z01_nome=$z01_nome';

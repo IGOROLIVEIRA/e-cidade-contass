@@ -2191,7 +2191,11 @@ if (isset($db_opcaoal)) {
                     document.getElementById('tipo7').style.display = 'none';
                 }
                 document.getElementById('rh02_tipobeneficio').value = oRetorno.rh02_tipobeneficio;
-                document.getElementById('rh02_descratobeneficio').value = oRetorno.rh02_descratobeneficio;
+                if (oRetorno.rh02_descratobeneficio != undefined) {
+                    document.getElementById('rh02_descratobeneficio').value = oRetorno.rh02_descratobeneficio;
+                } else {
+                    document.getElementById('rh02_descratobeneficio').value = '';
+                }
             }
             js_CarregaTipoBeneficio();
         </script>
