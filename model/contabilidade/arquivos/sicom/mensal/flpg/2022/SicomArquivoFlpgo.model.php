@@ -152,24 +152,21 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
            WHEN rh37_exerceatividade = 'f' THEN 2
            ELSE NULL
        END AS rh37_exerceatividade,
-    case
-    when rh05_recis < '{$this->sDataInicial}' then  'O'
-    else COALESCE((select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1),'A')
+    case when rh30_vinculo = 'A' and rh05_causa is null then '02'
+         when rh30_vinculo = 'I' and rh05_causa is null then '01'
+         when rh30_vinculo = 'P' and rh05_causa is null then '03'
+         when rh30_vinculo = 'I' and rh05_causa is not null then '08'
+         when rh30_vinculo = 'P' and rh05_causa is not null and rh02_validadepensao is null then '09'
+         when rh30_vinculo = 'P' and rh05_causa is not null and rh02_validadepensao is not null then '08'
+         when rh30_vinculo = 'A' and rh30_naturezaregime = 2 and rh05_causa is not null then '06'
+         when rh30_vinculo = 'A' and rh30_naturezaregime = 3 and rh05_causa is not null then '07'
+         when rh30_vinculo = 'A' and rh30_naturezaregime = 1 and rh05_causa between 60 and 69 then '08'
+         when rh30_vinculo = 'A' and rh30_naturezaregime = 1 and rh05_causa = 10 then '05'
+         when rh30_vinculo = 'A' and rh30_naturezaregime = 1 and rh05_causa is not null and rh05_causa not between 60 and 69 and rh05_causa != 10 then '06'
       end as si195_indsituacaoservidorpensionista,
-      case when rh05_recis < '{$this->sDataInicial}' then (SELECT r59_descr
-FROM rescisao
-WHERE (r59_anousu,
-       r59_mesusu,
-       r59_regime,
-       r59_causa,
-       r59_caub) = (rh02_anousu,
-                    rh02_mesusu,
-                    rh30_regime,
-                    rh05_causa,
-                    rh05_caub) LIMIT 1) else '' end as si195_dscsituacao,
       case when rh30_vinculo = 'P' AND rh30_naturezaregime = 4 then 2 
            when rh30_vinculo = 'P' AND rh30_naturezaregime != 4 then 1
-      else null end as si195_indpensionistaprevidenciario,
+      else null end as si195_indpensionista,
     rh01_admiss as si195_datconcessaoaposentadoriapensao,
     case
     when rh20_cargo <> 0 then rh04_descr
@@ -190,10 +187,9 @@ WHERE (r59_anousu,
    when h13_tipocargo = '6' then 'APO'
    when h13_tipocargo = '7' then 'STP'
    when h13_tipocargo = '8' then 'OTC'
+   when h13_tipocargo = '9' then 'AGH'
+   when h13_tipocargo = '10' then 'EST'
    end as si195_sglcargo,
-   case
-   when h13_tipocargo = '8' then h13_descr
-   end as si195_dscsiglacargo,
    rh37_reqcargo as si195_reqcargo,
    case
    when rh01_tipadm = '1' then ' '
@@ -206,6 +202,7 @@ WHERE (r59_anousu,
    when rh30_vinculo = 'P' then 00
    when rh30_vinculo = 'I' then 00
    when rh30_vinculo = 'A' then rh02_hrssem
+   when h13_tipocargo in (2,3,6) then 99
    end as si195_vlrcargahorariasemanal,
    rh01_admiss as si195_datefetexercicio,
    rh05_recis as si195_datexclusao,
@@ -408,7 +405,7 @@ WHERE (r59_anousu,
    GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,rh05_recis,rh02_hrssem
    ";
 
-   $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);exit;
+   $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);exit(pg_last_error());
 
    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -467,7 +464,7 @@ WHERE (r59_anousu,
      'tipo'=>'4',
      );
   }
-  //DescriÃ§Ã£o do tipo de pagamento extra
+  //Descrição do tipo de pagamento extra
   for ($iContTiposPagamento=1; $iContTiposPagamento <= count($aTiposPagamento); $iContTiposPagamento++) { 
     if($aTiposPagamento[$iContTiposPagamento]['si195_indtipopagamento'] == 'E'){
       //Consulta se o servidor possui ferias cadastradas no mes
@@ -512,8 +509,7 @@ WHERE (r59_anousu,
 		$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
         $clflpgo10->si195_dsctipopagextra                   = $this->convert_accented_characters($aTiposPagamento[$iContEx]['si195_dsctipopagextra']);
         $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
-        $clflpgo10->si195_dscsituacao                       = $this->convert_accented_characters($oDados10->si195_dscsituacao);
-        $clflpgo10->si195_indpensionistaprevidenciario      = $oDados10->si195_indpensionistaprevidenciario;
+        $clflpgo10->si195_indpensionista      = $oDados10->si195_indpensionista;
         if($oDados10->rh30_vinculo == 'P') {
             if($oDados10->rh02_cgminstituidor == "" || $oDados10->rh02_cgminstituidor == null){
                 $clflpgo10->si195_nrocpfinstituidor         = "";
@@ -528,20 +524,20 @@ WHERE (r59_anousu,
             $clflpgo10->si195_tipodependencia               = "";
         }
         $clflpgo10->si195_dscdependencia                       = $this->convert_accented_characters($oDados10->si195_dscdependencia);
-        $clflpgo10->si195_datafastpreliminar                   = NULL;
+        $clflpgo10->si195_optouafastpreliminar                 = "2";
+        $clflpgo10->si195_datfastpreliminar                   = NULL;
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
-        $clflpgo10->si195_dsccargo                          = $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $this->convert_accented_characters($oDados10->si195_dsccargo);
-        $clflpgo10->si195_codcargo                          = $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : (($oDados10->si195_indsituacaoservidorpensionista!='P')?$oDados10->rh37_cbo:0);
-        $clflpgo10->si195_sglcargo 							= $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $this->convert_accented_characters($oDados10->si195_sglcargo);
-        $clflpgo10->si195_dscsiglacargo                     = $this->convert_accented_characters($oDados10->si195_dscsiglacargo);
+        $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
+        $clflpgo10->si195_codcargo                          = (in_array($oDados10->si195_indsituacaoservidorpensionista,array('03','05','06','07','08','09')) ? 0 : $oDados10->rh37_cbo);
+        $clflpgo10->si195_sglcargo 							= $this->convert_accented_characters($oDados10->si195_sglcargo);
         $clflpgo10->si195_dscapo           					= $this->convert_accented_characters($dscAPO);
-        $clflpgo10->si195_natcargo                          = $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $this->convert_accented_characters($oDados10->si195_reqcargo);
+        $clflpgo10->si195_natcargo                          = $this->convert_accented_characters($oDados10->si195_reqcargo);
         $clflpgo10->si195_dscnatcargo 						= ($oDados10->si195_reqcargo == 4)?substr($this->convert_accented_characters($oDados10->rh37_atividadedocargo),0,150):' ';
         $clflpgo10->si195_indcessao 						= $this->convert_accented_characters($oDados10->si195_indcessao);
-        $clflpgo10->si195_dsclotacao 						= $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $this->convert_accented_characters($oDados10->si195_dsclotacao);
-        $clflpgo10->si195_indsalaaula 						= $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : ($oDados10->rh30_vinculo != 'I' ? $oDados10->rh37_exerceatividade : '');
+        $clflpgo10->si195_dsclotacao 						= $this->convert_accented_characters($oDados10->si195_dsclotacao);
+        $clflpgo10->si195_indsalaaula 						= ($oDados10->rh30_vinculo != 'I' ? $oDados10->rh37_exerceatividade : '');
         $clflpgo10->si195_vlrcargahorariasemanal 		    = ($oDados10->si195_sglcargo != 'APO') ? $oDados10->si195_vlrcargahorariasemanal : '';
-        $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $oDados10->si195_datefetexercicio;
+        $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datcomissionado                   = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;
         $clflpgo10->si195_datcomissionadoexclusao           = $oDados10->si195_datexclusao;

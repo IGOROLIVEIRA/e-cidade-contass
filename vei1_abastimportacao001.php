@@ -80,10 +80,10 @@ $db_botao = true;
   ?>
     </center>
     </td>
-  </tr>
+  </tr> 
 </table>
 </body>
-</html>
+</html> 
 <?
 if(isset($incluir) || isset($alterar)){
   if(isset($alterar)){

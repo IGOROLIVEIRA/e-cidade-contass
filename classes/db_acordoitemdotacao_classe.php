@@ -134,13 +134,7 @@ class cl_acordoitemdotacao
        return false;
      }*/
     if ($this->ac22_quantidade == null) {
-      $this->erro_sql = " Campo Quantidade nao Informado.";
-      $this->erro_campo = "ac22_quantidade";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
+      $this->ac22_quantidade = '0';
     }
     if ($ac22_sequencial == "" || $ac22_sequencial == null) {
       $result = db_query("select nextval('acordoitemdotacao_ac22_sequencial_seq')");
