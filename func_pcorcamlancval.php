@@ -201,9 +201,9 @@ if (isset($datafinal)) {
           $where_sol .= " and d.pc10_instit=" . db_getsession('DB_instit');
           /*OC3770*/
           if ($campos == 0) {
-            $campos = " pc20_codorc,pcproc.pc80_codproc,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao,c.pc10_resumo";
+            $campos = " pc20_codorc,pcproc.pc80_codproc,c.pc10_resumo,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao";
           } else {
-            $campos = $campos . " pc20_codorc,pcproc.pc80_codproc,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao,c.pc10_resumo";
+            $campos = $campos . " pc20_codorc,pcproc.pc80_codproc,c.pc10_resumof.coddepto,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao";
           }
           /*FIM - OC3770*/
         } else if (isset($lic) && $lic == 'true') {
