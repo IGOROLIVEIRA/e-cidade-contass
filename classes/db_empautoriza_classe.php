@@ -81,6 +81,7 @@ class cl_empautoriza
     var $e54_tipoorigem = null;
     var $e54_tipodespesa = null;
     var $e54_desconto = null;
+    var $e54_numerotermo = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                      e54_autori = int4 = Autorização
@@ -115,6 +116,7 @@ class cl_empautoriza
                      e54_tipoorigem = int4 = Tipo de Origem da Autorização - Disponiveis no manual do sicom
                      e54_tipoautorizacao = int4 = Tipo de Autorização 1-direta,2-licoutrosorgaos,3-licitacao,4-adesaoregpreco
                      e54_desconto = boolean = Desconto automático
+                     e54_numerotermo = int8 = numero do termo
                      ";
     //funcao construtor da classe
     function cl_empautoriza()
@@ -182,6 +184,7 @@ class cl_empautoriza
             $this->e54_tipoorigem = ($this->e54_tipoorigem == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_tipoorigem"] : $this->e54_tipoorigem);
             $this->e54_tipoautorizacao = ($this->e54_tipoautorizacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_tipoautorizacao"] : $this->e54_tipoautorizacao);
             $this->e54_desconto = ($this->e54_desconto == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_desconto"] : $this->e54_desconto);
+            $this->e54_numerotermo = ($this->e54_numerotermo == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_numerotermo"] : $this->e54_numerotermo);
         } else {
             $this->e54_autori = ($this->e54_autori == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_autori"] : $this->e54_autori);
         }
@@ -257,6 +260,9 @@ class cl_empautoriza
         }
         if ($this->e54_gestaut == null || $this->e54_gestaut == "") {
             $this->e54_gestaut = 0;
+        }
+        if ($this->e54_numerotermo == null || $this->e54_numerotermo == "") {
+            $this->e54_numerotermo = "null";
         }
         if ($this->e54_codtipo == null) {
             $this->erro_sql = " Campo Tipo Empenho nao Informado.";
@@ -364,6 +370,7 @@ class cl_empautoriza
                                           ,e54_tipoorigem
                                           ,e54_tipoautorizacao
                                           ,e54_desconto
+                                          ,e54_numerotermo
 
                            )
                     values (
@@ -399,6 +406,7 @@ class cl_empautoriza
                                    ," . ($this->e54_tipoorigem == "null" || $this->e54_tipoorigem == "" ? "null" : "'" . $this->e54_tipoorigem . "'") . "
                                    ," . ($this->e54_tipoautorizacao == "null" || $this->e54_tipoautorizacao == "" ? "null" : "'" . $this->e54_tipoautorizacao . "'") . "
                                    ,'$this->e54_desconto'
+                                   ,$this->e54_numerotermo
                           )";
         $result = db_query($sql);
         if ($result == false) {
@@ -1794,7 +1802,7 @@ class cl_empautoriza
 
             $rsDeleta = db_query($sSqlDeleta);
         }*/
-  
+
         /*
          * Alteramos a situação da autorização de empenho para anulada
          */
