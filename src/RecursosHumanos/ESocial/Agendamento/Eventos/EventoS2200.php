@@ -226,13 +226,12 @@ class EventoS2200 extends EventoBase
 
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->localTrabDom = empty($oDados->localTrabDom) ? null : $oDados->localTrabDom;
 
-                // if (empty($oDados->horContratual)) {
-
-                //     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = $oDados->horContratual;
-                //     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->horario = $this->buscarHorarios($oDados->vinculo->matricula);
-                // } else {
-                //     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = null;
-                // }
+                if (empty($oDados->horContratual) && !empty($oDados->infoCeletista)) {
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = $oDados->horContratual;
+                    //$oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->horario = $this->buscarHorarios($oDados->vinculo->matricula);
+                } else {
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = null;
+                }
 
                 // if (!empty($oDados->filiacaoSindical->cnpjSindTrab)) {
                 //     $oDadosAPI->evtAdmissao->vinculo->infoContrato->filiacaoSindical[0]->cnpjsindtrab = $oDados->filiacaoSindical->cnpjSindTrab;
