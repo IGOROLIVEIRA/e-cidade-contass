@@ -240,6 +240,13 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
         $sSql = "SELECT distinct '10' AS tipoRegistro,
      l20_codigo as seqlicitacao,
        infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
+       l20_leidalicitacao as lei,
+       l20_dtpulicacaopncp as dataPncp,
+       l20_linkpncp as linnPncp,
+       l20_dtpulicacaoedital as dataPubli,
+       l20_linkedital as linkPublic,
+       l20_diariooficialdivulgacao as divulgacaoDo,
+       l20_mododisputa as modoDisputa, 
   (SELECT CASE
     WHEN o41_subunidade != 0
          OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
@@ -313,7 +320,9 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
                                                       '54')";
 
         $rsResult10 = db_query($sSql);
-
+        //echo $sSql;
+        //db_criatabela($rsResult10); 
+        //exit; 
         /**
          * registro 10
          */
@@ -358,7 +367,20 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             $claberlic10->si46_criterioadjudicacao = $oDados10->criterioadjudicacao;
             $claberlic10->si46_veiculo1publicacao = $this->removeCaracteres($oDados10->veiculo1publicacao);
             $claberlic10->si46_veiculo2publicacao = $this->removeCaracteres($oDados10->veiculo2Publicacao);
-            $claberlic10->si46_instit = db_getsession("DB_instit");
+
+            $claberlic10->si46_leidalicitacao = $oDados10->lei; 
+            $claberlic10->si46_dtpulicacaopncp = $oDados10->dataPncp;
+            $claberlic10->si46_linkpncp = $oDados10->linnPncp;
+            $claberlic10->si46_dtpulicacaoedital = $oDados10->dataPubli;
+            $claberlic10->si46_linkedital = $oDados10->linkPublic;
+            $claberlic10->si46_diariooficialdivulgacao = $oDados10->divulgacaoDo;
+            if($oDados10->lei==1){
+                $claberlic10->si46_modoDisputa = $oDados10->mododisputa;
+            }else{
+                $claberlic10->si46_modoDisputa = "";
+            }
+            
+            $claberlic10->si46_instit = db_getsession("DB_instit");  
 
 
             $claberlic10->incluir(null);

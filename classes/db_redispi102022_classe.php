@@ -40,6 +40,8 @@ class cl_redispi102022
   var $si183_mes = 0;
   var $si183_instit = 0;
   var $si183_link = '';
+  var $si183_leidalicitacao = 0;
+  var $si183_regimeexecucaoobras = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si183_sequencial = int8 = sequencial 
@@ -62,9 +64,11 @@ class cl_redispi102022
                  si183_link = varchar(200) = Link de publicação
                  si183_mes = int8 = Mês 
                  si183_instit = int8 = Instituição 
+                 si183_leidalicitacao = Lei da Licitação
+                 si183_regimeexecucaoobras = Regime execução obras
                  ";
 
-  //funcao construtor da classe
+  // funcao construtor da classe
   function cl_redispi102022()
   {
     //classes dos rotulos dos campos
@@ -72,7 +76,7 @@ class cl_redispi102022
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
-  //funcao erro
+  // funcao erro
   function erro($mostra, $retorna)
   {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -83,7 +87,7 @@ class cl_redispi102022
     }
   }
 
-  // funcao para atualizar campos
+  //  funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
     if ($exclusao == false) {
@@ -114,6 +118,8 @@ class cl_redispi102022
       $this->si183_link = ($this->si183_link == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_link"] : $this->si183_link);
       $this->si183_mes = ($this->si183_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_mes"] : $this->si183_mes);
       $this->si183_instit = ($this->si183_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_instit"] : $this->si183_instit);
+      $this->si183_leidalicitacao = ($this->si183_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_leidalicitacao"] : $this->si183_leidalicitacao);
+      $this->si183_regimeexecucaoobras = ($this->si183_regimeexecucaoobras == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_regimeexecucaoobras"] : $this->si183_regimeexecucaoobras);
     } else {
       $this->si183_sequencial = ($this->si183_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si183_sequencial"] : $this->si183_sequencial);
     }
@@ -162,14 +168,33 @@ class cl_redispi102022
       $this->erro_status = "0";
       return false;
     }
+    if ($this->si183_leidalicitacao == null) {
+      $this->erro_sql = " Campo Lei da licitação nao Informado.";
+      $this->erro_campo = "si183_leidalicitacao";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->si183_regimeexecucaoobras == null) {
+      $this->erro_sql = " Campo Regime de obras nao Informado.";
+      $this->erro_campo = "si183_regimeexecucaoobras";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
     if (($this->si183_link == null) || ($this->si183_link == "")) {
-        $this->erro_sql = " Campo si183_link nao declarado.";
-        $this->erro_campo = "si183_link";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-        $this->erro_status = "0";
-        return false;
+      $this->erro_sql = " Campo si183_link nao declarado.";
+      $this->erro_campo = "si183_link";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+      return false;
     }
     if ($si183_sequencial == "" || $si183_sequencial == null) {
       $result = db_query("select nextval('redispi102022_si183_sequencial_seq')");
@@ -204,14 +229,14 @@ class cl_redispi102022
       $this->erro_status = "0";
       return false;
     }
-    if($this->si183_tipocadastradodispensainexigibilidade == null){
+    if ($this->si183_tipocadastradodispensainexigibilidade == null) {
       $this->si183_tipocadastradodispensainexigibilidade = 0;
     }
-    if($this->si183_bdi == null){
+    if ($this->si183_bdi == null) {
       $this->si183_bdi = 0;
     }
 
-    if($this->si183_vlrecurso == null){
+    if ($this->si183_vlrecurso == null) {
       $this->si183_vlrecurso = 0;
     }
 
@@ -235,7 +260,9 @@ class cl_redispi102022
                                       ,si183_bdi 
                                       ,si183_link 
                                       ,si183_mes 
-                                      ,si183_instit 
+                                      ,si183_instit
+                                      ,si183_leidalicitacao
+                                      ,si183_regimeexecucaoobras 
                        )
                 values (
                                 $this->si183_sequencial 
@@ -257,7 +284,9 @@ class cl_redispi102022
                                ,$this->si183_bdi 
                                ,'$this->si183_link'
                                ,$this->si183_mes 
-                               ,$this->si183_instit 
+                               ,$this->si183_instit
+                               ,$this->si183_leidalicitacao
+                               ,$this->si183_regimeexecucaoobras  
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -369,8 +398,8 @@ class cl_redispi102022
       $virgula = ",";
     }
     if (trim($this->si183_link) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si183_link"])) {
-        $sql .= $virgula . " si183_link = '$this->si183_link' ";
-        $virgula = ",";
+      $sql .= $virgula . " si183_link = '$this->si183_link' ";
+      $virgula = ",";
     }
 
     if (trim($this->si183_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si183_mes"])) {
@@ -379,6 +408,32 @@ class cl_redispi102022
       if (trim($this->si183_mes) == null) {
         $this->erro_sql = " Campo Mês nao Informado.";
         $this->erro_campo = "si183_mes";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->si183_leidalicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si183_leidalicitacao"])) {
+      $sql .= $virgula . " si183_leidalicitacao = $this->si183_leidalicitacao ";
+      $virgula = ",";
+      if (trim($this->si183_leidalicitacao) == null) {
+        $this->erro_sql = " Campo Instituição nao Informado.";
+        $this->erro_campo = "si183_leidalicitacao";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->si183_regimeexecucaoobras) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si183_regimeexecucaoobras"])) {
+      $sql .= $virgula . " si183_regimeexecucaoobras = $this->si183_regimeexecucaoobras ";
+      $virgula = ",";
+      if (trim($this->si183_regimeexecucaoobras) == null) {
+        $this->erro_sql = " Campo Regime execucao de obras nao Informado.";
+        $this->erro_campo = "si183_regimeexecucaoobras";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -588,5 +643,3 @@ class cl_redispi102022
     return $sql;
   }
 }
-
-?>

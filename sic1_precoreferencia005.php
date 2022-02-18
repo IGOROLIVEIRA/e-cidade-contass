@@ -104,7 +104,7 @@ ORDER BY l21_ordem) as x GROUP BY
                 pc80_criterioadjudicacao,
                 pc01_tabela,
                 pc01_taxa,
-                si01_justificativa
+                si01_justificativa 
 FROM pcproc
 JOIN pcprocitem ON pc80_codproc = pc81_codproc
 JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
@@ -118,8 +118,7 @@ JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by l21_ordem asc";
-
+ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
     $rsResult = db_query($sSql) or die(pg_last_error()); //db_criatabela($rsResult);exit;
 
     header("Content-type: text/plain");
@@ -179,7 +178,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
 
     //    echo "VALOR TOTAL DOS ITENS;";
     //    echo "R$" . number_format($nTotalItens, 2, ",", ".").";";
-    if ($oGet->impjust == 's') {
+    if ($oGet->impjust == 't') {
         echo "JUSTIFICATIVA;\n";
         echo str_replace(array(';', '.', ','), "", db_utils::fieldsMemory($rsResult, 0)->si01_justificativa);
     }

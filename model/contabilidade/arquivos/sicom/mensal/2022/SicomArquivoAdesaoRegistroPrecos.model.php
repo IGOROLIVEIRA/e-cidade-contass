@@ -237,6 +237,9 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                 and date_part('year',si06_dataadesao) = " . db_getsession("DB_anousu");
 
     $rsResult10 = db_query($sSql);
+    //echo $sSql;
+    //db_criatabela($rsResult10);
+    //exit; 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
@@ -262,11 +265,13 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       $regadesao10->si67_cpfresponsavel = $oDados10->cpfresponsavel;
       $regadesao10->si67_descontotabela = $oDados10->si06_descontotabela;
       $regadesao10->si67_processoporlote = $oDados10->si06_processoporlote;
+      $regadesao10->si67_leidalicitacao = $oDados10->si06_leidalicitacao;  
       $regadesao10->si67_instit = db_getsession("DB_instit");
       $regadesao10->si67_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
       $regadesao10->incluir(null);
-
+       
+      
       if ($regadesao10->erro_status == 0) {
         throw new Exception($regadesao10->erro_msg);
       }

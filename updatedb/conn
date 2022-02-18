@@ -28,11 +28,11 @@ pmitacambira        5432    prefeituras
 basemodeloppa       5432    prefeituras
 treinamento         5432    prefeituras
 pmsantafeminas      5432    prefeituras
+pmjanuaria_consulta    5432    prefeituras
+
 
 pmsaojoaomissoes       5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
-pmmontalvania          5432    prefeituras2
-pmjanuaria             5432    prefeituras2
 
 e-cidade               5432    pmubai
 
@@ -84,6 +84,7 @@ cisnorte            5432    e-cidade
 cisarp              5432    e-cidade
 hrjanauba           5432    e-cidade
 cmitacambira        5432    e-cidade
+arsan    			5432	e-cidade
 
 pmsaojoaomissoes    5432    e-cidadenovosclientes
 pmsantafeminas      5432    e-cidadenovosclientes
@@ -103,3 +104,5 @@ e-cidade            5432    pmmontalvania
 base_desenvolvimento   5432   teste
 
 e-cidade            5432    codanorte
+
+e-cidade            5432    pmserranopolis

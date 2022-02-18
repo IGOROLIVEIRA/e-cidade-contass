@@ -304,7 +304,7 @@ class cl_avaliacaogruporespostacgm
         } else {
             $sql2 = $dbwhere;
         }
-        exit($sql . $sql2);
+
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
