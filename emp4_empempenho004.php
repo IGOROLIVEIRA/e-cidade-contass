@@ -1,9 +1,9 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBSeller Servicos de Informatica
+/*       
+ *     E-cidade Software Publico para Gestao Municipal    
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica 
  *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
+ *                         e-cidade@dbseller.com.br     
  *
  *  Este programa e software livre; voce pode redistribui-lo e/ou
  *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
@@ -12,18 +12,18 @@
  *
  *  Este programa e distribuido na expectativa de ser util, mas SEM
  *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM  
  *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
+ *  detalhes.   
  *
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
  *  junto com este programa; se nao, escreva para a Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  *  02111-1307, USA.
  *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt
- */
+ */   
 
 require_once ("libs/db_stdlib.php");
 require_once ("libs/db_utils.php");
@@ -139,10 +139,10 @@ $clemphist	      = new cl_emphist;
 $clempauthist	  	= new cl_empauthist;
 $clempemphist	  	= new cl_empemphist;
 $clemptipo	      = new cl_emptipo;
-$clempautitem	  	= new cl_empautitem;
+$clempautitem	  	= new cl_empautitem; 
 $clempautidot	  	= new cl_empautidot;
-$clempparametro	  = new cl_empparametro;
-$clcflicita	      = new cl_cflicita;
+$clempparametro	  = new cl_empparametro; 
+$clcflicita	      = new cl_cflicita; 
 $clempparamnum	  = new cl_empparamnum;
 $clconcarpeculiar = new cl_concarpeculiar;
 $oDaoEmpenhoNl    = new cl_empempenhonl;
@@ -181,7 +181,7 @@ $clconlancamlr	  = new cl_conlancamlr;
 $clconlancamcgm	  = new cl_conlancamcgm;
 $clconlancamemp	  = new cl_conlancamemp;
 $clconlancamval	  = new cl_conlancamval;
-$clconlancamdot	  = new cl_conlancamdot;
+$clconlancamdot	  = new cl_conlancamdot; 
 $clconlancamdoc	  = new cl_conlancamdoc;
 $clconlancamcompl = new cl_conlancamcompl;
 $clconlancamnota  = new cl_conlancamnota;
@@ -569,6 +569,7 @@ if(isset($incluir)) {
             $clempempenho->e60_destin         = $e54_destin;
             $clempempenho->e60_codtipo        = $e54_codtipo;
             $clempempenho->e60_resumo         = $e54_resumo;
+            $clempempenho->e60_informacaoop   = $e50_obs;
             $clempempenho->e60_instit         = db_getsession("DB_instit");
             $clempempenho->e60_datasentenca   = $e60_datasentenca;
             $clempempenho->e60_concarpeculiar = $e54_concarpeculiar;
