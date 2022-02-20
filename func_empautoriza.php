@@ -41,59 +41,61 @@ $rotulo->label("z01_nome");
 
 ?>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-</head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload='document.form1.chave_e54_autori.focus();'>
-<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
-    <td height="63" align="center" valign="top">
-        <table width="35%" border="0" align="center" cellspacing="0">
-        <form name="form2" method="post" action="" >
-          <tr> 
-            <td width="4%" align="right" nowrap title="<?=$Te54_autori?>"><?=$Le54_autori?></td>
-            <td width="96%" align="left" nowrap> 
-            <? db_input("e54_autori",6,$Ie54_autori,true,"text",4,"","chave_e54_autori"); ?>
-            </td>
-          </tr>
-          <tr> 
-            <td width="4%" align="right" nowrap title="<?=$Tz01_nome?>"><?=$Lz01_nome?></td>
-            <td width="96%" align="left" nowrap> 
-            <? db_input("z01_nome",45,"",true,"text",4,"","chave_z01_nome"); ?>
-            </td>
-          </tr>	  
 
-          <tr> 
-            <td width="4%" align="right" nowrap title="<?=$Te54_anousu?>">
-            <?=$Le54_anousu?>
-            </td>
-            <td width="96%" align="left" nowrap> 
-            <? db_input("e54_anousu",4,$Ie54_anousu,true,"text",4,"","chave_e54_anousu"); ?>
-            </td>
-          </tr>
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
-              <input name="limpar" type="reset" id="limpar" value="Limpar" >
-              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_empautoriza.hide();">
-             </td>
-          </tr>
-        </form>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+</head>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload='document.form1.chave_e54_autori.focus();'>
+  <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
+    <tr>
+      <td height="63" align="center" valign="top">
+        <table width="35%" border="0" align="center" cellspacing="0">
+          <form name="form2" method="post" action="">
+            <tr>
+              <td width="4%" align="right" nowrap title="<?= $Te54_autori ?>"><?= $Le54_autori ?></td>
+              <td width="96%" align="left" nowrap>
+                <? db_input("e54_autori", 6, $Ie54_autori, true, "text", 4, "", "chave_e54_autori"); ?>
+              </td>
+            </tr>
+            <tr>
+              <td width="4%" align="right" nowrap title="<?= $Tz01_nome ?>"><?= $Lz01_nome ?></td>
+              <td width="96%" align="left" nowrap>
+                <? db_input("z01_nome", 45, "", true, "text", 4, "", "chave_z01_nome"); ?>
+              </td>
+            </tr>
+
+            <tr>
+              <td width="4%" align="right" nowrap title="<?= $Te54_anousu ?>">
+                <?= $Le54_anousu ?>
+              </td>
+              <td width="96%" align="left" nowrap>
+                <? db_input("e54_anousu", 4, $Ie54_anousu, true, "text", 4, "", "chave_e54_anousu"); ?>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center">
+                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                <input name="limpar" type="reset" id="limpar" value="Limpar">
+                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_empautoriza.hide();">
+              </td>
+            </tr>
+          </form>
         </table>
       </td>
-  </tr>
-  <tr> 
-    <td align="center" valign="top"> 
-      <?
+    </tr>
+    <tr>
+      <td align="center" valign="top">
+        <?
         $where_anul = "";
         if (isset($anul)) {
           $where_anul = " and e54_anulad is null ";
         }
         if (!isset($pesquisa_chave)) {
-          if (isset($campos)==false) {
-            if (file_exists("funcoes/db_func_empautoriza.php")==true) {
+          if (isset($campos) == false) {
+            if (file_exists("funcoes/db_func_empautoriza.php") == true) {
               include("funcoes/db_func_empautoriza.php");
             } else {
               $campos = "empautoriza.*";
@@ -108,41 +110,42 @@ $rotulo->label("z01_nome");
                      empautoriza.e54_emiss,
                      empautoriza.e54_anousu as db_e54_anousu,
                      empempenho.e60_destin";
-          
-          if (isset($chave_e54_autori) && (trim($chave_e54_autori)!="") ) {
-            $sql = $clempautoriza->sql_query(null,$campos,"e54_autori"," e54_autori=$chave_e54_autori $where_anul ", $possuiPC);
-          } else if (isset($chave_e54_anousu) && (trim($chave_e54_anousu)!="") ) {
-            $sql = $clempautoriza->sql_query("",$campos,"e54_anousu"," e54_anousu like '$chave_e54_anousu%' $where_anul ", $possuiPC);
-          } else if (isset($chave_z01_nome) && (trim($chave_z01_nome)!="") ) {
-            $sql = $clempautoriza->sql_query("",$campos,"e54_anousu"," z01_nome like '$chave_z01_nome%' $where_anul ", $possuiPC);
+
+          if (isset($chave_e54_autori) && (trim($chave_e54_autori) != "")) {
+            $sql = $clempautoriza->sql_query(null, $campos, "e54_autori", " e54_autori=$chave_e54_autori $where_anul ", $possuiPC);
+          } else if (isset($chave_e54_anousu) && (trim($chave_e54_anousu) != "")) {
+            $sql = $clempautoriza->sql_query("", $campos, "e54_anousu", " e54_anousu like '$chave_e54_anousu%' $where_anul ", $possuiPC);
+          } else if (isset($chave_z01_nome) && (trim($chave_z01_nome) != "")) {
+            $sql = $clempautoriza->sql_query("", $campos, "e54_anousu", " z01_nome like '$chave_z01_nome%' $where_anul ", $possuiPC);
           } else {
-            $sql = $clempautoriza->sql_query(null,$campos,null,"", $possuiPC);
+            $sql = $clempautoriza->sql_query(null, $campos, "empautoriza.e54_autori DESC", "", $possuiPC);
           }
-          db_lovrot($sql,15,"()","",$funcao_js);
+          db_lovrot($sql, 15, "()", "", $funcao_js);
         } else {
-          if ($pesquisa_chave!=null && $pesquisa_chave!="") {
-            $result = $clempautoriza->sql_record($clempautoriza->sql_query(null,"*","","e54_autori=$pesquisa_chave $where_anul "));
-            if ($clempautoriza->numrows!=0) {
-              db_fieldsmemory($result,0);
-              echo "<script>".$funcao_js."('$z01_nome',false);</script>";
+          if ($pesquisa_chave != null && $pesquisa_chave != "") {
+            $result = $clempautoriza->sql_record($clempautoriza->sql_query(null, "*", "", "e54_autori=$pesquisa_chave $where_anul "));
+            if ($clempautoriza->numrows != 0) {
+              db_fieldsmemory($result, 0);
+              echo "<script>" . $funcao_js . "('$z01_nome',false);</script>";
             } else {
-              echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
             }
           } else {
-            echo "<script>".$funcao_js."('',false);</script>";
+            echo "<script>" . $funcao_js . "('',false);</script>";
           }
         }
-      ?>
-     </td>
-   </tr>
-</table>
+        ?>
+      </td>
+    </tr>
+  </table>
 </body>
+
 </html>
 <?
-if(!isset($pesquisa_chave)){
-  ?>
+if (!isset($pesquisa_chave)) {
+?>
   <script>
   </script>
-  <?
+<?
 }
 ?>

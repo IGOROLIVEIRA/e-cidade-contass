@@ -51,14 +51,14 @@ $head5 = "PERÍODO : ".db_formatar($dataini,'d')." A ".db_formatar($datafin,'d');
 pg_query("create temporary table 
           ww_acount(
                     regist int,
-                    nomefunc char(40),
+                    nomefunc char(100),
                     tipo char(1),
                     campoalt char(20),
                     data date,
                     hora char(5),
                     anterior char(20),
                     atual char(20),
-                    usuario char(40)
+                    usuario char(100)
                    )");
 
 
@@ -112,7 +112,7 @@ for($xx = 0; $xx < pg_numrows($result1);$xx++){
                   )";
    $res_ins1 = pg_query($sql_ins1);
    if($res_ins1 == false){
-     echo "Erro ao inserir na tabela temporária : $sql_ins1 ";exit;
+     die("Erro ao inserir na tabela temporária : $sql_ins1 ".pg_last_error());
    }
 
 }

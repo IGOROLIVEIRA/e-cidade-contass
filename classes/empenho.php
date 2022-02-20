@@ -1,16 +1,16 @@
 <?php
-//ini_set('display_errors', 'On');
+//ini_set('display_errors', 'On'); 
 //error_reporting(E_ALL);
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
+ *                         e-cidade@dbseller.com.br 
  *
  *  Este programa e software livre; voce pode redistribui-lo e/ou
  *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
  *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *  Licenca como (a seu criterio) qualquer versao mais nova.  
  *
  *  Este programa e distribuido na expectativa de ser util, mas SEM
  *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
@@ -1482,10 +1482,10 @@ class empenho {
       return false;
     }
   }
-
-  /**
-   *  funcao para para converter dados do empenho e notas em string json;
-   *  @param  integer iEmpenho
+ 
+  /**  
+   *  funcao para para converter dados do empenho e notas em string json;  
+   *  @param  integer iEmpenho 
    *  @param  string [sWhere]
    *  @return string json;
    */
@@ -1508,10 +1508,11 @@ class empenho {
       $strJson["e60_coddot"] = $this->dadosEmpenho->e60_coddot;
       $strJson["e60_numcgm"] = $this->dadosEmpenho->e60_numcgm;
       $strJson["e60_resumo"] = "";
+      $strJson["e60_informacaoop"] = "";
 
       /**
        * query para retornar o  e64_codele da empelemento pelo e64_numemp
-       *
+       * 
        */
       $oDaoEmpElemento       = db_utils::getDao("empelemento");
       $sWhereEmpElemento     = "e64_numemp = {$this->dadosEmpenho->e60_numemp}";
@@ -1531,6 +1532,8 @@ class empenho {
         $sImportaResumoOrdemPagamento = db_utils::fieldsMemory($rsBuscaEmpParametro, 0)->e30_opimportaresumo;
         if ($sImportaResumoOrdemPagamento == "t") {
           $strJson["e60_resumo"] = $this->dadosEmpenho->e60_resumo;
+          $strJson["e60_informacaoop"] = $this->dadosEmpenho->e60_informacaoop;
+
         }
       }
 
