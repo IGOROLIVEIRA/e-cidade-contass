@@ -48,6 +48,26 @@ class Addtablerhmotivoafasta extends AbstractMigration
 
             INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','pes1_rhmotivoafasta003.php',1,1,'Exclusão','t');
             INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Cadastro de Motivos de Afastamentos eSocial%'),(select max(id_item) from db_itensmenu),3,952);
+            
+            insert into rhmotivoafasta values(1, 'Acidente/doença do trabalho');
+            insert into rhmotivoafasta values(3, 'Acidente/doença não relacionada ao trabalho');
+            insert into rhmotivoafasta values(5, 'Afastamento/licença de servidor público prevista em estatuto, sem remuneração');
+            insert into rhmotivoafasta values(6, 'Aposentadoria por invalidez');
+            insert into rhmotivoafasta values(7, 'Acompanhamento-Licença para acompanhamento de membro da família enfermo');
+            insert into rhmotivoafasta values(10, 'Afastamento/licença de servidor público prevista em estatuto, com remuneração');
+            insert into rhmotivoafasta values(11, 'Cárcere');
+            insert into rhmotivoafasta values(13, 'Cargo eletivo-Candidato a cargo eletivo');
+            insert into rhmotivoafasta values(14, 'Cessão/Requisição');
+            insert into rhmotivoafasta values(17, 'Licença maternidade');
+            insert into rhmotivoafasta values(18, 'Licença maternidade-Prorrogação por 60 dias, Lei 11.770/2008 (Empresa Cidadã)');
+            insert into rhmotivoafasta values(19, 'Licença maternidade-Afastamento temporário por motivo de aborto não criminoso');
+            insert into rhmotivoafasta values(21, 'Licença não remunerada ou sem vencimento');
+            insert into rhmotivoafasta values(22, 'Mandato eleitoral-Afastamento temporário para o exercício de mandato eleitoral');
+            insert into rhmotivoafasta values(25, 'Mulher vítima de violência-Art. 9º, § 2º, inciso II, da Lei 11.340/2006-Lei Maria da Penha');
+            insert into rhmotivoafasta values(29, 'Serviço militar-Afastamento temporário para prestar serviço militar obrigatório');
+            insert into rhmotivoafasta values(35, 'Licença maternidade-Antecipação e/ou prorrogação mediante atestado médico');
+            insert into rhmotivoafasta values(36, 'Afastamento temporário de exercente de mandato eletivo para cargo em comissão');
+            insert into rhmotivoafasta values(40, 'Exercício em outro órgão de servidor ou empregado público cedido');
 
         commit;
         ";
