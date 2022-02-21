@@ -36,7 +36,7 @@ class Oc16737NovasContas extends PostgresMigration
                     $c60_nregobrig                  = $aPcasp[6] == '' ? 0 : $aPcasp[6];
 
                     $aConPlano = array($c60_codcon, $c60_anousu, $c60_estrut, $c60_descr, $c60_finali, $c60_codsis, $c60_codcla,
-                                    $c60_consistemaconta, $c60_identificadorfinanceiro, $c60_naturezasaldo, $c60_funcao, $c60_nregobrig);
+                                       $c60_consistemaconta, $c60_identificadorfinanceiro, $c60_naturezasaldo, $c60_funcao, $c60_nregobrig);
 
                     $this->insertConplano($aConPlano);
                     if($aPcasp[14] == 'S'){
