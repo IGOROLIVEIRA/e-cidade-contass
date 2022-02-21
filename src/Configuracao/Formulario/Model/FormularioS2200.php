@@ -20,10 +20,9 @@ class FormularioS2200 extends FormularioEspecificoBase
     {
         return array(
             "matricula-atribuida-ao-trabalhador-pela--4000599",
-            "informar-o-nome-do-cargo-4000625",
             "nome-do-trabalhador-4000553",
-            "descricao-da-rubrica",
-            "preencher-com-o-numero-do-cpf-do-trabalh-4000552"
+            "preencher-com-a-data-de-admissao-do-trab-4000603",
+            "data-da-entrada-em-exercicio-pelo-servid-4000620"
         );
     }
 }
