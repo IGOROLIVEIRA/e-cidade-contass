@@ -121,6 +121,9 @@ function js_emite(){
 
 
 $xy = array (
+    '8A' => 'Recurso Até o Nível', 
+    '9A' => 'Recurso Até o Nível - Completo', 
+    '8B' => 'Recurso só o Nível',
     '1A' => 'Órgão Até o Nível', 
     '1B' => 'Órgão só o Nível', 
     '2A' => 'Unidade Até o Nível', 
@@ -136,10 +139,8 @@ $xy = array (
     '10A' => 'Modalidade de Aplicação até o Nível',
     '10B' => 'Modalidade de Aplicação só o Nível',
     '7A' => 'Elemento Até o Nível', 
-    '7B' => 'Elemento só o Nível', 
-    '8A' => 'Recurso Até o Nível', 
-    '9A' => 'Recurso Até o Nível - Completo', 
-    '8B' => 'Recurso só o Nível'
+    '7B' => 'Elemento só o Nível'
+    
 );
 db_select('nivel', $xy, true, 2, "");
 $db_selinstit = db_getsession("DB_instit");
@@ -228,7 +229,7 @@ if ($o50_subelem == 'f') {
   $data_ini_mes = $dt[1];
   $data_ini_ano  = $dt[0];
   $dt = split('-',$datafin);
-  $data_fin_dia   = $dt[2];
+  $data_fin_dia   = $dt[2]; 
   $data_fin_mes = $dt[1];
   $data_fin_ano  = $dt[0];
 
