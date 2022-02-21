@@ -263,6 +263,10 @@ $clrotulo->label("o15_codigo");
                                 <input type="checkbox" value="TomadasContasEspeciais" id="TomadasContasEspeciais" />
                                 <label for="TomadasContasEspeciais">TCE - Tomadas de Contas Especiais</label><br>
                             <? } ?>
+                            <? if (db_getsession("DB_anousu") > 2021) {?>
+                                <input type="checkbox" value="DemonstrativoInformacoesPrevidenciariasRepasses" id="DemonstrativoInformacoesPrevidenciariasRepasses" />
+                                <label for="DemonstrativoInformacoesPrevidenciariasRepasses">DIPR - Demonstrativo de Informações Previdenciárias e Repasses</label><br>
+                            <? } ?>
                             <? if (db_getsession("DB_anousu") >= 2014) {?>
                                 <input type="checkbox" value="Consideracoes" id="Consideracoes" />
                                 <label for="Consideracoes">CONSID - Considerações</label><br>
