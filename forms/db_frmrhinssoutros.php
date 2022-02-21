@@ -31,6 +31,8 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("rh51_seqpes");
 $clrotulo->label("rh01_regist");
 $clrotulo->label("z01_nome");
+$clrotulo->label("rh51_cgcvinculo");
+
 ?>
 <form name="form1" method="post" action="">
   <center>
