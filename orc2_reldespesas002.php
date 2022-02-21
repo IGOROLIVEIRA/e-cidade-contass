@@ -110,6 +110,7 @@ $sele_work = $clselorcdotacao->getDados()." and w.o58_instit in ($instits)";
  $filtro = str_replace("1=1","",$sele_work);
  $filtro = " ".str_replace("w.","",$filtro);
 $modalidade_aplicacao = false;
+
 if (substr($nivel,-1) == 'A'){
   $completo = false;
   $nivela = substr($nivel,0,1);
@@ -121,7 +122,7 @@ if (substr($nivel,-1) == 'A'){
       $nivela = "8";
   }
   //db_criatabela(pg_exec("select * from t"));
-  //db_criatabela($result);exit;
+  //db_criatabela($result);exit; 
   if ($modalidade_aplicacao) {
       $result = getDotacaoSaldoModalidadeAplic($nivela,1,2,true,$sele_work,$anousu,$dataini,$datafin);
   } else {
@@ -346,7 +347,7 @@ if (substr($nivel,-1) == 'A'){
 
 	      $pdf->cell(120,10,"DADOS DA DESPESA","TBR",0,"C",1);
 	      //$pdf->cell(60,$alt,"RECURSO",0,0,"L",0);
-	      $pdf->cell(15,10,"REDUZ"            ,"TLBR",0,"C",1);
+	      $pdf->cell(15,10,"REDUZIDO"            ,"TLBR",0,"C",1);
 	      $x = $pdf->GetX();
 	      $y = $pdf->GetY();
 	      $pdf->cell(50,5,"SALDO ORÇAMENTÁRIO","TLBR",0,"C",1);
@@ -364,7 +365,7 @@ if (substr($nivel,-1) == 'A'){
 
       	$pdf->cell(90,10,"DADOS DA DESPESA","TBR" ,0,"C",1);
         $pdf->cell(15,15,"RECURSO"         ,"TLBR" ,0,"C",1);
-	      $pdf->cell(30,10,"REDUZ"           ,"TLBR" ,0,"C",1);
+	      $pdf->cell(30,10,"REDUZIDO"           ,"TLBR" ,0,"C",1);
 	      $x = $pdf->GetX();
 	      $y = $pdf->GetY();
 	      $pdf->cell(50,5,"SALDO ORÇAMENTÁRIO","TLBR",0,"C",1);
@@ -398,7 +399,7 @@ if (substr($nivel,-1) == 'A'){
       $pdf->setfont('arial','',7);
 
     }
-
+    
     if($xorgao != $o58_orgao && $o58_orgao != 0){
       $xorgao = $o58_orgao;
       if($nivela == 1){
@@ -464,16 +465,18 @@ if (substr($nivel,-1) == 'A'){
         $totunidaatual   += $atual_menos_reservado;
       }else{
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade'),0,0,"L",0);
-				$pdf->cell(60,$alt,substr($o41_descr,0,33),0,1,"L",0);
+				$pdf->cell(60,$alt,substr($o41_descr,0,50),0,1,"L",0);
+        
       }
     }
 
     if("$o58_orgao.$o58_unidade.$o58_funcao" != "$xfuncao" && $o58_funcao != 0 ){
       $xfuncao = "$o58_orgao.$o58_unidade.$o58_funcao";
       $descr = $o52_descr;
+    
       if($nivela == 3){
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'funcao'),0,0,"L",0);
-				$pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+				$pdf->cell(60,$alt,substr($descr,0,44),0,0,"L",0);
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -499,7 +502,7 @@ if (substr($nivel,-1) == 'A'){
         $totunidaatual   += $atual_menos_reservado;
       }else{
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'funcao'),0,0,"L",0);
-				$pdf->cell(60,$alt,substr($descr,0,33),0,1,"L",0);
+				$pdf->cell(60,$alt,substr($descr,0,44),0,1,"L",0);
       }
     }
     if("$o58_orgao.$o58_unidade.$o58_funcao.$o58_subfuncao" != "$xsubfuncao" && $o58_subfuncao != 0){
@@ -507,7 +510,7 @@ if (substr($nivel,-1) == 'A'){
       $descr = $o53_descr;
       if($nivela == 4){
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'orgao').".".db_formatar($o58_subfuncao,'subfuncao'),0,0,"L",0);
-				$pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+				$pdf->cell(60,$alt,substr($descr,0,44),0,0,"L",0);
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -533,7 +536,7 @@ if (substr($nivel,-1) == 'A'){
         $totunidaatual   += $atual_menos_reservado;
       }else{
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'orgao').db_formatar($o58_funcao,'unidade').".".db_formatar($o58_subfuncao,'subfuncao'),0,0,"L",0);
-				$pdf->cell(60,$alt,substr($descr,0,33),0,1,"L",0);
+				$pdf->cell(60,$alt,substr($descr,0,44),0,1,"L",0);
       }
     }
     if("$o58_orgao.$o58_unidade.$o58_funcao.$o58_subfuncao.$o58_programa" != "$xprograma" && ( ($nivela == 8 && $o54_descr != "") || $o58_programa != 0)) {
@@ -541,7 +544,7 @@ if (substr($nivel,-1) == 'A'){
       $descr = $o54_descr;
       if($nivela == 5){
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'funcao').".".db_formatar($o58_subfuncao,'s','0',3,'e').".".db_formatar($o58_programa,'programa'),0,0,"L",0);
-				$pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+				$pdf->cell(60,$alt,substr($descr,0,44),0,0,"L",0);
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -567,7 +570,7 @@ if (substr($nivel,-1) == 'A'){
         $totunidaatual   += $atual_menos_reservado;
       }else{
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'funcao').".".db_formatar($o58_subfuncao,'subfuncao').".".db_formatar($o58_programa,'programa'));
-				$pdf->cell(60,$alt,substr($descr,0,33),0,1,"L",0);
+				$pdf->cell(60,$alt,substr($descr,0,44),0,1,"L",0);
       }
     }
     if("$o58_orgao.$o58_unidade.$o58_funcao.$o58_subfuncao.$o58_programa.$o58_projativ" != "$xprojativ" && $o58_projativ != 0){
@@ -575,7 +578,7 @@ if (substr($nivel,-1) == 'A'){
       $descr = $o55_descr;
       if($nivela == 6){
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'orgao').".".db_formatar($o58_subfuncao,'s','0',3,'e').".".db_formatar($o58_programa,'programa').".".db_formatar($o58_projativ,'projativ'),0,0,"L",0);
-				$pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+				$pdf->cell(60,$alt,substr($descr,0,44),0,0,"L",0);
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -606,9 +609,10 @@ if (substr($nivel,-1) == 'A'){
       	//echo "<br>aqui<br>";
       	//echo $sQuery."<br>";
 //      	echo "<br>$reservado<br>";
+        
 				$pdf->setfont('arial','b',7);
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'funcao').".".db_formatar($o58_subfuncao,'subfuncao').".".db_formatar($o58_programa,'programa').".".db_formatar($o58_projativ,'projativ'),0,0,"L",0);
-				$pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+				$pdf->cell(60,$alt,substr($descr,0,50),0,0,"L",0);
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				if($completo==false){
 			  	$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
@@ -632,7 +636,7 @@ if (substr($nivel,-1) == 'A'){
       if($nivela == 7){
 
 				$pdf->cell(27,$alt,db_formatar($o58_elemento,'elemento'),0,0,"L",0);
-				$pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+				$pdf->cell(60,$alt,substr($descr,0,44),0,0,"L",0);
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -666,14 +670,14 @@ if (substr($nivel,-1) == 'A'){
 
       if($completo == false){
       	$pdf->cell(27,$alt,$o58_elemento,0,0,"L",0);
-        $pdf->cell(53,$alt,substr($descr,0,30),0,0,"L",0);
+        $pdf->cell(53,$alt,substr($descr,0,35),0,0,"L",0);
         $pdf->cell(10,$alt,db_formatar($o58_codigo,'s','0',4,'e'),0,0,"C",0);
 	      if ($nivela == 8) {
-	       $pdf->cell(30,$alt,substr($o15_descr,0,20),0,0,"L",0);
+	       $pdf->cell(30,$alt,$o15_descr,0,0,"L",0);
 		    } else{
-	        $pdf->cell(30,$alt,substr($o15_descr,0,20),0,0,"L",0);
+	        $pdf->cell(30,$alt,$o15_descr,0,0,"L",0);
 		    }
-            $o58_coddot = $o58_coddot != '' ? $o58_coddot."-".db_CalculaDV($o58_coddot) : '';
+            $o58_coddot = $o58_coddot != '' ? $o58_coddot : '';
 		    $pdf->cell(15,$alt,$o58_coddot,0,0,"R",0);
       }
 
@@ -701,11 +705,12 @@ if (substr($nivel,-1) == 'A'){
         $totunidareser   += $reservado;
         $totunidaatual   += $atual_menos_reservado;
       }else{
+       
       	$pdf->setfont('arial','b',7);
       	$pdf->cell(27,$alt,$o58_elemento,0,0,"L",0);
-        $pdf->cell(68,$alt,substr($descr,0,30),0,0,"L",0);
+        $pdf->cell(68,$alt,substr($descr,0,44),0,0,"L",0);
         $pdf->cell(10,$alt,db_formatar($o58_codigo,'s','0',4,'e'),0,0,"C",0);
-        $pdf->cell(30,$alt,$o58_coddot."-".db_CalculaDV($o58_coddot),0,0,"C",0);
+        $pdf->cell(30,$alt,$o58_coddot,0,0,"C",0);
         //$pdf->cell(25,$alt,'',0,1,"R",0);
         //Inicial
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
@@ -995,7 +1000,7 @@ if (substr($nivel,-1) == 'A'){
       $pdf->ln(2);
       $pdf->cell(120,10,"DADOS DA DESPESA","TBR",0,"C",1);
         //$pdf->cell(60,$alt,"RECURSO",0,0,"L",0);
-      $pdf->cell(15,10,"REDUZ"            ,"TLBR",0,"C",1);
+      $pdf->cell(15,10,"REDUZIDO"            ,"TLBR",0,"C",1);
       $x = $pdf->GetX();
       $y = $pdf->GetY();
       $pdf->cell(50,5,"SALDO ORÇAMENTÁRIO","TLBR",0,"C",1);
@@ -1004,7 +1009,7 @@ if (substr($nivel,-1) == 'A'){
 
       $pdf->SetXY($x,$y+5);
       $pdf->cell(25,5,"INICIAL"           ,"TLBR" ,0,"C",1);
-      $pdf->cell(25,5,"DISPONÍVEL"        ,"TLBR" ,0,"C",1);
+      $pdf->cell(25,5,"DISPONÍVEL"        ,"TLBR" ,0,"C",1);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
       $pdf->cell(25,5,"COMPROMETIDO"      ,"TLBR" ,0,"C",1);
       $pdf->cell(25,5,"AUTOMÁTICO"        ,"TLBR" ,0,"C",1);
       $pdf->cell(25,5,"TOTAL"             ,"TLBR" ,1,"C",1);
@@ -1013,7 +1018,7 @@ if (substr($nivel,-1) == 'A'){
     }
     if ($nivela == 1) {
       $pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao'),0,0,"L",0);
-      $pdf->cell(60,$alt,substr($o40_descr,0,33),0,0,"L",0);
+      $pdf->cell(60,$alt,$o40_descr                                                                                                                                                                                                                                                                                                                                                                         ,0,0,"L",0);
       $pdf->cell(48,$alt,'',0,0,"L",0);
       $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
       $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -1041,7 +1046,7 @@ if (substr($nivel,-1) == 'A'){
 
     if ($nivela == 2) {
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade'),0,0,"L",0);
-        $pdf->cell(60,$alt,substr($o41_descr,0,33),0,0,"L",0);
+        $pdf->cell(60,$alt,$o41_descr,0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -1070,7 +1075,7 @@ if (substr($nivel,-1) == 'A'){
 
       if($nivela == 3){
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'funcao'),0,0,"L",0);
-        $pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+        $pdf->cell(60,$alt,substr($descr,0,44),0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -1099,7 +1104,7 @@ if (substr($nivel,-1) == 'A'){
       $descr = $o53_descr;
       if($nivela == 4){
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'orgao').".".db_formatar($o58_subfuncao,'subfuncao'),0,0,"L",0);
-        $pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+        $pdf->cell(60,$alt,substr($descr,0,44),0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -1128,7 +1133,7 @@ if (substr($nivel,-1) == 'A'){
       $descr = $o54_descr;
       if($nivela == 5){
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'funcao').".".db_formatar($o58_subfuncao,'s','0',3,'e').".".db_formatar($o58_programa,'programa'),0,0,"L",0);
-        $pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+        $pdf->cell(60,$alt,substr($descr,0,44),0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -1157,7 +1162,7 @@ if (substr($nivel,-1) == 'A'){
 
       if($nivela == 6){
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'orgao').".".db_formatar($o58_subfuncao,'s','0',3,'e').".".db_formatar($o58_programa,'programa').".".db_formatar($o58_projativ,'projativ'),0,0,"L",0);
-        $pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+        $pdf->cell(60,$alt,substr($descr,0,44),0,33,0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -1187,7 +1192,7 @@ if (substr($nivel,-1) == 'A'){
 
       if($nivela == 7){
 				$pdf->cell(27,$alt,db_formatar($o58_elemento,'elemento'),0,0,"L",0);
-        $pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
+        $pdf->cell(60,$alt,substr($descr,0,44),0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
@@ -1212,18 +1217,18 @@ if (substr($nivel,-1) == 'A'){
         $totunidareser   += $reservado;
         $totunidaatual   += $atual_menos_reservado;
       }
-
-      if ($nivela == 8) {
-
+      
+      if ($nivela == 8) {  
+        
         if (substr($nivel,0,2) == "10" && $o58_codigo > 0) {
 
             $pdf->cell(27,$alt,db_formatar($o58_elemento,'elemento'),0,0,"L",0);
-            $pdf->cell(53,$alt,substr($descr,0,30),0,0,"L",0);
+            $pdf->cell(53,$alt,substr($descr,0,35),0,0,"L",0);
 
             $pdf->cell(10,$alt,db_formatar($o58_codigo,'s','0',4,'e'),0,0,"C",0);
-
-            $pdf->cell(30,$alt,substr($o15_descr,0,20),0,0,"L",0);
-            $o58_coddot = $o58_coddot != '' ? $o58_coddot."-".db_CalculaDV($o58_coddot) : '';
+            
+            $pdf->cell(30,$alt,$o15_descr,0,0,"L",0);
+            $o58_coddot = $o58_coddot != '' ? $o58_coddot : '';
             $pdf->cell(15,$alt,$o58_coddot,0,0,"R",0);
 
             $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
@@ -1254,8 +1259,8 @@ if (substr($nivel,-1) == 'A'){
 
             $pdf->cell(10,$alt,db_formatar($o58_codigo,'s','0',4,'e'),0,0,"C",0);
 
-            $pdf->cell(110,$alt,substr($o15_descr,0,25),0,0,"L",0);
-            $o58_coddot = $o58_coddot != '' ? $o58_coddot."-".db_CalculaDV($o58_coddot) : '';
+            $pdf->cell(110,$alt,$o15_descr,0,0,"L",0);
+            $o58_coddot = $o58_coddot != '' ? $o58_coddot : '';
             $pdf->cell(15,$alt,$o58_coddot,0,0,"R",0);
             
             $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
