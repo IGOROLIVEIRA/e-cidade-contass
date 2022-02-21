@@ -45,16 +45,7 @@ require_once("classes/db_orcorgao_classe.php"); // receita
 require_once("classes/db_orcparametro_classe.php");
 require_once("classes/db_db_operacaodecredito_classe.php");
 
-
-
-
-
-
-
-
 include("classes/db_empautidot_classe.php");
-
-
 include("classes/db_orcreserva_classe.php");
 include("classes/db_orcreservaaut_classe.php");
 
@@ -87,6 +78,9 @@ $clorcsuplemval->rotulo->label();
 $clorcorgao->rotulo->label();
 $clorcdotacao->rotulo->label();
 $cloperacaodecredito->rotulo->label();
+
+$clrotulo = new rotulocampo;
+$clrotulo->label("op01_numerocontratoopc");
 
 $op = 1;
 $db_opcao = 1;
