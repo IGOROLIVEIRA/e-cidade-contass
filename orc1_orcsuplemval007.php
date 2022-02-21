@@ -80,7 +80,7 @@ $clorcdotacao->rotulo->label();
 $cloperacaodecredito->rotulo->label();
 
 $clrotulo = new rotulocampo;
-$clrotulo->label("op01_numerocontratoopc");
+$clrotulo->label("op01_numerocontratoopc"); 
 
 $op = 1;
 $db_opcao = 1;
@@ -169,7 +169,7 @@ if (isset($incluir)) {
 
         db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
         $sqlerro = true;
-        $limpa_dados = false;
+        $limpa_dados = false; 
     }
 
     if ($tiposup == 1004 || $tiposup == 1009) {
