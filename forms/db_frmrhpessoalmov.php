@@ -2127,6 +2127,7 @@ if (isset($db_opcaoal)) {
                 let value = document.getElementById('rh02_rhtipoapos').value;
                 let rh01_admiss = '<?= $rh01_admiss ?>';
                 let opcoesbeneficio = document.getElementById('rh02_tipobeneficio').options;
+                console.log(oRetorno.rh02_tipobeneficio);
                 if (oRetorno.rh02_tipobeneficio != undefined) {
                     document.getElementById('tipobeneficio').style.display = '';
                 }
