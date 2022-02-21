@@ -106,6 +106,9 @@ switch($oParam->exec) {
     $oDirf->setCodigoArquivo($oParam->sCodigoArquivo);
 
     $oDirf->setMatriculas($oParam->aMatriculaSelecionadas);
+    /**
+      * Este gerarArquivo esta em model/pessoal/Dirf2012.model.php
+      */
     $oRetorno->arquivo = $oDirf->gerarArquivo($oParam, $oParam->lProcessaEmpenho);
 
   break;

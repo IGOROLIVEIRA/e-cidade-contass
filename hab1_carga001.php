@@ -25,89 +25,92 @@
  *                                licenca/licenca_pt.txt
  */
 
-  require_once("libs/db_stdlib.php");
-  require_once("libs/db_conecta.php");
-  require_once("libs/db_sessoes.php");
-  require_once("libs/db_usuariosonline.php");
-  require_once("libs/db_utils.php");
-  require_once("dbforms/db_funcoes.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/db_utils.php");
+require_once("dbforms/db_funcoes.php");
 
-  $db101_cargadados = false;
+$db101_cargadados = false;
 
-  db_postmemory($HTTP_POST_VARS);
-  $mensagem = '';
+db_postmemory($HTTP_POST_VARS);
+$mensagem = '';
 
-  try {
+try {
 
     $oDaoAvaliacao    = new cl_avaliacao();
     $sSqlDaoAvaliacao = $oDaoAvaliacao->sql_query_file($db101_sequencial);
     $rsAvaliacao      = db_query($sSqlDaoAvaliacao);
 
     if (!$rsAvaliacao) {
-      throw new DBException("Erro ao buscar dados da avaliação.");
+        throw new DBException("Erro ao buscar dados da avaliação.");
     }
 
     if (pg_num_rows($rsAvaliacao) > 0) {
-      db_fieldsmemory($rsAvaliacao, 0);
+        db_fieldsmemory($rsAvaliacao, 0);
     }
 
     if (isset($_POST['db101_cargadados'])) {
 
-      $sCargaDados = str_replace(array("\\", ';'), '', $_POST['db101_cargadados']);
-      db_inicio_transacao();
-      $rsCargaDados = db_query($sCargaDados);
+        $sCargaDados = str_replace(array("\\", ';'), '', $_POST['db101_cargadados']);
+        db_inicio_transacao();
+        $rsCargaDados = db_query($sCargaDados);
 
-      if (!$rsCargaDados) {
-        throw new DBException("Instrução SQL inválida, por favor verifique a sintaxe da sua consulta.");
-      }
+        if (!$rsCargaDados) {
+            throw new DBException("Instrução SQL inválida, por favor verifique a sintaxe da sua consulta.");
+        }
 
-      if (pg_num_rows($rsCargaDados) === 0) {
+        // if (pg_num_rows($rsCargaDados) === 0) {
 
-        db_fim_transacao(true);
-        throw new BusinessException("INSERT, UPDATE e DELETE não permitido.");
-      }
+        //     db_fim_transacao(true);
+        //     throw new BusinessException("INSERT, UPDATE e DELETE não permitido.");
+        // }
 
-      db_fim_transacao(false);
+        db_fim_transacao(false);
 
-      $oDaoAvaliacao = new cl_avaliacao();
-      $oDaoAvaliacao->db101_sequencial = $db101_sequencial;
-      $oDaoAvaliacao->db101_cargadados = $_POST["db101_cargadados"];
-      $oDaoAvaliacao->alterar($db101_sequencial);
+        $oDaoAvaliacao = new cl_avaliacao();
+        $oDaoAvaliacao->db101_sequencial = $db101_sequencial;
+        $oDaoAvaliacao->db101_cargadados = $_POST["db101_cargadados"];
+        $oDaoAvaliacao->alterar($db101_sequencial);
 
-      $db101_cargadados = $sCargaDados;
-      $mensagem = "Carga configurada com sucesso.";
+        $db101_cargadados = $sCargaDados;
+        $mensagem = "Carga configurada com sucesso.";
     }
-  } catch (Exception $e) {
+} catch (Exception $e) {
     $mensagem = ($e->getMessage());
-  }
+}
 ?>
 
 <html>
-  <head>
+
+<head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
-  </head>
-  <body>
+</head>
+
+<body>
     <form action="" method="post" class="container">
-      <fieldset class="form-container">
-        <legend>Carga de dados:</legend>
-        <fieldset>
-          <legend><label for="db101_cargadados">Consulta:</label></legend>
-          <?php
-    			  db_input('db101_sequencial', 10, '0', true, 'hidden', 3, "");
-    			?>
-          <textarea cols="150" rows="20"  name="db101_cargadados" id="db101_cargadados"><?=($db101_cargadados) ? $db101_cargadados : '' ?></textarea>
+        <fieldset class="form-container">
+            <legend>Carga de dados:</legend>
+            <fieldset>
+                <legend><label for="db101_cargadados">Consulta:</label></legend>
+                <?php
+                db_input('db101_sequencial', 10, '0', true, 'hidden', 3, "");
+                ?>
+                <textarea cols="150" rows="20" name="db101_cargadados" id="db101_cargadados"><?= ($db101_cargadados) ? $db101_cargadados : '' ?></textarea>
+            </fieldset>
         </fieldset>
-      </fieldset>
-      <input type="submit" name="salvar" value="Salvar" />
+        <input type="submit" name="salvar" value="Salvar" />
     </form>
-  </body>
+</body>
+
 </html>
 <?php
 if (!empty($mensagem)) {
-  db_msgbox($mensagem);
+    db_msgbox($mensagem);
 }

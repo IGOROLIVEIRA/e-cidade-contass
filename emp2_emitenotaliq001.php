@@ -1,7 +1,7 @@
 <?
 /*
  *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
+ *  Copyright (C) 2014  DBselller Servicos de Informatica              
  *                            www.dbseller.com.br                     
  *                         e-cidade@dbseller.com.br                   
  *                                                                    
@@ -13,15 +13,15 @@
  *  Este programa e distribuido na expectativa de ser util, mas SEM   
  *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
  *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais   
+ *  detalhes.                                                          
  *                                                                    
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
  *  junto com este programa; se nao, escreva para a Free Software     
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
  *  02111-1307, USA.                                                  
  *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
+ *  Copia da licenca no diretorio licenca/licenca_en.txt   
  *                                licenca/licenca_pt.txt 
  */
 
@@ -96,15 +96,17 @@ db_app::load("scripts.js,
       </tr>
       <tr>
 	<td nowrap title="<?=@$Te50_codord?>">
-	   <b><? db_ancora("Nota de Liquidação:","js_pesquisae50_codord(true);",1); ?></b>
+	   <b><? db_ancora("Ordem:","js_pesquisae50_codord(true);",1); ?></b>
 	</td>
 	<td>
-	   <? db_input('e50_codord',13,$Ie50_codord,true,'text',$db_opcao," onchange='js_pesquisae50_codord(false);'")  ?>
+	   <? db_input('e50_codord',13,$Ie50_codord,true,'text',$db_opcao," onchange='js_pesquisae50_codord(false);'","e50_codord_ini")  ?>
+     <strong> / </strong>
+     <? db_input('e50_codord',13,$Ie50_codord,true,'text',$db_opcao,"","e50_codord_fim")  ?>
 	</td>
       </tr>
-     <tr>
+     <tr> 
      <td align="left" >
-       <b> Período:</b>
+       <b> Período:</b> 
      </td>
      <td>
       <?  db_inputdata('dtini',@$dia,@$mes,@$ano,true,'text',1,"");
@@ -189,7 +191,8 @@ function getForncedores() {
 function js_abre(){
   
   var obj            = document.form1;
-  var e50_codord     = obj.e50_codord.value;
+  var e50_codord_ini     = obj.e50_codord_ini.value;
+  var e50_codord_fim     = obj.e50_codord_fim.value;
   var e60_codemp_ini = obj.e60_codemp_ini.value;
   var e60_codemp_fim = obj.e60_codemp_fim.value;
   var e60_numemp     = obj.e60_numemp.value;
@@ -201,13 +204,19 @@ function js_abre(){
   var dtfim_dia      = obj.dtfim_dia.value;
   var dtfim_mes      = obj.dtfim_mes.value;
   var dtfim_ano      = obj.dtfim_ano.value;
-  var aFornecedores  = getForncedores();
+  var aFornecedores  = getForncedores(); 
 
   var query          = '';
 
-   if(e50_codord != ''){
-     query += "&e50_codord="+e50_codord;
-
+   if(e50_codord_ini != ''){
+     query += "&e50_codord_ini="+e50_codord_ini;
+     if(e50_codord_fim != '') {
+       if(Number(e50_codord_fim) < Number(e50_codord_ini)) {
+         alert("Ordem inicial maior que o Ordem:O final. Verifique!");
+         return false;
+       }
+     }
+     query += "&e50_codord_fim="+e50_codord_fim;
    }else{
 
        if((dtini_dia != '') && (dtini_mes != '') && (dtini_ano != '')){
@@ -270,8 +279,8 @@ function js_mostracodemp(chave,erro){
  var obj = document.form1;
 
   if(erro==true){
-    obj.e50_codemp.focus();
-    obj.e50_codemp.value = '';
+    obj.e50_codemp_ini.focus();
+    obj.e50_codemp_ini.value = '';
   }
 }
 function js_mostracodemp1(chave1,x){
@@ -305,21 +314,21 @@ function js_pesquisae50_codord(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostracodordem1|e50_codord','Pesquisa',true);
   }else{
-     if(document.form1.e50_codord.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostracodordem','Pesquisa',false);
+     if(document.form1.e50_codord_ini.value != ''){
+        js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord_ini.value+'&funcao_js=parent.js_mostracodordem','Pesquisa',false);
      }else{
-       document.form1.e50_codord.value = '';
+       document.form1.e50_codord_ini.value = '';
      }
   }
 }
 function js_mostracodordem(chave,erro){
   if(erro==true){
-    document.form1.e50_codord.focus();
-    document.form1.e50_codord.value = '';
+    document.form1.e50_codord_ini.focus();
+    document.form1.e50_codord_ini.value = '';
   }
 }
 function js_mostracodordem1(chave1,x){
-  document.form1.e50_codord.value = chave1;
+  document.form1.e50_codord_ini.value = chave1;
   db_iframe_pagordem.hide();
 }
 </script>

@@ -1,6 +1,6 @@
 <?
-/*
- *     E-cidade Software Publico para Gestao Municipal
+/* aa a
+ *     E-cidade Software Publico para Gestao Municipal  
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -54,7 +54,7 @@ $sFornecedor = null;
 if ( isset($oGet) && !empty($oGet) ) {
   $sFornecedor = !empty($oGet->aFornecedor) ? $oGet->aFornecedor : null;
 }
-
+$e50_codord = $codordem;
 $oConfiguracaoGed = GerenciadorEletronicoDocumentoConfiguracao::getInstance();
 if ($oConfiguracaoGed->utilizaGED()) {
 
@@ -108,11 +108,16 @@ if(isset($codordem) && $codordem != ''){
 	  $dbwhere .= " and ";
   }
   $dbwhere .= " e50_codord in ($codordem) ";
-}elseif(isset($e50_codord) && $e50_codord != ''){
+}elseif(isset($e50_codord_ini) && $e50_codord_ini != ''){
   if(strlen($dbwhere) > 0) {
 	  $dbwhere .= " and ";
   }
-  $dbwhere .= " e50_codord=$e50_codord ";
+  
+  if(isset($e50_codord_fim) && $e50_codord_fim != ''){
+  $dbwhere .= "e50_codord::integer between ".$e50_codord_ini." and ".$e50_codord_fim;
+  }else{
+     $dbwhere .= " e50_codord in ($e50_codord_ini) ";
+  }
 }else{
   if(strlen($dbwhere) > 0) {
 	  $dbwhere .= " and ";
@@ -124,7 +129,7 @@ if(isset($dtini) && $dtini!=""){
   if(strlen($dbwhere) > 0) {
 	  $dbwhere .= " and ";
   }
-  $dtini=str_replace("X","-",$dtini);
+  $dtini=str_replace("X","-",$dtini); 
   $dbwhere.=" e50_data >= '$dtini'";
 }
 
@@ -147,7 +152,7 @@ if ( !empty($sFornecedor) ) {
 
   if(strlen($dbwhere) > 0) {
 	  $dbwhere .= " and ";
-  }
+  } 
   $dbwhere .= " z01_numcgm in ({$sFornecedor}) ";
 }
 
@@ -157,7 +162,6 @@ $pdf1 = new db_impcarne($pdf,'7');
 $pdf1->objpdf->SetTextColor(0,0,0);
 
 $sSqlPagordem = $clpagordem->sql_query_notaliquidacao('',' e50_codord,e71_codnota ',' e50_codord ', $dbwhere);
-
 $result = $clpagordem->sql_record($sSqlPagordem);
 if($clpagordem->numrows>0){
   db_fieldsmemory($result,0);
@@ -167,9 +171,9 @@ if($clpagordem->numrows>0){
 
 $result2 = db_query("select * from empparametro where e39_anousu = ".db_getsession("DB_anousu"));
 
-if(pg_numrows($result2)>0){
+if(pg_numrows($result2)>0){ 
   db_fieldsmemory($result2,0);
-  $pdf1->nvias= $e30_nroviaord;
+  $pdf1->nvias= $e30_nroviaord; 
 }
 
 /*
@@ -295,7 +299,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->projativ         = $o58_projativ;
    $pdf1->descr_projativ   = $o55_descr;
    $pdf1->recurso          = $o58_codigo;
-   $pdf1->descr_recurso    = $o15_descr;
+   $pdf1->descr_recurso    = $o15_descr; 
    $pdf1->elemento     	   = $o56_elemento;
    $pdf1->descr_elemento   = $o56_descr;
    $pdf1->obs		       = substr($e50_obs,0,300);
@@ -304,7 +308,8 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
    $pdf1->telef            = $z01_telef;
    $pdf1->fax              = $z01_numero;
-
+   
+  
    /**
     * Variáveis utilizadas na assinatura. Sómente utilizada na impressão por movimento
     */
