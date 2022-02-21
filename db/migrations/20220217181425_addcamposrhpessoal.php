@@ -15,6 +15,7 @@ class Addcamposrhpessoal extends AbstractMigration
             ALTER TABLE rhpessoalmov ADD COLUMN rh02_tipobeneficio varchar(5);
             ALTER TABLE rhpessoalmov ADD COLUMN rh02_descratobeneficio varchar(255);
         
+            INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh01_cnpjrespmatricula'       ,'text' ,'cnpj responsavel pela matricula'     ,'', 'cnpj responsavel pela matricula'      ,14 ,false, false, false, 0, 'text', 'cnpj responsavel pela matricula');
 
             insert into rhtipoapos values (6,'Especial');
             insert into rhtipoapos values (7,'Sem Vinculo Previdenciario');
