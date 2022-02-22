@@ -136,7 +136,7 @@ LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
 LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacontabil = cgmassessoria.z01_numcgm
   WHERE codigo = " . db_getsession("DB_instit");
 
-    $rsResult10 = db_query($sSql); //db_criatabela($rsResult10);
+    $rsResult10 = db_query($sSql); // db_criatabela($rsResult10);
 
     /**
      * tirar caracteres de campo
@@ -171,8 +171,8 @@ LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacon
         throw new Exception($clorgao10->erro_msg);
       }
 
-      $sSql = "select * from identificacaoresponsaveis join cgm on si166_numcgm = z01_numcgm where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel in (1,2,3,4) and (si166_dataini <= '{$this->sDataInicial}' AND si166_datafim >= '{$this->sDataInicial}') AND (si166_dataini <= '{$this->sDataFinal}' AND si166_datafim >= '{$this->sDataFinal}')";
-      $rsResult11 = db_query($sSql); //db_criatabela($rsResult11);
+      $sSql = "select * from identificacaoresponsaveis join cgm on si166_numcgm = z01_numcgm where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel in (1, 2, 3, 4, 5, 6) and (si166_dataini <= '{$this->sDataInicial}' AND si166_datafim >= '{$this->sDataInicial}') AND (si166_dataini <= '{$this->sDataFinal}' AND si166_datafim >= '{$this->sDataFinal}')";
+      $rsResult11 = db_query($sSql); // db_criatabela($rsResult11);
 
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
