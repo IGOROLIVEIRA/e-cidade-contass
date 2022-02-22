@@ -258,6 +258,23 @@ SQL;
                     CONSTRAINT "dipraportes_dipr_fk" FOREIGN KEY ("c240_coddipr") REFERENCES "contabilidade"."dipr"("c236_coddipr"),
                     PRIMARY KEY ("c240_sequencial")
                 );
+
+                DROP SEQUENCE dipr102022_si230_sequencial_seq;
+                CREATE SEQUENCE dipr102022_si230_sequencial_seq;
+
+                -- Table Definition
+                CREATE TABLE "public"."dipr102022" (
+                "si230_sequencial" int8 NOT NULL DEFAULT nextval('dipr102022_si230_sequencial_seq'::regclass),
+                    "si230_tiporegistro" int8 NOT NULL DEFAULT 0,
+                    "si230_coddipr" int8 NOT NULL DEFAULT 0,
+                    "si230_segregacaomassa" int8 NOT NULL DEFAULT 0,
+                    "si230_benefcustesouro" int8 NOT NULL DEFAULT 0,
+                    "si230_atonormativo" int8 NOT NULL DEFAULT 0,
+                    "si230_exercicioato" int8 NOT NULL DEFAULT 0,
+                    "si230_mes" int8 NOT NULL DEFAULT 0,
+                    "si230_instit"  int8 NOT NULL DEFAULT 0,
+                    PRIMARY KEY ("si230_sequencial")
+                );
             COMMIT;
 SQL;
         $this->execute($sql);

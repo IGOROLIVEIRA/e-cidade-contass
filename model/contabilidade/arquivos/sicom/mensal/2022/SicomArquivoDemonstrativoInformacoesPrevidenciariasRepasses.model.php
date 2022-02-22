@@ -146,6 +146,8 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
             }
         }
 
+        db_fim_transacao();
+
         $sSql = "SELECT si09_codorgaotce AS codorgao
               FROM infocomplementaresinstit
               WHERE si09_instit = " . db_getsession("DB_instit");

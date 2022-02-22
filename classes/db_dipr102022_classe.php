@@ -101,10 +101,6 @@ class cl_dipr102022
 
         if ($si230_sequencial == "" || $si230_sequencial == null) {
             $result = db_query("select nextval('dipr102022_si230_sequencial_seq');");
-            echo "<pre>";
-            print_r($this);
-            echo pg_result($result, 0, 0);
-            echo "<------------------ <br/>";
             if ($result == false) {
                 $this->erro_banco = str_replace("", "", @pg_last_error());
                 $this->erro_sql = "Verifique o cadastro da sequencia: dipr102022_si230_sequencial_seq do campo: si230_sequencial";
