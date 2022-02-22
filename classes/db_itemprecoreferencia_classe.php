@@ -14,19 +14,34 @@ class cl_itemprecoreferencia {
    var $erro_banco = null;
    var $erro_msg   = null;
    var $erro_campo = null;
-   var $pagina_retorno = null;
+   var $pagina_retorno = null; 
    // cria variaveis do arquivo
    var $si02_sequencial = 0;
    var $si02_precoreferencia = 0;
    var $si02_itemproccompra = 0;
    var $si02_vlprecoreferencia = 0;
    var $si02_vlpercreferencia = 0;
+   var $si02_coditem = 0;
+   //var $si02_descritem = null;
+   var $si02_qtditem = 0;
+   var $si02_codunidadeitem = 0;
+   var $si02_reservado = "f";
+   var $si02_tabela = "f";
+   var $si02_taxa = "f";
+   var $si02_criterioadjudicacao = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si02_sequencial = int8 = codigo sequencial
                  si02_precoreferencia = int8 = codigo do preco de referencia
                  si02_itemproccompra = int8 = Codigo do Item
                  si02_vlprecoreferencia = float8 = Valor do preco de referencia
+                 si02_coditem = int8 = Codigo do Item Material
+                 si02_qtditem =  int8 = quantidade item 
+                 si02_codunidadeitem = int8 = codigo da unidade
+                 si02_reservado = bool = Reservado 
+                 si02_tabela = bool = Tabela
+                 si02_taxa = bool = Taxa
+                 si02_criterioadjudicacao = int8 = criterio 
                  ";
    //funcao construtor da classe
    function cl_itemprecoreferencia() {
@@ -44,17 +59,25 @@ class cl_itemprecoreferencia {
      }
    }
    // funcao para atualizar campos
-   function atualizacampos($exclusao=false) {
+   function atualizacampos($exclusao=false) { 
      if($exclusao==false){
        $this->si02_sequencial = ($this->si02_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_sequencial"]:$this->si02_sequencial);
        $this->si02_precoreferencia = ($this->si02_precoreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_precoreferencia"]:$this->si02_precoreferencia);
        $this->si02_itemproccompra = ($this->si02_itemproccompra == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_itemproccompra"]:$this->si02_itemproccompra);
        $this->si02_vlprecoreferencia = ($this->si02_vlprecoreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_vlprecoreferencia"]:$this->si02_vlprecoreferencia);
+       $this->si02_coditem = ($this->si02_coditem == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_coditem"]:$this->si02_coditem);
+       //$this->si02_descritem = ($this->si02_descritem == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_descritem"]:$this->si02_descritem);
+       $this->si02_qtditem = ($this->si02_qtditem == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_qtditem"]:$this->si02_qtditem);
+       $this->si02_codunidadeitem = ($this->si02_codunidadeitem == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_codunidadeitem"]:$this->si02_codunidadeitem);
+       $this->si02_reservado = ($this->si02_reservado == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_reservado"]:$this->si02_reservado);
+       $this->si02_tabela = ($this->si02_tabela == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_tabela"]:$this->si02_tabela);
+       $this->si02_taxa = ($this->si02_taxa == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_taxa"]:$this->si02_taxa);
+       $this->si02_criterioadjudicacao = ($this->si02_criterioadjudicacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_criterioadjudicacao"]:$this->si02_criterioadjudicacao);
      }else{
        $this->si02_sequencial = ($this->si02_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_sequencial"]:$this->si02_sequencial);
      }
    }
-   // funcao para inclusao
+   // funcao para inclusao 
    function incluir ($si02_sequencial){
       $this->atualizacampos();
      if($this->si02_precoreferencia == null ){
@@ -84,6 +107,53 @@ class cl_itemprecoreferencia {
        $this->erro_status = "0";
        return false;
      }
+     if($this->si02_coditem == null ){
+      $this->erro_sql = " Campo codigo do item do material não informado.";
+      $this->erro_campo = "si02_coditem";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    /*if($this->si02_descritem == null ){
+      $this->erro_sql = " Campo descricao do item não informado.";
+      $this->erro_campo = "si02_descritem";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }*/
+    if($this->si02_qtditem == null ){
+      $this->erro_sql = " Campo quantidade do item não informado.";
+      $this->erro_campo = "si02_qtditem";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    } 
+    if($this->si02_codunidadeitem == null ){
+      $this->erro_sql = " Campo codigo unidade do item não informado.";
+      $this->erro_campo = "si02_codunidadeitem";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if($this->si02_criterioadjudicacao == null ){
+      $this->erro_sql = " Campo critério de ajudicacao não informado.";
+      $this->erro_campo = "si02_criterioadjudicacao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    
+    
 
    if($si02_sequencial == "" || $si02_sequencial == null ){
        $result = db_query("select nextval('sic_itemprecoreferencia_si02_sequencial_seq')");
@@ -123,6 +193,13 @@ class cl_itemprecoreferencia {
                                       ,si02_itemproccompra
                                       ,si02_vlprecoreferencia
                                       ,si02_vlpercreferencia
+                                      ,si02_coditem
+                                      ,si02_qtditem
+                                      ,si02_codunidadeitem
+                                      ,si02_reservado
+                                      ,si02_tabela
+                                      ,si02_taxa
+                                      ,si02_criterioadjudicacao
                        )
                 values (
                                 $this->si02_sequencial
@@ -130,7 +207,15 @@ class cl_itemprecoreferencia {
                                ,$this->si02_itemproccompra
                                ,$this->si02_vlprecoreferencia
                                ,$this->si02_vlpercreferencia
+                               ,$this->si02_coditem
+                               ,$this->si02_qtditem
+                               ,$this->si02_codunidadeitem
+                               ,'$this->si02_reservado'
+                               ,'$this->si02_tabela'
+                               ,'$this->si02_taxa'
+                               ,$this->si02_criterioadjudicacao
                       )";
+                      
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
