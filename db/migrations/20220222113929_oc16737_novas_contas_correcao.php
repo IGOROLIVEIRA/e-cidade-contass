@@ -2,9 +2,8 @@
 
 use Classes\PostgresMigration;
 
-class Oc16737NovasContas extends PostgresMigration
+class Oc16737NovasContasCorrecao extends PostgresMigration
 {
-
     public function up()
     {
         $nAnoInicial = 2022;
@@ -27,14 +26,14 @@ class Oc16737NovasContas extends PostgresMigration
                     $c60_estrut                     = $sEstrut;
                     $c60_descr                      = substr($aPcasp[1], 0, 50);
                     $c60_finali                     = $aPcasp[2];
-                    $c60_codsis                     = $aPcasp[9];
+                    $c60_codsis                     = $aPcasp[9] !== '' ? $aPcasp[9] : 0;
                     $c60_codcla                     = 1;
                     $c60_consistemaconta            = 0;
                     $c60_identificadorfinanceiro    = $aPcasp[5] == 'P/F' ? 'F' : $aPcasp[5];
                     $c60_naturezasaldo              = $aPcasp[3] == 'D' ? 1 : $aPcasp[3] == 'C' ? 2 : 3;
                     $c60_funcao                     = $aPcasp[2];
                     $c60_nregobrig                  = $aPcasp[6] == '' ? 0 : $aPcasp[6];
-                    $c60_infcompmsc                 = $aPcasp[11];
+                    $c60_infcompmsc                 = $aPcasp[11] != '' ? $aPcasp[11] : 1;
 
                     $aConPlano = array($c60_codcon, $c60_anousu, $c60_estrut, $c60_descr, $c60_finali, $c60_codsis, $c60_codcla,
                                        $c60_consistemaconta, $c60_identificadorfinanceiro, $c60_naturezasaldo, $c60_funcao, $c60_nregobrig, $c60_infcompmsc);
@@ -46,7 +45,7 @@ class Oc16737NovasContas extends PostgresMigration
                         foreach($aInstituicoes as $oInstituicao){
                             $c61_codcon        = $c60_codcon;
                             $c61_anousu        = $oExercicios['c60_anousu'];
-                            $c61_reduz         = current($this->fetchRow("select nextval('conplano_c60_codcon_seq')"));
+                            $c61_reduz         = current($this->fetchRow("select nextval('conplanoreduz_c61_reduz_seq')"));
                             $c61_instit        = $oInstituicao['c61_instit'];
                             $c61_codigo        = 100;
                             $c61_contrapartida = 0;
@@ -136,5 +135,4 @@ class Oc16737NovasContas extends PostgresMigration
         $columns = array('c62_anousu', 'c62_reduz', 'c62_codrec', 'c62_vlrcre', 'c62_vlrdeb');
         $this->table('conplanoexe', array('schema' => 'contabilidade'))->insert($columns, array($data))->saveData();
     }
-
 }
