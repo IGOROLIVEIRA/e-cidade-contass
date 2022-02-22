@@ -152,7 +152,6 @@ SQL;
     {
         $sql = <<<SQL
             BEGIN;
-                DROP SEQUENCE IF EXISTS dipr_c236_coddipr_seq;
                 CREATE SEQUENCE dipr_c236_coddipr_seq;
 
                 CREATE TABLE "contabilidade"."dipr" (
@@ -171,7 +170,6 @@ SQL;
                     PRIMARY KEY ("c236_coddipr")
                 );
 
-                DROP SEQUENCE IF EXISTS diprbasecontribuicao_c237_sequencial_seq;
                 CREATE SEQUENCE diprbasecontribuicao_c237_sequencial_seq;
 
                 CREATE TABLE "contabilidade"."diprbasecontribuicao" (
@@ -194,7 +192,6 @@ SQL;
                     PRIMARY KEY ("c237_sequencial")
                 );
 
-                DROP SEQUENCE diprbaseprevidencia_c238_sequencial_seq;
                 CREATE SEQUENCE diprbaseprevidencia_c238_sequencial_seq;
 
                 CREATE TABLE "contabilidade"."diprbaseprevidencia" (
@@ -217,7 +214,6 @@ SQL;
                     PRIMARY KEY ("c238_sequencial")
                 );
 
-                DROP SEQUENCE diprdeducoes_c239_sequencial_seq;
                 CREATE SEQUENCE  diprdeducoes_c239_sequencial_seq;
 
                 CREATE TABLE "contabilidade"."diprdeducoes" (
@@ -239,7 +235,6 @@ SQL;
                     PRIMARY KEY ("c239_sequencial")
                 );
 
-                DROP SEQUENCE dipraportes_c240_sequencial_seq;
                 CREATE SEQUENCE dipraportes_c240_sequencial_seq;
 
                 CREATE TABLE "contabilidade"."dipraportes" (
@@ -259,7 +254,6 @@ SQL;
                     PRIMARY KEY ("c240_sequencial")
                 );
 
-                DROP SEQUENCE dipr102022_si230_sequencial_seq;
                 CREATE SEQUENCE dipr102022_si230_sequencial_seq;
 
                 -- Table Definition
