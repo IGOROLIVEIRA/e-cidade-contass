@@ -22,6 +22,7 @@ class cl_ext202022
   var $si165_codorgao = null;
   var $si165_codext = 0;
   var $si165_codfontrecursos = 0;
+  var $si165_exerciciocompdevo = 0;
   var $si165_vlsaldoanteriorfonte = 0;
   var $si165_natsaldoanteriorfonte = null;
   var $si165_totaldebitos = 0;
@@ -37,6 +38,7 @@ class cl_ext202022
                  si165_codorgao = varchar(2) = Código do órgão 
                  si165_codext = int8 = Código identificador 
                  si165_codfontrecursos = int8 = Código da fonte  de recursos
+                 si165_exerciciocompdevo = int4 = Exercício da competência da devolução de duodécimo
                  si165_totaldebitos = float8 = Total de débitos realizados no mês
                  si165_totalcreditos = float8 = Total de créditos realizados no mês
                  si165_vlsaldoanteriorfonte = float8 = Saldo anterior da  extraorçamentária 
@@ -73,6 +75,7 @@ class cl_ext202022
       $this->si165_codorgao = ($this->si165_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si165_codorgao"] : $this->si165_codorgao);
       $this->si165_codext = ($this->si165_codext == "" ? @$GLOBALS["HTTP_POST_VARS"]["si165_codext"] : $this->si165_codext);
       $this->si165_codfontrecursos = ($this->si165_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si165_codfontrecursos"] : $this->si165_codfontrecursos);
+      $this->si165_exerciciocompdevo = ($this->si165_exerciciocompdevo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si165_exerciciocompdevo"] : $this->si165_exerciciocompdevo);
       $this->si165_vlsaldoanteriorfonte = ($this->si165_vlsaldoanteriorfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si165_vlsaldoanteriorfonte"] : $this->si165_vlsaldoanteriorfonte);
       $this->si165_natsaldoanteriorfonte = ($this->si165_natsaldoanteriorfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si165_natsaldoanteriorfonte"] : $this->si165_natsaldoanteriorfonte);
       $this->si165_vlsaldoatualfonte = ($this->si165_vlsaldoatualfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si165_vlsaldoatualfonte"] : $this->si165_vlsaldoatualfonte);
@@ -103,6 +106,9 @@ class cl_ext202022
     }
     if ($this->si165_codfontrecursos == null) {
       $this->si165_codfontrecursos = "0";
+    }
+    if ($this->si165_exerciciocompdevo == null) {
+        $this->si165_exerciciocompdevo = "0";
     }
     if ($this->si165_totaldebitos == null) {
       $this->si165_totaldebitos = "0";
@@ -178,6 +184,7 @@ class cl_ext202022
                                       ,si165_codorgao 
                                       ,si165_codext 
                                       ,si165_codfontrecursos 
+                                      ,si165_exerciciocompdevo
                                       ,si165_vlsaldoanteriorfonte 
                                       ,si165_natsaldoanteriorfonte
                                       ,si165_totaldebitos
@@ -193,6 +200,7 @@ class cl_ext202022
                                ,'$this->si165_codorgao' 
                                ,$this->si165_codext 
                                ,$this->si165_codfontrecursos 
+                               ,$this->si165_exerciciocompdevo
                                ,$this->si165_vlsaldoanteriorfonte
                                ,'$this->si165_natsaldoanteriorfonte'
                                ,$this->si165_totaldebitos
@@ -293,6 +301,13 @@ class cl_ext202022
       $sql .= $virgula . " si165_codfontrecursos = $this->si165_codfontrecursos ";
       $virgula = ",";
     }
+        if (trim($this->si165_exerciciocompdevo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si165_exerciciocompdevo"])) {
+            if (trim($this->si165_exerciciocompdevo) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si165_exerciciocompdevo"])) {
+                $this->si165_exerciciocompdevo = "0";
+            }
+            $sql .= $virgula . " si165_exerciciocompdevo = $this->si165_exerciciocompdevo ";
+            $virgula = ",";
+        }
     if (trim($this->si165_vlsaldoanteriorfonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si165_vlsaldoanteriorfonte"])) {
       if (trim($this->si165_vlsaldoanteriorfonte) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si165_vlsaldoanteriorfonte"])) {
         $this->si165_vlsaldoanteriorfonte = "0";

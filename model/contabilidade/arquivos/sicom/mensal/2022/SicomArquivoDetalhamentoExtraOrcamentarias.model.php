@@ -246,6 +246,13 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 		       							AND si124_subtipo = '$cExt10->si124_subtipo'
 		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'
 		       							AND si124_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $sSqlVerifica .= " UNION
+								 SELECT si124_sequencial
+										FROM ext102021
+										WHERE si124_codorgao = '$oContaExtra->codorgao'
+		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
+		       							AND si124_subtipo = '$cExt10->si124_subtipo'
+										   AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'";
 				$sSqlVerifica .= " UNION
 								 SELECT si124_sequencial
 										FROM ext102020
@@ -326,6 +333,13 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
                  * GRAVAR DADOS DO REGISTRO 20
                  */
 
+                /* SQL RETORNA O EXERCICIO DE COMPETENCIA DE DEVOLUÇÃO */
+                $sSqlExtExercicioCompDevo = "select k17_devolucao from slip 
+                        where k17_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
+                        and k17_debito = {$nExtras} and k17_situacao IN (2, 4) ";
+                $rsExtExercicioComDevo = db_query($sSqlExtExercicioCompDevo);
+                $oExtExercicioComDevo = db_utils::fieldsMemory($rsExtExercicioComDevo, 0)->k17_devolucao;
+
 				/* SQL RETORNA A FONTE DE RECURSO DA CONTA EXTRA */
 				$sSqlExtRecurso = "select o15_codtri from conplanoreduz
 	        join orctiporec on c61_codigo = o15_codigo where c61_anousu = " . db_getsession("DB_anousu") . " and c61_reduz = " . $nExtras;
@@ -353,6 +367,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 					$cExt20->si165_codorgao = $oExt10Agrupado->si124_codorgao;
 					$cExt20->si165_codext = $oExt10Agrupado->si124_codext;
 					$cExt20->si165_codfontrecursos = $oExtRecurso;
+                    $cExt20->si165_exerciciocompdevo = $oExtExercicioComDevo;
 					$cExt20->si165_vlsaldoanteriorfonte = $saldoanterior;
 					$cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte == '' ? 'C' : $natsaldoanteriorfonte;
 					$cExt20->si165_vlsaldoatualfonte = $saldofinal;
@@ -395,7 +410,8 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 						
 						";
 
-				$rsExt30Geral = db_query($sSql30Geral);//db_criatabela($rsExt30Geral);
+				$rsExt30Geral = db_query($sSql30Geral);
+                //db_criatabela($rsExt30Geral);
 
 				for ($linha = 0; $linha < pg_num_rows($rsExt30Geral); $linha++) {
 

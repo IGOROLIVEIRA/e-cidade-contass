@@ -141,6 +141,8 @@ class GerarARC extends GerarAM
                         $aCSVARC21['si32_nrodocumento']       = $aARC21['si32_nrodocumento'] == "" || $aARC21['si32_nrodocumento'] == '0' ? "" : $aARC21['si32_nrodocumento'];
                         $aCSVARC21['si32_nroconvenio']        = $aARC21['si32_nroconvenio'];
                         $aCSVARC21['si32_dataassinatura']     = $this->sicomDate($aARC21['si32_dataassinatura']);
+                        $aCSVARC21['si32_nrocontratoop']      = $aARC21['si32_nrocontratoop'];
+                        $aCSVARC21['si32_dataassinaturacontratoop'] = $this->sicomDate($aARC21['si32_dataassinaturacontratoop']);
                         $aCSVARC21['si32_vlrestornadofonte']  = $this->sicomNumberReal($aARC21['si32_vlestornadofonte'], 2);
 
                         $this->sLinha = $aCSVARC21;
