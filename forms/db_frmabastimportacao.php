@@ -116,26 +116,40 @@ if(isset($_POST["processar"])) {
             //data formatada para não precisar vim com formatação de String na palnilha
             //$data = date('d/m/Y', PHPExcel_Shared_Date::ExcelToPHP( $cell->getValue()));
 
+
             if($data==""){
                 break;
             }
-
-            $data = explode("/",$data);
-            $data = $data[2]."-".$data[1]."-".$data[0];
+            
+            
+            $valorData = strlen($data);
+            if($valorData==10){
+                $data = explode("/",$data);
+                $data = $data[2]."-".$data[1]."-".$data[0];
+            }else{
+                $data = date('d/m/Y', PHPExcel_Shared_Date::ExcelToPHP( $cell->getValue()));
+                $data = explode("/",$data);
+                $data = $data[2]."-".$data[1]."-".($data[0]+1);
+            }
             
             //$hora = PHPExcel_Shared_Date::stringToExcel($data+1);
 
             $cell = $objWorksheet -> getCellByColumnAndRow (2,$row);
             //$hora = $cell->getValue();
             $val = $cell->getValue();
+            $tamVal = strlen($val);
 
-            $hours = round($val * 24);
-            $mins = round($val * 1440) - round($hours * 60);
-            $secs = round($val * 86400) - round($hours * 3600) - round($mins * 60);
-            $returnValue = (integer) gmmktime($hours+3, $mins, $secs);
-            
-            $hora = date('H:i',$returnValue);
-        
+            if($tamVal==8){
+                $hora = explode(":",$val);
+                $hora = $hora[0].":".$hora[1];
+            }else{
+                $hours = round($val * 24);
+                $mins = round($val * 1440) - round($hours * 60);
+                $secs = round($val * 86400) - round($hours * 3600) - round($mins * 60);
+                $returnValue = (integer) gmmktime($hours+3, $mins, $secs);
+                
+                $hora = date('H:i',$returnValue);
+            }
             $cell = $objWorksheet -> getCellByColumnAndRow (3,$row);
             $placa = $cell->getValue();
             $placa = explode("-", $placa);
@@ -241,8 +255,8 @@ if(isset($_POST["processar"])) {
                         }
                     }
                     $arrayItensPlanilha[] = $objItensPlanilha;
-            }  
-    }
+            }
+    } 
 }
 ?>
 

@@ -75,6 +75,7 @@ class GerarAOC extends GerarAM
                         $aCSVAOC11['si39_codreduzidodecreto']   = substr($aAOC11['si39_codreduzidodecreto'], 0, 15);
                         $aCSVAOC11['si39_nrodecreto']           = substr($aAOC11['si39_nrodecreto'], 0, 8);
                         $aCSVAOC11['si39_tipodecretoalteracao'] = $this->padLeftZero($aAOC11['si39_tipodecretoalteracao'], 2);
+                        $aCSVAOC11['si39_justificativa']        = substr($aAOC11['si39_justificativa'], 0, 500);
                         $aCSVAOC11['si39_valoraberto']          = $this->sicomNumberReal($aAOC11['si39_valoraberto'], 2);
 
                         $this->sLinha = $aCSVAOC11;
@@ -129,6 +130,8 @@ class GerarAOC extends GerarAM
                         $aCSVAOC14['si42_tiporegistro']       = $this->padLeftZero($aAOC14['si42_tiporegistro'], 2);
                         $aCSVAOC14['si42_codreduzidodecreto'] = substr($aAOC14['si42_codreduzidodecreto'], 0, 15);
                         $aCSVAOC14['si42_origemrecalteracao'] = $this->padLeftZero($aAOC14['si42_origemrecalteracao'], 2);
+                        $aCSVAOC14['si42_nrocontratoop'] = ($aAOC14['si42_nrocontratoop'] == ' ' || $aAOC14['si42_nrocontratoop'] == '0' ? ' ' : substr($aAOC14['si42_nrocontratoop'], 0, 30));
+                        $aCSVAOC14['si42_dataassinaturacontratoop'] = ($aAOC14['si42_dataassinaturacontratoop'] == ' ' || $aAOC14['si42_dataassinaturacontratoop'] == '0' ? ' ' : $this->sicomDate($aAOC14['si42_dataassinaturacontratoop']));
                         $aCSVAOC14['si42_codorigem']          = ($aAOC14['si42_codorigem'] == ' ' || $aAOC14['si42_codorigem'] == '0' ? ' ' : substr($aAOC14['si42_codorigem'], 0, 15));
                         $aCSVAOC14['si42_codorgao']           = $this->padLeftZero($aAOC14['si42_codorgao'], 2);
                         $aCSVAOC14['si42_codunidadesub']      = substr($aAOC14['si42_codunidadesub'], 0, strlen($aAOC14['si42_codunidadesub']) > 5 ? 8 : 5);

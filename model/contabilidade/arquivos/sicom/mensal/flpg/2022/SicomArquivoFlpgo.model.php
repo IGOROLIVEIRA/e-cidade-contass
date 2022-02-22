@@ -528,7 +528,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_datfastpreliminar                   = NULL;
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
         $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
-        $clflpgo10->si195_codcargo                          = (($oDados10->si195_indsituacaoservidorpensionista!='P')?$oDados10->rh37_cbo:0);
+        $clflpgo10->si195_codcargo                          = (in_array($oDados10->si195_indsituacaoservidorpensionista,array('03','05','06','07','08','09')) ? 0 : $oDados10->rh37_cbo);
         $clflpgo10->si195_sglcargo 							= $this->convert_accented_characters($oDados10->si195_sglcargo);
         $clflpgo10->si195_dscapo           					= $this->convert_accented_characters($dscAPO);
         $clflpgo10->si195_natcargo                          = $this->convert_accented_characters($oDados10->si195_reqcargo);

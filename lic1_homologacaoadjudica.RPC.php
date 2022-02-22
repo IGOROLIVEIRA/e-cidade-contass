@@ -651,6 +651,7 @@ switch($oParam->exec) {
                         }else{
                             $erro = "Homologação salva com sucesso!";
                             $oRetorno->message = urlencode($erro);
+                            $oRetorno->sequencial = $clhomologacaoadjudica->l202_sequencial;
                             $oRetorno->status = 1;
                         }
                         /**
@@ -705,7 +706,8 @@ switch($oParam->exec) {
                         }else{
                             $erro = "Homologação salva com sucesso!";
                             $oRetorno->message = urlencode($erro);
-                            $oRetorno->status = 1;
+                            $oRetorno->sequencial = $clhomologacaoadjudica->l202_sequencial;
+                            $oRetorno->status = 1; 
 
                         /*Verifica se é registro de preco*/
                             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
@@ -713,7 +715,7 @@ switch($oParam->exec) {
                             $oRetorno->regpreco = $l20_tipnaturezaproced;
 
                         /*cria consulta da solicitação com licitação*/
-                            $resultsolicita = $clliclicita->sql_record($clliclicita->sql_query_julgamento_licitacao(null,"pc10_numero",null,"l20_codigo = {$l202_licitacao}"));
+                            $resultsolicita = $clliclicita->sql_record($clliclicita->sql_query_consulta_regpreco(null,"pc10_numero",null,"l20_codigo = {$l202_licitacao}"));
                             $pc10_numero = db_utils::fieldsMemory($resultsolicita, 0)->pc10_numero;
                             $oRetorno->pc10_numero = $pc10_numero;
 
@@ -873,6 +875,7 @@ switch($oParam->exec) {
                     }else{
                         $erro = "Homologação salva com sucesso!";
                         $oRetorno->message = urlencode($erro);
+                        $oRetorno->sequencial = $clhomologacaoadjudica->l202_sequencial;
                         $oRetorno->status = 1;
                     }
 

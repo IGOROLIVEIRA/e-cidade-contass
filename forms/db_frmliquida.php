@@ -39,6 +39,7 @@ $clpagordemnota->rotulo->label();
 $clempnota->rotulo->label();
 $clempnotaele->rotulo->label();
 $cltabrec->rotulo->label();
+
 if ($tela_estorno){
 
    $operacao  = 2;//operacao a ser realizada:1 = liquidacao, 2 estorno
@@ -202,9 +203,15 @@ $db_opcao_inf=1;
  <fieldset><legend><b>Histórico</b></legend>
    <table width="100%">
         <tr>
-          <td>
+          <td id='opcredito' style='display:none'>
+          <?        
+          db_textarea('informacaoop',4,110,0,true,'text',1,"");       
+          ?>
+          </td>
+          <tr >
+          <td id='ophisotrico' style='display:none'>
           <?
-          db_textarea('historico',4,110,0,true,'text',1,"");
+          db_textarea('historico',4,110,0,true,'',1,"" );         
           ?>
           </td>
         </tr>
@@ -285,11 +292,11 @@ function js_consultaEmpenho(iEmpenho,operacao){
 /* Extensão CotaMensalLiquidacao - pt 3 */
 
  /**
-  * Preenche o formulário com os dados do empenho
+  * Preenche o formulário com os dados do empenho   
   */
 function js_saida(oAjax){
-
-   js_removeObj("msgBox");
+  
+   js_removeObj("msgBox"); 
     var iNumEmpOld = $F('e60_numemp');
     obj  = eval("("+oAjax.responseText+")");
     $('e60_codemp').value = obj.e60_codemp;
@@ -305,25 +312,38 @@ function js_saida(oAjax){
     $('e60_vlranu').value = obj.e60_vlranu;
     $('e60_vlrpag').value = obj.e60_vlrpag;
     $('e60_vlrliq').value = obj.e60_vlrliq;
-    $('historico').value  = obj.e60_resumo.urlDecode();
+    $('informacaoop').value  = obj.e60_informacaoop.urlDecode(); 
+    if(obj.e60_informacaoop){
+      $('historico').value  = obj.e60_informacaoop.urlDecode();}
+    else{
+      $('historico').value  = obj.e60_resumo.urlDecode();   
+    }
     $('saldo_disp').value = obj.saldo_dis;
     $('sEstrutElemento').value = obj.sEstrutural;
     saida                 = '';
     iTotNotas             = 0;
     $('dados').innerHTML  = '';
     estrutural            = obj.sEstrutural;
-    $('e50_compdesp').value = '';
+    $('e50_compdesp').value = ''; 
     $('e83_conta').value    = '';
     $('e83_descr').value    = '';
     $('e83_codtipo').value  = '';
+
+    if(obj.e60_informacaoop!=''){
+      document.getElementById('opcredito').style.display = "table-cell";
+      document.getElementById('ophisotrico').style.display = "none";
+    } else {
+      document.getElementById('opcredito').style.display = "none";
+      document.getElementById('ophisotrico').style.display = "table-cell";
+    }
 
     if (obj.aItensPendentesPatrimonio.length > 0) {
 
       oDBViewNotasPendentes = new DBViewNotasPendentes('oDBViewNotasPendentes');
       oDBViewNotasPendentes.setCodigoNota(obj.aItensPendentesPatrimonio);
-  	  oDBViewNotasPendentes.show();
+  	  oDBViewNotasPendentes.show();  
     }
-
+ 
     if (obj.numnotas > 0) {
 
       for (var i = 0; i < obj.data.length; i++) {
@@ -332,7 +352,7 @@ function js_saida(oAjax){
         if (obj.data[i].libera == 'disabled') {
           sClassName = ' disabled ';
         }
-
+ 
         if (in_array(obj.data[i].e69_codnota, obj.aItensPendentesPatrimonio)) {
           sClassName = ' disabled ';
         }
@@ -390,7 +410,7 @@ function js_saida(oAjax){
             saida += "   onclick='js_lancarRetencao("+obj.data[i].e69_codnota+",\""+iCodOrd+"\",\""+obj.data[i].e70_valor+"\");";
             saida += "return false;'>"+nValorRetencao+"</a>";
           } else {
-            saida += nValorRetencao;
+            saida += nValorRetencao; 
           }
           saida += "</td></tr>";
 
@@ -502,12 +522,19 @@ function js_liquidar(metodo){
        /* Extensão CotaMensalLiquidacao - pt 5 */
      }
      js_divCarregando(sMensagem, "msgLiq");
-
+    
      var oParam        = new Object();
      oParam.method     = metodo;
      oParam.iEmpenho   = $F('e60_numemp');
      oParam.notas      = aNotas;
-     oParam.historico  = encodeURIComponent($F('historico'));
+     oParam.informacaoop  = encodeURIComponent($F('informacaoop'));
+     if(obj.e60_informacaoop){
+        oParam.historico  = encodeURIComponent($F('informacaoop'));
+     }
+     else{   
+        oParam.historico  = encodeURIComponent($F('historico'));
+     }
+
      oParam.e03_numeroprocesso = encodeURIComponent(tagString($F("e03_numeroprocesso")));
 
      oParam.pars       = $F('e60_numemp');
@@ -688,7 +715,9 @@ function js_mostracontapagadora1(chave1,chave2,chave3) {
     db_iframe_empagetipo.hide();
 
 }
-
+$('informacaoop').style.width ='100%';
 $('historico').style.width ='100%';
+
+
 $("o15_descr").style.width = "222px";
 </script>

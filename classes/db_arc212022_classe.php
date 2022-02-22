@@ -27,6 +27,11 @@ class cl_arc212022
   var $si32_dataassinatura_dia = null;
   var $si32_dataassinatura_mes = null;
   var $si32_dataassinatura_ano = null;
+  var $si32_nrocontratoop = null;
+  var $si32_dataassinaturacontratoop = null;
+  var $si32_dataassinaturacontratoop_dia = null;
+  var $si32_dataassinaturacontratoop_mes = null;
+  var $si32_dataassinaturacontratoop_ano = null;
   var $si32_dataassinatura = null;
   var $si32_vlestornadofonte = 0;
   var $si32_reg20 = 0;
@@ -42,6 +47,8 @@ class cl_arc212022
                  si32_nrodocumento = varchar(14) = Número do documento
                  si32_nroconvenio = varchar(30) = Número do convênio
                  si32_dataassinatura = date = Data da assinatura
+                 si32_nrocontratoop = varchar(30) = Número do contrato
+                 si32_dataassinaturacontratoop = data = Data Assinatura do Contrato
                  si32_vlestornadofonte = float8 = Valor estornado
                  si32_reg20 = int8 = reg20
                  si32_instit = int8 = Instituição
@@ -86,7 +93,15 @@ class cl_arc212022
     			$this->si32_dataassinatura = $this->si32_dataassinatura_ano . "-" . $this->si32_dataassinatura_mes . "-" . $this->si32_dataassinatura_dia;
   		  }
   	  }
-
+        $this->si32_nrocontratoop = ($this->si32_nrocontratoop == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_nrocontratoop"] : $this->si32_nrocontratoop);
+        if($this->si32_dataassinaturacontratoop == ""){
+          $this->si32_dataassinaturacontratoop_dia = ($this->si32_dataassinaturacontratoop_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si32_dataassinaturacontratoop_dia"]:$this->si32_dataassinaturacontratoop_dia);
+          $this->si32_dataassinaturacontratoop_mes = ($this->si32_dataassinaturacontratoop_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si32_dataassinaturacontratoop_mes"]:$this->si32_dataassinaturacontratoop_mes);
+          $this->si32_dataassinaturacontratoop_ano = ($this->si32_dataassinaturacontratoop_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si32_dataassinaturacontratoop_ano"]:$this->si32_dataassinaturacontratoop_ano);
+          if($this->si32_dataassinaturacontratoop_dia != ""){
+            $this->si32_dataassinaturacontratoop = $this->si32_dataassinaturacontratoop_ano."-".$this->si32_dataassinaturacontratoop_mes."-".$this->si32_dataassinaturacontratoop_dia;
+          }
+        }
         $this->si32_vlestornadofonte = ($this->si32_vlestornadofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_vlestornadofonte"] : $this->si32_vlestornadofonte);
         $this->si32_reg20 = ($this->si32_reg20 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_reg20"] : $this->si32_reg20);
         $this->si32_mes = ($this->si32_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_mes"] : $this->si32_mes);
@@ -202,6 +217,8 @@ class cl_arc212022
                                       ,si32_nrodocumento
                                       ,si32_nroconvenio
                                       ,si32_dataassinatura
+                                      ,si32_nrocontratoop
+                                      ,si32_dataassinaturacontratoop
                                       ,si32_vlestornadofonte
                                       ,si32_reg20
                                       ,si32_mes
@@ -216,6 +233,8 @@ class cl_arc212022
                                ,'$this->si32_nrodocumento'
                                ,'$this->si32_nroconvenio'
                                ," . ($this->si32_dataassinatura == "null" || $this->si32_dataassinatura == "" ? "null" : "'" . $this->si32_dataassinatura . "'") . "
+                               ,'$this->si32_nrocontratoop'
+                               ,".($this->si32_dataassinaturacontratoop == "null" || $this->si32_dataassinaturacontratoop == ""?"null":"'".$this->si32_dataassinaturacontratoop."'")."
                                ,$this->si32_vlestornadofonte
                                ,$this->si32_reg20
                                ,$this->si32_mes

@@ -94,7 +94,10 @@ function js_emite(){
 	  <?
 
 
-$xy = array (
+$xy = array ( 
+    '9A' => 'Recurso Até o Nível - Completo',
+    '8A' => 'Recurso Até o Nível', 
+    '8B' => 'Recurso só o Nível',
     '1A' => 'Órgão Até o Nível', 
     '1B' => 'Órgão só o Nível', 
     '2A' => 'Unidade Até o Nível', 
@@ -110,10 +113,7 @@ $xy = array (
     '10A' => 'Modalidade de Aplicação até o Nível',
     '10B' => 'Modalidade de Aplicação só o Nível', 
     '7A' => 'Elemento Até o Nível', 
-    '7B' => 'Elemento só o Nível', 
-    '8A' => 'Recurso Até o Nível', 
-    '9A' => 'Recurso Até o Nível - Completo', 
-    '8B' => 'Recurso só o Nível'
+    '7B' => 'Elemento só o Nível'
 );
 db_select('nivel', $xy, true, 2, "");
 ?>
