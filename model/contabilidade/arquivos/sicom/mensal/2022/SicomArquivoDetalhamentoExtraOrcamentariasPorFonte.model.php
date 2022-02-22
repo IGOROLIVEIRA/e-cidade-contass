@@ -339,6 +339,11 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 					$saldoanterior            = $natsaldoanteriorfonte == 'C' ? ($saldoanteriorabs == '' ? 0 : $saldoanteriorabs) * -1 : ($saldoanteriorabs == '' ? 0 : $saldoanteriorabs);
 					$saldofinal               = $natsaldoatualfonte == 'C' ? ($saldofinalabs == '' ? 0 : $saldofinalabs) * -1 : ($saldofinalabs == '' ? 0 : $saldofinalabs);
 
+					/* SQL RETORNA O CODTRI DA FONTE */
+					$sSqlExtRecurso = "SELECT o15_codtri FROM orctiporec WHERE o15_codigo = ". $oExtRecurso;
+					$rsExtRecurso = db_query($sSqlExtRecurso);
+					$oExtRecursoTCE = db_utils::fieldsMemory($rsExtRecurso, 0)->o15_codtri; //fonte encerrada
+
                     /* SQL RETORNO A SLIP */
                     $sql = " SELECT 
                                 k17_devolucao devolucao, 
@@ -360,11 +365,11 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                                 AND k17_devolucao IS NOT NULL
                                 and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                                 and conlancaminstit.c02_instit = " . db_getsession("DB_instit");
-
+        
                     $resultado = db_query($sql) or die($sql);
                     for ($linha = 0; $linha < pg_num_rows($resultado); $linha++) {
                         $data = db_utils::fieldsMemory($resultado, $linha);
-                        $hash = "20{$oExt10Agrupado->si124_codorgao}{$oContaExtraFonte->codext}{$oContaExtraFonte->fonte}";
+                        $hash = "20{$oExt10Agrupado->si124_codorgao}{$oContaExtraFonte->codext}" . $oExtRecursoTCE;
                         if (array_key_exists($hash, $aExtExercicioCompDevo)) {
                             if (array_key_exists($data->devolucao, $aExtExercicioCompDevo[$hash])) {
                                 $aExtExercicioCompDevo[$hash][$data->devolucao]->valor += $data->valor;
@@ -379,11 +384,6 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                         $aExtExercicioCompDevo[$hash][$data->devolucao]->devolucao = $data->devolucao;
                         $aExtExercicioCompDevo[$hash][$data->devolucao]->valor = $data->valor;
                     }
-
-					/* SQL RETORNA O CODTRI DA FONTE */
-					$sSqlExtRecurso = "SELECT o15_codtri FROM orctiporec WHERE o15_codigo = ". $oExtRecurso;
-					$rsExtRecurso = db_query($sSqlExtRecurso);
-					$oExtRecursoTCE = db_utils::fieldsMemory($rsExtRecurso, 0)->o15_codtri; //fonte encerrada
 
                     //OC11537
                     $bFonteEncerrada  = in_array($oExtRecursoTCE, $this->aFontesEncerradas);
@@ -610,11 +610,12 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 				}
 		}
 	}
-    // echo "<pre>"; print_r($aExtExercicioCompDevo);
 
     foreach($aExt20 as $oExt20) {
         $hash = "20{$oExt20->si165_codorgao}{$oExt20->si165_codext}{$oExt20->si165_codfontrecursos}";
+
         if (array_key_exists($hash, $aExtExercicioCompDevo)) {
+            
             foreach ($aExtExercicioCompDevo[$hash] as $ano => $devolucao) {
                 $aExt20[$hash]->si165_totaldebitos -= $devolucao->valor;
                 $aExt20[$hash]->si165_vlsaldoatualfonte = $aExt20[$hash]->si165_vlsaldoanteriorfonte + $aExt20[$hash]->si165_totaldebitos - $aExt20[$hash]->si165_totalcreditos;

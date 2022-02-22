@@ -287,7 +287,9 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                                     ELSE 0::FLOAT8
                                                 END) AS c70_valor,
                                             c206_nroconvenio,
-                                            c206_dataassinatura
+                                            c206_dataassinatura,
+                                            op01_numerocontratoopc,
+                                            op01_dataassinaturacop
                                     FROM conlancamrec
                                     INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
                                     INNER JOIN orctiporec ON o70_codigo = o15_codigo
@@ -323,6 +325,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                                 OR (c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) = '49'))
                                     GROUP BY 1, 2, 3, 4, c53_tipo, c70_valor, c206_nroconvenio, c206_dataassinatura, op01_numerocontratoopc, op01_dataassinaturacop
                                     ORDER BY 1, 4, 3";
+
                             $result = db_query($sSql);
                             $aDadosCgm11 = array();
 

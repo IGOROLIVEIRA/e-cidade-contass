@@ -131,6 +131,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                 throw new Exception($clrec10->erro_msg);
             }
         }
+
+        db_fim_transacao();
+
         /* RECEITAS QUE DEVEM SER SUBSTIUIDAS RUBRICA CADASTRADA ERRADA */
         $aRectce = array('111202', '111208', '172136', '191138', '191139', '191140',
             '191308', '191311', '191312', '191313', '193104', '193111', '193112',
