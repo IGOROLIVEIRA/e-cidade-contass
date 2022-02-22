@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Oc16571Hotfix3 extends AbstractMigration
+class Oc16571HotFix4 extends AbstractMigration
 {
     public function up()
     {
@@ -23,7 +23,7 @@ class Oc16571Hotfix3 extends AbstractMigration
         ADD COLUMN "si165_exerciciocompdevo" int4 DEFAULT 0;
 
         -- Migration: Topico 4
-        ALTER TABLE "public"."rec202022"
+        ALTER TABLE "public"."rec112022"
         ADD COLUMN "si26_nrocontratoop" varchar(30),
         ADD COLUMN "si26_dataassinaturacontratoop" date;
 
@@ -40,10 +40,10 @@ class Oc16571Hotfix3 extends AbstractMigration
         -- Migration: Topico 6
 
         ALTER TABLE "public"."ctb202022"
-        ADD COLUMN "si96_saldocec" int4 NOT NULL;
+        ADD COLUMN "si96_saldocec" int4;
 
         ALTER TABLE "public"."ctb212022"
-        ADD COLUMN "si97_saldocec" int4 NOT NULL;
+        ADD COLUMN "si97_saldocec" int4;
 
         ALTER TABLE "public"."ctb212022"
         ADD COLUMN "si97_saldocectransf" int4;
