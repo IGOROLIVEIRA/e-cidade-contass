@@ -159,6 +159,8 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
          when rh30_vinculo = 'P' and rh05_causa is not null and rh02_validadepensao is null then '09'
          when rh30_vinculo = 'P' and rh05_causa is not null and rh02_validadepensao is not null then '08'
          when rh30_vinculo = 'A' and rh30_naturezaregime = 2 and rh05_causa is not null then '06'
+         when rh30_vinculo = 'A' and rh30_naturezaregime = 4 and rh30_regime in (1,3) and rh05_causa is not null then '06'
+         when rh30_vinculo = 'A' and rh30_naturezaregime = 4 and rh30_regime in (1,2) and rh05_causa is not null then '02'
          when rh30_vinculo = 'A' and rh30_naturezaregime = 3 and rh05_causa is not null then '07'
          when rh30_vinculo = 'A' and rh30_naturezaregime = 1 and rh05_causa between 60 and 69 then '08'
          when rh30_vinculo = 'A' and rh30_naturezaregime = 1 and rh05_causa = 10 then '05'
