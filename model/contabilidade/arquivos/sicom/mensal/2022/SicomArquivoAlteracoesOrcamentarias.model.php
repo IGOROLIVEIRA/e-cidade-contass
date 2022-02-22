@@ -174,6 +174,16 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
         $sSqlPrefeitura = "select * from infocomplementaresinstit where  si09_instit =" . db_getsession("DB_instit") . " and si09_tipoinstit = 2";
         $rsPrefeitura = db_query($sSqlPrefeitura);
 
+        // matriz de entrada
+        $what = array( 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û',
+        'Ä','Ã','À','Á','Â','Ê','Ë','È','É','Ï','Ì','Í','Ö','Õ','Ò','Ó','Ô','Ü','Ù','Ú','Û',
+        'ñ','Ñ','ç','Ç','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','°', "°",chr(13),chr(10),"'");
+
+        // matriz de saÃ­da
+        $by = array( 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u',
+        'A','A','A','A','A','E','E','E','E','I','I','I','O','O','O','O','O','U','U','U','U',
+        'n','N','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', " "," "," "," ");
+
         if (pg_num_rows($rsPrefeitura) > 0) {
 
             for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -216,6 +226,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                 WHEN o46_tiposup = 1022 THEN 15
                                 WHEN o46_tiposup IN (1023, 1024, 1025) THEN 11
                                 END ) AS tipoDecretoAlteracao,
+                                o39_justi as justificativa,
                                 sum(o47_valor) AS valorAberto
                             FROM orcsuplem
                                 JOIN orcsuplemval ON o47_codsup = o46_codsup
@@ -224,7 +235,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                 JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
                             WHERE o47_valor > 0
                                 AND o46_codlei IN ({$oDados10->codigovinc})
-                            GROUP BY o46_codlei, o39_numero, o46_tiposup";
+                            GROUP BY o46_codlei, o39_numero, o46_tiposup, o39_justi";
                 $rsResult11 = db_query($sSql);
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
@@ -238,11 +249,12 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     $sNrodecreto = str_replace("S", "", $sNrodecreto);
                     $claoc11->si39_nrodecreto = $sNrodecreto;
                     $claoc11->si39_tipodecretoalteracao = $oDados11->tipodecretoalteracao;
+                    $claoc11->si39_justificativa = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oDados11->justificativa), 0, 500)));
                     $claoc11->si39_valoraberto = $oDados11->valoraberto;
                     $claoc11->si39_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $claoc11->si39_reg10 = $claoc10->si38_sequencial;
                     $claoc11->si39_instit = db_getsession("DB_instit");
-
+              
                     $claoc11->incluir(null);
                     if ($claoc11->erro_status == 0) {
                         throw new Exception($claoc11->erro_msg);
@@ -432,7 +444,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                         substr(o56_elemento,2,6) AS naturezaDespesa,
                                         o15_codtri AS codFontRecursos,
                                         abs(o47_valor) AS vlacrescimoreducao,
-                                        o41_subunidade AS subunidade
+                                        o41_subunidade AS subunidade,
+                                        op01_numerocontratoopc AS numerocontratoopc,
+                                        op01_dataassinaturacop AS dataassinaturacontratoop
                         FROM orcsuplemval
                         JOIN orcsuplem ON o47_codsup = o46_codsup
                         JOIN orcdotacao ON (o47_anousu, o47_coddot) = (o58_anousu, o58_coddot)
@@ -443,9 +457,10 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                         JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
                         JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
                         LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
+                        LEFT JOIN db_operacaodecredito ON op01_sequencial = o47_codigoopcredito
                         WHERE o46_codlei IN ({$oDados10->codigovinc}) 
                         group by o46_codsup,o47_valor,o46_codlei,o46_tiposup,si09_codorgaotce,o58_programa,o58_projativ,o56_elemento,o47_codsup,o41_subunidade,o40_codtri,o40_orgao,o41_codtri,o41_unidade,o58_funcao,o58_subfuncao,
-                        o58_programa,o58_projativ,o15_codtri
+                        o58_programa,o58_projativ,o15_codtri,op01_numerocontratoopc,op01_dataassinaturacop
                         ORDER BY o46_codsup";
 
                 $rsResult = db_query($sSql);
@@ -464,12 +479,14 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     naturezadespesa,
                     codfontrecursos,
                     sum(vlacrescimoreducao) vlacrescimoreducao,
-                    subunidade
+                    subunidade,
+                    numerocontratoopc,
+                    dataassinaturacontratoop
                     FROM
                     ($sSql) reg14
                     GROUP BY codorgao, codunidadesub, codfuncao, codsubfuncao, codprograma, idacao, idsubacao, tiporegistro, codreduzidodecreto,
-                    tipodecretoalteracao, naturezadespesa, codfontrecursos, subunidade");
-
+                    tipodecretoalteracao, naturezadespesa, codfontrecursos, subunidade, numerocontratoopc, dataassinaturacontratoop");
+                
                 $aDadosAgrupados14 = array();
                 $aDadosAgrupados15 = array();
                 $aCodOrigem = array();
@@ -492,6 +509,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                 $oDados14->si42_tiporegistro = 14;
                                 $oDados14->si42_codreduzidodecreto = $oDadosSql14->codreduzidodecreto;
                                 $oDados14->si42_origemrecalteracao = $oDadosSql14->tipodecretoalteracao;
+                                $oDados14->si42_nrocontratoop = $oDadosSql14->numerocontratoopc;
+                                $oDados14->si42_dataassinaturacontratoop = $oDadosSql14->dataassinaturacontratoop;
                                 $oDados14->si42_codorigem = $oDadosSql14->codorigem;
                                 $oDados14->si42_codorgao = $oDadosSql14->codorgao;
                                 $oDados14->si42_codunidadesub = $oDadosSql14->codunidadesub;
@@ -558,6 +577,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                           $oDados14->si42_tiporegistro = 14;
                           $oDados14->si42_codreduzidodecreto = $oDadosSql14Vlr->codreduzidodecreto;
                           $oDados14->si42_origemrecalteracao = $oDadosSql14Vlr->tipodecretoalteracao;
+                          $oDados14->si42_nrocontratoop = $oDadosSql14Vlr->numerocontratoopc;
+                          $oDados14->si42_dataassinaturacontratoop = $oDadosSql14Vlr->dataassinaturacontratoop;
                           $oDados14->si42_codorigem = $oDadosSql14Vlr->codorigem;
                           $oDados14->si42_codorgao = $oDadosSql14Vlr->codorgao;
                           $oDados14->si42_codunidadesub = $oDadosSql14Vlr->codunidadesub;
@@ -574,6 +595,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                           $oDados14->si42_reg10 = $claoc10->si38_sequencial;
                           $oDados14->si42_instit = db_getsession("DB_instit");
                           $aDadosAgrupados14[$sHash] = $oDados14;
+
                       }else{
                           $aDadosAgrupados14[$sHash]->si42_vlacrescimoreducao += $oDadosSql14->vlacrescimoreducao;
                       }
@@ -594,6 +616,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                     $claoc14->si42_tiporegistro = 14;
                     $claoc14->si42_codreduzidodecreto = $oDadosReg14->si42_codreduzidodecreto;
+                    $claoc14->si42_nrocontratoop = $oDadosReg14->si42_numerocontratoopc;
+                    $claoc14->si42_dataassinaturacontratoop = $oDadosReg14->si42_dataassinaturacontratoop;
                     $claoc14->si42_codorigem = '';
                     $claoc14->si42_codorgao = $oDadosReg14->si42_codorgao;
                     $claoc14->si42_codunidadesub = $oDadosReg14->si42_codunidadesub;
@@ -627,7 +651,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     $claoc14->si42_codreduzidodecreto = $oDadosReg14->si194_codreduzidodecreto;
                     $claoc14->si42_codorigem = $oDadosReg14->si194_codorigem;
                     $claoc14->si42_codorgao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codorgao;
-
+                    $claoc14->si42_nrocontratoop = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_nrocontratoop;
+                    $claoc14->si42_dataassinaturacontratoop = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_dataassinaturacontratoop;
                     $claoc14->si42_codunidadesub = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codunidadesub;
                     $claoc14->si42_codfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfuncao;
                     $claoc14->si42_codsubfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codsubfuncao;
@@ -694,6 +719,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                         $claoc14->si42_codreduzidodecreto = $oDadosReg14->si42_codreduzidodecreto;
                         $claoc14->si42_codorigem = '';
                         $claoc14->si42_codorgao = $oDadosReg14->si42_codorgao;
+                        $claoc14->si42_nrocontratoop = $oDadosReg14->si42_nrocontratoop;
+                        $claoc14->si42_dataassinaturacontratoop = $oDadosReg14->si42_dataassinaturacontratoop;
                         $claoc14->si42_codunidadesub = $oDadosReg14->si42_codunidadesub;
                         $claoc14->si42_codfuncao = $oDadosReg14->si42_codfuncao;
                         $claoc14->si42_codsubfuncao = $oDadosReg14->si42_codsubfuncao;

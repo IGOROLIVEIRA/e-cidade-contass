@@ -97,7 +97,7 @@ class Pergunta
     {
         $oDaoAvaliacaoPergunta = new \cl_avaliacaopergunta();
         $sWhere                = 'db102_avaliacao = ' . $formulario->getCodigo();
-        $sSqlPerguntas         = $oDaoAvaliacaoPergunta->sql_query(null, "avaliacaopergunta.*", 'db103_ordem', $sWhere);
+        $sSqlPerguntas         = $oDaoAvaliacaoPergunta->sql_query(null, "avaliacaopergunta.*", 'db103_perguntaidentificadora desc, db103_ordem', $sWhere);
         $rsPerguntas           = db_query($sSqlPerguntas);
         if (!$rsPerguntas) {
             throw new \DBException('Erro ao pesquisar Perguntas do formulario ' . $formulario->getNome());

@@ -27,6 +27,11 @@ class cl_rec112022
   var $si26_dataassinatura_mes = null;
   var $si26_dataassinatura_ano = null;
   var $si26_dataassinatura = null;
+  var $si26_nrocontratoop = null;
+  var $si26_dataassinaturacontratoop = null;
+  var $si26_dataassinaturacontratoop_dia = null;
+  var $si26_dataassinaturacontratoop_mes = null;
+  var $si26_dataassinaturacontratoop_ano = null;
   var $si26_vlarrecadadofonte = 0;
   var $si26_reg10 = 0;
   var $si26_mes = 0;
@@ -41,6 +46,8 @@ class cl_rec112022
                  si26_nrodocumento = character varying(14) = CNPJ do contribuinte;
                  si26_nroconvenio = varchar(30) = Número do convênio
                  si26_dataassinatura = date = Data da assinatura
+                 si26_nrocontratoop = varchar(30) = Número do contrato
+                 si26_dataassinaturacontratoop = data = Data Assinatura do Contrato
                  si26_vlarrecadadofonte = float8 = Valor arrecadado
                  si26_reg10 = int8 = reg10
                  si26_mes = int8 = Mês
@@ -83,6 +90,15 @@ class cl_rec112022
         $this->si26_dataassinatura_ano = ($this->si26_dataassinatura_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si26_dataassinatura_ano"]:$this->si26_dataassinatura_ano);
         if($this->si26_dataassinatura_dia != ""){
           $this->si26_dataassinatura = $this->si26_dataassinatura_ano."-".$this->si26_dataassinatura_mes."-".$this->si26_dataassinatura_dia;
+        }
+      }
+      $this->si26_nrocontratoop = ($this->si26_nrocontratoop == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_nrocontratoop"] : $this->si26_nrocontratoop);
+      if($this->si26_dataassinaturacontratoop == ""){
+        $this->si26_dataassinaturacontratoop_dia = ($this->si26_dataassinaturacontratoop_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si26_dataassinaturacontratoop_dia"]:$this->si26_dataassinaturacontratoop_dia);
+        $this->si26_dataassinaturacontratoop_mes = ($this->si26_dataassinaturacontratoop_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si26_dataassinaturacontratoop_mes"]:$this->si26_dataassinaturacontratoop_mes);
+        $this->si26_dataassinaturacontratoop_ano = ($this->si26_dataassinaturacontratoop_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si26_dataassinaturacontratoop_ano"]:$this->si26_dataassinaturacontratoop_ano);
+        if($this->si26_dataassinaturacontratoop_dia != ""){
+          $this->si26_dataassinaturacontratoop = $this->si26_dataassinaturacontratoop_ano."-".$this->si26_dataassinaturacontratoop_mes."-".$this->si26_dataassinaturacontratoop_dia;
         }
       }
       $this->si26_vlarrecadadofonte = ($this->si26_vlarrecadadofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_vlarrecadadofonte"] : $this->si26_vlarrecadadofonte);
@@ -194,6 +210,8 @@ class cl_rec112022
                                       ,si26_nrodocumento
                                       ,si26_nroconvenio
                                       ,si26_dataassinatura
+                                      ,si26_nrocontratoop
+                                      ,si26_dataassinaturacontratoop
                                       ,si26_vlarrecadadofonte
                                       ,si26_reg10
                                       ,si26_mes
@@ -208,6 +226,8 @@ class cl_rec112022
                                ,'$this->si26_nrodocumento'
                                ,'$this->si26_nroconvenio'
                                ,".($this->si26_dataassinatura == "null" || $this->si26_dataassinatura == ""?"null":"'".$this->si26_dataassinatura."'")."
+                               ,'$this->si26_nrocontratoop'
+                               ,".($this->si26_dataassinaturacontratoop == "null" || $this->si26_dataassinaturacontratoop == ""?"null":"'".$this->si26_dataassinaturacontratoop."'")."
                                ,$this->si26_vlarrecadadofonte
                                ,$this->si26_reg10
                                ,$this->si26_mes
