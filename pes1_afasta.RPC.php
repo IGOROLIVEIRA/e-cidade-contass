@@ -36,7 +36,7 @@ require_once("libs/db_sessoes.php");
 require_once("classes/db_afasta_classe.php");
 
 $oJson               = new services_json();
-$oParam              = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
+$oParam              = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
 $oAfasta             = new cl_afasta;
 
 $oRetorno            = new stdClass();
@@ -48,39 +48,67 @@ $sMensagem           = "";
 
 try {
 
-	switch($oParam->exec) {
-		
-		case 'possuiAnteriores' :
-	
-		  $iMatricula = $oParam->iMatricula;
-		  $iAno       = $oParam->iAno;
-		  $iMes       = $oParam->iMes;
-			
-		  $sWherePossuiAnteriores = "r45_anousu = {$iAno} and r45_mesusu = {$iMes} and r45_regist = {$iMatricula}";
+	switch ($oParam->exec) {
+
+		case 'possuiAnteriores':
+
+			$iMatricula = $oParam->iMatricula;
+			$iAno       = $oParam->iAno;
+			$iMes       = $oParam->iMes;
+
+			$sWherePossuiAnteriores = "r45_anousu = {$iAno} and r45_mesusu = {$iMes} and r45_regist = {$iMatricula}";
 			$sSqlPossuiAnteriores   = $oAfasta->sql_query_file(null, "*", null, $sWherePossuiAnteriores);
 			$rsPossuiAnteriores     = $oAfasta->sql_record($sSqlPossuiAnteriores);
-		  
-		  if($oAfasta->numrows > 0){
-		    $oRetorno->status  = 1;
-		  }	else {
-		  	$oRetorno->status  = 2;
-		  }	
+
+			if ($oAfasta->numrows > 0) {
+				$oRetorno->status  = 1;
+			} else {
+				$oRetorno->status  = 2;
+			}
+
+			break;
+
+		case 'verificarAfastamentos':
+			echo "<pre>";
+			print_r($oParam);
+			echo "<br>";
+			$iMatricula = $oParam->iMatricula;
+			$iAno       = $oParam->iAno;
+			$iMes       = $oParam->iMes;
+			$iDataAfast = strtotime($oParam->iDateAfast);
+
+			var_dump($iDataAfast);
+			exit;
+
+			$sWherePossuiAnteriores = "r45_anousu = {$iAno} and r45_mesusu = {$iMes} and r45_regist = {$iMatricula}";
+			$sSqlPossuiAnteriores   = $oAfasta->sql_query_file(null, "*", null, $sWherePossuiAnteriores);
+			$rsPossuiAnteriores     = $oAfasta->sql_record($sSqlPossuiAnteriores);
+
+
+			/*
+			$date = '1986-10-03 10:30:00';
+			echo "Data Inicio: ". $date."<br>";
+			$celke_data_inicio = strtotime($date);
+			echo "Data Inicio Timestamp: ".$celke_data_inicio."<br>";
+			$celke_data_fim = strtotime('+2 day', $celke_data_inicio);
+			echo "Data Fim Timestamp: ".$celke_data_fim."<br>";    
+			echo "Data Fim formato Brasileiro: ".date('d/m/Y H:i:s', $celke_data_fim);
 			
-		break;	
-		
+			$date = '1986-10-10 10:30:00';
+			$celke_data_inicio = strtotime($date);
+			$celke_data_fim = strtotime('-3 day', $celke_data_inicio);
+			echo "<hr>Data Fim formato Brasileiro: ".date('d/m/Y H:i:s', $celke_data_fim);
+
+*/
+			break;
 	}
 
 	$oRetorno->sDados = "";
-	echo $oJson->encode($oRetorno); 
- 
-	
+	echo $oJson->encode($oRetorno);
+} catch (Exception $oErro) {
 
-} catch (Exception $oErro){
-  
-  //echo  $oErro->getMessage();
-  $oRetorno->status  = 2;
-  $oRetorno->message = $oErro->getMessage();
-  echo $oJson->encode($oRetorno); 
+	//echo  $oErro->getMessage();
+	$oRetorno->status  = 2;
+	$oRetorno->message = $oErro->getMessage();
+	echo $oJson->encode($oRetorno);
 }
-	
-?>

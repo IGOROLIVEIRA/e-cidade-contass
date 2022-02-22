@@ -18,10 +18,12 @@ class cl_rhmotivoafasta
   public $pagina_retorno = null;
   // cria variaveis do arquivo 
   public $rh172_sequencial = 0;
+  public $rh172_codigo = null;
   public $rh172_descricao = null;
   // cria propriedade com as variaveis do arquivo 
   public $campos = "
                  rh172_sequencial = int8 = Sequencial 
+                 rh172_codigo = vachar = codigo afastamento
                  rh172_descricao = text = Descrição Afastamento 
                  ";
 
@@ -49,6 +51,7 @@ class cl_rhmotivoafasta
   {
     if ($exclusao == false) {
       $this->rh172_sequencial = ($this->rh172_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh172_sequencial"] : $this->rh172_sequencial);
+      $this->rh172_codigo = ($this->rh172_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh172_codigo"] : $this->rh172_codigo);
       $this->rh172_descricao = ($this->rh172_descricao == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh172_descricao"] : $this->rh172_descricao);
     } else {
     }
@@ -73,6 +76,16 @@ class cl_rhmotivoafasta
       $this->rh172_sequencial = pg_result($result, 0, 0);
     }
 
+    if ($this->rh172_codigo == null) {
+      $this->erro_sql = " Campo Codigo Afastamento não informado.";
+      $this->erro_campo = "rh172_codigo";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
     if ($this->rh172_descricao == null) {
       $this->erro_sql = " Campo Descrição Afastamento não informado.";
       $this->erro_campo = "rh172_descricao";
@@ -83,11 +96,13 @@ class cl_rhmotivoafasta
       return false;
     }
     $sql = "insert into rhmotivoafasta(
-                                       rh172_sequencial 
+                                       rh172_sequencial
+                                       ,rh172_codigo 
                                       ,rh172_descricao 
                        )
                 values (
                                 $this->rh172_sequencial 
+                               ,'$this->rh172_codigo'
                                ,'$this->rh172_descricao' 
                       )";
     $result = db_query($sql);
@@ -145,6 +160,19 @@ class cl_rhmotivoafasta
       if (trim($this->rh172_descricao) == null) {
         $this->erro_sql = " Campo Descrição Afastamento não informado.";
         $this->erro_campo = "rh172_descricao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->rh172_codigo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh172_codigo"])) {
+      $sql  .= $virgula . " rh172_codigo = '$this->rh172_codigo' ";
+      $virgula = ",";
+      if (trim($this->rh172_codigo) == null) {
+        $this->erro_sql = " Campo Codigo Afastamento não informado.";
+        $this->erro_campo = "rh172_codigo";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

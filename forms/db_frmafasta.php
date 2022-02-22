@@ -47,7 +47,7 @@ $clrotulo->label('z01_nome');
 <form name="form1" method="post" action="">
   <center>
 
-    <fieldset style="margin-top: 20px; width: 40%;">
+    <fieldset style="margin-top: 20px; width: 45%;">
       <legend><b>Manutenção de Afastamentos</b></legend>
 
       <table border="0">
@@ -118,8 +118,22 @@ $clrotulo->label('z01_nome');
           </td>
           <td colspan="3" nowrap>
             <?
-            db_input('rh45_motivoafasta', 6, $Irh45_motivoafasta, true, 'text', 3, "onChange='js_pesquisarMotivoafasta(false);'");
-            db_input('rh172_descricao', 48, $Irh45_motivoafasta, true, 'text', 3, "");
+            db_input('rh172_codigo', 6, $Irh172_codigo, true, 'text', 3, "onChange='js_pesquisarMotivoafasta(false);'");
+            db_input('rh172_descricao', 48, $Irh172_descricao, true, 'text', 3, "");
+            ?>
+          </td>
+        </tr>
+        <tr id="mesmadoenca" style="display: none;">
+          <td>
+            <strong>Mesma Doença do Afastamento Anterior:</strong>
+          </td>
+          <td>
+            <?
+            $arraytipos = array(
+              "N" => "Não",
+              "S" => "Sim"
+            );
+            db_select('r45_mesmadoenca', $arraytipos, true, $db_opcao, "");
             ?>
           </td>
         </tr>
@@ -478,11 +492,18 @@ $clrotulo->label('z01_nome');
     } else {
       document.getElementById('r45_situacaux').value = '';
     }
+
+    if (r45_situac == 3 || r45_situac == 6) {
+      js_VerificaAfastamento();
+      document.getElementById('mesmadoenca').style.display = '';
+    } else {
+      document.getElementById('mesmadoenca').style.display = 'none';
+    }
   }
 
   function js_pesquisarMotivoafasta(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe("top.corpo", "db_iframe_rhmotivoafasta", "func_rhmotivoafasta.php?&funcao_js=parent.js_mostraAfastaMotivo1|rh172_sequencial|rh172_descricao", "Pesquisa", true, "20");
+      js_OpenJanelaIframe("top.corpo", "db_iframe_rhmotivoafasta", "func_rhmotivoafasta.php?&funcao_js=parent.js_mostraAfastaMotivo1|rh172_codigo|rh172_descricao", "Pesquisa", true, "20");
     }
     /*else {
       if (document.form1.r45_regist.value != "") {
@@ -494,7 +515,31 @@ $clrotulo->label('z01_nome');
   }
 
   function js_mostraAfastaMotivo1(codigo, descricao) {
+    document.form1.rh172_codigo.value = codigo;
+    document.form1.rh172_descricao.value = descricao;
     db_iframe_rhmotivoafasta.hide();
-    console.log(codigo)
+  }
+
+
+  function js_VerificaAfastamento() {
+    var oParam = new Object();
+    oParam.exec = 'verificarAfastamentos';
+    oParam.iAno = $F("r45_anousu");
+    oParam.iMes = $F("r45_mesusu");
+    oParam.iMatricula = $F('r45_regist');
+    oParam.iDateAfast = $F('r45_dtafas');
+
+    var oAjax = new Ajax.Request(
+      'pes1_afasta.RPC.php', {
+        parameters: 'json=' + Object.toJSON(oParam),
+        asynchronous: false,
+        method: 'post',
+        onComplete: js_oResultAfastamento
+      });
+  }
+
+  function js_oResultAfastamento(oAjax) {
+    js_removeObj("msgbox");
+    var oRetorno = eval('(' + oAjax.responseText + ")");
   }
 </script>

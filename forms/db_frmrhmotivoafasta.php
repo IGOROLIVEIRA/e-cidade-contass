@@ -27,6 +27,16 @@ $clrhmotivoafasta->rotulo->label();
           </td>
         </tr>
         <tr>
+          <td>
+            <strong>Codigo Afastamento:</strong>
+          </td>
+          <td>
+            <?
+            db_input('rh172_codigo', 11, $Irh172_codigo, true, 'text', $db_opcao, "")
+            ?>
+          </td>
+        </tr>
+        <tr>
           <td nowrap title="<?= @$Trh172_descricao ?>">
             <?= @$Lrh172_descricao ?>
           </td>
