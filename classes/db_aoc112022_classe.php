@@ -22,6 +22,7 @@ class cl_aoc112022
   var $si39_codreduzidodecreto = 0;
   var $si39_nrodecreto = 0;
   var $si39_tipodecretoalteracao = 0;
+  var $si39_justificativa = null;
   var $si39_valoraberto = 0;
   var $si39_mes = 0;
   var $si39_reg10 = 0;
@@ -33,6 +34,7 @@ class cl_aoc112022
                  si39_codreduzidodecreto = int8 = Código do decreto
                  si39_nrodecreto = int8 = Número do Decreto
                  si39_tipodecretoalteracao = int8 = Tipo de Decreto
+                 si39_justificativa = text = Justificativa
                  si39_valoraberto = float8 = Valor aberto
                  si39_mes = int8 = Mês
                  si39_reg10 = int8 = reg10
@@ -67,6 +69,7 @@ class cl_aoc112022
       $this->si39_codreduzidodecreto = ($this->si39_codreduzidodecreto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si39_codreduzidodecreto"] : $this->si39_codreduzidodecreto);
       $this->si39_nrodecreto = ($this->si39_nrodecreto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si39_nrodecreto"] : $this->si39_nrodecreto);
       $this->si39_tipodecretoalteracao = ($this->si39_tipodecretoalteracao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si39_tipodecretoalteracao"] : $this->si39_tipodecretoalteracao);
+      $this->si39_justificativa = ($this->si39_justificativa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si39_justificativa"] : $this->si39_justificativa);
       $this->si39_valoraberto = ($this->si39_valoraberto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si39_valoraberto"] : $this->si39_valoraberto);
       $this->si39_mes = ($this->si39_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si39_mes"] : $this->si39_mes);
       $this->si39_reg10 = ($this->si39_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si39_reg10"] : $this->si39_reg10);
@@ -167,6 +170,7 @@ class cl_aoc112022
                                       ,si39_codreduzidodecreto
                                       ,si39_nrodecreto
                                       ,si39_tipodecretoalteracao
+                                      ,si39_justificativa
                                       ,si39_valoraberto
                                       ,si39_mes
                                       ,si39_reg10
@@ -178,11 +182,13 @@ class cl_aoc112022
                                ,$this->si39_codreduzidodecreto
                                ,'$this->si39_nrodecreto'
                                ,$this->si39_tipodecretoalteracao
+                               ,'$this->si39_justificativa'
                                ,$this->si39_valoraberto
                                ,$this->si39_mes
                                ,$this->si39_reg10
                                ,$this->si39_instit
                       )";
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -277,6 +283,10 @@ class cl_aoc112022
       $sql .= $virgula . " si39_tipodecretoalteracao = $this->si39_tipodecretoalteracao ";
       $virgula = ",";
     }
+    
+    $sql .= $virgula . " si39_justificativa = '$this->si39_justificativa' ";
+    $virgula = ",";
+    
     if (trim($this->si39_valoraberto) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si39_valoraberto"])) {
       if (trim($this->si39_valoraberto) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si39_valoraberto"])) {
         $this->si39_valoraberto = "0";
