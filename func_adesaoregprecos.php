@@ -85,6 +85,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
 if (!isset($pesquisa_chave)) {
 ?>
   <script>
+
   </script>
 <?
 }

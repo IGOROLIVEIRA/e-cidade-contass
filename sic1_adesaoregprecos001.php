@@ -21,6 +21,7 @@ $db_opcao = isset($alterar) ? 2 : 1;
 
 if (isset($incluir) || isset($alterar)) {
 
+
   if (isset($incluir)) {
     $dataAux = $si06_dataadesao_ano + 1;
     $resultado = db_query("select * from adesaoregprecos where si06_dataadesao >= '$si06_dataadesao_ano-01-01 00:00:00' 
@@ -44,8 +45,6 @@ if (isset($incluir) || isset($alterar)) {
     $registroDePrecoSelecionado = db_query("select * from adesaoregprecos where si06_sequencial = $si06_sequencial");
     $objetoRegistroDePrecoSelecionado = db_utils::fieldsMemory($registroDePrecoSelecionado, 0);
     $anoAdesaoSelecionado = substr($objetoRegistroDePrecoSelecionado->si06_dataadesao, 0, strpos($objetoRegistroDePrecoSelecionado->si06_dataadesao, "-"));
-
-
 
 
     for ($i = 0; $i < $tamanho; $i++) {

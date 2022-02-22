@@ -209,7 +209,7 @@ $clrotulo->label("pc01_descrmater");
 <script>
   function verificaPrecoUnitario(e, oObject, item) {
     if (oObject.value == 0) {
-      alert('Erro! O preço unitário não pode ser zero');
+      alert('Erro! O preço unitário não pode ser zero ');
       oObject.value = qtdAderida.value;
       return false;
     }
