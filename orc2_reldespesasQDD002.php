@@ -395,7 +395,7 @@ if (substr($nivel, -1) == 'A') {
             if ($completo == false) {
                 $pdf->cell(160, 5, "DADOS DA DESPESA", "TBR", 0, "C", 1);
                 //$pdf->cell(60,$alt,"RECURSO",0,0,"L",0);
-                $pdf->cell(50, 5, "REDUZ", "TLBR", 0, "C", 1);
+                $pdf->cell(50, 5, "REDUZIDO", "TLBR", 0, "C", 1);
                 $pdf->cell(70, 5, "VALOR ORÇADO", "TLBR", 1, "C", 1);
                 $x = $pdf->GetX();
                 $y = $pdf->GetY();
@@ -404,7 +404,7 @@ if (substr($nivel, -1) == 'A') {
             } else {
 
                 $pdf->cell(160, 5, "DADOS DA DESPESA", "TBR", 0, "C", 1);
-                $pdf->cell(50, 5, "REDUZ", "TLBR", 0, "C", 1);
+                $pdf->cell(50, 5, "REDUZIDO", "TLBR", 0, "C", 1);
                 $pdf->cell(70, 5, "VALOR ORÇADO", "TLBR", 1, "C", 1);
 
                 $x = $pdf->GetX();
@@ -703,7 +703,7 @@ if (substr($nivel, -1) == 'A') {
                     /*$pdf->cell(30,$alt,"",'B',0,"L",0);
 	      	 $pdf->cell(130,$alt,"",'B',1,"L",0);*/
                 }
-                $o58_coddot = $o58_coddot != '' ? $o58_coddot . "-" . db_CalculaDV($o58_coddot) : '';
+                $o58_coddot = $o58_coddot != '' ? $o58_coddot : '';
                 $pdf->cell(-10, $alt, $o58_coddot, 'B', 0, "R", 0);
                 $pdf->cell(80, $alt, db_formatar($dot_ini, 'f'), 'B', 1, "R", 0);
             }
@@ -1019,7 +1019,7 @@ if (substr($nivel, -1) == 'A') {
             $pdf->ln(2);
             $pdf->cell(160, 5, "DADOS DA DESPESA", "TBR", 0, "C", 1);
             //$pdf->cell(60,$alt,"RECURSO",0,0,"L",0);
-            $pdf->cell(50, 5, "REDUZ", "TLBR", 0, "C", 1);
+            $pdf->cell(50, 5, "REDUZIDO", "TLBR", 0, "C", 1);
             $pdf->cell(70, 5, "VALOR ORÇADO", "TLBR", 1, "C", 1);
             $x = $pdf->GetX();
             $y = $pdf->GetY();
@@ -1241,7 +1241,7 @@ if (substr($nivel, -1) == 'A') {
 
                 $pdf->cell(27, $alt, db_formatar($o58_codigo, 's', '0', 4, 'e'), 'B', 0, "C", 0);
                 $pdf->cell(80, $alt, substr($o15_descr, 0, 80), 'B', 0, "L", 0);
-                $o58_coddot = $o58_coddot != '' ? $o58_coddot . "-" . db_CalculaDV($o58_coddot) : '';
+                $o58_coddot = $o58_coddot != '' ? $o58_coddot : '';
                 $pdf->cell(67, $alt, $o58_coddot, "B", 0, "R", 0);
                 $pdf->cell(25, $alt, db_formatar($dot_ini, 'f'), 'B', 1, "R", 0);
                 $nComprometido = $reservado - $nResevaAutomatica;
@@ -1265,7 +1265,7 @@ if (substr($nivel, -1) == 'A') {
 
                 $pdf->cell(27, $alt, db_formatar($o58_codigo, 's', '0', 4, 'e'), 'B', 0, "C", 0);
                 $pdf->cell(80, $alt, substr($o15_descr, 0, 80), 'B', 0, "L", 0);
-                $o58_coddot = $o58_coddot != '' ? $o58_coddot . "-" . db_CalculaDV($o58_coddot) : '';
+                $o58_coddot = $o58_coddot != '' ? $o58_coddot : '';
                 $pdf->cell(30, $alt, $o58_coddot, "B", 0, "R", 0);
                 $pdf->cell(130, $alt, db_formatar($dot_ini, 'f'), 'B', 1, "R", 0);
                 $nComprometido = $reservado - $nResevaAutomatica;
