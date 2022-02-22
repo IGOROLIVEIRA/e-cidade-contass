@@ -1153,6 +1153,10 @@ if (isset($db_opcaoal)) {
                     } else {
 
                         document.getElementById("tipoapos").style.display = "none";
+                        document.getElementById("tipobeneficio").style.display = "none";
+                        document.getElementById("tipo7").style.display = "none";
+                        document.getElementById("rh02_tipobeneficio").style.value = "0";
+                        document.getElementById("rh02_descratobeneficio").style.value = '';
                         document.getElementById("labelvalidadepensao").style.display = "none";
                         document.getElementById("validadepensao").style.display = "none";
                         document.getElementById("rh02_rhtipoapos").disabled = true;
@@ -2047,6 +2051,7 @@ if (isset($db_opcaoal)) {
 
                 if (value == 2 || value == 3 || value == 5 && rh01_admiss >= '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Aposentadoria por idade e tempo de contribuição - Proventos com integralidade, revisão pela paridade', '0101'));
                     opcoesbeneficio.add(new Option('Aposentadoria por idade e tempo de contribuição - Proventos pela média, reajuste manter valor real', '0102'));
                     opcoesbeneficio.add(new Option('Aposentadoria por idade - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0103'));
@@ -2059,6 +2064,7 @@ if (isset($db_opcaoal)) {
 
                 if (value == 6 && rh01_admiss >= '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Aposentadoria especial - Risco', '0201'));
                     opcoesbeneficio.add(new Option('Aposentadoria especial - Exposição a agentes nocivos', '0202'));
                     opcoesbeneficio.add(new Option('Aposentadoria da pessoa com deficiência', '0203'));
@@ -2066,6 +2072,7 @@ if (isset($db_opcaoal)) {
 
                 if (value == 4 && rh01_admiss >= '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos com integralidade, revisão pela paridade', '0301'));
                     opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos pela média, reajuste manter valor real', '0302'));
                     opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0303'));
@@ -2074,6 +2081,7 @@ if (isset($db_opcaoal)) {
 
                 if (value == 1 && rh01_admiss >= '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Pensão por morte (art. 40, § 7º, da CF/1988)', '0601'));
                     opcoesbeneficio.add(new Option('Pensão por morte com paridade, decorrente do art. 6º-A da EC 41/2003', '0602'));
                     opcoesbeneficio.add(new Option('Pensão por morte com paridade, decorrente do art. 3º da EC 47/2005', '0603'));
@@ -2082,6 +2090,7 @@ if (isset($db_opcaoal)) {
 
                 if (value && rh01_admiss < '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Aposentadoria sem paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0801'));
                     opcoesbeneficio.add(new Option('Aposentadoria com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0802'));
                     opcoesbeneficio.add(new Option('Aposentadoria por invalidez com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0803'));
@@ -2100,6 +2109,7 @@ if (isset($db_opcaoal)) {
                 } else if (value == 7) {
                     document.getElementById('tipo7').style.display = '';
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Pensão especial sem vínculo previdenciário', '1001'));
                     opcoesbeneficio.add(new Option('Outros benefícios sem vínculo previdenciário', '1009'));
                 } else {
@@ -2133,6 +2143,7 @@ if (isset($db_opcaoal)) {
                 }
                 if (value == 2 || value == 3 || value == 5 && rh01_admiss >= '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Aposentadoria por idade e tempo de contribuição - Proventos com integralidade, revisão pela paridade', '0101'));
                     opcoesbeneficio.add(new Option('Aposentadoria por idade e tempo de contribuição - Proventos pela média, reajuste manter valor real', '0102'));
                     opcoesbeneficio.add(new Option('Aposentadoria por idade - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0103'));
@@ -2145,6 +2156,7 @@ if (isset($db_opcaoal)) {
 
                 if (value == 6 && rh01_admiss >= '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Aposentadoria especial - Risco', '0201'));
                     opcoesbeneficio.add(new Option('Aposentadoria especial - Exposição a agentes nocivos', '0202'));
                     opcoesbeneficio.add(new Option('Aposentadoria da pessoa com deficiência', '0203'));
@@ -2152,6 +2164,7 @@ if (isset($db_opcaoal)) {
 
                 if (value == 4 && rh01_admiss >= '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos com integralidade, revisão pela paridade', '0301'));
                     opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos pela média, reajuste manter valor real', '0302'));
                     opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0303'));
@@ -2160,6 +2173,7 @@ if (isset($db_opcaoal)) {
 
                 if (value == 1 && rh01_admiss >= '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Pensão por morte (art. 40, § 7º, da CF/1988)', '0601'));
                     opcoesbeneficio.add(new Option('Pensão por morte com paridade, decorrente do art. 6º-A da EC 41/2003', '0602'));
                     opcoesbeneficio.add(new Option('Pensão por morte com paridade, decorrente do art. 3º da EC 47/2005', '0603'));
@@ -2168,6 +2182,7 @@ if (isset($db_opcaoal)) {
 
                 if (value && rh01_admiss < '2021-11-21') {
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Aposentadoria sem paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0801'));
                     opcoesbeneficio.add(new Option('Aposentadoria com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0802'));
                     opcoesbeneficio.add(new Option('Aposentadoria por invalidez com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0803'));
@@ -2186,6 +2201,7 @@ if (isset($db_opcaoal)) {
                 } else if (value == 7) {
                     document.getElementById('tipo7').style.display = '';
                     opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
                     opcoesbeneficio.add(new Option('Pensão especial sem vínculo previdenciário', '1001'));
                     opcoesbeneficio.add(new Option('Outros benefícios sem vínculo previdenciário', '1009'));
                 } else {
