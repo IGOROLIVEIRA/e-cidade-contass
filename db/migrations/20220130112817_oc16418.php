@@ -6,7 +6,7 @@ class Oc16418 extends AbstractMigration
 {
     public function up()
     {
-        $this->criarMenu();
+        // $this->criarMenu();
         $this->criarTabelaDIPR();
         $this->criarCampos();
     }
