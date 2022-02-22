@@ -36,20 +36,6 @@ class Oc16571HotFix4 extends AbstractMigration
         ALTER TABLE "public"."arc212022"
         ADD COLUMN "si32_nrocontratoop" varchar(30),
         ADD COLUMN "si32_dataassinaturacontratoop" date;
-
-        -- Migration: Topico 6
-
-        ALTER TABLE "public"."ctb202022"
-        ADD COLUMN "si96_saldocec" int4;
-
-        ALTER TABLE "public"."ctb212022"
-        ADD COLUMN "si97_saldocec" int4;
-
-        ALTER TABLE "public"."ctb212022"
-        ADD COLUMN "si97_saldocectransf" int4;
-
-        ALTER TABLE "public"."ctb222022"
-        ADD COLUMN "si98_saldocec" int4;
         COMMIT;
 
 SQL;
