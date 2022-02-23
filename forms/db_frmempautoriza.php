@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal
+ *     E-cidade Software Publico para Gestao Municipal 
  *  Copyright (C) 2014  DBselller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -25,14 +25,17 @@
  *                                licenca/licenca_pt.txt
  */
 
-//MODULO: empenho
+//MODULO: empenho   
 $clempautoriza->rotulo->label();
 $clrotulo = new rotulocampo;
+
 $clrotulo->label("e44_tipo");
 $clrotulo->label("z01_nome");
 $clrotulo->label("nome");
 $clrotulo->label("pc50_descr");
-$clrotulo->label("e57_codhist");
+$clrotulo->label("e57_codhist"); 
+$clrotulo->label("e40_codhist");
+$clrotulo->label("e40_historico");
 $clrotulo->label("c58_descr");
 $clrotulo->label("e150_numeroprocesso");
 if ($db_opcao==1) {
@@ -42,6 +45,24 @@ if ($db_opcao==1) {
 }else if ($db_opcao==3 || $db_opcao==33) {
     $ac="emp1_empautoriza006.php";
 }
+
+if(isset($e57_codhist)){
+    $query = "select e40_descr from emphist where e40_codhist = $e57_codhist";
+    $resultado = db_query($query);
+    $resultado = db_utils::fieldsMemory($resultado, 0);
+    $e40_descr=$resultado->e40_descr;
+}
+if(!$e57_codhist){
+    $query = "select distinct e57_codhist from empauthist where e57_codhist = 0";
+    $resultado = db_query($query);
+    $resultado = db_utils::fieldsMemory($resultado, 0);
+    $e57_codhist=$resultado->e57_codhist;
+    $query = "select e40_descr from emphist where e40_codhist = $e57_codhist";
+    $resultado = db_query($query);
+    $resultado = db_utils::fieldsMemory($resultado, 0);
+    $e40_descr=$resultado->e40_descr;
+}
+
 
 db_app::load("DBFormCache.js");
 
@@ -192,16 +213,16 @@ db_app::load("DBFormCache.js");
                     <strong>Dados da Licitação:</strong>
                 </td>
                 <td>
-                    <strong>Número do Processo:</strong>
-                    <? db_input('e54_numerl', 16,"",true,'text',1, "", "", "", "", 16); ?>
+                    <strong>Nº do Processo:</strong>
+                    <? db_input('e54_numerl', 13,"",true,'text',1, "", "", "", "", 16); ?>
 
-                    <strong>Modalidade:</strong>
-                    <?db_input('e54_nummodalidade',16,"",true,'text',1,"onkeyup='somenteNumeros(this)';","","","",10); ?>
+                    <strong> Modalidade:</strong>
+                    <?db_input('e54_nummodalidade',13,"",true,'text',1,"onkeyup='somenteNumeros(this)';","","","",10); ?>
                 </td>
             </tr>
             <tr>
                 <td nowrap title="<?=@$Te54_codcom?>">
-                    <strong>Tipo de Compra:</strong>
+                    <strong>Tipo de Compra:</strong> 
                 </td>
                 <td>
                     <?php
@@ -273,38 +294,10 @@ db_app::load("DBFormCache.js");
                      * alterado para liberar o campo tipo de empenho para alteracao
                      */
                     $result = $clemptipo->sql_record($clemptipo->sql_query_file(null,"e41_codtipo,e41_descr"));
-                    db_selectrecord("e54_codtipo",$result,true,isset($emprocesso)&&$emprocesso==true?"1":$db_opcao,"");
+                    db_selectrecord("e54_codtipo",$result,true,isset($emprocesso)&&$emprocesso==true?"1":$db_opcao,"", "", "","0-Selecione");
                     ?>
                 </td>
-            </tr>
-            <tr>
-                <td nowrap title="<?=@$Te57_codhist?>">
-                    <?=$Le57_codhist?>
-                </td>
-                <td>
-                    <?
-                    // caso empparametro.e30_autimportahist=='t' busca o historico da ultima autorização
-                    $par =  $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu")));
-                    if ($clempparametro->numrows>0 && $db_opcao == 1) {
-
-                        db_fieldsmemory($par,0);
-                        if ($e30_autimportahist == 't') {
-
-                            $hist = $clempauthist->sql_record("select e57_codhist
-    	                                             from empauthist
-    					                               inner join empautoriza on e54_autori=e57_autori
-    					                                    where e54_login=".db_getsession("DB_id_usuario")."
-    					                                 order by e57_autori desc limit 1");
-                            if ($clempauthist->numrows>0) {
-                                db_fieldsmemory($hist,0);
-                            }
-                        }
-                    }
-                    $result = $clemphist->sql_record($clemphist->sql_query_file(null,"e40_codhist,e40_descr"));
-                    db_selectrecord("e57_codhist",$result,true,isset($emprocesso)&&$emprocesso==true?"3":"1","","","","0");
-                    ?>
-                </td>
-            </tr>
+            </tr>               
             <tr>
                 <td nowrap title="<?=@$Te44_tipo?>">
                     <?=$Le44_tipo?>
@@ -373,20 +366,37 @@ db_app::load("DBFormCache.js");
                 db_input("e54_concarpeculiar",10,0,true,"hidden",3,"");
             }
             ?>
+             <tr>
+              <td nowrap title="<?= @$Te57_codhist ?>">
+                <?= db_ancora(substr(@$Le40_codhist, 12, 50), "js_pesquisahistorico(true);", isset($emprocesso)&&$emprocesso==true?"1":"1"); ?>
+              </td>
+              <td nowrap="nowrap">
+                <?  
+                    db_input('e57_codhist', 11, $Ie57_codhist, true, '', 1, " onchange='js_pesquisahistorico(false);'");
+                    if($db_opcao == 1)
+                         db_input('e40_descr', 50, $Ie40_descr, true, 'text', 3);                         
+                    else
+                         db_input('e40_descr', 42, $Ie40_descr, true, 'text', 3);                    
+                ?>
+              </td>
+	      </tr>       
             <tr>
                 <td nowrap title="<?=@$Te54_resumo?>" colspan="2">
                     <fieldset>
                         <legend>
                             <strong><?=@$Le54_resumo?></strong>
                         </legend>
-                        <? db_textarea('e54_resumo',3,84,$Ie54_resumo,true,'text',$db_opcao,"") ?>
+                        <? 
+                            db_textarea('e54_resumo',3,510,$Ie54_resumo,true,'text',$db_opcao,"","","#FFFFFF") 
+                        ?>
+                     
                     </fieldset>
                 </td>
             </tr>
         </table>
     </fieldset>
 
-    <div style="margin-top: 10px;">
+    <div style="margin-top: 10px;">   
 
         <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
                type="submit" id="db_opcao"
@@ -419,6 +429,38 @@ db_app::load("DBFormCache.js");
 
 </form>
 <script>
+
+function js_pesquisahistorico(mostra) {
+      if (mostra == true) {
+        js_OpenJanelaIframe('', 'db_iframe_emphist', 'func_emphist.php?funcao_js=parent.js_mostrahistorico1|e40_codhist|e40_descr|e40_historico|e54_resumo', 'Pesquisa', true);
+      } else {
+        if (document.form1.e57_codhist.value != '') {
+          js_OpenJanelaIframe('', 'db_iframe_emphist', 'func_emphist.php?pesquisa_chave=' + document.form1.e57_codhist.value +'&funcao_js=parent.js_mostrahistorico', 'Pesquisa', false);
+            
+        } else {
+          document.form1.e57_codhist.value = '';
+          document.form1.e40_descr.value = '';
+          document.form1.e54_resumo.value = '';
+        } 
+      }	
+	}
+    
+  function js_mostrahistorico1(chave,chave1,chave2,chave3) {
+        
+           document.form1.e57_codhist.value = chave; 
+           document.form1.e40_descr.value = chave1;
+           document.form1.e54_resumo.value = chave2 ;
+           db_iframe_emphist.hide();
+	}
+  function js_mostrahistorico(chave,chave1,erro) {
+		document.form1.e40_descr.value = chave;
+        if(erro == false)
+                document.form1.e54_resumo.value = chave1;
+        else     
+                document.form1.e54_resumo.value = '' ;
+                           
+        db_iframe_emphist.hide();   
+	}
 
     function js_validaLicitacao() {
         if($('dop').value != 3 && ($('e54_numerl').value == '' || $('e54_numerl').value == 0)) {
@@ -485,8 +527,9 @@ db_app::load("DBFormCache.js");
         db_iframe_concarpeculiar.hide();
     }
     function js_nova(){
+        // e40_historico
         destin = document.form1.e54_destin.value;
-        resumo = document.form1.e54_resumo.value;
+        resumo = document.form1.e40_historico.value;
         numcgm = document.form1.e54_numcgm.value;
         nome   = document.form1.z01_nome.value;
         parent.location.href="emp1_empautoriza001.php?z01_nome="+nome+"&e54_numcgm="+numcgm+"&e54_destin="+destin+"&e54_resumo="+resumo;

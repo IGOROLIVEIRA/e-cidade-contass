@@ -1695,11 +1695,12 @@ switch ($oParam->exec) {
 
     case 'getTipoJulgamento':
 
-        $rsTipo = db_query('SELECT l20_tipojulg, l20_anousu from liclicita where l20_codigo = ' . $oParam->licitacao);
+        $rsTipo = db_query('SELECT l20_tipojulg, l20_anousu,l20_datacria from liclicita where l20_codigo = ' . $oParam->licitacao);
         $oLicitacao = db_utils::fieldsMemory($rsTipo, 0);
         $oRetorno->tipo = $oLicitacao->l20_tipojulg;
-        $oRetorno->ano = $oLicitacao->l20_anousu;
-        $oRetorno->mes = date("m", db_getsession("DB_datausu"));
+        $oRetorno->data = $oLicitacao->l20_datacria;
+        //$oRetorno->ano = $oLicitacao->l20_anousu;
+        //$oRetorno->mes = date("m", db_getsession("DB_datausu"));
         break;
 
     case 'getLotes':

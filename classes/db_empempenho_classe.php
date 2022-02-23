@@ -25,8 +25,8 @@
  *                                licenca/licenca_pt.txt
  */
 
-//MODULO: empenho
-//CLASSE DA ENTIDADE empempenho
+//MODULO: empenho   
+//CLASSE DA ENTIDADE empempenho    
 class cl_empempenho {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -62,6 +62,7 @@ class cl_empempenho {
     var $e60_vlranu = 0;
     var $e60_codtipo = 0;
     var $e60_resumo = null;
+    var $e60_informacaoop = null;
     var $e60_destin = null;
     var $e60_salant = 0;
     var $e60_instit = 0;
@@ -96,6 +97,7 @@ class cl_empempenho {
                  e60_vlranu = float8 = Valor Anulado
                  e60_codtipo = int4 = Tipo Empenho
                  e60_resumo = text = Observação
+                 e60_informacaoop = text = Informações da OP
                  e60_destin = varchar(40) = Destino
                  e60_salant = float8 = Saldo anterior
                  e60_instit = int4 = codigo da instituicao
@@ -157,6 +159,7 @@ class cl_empempenho {
             $this->e60_vlranu = ($this->e60_vlranu == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vlranu"]:$this->e60_vlranu);
             $this->e60_codtipo = ($this->e60_codtipo == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_codtipo"]:$this->e60_codtipo);
             $this->e60_resumo = ($this->e60_resumo == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_resumo"]:$this->e60_resumo);
+            $this->e60_informacaoop = ($this->e60_informacaoop == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_informacaoop"]:$this->e60_informacaoop);
             $this->e60_destin = ($this->e60_destin == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_destin"]:$this->e60_destin);
             $this->e60_salant = ($this->e60_salant == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_salant"]:$this->e60_salant);
             $this->e60_instit = ($this->e60_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_instit"]:$this->e60_instit);
@@ -405,6 +408,7 @@ class cl_empempenho {
                                       ,e60_vlranu
                                       ,e60_codtipo
                                       ,e60_resumo
+                                      ,e60_informacaoop
                                       ,e60_destin
                                       ,e60_salant
                                       ,e60_instit
@@ -435,6 +439,7 @@ class cl_empempenho {
                                ,$this->e60_vlranu
                                ,$this->e60_codtipo
                                ,'$this->e60_resumo'
+                               ,'$this->e60_informacaoop' 
                                ,'$this->e60_destin'
                                ,$this->e60_salant
                                ,$this->e60_instit
@@ -494,6 +499,7 @@ class cl_empempenho {
             $resac = db_query("insert into db_acount values($acount,889,5660,'','".AddSlashes(pg_result($resaco,0,'e60_vlranu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,889,5661,'','".AddSlashes(pg_result($resaco,0,'e60_codtipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,889,5662,'','".AddSlashes(pg_result($resaco,0,'e60_resumo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,889,5662,'','".AddSlashes(pg_result($resaco,0,'e60_informacaoop'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,889,5679,'','".AddSlashes(pg_result($resaco,0,'e60_destin'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,889,5684,'','".AddSlashes(pg_result($resaco,0,'e60_salant'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,889,5663,'','".AddSlashes(pg_result($resaco,0,'e60_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -711,6 +717,10 @@ class cl_empempenho {
             $sql  .= $virgula." e60_resumo = '$this->e60_resumo' ";
             $virgula = ",";
         }
+        if(trim($this->e60_informacaoop)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_informacaoop"])){
+            $sql  .= $virgula." e60_informacaoop = '$this->e60_informacaoop' ";
+            $virgula = ",";
+        }
         if(trim($this->e60_destin)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_destin"])){
             $sql  .= $virgula." e60_destin = '$this->e60_destin' ";
             $virgula = ",";
@@ -880,6 +890,8 @@ class cl_empempenho {
                     $resac = db_query("insert into db_acount values($acount,889,5661,'".AddSlashes(pg_result($resaco,$conresaco,'e60_codtipo'))."','$this->e60_codtipo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 if(isset($GLOBALS["HTTP_POST_VARS"]["e60_resumo"]) || $this->e60_resumo != "")
                     $resac = db_query("insert into db_acount values($acount,889,5662,'".AddSlashes(pg_result($resaco,$conresaco,'e60_resumo'))."','$this->e60_resumo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_informacaoop"]) || $this->e60_informacaoop != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5662,'".AddSlashes(pg_result($resaco,$conresaco,'e60_informacaoop'))."','$this->e60_informacaoop',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 if(isset($GLOBALS["HTTP_POST_VARS"]["e60_destin"]) || $this->e60_destin != "")
                     $resac = db_query("insert into db_acount values($acount,889,5679,'".AddSlashes(pg_result($resaco,$conresaco,'e60_destin'))."','$this->e60_destin',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 if(isset($GLOBALS["HTTP_POST_VARS"]["e60_salant"]) || $this->e60_salant != "")
@@ -957,6 +969,7 @@ class cl_empempenho {
                 $resac = db_query("insert into db_acount values($acount,889,5660,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_vlranu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,889,5661,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_codtipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,889,5662,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_resumo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,889,5662,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_informacaoop'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,889,5679,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_destin'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,889,5684,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_salant'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,889,5663,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
