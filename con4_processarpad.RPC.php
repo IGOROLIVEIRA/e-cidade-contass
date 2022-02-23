@@ -385,6 +385,11 @@ switch($oParam->exec) {
         $sArquivo = 'SicomArquivoAnulacaoExtraOrcamentariaPorFonte';
     }
 
+        // Condição da OC16846
+        if (db_getsession("DB_anousu") > 2016 && $sArquivo == "SicomArquivoAnulacaoExtraOrcamentaria") 
+            $sArquivo = 'SicomArquivoAnulacaoExtraOrcamentariaPorFonte';
+        // Final da Condição da OC16846
+
     if (file_exists("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
 
      require_once("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
