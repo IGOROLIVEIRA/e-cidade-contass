@@ -44,7 +44,7 @@ db_postmemory($HTTP_POST_VARS);
 
 $oPost = db_utils::postMemory($_GET);
 //db_postmemory($HTTP_SERVER_VARS,2);exit;
-parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+//parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $clselorcdotacao  = new cl_selorcdotacao();
 $clorcelemento    = new cl_orcelemento;
@@ -198,12 +198,12 @@ if($rp == 'somente'){
 
 $sCampos = '';
 if ($oPost->sDadosFornecedor == 's') {
-  $sCampos  = " z01_incest, z01_cgccpf, c66_codnota, ";
+  $sCampos  = " z01_incest, z01_cgccpf, ";
 }
 
 
 
-$sqlperiodo  = "  select empempenho.e60_numemp::integer as e60_numemp, e50_codord,                                   ";
+$sqlperiodo  = "  select empempenho.e60_numemp::integer as e60_numemp,                                               ";
 $sqlperiodo .= " 	       e94_motivo,                                                                               ";
 $sqlperiodo .= " 	       e50_obs,                                                                                  ";
 $sqlperiodo .= " 	       e60_resumo,                                                                               ";
@@ -237,10 +237,8 @@ $sqlperiodo .= " 	       sum(c70_valor) as c70_valor,                           
 $sqlperiodo .= " 	       c70_data,                                                                                 ";
 $sqlperiodo .= " 	       c70_codlan,                                                                               ";
 $sqlperiodo .= " 	       c53_tipo,                                                                                 ";
-$sqlperiodo .= " 	       e69_numero,                                                   ";
-$sqlperiodo .= " 	       c53_descr,                                                   ";
 $sqlperiodo .= " 	       {$sCampos}                                                                                ";
-$sqlperiodo .= " 	       e91_numemp                                                                                ";
+$sqlperiodo .= " 	       c53_descr                                                                                 ";
 $sqlperiodo .= "    from empempenho                                                                                ";
 $sqlperiodo .= "   inner join conlancamemp 	on c75_numemp                 = empempenho.e60_numemp                  ";
 $sqlperiodo .= "   inner join conlancam		  on c70_codlan                 = c75_codlan                             ";
@@ -274,13 +272,11 @@ $sqlperiodo .= "   left join empresto		    on e60_numemp                 = e91_n
 $sqlperiodo .= "                           and e60_anousu                 = e91_anousu                             ";
 $sqlperiodo .= "   left join pagordem on e50_numemp = e60_numemp                                                   ";
 $sqlperiodo .= "   left join empanulado on e94_numemp = e60_numemp                                                 ";
-$sqlperiodo .= "    left join conlancamnota		  on c66_codlan             = c70_codlan                             ";
-$sqlperiodo .= "    left join empnota		  on e69_codnota             = c66_codnota                             ";
 $sqlperiodo .= "  where $xtipo $where_credor                                                                       ";
 $sqlperiodo .= "    and c70_data between '$dataini' and '$datafin'                                                 ";
 $sqlperiodo .= "    and $sele_work                                                                                 ";
 $sqlperiodo .= "    $instits                                                                                       ";
-$sqlperiodo .= "  group by e60_numemp, e50_codord,                                                                            ";
+$sqlperiodo .= "  group by e60_numemp,                                                                             ";
 $sqlperiodo .= "           e94_motivo,                                                                             ";
 $sqlperiodo .= "           e50_obs,                                                                             ";
 $sqlperiodo .= "           e60_resumo,                                                                             ";
@@ -313,12 +309,11 @@ $sqlperiodo .= "           c70_data,                                            
 $sqlperiodo .= " 	       c70_codlan,                                                                             ";
 $sqlperiodo .= "           c53_tipo,                                                                               ";
 $sqlperiodo .= "           c53_descr,                                                                              ";
-$sqlperiodo .= "           e69_numero,                                                                              ";
-$sqlperiodo .= "           {$sCampos}                                                                              ";
+$sqlperiodo .= "           {$sCampos}                                                                               ";
 $sqlperiodo .= "           e91_numemp                                                                              ";
 $sqlperiodo .= "     order by $xordem                                                                              ";
-
 $res=$clempempenho->sql_record($sqlperiodo);
+
 $rows=$clempempenho->numrows;
 if($rows == 0){
   db_redireciona('db_erros.php?fechar=true&db_erro=Verifique os dados escolhidos! Não foi retornado nenhum resultado.');
@@ -387,6 +382,11 @@ for ($x=0; $x < $rows;$x++){
        $pdf->cell(63,$tam,"INSCRIÇÃO ESTADUAL",1,0,"C",1);
        $pdf->cell(33,$tam,"NOTA",1,0,"C",1);
        $pdf->cell(30,$tam,"ORDEM PAGAMENTO",1,1,"C",1);
+     }else{
+        $pdf->cell(64,$tam," ",1,0,"C",1);
+        $pdf->cell(63,$tam," ",1,0,"C",1);
+        $pdf->cell(33,$tam,"NOTA",1,0,"C",1);
+        $pdf->cell(30,$tam,"ORDEM PAGAMENTO",1,1,"C",1);
      }
 
      if($com_mov == 's'){
@@ -417,14 +417,23 @@ for ($x=0; $x < $rows;$x++){
   }
   $pdf->Cell(85,$tam,'CREDOR : '.$e60_numcgm.' - '.$z01_nome,0,0,"L",$pre);
   $pdf->Cell(85,$tam,$c53_descr,0,1,"C",$pre);
-
+  $resNotaOrdemPagamento = db_query("select e69_numero, e71_codord from conlancamord
+                                    inner join pagordemnota on e71_codord=c80_codord
+                                    inner join empnota on e69_codnota=e71_codnota where c80_codlan=".$c70_codlan);
+  db_fieldsmemory($resNotaOrdemPagamento,0);
   if ($oPost->sDadosFornecedor == 's' ) {
 
     $sCnpjCpf = strlen($z01_cgccpf) == 11 ? db_formatar($z01_cgccpf, 'cpf') : db_formatar($z01_cgccpf, 'cnpj');
     $pdf->cell(64,$tam, "CPF / CNPJ: {$sCnpjCpf}", 0, 0, "L");
     $pdf->cell(63,$tam, "INSC. EST.: {$z01_incest}", 0, 0, "L");
+
     $pdf->cell(33,$tam, "NOTA: {$e69_numero}", 0, 0, "R");
-    $pdf->cell(30,$tam, "OP: {$e50_codord}", 0, 1, "R");
+    $pdf->cell(30,$tam, "OP: {$e71_codord}", 0, 1, "R");
+  }else{
+    $pdf->cell(64,$tam, " ", 0, 0, "L");
+    $pdf->cell(63,$tam, " ", 0, 0, "L");
+    $pdf->cell(33,$tam, "NOTA: {$e69_numero}", 0, 0, "R");
+    $pdf->cell(30,$tam, "OP: {$e71_codord}", 0, 1, "R");
   }
 
   if ($com_mov == 's') {
