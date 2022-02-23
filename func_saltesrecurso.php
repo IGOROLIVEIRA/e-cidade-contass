@@ -41,6 +41,8 @@ $clsaltes->rotulo->label("k13_conta");
 $clsaltes->rotulo->label("k13_descr");
 $clcontabancaria->rotulo->label("db83_numerocontratooc");
 $clcontabancaria->rotulo->label("db83_dataassinaturacop");
+$clcontabancaria->rotulo->label("db83_codigoopcredito");
+
 $ano = db_getsession("DB_anousu"); //ano 
 
 ?>  
@@ -121,7 +123,7 @@ $ano = db_getsession("DB_anousu"); //ano
               db_fieldsmemory($result, 0);
               $resultconta = $clcontabancaria->sql_record($clcontabancaria->sql_query(null, "*", "", " db83_conta='$c63_conta'"));
               db_fieldsmemory($resultconta, 0);
-              echo "<script>" . $funcao_js . "('$k13_conta','$k13_descr','$c61_codigo','$db83_numerocontratooc','$db83_dataassinaturacop',false);</script>";
+              echo "<script>" . $funcao_js . "('$k13_conta','$k13_descr','$c61_codigo','$db83_codigoopcredito',false);</script>";
             } else {
               echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") não Encontrado','',true);</script>";
             }
