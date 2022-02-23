@@ -62,7 +62,6 @@ $clrotulo->label("q02_inscr");
 $clrotulo->label("j01_matric");
 $clrotulo->label("db83_numerocontratooc");
 $clrotulo->label("db83_dataassinaturacop");
-$clrotulo->label("db83_codigoopcredito");
 
 $db_opcao = 1;
 $c58_sequencial = "000";
@@ -79,7 +78,6 @@ $sFuncaoBusca = "js_pesquisaMatricula";
 if ($oInstit->db21_usasisagua == "t") {
   $sFuncaoBusca = "js_pesquisa_agua";
 }
-
 ?>
 <html>
 
@@ -299,18 +297,28 @@ if ($oInstit->db21_usasisagua == "t") {
             <!-- Número do Contrato da Operação de Crédito -->
             <?php if ($ano >= 2022) { ?>
               <tr id="numerocontrato" style="display: none;">
-                <td nowrap title="<?= @$Top01_numerocontratoopc ?>"><? echo $Ldb83_numerocontratooc ?></td>
+                <td nowrap title="<?= @$Tdb83_numerocontratooc ?>"><? echo $Ldb83_numerocontratooc ?></td>
                 <td colspan='3'>
                   <?
-                  db_input('op01_numerocontratoopc', 75, 0, true, $db_opcaotext);
+                  $oDaoOrctiporec = db_utils::getDao("contabancaria");
+                  $sWhere         = " ";
+                  $sCampos        = "db83_numerocontratooc";
+                  $sSQLOrctiporec = $oDaoOrctiporec->sql_query_file(null, $sCampos, "db83_numerocontratooc");
+                  $rsOrctiporec   = $oDaoOrctiporec->sql_record($sSQLOrctiporec);
+                  db_input('db83_numerocontratooc', 75, $rsOrctiporec, true, $db_opcaotext);
                   ?>
                 </td>
               </tr>
               <tr id="datacontrato" style="display: none;">
                 <td nowrap title="<?= @$Tdb83_dataassinaturacop ?>"><? echo $Ldb83_dataassinaturacop ?></td>
                 <td colspan='3'>
-                  <? 
-                    db_input('op01_dataassinaturacop', 75, $rsOrctiporec, true, $db_opcao);
+                  <?
+                  $oDaoOrctiporec = db_utils::getDao("contabancaria");
+                  $sWhere         = " ";
+                  $sCampos        = "db83_dataassinaturacop";
+                  $sSQLOrctiporec = $oDaoOrctiporec->sql_query_file(null, $sCampos, "db83_dataassinaturacop");
+                  $rsOrctiporec   = $oDaoOrctiporec->sql_record($sSQLOrctiporec);
+                  db_input('db83_dataassinaturacop', 75, $rsOrctiporec, true, $db_opcao);
                   ?>
                 </td>
               </tr>
@@ -514,8 +522,6 @@ if ($oInstit->db21_usasisagua == "t") {
       $('estrutural').value = '';
       $('recurso').value = '';
 
-
-
       return false;
     }
   }
@@ -667,7 +673,7 @@ if ($oInstit->db21_usasisagua == "t") {
    */
   function js_pesquisaConta(lMostra) {
 
-    var sFuncao = 'funcao_js=parent.js_mostraSaltes|k13_conta|k13_descr|c61_codigo|db83_conta|db83_codigoopcredito';
+    var sFuncao = 'funcao_js=parent.js_mostraSaltes|k13_conta|k13_descr|c61_codigo|db83_conta|db83_numerocontratooc|db83_dataassinaturacop';
     var sPesquisa = 'func_saltesrecurso.php?recurso=0&' + sFuncao + '&data_limite=<?= date("Y-m-d", db_getsession("DB_datausu")) ?>'
 
     if (!lMostra) {
@@ -695,32 +701,6 @@ if ($oInstit->db21_usasisagua == "t") {
     );
   }
 
-  function js_getSaltesOP(idb83_codigoopcredito) {
-    sJson = '{"exec":"getSaltesOP","idb83_codigoopcredito":' + idb83_codigoopcredito + '}';
-    url = 'cai4_planilhalancamento.RPC.php';
-    oAjax = new Ajax.Request(
-      url, {
-        method: 'post',
-        parameters: 'sJson=' + sJson,
-        onComplete: js_retornoSaltesOP
-      }
-    );
-  }
-
-  function js_retornoSaltesOP(oAjax) { 
-    oSaltesOP = eval("(" + oAjax.responseText + ")");
-    if(oSaltesOP.op01_sequencial){
-        $('op01_numerocontratoopc').value = oSaltesOP.op01_numerocontratoopc;
-        const data = oSaltesOP.op01_dataassinaturacop.split('-');
-        $('op01_dataassinaturacop').value = data[2] + "/" + data[1] + "/" + data[0];
-    }else{
-      $('op01_numerocontratoopc').value = '';
-      $('op01_dataassinaturacop').value = '';
-    }
-     
-    js_mostrarNotificacaoOP(oSaltesOP);
-  }
-
   function js_retornoSaltesConvenio(oAjax) {
     oSaltesConvenio = eval("(" + oAjax.responseText + ")");
 
@@ -729,18 +709,21 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoConvenio(oSaltesConvenio);
   }
 
-  function js_preencheSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb83_codigoopcredito, lErro) {
+  function js_preencheSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb83_numerocontratooc, idb83_dataassinaturacop, lErro) {
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
-    
     var recursoreceita = $('recurso').value;
     
     if ($('anoUsu').value >= 2022) {
-        if (iCodigoConta != '' & idb83_codigoopcredito != '') {
-          js_getSaltesOP(idb83_codigoopcredito);
+        if (iCodigoConta != '' & idb83_numerocontratooc != '') {
+          $('db83_numerocontratooc').value = idb83_numerocontratooc;
         } 
-    }
+        if (idb83_dataassinaturacop != '') {
+          const data = idb83_dataassinaturacop.split('-');
+          $('db83_dataassinaturacop').value = data[2] + "/" + data[1] + "/" + data[0];
+        } 
+  }
     
     iCodRecursoConta = $F('c61_codigo').substr(-3);
 
@@ -794,11 +777,11 @@ if ($oInstit->db21_usasisagua == "t") {
         if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
           document.getElementById('numerocontrato').style.display = "";
           document.getElementById('datacontrato').style.display = "";
-          if(idb83_codigoopcredito == '' || idb83_codigoopcredito == null) {
+          if (idb83_dataassinaturacop == '' || idb83_numerocontratooc == '') {
             alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
             $('k81_conta').focus();
-            $('op01_numerocontratoopc').value = '';
-            $('op01_dataassinaturacop').value = '';            
+            $('db83_numerocontratooc').value = '';
+            $('db83_dataassinaturacop').value = '';            
             return false;
           }
         }
@@ -813,21 +796,25 @@ if ($oInstit->db21_usasisagua == "t") {
 
 
 
-  function js_mostraSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb_conta, idb83_codigoopcredito) {
-   
+  function js_mostraSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb_conta, idb83_numerocontratooc, idb83_dataassinaturacop) {
+    
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
     var recursoreceita = $('recurso').value;
     
     if ($('anoUsu').value >= 2022) {
-      if (idb83_codigoopcredito != '' & iCodigoConta != '') {
-        js_getSaltesOP(idb83_codigoopcredito);
+      if (iCodigoConta != '') {
+        $('db83_numerocontratooc').value = idb83_numerocontratooc;
       } else {
-        $('op01_numerocontratoopc').value = '';
-        $('op01_dataassinaturacop').value = '';
+        $('db83_numerocontratooc').value = '';
       }
-    
+      if (idb83_dataassinaturacop != '') {
+        const data = idb83_dataassinaturacop.split('-');
+        $('db83_dataassinaturacop').value = data[2] + "/" + data[1] + "/" + data[0];
+      } else {
+        $('db83_dataassinaturacop').value = '';
+      }
      
       if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
         document.getElementById('numerocontrato').style.display = "";
@@ -930,8 +917,6 @@ if ($oInstit->db21_usasisagua == "t") {
     $('recurso').value = chave3;
     $('estrutural').value = chave4;
     $('k02_tipo').value = chave6;
-    $('op01_numerocontratoopc').value = '';
-    $('op01_dataassinaturacop').value = '';
 
     if($('anoUsu').value >= 2022){
     var recursoreceita = $('recurso').value;
@@ -978,7 +963,6 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoEstruturais();
     js_mostrarNotificacaoConta();
     js_mostrarNotificacaoConvenio();
-    js_mostrarNotificacaoOP();
   }
 
   if($('anoUsu').value >= 2022){
@@ -989,8 +973,6 @@ if ($oInstit->db21_usasisagua == "t") {
     $('recurso').value = chave3;
     $('estrutural').value = chave4;
     $('k02_tipo').value = chave5;
-    $('op01_numerocontratoopc').value = '';
-    $('op01_dataassinaturacop').value = '';
 
     var recursoreceita = $('recurso').value;
     if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
@@ -1032,7 +1014,6 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoEstruturais();
     js_mostrarNotificacaoConta();
     js_mostrarNotificacaoConvenio();
-    js_mostrarNotificacaoOP();
 
     }
 }else{
@@ -1076,7 +1057,6 @@ if ($oInstit->db21_usasisagua == "t") {
           js_mostrarNotificacaoEstruturais();
           js_mostrarNotificacaoConta();
           js_mostrarNotificacaoConvenio();
-          js_mostrarNotificacaoOP();
 
         }
 }
@@ -1245,7 +1225,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if ($('anoUsu').value >= 2022) {
       var recursoreceita = $('recurso').value;
-      if ($F('op01_dataassinaturacop') == '' || $F('op01_numerocontratoopc') == '') {
+      if ($F('db83_dataassinaturacop') == '' || $F('db83_numerocontratooc') == '') {
         if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {        
           alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
           $('k81_conta').focus();
