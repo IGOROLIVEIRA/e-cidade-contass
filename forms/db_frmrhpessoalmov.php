@@ -1155,8 +1155,8 @@ if (isset($db_opcaoal)) {
                         document.getElementById("tipoapos").style.display = "none";
                         document.getElementById("tipobeneficio").style.display = "none";
                         document.getElementById("tipo7").style.display = "none";
-                        document.getElementById("rh02_tipobeneficio").style.value = "0";
-                        document.getElementById("rh02_descratobeneficio").style.value = '';
+                        document.getElementById("rh02_tipobeneficio").value = "0";
+                        document.getElementById("rh02_descratobeneficio").value = '';
                         document.getElementById("labelvalidadepensao").style.display = "none";
                         document.getElementById("validadepensao").style.display = "none";
                         document.getElementById("rh02_rhtipoapos").disabled = true;
@@ -2087,7 +2087,7 @@ if (isset($db_opcaoal)) {
                     opcoesbeneficio.add(new Option('Pensão por morte com paridade, decorrente do art. 3º da EC 47/2005', '0603'));
 
                 }
-
+                console.log(value);
                 if (value && rh01_admiss < '2021-11-21') {
                     opcoesbeneficio.length = 0;
                     opcoesbeneficio.add(new Option('Selecione', '0'));
@@ -2105,6 +2105,8 @@ if (isset($db_opcaoal)) {
                     opcoesbeneficio.add(new Option('Pensão por morte - Plano próprio', '0812'));
                     if (value == 7) {
                         document.getElementById('tipo7').style.display = '';
+                    } else {
+                        document.getElementById('tipo7').style.display = 'none';
                     }
                 } else if (value == 7) {
                     document.getElementById('tipo7').style.display = '';
