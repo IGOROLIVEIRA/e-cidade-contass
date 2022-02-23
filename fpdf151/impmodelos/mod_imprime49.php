@@ -1,8 +1,10 @@
+
 <?php
 
 $sSQLTomadorDBConfig = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
 $rsTomadorDBConfig = db_query($sSQLTomadorDBConfig);
 $lTomadorEhPrefeitura = !!pg_num_rows($rsTomadorDBConfig);
+$oInstit = new Instituicao(db_getsession('DB_instit'));
 
 ##Modelo de nota Fiscal
 $confNumRows = pg_num_rows($this->rsConfig);
@@ -325,10 +327,13 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $fTotalNota = $this->fTotaliUni;
 
     // valor total da nota
-    if ($lTomadorEhPrefeitura) {
+    if ($lTomadorEhPrefeitura){
         $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
+        }else if((isset($lTomadorEhPrefeitura)) && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
+                                                || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL)){        
+            $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
     }
-
+    
     $this->objpdf->setX(125);
     $this->objpdf->cell(40, 5, "Valor Total da Nota", 1, 0);
     $this->objpdf->Setfont('Arial', '', 10);
