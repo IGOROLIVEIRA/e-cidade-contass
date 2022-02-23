@@ -57,8 +57,6 @@ class cl_contabancaria
   var $db83_numconvenio = null;
   var $db83_dataconvenio = null;
   var $db83_nroseqaplicacao = null;
-  var $db83_numerocontratooc = null;
-  var $db83_dataassinaturacop = null;
   var $db83_codigoopcredito = null;
 
   // cria propriedade com as variaveis do arquivo
@@ -77,9 +75,7 @@ class cl_contabancaria
                  db83_numconvenio = int8 = Número Convênio
                  db83_dataconvenio = date = Data Convênio
                  db83_nroseqaplicacao = int8 = Número sequencial da aplicação
-                 db83_numerocontratooc = varchar(30) = Nº do Contrato da Operação de Crédito
-                 db83_dataassinaturacop = date = Data de Assinatura do Contrato OP
-                 db83_codigoopcredito = varchar(11) = Operação de Crédito
+                 db83_codigoopcredito = int4 = Operação de Crédito
                  ";
   //funcao construtor da classe
   function cl_contabancaria()
@@ -115,8 +111,6 @@ class cl_contabancaria
       $this->db83_convenio = ($this->db83_convenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_convenio"] : $this->db83_convenio);
       $this->db83_tipoaplicacao = ($this->db83_tipoaplicacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_tipoaplicacao"] : $this->db83_tipoaplicacao);
       $this->db83_numconvenio = ($this->db83_numconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_numconvenio"] : $this->db83_numconvenio);
-      $this->db83_numerocontratooc = ($this->db83_numerocontratooc == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_numerocontratooc"] : $this->db83_numerocontratooc);
-      $this->db83_dataassinaturacop = ($this->db83_dataassinaturacop == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_dataassinaturacop"] : $this->db83_dataassinaturacop);
       $this->db83_codigoopcredito = ($this->db83_codigoopcredito == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_codigoopcredito"] : $this->db83_codigoopcredito);
       
       if ($this->db83_dataconvenio == "") {
@@ -127,14 +121,6 @@ class cl_contabancaria
           $this->db83_dataconvenio = $this->db83_dataconvenio_ano . "-" . $this->db83_dataconvenio_mes . "-" . $this->db83_dataconvenio_dia;
         }
       } 
-      if ($this->db83_dataassinaturacop == "") {
-        $this->db83_dataassinaturacop_dia = ($this->db83_dataassinaturacop_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_dataassinaturacop_dia"] : $this->db83_dataassinaturacop_dia);
-        $this->db83_dataassinaturacop_mes = ($this->db83_dataassinaturacop_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_dataassinaturacop_mes"] : $this->db83_dataassinaturacop_mes);
-        $this->db83_dataassinaturacop_ano = ($this->db83_dataassinaturacop_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_dataassinaturacop_ano"] : $this->db83_dataassinaturacop_ano);
-        if ($this->db83_dataassinaturacop_dia != "") {
-          $this->db83_dataassinaturacop = $this->db83_dataassinaturacop_ano . "-" . $this->db83_dataassinaturacop_mes . "-" . $this->db83_dataassinaturacop_dia;
-        }
-      }
       $this->db83_nroseqaplicacao = ($this->db83_nroseqaplicacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_nroseqaplicacao"] : $this->db83_nroseqaplicacao);
     } else {
       $this->db83_sequencial = ($this->db83_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["db83_sequencial"] : $this->db83_sequencial);
@@ -279,11 +265,8 @@ class cl_contabancaria
     if (($this->db83_codigoopcredito == null) || ($this->db83_codigoopcredito == "")) {
       $this->db83_codigoopcredito = null;
     }
-    if (($this->db83_dataassinaturacop == null) || ($this->db83_dataassinaturacop == "")) {
-      $this->db83_dataassinaturacop = null;
-    }
-    
-    if($this->db83_numerocontratooc == null || $this->db83_codigoopcredito == null || $this->db83_dataassinaturacop == null){
+      
+    if($this->db83_codigoopcredito == null){
       $sql = "insert into contabancaria(
                                                 db83_sequencial
                                               ,db83_descricao
@@ -336,9 +319,7 @@ class cl_contabancaria
                                       ,db83_numconvenio
                                       ,db83_dataconvenio
                                       ,db83_nroseqaplicacao
-                                      ,db83_numerocontratooc
-                                      ,db83_dataassinaturacop
-                                      ,db83_codigoopcredito
+                                     ,db83_codigoopcredito
                        )
                 values (
                                 $this->db83_sequencial
@@ -355,9 +336,7 @@ class cl_contabancaria
                                ," . ($this->db83_numconvenio == "" ? "null" : $this->db83_numconvenio) . "
                                ," . ($this->db83_dataconvenio == "null" || $this->db83_dataconvenio == "" ? "null" : "'" . $this->db83_dataconvenio . "'") . "
                                ," . ($this->db83_nroseqaplicacao == "" ? "null" : $this->db83_nroseqaplicacao) . "
-                               ,'$this->db83_numerocontratooc'
-                               ,'$this->db83_dataassinaturacop'
-                               ,'$this->db83_codigoopcredito'
+                               ,$this->db83_codigoopcredito
                                
                       )";
                 }                  
@@ -399,8 +378,6 @@ class cl_contabancaria
       $resac = db_query("insert into db_acount values($acount,2740,15626,'','" . AddSlashes(pg_result($resaco, 0, 'db83_dvconta')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2740,15641,'','" . AddSlashes(pg_result($resaco, 0, 'db83_identificador')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2740,15642,'','" . AddSlashes(pg_result($resaco, 0, 'db83_codigooperacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2740,15643,'','" . AddSlashes(pg_result($resaco, 0, 'db83_numerocontratooc')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2740,15644,'','" . AddSlashes(pg_result($resaco, 0, 'db83_dataassinaturacop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2740,15645,'','" . AddSlashes(pg_result($resaco, 0, 'db83_tipoconta')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2740,18251,'','" . AddSlashes(pg_result($resaco, 0, 'db83_contaplano')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2740,18251,'','" . AddSlashes(pg_result($resaco, 0, 'db83_codigoopcredito')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -570,31 +547,14 @@ class cl_contabancaria
         return false;
       } 
     }
-    if($this->db83_numerocontratooc || isset($GLOBALS["HTTP_POST_VARS"]["db83_numerocontratooc"])){
-    if (trim($this->db83_numerocontratooc) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db83_numerocontratooc"]) == null) {
-      $sql  .= $virgula . " db83_numerocontratooc = '$this->db83_numerocontratooc' ";
-      $virgula = ",";
-    } else if (trim($this->db83_numerocontratooc) == "") {
-      $sql  .= $virgula . " db83_numerocontratooc = null ";
-      $virgula = ",";
-    }
     if (trim($this->db83_codigoopcredito) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db83_codigoopcredito"]) == null) {
-      $sql  .= $virgula . " db83_codigoopcredito = '$this->db83_codigoopcredito' ";
+      $sql  .= $virgula . " db83_codigoopcredito = $this->db83_codigoopcredito ";
       $virgula = ",";
     } else if (trim($this->db83_codigoopcredito) == "") {
       $sql  .= $virgula . " db83_codigoopcredito = null ";
       $virgula = ",";
     }
-  
-    
-    if ($this->db83_dataassinaturacop != ""  || isset($GLOBALS["HTTP_POST_VARS"]["db83_dataassinaturacop"]) == null) {
-      $sql  .= $virgula . " db83_dataassinaturacop = '$this->db83_dataassinaturacop' ";
-      $virgula = ",";
-    } else if (trim($this->db83_dataassinaturacop) == "" || isset($GLOBALS["HTTP_POST_VARS"]["db83_dataassinaturacop"]) == "") {
-      $sql  .= $virgula . " db83_dataassinaturacop = null ";
-      $virgula = ",";
-    }
-    } else {
+    else {
       if (isset($GLOBALS["HTTP_POST_VARS"]["db83_dataconvenio_dia"])) {
         $sql  .= $virgula . " db83_dataconvenio = null ";
         $virgula = ",";
