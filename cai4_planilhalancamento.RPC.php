@@ -60,3 +60,26 @@ if ($oParam->exec == 'getSaltesConvenio') {
 
    echo $oJson->encode($aSaltesConv);
 }
+
+//operação de credito
+
+if ($oParam->exec == 'getSaltesOP') {
+   $oDaoSaltes = db_utils::getDao("db_operacaodecredito");
+   $sqlSaltesOP = $oDaoSaltes->sql_query(null,"op01_sequencial, op01_numerocontratoopc, op01_dataassinaturacop","","$where op01_sequencial={$oParam->idb83_codigoopcredito}" );
+   $rsSaltes = $oDaoSaltes->sql_record($sqlSaltesOP);
+   
+   if ($oDaoSaltes->numrows > 0) {
+
+      $oSaltesOP = db_utils::fieldsMemory($rsSaltes, 0);
+
+      $aSaltesOP     = array("op01_sequencial" => $oSaltesOP->op01_sequencial, "op01_numerocontratoopc"=> $oSaltesOP->op01_numerocontratoopc,"op01_dataassinaturacop"=> $oSaltesOP->op01_dataassinaturacop, "lValidacao" => true, "sMensagem" => $sMensagem);   
+    
+   } else {
+
+      $sMensagem = "";
+      $aSaltesOP = array("op01_sequencial" => "", "op01_numerocontratoopc" => "","op01_dataassinaturacop" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
+
+   }
+
+   echo $oJson->encode($aSaltesOP);
+}
