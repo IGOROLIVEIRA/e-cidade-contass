@@ -308,17 +308,14 @@ $this->objpdf->setX(125);
 $this->objpdf->cell(40, 5, "Valor IRRF", 1, 0);
 $this->objpdf->cell(35, 5, "R$ " . number_format($this->fvlrIrrf, 2, ",", "."), 1, 1, "R");
 
-$fTotalNota = $this->fTotaliUni;    
+$fTotalNota = $this->fTotaliUni; 
 
 // valor total da nota
 if ($lTomadorEhPrefeitura){
     $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
-    }else if((isset($lTomadorEhPrefeitura)) && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
-                                            || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL)){        
-        $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
 }
 
-if ((isset($lTomadorEhPrefeitura)) && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
+if ($lTomadorEhPrefeitura == null && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
    || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL)){        
         $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
 }

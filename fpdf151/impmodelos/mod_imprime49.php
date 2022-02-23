@@ -1,4 +1,3 @@
-
 <?php
 
 $sSQLTomadorDBConfig = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
@@ -329,8 +328,10 @@ for ($j = 0; $j < $confNumRows; $j++) {
     // valor total da nota
     if ($lTomadorEhPrefeitura){
         $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
-        }else if((isset($lTomadorEhPrefeitura)) && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
-                                                || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL)){        
+    }
+
+    if ($lTomadorEhPrefeitura == null && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
+       || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL)){        
             $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
     }
     
