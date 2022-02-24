@@ -141,6 +141,15 @@ class cl_rhinssoutros
       $this->erro_status = "0";
       return false;
     }
+    if (strlen($this->rh51_cgcvinculo) < 11) {
+      $this->erro_sql = " Campo CNPJ/CPF do Outro Vínculo Invalido.";
+      $this->erro_campo = "rh51_cgcvinculo";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     if ($this->rh51_indicadesconto == null) {
       $this->erro_sql = " Campo Indicativo de Desconto nao Informado.";
       $this->erro_campo = "rh51_indicadesconto";

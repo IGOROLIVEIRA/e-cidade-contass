@@ -40,9 +40,9 @@ $db_botao = true;
 if (isset($incluir)) {
   $sqlerro = false;
   db_inicio_transacao();
-  $clrhinssoutros->$rh51_indicadesconto = $rh51_indicadesconto;
-  $clrhinssoutros->$rh51_cgcvinculo = $rh51_cgcvinculo;
-  $clrhinssoutros->$rh51_categoria = $rh51_categoria;
+  $clrhinssoutros->rh51_indicadesconto = $rh51_indicadesconto;
+  $clrhinssoutros->rh51_cgcvinculo = $rh51_cgcvinculo;
+  $clrhinssoutros->rh51_categoria = $rh51_categoria;
   $clrhinssoutros->incluir($rh51_seqpes);
   $erro_msg = $clrhinssoutros->erro_msg;
   if ($clrhinssoutros->erro_status == "0") {
@@ -58,9 +58,9 @@ if (isset($incluir)) {
   }
   $clrhinssoutros->rh51_ocorre = $rh51_ocorre;
   $clrhinssoutros->rh51_seqpes = $rh51_seqpes;
-  $clrhinssoutros->$rh51_indicadesconto = $rh51_indicadesconto;
-  $clrhinssoutros->$rh51_cgcvinculo = $rh51_cgcvinculo;
-  $clrhinssoutros->$rh51_categoria = $rh51_categoria;
+  $clrhinssoutros->rh51_indicadesconto = $rh51_indicadesconto;
+  $clrhinssoutros->rh51_cgcvinculo = $rh51_cgcvinculo;
+  $clrhinssoutros->rh51_categoria = $rh51_categoria;
   $clrhinssoutros->alterar($rh51_seqpes);
   $erro_msg = $clrhinssoutros->erro_msg;
   if ($clrhinssoutros->erro_status == "0") {
