@@ -189,6 +189,13 @@ $clrotulo->label("o15_codigo");
                             <label for="ContasBancarias">CTB - Contas Bancárias</label><br>
                             <input type="checkbox" value="Caixa" id="Caixa" />
                             <label for="Caixa">CAIXA - Caixa</label><br>
+
+                            <? if (db_getsession("DB_anousu") >= 2022) {?>
+
+                                <input type="checkbox" value="ConciliacaoBancaria" id="ConciliacaoBancaria" />
+                                <label for="ConciliacaoBancaria">CONCIBANC - Conciliação Bancária</label><br>
+                            <? } ?>
+
                         </td>
                         <td style="border: 2px groove white; padding-right:10px;" valign="top">
 
@@ -263,6 +270,10 @@ $clrotulo->label("o15_codigo");
                                 <input type="checkbox" value="TomadasContasEspeciais" id="TomadasContasEspeciais" />
                                 <label for="TomadasContasEspeciais">TCE - Tomadas de Contas Especiais</label><br>
                             <? } ?>
+                            <? if (db_getsession("DB_anousu") > 2021) {?>
+                                <input type="checkbox" value="DemonstrativoInformacoesPrevidenciariasRepasses" id="DemonstrativoInformacoesPrevidenciariasRepasses" />
+                                <label for="DemonstrativoInformacoesPrevidenciariasRepasses">DIPR - Demonstrativo de Informações Previdenciárias e Repasses</label><br>
+                            <? } ?>
                             <? if (db_getsession("DB_anousu") >= 2014) {?>
                                 <input type="checkbox" value="Consideracoes" id="Consideracoes" />
                                 <label for="Consideracoes">CONSID - Considerações</label><br>
@@ -279,19 +290,6 @@ $clrotulo->label("o15_codigo");
                             <? } ?>
 
                         </td>
-
-                        <!-- <td style="border: 2px groove white; padding-right:10px;" valign="top">
-
-                            <input type="checkbox" value="IdentificacaoRemessa" id="IdentificacaoRemessa" />
-                            <label for="IdentificacaoRemessa">IDE - Identificação da Remessa</label><br>
-
-                            <input type="checkbox" value="ProgramasAnuais" id="ProgramasAnuais" />
-                            <label for="ProgramasAnuais">PROG - Programas Anuais</label><br>
-
-                            <input type="checkbox" value="AcoesMetasAnuais" id="AcoesMetasAnuais" />
-                            <label for="AcoesMetasAnuais">Ações e Metas Anuais</label><br>
-
-                        </td> -->
 
                         <td style="border: 2px groove white;" valign="top">
                             <div id='retorno'

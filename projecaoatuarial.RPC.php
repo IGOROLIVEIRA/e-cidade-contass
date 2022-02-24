@@ -32,7 +32,7 @@ try{
 
             $aItens      = array();
 
-            $result = $clprojecaoatuarial20->sql_record($clprojecaoatuarial20->sql_query(null,"*",null,"si169_projecaoatuarial10={$oParam->codigo} and si169_tipoplano = {$oParam->tipoplano}"));
+            $result = $clprojecaoatuarial20->sql_record($clprojecaoatuarial20->sql_query(null,"*",null,"si169_projecaoatuarial10={$oParam->codigo} and si169_tipoplano = {$oParam->tipoplano} order by si169_exercicio"));          
             for ($iContItens = 0; $iContItens < pg_num_rows($result); $iContItens++) {
                 $oItens = db_utils::fieldsMemory($result, $iContItens);
                 $aItens[] = $oItens;

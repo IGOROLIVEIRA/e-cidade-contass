@@ -88,6 +88,7 @@ class GerarEXT extends GerarAM
         $aCSVEXT20['si165_codorgao']              = $this->padLeftZero($aEXT20['si165_codorgao'], 2);
         $aCSVEXT20['si165_codext']                = substr($aEXT20['si165_codext'], 0, 15);
         $aCSVEXT20['si165_codfontrecursos']       = $this->padLeftZero($aEXT20['si165_codfontrecursos'], 3);
+        $aCSVEXT20['si165_exerciciocompdevo']     = $aEXT20['si165_exerciciocompdevo'] == 0 ? ' ' : $aEXT20['si165_exerciciocompdevo'];
         $aCSVEXT20['si165_vlsaldoanteriorfonte']  = $this->sicomNumberReal(abs($aEXT20['si165_vlsaldoanteriorfonte']), 2);
 
         if($aEXT20['si165_vlsaldoanteriorfonte'] == 0 && !$bFonteEncerrada && !$bCorrecaoFonte){

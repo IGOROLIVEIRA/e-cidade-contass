@@ -21,6 +21,11 @@ class cl_aoc142022
   var $si42_tiporegistro = 0;
   var $si42_codreduzidodecreto = 0;
   var $si42_origemrecalteracao = "";
+  var $si42_nrocontratoop = "";
+  var $si42_dataassinaturacontratoop = null;
+  var $si42_dataassinaturacontratoop_dia = null;
+  var $si42_dataassinaturacontratoop_mes = null;
+  var $si42_dataassinaturacontratoop_ano = null;
   var $si42_codorigem = null;
   var $si42_codorgao = null;
   var $si42_codunidadesub = null;
@@ -41,6 +46,8 @@ class cl_aoc142022
                  si42_tiporegistro = int8 = Tipo do registro 
                  si42_codreduzidodecreto = int8 = Código do decreto
                  si42_origemrecalteracao = varchar(2) = Origem do recurso  
+                 si42_nrocontratoop = string = Número do contrato da operação de crédito
+                 si42_dataassinaturacontratoop = date = Data da assinatura contrato da operação de crédito
                  si42_codorigem = int8 = Código da Origem
                  si42_codorgao = varchar(2) = Código do órgão 
                  si42_codunidadesub = varchar(8) = Código da unidade 
@@ -83,6 +90,15 @@ class cl_aoc142022
       $this->si42_sequencial = ($this->si42_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_sequencial"] : $this->si42_sequencial);
       $this->si42_tiporegistro = ($this->si42_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_tiporegistro"] : $this->si42_tiporegistro);
       $this->si42_codreduzidodecreto = ($this->si42_codreduzidodecreto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codreduzidodecreto"] : $this->si42_codreduzidodecreto);
+            $this->si42_nrocontratoop = ($this->si42_nrocontratoop == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_nrocontratoop"] : $this->si42_nrocontratoop);
+            if ($this->si42_dataassinaturacontratoop == "") {
+                $this->si42_dataassinaturacontratoop_dia = ($this->si42_dataassinaturacontratoop_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_dataassinaturacontratoop_dia"] : $this->si42_dataassinaturacontratoop_dia);
+                $this->si42_dataassinaturacontratoop_mes = ($this->si42_dataassinaturacontratoop_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_dataassinaturacontratoop_mes"] : $this->si42_dataassinaturacontratoop_mes);
+                $this->si42_dataassinaturacontratoop_ano = ($this->si42_dataassinaturacontratoop_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_dataassinaturacontratoop_ano"] : $this->si42_dataassinaturacontratoop_ano);
+                if ($this->si42_dataassinaturacontratoop_dia != "") {
+                    $this->si42_dataassinaturacontratoop = $this->si42_dataassinaturacontratoop_ano . "-" . $this->si42_dataassinaturacontratoop_mes . "-" . $this->si42_dataassinaturacontratoop_dia;
+                }
+            }
       $this->si42_codorigem = ($this->si42_codorigem == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codorigem"] : $this->si42_codorigem);
       $this->si42_codorgao = ($this->si42_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codorgao"] : $this->si42_codorgao);
       $this->si42_codunidadesub = ($this->si42_codunidadesub == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codunidadesub"] : $this->si42_codunidadesub);
@@ -119,6 +135,12 @@ class cl_aoc142022
     if ($this->si42_codreduzidodecreto == null) {
       $this->si42_codreduzidodecreto = "0";
     }
+    if ($this->si42_nrocontratoop == null) {
+        $this->si42_nrocontratoop = " ";
+    }
+    if ($this->si42_dataassinaturacontratoop == null) {
+        $this->si42_dataassinaturacontratoop = "null";
+      }
     if ($this->si42_origemrecalteracao == null) {
       $this->si42_origemrecalteracao = " ";
     }
@@ -197,6 +219,8 @@ class cl_aoc142022
                                        si42_sequencial 
                                       ,si42_tiporegistro 
                                       ,si42_codreduzidodecreto 
+                                      ,si42_nrocontratoop
+                                      ,si42_dataassinaturacontratoop
                                       ,si42_origemrecalteracao
                                       ,si42_codorigem 
                                       ,si42_codorgao 
@@ -217,6 +241,8 @@ class cl_aoc142022
                                 $this->si42_sequencial 
                                ,$this->si42_tiporegistro 
                                ,$this->si42_codreduzidodecreto 
+                               ,'$this->si42_nrocontratoop'
+                               ," . ($this->si42_dataassinaturacontratoop == "null" || $this->si42_dataassinaturacontratoop == "" ? "null" : "'" . $this->si42_dataassinaturacontratoop . "'") . "
                                ,'$this->si42_origemrecalteracao'
                                ,$this->si42_codorigem
                                ,'$this->si42_codorgao' 
@@ -233,6 +259,7 @@ class cl_aoc142022
                                ,$this->si42_reg10 
                                ,$this->si42_instit
                       )";
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -321,6 +348,19 @@ class cl_aoc142022
       $sql .= $virgula . " si42_codreduzidodecreto = $this->si42_codreduzidodecreto ";
       $virgula = ",";
     }
+    if (trim($this->si42_nrocontratoop) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si42_nrocontratoop"])) {
+        $sql .= $virgula . " si42_nrocontratoop = '$this->si42_nrocontratoop' ";
+        $virgula = ",";
+      }
+      if (trim($this->si42_dataassinaturacontratoop) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si42_dataassinaturacontratoop_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si42_dataassinaturacontratoop_dia"] != "")) {
+        $sql .= $virgula . " si42_dataassinaturacontratoop = '$this->si42_dataassinaturacontratoop' ";
+        $virgula = ",";
+      } else {
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si42_dataassinaturacontratoop_dia"])) {
+          $sql .= $virgula . " si42_dataassinaturacontratoop = null ";
+          $virgula = ",";
+        }
+      }
     if (trim($this->si42_codorigem) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si42_codorigem"])) {
       if (trim($this->si42_codorigem) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si42_codorigem"])) {
         $this->si42_codorigem = "0";

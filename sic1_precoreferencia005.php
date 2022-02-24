@@ -134,7 +134,7 @@ JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
 JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
+WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0"; 
 
     $rsResultData = db_query($sSql) or die(pg_last_error()); 
 

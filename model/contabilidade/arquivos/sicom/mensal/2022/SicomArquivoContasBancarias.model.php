@@ -185,7 +185,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								  	AND substr(c60_estrut, 1, 7) != '1111102'
 								  	AND substr(c60_estrut, 1, 6) != '111113'
 								  	AND substr(c60_estrut, 1, 7) != '1112101'
+                                      AND substr(c60_estrut, 1, 4) != '1113'
 								  THEN 1
+                                  WHEN substr(c60_estrut, 1, 4) = '1113'
+								  THEN 3
 								ELSE 2
 							 END AS saldocec
 				       from saltes
@@ -207,8 +210,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
     }
 
-    $rsContas = db_query($sSqlGeral);
-    //echo $sSqlGeral;
+    $rsContas = db_query($sSqlGeral) or die($sSqlGeral);
+
     //db_criatabela($rsContas);
 
     $aBancosAgrupados = array();
@@ -524,7 +527,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $rsTotalMov = db_query($sSqlMov) or die($sSqlMov);
           //db_criatabela($rsTotalMov);
           //echo $sSqlMov;
-          $oTotalMov = db_utils::fieldsMemory($rsTotalMov);
+          $oTotalMov = db_utils::fieldsMemory($rsTotalMov, 0);
 
           $iFonte = (in_array($iFonteMovimento, $this->aFontesEncerradas)) ? substr($iFonteMovimento,0,1).'59' : $iFonteMovimento;
 
@@ -549,7 +552,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
             $oCtb20->si96_vlsaldoinicialfonte += $oTotalMov->sinalanterior == 'C' ? $oTotalMov->saldo_anterior * -1 : $oTotalMov->saldo_anterior;
             $oCtb20->si96_vlsaldofinalfonte += $oTotalMov->sinalfinal == 'C' ? $oTotalMov->saldo_final * -1 : $oTotalMov->saldo_final;
           }
-
+  
           $sSqlReg21 = "SELECT * FROM
                              (SELECT '21' AS tiporegistro,
                                      c71_codlan AS codreduzido,
@@ -616,14 +619,17 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                      END AS tipoentrsaida,
                                      substr(o57_fonte,0,3) AS rubrica,
                                      conlancamval.c69_valor AS valorentrsaida,
-									 CASE
-										WHEN substr(conplanocredito.c60_estrut, 1, 3) = '111'
-											AND substr(conplanocredito.c60_estrut, 1, 7) != '1111101'
-											AND substr(conplanocredito.c60_estrut, 1, 7) != '1111102'
-											AND substr(conplanocredito.c60_estrut, 1, 6) != '111113'
-											AND substr(conplanocredito.c60_estrut, 1, 7) != '1112101' THEN 1
-										ELSE 2
-									END AS saldocec,
+									 CASE WHEN substr(conplanocredito.c60_estrut, 1, 3) = '111'
+                                            AND substr(conplanocredito.c60_estrut, 1, 7) != '1111101'
+                                            AND substr(conplanocredito.c60_estrut, 1, 7) != '1111102'
+                                            AND substr(conplanocredito.c60_estrut, 1, 6) != '111113'
+                                            AND substr(conplanocredito.c60_estrut, 1, 7) != '1112101'
+                                            AND substr(conplanocredito.c60_estrut, 1, 4) != '1113'
+                                        THEN 1
+                                        WHEN substr(conplanocredito.c60_estrut, 1, 4) = '1113'
+                                        THEN 3
+                                        ELSE 2
+                                    END AS saldocec,
                                      CASE
                                          WHEN c71_coddoc IN (140, 141) THEN contadebito.c61_reduz
                                          ELSE 0
@@ -634,12 +640,16 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                      END AS codfontectbtransf,
 									 CASE
     									WHEN c71_coddoc IN (140, 141) THEN CASE
-                                      		WHEN substr(conplanodebito.c60_estrut, 1, 3) = '111'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111101'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111102'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 6) != '111113'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1112101' THEN 1
-                                      		ELSE 2
+                                            WHEN substr(conplanodebito.c60_estrut, 1, 3) = '111'
+                                                AND substr(conplanodebito.c60_estrut, 1, 7) != '1111101'
+                                                AND substr(conplanodebito.c60_estrut, 1, 7) != '1111102'
+                                                AND substr(conplanodebito.c60_estrut, 1, 6) != '111113'
+                                                AND substr(conplanodebito.c60_estrut, 1, 7) != '1112101'
+                                                AND substr(conplanodebito.c60_estrut, 1, 4) != '1113'
+                                            THEN 1
+                                            WHEN substr(conplanodebito.c60_estrut, 1, 4) = '1113'
+                                            THEN 3
+                                            ELSE 2
                                   			END
     									ELSE 0
 									END AS saldocectransf,
@@ -708,14 +718,17 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                     END AS tipoentrsaida,
                                     substr(o57_fonte,0,3) AS rubrica,
 									conlancamval.c69_valor AS valorentrsaida,
-									CASE
-										WHEN substr(conplanocredito.c60_estrut, 1, 3) = '111'
-											AND substr(conplanocredito.c60_estrut, 1, 7) != '1111101'
-											AND substr(conplanocredito.c60_estrut, 1, 7) != '1111102'
-											AND substr(conplanocredito.c60_estrut, 1, 6) != '111113'
-											AND substr(conplanocredito.c60_estrut, 1, 7) != '1112101' THEN 1
-										ELSE 2
-									END AS saldocec,
+									CASE WHEN substr(conplanocredito.c60_estrut, 1, 3) = '111'
+                                            AND substr(conplanocredito.c60_estrut, 1, 7) != '1111101'
+                                            AND substr(conplanocredito.c60_estrut, 1, 7) != '1111102'
+                                            AND substr(conplanocredito.c60_estrut, 1, 6) != '111113'
+                                            AND substr(conplanocredito.c60_estrut, 1, 7) != '1112101'
+                                            AND substr(conplanocredito.c60_estrut, 1, 4) != '1113'
+                                        THEN 1
+                                        WHEN substr(conplanocredito.c60_estrut, 1, 4) = '1113'
+                                        THEN 3
+                                        ELSE 2
+                                    END AS saldocec,
                                     CASE
                                         WHEN c71_coddoc IN (140, 141) THEN contacredito.c61_reduz
                                         ELSE 0
@@ -725,13 +738,18 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                         ELSE '0'
 									END AS codfontectbtransf,
 									CASE
-    									WHEN c71_coddoc IN (140, 141) THEN CASE
-                                      		WHEN substr(conplanodebito.c60_estrut, 1, 3) = '111'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111101'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1111102'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 6) != '111113'
-                                           		AND substr(conplanodebito.c60_estrut, 1, 7) != '1112101' THEN 1
-                                      		ELSE 2
+    									WHEN c71_coddoc IN (140, 141) THEN 
+                                        CASE WHEN substr(conplanocredito.c60_estrut, 1, 3) = '111'
+                                        AND substr(conplanocredito.c60_estrut, 1, 7) != '1111101'
+                                        AND substr(conplanocredito.c60_estrut, 1, 7) != '1111102'
+                                        AND substr(conplanocredito.c60_estrut, 1, 6) != '111113'
+                                        AND substr(conplanocredito.c60_estrut, 1, 7) != '1112101'
+                                        AND substr(conplanocredito.c60_estrut, 1, 4) != '1113'
+                                    THEN 1
+                                    WHEN substr(conplanocredito.c60_estrut, 1, 4) = '1113'
+                                    THEN 3
+                                    ELSE 2
+                                
                                   			END
     									ELSE 0
 									END AS saldocectransf,
@@ -774,7 +792,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                   AND DATE_PART('MONTH',conlancamdoc.c71_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " AND conlancamval.c69_debito = {$oConta->codctb} ) AS xx
                         WHERE fontemovimento::integer = $iFonteMovimento";
 
-          $rsMovi21 = db_query($sSqlReg21);
+          $rsMovi21 = db_query($sSqlReg21) or die($sSqlReg21);
 
             if (pg_num_rows($rsMovi21) != 0) {
 
@@ -913,7 +931,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                         LEFT JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
                         LEFT JOIN orctiporec ON o15_codigo = o70_codigo
                         WHERE c74_codlan = {$oMovi->codreduzido}";
-
+   
               $rsReceita = db_query($sSql);//echo $sSql;db_criatabela($rsReceita);
               $aTipoEntSaida = array('1', '2', '3', '4', '15', '16');
               if (pg_num_rows($rsReceita) != 0 && (in_array($oCtb20->ext21[$sHash]->si97_tipoentrsaida, $aTipoEntSaida))) {
@@ -991,7 +1009,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         $cCtb20->si96_vlsaldofinalfonte = $oCtb20->si96_vlsaldofinalfonte;
         $cCtb20->si96_mes = $oCtb20->si96_mes;
         $cCtb20->si96_instit = $oCtb20->si96_instit;
-
+ 
         $cCtb20->incluir(null);
         if ($cCtb20->erro_status == 0) {
               throw new Exception($cCtb20->erro_msg);

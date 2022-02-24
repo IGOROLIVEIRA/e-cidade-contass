@@ -291,14 +291,14 @@ JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
 JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
 JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
 JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-JOIN solicitem ON pc81_solicitem = pc11_codigo
+JOIN solicitem ON pc81_solicitem = pc11_codigo 
 JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
 JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by l21_ordem asc";
+ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
 
                 $rsResult = db_query($sSql) or die(pg_last_error());
                 
@@ -537,7 +537,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
                 precoreferencia
             where
                 si01_processocompra = {$codigo_preco});";
-            $rsResult = db_query($sSql) or die(pg_last_error());
+            $rsResult = db_query($sSql) or die(pg_last_error()); 
 
             $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->si02_criterioadjudicacao;
             $codigoItem = db_utils::fieldsMemory($rsResult, 0)->si02_coditem;

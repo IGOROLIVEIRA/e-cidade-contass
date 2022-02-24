@@ -287,7 +287,9 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                                     ELSE 0::FLOAT8
                                                 END) AS c70_valor,
                                             c206_nroconvenio,
-                                            c206_dataassinatura
+                                            c206_dataassinatura,
+                                            op01_numerocontratoopc,
+                                            op01_dataassinaturacop
                                     FROM conlancamrec
                                     INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
                                     INNER JOIN orctiporec ON o70_codigo = o15_codigo
@@ -304,6 +306,14 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                     INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
                                     INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
                                     LEFT JOIN cgm ON k81_numcgm = cgm.z01_numcgm
+                                    INNER JOIN saltes ON k13_conta = k81_conta
+                                    INNER join conplanoreduz on c61_reduz = k13_reduz
+                                    and c61_anousu = o70_anousu
+                                    INNER JOIN conplano on conplanoreduz.c61_codcon = conplano.c60_codcon
+                                        AND c61_anousu = c60_anousu
+                                    INNER JOIN conplanocontabancaria ON c56_codcon = c60_codcon AND c56_anousu = c60_anousu
+                                    INNER JOIN contabancaria on contabancaria.db83_sequencial = c56_contabancaria
+                                    LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
                                     WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
                                         AND o70_instit = " . db_getsession('DB_instit') . "
                                         AND (CASE
@@ -313,8 +323,9 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                         AND conlancamrec.c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
                                         AND ((c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) != '49')
                                                 OR (c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) = '49'))
-                                    GROUP BY 1, 2, 3, 4, c53_tipo, c70_valor, c206_nroconvenio, c206_dataassinatura
+                                    GROUP BY 1, 2, 3, 4, c53_tipo, c70_valor, c206_nroconvenio, c206_dataassinatura, op01_numerocontratoopc, op01_dataassinaturacop
                                     ORDER BY 1, 4, 3";
+
                             $result = db_query($sSql);
                             $aDadosCgm11 = array();
 
@@ -322,7 +333,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
                                 $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
 
-                                $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
+                                $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura.$oCodFontRecursos->op01_numerocontratoopc.$oCodFontRecursos->op01_dataassinaturacop;
 
                                 if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->z01_cgccpf != ''){
 
@@ -340,6 +351,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                     $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
                                     $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
                                     $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
+                                    $oDados11->si26_nrocontratoop = $oCodFontRecursos->op01_numerocontratoopc;
+                                    $oDados11->si26_dataassinaturacontratoop = $oCodFontRecursos->op01_dataassinaturacop;
                                     $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
                                     $aDadosCgm11[$sHashCgm] = $oDados11;
@@ -370,6 +383,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                 $aDados->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
                                 $aDados->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
                                 $aDados->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
+                                $aDados->si26_nrocontratoop = $oCodFontRecursos->op01_numerocontratoopc;
+                                $aDados->si26_dataassinaturacontratoop = $oCodFontRecursos->op01_dataassinaturacop;
                                 $aDados->si26_vlarrecadadofonte = $oCodDoc2->c70_valor;
                                 $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
@@ -436,6 +451,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
                         $clarc21->si32_nroconvenio = $oDados11->si26_nroconvenio;
                         $clarc21->si32_dataassinatura = $oDados11->si26_dataassinatura;
+                        $clarc21->si32_nrocontratoop = $oDados11->si26_nrocontratoop;
+                        $clarc21->si32_dataassinaturacontratoop = $oDados11->si26_dataassinaturacontratoop;
                         $clarc21->si32_vlestornadofonte = number_format(abs($oDados11->si26_vlarrecadadofonte), 2, ".", "");
                         $clarc21->si32_mes = intval($oDados11->si26_mes);
                         $clarc21->si32_instit = db_getsession("DB_instit");
@@ -463,6 +480,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
                         $clarc21->si32_nroconvenio = $oDados11->si26_nroconvenio;
                         $clarc21->si32_dataassinatura = $oDados11->si26_dataassinatura;
+                        $clarc21->si32_nrocontratoop = $oDados11->si26_nrocontratoop;
+                        $clarc21->si32_dataassinaturacontratoop = $oDados11->si26_dataassinaturacontratoop;
                         $clarc21->si32_vlestornadofonte = number_format(abs($oDados11->si26_vlarrecadadofonte), 2, ".", "");
                         $clarc21->si32_mes = intval($oDados11->si26_mes);
                         $clarc21->si32_instit = db_getsession("DB_instit");
