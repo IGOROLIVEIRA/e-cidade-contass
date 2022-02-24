@@ -476,7 +476,7 @@ class agendaPagamento {
       $oDaoEmpAgeMov->incluir(null);
       if ($oDaoEmpAgeMov->erro_status == 0) {
 
-        $sMsg  = "Erro [4] - Movimentos para Notas de liquidacao ({$oObjeto->iCodNota}) não incluido.\n";
+        $sMsg  = "Erro [4] - Movimento para Nota de liquidacao ({$oObjeto->iCodNota}) não incluido.\n";
         $sMsg .= "[Erro Técnico] - {$oDaoEmpAgeMov->erro_msg}";
         throw new Exception($sMsg);
 
