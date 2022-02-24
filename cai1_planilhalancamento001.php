@@ -64,13 +64,13 @@ $clrotulo->label("db83_numerocontratooc");
 $clrotulo->label("db83_dataassinaturacop");
 $clrotulo->label("db83_codigoopcredito");
 
-$db_opcao = 1;
+$db_opcao = 1; 
 $c58_sequencial = "000";
 $c58_descr      = "NAO SE APLICA";
 /*
- * definimos qual funcao sera usada para consultar a matricula.
+ * definimos qual funcao sera usada para consultar a matricula. 
 * se o campo db_config.db21_usasisagua for true, usamos a func_aguabase.
-* se for false, usamos a func_iptubase
+* se for false, usamos a func_iptubase  
 */
 $oDaoDBConfig = db_utils::getDao("db_config");
 $rsInstit     = $oDaoDBConfig->sql_record($oDaoDBConfig->sql_query_file(db_getsession("DB_instit")));
