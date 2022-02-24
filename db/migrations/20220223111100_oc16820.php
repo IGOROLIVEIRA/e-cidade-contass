@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Oc16820 extends AbstractMigration
+class Oc16820 extends AbstractMigration 
 {
     
     public function up()
