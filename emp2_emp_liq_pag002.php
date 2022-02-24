@@ -204,8 +204,6 @@ if ($oPost->sDadosFornecedor == 's') {
 
 
 $sqlperiodo  = "  select empempenho.e60_numemp::integer as e60_numemp,                                               ";
-$sqlperiodo .= " 	       e94_motivo,                                                                               ";
-$sqlperiodo .= " 	       e50_obs,                                                                                  ";
 $sqlperiodo .= " 	       e60_resumo,                                                                               ";
 $sqlperiodo .= " 	       e60_destin,                                                                               ";
 $sqlperiodo .= " 	       e60_codemp,                                                                               ";
@@ -270,15 +268,11 @@ $sqlperiodo .= "   left join  emphist 		    on emphist.e40_codhist        = empe
 $sqlperiodo .= "   inner join pctipocompra 	on pctipocompra.pc50_codcom   = empempenho.e60_codcom                  ";
 $sqlperiodo .= "   left join empresto		    on e60_numemp                 = e91_numemp                             ";
 $sqlperiodo .= "                           and e60_anousu                 = e91_anousu                             ";
-$sqlperiodo .= "   left join pagordem on e50_numemp = e60_numemp                                                   ";
-$sqlperiodo .= "   left join empanulado on e94_numemp = e60_numemp                                                 ";
 $sqlperiodo .= "  where $xtipo $where_credor                                                                       ";
 $sqlperiodo .= "    and c70_data between '$dataini' and '$datafin'                                                 ";
 $sqlperiodo .= "    and $sele_work                                                                                 ";
 $sqlperiodo .= "    $instits                                                                                       ";
 $sqlperiodo .= "  group by e60_numemp,                                                                             ";
-$sqlperiodo .= "           e94_motivo,                                                                             ";
-$sqlperiodo .= "           e50_obs,                                                                             ";
 $sqlperiodo .= "           e60_resumo,                                                                             ";
 $sqlperiodo .= "           e60_destin,                                                                             ";
 $sqlperiodo .= "           e60_codemp,                                                                             ";
@@ -417,9 +411,11 @@ for ($x=0; $x < $rows;$x++){
   }
   $pdf->Cell(85,$tam,'CREDOR : '.$e60_numcgm.' - '.$z01_nome,0,0,"L",$pre);
   $pdf->Cell(85,$tam,$c53_descr,0,1,"C",$pre);
-  $resNotaOrdemPagamento = db_query("select e69_numero, e71_codord from conlancamord
-                                    inner join pagordemnota on e71_codord=c80_codord
-                                    inner join empnota on e69_codnota=e71_codnota where c80_codlan=".$c70_codlan);
+  $resNotaOrdemPagamento = db_query("select e69_numero, e71_codord, e50_obs
+                                              from conlancamord
+                                        inner join pagordemnota on e71_codord=c80_codord
+                                        inner join empnota on e69_codnota=e71_codnota
+                                        inner join pagordem on e50_codord=e71_codord where c80_codlan=".$c70_codlan);
   db_fieldsmemory($resNotaOrdemPagamento,0);
   if ($oPost->sDadosFornecedor == 's' ) {
 
