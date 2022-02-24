@@ -90,10 +90,10 @@ if (isset($incluir)) {
                       join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
                       join pcorcamitem on pc31_orcamitem = pc22_orcamitem
                       join pcorcamval on pc22_orcamitem = pc23_orcamitem
-                      where pc80_codproc = $si01_processocompra and pc23_vlrun != 0 group by pc23_orcamitem pc11_seq order by pc11_seq asc";
+                      where pc80_codproc = $si01_processocompra and pc23_vlrun != 0 group by pc23_orcamitem, pc11_seq order by pc11_seq asc";
 
         $rsResult = db_query($sSql);
-
+        
 
         $arrayValores = array();
         $cont = 0;
@@ -137,62 +137,68 @@ if (isset($incluir)) {
                       where pc80_codproc = $si01_processocompra and pc23_orcamitem = $valor group by pc23_orcamitem";*/
 
                       $sSql = "select
-                    pc23_orcamitem,
-                    round($sFuncao(pc23_vlrun), 4) as valor,
-                    round($sFuncao(pc23_perctaxadesctabela), 2) as percreferencia1,
-                    round($sFuncao(pc23_percentualdesconto), 2) as percreferencia2,
-                    pc23_quant,
-                    pc11_reservado,
-                    pc01_codmater,
-                    pc01_descrmater,
-                    pc01_tabela,
-                    pc01_taxa,
-                    m61_codmatunid,
-                    pc80_criterioadjudicacao
-                from
-                    pcproc
-                join pcprocitem on
-                    pc80_codproc = pc81_codproc
-                join solicitem on
-                    pc81_solicitem = pc11_codigo
-                join solicitempcmater on
-                    pc11_codigo = pc16_solicitem
-                join pcmater on
-                    pc16_codmater = pc01_codmater
-                join solicitemunid on
-                    pc11_codigo = pc17_codigo
-                join matunid on
-                    pc17_unid = m61_codmatunid
-                join pcorcamitemproc on
-                    pc81_codprocitem = pc31_pcprocitem
-                join pcorcamitem on
-                    pc31_orcamitem = pc22_orcamitem
-                join pcorcamval on
-                    pc22_orcamitem = pc23_orcamitem
-                where
-                    pc80_codproc = $si01_processocompra
-                    and pc23_orcamitem = $valor
-                    and (pc23_vlrun <> 0 or  pc23_percentualdesconto <> 0)
-                group by
-                    pc23_orcamitem,
-                    pc23_quant,
-                    pc31_pcprocitem,
-                    pc11_reservado,
-                    pc01_codmater,
-                    pc01_descrmater,
-                    pc01_tabela,
-                    pc01_taxa,
-                    m61_codmatunid,
-                    pc80_criterioadjudicacao
-                    order by pc11_seq";
+                      pc23_orcamitem,
+                      round($sFuncao(pc23_vlrun), 4) as valor,
+                      round($sFuncao(pc23_perctaxadesctabela), 2) as percreferencia1,
+                      round($sFuncao(pc23_percentualdesconto), 2) as percreferencia2,
+                      pc23_quant,
+                      pc11_reservado,
+                      pc01_codmater,
+                      pc01_descrmater,
+                      pc01_tabela,
+                      pc01_taxa,
+                      m61_codmatunid,
+                      pc80_criterioadjudicacao,
+                      case when pc80_criterioadjudicacao = 1 then
+                       round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
+                       when pc80_criterioadjudicacao = 2 then
+                       round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
+                       end as mediapercentual
+                  from
+                      pcproc
+                  join pcprocitem on
+                      pc80_codproc = pc81_codproc
+                  join solicitem on
+                      pc81_solicitem = pc11_codigo
+                  join solicitempcmater on
+                      pc11_codigo = pc16_solicitem
+                  join pcmater on
+                      pc16_codmater = pc01_codmater
+                  join solicitemunid on
+                      pc11_codigo = pc17_codigo
+                  join matunid on
+                      pc17_unid = m61_codmatunid
+                  join pcorcamitemproc on
+                      pc81_codprocitem = pc31_pcprocitem
+                  join pcorcamitem on
+                      pc31_orcamitem = pc22_orcamitem
+                  join pcorcamval on
+                      pc22_orcamitem = pc23_orcamitem
+                  where
+                      pc80_codproc = $si01_processocompra
+                      and pc23_orcamitem = $valor
+                      and (pc23_vlrun <> 0 or  pc23_percentualdesconto <> 0)
+                  group by
+                      pc23_orcamitem,
+                      pc23_quant,
+                      pc31_pcprocitem,
+                      pc11_reservado,
+                      pc11_seq,
+                      pc01_codmater,
+                      pc01_descrmater,
+                      pc01_tabela,
+                      pc01_taxa,
+                      m61_codmatunid,
+                      pc80_criterioadjudicacao order by pc11_seq asc
+                     ";
                     
 
-            $rsResultee = db_query($sSql);  
+            $rsResultee = db_query($sSql); 
 
             $oItemOrc = db_utils::fieldsMemory($rsResultee, 0); 
-
+            
             $chars = array('ç', 'ã', 'â', 'à', 'á', 'é', 'è', 'ê', 'ó', 'ò', 'ô', 'ú', 'ù');
-            $byChars = array('Ç', 'Ã', 'Â', 'À', 'Á', 'É', 'È', 'Ê', 'Ó', 'Ò', 'Ô', 'Ú', 'Ù');
+            $byChars = array('Ç', 'Ã', 'Â', 'À', 'Á', 'É', 'È', 'Ê', 'Ó', 'Ò', 'Ô', 'Ú', 'Ù'); 
 
             if($oItemOrc->pc23_orcamitem!=""){
                 
@@ -215,12 +221,13 @@ if (isset($incluir)) {
                 $clitemprecoreferencia->si02_tabela = $oItemOrc->pc01_tabela;
                 $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
                 $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
+                $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
                 $clitemprecoreferencia->incluir(null);  
             }
         }
 
         if ($clitemprecoreferencia->erro_status == 0) {
-
+            
             $sqlerro = true;
             $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg;
             $clprecoreferencia->erro_status = "0";
@@ -273,7 +280,7 @@ if (isset($incluir)) {
             <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
                 <center>
                     <?php
-                    include("forms/db_frmprecoreferencia.php");
+                    include("forms/db_frmprecoreferencia.php"); 
                     ?>
                 </center>
             </td>
@@ -286,7 +293,7 @@ if (isset($incluir)) {
 
 </html>
 <script>
-    js_tabulacaoforms("form1", "si01_processocompra", true, 1, "si01_processocompra", true);
+    js_tabulacaoforms("form1", "si01_processocompra", true, 1, "si01_processocompra", true); 
 </script>
 <?
 if (isset($incluir)) {

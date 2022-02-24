@@ -62,7 +62,7 @@ if (isset($imprimirword)) {
     </script>";
     }
 }
-
+ 
 if (isset($alterar)) {
 
     if ($respCotacaocodigo != "" && $respOrcacodigo != "") {
@@ -82,7 +82,7 @@ if (isset($alterar)) {
     /**
      * Atualização do valor dos itens do preço referência
      */
-
+    
     if ($si01_tipoprecoreferencia == '1') {
         $sFuncao = "avg";
     } else if ($si01_tipoprecoreferencia == '2') {
@@ -130,8 +130,8 @@ if (isset($alterar)) {
             }
         }
     }
-
-
+    
+    
     for ($iCont = 0; $iCont < $cont; $iCont++) {
         $valor = $arrayValores[$iCont];
         /*$sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
@@ -157,7 +157,12 @@ if (isset($alterar)) {
                     pc01_tabela,
                     pc01_taxa,
                     m61_codmatunid,
-                    pc80_criterioadjudicacao
+                    pc80_criterioadjudicacao,
+                    case when pc80_criterioadjudicacao = 1 then
+                     round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
+                     when pc80_criterioadjudicacao = 2 then
+                     round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
+                     end as mediapercentual
                 from
                     pcproc
                 join pcprocitem on
@@ -195,13 +200,11 @@ if (isset($alterar)) {
                     m61_codmatunid,
                     pc80_criterioadjudicacao order by pc11_seq asc
                    ";
-
+        
         $rsResultee = db_query($sSql);  
        
 
         $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);  
-        
-        
 
         $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
         $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
@@ -221,11 +224,12 @@ if (isset($alterar)) {
         $clitemprecoreferencia->si02_tabela = $oItemOrc->pc01_tabela;
         $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
         $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
-        $clitemprecoreferencia->incluir(null); 
+        $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
+        $clitemprecoreferencia->incluir(null);    
 
        
     }
-
+    
     if ($clitemprecoreferencia->erro_status == 0) {
 
         $sqlerro = true;

@@ -29,6 +29,7 @@ class cl_itemprecoreferencia {
    var $si02_tabela = "f";
    var $si02_taxa = "f";
    var $si02_criterioadjudicacao = 0;
+   var $si02_mediapercentual = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si02_sequencial = int8 = codigo sequencial
@@ -42,6 +43,7 @@ class cl_itemprecoreferencia {
                  si02_tabela = bool = Tabela
                  si02_taxa = bool = Taxa
                  si02_criterioadjudicacao = int8 = criterio 
+                 si02_mediapercentual = float8 = Media percentual
                  ";
    //funcao construtor da classe
    function cl_itemprecoreferencia() {
@@ -59,7 +61,7 @@ class cl_itemprecoreferencia {
      }
    }
    // funcao para atualizar campos
-   function atualizacampos($exclusao=false) { 
+   function atualizacampos($exclusao=false) {  
      if($exclusao==false){
        $this->si02_sequencial = ($this->si02_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_sequencial"]:$this->si02_sequencial);
        $this->si02_precoreferencia = ($this->si02_precoreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_precoreferencia"]:$this->si02_precoreferencia);
@@ -72,8 +74,9 @@ class cl_itemprecoreferencia {
        $this->si02_reservado = ($this->si02_reservado == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_reservado"]:$this->si02_reservado);
        $this->si02_tabela = ($this->si02_tabela == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_tabela"]:$this->si02_tabela);
        $this->si02_taxa = ($this->si02_taxa == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_taxa"]:$this->si02_taxa);
-       $this->si02_criterioadjudicacao = ($this->si02_criterioadjudicacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_criterioadjudicacao"]:$this->si02_criterioadjudicacao);
-     }else{
+       $this->si02_criterioadjudicacao = ($this->si02_criterioadjudicacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_criterioadjudicacao"]:$this->si02_criterioadjudicacao); 
+       $this->si02_mediapercentual = ($this->si02_mediapercentual == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_mediapercentual"]:$this->si02_mediapercentual); 
+      }else{
        $this->si02_sequencial = ($this->si02_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_sequencial"]:$this->si02_sequencial);
      }
    }
@@ -152,6 +155,18 @@ class cl_itemprecoreferencia {
       $this->erro_status = "0";
       return false;
     }
+    if($this->si02_reservado == null ){
+      $this->si02_reservado = "f";
+    }
+    if($this->si02_tabela == null ){
+      $this->si02_tabela = "f";
+    }
+    if($this->si02_taxa == null ){
+      $this->si02_taxa = "f";
+    }
+    if($this->si02_mediapercentual == null ){
+      $this->si02_mediapercentual = 0;
+    }
     
     
 
@@ -200,6 +215,7 @@ class cl_itemprecoreferencia {
                                       ,si02_tabela
                                       ,si02_taxa
                                       ,si02_criterioadjudicacao
+                                      ,si02_mediapercentual
                        )
                 values (
                                 $this->si02_sequencial
@@ -214,9 +230,11 @@ class cl_itemprecoreferencia {
                                ,'$this->si02_tabela'
                                ,'$this->si02_taxa'
                                ,$this->si02_criterioadjudicacao
+                               ,$this->si02_mediapercentual
                       )";
-                      
+                 
      $result = db_query($sql);
+     
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -255,7 +273,9 @@ class cl_itemprecoreferencia {
    }
    // funcao para alteracao
    function alterar ($si02_sequencial=null) {
+    
       $this->atualizacampos();
+      
      $sql = " update itemprecoreferencia set ";
      $virgula = "";
      if(trim($this->si02_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si02_sequencial"])){
@@ -323,7 +343,7 @@ class cl_itemprecoreferencia {
          return false;
        }
      }
-     $sql .= " where ";
+     $sql .= " where ";  
      if($si02_sequencial==null){
         $sql .= " si02_sequencial = $this->si02_sequencial";
      }else{
@@ -346,6 +366,7 @@ class cl_itemprecoreferencia {
            $resac = db_query("insert into db_acount values($acount,2010196,2009257,'".AddSlashes(pg_result($resaco,$conresaco,'si02_vlprecoreferencia'))."','$this->si02_vlprecoreferencia',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
+     
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
