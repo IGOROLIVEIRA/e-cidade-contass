@@ -32,8 +32,13 @@ $clrotulo->label("rh51_seqpes");
 $clrotulo->label("rh01_regist");
 $clrotulo->label("z01_nome");
 $clrotulo->label("rh51_cgcvinculo");
-
 ?>
+<style>
+  #rh51_categoria,
+  #rh51_cgcvinculo {
+    width: 100px;
+  }
+</style>
 <form name="form1" method="post" action="">
   <center>
     <fieldset style="width: 580px; margin-top:10px; margin-bottom:10px">
@@ -60,6 +65,7 @@ $clrotulo->label("rh51_cgcvinculo");
           <td>
             <?
             $arr_indica = array(
+              0 => 'Selecione',
               1 => 'Desconto do segurado sobre a remuneração informada',
               2 => 'Desconto do segurado sobre a diferença',
               3 => 'Não realiza desconto do segurado'
