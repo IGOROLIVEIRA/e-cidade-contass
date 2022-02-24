@@ -275,6 +275,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb10->recurso = $oRegistro10->recurso;
           $cCtb10->contas = array();
 
+          $sSqlAplicacaoPrevidencia = "";
           if ($oRegistro10->si09_tipoinstit == 5) {
             $sSqlAplicacaoPrevidencia = " AND si95_tipoaplicacao::int = {$oRegistro10->tipoaplicacao} ";
             $sSqlAplicacaoPrevidencia .= " AND si95_nroseqaplicacao    = {$oRegistro10->nroseqaplicacao} ";
@@ -434,6 +435,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 		  $oConta = new stdClass();
 		  $oConta->codctb 	= $oRegistro10->codctb;
 		  $oConta->saldocec = $oRegistro10->saldocec;
+          $oConta->recurso 	= in_array($oRegistro10->recurso, $this->aFontesEncerradas) ? substr($oRegistro10->recurso, 0, 1).'59' : $oRegistro10->recurso;
 
 		  $cCtb10->contas[] = $oConta;
           $aBancosAgrupados[$aHash] = $cCtb10;
@@ -442,6 +444,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 			$oConta = new stdClass();
 			$oConta->codctb 	= $oRegistro10->codctb;
 			$oConta->saldocec = $oRegistro10->saldocec;
+            $oConta->recurso 	= $aBancosAgrupados[$aHash]->contas[0]->recurso;
 
 			$aBancosAgrupados[$aHash]->contas[] = $oConta;
         }
