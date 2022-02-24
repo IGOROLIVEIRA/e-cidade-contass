@@ -159,7 +159,7 @@ class cl_contratos132022 {
                                       ,si86_tipodocumento 
                                       ,si86_nrodocumento
                                       ,si86_tipodocrepresentante 
-                                      ,si86_nrodocrepresentantelegal 
+                                      ,si86_nrodocrepresentantelegal
                                       ,si86_mes 
                                       ,si86_reg10 
                                       ,si86_instit 
@@ -531,4 +531,3 @@ class cl_contratos132022 {
      return $sql;
   }
 }
-?>

@@ -67,6 +67,8 @@ class GerarREC extends GerarAM {
                         $aCSVREC11['si26_nrodocumento']         = $aREC11['si26_nrodocumento'] == "" || $aREC11['si26_nrodocumento'] == '0' ? "" : $aREC11['si26_nrodocumento'];
                         $aCSVREC11['si26_nroconvenio']          = $aREC11['si26_nroconvenio'];
                         $aCSVREC11['si26_dataassinatura']       = $this->sicomDate($aREC11['si26_dataassinatura']);
+                        $aCSVREC11['si26_nrocontratoop']          = $aREC11['si26_nrocontratoop'];
+                        $aCSVREC11['si26_dataassinaturacontratoop'] = $this->sicomDate($aREC11['si26_dataassinaturacontratoop']);
                         $aCSVREC11['si26_vlarrecadadofonte']    = $this->sicomNumberReal(abs($aREC11['si26_vlarrecadadofonte']), 2);
 
                         $this->sLinha = $aCSVREC11;

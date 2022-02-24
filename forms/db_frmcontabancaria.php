@@ -31,20 +31,13 @@ $cloperacaodecredito->rotulo->label();
 
 $clrotulo = new rotulocampo;
 
+
+
 $clrotulo->label("db89_codagencia");
 $clrotulo->label("op01_numerocontratoopc");
 $ano = db_getsession("DB_anousu"); //ano 
-if(isset($db83_codigoopcredito)){ 
-	if($db83_codigoopcredito>0){
-		$query = "select * from db_operacaodecredito where op01_sequencial = $db83_codigoopcredito";
-		$resultado = db_query($query);
-		$resultado = db_utils::fieldsMemory($resultado, 0);
-		$op01_numerocontratoopc=$resultado->op01_numerocontratoopc;
-		$op01_dataassinaturacop=$resultado->op01_dataassinaturacop;
-	}else{
-		$db83_codigoopcredito = '';
-	}
-}
+
+
 ?>
 <script>
 	function js_functionVerificaIdentificador() {
@@ -125,20 +118,18 @@ if(isset($db83_codigoopcredito)){
 				</tr>
 				<!-- OC16314 -->
 				<tr>
-					<td nowrap title="<?= substr(@$Top01_numerocontratoopc, 18, 50) ?>">
+					<td nowrap title="<?= substr(@$Tdb83_numerocontratooc, 18, 50) ?>">
 						<?= db_ancora(substr(@$Ldb83_numerocontratooc, 26, 50), "js_pesquisaop01_db_operacaodecredito(true);", $db_opcao); ?>
 					</td>
-					<td nowrap title="<?= @$Top01_dataassinaturacop ?>">
+					<td nowrap title="<?= @$Tdb83_dataassinaturacop ?>">
 						<?
-						db_input('db83_codigoopcredito', 10, 0, true, '', 1, " onchange='js_pesquisaop01_db_operacaodecredito(false);'");
-						db_input('op01_numerocontratoopc', 38, $Iop01_numerocontratoopc, true, 'text', 3);
-						
-						$data = explode("-", $op01_dataassinaturacop);
-						$op01_dataassinaturacop_dia = $data[2];
-						$op01_dataassinaturacop_mes = $data[1];
-						$op01_dataassinaturacop_ano = $data[0];
-						db_inputData('op01_dataassinaturacop',$op01_dataassinaturacop_dia, @$op01_dataassinaturacop_mes,@$op01_dataassinaturacop_ano, true, 'text', 3);
-						// db_input('op01_dataassinaturacop', 10, $Idop01_dataassinaturacop, true, 'text', 3);
+						db_input('db83_codigoopcredito', 10, $db83_codigoopcredito, true, '', 1, " onchange='js_pesquisaop01_db_operacaodecredito(false);'");
+						db_input('db83_numerocontratooc', 38, $Idb83_numerocontratooc, true, 'text', 3);
+						$data = explode("-", $db83_dataassinaturacop);
+						$db83_dataassinaturacop_dias = $data[2];
+						$db83_dataassinaturacop_mes = $data[1];
+						$db83_dataassinaturacop_ano = $data[0];
+						db_input('db83_dataassinaturacop', 10, $Idb83_dataassinaturacop, true, 'text', 3);
 						?>
 					</td>
 				</tr>
@@ -296,13 +287,13 @@ if(isset($db83_codigoopcredito)){
 	}
 	function js_pesquisaop01_db_operacaodecredito(mostra) {
 		if (mostra == true) {
-			js_OpenJanelaIframe('top.corpo', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?funcao_js=parent.js_mostraoperacaodecredito1|op01_sequencial|op01_numerocontratoopc|op01_dataassinaturacop', 'Pesquisa', true);
+			js_OpenJanelaIframe('top.corpo', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?funcao_js=parent.js_mostraoperacaodecredito1|op01_sequencial|op01_numerocontratoopc|op01_dataassinaturacop|db83_numerocontratooc|db83_dataassinaturacop|db83_codigoopcredito', 'Pesquisa', true);
 		} else {
 			if (document.form1.db83_codigoopcredito.value != '') {
 				js_OpenJanelaIframe('top.corpo', 'db_iframe_db_operacaodecredito', 'func_db_operacaodecredito.php?pesquisa_chave=' + document.form1.db83_codigoopcredito.value +'&funcao_js=parent.js_mostraoperacaodecredito', 'Pesquisa', false);
 			} else {
-				document.form1.op01_numerocontratoopc.value = '';
-				document.form1.op01_dataassinaturacop.value = '';
+				document.form1.db83_numerocontratooc.value = '';
+				document.form1.db83_dataassinaturacop.value = '';
 			}
 		}	
 	}
@@ -319,16 +310,16 @@ if(isset($db83_codigoopcredito)){
 	}
 	function js_mostraoperacaodecredito1(chave,chave1,chave2,chave3,chave4) {
 		document.form1.db83_codigoopcredito.value = chave;
-		document.form1.op01_numerocontratoopc.value = chave1;
+		document.form1.db83_numerocontratooc .value = chave1;
 		var data = chave2.split("-", 3);
-		document.form1.op01_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];
+		document.form1.db83_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];
 		db_iframe_db_operacaodecredito.hide();
 	}
 	
 	function js_mostraoperacaodecredito(chave,chave1,erro) {
-		document.form1.op01_numerocontratoopc.value = chave;
+		document.form1.db83_numerocontratooc .value = chave;
 		var data = chave1.split("-", 3);
-		document.form1.op01_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];
+		document.form1.db83_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];
 	}
 
 

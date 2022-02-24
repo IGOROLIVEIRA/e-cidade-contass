@@ -9,7 +9,7 @@
  *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
  *  publicada pela Free Software Foundation; tanto a versao 2 da
  *  Licenca como (a seu criterio) qualquer versao mais nova.
- *   
+ *
  *  Este programa e distribuido na expectativa de ser util, mas SEM
  *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
  *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
@@ -24,13 +24,13 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
- 
-//MODULO: configuracoes 
+
+//MODULO: configuracoes
 //CLASSE DA ENTIDADE contabancaria
 class cl_contabancaria
 {
     // cria variaveis de erro
-    var $rotulo     = null; 
+    var $rotulo     = null;
     var $query_sql  = null;
     var $numrows    = 0;
     var $numrows_incluir = 0;
@@ -62,20 +62,20 @@ class cl_contabancaria
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  db83_sequencial = int4 = Codigo sequencial da conta bancaria
-                 db83_descricao = varchar(100) = DescriÃ§Ã£o da Conta
+                 db83_descricao = varchar(100) = Descrição da Conta
                  db83_bancoagencia = int4 = Codigo da Agencia
                  db83_conta = varchar(15) = Conta
                  db83_dvconta = varchar(1) = Digito da Conta
                  db83_identificador = char(14) = Identificador (CNPJ )
-                 db83_codigooperacao = varchar(4) = CÃ³digo da OperaÃ§Ã£o
+                 db83_codigooperacao = varchar(4) = Código da Operação
                  db83_tipoconta = int4 = Tipo Conta
                  db83_contaplano = bool = Conta plano
-                 db83_convenio = int8 = ConvÃªnio
-                 db83_tipoaplicacao = int8 = Tipo AplicaÃ§Ã£o
-                 db83_numconvenio = int8 = NÃºmero ConvÃªnio
-                 db83_dataconvenio = date = Data ConvÃªnio
-                 db83_nroseqaplicacao = int8 = NÃºmero sequencial da aplicaÃ§Ã£o
-                 db83_codigoopcredito = int4 = OperaÃ§Ã£o de CrÃ©dito
+                 db83_convenio = int8 = Convênio
+                 db83_tipoaplicacao = int8 = Tipo Aplicação
+                 db83_numconvenio = int8 = Número Convênio
+                 db83_dataconvenio = date = Data Convênio
+                 db83_nroseqaplicacao = int8 = Número sequencial da aplicação
+                 db83_codigoopcredito = int4 = Operação de Crédito
                  ";
     //funcao construtor da classe
     function cl_contabancaria()
@@ -162,7 +162,7 @@ class cl_contabancaria
             $this->erro_sql = " Campo Digito da Conta nao Informado.";
             $this->erro_campo = "db83_dvconta";
             $this->erro_banco = "";
-            $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -303,12 +303,12 @@ class cl_contabancaria
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-                $this->erro_sql   = "Cadastro de contas bancaria ($this->db83_sequencial) nao Incluí­do. Inclusao Abortada.";
+                $this->erro_sql   = "Cadastro de contas bancaria ($this->db83_sequencial) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_banco = "Cadastro de contas bancaria já¡ Cadastrado";
+                $this->erro_banco = "Cadastro de contas bancaria já Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
-                $this->erro_sql   = "Cadastro de contas bancaria ($this->db83_sequencial) nao Incluí­do. Inclusao Abortada.";
+                $this->erro_sql   = "Cadastro de contas bancaria ($this->db83_sequencial) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
@@ -504,7 +504,7 @@ class cl_contabancaria
                 $this->erro_status = "0";
                 return false;
             }
-        }  
+        }
         if (trim($this->db83_codigoopcredito) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db83_codigoopcredito"])) {
             $sql  .= $virgula . " db83_codigoopcredito = " . ($this->db83_codigoopcredito == null ? 'null' : $this->db83_codigoopcredito);
             $virgula = ",";
