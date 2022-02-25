@@ -1120,12 +1120,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                         nValorDotacao += oDotacao.valor;
                     });
 
-                    if (lAditar && nValorDotacao.toFixed(2) != oItemAdicionar.valor.toFixed(2)) {
+/*                    if (lAditar && nValorDotacao.toFixed(2) != oItemAdicionar.valor.toFixed(2)) {
 
                         lAditar = false;
                         return alert("O valor da soma das Dotações do item " + oItem.descricaoitem.urlDecode() + " deve ser igual ao Valor Total do item.");
                     }
-
+*/
                     oItemAdicionar.dotacoes = oItem.dotacoes;
                 } else {
                     oItemAdicionar.dotacoes = oItem.dotacoesoriginal;
