@@ -56,7 +56,7 @@ class cl_contratos102022
   var $si83_datapublicacao_dia = null;
   var $si83_datapublicacao_mes = null;
   var $si83_datapublicacao_ano = null;
-  var $si83_unidadedemedidaprazoexex = null;
+  var $si83_unidadedemedidaprazoexec = null;
   var $campos = "
                  si83_sequencial = int8 = sequencial
                  si83_tiporegistro = int8 = Tipo do registro
@@ -81,7 +81,7 @@ class cl_contratos102022
                  si83_vlcontrato = float8 = Valor do contrato
                  si83_formafornecimento = varchar(50) = Forma de  fornecimento
                  si83_formapagamento = varchar(100) = Forma de  pagamento
-                 si83_unidadedemedidaprazoexex = int8 = unidade prazo de execucao
+                 si83_unidadedemedidaprazoexec = int8 = unidade prazo de execucao
                  si83_prazoexecucao = int8 = Prazo de Execução
                  si83_multarescisoria = varchar(100) = Multa Rescisória
                  si83_multainadimplemento = varchar(100) = Multa  inadimplemento
@@ -179,7 +179,7 @@ class cl_contratos102022
       $this->si83_mes = ($this->si83_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_mes"] : $this->si83_mes);
       $this->si83_instit = ($this->si83_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_instit"] : $this->si83_instit);
       $this->si83_tipocadastro = ($this->si83_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_tipocadastro"] : $this->si83_tipocadastro);
-      $this->si83_unidadedemedidaprazoexex = ($this->si83_unidadedemedidaprazoexex == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_unidadedemedidaprazoexex"] : $this->si83_unidadedemedidaprazoexex);
+      $this->si83_unidadedemedidaprazoexec = ($this->si83_unidadedemedidaprazoexec == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_unidadedemedidaprazoexec"] : $this->si83_unidadedemedidaprazoexec);
     } else {
       $this->si83_sequencial = ($this->si83_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_sequencial"] : $this->si83_sequencial);
     }
@@ -242,8 +242,8 @@ class cl_contratos102022
     if ($this->si83_datapublicacao == null) {
       $this->si83_datapublicacao = "null";
     }
-    if ($this->si83_unidadedemedidaprazoexex == null) {
-      $this->si83_unidadedemedidaprazoexex = "0";
+    if ($this->si83_unidadedemedidaprazoexec == null) {
+      $this->si83_unidadedemedidaprazoexec = "0";
     }
     if ($this->si83_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -319,7 +319,7 @@ class cl_contratos102022
                                       ,si83_vlcontrato
                                       ,si83_formafornecimento
                                       ,si83_formapagamento
-                                      ,si83_unidadedemedidaprazoexex
+                                      ,si83_unidadedemedidaprazoexec
                                       ,si83_prazoexecucao
                                       ,si83_multarescisoria
                                       ,si83_multainadimplemento
@@ -354,7 +354,7 @@ class cl_contratos102022
                                ,$this->si83_vlcontrato
                                ,'$this->si83_formafornecimento'
                                ,'$this->si83_formapagamento'
-                               ,$this->si83_unidadedemedidaprazoexex
+                               ,$this->si83_unidadedemedidaprazoexec
                                ," . ($this->si83_prazoexecucao == "null" || $this->si83_prazoexecucao == "" ? "null" : "'" . $this->si83_prazoexecucao . "'") . "
                                ,'$this->si83_multarescisoria'
                                ,'$this->si83_multainadimplemento'
