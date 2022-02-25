@@ -55,7 +55,6 @@ class DadosESocial
          *       Talvez outras informações de outros cadastros também serão buscadas do e-cidade
          */
         if ($tipo == Tipo::EMPREGADOR) {
-
         }
 
         return  $this->dados;
@@ -90,6 +89,7 @@ class DadosESocial
             case Tipo::PORTUARIO:
             case Tipo::CADASTRAMENTO_INICIAL:
             case Tipo::ESTABELECIMENTOS:
+            case Tipo::ALTERACAODEDADOS:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId);
             default:
                 throw new Exception('Tipo não encontrado.');
