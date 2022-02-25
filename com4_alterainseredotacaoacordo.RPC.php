@@ -62,9 +62,6 @@ switch ($oParam->exec) {
 
 			foreach ($oParam->aItens as $oItem) {
 
-				if (count($oAcordo->getAutorizacoes('', $oItem->iAnoDotacao))) {
-					throw new Exception('O contrato já possui autorização de empenho no ano vigente.');
-				}
 
 				$oItem->iAcordo = $iAcordo;
 				if (strcmp($oItem->itemDotacao, "true") == 0) {
