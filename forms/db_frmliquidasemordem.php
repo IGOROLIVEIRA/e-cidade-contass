@@ -391,7 +391,7 @@ if (USE_PCASP) {
             </tr>
             <tr>
               <td  nowrap>
-                <b>Valor ICMS Substituto:</b>
+                <b>Valor ICMS Substituto:</b> 
               </td>
               <td  nowrap>
                 <?
@@ -607,7 +607,7 @@ if (USE_PCASP) {
     $('e60_vlrpag').value  = obj.e60_vlrpag;
     $('e60_vlrliq').value  = obj.e60_vlrliq;
  
-    if(obj.e60_informacaoop !=""){
+    if(obj.e60_informacaoop != null || obj.e60_informacaoop !=""){
       $('informacaoop').value   = obj.e60_informacaoop.urlDecode();
       if (!obj.e60_resumo){
         $('historico').value   = obj.e60_informacaoop.urlDecode();
@@ -1015,14 +1015,19 @@ if (USE_PCASP) {
       oParam.valorTotal = valorTotal;
       oParam.iEmpenho   = $F('e60_numemp');
       oParam.notas      = aNotas;
-      if(obj.e60_informacaoop.urlDecode() != ''){
-        oParam.historico  = encodeURIComponent(tagString($F("informacaoop")));;//encodeURIComponent($F('historico')); 
-        oParam.informacaoop  = encodeURIComponent(tagString($F("informacaoop")));;//encodeURIComponent($F('informacaoop'));
-      }else{
+     
+      if(encodeURIComponent(tagString($F("informacaoop"))) != '' || encodeURIComponent(tagString($F("informacaoop"))) != null){
+        if(encodeURIComponent(tagString($F("informacaoop"))) != ''){
+          oParam.historico  = encodeURIComponent(tagString($F("informacaoop")));;//encodeURIComponent($F('historico')); 
+          oParam.informacaoop  = encodeURIComponent(tagString($F("informacaoop")));;//encodeURIComponent($F('informacaoop'));
+        }else{
+          oParam.historico  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('historico')); 
+          oParam.informacaoop  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('informacaoop'));
+      }}else{
         oParam.historico  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('historico')); 
         oParam.informacaoop  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('informacaoop'));
       }
-      
+           
       oParam.pars       = $F('e60_numemp');
       oParam.z01_credor = $F('e49_numcgm');
       oParam.cgm = $F('e60_numcgm');
