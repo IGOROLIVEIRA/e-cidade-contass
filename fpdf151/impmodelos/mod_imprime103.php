@@ -173,24 +173,28 @@ $this->objpdf->sety($xlin + 24);
 
 $this->objpdf->Setfont('Arial', 'B', 8);
 /*EMPENHO*/
-$this->objpdf->rect($xcol, $xlin + 22, 60, 6, 2, 'DF', '12');
+$this->objpdf->rect($xcol, $xlin + 22, 38, 6, 2, 'DF', '12');
+$this->objpdf->rect($xcol + 38, $xlin + 22, 164, 6, 2, 'DF', '12');
+
 /*grade do cabeçalho*/
 $this->objpdf->rect($xcol, $xlin + 28, 12, 6, 2, 'DF', '12');
 $this->objpdf->rect($xcol + 12, $xlin + 28, 13, 6, 2, 'DF', '12');
 $this->objpdf->rect($xcol + 25, $xlin + 28, 13, 6, 2, 'DF', '12');
-$this->objpdf->rect($xcol + 55, $xlin + 28, 99, 6, 2, 'DF', '12');
+$this->objpdf->rect($xcol + 38, $xlin + 28, 116, 6, 2, 'DF', '12');
 $this->objpdf->rect($xcol + 154, $xlin + 28, 26, 6, 2, 'DF', '12');
 $this->objpdf->rect($xcol + 180, $xlin + 28, 22, 6, 2, 'DF', '12');
 
 $this->objpdf->sety($xlin + 28);
 $alt = 4;
+$this->objpdf->text($xcol + 1, $xlin + 26, 'EMPENHO:');
+$this->objpdf->text($xcol + 39, $xlin + 26, 'DATA DE EMISSÃO:');
 
 $this->objpdf->text($xcol + 2, $xlin + 32, 'ITEM');
 $this->objpdf->text($xcol + 13, $xlin + 32, 'QUANT');
 $this->objpdf->text($xcol + 28.5, $xlin + 32, 'UNID');
-$this->objpdf->text($xcol + 77, $xlin + 34, 'MATERIAL OU SERVIÇO');
-$this->objpdf->text($xcol + 155, $xlin + 34, 'VALOR UNITÁRIO');
-$this->objpdf->text($xcol + 181, $xlin + 34, 'VALOR TOTAL');
+$this->objpdf->text($xcol + 77, $xlin + 32, 'MATERIAL OU SERVIÇO');
+$this->objpdf->text($xcol + 155, $xlin + 32, 'VALOR UNITÁRIO');
+$this->objpdf->text($xcol + 181, $xlin + 32, 'VALOR TOTAL');
 $maiscol = 0;
 
 $this->objpdf->setfillcolor(0, 0, 0);
@@ -225,16 +229,251 @@ if (@pg_numrows($resparag) > 0) {
     }
 }
 
-$this->objpdf->SetWidths(array(12, 17, 13, 13, 99, 26, 21));  //$this->objpdf->SetWidths(array(12,16,10,104,30,30));
-$this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
+$this->objpdf->SetWidths(array(10, 8, 30, 26, 21));  //$this->objpdf->SetWidths(array(12,16,10,104,30,30));
+$this->objpdf->SetAligns(array('C', 'C', 'C', 'C', 'C'));
 
 $this->objpdf->setleftmargin(4);
-$this->objpdf->sety($xlin + 32);
+$this->objpdf->sety($xlin + 35);
 
 $xtotal    = 0;
 $item      = 1;
 $iVoltaImp = 0;
 for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
+    db_fieldsmemory($this->recorddositens, $ii);
+    $this->objpdf->Setfont('Arial', '', 7);
+
+
+    /* Realizar a consulta de item anulado */
+
+    $sql = " SELECT m52_valor,
+                  m36_vrlanu,
+                  m36_qtd
+            FROM matordemitem
+            INNER JOIN empempitem ON empempitem.e62_numemp = matordemitem.m52_numemp
+            INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
+            AND empempitem.e62_sequen = matordemitem.m52_sequen
+            INNER JOIN empempenho ON empempenho.e60_numemp = empempitem.e62_numemp
+            INNER JOIN matordem ON matordem.m51_codordem = matordemitem.m52_codordem
+            INNER JOIN cgm ON cgm.z01_numcgm = matordem.m51_numcgm
+            INNER JOIN db_depart ON db_depart.coddepto = matordem.m51_depto
+            INNER JOIN orcelemento ON orcelemento.o56_codele = empempitem.e62_codele
+            AND orcelemento.o56_anousu = empempenho.e60_anousu
+            INNER JOIN pcmater ON pcmater.pc01_codmater = empempitem.e62_item
+              WHERE m52_codordem =  " . $this->numordem . " and e62_item = " . pg_result($this->recorddositens, $ii, $this->codmater);
+
+    $resItens = @db_query($sql);
+    $valorItemAnulado = db_utils::fieldsMemory($resItens, 0)->m36_vrlanu;
+    $valorItem = db_utils::fieldsMemory($resItens, 0)->m52_valor;
+    $qtdAnulada = db_utils::fieldsMemory($resItens, 0)->m36_qtd;
+
+    $descricaoitem = pg_result($this->recorddositens, $ii, $this->descricaoitem);
+    if (pg_result($this->recorddositens, $ii, $this->Snumero) != "") {
+        $descricaoitem .= "\n\n" . 'SOLICITAÇÃO: ' . pg_result($this->recorddositens, $ii, $this->Snumero);
+    }
+
+    $obsitem  = pg_result($this->recorddositens, $ii, $this->observacaoitem);
+    $obsitem  = substr($obsitem, 0, 1421);
+    $obsitem .= "\n\n" . 'Marca: ' . pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval) . "\n\n\n";
+
+    $obsitem .=
+        $sObsItem = $obsitem;
+
+    //// troca de pagina
+    if (($this->objpdf->gety() > $this->objpdf->h - 140 && $pagina == 1)
+        || ($this->objpdf->gety() > $this->objpdf->h - 100 && $pagina != 1)
+    ) {
+
+        $this->objpdf->Setfont('Arial', 'B', 7);
+        if ($this->objpdf->PageNo() == 1) {
+
+            if ($this->obs != "") {
+
+                $this->objpdf->text(90, 268 - $xlin, 'Continua na Página ' . ($pagina + 1));
+            } else {
+                $this->objpdf->text(90, $xlin + 243, 'Continua na Página ' . ($pagina + 1));
+            }
+        } else {
+            $this->objpdf->text(110, $xlin + 320, 'Continua na Página ' . ($pagina + 1));
+        }
+        if ($pagina == 1) {
+
+            $xlin = 20;
+            $xcol = 4;
+            $this->objpdf->rect($xcol, $xlin + 205, 154, 10, 2, 'DF', '34');
+            $this->objpdf->rect($xcol + 154, $xlin + 205, 26, 10, 2, 'DF', '34');
+            $this->objpdf->rect($xcol + 180, $xlin + 205, 22, 10, 2, 'DF', '34');
+            $this->objpdf->text($xcol + 111, $xlin + 211, 'T O T A L   D A   P Á G I N A');
+
+            $this->objpdf->SetXY(173, $xlin + 205);
+            $this->objpdf->cell(30, 10, db_formatar($xtotal, 'f'), 0, 0, "R");
+
+            $this->objpdf->SetXY(4, $xlin + 217);
+
+            if (isset($texto2) && trim($texto2) != "") {
+                $this->objpdf->multicell(202, 4, $texto2, 1);
+            }
+        }
+        $this->objpdf->addpage();
+        $pagina += 1;
+
+        $this->objpdf->settopmargin(1);
+        $xlin = 20;
+        $xcol = 4;
+
+        $this->objpdf->setfillcolor(245);
+        $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
+        $this->objpdf->setfillcolor(255, 255, 255);
+        $this->objpdf->Setfont('Arial', 'B', 9);
+        $this->objpdf->text(130, $xlin - 13, 'ORDEM DE COMPRA N' . CHR(176));
+        $this->objpdf->text(185, $xlin - 13, db_formatar($this->numordem, 's', '0', 6, 'e'));
+        $this->objpdf->Image('imagens/files/' . $this->logo, 15, $xlin - 17, 12);
+        $this->objpdf->Setfont('Arial', 'B', 9);
+        $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+        $this->objpdf->Setfont('Arial', '', 9);
+        $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+        $this->objpdf->text(40, $xlin - 8, $this->municpref);
+        $this->objpdf->text(40, $xlin - 5, $this->telefpref);
+        $this->objpdf->text(40, $xlin - 2, $this->emailpref);
+
+        $xlin = -30;
+        $this->objpdf->Setfont('Arial', 'B', 8);
+
+        $this->objpdf->rect($xcol, $xlin + 54, 12, 6, 2, 'DF', '12');
+        $this->objpdf->rect($xcol + 29, $xlin + 54, 13, 6, 2, 'DF', '12');
+        //$this->objpdf->rect($xcol + 42, $xlin + 54, 13, 6, 2, 'DF', '12');
+        $this->objpdf->rect($xcol + 55, $xlin + 54, 99, 6, 2, 'DF', '12');
+        $this->objpdf->rect($xcol + 154, $xlin + 54, 28, 6, 2, 'DF', '12');
+        $this->objpdf->rect($xcol + 182, $xlin + 54, 21, 6, 2, 'DF', '12');
+
+        $this->objpdf->rect($xcol,    $xlin + 60, 12, 252, 2, 'DF', '34');
+        $this->objpdf->rect($xcol + 12, $xlin + 60, 17, 252, 2, 'DF', '34');
+        //$this->objpdf->rect($xcol + 29, $xlin + 60, 13, 252, 2, 'DF', '34');
+        $this->objpdf->rect($xcol + 42, $xlin + 60, 13, 252, 2, 'DF', '34');
+        $this->objpdf->rect($xcol + 55, $xlin + 60, 99, 252, 2, 'DF', '34');
+        $this->objpdf->rect($xcol + 154, $xlin + 60, 28, 252, 2, 'DF', '');
+        $this->objpdf->rect($xcol + 182, $xlin + 60, 21, 252, 2, 'DF', '34');
+
+        $this->objpdf->sety($xlin + 66);
+        $alt = 4;
+
+        $this->objpdf->text($xcol + 2, $xlin + 58, 'ITEM');
+        $this->objpdf->text($xcol + 15, $xlin + 58, 'QUANT');
+        $this->objpdf->text($xcol + 32, $xlin + 58, 'UNID');
+        $this->objpdf->text($xcol + 77, $xlin + 58, 'MATERIAL OU SERVIÇO');
+        $this->objpdf->text($xcol + 155, $xlin + 58, 'VALOR UNITÁRIO');
+        $this->objpdf->text($xcol + 181, $xlin + 58, 'VALOR TOTAL');
+        $this->objpdf->text($xcol + 65, $xlin + 50, 'Continuação da Página ' . ($pagina - 1));
+        $this->objpdf->Setfont('Arial', '', 8);
+
+        $maiscol = 0;
+    }
+    $controle = $item;
+    $controle++;
+
+    // Pega o ultimo item da pagina e testa se consegue imprimir tudo na mesma pagina
+    if (($controle % 7) == 0) {
+
+        if (strlen($obsitem) > 68) {
+            $obsitem = substr($obsitem, 0, 68) . " ...";
+        }
+    }
+
+    if ($iVoltaImp == 0) {
+
+        if ($valorItemAnulado) {
+            $valorItemTotal = pg_result($this->recorddositens, $ii, $this->valoritem) - $valorItemAnulado;
+        } else $valorItemTotal = pg_result($this->recorddositens, $ii, $this->valoritem);
+
+
+        if ($qtdAnulada > 0) {
+            $qtdItem = pg_result($this->recorddositens, $ii, $this->quantitem) - $qtdAnulada;
+        } else $qtdItem = pg_result($this->recorddositens, $ii, $this->quantitem);
+
+        $this->objpdf->Row_multicell(array(
+            pg_result($this->recorddositens, $ii, $this->codmater),
+            $qtdItem, pg_result($this->recorddositens, $ii, $this->unid),
+            $descricaoitem . "\n",
+            db_formatar(pg_result($this->recorddositens, $ii, $this->vlrunitem), 'v', " ", $this->numdec),
+            db_formatar($valorItemTotal, 'f')
+        ), 3, false, 4, 0, true);
+
+        if ($valorItemAnulado > 0) {
+            $xtotal += $valorItem;
+            $xtotal -= $valorItemAnulado;
+        } else {
+            $xtotal += pg_result($this->recorddositens, $ii, $this->valoritem);
+        }
+    } else if ($iVoltaImp == 1) {
+        $sObsItem = $sTextoaImprimir; //resto do texto
+    }
+
+    if ((isset($sObsItem) && $obsitem != '' && $iVoltaImp == 0) || $iVoltaImp == 1) {
+
+        $this->objpdf->Setfont('Arial', '', 5);
+        $iAlturaFinal = 80;
+        if ($pagina != 1) {
+            $iAlturaFinal = 30;
+        }
+
+        // Largura total do multicell
+        $iWidthMulticell  = $this->objpdf->widths[4];
+
+        // Consulta o total de linhas restantes
+        $iLinhasRestantes = ((($this->objpdf->h - 25) - $this->objpdf->GetY()) / $dist);
+
+        // Consulta o total de linhas que será utilizado no multicelll
+        $iLinhasMulticell = $this->objpdf->NbLines($iWidthMulticell, $sObsItem);
+
+        // Verifica se o total de linhas utilizadas no multicell é maior que as linhas restantes
+        if ($iLinhasMulticell > $iLinhasRestantes) {
+
+            // Total de carateres necessários para a impressão até o fim da página
+            $iTotalCaract = ($iWidthMulticell * $iLinhasRestantes);
+            $iLimitString = $iTotalCaract;
+
+            // Percorre o resumo do limite de caraceters até um ponto que haja espaço em branco para não quebre alguma palavra
+            for ($iInd = $iTotalCaract; $iInd < strlen($sObsItem); $iInd++) {
+                if ($sObsItem{
+                    $iInd} == ' ') {
+                    $iLimitString = $iInd;
+                    break;
+                }
+            }
+
+            // Insere quebra no ponto informado
+            //$sObsItem = substr($sObsItem,0,$iLimitString)."\n".substr($sObsItem,$iLimitString,strlen($sObsItem));
+            //$sObsItem = substr($sObsItem,0,1421);
+        }
+
+        $sObsItem = $this->objpdf->Row_multicell(
+            array('', '', '', '', stripslashes($sObsItem), '', ''),
+            3,
+            false,
+            5,
+            0,
+            true,
+            true,
+            3,
+            ($this->objpdf->h - $iAlturaFinal)
+        );
+        if ($valorItemAnulado == $valorItem && $valorItemAnulado > 0) {
+            $this->objpdf->Setfont('Arial', 'B', 8);
+            $this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() - 3, "(ANULADO)");
+        } else if ($valorItemAnulado < $valorItem) {
+            $this->objpdf->Setfont('Arial', 'B', 8);
+            $this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() - 3, "(ANULADO PARCIALMENTE)");
+        }
+
+        if ($sObsItem != "") {
+
+            $iVoltaImp       = 1;
+            $sTextoaImprimir = $sObsItem;
+            $ii--;
+        } else {
+            $iVoltaImp = 0;
+        }
+    }
+
     $item++;
 }
 $this->objpdf->Setfont('Arial', 'B', 8);
