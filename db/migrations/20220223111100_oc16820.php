@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Oc16820 extends AbstractMigration
+class Oc16820 extends AbstractMigration 
 {
     
     public function up()
@@ -13,13 +13,26 @@ class Oc16820 extends AbstractMigration
         BEGIN;
 
         SELECT fc_startsession();
+        
+        CREATE TEMP TABLE temp_contabancaria ON COMMIT DROP AS
+        SELECT db83_sequencial,
+        CASE
+           WHEN db83_codigoopcredito = '' THEN NULL
+           ELSE db83_codigoopcredito::int4
+        END AS db83_codigoopcredito
+        FROM contabancaria;
 
-        alter table contabancaria disable trigger all;
-        update contabancaria set db83_codigoopcredito = 0 where db83_codigoopcredito is null;
-        alter table contabancaria enable trigger all;
+        ALTER TABLE contabancaria DISABLE TRIGGER ALL;
 
-        ALTER TABLE contabancaria 
-        ALTER COLUMN db83_codigoopcredito TYPE INT USING db83_codigoopcredito::integer;
+        UPDATE contabancaria t1
+        SET db83_codigoopcredito = t2.db83_codigoopcredito
+        FROM temp_contabancaria t2
+        JOIN contabancaria t3 ON t2.db83_sequencial = t3.db83_sequencial
+        WHERE t1.db83_sequencial = t2.db83_sequencial;
+
+        ALTER TABLE contabancaria ENABLE TRIGGER ALL;
+
+        ALTER TABLE contabancaria ALTER COLUMN db83_codigoopcredito TYPE int4 USING db83_codigoopcredito::int4;
         
         ALTER TABLE contabancaria 
         DROP COLUMN db83_dataassinaturacop ;  
@@ -42,5 +55,5 @@ class Oc16820 extends AbstractMigration
 
 SQL;
         $this->execute($sql);
-    }
+    } 
 }

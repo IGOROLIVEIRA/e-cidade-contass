@@ -125,7 +125,7 @@ $ano = db_getsession("DB_anousu"); //ano
               db_fieldsmemory($resultconta, 0);
               echo "<script>" . $funcao_js . "('$k13_conta','$k13_descr','$c61_codigo','$db83_codigoopcredito',false);</script>";
             } else {
-              echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") não Encontrado','',true);</script>";
+              echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") no Encontrado','',true);</script>";
             }
           } else {
             echo "<script>" . $funcao_js . "('','','',false);</script>";

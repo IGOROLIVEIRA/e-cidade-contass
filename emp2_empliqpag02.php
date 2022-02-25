@@ -41,7 +41,7 @@ require_once("classes/db_empempitem_classe.php");
 db_postmemory($_POST);
 
 //db_postmemory($HTTP_SERVER_VARS,2);exit;
-parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+//parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $clselorcdotacao = new cl_selorcdotacao();
 $clorcelemento   = new cl_orcelemento;
@@ -217,8 +217,6 @@ if($rp == 'n'){
 
 $sqlperiodo = "
 select 	empempenho.e60_numemp::integer as e60_numemp,
-    e94_motivo,
-    e50_obs,
 	e60_resumo,
 	e60_destin,
 	e60_codemp,
@@ -248,7 +246,7 @@ select 	empempenho.e60_numemp::integer as e60_numemp,
 	pc50_descr,
 	c70_valor,
 	c70_data,
-  c70_codlan,
+    c70_codlan,
 	c53_tipo,
 	c53_descr,
 	e91_numemp
@@ -282,8 +280,6 @@ select 	empempenho.e60_numemp::integer as e60_numemp,
 	inner join pctipocompra 	on pctipocompra.pc50_codcom = empempenho.e60_codcom
 	left join empresto		on e60_numemp = e91_numemp
 					and ".db_getsession("DB_anousu")." = e91_anousu
-    left join pagordem on e50_numemp = e60_numemp
-    left join empanulado on e94_numemp = e60_numemp
 where $xtipo $where_credor
   and c70_data between '$dataini' and '$datafin'
   and $filtro and e60_instit in $instits
@@ -363,6 +359,12 @@ for ($x = 0; $x < $rows; $x++) {
   }
   $pdf->Cell(0,$tam,'CREDOR : '.$e60_numcgm.' - '.$z01_nome,0,1,"L",$pre);
 
+  $resNotaOrdemPagamento = db_query("select e69_numero, e71_codord, e50_obs
+                                              from conlancamord
+                                        inner join pagordemnota on e71_codord=c80_codord
+                                        inner join empnota on e69_codnota=e71_codnota
+                                        inner join pagordem on e50_codord=e71_codord where c80_codlan=".$c70_codlan);
+  db_fieldsmemory($resNotaOrdemPagamento,0);
   if($com_mov == 's'){
     $resumo = $e50_obs;
     if($c53_tipo == 10){
