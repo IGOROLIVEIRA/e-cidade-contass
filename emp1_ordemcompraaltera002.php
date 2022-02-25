@@ -225,6 +225,15 @@ if (isset($dados->altera)) {
     }
 }
 
+if (isset($dados->getDepart)) {
+    $result_ordem = $clmatordem->sql_record($clmatordem->sql_query_file("", "m51_deptoorigem", "", "m51_codordem = $dados->m51_codordem"));
+    db_fieldsmemory($result_ordem, 0);
+    $oRetorno           = new stdClass();
+    $oRetorno->coddepartorigem = $m51_deptoorigem;
+    echo $oJson->encode($oRetorno);
+    die();
+}
+
 ?>
 <html>
 

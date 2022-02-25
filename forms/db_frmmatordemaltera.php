@@ -69,7 +69,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
     }
     db_fieldsmemory($result, 0);
 
-    $sqlDeptoOrigem = "select m51_deptoorigem as dptorigem,
+    /*    $sqlDeptoOrigem = "select m51_deptoorigem as dptorigem,
                               descrdepto as departamento
                        from matordem
                        inner join db_depart on coddepto = m51_deptoorigem
@@ -79,18 +79,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
     if (pg_numrows($resultSql) == 0) {
     }
     db_fieldsmemory($resultSql, 0);
-
-    $sqlDepartPermis = "select db_depusu.coddepto departpermiss,
-                                   d.descrdepto
-                            from db_depusu
-                            inner join db_depart d on db_depusu.coddepto = d.coddepto
-                            left matordem on m51_deptoorigem = db_depusu.coddepto
-                            where db_depusu.id_usuario = " . db_getsession('DB_id_usuario');
-
-    $resultPermis = pg_exec($sqlDepartPermis);
-    if (pg_numrows($resultPermis) == 0) {
-    }
-    db_fieldsmemory($resultPermis, 0);
+*/
 }
 
 ?>
@@ -227,6 +216,12 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                 </td>
                                 <td>
                                     <?
+                                    $sqlDepartPermis = "select distinct db_depusu.coddepto as dptorigem,
+                                                            d.descrdepto
+                                                    from db_depusu
+                                                    inner join db_depart d on db_depusu.coddepto = d.coddepto
+                                                    where db_depusu.id_usuario = " . db_getsession('DB_id_usuario') . "order by db_depusu.coddepto asc";
+                                    $resultSql = pg_exec($sqlDepartPermis);
                                     db_selectrecord('dptorigem', $resultSql, true, 2);
                                     ?>
                                 </td>
@@ -392,6 +387,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
     function js_AlteraCGM(cgm) {
         js_OpenJanelaIframe('', 'db_iframe_altcgm', 'prot1_cadcgm002.php?chavepesquisa=' + cgm + '&testanome=true&autoc=true', 'Altera Cgm', true);
     }
+    getDepartOrigin();
 
     function js_buscavalores() {
         obj = itens.document.form1;
@@ -468,7 +464,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
     function js_retornoDados(oAjax) {
         let response = eval("(" + oAjax.responseText + ")");
-
+        console.log(response);
         if (!response.erro) {
             alert(`${response.message.urlDecode()}`);
             itens.document.location.href = "forms/db_frmmatordemitemaltera.php?m51_codordem=<?= $m51_codordem ?>";
@@ -511,6 +507,29 @@ if (isset($m51_codordem) && $m51_codordem != '') {
             document.form1.coddepto.focus();
             document.form1.coddepto.value = '';
         }
+    }
+
+    function getDepartOrigin() {
+        let oParam = new Object();
+        let body = document.form1;
+        oParam.m51_prazoent = body.m51_prazoent.value;
+        oParam.m51_codordem = body.m51_codordem.value;
+        oParam.coddepto = body.coddepto.value;
+        oParam.coddeptodescr = body.coddeptodescr.value;
+        oParam.obs = body.m51_obs.value;
+        oParam.m51_data = body.m51_data.value;
+        oParam.getDepart = true;
+
+        let oAjax = new Ajax.Request('emp1_ordemcompraaltera002.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_carregarDepartOrigin
+        })
+    }
+
+    function js_carregarDepartOrigin(oAjax) {
+        let response = eval("(" + oAjax.responseText + ")");
+        console.log(response)
     }
 </script>
 </body>
