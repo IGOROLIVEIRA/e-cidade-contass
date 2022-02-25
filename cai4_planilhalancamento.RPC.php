@@ -53,10 +53,33 @@ if ($oParam->exec == 'getSaltesConvenio') {
     
    } else {
 
-      $sMensagem = "UsuÃ¡rio: para realizar a arrecadaÃ§Ã£o da receita, vincule o convÃªnio a respectiva conta bancÃ¡ria.";
+      $sMensagem = "Usuário: para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária.";
       $aSaltesConv = array("c206_sequencial" => "", "c206_objetoconvenio" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
 
    }
 
    echo $oJson->encode($aSaltesConv);
+}
+
+//operao de credito
+
+if ($oParam->exec == 'getSaltesOP') {
+   $oDaoSaltes = db_utils::getDao("db_operacaodecredito");
+   $sqlSaltesOP = $oDaoSaltes->sql_query(null,"op01_sequencial, op01_numerocontratoopc, op01_dataassinaturacop","","$where op01_sequencial={$oParam->idb83_codigoopcredito}" );
+   $rsSaltes = $oDaoSaltes->sql_record($sqlSaltesOP);
+   
+   if ($oDaoSaltes->numrows > 0) {
+
+      $oSaltesOP = db_utils::fieldsMemory($rsSaltes, 0);
+
+      $aSaltesOP     = array("op01_sequencial" => $oSaltesOP->op01_sequencial, "op01_numerocontratoopc"=> $oSaltesOP->op01_numerocontratoopc,"op01_dataassinaturacop"=> $oSaltesOP->op01_dataassinaturacop, "lValidacao" => true, "sMensagem" => $sMensagem);   
+    
+   } else {
+
+      $sMensagem = "";
+      $aSaltesOP = array("op01_sequencial" => "", "op01_numerocontratoopc" => "","op01_dataassinaturacop" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
+
+   }
+
+   echo $oJson->encode($aSaltesOP);
 }

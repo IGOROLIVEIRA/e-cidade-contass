@@ -84,6 +84,10 @@ class GerarEXT extends GerarAM
         $bFonteEncerrada    = in_array($aEXT20['si165_codfontrecursos'], $aFontes);
         $bCorrecaoFonte     = ($bFonteEncerrada && $aEXT20['si165_mes'] == '01' && db_getsession("DB_anousu") == 2022);
 
+        
+        if (($aEXT20["si165_vlsaldoanteriorfonte"] + $aEXT20["si165_totaldebitos"] + $aEXT20["si165_totalcreditos"]) == 0)
+            continue;
+
         $aCSVEXT20['si165_tiporegistro']          = $this->padLeftZero($aEXT20['si165_tiporegistro'], 2);
         $aCSVEXT20['si165_codorgao']              = $this->padLeftZero($aEXT20['si165_codorgao'], 2);
         $aCSVEXT20['si165_codext']                = substr($aEXT20['si165_codext'], 0, 15);
