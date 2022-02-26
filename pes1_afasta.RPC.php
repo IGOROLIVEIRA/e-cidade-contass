@@ -69,37 +69,28 @@ try {
 			break;
 
 		case 'verificarAfastamentos':
-			echo "<pre>";
-			print_r($oParam);
-			echo "<br>";
+
 			$iMatricula = $oParam->iMatricula;
 			$iAno       = $oParam->iAno;
 			$iMes       = $oParam->iMes;
-			$iDataAfast = strtotime($oParam->iDateAfast);
+			$iDate = implode("-", (array_reverse(explode("/", $oParam->iDateAfast))));
 
-			var_dump($iDataAfast);
-			exit;
+			$iDataAfast = date('d/m/Y', strtotime('-1 months', strtotime($iDate)));
+			$iDataAfast2 = date('d/m/Y', strtotime('-2 months', strtotime($iDate)));
+			$arrayDate = array($iDataAfast, $iDataAfast2);
+			foreach ($arrayDate as $date) {
+				$sWherePossuiAnteriores = "r45_anousu = date_part('month','$date'::date) AND r45_mesusu = date_part('year','$date'::date) and r45_regist = {$iMatricula} AND r45_situac IN (3,6)";
+				$sSqlPossuiAnteriores   = $oAfasta->sql_query_file(null, "*", null, $sWherePossuiAnteriores);
+				$rsPossuiAnteriores     = $oAfasta->sql_record($sSqlPossuiAnteriores);
 
-			$sWherePossuiAnteriores = "r45_anousu = {$iAno} and r45_mesusu = {$iMes} and r45_regist = {$iMatricula}";
-			$sSqlPossuiAnteriores   = $oAfasta->sql_query_file(null, "*", null, $sWherePossuiAnteriores);
-			$rsPossuiAnteriores     = $oAfasta->sql_record($sSqlPossuiAnteriores);
+				if ($oAfasta->numrows > 0) {
+					$iPossuiAnteriores = 1;
+				} else {
+					$iPossuiAnteriores = 2;
+				}
+			}
+			$oRetorno->status  = $iPossuiAnteriores;
 
-
-			/*
-			$date = '1986-10-03 10:30:00';
-			echo "Data Inicio: ". $date."<br>";
-			$celke_data_inicio = strtotime($date);
-			echo "Data Inicio Timestamp: ".$celke_data_inicio."<br>";
-			$celke_data_fim = strtotime('+2 day', $celke_data_inicio);
-			echo "Data Fim Timestamp: ".$celke_data_fim."<br>";    
-			echo "Data Fim formato Brasileiro: ".date('d/m/Y H:i:s', $celke_data_fim);
-			
-			$date = '1986-10-10 10:30:00';
-			$celke_data_inicio = strtotime($date);
-			$celke_data_fim = strtotime('-3 day', $celke_data_inicio);
-			echo "<hr>Data Fim formato Brasileiro: ".date('d/m/Y H:i:s', $celke_data_fim);
-
-*/
 			break;
 	}
 

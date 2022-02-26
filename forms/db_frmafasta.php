@@ -495,7 +495,6 @@ $clrotulo->label('z01_nome');
 
     if (r45_situac == 3 || r45_situac == 6) {
       js_VerificaAfastamento();
-      document.getElementById('mesmadoenca').style.display = '';
     } else {
       document.getElementById('mesmadoenca').style.display = 'none';
     }
@@ -539,7 +538,11 @@ $clrotulo->label('z01_nome');
   }
 
   function js_oResultAfastamento(oAjax) {
-    js_removeObj("msgbox");
     var oRetorno = eval('(' + oAjax.responseText + ")");
+    if (oRetorno.status == 2) {
+      document.getElementById('mesmadoenca').style.display = 'none';
+    } else {
+      document.getElementById('mesmadoenca').style.display = '';
+    }
   }
 </script>
