@@ -30,9 +30,9 @@ class EventoS2206 extends EventoBase
     public function montarDados()
     {
         $aDadosAPI = array();
-        // echo '<pre>';
-        // print_r($this->dados);
-        // exit;
+        echo '<pre>';
+        print_r($this->dados);
+        exit;
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
 
