@@ -94,6 +94,7 @@ switch ($oParam->exec) {
 											 WHERE ac26_acordo = $oParam->iCodigoAcordo) ";
 
 		$rsDotacoes = db_query($sql);
+		$rsDotacoes = 0;
 		if (pg_num_rows($rsDotacoes) == 0) {
 
 			$aItensDotacao = array();
