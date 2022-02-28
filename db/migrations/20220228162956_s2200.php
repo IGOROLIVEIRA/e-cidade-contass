@@ -504,7 +504,7 @@ class S2200 extends AbstractMigration
                 rhpessoal
             left join rhpessoalmov on
                 rh02_anousu = fc_getsession(''DB_anousu'')::int
-                and rh02_mesusu = date_part('month',fc_getsession(''DB_datausu'')::date)
+                and rh02_mesusu = date_part(''month'',fc_getsession(''DB_datausu'')::date)
                 and rh02_regist = rh01_regist
                 and rh02_instit = fc_getsession(''DB_instit'')::int
             left join rhlota on
