@@ -71,7 +71,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
               echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
             }
           } else {
-            echo "<script>" . $funcao_js . "('',false);</script>";
+            echo "<script>" . $funcao_js . "('',false);</script> ";
           }
         }
         ?>

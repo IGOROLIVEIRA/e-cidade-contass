@@ -59,7 +59,7 @@ if (isset($incluir) || isset($alterar)) {
   }
 
   if (!intval($si06_edital) && !$sqlerro) {
-    $erro_msg = 'Valor do campo Edital inválido. Verifique!';
+    $erro_msg = 'Valor do campo Edital inválido. Verifique! ';
     $sqlerro = true;
   }
 
