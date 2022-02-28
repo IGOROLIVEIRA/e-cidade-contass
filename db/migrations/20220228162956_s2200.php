@@ -503,8 +503,8 @@ class S2200 extends AbstractMigration
             from
                 rhpessoal
             left join rhpessoalmov on
-                rh02_anousu = (select r11_anousu from cfpess order by r11_anousu desc, r11_mesusu desc limit 1)
-                and rh02_mesusu = (select r11_mesusu from cfpess order by r11_anousu desc, r11_mesusu desc limit 1)
+                rh02_anousu = fc_getsession(''DB_anousu'')::int
+                and rh02_mesusu = date_part('month',fc_getsession(''DB_datausu'')::date)
                 and rh02_regist = rh01_regist
                 and rh02_instit = fc_getsession(''DB_instit'')::int
             left join rhlota on
@@ -551,8 +551,8 @@ class S2200 extends AbstractMigration
             left  outer join (
                             select distinct r33_codtab,r33_nome,r33_tiporegime
                                                 from inssirf
-                                                where     r33_anousu = (select r11_anousu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc limit 1)
-                                                        and r33_mesusu = (select r11_mesusu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc, r11_mesusu desc limit 1)
+                                                where     r33_anousu = (select r11_anousu from cfpess where r11_instit = fc_getsession(''DB_instit'')::int order by r11_anousu desc limit 1)
+                                                        and r33_mesusu = (select r11_mesusu from cfpess where r11_instit = fc_getsession(''DB_instit'')::int order by r11_anousu desc, r11_mesusu desc limit 1)
                                                         and r33_instit = fc_getsession(''DB_instit'')::int
                                                 ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
             left  join rescisao      on rescisao.r59_anousu       = rhpessoalmov.rh02_anousu
