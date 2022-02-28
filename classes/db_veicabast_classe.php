@@ -291,7 +291,7 @@ class cl_veicabast {
                                ,'$this->ve70_hora' 
                                ,'$this->ve70_observacao'
                                ,'$this->ve70_importado' 
-                      )";
+                      )";            
      $result = db_query($sql); 
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -756,6 +756,29 @@ class cl_veicabast {
      return $sql;
   }
   function sql_query_valorMax ($ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ve70_medida from veicabast where ve70_codigo = (select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    $sql .= "from veicabast";
+    if($dbwhere==""){
+      if($ve70_codigo!=null ){
+        $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo "; 
+      } 
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2.")";
+
+    return $sql;
+
+  }
+  function sql_query_valorMax1 ($ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
       $campos_sql = split("#",$campos);
