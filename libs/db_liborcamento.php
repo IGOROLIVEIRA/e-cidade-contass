@@ -4444,13 +4444,13 @@ class cl_permusuario_dotacao
           }
         }
         $dotacoes .= " ORDER BY O50_ESTRUTDESPESA ";
-        //$secretar .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
+        // $secretar .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
         $secretar .= " and o58_anousu = $anousu and o58_instit in ($instituicoes) ";
         $secretar .= " ORDER BY O40_ORGAO ";
         //$departam .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
         $departam .= " and o58_anousu = $anousu and o58_instit in ($instituicoes)";
         $departam .= " ORDER BY CODDEPTO ";
-        //echo $dotacoes;
+        // echo $dotacoes;
         $result = db_query($dotacoes);
         if ($result == false || pg_numrows($result) == 0) {
           return false;
@@ -4769,7 +4769,7 @@ class cl_selorcdotacao
       //        $sele_work_elemento .= ")";
       $sele_work_desdobramento .= ")";
       $sele_work_recurso .= ")";
-      //echo $sele_work_elemento; exit;
+      //  echo $sele_work_elemento; exit;
     }
     // atualiza instituição
     if ($sepi != "")

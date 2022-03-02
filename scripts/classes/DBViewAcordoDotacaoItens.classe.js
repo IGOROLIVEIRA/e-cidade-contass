@@ -106,13 +106,13 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
     }
 
     /**
-     * preenche os dados da Grid das dotações
+     *  preenche os dados da Grid das dotações
      */
     this.retornoGetDotacoes = (oAjax) => {
         js_removeObj('msgBox');
         let oRetorno = eval("(" + oAjax.responseText + ")");
         this.tipoSql = oRetorno.tipoSql;
-        //alert(this.tipoSql);
+         //alert(this.tipoSql);
         //alert(JSON.stringify(oRetorno));
 
         if (oRetorno.status == 2) {
@@ -561,7 +561,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
     }
 
     /**
-     *Marca todos os itens que possuiem o mesmo hash de dotacao
+     * Marca todos  os itens  que possuiem o mesmo hash de dotacao
      */
     this.marcaTodosItens = (sDotacao) => {
 
