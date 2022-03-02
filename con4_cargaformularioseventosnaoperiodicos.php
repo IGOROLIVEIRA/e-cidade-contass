@@ -38,6 +38,14 @@ require_once("dbforms/db_funcoes.php");
                         <label>Cadastramento Inicial do Vínculo e Admissão/Ingresso de Trabalhador s2200</label>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" value="4000104">
+                    </td>
+                    <td>
+                        <label>Alteração de Contrato de Trabalho/Relação Estatutária s2206</label>
+                    </td>
+                </tr>
             </table>
         </fieldset>
         <input type="button" value="Processar" id="btnProcessar">
