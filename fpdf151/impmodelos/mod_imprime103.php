@@ -196,7 +196,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
             pg_result($this->recorddositens, $ii, $this->codmater),
             pg_result($this->recorddositens, $ii, $this->unid),
             pg_result($this->recorddositens, $ii, $this->quantitem),
-            pg_result($this->recorddositens, $ii, $this->descricaoitem) . "\n" . 'Marca:' .  pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval),
+            pg_result($this->recorddositens, $ii, $this->descricaoitem) . "\n" . pg_result($this->recorddositens, $ii, $this->observacaoitem) . "\n" . 'Marca:' .  pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval),
             db_formatar(pg_result($this->recorddositens, $ii, $this->vlrunitem), 'v', " ", $this->numdec),
             db_formatar(pg_result($this->recorddositens, $ii, $this->valoritem), 'f')
         ),
@@ -206,22 +206,29 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         0,
         false
     );
-    /*
-    $this->objpdf->Cell(20, 5, pg_result($this->recorddositens, $ii, $this->vlrunitem), 1, 0, 'C');
-    $this->objpdf->Cell(20, 5, pg_result($this->recorddositens, $ii, $this->valoritem), 1, 1, 'C');
-*/
-    /*$this->objpdf->Row(
-        array(
-            pg_result($this->recorddositens, $ii, $this->codmater),
-            pg_result($this->recorddositens, $ii, $this->quantitem),
-            $descricaoitem . "\n",
-            db_formatar(pg_result($this->recorddositens, $ii, $this->vlrunitem), 'v', " ", $this->numdec),
-            db_formatar(pg_result($this->recorddositens, $ii, $this->valoritem), 'f')
-        ),
-        3,
-        false,
-        4,
-        0,
-        true
-    );*/
+    $totalgeral +=  pg_result($this->recorddositens, $ii, $this->valoritem);
+    /*var_dump($this->objpdf->gety());
+    echo "<br>";
+    var_dump($this->objpdf->h - 85);
+    echo "<br>";
+    var_dump($pagina);
+    exit;*/
+
+    if (($this->objpdf->gety() > $this->objpdf->h - 40 && $pagina == 1) || ($this->objpdf->gety() > $this->objpdf->h - 50 && $pagina != 1)) {
+        $this->objpdf->sety($xlin + 22);
+        $this->objpdf->Setfont('Arial', 'B', 8);
+        $this->objpdf->AddPage();
+        //$this->objpdf->Cell(60, 5, 'Empenho: ' . pg_result($this->recorddositens, $ii, $this->empempenho) . "/" . pg_result($this->recorddositens, $ii, $this->anousuemp), 1, 0, 'L');
+        //$this->objpdf->Cell(142, 5, 'Data da Emissão:', 1, 1, 'L');
+        $this->objpdf->Cell(20, 5, 'Item', 1, 0, 'C');
+        $this->objpdf->Cell(20, 5, 'Quant.', 1, 0, 'C');
+        $this->objpdf->Cell(20, 5, 'Unid.', 1, 0, 'C');
+        $this->objpdf->Cell(102, 5, 'Material/Serviço', 1, 0, 'C');
+        $this->objpdf->Cell(20, 5, 'Unitário', 1, 0, 'C');
+        $this->objpdf->Cell(20, 5, 'Total', 1, 1, 'C');
+        $this->objpdf->Setfont('Arial', '', 6);
+    }
 }
+$this->objpdf->Setfont('Arial', 'B', 8);
+$this->objpdf->Cell(162, 5, 'Total Geral', 1, 0, 'C');
+$this->objpdf->Cell(40, 5, db_formatar($totalgeral, 'f'), 1, 0, 'C');
