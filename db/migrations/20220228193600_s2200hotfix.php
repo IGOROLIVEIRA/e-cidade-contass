@@ -585,8 +585,8 @@ class S2200hotfix extends AbstractMigration
                     or
                     (
                     rh02_anousu > 2021
-                    and date_part('month',rh01_admiss::date) = date_part('month',fc_getsession('\'DB_datausu'\')::date)
-                    and date_part('year',rh01_admiss::date) = fc_getsession(''DB_anousu'')::int
+                    and date_part('month',rh01_admiss::date) = date_part('month',fc_getsession('DB_datausu')::date)
+                    and date_part('year',rh01_admiss::date) = fc_getsession('DB_anousu')::int
                     )
                 )
             )
