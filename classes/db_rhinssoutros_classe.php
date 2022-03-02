@@ -292,8 +292,18 @@ class cl_rhinssoutros
       if (trim($this->rh51_cgcvinculo) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh51_cgcvinculo"])) {
         $this->rh51_cgcvinculo = "";
       }
-      $sql  .= $virgula . " rh51_cgcvinculo = '$this->rh51_cgcvinculo' ";
-      $virgula = ",";
+      if (strlen($this->rh51_cgcvinculo) < 11) {
+        $this->erro_sql = " Campo CNPJ/CPF do Outro Vínculo Invalido.";
+        $this->erro_campo = "rh51_cgcvinculo";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      } else {
+        $sql  .= $virgula . " rh51_cgcvinculo = '$this->rh51_cgcvinculo' ";
+        $virgula = ",";
+      }
     }
     if (trim($this->rh51_categoria) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh51_categoria"])) {
       if (trim($this->rh51_categoria) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh51_categoria"])) {

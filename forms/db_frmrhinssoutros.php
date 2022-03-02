@@ -32,6 +32,8 @@ $clrotulo->label("rh51_seqpes");
 $clrotulo->label("rh01_regist");
 $clrotulo->label("z01_nome");
 $clrotulo->label("rh51_cgcvinculo");
+$clrotulo->label("rh51_categoria");
+
 ?>
 <style>
   #rh51_categoria,
