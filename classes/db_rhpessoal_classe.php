@@ -341,6 +341,12 @@ class cl_rhpessoal
     if ($this->rh01_rhsindicato == null) {
       $this->rh01_rhsindicato = "0";
     }
+    if ($this->rh01_matorgaobeneficio == null) {
+      $this->rh01_matorgaobeneficio = "0";
+    }
+    if ($this->rh01_concedido == null) {
+      $this->rh01_concedido = "f";
+    }
     if ($this->rh01_reajusteparidade == null) {
       $this->erro_sql = " Campo Reajuste de Paridade não informado.";
       $this->erro_campo = "rh01_reajusteparidade";
