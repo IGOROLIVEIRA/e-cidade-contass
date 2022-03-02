@@ -78,7 +78,7 @@ if (isset($incluir) || isset($alterar)) {
 
   if ($sDataCotacao > $sDataAbertura && !$sqlerro) {
     $sqlerro = true;
-    $erro_msg = 'Data da Cotação é maior que a Data de Abertura!';
+    $erro_msg = 'Data da Cotação é maior que a Data de Abertura! ';
   }
 }
 if (!$sqlerro) {
@@ -169,6 +169,7 @@ if (!$sqlerro) {
      */
     $dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial, "si06_dataadesao")), 0)->si06_dataadesao;
 
+    /*
     if (!empty($si06_dataadesao)) {
       $clcondataconf = new cl_condataconf;
       if (!$clcondataconf->verificaPeriodoPatrimonial($dataadesao) || !$clcondataconf->verificaPeriodoPatrimonial($si06_dataadesao)) {
@@ -177,6 +178,7 @@ if (!$sqlerro) {
         $sqlerro  = true;
       }
     }
+     */
 
     if ($sqlerro == false) {
       $cladesaoregprecos->alterar($si06_sequencial);

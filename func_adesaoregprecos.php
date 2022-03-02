@@ -46,7 +46,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
                       c.z01_nome as dl_Resp_Aprovacao,si06_numeroadm,si06_anocadastro";
             }
           }
-          $sql = $cladesaoregprecos->sql_query(null, $campos);
+          $sql = $cladesaoregprecos->sql_query(null, $campos, null, "si06_instit = " . db_getsession("DB_instit"));
           $repassa = array();
 
           db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
@@ -68,7 +68,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
                 echo "<script>" . $funcao_js . "('$oid',false);</script>";
               }
             } else {
-              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado ',true);</script>";
             }
           } else {
             echo "<script>" . $funcao_js . "('',false);</script> ";

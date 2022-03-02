@@ -71,7 +71,7 @@ if (isset($incluir) || isset($alterar)) {
 
   if ($sDataAta > $sDataAbertura && !$sqlerro) {
     $sqlerro = true;
-    $erro_msg = 'Data da Ata é maior que a Data de Abertura!';
+    $erro_msg = 'Data da Ata é maior que a Data de Abertura! ';
   }
 
   $oDaoPcProc = db_utils::getDao('pcproc');
@@ -174,7 +174,7 @@ if (!$sqlerro) {
     if (!empty($si06_dataadesao)) {
       $clcondataconf = new cl_condataconf;
       if (!$clcondataconf->verificaPeriodoPatrimonial($dataadesao) || !$clcondataconf->verificaPeriodoPatrimonial($si06_dataadesao)) {
-        $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
+        $erro_msg = $clcondataconf->erro_msg;
         $cladesaoregprecos->erro_status = "0";
         $sqlerro  = true;
       }
@@ -314,7 +314,7 @@ if ($sqlerro) {
 }*/
 if (isset($alterar)) {
   if ($cladesaoregprecos->erro_status == "0") {
-    $cladesaoregprecos->erro(true, false);
+    //$cladesaoregprecos->erro(true, false);
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if ($cladesaoregprecos->erro_campo != "") {

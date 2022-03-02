@@ -220,7 +220,7 @@ $clrotulo->label("pc01_descrmater");
 
 
     if (parseFloat(oObject.value) > parseFloat(qtdAderida.value)) {
-      alert('Erro! Valor da quantidade licitada não pode ser maior que a quantidade Aderida ');
+      alert('Usuário: Quantidade Licitada não pode ser maior que a quantidade aderida! ');
 
       oObject.value = qtdAderida.value;
       return false;
@@ -396,7 +396,7 @@ $clrotulo->label("pc01_descrmater");
 
     if (itens.length < 1) {
 
-      alert('Selecione pelo menos um item da lista.');
+      alert('Selecione pelo menos um item da lista. ');
       return;
 
     }
