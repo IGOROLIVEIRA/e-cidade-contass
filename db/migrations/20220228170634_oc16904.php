@@ -6,7 +6,7 @@ class Oc16904 extends PostgresMigration
 {
     public function up()
     {
-        $aFontesLivres = array(100, 200, 170, 270);
+        $aFontesLivres = array(1, 100, 200, 170, 270);
         if(($handle = fopen("db/migrations/fonterecurso2022.txt", "r")) !== FALSE)  {
             while ( ($aFontes = fgetcsv($handle, 1000, ";")) !== FALSE) {
                 if($aFontes[0] === 'codfonte'){
