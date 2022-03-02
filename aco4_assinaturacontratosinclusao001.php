@@ -210,6 +210,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     <tr>
       <td align="center">
         <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_checaValor();">
+        <input id="finalizar" name="Finalizar Acordo" type="button" value="Finalizar Acordo" onclick="js_finalizaracordo();">
       </td>
     </tr>
   </table>
@@ -228,10 +229,9 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   /**
    * Pesquisa acordos ao clicar no botao assinar acordo na aba Penalidades
    */
-  var ac16_sequencial = <?= $ac16_sequencial ?>;
-  if (ac16_sequencial) {
-    js_pesquisaac16_sequencial(false);
-  }
+
+  js_pesquisaac16_sequencial(false);
+
   /**
    * Pesquisa acordos
    */
@@ -413,6 +413,10 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       alert("Inclusão efetuada com Sucesso.");
       return true;
     }
+  }
+
+  function js_finalizaracordo() {
+    document.location.href = 'aco4_homologacaoinclusao001.php';
   }
 </script>
 
