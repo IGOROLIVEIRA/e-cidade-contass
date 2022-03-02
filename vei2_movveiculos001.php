@@ -56,7 +56,9 @@ $db_opcao = 1;
             var sDataIni = $F('data_inicial_ano') + '-' + $F('data_inicial_mes') + '-' + $F('data_inicial_dia');
             var sDatafim = $F('data_final_ano') + '-' + $F('data_final_mes') + '-' + $F('data_final_dia');
             var sDestino = $F('destino');
-            var sUrl = 'iVeiculo=' + iVeiculo + '&sPlaca=' + sPlaca + '&iCentral=' + iCentral + '&sDataIni=' + sDataIni + '&sDataFim=' + sDatafim + '&sDestino=' + sDestino;
+            var sDescDes = $F('destinodescr');
+            console.log(sDescDes);
+            var sUrl = 'iVeiculo=' + iVeiculo + '&sPlaca=' + sPlaca + '&iCentral=' + iCentral + '&sDataIni=' + sDataIni + '&sDataFim=' + sDatafim + '&sDestino=' + sDestino + '&sDescDes=' + sDescDes;
 
             jan = window.open('vei2_movveiculos002.php?' + sUrl, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
             jan.moveTo(0, 0);

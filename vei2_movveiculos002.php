@@ -29,6 +29,7 @@ include("fpdf151/pdf.php");
 include("libs/db_sql.php");
 include("classes/db_veiculos_classe.php");
 include("classes/db_veiculoscomb_classe.php");
+include("classes/db_veiccaddestino_classe.php");
 
 $clveiculos = new cl_veiculos;
 $clveiculoscomb = new cl_veiculoscomb;
@@ -72,6 +73,11 @@ if (($sDataIni != "--") && ($sDataFim != "--")) {
     $where .= "and ve60_datasaida <= '$sDataFim'   ";
     $sDataFim = db_formatar($sDataFim, "d");
     $info = "Período Até $sDataFim.";
+} else if ($sDestino != "0") {
+    $clveiccaddestino = new cl_veiccaddestino;
+    $rsDestino = $clveiccaddestino->sql_record($clveiccaddestino->sql_query_file($sDestino, "ve75_destino"));
+    db_fieldsmemory($rsDestino, 0);
+    $info = "DESTINO: " . $ve75_destino;
 }
 
 $head3 = "MOVIMENTAÇÃO DE VEÍCULOS";
@@ -159,7 +165,7 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
         $pdf->cell(15, $alt, "H. Saída", 1, 0, "C", 1);
         $pdf->cell(20, $alt, "Km Saída", 1, 0, "C", 1);
         $pdf->cell(54, $alt, "Motorista", 1, 0, "C", 1);
-        $pdf->cell(74, $alt, "Destino", 1, 0, "C", 1);
+        $pdf->cell(74, $alt, "Observação", 1, 0, "C", 1);
         $pdf->cell(20, $alt, "Devolução", 1, 0, "C", 1);
         $pdf->cell(20, $alt, "Retorno", 1, 0, "C", 1);
         $pdf->cell(20, $alt, "H. Dev.", 1, 0, "C", 1);
