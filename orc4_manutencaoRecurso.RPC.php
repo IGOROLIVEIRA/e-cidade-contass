@@ -84,6 +84,7 @@ switch ($oParam->exec) {
     $oRetorno->finalidaderecurso     = urlencode($oRecurso->getFinalidadeRecurso());
     $oRetorno->tipo                  = $oRecurso->getEstruturaValor()->getTipoConta();
     $oRetorno->tiporecurso           = $oRecurso->getTipoRecurso();
+    $oRetorno->codstnnovo            = $oRecurso->getCodigoSTNnovo();
     $oRetorno->codstn                = $oRecurso->getCodigoSTN();
     $oRetorno->datalimiterecurso     = $oRecurso->getDataLimiteRecurso();
     break;
@@ -134,6 +135,7 @@ switch ($oParam->exec) {
 
       $oRecurso->setCodigoRecurso((int)$oParam->codigorecurso)
                ->setTipoRecurso($oParam->tiporecurso)
+               ->setCodigoSTNnovo($oParam->codstnnovo)
                ->setCodigoSTN($oParam->codstn)
                ->setDataLimiteRecurso(implode("-", array_reverse(explode("/", $oParam->datalimiterecurso))))
                ->setFinalidadeRecurso(db_stdClass::normalizeStringJson($oParam->finalidaderecurso))
