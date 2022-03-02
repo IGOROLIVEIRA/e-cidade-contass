@@ -1,59 +1,59 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE dvpdcasp202120
-class cl_dvpdcasp202120 { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $si217_sequencial = 0; 
-   var $si217_tiporegistro = 0; 
-   var $si217_vldiminutivapessoaencargos = 0; 
-   var $si217_vlprevassistenciais = 0; 
-   var $si217_vlservicoscapitalfixo = 0; 
-   var $si217_vldiminutivavariacoesfinanceiras = 0; 
-   var $si217_vltransfconcedidas = 0; 
-   var $si217_vldesvaloativoincorpopassivo = 0; 
-   var $si217_vltributarias = 0; 
-   var $si217_vlmercadoriavendidoservicos = 0; 
-   var $si217_vloutrasvariacoespatridiminutivas = 0; 
-   var $si217_vltotalvpdiminutivas = 0; 
+//CLASSE DA ENTIDADE dvpdcasp202021
+class cl_dvpdcasp202021 {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $si217_sequencial = 0;
+   var $si217_tiporegistro = 0;
+   var $si217_vldiminutivapessoaencargos = 0;
+   var $si217_vlprevassistenciais = 0;
+   var $si217_vlservicoscapitalfixo = 0;
+   var $si217_vldiminutivavariacoesfinanceiras = 0;
+   var $si217_vltransfconcedidas = 0;
+   var $si217_vldesvaloativoincorpopassivo = 0;
+   var $si217_vltributarias = 0;
+   var $si217_vlmercadoriavendidoservicos = 0;
+   var $si217_vloutrasvariacoespatridiminutivas = 0;
+   var $si217_vltotalvpdiminutivas = 0;
    var $si217_ano = 0;
    var $si217_periodo = 0;
    var $si217_institu = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si217_sequencial = int4 = si217_sequencial 
-                 si217_tiporegistro = int4 = si217_tiporegistro 
-                 si217_vldiminutivapessoaencargos = float4 = si217_vldiminutivapessoaencargos 
-                 si217_vlprevassistenciais = float4 = si217_vlprevassistenciais 
-                 si217_vlservicoscapitalfixo = float4 = si217_vlservicoscapitalfixo 
-                 si217_vldiminutivavariacoesfinanceiras = float4 = si217_vldiminutivavariacoesfinanceiras 
-                 si217_vltransfconcedidas = float4 = si217_vltransfconcedidas 
-                 si217_vldesvaloativoincorpopassivo = float4 = si217_vldesvaloativoincorpopassivo 
-                 si217_vltributarias = float4 = si217_vltributarias 
-                 si217_vlmercadoriavendidoservicos = float4 = si217_vlmercadoriavendidoservicos 
-                 si217_vloutrasvariacoespatridiminutivas = float4 = si217_vloutrasvariacoespatridiminutivas 
-                 si217_vltotalvpdiminutivas = float4 = si217_vltotalvpdiminutivas 
+                 si217_sequencial = int4 = si217_sequencial
+                 si217_tiporegistro = int4 = si217_tiporegistro
+                 si217_vldiminutivapessoaencargos = float4 = si217_vldiminutivapessoaencargos
+                 si217_vlprevassistenciais = float4 = si217_vlprevassistenciais
+                 si217_vlservicoscapitalfixo = float4 = si217_vlservicoscapitalfixo
+                 si217_vldiminutivavariacoesfinanceiras = float4 = si217_vldiminutivavariacoesfinanceiras
+                 si217_vltransfconcedidas = float4 = si217_vltransfconcedidas
+                 si217_vldesvaloativoincorpopassivo = float4 = si217_vldesvaloativoincorpopassivo
+                 si217_vltributarias = float4 = si217_vltributarias
+                 si217_vlmercadoriavendidoservicos = float4 = si217_vlmercadoriavendidoservicos
+                 si217_vloutrasvariacoespatridiminutivas = float4 = si217_vloutrasvariacoespatridiminutivas
+                 si217_vltotalvpdiminutivas = float4 = si217_vltotalvpdiminutivas
                  ";
-   //funcao construtor da classe 
-   function cl_dvpdcasp202120() { 
+   //funcao construtor da classe
+   function cl_dvpdcasp202021() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("dvpdcasp202120"); 
+     $this->rotulo = new rotulo("dvpdcasp202021");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -84,9 +84,9 @@ class cl_dvpdcasp202120 {
      }
    }
    // funcao para inclusao
-   function incluir ($si217_sequencial){ 
+   function incluir ($si217_sequencial){
       $this->atualizacampos();
-     if($this->si217_tiporegistro == null ){ 
+     if($this->si217_tiporegistro == null ){
        $this->erro_sql = " Campo si217_tiporegistro não informado.";
        $this->erro_campo = "si217_tiporegistro";
        $this->erro_banco = "";
@@ -126,51 +126,51 @@ class cl_dvpdcasp202120 {
        $this->si217_vltotalvpdiminutivas = 0;
      }
 
-     $sql = "insert into dvpdcasp202120(
-                                       si217_sequencial 
-                                      ,si217_tiporegistro 
-                                      ,si217_vldiminutivapessoaencargos 
-                                      ,si217_vlprevassistenciais 
-                                      ,si217_vlservicoscapitalfixo 
-                                      ,si217_vldiminutivavariacoesfinanceiras 
-                                      ,si217_vltransfconcedidas 
-                                      ,si217_vldesvaloativoincorpopassivo 
-                                      ,si217_vltributarias 
-                                      ,si217_vlmercadoriavendidoservicos 
-                                      ,si217_vloutrasvariacoespatridiminutivas 
-                                      ,si217_vltotalvpdiminutivas 
+     $sql = "insert into dvpdcasp202021(
+                                       si217_sequencial
+                                      ,si217_tiporegistro
+                                      ,si217_vldiminutivapessoaencargos
+                                      ,si217_vlprevassistenciais
+                                      ,si217_vlservicoscapitalfixo
+                                      ,si217_vldiminutivavariacoesfinanceiras
+                                      ,si217_vltransfconcedidas
+                                      ,si217_vldesvaloativoincorpopassivo
+                                      ,si217_vltributarias
+                                      ,si217_vlmercadoriavendidoservicos
+                                      ,si217_vloutrasvariacoespatridiminutivas
+                                      ,si217_vltotalvpdiminutivas
                                       ,si217_ano
                                       ,si217_periodo
                                       ,si217_institu
                        )
                 values (
-                                (select nextval('dvpdcasp202120_si217_sequencial_seq'))
-                               ,$this->si217_tiporegistro 
-                               ,$this->si217_vldiminutivapessoaencargos 
-                               ,$this->si217_vlprevassistenciais 
-                               ,$this->si217_vlservicoscapitalfixo 
-                               ,$this->si217_vldiminutivavariacoesfinanceiras 
-                               ,$this->si217_vltransfconcedidas 
-                               ,$this->si217_vldesvaloativoincorpopassivo 
-                               ,$this->si217_vltributarias 
-                               ,$this->si217_vlmercadoriavendidoservicos 
-                               ,$this->si217_vloutrasvariacoespatridiminutivas 
-                               ,$this->si217_vltotalvpdiminutivas 
+                                (select nextval('dvpdcasp202021_si217_sequencial_seq'))
+                               ,$this->si217_tiporegistro
+                               ,$this->si217_vldiminutivapessoaencargos
+                               ,$this->si217_vlprevassistenciais
+                               ,$this->si217_vlservicoscapitalfixo
+                               ,$this->si217_vldiminutivavariacoesfinanceiras
+                               ,$this->si217_vltransfconcedidas
+                               ,$this->si217_vldesvaloativoincorpopassivo
+                               ,$this->si217_vltributarias
+                               ,$this->si217_vlmercadoriavendidoservicos
+                               ,$this->si217_vloutrasvariacoespatridiminutivas
+                               ,$this->si217_vltotalvpdiminutivas
                                ,$this->si217_ano
                                ,$this->si217_periodo
                                ,$this->si217_institu
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "dvpdcasp202120 ($this->si217_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "dvpdcasp202021 ($this->si217_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_banco = "dvpdcasp202120 já Cadastrado";
+         $this->erro_banco = "dvpdcasp202021 já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
        }else{
-         $this->erro_sql   = "dvpdcasp202120 ($this->si217_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "dvpdcasp202021 ($this->si217_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
        }
@@ -186,16 +186,16 @@ class cl_dvpdcasp202120 {
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($si217_sequencial=null) { 
+   function alterar ($si217_sequencial=null) {
       $this->atualizacampos();
-     $sql = " update dvpdcasp202120 set ";
+     $sql = " update dvpdcasp202021 set ";
      $virgula = "";
-     if(trim($this->si217_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_sequencial"])){ 
+     if(trim($this->si217_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_sequencial"])){
        $sql  .= $virgula." si217_sequencial = $this->si217_sequencial ";
        $virgula = ",";
-       if(trim($this->si217_sequencial) == null ){ 
+       if(trim($this->si217_sequencial) == null ){
          $this->erro_sql = " Campo si217_sequencial não informado.";
          $this->erro_campo = "si217_sequencial";
          $this->erro_banco = "";
@@ -205,10 +205,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_tiporegistro"])){ 
+     if(trim($this->si217_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_tiporegistro"])){
        $sql  .= $virgula." si217_tiporegistro = $this->si217_tiporegistro ";
        $virgula = ",";
-       if(trim($this->si217_tiporegistro) == null ){ 
+       if(trim($this->si217_tiporegistro) == null ){
          $this->erro_sql = " Campo si217_tiporegistro não informado.";
          $this->erro_campo = "si217_tiporegistro";
          $this->erro_banco = "";
@@ -218,10 +218,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vldiminutivapessoaencargos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vldiminutivapessoaencargos"])){ 
+     if(trim($this->si217_vldiminutivapessoaencargos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vldiminutivapessoaencargos"])){
        $sql  .= $virgula." si217_vldiminutivapessoaencargos = $this->si217_vldiminutivapessoaencargos ";
        $virgula = ",";
-       if(trim($this->si217_vldiminutivapessoaencargos) == null ){ 
+       if(trim($this->si217_vldiminutivapessoaencargos) == null ){
          $this->erro_sql = " Campo si217_vldiminutivapessoaencargos não informado.";
          $this->erro_campo = "si217_vldiminutivapessoaencargos";
          $this->erro_banco = "";
@@ -231,10 +231,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vlprevassistenciais)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vlprevassistenciais"])){ 
+     if(trim($this->si217_vlprevassistenciais)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vlprevassistenciais"])){
        $sql  .= $virgula." si217_vlprevassistenciais = $this->si217_vlprevassistenciais ";
        $virgula = ",";
-       if(trim($this->si217_vlprevassistenciais) == null ){ 
+       if(trim($this->si217_vlprevassistenciais) == null ){
          $this->erro_sql = " Campo si217_vlprevassistenciais não informado.";
          $this->erro_campo = "si217_vlprevassistenciais";
          $this->erro_banco = "";
@@ -244,10 +244,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vlservicoscapitalfixo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vlservicoscapitalfixo"])){ 
+     if(trim($this->si217_vlservicoscapitalfixo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vlservicoscapitalfixo"])){
        $sql  .= $virgula." si217_vlservicoscapitalfixo = $this->si217_vlservicoscapitalfixo ";
        $virgula = ",";
-       if(trim($this->si217_vlservicoscapitalfixo) == null ){ 
+       if(trim($this->si217_vlservicoscapitalfixo) == null ){
          $this->erro_sql = " Campo si217_vlservicoscapitalfixo não informado.";
          $this->erro_campo = "si217_vlservicoscapitalfixo";
          $this->erro_banco = "";
@@ -257,10 +257,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vldiminutivavariacoesfinanceiras)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vldiminutivavariacoesfinanceiras"])){ 
+     if(trim($this->si217_vldiminutivavariacoesfinanceiras)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vldiminutivavariacoesfinanceiras"])){
        $sql  .= $virgula." si217_vldiminutivavariacoesfinanceiras = $this->si217_vldiminutivavariacoesfinanceiras ";
        $virgula = ",";
-       if(trim($this->si217_vldiminutivavariacoesfinanceiras) == null ){ 
+       if(trim($this->si217_vldiminutivavariacoesfinanceiras) == null ){
          $this->erro_sql = " Campo si217_vldiminutivavariacoesfinanceiras não informado.";
          $this->erro_campo = "si217_vldiminutivavariacoesfinanceiras";
          $this->erro_banco = "";
@@ -270,10 +270,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vltransfconcedidas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vltransfconcedidas"])){ 
+     if(trim($this->si217_vltransfconcedidas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vltransfconcedidas"])){
        $sql  .= $virgula." si217_vltransfconcedidas = $this->si217_vltransfconcedidas ";
        $virgula = ",";
-       if(trim($this->si217_vltransfconcedidas) == null ){ 
+       if(trim($this->si217_vltransfconcedidas) == null ){
          $this->erro_sql = " Campo si217_vltransfconcedidas não informado.";
          $this->erro_campo = "si217_vltransfconcedidas";
          $this->erro_banco = "";
@@ -283,10 +283,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vldesvaloativoincorpopassivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vldesvaloativoincorpopassivo"])){ 
+     if(trim($this->si217_vldesvaloativoincorpopassivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vldesvaloativoincorpopassivo"])){
        $sql  .= $virgula." si217_vldesvaloativoincorpopassivo = $this->si217_vldesvaloativoincorpopassivo ";
        $virgula = ",";
-       if(trim($this->si217_vldesvaloativoincorpopassivo) == null ){ 
+       if(trim($this->si217_vldesvaloativoincorpopassivo) == null ){
          $this->erro_sql = " Campo si217_vldesvaloativoincorpopassivo não informado.";
          $this->erro_campo = "si217_vldesvaloativoincorpopassivo";
          $this->erro_banco = "";
@@ -296,10 +296,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vltributarias)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vltributarias"])){ 
+     if(trim($this->si217_vltributarias)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vltributarias"])){
        $sql  .= $virgula." si217_vltributarias = $this->si217_vltributarias ";
        $virgula = ",";
-       if(trim($this->si217_vltributarias) == null ){ 
+       if(trim($this->si217_vltributarias) == null ){
          $this->erro_sql = " Campo si217_vltributarias não informado.";
          $this->erro_campo = "si217_vltributarias";
          $this->erro_banco = "";
@@ -309,10 +309,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vlmercadoriavendidoservicos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vlmercadoriavendidoservicos"])){ 
+     if(trim($this->si217_vlmercadoriavendidoservicos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vlmercadoriavendidoservicos"])){
        $sql  .= $virgula." si217_vlmercadoriavendidoservicos = $this->si217_vlmercadoriavendidoservicos ";
        $virgula = ",";
-       if(trim($this->si217_vlmercadoriavendidoservicos) == null ){ 
+       if(trim($this->si217_vlmercadoriavendidoservicos) == null ){
          $this->erro_sql = " Campo si217_vlmercadoriavendidoservicos não informado.";
          $this->erro_campo = "si217_vlmercadoriavendidoservicos";
          $this->erro_banco = "";
@@ -322,10 +322,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vloutrasvariacoespatridiminutivas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vloutrasvariacoespatridiminutivas"])){ 
+     if(trim($this->si217_vloutrasvariacoespatridiminutivas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vloutrasvariacoespatridiminutivas"])){
        $sql  .= $virgula." si217_vloutrasvariacoespatridiminutivas = $this->si217_vloutrasvariacoespatridiminutivas ";
        $virgula = ",";
-       if(trim($this->si217_vloutrasvariacoespatridiminutivas) == null ){ 
+       if(trim($this->si217_vloutrasvariacoespatridiminutivas) == null ){
          $this->erro_sql = " Campo si217_vloutrasvariacoespatridiminutivas não informado.";
          $this->erro_campo = "si217_vloutrasvariacoespatridiminutivas";
          $this->erro_banco = "";
@@ -335,10 +335,10 @@ class cl_dvpdcasp202120 {
          return false;
        }
      }
-     if(trim($this->si217_vltotalvpdiminutivas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vltotalvpdiminutivas"])){ 
+     if(trim($this->si217_vltotalvpdiminutivas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_vltotalvpdiminutivas"])){
        $sql  .= $virgula." si217_vltotalvpdiminutivas = $this->si217_vltotalvpdiminutivas ";
        $virgula = ",";
-       if(trim($this->si217_vltotalvpdiminutivas) == null ){ 
+       if(trim($this->si217_vltotalvpdiminutivas) == null ){
          $this->erro_sql = " Campo si217_vltotalvpdiminutivas não informado.";
          $this->erro_campo = "si217_vltotalvpdiminutivas";
          $this->erro_banco = "";
@@ -393,10 +393,10 @@ class cl_dvpdcasp202120 {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
-       $this->erro_sql   = "dvpdcasp202120 nao Alterado. Alteracao Abortada.\n";
+       $this->erro_sql   = "dvpdcasp202021 nao Alterado. Alteracao Abortada.\n";
          $this->erro_sql .= "Valores : ".$this->si217_sequencial;
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -406,7 +406,7 @@ class cl_dvpdcasp202120 {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "dvpdcasp202120 nao foi Alterado. Alteracao Executada.\n";
+         $this->erro_sql = "dvpdcasp202021 nao foi Alterado. Alteracao Executada.\n";
          $this->erro_sql .= "Valores : ".$this->si217_sequencial;
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -422,12 +422,12 @@ class cl_dvpdcasp202120 {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
+       }
+     }
+   }
+   // funcao para exclusao
    function excluir ($si217_sequencial=null,$dbwhere=null) {
-     $sql = " delete from dvpdcasp202120
+     $sql = " delete from dvpdcasp202021
                     where ";
      $sql2 = "";
      if($dbwhere==null || $dbwhere ==""){
@@ -441,10 +441,10 @@ class cl_dvpdcasp202120 {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
-       $this->erro_sql   = "dvpdcasp202120 nao Excluído. Exclusão Abortada.\n";
+       $this->erro_sql   = "dvpdcasp202021 nao Excluído. Exclusão Abortada.\n";
        $this->erro_sql .= "Valores : ".$si217_sequencial;
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -454,7 +454,7 @@ class cl_dvpdcasp202120 {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "dvpdcasp202120 nao Encontrado. Exclusão não Efetuada.\n";
+         $this->erro_sql = "dvpdcasp202021 nao Encontrado. Exclusão não Efetuada.\n";
          $this->erro_sql .= "Valores : ".$si217_sequencial;
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -470,11 +470,11 @@ class cl_dvpdcasp202120 {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -489,7 +489,7 @@ class cl_dvpdcasp202120 {
      $this->numrows = pg_numrows($result);
       if($this->numrows==0){
         $this->erro_banco = "";
-        $this->erro_sql   = "Record Vazio na Tabela:dvpdcasp202120";
+        $this->erro_sql   = "Record Vazio na Tabela:dvpdcasp202021";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
         $this->erro_status = "0";
@@ -497,8 +497,8 @@ class cl_dvpdcasp202120 {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $si217_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $si217_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -510,12 +510,12 @@ class cl_dvpdcasp202120 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from dvpdcasp202120 ";
+     $sql .= " from dvpdcasp202021 ";
      $sql2 = "";
      if($dbwhere==""){
        if($si217_sequencial!=null ){
-         $sql2 .= " where dvpdcasp202120.si217_sequencial = $si217_sequencial "; 
-       } 
+         $sql2 .= " where dvpdcasp202021.si217_sequencial = $si217_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -531,8 +531,8 @@ class cl_dvpdcasp202120 {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $si217_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $si217_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -544,12 +544,12 @@ class cl_dvpdcasp202120 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from dvpdcasp202120 ";
+     $sql .= " from dvpdcasp202021 ";
      $sql2 = "";
      if($dbwhere==""){
        if($si217_sequencial!=null ){
-         $sql2 .= " where dvpdcasp202120.si217_sequencial = $si217_sequencial "; 
-       } 
+         $sql2 .= " where dvpdcasp202021.si217_sequencial = $si217_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
