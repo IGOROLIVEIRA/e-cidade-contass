@@ -55,6 +55,10 @@ if ($iCentral != "") {
     $where .= " and ve40_veiccadcentral = $iCentral ";
 }
 
+if ($sDestino != "") {
+    $where .= " and ve60_destinonovo = $sDestino ";
+}
+
 if (($sDataIni != "--") && ($sDataFim != "--")) {
     $where .= " and  ve60_datasaida  between '$sDataIni' and '$sDataFim'  ";
     $sDataIni = db_formatar($sDataIni, "d");
@@ -227,9 +231,7 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
         $pdf->cell(257, $alt, "TOTAL DE KM RODADOS:", 1, 0, "L", 0);
         $pdf->cell(20, $alt, "{$total}", "TRB", 1, "C", 0);
         $pdf->ln();
-
     }
-
 }
 $pdf->Output();
 
@@ -240,10 +242,9 @@ function quebrar_texto($texto, $tamanho)
     $string_atual = "";
     foreach ($aTexto as $word) {
 
-        if(strlen($word) > $tamanho) {
+        if (strlen($word) > $tamanho) {
 
             $aTextoNovo = str_split($word, $tamanho);
-
         } else {
 
             $string_ant = $string_atual;
@@ -256,13 +257,9 @@ function quebrar_texto($texto, $tamanho)
         }
     }
 
-    if($string_atual != '') {
+    if ($string_atual != '') {
 
         $aTextoNovo[] = $string_atual;
-
     }
     return $aTextoNovo;
-
 }
-
-?>
