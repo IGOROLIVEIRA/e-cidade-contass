@@ -149,6 +149,8 @@ switch ($oParam->exec) {
 					$oItem->iCodigoItem = $aItens->ac20_sequencial;
 					$oItem->lAlterado = false;
 					$oDotacao->aItens[] = $oItem;
+					$oDotacao->tipoSql = "insert";
+
 
 					if (!isset($aItensDotacao[$var++])) {
 						$aItensDotacao[$var++] = $oDotacao;

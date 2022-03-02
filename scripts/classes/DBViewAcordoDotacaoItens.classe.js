@@ -112,7 +112,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
         js_removeObj('msgBox');
         let oRetorno = eval("(" + oAjax.responseText + ")");
         this.tipoSql = oRetorno.tipoSql;
-        alert(this.tipoSql);
+        //alert(this.tipoSql);
         //alert(JSON.stringify(oRetorno));
 
         if (oRetorno.status == 2) {
@@ -193,7 +193,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
             if (oDotacao.lAutorizado == 'false') {
 
-                if (iCodigoDotacao != '0') {
+                if (iCodigoDotacao != '0' && oDotacao.tipoSql != 'insert') {
                     aRowDotacao[4] = `<input id='btnAlteraDotacao${iCodigoDotacao}' type='button' value='Alterar'`;
                     aRowDotacao[4] += "       onclick=\"" + sNomeFuncaoAlteraDotacao + "\" />";
                 } else {
