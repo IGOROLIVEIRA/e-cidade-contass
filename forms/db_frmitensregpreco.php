@@ -170,7 +170,7 @@ $clrotulo->label("pc01_descrmater");
             <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdLicitada]" onkeypress="mascaraQtdLicitada(event,this,<?= $iItem ?>)" onkeyup="comparaValor(event,this,<?= $iItem ?>)" value="<?= $oItem->si07_quantidadelicitada ?>">
           </td>
           <td class="linhagrid">
-            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][precoUnitario]" onkeypress="mascaraPrecoUnitario(event,this)" onkeyup="verificaPrecoUnitario(event,this,<?= $iItem ?>)" value="<?= $oItem->si07_precounitario ?>">
+            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][precoUnitario]" onkeypress="mascaraPrecoUnitario(event,this)" onkeyup="verificaPrecoUnitario(event,this,<?= $iItem ?>,<?= $oItem->si07_precounitario ?>)" value="<?= $oItem->si07_precounitario ?>">
           </td>
           <td class="linhagrid fornecedor">
             <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][descricaoFornecedor]" value="<?= $oItem->z01_nome ?>" readonly class="input-inativo">
@@ -207,10 +207,10 @@ $clrotulo->label("pc01_descrmater");
 <script type="text/javascript" src="scripts/prototype.js"></script>
 
 <script>
-  function verificaPrecoUnitario(e, oObject, item) {
+  function verificaPrecoUnitario(e, oObject, item, valorAntigo) {
     if (oObject.value == 0) {
       alert('Erro! O preço unitário não pode ser zero ');
-      oObject.value = qtdAderida.value;
+      oObject.value = valorAntigo;
       return false;
     }
   }
