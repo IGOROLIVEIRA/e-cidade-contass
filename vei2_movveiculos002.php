@@ -56,7 +56,7 @@ if ($iCentral != "") {
     $where .= " and ve40_veiccadcentral = $iCentral ";
 }
 
-if ($sDestino != "") {
+if ($sDestino != "0") {
     $where .= " and ve60_destinonovo = $sDestino ";
 }
 
@@ -111,6 +111,7 @@ $campos = " DISTINCT
                 ve01_codigo,ve01_placa,
                 (max(ve61_medidadevol))-(min(ve60_medidasaida)) as percoreu ";
 $sSqlGeral = $clveiculos->sql_query_movimentacao(null, $campos, $sOrderBy, $where . $sGroupBy);
+
 $result = db_query(" drop table if exists w_movveiculos; create table w_movveiculos as {$sSqlGeral} ") or die(pg_last_error());
 
 if (pg_num_rows(db_query("select * from w_movveiculos")) == 0) {
