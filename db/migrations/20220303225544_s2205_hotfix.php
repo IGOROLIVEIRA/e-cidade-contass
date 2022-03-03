@@ -415,5 +415,7 @@ and (
 
 
         ";
+
+        $this->execute($sql);
     }
 }
