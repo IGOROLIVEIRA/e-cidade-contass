@@ -91,7 +91,7 @@ if (isset($dados->altera)) {
     }
 
     /*
-	 * Sequenciais que irão sofreer alteração
+	 * Sequenciais que irão sofrer alteração
 	 *
 	 * */
     $sItens = '';
@@ -107,7 +107,7 @@ if (isset($dados->altera)) {
     $clmatordem->m51_codordem    = $m51_codordem;
     $clmatordem->m51_data        = $dados->m51_data;
     $clmatordem->m51_depto       = $dados->coddepto;
-    $clmatordem->m51_deptoorigem = $m51_depto;
+    $clmatordem->m51_deptoorigem = $dados->m51_deptoorigem;
     $clmatordem->m51_numcgm      = $m51_numcgm;
     $clmatordem->m51_obs         = $dados->obs;
     $clmatordem->m51_valortotal  = $valor_total;
@@ -223,15 +223,6 @@ if (isset($dados->altera)) {
         echo $oJson->encode($oRetorno);
         die();
     }
-}
-
-if (isset($dados->getDepart)) {
-    $result_ordem = $clmatordem->sql_record($clmatordem->sql_query_file("", "m51_deptoorigem", "", "m51_codordem = $dados->m51_codordem"));
-    db_fieldsmemory($result_ordem, 0);
-    $oRetorno           = new stdClass();
-    $oRetorno->coddepartorigem = $m51_deptoorigem;
-    echo $oJson->encode($oRetorno);
-    die();
 }
 
 ?>

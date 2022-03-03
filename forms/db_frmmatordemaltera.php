@@ -68,18 +68,6 @@ if (isset($m51_codordem) && $m51_codordem != '') {
     if (pg_numrows($result) == 0) {
     }
     db_fieldsmemory($result, 0);
-
-    /*    $sqlDeptoOrigem = "select m51_deptoorigem as dptorigem,
-                              descrdepto as departamento
-                       from matordem
-                       inner join db_depart on coddepto = m51_deptoorigem
-                       where m51_codordem = $m51_codordem ";
-
-    $resultSql = pg_exec($sqlDeptoOrigem);
-    if (pg_numrows($resultSql) == 0) {
-    }
-    db_fieldsmemory($resultSql, 0);
-*/
 }
 
 ?>
@@ -190,7 +178,84 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap align="right" title="<?= @$Tm51_data ?>"><b>Data:</b></td>
+                                <?
+                                $result_entrada = $clmatestoqueitemoc->sql_record($clmatestoqueitemoc->sql_query_file(
+                                    null,
+                                    null,
+                                    "*",
+                                    null,
+                                    "m73_codmatordemitem  in
+							                                      (select m52_codlanc from matordemitem where m52_codordem=$m51_codordem)
+							                                      and m73_cancelado is false;"
+                                ));
+                                if ($clmatestoqueitemoc->numrows != 0) {
+                                ?>
+                                    <td nowrap align="right" title="<?= @$Tm51_data ?>">
+                                        <b>Data:</b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        if (empty($m51_data_dia)) {
+                                            $m51_data_dia = date("d", db_getsession("DB_datausu"));
+                                            $m51_data_mes = date("m", db_getsession("DB_datausu"));
+                                            $m51_data_ano = date("Y", db_getsession("DB_datausu"));
+                                        }
+                                        db_inputdata('m51_data', @$m51_data_dia, @$m51_data_mes, @$m51_data_ano, true, 'text', 3);
+                                        ?>
+                                    </td>
+                                    <td nowrap align="right" title="<?= @$Tm51_prazoent ?>">
+                                        <?= @$Lm51_prazoent ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('m51_prazoent', 6, $Im51_prazoent, true, 'text', 3);
+                                        ?>
+                                    </td>
+                            </tr>
+                            <tr>
+                                <td nowrap align="right" title="<?= @$Tm51_deptoorigem ?>">
+                                    <b>Depto. Origem: </b>
+                                </td>
+                                <td>
+                                    <?
+                                    $sqlDptOrigem = "select m51_deptoorigem,descrdepto as departamento from matordem inner join db_depart on coddepto = m51_deptoorigem where m51_codordem = $m51_codordem";
+                                    $resultDepOri = pg_query($sqlDptOrigem);
+                                    $m51_deptoorigem = db_utils::fieldsMemory($resultDepOri, 0)->m51_deptoorigem;
+
+                                    $sqlDepartPermis = "select distinct db_depusu.coddepto as dptorigemper, d.descrdepto from db_depusu inner join db_depart d on db_depusu.coddepto = d.coddepto where db_depusu.id_usuario = " . db_getsession('DB_id_usuario') . "order by db_depusu.coddepto asc";
+                                    $resultSql = pg_query($sqlDepartPermis);
+
+                                    db_selectrecord('m51_deptoorigem', $resultSql, true, 3);
+                                    ?>
+                                </td>
+
+                                <td nowrap align="right" title="<?= @$descrdepto ?>">
+                                    <?= @$Lcoddepto ?>
+                                <td>
+                                    <?
+                                    db_input('coddepto', 6, $Im51_depto, true, 'text', 3);
+                                    db_input('coddeptodescr', 36, $Idescrdepto, true, 'text', 3);
+                                    $depart = "false";
+                                    db_input('depart', 35, $Idescrdepto, true, 'hidden', 3);
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align='right'>
+                                    <b>Obs:</b>
+                                </td>
+                                <td colspan='3' align='left'>
+                                    <?
+                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 3);
+                                    ?>
+                                </td>
+
+                            <?
+                                } else {
+                            ?>
+                                <td nowrap align="right" title="<?= @$Tm51_data ?>">
+                                    <b>Data:</b>
+                                </td>
                                 <td>
                                     <?
                                     if (empty($m51_data_dia)) {
@@ -209,58 +274,23 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                     db_input('m51_prazoent', 6, $Im51_prazoent, true, 'text', 1);
                                     ?>
                                 </td>
-                            </tr>
                             <tr>
-                                <td nowrap align="right" title="<?= @$descrdepto ?>">
+                                <td nowrap align="right" title="<?= @$Tm51_deptoorigem ?>">
                                     <b>Depto. Origem: </b>
                                 </td>
                                 <td>
                                     <?
-                                    $sqlDepartPermis = "select distinct db_depusu.coddepto as dptorigem,
-                                                            d.descrdepto
-                                                    from db_depusu
-                                                    inner join db_depart d on db_depusu.coddepto = d.coddepto
-                                                    where db_depusu.id_usuario = " . db_getsession('DB_id_usuario') . "order by db_depusu.coddepto asc";
-                                    $resultSql = pg_exec($sqlDepartPermis);
-                                    db_selectrecord('dptorigem', $resultSql, true, 2);
+                                    $sqlDptOrigem = "select m51_deptoorigem,descrdepto as departamento from matordem inner join db_depart on coddepto = m51_deptoorigem where m51_codordem = $m51_codordem";
+                                    $resultDepOri = pg_query($sqlDptOrigem);
+                                    $m51_deptoorigem = db_utils::fieldsMemory($resultDepOri, 0)->m51_deptoorigem;
+
+                                    $sqlDepartPermis = "select distinct db_depusu.coddepto as dptorigemper, d.descrdepto from db_depusu inner join db_depart d on db_depusu.coddepto = d.coddepto where db_depusu.id_usuario = " . db_getsession('DB_id_usuario') . "order by db_depusu.coddepto asc";
+                                    $resultSql = pg_query($sqlDepartPermis);
+
+                                    db_selectrecord('m51_deptoorigem', $resultSql, true, 2);
                                     ?>
                                 </td>
                                 <?
-                                $result_entrada = $clmatestoqueitemoc->sql_record($clmatestoqueitemoc->sql_query_file(
-                                    null,
-                                    null,
-                                    "*",
-                                    null,
-                                    "m73_codmatordemitem  in
-							                                      (select m52_codlanc from matordemitem where m52_codordem=$m51_codordem)
-							                                      and m73_cancelado is false;"
-                                ));
-                                if ($clmatestoqueitemoc->numrows != 0) {
-                                ?>
-
-                                    <td nowrap align="right" title="<?= @$descrdepto ?>">
-                                        <?= @$Lcoddepto ?>
-                                    <td>
-                                        <?
-                                        db_input('coddepto', 6, $Im51_depto, true, 'text', 3);
-                                        db_input('coddeptodescr', 36, $Idescrdepto, true, 'text', 3);
-                                        $depart = "false";
-                                        db_input('depart', 35, $Idescrdepto, true, 'hidden', 3);
-                                        ?>
-                                    </td>
-                            </tr>
-                            <tr>
-                                <td align='right'>
-                                    <b>Obs:</b>
-                                </td>
-                                <td colspan='3' align='left'>
-                                    <?
-                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 3);
-                                    ?>
-                                </td>
-
-                                <?
-                                } else {
                                     $result_matparam = $clmatparam->sql_record($clmatparam->sql_query_file());
                                     if ($clmatparam->numrows > 0) {
                                         db_fieldsmemory($result_matparam, 0);
@@ -315,48 +345,49 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                             db_input('coddeptodescr', 35, $Idescrdepto, true, 'text', 3, '');
                                             ?>
                                         </td>
-                                    <?
+                            </tr>
+                        <?
                                         }
                                     } else {
-                                    ?>
-                                    <td nowrap align="right" title="<?= @$descrdepto ?>"><?
-                                                                                            db_ancora(@$Lcoddepto, "js_coddepto(true);", 1); ?></td>
-                                    <td><?
+                        ?>
+                        <td nowrap align="right" title="<?= @$descrdepto ?>"><?
+                                                                                db_ancora(@$Lcoddepto, "js_coddepto(true);", 1); ?></td>
+                        <td><?
                                         db_input('coddepto', 6, $Icoddepto, true, 'text', 1, " onchange='js_coddepto(false);'");
                                         db_input('coddeptodescr', 35, $Idescrdepto, true, 'text', 3, ''); ?>
-                                    </td>
-                                <?
+                        </td>
+                    <?
                                     } ?>
-                            <tr>
-                                <td align='right'>
-                                    <b>Obs:</b>
-                                </td>
-                                <td colspan='3' align='left'>
-                                    <?
+                    <tr>
+                        <td align='right'>
+                            <b>Obs:</b>
+                        </td>
+                        <td colspan='3' align='left'>
+                            <?
                                     $obs = $m51_obs;
                                     db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 1);
-                                    ?>
-                                </td>
-                            <?
-                                }
                             ?>
-                            </tr>
-                            <tr>
-                                <td colspan='4' align='center'>
-                                    <?
-                                    $observacao = preg_replace('/[^A-Z a-z]/', '', $m51_obs);
-                                    $descrAutomatica = strlen($observacao) == 25 ? 'ordem de compra automtica' : 'ordem de compra automatica';
+                        </td>
+                    <?
+                                }
+                    ?>
+                    </tr>
+                    <tr>
+                        <td colspan='4' align='center'>
+                            <?
+                            $observacao = preg_replace('/[^A-Z a-z]/', '', $m51_obs);
+                            $descrAutomatica = strlen($observacao) == 25 ? 'ordem de compra automtica' : 'ordem de compra automatica';
 
-                                    if ($m51_codordem != "" && strcmp(strtolower($observacao), $descrAutomatica) && !$clmatestoqueitemoc->numrows) {
-                                    ?>
-                                        <input name="altera" type="button" value="Alterar" onclick="js_buscavalores();">
-                                    <? } else {
-                                    ?>
-                                        <input name="altera" type="submit" disabled value="Alterar">
-                                    <? } ?>
-                                    <input name="voltar" type="button" value="Voltar" onclick="location.href='emp1_ordemcompraaltera001.php';">
-                                </td>
-                            </tr>
+                            if ($m51_codordem != "" && strcmp(strtolower($observacao), $descrAutomatica) && !$clmatestoqueitemoc->numrows) {
+                            ?>
+                                <input name="altera" type="button" value="Alterar" onclick="js_buscavalores();">
+                            <? } else {
+                            ?>
+                                <input name="altera" type="submit" disabled value="Alterar">
+                            <? } ?>
+                            <input name="voltar" type="button" value="Voltar" onclick="location.href='emp1_ordemcompraaltera001.php';">
+                        </td>
+                    </tr>
                         </table>
                     </fieldset>
                 </td>
@@ -387,7 +418,6 @@ if (isset($m51_codordem) && $m51_codordem != '') {
     function js_AlteraCGM(cgm) {
         js_OpenJanelaIframe('', 'db_iframe_altcgm', 'prot1_cadcgm002.php?chavepesquisa=' + cgm + '&testanome=true&autoc=true', 'Altera Cgm', true);
     }
-    getDepartOrigin();
 
     function js_buscavalores() {
         obj = itens.document.form1;
@@ -452,6 +482,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         oParam.coddeptodescr = body.coddeptodescr.value;
         oParam.obs = body.m51_obs.value;
         oParam.m51_data = body.m51_data.value;
+        oParam.m51_deptoorigem = body.m51_deptoorigem.value;
         oParam.itens = aItens;
         oParam.altera = true;
 
@@ -507,29 +538,6 @@ if (isset($m51_codordem) && $m51_codordem != '') {
             document.form1.coddepto.focus();
             document.form1.coddepto.value = '';
         }
-    }
-
-    function getDepartOrigin() {
-        let oParam = new Object();
-        let body = document.form1;
-        oParam.m51_prazoent = body.m51_prazoent.value;
-        oParam.m51_codordem = body.m51_codordem.value;
-        oParam.coddepto = body.coddepto.value;
-        oParam.coddeptodescr = body.coddeptodescr.value;
-        oParam.obs = body.m51_obs.value;
-        oParam.m51_data = body.m51_data.value;
-        oParam.getDepart = true;
-
-        let oAjax = new Ajax.Request('emp1_ordemcompraaltera002.php', {
-            method: 'post',
-            parameters: 'json=' + Object.toJSON(oParam),
-            onComplete: js_carregarDepartOrigin
-        })
-    }
-
-    function js_carregarDepartOrigin(oAjax) {
-        let response = eval("(" + oAjax.responseText + ")");
-        console.log(response)
     }
 </script>
 </body>

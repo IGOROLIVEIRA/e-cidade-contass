@@ -270,15 +270,14 @@ class cl_matordem
   function alterar($m51_codordem = null)
   {
 
-    $this->m51_deptoorigem = db_getsession("DB_coddepto");
     $this->atualizacampos();
 
     if (strtotime($this->m51_data) < strtotime($this->getDataEmp($this->m51_codordem))) {
-      $this->erro_sql = " Data da ordem nao pode ser anterior a data de emissão do empenho.";
+      $this->erro_sql = " Data da ordem não pode ser anterior a data de emissão do empenho.";
       $this->erro_campo = "m51_data";
       $this->erro_banco = "";
-      $this->erro_mm51_codordem   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_data   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: " . $this->erro_sql . ""));
       $this->erro_status = "0";
       return false;
     }
@@ -843,8 +842,12 @@ class cl_matordem
 
   public function getDataEmp($m51_codordem)
   {
-    $sSql = "select e60_emiss from empempenho inner join matordemitem on m52_numemp = e60_numemp inner join matordem on m51_codordem = m52_codordem where m51_codordem = $m51_codordem";
+    $sSql = "select e60_emiss,e60_numemp
+             from empempenho
+             inner join matordemitem on m52_numemp = e60_numemp
+             inner join matordem on m51_codordem = m52_codordem
+             where m51_codordem = $m51_codordem";
     $resSsql = db_query($sSql) or die(pg_last_error());
-    return db_utils::fieldsMemory($resSsql, 0)->pc80_data;
+    return db_utils::fieldsMemory($resSsql, 0)->e60_emiss;
   }
 }
