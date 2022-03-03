@@ -2,7 +2,7 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once('model/contabilidade/relatorios/dcasp/BalancoPatrimonialDCASP2021.model.php');
+require_once('model/contabilidade/relatorios/dcasp/BalancoPatrimonialDCASP2015.model.php');
 require_once('libs/db_stdlib.php');
 require_once('libs/db_conecta.php');
 require_once('libs/db_sessoes.php');
@@ -16,7 +16,7 @@ require_once('libs/db_liborcamento.php');
 require_once('fpdf151/PDFDocument.php');
 
 require_once("classes/db_bpdcasp102021_classe.php");
-require_once("classes/db_bpdcasp202121_classe.php");
+require_once("classes/db_bpdcasp202021_classe.php");
 require_once("classes/db_bpdcasp302021_classe.php");
 require_once("classes/db_bpdcasp402021_classe.php");
 require_once("classes/db_bpdcasp502021_classe.php");
@@ -103,7 +103,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
     $clbpdcasp10 = new cl_bpdcasp102021();
-    $clbpdcasp20 = new cl_bpdcasp202121();
+    $clbpdcasp20 = new cl_bpdcasp202021();
     $clbpdcasp30 = new cl_bpdcasp302021();
     $clbpdcasp40 = new cl_bpdcasp402021();
     $clbpdcasp50 = new cl_bpdcasp502021();
@@ -212,15 +212,15 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
      * ser alterados aqui também.
      */
 
-    $oBalancoPatrimonial = new BalancoPatrimonialDCASP2021($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
+    $oBalancoPatrimonial = new BalancoPatrimonialDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oBalancoPatrimonial->setInstituicoes($sListaInstituicoes);
     $oBalancoPatrimonial->setExibirExercicioAnterior(true);
 
     $aQuadros   = array();
-    $aQuadros[] = BalancoPatrimonialDCASP2021::QUADRO_PRINCIPAL;
-    $aQuadros[] = BalancoPatrimonialDCASP2021::QUADRO_ATIVOS_PASSIVOS;
-    $aQuadros[] = BalancoPatrimonialDCASP2021::QUADRO_CONTAS_COMPENSACAO;
-    $aQuadros[] = BalancoPatrimonialDCASP2021::QUADRO_SUPERAVIT;
+    $aQuadros[] = BalancoPatrimonialDCASP2015::QUADRO_PRINCIPAL;
+    $aQuadros[] = BalancoPatrimonialDCASP2015::QUADRO_ATIVOS_PASSIVOS;
+    $aQuadros[] = BalancoPatrimonialDCASP2015::QUADRO_CONTAS_COMPENSACAO;
+    $aQuadros[] = BalancoPatrimonialDCASP2015::QUADRO_SUPERAVIT;
 
     $oBalancoPatrimonial->setExibirQuadros($aQuadros);
 
@@ -266,7 +266,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbpdcasp20  = new cl_bpdcasp202121();
+      $clbpdcasp20  = new cl_bpdcasp202021();
 
       $clbpdcasp20->si209_ano                                 = $iAnoUsu;
       $clbpdcasp20->si209_periodo                             = $iCodigoPeriodo;
@@ -300,12 +300,12 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         $iAno = $iAno-1;
       }
 
-      $nValorResultadoExecAnterior = db_utils::fieldsMemory(db_query($clbpdcasp20->sql_query_vlpatriliquidresultacumexeranteri($sListaInstituicoes,$iAno)))->resultacumexeranteri;
+      $nValorResultadoExecAnterior = db_utils::fieldsMemory(db_query($clbpdcasp20->sql_query_vlpatriliquidresultacumexeranteri($sListaInstituicoes,$iAno)),0)->resultacumexeranteri;
 
       //no arquivo o sinal deve ser negativo para saldo credor e positivo para saldo devedor.
       $nValorResultadoExecAnterior = $nValorResultadoExecAnterior*-1;
 
-      $nValorResultadoExec= db_utils::fieldsMemory(db_query($clbpdcasp20->sql_query_vlpatriliquidresultacumexer($sListaInstituicoes,$iAno)))->resultacumexeranteri;
+      $nValorResultadoExec= db_utils::fieldsMemory(db_query($clbpdcasp20->sql_query_vlpatriliquidresultacumexer($sListaInstituicoes,$iAno)),0)->resultacumexeranteri;
 
       //no arquivo o sinal deve ser negativo para saldo credor e positivo para saldo devedor.
       $nValorResultadoExec = $nValorResultadoExec*-1;
