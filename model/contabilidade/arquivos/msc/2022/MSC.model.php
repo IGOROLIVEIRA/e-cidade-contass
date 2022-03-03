@@ -155,13 +155,7 @@ class MSC {
   public function getIC6() {
     return $this->iIC6;
   }
-  //IC7
-  public function setIC7($iIC7) {
-      $this->iIC7 = $iIC7;
-  }
-  public function getIC7() {
-      return $this->iIC7;
-  }
+  
   //Tipo6
   public function setTipoIC6($sTipoIC6) {
     $this->sTipoIC6 = $sTipoIC6;
@@ -169,13 +163,7 @@ class MSC {
   public function getTipoIC6() {
     return $this->sTipoIC6;
   }
-  //Tipo7
-  public function setTipoIC7($sTipoIC7) {
-      $this->sTipoIC7 = $sTipoIC7;
-  }
-  public function getTipoIC7() {
-      return $this->sTipoIC7;
-  }
+ 
   //Valor
   public function setValor($iValor) {
     $this->iValor = $iValor;
@@ -343,7 +331,7 @@ class MSC {
     $aRegistros = array();
     $indice = "";
 
-    for ($ind = 0; $ind <= 7; $ind++) {
+    for ($ind = 0; $ind <= 6; $ind++) {
       $indice .= ($oRegistro[$ind] != "null") ? $oRegistro[$ind] : '';
     }
 
@@ -372,9 +360,9 @@ class MSC {
               $oNovoRegistro->valor     = number_format($oRegistro[$key-1], 2, '.', '');
           }
 
-          $aTipoIC = array("po", "fp", "fr", "nr", "nd", "fs", "ai", "dc", "es", "cf");
+          $aTipoIC = array("po", "fp", "fr", "nr", "nd", "fs", "ai", "dc", "es", "co");
 
-          for ($ii = 1; $ii <= 7; $ii++) {
+          for ($ii = 1; $ii <= 6; $ii++) {
             $IC = "IC".$ii;
             $TipoIC = "TipoIC".$ii;
 
@@ -412,8 +400,8 @@ class MSC {
       (array)$this->getDadosIC04($ano, $data_inicio),
       (array)$this->getDadosIC05($ano, $data_inicio),
       (array)$this->getDadosIC06($ano, $data_inicio),
-      (array)$this->getDadosIC07EMP($ano, $data_inicio),
-      (array)$this->getDadosIC07RSP($ano, $data_inicio),
+      // (array)$this->getDadosIC07EMP($ano, $data_inicio),
+      // (array)$this->getDadosIC07RSP($ano, $data_inicio),
       (array)$this->getDadosIC08($ano, $data_inicio, $data_fim),
       (array)$this->getDadosIC09EMP($ano, $data_inicio),
       (array)$this->getDadosIC09RSP($ano, $data_inicio)
@@ -429,14 +417,14 @@ class MSC {
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
       $oReg = db_utils::fieldsMemory($rsResult, $iCont);
       $sHash = "";
-      for ($ind = 0; $ind <= 7; $ind++) {
+      for ($ind = 0; $ind <= 6; $ind++) {
         $sHash .= (isset($oReg->{$aCampos[$ind]}) && !empty($oReg->{$aCampos[$ind]})) ? $oReg->{$aCampos[$ind]} : '';
       }
       if (!isset(${$aDadosIC}[$sHash])) {
         $$aIC = array();
         for ($i = 0; $i < 18; $i++) {
 
-          if ($i > 0 && $i <= 7) {
+          if ($i > 0 && $i <= 6) {
             ${$aIC}[$i] = isset($oReg->{$aCampos[$i]}) ? "{$oReg->{$aCampos[$i]}}_{$aCampos[$i]}" : "_{$aCampos[$i]}";
           }
           else if ($i == 8) {
@@ -487,7 +475,7 @@ class MSC {
 
     foreach (${$aDadosIC} as $obj) {
       $sHash = "";
-      for ($ind = 0; $ind <= 7; $ind++) {
+      for ($ind = 0; $ind <= 6; $ind++) {
         $sHash .= ($obj[$ind] != "_null") ? $obj[$ind] : '';
       }
       $oIC = $obj;
@@ -543,9 +531,9 @@ class MSC {
          left join vinculopcaspmsc on (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
          where {$this->getTipoMatriz()} (c60_infcompmsc is null or c60_infcompmsc = 0 or c60_infcompmsc = 1) and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
        ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) ";
-
+     
     $rsResult = db_query($sSQL);
-
+    // echo $sSQL;
     $aCampos  = array("conta", "po", "null", "null", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
@@ -605,7 +593,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
     $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
+    
     if ($rsResult) {
       return $this->getDadosIC(2, $aCampos, $rsResult);
     } else {
@@ -630,7 +618,7 @@ class MSC {
         ELSE 10131
         END AS po,
         case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
-        o15_codstn as fr,
+        o15_codstnnovo as fr,
       round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
       substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
@@ -658,7 +646,7 @@ class MSC {
       c61_codcon,
       c61_codigo,
       r.c61_instit,
-            c60_identificadorfinanceiro,o15_codstn,
+            c60_identificadorfinanceiro,o15_codstnnovo,
             fc_saldocontacorrente($iAno,c19_sequencial,103,$iMes,codigo)
           from conplanoexe e
       inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz
@@ -673,7 +661,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
     $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
+    
     if ($rsResult) {
       return $this->getDadosIC(4, $aCampos, $rsResult);
     } else {
@@ -692,7 +680,7 @@ class MSC {
         WHEN db21_tipoinstit IN (2) THEN 20231
         ELSE 10131
         END AS po,
-        o15_codstn as fr,
+        o15_codstnnovo as fr,
       round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
       substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
@@ -720,7 +708,7 @@ class MSC {
       c61_codcon,
       c61_codigo,
       r.c61_instit,
-            c60_identificadorfinanceiro,o15_codstn,
+            c60_identificadorfinanceiro,o15_codstnnovo,
             fc_saldocontacorrente($iAno,c19_sequencial,103,$iMes,codigo)
           from conplanoexe e
       inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz
@@ -734,7 +722,7 @@ class MSC {
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
-
+    
     $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
@@ -755,13 +743,6 @@ class MSC {
                                	WHEN db21_tipoinstit IN (2) THEN 20231
                                	ELSE 10131
                            	END AS po,
-                           	CASE
-                            	WHEN o15_codtri = '124' THEN
-                                   	CASE
-                                    	WHEN substr(natreceita,1,6) = '172810' OR substr(natreceita,1,6) = '242810' THEN 15200000
-                                       	ELSE 15100000 END
-                               	ELSE o15_codstn
-                           	END AS fr,
                            	natreceita AS nr,
                            	round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
                            	'beginning_balance' AS tipovalor_si,
@@ -791,7 +772,7 @@ class MSC {
                                        	ELSE ''
                                    	END
                                	ELSE ''
-                           	END AS cf
+                           	END AS co
                     FROM
                         (SELECT
                                 CASE
@@ -804,7 +785,7 @@ class MSC {
                                 c61_codcon,
                                 c61_codigo,
                                 r.c61_instit,
-                                c60_identificadorfinanceiro,o15_codstn,
+                                c60_identificadorfinanceiro,o15_codstnnovo,
                                 CASE
                                     WHEN substr(c19_estrutural,2,1) = '9' THEN substr(c19_estrutural,4,8)
                                     WHEN c212_mscestrut IS NOT NULL THEN c212_mscestrut
@@ -828,8 +809,8 @@ class MSC {
 				WHERE (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
-
-    $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "cf", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    
+    $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "co", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(6, $aCampos, $rsResult);
@@ -838,236 +819,236 @@ class MSC {
     }
   }
 
-  public function getDadosIC07EMP($iAno, $dataInicio) {
+  // public function getDadosIC07EMP($iAno, $dataInicio) {
 
-    $iMes = date('m',strtotime($dataInicio));
+  //   $iMes = date('m',strtotime($dataInicio));
 
-    $sSQL = "   SELECT * FROM (
-                    SELECT estrut AS conta,
-                    CASE
-                        WHEN db21_tipoinstit IN (6) THEN 10132
-                        WHEN db21_tipoinstit IN (2) THEN 20231
-                        ELSE 10131
-                    END AS po,
-                    funsub AS fs,
-                    CASE
-                        WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
-                        ELSE o15_codstn
-                    END AS fr,
-                    CASE
-                        WHEN substr(c60_estrut, 1, 3) = '522' AND natdespesa != '99999999' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
-                        WHEN substr(c60_estrut, 1, 3) = '622' THEN natdespesa
-                        ELSE natdespesa
-                    END AS nd,
-                    null AS es,
-                    round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
-                    'beginning_balance' AS tipovalor_si,
-                    substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
-                    round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
-                    CASE
-                        WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
-                        ELSE 'period_change_deb'
-                    END AS tipovalordeb,
-                    round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
-                    CASE
-                        WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
-                        ELSE 'period_change_cred'
-                    END AS tipovalorcred,
-                    round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
-                    'ending_balance' AS tipovalor_sf,
-                    substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
-                    CASE
-                        WHEN db21_tipoinstit IN (6)
-                                AND estrut IN ($this->sContasRPPSIC07)
-                                AND c211_elemdespestrut IN ($this->sNaturezasRPPS) THEN
-                            CASE
-                                WHEN e60_tipodespesa = 1 THEN '1111'
-                                WHEN e60_tipodespesa = 2 THEN '1121'
-                                ELSE ''
-                            END
-                        ELSE ''
-                    END AS cf,
-                    c61_reduz,
-                    c61_codcon,
-                    c61_codigo,
-                    c61_instit
-                FROM
-                    (SELECT
-                        CASE
-                            WHEN c210_mscestrut IS NULL THEN substr(p.c60_estrut,1,9)
-                            ELSE c210_mscestrut
-                        END AS estrut,
-                        CASE
-                            WHEN c211_mscestrut IS NULL THEN substr(o56_elemento,2,8)
-                            ELSE c211_mscestrut
-                        END AS natdespesa,
-                        c60_estrut,
-                        db21_tipoinstit,
-                        c61_reduz,
-                        c61_codcon,
-                        c61_codigo,
-                        r.c61_instit,
-                        o15_codtri,
-                        lpad(o58_funcao,2,0) AS o58_funcao,
-                        c60_identificadorfinanceiro,o15_codstn,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
-                        fc_saldocontacorrente($iAno,c19_sequencial,102,$iMes,codigo),
-                        c211_elemdespestrut,
-                        e60_tipodespesa
-                    FROM conplanoexe e
-                        INNER JOIN conplanoreduz r
-                            ON (r.c61_anousu, r.c61_reduz) = (c62_anousu, c62_reduz)
-                        INNER JOIN conplano p
-                            ON (r.c61_codcon, r.c61_anousu) = (c60_codcon, c60_anousu)
-                        INNER JOIN db_config
-                            ON codigo = r.c61_instit
-                        INNER JOIN contacorrentedetalhe
-                            ON (c19_conplanoreduzanousu, c19_reduz) = (c61_anousu, c61_reduz)
-                        INNER JOIN orcdotacao
-                            ON (c19_orcdotacao, o58_anousu) = (o58_coddot, c19_orcdotacaoanousu)
-                        LEFT JOIN empempenho
-                            ON e60_numemp=c19_numemp
-                        LEFT JOIN empelemento
-                            ON e64_numemp = e60_numemp
-                        LEFT JOIN orcelemento
-                            ON (o56_codele, o56_anousu) = (e64_codele, e60_anousu)
-                        LEFT JOIN elemdespmsc
-                            ON (substr(o56_elemento,2,8), o56_anousu) = (c211_elemdespestrut, c211_anousu)
-                        LEFT OUTER JOIN consistema
-                            ON c60_codsis = c52_codsis
-                        LEFT JOIN vinculopcaspmsc
-                            ON (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
-                        LEFT JOIN orctiporec
-                            ON c19_orctiporec = o15_codigo
-                    WHERE {$this->getTipoMatriz()} c19_contacorrente = 102 AND c60_infcompmsc = 7 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL
-                    ORDER BY p.c60_estrut
+  //   $sSQL = "   SELECT * FROM (
+  //                   SELECT estrut AS conta,
+  //                   CASE
+  //                       WHEN db21_tipoinstit IN (6) THEN 10132
+  //                       WHEN db21_tipoinstit IN (2) THEN 20231
+  //                       ELSE 10131
+  //                   END AS po,
+  //                   funsub AS fs,
+  //                   CASE
+  //                       WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
+  //                       ELSE o15_codstnnovo
+  //                   END AS fr,
+  //                   CASE
+  //                       WHEN substr(c60_estrut, 1, 3) = '522' AND natdespesa != '99999999' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
+  //                       WHEN substr(c60_estrut, 1, 3) = '622' THEN natdespesa
+  //                       ELSE natdespesa
+  //                   END AS nd,
+  //                   null AS es,
+  //                   round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
+  //                   'beginning_balance' AS tipovalor_si,
+  //                   substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
+  //                   round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
+  //                   CASE
+  //                       WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
+  //                       ELSE 'period_change_deb'
+  //                   END AS tipovalordeb,
+  //                   round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
+  //                   CASE
+  //                       WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
+  //                       ELSE 'period_change_cred'
+  //                   END AS tipovalorcred,
+  //                   round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
+  //                   'ending_balance' AS tipovalor_sf,
+  //                   substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
+  //                   CASE
+  //                       WHEN db21_tipoinstit IN (6)
+  //                               AND estrut IN ($this->sContasRPPSIC07)
+  //                               AND c211_elemdespestrut IN ($this->sNaturezasRPPS) THEN
+  //                           CASE
+  //                               WHEN e60_tipodespesa = 1 THEN '1111'
+  //                               WHEN e60_tipodespesa = 2 THEN '1121'
+  //                               ELSE ''
+  //                           END
+  //                       ELSE ''
+  //                   END AS co,
+  //                   c61_reduz,
+  //                   c61_codcon,
+  //                   c61_codigo,
+  //                   c61_instit
+  //               FROM
+  //                   (SELECT
+  //                       CASE
+  //                           WHEN c210_mscestrut IS NULL THEN substr(p.c60_estrut,1,9)
+  //                           ELSE c210_mscestrut
+  //                       END AS estrut,
+  //                       CASE
+  //                           WHEN c211_mscestrut IS NULL THEN substr(o56_elemento,2,8)
+  //                           ELSE c211_mscestrut
+  //                       END AS natdespesa,
+  //                       c60_estrut,
+  //                       db21_tipoinstit,
+  //                       c61_reduz,
+  //                       c61_codcon,
+  //                       c61_codigo,
+  //                       r.c61_instit,
+  //                       o15_codtri,
+  //                       lpad(o58_funcao,2,0) AS o58_funcao,
+  //                       c60_identificadorfinanceiro,o15_codstnnovo,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
+  //                       fc_saldocontacorrente($iAno,c19_sequencial,102,$iMes,codigo),
+  //                       c211_elemdespestrut,
+  //                       e60_tipodespesa
+  //                   FROM conplanoexe e
+  //                       INNER JOIN conplanoreduz r
+  //                           ON (r.c61_anousu, r.c61_reduz) = (c62_anousu, c62_reduz)
+  //                       INNER JOIN conplano p
+  //                           ON (r.c61_codcon, r.c61_anousu) = (c60_codcon, c60_anousu)
+  //                       INNER JOIN db_config
+  //                           ON codigo = r.c61_instit
+  //                       INNER JOIN contacorrentedetalhe
+  //                           ON (c19_conplanoreduzanousu, c19_reduz) = (c61_anousu, c61_reduz)
+  //                       INNER JOIN orcdotacao
+  //                           ON (c19_orcdotacao, o58_anousu) = (o58_coddot, c19_orcdotacaoanousu)
+  //                       LEFT JOIN empempenho
+  //                           ON e60_numemp=c19_numemp
+  //                       LEFT JOIN empelemento
+  //                           ON e64_numemp = e60_numemp
+  //                       LEFT JOIN orcelemento
+  //                           ON (o56_codele, o56_anousu) = (e64_codele, e60_anousu)
+  //                       LEFT JOIN elemdespmsc
+  //                           ON (substr(o56_elemento,2,8), o56_anousu) = (c211_elemdespestrut, c211_anousu)
+  //                       LEFT OUTER JOIN consistema
+  //                           ON c60_codsis = c52_codsis
+  //                       LEFT JOIN vinculopcaspmsc
+  //                           ON (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
+  //                       LEFT JOIN orctiporec
+  //                           ON c19_orctiporec = o15_codigo
+  //                   WHERE {$this->getTipoMatriz()} c19_contacorrente = 102 AND c60_infcompmsc = 7 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL
+  //                   ORDER BY p.c60_estrut
 
-                    )
-                AS movgeral
-            ) AS movfinal
-            WHERE (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
+  //                   )
+  //               AS movgeral
+  //           ) AS movfinal
+  //           WHERE (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
-    $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "cf", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+  //   $rsResult = db_query($sSQL);
+  //   $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "co", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+   
+  //   if ($rsResult) {
+  //     return $this->getDadosIC(7, $aCampos, $rsResult);
+  //   } else {
+  //       $this->setErroSQL(7);
+  //   }
+  // }
 
-    if ($rsResult) {
-      return $this->getDadosIC(7, $aCampos, $rsResult);
-    } else {
-        $this->setErroSQL(7);
-    }
-  }
+  // public function getDadosIC07RSP($iAno, $dataInicio) {
 
-  public function getDadosIC07RSP($iAno, $dataInicio) {
+  //   $iMes = date('m',strtotime($dataInicio));
 
-    $iMes = date('m',strtotime($dataInicio));
+  //   $sSQL = "    SELECT * FROM (
+  //                   SELECT estrut AS conta,
+  //                       CASE
+  //                           WHEN db21_tipoinstit IN (6) THEN 10132
+  //                           WHEN db21_tipoinstit IN (2) THEN 20231
+  //                           ELSE 10131
+  //                       END AS po,
+  //                       funsub AS fs,
+  //                       CASE
+  //                           WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
+  //                           ELSE o15_codstnnovo
+  //                       END AS fr,
+  //                      CASE
+  //                          WHEN substr(c60_estrut, 1, 3) = '522' AND natdespesa != '99999999' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
+  //                          WHEN substr(c60_estrut, 1, 3) = '622' THEN natdespesa
+  //                          ELSE natdespesa
+  //                      END AS nd,
+  //                      null AS es,
+  //                      round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
+  //                      'beginning_balance' AS tipovalor_si,
+  //                      substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
+  //                      round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
+  //                      CASE
+  //                          WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
+  //                          ELSE 'period_change_deb'
+  //                      END AS tipovalordeb,
+  //                      round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
+  //                      CASE
+  //                          WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
+  //                          ELSE 'period_change_cred'
+  //                      END AS tipovalorcred,
+  //                      round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
+  //                      'ending_balance' AS tipovalor_sf,
+  //                      substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
+  //                      CASE
+  //                          WHEN db21_tipoinstit IN (6)
+  //                                   AND estrut IN ($this->sContasRPPSIC07)
+  //           		                AND substr(c19_estrutural,2,8) IN ($this->sNaturezasRPPS) THEN
+  //                              CASE
+  //                                  WHEN e60_tipodespesa = 1 THEN '1111'
+  //                                  WHEN e60_tipodespesa = 2 THEN '1121'
+  //                              ELSE ''
+  //                              END
+  //                          ELSE ''
+  //                      END AS co,
+  //                      c61_reduz,
+  //                      c61_codcon,
+  //                      c61_codigo,
+  //                      c61_instit
+  //                   FROM
+  //                       (SELECT
+  //                           CASE
+  //                               WHEN c210_mscestrut IS NULL THEN substr(p.c60_estrut,1,9)
+  //                               ELSE c210_mscestrut
+  //                           END AS estrut,
+  //                           CASE
+  //                               WHEN c211_mscestrut IS NULL THEN substr(c19_estrutural,2,8)
+  //                               ELSE c211_mscestrut
+  //                           END AS natdespesa,
+  //                           c60_estrut,
+  //                           db21_tipoinstit,
+  //                           c61_reduz,
+  //                           c61_codcon,
+  //                           c61_codigo,
+  //                           r.c61_instit,
+  //                           o15_codtri,
+  //                           lpad(o58_funcao,2,0) AS o58_funcao,
+  //                           c60_identificadorfinanceiro,o15_codstnnovo,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) AS funsub,
+  //                           fc_saldocontacorrente($iAno,c19_sequencial,101,$iMes,codigo),
+  //                           c211_elemdespestrut,
+  //                           e60_tipodespesa,
+  //                           c19_estrutural
+  //                       FROM conplanoexe e
+  //                           INNER JOIN conplanoreduz r
+  //                               ON (r.c61_anousu, r.c61_reduz) = (c62_anousu, c62_reduz)
+  //                           INNER JOIN conplano p
+  //                               ON (r.c61_codcon, r.c61_anousu) = (c60_codcon, c60_anousu)
+  //                           INNER JOIN db_config
+  //                               ON codigo = r.c61_instit
+  //                           INNER JOIN contacorrentedetalhe
+  //                               ON (c19_conplanoreduzanousu, c19_reduz) = (c61_anousu, c61_reduz)
+  //                           INNER JOIN orcdotacao
+  //                               ON (c19_orcdotacao, o58_anousu) = (o58_coddot, c19_orcdotacaoanousu)
+  //                           LEFT JOIN elemdespmsc
+  //                               ON (substr(c19_estrutural,2,8), $iAno) = (c211_elemdespestrut, c211_anousu)
+  //                           LEFT OUTER JOIN consistema
+  //                               ON c60_codsis = c52_codsis
+  //                           LEFT JOIN vinculopcaspmsc
+  //                               ON (substr(p.c60_estrut,2,8), $iAno) = (c210_pcaspestrut, c210_anousu)
+  //                           LEFT JOIN orctiporec
+  //                               ON c19_orctiporec = o15_codigo
+  //                           LEFT JOIN empempenho
+  //                               ON e60_numemp = c19_numemp
+  //                       WHERE {$this->getTipoMatriz()} c19_contacorrente=101 AND c60_infcompmsc = 7 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL
+  //                       ORDER BY p.c60_estrut
+  //                   ) AS movgeral
+  //               ) AS movfinal
+  //               WHERE (saldoinicial <> 0 OR debito <> 0 OR credito <> 0)";
 
-    $sSQL = "    SELECT * FROM (
-                    SELECT estrut AS conta,
-                        CASE
-                            WHEN db21_tipoinstit IN (6) THEN 10132
-                            WHEN db21_tipoinstit IN (2) THEN 20231
-                            ELSE 10131
-                        END AS po,
-                        funsub AS fs,
-                        CASE
-                            WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
-                            ELSE o15_codstn
-                        END AS fr,
-                       CASE
-                           WHEN substr(c60_estrut, 1, 3) = '522' AND natdespesa != '99999999' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
-                           WHEN substr(c60_estrut, 1, 3) = '622' THEN natdespesa
-                           ELSE natdespesa
-                       END AS nd,
-                       null AS es,
-                       round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
-                       'beginning_balance' AS tipovalor_si,
-                       substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
-                       round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
-                       CASE
-                           WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
-                           ELSE 'period_change_deb'
-                       END AS tipovalordeb,
-                       round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
-                       CASE
-                           WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
-                           ELSE 'period_change_cred'
-                       END AS tipovalorcred,
-                       round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
-                       'ending_balance' AS tipovalor_sf,
-                       substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
-                       CASE
-                           WHEN db21_tipoinstit IN (6)
-                                    AND estrut IN ($this->sContasRPPSIC07)
-            		                AND substr(c19_estrutural,2,8) IN ($this->sNaturezasRPPS) THEN
-                               CASE
-                                   WHEN e60_tipodespesa = 1 THEN '1111'
-                                   WHEN e60_tipodespesa = 2 THEN '1121'
-                               ELSE ''
-                               END
-                           ELSE ''
-                       END AS cf,
-                       c61_reduz,
-                       c61_codcon,
-                       c61_codigo,
-                       c61_instit
-                    FROM
-                        (SELECT
-                            CASE
-                                WHEN c210_mscestrut IS NULL THEN substr(p.c60_estrut,1,9)
-                                ELSE c210_mscestrut
-                            END AS estrut,
-                            CASE
-                                WHEN c211_mscestrut IS NULL THEN substr(c19_estrutural,2,8)
-                                ELSE c211_mscestrut
-                            END AS natdespesa,
-                            c60_estrut,
-                            db21_tipoinstit,
-                            c61_reduz,
-                            c61_codcon,
-                            c61_codigo,
-                            r.c61_instit,
-                            o15_codtri,
-                            lpad(o58_funcao,2,0) AS o58_funcao,
-                            c60_identificadorfinanceiro,o15_codstn,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) AS funsub,
-                            fc_saldocontacorrente($iAno,c19_sequencial,101,$iMes,codigo),
-                            c211_elemdespestrut,
-                            e60_tipodespesa,
-                            c19_estrutural
-                        FROM conplanoexe e
-                            INNER JOIN conplanoreduz r
-                                ON (r.c61_anousu, r.c61_reduz) = (c62_anousu, c62_reduz)
-                            INNER JOIN conplano p
-                                ON (r.c61_codcon, r.c61_anousu) = (c60_codcon, c60_anousu)
-                            INNER JOIN db_config
-                                ON codigo = r.c61_instit
-                            INNER JOIN contacorrentedetalhe
-                                ON (c19_conplanoreduzanousu, c19_reduz) = (c61_anousu, c61_reduz)
-                            INNER JOIN orcdotacao
-                                ON (c19_orcdotacao, o58_anousu) = (o58_coddot, c19_orcdotacaoanousu)
-                            LEFT JOIN elemdespmsc
-                                ON (substr(c19_estrutural,2,8), $iAno) = (c211_elemdespestrut, c211_anousu)
-                            LEFT OUTER JOIN consistema
-                                ON c60_codsis = c52_codsis
-                            LEFT JOIN vinculopcaspmsc
-                                ON (substr(p.c60_estrut,2,8), $iAno) = (c210_pcaspestrut, c210_anousu)
-                            LEFT JOIN orctiporec
-                                ON c19_orctiporec = o15_codigo
-                            LEFT JOIN empempenho
-                                ON e60_numemp = c19_numemp
-                        WHERE {$this->getTipoMatriz()} c19_contacorrente=101 AND c60_infcompmsc = 7 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL
-                        ORDER BY p.c60_estrut
-                    ) AS movgeral
-                ) AS movfinal
-                WHERE (saldoinicial <> 0 OR debito <> 0 OR credito <> 0)";
-
-    $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "cf", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
-    if ($rsResult) {
-      return $this->getDadosIC(7, $aCampos, $rsResult);
-    } else {
-        $this->setErroSQL(7);
-    }
-  }
+  //   $rsResult = db_query($sSQL);
+  //   $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "co", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    
+  //   if ($rsResult) {
+  //     return $this->getDadosIC(7, $aCampos, $rsResult);
+  //   } else {
+  //       $this->setErroSQL(7);
+  //   }
+  // }
 
   public function getDadosIC08($iAno, $dataInicio, $dataFim) {
 
@@ -1081,7 +1062,7 @@ class MSC {
         END AS po,
         case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
         null as dc,
-        o15_codstn AS fr,
+        o15_codstnnovo AS fr,
       round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
       substr(fc_planosaldonovo,59,1)::varchar(1) AS nat_vlr_si,
@@ -1104,7 +1085,7 @@ class MSC {
       c61_reduz,
       c61_codcon,
       c61_codigo,
-      r.c61_instit,o15_codstn,
+      r.c61_instit,o15_codstnnovo,
       fc_planosaldonovo(".$iAno.", c61_reduz, '".$dataInicio."', '".$dataFim."', false)
           from conplanoexe e
       inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz
@@ -1117,9 +1098,9 @@ class MSC {
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
-
+   
     $aCampos  = array("conta", "po", "fp", "dc", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
+    
     if ($rsResult) {
       return $this->getDadosIC(8, $aCampos, $rsResult);
     } else {
@@ -1145,7 +1126,7 @@ class MSC {
                        funsub AS fs,
                        CASE
                            WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
-                           ELSE o15_codstn
+                           ELSE o15_codstnnovo
                        END AS fr,
                        natdespesa AS nd,
                        null AS es,
@@ -1174,7 +1155,7 @@ class MSC {
                                WHEN e60_tipodespesa = 2 THEN '1121'
                                ELSE '' END
                            ELSE ''
-                       END AS cf,
+                       END AS co,
                        c61_reduz,
                        c61_codcon,
                        c61_codigo,
@@ -1197,7 +1178,7 @@ class MSC {
                             e60_anousu,
                             o15_codtri,
                             lpad(o58_funcao,2,0) AS o58_funcao,
-                            p.c60_identificadorfinanceiro,o15_codstn,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) AS funsub,
+                            p.c60_identificadorfinanceiro,o15_codstnnovo,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) AS funsub,
                             fc_saldocontacorrente($iAno,c19_sequencial,102,$iMes,codigo),
                             c211_elemdespestrut,
                             e60_tipodespesa
@@ -1229,8 +1210,8 @@ class MSC {
                 WHERE (saldoinicial <> 0 OR debito <> 0 OR credito <> 0)";
 
     $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "cf", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "co", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    
     if ($rsResult) {
       return $this->getDadosIC(9, $aCampos, $rsResult);
     } else {
@@ -1258,7 +1239,7 @@ class MSC {
                            CASE
                                WHEN o15_codtri = '103'
                                     AND o58_funcao = '04' THEN 14300000
-                               ELSE o15_codstn
+                               ELSE o15_codstnnovo
                            END AS fr,
                            natdespesa AS nd,
                            NULL AS es,
@@ -1287,7 +1268,7 @@ class MSC {
                                    WHEN e60_tipodespesa = 2 THEN '1121'
                                    ELSE '' END
                                ELSE ''
-                           END AS cf,
+                           END AS co,
                            c61_reduz,
                            c61_codcon,
                            c61_codigo,
@@ -1316,7 +1297,7 @@ class MSC {
                                r.c61_instit,
                                e60_anousu,
                                p.c60_identificadorfinanceiro,
-                               o15_codstn,
+                               o15_codstnnovo,
                                lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) AS funsub,
                                fc_saldocontacorrente($iAno,c19_sequencial,106,$iMes,codigo),
                                a1.c211_elemdespestrut,
@@ -1345,8 +1326,9 @@ class MSC {
               WHERE (saldoinicial <> 0 OR debito <> 0 OR credito <> 0)";
 
     $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "cf", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "co", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+   
+   
     if ($rsResult) {
       return $this->getDadosIC(9, $aCampos, $rsResult);
     } else {

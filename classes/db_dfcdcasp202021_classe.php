@@ -1,7 +1,7 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE dfcdcasp202120
-class cl_dfcdcasp202120 {
+//CLASSE DA ENTIDADE dfcdcasp202021
+class cl_dfcdcasp202021 {
    // cria variaveis de erro
    var $rotulo     = null;
    var $query_sql  = null;
@@ -40,9 +40,9 @@ class cl_dfcdcasp202120 {
                  si220_vltotaldesembolsosativoperacionais = float8 = si220_vltotaldesembolsosativoperacionais
                  ";
    //funcao construtor da classe
-   function cl_dfcdcasp202120() {
+   function cl_dfcdcasp202021() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("dfcdcasp202120");
+     $this->rotulo = new rotulo("dfcdcasp202021");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
    //funcao erro
@@ -105,11 +105,11 @@ class cl_dfcdcasp202120 {
 
 
      if(empty($si220_sequencial)){
-       $result = db_query("select nextval('dfcdcasp202120_si220_sequencial_seq')");
+       $result = db_query("select nextval('dfcdcasp202021_si220_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("
 ","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: dfcdcasp202120_si220_sequencial_seq do campo: si220_sequencial";
+         $this->erro_sql   = "Verifique o cadastro da sequencia: dfcdcasp202021_si220_sequencial_seq do campo: si220_sequencial";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
          $this->erro_status = "0";
@@ -117,7 +117,7 @@ class cl_dfcdcasp202120 {
        }
        $this->si220_sequencial = pg_result($result,0,0);
      }else{
-       $result = db_query("select last_value from dfcdcasp202120_si220_sequencial_seq");
+       $result = db_query("select last_value from dfcdcasp202021_si220_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $si220_sequencial)){
          $this->erro_sql = " Campo si220_sequencial maior que último número da sequencia.";
          $this->erro_banco = "Sequencia menor que este número.";
@@ -131,7 +131,7 @@ class cl_dfcdcasp202120 {
      }
 
 
-     $sql = "insert into dfcdcasp202120(
+     $sql = "insert into dfcdcasp202021(
                                        si220_anousu
                                       ,si220_periodo
                                       ,si220_instit
@@ -160,12 +160,12 @@ class cl_dfcdcasp202120 {
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "dfcdcasp202120 ($this->si220_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "dfcdcasp202021 ($this->si220_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_banco = "dfcdcasp202120 já Cadastrado";
+         $this->erro_banco = "dfcdcasp202021 já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
        }else{
-         $this->erro_sql   = "dfcdcasp202120 ($this->si220_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "dfcdcasp202021 ($this->si220_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
        }
@@ -186,7 +186,7 @@ class cl_dfcdcasp202120 {
    // funcao para alteracao
    function alterar ($si220_sequencial=null) {
       $this->atualizacampos();
-     $sql = " update dfcdcasp202120 set ";
+     $sql = " update dfcdcasp202021 set ";
      $virgula = "";
      if(trim($this->si220_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si220_sequencial"])){
        $sql  .= $virgula." si220_sequencial = $this->si220_sequencial ";
@@ -288,7 +288,7 @@ class cl_dfcdcasp202120 {
      if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
-       $this->erro_sql   = "dfcdcasp202120 nao Alterado. Alteracao Abortada.\n";
+       $this->erro_sql   = "dfcdcasp202021 nao Alterado. Alteracao Abortada.\n";
          $this->erro_sql .= "Valores : ".$this->si220_sequencial;
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -298,7 +298,7 @@ class cl_dfcdcasp202120 {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "dfcdcasp202120 nao foi Alterado. Alteracao Executada.\n";
+         $this->erro_sql = "dfcdcasp202021 nao foi Alterado. Alteracao Executada.\n";
          $this->erro_sql .= "Valores : ".$this->si220_sequencial;
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -320,7 +320,7 @@ class cl_dfcdcasp202120 {
    // funcao para exclusao
    function excluir ($si220_sequencial=null,$dbwhere=null) {
 
-     $sql = " delete from dfcdcasp202120
+     $sql = " delete from dfcdcasp202021
                     where ";
      $sql2 = "";
      if($dbwhere==null || $dbwhere ==""){
@@ -337,7 +337,7 @@ class cl_dfcdcasp202120 {
      if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
-       $this->erro_sql   = "dfcdcasp202120 nao Excluído. Exclusão Abortada.\n";
+       $this->erro_sql   = "dfcdcasp202021 nao Excluído. Exclusão Abortada.\n";
        $this->erro_sql .= "Valores : ".$si220_sequencial;
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -347,7 +347,7 @@ class cl_dfcdcasp202120 {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "dfcdcasp202120 nao Encontrado. Exclusão não Efetuada.\n";
+         $this->erro_sql = "dfcdcasp202021 nao Encontrado. Exclusão não Efetuada.\n";
          $this->erro_sql .= "Valores : ".$si220_sequencial;
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -382,7 +382,7 @@ class cl_dfcdcasp202120 {
      $this->numrows = pg_numrows($result);
       if($this->numrows==0){
         $this->erro_banco = "";
-        $this->erro_sql   = "Record Vazio na Tabela:dfcdcasp202120";
+        $this->erro_sql   = "Record Vazio na Tabela:dfcdcasp202021";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
         $this->erro_status = "0";
@@ -403,11 +403,11 @@ class cl_dfcdcasp202120 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from dfcdcasp202120 ";
+     $sql .= " from dfcdcasp202021 ";
      $sql2 = "";
      if($dbwhere==""){
        if($si220_sequencial!=null ){
-         $sql2 .= " where dfcdcasp202120.si220_sequencial = $si220_sequencial ";
+         $sql2 .= " where dfcdcasp202021.si220_sequencial = $si220_sequencial ";
        }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
@@ -437,11 +437,11 @@ class cl_dfcdcasp202120 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from dfcdcasp202120 ";
+     $sql .= " from dfcdcasp202021 ";
      $sql2 = "";
      if($dbwhere==""){
        if($si220_sequencial!=null ){
-         $sql2 .= " where dfcdcasp202120.si220_sequencial = $si220_sequencial ";
+         $sql2 .= " where dfcdcasp202021.si220_sequencial = $si220_sequencial ";
        }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
