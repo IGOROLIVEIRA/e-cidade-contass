@@ -230,5 +230,19 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     }
 }
 $this->objpdf->Setfont('Arial', 'B', 8);
-$this->objpdf->Cell(162, 5, 'Total Geral', 1, 0, 'C');
-$this->objpdf->Cell(40, 5, db_formatar($totalgeral, 'f'), 1, 0, 'C');
+$this->objpdf->Cell(162, 5, 'Total Geral: ', 1, 0, 'R');
+$this->objpdf->Cell(40, 5, db_formatar($totalgeral, 'f'), 1, 0, 'R');
+
+$sqlparagpadrao  = "select db61_texto ";
+$sqlparagpadrao .= "  from db_documentopadrao ";
+$sqlparagpadrao .= "       inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc ";
+$sqlparagpadrao .= "       inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
+$sqlparagpadrao .= "       inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
+$sqlparagpadrao .= " where db60_tipodoc = 1502 order by db62_ordem";
+
+$resparagpadrao = @pg_query($sqlparagpadrao);
+if (@pg_numrows($resparagpadrao) > 0) {
+    db_fieldsmemory($resparagpadrao, 0);
+
+    eval($db61_texto);
+}
