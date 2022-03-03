@@ -760,6 +760,7 @@ class cl_afasta
     $sql .= "      inner join rhinstrucao  on  rhinstrucao.rh21_instru = rhpessoal.rh01_instru";
     $sql .= "      inner join rhnacionalidade  on  rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion";
     $sql .= "      left  join rhsindicato  on  rhsindicato.rh116_sequencial = rhpessoal.rh01_rhsindicato";
+    $sql .= "      left  join rhmotivoafasta  on  rhmotivoafasta.rh172_codigo = afasta.r45_codigoafasta";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($r45_codigo != null) {
