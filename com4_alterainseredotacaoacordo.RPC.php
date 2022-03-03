@@ -152,10 +152,8 @@ switch ($oParam->exec) {
 					$oDotacao->tipoSql = "insert";
 
 
-					if (!isset($aItensDotacao[$var++])) {
-						$aItensDotacao[$var++] = $oDotacao;
-						$oDotacao = new stdClass();
-						$oDotacao->aItens = array();
+					if (!isset($aItensDotacao[1])) {
+						$aItensDotacao[1] = $oDotacao;
 					}
 				}
 			}

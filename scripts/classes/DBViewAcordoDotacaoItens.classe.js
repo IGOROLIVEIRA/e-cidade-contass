@@ -113,7 +113,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
         let oRetorno = eval("(" + oAjax.responseText + ")");
         this.tipoSql = oRetorno.tipoSql;
          //alert(this.tipoSql);
-        //alert(JSON.stringify(oRetorno));
+        alert(JSON.stringify(oRetorno.tipoSql));
 
         if (oRetorno.status == 2) {
             alert(oRetorno.message.urlDecode());
