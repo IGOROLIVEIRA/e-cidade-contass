@@ -89,6 +89,7 @@ class DadosESocial
             case Tipo::PORTUARIO:
             case Tipo::CADASTRAMENTO_INICIAL:
             case Tipo::ESTABELECIMENTOS:
+            case Tipo::ALTERACAODEDADOS:
             case Tipo::ALTERACAO_CONTRATO:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId);
             default:
@@ -143,6 +144,7 @@ class DadosESocial
             case Tipo::PORTUARIO:
             case Tipo::CADASTRAMENTO_INICIAL:
             case Tipo::ESTABELECIMENTOS:
+            case Tipo::ALTERACAODEDADOS:
             case Tipo::ALTERACAO_CONTRATO:
                 return $preenchimento->pk;
             default:
