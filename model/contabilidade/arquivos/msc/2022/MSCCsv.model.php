@@ -49,7 +49,7 @@ class MSCCsv extends MSC {
 
     $aCabecalhoCSV['ContaContabil'] = 'ContaContabil';
 
-    for ($ic = 1; $ic <= 7; $ic++) {
+    for ($ic = 1; $ic <= 6; $ic++) {
       $IC     = 'IC'.$ic;
       $TipoIC = "TipoIC".$ic;
       $aCabecalhoCSV[$IC]     = $IC;
@@ -78,7 +78,7 @@ class MSCCsv extends MSC {
     $aMscCsv[0] = $this->getConta();
 
     $iIC = 1;
-    for ($ic = 1; $ic <= 14; $ic+=2) {
+    for ($ic = 1; $ic <= 12; $ic+=2) {
       $IC        = "iIC".$iIC;
       $getIC     = "getIC".$iIC;
       $getTipoIC = "getTipoIC".$iIC;
@@ -106,7 +106,7 @@ class MSCCsv extends MSC {
 
     $this->setConta($oRegistro->conta);
 
-    for ($ic = 1; $ic <= 7; $ic++) {
+    for ($ic = 1; $ic <= 6; $ic++) {
       $IC     = "IC".$ic;
       $TipoIC = "TipoIC".$ic;
       $setIC  = "setIC".$ic;
@@ -128,7 +128,7 @@ class MSCCsv extends MSC {
 
     $this->iConta = "";
 
-    for ($ic = 1; $ic <= 7; $ic++) {
+    for ($ic = 1; $ic <= 6; $ic++) {
       $IC     = "iIC".$ic;
       $TipoIC = "sTipoIC".$ic;
       $this->{$IC} = "";

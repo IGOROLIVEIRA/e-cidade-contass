@@ -240,9 +240,9 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                                       AND si124_tipolancamento    = '" . $cExt10->si124_tipolancamento . "'
                                       AND si124_subtipo           = '" . $cExt10->si124_subtipo . "'
                                       AND si124_desdobrasubtipo   = '" . $cExt10->si124_desdobrasubtipo . "' ";
-
+        
                 $rsResulVerifica = db_query($sSqlVerifica) or die($sSqlVerifica);
-                // echo $rsResulVerifica;db_criatabela($rsResulVerifica);exit;
+                //  echo $rsResulVerifica;db_criatabela($rsResulVerifica);exit;
 
                 if (pg_num_rows($rsResulVerifica) == 0) {
 
