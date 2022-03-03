@@ -52,11 +52,11 @@ class Addtablerhmotivoafasta extends AbstractMigration
             INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','pes1_rhmotivoafasta003.php',1,1,'Exclusão','t');
             INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Cadastro de Motivos de Afastamentos eSocial%'),(select max(id_item) from db_itensmenu),3,952);
             
-            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'1', 'Acidente/doença do trabalho');
-            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'3', 'Acidente/doença não relacionada ao trabalho');
-            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'5', 'Afastamento/licença de servidor público prevista em estatuto, sem remuneração');
-            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'6', 'Aposentadoria por invalidez');
-            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'7', 'Acompanhamento-Licença para acompanhamento de membro da família enfermo');
+            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'01', 'Acidente/doença do trabalho');
+            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'03', 'Acidente/doença não relacionada ao trabalho');
+            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'05', 'Afastamento/licença de servidor público prevista em estatuto, sem remuneração');
+            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'06', 'Aposentadoria por invalidez');
+            insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'07', 'Acompanhamento-Licença para acompanhamento de membro da família enfermo');
             insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'10', 'Afastamento/licença de servidor público prevista em estatuto, com remuneração');
             insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'11', 'Cárcere');
             insert into rhmotivoafasta values(nextval('rhmotivoafasta_rh172_sequencial_seq'),'13', 'Cargo eletivo-Candidato a cargo eletivo');
