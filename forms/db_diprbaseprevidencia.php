@@ -46,7 +46,7 @@ $cldipr->rotulo->label();
 
                 <tr>
                     <td>
-                        <b><? db_ancora("Código DIRP", "js_pesquisac237_codigodipr(true);", $db_opcao); ?></b>
+                        <b><? db_ancora("Código DIPR", "js_pesquisac237_codigodipr(true);", $db_opcao); ?></b>
                     </td>
                     <td nowrap>
                         <?
