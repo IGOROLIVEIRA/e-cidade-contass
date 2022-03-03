@@ -823,8 +823,8 @@ switch ($oParam->exec) {
         break;
 
     case 'insereItens':
-        // ini_set('display_errors', 'On');
-        // error_reporting(E_ALL);
+        //ini_set('display_errors', 'On');
+        //error_reporting(E_ALL);
 
         $aItens = $oParam->aItens;
 
@@ -1229,7 +1229,7 @@ switch ($oParam->exec) {
                                     }
 
                                     /**
-                                     * Insere o item reservado na tabela pcprocitem
+                                     *  Insere o item reservado na tabela pcprocitem
                                      */
 
                                     $oDaopcprocitem = db_utils::getDao('pcprocitem');

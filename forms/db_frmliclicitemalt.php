@@ -108,10 +108,9 @@ $clrotulo->label("nome");
         var codTipoLicitacao = document.form1.codTipoLicitacao.value;
         if (codTipoLicitacao != 8 && codTipoLicitacao != 9 && codTipoLicitacao != 10) {
             if (criterioadj_item == criterioadj_contrato) {
-
                 itens.document.form1.incluir.value = 'incluir';
-                itens.document.form1.submit();
-                procs.document.form1.submit();
+                //itens.document.form1.submit();
+                //procs.document.form1.submit();
             } else {
                 alert("Critério de Adjudicação não corresponde com o processo de compra")
                 return false;
@@ -124,9 +123,11 @@ $clrotulo->label("nome");
             procs.document.form1.submit();
         }
 
+        console.log('04');
         itens.js_submit_form();
         itens.document.form1.incluir.value = 'incluir';
         itens.js_insereItens();
+
 
         return;
 
