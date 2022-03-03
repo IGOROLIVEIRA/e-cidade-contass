@@ -67,7 +67,17 @@ $clorctiporec->rotulo->label();
 								?>
 	            </td>
 	          </tr>
-	          <tr>
+            <tr>
+              <td nowrap title="<?=@$To15_codstnnovo?>">
+                <?=@$Lo15_codstnnovo?>
+              </td>
+              <td>
+                <?
+                  db_input('o15_codstnnovo', 51, $Io15_codstnnovo, true, 'text', $db_opcao, "","","","",4);
+                ?>
+              </td>
+            </tr>
+            <tr>
               <td nowrap title="<?=@$To15_codstn?>">
                 <?=@$Lo15_codstn?>
               </td>
@@ -205,6 +215,7 @@ function js_retornoDadosRecurso(oAjax) {
   } else {
 
     $('o15_codigo').value     = oRetorno.codigorecurso;
+    $('o15_codstnnovo').value = oRetorno.codstnnovo;
     $('o15_codstn').value     = oRetorno.codstn;
     $('o15_descr').value      = oRetorno.descricaorecurso.urlDecode();
     $('o15_codtri').value     = oRetorno.codigotribunalrecurso;
@@ -301,12 +312,19 @@ function js_salvar() {
     alert("Informe a finalidade do recurso!");
     return false;
   }
-
+  var sCodStnnovo = $('o15_codstnnovo').value;
   var sCodStn = $('o15_codstn').value;
-  if (sCodStn == '') {
-
+   
+  if (sCodStnnovo == '') {
     alert("Informe o Código STN!");
     return false;
+  }
+  
+  if(sCodStnnovo){
+    if (sCodStnnovo.length < 4) {
+      alert("Código STN Deve Possuir 4 Digitos!");
+      return false;
+    }
   }
 
   js_divCarregando('Aguarde salvando recurso...', 'msgBoxSalvarRecurso');
@@ -318,7 +336,8 @@ function js_salvar() {
   oParam.tipo                  = encodeURIComponent(tagString($('iTipo').value));
   oParam.codigotribunalrecurso = encodeURIComponent(tagString(iCodigoTribunal));
   oParam.tiporecurso           = $('o15_tipo').value;
-  oParam.codstn                = sCodStn;
+  oParam.codstnnovo            = sCodStnnovo;
+  oParam.codstn                = sCodStn; 
   oParam.datalimiterecurso     = $('o15_datalimite').value;
   oParam.finalidaderecurso     = encodeURIComponent(tagString(sFinalidadeRecurso));
   oParam.modo                  = $F('db_opcao') == "Incluir"?1:2;
@@ -410,6 +429,7 @@ function js_retornoRemover(oAjax) {
 
   $('o15_codigo').value     = '';
   $('o15_codstn').value     = '';
+  $('o15_codstnnovo').value = '';
   $('o15_descr').value      = '';
   $('o15_finali').value     = '';
   $('sMascara').value       = '';

@@ -2,7 +2,7 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once('model/contabilidade/relatorios/dcasp/BalancoFinanceiroDCASP2022.model.php');
+require_once('model/contabilidade/relatorios/dcasp/BalancoFinanceiroDCASP2015.model.php');
 require_once('libs/db_stdlib.php');
 require_once('libs/db_conecta.php');
 require_once('libs/db_sessoes.php');
@@ -16,7 +16,7 @@ require_once('libs/db_liborcamento.php');
 require_once('fpdf151/PDFDocument.php');
 
 require_once("classes/db_bfdcasp102022_classe.php");
-require_once("classes/db_bfdcasp202221_classe.php");
+require_once("classes/db_bfdcasp202022_classe.php");
 
 require_once("model/contabilidade/arquivos/sicom/2022/dcasp/geradores/GerarBF.model.php");
 
@@ -100,7 +100,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
     $clbfdcasp10 = new cl_bfdcasp102022();
-    $clbfdcasp20 = new cl_bfdcasp202221();
+    $clbfdcasp20 = new cl_bfdcasp202022();
 
 
     /**
@@ -141,7 +141,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
      * ser alterados aqui também.
      */
 
-    $oBalancoFinanceiro = new BalancoFinanceiroDCASP2022($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
+    $oBalancoFinanceiro = new BalancoFinanceiroDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oBalancoFinanceiro->setInstituicoes($sListaInstituicoes);
     $oBalancoFinanceiro->setExibirExercicioAnterior(true);
     $oBalancoFinanceiro->setTipo($sTipoImpressao);
@@ -196,7 +196,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbfdcasp20  = new cl_bfdcasp202221();
+      $clbfdcasp20  = new cl_bfdcasp202022();
 
       $clbfdcasp20->si207_ano                               = $iAnoUsu;
       $clbfdcasp20->si207_periodo                           = $iCodigoPeriodo;

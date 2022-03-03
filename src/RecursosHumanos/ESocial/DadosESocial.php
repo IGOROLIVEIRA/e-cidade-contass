@@ -45,17 +45,16 @@ class DadosESocial
     public function getPorTipo($tipo)
     {
         $this->tipo = $tipo;
+
         $preenchimentos = $this->buscaPreenchimentos();
 
         $this->buscaRespostas($preenchimentos);
-
         /**
          * @todo Quando for o empregador, temos que buscar os dados da escala do servidor do e-cidade.
          *       Não é possível representar a escala do servidor no formulário.
          *       Talvez outras informações de outros cadastros também serão buscadas do e-cidade
          */
         if ($tipo == Tipo::EMPREGADOR) {
-
         }
 
         return  $this->dados;
@@ -90,6 +89,7 @@ class DadosESocial
             case Tipo::PORTUARIO:
             case Tipo::CADASTRAMENTO_INICIAL:
             case Tipo::ESTABELECIMENTOS:
+            case Tipo::ALTERACAO_CONTRATO:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId);
             default:
                 throw new Exception('Tipo não encontrado.');
@@ -143,6 +143,7 @@ class DadosESocial
             case Tipo::PORTUARIO:
             case Tipo::CADASTRAMENTO_INICIAL:
             case Tipo::ESTABELECIMENTOS:
+            case Tipo::ALTERACAO_CONTRATO:
                 return $preenchimento->pk;
             default:
                 throw new Exception('Tipo não encontrado.');

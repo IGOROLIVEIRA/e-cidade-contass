@@ -385,6 +385,11 @@ switch($oParam->exec) {
         $sArquivo = 'SicomArquivoAnulacaoExtraOrcamentariaPorFonte';
     }
 
+        // Condição da OC16846
+        if (db_getsession("DB_anousu") > 2016 && $sArquivo == "SicomArquivoAnulacaoExtraOrcamentaria")
+            $sArquivo = 'SicomArquivoAnulacaoExtraOrcamentariaPorFonte';
+        // Final da Condição da OC16846
+
     if (file_exists("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
 
      require_once("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
@@ -809,14 +814,14 @@ case "processarBalancete" :
         $iAnoReferencia = db_getsession('DB_anousu');
         $sSql  = "SELECT si09_codorgaotce AS codorgao, z01_cgccpf AS cnpj
             FROM db_config
-            LEFT JOIN infocomplementaresinstit ON si09_instit = codigo 
+            LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
             INNER JOIN cgm ON z01_numcgm = db_config.numcgm
             WHERE codigo = ".db_getsession("DB_instit");
         $rsOrgao = db_query($sSql);
         $sOrgao = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
         $sCnpj = db_utils::fieldsMemory($rsOrgao, 0)->cnpj;
         echo pg_last_error();
-        
+
         /*
          * array para adicionar os arquivos de inslusao de programas
          */
@@ -830,13 +835,13 @@ case "processarBalancete" :
          * instanciar cada arqivo selecionado e gerar o CSV correspondente
         */
         $aArrayArquivos = array();
-        
+
         $caminho = "extratobancariosicom/{$sCnpj}/{$iAnoReferencia}";
         $diretorio = dir($caminho);
-        
+
         try {
-            
-            if (!is_dir($caminho)) 
+
+            if (!is_dir($caminho))
                 throw new Exception("Não existe extrato bancário para geração");
 
             while($arquivo = $diretorio->read()) {
@@ -848,14 +853,14 @@ case "processarBalancete" :
                     $oArquivoZip->nome    = $arquivo;
                     $oArquivoZip->caminho = $arquivo;
                     $aArrayArquivos[] = $oArquivoZip;
-                }     
+                }
             }
         } catch (Exception $eErro) {
             $oRetorno->status  = 2;
             $sGetMessage       = "Arquivo: retornou com erro: \\n \\n {$eErro->getMessage()}";
             $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
         }
-        
+
         $aListaArquivos = " ";
         foreach ($aArrayArquivos as $oArquivo){
             $aListaArquivos .= " ".$oArquivo->caminho;
@@ -874,10 +879,10 @@ case "processarBalancete" :
         $oArquivoZip->nome    = "EXTRATOS_{$sInst}_{$sOrgao}_12_{$iAnoReferencia}.zip";
         $oArquivoZip->caminho = "EXTRATOS_{$sInst}_{$sOrgao}_12_{$iAnoReferencia}.zip";
         $aArrayArquivos[] = $oArquivoZip;
-        
+
         $oRetorno->itens  = $aArrayArquivos;
         $oRetorno->message = $aListaArquivos;
-        
+
         break;
 
     case "processarFlpgo" :
@@ -1281,6 +1286,31 @@ function getCalculoEncerramento(){
   // print_r($sSqlEncerramento);
   $rsSqlEncerramento = db_query($sSqlEncerramento) or die(pg_last_error());
   $aEncerramentos = db_utils::getColectionByRecord($rsSqlEncerramento);
+
+  $nTotalDevedorAtivo = 0;
+  $nTotalCredorAtivo = 0;
+  $nTotalDevedorPassivo= 0;
+  $nTotalDebitosVP = 0;
+  $nTotalCredorPassivo = 0;
+  $nTotalCreditosVP = 0;
+  $nTotalDebitosResultado = 0;
+  $nTotalCreditosResultado = 0;
+  $nTotalDebitosVP2 = 0;
+  $nTotalCreditosVP2 = 0 ;
+  $nTotalDebitosResultado2 = 0;
+  $nTotalDebitosVP3 = 0;
+  $nTotalDebitosResultado3 = 0;
+  $nTotalCreditosResultado3  = 0;
+  $nTotalDebitosVP4= 0;
+  $nTotalCreditosResultado2 = 0;
+  $nTotalCreditosVP3 = 0;
+  $nTotalCreditosVP4 = 0;
+  $nTotalCreditosResultado5 = 0;
+  $nTotalDebitosResultado4 = 0;
+  $nTotalCreditosResultado4 = 0;
+  $nTotalDebitosVP5 = 0;
+  $nTotalCreditosVP5 = 0;
+  $nTotalDebitosResultado5 = 0;
 
   foreach ($aEncerramentos as $objEncerramento) {
     /**

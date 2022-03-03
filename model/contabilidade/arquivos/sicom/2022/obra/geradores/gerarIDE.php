@@ -25,8 +25,7 @@ class GerarIDE extends GerarAM
 
     $sSql = "select * from ide2022 where si11_mes = {$this->iMes} and si11_instit = " . db_getsession("DB_instit");
     $rsIDE = db_query($sSql);
-    db_criatabela($rsIDE);
-    die();
+
     if (pg_num_rows($rsIDE) == 0) {
 
       $aCSV['tiporegistro'] = '99';
