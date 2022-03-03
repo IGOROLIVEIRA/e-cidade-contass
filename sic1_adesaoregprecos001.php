@@ -314,7 +314,7 @@ if ($sqlerro) {
 }*/
 if (isset($alterar)) {
   if ($cladesaoregprecos->erro_status == "0") {
-    //$cladesaoregprecos->erro(true, false);
+    // $cladesaoregprecos->erro(true, false);
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if ($cladesaoregprecos->erro_campo != "") {

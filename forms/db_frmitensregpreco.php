@@ -355,7 +355,7 @@ $clrotulo->label("pc01_descrmater");
   }
 
 
-  // --------------------
+  // ------------------
 
 
   function aItens() {

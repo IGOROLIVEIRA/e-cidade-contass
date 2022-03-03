@@ -247,7 +247,7 @@ if (!$sqlerro) {
       db_fim_transacao();
     }
   } else if (isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])) {
-    //$db_opcao = 3;
+    // $db_opcao = 3;
     if (!isset($chavepesquisa)) {
       $chavepesquisa = $_SESSION["codigoAdesao"];
     }
