@@ -26,7 +26,6 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
    */
   public function __construct()
   {
-
   }
 
   /**
@@ -34,7 +33,8 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
    *
    * @return Integer
    */
-  public function getCodigoLayout(){
+  public function getCodigoLayout()
+  {
     return $this->iCodigoLayout;
   }
 
@@ -57,7 +57,7 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
 
   public function gerarDados()
   {
-        /**
+    /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
     $clpessoasobra102022 = new cl_pessoasobra102022();
@@ -91,13 +91,13 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
             INNER JOIN cgm ON z01_numcgm = obr05_responsavel
             INNER JOIN licobras ON obr05_seqobra = obr01_sequencial
             WHERE DATE_PART('YEAR',licobrasresponsaveis.obr05_dtcadastrores)= " . db_getsession("DB_anousu") . "
-            AND DATE_PART('MONTH',licobrasresponsaveis.obr05_dtcadastrores)=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
+            AND DATE_PART('MONTH',licobrasresponsaveis.obr05_dtcadastrores)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
             AND z01_cgccpf NOT IN
             (SELECT si194_nrodocumento
-                 FROM pessoasobra102022
+                 FROM pessoasobra102021
             INNER JOIN cgm ON si194_nrodocumento = z01_cgccpf)
     ";
-    $rsResult10 = db_query($sql);//db_criatabela($rsResult10);die($sql);
+    $rsResult10 = db_query($sql); //db_criatabela($rsResult10);die($sql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       $clpessoasobra102022 = new cl_pessoasobra102022();
@@ -120,6 +120,5 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
     $oGerarPESSOAOBRA = new gerarPESSOAOBRA();
     $oGerarPESSOAOBRA->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarPESSOAOBRA->gerarDados();
-
   }
 }
