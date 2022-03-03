@@ -102,7 +102,9 @@ db_postmemory($HTTP_POST_VARS);
         </tr>
 
         <tr>
-          <td align="left" nowrap title="<?= $Te60_numcgm ?>"><? db_ancora(@$Le60_numcgm, "js_pesquisae60_numcgm(true);", 1); ?></td>
+          <td align="left" nowrap title="<?= $Te60_numcgm ?>">
+            <? db_ancora('<b>Fornecedor:</b>', "js_pesquisae60_numcgm(true);", 1); ?>
+          </td>
           <td align="left" nowrap>
             <? db_input("m51_numcgm", 6, $Ie60_numcgm, true, "text", 4, "onchange='js_pesquisae60_numcgm(false);'");
             db_input("z01_nome", 40, "$Iz01_nome", true, "text", 3);
@@ -170,8 +172,6 @@ db_postmemory($HTTP_POST_VARS);
     }
 
     function js_mostracgm1(chave1, chave2) {
-      console.log(chave1);
-      console.log(chave2);
       document.form1.m51_numcgm.value = chave1;
       document.form1.z01_nome.value = chave2;
       //document.form1.m51_codordem.value = chave3;
