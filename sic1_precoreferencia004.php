@@ -543,6 +543,33 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
             $codigoItem = db_utils::fieldsMemory($rsResult, 0)->si02_coditem;
             //$itemnumero = db_utils::fieldsMemory($rsResult, 0)->si02_itemproccompra;
 
+            $sqlV = "select pc11_numero,
+                            pc11_reservado,
+                            pc11_quant,
+                            pc16_codmater
+                    from
+                        pcproc
+                    join pcprocitem on
+                        pc80_codproc = pc81_codproc
+                    join solicitem on
+                        pc81_solicitem = pc11_codigo
+                    join solicitempcmater on
+                        pc11_codigo = pc16_solicitem
+                    join pcmater on
+                        pc16_codmater = pc01_codmater
+                    where
+                        pc80_codproc = {$codigo_preco}
+                        and pc11_reservado = true;";
+            
+            $rsResultV = db_query($sqlV) or die(pg_last_error());
+            $arrayValores = array();
+
+            for($j=0;$j<pg_num_rows($rsResultV);$j++){
+                $valores = db_utils::fieldsMemory($rsResultV, $j);
+                $arrayValores[$j][0]=$valores->pc16_codmater;
+                $arrayValores[$j][1]=$valores->pc11_quant;
+            }
+            $quantLinhas = count($arrayValores);
                 
             if($codigoItem==""){
                 
@@ -662,7 +689,7 @@ HTML;
             ?>
         <?php 
     
-
+            $sqencia = 0;
             for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
                 $oResult = db_utils::fieldsMemory($rsResult, $iCont); 
@@ -675,7 +702,8 @@ HTML;
                 $oResult1 = db_utils::fieldsMemory($rsResult1,0);
 
                 $sSql2 = "select
-                            pc01_descrmater
+                            case when pc01_descrmater=pc01_complmater or pc01_complmater is null then pc01_descrmater
+else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                         from
                             pcmater
                         where
@@ -694,35 +722,70 @@ HTML;
 
                 $nTotalItens += $lTotal;
                 $oDadosDaLinha = new stdClass();
-                $oDadosDaLinha->seq = $iCont + 1; //$oResult->pc11_seq; 
-                $oDadosDaLinha->item = $oResult->si02_coditem;
-                if ($oResult->si02_reservado == 't') {
-                    $oDadosDaLinha->descricao = '<span style="font-weight: bold;">[ME/EPP]</span> - '.$oResult2->pc01_descrmater ;
-                } else {
-                    $oDadosDaLinha->descricao = $oResult2->pc01_descrmater;
-                }
-                if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
-                    $oDadosDaLinha->valorUnitario = "-";
-                    $oDadosDaLinha->quantidade = "-";
-                    
-                    if ($oResult->si02_mediapercentual == 0) {
-                        $oDadosDaLinha->mediapercentual = ""; 
-                    } else {
-                        $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                 //$oResult->pc11_seq;
+                $op = 1;
+                
+                    for($i=0;$i<$quantLinhas;$i++){
+                        
+                        if($arrayValores[$i][0]==$oResult->si02_coditem){
+                          $valorqtd = $arrayValores[$i][1];
+                          $op=2;  
+                        }
                     }
-                    $oDadosDaLinha->unidadeDeMedida = "-";
-                    $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
-                } else {
-                    $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
-                    $oDadosDaLinha->quantidade = $oResult->si02_qtditem;
-                    if ($oResult->si02_mediapercentual == 0) {
-                        $oDadosDaLinha->mediapercentual = "-";
+                   if($op==1){
+                       $fazerloop = 1;
+                   }else{
+                       $fazerloop = 2;
+                   }
+                   $controle = 0;
+                   while($controle!=$fazerloop){ 
+                    $oDadosDaLinha->seq = $sqencia + 1;
+                    $oDadosDaLinha->item = $oResult->si02_coditem;
+                    if ($controle == 1) {
+                        $oDadosDaLinha->descricao = '<span style="font-weight: bold;">[ME/EPP]</span> - '.$oResult2->pc01_descrmater ;
                     } else {
-                        $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                        $oDadosDaLinha->descricao = $oResult2->pc01_descrmater;
                     }
-                    $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
-                    $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
-                }
+                    if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
+                        $oDadosDaLinha->valorUnitario = "-";
+                        $oDadosDaLinha->quantidade = "-";
+                        
+                        if ($oResult->si02_mediapercentual == 0) {
+                            $oDadosDaLinha->mediapercentual = ""; 
+                        } else {
+                            $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                        }
+                        $oDadosDaLinha->unidadeDeMedida = "-";
+                        if($controle==1){
+                            $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
+                        }
+                        $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+                    } else {
+                        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                        if($controle == 0 && $fazerloop==2){
+                            $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
+                        }else if($controle == 1 && $fazerloop==2){
+                            $oDadosDaLinha->quantidade = $valorqtd;
+                        }else{
+                            $oDadosDaLinha->quantidade = $oResult->si02_qtditem;
+                        }
+                        
+                        if ($oResult->si02_mediapercentual == 0) {
+                            $oDadosDaLinha->mediapercentual = "-";
+                        } else {
+                            $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                        }
+                        $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
+                        if($controle==0 && $fazerloop==2){
+                            $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
+                        }else if($controle==1 && $fazerloop==2){
+                            $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $valorqtd;
+                        }
+                        $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+                    }
+                
+                    $controle++;
+                    $sqencia++;
 
                 if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
                     echo <<<HTML
@@ -766,6 +829,7 @@ HTML;
 HTML;
                 }
             }
+        }
         }
         ?>
 

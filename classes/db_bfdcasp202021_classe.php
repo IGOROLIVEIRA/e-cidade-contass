@@ -1,7 +1,7 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE bfdcasp202120
-class cl_bfdcasp202120 {
+//CLASSE DA ENTIDADE bfdcasp202021
+class cl_bfdcasp202021 {
    // cria variaveis de erro
    var $rotulo     = null;
    var $query_sql  = null;
@@ -62,9 +62,9 @@ class cl_bfdcasp202120 {
                  si207_vltotaldispendios = float8 = si207_vltotaldispendios
                  ";
    //funcao construtor da classe
-   function cl_bfdcasp202120() {
+   function cl_bfdcasp202021() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("bfdcasp202120");
+     $this->rotulo = new rotulo("bfdcasp202021");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
    //funcao erro
@@ -161,11 +161,11 @@ class cl_bfdcasp202120 {
 
 
      if($si207_sequencial == "" || $si207_sequencial == null ){
-       $result = db_query("select nextval('bfdcasp202120_si207_sequencial_seq')");
+       $result = db_query("select nextval('bfdcasp202021_si207_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("
 ","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: bfdcasp202120_si207_sequencial_seq do campo: si207_sequencial";
+         $this->erro_sql   = "Verifique o cadastro da sequencia: bfdcasp202021_si207_sequencial_seq do campo: si207_sequencial";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
          $this->erro_status = "0";
@@ -173,7 +173,7 @@ class cl_bfdcasp202120 {
        }
        $this->si207_sequencial = pg_result($result,0,0);
      }else{
-       $result = db_query("select last_value from bfdcasp202120_si207_sequencial_seq");
+       $result = db_query("select last_value from bfdcasp202021_si207_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $si207_sequencial)){
          $this->erro_sql = " Campo si207_sequencial maior que último número da sequencia.";
          $this->erro_banco = "Sequencia menor que este número.";
@@ -195,7 +195,7 @@ class cl_bfdcasp202120 {
        return false;
      }
 
-     $sql = "insert into bfdcasp202120(
+     $sql = "insert into bfdcasp202021(
                                        si207_sequencial
                                       ,si207_tiporegistro
                                       ,si207_vldesporcamenrecurordinarios
@@ -246,12 +246,12 @@ class cl_bfdcasp202120 {
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "bfdcasp202120 ($this->si207_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "bfdcasp202021 ($this->si207_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_banco = "bfdcasp202120 já Cadastrado";
+         $this->erro_banco = "bfdcasp202021 já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
        }else{
-         $this->erro_sql   = "bfdcasp202120 ($this->si207_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "bfdcasp202021 ($this->si207_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
        }
@@ -272,7 +272,7 @@ class cl_bfdcasp202120 {
    // funcao para alteracao
    function alterar ($si207_sequencial=null) {
       $this->atualizacampos();
-     $sql = " update bfdcasp202120 set ";
+     $sql = " update bfdcasp202021 set ";
      $virgula = "";
      if(trim($this->si207_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si207_sequencial"])){
        $sql  .= $virgula." si207_sequencial = $this->si207_sequencial ";
@@ -558,7 +558,7 @@ class cl_bfdcasp202120 {
      if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
-       $this->erro_sql   = "bfdcasp202120 nao Alterado. Alteracao Abortada.\n";
+       $this->erro_sql   = "bfdcasp202021 nao Alterado. Alteracao Abortada.\n";
          $this->erro_sql .= "Valores : ".$this->si207_sequencial;
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -568,7 +568,7 @@ class cl_bfdcasp202120 {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "bfdcasp202120 nao foi Alterado. Alteracao Executada.\n";
+         $this->erro_sql = "bfdcasp202021 nao foi Alterado. Alteracao Executada.\n";
          $this->erro_sql .= "Valores : ".$this->si207_sequencial;
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -590,7 +590,7 @@ class cl_bfdcasp202120 {
    // funcao para exclusao
    function excluir ($si207_sequencial=null,$dbwhere=null) {
 
-     $sql = " delete from bfdcasp202120
+     $sql = " delete from bfdcasp202021
                     where ";
      $sql2 = "";
      if($dbwhere==null || $dbwhere ==""){
@@ -607,7 +607,7 @@ class cl_bfdcasp202120 {
      if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
-       $this->erro_sql   = "bfdcasp202120 nao Excluído. Exclusão Abortada.\n";
+       $this->erro_sql   = "bfdcasp202021 nao Excluído. Exclusão Abortada.\n";
        $this->erro_sql .= "Valores : ".$si207_sequencial;
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -617,7 +617,7 @@ class cl_bfdcasp202120 {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "bfdcasp202120 nao Encontrado. Exclusão não Efetuada.\n";
+         $this->erro_sql = "bfdcasp202021 nao Encontrado. Exclusão não Efetuada.\n";
          $this->erro_sql .= "Valores : ".$si207_sequencial;
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -652,7 +652,7 @@ class cl_bfdcasp202120 {
      $this->numrows = pg_numrows($result);
       if($this->numrows==0){
         $this->erro_banco = "";
-        $this->erro_sql   = "Record Vazio na Tabela:bfdcasp202120";
+        $this->erro_sql   = "Record Vazio na Tabela:bfdcasp202021";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
         $this->erro_status = "0";
@@ -673,11 +673,11 @@ class cl_bfdcasp202120 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from bfdcasp202120 ";
+     $sql .= " from bfdcasp202021 ";
      $sql2 = "";
      if($dbwhere==""){
        if($si207_sequencial!=null ){
-         $sql2 .= " where bfdcasp202120.si207_sequencial = $si207_sequencial ";
+         $sql2 .= " where bfdcasp202021.si207_sequencial = $si207_sequencial ";
        }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
@@ -707,11 +707,11 @@ class cl_bfdcasp202120 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from bfdcasp202120 ";
+     $sql .= " from bfdcasp202021 ";
      $sql2 = "";
      if($dbwhere==""){
        if($si207_sequencial!=null ){
-         $sql2 .= " where bfdcasp202120.si207_sequencial = $si207_sequencial ";
+         $sql2 .= " where bfdcasp202021.si207_sequencial = $si207_sequencial ";
        }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
