@@ -200,7 +200,7 @@ if (isset($alterar)) {
                     m61_codmatunid,
                     pc80_criterioadjudicacao order by pc11_seq asc
                    ";
-        
+       
         $rsResultee = db_query($sSql);  
        
 

@@ -157,7 +157,7 @@ class EventoS2200 extends EventoBase
 
             $oDadosAPI->evtAdmissao->endereco->brasil    = empty($oDados->brasil) ? null : $oDados->brasil;
 
-            $oDadosAPI->evtAdmissao->endereco->exterior  = empty($oDados->exterior) ? null : $oDados->exterior;
+            //$oDadosAPI->evtAdmissao->endereco->exterior  = empty($oDados->exterior) ? null : $oDados->exterior;
 
             if (!empty($oDados->trabEstrangeiro)) {
                 $oDadosAPI->evtAdmissao->trabEstrangeiro = $oDados->trabEstrangeiro;

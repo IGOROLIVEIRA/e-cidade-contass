@@ -28,6 +28,7 @@ class Tipo
     const CADASTRAMENTO_INICIAL = 37;
     const ESTABELECIMENTOS = 26;
     const ALTERACAODEDADOS = 38;
+    const ALTERACAO_CONTRATO = 39;
 
 
     /**
@@ -110,7 +111,7 @@ class Tipo
             24 => 'S2190',
             25 => 'S2299',
             26 => 'S1005',
-            27 => 'S2206',
+            27 => 'S2306',
             28 => 'S2210',
             29 => 'S2220',
             30 => 'S2221',
@@ -122,7 +123,7 @@ class Tipo
             36 => 'S2298',
             37 => 'S2200',
             38 => 'S2205',
-            39 => 'S2306',
+            39 => 'S2206',
             40 => 'S2399',
             41 => 'S2400',
             42 => 'S3000',

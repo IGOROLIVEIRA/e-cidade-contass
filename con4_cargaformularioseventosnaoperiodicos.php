@@ -44,6 +44,10 @@ require_once("dbforms/db_funcoes.php");
                     </td>
                     <td>
                         <label>Alteração de Dados Cadastrais do Trabalhador s2205</label>
+                        <input type="checkbox" value="4000104">
+                    </td>
+                    <td>
+                        <label>Alteração de Contrato de Trabalho/Relação Estatutária s2206</label>
                     </td>
                 </tr>
             </table>
