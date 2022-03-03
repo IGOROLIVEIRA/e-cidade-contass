@@ -138,6 +138,11 @@ $clrotulo->label("ac10_obs");
 
   var sUrl = 'con4_contratosmovimento.RPC.php';
   numeroAcordo = '';
+
+  /**
+   * Pesquisa acordos ao clicar no botao Finalizar na tela de assinatura de acordo
+   */
+  js_pesquisaac16_sequencial(false);
   /**
    * Pesquisa acordos
    */

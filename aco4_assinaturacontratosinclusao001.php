@@ -397,12 +397,12 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     var oRetorno = eval("(" + oAjax.responseText + ")");
 
-    $('ac16_sequencial').value = "";
-    $('ac16_resumoobjeto').value = "";
-    $('ac10_datamovimento').value = "";
-    $('ac16_datapublicacao').value = "";
-    $('ac16_veiculodivulgacao').value = "";
-    $('ac10_obs').value = "";
+    /*    $('ac16_sequencial').value = "";
+        $('ac16_resumoobjeto').value = "";
+        $('ac10_datamovimento').value = "";
+        $('ac16_datapublicacao').value = "";
+        $('ac16_veiculodivulgacao').value = "";
+        $('ac10_obs').value = "";*/
 
     if (oRetorno.status == 2) {
 
@@ -416,7 +416,8 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   }
 
   function js_finalizaracordo() {
-    document.location.href = 'aco4_homologacaoinclusao001.php';
+    let iAcordo = $('ac16_sequencial').value;
+    document.location.href = 'aco4_homologacaoinclusao001.php?ac16_sequencial=' + iAcordo;
   }
 </script>
 
