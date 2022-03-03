@@ -36,7 +36,7 @@ require_once("libs/db_sessoes.php");
 require_once("classes/db_afasta_classe.php");
 
 $oJson               = new services_json();
-$oParam              = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
+$oParam              = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
 $oAfasta             = new cl_afasta;
 
 $oRetorno            = new stdClass();
@@ -48,39 +48,58 @@ $sMensagem           = "";
 
 try {
 
-	switch($oParam->exec) {
-		
-		case 'possuiAnteriores' :
-	
-		  $iMatricula = $oParam->iMatricula;
-		  $iAno       = $oParam->iAno;
-		  $iMes       = $oParam->iMes;
-			
-		  $sWherePossuiAnteriores = "r45_anousu = {$iAno} and r45_mesusu = {$iMes} and r45_regist = {$iMatricula}";
+	switch ($oParam->exec) {
+
+		case 'possuiAnteriores':
+
+			$iMatricula = $oParam->iMatricula;
+			$iAno       = $oParam->iAno;
+			$iMes       = $oParam->iMes;
+
+			$sWherePossuiAnteriores = "r45_anousu = {$iAno} and r45_mesusu = {$iMes} and r45_regist = {$iMatricula}";
 			$sSqlPossuiAnteriores   = $oAfasta->sql_query_file(null, "*", null, $sWherePossuiAnteriores);
 			$rsPossuiAnteriores     = $oAfasta->sql_record($sSqlPossuiAnteriores);
-		  
-		  if($oAfasta->numrows > 0){
-		    $oRetorno->status  = 1;
-		  }	else {
-		  	$oRetorno->status  = 2;
-		  }	
-			
-		break;	
-		
+
+			if ($oAfasta->numrows > 0) {
+				$oRetorno->status  = 1;
+			} else {
+				$oRetorno->status  = 2;
+			}
+
+			break;
+
+		case 'verificarAfastamentos':
+
+			$iMatricula = $oParam->iMatricula;
+			$iAno       = $oParam->iAno;
+			$iMes       = $oParam->iMes;
+			$iDate = implode("-", (array_reverse(explode("/", $oParam->iDateAfast))));
+
+			$iDataAfast = date('d/m/Y', strtotime('-1 months', strtotime($iDate)));
+			$iDataAfast2 = date('d/m/Y', strtotime('-2 months', strtotime($iDate)));
+			$arrayDate = array($iDataAfast, $iDataAfast2);
+			foreach ($arrayDate as $date) {
+				$sWherePossuiAnteriores = "r45_anousu = date_part('month','$date'::date) AND r45_mesusu = date_part('year','$date'::date) and r45_regist = {$iMatricula} AND r45_situac IN (3,6)";
+				$sSqlPossuiAnteriores   = $oAfasta->sql_query_file(null, "*", null, $sWherePossuiAnteriores);
+				$rsPossuiAnteriores     = $oAfasta->sql_record($sSqlPossuiAnteriores);
+
+				if ($oAfasta->numrows > 0) {
+					$iPossuiAnteriores = 1;
+				} else {
+					$iPossuiAnteriores = 2;
+				}
+			}
+			$oRetorno->status  = $iPossuiAnteriores;
+
+			break;
 	}
 
 	$oRetorno->sDados = "";
-	echo $oJson->encode($oRetorno); 
- 
-	
+	echo $oJson->encode($oRetorno);
+} catch (Exception $oErro) {
 
-} catch (Exception $oErro){
-  
-  //echo  $oErro->getMessage();
-  $oRetorno->status  = 2;
-  $oRetorno->message = $oErro->getMessage();
-  echo $oJson->encode($oRetorno); 
+	//echo  $oErro->getMessage();
+	$oRetorno->status  = 2;
+	$oRetorno->message = $oErro->getMessage();
+	echo $oJson->encode($oRetorno);
 }
-	
-?>
