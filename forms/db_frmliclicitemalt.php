@@ -107,7 +107,9 @@ $clrotulo->label("nome");
         var criterioadj_contrato = document.form1.criterioadj_contrato.value;
         var codTipoLicitacao = document.form1.codTipoLicitacao.value;
         if (codTipoLicitacao != 8 && codTipoLicitacao != 9 && codTipoLicitacao != 10) {
+            console.log('01')
             if (criterioadj_item == criterioadj_contrato) {
+                console.log('02')
                 itens.document.form1.incluir.value = 'incluir';
                 //itens.document.form1.submit();
                 //procs.document.form1.submit();
@@ -117,10 +119,11 @@ $clrotulo->label("nome");
             }
 
         } else {
+            console.log('03')
 
             itens.document.form1.incluir.value = 'incluir';
-            itens.document.form1.submit();
-            procs.document.form1.submit();
+            //itens.document.form1.submit();
+            //procs.document.form1.submit();
         }
 
         console.log('04');
