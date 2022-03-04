@@ -62,9 +62,6 @@ switch ($oParam->exec) {
 
 			foreach ($oParam->aItens as $oItem) {
 
-				if (count($oAcordo->getAutorizacoes('', $oItem->iAnoDotacao))) {
-					throw new Exception('O contrato já possui autorização de empenho no ano vigente.');
-				}
 
 				$oItem->iAcordo = $iAcordo;
 				if (strcmp($oItem->itemDotacao, "true") == 0) {
@@ -97,6 +94,7 @@ switch ($oParam->exec) {
 											 WHERE ac26_acordo = $oParam->iCodigoAcordo) ";
 
 		$rsDotacoes = db_query($sql);
+		//$rsDotacoes = 0;
 		if (pg_num_rows($rsDotacoes) == 0) {
 
 			$aItensDotacao = array();
@@ -151,6 +149,8 @@ switch ($oParam->exec) {
 					$oItem->iCodigoItem = $aItens->ac20_sequencial;
 					$oItem->lAlterado = false;
 					$oDotacao->aItens[] = $oItem;
+					$oDotacao->tipoSql = "insert";
+
 
 					if (!isset($aItensDotacao[$var++])) {
 						$aItensDotacao[$var++] = $oDotacao;
@@ -256,9 +256,9 @@ switch ($oParam->exec) {
 			}
 
 
-			//$aItensDotacao = array();
+			// $aItensDotacao = array();
 
-			//$tipoSql = "insert";
+			// $tipoSql = "insert";
 
 			$sSqlItens = "SELECT DISTINCT
 								ac20_sequencial,
@@ -317,7 +317,7 @@ switch ($oParam->exec) {
 						$aItensDotacao[0] = $oDotacao;
 					}
 
-					//$oDotacao = new stdClass();
+					// $oDotacao = new stdClass();
 					//$oDotacao->aItens = array();
 				}
 			}
