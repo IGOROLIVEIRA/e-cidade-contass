@@ -22,40 +22,39 @@ class GerarABERLIC extends GerarAM
         $this->sArquivo = "ABERLIC";
         $this->abreArquivo();
 
-        $sSql = "select * from aberlic102022 where si46_mes = " . $this->iMes . " and si46_instit=" . db_getsession("DB_instit");
-        $rsABERLIC10 = db_query($sSql);
+        $sSql10 = "select * from aberlic102022 where si46_mes = " . $this->iMes . " and si46_instit=" . db_getsession("DB_instit");
+        $rsABERLIC10 = db_query($sSql10);
 
-        $sSql2 = "select * from aberlic112022 where si47_mes = " . $this->iMes . " and si47_instit=" . db_getsession("DB_instit");;
-        $rsABERLIC11 = db_query($sSql2);
+        $sSql11 = "select * from aberlic112022 where si47_mes = " . $this->iMes . " and si47_instit=" . db_getsession("DB_instit");;
+        $rsABERLIC11 = db_query($sSql11);
 
-        $sSql3 = "select * from aberlic122022 where si48_mes = " . $this->iMes . " and si48_instit=" . db_getsession("DB_instit");;
-        $rsABERLIC12 = db_query($sSql3);
+        $sSql12 = "select * from aberlic122022 where si48_mes = " . $this->iMes . " and si48_instit=" . db_getsession("DB_instit");;
+        $rsABERLIC12 = db_query($sSql12);
 
-        $sSql4 = "select * from aberlic132022 where si49_mes = " . $this->iMes . " and si49_instit=" . db_getsession("DB_instit");;
-        $rsABERLIC13 = db_query($sSql4);
+        $sSql13 = "select * from aberlic132022 where si49_mes = " . $this->iMes . " and si49_instit=" . db_getsession("DB_instit");;
+        $rsABERLIC13 = db_query($sSql13);
 
-        $sSql5 = "select * from aberlic142022 where si50_mes = " . $this->iMes . " and si50_instit=" . db_getsession("DB_instit");;
-        $rsABERLIC14 = db_query($sSql5);
+        $sSql14 = "select * from aberlic142022 where si50_mes = " . $this->iMes . " and si50_instit=" . db_getsession("DB_instit");;
+        $rsABERLIC14 = db_query($sSql14);
 
-        $sSql6 = "select * from aberlic152022 where si51_mes = " . $this->iMes . " and si51_instit=" . db_getsession("DB_instit");;
-        $rsABERLIC15 = db_query($sSql6);
+        $sSql15 = "select * from aberlic152022 where si51_mes = " . $this->iMes . " and si51_instit=" . db_getsession("DB_instit");;
+        $rsABERLIC15 = db_query($sSql15);
 
-        $sSql7 = "select * from aberlic162022 where si52_mes = " . $this->iMes . " and si52_instit=" . db_getsession("DB_instit");;
-        $rsABERLIC16 = db_query($sSql7);
+        $sSql16 = "select * from aberlic162022 where si52_mes = " . $this->iMes . " and si52_instit=" . db_getsession("DB_instit");;
+        $rsABERLIC16 = db_query($sSql16);
 
         if (pg_num_rows($rsABERLIC10) == 0) {
 
             $aCSV['tiporegistro'] = '99';
             $this->sLinha = $aCSV;
             $this->adicionaLinha();
-
         } else {
 
             /**
              *
              * Registros 10, 11, 12   
              */
-            
+
             for ($iCont = 0; $iCont < pg_num_rows($rsABERLIC10); $iCont++) {
                 $aABERLIC10 = pg_fetch_array($rsABERLIC10, $iCont);
 
@@ -121,7 +120,6 @@ class GerarABERLIC extends GerarAM
                         $this->sLinha = $aCSVABERLIC11;
                         $this->adicionaLinha();
                     }
-
                 }
 
                 for ($iCont3 = 0; $iCont3 < pg_num_rows($rsABERLIC12); $iCont3++) {
@@ -140,9 +138,7 @@ class GerarABERLIC extends GerarAM
 
                         $this->sLinha = $aCSVABERLIC12;
                         $this->adicionaLinha();
-
                     }
-
                 }
 
                 for ($iCont4 = 0; $iCont4 < pg_num_rows($rsABERLIC13); $iCont4++) {
@@ -161,9 +157,7 @@ class GerarABERLIC extends GerarAM
 
                         $this->sLinha = $aCSVABERLIC13;
                         $this->adicionaLinha();
-
                     }
-
                 }
 
                 for ($iCont5 = 0; $iCont5 < pg_num_rows($rsABERLIC14); $iCont5++) {
@@ -182,9 +176,9 @@ class GerarABERLIC extends GerarAM
                         $aCSVABERLIC14['si50_dtcotacao']              = $this->sicomDate($aABERLIC14['si50_dtcotacao']);
                         $aCSVABERLIC14['si50_vlrefpercentual']        = $this->sicomNumberReal($aABERLIC14['si50_vlrefpercentual'], 2);
 
-                        if($aABERLIC10['si46_criterioadjudicacao'] == 2 || $aABERLIC10['si46_criterioadjudicacao'] == 3){
-                            $aCSVABERLIC14['si50_vlcotprecosunitario']    = $this->sicomNumberReal(0,4);
-                        }else{
+                        if ($aABERLIC10['si46_criterioadjudicacao'] == 1 || $aABERLIC10['si46_criterioadjudicacao'] == 2) {
+                            $aCSVABERLIC14['si50_vlcotprecosunitario']    = $this->sicomNumberReal(0, 4);
+                        } else {
                             $aCSVABERLIC14['si50_vlcotprecosunitario']    = $this->sicomNumberReal($aABERLIC14['si50_vlcotprecosunitario'], 4);
                         }
                         $aCSVABERLIC14['si50_quantidade']             = $this->sicomNumberReal($aABERLIC14['si50_quantidade'], 4);
@@ -194,7 +188,6 @@ class GerarABERLIC extends GerarAM
                         $this->sLinha = $aCSVABERLIC14;
                         $this->adicionaLinha();
                     }
-
                 }
 
                 for ($iCont6 = 0; $iCont6 < pg_num_rows($rsABERLIC15); $iCont6++) {
@@ -215,7 +208,6 @@ class GerarABERLIC extends GerarAM
                         $this->sLinha = $aCSVABERLIC15;
                         $this->adicionaLinha();
                     }
-
                 }
 
                 for ($iCont7 = 0; $iCont7 < pg_num_rows($rsABERLIC16); $iCont7++) {
@@ -243,15 +235,10 @@ class GerarABERLIC extends GerarAM
                         $this->sLinha = $aCSVABERLIC16;
                         $this->adicionaLinha();
                     }
-
                 }
-
             }
 
             $this->fechaArquivo();
-
         }
-
     }
-
 }
