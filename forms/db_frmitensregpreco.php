@@ -208,7 +208,14 @@ $clrotulo->label("pc01_descrmater");
 
 <script>
   function verificaPrecoUnitario(e, oObject, item, valorAntigo) {
-    if (oObject.value == 0) {
+
+    var precoUnitario = document.getElementsByName(`aItensAdesaoRegPreco[${item}][precoUnitario]`)[0];
+
+    if (precoUnitario.value == '') {
+      return false;
+    }
+
+    if (precoUnitario.value == 0) {
       alert('Erro! O preço unitário não pode ser zero ');
       oObject.value = valorAntigo;
       return false;
