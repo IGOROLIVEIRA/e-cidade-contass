@@ -1244,7 +1244,7 @@ switch ($oParam->exec) {
                                     }
 
                                     $codprocitemreservado = $oDaopcprocitem->pc81_codprocitem;
-
+                                    //echo "Código Item Reservado: " . $codprocitemreservado;
                                     /**
                                      * Busca o código do material e insere as informa??es na tabela solicitempcmater
                                      */
@@ -1572,6 +1572,7 @@ switch ($oParam->exec) {
 
                             $clliclicitemreservado = db_utils::getDao('liclicitem');
                             $res_liclicitemreservado = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codpcprocitem = " . $codprocitemreservado));
+                            //echo $clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codpcprocitem = " . $codprocitemreservado);
 
                             if ($clliclicitem->numrows > 0) {
                                 db_fieldsmemory($res_liclicitem, 0);
