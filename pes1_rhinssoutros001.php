@@ -65,6 +65,7 @@ if (isset($incluir)) {
   $erro_msg = $clrhinssoutros->erro_msg;
   if ($clrhinssoutros->erro_status == "0") {
     $sqlerro = true;
+    $db_opcao = 2;
   }
   db_fim_transacao();
 } else if (isset($excluir)) {
