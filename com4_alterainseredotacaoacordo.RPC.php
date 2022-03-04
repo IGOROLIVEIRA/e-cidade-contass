@@ -94,7 +94,7 @@ switch ($oParam->exec) {
 											 WHERE ac26_acordo = $oParam->iCodigoAcordo) ";
 
 		$rsDotacoes = db_query($sql);
-		//$rsDotacoes = 0;
+		//$rsDotacoes = 0 Usado para teste em caso de não estiver dotacoes no acordo;
 		if (pg_num_rows($rsDotacoes) == 0) {
 
 			$aItensDotacao = array();
@@ -133,6 +133,8 @@ switch ($oParam->exec) {
 				$oDotacao = new stdClass();
 				$oDotacao->aItens = array();
 				$oDotacao->quantidade = pg_num_rows($rsResultItens);
+				$oDotacao->itemDotacao = "false";
+				$oDotacao->quebraDotacoesCadastradas = "false";
 				for ($i = 0; $i < pg_num_rows($rsResultItens); $i++) {
 					$aItens = db_utils::fieldsMemory($rsResultItens, $i);
 
@@ -145,15 +147,15 @@ switch ($oParam->exec) {
 					$oItem->sNomeItem = $aItens->pc01_descrmater;
 					$oItem->nValor = $aItens->ac20_valortotal;
 					$oItem->nQuantidade = $aItens->ac20_quantidade;
-
+					$oItem->itemDotacao = "false";
 					$oItem->iCodigoItem = $aItens->ac20_sequencial;
 					$oItem->lAlterado = false;
 					$oDotacao->aItens[] = $oItem;
 					$oDotacao->tipoSql = "insert";
 
 
-					if (!isset($aItensDotacao[1])) {
-						$aItensDotacao[1] = $oDotacao;
+					if (!isset($aItensDotacao[0])) {
+						$aItensDotacao[0] = $oDotacao;
 					}
 				}
 			}
