@@ -167,10 +167,10 @@ $clrotulo->label("pc01_descrmater");
             <input type="hidden" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdAderida]" value="<?= $oItem->pc11_quant ?>">
           </td>
           <td class="linhagrid">
-            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdLicitada]" onkeypress="maskValor4(event,this)" value="<?= $oItem->si07_quantidadelicitada ?>">
+            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdLicitada]" onkeypress="mascaraQtdLicitada(event,this,<?= $iItem ?>)" onkeyup="comparaValor(event,this,<?= $iItem ?>)" value="<?= $oItem->si07_quantidadelicitada ?>">
           </td>
           <td class="linhagrid">
-            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][precoUnitario]" onkeypress="maskValor4(event,this)" value="<?= $oItem->si07_precounitario ?>">
+            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][precoUnitario]" onkeypress="mascaraPrecoUnitario(event,this)" onkeyup="verificaPrecoUnitario(event,this,<?= $iItem ?>,<?= $oItem->si07_precounitario ?>)" value="<?= $oItem->si07_precounitario ?>">
           </td>
           <td class="linhagrid fornecedor">
             <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][descricaoFornecedor]" value="<?= $oItem->z01_nome ?>" readonly class="input-inativo">
@@ -207,7 +207,70 @@ $clrotulo->label("pc01_descrmater");
 <script type="text/javascript" src="scripts/prototype.js"></script>
 
 <script>
-  function maskValor4(e, oObject) {
+  function verificaPrecoUnitario(e, oObject, item, valorAntigo) {
+
+    var precoUnitario = document.getElementsByName(`aItensAdesaoRegPreco[${item}][precoUnitario]`)[0];
+
+    if (precoUnitario.value == '') {
+      return false;
+    }
+
+    if (precoUnitario.value == 0) {
+      alert('Erro! O preço unitário não pode ser zero ');
+      oObject.value = valorAntigo;
+      return false;
+    }
+  }
+
+  function comparaValor(e, oObject, item) {
+    var qtdAderida = document.getElementsByName(`aItensAdesaoRegPreco[${item}][qtdAderida]`)[0];
+
+
+    if (parseFloat(oObject.value) > parseFloat(qtdAderida.value)) {
+      alert('Usuário: Quantidade Licitada não pode ser maior que a quantidade aderida! ');
+
+      oObject.value = qtdAderida.value;
+      return false;
+    }
+
+  }
+
+  function mascaraQtdLicitada(e, oObject, item) {
+
+    novaString = oObject.value + e.key;
+
+
+
+    var qtdAderida = document.getElementsByName(`aItensAdesaoRegPreco[${item}][qtdAderida]`)[0];
+    var qtdLicitada = document.getElementsByName(`aItensAdesaoRegPreco[${item}][qtdLicitada]`)[0];
+
+
+    if (novaString.includes('.')) {
+
+      if (novaString.substr(novaString.indexOf(".")).length == 6) {
+        e.preventDefault();
+        return true;
+      }
+
+    }
+
+    if (e.key == ",") {
+      oObject.value = oObject.value + ".";
+      e.preventDefault();
+      return true;
+    }
+
+    if (!js_mask(e, '0-9|.|-')) {
+      oObject.value = '';
+      return false;
+    }
+
+
+
+
+  }
+
+  function mascaraPrecoUnitario(e, oObject) {
 
     novaString = oObject.value + e.key;
 
@@ -299,7 +362,7 @@ $clrotulo->label("pc01_descrmater");
   }
 
 
-  // --------------------
+  // ------------------
 
 
   function aItens() {
@@ -340,7 +403,7 @@ $clrotulo->label("pc01_descrmater");
 
     if (itens.length < 1) {
 
-      alert('Selecione pelo menos um item da lista.');
+      alert('Selecione pelo menos um item da lista. ');
       return;
 
     }
