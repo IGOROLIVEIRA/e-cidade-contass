@@ -148,6 +148,10 @@ if (isset($db_opcaoal)) {
         width: 260px;
     }
 
+    #rh02_tipobeneficio {
+        width: 417px;
+    }
+
     #rh02_tipoparentescoinst {
         width: 329px;
     }
@@ -198,7 +202,7 @@ if (isset($db_opcaoal)) {
                         db_input('rh02_seqpes', 6, $Irh02_seqpes, true, 'hidden', 3, "");
                         ?>
                         <table width="100%" border="0">
-                            
+
                             <tr>
                                 <td nowrap title="<?= @$Trh02_lota ?>">
                                     <?
@@ -441,7 +445,7 @@ if (isset($db_opcaoal)) {
                                 </td>
                             </tr>
                             <tr id="disabpropri">
-                                <td nowrap title="<?= $Trh19_propi ?>" >
+                                <td nowrap title="<?= $Trh19_propi ?>">
                                     <? db_ancora(@$Lrh19_propi, "", 3); ?>
                                 </td>
                                 <td nowrap>
@@ -454,7 +458,7 @@ if (isset($db_opcaoal)) {
                                     ?>
                                     <b>%</b>
                                 </td>
-                            </tr>                            
+                            </tr>
                             <tr id="tipoapos">
                                 <td nowrap title="<?= $Trh02_rhtipoapos ?>">
                                     <?= @$Lrh02_rhtipoapos ?>
@@ -463,7 +467,7 @@ if (isset($db_opcaoal)) {
                                     <?
                                     $sSqlRhTipoApos  = $clrhtipoapos->sql_query(null, "*", "rh88_sequencial", "");
                                     $rsSqlRhTipoApos = $clrhtipoapos->sql_record($sSqlRhTipoApos);
-                                    db_selectrecord('rh02_rhtipoapos', $rsSqlRhTipoApos, true, $db_opcao);
+                                    db_selectrecord('rh02_rhtipoapos', $rsSqlRhTipoApos, true, $db_opcao, "", "", "", "", "js_verificatipoapos(this.value)");
                                     ?>
                                 </td>
                                 <td id="labelvalidadepensao">
@@ -472,6 +476,28 @@ if (isset($db_opcaoal)) {
                                 <td id="validadepensao">
                                     <?
                                     db_inputdata('rh02_validadepensao', @$rh02_validadepensao_dia, @$rh02_validadepensao_mes, @$rh02_validadepensao_ano, true, 'text', $db_opcao, "")
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr id="tipobeneficio" style="display: none;">
+                                <td nowrap align="left">
+                                    <strong>Tipo de Benefício:</strong>
+                                </td>
+                                <td>
+                                    <?php
+                                    $array = array('0' => 'Selecione');
+                                    db_select('rh02_tipobeneficio', $array, true, $db_opcao);
+                                    ?>
+                                </td>
+                            </tr>
+
+                            <tr id="tipo7" style="display: none;">
+                                <td>
+                                    <strong>Descrição do ato que originou o Benefício:</strong>
+                                </td>
+                                <td>
+                                    <?
+                                    db_textarea('rh02_descratobeneficio', 0, 75, $Ipc01_descrmater, true, 'text', $db_opcao, "", '', '', '255');
                                     ?>
                                 </td>
                             </tr>
@@ -528,7 +554,7 @@ if (isset($db_opcaoal)) {
                                     </td>
                                 </tr>
                                 <tr>
-                                   <td>
+                                    <td>
                                         <strong>Tipo de Jornada:</strong>
                                     </td>
                                     <td>
@@ -538,7 +564,7 @@ if (isset($db_opcaoal)) {
                                         );
                                         db_select("rh02_tipojornada", $aTipoJornada, true, $db_opcao, "style='width:313;'", "", "", "");
                                         ?>
-                                    </td> 
+                                    </td>
                                 </tr>
                             </table>
                         </center>
@@ -546,208 +572,208 @@ if (isset($db_opcaoal)) {
                     <fieldset>
                         <legend>Informações Complementares</legend>
                         <center>
-                        <table width="74%" align="left">
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_tipsal ?>">
-                                    <?= @$Lrh01_reajusteparidade ?>
-                                </td>
-                                <td>
-                                    <?php
-                                    $oDaoReajusteParidade = db_utils::getDao('rhreajusteparidade');
-                                    $sSql                 = $oDaoReajusteParidade->sql_query_file(null, '*', 'rh148_sequencial');
-                                    $rsReajusteParidade   = db_query($sSql);
+                            <table width="74%" align="left">
+                                <tr>
+                                    <td nowrap title="<?= @$Trh02_tipsal ?>">
+                                        <?= @$Lrh01_reajusteparidade ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $oDaoReajusteParidade = db_utils::getDao('rhreajusteparidade');
+                                        $sSql                 = $oDaoReajusteParidade->sql_query_file(null, '*', 'rh148_sequencial');
+                                        $rsReajusteParidade   = db_query($sSql);
 
-                                    if (!$rsReajusteParidade) {
-                                        throw new DBException('Erro ao buscar os dados da tabela rhreajusteparidade.');
-                                    }
+                                        if (!$rsReajusteParidade) {
+                                            throw new DBException('Erro ao buscar os dados da tabela rhreajusteparidade.');
+                                        }
 
-                                    $aTipoReajuste     = array("0" => '');
-                                    $aReajusteParidade = db_utils::getCollectionByRecord($rsReajusteParidade, false, false, true);
+                                        $aTipoReajuste     = array("0" => '');
+                                        $aReajusteParidade = db_utils::getCollectionByRecord($rsReajusteParidade, false, false, true);
 
-                                    foreach ($aReajusteParidade as $oReajusteParidade) {
-                                        $aTipoReajuste["{$oReajusteParidade->rh148_sequencial}"] = $oReajusteParidade->rh148_descricao;
-                                    }
-                                    $aTipoReajuste["0"] = "Nenhum";
+                                        foreach ($aReajusteParidade as $oReajusteParidade) {
+                                            $aTipoReajuste["{$oReajusteParidade->rh148_sequencial}"] = $oReajusteParidade->rh148_descricao;
+                                        }
+                                        $aTipoReajuste["0"] = "Nenhum";
 
-                                    db_select('rh01_reajusteparidade', $aTipoReajuste, true, $db_opcao);
-                                    ?>
-                                </td>
-                                <td nowrap align="right" title="<?php echo $Trh02_diasgozoferias; ?>">
-                                    <?php echo @$Lrh02_diasgozoferias; ?>
-                                </td>
-                                <td>
-                                    <?php
-
-                                    if (!isset($rh02_diasgozoferias) && $db_opcao == 1) {
-                                        $rh02_diasgozoferias = 30;
-                                    }
-
-                                    db_input('rh02_diasgozoferias', 10, 1, true, 'text', $db_opcao);
-
-                                    ?>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_deficientefisico ?>" align="left">
-                                    <?= @$Lrh02_deficientefisico ?>
-                                </td>
-                                <td nowrap>
-                                    <? $clrotulo->label("rh02_deficientefisico");
-                                    $aDeficiente = array('f' => 'Não', 't' => 'Sim');
-                                    db_select("rh02_deficientefisico", $aDeficiente, true, $db_opcao, "onchange='js_informarTipoDeficiencia()'");
-                                    ?>
-                                </td>
-                                <td nowrap title="Plano de Segregação da Massa" align="right">
-                                    <strong>Plano de Segregação da Massa:</strong>
-                                </td>
-                                <td colspan="1" nowrap>
-                                    <?
-                                    $aPlanSegreg = array('0' => 'Selecione', '1' => 'Fundo em capitalização', '2' => 'Fundo em repartição', '3' => 'Mantido pelo Tesouro');
-                                    db_select("rh02_plansegreg", $aPlanSegreg, true, $db_opcao, "", "", "", "");
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr id="row_rh02_tipodeficiencia" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
-                                <td nowrap title="<?= @$Trh02_tipodeficiencia ?>" align="left">
-                                    <?= @$Lrh02_tipodeficiencia ?>
-                                </td>
-                                <td colspan="2" nowrap>
-                                    <?
-                                    $result_tipodeficiencia = $cltipodeficiencia->sql_record($cltipodeficiencia->sql_query_file(null, "rh150_sequencial,rh150_descricao", 'rh150_sequencial asc', null));
-                                    db_selectrecord("rh02_tipodeficiencia", $result_tipodeficiencia, true, $db_opcao, "style='width:115;'", "", "", "", "js_informarReab()", 1);
-                                    ?>
-
-                                    <?= @$Lrh02_laudodeficiencia ?>
-                                    <?
-                                    db_input('rh02_laudodeficiencia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
-                                    if (!empty($GLOBALS['rh02_laudodeficiencia'])) {
-                                        db_input('rh02_laudodeficiencia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
-                                    ?> <input type="button" name="imprimir_laudodeficiencia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudodeficiencia');"> <?
-                                                                                                                                                                    }
-                                                                                                                                                                        ?>
-                                </td>
-                            </tr>
-                            <tr id="row_rh02_cotadeficiencia" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
-                                <td nowrap title="Cota de Pessoas com Deficiência" align="left">
-                                    <strong>Cota de Pessoas com Deficiência:</strong>
-                                </td>
-                                <td nowrap>
-                                    <?
-                                    $aCotaDef = array('f' => 'Não', 't' => 'Sim');
-                                    db_select("rh02_cotadeficiencia", $aCotaDef, true, $db_opcao, "style='width:115;'", "", "", "");
-                                    ?>
-                                </td>
-                            
-                                <td colspan="2" nowrap title="Trabalhador Reabilitado/Readaptado" align="left">
-                                    <span id="row_rh02_reabreadap" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
-                                        <strong>Trabalhador Reabilitado/Readaptado:</strong>
-                                    
-                                        <?
-                                        $aReab = array('f' => 'Não', 't' => 'Sim');
-                                        db_select("rh02_reabreadap", $aReab, true, $db_opcao, "style='width:115;'", "", "", "");
+                                        db_select('rh01_reajusteparidade', $aTipoReajuste, true, $db_opcao);
                                         ?>
-                                    </span>
-                                </td>
-                            </tr>                            
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_portadormolestia ?>" align="left">
-                                    <?= @$Lrh02_portadormolestia ?>
-                                </td>
-                                <td colspan="3" nowrap>
-                                    <? $clrotulo->label("rh02_portadormolestia ");
-                                    $aMolestia = array('f' => 'Não', 't' => 'Sim');
-                                    db_select("rh02_portadormolestia", $aMolestia, true, $db_opcao, "onchange='js_informarLaudoPortadorMolestia()'");
-                                    ?>
+                                    </td>
+                                    <td nowrap align="right" title="<?php echo $Trh02_diasgozoferias; ?>">
+                                        <?php echo @$Lrh02_diasgozoferias; ?>
+                                    </td>
+                                    <td>
+                                        <?php
 
-                                    <span id="laudoportadormolestia" <? echo ($GLOBALS['rh02_portadormolestia'] == 't') ? '' : 'style="display: none;"' ?>>
-                                        <?= @$Lrh02_laudoportadormolestia ?>
-                                        <?
-                                        db_input('rh02_laudoportadormolestia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
-                                        if (!empty($GLOBALS['rh02_laudoportadormolestia'])) {
-                                            db_input('rh02_laudoportadormolestia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
-                                        ?> <input type="button" name="imprimir_laudoportadormolestia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudoportadormolestia');"> <? } ?>
-                                        
-                                        <?= @$Lrh02_datalaudomolestia ?>
-                                        <?
-                                        db_inputdata('rh02_datalaudomolestia', @$rh02_datalaudomolestia_dia, @$rh02_datalaudomolestia_mes, @$rh02_datalaudomolestia_ano, true, 'text', $db_opcao, "")
+                                        if (!isset($rh02_diasgozoferias) && $db_opcao == 1) {
+                                            $rh02_diasgozoferias = 30;
+                                        }
+
+                                        db_input('rh02_diasgozoferias', 10, 1, true, 'text', $db_opcao);
+
                                         ?>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <?php echo $Lrh02_abonopermanencia ?>
-                                </td>
-                                <td colspan="3">
-                                    <?php
-                                    $aAbonoPermanencia = array('f' => 'Não', 't' => 'Sim');
-                                    db_select('rh02_abonopermanencia', $aAbonoPermanencia, true, $db_opcao, "onchange='js_abonopermanencia()'");
-                                    ?>
-                                    <span id="datainicio" <? echo ($GLOBALS['rh02_abonopermanencia'] == 't') ? '' : 'style="display: none;"' ?>>
-                                
-                                    <strong>Data Início:</strong>
-                                    <?
-                                    db_inputdata('rh02_datainicio', @$rh02_datainicio_dia, @$rh02_datainicio_mes, @$rh02_datainicio_ano, true, 'text', $db_opcao, "")
-                                    ?>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_vincrais ?>">
-                                    <?= @$Lrh02_vincrais ?>
-                                </td>
-                                <td nowrap colspan="3">
-                                    <?
-                                    $arr_vincrais = array(
-                                        '00' => '   - Nenhum',
-                                        '10' => '10 - Trab urbano vinc a empr pessoa juridica - CLT p/tempo indeterminado',
-                                        '15' => '15 - Trab urbano vinc a empr pessoa fisica  - CLT p/tempo indeterminado',
-                                        '20' => '20 - Trab rural vinc a empr pessoa juridica - CLT p/tempo indeterminado',
-                                        '25' => '25 - Trab rural vinc a empr pessoa fisica  - CLT p/tempo indeterminado',
-                                        '30' => '30 - Serv regido pelo regime juridico unico (Fed,est,munic) e militar',
-                                        '31' => '31 - Serv regido pelo Regime Jurídico Único (fed,est,munic) e militar,vinc a RGPS',
-                                        '35' => '35 - Serv publico nao-efetivo',
-                                        '40' => '40 - Trabalhador avulso',
-                                        '50' => '50 - Trab temporario, regido pela Lei n. 6.019 de 03.01.74',
-                                        '55' => '55 - Aprendiz contratado na termos do art. 428 da CLT.',
-                                        '60' => '60 - Trab urbano vinc a empr pessoa juridica - CLT p/tempo determinado',
-                                        '65' => '65 - Trab urbano vinc a empr pessoa fisica - CLT p/tempo determinado',
-                                        '70' => '70 - Trab rural vinc a empr pessoa juridica - CLT p/tempo determinado',
-                                        '75' => '75 - Trab rural vinc a empr pessoa fisica - CLT p/tempo determinado',
-                                        '80' => '80 - Diretor sem vinc empregaticio c/ recolhimento do FGTS',
-                                        '90' => '90 - Contrato de trabalho p/prazo determinado Lei 9.601 CLT',
-                                        '90' => '90 - Contrato de Trabalho por Tempo Determinado, reg pela Lei no. 8.745',
-                                        '95' => '95 - Contrato de Trabalho por Tempo Determinado, reg pela Lei no. 8.745 e 9.849',
-                                        '96' => '96 - Contrato de Trabalho por Prazo Determinado, regido por Lei Estadual',
-                                        '97' => '97 - Contrato de Trabalho por Prazo Determinado, regido por Lei Municipal'
-                                    );
-                                    db_select("rh02_vincrais", $arr_vincrais, true, $db_opcao, "style='width:313;'");
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Trh02_ocorre ?>">
-                                    <?= @$Lrh02_ocorre ?>
-                                </td>
-                                <td nowrap colspan="3">
-                                    <?
-                                    $arr_ocorre = array(
-                                        '' => 'Nunca esteve exposta',
-                                        '01' => '01 - Não exposto no momento, mas já esteve',
-                                        '02' => '02 - Exposta (aposentadoria esp. 15 anos)',
-                                        '03' => '03 - Exposta (aposentadoria esp. 20 anos)',
-                                        '04' => '04 - Exposta (aposentadoria esp. 25 anos)',
-                                        '05' => '05 - Mais de um vínculo (ou fonte pagadora) - Não exposição a agente nocivo',
-                                        '06' => '06 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 15 anos)',
-                                        '07' => '07 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 20 anos)',
-                                        '08' => '08 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 25 anos)'
-                                    );
-                                    db_select("rh02_ocorre", $arr_ocorre, true, $db_opcao, "style='width:313;'");
-                                    ?>
-                                </td>
-                            </tr>
-                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td nowrap title="<?= @$Trh02_deficientefisico ?>" align="left">
+                                        <?= @$Lrh02_deficientefisico ?>
+                                    </td>
+                                    <td nowrap>
+                                        <? $clrotulo->label("rh02_deficientefisico");
+                                        $aDeficiente = array('f' => 'Não', 't' => 'Sim');
+                                        db_select("rh02_deficientefisico", $aDeficiente, true, $db_opcao, "onchange='js_informarTipoDeficiencia()'");
+                                        ?>
+                                    </td>
+                                    <td nowrap title="Plano de Segregação da Massa" align="right">
+                                        <strong>Plano de Segregação da Massa:</strong>
+                                    </td>
+                                    <td colspan="1" nowrap>
+                                        <?
+                                        $aPlanSegreg = array('0' => 'Selecione', '1' => 'Fundo em capitalização', '2' => 'Fundo em repartição', '3' => 'Mantido pelo Tesouro');
+                                        db_select("rh02_plansegreg", $aPlanSegreg, true, $db_opcao, "", "", "", "");
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr id="row_rh02_tipodeficiencia" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
+                                    <td nowrap title="<?= @$Trh02_tipodeficiencia ?>" align="left">
+                                        <?= @$Lrh02_tipodeficiencia ?>
+                                    </td>
+                                    <td colspan="2" nowrap>
+                                        <?
+                                        $result_tipodeficiencia = $cltipodeficiencia->sql_record($cltipodeficiencia->sql_query_file(null, "rh150_sequencial,rh150_descricao", 'rh150_sequencial asc', null));
+                                        db_selectrecord("rh02_tipodeficiencia", $result_tipodeficiencia, true, $db_opcao, "style='width:115;'", "", "", "", "js_informarReab()", 1);
+                                        ?>
+
+                                        <?= @$Lrh02_laudodeficiencia ?>
+                                        <?
+                                        db_input('rh02_laudodeficiencia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
+                                        if (!empty($GLOBALS['rh02_laudodeficiencia'])) {
+                                            db_input('rh02_laudodeficiencia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
+                                        ?> <input type="button" name="imprimir_laudodeficiencia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudodeficiencia');"> <?
+                                                                                                                                                                        }
+                                                                                                                                                                            ?>
+                                    </td>
+                                </tr>
+                                <tr id="row_rh02_cotadeficiencia" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
+                                    <td nowrap title="Cota de Pessoas com Deficiência" align="left">
+                                        <strong>Cota de Pessoas com Deficiência:</strong>
+                                    </td>
+                                    <td nowrap>
+                                        <?
+                                        $aCotaDef = array('f' => 'Não', 't' => 'Sim');
+                                        db_select("rh02_cotadeficiencia", $aCotaDef, true, $db_opcao, "style='width:115;'", "", "", "");
+                                        ?>
+                                    </td>
+
+                                    <td colspan="2" nowrap title="Trabalhador Reabilitado/Readaptado" align="left">
+                                        <span id="row_rh02_reabreadap" <? echo ($GLOBALS['rh02_deficientefisico'] == 't') ? '' : 'style="display: none;"' ?>>
+                                            <strong>Trabalhador Reabilitado/Readaptado:</strong>
+
+                                            <?
+                                            $aReab = array('f' => 'Não', 't' => 'Sim');
+                                            db_select("rh02_reabreadap", $aReab, true, $db_opcao, "style='width:115;'", "", "", "");
+                                            ?>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap title="<?= @$Trh02_portadormolestia ?>" align="left">
+                                        <?= @$Lrh02_portadormolestia ?>
+                                    </td>
+                                    <td colspan="3" nowrap>
+                                        <? $clrotulo->label("rh02_portadormolestia ");
+                                        $aMolestia = array('f' => 'Não', 't' => 'Sim');
+                                        db_select("rh02_portadormolestia", $aMolestia, true, $db_opcao, "onchange='js_informarLaudoPortadorMolestia()'");
+                                        ?>
+
+                                        <span id="laudoportadormolestia" <? echo ($GLOBALS['rh02_portadormolestia'] == 't') ? '' : 'style="display: none;"' ?>>
+                                            <?= @$Lrh02_laudoportadormolestia ?>
+                                            <?
+                                            db_input('rh02_laudoportadormolestia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
+                                            if (!empty($GLOBALS['rh02_laudoportadormolestia'])) {
+                                                db_input('rh02_laudoportadormolestia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
+                                            ?> <input type="button" name="imprimir_laudoportadormolestia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudoportadormolestia');"> <? } ?>
+
+                                            <?= @$Lrh02_datalaudomolestia ?>
+                                            <?
+                                            db_inputdata('rh02_datalaudomolestia', @$rh02_datalaudomolestia_dia, @$rh02_datalaudomolestia_mes, @$rh02_datalaudomolestia_ano, true, 'text', $db_opcao, "")
+                                            ?>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <?php echo $Lrh02_abonopermanencia ?>
+                                    </td>
+                                    <td colspan="3">
+                                        <?php
+                                        $aAbonoPermanencia = array('f' => 'Não', 't' => 'Sim');
+                                        db_select('rh02_abonopermanencia', $aAbonoPermanencia, true, $db_opcao, "onchange='js_abonopermanencia()'");
+                                        ?>
+                                        <span id="datainicio" <? echo ($GLOBALS['rh02_abonopermanencia'] == 't') ? '' : 'style="display: none;"' ?>>
+
+                                            <strong>Data Início:</strong>
+                                            <?
+                                            db_inputdata('rh02_datainicio', @$rh02_datainicio_dia, @$rh02_datainicio_mes, @$rh02_datainicio_ano, true, 'text', $db_opcao, "")
+                                            ?>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap title="<?= @$Trh02_vincrais ?>">
+                                        <?= @$Lrh02_vincrais ?>
+                                    </td>
+                                    <td nowrap colspan="3">
+                                        <?
+                                        $arr_vincrais = array(
+                                            '00' => '   - Nenhum',
+                                            '10' => '10 - Trab urbano vinc a empr pessoa juridica - CLT p/tempo indeterminado',
+                                            '15' => '15 - Trab urbano vinc a empr pessoa fisica  - CLT p/tempo indeterminado',
+                                            '20' => '20 - Trab rural vinc a empr pessoa juridica - CLT p/tempo indeterminado',
+                                            '25' => '25 - Trab rural vinc a empr pessoa fisica  - CLT p/tempo indeterminado',
+                                            '30' => '30 - Serv regido pelo regime juridico unico (Fed,est,munic) e militar',
+                                            '31' => '31 - Serv regido pelo Regime Jurídico Único (fed,est,munic) e militar,vinc a RGPS',
+                                            '35' => '35 - Serv publico nao-efetivo',
+                                            '40' => '40 - Trabalhador avulso',
+                                            '50' => '50 - Trab temporario, regido pela Lei n. 6.019 de 03.01.74',
+                                            '55' => '55 - Aprendiz contratado na termos do art. 428 da CLT.',
+                                            '60' => '60 - Trab urbano vinc a empr pessoa juridica - CLT p/tempo determinado',
+                                            '65' => '65 - Trab urbano vinc a empr pessoa fisica - CLT p/tempo determinado',
+                                            '70' => '70 - Trab rural vinc a empr pessoa juridica - CLT p/tempo determinado',
+                                            '75' => '75 - Trab rural vinc a empr pessoa fisica - CLT p/tempo determinado',
+                                            '80' => '80 - Diretor sem vinc empregaticio c/ recolhimento do FGTS',
+                                            '90' => '90 - Contrato de trabalho p/prazo determinado Lei 9.601 CLT',
+                                            '90' => '90 - Contrato de Trabalho por Tempo Determinado, reg pela Lei no. 8.745',
+                                            '95' => '95 - Contrato de Trabalho por Tempo Determinado, reg pela Lei no. 8.745 e 9.849',
+                                            '96' => '96 - Contrato de Trabalho por Prazo Determinado, regido por Lei Estadual',
+                                            '97' => '97 - Contrato de Trabalho por Prazo Determinado, regido por Lei Municipal'
+                                        );
+                                        db_select("rh02_vincrais", $arr_vincrais, true, $db_opcao, "style='width:313;'");
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap title="<?= @$Trh02_ocorre ?>">
+                                        <?= @$Lrh02_ocorre ?>
+                                    </td>
+                                    <td nowrap colspan="3">
+                                        <?
+                                        $arr_ocorre = array(
+                                            '' => 'Nunca esteve exposta',
+                                            '01' => '01 - Não exposto no momento, mas já esteve',
+                                            '02' => '02 - Exposta (aposentadoria esp. 15 anos)',
+                                            '03' => '03 - Exposta (aposentadoria esp. 20 anos)',
+                                            '04' => '04 - Exposta (aposentadoria esp. 25 anos)',
+                                            '05' => '05 - Mais de um vínculo (ou fonte pagadora) - Não exposição a agente nocivo',
+                                            '06' => '06 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 15 anos)',
+                                            '07' => '07 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 20 anos)',
+                                            '08' => '08 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 25 anos)'
+                                        );
+                                        db_select("rh02_ocorre", $arr_ocorre, true, $db_opcao, "style='width:313;'");
+                                        ?>
+                                    </td>
+                                </tr>
+                            </table>
                         </center>
                     </fieldset>
                 </td>
@@ -1105,7 +1131,6 @@ if (isset($db_opcaoal)) {
                 var sVinculo = vinculo;
 
                 if (sVinculo != "") {
-
                     if (sVinculo != "A") {
 
                         document.getElementById("tipoapos").style.display = "";
@@ -1128,6 +1153,10 @@ if (isset($db_opcaoal)) {
                     } else {
 
                         document.getElementById("tipoapos").style.display = "none";
+                        document.getElementById("tipobeneficio").style.display = "none";
+                        document.getElementById("tipo7").style.display = "none";
+                        document.getElementById("rh02_tipobeneficio").value = "0";
+                        document.getElementById("rh02_descratobeneficio").value = '';
                         document.getElementById("labelvalidadepensao").style.display = "none";
                         document.getElementById("validadepensao").style.display = "none";
                         document.getElementById("rh02_rhtipoapos").disabled = true;
@@ -2014,6 +2043,180 @@ if (isset($db_opcaoal)) {
                 }
                 return false;
             }
+
+            function js_verificatipoapos(value) {
+                let rh01_admiss = '<?= $rh01_admiss ?>';
+                let opcoesbeneficio = document.getElementById('rh02_tipobeneficio').options;
+                document.getElementById('tipobeneficio').style.display = '';
+
+                if (value == 2 || value == 3 || value == 5 && rh01_admiss >= '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por idade e tempo de contribuição - Proventos com integralidade, revisão pela paridade', '0101'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por idade e tempo de contribuição - Proventos pela média, reajuste manter valor real', '0102'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por idade - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0103'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por idade - Proventos proporcionais calculado sobre a média, reajuste manter valor real', '0104'));
+                    opcoesbeneficio.add(new Option('Aposentadoria compulsória - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0105'));
+                    opcoesbeneficio.add(new Option('Aposentadoria compulsória - Proventos proporcionais calculado sobre a média, reajuste manter valor real', '0106'));
+                    opcoesbeneficio.add(new Option('Aposentadoria de professor - Proventos com integralidade, revisão pela paridade', '0107'));
+                    opcoesbeneficio.add(new Option('Aposentadoria de professor - Proventos pela média, reajuste manter valor real', '0108'));
+                }
+
+                if (value == 6 && rh01_admiss >= '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Aposentadoria especial - Risco', '0201'));
+                    opcoesbeneficio.add(new Option('Aposentadoria especial - Exposição a agentes nocivos', '0202'));
+                    opcoesbeneficio.add(new Option('Aposentadoria da pessoa com deficiência', '0203'));
+                }
+
+                if (value == 4 && rh01_admiss >= '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos com integralidade, revisão pela paridade', '0301'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos pela média, reajuste manter valor real', '0302'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0303'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos proporcionais calculado sobre a média, reajuste manter valor real', '0304'));
+                }
+
+                if (value == 1 && rh01_admiss >= '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Pensão por morte (art. 40, § 7º, da CF/1988)', '0601'));
+                    opcoesbeneficio.add(new Option('Pensão por morte com paridade, decorrente do art. 6º-A da EC 41/2003', '0602'));
+                    opcoesbeneficio.add(new Option('Pensão por morte com paridade, decorrente do art. 3º da EC 47/2005', '0603'));
+
+                }
+                console.log(value);
+                if (value && rh01_admiss < '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Aposentadoria sem paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0801'));
+                    opcoesbeneficio.add(new Option('Aposentadoria com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0802'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0803'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez sem paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0804'));
+                    opcoesbeneficio.add(new Option('Transferência para reserva concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0805'));
+                    opcoesbeneficio.add(new Option('Reforma concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0806'));
+                    opcoesbeneficio.add(new Option('Pensão por morte com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0807'));
+                    opcoesbeneficio.add(new Option('Pensão por morte sem paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0808'));
+                    opcoesbeneficio.add(new Option('Outros benefícios previdenciários concedidos antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0809'));
+                    opcoesbeneficio.add(new Option('Aposentadoria de parlamentar - Plano próprio', '0810'));
+                    opcoesbeneficio.add(new Option('Aposentadoria de servidor vinculado ao Poder Legislativo - Plano próprio', '0811'));
+                    opcoesbeneficio.add(new Option('Pensão por morte - Plano próprio', '0812'));
+                    if (value == 7) {
+                        document.getElementById('tipo7').style.display = '';
+                    } else {
+                        document.getElementById('tipo7').style.display = 'none';
+                    }
+                } else if (value == 7) {
+                    document.getElementById('tipo7').style.display = '';
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Pensão especial sem vínculo previdenciário', '1001'));
+                    opcoesbeneficio.add(new Option('Outros benefícios sem vínculo previdenciário', '1009'));
+                } else {
+                    document.getElementById('tipo7').style.display = 'none';
+                }
+            }
+
+            function js_CarregaTipoBeneficio() {
+                var oParam = new Object();
+                oParam.sMethod = 'getTipoBeneficio';
+                oParam.rh02_regist = <?= $rh02_regist ?>;
+                oParam.rh02_anousu = <?= $rh02_anousu ?>;
+                oParam.rh02_mesusu = <?= $rh02_mesusu ?>;
+                var oAjax = new Ajax.Request(
+                    'pes1_rhpessoalmov.RPC.php', {
+                        parameters: 'json=' + Object.toJSON(oParam),
+                        asynchronous: false,
+                        method: 'post',
+                        onComplete: js_oBeneficio
+                    });
+            }
+
+            function js_oBeneficio(oAjax) {
+                var oRetorno = eval('(' + oAjax.responseText + ")");
+                let value = document.getElementById('rh02_rhtipoapos').value;
+                let rh01_admiss = '<?= $rh01_admiss ?>';
+                let opcoesbeneficio = document.getElementById('rh02_tipobeneficio').options;
+                console.log(oRetorno.rh02_tipobeneficio);
+                if (oRetorno.rh02_tipobeneficio != undefined) {
+                    document.getElementById('tipobeneficio').style.display = '';
+                }
+                if (value == 2 || value == 3 || value == 5 && rh01_admiss >= '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por idade e tempo de contribuição - Proventos com integralidade, revisão pela paridade', '0101'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por idade e tempo de contribuição - Proventos pela média, reajuste manter valor real', '0102'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por idade - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0103'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por idade - Proventos proporcionais calculado sobre a média, reajuste manter valor real', '0104'));
+                    opcoesbeneficio.add(new Option('Aposentadoria compulsória - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0105'));
+                    opcoesbeneficio.add(new Option('Aposentadoria compulsória - Proventos proporcionais calculado sobre a média, reajuste manter valor real', '0106'));
+                    opcoesbeneficio.add(new Option('Aposentadoria de professor - Proventos com integralidade, revisão pela paridade', '0107'));
+                    opcoesbeneficio.add(new Option('Aposentadoria de professor - Proventos pela média, reajuste manter valor real', '0108'));
+                }
+
+                if (value == 6 && rh01_admiss >= '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Aposentadoria especial - Risco', '0201'));
+                    opcoesbeneficio.add(new Option('Aposentadoria especial - Exposição a agentes nocivos', '0202'));
+                    opcoesbeneficio.add(new Option('Aposentadoria da pessoa com deficiência', '0203'));
+                }
+
+                if (value == 4 && rh01_admiss >= '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos com integralidade, revisão pela paridade', '0301'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos pela média, reajuste manter valor real', '0302'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos proporcionais calculado sobre integralidade, revisão pela paridade', '0303'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez - Proventos proporcionais calculado sobre a média, reajuste manter valor real', '0304'));
+                }
+
+                if (value == 1 && rh01_admiss >= '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Pensão por morte (art. 40, § 7º, da CF/1988)', '0601'));
+                    opcoesbeneficio.add(new Option('Pensão por morte com paridade, decorrente do art. 6º-A da EC 41/2003', '0602'));
+                    opcoesbeneficio.add(new Option('Pensão por morte com paridade, decorrente do art. 3º da EC 47/2005', '0603'));
+
+                }
+
+                if (value && rh01_admiss < '2021-11-21') {
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Aposentadoria sem paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0801'));
+                    opcoesbeneficio.add(new Option('Aposentadoria com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0802'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0803'));
+                    opcoesbeneficio.add(new Option('Aposentadoria por invalidez sem paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0804'));
+                    opcoesbeneficio.add(new Option('Transferência para reserva concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0805'));
+                    opcoesbeneficio.add(new Option('Reforma concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0806'));
+                    opcoesbeneficio.add(new Option('Pensão por morte com paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0807'));
+                    opcoesbeneficio.add(new Option('Pensão por morte sem paridade concedida antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0808'));
+                    opcoesbeneficio.add(new Option('Outros benefícios previdenciários concedidos antes da obrigatoriedade de envio dos eventos não periódicos para entes públicos no eSocial', '0809'));
+                    opcoesbeneficio.add(new Option('Aposentadoria de parlamentar - Plano próprio', '0810'));
+                    opcoesbeneficio.add(new Option('Aposentadoria de servidor vinculado ao Poder Legislativo - Plano próprio', '0811'));
+                    opcoesbeneficio.add(new Option('Pensão por morte - Plano próprio', '0812'));
+                    if (value == 7) {
+                        document.getElementById('tipo7').style.display = '';
+                    }
+                } else if (value == 7) {
+                    document.getElementById('tipo7').style.display = '';
+                    opcoesbeneficio.length = 0;
+                    opcoesbeneficio.add(new Option('Selecione', '0'));
+                    opcoesbeneficio.add(new Option('Pensão especial sem vínculo previdenciário', '1001'));
+                    opcoesbeneficio.add(new Option('Outros benefícios sem vínculo previdenciário', '1009'));
+                } else {
+                    document.getElementById('tipo7').style.display = 'none';
+                }
+                document.getElementById('rh02_tipobeneficio').value = oRetorno.rh02_tipobeneficio;
+                if (oRetorno.rh02_descratobeneficio != undefined) {
+                    document.getElementById('rh02_descratobeneficio').value = oRetorno.rh02_descratobeneficio;
+                } else {
+                    document.getElementById('rh02_descratobeneficio').value = '';
+                }
+            }
+            js_CarregaTipoBeneficio();
         </script>
         <?
 

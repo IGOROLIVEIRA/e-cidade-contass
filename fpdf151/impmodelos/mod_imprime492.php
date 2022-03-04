@@ -3,6 +3,7 @@
 $sSQLTomadorDBConfig = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
 $rsTomadorDBConfig = db_query($sSQLTomadorDBConfig);
 $lTomadorEhPrefeitura = !!pg_num_rows($rsTomadorDBConfig);
+$oInstit = new Instituicao(db_getsession('DB_instit'));
 
 $oConf = db_utils::fieldsmemory($this->rsConfig, $j);
 $xlin = 20;
@@ -307,11 +308,16 @@ $this->objpdf->setX(125);
 $this->objpdf->cell(40, 5, "Valor IRRF", 1, 0);
 $this->objpdf->cell(35, 5, "R$ " . number_format($this->fvlrIrrf, 2, ",", "."), 1, 1, "R");
 
-$fTotalNota = $this->fTotaliUni;
+$fTotalNota = $this->fTotaliUni; 
 
 // valor total da nota
-if ($lTomadorEhPrefeitura) {
+if ($lTomadorEhPrefeitura){
     $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
+}
+
+if ($lTomadorEhPrefeitura == null && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
+   || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL)){        
+        $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
 }
 
 $this->objpdf->setX(125);

@@ -111,6 +111,9 @@ class cl_rhpessoalmov
 
     var $rh02_jornadadetrabalho = null;
 
+    var $rh02_tipobeneficio = null;
+    var $rh02_descratobeneficio = null;
+
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  rh02_instit = int4 = Cod. Instituição
@@ -158,7 +161,8 @@ class cl_rhpessoalmov
                  rh02_mattraborgcedente = varchar(100) = Matricula do Trabalhador no órgão Cedente
                  rh02_dataadmisorgcedente = date = Data admissão org Cedente
                  rh02_jornadadetrabalho = int4 = Jornada de Trabalho
-
+                 rh02_tipobeneficio = varchar(5) =  Tipo de Benefício
+                 rh02_descratobeneficio = varchar(255) =  Descrição do ato que originou o Benefício
                  ";
     //funcao construtor da classe
     function cl_rhpessoalmov()
@@ -262,6 +266,8 @@ class cl_rhpessoalmov
                 }
             }
             $this->rh02_jornadadetrabalho = ($this->rh02_jornadadetrabalho == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"] : $this->rh02_jornadadetrabalho);
+            $this->rh02_tipobeneficio = ($this->rh02_tipobeneficio == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_tipobeneficio"] : $this->rh02_tipobeneficio);
+            $this->rh02_descratobeneficio = ($this->rh02_descratobeneficio == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_descratobeneficio"] : $this->rh02_descratobeneficio);
         } else {
             $this->rh02_instit = ($this->rh02_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_instit"] : $this->rh02_instit);
             $this->rh02_seqpes = ($this->rh02_seqpes == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_seqpes"] : $this->rh02_seqpes);
@@ -513,6 +519,14 @@ class cl_rhpessoalmov
             $this->rh02_horarionoturno = "f";
         }
 
+        if ($this->rh02_tipobeneficio == null) {
+            $this->rh02_tipobeneficio = "null";
+        }
+
+        if ($this->rh02_descratobeneficio == null) {
+            $this->rh02_descratobeneficio = "null";
+        }
+
         if ($this->rh02_cnpjcedente == null) {
             if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
                 $this->erro_sql = " Campo CNPJ Cedente não informado.";
@@ -669,6 +683,8 @@ class cl_rhpessoalmov
                                       ,rh02_mattraborgcedente
                                       ,rh02_dataadmisorgcedente
                                       ,rh02_jornadadetrabalho
+                                      ,rh02_tipobeneficio
+                                      ,rh02_descratobeneficio
                        )
                 values (
                                 $this->rh02_instit
@@ -723,6 +739,8 @@ class cl_rhpessoalmov
                                ," . ($this->rh02_mattraborgcedente == "null" || $this->rh02_mattraborgcedente == "" ? "null" : "'" . $this->rh02_mattraborgcedente . "'") . "
                                ," . ($this->rh02_dataadmisorgcedente == "null" || $this->rh02_dataadmisorgcedente == "" ? "null" : "'" . $this->rh02_dataadmisorgcedente . "'") . "
                                ," . ($this->rh02_jornadadetrabalho == "null" || $this->rh02_jornadadetrabalho == "" ? "null" : "'" . $this->rh02_jornadadetrabalho . "'") . "
+                               ,'$this->rh02_tipobeneficio'
+                               ,'$this->rh02_descratobeneficio'
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -1342,6 +1360,26 @@ class cl_rhpessoalmov
             $virgula = ",";
         }
 
+        if (trim($this->rh02_tipobeneficio) == "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipobeneficio"])) {
+            if ($this->rh02_tipobeneficio == "") {
+                $sql  .= $virgula . " rh02_tipobeneficio = null";
+                $virgula = ",";
+            } else {
+                $sql  .= $virgula . " rh02_tipobeneficio = '$this->rh02_tipobeneficio'";
+                $virgula = ",";
+            }
+        }
+
+        if (trim($this->rh02_descratobeneficio) == "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_descratobeneficio"])) {
+            if ($this->rh02_descratobeneficio == "") {
+                $sql  .= $virgula . " rh02_descratobeneficio = null";
+                $virgula = ",";
+            } else {
+                $sql  .= $virgula . " rh02_descratobeneficio = '$this->rh02_descratobeneficio'";
+                $virgula = ",";
+            }
+        }
+
         $sql .= " where ";
         if ($rh02_seqpes != null) {
             $sql .= " rh02_seqpes = $this->rh02_seqpes";
@@ -1421,6 +1459,7 @@ class cl_rhpessoalmov
             }
         }
         $result = db_query($sql);
+
         if (!$result) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Cadastro de pessoal não Alterado. Alteração Abortada.\\n";

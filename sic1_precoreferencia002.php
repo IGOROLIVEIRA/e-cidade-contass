@@ -62,7 +62,7 @@ if (isset($imprimirword)) {
     </script>";
     }
 }
-
+ 
 if (isset($alterar)) {
 
     if ($respCotacaocodigo != "" && $respOrcacodigo != "") {
@@ -82,7 +82,7 @@ if (isset($alterar)) {
     /**
      * Atualização do valor dos itens do preço referência
      */
-
+    
     if ($si01_tipoprecoreferencia == '1') {
         $sFuncao = "avg";
     } else if ($si01_tipoprecoreferencia == '2') {
@@ -94,16 +94,17 @@ if (isset($alterar)) {
     $sSql = "select pc23_orcamitem,count(pc23_vlrun) as valor
     from pcproc
     join pcprocitem on pc80_codproc = pc81_codproc
+    join solicitem on pc81_solicitem = pc11_codigo
     join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
     join pcorcamitem on pc31_orcamitem = pc22_orcamitem
     join pcorcamval on pc22_orcamitem = pc23_orcamitem
-    where pc80_codproc = $si01_processocompra and pc23_vlrun != 0 group by pc23_orcamitem";
+    where pc80_codproc = $si01_processocompra and pc23_vlrun != 0 group by pc23_orcamitem, pc11_seq order by pc11_seq asc";
 
     $rsResult = db_query($sSql);
 
 
     $arrayValores = array();
-    $cont = 0;
+    $cont = 0; 
 
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
@@ -129,11 +130,11 @@ if (isset($alterar)) {
             }
         }
     }
-
-
+    
+    
     for ($iCont = 0; $iCont < $cont; $iCont++) {
         $valor = $arrayValores[$iCont];
-        $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
+        /*$sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
             round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
             round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
                 from pcproc
@@ -141,11 +142,69 @@ if (isset($alterar)) {
                 join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
                 join pcorcamitem on pc31_orcamitem = pc22_orcamitem
                 join pcorcamval on pc22_orcamitem = pc23_orcamitem
-                where pc80_codproc = $si01_processocompra and pc23_orcamitem = $valor group by pc23_orcamitem";
+                where pc80_codproc = $si01_processocompra and pc23_orcamitem = $valor group by pc23_orcamitem";*/
+                
 
-        $rsResultee = db_query($sSql);
+        $sSql = "select
+                    pc23_orcamitem,
+                    round($sFuncao(pc23_vlrun), 4) as valor,
+                    round($sFuncao(pc23_perctaxadesctabela), 2) as percreferencia1,
+                    round($sFuncao(pc23_percentualdesconto), 2) as percreferencia2,
+                    pc23_quant,
+                    pc11_reservado,
+                    pc01_codmater,
+                    pc01_descrmater,
+                    pc01_tabela,
+                    pc01_taxa,
+                    m61_codmatunid,
+                    pc80_criterioadjudicacao,
+                    case when pc80_criterioadjudicacao = 1 then
+                     round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
+                     when pc80_criterioadjudicacao = 2 then
+                     round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
+                     end as mediapercentual
+                from
+                    pcproc
+                join pcprocitem on
+                    pc80_codproc = pc81_codproc
+                join solicitem on
+                    pc81_solicitem = pc11_codigo
+                join solicitempcmater on
+                    pc11_codigo = pc16_solicitem
+                join pcmater on
+                    pc16_codmater = pc01_codmater
+                join solicitemunid on
+                    pc11_codigo = pc17_codigo
+                join matunid on
+                    pc17_unid = m61_codmatunid
+                join pcorcamitemproc on
+                    pc81_codprocitem = pc31_pcprocitem
+                join pcorcamitem on
+                    pc31_orcamitem = pc22_orcamitem
+                join pcorcamval on
+                    pc22_orcamitem = pc23_orcamitem
+                where
+                    pc80_codproc = $si01_processocompra
+                    and pc23_orcamitem = $valor
+                    and (pc23_vlrun <> 0 or  pc23_percentualdesconto <> 0)
+                group by
+                    pc23_orcamitem,
+                    pc23_quant,
+                    pc31_pcprocitem,
+                    pc11_reservado,
+                    pc11_seq,
+                    pc01_codmater,
+                    pc01_descrmater,
+                    pc01_tabela,
+                    pc01_taxa,
+                    m61_codmatunid,
+                    pc80_criterioadjudicacao order by pc11_seq asc
+                   ";
+       
+        $rsResultee = db_query($sSql);  
+       
 
-        $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
+        $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);  
 
         $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
         $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
@@ -157,9 +216,20 @@ if (isset($alterar)) {
         } else {
             $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia2;
         }
-        $clitemprecoreferencia->incluir(null);
-    }
+        $clitemprecoreferencia->si02_coditem = $oItemOrc->pc01_codmater;
+        //$clitemprecoreferencia->si02_descritem = $oItemOrc->pc01_descrmater;
+        $clitemprecoreferencia->si02_qtditem = $oItemOrc->pc23_quant;
+        $clitemprecoreferencia->si02_codunidadeitem =  $oItemOrc->m61_codmatunid;
+        $clitemprecoreferencia->si02_reservado = $oItemOrc->pc11_reservado;
+        $clitemprecoreferencia->si02_tabela = $oItemOrc->pc01_tabela;
+        $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
+        $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
+        $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
+        $clitemprecoreferencia->incluir(null);    
 
+       
+    }
+    
     if ($clitemprecoreferencia->erro_status == 0) {
 
         $sqlerro = true;
