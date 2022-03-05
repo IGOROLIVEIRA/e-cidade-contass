@@ -173,34 +173,31 @@ $this->objpdf->sety($xlin + 22);
 $this->objpdf->Setfont('Arial', 'B', 8);
 
 $this->objpdf->Cell(60, 5, 'Empenho: ' . pg_result($this->recorddositens, $ii, $this->empempenho) . "/" . pg_result($this->recorddositens, $ii, $this->anousuemp), 1, 0, 'L');
-$this->objpdf->Cell(142, 5, 'Data da Emissão:', 1, 1, 'L');
+$this->objpdf->Cell(142, 5, 'Data da Emissão do Empenho: ' . db_formatar($this->e60_emiss, 'd'), 1, 1, 'L');
 $this->objpdf->Cell(20, 5, 'Item', 1, 0, 'C');
 $this->objpdf->Cell(20, 5, 'Quant.', 1, 0, 'C');
 $this->objpdf->Cell(20, 5, 'Unid.', 1, 0, 'C');
 $this->objpdf->Cell(102, 5, 'Material/Serviço', 1, 0, 'C');
 $this->objpdf->Cell(20, 5, 'Unitário', 1, 0, 'C');
 $this->objpdf->Cell(20, 5, 'Total', 1, 1, 'C');
-$this->objpdf->Setfont('Arial', '', 6);
+$this->objpdf->Setfont('Arial', '', 8);
 
 $this->objpdf->SetWidths(array(20, 20, 20, 102, 20, 20));  //$this->objpdf->SetWidths(array(12,16,10,104,30,30));
-$this->objpdf->SetAligns(array('C', 'C', 'C', 'L', 'R', 'R'));
+$this->objpdf->SetAligns(array('C', 'C', 'C', 'L', 'C', 'C'));
 
 for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     db_fieldsmemory($this->recorddositens, $ii);
 
-    /*    $this->objpdf->Cell(20, 5, pg_result($this->recorddositens, $ii, $this->codmater), 1, 0, 'C');
-    $this->objpdf->Cell(20, 5, pg_result($this->recorddositens, $ii, $this->quantitem), 1, 0, 'C');
-    $this->objpdf->Cell(20, 5, pg_result($this->recorddositens, $ii, $this->unid), 1, 0, 'C');*/
     $this->objpdf->Row(
         array(
             pg_result($this->recorddositens, $ii, $this->codmater),
-            pg_result($this->recorddositens, $ii, $this->unid),
             pg_result($this->recorddositens, $ii, $this->quantitem),
-            pg_result($this->recorddositens, $ii, $this->descricaoitem) . "\n" . pg_result($this->recorddositens, $ii, $this->observacaoitem) . "\n" . 'Marca:' .  pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval),
+            pg_result($this->recorddositens, $ii, $this->unid),
+            pg_result($this->recorddositens, $ii, $this->descricaoitem) . pg_result($this->recorddositens, $ii, $this->pc01_complmater) . "\n" . 'Marca: ' . pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval),
             db_formatar(pg_result($this->recorddositens, $ii, $this->vlrunitem), 'v', " ", $this->numdec),
             db_formatar(pg_result($this->recorddositens, $ii, $this->valoritem), 'f')
         ),
-        3,
+        5,
         true,
         5,
         0,
@@ -214,7 +211,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     var_dump($pagina);
     exit;*/
 
-    if (($this->objpdf->gety() > $this->objpdf->h - 40 && $pagina == 1) || ($this->objpdf->gety() > $this->objpdf->h - 50 && $pagina != 1)) {
+    if (($this->objpdf->gety() > $this->objpdf->h - 30 && $pagina == 1) || ($this->objpdf->gety() > $this->objpdf->h - 50 && $pagina != 1)) {
         $this->objpdf->sety($xlin + 22);
         $this->objpdf->Setfont('Arial', 'B', 8);
         $this->objpdf->AddPage();
@@ -226,7 +223,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         $this->objpdf->Cell(102, 5, 'Material/Serviço', 1, 0, 'C');
         $this->objpdf->Cell(20, 5, 'Unitário', 1, 0, 'C');
         $this->objpdf->Cell(20, 5, 'Total', 1, 1, 'C');
-        $this->objpdf->Setfont('Arial', '', 6);
+        $this->objpdf->Setfont('Arial', '', 8);
     }
 }
 $this->objpdf->Setfont('Arial', 'B', 8);
