@@ -63,15 +63,15 @@ class cl_saltes
   var $k13_dtimplantacao = null;
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
-                 k13_conta = int4 = Código Conta 
+                 k13_conta = int4 = Cdigo Conta 
                  k13_reduz = int4 = Reduzido 
-                 k13_descr = varchar(40) = Descrição  Conta 
+                 k13_descr = varchar(40) = Descrio  Conta 
                  k13_saldo = float8 = Saldo da Conta 
                  k13_ident = char(15) = Identificacao da conta 
                  k13_vlratu = float8 = Valor Atualizado 
-                 k13_datvlr = date = Data Atualização 
+                 k13_datvlr = date = Data Atualizao 
                  k13_limite = date = Data Limite 
-                 k13_dtimplantacao = date = Data da Implantação da Conta 
+                 k13_dtimplantacao = date = Data da Implantao da Conta 
                  ";
   //funcao construtor da classe 
   function cl_saltes()
@@ -136,16 +136,16 @@ class cl_saltes
       $this->erro_sql = " Campo Reduzido nao Informado.";
       $this->erro_campo = "k13_reduz";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
     }
     if ($this->k13_descr == null) {
-      $this->erro_sql = " Campo Descrição  Conta nao Informado.";
+      $this->erro_sql = " Campo Descrio  Conta nao Informado.";
       $this->erro_campo = "k13_descr";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -154,7 +154,7 @@ class cl_saltes
       $this->erro_sql = " Campo Saldo da Conta nao Informado.";
       $this->erro_campo = "k13_saldo";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -166,10 +166,10 @@ class cl_saltes
       $this->k13_limite = "null";
     }
     if ($this->k13_dtimplantacao == null) {
-      $this->erro_sql = " Campo Data da Implantação da Conta nao Informado.";
+      $this->erro_sql = " Campo Data da Implantao da Conta nao Informado.";
       $this->erro_campo = "k13_dtimplantacao_dia";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -178,7 +178,7 @@ class cl_saltes
     if (($this->k13_conta == null) || ($this->k13_conta == "")) {
       $this->erro_sql = " Campo k13_conta nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -209,13 +209,13 @@ class cl_saltes
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql   = "Saldo Tesuoraria ($this->k13_conta) nao Incluído. Inclusao Abortada.";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_banco = "Saldo Tesuoraria já Cadastrado";
+        $this->erro_sql   = "Saldo Tesuoraria ($this->k13_conta) nao Includo. Inclusao Abortada.";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_banco = "Saldo Tesuoraria j Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = "Saldo Tesuoraria ($this->k13_conta) nao Incluído. Inclusao Abortada.";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_sql   = "Saldo Tesuoraria ($this->k13_conta) nao Includo. Inclusao Abortada.";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
       $this->erro_status = "0";
@@ -225,7 +225,7 @@ class cl_saltes
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
     $this->erro_sql .= "Valores : " . $this->k13_conta;
-    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
@@ -257,10 +257,10 @@ class cl_saltes
       $sql  .= $virgula . " k13_conta = $this->k13_conta ";
       $virgula = ",";
       if (trim($this->k13_conta) == null) {
-        $this->erro_sql = " Campo Código Conta nao Informado.";
+        $this->erro_sql = " Campo Cdigo Conta nao Informado.";
         $this->erro_campo = "k13_conta";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -273,7 +273,7 @@ class cl_saltes
         $this->erro_sql = " Campo Reduzido nao Informado.";
         $this->erro_campo = "k13_reduz";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -283,10 +283,10 @@ class cl_saltes
       $sql  .= $virgula . " k13_descr = '$this->k13_descr' ";
       $virgula = ",";
       if (trim($this->k13_descr) == null) {
-        $this->erro_sql = " Campo Descrição  Conta nao Informado.";
+        $this->erro_sql = " Campo Descrio  Conta nao Informado.";
         $this->erro_campo = "k13_descr";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -299,7 +299,7 @@ class cl_saltes
         $this->erro_sql = " Campo Saldo da Conta nao Informado.";
         $this->erro_campo = "k13_saldo";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -338,10 +338,10 @@ class cl_saltes
       $sql  .= $virgula . " k13_dtimplantacao = '$this->k13_dtimplantacao' ";
       $virgula = ",";
       if (trim($this->k13_dtimplantacao) == null) {
-        $this->erro_sql = " Campo Data da Implantação da Conta nao Informado.";
+        $this->erro_sql = " Campo Data da Implantao da Conta nao Informado.";
         $this->erro_campo = "k13_dtimplantacao_dia";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -351,10 +351,10 @@ class cl_saltes
         $sql  .= $virgula . " k13_dtimplantacao = null ";
         $virgula = ",";
         if (trim($this->k13_dtimplantacao) == null) {
-          $this->erro_sql = " Campo Data da Implantação da Conta nao Informado.";
+          $this->erro_sql = " Campo Data da Implantao da Conta nao Informado.";
           $this->erro_campo = "k13_dtimplantacao_dia";
           $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
           $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
           $this->erro_status = "0";
           return false;
@@ -397,7 +397,7 @@ class cl_saltes
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Saldo Tesuoraria nao Alterado. Alteracao Abortada.\\n";
       $this->erro_sql .= "Valores : " . $this->k13_conta;
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
@@ -407,16 +407,16 @@ class cl_saltes
         $this->erro_banco = "";
         $this->erro_sql = "Saldo Tesuoraria nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_sql .= "Valores : " . $this->k13_conta;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+        $this->erro_sql = "Alterao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->k13_conta;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
@@ -465,9 +465,9 @@ class cl_saltes
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Saldo Tesuoraria nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql   = "Saldo Tesuoraria nao Excludo. Excluso Abortada.\\n";
       $this->erro_sql .= "Valores : " . $k13_conta;
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
@@ -475,18 +475,18 @@ class cl_saltes
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "Saldo Tesuoraria nao Encontrado. Exclusão não Efetuada.\\n";
+        $this->erro_sql = "Saldo Tesuoraria nao Encontrado. Excluso no Efetuada.\\n";
         $this->erro_sql .= "Valores : " . $k13_conta;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+        $this->erro_sql = "Excluso efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $k13_conta;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
@@ -502,7 +502,7 @@ class cl_saltes
       $this->numrows    = 0;
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Erro ao selecionar os registros.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -511,7 +511,7 @@ class cl_saltes
     if ($this->numrows == 0) {
       $this->erro_banco = "";
       $this->erro_sql   = "Record Vazio na Tabela:saltes";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;

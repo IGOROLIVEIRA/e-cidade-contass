@@ -239,10 +239,14 @@ switch($oParam->exec) {
                     $codigoVeic = $resultVeiculo->ve01_codigo;
                 }
 
-                $resultadoAbast = $clveicabast->sql_record($clveicabast->sql_query_valorMax(null,"max(veicabast.ve70_medida)",null,"ve70_veiculos = $codigoVeic"));
+                $resultadoAbast = $clveicabast->sql_record($clveicabast->sql_query_valorMax(null,"max(veicabast.ve70_codigo)",null,"ve70_veiculos = $codigoVeic"));
                 $resultAbaste = db_utils::fieldsMemory($resultadoAbast,0);
 
-                if($resultAbaste->max>$medidasaida){
+                /*echo"<pre>";
+                var_dump($clveicabast->sql_query_valorMax(null,"max(veicabast.ve70_codigo)",null,"ve70_veiculos = $codigoVeic"));
+                exit;*/
+
+                if($resultAbaste->ve70_medida>$medidasaida){
                     $arrayKm[$k][0]  = $codigoVeic;
                     $arrayKm[$k][1]  = $test1;
                     $arrayKm[$k][2]  = $medidasaida;
@@ -438,12 +442,25 @@ switch($oParam->exec) {
             
 
             $resultadoMot1 = $clcgm->sql_record($clcgm->sql_query(null,"*",null,"z01_cgccpf = '$motorista'"));
-            $resultadoMot2 = db_utils::fieldsMemory($resultadoMot1, 0);
+            $verificaMotor = 0;
+            for($i=0;$i<pg_num_rows($resultadoMot1);$i++){
+                $resultadoMot2 = db_utils::fieldsMemory($resultadoMot1, $i);
+                $resultadoMotCod = $clveicmotoristas->sql_record($clveicmotoristas->sql_query(null,"*",null,"ve05_numcgm = $resultadoMot2->z01_numcgm"));
+                $resultMotCod = db_utils::fieldsMemory($resultadoMotCod, 0);
+                
+                if($resultMotCod->ve05_codigo!=""){
+                    $verificaMotor = 1;
+                }
+            }
+        
+            /*if($clveicmotoristas->numrows == 0){
+                echo"<pre>";
+                var_dump($clcgm->sql_query(null,"*",null,"z01_cgccpf = '$motorista'")."-".$clveicmotoristas->sql_query(null,"*",null,"ve05_numcgm = $resultadoMot2->z01_numcgm"));
+                exit;
+            }*/
+            
 
-            $resultadoMotCod = $clveicmotoristas->sql_record($clveicmotoristas->sql_query(null,"*",null,"ve05_numcgm = $resultadoMot2->z01_numcgm"));
-            $resultMotCod = db_utils::fieldsMemory($resultadoMotCod, 0);   
-
-            if($clveicmotoristas->numrows == 0){
+            if($verificaMotor == 0){
                 $controle1 = 1;
                 $arrayItensPlanilhaMotorista[$h][0] = $motorista;
                 $arrayItensPlanilhaMotorista[$h][1] = $motoristaNome;
@@ -571,7 +588,8 @@ switch($oParam->exec) {
                     $datasaida   = $row->data;
                     $hora        = $row->hora;
                     $valor       = $row->valor;
-                    $vUnitario   = floor($row->vUnitario*100)/100;
+                    //$vUnitario   = floor($row->vUnitario*100)/100;
+                    $vUnitario   = $row->vUnitario;
                     $litros      = $row->litros;
                     $combust     = strtoupper($row->combust);
                     //Busca o codigo do combustivel
@@ -582,7 +600,11 @@ switch($oParam->exec) {
                     $motorista         = $row->motorista;
                     $nota              = $row->nota;
 
-                    
+                    $valor = explode(",",$valor);
+                    $valor = $valor[0].".".$valor[1];
+                    $vUnitario = explode(",",$vUnitario);
+                    $vUnitario = $vUnitario[0].".".$vUnitario[1];
+  
 
                 //faz a busca do veiculo por placa
                 //$resultadoVeiculo = $clveiculos->sql_record($clveiculos->sql_query(null,"ve01_codigo,z01_cgccpf",null,"ve01_placa = '$test1'"));
@@ -612,10 +634,18 @@ switch($oParam->exec) {
                 $resultadoMotorita = $clcgm->sql_record($clcgm->sql_query(null,"*",null,"z01_cgccpf = '$motorista'"));
                 $resultMotorista = db_utils::fieldsMemory($resultadoMotorita, 0);
 
+                for($i=0;$i<pg_num_rows($resultadoMot1);$i++){
+                    $resultMotorista = db_utils::fieldsMemory($resultadoMotorita, 0);
+                    //Identifica Cod do motorista
+                    $resultadoMotCod = $clveicmotoristas->sql_record($clveicmotoristas->sql_query(null,"*",null,"ve05_numcgm = $resultMotorista->z01_numcgm"));
+                    $resultMotCod = db_utils::fieldsMemory($resultadoMotCod, 0);
+                    
+                    if($resultMotCod->ve05_codigo!=""){
+                        $motoristaCodigo = $resultMotCod->ve05_codigo;
+                    }
+                }
                 
-                //Identifica Cod do motorista
-                $resultadoMotCod = $clveicmotoristas->sql_record($clveicmotoristas->sql_query(null,"*",null,"ve05_numcgm = $resultMotorista->z01_numcgm"));
-                $resultMotCod = db_utils::fieldsMemory($resultadoMotCod, 0);
+                
 
                 //Verifica codigo do departamento de cada veiculo.
                 $resultCodDepart =  $clveiccentral->sql_record($clveiccentral->sql_query_file(null,"*",null,"ve40_veiculos = $codigoVeic"));
@@ -627,7 +657,7 @@ switch($oParam->exec) {
                 // Incluir a retirada do veiculo
                 
                 $clveicretirada->ve60_veiculo              = $codigoVeic;
-                $clveicretirada->ve60_veicmotoristas       = $resultMotCod->ve05_codigo;
+                $clveicretirada->ve60_veicmotoristas       = $motoristaCodigo;
                 $clveicretirada->ve60_datasaida            = $datasaida;
                 $clveicretirada->ve60_horasaida            = $hora;
                 $clveicretirada->ve60_medidasaida          = $medidasaida;
@@ -657,7 +687,7 @@ switch($oParam->exec) {
                 $clveicabast->incluir(null);
 
                 //fazendo inserção na tabela empveiculos
-                $resultadoAba = $clveicabast->sql_record($clveicabast->sql_query_valorMax(null,"max(ve70_codigo)",null,"ve70_veiculos = $codigoVeic"));
+                $resultadoAba = $clveicabast->sql_record($clveicabast->sql_query_valorMax1(null,"max(ve70_codigo)",null,"ve70_veiculos = $codigoVeic"));
                 $resultAba = db_utils::fieldsMemory($resultadoAba, 0);
 
                 $codemp = explode("/",$valorEm[$emp]);
@@ -669,7 +699,6 @@ switch($oParam->exec) {
                 $resultEmpenho = db_utils::fieldsMemory($resultadoEmpenho, 0);
 
 
-                
                 $clempveiculos -> si05_numemp            = $resultEmpenho->e60_numemp;
                 $clempveiculos -> si05_atestado          = "t"; 
                 $clempveiculos -> si05_codabast          = $resultAba->max;
@@ -688,7 +717,7 @@ switch($oParam->exec) {
                 $clveicabastretirada->incluir(null);
 
                 $clveicdevolucao->ve61_veicretirada      = $resultRetirada->max;
-                $clveicdevolucao->ve61_veicmotoristas    = $resultMotCod->ve05_codigo;
+                $clveicdevolucao->ve61_veicmotoristas    = $motoristaCodigo;
                 $clveicdevolucao->ve61_datadevol         = $datasaida;
                 $clveicdevolucao->ve61_horadevol         = $hora;
                 $clveicdevolucao->ve61_usuario           = db_getsession("DB_id_usuario"); 

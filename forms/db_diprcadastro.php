@@ -50,7 +50,7 @@ $cldipr->rotulo->label();
                     <td>
                         <?php
                         $aSegregacaoLei = array(0 => "Selecione", 't' => "Sim", 'f' => "Não");
-                        db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "style='width:120px' onchange='verificarMassaInstituidaPorLei()'");
+                        db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "style='width:120px'");
                         ?>
                     </td>
                 </tr>
@@ -149,7 +149,7 @@ $cldipr->rotulo->label();
     // Declarando uma variavel global
     campo = "";
     // Verificando se campos condicionais devem aparecer
-    verificarMassaInstituidaPorLei();
+    // verificarMassaInstituidaPorLei();
 
     function js_pesquisac236_numcgm(mostra, input) {
         campo = input;

@@ -30,6 +30,7 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_veiccaddestino_classe.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 $clrotulo = new rotulocampo;
 $clrotulo->label('ve01_codigo');
@@ -39,6 +40,7 @@ $clrotulo->label('descrdepto');
 $db_opcao = 1;
 ?>
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -53,7 +55,10 @@ $db_opcao = 1;
             var iCentral = $F('ve40_veiccadcentral');
             var sDataIni = $F('data_inicial_ano') + '-' + $F('data_inicial_mes') + '-' + $F('data_inicial_dia');
             var sDatafim = $F('data_final_ano') + '-' + $F('data_final_mes') + '-' + $F('data_final_dia');
-            var sUrl = 'iVeiculo=' + iVeiculo + '&sPlaca=' + sPlaca + '&iCentral=' + iCentral + '&sDataIni=' + sDataIni + '&sDataFim=' + sDatafim;
+            var sDestino = $F('destino');
+            var sDescDes = $F('destinodescr');
+            console.log(sDescDes);
+            var sUrl = 'iVeiculo=' + iVeiculo + '&sPlaca=' + sPlaca + '&iCentral=' + iCentral + '&sDataIni=' + sDataIni + '&sDataFim=' + sDatafim + '&sDestino=' + sDestino + '&sDescDes=' + sDescDes;
 
             jan = window.open('vei2_movveiculos002.php?' + sUrl, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
             jan.moveTo(0, 0);
@@ -62,88 +67,106 @@ $db_opcao = 1;
     </script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+
 <body bgcolor="#CCCCCC" style="margin-top: 25px">
-<form name="form1" method="post">
-    <center>
-        <table>
-            <tr>
-                <td>
-                    <fieldset>
-                        <legend>
-                            <b>Movimentação de Veículos</b>
-                        </legend>
-                        <table>
-                            <tr>
-                                <td nowrap title="<?= @$Tve01_codigo ?>">
-                                    <?
-                                    db_ancora(@$Lve01_codigo, "js_pesquisave01_codigo(true);", 4);
-                                    ?>
-                                </td>
-                                <td>
-                                    <?
-                                    db_input('ve01_codigo', 10, $Ive01_codigo, true, 'text', 4, " onchange='js_pesquisave01_codigo(false);'")
-                                    ?>
-                                    <?
-                                    db_input('ve01_placadescr', 10, '0', true, 'text', 3, '')
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <?= @$Lve01_placa ?>
-                                </td>
-                                <td>
-                                    <?
-                                    db_input('ve01_placa', 10, $Ive01_placa, true, 'text', 4, '');
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Tve40_veiccadcentral ?>">
-                                    <?
-                                    db_ancora(@$Lve40_veiccadcentral, "js_pesquisacentral(true);", $db_opcao);
-                                    ?>
-                                </td>
-                                <td>
-                                    <?
-                                    db_input('ve40_veiccadcentral', 10, $Ive40_veiccadcentral, true,
-                                        'text', $db_opcao, " onchange='js_pesquisacentral(false);'")
-                                    ?>
-                                    <?
-                                    db_input('descrdepto', 40, $Idescrdepto, true, 'text', 3, '')
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td nowrap><b>Período:</b></td>
-                                <td>
-                                    <?
-                                    db_inputdata("data_inicial", "", "", "", true, "text", 4);
-                                    ?>&nbsp;<b> até</b>&nbsp;
-                                    <?
-                                    db_inputdata("data_final", "", "", "", true, "text", 4);
-                                    ?>
-                                </td>
-                            </tr>
-                        </table>
-                    </fieldset>
-                </td>
-            </tr>
-            <tr>
-                <td align="center" colspan="2">
-                    <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
-                </td>
-            </tr>
-        </table>
-</form>
-</center>
-<?
-db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
-?>
+    <form name="form1" method="post">
+        <center>
+            <table>
+                <tr>
+                    <td>
+                        <fieldset>
+                            <legend>
+                                <b>Movimentação de Veículos</b>
+                            </legend>
+                            <table>
+                                <tr>
+                                    <td nowrap title="<?= @$Tve01_codigo ?>">
+                                        <?
+                                        db_ancora(@$Lve01_codigo, "js_pesquisave01_codigo(true);", 4);
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('ve01_codigo', 10, $Ive01_codigo, true, 'text', 4, " onchange='js_pesquisave01_codigo(false);'")
+                                        ?>
+                                        <?
+                                        db_input('ve01_placadescr', 10, '0', true, 'text', 3, '')
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <?= @$Lve01_placa ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('ve01_placa', 10, $Ive01_placa, true, 'text', 4, '');
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap title="<?= @$Tve40_veiccadcentral ?>">
+                                        <?
+                                        db_ancora(@$Lve40_veiccadcentral, "js_pesquisacentral(true);", $db_opcao);
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input(
+                                            've40_veiccadcentral',
+                                            10,
+                                            $Ive40_veiccadcentral,
+                                            true,
+                                            'text',
+                                            $db_opcao,
+                                            " onchange='js_pesquisacentral(false);'"
+                                        )
+                                        ?>
+                                        <?
+                                        db_input('descrdepto', 40, $Idescrdepto, true, 'text', 3, '')
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><b>Período:</b></td>
+                                    <td>
+                                        <?
+                                        db_inputdata("data_inicial", "", "", "", true, "text", 4);
+                                        ?>&nbsp;<b> até</b>&nbsp;
+                                        <?
+                                        db_inputdata("data_final", "", "", "", true, "text", 4);
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><b>Destino:</b></td>
+                                    <td>
+                                        <?
+                                        $clveiccaddestino = new cl_veiccaddestino;
+                                        $result_destinos = $clveiccaddestino->sql_record($clveiccaddestino->sql_query_file(null, "*"));
+                                        db_selectrecord("destino", $result_destinos, true, 1, "", "", "", "0", "");
+                                        ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
+                    </td>
+                </tr>
+            </table>
+    </form>
+    </center>
+    <?
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+    ?>
 </body>
+
 </html>
 <script type="text/javascript">
-
     /**
      * Valida codigo do veiculo antes de abrir tela de consulta, funcao js_pesquisa()
      *
@@ -162,7 +185,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
      *
      * @return {void}
      */
-    js_validarVeiculo.retorno = function (sDescricaoVeiculo, lErro) {
+    js_validarVeiculo.retorno = function(sDescricaoVeiculo, lErro) {
 
         /**
          * Veiculo nao encontrado
@@ -189,6 +212,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
             }
         }
     }
+
     function js_mostraveiculos(chave, erro) {
 
         document.form1.ve01_placadescr.value = chave;
@@ -197,6 +221,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
             document.form1.ve01_codigo.value = '';
         }
     }
+
     function js_mostraveiculos1(chave1, chave2) {
 
         document.form1.ve01_codigo.value = chave1;
@@ -228,6 +253,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
             }
         }
     }
+
     function js_mostracentral(chave, erro, descrdepto) {
 
         document.form1.descrdepto.value = descrdepto;
@@ -237,6 +263,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
             document.form1.descrdepto.value = '';
         }
     }
+
     function js_mostracentral1(chave1, chave2) {
 
         document.form1.ve40_veiccadcentral.value = chave1;

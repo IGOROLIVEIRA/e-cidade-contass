@@ -53,7 +53,7 @@ if ($oParam->exec == 'getSaltesConvenio') {
     
    } else {
 
-      $sMensagem = "UsuÃ¡rio: para realizar a arrecadaÃ§Ã£o da receita, vincule o convÃªnio a respectiva conta bancÃ¡ria.";
+      $sMensagem = "Usuário: para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária.";
       $aSaltesConv = array("c206_sequencial" => "", "c206_objetoconvenio" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
 
    }
@@ -61,7 +61,7 @@ if ($oParam->exec == 'getSaltesConvenio') {
    echo $oJson->encode($aSaltesConv);
 }
 
-//operação de credito
+//operao de credito
 
 if ($oParam->exec == 'getSaltesOP') {
    $oDaoSaltes = db_utils::getDao("db_operacaodecredito");
