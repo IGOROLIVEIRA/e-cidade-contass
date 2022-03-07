@@ -143,6 +143,8 @@ $db_botao = true;
         let aSelecionados = aItens.filter(e => e.isSelected);
         let aItensFormatados = [];
 
+        let erro = false;
+
         if (!aSelecionados.length) {
             alert('Informe ao menos um item!');
             return;
@@ -172,6 +174,7 @@ $db_botao = true;
 
             if (item.qtdexclusiva == "" && valorMeepp == 1) {
                 alert('Qtde Exclusiva do item ' + item.codigo + ' precisa ser preenchida!');
+                erro = true;
                 return;
             }
 
@@ -179,6 +182,10 @@ $db_botao = true;
             aItensFormatados.push(item);
 
         });
+
+        if (erro == true) {
+            return;
+        }
 
         let oParam = new Object();
         oParam.licitacao = document.form1.licitacao.value;
