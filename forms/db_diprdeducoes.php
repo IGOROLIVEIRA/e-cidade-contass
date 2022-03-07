@@ -44,7 +44,7 @@
 
                 <tr>
                     <td>
-                        <b><? db_ancora("Código DIRP", "js_pesquisac239_codigodipr(true);", $db_opcao); ?></b>
+                        <b><? db_ancora("Código DIPR", "js_pesquisac239_codigodipr(true);", $db_opcao); ?></b>
                     </td>
                     <td nowrap>
                         <?

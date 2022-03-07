@@ -29,6 +29,7 @@ include("fpdf151/pdf.php");
 include("libs/db_sql.php");
 include("classes/db_veiculos_classe.php");
 include("classes/db_veiculoscomb_classe.php");
+include("classes/db_veiccaddestino_classe.php");
 
 $clveiculos = new cl_veiculos;
 $clveiculoscomb = new cl_veiculoscomb;
@@ -55,6 +56,10 @@ if ($iCentral != "") {
     $where .= " and ve40_veiccadcentral = $iCentral ";
 }
 
+if ($sDestino != "0") {
+    $where .= " and ve60_destinonovo = $sDestino ";
+}
+
 if (($sDataIni != "--") && ($sDataFim != "--")) {
     $where .= " and  ve60_datasaida  between '$sDataIni' and '$sDataFim'  ";
     $sDataIni = db_formatar($sDataIni, "d");
@@ -68,6 +73,11 @@ if (($sDataIni != "--") && ($sDataFim != "--")) {
     $where .= "and ve60_datasaida <= '$sDataFim'   ";
     $sDataFim = db_formatar($sDataFim, "d");
     $info = "Período Até $sDataFim.";
+} else if ($sDestino != "0") {
+    $clveiccaddestino = new cl_veiccaddestino;
+    $rsDestino = $clveiccaddestino->sql_record($clveiccaddestino->sql_query_file($sDestino, "ve75_destino"));
+    db_fieldsmemory($rsDestino, 0);
+    $info = "DESTINO: " . $ve75_destino;
 }
 
 $head3 = "MOVIMENTAÇÃO DE VEÍCULOS";
@@ -101,6 +111,7 @@ $campos = " DISTINCT
                 ve01_codigo,ve01_placa,
                 (max(ve61_medidadevol))-(min(ve60_medidasaida)) as percoreu ";
 $sSqlGeral = $clveiculos->sql_query_movimentacao(null, $campos, $sOrderBy, $where . $sGroupBy);
+
 $result = db_query(" drop table if exists w_movveiculos; create table w_movveiculos as {$sSqlGeral} ") or die(pg_last_error());
 
 if (pg_num_rows(db_query("select * from w_movveiculos")) == 0) {
@@ -155,7 +166,7 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
         $pdf->cell(15, $alt, "H. Saída", 1, 0, "C", 1);
         $pdf->cell(20, $alt, "Km Saída", 1, 0, "C", 1);
         $pdf->cell(54, $alt, "Motorista", 1, 0, "C", 1);
-        $pdf->cell(74, $alt, "Destino", 1, 0, "C", 1);
+        $pdf->cell(74, $alt, "Observação", 1, 0, "C", 1);
         $pdf->cell(20, $alt, "Devolução", 1, 0, "C", 1);
         $pdf->cell(20, $alt, "Retorno", 1, 0, "C", 1);
         $pdf->cell(20, $alt, "H. Dev.", 1, 0, "C", 1);
@@ -227,9 +238,7 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
         $pdf->cell(257, $alt, "TOTAL DE KM RODADOS:", 1, 0, "L", 0);
         $pdf->cell(20, $alt, "{$total}", "TRB", 1, "C", 0);
         $pdf->ln();
-
     }
-
 }
 $pdf->Output();
 
@@ -240,10 +249,9 @@ function quebrar_texto($texto, $tamanho)
     $string_atual = "";
     foreach ($aTexto as $word) {
 
-        if(strlen($word) > $tamanho) {
+        if (strlen($word) > $tamanho) {
 
             $aTextoNovo = str_split($word, $tamanho);
-
         } else {
 
             $string_ant = $string_atual;
@@ -256,13 +264,9 @@ function quebrar_texto($texto, $tamanho)
         }
     }
 
-    if($string_atual != '') {
+    if ($string_atual != '') {
 
         $aTextoNovo[] = $string_atual;
-
     }
     return $aTextoNovo;
-
 }
-
-?>

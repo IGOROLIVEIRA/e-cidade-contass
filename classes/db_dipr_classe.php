@@ -86,8 +86,6 @@ class cl_dipr
             $this->c236_orgao = ($this->c236_orgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_orgao"] : $this->c236_orgao);
             $this->c236_massainstituida = ($this->c236_massainstituida == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_massainstituida"] : $this->c236_massainstituida);
             $this->c236_beneficiotesouro = ($this->c236_beneficiotesouro == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_beneficiotesouro"] : $this->c236_beneficiotesouro);
-            $this->verificarCondicaoMassaInstituidaPorLei('c236_atonormativo');
-            $this->verificarCondicaoMassaInstituidaPorLei('c236_exercicionormativo');
             $this->c236_atonormativo = ($this->c236_atonormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_atonormativo"] : $this->c236_atonormativo);
             $this->c236_exercicionormativo = ($this->c236_exercicionormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_exercicionormativo"] : $this->c236_exercicionormativo);
             $this->c236_numcgmexecutivo = ($this->c236_numcgmexecutivo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmexecutivo"] : $this->c236_numcgmexecutivo);
@@ -458,7 +456,7 @@ class cl_dipr
 
     function verificaAtoNormativo()
     {
-        if ($this->c236_atonormativo == null and $this->c236_massainstituida != "f") {
+        if ($this->c236_atonormativo == null) {
             $this->erroCampo("Campo Ato Normativo não Informado.", "c236_atonormativo");
             return false;
         }
@@ -467,7 +465,7 @@ class cl_dipr
 
     function verificaExercicioNormativo()
     {
-        if ($this->c236_exercicionormativo == null and $this->c236_massainstituida === "t") {
+        if ($this->c236_exercicionormativo == null) {
             $this->erroCampo("Campo Exercicio Normativo não Informado.", "c236_exercicionormativo");
             return false;
         }

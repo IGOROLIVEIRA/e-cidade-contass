@@ -26,19 +26,19 @@ class GerarDIPR extends GerarAM
         $sSql = "select * from dipr102022 where si230_mes = " . $this->iMes . " and si230_instit = " . db_getsession("DB_instit");
         $rsCONV10 = db_query($sSql);
 
-        $sSql2 = "select * from conv112022 where si93_mes = " . $this->iMes . " and si93_instit = " . db_getsession("DB_instit");
+        $sSql2 = "select * from conv112022 where si93_mes = 11" . $this->iMes . " and si93_instit = " . db_getsession("DB_instit");
         $rsCONV11 = db_query($sSql2);
 
-        $sSql3 = "select * from conv202022 where si94_mes = " . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
+        $sSql3 = "select * from conv202022 where si94_mes = 11" . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
         $rsCONV20 = db_query($sSql3);
 
-        $sSql4 = "select * from conv212022 where si232_mes = " . $this->iMes . " and si232_instint = " . db_getsession("DB_instit");
+        $sSql4 = "select * from conv212022 where si232_mes = 11" . $this->iMes . " and si232_instint = " . db_getsession("DB_instit");
         $rsCONV21 = db_query($sSql4);
 
-        $sSql5 = "select * from conv302022 where si203_mes = " . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
+        $sSql5 = "select * from conv302022 where si203_mes = 11" . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
         $rsCONV30 = db_query($sSql5);
 
-        $sSql6 = "select * from conv312022 where si204_mes = " . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
+        $sSql6 = "select * from conv312022 where si204_mes = 11" . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
         $rsCONV31 = db_query($sSql6);
 
         //echo $sSql."-".$sSql3; exit;
