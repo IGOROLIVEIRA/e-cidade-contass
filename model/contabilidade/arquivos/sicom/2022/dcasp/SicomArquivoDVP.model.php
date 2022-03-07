@@ -2,7 +2,7 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once('model/contabilidade/relatorios/dcasp/VariacaoPatrimonialDCASP2022.model.php');
+require_once('model/contabilidade/relatorios/dcasp/VariacaoPatrimonialDCASP2015.model.php');
 require_once('libs/db_stdlib.php');
 require_once('libs/db_conecta.php');
 require_once('libs/db_sessoes.php');
@@ -16,7 +16,7 @@ require_once('libs/db_liborcamento.php');
 require_once('fpdf151/PDFDocument.php');
 
 require_once("classes/db_dvpdcasp102022_classe.php");
-require_once("classes/db_dvpdcasp202221_classe.php");
+require_once("classes/db_dvpdcasp202022_classe.php");
 require_once("classes/db_dvpdcasp302022_classe.php");
 
 require_once("model/contabilidade/arquivos/sicom/2022/dcasp/geradores/GerarDVP.model.php");
@@ -30,7 +30,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
 
-  protected $iCodigoLayout = VariacaoPatrimonialDCASP2022::CODIGO_RELATORIO; // Código do relatório
+  protected $iCodigoLayout = VariacaoPatrimonialDCASP2015::CODIGO_RELATORIO; // Código do relatório
 
   protected $sNomeArquivo = 'DVP';
 
@@ -101,7 +101,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
     $cldvpdcasp10 = new cl_dvpdcasp102022();
-    $cldvpdcasp20 = new cl_dvpdcasp202221();
+    $cldvpdcasp20 = new cl_dvpdcasp202022();
     $cldvpdcasp30 = new cl_dvpdcasp302022();
 
     /**
@@ -145,10 +145,10 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     /*------------------------------------------------------------------------*/
 
-    $oVariacoesPatrimoniais = new VariacaoPatrimonialDCASP2022($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
+    $oVariacoesPatrimoniais = new VariacaoPatrimonialDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oVariacoesPatrimoniais->setInstituicoes($sListaInstituicoes);
     $oVariacoesPatrimoniais->setImprimirExercicioAnterior(true);
-    $oVariacoesPatrimoniais->setTipo(VariacaoPatrimonialDCASP2022::TIPO_ANALITICO);
+    $oVariacoesPatrimoniais->setTipo(VariacaoPatrimonialDCASP2015::TIPO_ANALITICO);
 
     $oRetornoDVP = $oVariacoesPatrimoniais->getDados();
 
@@ -182,7 +182,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldvpdcasp20  = new cl_dvpdcasp202221();
+      $cldvpdcasp20  = new cl_dvpdcasp202022();
 
       $cldvpdcasp20->si217_ano                                = $iAnoUsu;
       $cldvpdcasp20->si217_periodo                            = $iCodigoPeriodo;

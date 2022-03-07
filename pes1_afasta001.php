@@ -66,43 +66,43 @@ if (isset($incluir)) {
 
   db_inicio_transacao();
 
-  $r45_dtafas = $r45_dtafas_ano."-".$r45_dtafas_mes."-".$r45_dtafas_dia;
+  $r45_dtafas = $r45_dtafas_ano . "-" . $r45_dtafas_mes . "-" . $r45_dtafas_dia;
   $r45_dtreto = null;
-  
-  if(trim($r45_dtreto_ano) != "" && trim($r45_dtreto_mes) != "" && trim($r45_dtreto_dia) != ""){
-    $r45_dtreto = $r45_dtreto_ano."-".$r45_dtreto_mes."-".$r45_dtreto_dia;
+
+  if (trim($r45_dtreto_ano) != "" && trim($r45_dtreto_mes) != "" && trim($r45_dtreto_dia) != "") {
+    $r45_dtreto = $r45_dtreto_ano . "-" . $r45_dtreto_mes . "-" . $r45_dtreto_dia;
   }
-  
+
   $sqlerro = false;
- 
+
   //r45_dtreto
   $sSqlRetornoNulo  = $clafasta->sql_query_file(null, "r45_codigo", null, "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} and r45_dtreto is null ");
   $rsSqlRetornoNulo = $clafasta->sql_record($sSqlRetornoNulo);
   $aRetornoNulo     = db_utils::getCollectionByRecord($rsSqlRetornoNulo);
-  if(count($aRetornoNulo) > 0) {
-    
+  if (count($aRetornoNulo) > 0) {
+
     $sqlerro  = true;
     $erro_msg = "O Servidor já possui afastamento sem retorno \\n Verifique afastamentos Anteriores";
-  }  
-  
+  }
+
   //r45_dtreto
   $sWhereVerificaAfastamento = "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} ";
-  if($r45_dtreto != null || $r45_dtreto != ''){
+  if ($r45_dtreto != null || $r45_dtreto != '') {
     $sWhereVerificaAfastamento .= " and (";
-  	$sWhereVerificaAfastamento .= " ( r45_dtafas between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date or r45_dtreto between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date )";
+    $sWhereVerificaAfastamento .= " ( r45_dtafas between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date or r45_dtreto between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date )";
     $sWhereVerificaAfastamento .= " or ( '{$r45_dtafas}'::date between r45_dtafas and r45_dtreto or '{$r45_dtreto}'::date between r45_dtafas and r45_dtreto )";
     $sWhereVerificaAfastamento .= " )";
   } else {
-  	$sWhereVerificaAfastamento .= " and  r45_dtafas >= '{$r45_dtafas}' ";
+    $sWhereVerificaAfastamento .= " and  r45_dtafas >= '{$r45_dtafas}' ";
   }
-  
+
   $sSqlVerificaAfastamento   = $clafasta->sql_query_file(null, "r45_codigo", null, $sWhereVerificaAfastamento);
   $rsVerificaAfastamento     = $clafasta->sql_record($sSqlVerificaAfastamento);
   $aVerificaAfastamento      = db_utils::getCollectionByRecord($rsVerificaAfastamento);
-  if(count($aVerificaAfastamento) > 0){
-  	
-  	$sqlerro  = true;
-  	$erro_msg = "O Servidor já possui afastamento para o período selecionado \\n Verifique afastamentos Anteriores";
+  if (count($aVerificaAfastamento) > 0) {
+
+    $sqlerro  = true;
+    $erro_msg = "O Servidor já possui afastamento para o período selecionado \\n Verifique afastamentos Anteriores";
   }
 
   if ($sqlerro == false) {
@@ -113,48 +113,50 @@ if (isset($incluir)) {
     $clafasta->r45_dtafas = $r45_dtafas;
     $clafasta->r45_dtreto = $r45_dtreto;
 
-    if($r45_situac == 22){
-        $clafasta->r45_situac = 2;
-    }else{
-        $clafasta->r45_situac = $r45_situac;
+    if ($r45_situac == 22) {
+      $clafasta->r45_situac = 2;
+    } else {
+      $clafasta->r45_situac = $r45_situac;
     }
 
     $clafasta->r45_situacaux = $r45_situacaux;
-    $clafasta->r45_dtlanc = date("Y-m-d",db_getsession("DB_datausu"));
+    $clafasta->r45_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
     $clafasta->r45_codafa = $r45_codafa;
     $clafasta->r45_codret = $r45_codret;
     $clafasta->r45_obs    = $r45_obs;
+    $clafasta->r45_codigoafasta    = $rh172_codigo;
+    $clafasta->r45_mesmadoenca    = $r45_mesmadoenca;
 
     $clafasta->incluir(null);
     $erro_msg             = $clafasta->erro_msg;
-    
-    if($clafasta->erro_status == "0"){
+
+    if ($clafasta->erro_status == "0") {
       $sqlerro  = true;
     }
-    if($sqlerro == false){
+    if ($sqlerro == false) {
 
       /**
        * $r45_situac == 2 - Afastado sem remuneração
        * $r45_situac == 7 - Licença sem vencimento, cessão sem ônus
        */
-      if (in_array($r45_situac, array(2,7))) {
+      if (in_array($r45_situac, array(2, 7))) {
 
         $classenta  = new cl_assenta();
         $cltipoasse = new cl_tipoasse();
         $clafastaassenta   = new cl_afastaassenta;
-        
+
         $classenta->h16_dtconc = $r45_dtafas;
         $classenta->h16_dtterm = $r45_dtreto;
         $classenta->h16_regist = $r45_regist;
         $classenta->h16_histor = $h16_histor;
         $classenta->h16_hist2  = '';
         $classenta->h16_perc   = "0";
-        $classenta->h16_dtlanc = date("Y-m-d",db_getsession("DB_datausu"));
+        $classenta->h16_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
         $classenta->h16_conver = "false";
         $classenta->h16_login  = db_getsession("DB_id_usuario");
-        $classenta->h16_assent = db_utils::fieldsMemory(db_query($cltipoasse->sql_query_file(null,"h12_codigo",null,"trim(h12_assent) = 'LTIP'")), 0)->h12_codigo;
+        $classenta->h16_assent = db_utils::fieldsMemory(db_query($cltipoasse->sql_query_file(null, "h12_codigo", null, "trim(h12_assent) = 'LTIP'")), 0)->h12_codigo;
         $classenta->incluir(null);
-        if($clafasta->erro_status == "0") {
+        if ($clafasta->erro_status == "0") {
           $sqlerro  = true;
           $erro_msg = $classenta->erro_msg;
         }
@@ -162,56 +164,56 @@ if (isset($incluir)) {
         $clafastaassenta->h81_afasta = $clafasta->r45_codigo;
         $clafastaassenta->h81_assenta = $classenta->h16_codigo;
         $clafastaassenta->incluir(null);
-        if($clafasta->erro_status == "0") {
+        if ($clafasta->erro_status == "0") {
           $sqlerro  = true;
           $erro_msg = $clafastaassenta->erro_msg;
         }
       }
 
-      $arr_possiveis = Array(2,3,4,5,6,7,8,10,12);
-      if(in_array($r45_situac,$arr_possiveis)){
+      $arr_possiveis = array(2, 3, 4, 5, 6, 7, 8, 10, 12);
+      if (in_array($r45_situac, $arr_possiveis)) {
 
-        $result_pontofx = $clpontofx->sql_record($clpontofx->sql_query_file(db_anofolha(),db_mesfolha(),$r45_regist));
+        $result_pontofx = $clpontofx->sql_record($clpontofx->sql_query_file(db_anofolha(), db_mesfolha(), $r45_regist));
         $numrows_pontofx = $clpontofx->numrows;
 
-				$subpes = db_anofolha();
-				$subpes.= db_mesfolha();
-	
-        //dias_pagto($r45_regist,$r45_dtreto,$r45_dtafas);
-        global $dias_pagamento, $data_afastamento, $dtfim,$subpes;
-        $data_ultimo_dia = db_dias_mes(db_anofolha(),db_mesfolha(),true);
-        
-        if($r45_dtreto == '' || $r45_dtreto > $data_ultimo_dia ){
-          
-           $result_dias_trab = db_query("select fc_dias_trabalhados(".$r45_regist.",".db_anofolha().",".db_mesfolha().",true,".db_getsession("DB_instit").") as dias_pagamento");
-          if(pg_numrows($result_dias_trab) > 0){
-            db_fieldsmemory($result_dias_trab, 0);
-          }
-        }else{
-          $result_dias_trab = db_query("select fc_dias_trabalhados(".$r45_regist.",".db_anofolha().",".db_mesfolha().",false,".db_getsession("DB_instit").") as dias_pagamento");
-          if(pg_numrows($result_dias_trab) > 0){
-            db_fieldsmemory($result_dias_trab, 0);
-          }
-        }   
-        $result_tbprev = $clrhpessoalmov->sql_record($clrhpessoalmov->sql_query_file(null,db_getsession('DB_instit'),"(rh02_tbprev + 2) as rh02_tbpev","","rh02_anousu = ".db_anofolha()." and rh02_mesusu = ".db_mesfolha()." and rh02_regist = ".$r45_regist." and rh02_instit = ".db_getsession("DB_instit")));
+        $subpes = db_anofolha();
+        $subpes .= db_mesfolha();
 
-        if($clrhpessoalmov->numrows > 0){
+        //dias_pagto($r45_regist,$r45_dtreto,$r45_dtafas);
+        global $dias_pagamento, $data_afastamento, $dtfim, $subpes;
+        $data_ultimo_dia = db_dias_mes(db_anofolha(), db_mesfolha(), true);
+
+        if ($r45_dtreto == '' || $r45_dtreto > $data_ultimo_dia) {
+
+          $result_dias_trab = db_query("select fc_dias_trabalhados(" . $r45_regist . "," . db_anofolha() . "," . db_mesfolha() . ",true," . db_getsession("DB_instit") . ") as dias_pagamento");
+          if (pg_numrows($result_dias_trab) > 0) {
+            db_fieldsmemory($result_dias_trab, 0);
+          }
+        } else {
+          $result_dias_trab = db_query("select fc_dias_trabalhados(" . $r45_regist . "," . db_anofolha() . "," . db_mesfolha() . ",false," . db_getsession("DB_instit") . ") as dias_pagamento");
+          if (pg_numrows($result_dias_trab) > 0) {
+            db_fieldsmemory($result_dias_trab, 0);
+          }
+        }
+        $result_tbprev = $clrhpessoalmov->sql_record($clrhpessoalmov->sql_query_file(null, db_getsession('DB_instit'), "(rh02_tbprev + 2) as rh02_tbpev", "", "rh02_anousu = " . db_anofolha() . " and rh02_mesusu = " . db_mesfolha() . " and rh02_regist = " . $r45_regist . " and rh02_instit = " . db_getsession("DB_instit")));
+
+        if ($clrhpessoalmov->numrows > 0) {
           db_fieldsmemory($result_tbprev, 0);
         }
-        $result_inssirfsau = $clinssirf->sql_record($clinssirf->sql_query_file(null,db_getsession('DB_instit'),"*","","r33_anousu = ".db_anofolha()." and r33_mesusu = ".db_mesfolha()." and r33_codtab = '".trim($rh02_tbpev)."' and trim(r33_rubsau) <> '' "));
+        $result_inssirfsau = $clinssirf->sql_record($clinssirf->sql_query_file(null, db_getsession('DB_instit'), "*", "", "r33_anousu = " . db_anofolha() . " and r33_mesusu = " . db_mesfolha() . " and r33_codtab = '" . trim($rh02_tbpev) . "' and trim(r33_rubsau) <> '' "));
         $numrows_sau = $clinssirf->numrows;
-  
-        $result_inssirfmat = $clinssirf->sql_record($clinssirf->sql_query_file(null,db_getsession('DB_instit'),"*","","r33_anousu = ".db_anofolha()." and r33_mesusu = ".db_mesfolha()." and r33_codtab = '".trim($rh02_tbpev)."' and trim(r33_rubmat) <> '' "));
+
+        $result_inssirfmat = $clinssirf->sql_record($clinssirf->sql_query_file(null, db_getsession('DB_instit'), "*", "", "r33_anousu = " . db_anofolha() . " and r33_mesusu = " . db_mesfolha() . " and r33_codtab = '" . trim($rh02_tbpev) . "' and trim(r33_rubmat) <> '' "));
         $numrows_mat = $clinssirf->numrows;
 
-        $result_inssirfaci = $clinssirf->sql_record($clinssirf->sql_query_file(null,db_getsession('DB_instit'),"*","","r33_anousu = ".db_anofolha()." and r33_mesusu = ".db_mesfolha()." and r33_codtab = '".trim($rh02_tbpev)."' and trim(r33_rubaci) <> '' "));
+        $result_inssirfaci = $clinssirf->sql_record($clinssirf->sql_query_file(null, db_getsession('DB_instit'), "*", "", "r33_anousu = " . db_anofolha() . " and r33_mesusu = " . db_mesfolha() . " and r33_codtab = '" . trim($rh02_tbpev) . "' and trim(r33_rubaci) <> '' "));
         $numrows_aci = $clinssirf->numrows;
 
 
         /**
          * Realiza a proporcionalização do ponto
          */
-        $oCompetencia = DBPessoal::getCompetenciaFolha(); 
+        $oCompetencia = DBPessoal::getCompetenciaFolha();
         $oServidor = ServidorRepository::getInstanciaByCodigo($r45_regist, $oCompetencia->getAno(), $oCompetencia->getMes());
         $oProporcionalizacaoPontoSalario = new ProporcionalizacaoPontoSalario($oServidor->getPonto(Ponto::SALARIO), $r45_situac, new DBDate($r45_dtreto));
         $oProporcionalizacaoPontoSalario->processar();
@@ -220,116 +222,119 @@ if (isset($incluir)) {
     db_fim_transacao($sqlerro);
   }
 }
-function dias_pagto($registro=null,$r45_dtreto,$r45_dtafas){
-  
-  global $dias_pagamento, $data_afastamento, $dtfim,$subpes;
-  
-  $dias_mes = ndias(db_substr($subpes,-2)."/".db_substr($subpes,1,4));
-  $dtini = db_ctod("01/".db_substr($subpes,-2)."/".db_substr($subpes,1,4));
-  $dtfim = db_ctod(db_str($dias_mes,2,0,"0")."/".db_substr($subpes,-2)."/".db_substr($subpes,1,4));
+function dias_pagto($registro = null, $r45_dtreto, $r45_dtafas)
+{
+
+  global $dias_pagamento, $data_afastamento, $dtfim, $subpes;
+
+  $dias_mes = ndias(db_substr($subpes, -2) . "/" . db_substr($subpes, 1, 4));
+  $dtini = db_ctod("01/" . db_substr($subpes, -2) . "/" . db_substr($subpes, 1, 4));
+  $dtfim = db_ctod(db_str($dias_mes, 2, 0, "0") . "/" . db_substr($subpes, -2) . "/" . db_substr($subpes, 1, 4));
   $dias_pagamento = 30;
   $afastado = 1;
-  $data_afastamento = date("Y-m-d",db_getsession("DB_datausu"));
-  if( db_mktime($r45_dtreto) >= db_mktime($dtini) || db_empty($r45_dtreto)){
-     $afastado = $r45_situac;
-     if( !db_empty($r45_dtreto) ){
-        if( db_mktime($r45_dtafas) > db_mktime($dtfim) ){
-           $afastado = 1;
+  $data_afastamento = date("Y-m-d", db_getsession("DB_datausu"));
+  if (db_mktime($r45_dtreto) >= db_mktime($dtini) || db_empty($r45_dtreto)) {
+    $afastado = $r45_situac;
+    if (!db_empty($r45_dtreto)) {
+      if (db_mktime($r45_dtafas) > db_mktime($dtfim)) {
+        $afastado = 1;
+      }
+      if (isset($datafim) || !db_empty($datafim)) {
+        if (db_mktime($r45_dtreto) < db_mktime($datafim)) {
+          $afastado = 1;
         }
-        if(isset($datafim) || !db_empty($datafim)){
-          if( db_mktime($r45_dtreto) < db_mktime($datafim) ){
-             $afastado = 1;
+      }
+    }
+    if ($afastado != 1) {
+      if ((db_mktime($r45_dtreto) == 0 || db_mktime($r45_dtreto) > db_mktime($dtfim)) && db_mktime($r45_dtafas) >= db_mktime($dtini)) {
+        $dias_pagamento = db_datedif($r45_dtafas, $dtini);
+      } else if ((db_empty($r45_dtreto) || db_mktime($r45_dtreto) > db_mktime($dtfim)) && db_mktime($r45_dtafas) < db_mktime($dtini)) {
+        $dias_pagamento = 0;
+      } else if (db_mktime($r45_dtafas) < db_mktime($dtini) && db_mktime($r45_dtreto) <= db_mktime($dtfim)) {
+        $dias_pagamento = db_datedif($dtfim, $r45_dtreto);
+        if ($dias_pagamento > 0) {
+          if ($dias_mes > 30) {
+            $dias_pagamento -= 1;
+          } else if ($dias_mes == 29) {
+            $dias_pagamento = (30 - db_day($r45_dtreto));
           }
         }
-     }
-     if( $afastado != 1){
-        if( ( db_mktime($r45_dtreto)==0 || db_mktime($r45_dtreto) > db_mktime($dtfim)  ) && db_mktime($r45_dtafas) >= db_mktime($dtini) ){
-           $dias_pagamento = db_datedif($r45_dtafas,$dtini);
-        }else if( ( db_empty( $r45_dtreto) || db_mktime($r45_dtreto) > db_mktime($dtfim)  ) && db_mktime($r45_dtafas) < db_mktime($dtini) ){ 
-           $dias_pagamento = 0;
-        }else if( db_mktime($r45_dtafas) < db_mktime($dtini) && db_mktime($r45_dtreto) <= db_mktime($dtfim) ){ 
-           $dias_pagamento = db_datedif($dtfim,$r45_dtreto);
-           if( $dias_pagamento > 0 ){
-     	 if( $dias_mes > 30){
-     	     $dias_pagamento -= 1;
-     	 }else if( $dias_mes == 29){ 
-     	     $dias_pagamento = (30 - db_day($r45_dtreto));
-     	 }
-           }
-        }else if( db_mktime($r45_dtafas) >= db_mktime($dtini) && db_mktime($r45_dtreto) <= db_mktime($dtfim)){ 
-           $dias_pagamento = ceil(((db_mktime($dtfim) - db_mktime($r45_dtreto) + db_mktime($r45_dtafas) - db_mktime($dtini))/86400));
-           if( !db_empty($dias_pagamento)){
-     	 if( $dias_mes > 30){
-     	    $dias_pagamento -= 1;
-     	 }else if( $dias_mes < 30){ 
-     	    $dias_pagamento += (30 - $dias_mes);
-     	 }
-           }
+      } else if (db_mktime($r45_dtafas) >= db_mktime($dtini) && db_mktime($r45_dtreto) <= db_mktime($dtfim)) {
+        $dias_pagamento = ceil(((db_mktime($dtfim) - db_mktime($r45_dtreto) + db_mktime($r45_dtafas) - db_mktime($dtini)) / 86400));
+        if (!db_empty($dias_pagamento)) {
+          if ($dias_mes > 30) {
+            $dias_pagamento -= 1;
+          } else if ($dias_mes < 30) {
+            $dias_pagamento += (30 - $dias_mes);
+          }
         }
-        $data_afastamento = $r45_dtafas;
-     }
+      }
+      $data_afastamento = $r45_dtafas;
+    }
   }
-
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="25%" height="18">&nbsp;</td>
-    <td width="25%">&nbsp;</td>
-    <td width="25%">&nbsp;</td>
-    <td width="25%">&nbsp;</td>
-  </tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-      <center>
-      <?
-      require_once("forms/db_frmafasta.php");
-      
-      
-        if(count($aRetornoNulo) > 0){
-          echo "<script> 
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+    <tr>
+      <td width="25%" height="18">&nbsp;</td>
+      <td width="25%">&nbsp;</td>
+      <td width="25%">&nbsp;</td>
+      <td width="25%">&nbsp;</td>
+    </tr>
+  </table>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+        <center>
+          <?
+          require_once("forms/db_frmafasta.php");
+
+
+          if (count($aRetornoNulo) > 0) {
+            echo "<script> 
                  js_afastamentosAnteriores({$r45_regist});
                  js_OpenJanelaIframe('','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao=Afastamentos&parametro={$r45_regist}&ano={$r45_anousu}&mes={$r45_mesusu}','CONSULTA DE FUNCIONÁRIOS',true,'20'); 
                </script>";
-        } 
-      if(count($aVerificaAfastamento) > 0){
-			    echo "<script> 
+          }
+          if (count($aVerificaAfastamento) > 0) {
+            echo "<script> 
 			           js_afastamentosAnteriores({$r45_regist});
 			           js_OpenJanelaIframe('','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao=Afastamentos&parametro={$r45_regist}&ano={$r45_anousu}&mes={$r45_mesusu}','CONSULTA DE FUNCIONÁRIOS',true,'20'); 
 			         </script>";
-			  }      
-      
-      ?>
-      </center>
-    </td>
-  </tr>
-</table>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+          }
+
+          ?>
+        </center>
+      </td>
+    </tr>
+  </table>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
+
 </html>
 <?
-if(isset($incluir)){
-  if($sqlerro == true){
+if (isset($incluir)) {
+  if ($sqlerro == true) {
     db_msgbox($erro_msg);
-  }else{
-    $clafasta->erro(true,true,true);
+  } else {
+    $clafasta->erro(true, true, true);
   };
 };
 ?>
 <script>
-js_tabulacaoforms("form1","r45_regist",true,1,"r45_regist",true);
+  js_tabulacaoforms("form1", "r45_regist", true, 1, "r45_regist", true);
 </script>

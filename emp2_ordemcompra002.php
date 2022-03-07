@@ -159,6 +159,7 @@ for ($i = 0; $i < $num; $i++) {
                                                          e55_marca,
                                                          case when matunid.m61_abrev is null or matunid.m61_abrev = '' then coalesce(matunidaut.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) else coalesce(matunid.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) end as m61_abrev,
                                                          pcmater.pc01_descrmater,
+                                                         pcmater.pc01_complmater,
                                                          pc01_codmater,
                                                          pc01_servico,
                                                          e62_servicoquantidade,
@@ -166,6 +167,7 @@ for ($i = 0; $i < $num; $i++) {
                                                         /* e62_descr,*/
                                                          empempenho.e60_codemp,
                                                          empempenho.e60_anousu,
+                                                         empempenho.e60_emiss,
                                                          e62_vltot,
                                                          e62_quant,
                                                          e54_conpag,
@@ -183,11 +185,10 @@ for ($i = 0; $i < $num; $i++) {
     "m52_numemp, m52_sequen",
     "m52_codordem = $m51_codordem"
   );
-  //echo($sqlItem);
+  //echo ($sqlItem);
   //die();
   $resultitem = $clmatordemitem->sql_record($sqlItem);
-  //	db_criatabela($resultitem); exit;
-
+  db_fieldsmemory($resultitem, $i)->e60_emiss;
 
   $numrows = $clmatordemitem->numrows;
   if ($numrows == 0) {
@@ -238,13 +239,15 @@ for ($i = 0; $i < $num; $i++) {
   // $pdf1->item	      = 'm52_sequen';
   $pdf1->obs            = $m51_obs;
   $pdf1->sTipoCompra    = 'pc50_descr'; //campo do pg_result
-  $pdf1->empempenho      = 'e60_codemp';
-  $pdf1->anousuemp       = 'e60_anousu';
+  $pdf1->empempenho     = 'e60_codemp';
+  $pdf1->anousuemp      = 'e60_anousu';
   $pdf1->quantitem      = 'm52_quant';
   $pdf1->unid           = 'm61_abrev';
   $pdf1->condpag        = 'e54_conpag';
   $pdf1->destino        = 'e54_destin';
-  $pdf1->autori        = 'e61_autori';
+  $pdf1->autori         = 'e61_autori';
+  $pdf1->e60_emiss      = $e60_emiss;
+
   $pdf1->obs_ordcom_orcamval = "e55_marca";
   $pdf1->sOrigem        = $iOrigem . " - " . $sOrigem;
   //$pdf1->iOrigem        = $iOrigem;
@@ -260,16 +263,15 @@ for ($i = 0; $i < $num; $i++) {
     $e30_numdec = 4;
   }
 
-
   $pdf1->numdec         = $e30_numdec;
   $pdf1->valoritem      = 'm52_valor';
   $pdf1->vlrunitem      = 'm52_vlruni';
   $pdf1->descricaoitem  = 'pc01_descrmater';
+  $pdf1->pc01_complmater  = 'pc01_complmater';
   $pdf1->codmater       = 'pc01_codmater';
   $pdf1->observacaoitem = 'e62_descr';
   $pdf1->depto          = $m51_depto;
   $pdf1->prazoent       = $m51_prazoent;
-
   $pdf1->Snumeroproc    = "pc81_codproc";
   $pdf1->Snumero        = "pc11_numero";
   $pdf1->obs_ordcom_orcamval = "pc23_obs";

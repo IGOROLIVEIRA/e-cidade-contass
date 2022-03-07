@@ -120,8 +120,7 @@ switch ($oParam->exec) {
 							JOIN acordoitem ON ac22_acordoitem = ac20_sequencial
 							JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
 							JOIN acordoposicaotipo ON ac26_acordoposicaotipo = ac27_sequencial
-							JOIN orcelemento ON o56_codele = ac20_elemento AND o56_anousu = o58_anousu
-							JOIN acordo ON ac26_acordo = ac16_sequencial
+							JOIN orcelemento ON o56_codele = ac20_elemento AND o56_anousu = '" . db_getsession('DB_anousu') . "'							JOIN acordo ON ac26_acordo = ac16_sequencial
 							JOIN cgm ON ac16_contratado = z01_numcgm
 							JOIN pcmater ON ac20_pcmater = pc01_codmater
 							WHERE ac20_acordoposicao = (SELECT max(ac26_sequencial)

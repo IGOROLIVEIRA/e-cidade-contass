@@ -1062,6 +1062,7 @@ class cl_adesaoregprecos
     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pcproc.pc80_usuario";
     $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";
     $sql2 = "";
+    // $dbwhere = "si06_instit = " . db_getsession("DB_instit");
     if ($dbwhere == "") {
       if ($si06_sequencial != null) {
         $sql2 .= " where adesaoregprecos.si06_sequencial = $si06_sequencial ";
