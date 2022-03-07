@@ -499,7 +499,6 @@ function buscaCgmMatricula($iMatricula) {
 
 function buscaReceitaFundep($iReceita) {
   
-  // echo $codreceita;
 	$oDaoTabRec = db_utils::getDao('tabrec');
 	$sCampos 	= "tabrec.k02_codigo, k02_descr, o70_codigo";
   
