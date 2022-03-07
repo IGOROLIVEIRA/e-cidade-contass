@@ -37,7 +37,7 @@
                         where
                             pc80_codproc = {$codigo_preco}
                             and pc68_sequencial is not null
-                            order by pc68_sequencial asc"); 
+                            order by pc68_sequencial asc");
 
 
     $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
@@ -109,7 +109,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
 
     <head>
         <title>Relatório</title>
-        <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css"> 
+        <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">
         <style type="text/css">
             .content {
                 width: 1070px;
@@ -301,7 +301,7 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criter
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
 
                 $rsResult = db_query($sSql) or die(pg_last_error());
-                
+
                 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
                 // die($sSql);
                 $rsResult = db_query($sSql) or die(pg_last_error());
@@ -529,6 +529,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
             *
         from
             itemprecoreferencia
+            inner join precoreferencia on si01_sequencial = si02_precoreferencia
         where
             si02_precoreferencia = (
             select
@@ -537,7 +538,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
                 precoreferencia
             where
                 si01_processocompra = {$codigo_preco});";
-            $rsResult = db_query($sSql) or die(pg_last_error()); 
+            $rsResult = db_query($sSql) or die(pg_last_error());
 
             $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->si02_criterioadjudicacao;
             $codigoItem = db_utils::fieldsMemory($rsResult, 0)->si02_coditem;
@@ -560,22 +561,21 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
                     where
                         pc80_codproc = {$codigo_preco}
                         and pc11_reservado = true;";
-            
+
             $rsResultV = db_query($sqlV) or die(pg_last_error());
             $arrayValores = array();
 
-            for($j=0;$j<pg_num_rows($rsResultV);$j++){
+            for ($j = 0; $j < pg_num_rows($rsResultV); $j++) {
                 $valores = db_utils::fieldsMemory($rsResultV, $j);
-                $arrayValores[$j][0]=$valores->pc16_codmater;
-                $arrayValores[$j][1]=$valores->pc11_quant;
+                $arrayValores[$j][0] = $valores->pc16_codmater;
+                $arrayValores[$j][1] = $valores->pc11_quant;
             }
             $quantLinhas = count($arrayValores);
-                
-            if($codigoItem==""){
-                
+            if ($codigoItem == "") {
+
                 for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-                    $oResult = db_utils::fieldsMemory($rsResult, $iCont); 
-                            $sSql = "select
+                    $oResult = db_utils::fieldsMemory($rsResult, $iCont);
+                    $sSql = "select
                             pc23_quant,
                             pc11_reservado,
                             pc01_codmater,
@@ -618,32 +618,32 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
                             pc80_criterioadjudicacao;
                             ";
 
-                    $rsResultee = db_query($sSql);  
+                    $rsResultee = db_query($sSql);
                     $resultado = db_utils::fieldsMemory($rsResultee, 0);
 
-                    if($resultado->pc11_reservado==""){
+                    if ($resultado->pc11_reservado == "") {
                         $valor = "f";
-                    }else{
+                    } else {
                         $valor = $resultado->pc11_reservado;
                     }
 
                     $sql = " update itemprecoreferencia set ";
-                    $sql .= "si02_coditem = ".$resultado->pc01_codmater;
-                    $sql .= ",si02_qtditem = ".$resultado->pc23_quant;
-                    $sql .= ",si02_codunidadeitem = ".$resultado->m61_codmatunid;
-                    $sql .= ",si02_reservado = '".$valor."'";
-                    $sql .= ",si02_tabela = '".$resultado->pc01_tabela."'";
-                    $sql .= ",si02_taxa = '".$resultado->pc01_taxa."'";
-                    $sql .= ",si02_criterioadjudicacao = ".$resultado->pc80_criterioadjudicacao;
-                    $sql .= " where si02_sequencial = ".$oResult->si02_sequencial;
+                    $sql .= "si02_coditem = " . $resultado->pc01_codmater;
+                    $sql .= ",si02_qtditem = " . $resultado->pc23_quant;
+                    $sql .= ",si02_codunidadeitem = " . $resultado->m61_codmatunid;
+                    $sql .= ",si02_reservado = '" . $valor . "'";
+                    $sql .= ",si02_tabela = '" . $resultado->pc01_tabela . "'";
+                    $sql .= ",si02_taxa = '" . $resultado->pc01_taxa . "'";
+                    $sql .= ",si02_criterioadjudicacao = " . $resultado->pc80_criterioadjudicacao;
+                    $sql .= " where si02_sequencial = " . $oResult->si02_sequencial;
 
                     $rsResultado = db_query($sql);
-
                 }
-                    $sSql = "select
+                $sSql = "select
                         *
                     from
                         itemprecoreferencia
+                        inner join precoreferencia on si01_sequencial = si02_precoreferencia
                     where
                         si02_precoreferencia = (
                         select
@@ -652,8 +652,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
                             precoreferencia
                         where
                             si01_processocompra = {$codigo_preco});";
-                    $rsResult = db_query($sSql) or die(pg_last_error());
-
+                $rsResult = db_query($sSql) or die(pg_last_error());
             }
 
             if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365 
@@ -687,19 +686,19 @@ HTML;
 HTML;
             }
             ?>
-        <?php 
-    
+        <?php
+
             $sqencia = 0;
             for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-                $oResult = db_utils::fieldsMemory($rsResult, $iCont); 
+                $oResult = db_utils::fieldsMemory($rsResult, $iCont);
                 $sSql1 = "select
                             m61_abrev
                         from
                             matunid
                         where m61_codmatunid = $oResult->si02_codunidadeitem";
                 $rsResult1 = db_query($sSql1) or die(pg_last_error());
-                $oResult1 = db_utils::fieldsMemory($rsResult1,0);
+                $oResult1 = db_utils::fieldsMemory($rsResult1, 0);
 
                 $sSql2 = "select
                             case when pc01_descrmater=pc01_complmater or pc01_complmater is null then pc01_descrmater
@@ -708,9 +707,9 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                             pcmater
                         where
                             pc01_codmater = $oResult->si02_coditem";
-                
+
                 $rsResult2 = db_query($sSql2) or die(pg_last_error());
-                $oResult2 = db_utils::fieldsMemory($rsResult2,0);
+                $oResult2 = db_utils::fieldsMemory($rsResult2, 0);
 
                 //    if($quant_casas){
                 $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $oResult->si02_qtditem;
@@ -722,73 +721,73 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
 
                 $nTotalItens += $lTotal;
                 $oDadosDaLinha = new stdClass();
-                 //$oResult->pc11_seq;
+                //$oResult->pc11_seq;
                 $op = 1;
-                
-                    for($i=0;$i<$quantLinhas;$i++){
-                        
-                        if($arrayValores[$i][0]==$oResult->si02_coditem){
-                          $valorqtd = $arrayValores[$i][1];
-                          $op=2;  
-                        }
+
+                for ($i = 0; $i < $quantLinhas; $i++) {
+
+                    if ($arrayValores[$i][0] == $oResult->si02_coditem) {
+                        $valorqtd = $arrayValores[$i][1];
+                        $op = 2;
                     }
-                   if($op==1){
-                       $fazerloop = 1;
-                   }else{
-                       $fazerloop = 2;
-                   }
-                   $controle = 0;
-                   while($controle!=$fazerloop){ 
+                }
+                if ($op == 1) {
+                    $fazerloop = 1;
+                } else {
+                    $fazerloop = 2;
+                }
+                $controle = 0;
+                while ($controle != $fazerloop) {
                     $oDadosDaLinha->seq = $sqencia + 1;
                     $oDadosDaLinha->item = $oResult->si02_coditem;
                     if ($controle == 1) {
-                        $oDadosDaLinha->descricao = '<span style="font-weight: bold;">[ME/EPP]</span> - '.$oResult2->pc01_descrmater ;
+                        $oDadosDaLinha->descricao = '<span style="font-weight: bold;">[ME/EPP]</span> - ' . $oResult2->pc01_descrmater;
                     } else {
                         $oDadosDaLinha->descricao = $oResult2->pc01_descrmater;
                     }
                     if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
                         $oDadosDaLinha->valorUnitario = "-";
                         $oDadosDaLinha->quantidade = "-";
-                        
+
                         if ($oResult->si02_mediapercentual == 0) {
-                            $oDadosDaLinha->mediapercentual = ""; 
+                            $oDadosDaLinha->mediapercentual = "";
                         } else {
                             $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                         }
                         $oDadosDaLinha->unidadeDeMedida = "-";
-                        if($controle==1){
+                        if ($controle == 1) {
                             $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
                         }
                         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                     } else {
                         $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
-                        if($controle == 0 && $fazerloop==2){
+                        if ($controle == 0 && $fazerloop == 2) {
                             $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
-                        }else if($controle == 1 && $fazerloop==2){
+                        } else if ($controle == 1 && $fazerloop == 2) {
                             $oDadosDaLinha->quantidade = $valorqtd;
-                        }else{
+                        } else {
                             $oDadosDaLinha->quantidade = $oResult->si02_qtditem;
                         }
-                        
+
                         if ($oResult->si02_mediapercentual == 0) {
                             $oDadosDaLinha->mediapercentual = "-";
                         } else {
                             $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                         }
                         $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
-                        if($controle==0 && $fazerloop==2){
+                        if ($controle == 0 && $fazerloop == 2) {
                             $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
-                        }else if($controle==1 && $fazerloop==2){
+                        } else if ($controle == 1 && $fazerloop == 2) {
                             $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $valorqtd;
                         }
                         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                     }
-                
+
                     $controle++;
                     $sqencia++;
 
-                if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
-                    echo <<<HTML
+                    if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
+                        echo <<<HTML
         <tr class="">
           <td class="item-text">{$oDadosDaLinha->seq}</td>
           <td class="item-text">{$oDadosDaLinha->item}</td>
@@ -801,8 +800,8 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
         </tr>
 
 HTML;
-                } else {
-                    echo <<<HTML
+                    } else {
+                        echo <<<HTML
          <div class="tr row">
           <div class="td col-item align-center">
             {$oDadosDaLinha->seq}
@@ -827,9 +826,9 @@ HTML;
           </div>
         </div>
 HTML;
+                    }
                 }
             }
-        }
         }
         ?>
 
@@ -837,7 +836,8 @@ HTML;
             <div class="td item-total-color">
                 VALOR TOTAL ESTIMADO
             </div>
-            <?php //echo $nTotalItens ?>
+            <?php //echo $nTotalItens 
+            ?>
             <div class="td item-menu-color">
                 <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
             </div>
@@ -850,7 +850,7 @@ HTML;
             </div>
             <div class="tr">
                 <div class="td">
-                    <?= db_utils::fieldsMemory($rsResult, 0)->si01_justificativa; ?>
+                    <?= $oResult->si01_justificativa; ?>
                 </div>
             </div>
         <?php endif; ?>
@@ -858,7 +858,7 @@ HTML;
         </table>
         </div>
         <?php
-    
+
         $chars = array('ç', 'ã', 'â', 'à', 'á', 'é', 'è', 'ê', 'ó', 'ò', 'ô', 'ú', 'ù');
         $byChars = array('Ç', 'Ã', 'Â', 'À', 'Á', 'É', 'È', 'Ê', 'Ó', 'Ò', 'Ô', 'Ú', 'Ù');
 
@@ -908,7 +908,7 @@ HTML;
                 </div>
 HTML;
             }
-        } 
+        }
         ?>
 
     </body>
@@ -921,6 +921,6 @@ HTML;
 
     ob_end_clean();
     $mPDF->WriteHTML(utf8_encode($html));
-    $mPDF->Output(); 
+    $mPDF->Output();
 
     ?>
