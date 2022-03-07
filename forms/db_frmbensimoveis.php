@@ -191,6 +191,51 @@ $clrotulo = new rotulocampo;
       </td>
     </tr>
 
+    <tr>
+      <td nowrap="nowrap" title="Nº Registro:">
+        <b>Nº Registro:</b>
+      </td>
+      <td title="Nº Registro:">
+        <?php
+        db_input('numeroRegistro', 32, $It44_aplicacao, true, 'text', 1, '');
+        ?>
+      </td>
+    </tr>
+
+    <tr>
+      <td nowrap="nowrap" title="Livro:">
+        <b>Livro:</b>
+      </td>
+      <td title="Livro:">
+        <?php
+        db_input('livro', 32, $It44_aplicacao, true, 'text', 1, '');
+        ?>
+      </td>
+    </tr>
+
+    <tr>
+      <td nowrap="nowrap" title="folha:">
+        <b>Folha:</b>
+      </td>
+      <td title="Folha:">
+        <?php
+        db_input('folha', 32, $It44_aplicacao, true, 'text', 1, '');
+        ?>
+      </td>
+    </tr>
+
+    <tr>
+      <td nowrap="nowrap" title="data:">
+        <b>Data:</b>
+      </td>
+      <td title="Data:">
+        <?php
+        db_input('data', 32, $It44_aplicacao, true, 'text', 1, '');
+        ?>
+      </td>
+    </tr>
+
+
   </table>
 
 
