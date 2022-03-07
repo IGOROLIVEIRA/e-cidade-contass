@@ -354,10 +354,12 @@ switch($oParam->exec) {
                             $valorautilizar = $resultEm->e60_vlremp - $valorutilizado;
                             $arrayValores[$j][0] = $resultEm->e60_numemp;
                             $arrayValores[$j][1] = $valorautilizar;
+                            $arrayValores[$j][2] = $codEmp;
                             $j++;
                           }else{
                             $arrayValores[$j][0] = $resultEm->e60_numemp;
                             $arrayValores[$j][1] = $resultEm->e60_vlremp - $resultEm->e60_vlrutilizado;
+                            $arrayValores[$j][2] = $codEmp;
                             $j++;  
                           }
                     }
@@ -380,10 +382,12 @@ switch($oParam->exec) {
                         $valorautilizar = $resultEm->e60_vlremp - $valorutilizado;
                         $arrayValores[$j][0] = $resultEm->e60_numemp;
                         $arrayValores[$j][1] = $valorautilizar;
+                        $arrayValores[$j][2] = $codEmp;
                         $j++;
                       }else{
                         $arrayValores[$j][0] = $resultEm->e60_numemp;
                         $arrayValores[$j][1] = $resultEm->e60_vlremp - $resultEm->e60_vlrutilizado;
+                        $arrayValores[$j][2] = $codEmp;
                         $j++;  
                       }
                 }
@@ -449,6 +453,9 @@ switch($oParam->exec) {
                         }
                         if($keyCel == 1){
                             $objItensSoma->liberado     =  $cell;
+                        }
+                        if($keyCel == 2){
+                            $objItensSoma->codemp     =  $cell;
                         }
                         
                     }

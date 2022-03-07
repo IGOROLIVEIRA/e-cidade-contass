@@ -885,13 +885,14 @@ if(isset($_POST["processar"])) {
 
                 }else if(identificador==8){
                     if(cont==1){
-                        alert("Empenho não possui saldo para o total inserido!"); 
+                        alert("Empenho(s) listado(s) abaixo sem saldo disponível!"); 
                         cont++;
                     }
                     
                     
                     var vnumemp = oItem.numemp;
                     var vliberado = oItem.liberado;
+                    var vcodemp = oItem.codemp;
                     document.getElementById("tblValorLiberado").style.display="block";
 
                     var tabela = document.getElementById("tblValorLiberado");
@@ -899,7 +900,7 @@ if(isset($_POST["processar"])) {
                     var linha = tabela.insertRow(numeroLinhas);
                     var celula1 = linha.insertCell(0);
                     var celula2 = linha.insertCell(1);
-                    celula1.innerHTML =  "<div style='text-align:center;'>"+vnumemp+"<div>";
+                    celula1.innerHTML =  "<div style='text-align:center;'>"+vcodemp+"<div>";
                     celula2.innerHTML =  "<div style='text-align:center;'>"+vliberado+"<div>";
                     
 
