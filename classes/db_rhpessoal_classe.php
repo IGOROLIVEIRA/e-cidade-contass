@@ -284,7 +284,7 @@ class cl_rhpessoal
       $this->erro_status = "0";
       return false;
     }
-    if ($this->rh01_tipadm == null) {
+    if ($this->rh01_tipadm == null || $this->rh01_tipadm == "0") {
       $this->erro_sql = " Campo Tipo de Admissão não Informado.";
       $this->erro_campo = "rh01_tipadm";
       $this->erro_banco = "";
@@ -650,7 +650,7 @@ class cl_rhpessoal
     if (trim($this->rh01_tipadm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_tipadm"])) {
       $sql  .= $virgula . " rh01_tipadm = $this->rh01_tipadm ";
       $virgula = ",";
-      if (trim($this->rh01_tipadm) == null) {
+      if (trim($this->rh01_tipadm) == null || $this->rh01_tipadm == "0") {
         $this->erro_sql = " Campo Tipo de Admissão não Informado.";
         $this->erro_campo = "rh01_tipadm";
         $this->erro_banco = "";
