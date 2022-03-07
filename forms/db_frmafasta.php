@@ -93,6 +93,7 @@ $clrotulo->label('z01_nome');
           <td colspan="3" nowrap>
             <?
             $db_situac = array(
+              "NULL" => "Selecione",
               "2" => "2 - Afastado sem remuneração",
               "3" => "3 - Afastado acidente de trabalho +15 dias",
               "4" => "4 - Afastado serviço militar",
@@ -106,7 +107,7 @@ $clrotulo->label('z01_nome');
               // "12" => "12 - Prorrogação Licença Maternidade",
               "13" => "13 - Outras licenças remuneradas"
             );
-            db_select('r45_situac', $db_situac, true, ($db_opcao == 1 ? 1 : 3), "onChange = 'js_verificasituac(this.value)'");
+            db_select('r45_situac', $db_situac, true, ($db_opcao == 1 ? 1 : 3), "onChange = 'js_verificasituac(this.value);js_changeCodAfastamento()'");
             ?>
           </td>
         </tr>
@@ -163,7 +164,11 @@ $clrotulo->label('z01_nome');
             <?
             $arr_codre = array();
             $result_codre = $clmovcasadassefip->sql_record($clmovcasadassefip->sql_query(db_anofolha(), db_mesfolha(), $r45_codafa, null, "r67_reto"));
-            db_select("r45_codret", $arr_codre, true, ($db_opcao == 1 ? 1 : 3), "");
+            if ($db_opcao != 1) {
+              db_input('r45_codret', 6, "", true, 'text', 3);
+            } else {
+              db_select("r45_codret", $arr_codre, true, 1, "");
+            }
             ?>
           </td>
         </tr>
@@ -504,19 +509,23 @@ $clrotulo->label('z01_nome');
     if (mostra == true) {
       js_OpenJanelaIframe("top.corpo", "db_iframe_rhmotivoafasta", "func_rhmotivoafasta.php?&funcao_js=parent.js_mostraAfastaMotivo1|rh172_codigo|rh172_descricao", "Pesquisa", true, "20");
     }
-    /*else {
-      if (document.form1.r45_regist.value != "") {
-        js_OpenJanelaIframe("top.corpo", "db_iframe_rhafasta", "func_rhmotivoafasta.php?&pesquisa_chave=" + document.form1.r45_regist.value + "&funcao_js=parent.js_mostraregist", "Pesquisa", false, "20");
+    else {
+      if (document.form1.rh172_codigo.value != "") {
+        js_OpenJanelaIframe("top.corpo", "db_iframe_rhafasta", "func_rhmotivoafasta.php?&pesquisa_chave_codigo=" + document.form1.rh172_codigo.value + "&funcao_js=parent.js_mostraAfastaMotivo", "Pesquisa", false, "20");
       } else {
         document.form1.z01_nome.value = "";
       }
-    }*/
+    }
   }
 
   function js_mostraAfastaMotivo1(codigo, descricao) {
     document.form1.rh172_codigo.value = codigo;
     document.form1.rh172_descricao.value = descricao;
     db_iframe_rhmotivoafasta.hide();
+  }
+
+  function js_mostraAfastaMotivo(descricao, error) {
+    document.form1.rh172_descricao.value = descricao;
   }
 
 
@@ -544,5 +553,51 @@ $clrotulo->label('z01_nome');
     } else {
       document.getElementById('mesmadoenca').style.display = '';
     }
+  }
+
+  function js_changeCodAfastamento()
+  {
+    let situacao = document.form1.r45_situac.value;
+    switch (situacao) {
+      case '2':
+      case '7':
+        document.form1.rh172_codigo.value = '05';
+        document.form1.r45_codafa.value = 'X ';
+        break;
+      case '5': 
+        document.form1.rh172_codigo.value = '17';
+        document.form1.r45_codafa.value = 'Q1';
+        break;
+      case '6': 
+        document.form1.rh172_codigo.value = '03';
+        document.form1.r45_codafa.value = 'P1';
+        break;
+      case '10': 
+        document.form1.rh172_codigo.value = '03';
+        document.form1.r45_codafa.value = 'P3';
+        break;
+      case '11': 
+        document.form1.rh172_codigo.value = '13';
+        document.form1.r45_codafa.value = 'Y ';
+        break;
+      case '13': 
+        document.form1.rh172_codigo.value = '10';
+        document.form1.r45_codafa.value = 'Y ';
+        break;
+      case '3': 
+        document.form1.rh172_codigo.value = '01';
+        document.form1.r45_codafa.value = 'O1';
+        break;
+      default:
+        document.form1.rh172_codigo.value = '';
+        document.form1.rh172_descricao.value = '';
+        document.form1.r45_codafa.value = '';
+        document.form1.r45_codafadescr.value = '';
+        document.form1.r45_codret.value = '';
+        break;
+    }
+    js_pesquisarMotivoafasta(false);
+    js_ProcCod_r45_codafa('r45_codafa','r45_codafadescr');
+    js_abrelista();
   }
 </script>

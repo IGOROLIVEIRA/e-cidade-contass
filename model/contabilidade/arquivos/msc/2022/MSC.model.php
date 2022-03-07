@@ -1345,12 +1345,13 @@ class MSC {
 
       foreach ($aRegis as $key => $value) {
 
-          if ($this->iConta != $value[0]) {
+          if ($iConta != $value[0]) {
 
-              $oNovoResgistro                     = new stdClass;
               if (!empty($iConta)) {
                   $aRegistros[$iConta] = $oNovoResgistro;
-              }
+                }
+
+              $oNovoResgistro                     = new stdClass;
               $oNovoResgistro->conta = $iConta    = $value[0];
               $oNovoResgistro->beginning_balance  = 0;
               $oNovoResgistro->period_change_deb  = 0;

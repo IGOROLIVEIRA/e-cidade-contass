@@ -109,10 +109,18 @@ $db_botao = true;
                         <div class="container">
                             <div id="itens"></div>
                         </div>
+
+                        <?php
+
+                        $destinacaoExclusiva = db_query("select l20_destexclusiva from liclicita where l20_codigo = $licitacao;");
+                        $destinacaoExclusiva = pg_result($destinacaoExclusiva, 0, 'l20_destexclusiva');
+
+                        ?>
+
                         <script>
                             if (document.form1.codproc.value) {
                                 let licitacao = document.form1.licitacao.value;
-                                var oItensLicitacao = new dbViewItensLicitacao('oItensLicitacao', document.getElementById('itens'));
+                                var oItensLicitacao = new dbViewItensLicitacao('oItensLicitacao', document.getElementById('itens'), <?php echo $destinacaoExclusiva; ?>);
                                 let objeto = new Object();
                                 objeto.iLicitacao = document.form1.licitacao.value;
                                 objeto.iProcCompra = document.form1.codproc.value;
@@ -135,6 +143,8 @@ $db_botao = true;
         let aSelecionados = aItens.filter(e => e.isSelected);
         let aItensFormatados = [];
 
+        let erro = false;
+
         if (!aSelecionados.length) {
             alert('Informe ao menos um item!');
             return;
@@ -142,11 +152,19 @@ $db_botao = true;
 
         aSelecionados.forEach(elemento => {
 
+
+
+
             let item = new Object();
             item.codigo = elemento.aCells[1].getContent();
             item.sequencial = elemento.aCells[2].getContent();
             item.codprocitem = elemento.aCells[9].getContent();
             item.codproc = document.form1.codproc.value;
+
+            numeroId = parseInt(item.sequencial) - 1;
+            idMeepp = "meEpp" + numeroId;
+            valorMeepp = document.forms["form1"][idMeepp].value;
+
 
             if (document.getElementById(elemento.aCells[7].sId).children[0].selectedIndex) {
                 item.qtdexclusiva = document.getElementById(elemento.aCells[8].sId).children[0].value;
@@ -154,9 +172,20 @@ $db_botao = true;
                 item.qtdexclusiva = 0;
             }
 
+            if (item.qtdexclusiva == "" && valorMeepp == 1) {
+                alert('Qtde Exclusiva do item ' + item.codigo + ' precisa ser preenchida!');
+                erro = true;
+                return;
+            }
+
+
             aItensFormatados.push(item);
 
         });
+
+        if (erro == true) {
+            return;
+        }
 
         let oParam = new Object();
         oParam.licitacao = document.form1.licitacao.value;
@@ -175,16 +204,18 @@ $db_botao = true;
 
     function js_retornoItens(oAjax) {
 
+
         let oRetorno = eval("(" + oAjax.responseText + ")");
         let tipoJulgamento = "<?= $tipojulg ?>";
         let licitacao = "<?= $licitacao ?>";
+
 
         if (oRetorno.status == 1) {
             alert('Item incluído com sucesso!');
 
             parent.parent.iframe_liclicita.bloquearRegistroPreco;
 
-            parent.iframe_liclicitem.location.href = `lic1_liclicitemalt001.php?licitacao=${licitacao}`;
+            parent.location.href = `lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
 
             if (tipoJulgamento == '3') {
                 parent.parent.iframe_liclicitemlote.location.href = `lic1_liclicitemlote001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
