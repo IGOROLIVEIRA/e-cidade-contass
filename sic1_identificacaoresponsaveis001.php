@@ -25,7 +25,7 @@ if(isset($incluir)){
         $dtinicial = DateTime::createFromFormat('d/m/Y', $si166_dataini);
         $dtcadastrocgm =   DateTime::createFromFormat('d/m/Y', $z09_datacadastro);
 
-        if($dtinicial < $dtcadastrocgm){
+        if($dtinicial < $dtcadastrocgm && db_getsession("DB_modulo") != 952) {
             db_msgbox("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
             $sqlerro = true;
         }

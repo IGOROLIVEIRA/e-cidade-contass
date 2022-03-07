@@ -49,7 +49,7 @@ $clrhmotivoafasta = new cl_rhmotivoafasta;
     <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_rhmotivoafasta.hide();">
   </form>
   <?
-  if (!isset($pesquisa_chave)) {
+  if (!isset($pesquisa_chave) && !isset($pesquisa_chave_codigo)) {
     $campos = "*";
     if (isset($chave_rh172_codigo) && (trim($chave_rh172_codigo) != "")) {
       $sql = $clrhmotivoafasta->sql_query(null, $campos, null, "rh172_codigo='$chave_rh172_codigo'");
@@ -73,6 +73,14 @@ $clrhmotivoafasta = new cl_rhmotivoafasta;
         echo "<script>" . $funcao_js . "('$rh172_sequencial',false);</script>";
       } else {
         echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+      }
+    } else if ($pesquisa_chave_codigo != null && $pesquisa_chave_codigo != "") {
+      $result = $clrhmotivoafasta->sql_record($clrhmotivoafasta->sql_query(null, "rh172_descricao", null, "rh172_codigo = '{$pesquisa_chave_codigo}'"));
+      if ($clrhmotivoafasta->numrows != 0) {
+        db_fieldsmemory($result, 0);
+        echo "<script>" . $funcao_js . "('$rh172_descricao',false);</script>";
+      } else {
+        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave_codigo . ") não Encontrado',true);</script>";
       }
     } else {
       echo "<script>" . $funcao_js . "('',false);</script>";
