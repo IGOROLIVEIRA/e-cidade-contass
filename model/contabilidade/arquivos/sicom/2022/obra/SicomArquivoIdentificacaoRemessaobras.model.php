@@ -32,7 +32,6 @@ class SicomArquivoIdentificacaoRemessaobras extends SicomArquivoBase implements 
    */
   public function __construct()
   {
-
   }
 
   /**
@@ -121,7 +120,6 @@ class SicomArquivoIdentificacaoRemessaobras extends SicomArquivoBase implements 
       if ($clide->erro_status == 0) {
         throw new Exception($clide->erro_msg);
       }
-
     }
 
     db_fim_transacao();
@@ -129,7 +127,5 @@ class SicomArquivoIdentificacaoRemessaobras extends SicomArquivoBase implements 
     $oGerarIde = new GerarIDE();
     $oGerarIde->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarIde->gerarDados();
-
   }
-
 }

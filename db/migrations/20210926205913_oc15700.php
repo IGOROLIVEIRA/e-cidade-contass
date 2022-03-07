@@ -18,9 +18,9 @@ class Oc15700 extends AbstractMigration
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_dtinicio      ', 'date' , 'Vigência'                     ,'', 'Vigência'            , 16, false, false, false, 0, 'date', 'Vigência');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_dtfim         ', 'date' , 'Vigência Final'               ,'', 'Vigência Final'      , 16, false, false, false, 0, 'date', 'Vigência Final');
                     INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_dtpublicacao  ', 'date' , 'Data da Publicação'           ,'', 'Data da Publicação'  , 16, false, false, false, 0, 'date', 'Data da Publicação');
-                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_veiculodepublicacao','text' ,'Veiculo de Publicação'     ,'', 'Veiculo de Publicação'  ,500,false, false, false, 0, 'text', 'Veiculo de Publicação'
-                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_anousu'       ,  'int4' ,'Ano do termo'                  ,'', 'Ano do termo'         ,500,false, false, false, 0, 'text', 'Ano do termo'
-                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_observacao    ', 'text' ,'Observação'                    ,'', 'Observação'           ,500,false, false, false, 0, 'text', 'Observação'
+                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_veiculodepublicacao','text' ,'Veiculo de Publicação'     ,'', 'Veiculo de Publicação'  ,500,false, false, false, 0, 'text', 'Veiculo de Publicação');
+                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_anousu'       ,  'int4' ,'Ano do termo'                  ,'', 'Ano do termo'         ,500,false, false, false, 0, 'text', 'Ano do termo');
+                    INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l212_observacao    ', 'text' ,'Observação'                    ,'', 'Observação'           ,500,false, false, false, 0, 'text', 'Observação');
                     
                     
                     -- INSERINDO db_syssequencia
@@ -89,6 +89,8 @@ class Oc15700 extends AbstractMigration
                     ALTER TABLE credenciamentosaldo ADD COLUMN l213_autori int8;
                     
                     ALTER TABLE empautoriza ADD COLUMN e54_numerotermo int8;
+
+                    
                     ";
         $this->execute($sql);
     }

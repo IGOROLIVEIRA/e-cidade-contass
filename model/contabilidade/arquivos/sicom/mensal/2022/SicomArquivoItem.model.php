@@ -108,6 +108,11 @@ WHERE DATE_PART ('YEAR' , homologacao . l202_datahomologacao) =" . db_getsession
 
      AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
         (SELECT si43_coditem::varchar
+         FROM item102021
+         WHERE si43_instit = " . db_getsession("DB_instit") . ")
+
+     AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
+        (SELECT si43_coditem::varchar
          FROM item102020
          WHERE si43_instit = " . db_getsession("DB_instit") . ")
 
@@ -173,7 +178,13 @@ WHERE empempenho.e60_instit = " . db_getsession("DB_instit") . " AND ((DATE_PART
                FROM item102022
                WHERE si43_instit = " . db_getsession("DB_instit") . "
                and si43_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
-  AND (pcmater.pc01_codmater::varchar || (CASE WHEN COALESCE(e55_unid,0) = 0 THEN 1 ELSE e55_unid END)::varchar) NOT IN
+  
+      AND (pcmater.pc01_codmater::varchar || (CASE WHEN COALESCE(e55_unid,0) = 0 THEN 1 ELSE e55_unid END)::varchar) NOT IN
+               (SELECT si43_coditem::varchar
+                FROM item102021
+                WHERE si43_instit = " . db_getsession("DB_instit") . ")
+
+      AND (pcmater.pc01_codmater::varchar || (CASE WHEN COALESCE(e55_unid,0) = 0 THEN 1 ELSE e55_unid END)::varchar) NOT IN
         (SELECT si43_coditem::varchar
          FROM item102020
          WHERE si43_instit = " . db_getsession("DB_instit") . ")
@@ -237,7 +248,13 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
      FROM item102022
      WHERE si43_instit = " . db_getsession("DB_instit") . "
      and si43_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
-  AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
+  
+     AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
+     (SELECT si43_coditem::varchar
+      FROM item102021
+      WHERE si43_instit = " . db_getsession("DB_instit") . ")
+
+     AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
         (SELECT si43_coditem::varchar
          FROM item102020
          WHERE si43_instit = " . db_getsession("DB_instit") . ")
@@ -307,7 +324,13 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
      FROM item102022
      WHERE si43_instit = " . db_getsession("DB_instit") . "
      and si43_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
-	AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
+	
+     AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
+     (SELECT si43_coditem::varchar
+      FROM item102021
+      WHERE si43_instit = " . db_getsession("DB_instit") . ")
+
+     AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
         (SELECT si43_coditem::varchar
          FROM item102020
          WHERE si43_instit = " . db_getsession("DB_instit") . ")
@@ -366,6 +389,12 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
          FROM item102022
          WHERE si43_instit = " . db_getsession("DB_instit") . "
          and si43_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
+
+      AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
+         (SELECT si43_coditem::varchar
+          FROM item102021
+          WHERE si43_instit = " . db_getsession("DB_instit") . ")
+
       AND (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
         (SELECT si43_coditem::varchar
          FROM item102020
@@ -438,7 +467,16 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
          FROM item102022
          WHERE si43_instit = " . db_getsession("DB_instit") . "
          and si43_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
-      AND (l205_item::varchar || (CASE
+      
+         AND (l205_item::varchar || (CASE
+                                                     WHEN COALESCE(m61_codmatunid,0) = 0 THEN 1
+                                                     ELSE m61_codmatunid
+                                                 END)::varchar) NOT IN
+        (SELECT si43_coditem::varchar
+         FROM item102021
+         WHERE si43_instit = " . db_getsession("DB_instit") . ")
+         
+         AND (l205_item::varchar || (CASE
                                                      WHEN COALESCE(m61_codmatunid,0) = 0 THEN 1
                                                      ELSE m61_codmatunid
                                                  END)::varchar) NOT IN
@@ -531,7 +569,16 @@ where DATE_PART ('MONTH', si06_dataadesao) = " . $this->sDataFinal['5'] . $this-
      FROM item102022
      WHERE si43_instit = " . db_getsession("DB_instit") . "
      and si43_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
-  AND (pcmater.pc01_codmater::varchar || (CASE
+
+     AND (pcmater.pc01_codmater::varchar || (CASE
+                                                        WHEN m61_codmatunid IS NULL THEN 1
+                                                        ELSE m61_codmatunid
+                                                    END)::varchar) NOT IN
+        (SELECT si43_coditem::varchar
+         FROM item102021
+         WHERE si43_instit = " . db_getsession("DB_instit") . ")
+
+     AND (pcmater.pc01_codmater::varchar || (CASE
                                                         WHEN m61_codmatunid IS NULL THEN 1
                                                         ELSE m61_codmatunid
                                                     END)::varchar) NOT IN
@@ -590,7 +637,7 @@ where DATE_PART ('MONTH', si06_dataadesao) = " . $this->sDataFinal['5'] . $this-
       )
   AND si06_instit=" . db_getsession("DB_instit");
 
-    $rsResult10 = db_query($sSql);// echo $sSql;db_criatabela($rsResult10);die($sSql);
+    $rsResult10 = db_query($sSql); // echo $sSql;db_criatabela($rsResult10);die($sSql);
     //$aCaracteres = array("/","\","'","\"","°","ª","º","§");
     // matriz de entrada
     $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
@@ -602,7 +649,9 @@ where DATE_PART ('MONTH', si06_dataadesao) = " . $this->sDataFinal['5'] . $this-
       $clitem10 = new cl_item102022();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      $sSqlitem = "select si43_coditem,si43_unidademedida from item102020  where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem . " and si43_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $sSqlitem = "select si43_coditem,si43_unidademedida from item102021  where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem . " and si43_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $sSqlitem .= " union
+        select si43_coditem,si43_unidademedida from item102020  where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem;
       $sSqlitem .= " union
         select si43_coditem,si43_unidademedida from item102019  where si43_instit = " . db_getsession('DB_instit') . " and si43_coditem=" . $oDados10->coditem;
       $sSqlitem .= " union

@@ -74,11 +74,9 @@ if (!isset($lReadOnly)){
 if( isset($_GET['lConsulta']) ) {
 	$r01_regist = $_GET['iMatricula'];
 }
+if ( !empty($iMatricula) ) {
 
-if ( !empty($oGet->iMatricula) ) {
-
-	$r01_regist = $oGet->iMatricula;
-	$matricula  = $oGet->iMatricula;
+	$matric = $matricula = $r01_regist = $iMatricula;
 } 
 
 /**

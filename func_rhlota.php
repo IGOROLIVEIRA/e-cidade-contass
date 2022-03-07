@@ -83,7 +83,7 @@ $chave_r70_estrut = isset($chave_r70_estrut) ? stripslashes($chave_r70_estrut) :
             <td colspan="2" align="center"> 
               <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar" onClick="return js_valida(arguments[0])"> 
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
-              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_rhlota.hide();">
+              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.fechardb_iframerhlota.click();">
             </td>
           </tr>
         </form>

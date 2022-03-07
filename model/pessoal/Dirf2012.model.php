@@ -563,7 +563,7 @@ class Dirf2012 extends Dirf {
     $sSqlTipoReceitas .= "        inner join rhdirfgeracao              on rh96_rhdirfgeracao                  = rh95_sequencial ";
     $sSqlTipoReceitas .= "        inner join cgm                        on z01_numcgm                          = rh96_numcgm     ";
     $sSqlTipoReceitas .= "  where rh95_ano = {$this->iAno}                ";
-    $sSqlTipoReceitas .= "    and (rh98_rhdirftipovalor in (6,16) ";
+    $sSqlTipoReceitas .= "    and (rh98_rhdirftipovalor in (7,6,16) ";
 
     if ($oDados->sAcima6000 == "S") {
 

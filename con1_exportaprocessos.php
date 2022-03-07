@@ -97,6 +97,11 @@ $clrotulo->label("l20_numero");
                 return false;
             }
 
+            if (document.form1.PROC.value == '') {
+                alert("Nenhum arquivo informado!");
+                return false;
+            }
+
             //location.href = 'con1_exportaprocessos002.php?' + sQuery;
 
             jan = window.open('con1_importaprocessos002.php?' + sQuery, '',

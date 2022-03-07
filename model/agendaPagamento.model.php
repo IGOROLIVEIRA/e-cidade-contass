@@ -1730,7 +1730,7 @@ class agendaPagamento {
       $sSqlMovimento     = $oDaoEmpageMov->sql_query_file($oMovimento->iCodMov);
       $rsMovimento       = $oDaoEmpageMov->sql_record($sSqlMovimento);
       $oMovimentoOriginal = db_utils::fieldsMemory($rsMovimento, 0);
-      if (round(($oMovimento->nValor+$oMovimento->nValorRetencao),2) < $oMovimentoOriginal->e81_valor) {
+      if (round(($oMovimento->nValor+$oMovimento->nValorRetencao),2) < round($oMovimentoOriginal->e81_valor,2)) {
 
         $oDaoEmpageMov->e81_valor  = $oMovimento->nValor;
         $oDaoEmpageMov->e81_codmov = $oMovimento->iCodMov;

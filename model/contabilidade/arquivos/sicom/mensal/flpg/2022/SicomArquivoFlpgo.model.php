@@ -159,6 +159,8 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
          when rh30_vinculo = 'P' and rh05_causa is not null and rh02_validadepensao is null then '09'
          when rh30_vinculo = 'P' and rh05_causa is not null and rh02_validadepensao is not null then '08'
          when rh30_vinculo = 'A' and rh30_naturezaregime = 2 and rh05_causa is not null then '06'
+         when rh30_vinculo = 'A' and rh30_naturezaregime = 4 and rh30_regime in (1,3) and rh05_causa is not null then '06'
+         when rh30_vinculo = 'A' and rh30_naturezaregime = 4 and rh30_regime in (1,2) and rh05_causa is not null then '02'
          when rh30_vinculo = 'A' and rh30_naturezaregime = 3 and rh05_causa is not null then '07'
          when rh30_vinculo = 'A' and rh30_naturezaregime = 1 and rh05_causa between 60 and 69 then '08'
          when rh30_vinculo = 'A' and rh30_naturezaregime = 1 and rh05_causa = 10 then '05'
@@ -528,7 +530,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_datfastpreliminar                   = NULL;
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
         $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
-        $clflpgo10->si195_codcargo                          = (($oDados10->si195_indsituacaoservidorpensionista!='P')?$oDados10->rh37_cbo:0);
+        $clflpgo10->si195_codcargo                          = (in_array($oDados10->si195_indsituacaoservidorpensionista,array('03','05','06','07','08','09')) ? 0 : $oDados10->rh37_cbo);
         $clflpgo10->si195_sglcargo 							= $this->convert_accented_characters($oDados10->si195_sglcargo);
         $clflpgo10->si195_dscapo           					= $this->convert_accented_characters($dscAPO);
         $clflpgo10->si195_natcargo                          = $this->convert_accented_characters($oDados10->si195_reqcargo);

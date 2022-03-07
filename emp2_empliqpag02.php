@@ -41,7 +41,7 @@ require_once("classes/db_empempitem_classe.php");
 db_postmemory($_POST);
 
 //db_postmemory($HTTP_SERVER_VARS,2);exit;
-parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+//parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $clselorcdotacao = new cl_selorcdotacao();
 $clorcelemento   = new cl_orcelemento;
@@ -246,7 +246,7 @@ select 	empempenho.e60_numemp::integer as e60_numemp,
 	pc50_descr,
 	c70_valor,
 	c70_data,
-  c70_codlan,
+    c70_codlan,
 	c53_tipo,
 	c53_descr,
 	e91_numemp
@@ -358,8 +358,22 @@ for ($x = 0; $x < $rows; $x++) {
      $pdf->Cell(0,$tam,'',0,1,"C",$pre);
   }
   $pdf->Cell(0,$tam,'CREDOR : '.$e60_numcgm.' - '.$z01_nome,0,1,"L",$pre);
+
+  $resNotaOrdemPagamento = db_query("select e69_numero, e71_codord, e50_obs
+                                              from conlancamord
+                                        inner join pagordemnota on e71_codord=c80_codord
+                                        inner join empnota on e69_codnota=e71_codnota
+                                        inner join pagordem on e50_codord=e71_codord where c80_codlan=".$c70_codlan);
+  db_fieldsmemory($resNotaOrdemPagamento,0);
   if($com_mov == 's'){
-    $pdf->multiCell(0,$tam,'HISTÓRICO : '.$e60_resumo,0,"L",$pre);
+    $resumo = $e50_obs;
+    if($c53_tipo == 10){
+        $resumo = $e60_resumo;
+    }
+    if($c53_tipo == 11){
+        $resumo = $e94_motivo;
+    }
+    $pdf->multiCell(0,$tam,'HISTÓRICO : '.$resumo,0,"L",$pre);
     if($e60_destin != ''){
        $pdf->multiCell(0,$tam,'DESTINO : '.$e60_destin,0,"L",$pre);
     }

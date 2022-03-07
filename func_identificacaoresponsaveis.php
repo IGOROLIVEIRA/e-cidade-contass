@@ -47,7 +47,7 @@ $clidentificacaoresponsaveis = new cl_identificacaoresponsaveis;
         if(db_getsession("DB_modulo") != 952) {
             $sql = $clidentificacaoresponsaveis->sql_query(NULL, $campos, NULL, "si166_instit = " . db_getsession("DB_instit"));
         }else{
-            $sql = $clidentificacaoresponsaveis->sql_query(NULL, $campos, NULL, "si166_instit = " . db_getsession("DB_instit") . " and  si166_tiporesponsavel = 5 ");
+            $sql = $clidentificacaoresponsaveis->sql_query(NULL, $campos, NULL, "si166_instit = " . db_getsession("DB_instit") . " and  si166_tiporesponsavel = 7 ");
         }
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);

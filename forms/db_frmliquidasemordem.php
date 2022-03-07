@@ -26,6 +26,7 @@
  */
 
 //MODULO: empenho
+
 $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
 $clrotulo->label("o56_elemento");
@@ -88,44 +89,63 @@ if (USE_PCASP) {
 }
 
 ?>
-<center>
+<!-- <center> -->
   <form name=form1 action="" method="POST">
     <table width='80%' cellspacing='0' style='padding:0px; margin-top: 20px;' border='0'>
-      <tr><td  style='padding:0px' valign="top">
-          <fieldset><legend><b>&nbsp;Empenho&nbsp;</b></legend>
-            <table >
+      <tr><td style='padding:0px' valign="top" width='35%'>
+          <fieldset style="width:660px" ><legend><b>&nbsp;Empenho&nbsp;</b></legend>
+            <table>
               <tr>
                 <td><?=db_ancora($Le60_codemp,"js_JanelaAutomatica('empempenho',\$F('e60_numemp'))",$db_opcao_inf)?></td>
                 <td><? db_input('e60_codemp', 13, $Ie60_codemp, true, 'text', 3)?> </td>
-                <td nowrap="nowrap"><?=db_ancora($Le60_numemp,"js_JanelaAutomatica('empempenho',\$F('e60_numemp'))",$db_opcao_inf)?></td>
-                <td><? db_input('e60_numemp', 13, $Ie60_numemp, true, 'text', 3)?> </td>
-              </tr>
-              <tr>
-                <td><?=db_ancora($Le60_numcgm,"js_JanelaAutomatica('cgm',\$F('e60_numcgm'))",$db_opcao_inf)?></td>
-                <td><? db_input('e60_numcgm', 13, $Ie60_numcgm, true, 'text', 3); ?> </td>
-                <td colspan=2><? db_input('z01_nome', 52, $Iz01_nome, true, 'text', 3, '');?></td>
-              </tr>
-              <tr>
-                <td><?=db_ancora('<b>Credor:</b>',"js_pesquisae49_numcgm(true)",1)?></td>
-                <td><? db_input('e49_numcgm', 13, $Ie60_numcgm, true, 'text', 1,"onchange='js_pesquisae49_numcgm(false)'"); ?> </td>
-                <td colspan=2><? db_input('z01_credor', 52, $Iz01_nome, true, 'text', 3, '');?></td>
+                <!-- <td nowrap="nowrap"><?=db_ancora($Le60_numemp,"js_JanelaAutomatica('empempenho',\$F('e60_numemp'))",$db_opcao_inf)?></td> -->
+                <td style="display: none"><? db_input('e60_numemp', 13, $Ie60_numemp, true, 'text', 3)?> </td>
               </tr>
               <tr>
                 <td><?=db_ancora($Le60_coddot,"js_JanelaAutomatica('orcdotacao',\$F('e60_coddot'),'".@$e60_anousu."')",$db_opcao_inf)?></td>
                 <td nowrap ><? db_input('e60_coddot', 13, $Ie60_coddot, true, 'text', 3); ?></td>
-                <td width="20"><?=db_ancora($Lo15_codigo,"",3)?></td>
-                <td nowrap><? db_input('o15_codigo', 5, $Io15_codigo, true, 'text', 3); db_input('o15_descr', 33, $Io15_descr, true, 'text', 3)?></td>
+                <!-- <td width="20"><?=db_ancora($Lo15_codigo,"",3)?></td> -->
+                <!-- <td></td> -->
+                <td nowrap><? 
+                            db_input('o15_codigo', 5, $Io15_codigo, true, 'hidden', 3); 
+                            db_input('o15_descr', 5, $Io15_descr, true, 'text', 3)?></td>
+              </tr>
+              <tr>
+                <td><?=db_ancora($Le60_numcgm,"js_JanelaAutomatica('cgm',\$F('e60_numcgm'))",$db_opcao_inf)?></td>
+                <td><? db_input('e60_numcgm', 13, $Ie60_numcgm, true, 'text', 3); ?> </td>
+                <!-- <td></td> -->
+                <td colspan=2><? db_input('z01_nome', 64, $Iz01_nome, true, 'text', 3, '');?></td>
+              </tr>
+              <tr>
+                <td><?=db_ancora('<b>Credor:</b>',"js_pesquisae49_numcgm(true)",1)?></td>
+                <td><? db_input('e49_numcgm', 13, $Ie60_numcgm, true, 'text', 1,"onchange='js_pesquisae49_numcgm(false)'"); ?> </td>
+                <!-- <td></td> -->
+                <td colspan=2><? db_input('z01_credor', 64, $Iz01_nome, true, 'text', 3, '');?></td>
               </tr>
               <tr>
                 <td><?db_ancora("<b>Conta Pagadora:</b>","js_pesquisa_contapagadora(true);",1);?></td>
                 <td>
                     <? 
                     db_input("e83_conta",13,1,true,"text",4,"onchange='js_pesquisa_contapagadora(false);'"); 
-                    db_input("e83_codtipo",5,1,true,"hidden");
                     ?>
                 </td>
-                <td colspan='3'><? db_input("e83_descr",50,"",true,"text",3); ?></td>
+                <td>
+                    <?    
+                    db_input("e83_codtipo",5,1,true,"hidden");
+                    ?>
+                <? db_input("e83_descr",64,"",true,"text",3); ?></td>
               </tr>
+              <td nowrap ><b>Nota Fiscal Eletronica: </b></td>
+                <td colspan='2'>
+                
+                  <?
+                  /**
+                   * Acrescentado por causa do sicom
+                   */
+                  $aNfEletronica = array(1 => 'Sim, padrão Estadual ou SINIEF 07/05',2 => 'Sim, chave de acesso municipal ou outra',3 => 'Não',4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
+                  db_select('e69_notafiscaleletronica', $aNfEletronica, true, 1, "onchange='js_tipoChave(this.value);'");
+                  ?>
+                </td>  
               <tr id='controlepit' style='display: <?=$iControlaPit==1?"":"none"?>'>
                 <td><b>Tipo da Entrada: </b></td>
                 <td colspan="4">
@@ -147,72 +167,63 @@ if (USE_PCASP) {
               </tr>
               <tr>
                 <td nowrap><b>Número da Nota:</b></td>
-                <td><?db_input('e69_numnota', 13, '', true, 'text', 1); ?></td>
-                <td nowrap><b>Data da Nota:</b></td>
-                <td><?db_inputData('e69_dtnota', '', '','', true, 'text', 1); ?></td>
+                <td colspan='2'><?db_input('e69_numnota', 19, '', true, 'text', 1,"","","","",20); ?>            
                 <!-- OC 12746 -->
-                <td nowrap id="competDespLabel" style="display: none"><b>Competência da Despesa: </b></td>
+                <b>Número de série: </b>
+                <?
+                db_input('e69_nfserie', 80, 0, true, 'text', 3, "","","","",8);
+                ?>
+                <b>Data da Nota:</b><?db_inputData('e69_dtnota', '', '','', true, 'text', 1); ?></td>
+              </tr>
+              <!-- <tr>
+              <td nowrap>
+                </td>
+                <td>
+                  <?
+                  /**
+                   * Acrescentado por causa do sicom
+                   */
+                  
+                  ?>
+                </td>
+                </tr>     -->
+              <tr>      
+                <td nowrap><b>Chave Acesso: </b></td>
+                <td colspan='2'>
+                  <?
+                  /**
+                   * Acrescentado por causa do sicom
+                   */
+                  db_input('e69_chaveacesso', 80, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'","","","",44);
+                  ?>
+                </td>
+              </tr>
+              <tr>    
+                <td>
+                  <strong>Processo Administrativo:</strong>
+                </td>
+                <td colspan='2'>
+                  <?php db_input('e03_numeroprocesso', 80, '', true, 'text', $db_opcao, null, null, null, null, 15); ?>
+                </td>
+
+              </tr>
+              <tr>
+              <td nowrap id="competDespLabel" style="display: none"><b>Competência da Despesa: </b></td>
                 <td style="display: none" id="competDespInput">
                   <?db_inputData('e50_compdesp', '', '', '', true, 'text', 1); ?>
                   <input type="hidden" name="sEstrutElemento" id="sEstrutElemento"/>
                 </td>
-              </tr>
-
-              <tr>
-                <td nowrap ><b>Nota Fiscal Eletronica: </b>
-                </td>
-                <td>
-                  <?
-                  /**
-                   * Acrescentado por causa do sicom
-                   */
-                  $aNfEletronica = array(1 => 'Sim, padrão Estadual ou SINIEF 07/05',2 => 'Sim, chave de acesso municipal ou outra',3 => 'Não',4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
-                  db_select('e69_notafiscaleletronica', $aNfEletronica, true, 1, "onchange='js_tipoChave(this.value);'");
-                  ?>
-                </td>
-
-                <td nowrap><b>Chave Acesso: </b>
-                </td>
-                <td>
-                  <?
-                  /**
-                   * Acrescentado por causa do sicom
-                   */
-                  db_input('e69_chaveacesso', 40, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'","","","",44);
-                  ?>
-                </td>
-
-                <td nowrap><b>Número de série: </b>
-                </td>
-                <td>
-                  <?
-                  /**
-                   * Acrescentado por causa do sicom
-                   */
-                  db_input('e69_nfserie', 10, 0, true, 'text', 3, "","","","",8);
-                  ?>
-                </td>
-
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Processo Administrativo:</strong>
-                </td>
-                <td colspan="3">
-                  <?php db_input('e03_numeroprocesso', 13, '', true, 'text', $db_opcao, null, null, null, null, 15); ?>
-                </td>
-
-              </tr>
+            </tr>  
 
               <!--[Extensao OrdenadorDespesa] inclusao_ordenador-->
 
             </table>
           </fieldset>
         </td>
-        <td valign='top' style='padding:0px'>
-          <fieldset ><legend><b>&nbsp;Valores do Empenho&nbsp;</b></legend>
-            <table style="width:200px;" >
+        <td valign='top' style='padding:0px' width='60%'>
+        <center>
+          <fieldset style="width:410px"><legend><b>&nbsp;&nbsp;&nbsp;&nbsp;Valores do Empenho&nbsp;</b></legend>
+            <table style="width:100px;">
               <tr><td nowrap><?=@$Le60_vlremp?></td><td align=right><? db_input('e60_vlremp', 12, $Ie60_vlremp, true, 'text', 3, '','','','text-align:right')?></td></tr>
               <tr><td nowrap><?=@$Le60_vlranu?></td><td align=right><? db_input('e60_vlranu', 12, $Ie60_vlranu, true, 'text', 3, '','','','text-align:right')?></td></tr>
               <tr><td nowrap><?=@$Le60_vlrliq?></td><td align=right><? db_input('e60_vlrliq', 12, $Ie60_vlrliq, true, 'text', 3, '','','','text-align:right')?></td></tr>
@@ -221,31 +232,32 @@ if (USE_PCASP) {
               <tr><td nowrap><b>Saldo</b></td><td align=right><? db_input('saldodis', 12, 0, true, 'text', 3, '','','','text-align:right')?></td></tr>
             </table>
           </fieldset>
+        </center>  
         </td>
       </tr>
       <tr>
-        <td colspan='2' style='padding:0px'>
-          <fieldset><legend><b>&nbsp;Itens&nbsp;</b></legend>
+        <td colspan='2' style='padding:0px'   width='92%'>
+          <fieldset style="width:97,5%"><legend><b>&nbsp;Itens&nbsp;</b></legend>
             <div style='border:2px inset white'>
-              <table  cellspacing=0 cellpadding=0 width='100%'>
+              <table  cellspacing=0 cellpadding=0 width='100%' >
                 <tr>
                   <th class='table_header'>
                     <input type='checkbox'  style='display:none' id='mtodos' onclick='js_marca()'>
                     <a onclick='js_marca()' style='cursor:pointer'>M</a></b></th>
-                  <th class='table_header' width='30%'>Material</th>
-                  <th class='table_header'>Sequência</th>
-                  <th class='table_header'>Valor Unitário</th>
-                  <th class='table_header'>Quantidade</th>
-                  <th class='table_header'>Valor Total</th>
-                  <th class='table_header'>Quantidade <br>Entregue</th>
-                  <th class='table_header'>Valor <br>Entregue</th>
+                  <th class='table_header' width='40%'>Item</th>
+                  <th class='table_header' width='10%'>Sequência</th>
+                  <th class='table_header' width='10%'>Valor Unitário</th>
+                  <th class='table_header' width='10%'>Quantidade</th>
+                  <th class='table_header' width='10%'>Valor Total</th>
+                  <th class='table_header' width='10%'>Quantidade <br>Entregue</th>
+                  <th class='table_header' width='10%'>Valor <br>Entregue</th>
                   <?
                   if ($iTipoControleCustos > 0) {
                     echo "<th class='table_header'>Centro de Custo</th>";
                   }
 
                   ?>
-                  <th class='table_header' style='width:18px'>&nbsp;</th>
+                  <!-- <th class='table_header' style='width:18px'>&nbsp;</th> -->
                 </tr>
                 <tbody id='dados' style='height:150px;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
                 </tbody>
@@ -259,7 +271,7 @@ if (USE_PCASP) {
                   }
 
                   ?>
-                  <th class='table_footer' style='width:18px'>&nbsp;</th>
+                  <!-- <th class='table_footer' style='width:18px'>&nbsp;</th> -->
                 </tr>
                 </tfoot>
               </table></div>
@@ -267,13 +279,20 @@ if (USE_PCASP) {
         </td>
       </tr>
       <tr>
-        <td colspan='2' style='padding:0px'>
-          <fieldset><legend><b>&nbsp;Histórico&nbsp;</b></legend>
+        <td colspan='2' width='77%'>
+          <fieldset style="width:98%"><legend><b>&nbsp;Histórico&nbsp;</b></legend>
             <table>
-              <tr>
-                <td>
+            <tr  >
+                <td id='opcredito' style="display: none">
                   <?
-                  db_textarea('historico',5,200,0,true,'text',1,"")
+                  db_textarea('informacaoop',5,164,0,true,'text',1,"");
+                  ?>
+                </td>
+              </tr>
+            <tr  >
+                <td id='ophisotrico' style="display: none">
+                  <?
+                  db_textarea('historico',5,164,0,true,'text',1,"");
                   ?>
                 </td>
               </tr>
@@ -285,7 +304,7 @@ if (USE_PCASP) {
             </table>
           </fieldset>
     </table>
-
+    <center>
     <input name="confirmar"  type="button" id="confirmar"  value="Confirmar" onclick="return js_liquidar('<?=$metodo?>')" disabled>
     <input name="pesquisar"  type="button" id="pesquisar"  value="Pesquisar" onclick="js_pesquisa();" >
     <input name="zeraritens" type="button" id="zeraritens" value="Zerar Itens" onclick="js_zeraItens();" >
@@ -372,7 +391,7 @@ if (USE_PCASP) {
             </tr>
             <tr>
               <td  nowrap>
-                <b>Valor ICMS Substituto:</b>
+                <b>Valor ICMS Substituto:</b> 
               </td>
               <td  nowrap>
                 <?
@@ -392,6 +411,17 @@ if (USE_PCASP) {
   </table>
 </div>
 <script>
+  document.getElementById("e69_notafiscaleletronica").style.width="100%"; 
+  document.getElementById("z01_nome").style.width="100%"; 
+  document.getElementById("z01_credor").style.width="100%"; 
+  document.getElementById("e83_descr").style.width="100%";
+  document.getElementById("e50_compdesp").style.width="80px";
+  document.getElementById("informacaoop").style.width="100%";
+  document.getElementById("historico").style.width="100%%";
+  document.getElementById("o15_descr").style.width="100%"; 
+  document.getElementById("e69_dtnota").style.width="80px";
+  document.getElementById("e69_nfserie").style.width="85px";
+  
   iTipoControle = <?=$iTipoControleCustos;?>;
   iControlaPit  = <?=$iControlaPit?>;
   function dataFormatada(date){
@@ -533,12 +563,12 @@ if (USE_PCASP) {
     }
 
     /**
-     * Exibe aviso dos grupos 7,8,9 e 10 de desdobramentos de consumo imediato
+     * Exibe aviso dos grupos 7,8,9 e 10 de desdobramentos de consumo imediato 
      */
     if (obj.e60_numemp != iEmpenho && (lUsaPCASP == true || lUsaPCASP == 'true')) {
 
       /**
-       * Para nao exibir mais de uma vez
+       * Para nao exibir mais de uma vez 
        */
       if (obj.oGrupoElemento.iGrupo != "") {
 
@@ -576,7 +606,21 @@ if (USE_PCASP) {
     $('e60_vlranu').value  = obj.e60_vlranu;
     $('e60_vlrpag').value  = obj.e60_vlrpag;
     $('e60_vlrliq').value  = obj.e60_vlrliq;
-    $('historico').value   = obj.e60_resumo.urlDecode();
+ 
+    if(obj.e60_informacaoop != null || obj.e60_informacaoop !=""){
+      $('informacaoop').value   = obj.e60_informacaoop.urlDecode();
+      if (!obj.e60_resumo){
+        $('historico').value   = obj.e60_informacaoop.urlDecode();
+      }else{
+        $('historico').value   = obj.e60_resumo.urlDecode();
+      }       
+    }
+    else{
+      $('informacaoop').value   = obj.e60_resumo.urlDecode();
+      $('historico').value   = obj.e60_resumo.urlDecode();
+    }
+    
+   
     $('saldodis').value    = obj.saldo_dis;
     $('e69_numnota').value = '';
     $('sEstrutElemento').value = obj.sEstrutural;
@@ -589,6 +633,15 @@ if (USE_PCASP) {
     var lBloquearItens = false;
     if (obj.e60_vlremp == obj.e60_vlrpag) {
       lBloquearItens = true;
+    }
+
+    
+    if(obj.e60_informacaoop){ 
+      document.getElementById('opcredito').style.display = "table-cell";
+      document.getElementById('ophisotrico').style.display = "none";
+    } else {
+      document.getElementById('opcredito').style.display = "none";
+      document.getElementById('ophisotrico').style.display = "table-cell";
     }
 
     aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
@@ -823,9 +876,9 @@ if (USE_PCASP) {
         /*
          * controlamos se deve ser solicitado o centro de custo para o item.
          * iTipoControle = 2 Uso Obrigatorio.
-         *                 1 uso nao obrigatorio
-         *                 0 Nao usa
-         */
+         *                 1 uso nao obrigatorio 
+         *                  0 Nao usa  
+         */  
         if (iTipoControle  == 2  ) {
 
           if ($('cc08_sequencial'+itens[i].value).innerHTML.trim() == "") {
@@ -842,7 +895,7 @@ if (USE_PCASP) {
         }
 
         /*
-
+ 
         JSON escrito manualmente. Alterado para objeto Javascript e então passado para o RPC com o Object.toJSON()
 
         notas += sV+'{"sequen":"'+itens[i].value+'","quantidade":"'+$F('qtdesol'+itens[i].value)+'","vlrtot":"';
@@ -962,7 +1015,19 @@ if (USE_PCASP) {
       oParam.valorTotal = valorTotal;
       oParam.iEmpenho   = $F('e60_numemp');
       oParam.notas      = aNotas;
-      oParam.historico  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('historico'));
+     
+      if(encodeURIComponent(tagString($F("informacaoop"))) != '' || encodeURIComponent(tagString($F("informacaoop"))) != null){
+        if(encodeURIComponent(tagString($F("informacaoop"))) != ''){
+          oParam.historico  = encodeURIComponent(tagString($F("informacaoop")));;//encodeURIComponent($F('historico')); 
+          oParam.informacaoop  = encodeURIComponent(tagString($F("informacaoop")));;//encodeURIComponent($F('informacaoop'));
+        }else{
+          oParam.historico  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('historico')); 
+          oParam.informacaoop  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('informacaoop'));
+      }}else{
+        oParam.historico  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('historico')); 
+        oParam.informacaoop  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('informacaoop'));
+      }
+           
       oParam.pars       = $F('e60_numemp');
       oParam.z01_credor = $F('e49_numcgm');
       oParam.cgm = $F('e60_numcgm');
