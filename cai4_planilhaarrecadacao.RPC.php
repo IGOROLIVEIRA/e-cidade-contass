@@ -328,7 +328,7 @@ switch ($oParam->exec) {
   case 'buscarDeducao':
 
     try{
-        $oRetorno->oReceita = buscarDeducao($oParam->k81_receita);
+        $oRetorno->oReceita = buscarDeducao($oParam->recurso);
         $oRetorno->oReceita->k02_descr = urlencode($oRetorno->oReceita->k02_descr);
 
     }catch (Exception $oExceptionErro) {
@@ -366,7 +366,7 @@ switch ($oParam->exec) {
 
 		try {
 
-			$oRetorno->oReceita = buscaReceitaFundep();
+			$oRetorno->oReceita = buscaReceitaFundep($oParam->k81_receita);
 			$oRetorno->oReceita->k02_descr = urlencode($oRetorno->oReceita->k02_descr);
 
 		} catch (Exception $oExceptionErro) {
@@ -497,27 +497,43 @@ function buscaCgmMatricula($iMatricula) {
 
 }
 
-function buscaReceitaFundep() {
-
+function buscaReceitaFundep($iReceita) {
+  
 	$oDaoTabRec = db_utils::getDao('tabrec');
 	$sCampos 	= "tabrec.k02_codigo, k02_descr, o70_codigo";
-
+  
+  if($iReceita =='118'){
 	if (db_getsession("DB_anousu") > 2021) 
-    $sWhere 	= "k02_estorc like '417515001%' and o70_codigo = '119' limit 1";
-  else
-	  $sWhere 	= "k02_estorc like '417580111%' and o70_codigo = '119' limit 1";
-    
-	$sSqlTabRec = $oDaoTabRec->sql_query_concarpeculiar(null, $sCampos, null, $sWhere);
-	$rsTabRec 	= $oDaoTabRec->sql_record($sSqlTabRec);
-
-	if ($rsTabRec && $oDaoTabRec->numrows == 1) {
+        $sWhere 	= "k02_estorc like '417515001%' and o70_codigo = '119' limit 1";
+      else
+        $sWhere 	= "k02_estorc like '417580111%' and o70_codigo = '119' limit 1";
+        
+      $sSqlTabRec = $oDaoTabRec->sql_query_concarpeculiar(null, $sCampos, null, $sWhere);
+      $rsTabRec 	= $oDaoTabRec->sql_record($sSqlTabRec);
+      
+  }if($iReceita =='166'){
+     if (db_getsession("DB_anousu") > 2021) 
+            $sWhere 	= "k02_estorc like '417155001%' and o70_codigo = '167' limit 1";
+        else
+            $sWhere 	= "k02_estorc like '417580111%' and o70_codigo = '119' limit 1";
+        
+        $sSqlTabRec = $oDaoTabRec->sql_query_concarpeculiar(null, $sCampos, null, $sWhere);
+        $rsTabRec 	= $oDaoTabRec->sql_record($sSqlTabRec);
+  }  
+  
+  if ($rsTabRec && $oDaoTabRec->numrows == 1) {
 		return db_utils::fieldsMemory($rsTabRec,0);
-	} else {
+	}
+  else {
+		if($iReceita == '118')
+		  $sMsgErro = "Para realizar arrecadação da receita do FUNDEB é necessário que a receita de fonte 119 esteja cadastrada na tesouraria.";
+    if($iReceita == '166')
+		  $sMsgErro = "Para realizar arrecadação da receita do FUNDEB é necessário que a receita de fonte 167 esteja cadastrada na tesouraria.";
 		
-		$sMsgErro = "Para realizar arrecadação da receita do FUNDEB é necessário que a receita de fonte 119 esteja cadastrada na tesouraria.";
-		throw new BusinessException($sMsgErro);
+      throw new BusinessException($sMsgErro);
 
 	}
+ 
 
 } 
 

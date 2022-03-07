@@ -113,7 +113,6 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
         let oRetorno = eval("(" + oAjax.responseText + ")");
         this.tipoSql = oRetorno.tipoSql;
          //alert(this.tipoSql);
-        //alert(JSON.stringify(oRetorno));
 
         if (oRetorno.status == 2) {
             alert(oRetorno.message.urlDecode());
@@ -278,7 +277,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
             });
             iTotalDotacoes++;
 
-            if(iCodigoDotacao == '0'){
+            if(iCodigoDotacao == '0' && oDotacao.quebraDotacoesCadastradas != 'false'){
                 var linha = new Array();
                 linha[0] = '<b>Alterar dotações cadastradas </b> ';
                 oGridDotacoes.addRow(linha);
@@ -418,13 +417,13 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
         if(this.itemDotacao == "false"){
             keyDotAnterior = "0";
         }
+
         
 
         //alert('alteraDotacaoItem' + JSON.stringify(me.aDotacoes.aItens[0]['iOrdem']));
         if (me.aDotacoes[keyDotAnterior]) {
 
             if (me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual]) {
-
                 me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].iDotacao = iCodigoDotacao;
                 me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].iAnoDotacao = me.iAnoSessao;
                 me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].lAlterado = true;

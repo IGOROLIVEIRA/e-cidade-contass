@@ -359,7 +359,7 @@ if ($oInstit->db21_usasisagua == "t") {
                 db_select("k81_emparlamentar", $aOpcoes, true, 1, "class='input-menor'");
                 ?>
               </td>
-            </tr>
+            </tr> 
 
             <tr id="notificacao-conv" style="display:none;">
               <td colspan='4' style="text-align: left; background-color: #fcf8e3; border: 1px solid #fcc888; padding: 10px">
@@ -942,7 +942,7 @@ if ($oInstit->db21_usasisagua == "t") {
         document.getElementById('numerocontrato').style.display = "none";
         document.getElementById('datacontrato').style.display = "none";
     }
-  }
+    }
     if (erro) {
       $('k81_receita').focus();
       $('k81_receita').value = '';
@@ -979,9 +979,9 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoConta();
     js_mostrarNotificacaoConvenio();
     js_mostrarNotificacaoOP();
-  }
+    }
 
-  if($('anoUsu').value >= 2022){
+    if($('anoUsu').value >= 2022){
     function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
 
     $('k81_receita').value = iReceita;
@@ -1035,7 +1035,7 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoOP();
 
     }
-}else{
+  }else{
   function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
 
       $('k81_receita').value = iReceita;
@@ -1079,6 +1079,7 @@ if ($oInstit->db21_usasisagua == "t") {
           js_mostrarNotificacaoOP();
 
         }
+       
 }
 
   /**
@@ -1242,7 +1243,6 @@ if ($oInstit->db21_usasisagua == "t") {
    * Funo para Adicionar uma Receita na Grid
    */
   function js_addReceita() {
-
     if ($('anoUsu').value >= 2022) {
       var recursoreceita = $('recurso').value;
       if ($F('op01_dataassinaturacop') == '' || $F('op01_numerocontratoopc') == '') {
@@ -1270,7 +1270,7 @@ if ($oInstit->db21_usasisagua == "t") {
     }
 
     if ($('anoUsu').value >= 2022) {
-      aEstruts = ['4172150', '4172151', '4175150'];
+      aEstruts = ['4172150', '4172151', '4175150', '4171550'];
       aEstrutsDed = ['4951728011', '4951728012', '4951758011', '4951728991'];
 
       if (aEstruts.indexOf($('estrutural').value.substr(0, 7)) > -1 ||
@@ -1547,7 +1547,14 @@ if ($oInstit->db21_usasisagua == "t") {
 
     //Dados Adicionais
     if (js_isReceitaFundeb()) {
-      oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 118);
+     
+      if($('recurso').value =='118'){
+           oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 118);
+      }
+      if($('recurso').value =='166'){
+          oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 166);
+      }
+      
     } else {
       oReceita.k81_valor = $F('k81_valor');
     }
@@ -1564,6 +1571,7 @@ if ($oInstit->db21_usasisagua == "t") {
       if (js_isReceitaFundeb()) {
 
         oParametro.exec = 'buscaReceitaFundep';
+        oParametro.k81_receita =   oReceita.recurso;
 
       } else {
 
@@ -1646,7 +1654,12 @@ if ($oInstit->db21_usasisagua == "t") {
 
       //Dados Adicionais
       if (js_isReceitaFundeb()) {
-        oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 119);
+        if($('recurso').value =='118'){
+           oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 119); 
+        }
+        if($('recurso').value =='166'){      
+            oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 167); 
+        }
       } else {
         oReceita.k81_valor = (new Number($F('k81_valor')) * 0.20) * (-1);
       }
@@ -2276,7 +2289,7 @@ if ($oInstit->db21_usasisagua == "t") {
   function js_verificaRegularizaRepasse() {
 
     if ($('anoUsu').value >= 2022) {
-      aEstruts = ['4172150', '4172151', '4175150'];
+      aEstruts = ['4172150', '4172151', '4175150','4171550'];
       aEstrutsDed = ['4951728011', '4951728012', '4951758011', '4951728991'];
 
       if (aEstruts.indexOf($('estrutural').value.substr(0, 7)) > -1 ||
@@ -2343,13 +2356,23 @@ if ($oInstit->db21_usasisagua == "t") {
 
     let sEstrutural = $('estrutural').value.substr(0, 9);
     let sRecurso = $('recurso').value;
-    let iAno = $('anoUsu').value;
+    let iAno = $('anoUsu').value; 
 
-    if ($('anoUsu').value>2021) 
-      return (iAno > 2021 && sRecurso == '118' && (sEstrutural == '417515001' || sEstrutural == '417180911')) ? true : false;
-    else
-      return (iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
-
+    if ($('anoUsu').value>2021){     
+      if(sRecurso == '118'){ 
+          return (iAno > 2021 && sRecurso == '118' && (sEstrutural == '417515001' || sEstrutural == '417180911')) ? true : false;
+      }
+      if(sRecurso == '166'){ 
+          return (iAno > 2021 && sRecurso == '166' && (sEstrutural == '417155001' )) ? true : false;
+      }
+    }else{
+      if(sRecurso == '118'){ 
+          return (iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
+      }
+      if(sRecurso == '166'){ 
+         return (iAno >= 2021 && sRecurso == '166' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
+      }  
+    }
   } 
 
   /**
@@ -2361,21 +2384,46 @@ if ($oInstit->db21_usasisagua == "t") {
    */
   function js_arredondamentoFundeb(fValor, iTipo) {
 
-    let fTotal = js_round((new Number(fValor)), 2);
-    let fVl118 = js_round((new Number(fValor) * 0.70), 2);
-    let fVl119 = js_round((new Number(fValor) * 0.30), 2);
+    if($('recurso').value == '118'){
+    
+          let fTotal = js_round((new Number(fValor)), 2);
+          let fVl118 = js_round((new Number(fValor) * 0.70), 2);
+          let fVl119 = js_round((new Number(fValor) * 0.30), 2);
 
-    let fDif = js_round((fTotal - (fVl118 + fVl119)), 2);
+          let fDif = js_round((fTotal - (fVl118 + fVl119)), 2);
 
-    if (fDif > 0) {
-      fVl118 += fDif;
-      fVl119 = js_round((fTotal - fVl118), 2);
-    } else {
-      fVl119 += fDif;
-      fVl118 = js_round((fTotal - fVl119), 2);
+          if (fDif > 0) {
+            fVl118 += fDif;
+            fVl119 = js_round((fTotal - fVl118), 2);
+          } else { 
+            fVl118 += fDif;
+            fVl119 += fDif;
+            fVl118 = js_round((fTotal - fVl119), 2);
+          }  
+          return iTipo == 118 ? fVl118 : fVl119;
     }
-
-    return iTipo == 118 ? fVl118 : fVl119;
-
+    if($('recurso').value == '166'){ 
+       
+          let fTotal = js_round((new Number(fValor)), 2); 
+          let fVl166 = js_round((new Number(fValor) * 0.70), 2);
+          let fVl167 = js_round((new Number(fValor) * 0.30), 2);
+        
+          let fDif = js_round((fTotal - (fVl166 + fVl167)), 2);
+      
+            if (fDif > 0) {
+                fVl166 += fDif;
+                fVl167 = js_round((fTotal - fVl166), 2);    
+            } else {
+              fVl166 += fDif;
+              fVl167 += fDif;
+              fVl166 = js_round((fTotal - fVl167), 2);
+            }
+          return iTipo == 166 ? fVl166 : fVl167;
+    }
   }
+<<<<<<< HEAD
+ 
 </script> 
+=======
+</script> 
+>>>>>>> 58fdf4a927b283a9931825184f666166bf462071
