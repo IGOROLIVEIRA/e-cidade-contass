@@ -110,8 +110,9 @@ switch($oParam->exec) {
             $opVeic = 0;
             $b = 0;
             $ve = 0;
-            
-            
+
+            $d = 0;
+            $h = 0;
             //verifica Baixa de Veiculos 
             foreach($resultadoPlanilha as $row){
                 $opNumBaixa  =  0;
@@ -125,6 +126,36 @@ switch($oParam->exec) {
                 $medidasaida = $row->medidasaida;
                 $motorista       = $row->motorista;
                 $motoristaNome       = $row->motoristaNome;
+
+                //mudança
+                $controleSoma = 0;
+                $codemp = explode("/",$resultadoEmpenho[$d]);
+                $codEmp = $codemp[0];
+                $anoEmp = $codemp[1];
+
+                $resultadoEm = $clempempenho->sql_record($clempempenho->sql_query(null,"*",null,"e60_codemp like '$codEmp' and e60_anousu = $anoEmp"));
+                $resultEm = db_utils::fieldsMemory($resultadoEm, 0);
+                if(count($arrayValoresEmpenhos)==0){
+                    $arrayValoresEmpenhos[$h][0]= $resultEm->e60_numemp;
+                    $arrayValoresEmpenhos[$h][1]= $valor;
+                    $h++;
+                }else{
+                    for($i=0;$i<count($arrayValoresEmpenhos);$i++){
+                        if( $arrayValoresEmpenhos[$i][0]==$resultEm->e60_numemp){
+                            $controleSoma = 1;
+                            break;
+                        }
+                    }
+                    if($controleSoma==0){
+                        $arrayValoresEmpenhos[$h][0]= $resultEm->e60_numemp;
+                        $arrayValoresEmpenhos[$h][1]= $valor;
+                        $h++;
+                    }else{
+                        $arrayValoresEmpenhos[$i][1]+= $valor;
+                    }
+                }
+                $d++;
+                //final
 
                 $resultadoVeiculo = $clveiculos->sql_record($clveiculos->sql_query(null,"*",null,"ve01_placa like '$test1'"));
 
@@ -284,7 +315,8 @@ switch($oParam->exec) {
                 }
             }
 
-
+            $arrayValores = array();
+            $j = 0;
             foreach($resultadoEmpenho as $row){
                 $valorEm[$e] = $row;
                 $codemp = explode("/",$valorEm[$e]);
@@ -293,6 +325,69 @@ switch($oParam->exec) {
 
                 $resultadoEm = $clempempenho->sql_record($clempempenho->sql_query(null,"*",null,"e60_codemp like '$codEmp' and e60_anousu = $anoEmp"));
                 $resultEm = db_utils::fieldsMemory($resultadoEm, 0);
+
+                $quantidade = count($arrayValores);
+                $opEmpenho = 0;
+                if($quantidade>0){
+                    for($i=0;$i<$quantidade;$i++){
+                        if($arrayValores[$i][0]==$resultEm->e60_numemp){
+                            $opEmpenho = 1;
+                            break;
+                        }
+                    }
+                    if($opEmpenho==0){
+                        if($resultEm->e60_vlrutilizado==""||$resultEm->e60_vlrutilizado==0){
+                            $sql = "select si05_codabast from empveiculos where si05_numemp = $resultEm->e60_numemp";
+                      
+                            $result = db_query($sql);
+                            $soma = 0;
+                            for($i=0;$i<pg_num_rows($result);$i++){
+                              $rsAbastecimento = db_utils::fieldsMemory($result,$i);
+                              $sql = "select ve70_valor from veicabast where ve70_codigo = $rsAbastecimento->si05_codabast";
+                              $result1 = db_query($sql);
+                              $rsAbastecimento1 = db_utils::fieldsMemory($result1,0);
+                      
+                              $valorutilizado += $rsAbastecimento1->ve70_valor;
+                            }
+                            $clempempenho->e60_vlrutilizado =  $valorutilizado;
+                            $clempempenho->sql_query_valorutilizado($resultEm->e60_numemp);
+                            $valorautilizar = $resultEm->e60_vlremp - $valorutilizado;
+                            $arrayValores[$j][0] = $resultEm->e60_numemp;
+                            $arrayValores[$j][1] = $valorautilizar;
+                            $j++;
+                          }else{
+                            $arrayValores[$j][0] = $resultEm->e60_numemp;
+                            $arrayValores[$j][1] = $resultEm->e60_vlremp - $resultEm->e60_vlrutilizado;
+                            $j++;  
+                          }
+                    }
+                }else{
+                    if($resultEm->e60_vlrutilizado==""||$resultEm->e60_vlrutilizado==0){
+                        $sql = "select si05_codabast from empveiculos where si05_numemp = $resultEm->e60_numemp";
+                  
+                        $result = db_query($sql);
+                        $soma = 0;
+                        for($i=0;$i<pg_num_rows($result);$i++){
+                          $rsAbastecimento = db_utils::fieldsMemory($result,$i);
+                          $sql = "select ve70_valor from veicabast where ve70_codigo = $rsAbastecimento->si05_codabast";
+                          $result1 = db_query($sql);
+                          $rsAbastecimento1 = db_utils::fieldsMemory($result1,0);
+                  
+                          $valorutilizado += $rsAbastecimento1->ve70_valor;
+                        }
+                        $clempempenho->e60_vlrutilizado =  $valorutilizado;
+                        $clempempenho->sql_query_valorutilizado($resultEm->e60_numemp);
+                        $valorautilizar = $resultEm->e60_vlremp - $valorutilizado;
+                        $arrayValores[$j][0] = $resultEm->e60_numemp;
+                        $arrayValores[$j][1] = $valorautilizar;
+                        $j++;
+                      }else{
+                        $arrayValores[$j][0] = $resultEm->e60_numemp;
+                        $arrayValores[$j][1] = $resultEm->e60_vlremp - $resultEm->e60_vlrutilizado;
+                        $j++;  
+                      }
+                }
+                //final 
                 
                 if($clempempenho->numrows==0){
                     $controleVerificarEmp = 1;
@@ -326,12 +421,42 @@ switch($oParam->exec) {
                     if($clempresto->numrows==0){
                         $controleAno = 1;
                     }
-
                     
                 }
                 
                 $e++;
             }
+            //mudança
+            $deixarInserir = 0;
+            for($i=0;$i<count($arrayValoresEmpenhos);$i++){
+                if($arrayValoresEmpenhos[$i][0]==$arrayValores[$i][0]){
+                    if($arrayValoresEmpenhos[$i][1]>$arrayValores[$i][1]){
+                        $deixarInserir = 1;
+                    }
+                }
+            }
+
+            if($deixarInserir==1){
+                $arrayRetornoSoma = array();
+                foreach ($arrayValores as $keyRow => $Row){
+
+                    
+                    $objItensSoma = new stdClass();
+                    foreach ($Row as $keyCel => $cell){
+                        
+                        if($keyCel == 0){
+                            $objItensSoma->numemp   =  $cell;
+                        }
+                        if($keyCel == 1){
+                            $objItensSoma->liberado     =  $cell;
+                        }
+                        
+                    }
+                    $objItensSoma->identificador = 8 ;
+                    $arrayRetornoSoma[] = $objItensSoma;
+                }
+            }
+            //final
 
             //verifica se possui lançamentos com datas informadas
             $arrayValoresLancados = array();
@@ -581,7 +706,7 @@ switch($oParam->exec) {
 
             //após a verificação de todas validações realiza a importar
         
-            if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1==0 && $opBaixaCompleta==0 && $opBaixa==0 && $opKm==0 && $opVeic==0 && $controleCom==0){
+            if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1==0 && $opBaixaCompleta==0 && $opBaixa==0 && $opKm==0 && $opVeic==0 && $controleCom==0 && $deixarInserir==0){
                 $emp = 0;
                 foreach($resultadoPlanilha as $row){
                     $test1       = $row->placa;
@@ -634,7 +759,7 @@ switch($oParam->exec) {
                 $resultadoMotorita = $clcgm->sql_record($clcgm->sql_query(null,"*",null,"z01_cgccpf = '$motorista'"));
                 $resultMotorista = db_utils::fieldsMemory($resultadoMotorita, 0);
 
-                for($i=0;$i<pg_num_rows($resultadoMot1);$i++){
+                for($i=0;$i<pg_num_rows($resultadoMotorita);$i++){
                     $resultMotorista = db_utils::fieldsMemory($resultadoMotorita, 0);
                     //Identifica Cod do motorista
                     $resultadoMotCod = $clveicmotoristas->sql_record($clveicmotoristas->sql_query(null,"*",null,"ve05_numcgm = $resultMotorista->z01_numcgm"));
@@ -707,6 +832,9 @@ switch($oParam->exec) {
 
                 $emp++;
 
+                $clempempenho->e60_vlrutilizado =  $resultEmpenho->e60_vlrutilizado+$valor;
+                $clempempenho->sql_query_valorutilizado($resultEmpenho->e60_numemp);
+
 
 
                 $resultadoRetirada = $clveicretirada->sql_record($clveicretirada->sql_query(null,"max(veicretirada.ve60_codigo)",null,"ve60_veiculo = $codigoVeic"));
@@ -727,21 +855,38 @@ switch($oParam->exec) {
                 $clveicdevolucao->ve61_importado         = "t";
                 $clveicdevolucao->incluir(null);
 
-                $clveiccadposto->ve29_tipo = 2;
-                $clveiccadposto->incluir(null);
+                $verificarposto = $clveiccadpostoexterno->sql_record($clveiccadpostoexterno->sql_query_file(null,"*",null,"ve34_numcgm =  $resultEmpenho->e60_numcgm"));
+                if($clveiccadpostoexterno->numrows==0){
 
-                $resultadoPost = $clveiccadposto->sql_record($clveiccadposto->sql_query(null,"max(veiccadposto.ve29_codigo)",null,""));
-                $resultPost = db_utils::fieldsMemory($resultadoPost, 0);
+                    $clveiccadposto->ve29_tipo = 2;
+                    $clveiccadposto->incluir(null);
 
-                $clveicabastposto->ve71_veicabast = $resultAba->max;
-                $clveicabastposto->ve71_veiccadposto = $resultPost->max;
-                $clveicabastposto->ve71_nota = $nota;
-                $clveicabastposto->incluir(null);
+                    $resultadoPost = $clveiccadposto->sql_record($clveiccadposto->sql_query(null,"max(veiccadposto.ve29_codigo)",null,""));
+                    $resultPost = db_utils::fieldsMemory($resultadoPost, 0);
+
+                    $clveicabastposto->ve71_veicabast = $resultAba->max;
+                    $clveicabastposto->ve71_veiccadposto = $resultPost->max;
+                    $clveicabastposto->ve71_nota = $nota;
+                    $clveicabastposto->incluir(null);
+
+                    
+                    $clveiccadpostoexterno->ve34_veiccadposto = $resultPost->max;
+                    $clveiccadpostoexterno->ve34_numcgm = $resultEmpenho->e60_numcgm;
+                    $clveiccadpostoexterno->incluir(null);
+
+                }else{ 
+                    $verificarpostoresult = db_utils::fieldsMemory($verificarposto, 0);
+
+                    $resultadoPost = $clveiccadposto->sql_record($clveiccadposto->sql_query(null,"*",null,"ve29_codigo = $verificarpostoresult->ve34_veiccadposto"));
+                    $resultPost = db_utils::fieldsMemory($resultadoPost, 0);
+
+                    $clveicabastposto->ve71_veicabast = $resultAba->max;
+                    $clveicabastposto->ve71_veiccadposto = $resultPost->ve29_codigo;
+                    $clveicabastposto->ve71_nota = $nota;
+                    $clveicabastposto->incluir(null);
+                }
 
                 
-                $clveiccadpostoexterno->ve34_veiccadposto = $resultPost->max;
-                $clveiccadpostoexterno->ve34_numcgm = $resultEmpenho->e60_numcgm;
-                $clveiccadpostoexterno->incluir(null);
                
 
                     
@@ -755,8 +900,15 @@ switch($oParam->exec) {
                    
                 } 
 
-            } else{ 
-                if($opVeic==1){
+            } else{
+                //mudança
+                if($deixarInserir==1){
+                    if($erro==false){
+                        unlink($arquivo);
+                    }
+                    $oRetorno->itens = $arrayRetornoSoma;
+
+                }else if($opVeic==1){
                     if($erro == false){
                         unlink($arquivo);
                     }
