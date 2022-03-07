@@ -2421,9 +2421,4 @@ if ($oInstit->db21_usasisagua == "t") {
           return iTipo == 166 ? fVl166 : fVl167;
     }
   }
-<<<<<<< HEAD
- 
-</script> 
-=======
-</script> 
->>>>>>> 58fdf4a927b283a9931825184f666166bf462071
+    </script> 
