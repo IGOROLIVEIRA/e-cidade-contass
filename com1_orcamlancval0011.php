@@ -585,7 +585,7 @@ if ($clempparametro->numrows > 0){
                                            /*FIM - OC3770*/
                                     echo "
                                     <td align='center'  class='bordas_corp'>";
-                                        db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();' onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);' " : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();' onClick='teste($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);'");
+                                        db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();' onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);' " : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();' onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);'");
                                     echo "
                                     </td>
                                     <td align='center'  class='bordas_corp' width='15%'>";
