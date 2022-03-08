@@ -61,10 +61,12 @@ class EventoS2206 extends EventoBase
                 }
                 $oDadosAPI->evtAltContratual->infoCeletista->aprend = empty($oDados->aprend) ? null : $oDados->aprend;
             } else {
-                $oDadosAPI->evtAltContratual->infoEstatutario = $oDados->infoEstatutario;
-                $oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP = $oDados->infoEstatutario->tpPlanRP;
-                $oDadosAPI->evtAltContratual->infoEstatutario->indTetoRGPS = $oDados->infoEstatutario->indTetoRGPS;
-                $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = $oDados->infoEstatutario->indAbonoPerm;
+                if (!empty($oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP)) {
+                    // $oDadosAPI->evtAltContratual->infoEstatutario = $oDados->infoEstatutario;
+                    $oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP = $oDados->infoEstatutario->tpPlanRP;
+                    $oDadosAPI->evtAltContratual->infoEstatutario->indTetoRGPS = $oDados->infoEstatutario->indTetoRGPS;
+                    $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = $oDados->infoEstatutario->indAbonoPerm;
+                }
             }
 
             if (!empty($oDados->infoContrato)) {

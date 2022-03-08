@@ -1,4 +1,5 @@
-function dbViewItensLicitacao(sNomeInstance, oNode) {
+function dbViewItensLicitacao(sNomeInstance, oNode, destinacaoExclusiva) {
+
 
     var me = this, aItensPosicao = new Array();
 
@@ -99,7 +100,13 @@ function dbViewItensLicitacao(sNomeInstance, oNode) {
             aLinha[6].addItem('0', 'Não');
             aLinha[6].addItem('1', 'Sim');
             aLinha[6].addEvent("onChange", ";" + me.sInstance + ".js_liberaQtdeExclusiva("+iSeq+", this.value);");
+            
             aLinha[6].lDisabled = oItem.marcado;
+            
+            if(destinacaoExclusiva == 1){
+                aLinha[6].lDisabled = true;
+            }
+            
             
             aLinha[7] = oInputQuantidade;
             aLinha[7].lDisabled = oItem.marcado;
