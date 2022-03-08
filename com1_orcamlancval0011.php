@@ -159,9 +159,16 @@ if ($clempparametro->numrows > 0){
                 }
             }
         }
-
-        function js_calcvaltot(valor,param,nome){
-
+        function colocaCor(param){
+            var nome = "linha_"+param;
+            document.getElementById(nome).style.backgroundColor = "#a0f072";
+        }
+        function removerCor(param){
+            var nome = "linha_"+param;
+            document.getElementById(nome).style.backgroundColor = "#CCCCCC";
+        }
+        function js_calcvaltot(valor,param,nome){    
+            
             if(!isNaN(valor)){
                 dec = 2;
                 pos = valor.indexOf('.');
@@ -195,6 +202,7 @@ if ($clempparametro->numrows > 0){
             }
         }
         function js_calcvalunit(valor,param,nome){
+          
             if(!isNaN(valor)){
                 dec = 2;
                 pos = valor.indexOf('.');
@@ -456,7 +464,7 @@ if ($clempparametro->numrows > 0){
                                             $camposelected = "vlrun_$pc22_orcamitem";
                                         }
                                 echo "
-                                <tr class='bordas_corp' width='15%'>
+                                <tr class='bordas_corp' width='15%' id='linha_$pc22_orcamitem'>
                                     <td align='center'  class='bordas_corp' width='15%'>
                                         $pc11_seq
                                     </td>
@@ -467,7 +475,7 @@ if ($clempparametro->numrows > 0){
                                         ".substr(stripslashes($pc11_resum),0,22)."...    
                                     </td>
                                     <td align='center'  class='bordas_corp'>";
-                                        db_input("obs_$pc22_orcamitem",30,$Ipc23_obs,true,'text',$db_opcao,"onchange='document.form1.vlrun_$pc22_orcamitem.select();'",'','','',30);
+                                        db_input("obs_$pc22_orcamitem",30,$Ipc23_obs,true,'text',$db_opcao,"onchange='document.form1.vlrun_$pc22_orcamitem.select();'onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);'",'','','',30);
                                     echo "
                                     </td>
                                     <td align='center' nowrap  class='bordas_corp'>";
@@ -564,20 +572,20 @@ if ($clempparametro->numrows > 0){
                                             db_input('pc80_criterioadjudicacao',40,0,true,'hidden',3,"");
                                             if ($pc80_criterioadjudicacao != 3  && ($pc01_tabela == 't' || $pc01_taxa == 't')) {
                                                 if ($pc80_criterioadjudicacao == 1) {
-                                                    db_input("percdesctaxa_$pc22_orcamitem",10,4,true,'text',1,"onchange='".$js_calcvaltaxa."js_passacampo(this.name,this.name.substr(0,13));js_somavalor();'");
+                                                    db_input("percdesctaxa_$pc22_orcamitem",10,4,true,'text',1,"onchange='".$js_calcvaltaxa."js_passacampo(this.name,this.name.substr(0,13));js_somavalor();' onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);'");
                                                 }
                                                 else if ($pc80_criterioadjudicacao == 2) {
-                                                    db_input("percdesctaxa_$pc22_orcamitem",10,4,true,'text',1,"onchange='js_calcvaltaxa(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,13));js_somavalor();'");
+                                                    db_input("percdesctaxa_$pc22_orcamitem",10,4,true,'text',1,"onchange='js_calcvaltaxa(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,13));js_somavalor();' onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);'");
                                                 }
                                             } else {
-                                                db_input("percdesctaxa_$pc22_orcamitem",10,4,true,'text',3,"onchange='".$js_calcvaltaxa."js_passacampo(this.name,this.name.substr(0,13));js_somavalor();'");
+                                                db_input("percdesctaxa_$pc22_orcamitem",10,4,true,'text',3,"onchange='".$js_calcvaltaxa."js_passacampo(this.name,this.name.substr(0,13));js_somavalor();'onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);'");
                                             }
                                     echo "
                                     </td>";
                                            /*FIM - OC3770*/
                                     echo "
                                     <td align='center'  class='bordas_corp'>";
-                                        db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();'" : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();'");
+                                        db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();' onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);' " : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();' onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);'");
                                     echo "
                                     </td>
                                     <td align='center'  class='bordas_corp' width='15%'>";
@@ -587,9 +595,9 @@ if ($clempparametro->numrows > 0){
                                     // Se for Outros +Item +serviço +Controlado por VALOR = Valor Total tbm bloqueado
                                     // 23/04/2021
                                     if($pc01_tabela == "t"){
-                                        db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',1,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
+                                        db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',1,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);' onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);'");
                                     }else{
-                                        db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
+                                        db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);' onClick='colocaCor($pc22_orcamitem);' onBlur='removerCor($pc22_orcamitem);'");
                                     }
                                     echo"
                                     </td>
