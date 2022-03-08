@@ -161,7 +161,7 @@ if ($clempparametro->numrows > 0){
         }
         function colocaCor(param){
             var nome = "linha_"+param;
-            document.getElementById(nome).style.backgroundColor = "#a0f072";
+            document.getElementById(nome).style.backgroundColor = "#a0f072"; 
         }
         function removerCor(param){
             var nome = "linha_"+param;
