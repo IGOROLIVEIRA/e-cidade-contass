@@ -1314,8 +1314,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
                   onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$REGISTRO[$i]["k00_numpre"])."'\" 
                   type=\"button\" value=\"".$REGISTRO[$i]["k00_numpre"] . "\"<h6> ($qteParcelamento)</h6>" . "</td>\n";
           }
-
-          /*echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$REGISTRO[$i]["k00_numpre"])."'\" type=\"button\" value=\"".$REGISTRO[$i]["k00_numpre"]."\"></td>\n";*/
+          
           echo "<td class=\"borda\" style=\"font-size:11px\" " . ($corDtoper == "" ? "" : "bgcolor=$corDtoper") . " nowrap>" . $iMatric . "</td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>
         <input type=\"hidden\" id=\"parc$i\" value=\"0#".$REGISTRO[$i]["k00_numtot"]."#".$REGISTRO[$i]["k00_numpre"]."\">0 </td>\n";
