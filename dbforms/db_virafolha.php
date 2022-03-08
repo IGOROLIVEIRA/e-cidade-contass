@@ -1143,11 +1143,13 @@ if($res_exc == false){
           $oDaoAfastamentoNovaCompetencia->r45_codafa = $oStdAfastamentoAssentamento->r45_codafa;
           $oDaoAfastamentoNovaCompetencia->r45_codret = $oStdAfastamentoAssentamento->r45_codret;
           $oDaoAfastamentoNovaCompetencia->r45_obs    = $oStdAfastamentoAssentamento->r45_obs;
+          $oDaoAfastamentoNovaCompetencia->r45_codigoafasta = $oStdAfastamentoAssentamento->r45_codigoafasta;
+          $oDaoAfastamentoNovaCompetencia->r45_mesmadoenca = $oStdAfastamentoAssentamento->r45_mesmadoenca;
 
           $oDaoAfastamentoNovaCompetencia->incluir(null);
 
           if($oDaoAfastamentoNovaCompetencia->erro_status == "0") {
-            $retorno = "Erro ao incluir na tabela afasta.\\n\\nFechamento da folha cancelado.\\nPerodo: ".$periodoini1." a ".$periodoini2.".\\n\\n".str_replace("\n","",@pg_last_error());
+            $retorno = "{$oDaoAfastamentoNovaCompetencia->erro_msg} Erro ao incluir na tabela afasta.\\n\\nFechamento da folha cancelado.\\nPerodo: ".$periodoini1." a ".$periodoini2.".\\n\\n".str_replace("\n","",@pg_last_error());
             $sqlerro = true;
           }
 
