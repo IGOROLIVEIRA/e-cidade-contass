@@ -1426,7 +1426,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             throw new Exception($clcontratos21->erro_msg);
                         }
 
-                        if($oAcordoPosicao->getTipo() == 14){
+                        if($oAcordoPosicao->getTipo() == 14){ 
                             $clcontratos21->si88_tiporegistro = 21;
                             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
                             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;

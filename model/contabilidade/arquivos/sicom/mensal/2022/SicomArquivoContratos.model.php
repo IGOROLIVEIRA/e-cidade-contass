@@ -1186,7 +1186,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                   where si87_codaditivo = {$oDados20->ac26_sequencial}
             ";
             $rsConsultaR20  = db_query($sSQL20);
-            if (pg_num_rows($rsConsultaR20) > 0) {
+            if (pg_num_rows($rsConsultaR20) > 0) { 
                 continue;
             }
 
