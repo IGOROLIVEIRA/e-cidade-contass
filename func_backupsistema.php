@@ -6,17 +6,26 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 
-system("rm -R /var/www/e-cidade/backup_e-cidade_*");
-system("pg_dump -U dbportal e-cidade | bzip2 -c > /var/www/e-cidade/tmp/backup_e-cidade_".date("dmY").".sql.bz2");
+$hostname = gethostname();
+$cmd = shell_exec("cat updatedb/conn | grep -e {$hostname}$");
+$rows        = preg_split('/\s+/', $cmd);
+$rows = array_filter($rows);
+$array_global = array();
+$array_interno = array();
 
-// As linhas abaixo forçam o download do arquivo
-/*$link = "/var/www/e-cidade/backup_e-cidade_".date("dmY").".sql.bz2";
-header ("Content-Disposition: attachment; filename="."backup_e-cidade_".date("dmY").".sql.bz2");
-header ("Content-Type: application/octet-stream");
-header ("Content-Length: ".filesize($link));
-readfile($link);
-*/
+foreach ($rows as $row) {
+    if (count($array_interno) <= 3) {
+        $array_interno[] = $row;
+        if (count($array_interno) == 3) {
+            array_push($array_global, $array_interno);
+            $array_interno = array();
+        }
+    }
+}
 
-echo json_encode("/var/www/e-cidade/tmp/backup_e-cidade_".date("dmY").".sql.bz2");
+foreach ($array_global as $row) {
+    system("rm -R /var/www/e-cidade/tmp/backup_$row[0]_*");
+    system("pg_dump -U dbportal {$row[0]} | bzip2 -c > /var/www/e-cidade/tmp/backup_{$row[0]}_" . date("dmY") . ".sql.bz2");
+}
 
-?>
+echo json_encode("/var/www/e-cidade/tmp/backup_{$row[0]}_" . date("dmY") . ".sql.bz2");
