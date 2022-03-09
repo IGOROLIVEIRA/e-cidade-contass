@@ -368,19 +368,19 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             $claberlic10->si46_veiculo1publicacao = $this->removeCaracteres($oDados10->veiculo1publicacao);
             $claberlic10->si46_veiculo2publicacao = $this->removeCaracteres($oDados10->veiculo2Publicacao);
 
-            $claberlic10->si46_leidalicitacao = $oDados10->lei; 
+            $claberlic10->si46_leidalicitacao = $oDados10->lei;
             $claberlic10->si46_dtpulicacaopncp = $oDados10->dataPncp;
             $claberlic10->si46_linkpncp = $oDados10->linnPncp;
             $claberlic10->si46_dtpulicacaoedital = $oDados10->dataPubli;
             $claberlic10->si46_linkedital = $oDados10->linkPublic;
             $claberlic10->si46_diariooficialdivulgacao = $oDados10->divulgacaoDo;
-            if($oDados10->lei==1){
+            if ($oDados10->lei == 1) {
                 $claberlic10->si46_modoDisputa = $oDados10->mododisputa;
-            }else{
+            } else {
                 $claberlic10->si46_modoDisputa = "";
             }
-            
-            $claberlic10->si46_instit = db_getsession("DB_instit");  
+
+            $claberlic10->si46_instit = db_getsession("DB_instit");
 
 
             $claberlic10->incluir(null);
@@ -604,7 +604,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
     precoreferencia.si01_datacotacao as dtCotacao,
     itemprecoreferencia.si02_vlpercreferencia AS vlRefPercentual,
-    itemprecoreferencia.si02_vlprecoreferencia as vlCotPrecosUnitario,
+    itemprecoreferencia.si02_vlprecoreferencia as vlcotprecosunitario,
     pcorcamval.pc23_quant as quantidade,
     '0' as vlMinAlienBens
     FROM liclicitem
@@ -630,55 +630,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND pctipocompratribunal.l44_sequencial != 102
     AND liclicita.l20_codigo= $oDados10->seqlicitacao";
 
-            $rsResult14 = db_query($sSql); //echo $sSql;db_criatabela($rsResult14);
-            if (pg_num_rows($rsResult14) == 0) {
-                $sSql = " select distinct '14' as tipoRegistro,
-            infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-            (SELECT CASE
-    WHEN o41_subunidade != 0
-         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
-            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
-    ELSE lpad((CASE WHEN o40_codtri = '0'
-         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-   END AS codunidadesub
-   FROM db_departorg
-   JOIN infocomplementares ON si08_anousu = db01_anousu
-   AND si08_instit = " . db_getsession("DB_instit") . "
-   JOIN orcunidade ON db01_orgao=o41_orgao
-   AND db01_unidade=o41_unidade
-   AND db01_anousu = o41_anousu
-   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-   WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
-            liclicita.l20_anousu as exercicioLicitacao,
-            liclicita.l20_edital as nroProcessoLicitatorio,
-            CASE WHEN liclicita.l20_tipojulg = 3 THEN aberlic112022.si47_nrolote ELSE 0 END AS nroLote,
-            (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
-            precomedio.l209_datacotacao as dtCotacao,
-            precomedio.l209_valor as vlCotPrecosUnitario,
-            solicitem.pc11_quant as quantidade,
-            '0' as vlMinAlienBens
-            FROM liclicitem
-            INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
-            LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-            LEFT JOIN aberlic112022 on (liclicitemlote.l04_descricao = aberlic112022.si47_dsclote and aberlic112022.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
-            INNER JOIN pcprocitem  on (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
-            INNER JOIN solicitem on (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
-            INNER JOIN solicitempcmater on (solicitem.pc11_codigo = solicitempcmater.pc16_solicitem)
-            INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
-            INNER JOIN precomedio on (precomedio.l209_licitacao = liclicita.l20_codigo and precomedio.l209_item = pcmater.pc01_codmater)
-            INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
-            LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
-            LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
-            INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
-            INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
-            LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
-            WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND pctipocompratribunal.l44_sequencial != 102
-            AND liclicita.l20_codigo= $oDados10->seqlicitacao";
-
-                $rsResult14 = db_query($sSql); //echo $sSql;db_criatabela($rsResult14);
-            }
+            $rsResult14 = db_query($sSql);
             $aDadosAgrupados14 = array();
             for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
 
