@@ -359,34 +359,36 @@ foreach ($aConsulta as $servidor) {
     $pdf->cell(15, $alt, " " . $servidor->rh37_funcao, "0", 0, "L", 0);
     $pdf->cell(35, $alt, $servidor->rh37_descr, "0", 0, "L", 0);
 
-    $pdf->ln();
-    $pdf->setfont("arial", "B", 10);
-    $pdf->cell(25, $alt, "Horário Ent:", "0", 0, "L", 0);
-    $pdf->cell(1, $alt, ":", "0", 0, "L", 0);
-    $pdf->setfont("arial", "", 10);
-    $pdf->cell(12, $alt, " " . $hora1, "0", 0, "L", 0);
+    if ($mostrarJornada == "true") {
+        $pdf->ln();
+        $pdf->setfont("arial", "B", 10);
+        $pdf->cell(25, $alt, "Horário Ent:", "0", 0, "L", 0);
+        $pdf->cell(1, $alt, ":", "0", 0, "L", 0);
+        $pdf->setfont("arial", "", 10);
+        $pdf->cell(12, $alt, " " . $hora1, "0", 0, "L", 0);
 
-    $pdf->setfont("arial", "B", 10);
-    $pdf->cell(11, $alt, "Saída:", "0", 0, "L", 0);
-    $pdf->setfont("arial", "", 10);
-    $pdf->cell(10, $alt, $hora2, "0", 0, "L", 0);
-    $pdf->cell(5, $alt, " - ", "0", 0, "L", 0);
+        $pdf->setfont("arial", "B", 10);
+        $pdf->cell(11, $alt, "Saída:", "0", 0, "L", 0);
+        $pdf->setfont("arial", "", 10);
+        $pdf->cell(10, $alt, $hora2, "0", 0, "L", 0);
+        $pdf->cell(5, $alt, " - ", "0", 0, "L", 0);
 
-    $pdf->setfont("arial", "B", 10);
-    $pdf->cell(8, $alt, "Ent: ", "0", 0, "L", 0);
-    $pdf->setfont("arial", "", 10);
-    $pdf->cell(12, $alt, $hora3, "0", 0, "L", 0);
+        $pdf->setfont("arial", "B", 10);
+        $pdf->cell(8, $alt, "Ent: ", "0", 0, "L", 0);
+        $pdf->setfont("arial", "", 10);
+        $pdf->cell(12, $alt, $hora3, "0", 0, "L", 0);
 
-    $pdf->setfont("arial", "B", 10);
-    $pdf->cell(8, $alt, "Sai: ", "0", 0, "L", 0);
-    $pdf->setfont("arial", "", 10);
-    $pdf->cell(7, $alt, $hora4, "0", 0, "L", 0);
-    $pdf->cell(7, $alt, "", "0", 0, "L", 0);
+        $pdf->setfont("arial", "B", 10);
+        $pdf->cell(8, $alt, "Sai: ", "0", 0, "L", 0);
+        $pdf->setfont("arial", "", 10);
+        $pdf->cell(7, $alt, $hora4, "0", 0, "L", 0);
+        $pdf->cell(7, $alt, "", "0", 0, "L", 0);
 
-    $pdf->setfont("arial", "B", 10);
-    $pdf->cell(27, $alt, "Jornada. Mens: ", "0", 0, "L", 0);
-    $pdf->setfont("arial", "", 10);
-    $pdf->cell(10, $alt, $servidor->rh02_hrsmen . " Horas", "0", 0, "L", 0);
+        $pdf->setfont("arial", "B", 10);
+        $pdf->cell(27, $alt, "Jornada. Mens: ", "0", 0, "L", 0);
+        $pdf->setfont("arial", "", 10);
+        $pdf->cell(10, $alt, $servidor->rh02_hrsmen . " Horas", "0", 0, "L", 0);
+    }
 
     $pdf->ln(5);
 
