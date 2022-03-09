@@ -37,6 +37,7 @@ class Oc16926 extends AbstractMigration
         DROP VIEW cadastro_pessoal_2008;
         DROP VIEW cadastro_portaria;
         DROP VIEW venal;
+        DROP VIEW vw_transparenciacontracheque_tb;
         ";
     }
 
@@ -242,6 +243,152 @@ class Oc16926 extends AbstractMigration
    LEFT JOIN rhpesrescisao ON rhpessoalmov.rh02_seqpes = rhpesrescisao.rh05_seqpes
    LEFT JOIN rhfuncao ON rhpessoalmov.rh02_funcao = rhfuncao.rh37_funcao AND rhpessoalmov.rh02_instit = rhfuncao.rh37_instit
   WHERE rhpesrescisao.rh05_seqpes IS NULL AND rhpessoalmov.rh02_instit = fc_getsession('db_instit'::text)::integer AND db_usuarios.usuarioativo = 1 AND db_usuarios.usuext = 0 AND iptucalc.j23_anousu = fc_getsession('db_anousu'::text)::integer;
+
+        CREATE VIEW vw_transparenciacontracheque_tb AS 
+         SELECT pg_catalog.concat(x.cdcontracheque, dense_rank() OVER (ORDER BY x.tpfolha)) AS cdcontracheque, 
+    x.cdcadastroservidor, x.nmservidor, x.dtadmissao, x.nmunidade, x.nmcargo, 
+    x.nmfuncao, x.nmlotacao, x.nucpf, x.nmcompetencia, x.nmstcontrato, x.covid, 
+    x.nmtpfolha, x.tpfolha
+   FROM (        (         SELECT DISTINCT pg_catalog.concat(gerfsal.r14_regist, gerfsal.r14_mesusu, gerfsal.r14_anousu) AS cdcontracheque, 
+                            gerfsal.r14_regist AS cdcadastroservidor, 
+                            cgm.z01_nome AS nmservidor, 
+                            rhpessoal.rh01_admiss AS dtadmissao, 
+                            orcunidade.o41_descr AS nmunidade, 
+                            rhfuncao.rh37_descr AS nmcargo, 
+                            rhfuncao.rh37_descr AS nmfuncao, 
+                            rhlota.r70_descr AS nmlotacao, 
+                            cgm.z01_cgccpf AS nucpf, 
+                            pg_catalog.concat(gerfsal.r14_mesusu, '/', gerfsal.r14_anousu)::character varying AS nmcompetencia, 
+                            'Salario'::text AS nmtpfolha, 
+                            rhregime.rh30_descr AS nmvinculo, 
+                                CASE
+                                    WHEN codmovsefip.r66_descr IS NOT NULL THEN codmovsefip.r66_descr
+                                    ELSE 'Ativo'::bpchar
+                                END AS nmstcontrato, 
+                                CASE
+                                    WHEN rhregime.rh30_descr::text ~~* '%covid%'::text THEN true
+                                    ELSE false
+                                END AS covid, 
+                            gerfsal.r14_anousu, gerfsal.r14_mesusu, 
+                            gerfsal.r14_regist, 1 AS tpfolha
+                           FROM ( SELECT DISTINCT gerfsal.r14_regist, 
+                                    gerfsal.r14_anousu, gerfsal.r14_mesusu, 
+                                    gerfsal.r14_lotac, gerfsal.r14_rubric, 
+                                    gerfsal.r14_valor, gerfsal.r14_pd
+                                   FROM gerfsal
+                                  WHERE gerfsal.r14_instit = 8) gerfsal
+                      JOIN rhpessoal ON rhpessoal.rh01_regist = gerfsal.r14_regist
+                 JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist AND rhpessoalmov.rh02_anousu = gerfsal.r14_anousu AND rhpessoalmov.rh02_mesusu = gerfsal.r14_mesusu AND rhpessoalmov.rh02_instit = 8
+            LEFT JOIN afasta ON afasta.r45_regist = rhpessoalmov.rh02_regist AND pg_catalog.concat(date_part('year'::text, afasta.r45_dtafas), date_part('month'::text, afasta.r45_dtafas))::integer <= pg_catalog.concat(rhpessoalmov.rh02_anousu, rhpessoalmov.rh02_mesusu)::integer AND pg_catalog.concat(date_part('year'::text, afasta.r45_dtreto), date_part('month'::text, afasta.r45_dtreto))::integer >= pg_catalog.concat(rhpessoalmov.rh02_anousu, rhpessoalmov.rh02_mesusu)::integer
+       LEFT JOIN codmovsefip ON codmovsefip.r66_anousu = afasta.r45_anousu AND codmovsefip.r66_mesusu = afasta.r45_mesusu AND codmovsefip.r66_codigo = afasta.r45_codafa::bpchar
+   JOIN rhregime ON rhpessoalmov.rh02_codreg = rhregime.rh30_codreg AND rhpessoalmov.rh02_instit = rhregime.rh30_instit
+   JOIN cgm ON rhpessoal.rh01_numcgm = cgm.z01_numcgm
+   LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao AND rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhlota ON rhlota.r70_codigo = rhpessoalmov.rh02_lota AND rhlota.r70_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhlotavinc ON rhlotavinc.rh25_codigo = rhlota.r70_codigo AND rhlotavinc.rh25_anousu = rhpessoalmov.rh02_anousu
+   LEFT JOIN orcdotacao ON rhlotavinc.rh25_anousu = orcdotacao.o58_anousu AND rhlotavinc.rh25_projativ = orcdotacao.o58_projativ AND rhlotavinc.rh25_programa = orcdotacao.o58_programa AND rhlotavinc.rh25_subfuncao = orcdotacao.o58_subfuncao AND rhlotavinc.rh25_funcao = orcdotacao.o58_funcao
+   LEFT JOIN orcunidade ON orcdotacao.o58_anousu = orcunidade.o41_anousu AND orcdotacao.o58_orgao = orcunidade.o41_orgao AND orcdotacao.o58_unidade = orcunidade.o41_unidade
+   LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes AND rhpescargo.rh20_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhpesbanco ON rhpesbanco.rh44_seqpes = rhpessoalmov.rh02_seqpes
+   LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo AND rhcargo.rh04_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhpeslocaltrab ON rhpeslocaltrab.rh56_seqpes = rhpessoalmov.rh02_seqpes AND rhpeslocaltrab.rh56_princ = true
+   LEFT JOIN rhpesdoc ON rhpesdoc.rh16_regist = rhpessoal.rh01_regist
+   LEFT JOIN rhlotaexe ON rhlotaexe.rh26_codigo = rhlota.r70_codigo AND rhlotaexe.rh26_anousu = gerfsal.r14_anousu
+   LEFT JOIN orcorgao ON orcorgao.o40_orgao = rhlotaexe.rh26_orgao AND orcorgao.o40_anousu = gerfsal.r14_anousu AND orcorgao.o40_instit = rhpessoalmov.rh02_instit
+                UNION ALL 
+                         SELECT DISTINCT pg_catalog.concat(gerfsal.r48_regist, gerfsal.r48_mesusu, gerfsal.r48_anousu) AS cdcontracheque, 
+                            gerfsal.r48_regist AS cdcadastroservidor, 
+                            cgm.z01_nome AS nmservidor, 
+                            rhpessoal.rh01_admiss AS dtadmissao, 
+                            orcunidade.o41_descr AS nmunidade, 
+                            rhfuncao.rh37_descr AS nmcargo, 
+                            rhfuncao.rh37_descr AS nmfuncao, 
+                            rhlota.r70_descr AS nmlotacao, 
+                            cgm.z01_cgccpf AS nucpf, 
+                            pg_catalog.concat(gerfsal.r48_mesusu, '/', gerfsal.r48_anousu)::character varying AS nmcompetencia, 
+                            'Complementar'::text AS nmtpfolha, 
+                            rhregime.rh30_descr AS nmvinculo, 
+                                CASE
+                                    WHEN codmovsefip.r66_descr IS NOT NULL THEN codmovsefip.r66_descr
+                                    ELSE 'Ativo'::bpchar
+                                END AS nmstcontrato, 
+                                CASE
+                                    WHEN rhregime.rh30_descr::text ~~* '%covid%'::text THEN true
+                                    ELSE false
+                                END AS covid, 
+                            gerfsal.r48_anousu, gerfsal.r48_mesusu, 
+                            gerfsal.r48_regist, 2 AS tpfolha
+                           FROM ( SELECT DISTINCT gerfcom.r48_regist, 
+                                    gerfcom.r48_anousu, gerfcom.r48_mesusu, 
+                                    gerfcom.r48_lotac, gerfcom.r48_rubric, 
+                                    gerfcom.r48_valor, gerfcom.r48_pd
+                                   FROM gerfcom
+                                  WHERE gerfcom.r48_instit = 8) gerfsal
+                      JOIN rhpessoal ON rhpessoal.rh01_regist = gerfsal.r48_regist
+                 JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist AND rhpessoalmov.rh02_anousu = gerfsal.r48_anousu AND rhpessoalmov.rh02_mesusu = gerfsal.r48_mesusu AND rhpessoalmov.rh02_instit = 8
+            LEFT JOIN afasta ON afasta.r45_regist = rhpessoalmov.rh02_regist AND pg_catalog.concat(date_part('year'::text, afasta.r45_dtafas), date_part('month'::text, afasta.r45_dtafas))::integer <= pg_catalog.concat(rhpessoalmov.rh02_anousu, rhpessoalmov.rh02_mesusu)::integer AND pg_catalog.concat(date_part('year'::text, afasta.r45_dtreto), date_part('month'::text, afasta.r45_dtreto))::integer >= pg_catalog.concat(rhpessoalmov.rh02_anousu, rhpessoalmov.rh02_mesusu)::integer
+       LEFT JOIN codmovsefip ON codmovsefip.r66_anousu = afasta.r45_anousu AND codmovsefip.r66_mesusu = afasta.r45_mesusu AND codmovsefip.r66_codigo = afasta.r45_codafa::bpchar
+   JOIN rhregime ON rhpessoalmov.rh02_codreg = rhregime.rh30_codreg AND rhpessoalmov.rh02_instit = rhregime.rh30_instit
+   JOIN cgm ON rhpessoal.rh01_numcgm = cgm.z01_numcgm
+   LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao AND rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhlota ON rhlota.r70_codigo = rhpessoalmov.rh02_lota AND rhlota.r70_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhlotavinc ON rhlotavinc.rh25_codigo = rhlota.r70_codigo AND rhlotavinc.rh25_anousu = rhpessoalmov.rh02_anousu
+   LEFT JOIN orcdotacao ON rhlotavinc.rh25_anousu = orcdotacao.o58_anousu AND rhlotavinc.rh25_projativ = orcdotacao.o58_projativ AND rhlotavinc.rh25_programa = orcdotacao.o58_programa AND rhlotavinc.rh25_subfuncao = orcdotacao.o58_subfuncao AND rhlotavinc.rh25_funcao = orcdotacao.o58_funcao
+   LEFT JOIN orcunidade ON orcdotacao.o58_anousu = orcunidade.o41_anousu AND orcdotacao.o58_orgao = orcunidade.o41_orgao AND orcdotacao.o58_unidade = orcunidade.o41_unidade
+   LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes AND rhpescargo.rh20_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhpesbanco ON rhpesbanco.rh44_seqpes = rhpessoalmov.rh02_seqpes
+   LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo AND rhcargo.rh04_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhpeslocaltrab ON rhpeslocaltrab.rh56_seqpes = rhpessoalmov.rh02_seqpes AND rhpeslocaltrab.rh56_princ = true
+   LEFT JOIN rhpesdoc ON rhpesdoc.rh16_regist = rhpessoal.rh01_regist
+   LEFT JOIN rhlotaexe ON rhlotaexe.rh26_codigo = rhlota.r70_codigo AND rhlotaexe.rh26_anousu = gerfsal.r48_anousu
+   LEFT JOIN orcorgao ON orcorgao.o40_orgao = rhlotaexe.rh26_orgao AND orcorgao.o40_anousu = gerfsal.r48_anousu AND orcorgao.o40_instit = rhpessoalmov.rh02_instit)
+        UNION ALL 
+                 SELECT DISTINCT pg_catalog.concat(gerfsal.r35_regist, gerfsal.r35_mesusu, gerfsal.r35_anousu) AS cdcontracheque, 
+                    gerfsal.r35_regist AS cdcadastroservidor, 
+                    cgm.z01_nome AS nmservidor, 
+                    rhpessoal.rh01_admiss AS dtadmissao, 
+                    orcunidade.o41_descr AS nmunidade, 
+                    rhfuncao.rh37_descr AS nmcargo, 
+                    rhfuncao.rh37_descr AS nmfuncao, 
+                    rhlota.r70_descr AS nmlotacao, cgm.z01_cgccpf AS nucpf, 
+                    pg_catalog.concat('13', '/', gerfsal.r35_anousu)::character varying AS nmcompetencia, 
+                    '13Salario'::text AS nmtpfolha, 
+                    rhregime.rh30_descr AS nmvinculo, 
+                        CASE
+                            WHEN codmovsefip.r66_descr IS NOT NULL THEN codmovsefip.r66_descr
+                            ELSE 'Ativo'::bpchar
+                        END AS nmstcontrato, 
+                        CASE
+                            WHEN rhregime.rh30_descr::text ~~* '%covid%'::text THEN true
+                            ELSE false
+                        END AS covid, 
+                    gerfsal.r35_anousu, gerfsal.r35_mesusu, gerfsal.r35_regist, 
+                    3 AS tpfolha
+                   FROM ( SELECT DISTINCT gerfs13.r35_regist, 
+                            gerfs13.r35_anousu, gerfs13.r35_mesusu, 
+                            gerfs13.r35_lotac, gerfs13.r35_rubric, 
+                            gerfs13.r35_valor, gerfs13.r35_pd
+                           FROM gerfs13
+                          WHERE gerfs13.r35_instit = 8) gerfsal
+              JOIN rhpessoal ON rhpessoal.rh01_regist = gerfsal.r35_regist
+         JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist AND rhpessoalmov.rh02_anousu = gerfsal.r35_anousu AND rhpessoalmov.rh02_mesusu = gerfsal.r35_mesusu AND rhpessoalmov.rh02_instit = 8
+    LEFT JOIN afasta ON afasta.r45_regist = rhpessoalmov.rh02_regist AND pg_catalog.concat(date_part('year'::text, afasta.r45_dtafas), date_part('month'::text, afasta.r45_dtafas))::integer <= pg_catalog.concat(rhpessoalmov.rh02_anousu, rhpessoalmov.rh02_mesusu)::integer AND pg_catalog.concat(date_part('year'::text, afasta.r45_dtreto), date_part('month'::text, afasta.r45_dtreto))::integer >= pg_catalog.concat(rhpessoalmov.rh02_anousu, rhpessoalmov.rh02_mesusu)::integer
+   LEFT JOIN codmovsefip ON codmovsefip.r66_anousu = afasta.r45_anousu AND codmovsefip.r66_mesusu = afasta.r45_mesusu AND codmovsefip.r66_codigo = afasta.r45_codafa::bpchar
+   JOIN rhregime ON rhpessoalmov.rh02_codreg = rhregime.rh30_codreg AND rhpessoalmov.rh02_instit = rhregime.rh30_instit
+   JOIN cgm ON rhpessoal.rh01_numcgm = cgm.z01_numcgm
+   LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao AND rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhlota ON rhlota.r70_codigo = rhpessoalmov.rh02_lota AND rhlota.r70_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhlotavinc ON rhlotavinc.rh25_codigo = rhlota.r70_codigo AND rhlotavinc.rh25_anousu = rhpessoalmov.rh02_anousu
+   LEFT JOIN orcdotacao ON rhlotavinc.rh25_anousu = orcdotacao.o58_anousu AND rhlotavinc.rh25_projativ = orcdotacao.o58_projativ AND rhlotavinc.rh25_programa = orcdotacao.o58_programa AND rhlotavinc.rh25_subfuncao = orcdotacao.o58_subfuncao AND rhlotavinc.rh25_funcao = orcdotacao.o58_funcao
+   LEFT JOIN orcunidade ON orcdotacao.o58_anousu = orcunidade.o41_anousu AND orcdotacao.o58_orgao = orcunidade.o41_orgao AND orcdotacao.o58_unidade = orcunidade.o41_unidade
+   LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes AND rhpescargo.rh20_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhpesbanco ON rhpesbanco.rh44_seqpes = rhpessoalmov.rh02_seqpes
+   LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo AND rhcargo.rh04_instit = rhpessoalmov.rh02_instit
+   LEFT JOIN rhpeslocaltrab ON rhpeslocaltrab.rh56_seqpes = rhpessoalmov.rh02_seqpes AND rhpeslocaltrab.rh56_princ = true
+   LEFT JOIN rhpesdoc ON rhpesdoc.rh16_regist = rhpessoal.rh01_regist
+   LEFT JOIN rhlotaexe ON rhlotaexe.rh26_codigo = rhlota.r70_codigo AND rhlotaexe.rh26_anousu = gerfsal.r35_anousu
+   LEFT JOIN orcorgao ON orcorgao.o40_orgao = rhlotaexe.rh26_orgao AND orcorgao.o40_anousu = gerfsal.r35_anousu AND orcorgao.o40_instit = rhpessoalmov.rh02_instit) x
+  ORDER BY x.nmservidor, pg_catalog.concat(x.cdcontracheque, dense_rank() OVER (ORDER BY x.tpfolha));
         ";
     }
 }
