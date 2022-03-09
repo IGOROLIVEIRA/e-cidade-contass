@@ -1389,10 +1389,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
                         }
                         if ($oAcordoItem->getQuantiAditada() == 0) {
-                            $clcontratos21->si88_quantacrescdecresc = 1;
+                            if ($oAcordoPosicao->getTipo() == 14){
+                                $clcontratos21->si88_quantacrescdecresc = $oDadoDados1->ac20_quantidade;
+                            }else{
+                                $clcontratos21->si88_quantacrescdecresc = 1;
+                            } 
                         } else {
                             if ($oAcordoPosicao->getTipo() == 14){
-                                $clcontratos21->si88_quantacrescdecresc = $oDadoDados1->ac20_quantidade;;
+                                $clcontratos21->si88_quantacrescdecresc = $oDadoDados1->ac20_quantidade;
                             }else{
                                 $clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantiAditada();
                             } 
@@ -1456,11 +1460,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             } else {
                                 $clcontratos21->si88_valorunitarioitem = abs($oDadoDados->ac20_valorunitario);
                             }
-                            if ($oAcordoItem->getQuantiAditada() == 0) {
-                                $clcontratos21->si88_quantacrescdecresc = 1;
-                            } else {
+                            
                                 $clcontratos21->si88_quantacrescdecresc = $oDadoDados->ac20_quantidade;
-                            }
+                            
 
                             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                             $clcontratos21->si88_instit = db_getsession("DB_instit");
