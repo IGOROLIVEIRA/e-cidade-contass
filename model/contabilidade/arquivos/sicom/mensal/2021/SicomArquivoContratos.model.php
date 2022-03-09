@@ -1247,7 +1247,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos20->si87_novadatatermino = "";
             }
             //$clcontratos20->si87_novadatatermino = in_array($oAcordoPosicao->getTipo(), array(7, 13, 14)) ? $oDataTermino->getDate() : "";
-            if($oAcordoPosicao->getTipo()==14){
                
                 $sSQLAnterior = "
                     select ac26_sequencial
@@ -1285,27 +1284,10 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $tipoalteracao = 3;
                     }
                     $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao; 
-
-                    
-                    
-                 /*
-                    if($oDadoDados->ac20_valorunitario<$oDadoDados1->ac20_valorunitario){
-                        $tipoalteracao = 1;
-                    }elseif($oDadoDados->ac20_valorunitario>$oDadoDados1->ac20_valorunitario){
-                        $tipoalteracao = 2;
-                    }else{
-                        $tipoalteracao = 3;
-                    }
-                    $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao;
-                */    
+   
                 
                 
                 $clcontratos20->si87_valoraditivo = ($iTipoAlteracaoValor == 3 ? 0 : abs($oDadoDados->ac20_valortotal-$oDadoDados1->ac20_valortotal));    
-               
-                
-            }else{
-                $clcontratos20->si87_valoraditivo = ($iTipoAlteracaoValor == 3 ? 0 : abs($oDados20->valoraditado));
-            }
             
             $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao;
             $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao);
@@ -1431,7 +1413,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             throw new Exception($clcontratos21->erro_msg);
                         }
 
-                        if($oAcordoPosicao->getTipo() == 14){ 
+                        if($oAcordoPosicao->getTipo() == 14 || $oAcordoPosicao->getTipo() == 11){ 
                             $clcontratos21->si88_tiporegistro = 21;
                             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
                             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
