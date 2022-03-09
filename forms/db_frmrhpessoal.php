@@ -562,6 +562,13 @@ if (($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
         return false;
       }
 
+      if (document.form1.rh01_tipadm.value == "0") {
+
+        alert("Informe o Tipo de Admissão.");
+        document.form1.rh01_tipadm.focus();
+        return false;
+      }
+
       <?
       if ($db_opcao == 1) {
       ?>
