@@ -1176,9 +1176,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
         $rsResult20 = db_query($sSql);
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) { 
-            $op = 0;
+            
             $clcontratos20 = new cl_contratos202021();
             $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
+            
+            
 
             $sSQL20 = "
               select si87_codaditivo
@@ -1208,7 +1210,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             //exit;
             
             $sCodUnidade = db_utils::fieldsMemory($result, 0)->codunidadesub;
-        //do{
+
             $clcontratos20->si87_tiporegistro = 20;
             $clcontratos20->si87_codaditivo = $oDados20->ac26_sequencial;
             $clcontratos20->si87_codorgao = $sCodorgao;
@@ -1223,6 +1225,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo;
 
             $oAcordoPosicao = new AcordoPosicao($oDados20->ac26_sequencial);
+            
+            $valor = count($oAcordoPosicao->getItens());
             $oAcordo = new Acordo($oDados20->ac16_sequencial);
             $iTipoAlteracaoValor = 3;
 
@@ -1253,20 +1257,34 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         from acordoposicao
                         where ac26_acordo = {$oDados20->ac16_sequencial}
                     ";
+                  
                 $rsConsultaAnterior  = db_query($sSQLAnterior);
 
                 $oDadoAnterior = db_utils::fieldsMemory($rsConsultaAnterior,(pg_num_rows($rsConsultaAnterior))-2);
-                
 
+                              
                 $sSQLdados = "
                     select *
                     from acordoitem
                         where ac20_acordoposicao = {$oDadoAnterior->ac26_sequencial}
                 ";
                 $rsConsultaDados  = db_query($sSQLdados);
-                $oDadoDados = db_utils::fieldsMemory($rsConsultaDados,0);
+                if(pg_num_rows($rsConsultaDados)>1){
+                    $valorTotal = array();
+                    for($i=0;$i<pg_num_rows($rsConsultaDados);$i++){
+                        $oDadoDados = db_utils::fieldsMemory($rsConsultaDados,$i);
+                        $valorTotal[$i] = $oDadoDados->ac20_valortotal;
+                    }
+                    
+                    
+                }else{
+                    $oDadoDados = db_utils::fieldsMemory($rsConsultaDados,0);
+                } 
+                
 
                 $oDadoAnterior1 = db_utils::fieldsMemory($rsConsultaAnterior,(pg_num_rows($rsConsultaAnterior))-1);
+                
+                
 
                 $sSQLdados1 = "
                     select *
@@ -1274,8 +1292,27 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         where ac20_acordoposicao = {$oDadoAnterior1->ac26_sequencial}
                 ";
                 $rsConsultaDados1  = db_query($sSQLdados1);
-                $oDadoDados1 = db_utils::fieldsMemory($rsConsultaDados1,0);
-
+                
+                if(pg_num_rows($rsConsultaDados1)>1){
+                    $valor_Total = array();
+                    for($i=0;$i<pg_num_rows($rsConsultaDados1);$i++){
+                        $oDadoDados1 = db_utils::fieldsMemory($rsConsultaDados1,$i);
+                        $valor_Total[$i] = $oDadoDados1->ac20_valortotal;
+                    }
+                    
+                    
+                }else{
+                    $oDadoDados1 = db_utils::fieldsMemory($rsConsultaDados1,0);
+                } 
+                if($valor>1){
+                    if($valorTotal[1]<$valor_Total[1]){
+                        $tipoalteracao = 1;
+                    }elseif($valorTotal[1]>$valor_Total[1]){
+                        $tipoalteracao = 2;
+                    }else{
+                        $tipoalteracao = 3;
+                    }
+                }else{
                     if($oDadoDados->ac20_valortotal<$oDadoDados1->ac20_valortotal){
                         $tipoalteracao = 1;
                     }elseif($oDadoDados->ac20_valortotal>$oDadoDados1->ac20_valortotal){
@@ -1283,11 +1320,17 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     }else{
                         $tipoalteracao = 3;
                     }
-                    $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao; 
+                }
+                    
+                    $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao;
    
                 
+                if($valor>1){
+                    $clcontratos20->si87_valoraditivo = ($iTipoAlteracaoValor == 3 ? 0 : abs($valorTotal[1]-$valor_Total[1]));
+                }else{
+                    $clcontratos20->si87_valoraditivo = ($iTipoAlteracaoValor == 3 ? 0 : abs($oDadoDados->ac20_valortotal-$oDadoDados1->ac20_valortotal));    
+                }
                 
-                $clcontratos20->si87_valoraditivo = ($iTipoAlteracaoValor == 3 ? 0 : abs($oDadoDados->ac20_valortotal-$oDadoDados1->ac20_valortotal));    
             
             $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao;
             $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao);
@@ -1305,7 +1348,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
              * Detalhamento dos Itens Aditados
              *
              */
-
+            $op = 1;
             if (in_array($oAcordoPosicao->getTipo(), array(4, 9, 10, 11, 14))) {
                 foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
                     if ($oAcordoItem->getQuantiAditada() > 0 || $oAcordoItem->getValorAditado() > 0) {
@@ -1475,9 +1518,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             }
                         }
                     }
+                    $op++;
                 }
             }
         }
+        
 
         /*
          * selecionar informacoes registro 30
