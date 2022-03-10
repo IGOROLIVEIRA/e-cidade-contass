@@ -437,6 +437,7 @@ if ($oInstit->db21_usasisagua == "t") {
 </html>
 
 <script>
+  
   const CAMINHO_MENSAGEM = 'financeiro.caixa.cai1_planilhalancamento001.';
   sRPC = 'cai4_planilhaarrecadacao.RPC.php';
 
@@ -723,9 +724,10 @@ if ($oInstit->db21_usasisagua == "t") {
 
   function js_retornoSaltesConvenio(oAjax) {
     oSaltesConvenio = eval("(" + oAjax.responseText + ")");
-
+    $('c206_objetoconvenio').value = oSaltesConvenio.c206_objetoconvenio.urlDecode();
     $('k81_convenio').value = oSaltesConvenio.c206_sequencial;
-    $('c206_objetoconvenio').value = oSaltesConvenio.c206_objetoconvenio;
+    
+   
     js_mostrarNotificacaoConvenio(oSaltesConvenio);
   }
 
@@ -930,8 +932,18 @@ if ($oInstit->db21_usasisagua == "t") {
     $('recurso').value = chave3;
     $('estrutural').value = chave4;
     $('k02_tipo').value = chave6;
+
+    if($('anoUsu').value >= 2022){
     $('op01_numerocontratoopc').value = '';
     $('op01_dataassinaturacop').value = '';
+    }
+
+    if ($('anoUsu').value >= 2020) {
+
+      js_verificaEmendaParlamentar();
+      js_verificaRegularizaRepasse();
+
+    }
 
     if($('anoUsu').value >= 2022){
     var recursoreceita = $('recurso').value;
@@ -966,14 +978,6 @@ if ($oInstit->db21_usasisagua == "t") {
         js_getCgmConta($('k81_conta').value);
       }
     }
-
-    if ($('anoUsu').value >= 2020) {
-
-      js_verificaEmendaParlamentar();
-      js_verificaRegularizaRepasse();
-
-    }
-
     js_verificaReceita();
     js_mostrarNotificacaoEstruturais();
     js_mostrarNotificacaoConta();
@@ -992,14 +996,13 @@ if ($oInstit->db21_usasisagua == "t") {
     $('op01_numerocontratoopc').value = '';
     $('op01_dataassinaturacop').value = '';
 
-    var recursoreceita = $('recurso').value;
-    if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
-        document.getElementById('numerocontrato').style.display = "";
-        document.getElementById('datacontrato').style.display = "";
-    }else{
-        document.getElementById('numerocontrato').style.display = "none";
-        document.getElementById('datacontrato').style.display = "none";
-    }
+    if ($('anoUsu').value >= 2020) {
+
+      js_verificaEmendaParlamentar();
+      js_verificaRegularizaRepasse();
+
+      }
+
     if ($('anoUsu').value >= 2022) {
       if ($('estrutural').value.substr(0, 7) == '4121004' || $('estrutural').value.substr(0, 7) == '4721004' || $('estrutural').value.substr(0, 5) == '41215' || $('estrutural').value.substr(0, 5) == '47215') {
         if ($('bAtualiza').value == 0) {
@@ -1019,13 +1022,16 @@ if ($oInstit->db21_usasisagua == "t") {
         js_getCgmConta($('k81_conta').value);
       }
     }
-
-    if ($('anoUsu').value >= 2020) {
-
-      js_verificaEmendaParlamentar();
-      js_verificaRegularizaRepasse();
-
+    var recursoreceita = $('recurso').value;
+    if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
+        document.getElementById('numerocontrato').style.display = "";
+        document.getElementById('datacontrato').style.display = "";
+    }else{
+        document.getElementById('numerocontrato').style.display = "none";
+        document.getElementById('datacontrato').style.display = "none";
     }
+
+   
 
     db_iframe_tabrec.hide();
     js_verificaReceita();
@@ -1035,8 +1041,8 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoOP();
 
     }
-  }else{
-  function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
+    }else{
+    function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
 
       $('k81_receita').value = iReceita;
       $('k02_drecei').value = sReceita;
@@ -1054,6 +1060,13 @@ if ($oInstit->db21_usasisagua == "t") {
           js_getCgmConta($('k81_conta').value);
         }
       } else {
+        if ($('anoUsu').value >= 2020) {
+
+        js_verificaEmendaParlamentar();
+        js_verificaRegularizaRepasse();
+
+        }
+
             if ($('estrutural').value.substr(0, 7) == '4121004' || $('estrutural').value.substr(0, 7) == '4721004' || $('estrutural').value.substr(0, 5) == '41218' || $('estrutural').value.substr(0, 5) == '47218') {
               if ($('bAtualiza').value == 0) {
                 $('k81_numcgm').value = '';
@@ -1064,12 +1077,7 @@ if ($oInstit->db21_usasisagua == "t") {
             }
           }
 
-          if ($('anoUsu').value >= 2020) {
-
-            js_verificaEmendaParlamentar();
-            js_verificaRegularizaRepasse();
-
-          }
+          
 
           db_iframe_tabrec.hide();
           js_verificaReceita();
@@ -1316,7 +1324,7 @@ if ($oInstit->db21_usasisagua == "t") {
           }
         }
       }
-
+      
       if (lEmendaParlamentarObrigatoria && $('k81_emparlamentar').value == '') {
         alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
         return false;
@@ -2211,6 +2219,7 @@ if ($oInstit->db21_usasisagua == "t") {
       );
 
     } else {
+     
       lEmendaParlamentarObrigatoria = (
         (sReceita == '417189911' && sRecurso == '100') ||
         (sReceita == '417189911' && sRecurso == '164') ||
@@ -2286,7 +2295,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
   }
 
-  function js_verificaRegularizaRepasse() {
+  function js_verificaRegularizaRepasse() { 
 
     if ($('anoUsu').value >= 2022) {
       aEstruts = ['4172150', '4172151', '4175150','4171550'];
