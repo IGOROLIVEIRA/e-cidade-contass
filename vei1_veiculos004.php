@@ -157,6 +157,19 @@ if (isset($incluir)) {
             $clveiculos->erro_campo = "si04_tipoveiculo";
         }
 
+        if ($si04_tipoveiculo != 3 && $si04_tipoveiculo != 99) {
+            if ($ve01_nroserie == '') {
+                $sqlerro = true;
+                $erro_msg = "Campo Nº de Série não informado. Verifique.";
+                $clveiculos->erro_campo = "ve01_nroserie";
+            }
+            if ($ve01_nroserie == 0) {
+                $sqlerro = true;
+                $erro_msg = "Campo Nº de Série não pode ser zero. Verifique.";
+                $clveiculos->erro_campo = "ve01_nroserie";
+            }
+        }
+
         if ($sqlerro == false) {
 
             $clveiculos->incluir(null, $si04_tipoveiculo);
