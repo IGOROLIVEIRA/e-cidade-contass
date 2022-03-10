@@ -37,7 +37,7 @@ $oJson   = new services_JSON();
 $oParam  = $oJson->decode(str_replace("\\","",$_POST["sJson"]));
 $sMensagem = "";
 
-if ($oParam->exec == 'getSaltesConvenio') {
+if ($oParam->exec == 'getSaltesConvenio') { 
    
    $oDaoSaltes = db_utils::getDao("saltes");
 
@@ -48,17 +48,15 @@ if ($oParam->exec == 'getSaltesConvenio') {
    if ($oDaoSaltes->numrows > 0) {
 
       $oSaltesConv = db_utils::fieldsMemory($rsSaltes, 0);
-
       $aSaltesConv      = array("c206_sequencial" => $oSaltesConv->c206_sequencial, "c206_objetoconvenio"=> $oSaltesConv->c206_objetoconvenio, "lValidacao" => true, "sMensagem" => $sMensagem);   
-    
+     
    } else {
 
-      $sMensagem = "Usuário: para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária.";
+      $sMensagem = "UsuÃ¡rio: para realizar a arrecadaÃ§Ã£o da receita, vincule o convÃªnio a respectiva conta bancÃ¡ria.";
       $aSaltesConv = array("c206_sequencial" => "", "c206_objetoconvenio" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
-
+      
    }
-
-   echo $oJson->encode($aSaltesConv);
+    echo $oJson->encode($aSaltesConv); 
 }
 
 //operao de credito
