@@ -19,11 +19,11 @@ class Oc16961 extends PostgresMigration
                         // se existir o estrutural não deve ser inserido nem atualizado.
                         $sEstrut = str_pad($aPlanoOrcamento[0], 15, "0");
                         $sEstrutPcasp = str_pad($aPlanoOrcamento[4], 15, "0");
-                        $aConplanoOrcamentoExiste = $this->fetchAll("select * from conplanoorcamento where c60_anousu={$oExercicios['c60_anousu']} and c60_estrut = '{$sEstrut}'");
+                        $aConplanoOrcamentoExiste = $this->fetchRow("select * from conplanoorcamento where c60_anousu={$oExercicios['c60_anousu']} and c60_estrut = '{$sEstrut}'");
                         if(!empty($aConplanoOrcamentoExiste)){
+                            $this->updateConplanoOrcamento($aConplanoOrcamentoExiste, substr($aPlanoOrcamento[1], 0, 50), $sEstrutPcasp);
                             continue;
                         }
-
                         $c60_codcon                     = current($this->fetchRow("select nextval('conplanoorcamento_c60_codcon_seq')"));
                         $c60_anousu                     = $oExercicios['c60_anousu'];
                         $c60_estrut                     = $sEstrut;
@@ -120,5 +120,27 @@ class Oc16961 extends PostgresMigration
         $this->table('conplanoconplanoorcamento', array('schema' => 'contabilidade'))->insert($columns, array($data))->saveData();
     }
 
+    /**
+     * @param Array $data
+     * @param String $descricao
+     */
+    public function updateConplanoOrcamento($data, $descricao, $sEstrutPcasp){
+        $sql = " update conplanoorcamento set c60_descr = '{$descricao}' where c60_anousu = {$data['c60_anousu']} and c60_codcon = {$data['c60_codcon']} ;";
+        $sql .= " update orcelemento set o56_descr = '{$descricao}' where o56_anousu = {$data['c60_anousu']} and o56_codele = {$data['c60_codcon']} ;";
+
+        $this->execute($sql);
+
+        $this->execute("delete from conplanoconplanoorcamento where c72_conplanoorcamento = {$data['c60_codcon']} and c72_anousu = {$data['c60_anousu']}");
+
+        $pcasp = $this->fetchRow("select c60_codcon from conplano where c60_anousu = {$data['c60_anousu']} and c60_estrut = '{$sEstrutPcasp}' ");
+        if(!empty($pcasp)){
+            $c72_sequencial = current($this->fetchRow("select nextval('conplanoconplanoorcamento_c72_sequencial_seq')"));
+            $c72_conplano = $pcasp['c60_codcon'];
+            $c72_conplanoorcamento = $data['c60_codcon'];
+            $c72_anousu = $data['c60_anousu'];
+            $aConplanoConplanoOrcamento = array($c72_sequencial, $c72_conplano, $c72_conplanoorcamento, $c72_anousu);
+            $this->insertConplanoConplanoOrcamento($aConplanoConplanoOrcamento);
+        }
+    }
 
 }
