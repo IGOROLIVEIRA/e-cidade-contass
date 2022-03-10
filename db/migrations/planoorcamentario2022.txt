@@ -1,46 +1,46 @@
 codigo;descricao;natureza;tipo;pcasp;fonte;instituicao
-331909204;Contratação por Tempo Determinado;D;Analítica;311110101;100;Todas
-331909205;Outros Benef. Previd .do Servidor ou do Militar;D;Analítica;311110101;100;Todas
-331909207;Contrib. a Entidades Fechadas de Previdência;D;Analítica;311110101;100;Todas
-331909211;Vencimentos e Vantagens Fixas - Pessoal Civil;D;Analítica;311110101;100;Todas
-331909213;Obrigações Patronais;D;Analítica;311110101;100;Todas
-331909216;Outras Despesas Variáveis - Pessoal Civil;D;Analítica;311110101;100;Todas
-331909259;Pensões Especiais;D;Analítica;311110101;100;Todas
-331909291;Sentenças Judiciais;D;Analítica;311110101;100;Todas
-331909294;Indenizações e Restituições Trabalhistas;D;Analítica;311110101;100;Todas
-331909296;Ressarcimento de Despesas com Pessoal Requisitado;D;Analítica;311110101;100;Todas
-331909298;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;Analítica;311110101;100;Todas
-331909299;Outras Despesas de Exercícios Anteriores;D;Analítica;311110101;100;Todas
-331909413;Indenizações e Restituições Trab. Pens. Civil ;D;Analítica;319910100;100;Todas
-331909498;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;Analítica;319910100;100;Todas
-331909499;Outras Indenizações e Restituições Trabalhistas;D;Analítica;319910100;100;Todas
-331911309;Seguros de Acidentes do Trabalho;D;Analítica;312120100;100;Todas
-331911310;Contribuições Previdenciárias - RPPS - Pessoal Inativo e Pensionista - Plano Previdenciário;D;Analítica;312120100;100;Todas
-331911311;Contribuições Previdenciárias - RPPS - Pessoal Ativo - Plano Financeiro;D;Analítica;312120100;100;Todas
-331911312;Contribuições Previdenciárias - RPPS - Pessoal Inativo e Pensionista - Plano Financeiro;D;Analítica;312120100;100;Todas
-331911320;Alíquota Suplementar de Contribuição Previdenciária -  Pessoal Ativo - Plano Previdenciário;D;Analítica;312120100;100;Todas
-331911321;Alíquota Suplementar de Contribuição Previdenciária -  Pessoal Inativo e Pensionista - Plano Previdenciário;D;Analítica;312120100;100;Todas
-331911322;Alíquota Suplementar de Contribuição Previdenciária -  Pessoal Ativo - Plano Financeiro;D;Analítica;312120100;100;Todas
-331911323;Alíquota Suplementar de Contribuição Previdenciária -  Pessoal Inativo e Pensionista - Plano Financeiro;D;Analítica;312120100;100;Todas
-331919204;Contratação por Tempo Determinado;D;Analítica;311120000;100;Todas
-331919205;Contribuições Previdenciárias - RPPS - Pessoal Ativo do Plano Previdenciário;D;Analítica;312120100;100;Todas
-331919206;Contribuições Previdenciárias - RPPS - Pessoal Inativo e Pensionista do Plano Previdenciário;D;Analítica;312120100;100;Todas
-331919207;Contribuições Previdenciárias - RPPS - Pessoal Ativo do Plano Financeiro;D;Analítica;312120100;100;Todas
-331919208;Contribuições Previdenciárias - RPPS - Pessoal Inativo e Pensionista do Plano Financeiro;D;Analítica;312120100;100;Todas
-331919209;Alíquota Suplementar De Contribuição Previdenciária - Pessoal Ativo do Plano Previdenciário;D;Analítica;312120100;100;Todas
-331919210;Alíquota Suplementar De Contribuição Previdenciária - Pessoal Inativo e Pensionista do Plano Previdenciário;D;Analítica;312120100;100;Todas
-331919211;Alíquota Suplementar de Contribuição Previdenciária - Pessoal Ativo do Plano Financeiro;D;Analítica;312120100;100;Todas
-331919212;Alíquota Suplementar De Contribuição Previdenciária - Pessoal Inativo e Pensionista do Plano Financeiro;D;Analítica;312120100;100;Todas
-331919213;Demais Obrigações Patronais;D;Analítica;312129900;100;Todas
-331919251;Indenizações Trabalhistas - Obrig. Patronais;D;Analítica;312129900;100;Todas
-331919291;Sentenças Judiciais;D;Analítica;319920000;100;Todas
-331919296;Ressarcimento de Despesas com Pessoal Requisitado;D;Analítica;319920000;100;Todas
-331919298;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;Analítica;319920000;100;Todas
-331919299;Outras Despesas de Exercícios Anteriores;D;Analítica;319920000;100;Todas
-331919451;Indenizações Trabalhistas - Obrig. Patronais;D;Analítica;319110000;100;Todas
-331919498;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;Analítica;319920000;100;Todas
-331919499;Outras Indenizações e Restituições Trabalhistas;D;Analítica;319920000;100;Todas
-331959498;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;Analítica;311110212;100;Todas
-331959499;Outras Indenizações e Restituições Trabalhistas;D;Analítica;319110000;100;Todas
-333908600;Compensações a  Regimes de Previdência;D;Analítica;399130000;100;Todas
-333919800;Despesas do Orçamento de Investimento;D;Analítica;399920000;100;Todas
+331909204;Contratação por Tempo Determinado;D;ANALITICA;311110101;100;Todas
+331909205;Outros Benef. Previd .do Servidor ou do Militar;D;ANALITICA;311110101;100;Todas
+331909207;Contrib. a Entidades Fechadas de Previdência;D;ANALITICA;311110101;100;Todas
+331909211;Vencimentos e Vantagens Fixas - Pessoal Civil;D;ANALITICA;311110101;100;Todas
+331909213;Obrigações Patronais;D;ANALITICA;311110101;100;Todas
+331909216;Outras Despesas Variáveis - Pessoal Civil;D;ANALITICA;311110101;100;Todas
+331909259;Pensões Especiais;D;ANALITICA;311110101;100;Todas
+331909291;Sentenças Judiciais;D;ANALITICA;311110101;100;Todas
+331909294;Indenizações e Restituições Trabalhistas;D;ANALITICA;311110101;100;Todas
+331909296;Ressarcimento de Despesas com Pessoal Requisitado;D;ANALITICA;311110101;100;Todas
+331909298;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;ANALITICA;311110101;100;Todas
+331909299;Outras Despesas de Exercícios Anteriores;D;ANALITICA;311110101;100;Todas
+331909413;Indenizações e Restituições Trab. Pens. Civil ;D;ANALITICA;319910100;100;Todas
+331909498;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;ANALITICA;319910100;100;Todas
+331909499;Outras Indenizações e Restituições Trabalhistas;D;ANALITICA;319910100;100;Todas
+331911309;Seguros de Acidentes do Trabalho;D;ANALITICA;312120100;100;Todas
+331911310;Contribuições Previdenciárias - RPPS - Pessoal Inativo e Pensionista - Plano Previdenciário;D;ANALITICA;312120100;100;Todas
+331911311;Contribuições Previdenciárias - RPPS - Pessoal Ativo - Plano Financeiro;D;ANALITICA;312120100;100;Todas
+331911312;Contribuições Previdenciárias - RPPS - Pessoal Inativo e Pensionista - Plano Financeiro;D;ANALITICA;312120100;100;Todas
+331911320;Alíquota Suplementar de Contribuição Previdenciária -  Pessoal Ativo - Plano Previdenciário;D;ANALITICA;312120100;100;Todas
+331911321;Alíquota Suplementar de Contribuição Previdenciária -  Pessoal Inativo e Pensionista - Plano Previdenciário;D;ANALITICA;312120100;100;Todas
+331911322;Alíquota Suplementar de Contribuição Previdenciária -  Pessoal Ativo - Plano Financeiro;D;ANALITICA;312120100;100;Todas
+331911323;Alíquota Suplementar de Contribuição Previdenciária -  Pessoal Inativo e Pensionista - Plano Financeiro;D;ANALITICA;312120100;100;Todas
+331919204;Contratação por Tempo Determinado;D;ANALITICA;311120000;100;Todas
+331919205;Contribuições Previdenciárias - RPPS - Pessoal Ativo do Plano Previdenciário;D;ANALITICA;312120100;100;Todas
+331919206;Contribuições Previdenciárias - RPPS - Pessoal Inativo e Pensionista do Plano Previdenciário;D;ANALITICA;312120100;100;Todas
+331919207;Contribuições Previdenciárias - RPPS - Pessoal Ativo do Plano Financeiro;D;ANALITICA;312120100;100;Todas
+331919208;Contribuições Previdenciárias - RPPS - Pessoal Inativo e Pensionista do Plano Financeiro;D;ANALITICA;312120100;100;Todas
+331919209;Alíquota Suplementar De Contribuição Previdenciária - Pessoal Ativo do Plano Previdenciário;D;ANALITICA;312120100;100;Todas
+331919210;Alíquota Suplementar De Contribuição Previdenciária - Pessoal Inativo e Pensionista do Plano Previdenciário;D;ANALITICA;312120100;100;Todas
+331919211;Alíquota Suplementar de Contribuição Previdenciária - Pessoal Ativo do Plano Financeiro;D;ANALITICA;312120100;100;Todas
+331919212;Alíquota Suplementar De Contribuição Previdenciária - Pessoal Inativo e Pensionista do Plano Financeiro;D;ANALITICA;312120100;100;Todas
+331919213;Demais Obrigações Patronais;D;ANALITICA;312129900;100;Todas
+331919251;Indenizações Trabalhistas - Obrig. Patronais;D;ANALITICA;312129900;100;Todas
+331919291;Sentenças Judiciais;D;ANALITICA;319920000;100;Todas
+331919296;Ressarcimento de Despesas com Pessoal Requisitado;D;ANALITICA;319920000;100;Todas
+331919298;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;ANALITICA;319920000;100;Todas
+331919299;Outras Despesas de Exercícios Anteriores;D;ANALITICA;319920000;100;Todas
+331919451;Indenizações Trabalhistas - Obrig. Patronais;D;ANALITICA;319110000;100;Todas
+331919498;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;ANALITICA;319920000;100;Todas
+331919499;Outras Indenizações e Restituições Trabalhistas;D;ANALITICA;319920000;100;Todas
+331959498;Indenizações por Demissão e com Programas de Incentivos à Demissão Voluntária - Trab. Ativo Civil;D;ANALITICA;311110212;100;Todas
+331959499;Outras Indenizações e Restituições Trabalhistas;D;ANALITICA;319110000;100;Todas
+333908600;Compensações a  Regimes de Previdência;D;ANALITICA;399130000;100;Todas
+333919800;Despesas do Orçamento de Investimento;D;ANALITICA;399920000;100;Todas

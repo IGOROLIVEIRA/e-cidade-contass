@@ -18,7 +18,7 @@ class Oc16961 extends PostgresMigration
                     foreach($aExercicios as $oExercicios){
                         // se existir o estrutural não deve ser inserido nem atualizado.
                         $sEstrut = str_pad($aPlanoOrcamento[0], 15, "0");
-                        $sEstrutPcasp = str_pad($aPlanoOrcamento[0], 15, "0");
+                        $sEstrutPcasp = str_pad($aPlanoOrcamento[4], 15, "0");
                         $aConplanoOrcamentoExiste = $this->fetchAll("select * from conplanoorcamento where c60_anousu={$oExercicios['c60_anousu']} and c60_estrut = '{$sEstrut}'");
                         if(!empty($aConplanoOrcamentoExiste)){
                             continue;
@@ -39,9 +39,9 @@ class Oc16961 extends PostgresMigration
                                         $c60_consistemaconta, $c60_naturezasaldo, $c60_funcao);
 
                         $this->insertConplanoOrcamento($aConPlano);
-                        if($aPlanoOrcamento[14] == 'Analítica'){
-                            $aInstituicoes = $this->fetchAll("select distinct c61_instit from conplanoorcamentoanalitica where c61_anousu = {$oExercicios['c60_anousu']} order by 1 ");
 
+                        if($aPlanoOrcamento[3] == 'ANALITICA'){
+                            $aInstituicoes = $this->fetchAll("select distinct c61_instit from conplanoorcamentoanalitica where c61_anousu = {$oExercicios['c60_anousu']} order by 1 ");
                             foreach($aInstituicoes as $oInstituicao){
                                 $c61_codcon        = $c60_codcon;
                                 $c61_anousu        = $oExercicios['c60_anousu'];
@@ -52,8 +52,11 @@ class Oc16961 extends PostgresMigration
                                 $aConPlanoOrcamentoAnalitica    = array($c61_codcon, $c61_anousu, $c61_reduz, $c61_instit, $c61_codigo, $c61_contrapartida);
                                 $this->insertConplanoOrcamentoAnalitica($aConPlanoOrcamentoAnalitica);
 
+                            }
+                            $pcasp = $this->fetchRow("select c60_codcon from conplano where c60_anousu = {$oExercicios['c60_anousu']} and c60_estrut = '{$sEstrutPcasp}' ");
+                            if(!empty($pcasp)){
                                 $c72_sequencial = current($this->fetchRow("select nextval('conplanoconplanoorcamento_c72_sequencial_seq')"));
-                                $c72_conplano = current($this->fetchRow("select c60_codcon from conplano where c60_anousu = {$oExercicios['c60_anousu']} and c60_estrut = '{$sEstrutPcasp}' "));
+                                $c72_conplano = $pcasp['c60_codcon'];
                                 $c72_conplanoorcamento = $c60_codcon;
                                 $c72_anousu = $oExercicios['c60_anousu'];
                                 $aConplanoConplanoOrcamento = array($c72_sequencial, $c72_conplano, $c72_conplanoorcamento, $c72_anousu);
