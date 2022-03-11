@@ -182,7 +182,7 @@ $rotulo->label("z01_cgccpf");
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
             $dbwhere .= "AND ((date_part('year', empempenho.e60_emiss) < date_part('year', date '" . $ve70_abast . "') AND date_part('month', empempenho.e60_emiss) <= 12)
                                OR (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "') AND date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')))";
-            $filtroempelemento = 1;
+            $filtroempelemento = 1; 
           }  
 
           /**

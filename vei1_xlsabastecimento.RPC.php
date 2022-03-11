@@ -755,7 +755,7 @@ switch($oParam->exec) {
                         $clveicabastposto->ve71_veiccadposto = $resultPost->ve29_codigo;
                         $clveicabastposto->ve71_nota = $nota;
                         $clveicabastposto->incluir(null);
-                    }
+                    } 
 
                     
                     if($erro == false){
