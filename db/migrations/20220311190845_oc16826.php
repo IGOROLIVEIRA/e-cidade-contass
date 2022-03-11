@@ -33,7 +33,7 @@ class Oc16826 extends AbstractMigration
 				
         UPDATE db_itensmenu
 				SET descricao = 'Balanço Orçamentário'
-				WHERE id_item = (select id_item from db_itensmenu where descricao = 'Exercício 2015' and help = 'Balanço Orçamentário do DCASP - Exercício 2015')
+				WHERE id_item = (select id_item from db_itensmenu where descricao = 'Exercício 2015' and help = 'Balanço Orçamentário do DCASP - Exercício 2015');
 
 
         COMMIT;
