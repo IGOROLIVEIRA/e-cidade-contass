@@ -267,8 +267,7 @@ class FilaESocialTask extends Task implements iTarefa
     {
         $arrEvtIniciais = array('S1000','S1005','S1010','S1020','S1070');
         $arrEvtPeriodicos = array('S1200','S1202','S1207','S1210','S1260','S1270','S1280','S1298','S1299');
-        $arrEvtNaoPeriodicos = array('S2190','S2299','S2306','S2230','S2231','S2298','S2200','S2205','S2206','S2399','S2400','S2405','S2410','S2416','S2418','S2420','S3000','S5001','S2300','S5003','S5011','S5013','S5002',''
-        );
+        $arrEvtNaoPeriodicos = array('S2190','S2299','S2306','S2230','S2231','S2298','S2200','S2205','S2206','S2399','S2400','S2405','S2410','S2416','S2418','S2420','S3000','S5001','S2300','S5003','S5011','S5013','S5002');
         if (in_array("S{$evento}", $arrEvtIniciais)) {
             return 1;
         }
