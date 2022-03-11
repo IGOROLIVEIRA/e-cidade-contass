@@ -1,10 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_conv102022_classe.php");
-require_once("classes/db_conv112022_classe.php");
-require_once("classes/db_conv202022_classe.php");
-require_once("classes/db_conv212022_classe.php");
+require_once("classes/db_dipr102022_classe.php");
+require_once("classes/db_dipr202022_classe.php");
+require_once("classes/db_dipr302022_classe.php");
+require_once("classes/db_dipr402022_classe.php");
+require_once("classes/db_dipr502022_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2022/GerarDIPR.model.php");
 
 /**
@@ -61,28 +62,12 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
     public function gerarDados()
     {
         $cldipr10 = new cl_dipr102022();
-        $clconv11 = new cl_conv112022();
-        $clconv20 = new cl_conv202022();
-        $clconv21 = new cl_conv212022();
-        $clconv30 = new cl_conv302022();
-        $clconv31 = new cl_conv312022();
+        $cldipr20 = new cl_dipr202022();
+        $cldipr30 = new cl_dipr302022();
+        $cldipr40 = new cl_dipr402022();
+        $cldipr50 = new cl_dipr502022();
 
         db_inicio_transacao();
-
-
-        /*
-   * excluir informacoes do mes selecionado registro 11
-   */
-        $result = $clconv11->sql_record($clconv11->sql_query(null, "*", null, "si93_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si93_instit = " . db_getsession("DB_instit")));
-        if (pg_num_rows($result) > 0) {
-
-            $clconv11->excluir(null, "si93_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si93_instit = " . db_getsession("DB_instit"));
-            if ($clconv11->erro_status == 0) {
-                throw new Exception($clconv11->erro_msg);
-            }
-        }
-
-
         /*
          * excluir informacoes do mes selecionado registro 10
         */
@@ -95,59 +80,41 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
             }
         }
 
-        /*
-     * excluir informacoes do mes selecionado registro 20
-     */
-        $result = $clconv20->sql_record($clconv20->sql_query(null, "*", null, "si94_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si94_instit = " . db_getsession("DB_instit")));
+        $result = $cldipr20->sql_record($cldipr20->sql_query(null, "*", null, "si231_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si231_instit = " . db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
-            $clconv20->excluir(null, "si94_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si94_instit = " . db_getsession("DB_instit"));
-            if ($clconv20->erro_status == 0) {
-                throw new Exception($clconv20->erro_msg);
+            $cldipr20->excluir(null, "si231_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si231_instit = " . db_getsession("DB_instit"));
+    
+            if ($cldipr20->erro_status == 0) {
+                throw new Exception($cldipr20->erro_msg);
             }
         }
 
-        /*
-       * excluir informacoes do mes selecionado registro 21
-       */
-        $result = $clconv21->sql_record($clconv21->sql_query(null, "*", null, "si232_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si232_instint = " . db_getsession("DB_instit")));
+        $result = $cldipr30->sql_record($cldipr30->sql_query(null, "*", null, "si232_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si232_instit = " . db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
-            $clconv21->excluir(null, "si232_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si232_instint = " . db_getsession("DB_instit"));
-            if ($clconv21->erro_status == 0) {
-                throw new Exception($clconv21->erro_msg);
+            $cldipr30->excluir(null, "si232_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si232_instit = " . db_getsession("DB_instit"));
+            if ($cldipr30->erro_status == 0) {
+                throw new Exception($cldipr30->erro_msg);
             }
         }
 
-        /*
-     * excluir informacoes do mes selecionado registro 30
-     */
-        if ($this->sDataInicial[5] . $this->sDataInicial[6] == 12) {
-            $result = $clconv30->sql_record($clconv30->sql_query(null, "*", null, "si203_mes = {$this->sDataFinal['5']}{$this->sDataFinal['6']} and si203_instit = " . db_getsession("DB_instit")));
-
-            if (pg_num_rows($result) > 0) {
-                $clconv30->excluir(null, "si203_mes = {$this->sDataFinal['5']}{$this->sDataFinal['6']} and si203_instit = " . db_getsession("DB_instit"));
-                if ($clconv30->erro_status == 0) {
-                    throw new Exception($clconv30->erro_msg);
-                }
+        $result = $cldipr40->sql_record($cldipr40->sql_query(null, "*", null, "si233_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si233_instit = " . db_getsession("DB_instit")));
+        if (pg_num_rows($result) > 0) {
+            $cldipr40->excluir(null, "si233_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si233_instit = " . db_getsession("DB_instit"));
+            if ($cldipr40->erro_status == 0) {
+                throw new Exception($cldipr40->erro_msg);
             }
         }
 
-        /*
-     * excluir informacoes do mes selecionado registro 31
-     */
-
-        if ($this->sDataInicial[5] . $this->sDataInicial[6] == 12) {
-            $result = $clconv31->sql_record($clconv31->sql_query(null, "*", null, "si204_mes = {$this->sDataFinal['5']}{$this->sDataFinal['6']} and si204_instit = " . db_getsession("DB_instit")));
-
-            if (pg_num_rows($result) > 0) {
-                $clconv31->excluir(null, "si204_mes = {$this->sDataFinal['5']}{$this->sDataFinal['6']} and si204_instit = " . db_getsession("DB_instit"));
-                if ($clconv31->erro_status == 0) {
-                    throw new Exception($clconv31->erro_msg);
-                }
+        $result = $cldipr50->sql_record($cldipr50->sql_query(null, "*", null, "si234_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si234_instit = " . db_getsession("DB_instit")));
+        if (pg_num_rows($result) > 0) {
+            $cldipr50->excluir(null, "si234_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si234_instit = " . db_getsession("DB_instit"));
+            if ($cldipr50->erro_status == 0) {
+                throw new Exception($cldipr50->erro_msg);
             }
         }
 
         db_fim_transacao();
-
+        
         $sSql = "SELECT si09_codorgaotce AS codorgao
               FROM infocomplementaresinstit
               WHERE si09_instit = " . db_getsession("DB_instit");
@@ -158,6 +125,7 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
         /*
          * selecionar informacoes registro 10
         */
+        
         $sSql = "SELECT * FROM dipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND not exists (select 1 from dipr102022 where si230_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si230_instit = " . db_getsession("DB_instit") . ");";
 
         $rsResult10 = db_query($sSql);
@@ -171,261 +139,143 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
             $cldipr10->si230_segregacaomassa = $oDados10->c236_massainstituida ? 1 : 2;
             $cldipr10->si230_benefcustesouro = $oDados10->c236_beneficiotesouro ? 1 : 2;
             $cldipr10->si230_atonormativo = $oDados10->c236_atonormativo;
-            $cldipr10->si230_exercicioato = $oDados10->c236_exercicioatonormativo;
+            $cldipr10->si230_exercicioato = $oDados10->c236_exercicionormativo;
             $cldipr10->si230_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $cldipr10->si230_instit = db_getsession("DB_instit");
 
             $cldipr10->incluir(null);
-        
+
             if ($cldipr10->erro_status == 0) {
                 throw new Exception($cldipr10->erro_msg);
             }
-            /*
-       * selecionar informacoes registro 11
-       */
-            $sSql = "select * from convdetalhaconcedentes cd
-               inner join convconvenios cc on cc.c206_sequencial = cd.c207_codconvenio
-               where c206_datacadastro >= '{$this->sDataInicial}' and c206_datacadastro <= '{$this->sDataFinal}'
-               and c207_codconvenio = '{$oDados10->c206_sequencial}'
-               and c206_instit = " . db_getsession("DB_instit");
-
-            $rsResult11 = db_query($sSql);
-
-            for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
-
-                $clconv11 = new cl_conv112022();
-                $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-
-                $clconv11->si93_tiporegistro = 11;
-                $clconv11->si93_codconvenio = $oDados10->c206_sequencial;
-                $clconv11->si93_tipodocumento = ($oDados11->c207_esferaconcedente != 4) ? 2 : '';
-                $clconv11->si93_nrodocumento = $oDados11->c207_nrodocumento;
-                $clconv11->si93_esferaconcedente = $oDados11->c207_esferaconcedente;
-                $clconv11->si93_dscexterior = $oDados11->c207_descrconcedente;
-                $clconv11->si93_valorconcedido = $oDados11->c207_valorconcedido;
-                $clconv11->si93_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                $clconv11->si93_reg10 = $cldipr10->si230_sequencial;
-                $clconv11->si93_instit = db_getsession("DB_instit");
-
-                $clconv11->incluir(null);
-
-                if ($clconv11->erro_status == 0) {
-                    throw new Exception($clconv11->erro_msg);
-                }
-            }
         }
 
-        /*
-        * selecionar informacoes registro 20 e 21
-      */
-        $sSql = "select * from convdetalhatermos cdt
-               inner join convconvenios cc on cc.c206_sequencial = cdt.c208_codconvenio
-               where c208_datacadastro >= '{$this->sDataInicial}' and c208_datacadastro <= '{$this->sDataFinal}'
-               and c206_instit = " . db_getsession("DB_instit");
+        $sSql = "SELECT diprbasecontribuicao.*, c236_orgao FROM diprbasecontribuicao LEFT JOIN dipr ON c236_coddipr = c237_coddipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c237_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr202022 where si231_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si231_instit = " . db_getsession("DB_instit") . ");";
 
         $rsResult20 = db_query($sSql);
-
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-            $clconv20 = new cl_conv202022();
+            $cldipr20 = new cl_dipr202022();
             $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
-            $clconv20->si94_tiporegistro = 20;
-            $clconv20->si94_codorgao = $sCodorgao;
-            $clconv20->si94_nroconvenio = $oDados20->c206_nroconvenio;
-            $clconv20->si94_dtassinaturaconvoriginal = $oDados20->c206_dataassinatura;
-            $clconv20->si94_nroseqtermoaditivo = $oDados20->c208_nroseqtermo;
-            $clconv20->si94_dscalteracao = $oDados20->c208_dscalteracao;
-            $clconv20->si94_codconvaditivo = $oDados20->c206_sequencial . $oDados20->c208_sequencial;
-            $clconv20->si94_dtassinaturatermoaditivo = $oDados20->c208_dataassinaturatermoaditivo;
-            $clconv20->si94_datafinalvigencia = $oDados20->c208_datafinalvigencia;
-            $clconv20->si94_valoratualizadoconvenio = $oDados20->c208_valoratualizadoconvenio;
-            $clconv20->si94_valoratualizadocontrapartida = $oDados20->c208_valoratualizadocontrapartida;
-            $clconv20->si94_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $clconv20->si94_instit = db_getsession("DB_instit");
+            $cldipr20->si231_tiporegistro = 20;
+            $cldipr20->si231_codorgao = $oDados20->c236_orgao;
+            $cldipr20->si231_coddipr = $oDados20->c237_coddipr;
+            $cldipr20->si231_tipobasecalculo = $oDados20->c237_basecalculocontribuinte;
+            $cldipr20->si231_mescompetencia = $oDados20->c237_mescompetencia ? $oDados20->c237_mescompetencia : 0;
+            $cldipr20->si231_exerciciocompetencia = $oDados20->c237_exerciciocompetencia ? $oDados20->c237_exerciciocompetencia : 0;
+            $cldipr20->si231_tipofundo = $oDados20->c237_tipofundo;
+            $cldipr20->si231_remuneracaobrutafolhapag = $oDados20->c237_remuneracao;
+            $cldipr20->si231_tipobasecalculocontrprevidencia = $oDados20->c237_basecalculosegurados;
+            $cldipr20->si231_tipobasecalculocontrseg = $oDados20->c237_basecalculoorgao;
+            $cldipr20->si231_valorbasecalculocontr = $oDados20->c237_valorbasecalculo;
+            $cldipr20->si231_tipocontribuicao = $oDados20->c237_tipocontribuinte;
+            $cldipr20->si231_aliquota = $oDados20->c237_aliquota;
+            $cldipr20->si231_valorcontribdevida = $oDados20->c237_valorcontribuicao;
+            $cldipr20->si231_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $cldipr20->si231_instit = db_getsession("DB_instit");
 
-            $clconv20->incluir(null);
-            if ($clconv20->erro_status == 0) {
-                throw new Exception($clconv20->erro_msg);
+            $cldipr20->incluir(null);
+
+            if ($cldipr20->erro_status == 0) {
+                throw new Exception($cldipr20->erro_msg);
             }
+        }
+         
+        $sSql = "SELECT diprbaseprevidencia.*, c236_orgao FROM diprbaseprevidencia LEFT JOIN dipr ON c236_coddipr = c238_coddipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c238_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr302022 where si232_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si232_instit = " . db_getsession("DB_instit") . ");";
 
-            $clconv21 = new cl_conv212022();
-            $clconv21->si232_tiporegistro = 21;
-            $clconv21->si232_codconvaditivo = $oDados20->c206_sequencial . $oDados20->c208_sequencial;
-            $clconv21->si232_tipotermoaditivo = $oDados20->c208_tipotermoaditivo;
-            $clconv21->si232_dsctipotermoaditivo = $oDados20->c208_dsctipotermoaditivo;
-            $clconv21->si232_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $clconv21->si232_instint = db_getsession("DB_instit");
+        $rsResult30 = db_query($sSql);
+        for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-            $clconv21->incluir(null);
-            if ($clconv21->erro_status == 0) {
-                throw new Exception($clconv21->erro_msg);
+            $cldipr30 = new cl_dipr302022();
+            $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
+
+            $cldipr30->si232_tiporegistro = 30;
+            $cldipr30->si232_codorgao = $oDados30->c236_orgao;
+            $cldipr30->si232_coddipr = $oDados30->c238_coddipr;
+            $cldipr30->si232_mescompetencia = $oDados30->c238_mescompetencia ? $oDados30->c238_mescompetencia : 0;
+            $cldipr30->si232_exerciciocompetencia = $oDados30->c238_exerciciocompetencia ? $oDados30->c238_exerciciocompetencia : 0;
+            $cldipr30->si232_tipofundo = $oDados30->c238_tipofundo;
+            $cldipr30->si232_tiporepasse = $oDados30->c238_tiporepasse;
+            $cldipr30->si232_tipocontripatronal = $oDados30->c238_tipocontribuicaopatronal;
+            $cldipr30->si232_tipocontrisegurado = $oDados30->c238_tipocontribuicaosegurados;
+            $cldipr30->si232_tipocontribuicao = $oDados30->c238_tipocontribuinte;
+            $cldipr30->si232_datarepasse = $oDados30->c238_datarepasse;
+            $cldipr30->si232_datavencirepasse = $oDados30->c238_datavencimentorepasse;
+            $cldipr30->si232_valororiginal = $oDados30->c238_valororiginal;
+            $cldipr30->si232_valororiginalrepassado = $oDados30->c238_valororiginalrepassado;
+            $cldipr30->si232_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $cldipr30->si232_instit = db_getsession("DB_instit");
+
+            $cldipr30->incluir(null);
+
+            if ($cldipr30->erro_status == 0) {
+                throw new Exception($cldipr30->erro_msg);
             }
         }
 
-        /*
-       * selecionar informacoes registro 30 e 31
-       */
-        if ($this->sDataInicial[5] . $this->sDataInicial[6] == 12) {
+        $sSql = "SELECT diprdeducoes.*, c236_orgao FROM diprdeducoes LEFT JOIN dipr ON c236_coddipr = c239_coddipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c239_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr402022 where si233_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si233_instit = " . db_getsession("DB_instit") . ");";
+        
+        $rsResult40 = db_query($sSql);
+        for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-            $iAnoUsu = db_getsession('DB_anousu');
-            $iInstit = db_getsession("DB_instit");
+            $cldipr40 = new cl_dipr402022();
+            $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
-            $sSql = " 	SELECT  o57_fonte,
-							o57_descr,
-							o70_codigo,
-							o70_valor,
-							o70_codrec,
-							c229_vlprevisto,
-							CAST(coalesce(nullif(substr(fc_receitasaldo,55,12),''),'0') AS float8) AS saldo_arrecadado,
-							c229_semassinatura
-					FROM
-						(SELECT o57_fonte,
-								o57_descr,
-								o70_codigo,
-								o70_valor,
-								o70_codrec,
-								COALESCE(SUM(c229_vlprevisto),0) c229_vlprevisto,
-								fc_receitasaldo({$iAnoUsu},o70_codrec,3,'{$iAnoUsu}-01-01','{$iAnoUsu}-12-31'),
-								CASE
-									WHEN (COALESCE(SUM(c229_vlprevisto),0) > 0) THEN (o70_valor - COALESCE(SUM(c229_vlprevisto),0))
-									ELSE 0
-								END AS c229_semassinatura
-						FROM orcfontes
-							LEFT JOIN orcreceita ON o57_codfon = o70_codfon AND o57_anousu = o70_anousu
-							LEFT JOIN prevconvenioreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec
-						WHERE o70_codigo IN ('122','123','124','142','163')
-							AND o70_anousu = {$iAnoUsu}
-							AND o70_instit = {$iInstit}
-							AND o70_valor > 0
-						GROUP BY 1,2,3,4,5) AS x";
+            $cldipr40->si233_tiporegistro = 40;
+            $cldipr40->si233_codorgao = $oDados40->c236_orgao;
+            $cldipr40->si233_coddipr = $oDados40->c239_coddipr;
+            $cldipr40->si233_mescompetencia = $oDados40->c239_mescompetencia ? $oDados40->c239_mescompetencia : 0;
+            $cldipr40->si233_exerciciocompetencia = $oDados40->c239_exerciciocompetencia ? $oDados40->c239_exerciciocompetencia : 0;
+            $cldipr40->si233_tipofundo = $oDados40->c239_tipofundo;
+            $cldipr40->si233_tiporepasse = $oDados40->c239_tiporepasse;
+            $cldipr40->si233_tipocontripatronal = $oDados40->c239_tipocontribuicaopatronal;
+            $cldipr40->si233_tipocontrisegurado = $oDados40->c239_tipocontribuicaosegurados;
+            $cldipr40->si233_tipocontribuicao = $oDados40->c239_tipocontribuicao;
+            $cldipr40->si233_tipodeducao = $oDados40->c239_tipodeducao;
+            $cldipr40->si233_dsctiposdeducoes = $oDados40->c239_descricao;
+            $cldipr40->si233_valordeducao = $oDados40->c239_valordeducao;
+            $cldipr40->si233_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $cldipr40->si233_instit = db_getsession("DB_instit");
 
-            $rsResult30 = db_query($sSql);
+            $cldipr40->incluir(null);
 
-            for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
+            if ($cldipr40->erro_status == 0) {
+                throw new Exception($cldipr40->erro_msg);
+            }
+        }
 
-                $clconv30 = new cl_conv302022();
-                $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
+        $sSql = "SELECT dipraportes.*, c236_orgao FROM dipraportes LEFT JOIN dipr ON c236_coddipr = c240_coddipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c240_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr502022 where si234_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si234_instit = " . db_getsession("DB_instit") . ");";
+       
+        $rsResult50 = db_query($sSql);
+        for ($iCont50 = 0; $iCont50 < pg_num_rows($rsResult50); $iCont50++) {
 
-                $clconv30->si203_tiporegistro = 30;
-                $clconv30->si203_codreceita = $oDados30->o70_codrec;
-                $clconv30->si203_codorgao = $sCodorgao;
-                $clconv30->si203_naturezareceita = $oDados30->o57_fonte;
-                $clconv30->si203_codfontrecursos = $oDados30->o70_codigo;
-                $clconv30->si203_vlprevisao = $oDados30->o70_valor;
-                $clconv30->si203_mes = 12;
-                $clconv30->si203_instit = db_getsession("DB_instit");
+            $cldipr50 = new cl_dipr502022();
+            $oDados50 = db_utils::fieldsMemory($rsResult50, $iCont50);
 
-                $clconv30->incluir(null);
-                if ($clconv30->erro_status == 0) {
-                    throw new Exception($clconv30->erro_msg);
-                }
+            $cldipr50->si234_tiporegistro = 50;
+            $cldipr50->si234_codorgao = $oDados50->c236_orgao;
+            $cldipr50->si234_coddipr = $oDados50->c240_coddipr;
+            $cldipr50->si234_mescompetencia = $oDados50->c240_mescompetencia ? $oDados50->c240_mescompetencia : 0;
+            $cldipr50->si234_exerciciocompetencia = $oDados50->c240_exerciciocompetencia ? $oDados50->c240_exerciciocompetencia : 0;
+            $cldipr50->si234_tipofundo = $oDados50->c240_tipofundo;
+            $cldipr50->si234_tipoaportetransf = $oDados50->c240_tipoaporte;
+            $cldipr50->si234_dscoutrosaportestransf = $oDados50->c240_descricao;
+            $cldipr50->si234_atonormativo = $oDados50->c240_atonormativo;
+            $cldipr50->si234_exercicioato = $oDados50->c240_exercicioatonormativo;
+            $cldipr50->si234_valoraportetransf = $oDados50->c240_valoraporte;
+            $cldipr50->si234_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $cldipr50->si234_instit = db_getsession("DB_instit");
 
-                if ($oDados30->saldo_arrecadado > 0) {
+            $cldipr50->incluir(null);
 
-                    $sSql31 = " SELECT  o70_codrec,
-									c206_sequencial,
-									c206_nroconvenio,
-									c229_convenio,
-									c206_objetoconvenio,
-									c206_dataassinatura,
-									sum(c229_vlprevisto) AS c229_vlprevisto,
-									sum(valor_arrecadado) as valor_arrecadado
-							FROM 
-								(SELECT	o70_codrec,
-										c206_sequencial,
-										c206_nroconvenio,
-										c229_convenio,
-										c206_objetoconvenio,
-										c206_dataassinatura,
-										sum(c229_vlprevisto) AS c229_vlprevisto,
-										0 AS valor_arrecadado
-								FROM prevconvenioreceita
-									LEFT JOIN orcreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec 
-									LEFT JOIN convconvenios ON c206_sequencial = c229_convenio
-								WHERE o70_codigo IN ('122','123','124','142')
-									AND o70_anousu = {$iAnoUsu}
-									AND o70_instit = {$iInstit}
-									AND o70_valor > 0
-									AND o70_codrec = {$oDados30->o70_codrec}                    
-								GROUP BY 1,2,3,4,5
-								UNION
-								SELECT *
-								FROM
-									(SELECT o70_codrec,
-											c206_sequencial,
-											c206_nroconvenio,
-											c229_convenio,
-											c206_objetoconvenio,
-											c206_dataassinatura,
-											0 AS c229_vlprevisto,
-											round(sum(CASE WHEN c71_coddoc = 100 THEN c70_valor ELSE c70_valor * -1 END),2) AS valor_arrecadado
-									FROM orcreceita 
-										LEFT JOIN conlancamrec ON c74_anousu = o70_anousu AND c74_codrec = o70_codrec
-										INNER JOIN conlancam ON c70_codlan = c74_codlan
-										LEFT JOIN conlancamdoc ON c74_codlan = c71_codlan
-										LEFT JOIN conlancamcorrente ON c86_conlancam = c74_codlan
-										LEFT JOIN corplacaixa ON (k82_id,k82_data,k82_autent) = (c86_id,c86_data,c86_autent)
-										LEFT JOIN placaixarec ON k81_seqpla = k82_seqpla
-										LEFT JOIN convconvenios ON c206_sequencial = k81_convenio
-										LEFT JOIN prevconvenioreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec AND c229_convenio = c206_sequencial
-									WHERE o70_codigo IN ('122','123','124','142')
-										AND o70_anousu = {$iAnoUsu}
-										AND o70_instit = {$iInstit}
-										AND o70_valor > 0
-										AND o70_codrec = {$oDados30->o70_codrec}
-										AND c206_sequencial IS NOT NULL
-									GROUP BY 1,2,3,4,5,6) AS x
-								WHERE valor_arrecadado > 0) AS xx GROUP BY 1,2,3,4,5,6 ";
-
-                    $rsResult31 = db_query($sSql31);
-
-                    if (pg_num_rows($rsResult31) > 0) {
-
-                        for ($iCont31 = 0; $iCont31 < pg_num_rows($rsResult31); $iCont31++) {
-
-                            $clconv31 = new cl_conv312022();
-                            $oDados31 = db_utils::fieldsMemory($rsResult31, $iCont31);
-
-                            $clconv31->si204_tiporegistro = 31;
-                            $clconv31->si204_codreceita = $oDados31->o70_codrec;
-                            $clconv31->si204_prevorcamentoassin = $oDados31->valor_arrecadado > 0 ? 1 : 2;
-                            $clconv31->si204_nroconvenio = "'{$oDados31->c206_nroconvenio}'";
-                            $clconv31->si204_dataassinatura = "'{$oDados31->c206_dataassinatura}'";
-                            $clconv31->si204_vlprevisaoconvenio = $oDados31->c229_vlprevisto;
-                            $clconv31->si204_mes = 12;
-                            $clconv31->si204_instit = db_getsession("DB_instit");
-
-                            $clconv31->incluir(null);
-                            if ($clconv31->erro_status == 0) {
-                                throw new Exception($clconv31->erro_msg);
-                            }
-                        }
-                    }
-                }
-
-                $clconv31 = new cl_conv312022();
-
-                $clconv31->si204_tiporegistro = 31;
-                $clconv31->si204_codreceita = $oDados30->o70_codrec;
-                $clconv31->si204_prevorcamentoassin = 2;
-                if ($oDados30->c229_semassinatura > 0 && $oDados30->saldo_arrecadado > 0) {
-                    $clconv31->si204_vlprevisaoconvenio = $oDados30->c229_semassinatura;
-                } else {
-                    $clconv31->si204_vlprevisaoconvenio = $oDados30->o70_valor;
-                }
-                $clconv31->si204_mes = 12;
-                $clconv31->si204_instit = db_getsession("DB_instit");
-
-                $clconv31->incluir(null);
-                if ($clconv31->erro_status == 0) {
-                    throw new Exception($clconv31->erro_msg);
-                }
+            if ($cldipr50->erro_status == 0) {
+                throw new Exception($cldipr50->erro_msg);
             }
         }
 
         db_fim_transacao();
-
+        
         $oGerarDIPR = new GerarDIPR();
         $oGerarDIPR->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $oGerarDIPR->gerarDados();
