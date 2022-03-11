@@ -53,7 +53,9 @@ include_once("libs/db_utils.php");
 $cldb_config = new cl_db_config;
 $rsConfig = $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession('DB_instit'),"db21_codcli"));
 $oConfig  = db_utils::fieldsMemory($rsConfig,0);
-if (db_getsession("DB_id_usuario") == 1 || ( $oConfig->db21_codcli == Instituicao::COD_CLI_PMPIRAPORA && db_getsession("DB_id_usuario") == 2050 ) ) {
+$arrayusuarios = array('2050', '2463,', '2086','2046');
+if (db_getsession("DB_id_usuario") == 1 || ( $oConfig->db21_codcli == Instituicao::COD_CLI_PMPIRAPORA && 
+	in_array(db_getsession("DB_id_usuario"), $arrayusuarios) ) ) {
 ?>
 <div align="center">
 <fieldset style="width: 300px;">
