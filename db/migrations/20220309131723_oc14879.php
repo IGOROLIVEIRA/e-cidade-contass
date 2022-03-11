@@ -27,7 +27,13 @@ class Oc14879 extends AbstractMigration
         alter table bensimoveis add column t54_folha_tp int;
         alter table bensimoveis add column t54_data_tp date;
         alter table bensimoveis add column t54_escritura_tp varchar(200);
-        alter table bensimoveis add column t54_carta_tp varchar(200);";
+        alter table bensimoveis add column t54_carta_tp varchar(200);
+        alter table bensimoveis drop constraint bensimoveis_codb_idbq_pk;
+        ALTER TABLE bensimoveis ADD PRIMARY KEY (t54_codbem);
+        ALTER TABLE bensimoveis ALTER column t54_idbql DROP NOT NULL;
+        ALTER TABLE bensimoveis ALTER column t54_idbql DROP DEFAULT;
+        ALTER TABLE patrimonio.bensimoveis DROP constraint bensimoveis_idbql_fk;
+        ALTER TABLE patrimonio.bensimoveis ADD constraint bensimoveis_idbql_fk FOREIGN KEY (t54_idbql) REFERENCES cadastro.lote(j34_idbql);";
 
         $this->execute($sSql);
     }

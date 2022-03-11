@@ -98,6 +98,34 @@ if (isset($desabilita) && $desabilita == true || $clbensmater->numrows > 0) {
 if (isset($excluir)) {
   $t54_idbql = "";
   $t54_obs = "";
+  $t54_obs = "";
+  $t54_endereco = "";
+  $t54_valor_terreno = "";
+  $t54_valor_area = "";
+  $t54_valor_total = "";
+  $t54_limites_confrontacoes = "";
+  $t54_aplicacao = "";
+  $t54_prop_anterior = "";
+  $t54_cpfcnpj = "";
+  $t54_cartorio_tc = "";
+  $t54_comarca_tc = "";
+  $t54_registro_tc = "";
+  $t54_livro_tc = "";
+  $t54_folha_tc = "";
+  $t54_data_tc_dia = "";
+  $t54_data_tc_mes = "";
+  $t54_data_tc_ano = "";
+  $t54_data_tc = "";
+  $t54_cartorio_tp = "";
+  $t54_tabeliao_tp = "";
+  $t54_livro_tp = "";
+  $t54_folha_tp = "";
+  $t54_data_tp_dia = "";
+  $t54_data_tp_mes = "";
+  $t54_data_tp_ano = "";
+  $t54_data_tp = "";
+  $t54_escritura_tp = "";
+  $t54_carta_tp = "";
 }
 
 if (isset($importar) && $importar == true) {

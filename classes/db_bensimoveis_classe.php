@@ -184,14 +184,16 @@ class cl_bensimoveis
       $this->erro_status = "0";
       return false;
     }
-    if (($this->t54_idbql == null) || ($this->t54_idbql == "")) {
-      $this->erro_sql = " Campo t54_idbql nao declarado.";
+
+    if (($this->t54_endereco == null) || ($this->t54_endereco == "")) {
+      $this->erro_sql = " Campo t54_endereco nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
     }
+
     if (($this->t54_valor_terreno == null) || ($this->t54_valor_terreno == "")) {
       $this->erro_sql = " Campo t54_valor_terreno nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
@@ -231,6 +233,10 @@ class cl_bensimoveis
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
+    }
+
+    if ($this->t54_idbql == "") {
+      $this->t54_idbql = 'null';
     }
 
     if ($this->t54_cpfcnpj == "") {
@@ -372,19 +378,7 @@ class cl_bensimoveis
         return false;
       }
     }
-    if (trim($this->t54_idbql) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t54_idbql"])) {
-      $sql  .= $virgula . " t54_idbql = $this->t54_idbql ";
-      $virgula = ",";
-      if (trim($this->t54_idbql) == null) {
-        $this->erro_sql = " Campo Codigo Lote nao Informado.";
-        $this->erro_campo = "t54_idbql";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+
 
     if (trim($this->t54_endereco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t54_endereco"])) {
       $sql  .= $virgula . " t54_endereco = '$this->t54_endereco' ";
@@ -417,7 +411,7 @@ class cl_bensimoveis
     if (trim($this->t54_valor_area) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t54_valor_area"])) {
       $sql  .= $virgula . " t54_valor_area = $this->t54_valor_area ";
       $virgula = ",";
-      if (trim($this->t54_idbql) == null) {
+      if (trim($this->t54_valor_area) == null) {
         $this->erro_sql = " Campo valor área nao Informado.";
         $this->erro_campo = "t54_valor_area";
         $this->erro_banco = "";
@@ -574,6 +568,16 @@ class cl_bensimoveis
     }
 
 
+    if (trim($this->t54_idbql) == "") {
+      $this->t54_idbql = 'null';
+      $sql  .= $virgula . " t54_idbql = $this->t54_idbql ";
+      $virgula = ",";
+    } else {
+      $sql  .= $virgula . " t54_idbql = $this->t54_idbql ";
+      $virgula = ",";
+    }
+
+
     if (trim($this->t54_folha_tp) == "") {
       $this->t54_folha_tp = 'null';
       $sql  .= $virgula . " t54_folha_tp = $this->t54_folha_tp ";
@@ -616,9 +620,11 @@ class cl_bensimoveis
     if ($t54_codbem != null) {
       $sql .= " t54_codbem = $this->t54_codbem";
     }
+    /*
     if ($t54_idbql != null) {
       $sql .= " and  t54_idbql = $this->t54_idbql";
     }
+    */
     $resaco = $this->sql_record($this->sql_query_file($this->t54_codbem, $this->t54_idbql));
     if ($this->numrows > 0) {
       for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
@@ -830,6 +836,7 @@ class cl_bensimoveis
       if ($t54_codbem != null) {
         $sql2 .= " where bensimoveis.t54_codbem = $t54_codbem ";
       }
+      /*
       if ($t54_idbql != null) {
         if ($sql2 != "") {
           $sql2 .= " and ";
@@ -838,6 +845,7 @@ class cl_bensimoveis
         }
         $sql2 .= " bensimoveis.t54_idbql = $t54_idbql ";
       }
+      */
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
     }
