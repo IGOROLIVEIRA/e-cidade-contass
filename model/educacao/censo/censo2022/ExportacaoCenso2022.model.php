@@ -27,16 +27,16 @@
 
 
 /**
- * Classe para retorno dos dados de exportação do censo 2015
+ * Classe para retorno dos dados de exportação do censo 2022
  * @author     andrio.costa@dbseller.com.br
  * @package    Educacao
  * @subpackage Censo
- * @subpackage Censo2015
+ * @subpackage Censo2022
  */
 
-define("MSG_EXPORTACAO_CENSO_2015", "educacao.escola.ExportacaoCenso2015.");
+define("MSG_EXPORTACAO_CENSO_2022", "educacao.escola.ExportacaoCenso2022.");
 
-class ExportacaoCenso2015 implements IExportacaoCenso {
+class ExportacaoCenso2022 implements IExportacaoCenso {
 
   protected $iCodigoLayout;
 
@@ -160,7 +160,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
   protected function getDadosCensoEscola() {
 
     $this->oDadosEscola             = new stdClass();
-    $oDadosCensoEscola              = new DadosCensoEscola2015($this->iCodigoEscola, $this->iAnoCenso, $this->dtBaseCenso);
+    $oDadosCensoEscola              = new DadosCensoEscola2022($this->iCodigoEscola, $this->iAnoCenso, $this->dtBaseCenso);
     $this->oDadosEscola->registro00 = $oDadosCensoEscola->getDadosRegistro00();
     $this->oDadosEscola->registro10 = $oDadosCensoEscola->getDadosRegistro10();
     return $this->oDadosEscola;
@@ -321,7 +321,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
         continue;
       }
 
-      $oTurmaCenso = new DadosCensoTurma2015($iCodigosTurma);
+      $oTurmaCenso = new DadosCensoTurma2022($iCodigosTurma);
       $oTurmaCenso->setDataCenso( $this->dtBaseCenso );
 
       if ( isset($this->aTurmasUnicas[$iCodigosTurma]) ) {
@@ -414,7 +414,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
 
       $oErro        = new stdClass();
       $oErro->sErro = pg_last_error();
-      throw new DBException ( _M( MSG_EXPORTACAO_CENSO_2015 . 'erro_buscar_turmas_unicas', $oErro ) );
+      throw new DBException ( _M( MSG_EXPORTACAO_CENSO_2022 . 'erro_buscar_turmas_unicas', $oErro ) );
     }
 
     $iLinhas = pg_num_rows( $rsTurmaUnica );
@@ -447,7 +447,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
     $sWhereDocentes  .= "    and (    ed321_inicio is null or ed321_inicio > '{$this->dtBaseCenso}' \n";
     $sWhereDocentes  .= "          or ( ed321_inicio < '{$this->dtBaseCenso}' and ed321_final < '{$this->dtBaseCenso}' ) ) \n";
     $sWhereDocentes  .= "  and (ed01_funcaoatividade in (2,3,4) or (ed01_funcaoatividade = 1 and ed01_c_regencia = 'S'))";
-    $sSqlDocentes     = $oDaoDocentes->sql_query_censo_2015("", $sCamposDocentes, "", $sWhereDocentes);
+    $sSqlDocentes     = $oDaoDocentes->sql_query_censo_2022("", $sCamposDocentes, "", $sWhereDocentes);
     $sSqlDocentes     = "select distinct on(numcgm) numcgm,ed20_i_codigo from ({$sSqlDocentes}) as x ";
     $sResultDocentes  = $oDaoDocentes->sql_record($sSqlDocentes);
     $iTotalDocentes   = $oDaoDocentes->numrows;
@@ -455,7 +455,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
     for ($i = 0; $i < $iTotalDocentes; $i++) {
 
       $iCodigoDocente        = db_utils::fieldsMemory($sResultDocentes, $i)->ed20_i_codigo;
-      $oDocenteCenso         = new DadosCensoDocente2015( $iCodigoDocente );
+      $oDocenteCenso         = new DadosCensoDocente2022( $iCodigoDocente );
       $oDocenteCenso->setAnoCenso($this->iAnoCenso);
       $oDocenteCenso->setCodigoEscola($this->iCodigoEscola);
       $oDataCenso = new DBDate( $this->dtBaseCenso );
@@ -583,7 +583,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
    */
   protected function validarDadosEscola() {
 
-    if ( !DadosCensoEscola2015::validarDados($this)) {
+    if ( !DadosCensoEscola2022::validarDados($this)) {
       return false;
     }
     return true;
@@ -595,7 +595,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
    */
   protected function validarDadosTurma() {
 
-    if ( !DadosCensoTurma2015::validarDados($this)) {
+    if ( !DadosCensoTurma2022::validarDados($this)) {
       return false;
     }
     return true;
@@ -607,7 +607,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
    */
   protected function validarDadosDocente() {
 
-    if (!DadosCensoDocente2015::validarDados($this)) {
+    if (!DadosCensoDocente2022::validarDados($this)) {
       return false;
     }
     return true;
@@ -619,7 +619,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
    */
   protected function validarDadosAluno() {
 
-    if (!DadosCensoAluno2015::validarDados($this)) {
+    if (!DadosCensoAluno2022::validarDados($this)) {
       return false;
     }
     return true;

@@ -77,6 +77,7 @@ $iAnoEscolhido = isset($oPost->ano_opcao) ? $oPost->ano_opcao : $iAnoAtual;
 $lErro = false;
 
 if (isset($oPost->importar)) {
+
     try {
         if(empty($_FILES['arquivo'])) {
             throw new BusinessException('Selecione o arquivo a ser importado.');

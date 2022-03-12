@@ -89,6 +89,15 @@ abstract class ArquivoImportacao {
                 $oCenso = new \importacaoCenso2016($iAno, $iCodigoInepEscola = null, $iCodigoLayout);
 
                 break;
+            case 2022:
+                ini_set('display_errors', 'On'); error_reporting(E_ALL);
+                $iCodigoLayout = 100224;
+                $oCenso = new \importacaoCenso2022($iAno, $iCodigoInepEscola = null, $iCodigoLayout);
+                $oCenso->lImportarAluno = true;
+                $oCenso->lImportarAlunoAtivo = false;
+                $oCenso->lModuloEscola = false;
+
+                break;
         }
 
         return $oCenso;
