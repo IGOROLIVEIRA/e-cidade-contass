@@ -109,7 +109,7 @@ $pdf->AddPage('L'); // adiciona uma pagina
 $pdf->SetTextColor(0, 0, 0);
 $pdf->SetFillColor(235);
 $pdf->SetFont('Arial', 'B', 8);
-$tam = '05';
+$tam = '05'; 
 
 if ($iRestosPagar != 2) {
 
@@ -159,7 +159,7 @@ if ($iRestosPagar != 2) {
             inner join saltes on saltes.k13_conta = corrente.k12_conta
         where " . $sWhere . " and coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' 
         order by o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento,e60_codemp) as xxxxx where 1 = 1";
-    }else{
+    }else if($ordenar == 02) {
         $sSql = "SELECT *
     FROM
         (SELECT coremp.k12_empen,e60_numemp,e60_codemp,e60_emiss,e60_numerol,e60_tipol,
@@ -196,8 +196,55 @@ if ($iRestosPagar != 2) {
         WHERE " . $sWhere . " and coremp.k12_data BETWEEN '" . $sDataInicial . "' and '" . $sDataFinal . "'
         ORDER BY o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_funcao,o58_programa,o58_projativ,o56_elemento,e60_codemp) AS xxxxx
     WHERE 1 = 1";
+}else if($ordenar == 03) {
+        $sSql = "select * from
+        ( select coremp.k12_empen, e60_numemp, e60_codemp, e60_emiss, e60_numerol,e60_tipol,
+            case when e49_numcgm is null then e60_numcgm
+                else e49_numcgm end as
+            e60_numcgm,
+            k12_codord as e50_codord,
+            case when e49_numcgm is null then cgm.z01_nome
+                else cgmordem.z01_nome end as z01_nome,
+            k12_valor,
+            k12_cheque,
+            e60_anousu,
+            coremp.k12_autent,
+            coremp.k12_data,
+            k13_conta,
+            k13_descr,
+            o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,
+            o58_funcao,o58_programa,
+            o55_descr,
+            o15_codtri,o15_descr,o15_tipo,
+            o56_elemento,
+                            o56_descr,
+                            e50_data,
+            case when e60_anousu < " . db_getsession("DB_anousu") . " then 'RP'
+                else 'Emp' end as tipo,
+                e50_obs
+        from coremp
+            inner join empempenho on e60_numemp = k12_empen
+                        and e60_instit = " . db_getsession("DB_instit") . "
+            inner join orcdotacao on e60_anousu = o58_anousu
+                        and e60_coddot = o58_coddot
+            inner join orcprojativ on o58_anousu = o55_anousu
+                        and o58_projativ = o55_projativ
+            inner join orctiporec on o58_codigo = o15_codigo
+            inner join orcelemento on o58_codele = o56_codele
+            and o58_anousu = o56_anousu
+            inner join pagordem on e50_codord = k12_codord
+            left join pagordemconta on e50_codord = e49_codord
+            inner join corrente on corrente.k12_id = coremp.k12_id
+                        and corrente.k12_data=coremp.k12_data
+                        and corrente.k12_autent= coremp.k12_autent
+            inner join cgm on cgm.z01_numcgm = e60_numcgm
+            left join cgm cgmordem on cgmordem.z01_numcgm = e49_numcgm
+            inner join saltes on saltes.k13_conta = corrente.k12_conta
+        where " . $sWhere . " and coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' 
+        order by o58_coddot,o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento,e60_codemp) as xxxxx where 1 = 1";
+        
     }
-
+    echo $sSql;exit;
     $rsResult = db_query($sSql);
     $aDadosAgrupados = array();
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
