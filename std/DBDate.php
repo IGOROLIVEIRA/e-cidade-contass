@@ -324,6 +324,20 @@ class DBDate {
   }
 
   /**
+   * Retorna um VO do tipo DateInterval
+   * @param DBDate $oDataInicial
+   * @param DBDate $oDataFinal
+   * @return DateInterval
+   */
+  public static function getIntervaloEntreDatas(DBDate $oDataInicial, DBDate $oDataFinal) {
+
+    $oDateTimeInicial = new DateTime($oDataInicial->getDate());
+    $oDateTimeFinal   = new DateTime($oDataFinal->getDate());
+    $oDateInterval    = $oDateTimeInicial->diff($oDateTimeFinal);
+    return $oDateInterval;
+  }
+
+  /**
    * Retorna a descrição dos meses entre um intervalo de datas indexado por ano e mês
    * @param DBDate $oDtInicio
    * @param DBDate $oDtFim

@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
-class DadosCensoEscola2015 extends DadosCensoEscola {
+class DadosCensoEscola2022 extends DadosCensoEscola {
 
   /**
    * Dados do registro 00
@@ -512,7 +512,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
       $sMensagem          = "É necessário informar o código INEP da escola.";
       $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     }
     // Validações do código INEP
     if( trim( $oDadosEscola->registro00->codigo_escola_inep ) != '' ) {
@@ -521,18 +521,18 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem          = "Código INEP da escola inválido. O código INEP deve conter apenas números.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       if( strlen( trim( $oDadosEscola->registro00->codigo_escola_inep ) ) != 8 ) {
 
         $sMensagem          = "Código INEP da escola inválido. O código INEP deve conter 8 dígitos.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
     }
     // valida os dados do gestor
-    $lValidaAutenticacao = DadosCensoEscola2015::validaAutenticacao($oExportacaoCenso, $oDadosEscola->registro00);
+    $lValidaAutenticacao = DadosCensoEscola2022::validaAutenticacao($oExportacaoCenso, $oDadosEscola->registro00);
      // se lTodosDadosValidos já esta false, mantem false
     if ( !$lValidaAutenticacao ) {
       $lTodosDadosValidos = $lValidaAutenticacao;
@@ -544,16 +544,16 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     if (trim($oDadosEscola->registro00->nome_escola) == '') {
 
       $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro("Nome da Escola não pode ser vazio", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Nome da Escola não pode ser vazio", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     if ( trim( $oDadosEscola->registro00->nome_escola ) != '' && strlen($oDadosEscola->registro00->nome_escola) < 4 ) {
 
       $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro("Nome da Escola deve conter no mínimo 4 dígitos", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Nome da Escola deve conter no mínimo 4 dígitos", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
-    $lvalidaLatitudeLongitude = DadosCensoEscola2015::validaLatitudeLongitude($oExportacaoCenso, $oDadosEscola->registro00);
+    $lvalidaLatitudeLongitude = DadosCensoEscola2022::validaLatitudeLongitude($oExportacaoCenso, $oDadosEscola->registro00);
 
     if ( !$lvalidaLatitudeLongitude ) {
       $lTodosDadosValidos = $lvalidaLatitudeLongitude;
@@ -562,7 +562,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     if ($oDadosEscola->registro00->cep == '') {
 
       $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro("Campo CEP é obrigatório", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Campo CEP é obrigatório", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     if( !empty( $oDadosEscola->registro00->cep ) ) {
@@ -571,45 +571,45 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem          = "CEP inválido. Deve conter somente números.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       if (strlen($oDadosEscola->registro00->cep) < 8) {
 
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro("CEP  da escola deve conter 8 dígitos.", ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro("CEP  da escola deve conter 8 dígitos.", ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       if (preg_match ('/1{8}|2{8}|3{8}|4{8}|5{8}|6{8}|7{8}|8{8}|9{8}/', $oDadosEscola->registro00->cep)) {
 
         $lTodosDadosValidos = false;
         $sMensagem          = "O Campo CEP foi preenchido com um valor inválido. CEP: {$oDadosEscola->registro00->cep}";
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
     }
 
     if ($oDadosEscola->registro00->endereco == '') {
 
       $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro("Endereço da escola é obrigatório.", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Endereço da escola é obrigatório.", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     if ($oDadosEscola->registro00->uf == '') {
 
       $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro("UF da escolas é obrigatório.", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("UF da escolas é obrigatório.", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     if ($oDadosEscola->registro00->municipio == '') {
 
       $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro("Campo Munícipio da escola é obrigatório.", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Campo Munícipio da escola é obrigatório.", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     if ($oDadosEscola->registro00->distrito == '') {
 
       $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro("Campo Distrito é obrigatório.", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Campo Distrito é obrigatório.", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     /**
@@ -623,14 +623,14 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $lTodosDadosValidos = false;
         $sMensagem          = "O campo data de início letivo não pode ser preenchido {$sMsgPadrao}";
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       if ( !empty($oDadosEscola->registro00->data_termino_ano_letivo) ) {
 
         $lTodosDadosValidos = false;
         $sMensagem          = "O campo data de término do ano letivo não pode ser preenchido {$sMsgPadrao}";
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       if ( !is_null($oDadosEscola->registro00->unidade_vinculada_escola_educacao_basica) ) {
@@ -648,7 +648,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       if (trim($oDadosEscola->registro00->codigo_orgao_regional_ensino) == '' && $oDadosEscola->registro00->lOrgaoEnsinoObrigatorio) {
 
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro("Orgão Regional de Ensino obrigatório.", ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro("Orgão Regional de Ensino obrigatório.", ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       $dtInicioAnoLetivo = $oDadosEscola->registro00->data_inicio_ano_letivo;
@@ -665,7 +665,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
           $sMensagem  = "Data de início do ano letivo não é válida. Data informada: {$dtInicioAnoLetivo}. ";
           $sMensagem .= "Formato válido: dd/mm/aaaa.";
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro($sMensagem , ExportacaoCenso2015::LOG_ESCOLA );
+          $oExportacaoCenso->logErro($sMensagem , ExportacaoCenso2022::LOG_ESCOLA );
         }
 
         try {
@@ -675,20 +675,20 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
           $sMensagem  = "Data de início do ano letivo não é válida. Data informada: {$dtFimAnoLetivo}. ";
           $sMensagem .= "Formato válido: dd/mm/aaaa.";
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro($sMensagem , ExportacaoCenso2015::LOG_ESCOLA );
+          $oExportacaoCenso->logErro($sMensagem , ExportacaoCenso2022::LOG_ESCOLA );
         }
 
         if( DBDate::calculaIntervaloEntreDatas( $oDataInicio, $oDataTermino, 'd' ) > 0 ) {
 
           $sMensagem          = "A data de início do ano letivo não pode ser maior que a data de término.";
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         }
         if ($oDataInicio->getAno() < $oExportacaoCenso->getAnoCenso() && $oDataInicio->getAno() > $oExportacaoCenso->getAnoCenso()) {
 
           $sMensagem          = "Ano da data de início não pode ser inferior/superior a " . $oExportacaoCenso->getAnoCenso();
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         }
 
         $oDataCenso = new DBDate( $oExportacaoCenso->getDataCenso() );
@@ -698,7 +698,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
           $sMensagem .= $oExportacaoCenso->getDataCenso() .")e o ano de referência não pode ser superior a " . $oExportacaoCenso->getAnoCenso();
 
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         }
       }
 
@@ -716,7 +716,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem          = "Se informado DDD, deve ser informado um telefone para a escola.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       /**
@@ -739,7 +739,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
             $sMensagem          = "Campo {$sMensagemTelefone} deve conter 8 dígitos";
             $lTodosDadosValidos = false;
-            $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+            $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
           }
 
           if (    substr($oDadosEscola->registro00->{$sPropriedadeTelefone}, 0, 1) != 9
@@ -748,7 +748,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
             $sMensagem          = "Campo {$sMensagemTelefone}, ao conter 9 dígitos, o primeiro algarismo deve ser 9.";
             $lTodosDadosValidos = false;
-            $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+            $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
           }
         }
       }
@@ -758,7 +758,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         if (strlen($oDadosEscola->registro00->fax) < 8) {
 
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro("Campo Fax deve conter 8 dígitos", ExportacaoCenso2015::LOG_ESCOLA);
+          $oExportacaoCenso->logErro("Campo Fax deve conter 8 dígitos", ExportacaoCenso2022::LOG_ESCOLA);
         }
       }
 
@@ -767,21 +767,21 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $lTodosDadosValidos = false;
         $sMensagem          = "E-mail da escola inválido: {$oDadosEscola->registro00->endereco_eletronico}";
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       if ( !empty( $oDadosEscola->registro00->categoria_escola_privada ) && $oDadosEscola->registro00->dependencia_administrativa != 4 ) {
 
         $lTodosDadosValidos  = false;
         $sMensagem = "Escola de Categoria Privada a Dependência administrativa deve ser igual a 4 - privada.";
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       if ( !empty( $oDadosEscola->registro00->conveniada_poder_publico ) && $oDadosEscola->registro00->dependencia_administrativa != 4 ) {
 
         $lTodosDadosValidos  = false;
         $sMensagem = "Se informado \"Conveniada com o poder publico\" a Dependência administrativa deve ser igual a 4 - privada.";
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       /**
@@ -797,14 +797,14 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
           $lTodosDadosValidos  = false;
           $sErroMsg            = "Escola de Categoria Privada.\n";
           $sErroMsg           .= "Deve ser selecionada uma opção no campo Categoria da Escola Privada";
-          $oExportacaoCenso->logErro($sErroMsg, ExportacaoCenso2015::LOG_ESCOLA);
+          $oExportacaoCenso->logErro($sErroMsg, ExportacaoCenso2022::LOG_ESCOLA);
         }
 
         if ($oDadosEscola->registro00->conveniada_poder_publico == '') {
 
           $sMensagem          = "Deve ser selecionada uma opção no campo Conveniada Com o Poder Público";
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         }
 
         if (    $oDadosEscola->registro00->mant_esc_privada_empresa_grupo_empresarial_pes_fis  == 0
@@ -816,13 +816,13 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
           $sMensagem          = "Deve ser selecionado pelo menos um campo de Mantenedora da Escola Privada";
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         }
 
         if ($oDadosEscola->registro00->cnpj_mantenedora_principal_escola_privada == '') {
 
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro("O CNPJ da mantenedora principal da escola deve ser informado", ExportacaoCenso2015::LOG_ESCOLA);
+          $oExportacaoCenso->logErro("O CNPJ da mantenedora principal da escola deve ser informado", ExportacaoCenso2022::LOG_ESCOLA);
         }
 
         if(    $oDadosEscola->registro00->cnpj_mantenedora_principal_escola_privada != ''
@@ -831,13 +831,13 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
           $sMensagem          = "O CNPJ da mantenedora principal não é válido.";
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         }
 
         if ($oDadosEscola->registro00->cnpj_escola_privada == '') {
 
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro("O CNPJ da escola deve ser informado quando escola for privada.", ExportacaoCenso2015::LOG_ESCOLA);
+          $oExportacaoCenso->logErro("O CNPJ da escola deve ser informado quando escola for privada.", ExportacaoCenso2022::LOG_ESCOLA);
         }
 
         if(    trim( $oDadosEscola->registro00->cnpj_escola_privada ) != ''
@@ -846,7 +846,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
           $sMensagem          = "O CNPJ da escola não é válido.";
           $lTodosDadosValidos = false;
-          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         }
       }
 
@@ -854,18 +854,18 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem          = "Deve ser informada uma opção referente ao Credenciamento da escola.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
     }
 
     if ( empty($oDadosEscola->registro00->localizacao_zona_escola) ){
 
       $sMensagem = "Localização/Zona da escola deve ser informado.";
-      $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       $lTodosDadosValidos  = false;
     }
 
-    $lDadosInfraEstrutura = DadosCensoEscola2015::validarDadosInfraEstrutura($oExportacaoCenso);
+    $lDadosInfraEstrutura = DadosCensoEscola2022::validarDadosInfraEstrutura($oExportacaoCenso);
     if (!$lDadosInfraEstrutura) {
       $lTodosDadosValidos = $lDadosInfraEstrutura;
     }
@@ -890,7 +890,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     if ($oDados->numero_cpf_gestor_escolar == '') {
 
       $lValidou = false;
-      $oExportacaoCenso->logErro("Número do CPF do gestor é obrigatório", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Número do CPF do gestor é obrigatório", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     if ( in_array( trim($oDados->numero_cpf_gestor_escolar), array("00000000191", "00000000000") ) ) {
@@ -898,13 +898,13 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $lValidou  = false;
       $sMensagem           = "Número do CPF ({$oDados->numero_cpf_gestor_escolar}) do";
       $sMensagem          .= " gestor informado é inválido.";
-      $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     if ($oDados->nome_gestor_escolar == '') {
 
       $lValidou = false;
-      $oExportacaoCenso->logErro("Nome do gestor é obrigatório", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Nome do gestor é obrigatório", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     $sExpressao          = '/[^a-zA-Z\s]+/';
@@ -913,19 +913,19 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     if ($lValidacaoExpressao) {
 
       $lValidou = false;
-      $oExportacaoCenso->logErro("Nome do gestor inválido. Não é possível ter caractéres acentuados.", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Nome do gestor inválido. Não é possível ter caractéres acentuados.", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     if ($oDados->cargo_gestor_escolar == '') {
 
       $lValidou = false;
-      $oExportacaoCenso->logErro("Cargo do gestor é obrigatório", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Cargo do gestor é obrigatório", ExportacaoCenso2022::LOG_ESCOLA);
     }
 
     if ( !DBString::isEmail($oDados->endereco_eletronico_gestor_escolar) ) {
 
       $lValidou = false;
-      $oExportacaoCenso->logErro("E-mail do gestor inválido. {$oDados->endereco_eletronico_gestor_escolar}", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("E-mail do gestor inválido. {$oDados->endereco_eletronico_gestor_escolar}", ExportacaoCenso2022::LOG_ESCOLA);
     }
     return $lValidou;
   }
@@ -949,28 +949,28 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem  = "Latitude deve conter no máximo 20 caractéres.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       if ( preg_match ('/[^\-0-9.]+/i',  $oDados->latitude) ) {
 
         $sMensagem  = "Latitude aceita deve conter somente os seguintes caractéres entre parêntesis(0123456789.-).";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       if ( strpos($oDados->latitude, "-") > 0 ) {
 
         $sMensagem  = "O sinal de subtração(-) só pode vir na posição inicial.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       if ( $oDados->latitude < -33.75208 || $oDados->latitude > 5.271841) {
 
         $sMensagem  = "Latitude informada deve ser maior ou igual a -33.75208 e menor ou igual a 5.271841 .";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
     }
 
@@ -980,28 +980,28 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem  = "Longitude deve conter no máximo 20 caractéres.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       if ( preg_match ('/[^\-0-9.]+/i',  $oDados->longitude) ) {
 
         $sMensagem  = "Latitude aceita deve conter somente os seguintes caractéres entre parêntesis(0123456789.-).";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       if ( strpos($oDados->longitude, "-") > 0 ) {
 
         $sMensagem  = "O sinal de subtração(-) só pode vir na posição inicial.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
 
       if ( $oDados->longitude < -73.99045 || $oDados->longitude > -32.39091) {
 
         $sMensagem  = "Latitude informada deve ser maior ou igual a -73.99045 e menor ou igual a -32.39091.";
         $lTodosDadosValidos = false;
-        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
+        $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ESCOLA);
       }
     }
 
@@ -1089,7 +1089,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
     foreach( $aErros as $sMensagem ) {
 
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       $lValidouLocalFuncionamento = false;
     }
 
@@ -1206,7 +1206,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
     foreach ($aErros as $sMsg) {
 
-      $oExportacaoCenso->logErro($sMsg, ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro($sMsg, ExportacaoCenso2022::LOG_ESCOLA);
       $lValidouDependencias = false;
     }
 
@@ -1288,7 +1288,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
     foreach ($aErros as $sMsg) {
 
-      $oExportacaoCenso->logErro($sMsg, ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro($sMsg, ExportacaoCenso2022::LOG_ESCOLA);
       $lValidouEquipamento = false;
     }
 
@@ -1314,7 +1314,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       ) {
 
       $sMensagem = "Obrigatório selecionar ao menos um tipo de abastecimento de água.";
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       $lValidouAbastecimento = false;
     }
 
@@ -1328,7 +1328,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem  = "Ao selecionar Abastecimento de Água como \"Inexistente\", nenhuma das outras opções deve ser";
         $sMensagem .= " selecionada.";
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         $lValidouAbastecimento = false;
       }
     }
@@ -1353,7 +1353,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       ) {
 
       $sMensagem = "Obrigatório selecionar ao menos um tipo de abastecimento de energia.";
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       $lValidouEnergia = false;
     }
 
@@ -1366,7 +1366,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem  = "Ao selecionar Abastecimento de Energia como \"Inexistente\", nenhuma das outras opções deve ser";
         $sMensagem .= " selecionada.";
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         $lValidouEnergia = false;
       }
     }
@@ -1390,7 +1390,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       ) {
 
       $sMensagem = "Obrigatório selecionar ao menos uma opção referente a Esgoto Sanitário.";
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       $lValidouEsgoto = false;
     }
 
@@ -1402,7 +1402,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem  = "Ao selecionar Esgoto Sanitário como \"Inexistente\", nenhuma das outras opções deve ser";
         $sMensagem .= " selecionada.";
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         $lValidouEsgoto = false;
       }
     }
@@ -1429,7 +1429,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
        ) {
 
         $lValidouLixo = false;
-        $oExportacaoCenso->logErro( "Destinação do lixo da escola não informado.", ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( "Destinação do lixo da escola não informado.", ExportacaoCenso2022::LOG_ESCOLA );
       }
 
     return $lValidouLixo;
@@ -1454,7 +1454,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     //   $lValidouInformacoes = false;
     //   $sMensagem           = "Escola informada como pública( Federal / Estadual / Municipal ). A mesma deve estar com";
     //   $sMensagem          .= " a opção \"Alimentação Escolar para os Alunos\" selecionada como Oferece.";
-    //   $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+    //   $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     // }
 
 
@@ -1478,7 +1478,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $sMensagem  = 'O campo "Alimentação escolar para os alunos" não pode ser igual a 1 (Oferece) quando o';
         $sMensagem .= ' campo "Tipo de mediação didático-pedagógica" de todas as turmas da escola for';
         $sMensagem .= ' igual a 3 (Educação a Distância).';
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
         $lValidouInformacoes = false;
       }
     }
@@ -1492,7 +1492,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $lValidouInformacoes = false;
       $sMensagem           = "Localização diferenciada da escola informada como Área de assentamento. Localização/Zona";
       $sMensagem          .= " deve ser do tipo Rural.";
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     if(    $oDadosEscola->registro10->materiais_didaticos_especificos_nao_utiliza == 1
@@ -1503,7 +1503,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $lValidouInformacoes = false;
       $sMensagem           = "Materais Didáticos Específicos: Ao selecionar a opção \"Não utiliza\", as demais não";
       $sMensagem          .= " não estar selecionadas.";
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     if(    $oDadosEscola->registro10->materiais_didaticos_especificos_nao_utiliza == 0
@@ -1514,7 +1514,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
       $lValidouInformacoes = false;
       $sMensagem           = "Materais Didáticos Específicos: Ao menos uma das opções devem ser selecionadas.";
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     return $lValidouInformacoes;
@@ -1555,7 +1555,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $sMensagem  = "Campo 'Escola oferece {$sAtividade}' deve ser informamdo como 'Não Exclusivamente' pois escola";
       $sMensagem .= " possui turmas de escolarização.";
       $lValidou   = false;
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     // coluna 90 regra 3
@@ -1565,7 +1565,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $sMensagem  = 'O campo "Atendimento educacional especializado - AEE" não pode ser preenchido diferente de não ';
       $sMensagem .= 'oferece (0), quando o campo "Atividade complementar" for preenchido com exclusivamente (2).';
       $lValidou   = false;
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     // coluna 91 regra 3
@@ -1575,7 +1575,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $sMensagem  = 'O campo "Atividade complementar" não pode ser preenchido diferente de não oferece (0), quando o ';
       $sMensagem .= 'campo "Atendimento educacional especializado - AEE" for preenchido com exclusivamente (2).';
       $lValidou   = false;
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     if( $oDadosEscola->registro10->atendimento_educacional_especializado === '' &&
@@ -1585,7 +1585,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $sMensagem  = "É necessário marcar uma das opções referentes a Atendimento Educacional Especializado";
       $sMensagem .= " e Atividade Complementar.";
       $lValidou   = false;
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     // coluna 90 regra 5
@@ -1604,7 +1604,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $sMensagem  = 'O campo "Atendimento educacional especializado - AEE" foi preenchido com 1 (Não exclusivamente) ';
         $sMensagem .= 'ou 2 (Exclusivamente), mas não há nenhuma turma com esse tipo de atendimento.';
         $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
     }
     // coluna 91 regra 5
@@ -1624,7 +1624,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMensagem  = "Escola oferece turma de Atividade Complementar mas não possui turma com este tipo de atendimento.";
         $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
     }
 
@@ -1648,7 +1648,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $sMensagem  = 'O campo "Ensino fundamental organizado em ciclos" deve ser preenchido quando a escola possuir ';
       $sMensagem .= 'turma(s) do ensino fundamental.';
       $lValidou   = false;
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
     }
     /* Coluna 96 do Registro 10 - FIM */
 
@@ -1672,7 +1672,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $sMensagem  = 'Ao informar que a escola oferece educação indígena, é obrigatório informar em qual língua o';
         $sMensagem .= ' ensino é ministrado.';
         $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
       if ( !empty($oDadosEscola->registro10->codigo_lingua_indigena) &&
            $oDadosEscola->registro10->lingua_ensino_ministrado_lingua_indigena === 0 ) {
@@ -1680,7 +1680,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $sMensagem  = 'Ao informar o código da língua indigena, escola deve ter informado que oferece ensino ';
         $sMensagem .= 'ministrado em língua indigena.';
         $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       if ( $oDadosEscola->registro10->lingua_ensino_ministrado_lingua_indigena == 1 &&
@@ -1689,7 +1689,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $sMensagem  = 'Ao informar que a escola oferece ensino ministrado em língua indigena, ';
         $sMensagem .= 'é obrigatório informar qual a língua indígena.';
         $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ESCOLA );
       }
     }
 
@@ -1754,7 +1754,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $sMsgErro  = "Código da escola com a qual compartilha inválido. Não pode haver dois códigos da escola com a ";
       $sMsgErro .= "qual compartilha iguais.";
       $lValidou  = false;
-      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     foreach ($aCompartilha as $sCompartilha => $sValue) {
@@ -1764,28 +1764,28 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $sMsgErro  = "O campo \"{$sCompartilha}\" não pode ser preenchido quando o campo \"Prédio compartilhado com ";
         $sMsgErro .= "outra escola\" for diferente de 1 (Sim).";
         $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       if ( !empty($sValue) && strlen($sValue) != 8 ) {
 
         $sMsgErro  = "O campo \"{$sCompartilha}\" deve ter 8 caractéres.";
         $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       if ( preg_match("/[^1-9]/", $sValue) ) {
 
         $sMsgErro  = "O campo \"{$sCompartilha}\", quando preenchido, apenas números podem ser informados.";
         $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       if ($oDadosEscola->registro00->codigo_escola_inep == $sValue ) {
 
         $sMsgErro  = "O campo \"{$sCompartilha}\", não pode ser igual ao da escola atual.";
         $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
       }
     }
 
@@ -1808,14 +1808,14 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
       $sMsgErro = 'O campo "Água consumida pelos alunos" é uma informação obrigatória.';
       $lValidou = false;
-      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     if ( isset($oRegistro10->agua_consumida_alunos) && !in_array($oRegistro10->agua_consumida_alunos, array(1, 2)) ) {
 
       $sMsgErro = 'O campo "Água consumida pelos alunos" foi preenchido com valor inválido.';
       $lValidou = false;
-      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     return $lValidou;
@@ -1846,7 +1846,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
       $sMsgErro = 'Abastecimento de água inválido. Não podem ser informadas todas as opções com valor igual a 0 (Não).';
       $lValidou = false;
-      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
     }
 
     foreach ($aAbastecimentoAgua as $sAbastecimento => $iValue) {
@@ -1856,7 +1856,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMsgErro = "O campo \"Abastecimento de água - {$sAbastecimento}\" foi preenchido com valor inválido.";
         $lValidou = false;
-        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       // colunas 21-24 regra 3
@@ -1865,7 +1865,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $sMsgErro  = "O campo \"Abastecimento de água - {$sAbastecimento}\" não pode ser preenchido com 1 (Sim) ";
         $sMsgErro .= "quando o campo \"Abastecimento de água - Inexistente\" for preenchido com 1 (Sim).";
         $lValidou  = false;
-        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
     }
@@ -1904,7 +1904,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       if ( $mValor === '' ) {
         $sMsgErro = "O campo \"{$sColuna}\" é uma informação obrigatória.";
         $lValidou = false;
-        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
       }
 
       // regra 2
@@ -1912,7 +1912,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
         $sMsgErro = "O campo \"{$sColuna}\" foi preenchido com valor inválido.";
         $lValidou = false;
-        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
       }
     }
 
@@ -1937,7 +1937,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $sMsgErro  = 'Escolas que possuem apenas turmas de atividade complementar, de atendimento educacional ';
         $sMsgErro .= 'especializando, de educação infantil e de anos iniciais do ensino fundamental devem informar o ';
         $sMsgErro .= 'campo "Escola com proposta pedagógica de formação por alternância" com 0 (Não).';
-        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2022::LOG_ESCOLA );
         $lValidou = false;
       }
     }

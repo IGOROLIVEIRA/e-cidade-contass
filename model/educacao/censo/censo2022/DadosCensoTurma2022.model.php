@@ -26,7 +26,7 @@
  */
 
 
-class DadosCensoTurma2015 extends DadosCensoTurma {
+class DadosCensoTurma2022 extends DadosCensoTurma {
 
   /**
    * Etapas e disciplinas do censo
