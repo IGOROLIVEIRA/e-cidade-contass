@@ -155,6 +155,7 @@ class cl_dipr302022
                     ,si232_tiporepasse
                     ,si232_tipocontripatronal
                     ,si232_tipocontrisegurado
+                    ,si232_tipocontribuicao
                     ,si232_datarepasse
                     ,si232_datavencirepasse
                     ,si232_valororiginal
@@ -172,6 +173,7 @@ class cl_dipr302022
                     ,$this->si232_tiporepasse
                     ,$this->si232_tipocontripatronal
                     ,$this->si232_tipocontrisegurado
+                    ,$this->si232_tipocontribuicao
                     ,'$this->si232_datarepasse'
                     ,'$this->si232_datavencirepasse'
                     ,$this->si232_valororiginal

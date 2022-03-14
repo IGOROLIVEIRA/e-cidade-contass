@@ -70,12 +70,12 @@ class GerarDIPR extends GerarAM
                 $aCSVDIPR20['si231_codorgao']                        = $this->padLeftZero($aDIPR20['si231_codorgao'], 2);
                 $aCSVDIPR20['si231_coddipr']                         = $aDIPR20['si231_coddipr'];
                 $aCSVDIPR20['si231_tipobasecalculo']                 = $aDIPR20['si231_tipobasecalculo'];
-                $aCSVDIPR20['si231_mescompetencia']                  = $aDIPR20['si231_mescompetencia'];
+                $aCSVDIPR20['si231_mescompetencia']                  = $this->padLeftZero($aDIPR20['si231_mescompetencia'], 2);
                 $aCSVDIPR20['si231_exerciciocompetencia']            = $aDIPR20['si231_exerciciocompetencia'];
                 $aCSVDIPR20['si231_tipofundo']                       = $aDIPR20['si231_tipofundo'];
                 $aCSVDIPR20['si231_remuneracaobrutafolhapag']        = $this->sicomNumberReal($aDIPR20['si231_remuneracaobrutafolhapag'], 2);
-                $aCSVDIPR20['si231_tipobasecalculocontrprevidencia'] = $aDIPR20['si231_tipobasecalculocontrprevidencia'] != "0" ? $aDIPR20['si231_tipobasecalculocontrprevidencia'] : " ";
                 $aCSVDIPR20['si231_tipobasecalculocontrseg']         = $aDIPR20['si231_tipobasecalculocontrseg'] != "0" ? $aDIPR20['si231_tipobasecalculocontrseg'] : " ";
+                $aCSVDIPR20['si231_tipobasecalculocontrprevidencia'] = $aDIPR20['si231_tipobasecalculocontrprevidencia'] != "0" ? $aDIPR20['si231_tipobasecalculocontrprevidencia'] : " ";
                 $aCSVDIPR20['si231_valorbasecalculocontr']           = $this->sicomNumberReal($aDIPR20['si231_valorbasecalculocontr'], 2);
                 $aCSVDIPR20['si231_tipocontribuicao']                = $aDIPR20['si231_tipocontribuicao'];
                 $aCSVDIPR20['si231_aliquota']                        = $this->sicomNumberReal($aDIPR20['si231_aliquota'], 2);
@@ -91,12 +91,13 @@ class GerarDIPR extends GerarAM
                 $aCSVDIPR30['si232_tiporegistro']           = $this->padLeftZero($aDIPR30['si232_tiporegistro'], 2);
                 $aCSVDIPR30['si232_codorgao']               = $this->padLeftZero($aDIPR30['si232_codorgao'], 2);
                 $aCSVDIPR30['si232_coddipr']                = $aDIPR30['si232_coddipr'];
-                $aCSVDIPR30['si232_mescompetencia']         = $aDIPR30['si232_mescompetencia'];
+                $aCSVDIPR30['si232_mescompetencia']         = $this->padLeftZero($aDIPR30['si232_mescompetencia'], 2);
                 $aCSVDIPR30['si232_exerciciocompetencia']   = $aDIPR30['si232_exerciciocompetencia'];
                 $aCSVDIPR30['si232_tipofundo']              = $aDIPR30['si232_tipofundo'];
                 $aCSVDIPR30['si232_tiporepasse']            = $aDIPR30['si232_tiporepasse'];
                 $aCSVDIPR30['si232_tipocontripatronal']     = $aDIPR30['si232_tipocontripatronal'] != "0" ? $aDIPR30['si232_tipocontripatronal'] : " ";
                 $aCSVDIPR30['si232_tipocontrisegurado']     = $aDIPR30['si232_tipocontrisegurado'] != "0" ? $aDIPR30['si232_tipocontrisegurado'] : " ";
+                $aCSVDIPR30['si232_tipocontribuicao']        = $aDIPR30['si232_tipocontribuicao'] != "0" ? $aDIPR30['si232_tipocontribuicao'] : " ";
                 $aCSVDIPR30['si232_datarepasse']            = $this->sicomDate($aDIPR30['si232_datarepasse']);
                 $aCSVDIPR30['si232_datavencirepasse']       = $this->sicomDate($aDIPR30['si232_datavencirepasse']);
                 $aCSVDIPR30['si232_valororiginal']          = $this->sicomNumberReal($aDIPR30['si232_valororiginal'], 2);
@@ -112,7 +113,7 @@ class GerarDIPR extends GerarAM
                 $aCSVDIPR40['si233_tiporegistro']           = $this->padLeftZero($aDIPR40['si233_tiporegistro'], 2);
                 $aCSVDIPR40['si233_codorgao']               = $this->padLeftZero($aDIPR40['si233_codorgao'], 2);
                 $aCSVDIPR40['si233_coddipr']                = $aDIPR40['si233_coddipr'];
-                $aCSVDIPR40['si233_mescompetencia']         = $aDIPR40['si233_mescompetencia'];
+                $aCSVDIPR40['si233_mescompetencia']         = $this->padLeftZero($aDIPR40['si233_mescompetencia'], 2);
                 $aCSVDIPR40['si233_exerciciocompetencia']   = $aDIPR40['si233_exerciciocompetencia'];
                 $aCSVDIPR40['si233_tipofundo']              = $aDIPR40['si233_tipofundo'];
                 $aCSVDIPR40['si233_tiporepasse']            = $aDIPR40['si233_tiporepasse'];
@@ -133,7 +134,7 @@ class GerarDIPR extends GerarAM
                 $aCSVDIPR50['si234_tiporegistro']           = $this->padLeftZero($aDIPR50['si234_tiporegistro'], 2);
                 $aCSVDIPR50['si234_codorgao']               = $this->padLeftZero($aDIPR50['si234_codorgao'], 2);
                 $aCSVDIPR50['si234_coddipr']                = $aDIPR50['si234_coddipr'];
-                $aCSVDIPR50['si234_mescompetencia']         = $aDIPR50['si234_mescompetencia'];
+                $aCSVDIPR50['si234_mescompetencia']         = $this->padLeftZero($aDIPR50['si234_mescompetencia'], 2);
                 $aCSVDIPR50['si234_exerciciocompetencia']   = $aDIPR50['si234_exerciciocompetencia'];
                 $aCSVDIPR50['si234_tipofundo']              = $aDIPR50['si234_tipofundo'];
                 $aCSVDIPR50['si234_tipoaportetransf']       = $aDIPR50['si234_tipoaportetransf'];
