@@ -837,13 +837,15 @@ class DadosCensoAluno2022 extends DadosCensoAluno {
     if ($oLinha->municipio_nascimento != "") {
       $oDaoAluno->ed47_i_censomunicnat = $oLinha->municipio_nascimento;
     }
-    $oDaoAluno->ed47_c_codigoinep         = $oLinha->identificacao_unica_aluno;
+    $oDaoAluno->ed47_c_codigoinep         = $oLinha->identificacao_unica_inep;
     $oDaoAluno->ed47_i_filiacao           = $oLinha->filiacao;
+    $oDaoAluno->ed47_v_cpf                = $oLinha->numero_cpf;
     $oDaoAluno->ed47_c_atenddifer         = '3';
     $oDaoAluno->ed47_v_ender              = 'NAO INFORMADO';
     $oDaoAluno->ed47_i_transpublico       = "";
     $oDaoAluno->ed47_situacaodocumentacao = "0";
     $oDaoAluno->ed47_v_nome = str_replace(array('ª', 'º'), array('', ''), $oLinha->nome_completo);
+
 
     return $oDaoAluno;
   }

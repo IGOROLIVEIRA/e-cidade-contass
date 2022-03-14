@@ -26,7 +26,7 @@
  */
 
 namespace ECidade\Educacao\Escola\Censo\Importacao\Factory;
-
+require_once("model/educacao/censo/censo2022/importacaoCenso2022.model.php");
 /**
  * Class ArquivoImportacao
  * @package Ecidade\Educacao\Escola\Censo\Importacao\Factory
@@ -90,11 +90,10 @@ abstract class ArquivoImportacao {
 
                 break;
             case 2022:
-                ini_set('display_errors', 'On'); error_reporting(E_ALL);
                 $iCodigoLayout = 100224;
                 $oCenso = new \importacaoCenso2022($iAno, $iCodigoInepEscola = null, $iCodigoLayout);
                 $oCenso->lImportarAluno = true;
-                $oCenso->lImportarAlunoAtivo = false;
+                $oCenso->lImportarAlunoAtivo = true;
                 $oCenso->lModuloEscola = false;
 
                 break;

@@ -270,7 +270,7 @@ abstract class importacaoCenso
                     }
                 }
 
-                if ($conteudo[0] == '60') {
+                if ($conteudo[0] == '30') {
                     $oDadosAluno = new stdClass();
                     $oDadosAluno->iCodigoUnicoAluno = $conteudo[2];
                     $oDadosAluno->sNomeAluno = $conteudo[4];
@@ -532,9 +532,12 @@ abstract class importacaoCenso
             }
 
             if ($this->lImportarAluno) {
-                if ($oLinha->{$this->sCampoChave} == "60") {
+                if ($oLinha->{$this->sCampoChave} == "30") {
+
                     $this->atualizaDadosAluno($oLinha);
                     $this->addTotalProcessados();
+                    $this->getProgressBar()->updatePercentual($this->getTotalProcessados());
+
                 }
 
                 if ($oLinha->{$this->sCampoChave} == "70") {
@@ -1596,7 +1599,6 @@ abstract class importacaoCenso
      */
     public function atualizaDadosAluno(DBLayoutLinha $oLinha)
     {
-
         $oDaoAluno = db_utils::getdao('aluno');
         $aDadosAluno = $this->getDadosAluno($oLinha);
         $oDaoAluno->ed47_i_censoorgemissrg = "";
@@ -1771,6 +1773,7 @@ abstract class importacaoCenso
                 unset($aNecessidade);
             }//fecha o for iCont
         } else {
+
             if ($this->lIncluirAlunoNaoEncontrado) {
                 if ($oLinha->paisorigem != "") {
                     $oDaoAluno->ed47_i_pais = $this->getPais($oLinha->paisorigem);

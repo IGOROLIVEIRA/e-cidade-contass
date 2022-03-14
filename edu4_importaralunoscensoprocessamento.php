@@ -92,7 +92,6 @@ if (isset($oPost->importar)) {
         }
 
         $oCenso = ArquivoImportacao::getArquivoPorAno($iAnoEscolhido, $iCodigoInepEscola);
-
         if($oCenso == null) {
             throw new BusinessException("Arquivo do ano escolhido não existe!");
         }
@@ -101,7 +100,6 @@ if (isset($oPost->importar)) {
             $oCenso->gerarLog();
             throw new BusinessException();
         }
-
         $progressBar = new ProgressBar('progress');
         $progressBar->flush();
         $progressBar->updateMaxProgress($oCenso->getTotalAlunosArquivo());

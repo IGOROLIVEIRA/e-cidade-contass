@@ -26,6 +26,7 @@
  *                                licenca/licenca_pt.txt
  */
 
+ require_once("model/educacao/censo/censo2022/DadosCensoAluno2022.model.php");
 
 class importacaoCenso2022 extends ImportacaoCenso2012
 {
@@ -69,7 +70,6 @@ class importacaoCenso2022 extends ImportacaoCenso2012
      */
     public function atualizaDadosAluno(DBLayoutLinha $oLinha)
     {
-
         if (!$this->lImportarAluno) {
             return true;
         }
@@ -111,7 +111,7 @@ class importacaoCenso2022 extends ImportacaoCenso2012
                     $this->lTemRegistroImportado = true;
                 }
 
-                $sMsg = "Aluno [{$oLinha-> identificacao_unica_aluno}] {$oLinha->nome_completo}";
+                $sMsg = "Aluno [{$oLinha-> identificacao_unica_inep}] {$oLinha->nome_completo}";
                 $sMsg .= ": foi importado para o sistema.\n";
                 $this->log($sMsg);
             }
@@ -120,7 +120,7 @@ class importacaoCenso2022 extends ImportacaoCenso2012
 
     /**
      * Pesquisa os dados do aluno conforme os dados do censo.
-     * @param DBLayoutLinha $oLinha linha com os dados do registro 60 do censo escolar
+     * @param DBLayoutLinha $oLinha linha com os dados do registro 30 do censo escolar
      * @return stdClass
      */
     public function getDadosAluno(DBLayoutLinha $oLinha, $lPesquisaInep = false, $lValidaCodigo = true)
@@ -130,8 +130,8 @@ class importacaoCenso2022 extends ImportacaoCenso2012
         $sCamposAluno = "aluno.*, ed228_i_paisonu, escola.ed18_c_codigoinep as vinculo_escola";
         $aWhereAluno = array();
 
-        if ($lPesquisaInep && !empty($oLinha->identificacao_unica_aluno)) {
-            $aWhereAluno[] = " ed47_c_codigoinep = '" . $oLinha->identificacao_unica_aluno . "'";
+        if ($lPesquisaInep && !empty($oLinha->identificacao_unica_inep)) {
+            $aWhereAluno[] = " ed47_c_codigoinep = '" . $oLinha->identificacao_unica_inep . "'";
         }
 
         if ($lValidaCodigo && !empty($oLinha->codigo_aluno_entidade_escola)) {
@@ -182,7 +182,7 @@ class importacaoCenso2022 extends ImportacaoCenso2012
 
         foreach ($aLinhasArquivo as $iIndLinha => $oLinha) {
 
-            if (!in_array($oLinha->{$this->sCampoChave}, array(20, 30, 60))) {
+            if (!in_array($oLinha->{$this->sCampoChave}, array(20, 30, 40))) {
                 continue;
             }
 
@@ -190,11 +190,11 @@ class importacaoCenso2022 extends ImportacaoCenso2012
                 $this->atualizaCodigoInepTurma($oLinha);
             }
 
-            if ($this->lImportarDocente && $oLinha->{$this->sCampoChave} == "30") {
+            if ($this->lImportarDocente && $oLinha->{$this->sCampoChave} == "40") {
                 $this->atualizaCodigoInepDocente($oLinha);
             }
 
-            if ($this->lImportarAluno && $oLinha->{$this->sCampoChave} == "60") {
+            if ($this->lImportarAluno && $oLinha->{$this->sCampoChave} == "30") {
                 $this->atualizaCodigoInepAluno($oLinha);
             }
         }
@@ -430,10 +430,10 @@ class importacaoCenso2022 extends ImportacaoCenso2012
     protected function validaAnoArquivo($aLinha)
     {
 
-        $sData = $aLinha[7];
+        $sData = $aLinha[3];
         $aData = explode("/", $sData);
 
-        if ($this->iAnoEscolhido != $aData[2]) {
+        if ($this->iAnoEscolhido != $aData[2]+2) {
 
             fclose($pArquivoCenso);
             throw new Exception(" Arquivo informado não pertence ao ano de " . $this->iAnoEscolhido);
