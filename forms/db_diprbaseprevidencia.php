@@ -176,9 +176,8 @@ $cldipr->rotulo->label();
                         <?php
                         $arrayTipoContribuicao = array(
                             0 => "Selecione",
-                            1 => "Servidores",
-                            2 => "Aposentados",
-                            3 => "Pensionistas"
+                            1 => "Normal",
+                            2 => "Suplementar"
                         );
                         db_select('c238_tipocontribuicao', $arrayTipoContribuicao, true, 1, "");
                         ?>
@@ -306,7 +305,13 @@ $cldipr->rotulo->label();
     }
 
     function zerarValor(identificador) {
-        document.getElementById(identificador).value = 0;
+        if (identificador == 'LinhaContribuicaoSegurados') {
+            document.getElementById('c238_tipocontribuicaosegurados').value = 0;
+            return;
+        }
+        document.getElementById('c238_tipocontribuicaopatronal').value = 0;
+        document.getElementById('c238_tipocontribuicao').value = 0;
+        return;
     }
 
     function alterarDisplayDaLinha(identificador, display) {
