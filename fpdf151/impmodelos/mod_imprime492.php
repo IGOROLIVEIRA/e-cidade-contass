@@ -42,7 +42,7 @@ if ($this->notaCancelada) {
 $this->objpdf->sety($xlin + 3);
 $this->objpdf->setx($xlin + 19);
 $this->objpdf->Setfont('Arial', 'B', 10);
-if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
+if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){
     $this->objpdf->cell(121, 5, "NOTA FISCAL DE SERVIÇOS - AVULSA", 0, 1, "C");
 }else{
     $this->objpdf->cell(121, 5, "NOTA FISCAL DE SERVIÇOS ELETRÔNICA - AVULSA", 0, 1, "C");
@@ -333,7 +333,7 @@ $this->objpdf->sety(250);
 $this->objpdf->Setfont('Arial', 'B', 10);
 $this->objpdf->cell(30, 20,"Avisos", "LTB", 0, "C");
 $this->objpdf->Setfont('Arial', '', 8);
-if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
+if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){
     $this->objpdf->rect(40, $this->yOld + 40, 100, 20);
     $this->objpdf->MultiCell(100, 5,$this->texto_aviso, 0, "L");
     $this->objpdf->rect(140, $this->yOld + 30, 60, 20);
