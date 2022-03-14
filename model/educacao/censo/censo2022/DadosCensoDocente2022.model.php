@@ -25,12 +25,12 @@
  *                                licenca/licenca_pt.txt
  */
 
-define( "MENSAGENS_DADOSCENSODOCENTE2015", "educacao.escola.DadosCensoDocente2015." );
+define( "MENSAGENS_DADOSCENSODOCENTE2022", "educacao.escola.DadosCensoDocente2022." );
 define('GRAU_LICENCIATURA', 3);
 define('GRAU_BACHARELADO',  2);
 define('GRAU_TECNOLOGICO',  1);
 
-class DadosCensoDocente2015 extends DadosCensoDocente {
+class DadosCensoDocente2022 extends DadosCensoDocente {
 
   private   $sDadosDocente          = '';
   private   $oExportacaoCenso       = '';
@@ -48,7 +48,7 @@ class DadosCensoDocente2015 extends DadosCensoDocente {
     $oExportacaoCenso = $oExportacaoCenso;
     $aDadosDocente    = $oExportacaoCenso->getDadosProcessadosDocente();
 
-    DadosCensoDocente2015::getGrauCurso();
+    DadosCensoDocente2022::getGrauCurso();
 
     foreach( $aDadosDocente as $oDadosCensoDocente ) {
 
@@ -58,23 +58,19 @@ class DadosCensoDocente2015 extends DadosCensoDocente {
       $oRegistro30 = $oDadosCensoDocente->registro30;
       $oRegistro40 = $oDadosCensoDocente->registro40;
       $oRegistro50 = $oDadosCensoDocente->registro50;
-      $aRegistro51 = $oDadosCensoDocente->registro51;
 
-      if( !DadosCensoDocente2015::validacoesRegistro30( $sDadosDocente, $oExportacaoCenso, $oRegistro30, $oRegistro40 ) ) {
+      if( !DadosCensoDocente2022::validacoesRegistro30( $sDadosDocente, $oExportacaoCenso, $oRegistro30, $oRegistro40 ) ) {
         $lDadosValidos = false;
       }
 
-      if( !DadosCensoDocente2015::validacoesRegistro40( $sDadosDocente, $oExportacaoCenso, $oRegistro30, $oRegistro40 ) ) {
+      if( !DadosCensoDocente2022::validacoesRegistro40( $sDadosDocente, $oExportacaoCenso, $oRegistro30, $oRegistro40 ) ) {
         $lDadosValidos = false;
       }
 
-      if( !DadosCensoDocente2015::validacoesRegistro50( $sDadosDocente, $oExportacaoCenso, $oRegistro50, $oRegistro30 ) ) {
+      if( !DadosCensoDocente2022::validacoesRegistro50( $sDadosDocente, $oExportacaoCenso, $oRegistro50, $oRegistro30 ) ) {
         $lDadosValidos = false;
       }
 
-      if( !DadosCensoDocente2015::validacoesRegistro51( $sDadosDocente, $oExportacaoCenso, $oRegistro30, $aRegistro51 ) ) {
-        $lDadosValidos = false;
-      }
     }
 
     return $lDadosValidos;
@@ -167,7 +163,7 @@ class DadosCensoDocente2015 extends DadosCensoDocente {
     /**
      * Chamado método para validações especifícas referentes a Necessidades Especiais
      */
-    if( !DadosCensoDocente2015::validacoesNecessidadesEspeciais( $sDadosDocente, $oExportacaoCenso, $oRegistro30 ) ) {
+    if( !DadosCensoDocente2022::validacoesNecessidadesEspeciais( $sDadosDocente, $oExportacaoCenso, $oRegistro30 ) ) {
       $lDadosValidos = false;
     }
 
@@ -470,7 +466,7 @@ class DadosCensoDocente2015 extends DadosCensoDocente {
     /**
      * Chamado método responsável pelas validações referentes ao endereço residencial
      */
-    if( !DadosCensoDocente2015::validacoesEnderecoResidencial( $sDadosDocente, $oExportacaoCenso, $oRegistro40 ) ) {
+    if( !DadosCensoDocente2022::validacoesEnderecoResidencial( $sDadosDocente, $oExportacaoCenso, $oRegistro40 ) ) {
       $lDadosValidos = false;
     }
 
@@ -569,7 +565,7 @@ class DadosCensoDocente2015 extends DadosCensoDocente {
       /* coluna 7 - DAQUI */
       if ( $oRegistro50->$iFormacaoComplementacaoPedagogica == ''
           && $oRegistro50->$iSituacaoCursoSuperior == 1
-          && DadosCensoDocente2015::$aCursosFormacao[$oRegistro50->$iCodigoCursoSuperior] != GRAU_LICENCIATURA ) {
+          && DadosCensoDocente2022::$aCursosFormacao[$oRegistro50->$iCodigoCursoSuperior] != GRAU_LICENCIATURA ) {
 
 
         $sMsgErro  = "Docente CGM {$sDadosDocente}: \n";
@@ -586,7 +582,7 @@ class DadosCensoDocente2015 extends DadosCensoDocente {
        */
       if ( $oRegistro50->$iSituacaoCursoSuperior != 1  ||
            ( !empty($oRegistro50->$iCodigoCursoSuperior) &&
-             DadosCensoDocente2015::$aCursosFormacao[$oRegistro50->$iCodigoCursoSuperior] == GRAU_LICENCIATURA) ) {
+             DadosCensoDocente2022::$aCursosFormacao[$oRegistro50->$iCodigoCursoSuperior] == GRAU_LICENCIATURA) ) {
         $oRegistro50->$iFormacaoComplementacaoPedagogica = '';
       }
       /* ATÉ AQUI */
@@ -1428,7 +1424,7 @@ class DadosCensoDocente2015 extends DadosCensoDocente {
       for( $iContador = 0; $iContador < $iTotalLinhas; $iContador++ ) {
 
         $oGrau = db_utils::fieldsMemory( $rsGrau, $iContador );
-        DadosCensoDocente2015::$aCursosFormacao[$oGrau->ed94_c_codigocenso] = $oGrau->ed94_i_grauacademico;
+        DadosCensoDocente2022::$aCursosFormacao[$oGrau->ed94_c_codigocenso] = $oGrau->ed94_i_grauacademico;
       }
     }
   }

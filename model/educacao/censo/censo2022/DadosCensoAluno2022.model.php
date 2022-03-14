@@ -28,7 +28,7 @@
 /**
  *
  */
-class DadosCensoAluno2015 extends DadosCensoAluno {
+class DadosCensoAluno2022 extends DadosCensoAluno {
 
   private $sAluno           = '';
   private $oExportacaoCenso = null;
@@ -39,24 +39,16 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
     foreach ( $oExportacaoCenso->getDadosProcessadosAluno() as $oDadosAluno ) {
 
-      if ( !DadosCensoAluno2015::validaRegistro60($oExportacaoCenso, $oDadosAluno) ) {
+      if ( !DadosCensoAluno2022::validaRegistro60($oExportacaoCenso, $oDadosAluno) ) {
         $lValidou = false;
       }
-
-      if ( !DadosCensoAluno2015::validaRegistro70($oExportacaoCenso, $oDadosAluno) ) {
-        $lValidou = false;
-      }
-
-     if ( !DadosCensoAluno2015::validaRegistro80($oExportacaoCenso, $oDadosAluno ) ) {
-       $lValidou = false;
-     }
     }
 
     return $lValidou;
   }
 
   /**
-   * Valida os dados do registro 60 do layout do censo de 2015
+   * Valida os dados do registro 60 do layout do censo de 2022
    * Campos não validados pois são validados na geração dos dados do aluno
    *  - tipo_registro
    *  - codigo_escola_inep
@@ -79,7 +71,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "Aluno(a) {$sAluno}:\n";
       $sMsgErro .= "Código INEP do aluno possui tamanho inferior a 12 dígitos.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -88,7 +80,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
     if ( !DBString::isNomeValido($oRegistro60->nome_completo, DBString::NOME_REGRA_2) ) {
 
       $sMsgErro  = "Nome do Aluno(a) {$sAluno} dever possuir nome e sobrenome.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -105,7 +97,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
           $sMsgErro  = "Aluno(a) {$sAluno}:\n";
           $sMsgErro .= "Nome do pai e/ou mãe só devem ser informadados quando a filiação for igual a: Pai e/ou Mãe.";
-          $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+          $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
           $lValidou = false;
         }
 
@@ -118,7 +110,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
             $sMsgErro  = "Aluno(a) {$sAluno}:\n";
             $sMsgErro .= "O campo \"Filiação 1\" ou o campo \"Filiação 2\" deve ser preenchido quando o campo ";
             $sMsgErro .= " \"Filiação\" for igual a 1 (Pai e/ou Mãe).";
-            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
             $lValidou = false;
           }
 
@@ -128,7 +120,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
             $sMsgErro  = "Aluno(a) {$sAluno}:\n";
             $sMsgErro .= " \"Filiação 1\" ({$oRegistro60->filiacao_1}) possui mais de 4 letras repetidas em sequência.";
-            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
             $lValidou = false;
           }
           // coluna 11 regra 5
@@ -137,7 +129,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
             $sMsgErro  = "Aluno(a) {$sAluno}:\n";
             $sMsgErro .= " \"Filiação 1\" ({$oRegistro60->filiacao_2}) possui mais de 4 letras repetidas em sequência.";
-            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
             $lValidou = false;
           }
 
@@ -145,7 +137,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
           if ( !empty($oRegistro60->filiacao_2) && $oRegistro60->filiacao_2 == $oRegistro60->filiacao_1) {
             $sMsgErro  = "Aluno(a) {$sAluno}:\n";
             $sMsgErro .= " O campo \"Filiação 2\" não pode ser igual ao campo \"Filiação 1\".";
-            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
             $lValidou = false;
           }
         break;
@@ -160,7 +152,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMsgErro  = "Aluno(a) {$sAluno}:\n";
         $sMsgErro .= "Obrigatório informar UF de nascimento quando a nascionalidade for Brasileira.";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
 
@@ -172,7 +164,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMsgErro  = "Aluno(a) {$sAluno}:\n";
         $sMsgErro .= "Obrigatório informar Município de nascimento quando a nascionalidade for Brasileira.";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
     }
@@ -251,7 +243,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMensagem  = "Aluno(a) {$sAluno}: \n";
         $sMensagem .= "Deve ser informada a turma Unificada do Aluno";
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ALUNO );
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ALUNO );
         $lValidou = false;
       }
 
@@ -262,7 +254,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
           $sMensagem  = "Aluno(a) {$sAluno}: \n";
           $sMensagem .= "Turma: {$oTurma->nome_turma}";
           $sMensagem .= " Etapa do aluno em turma multietapa fora das etapas permitidas.";
-          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ALUNO );
+          $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2022::LOG_ALUNO );
           $lValidou = false;
         }
       }
@@ -274,7 +266,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
           $sMensagem  = "Aluno(a) {$sAluno}: \n";
           $sMensagem .= "O campo 'Recebe escolarização em outro espaço' deve ser informado.";
-          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ALUNO);
+          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ALUNO);
           $lValidou = false;
         }
 
@@ -286,7 +278,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
             $sMensagem .= "Quando informado 'Recebe escolarização em outro espaço' com o valor";
             $sMensagem .= " 1-Em Hospital, o campo 'Tipo de Atendimento' da turma deve ser informado com o valor";
             $sMensagem .= " 1-Classe hospitalar.";
-            $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ALUNO);
+            $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ALUNO);
             $lValidou = false;
           }
         }
@@ -301,7 +293,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
           $sMensagem  = "Aluno(a) {$sAluno}: \n";
           $sMensagem .= "O campo 'Poder Público responsável pelo transporte escolar' não pode ser informado, Aluno não";
           $sMensagem .= " utiliza transporte público.";
-          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ALUNO);
+          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ALUNO);
           $lValidou = false;
         }
 
@@ -327,7 +319,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
           $sMensagem  = "Aluno(a) {$sAluno}: \n";
           $sMensagem .= "Deve ser informado o poder público responsável.";
-          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ALUNO);
+          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ALUNO);
           $lValidou = false;
         }
 
@@ -336,7 +328,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
           $sMensagem  = "Aluno(a) {$sAluno}: \n";
           $sMensagem .= "Informado que o aluno utiliza transporte público. Ao menos uma das opções de transporte público";
           $sMensagem .= " deve ser selecionada.";
-          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ALUNO);
+          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ALUNO);
           $lValidou = false;
         }
 
@@ -344,7 +336,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
           $sMensagem  = "Aluno(a) {$sAluno}: \n";
           $sMensagem .= "Permitido informar no máximo 3 opções de transporte público.";
-          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ALUNO);
+          $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2022::LOG_ALUNO);
           $lValidou = false;
         }
       }
@@ -845,13 +837,15 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
     if ($oLinha->municipio_nascimento != "") {
       $oDaoAluno->ed47_i_censomunicnat = $oLinha->municipio_nascimento;
     }
-    $oDaoAluno->ed47_c_codigoinep         = $oLinha->identificacao_unica_aluno;
+    $oDaoAluno->ed47_c_codigoinep         = $oLinha->identificacao_unica_inep;
     $oDaoAluno->ed47_i_filiacao           = $oLinha->filiacao;
+    $oDaoAluno->ed47_v_cpf                = $oLinha->numero_cpf;
     $oDaoAluno->ed47_c_atenddifer         = '3';
     $oDaoAluno->ed47_v_ender              = 'NAO INFORMADO';
     $oDaoAluno->ed47_i_transpublico       = "";
     $oDaoAluno->ed47_situacaodocumentacao = "0";
     $oDaoAluno->ed47_v_nome = str_replace(array('ª', 'º'), array('', ''), $oLinha->nome_completo);
+
 
     return $oDaoAluno;
   }
@@ -962,7 +956,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
     if ( empty($oDadosAluno->registro60->data_nascimento) ) {
 
       $sMsgErro  = "{$sAluno} O campo \"Data de nascimento\" é uma informação obrigatória.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -974,7 +968,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
     if ( $oIntervalo->y > 106 )  {
 
       $sMsgErro  = "{$sAluno} O campo \"Data de nascimento\" foi preenchido com valor inválido.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
     // regra 5
@@ -982,7 +976,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
     if ( $oDtCenso->getTimeStamp() < $oDtNascimento->getTimeStamp() ) {
 
       $sMsgErro  = "{$sAluno} O campo \"Data de nascimento\" esta maior que a data do censo.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1007,7 +1001,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Aluno com deficiência, transtorno global do desenvolvimento ou altas ";
       $sMsgErro .= "habilidades/superdotação\" foi preenchido com valor inválido.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1021,7 +1015,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMsgErro  = "{$sAluno} O aluno foi vinculado em turma de Educação Especial mas informou que não possui ";
         $sMsgErro .= "deficiência, transtorno global do desenvolvimento ou altas habilidades/superdotação.";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
 
@@ -1031,7 +1025,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMsgErro  = "{$sAluno} O aluno foi vinculado em turma de AEE mas informou que não possui deficiência, ";
         $sMsgErro .= "transtorno global do desenvolvimento ou altas habilidades/superdotação.";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
     }
@@ -1074,7 +1068,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMsgErro  = "{$sAluno} O campo \"{$sDeficiencia}\" deve ser preenchido quando o campo \"Aluno com deficiência, ";
         $sMsgErro .= "transtorno global do desenvolvimento ou altas habilidades/superdotação\" for igual a 1 (Sim).";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
 
@@ -1083,7 +1077,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMsgErro  = "{$sAluno} O campo \"{$sDeficiencia}\" não pode ser preenchido quando o campo \"Aluno com deficiência, ";
         $sMsgErro .= "transtorno global do desenvolvimento ou altas habilidades/superdotação\" for diferente de 1 (Sim).";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
 
@@ -1091,7 +1085,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
       if ( $mValor == 1 && !in_array($oDadosAluno->registro60->tipos_defic_transtorno_cegueira, array(0,1)) ) {
 
         $sMsgErro = "{$sAluno}O campo \"{$sDeficiencia}\" foi preenchido com valor inválido.";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
     }
@@ -1117,7 +1111,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_baixa_visao == 1) {
 
       $sMsgErro = "{$sAluno}O campo \"Cegueira\" é incompatível com o campo \"Baixa visão\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1126,7 +1120,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_surdez == 1) {
 
       $sMsgErro = "{$sAluno}O campo \"Cegueira\" é incompatível com o campo \"Surdez\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
     // regra 6
@@ -1134,7 +1128,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_surdocegueira == 1) {
 
       $sMsgErro = "{$sAluno}O campo \"Cegueira\" é incompatível com o campo \"Surdocegueira\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
     return $lValidou;
@@ -1158,7 +1152,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_surdocegueira == 1 ) {
 
       $sMsgErro = "{$sAluno}O campo \"Baixa visão\" é incompatível com o campo \"Surdocegueira\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1183,7 +1177,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_auditiva == 1 ) {
 
       $sMsgErro = "{$sAluno}O campo \"Surdez\" é incompatível com o campo \"Deficiência auditiva\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1192,7 +1186,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_surdocegueira == 1 ) {
 
       $sMsgErro = "{$sAluno}O campo \"Surdez\" é incompatível com o campo \"Surdocegueira\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1217,7 +1211,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_surdocegueira == 1 ) {
 
       $sMsgErro = "{$sAluno}O campo \"Deficiência auditiva\" é incompatível com o campo \"Surdocegueira\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1268,7 +1262,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Deficiência Múltipla\" não foi preenchido com 1 (Sim) e as deficiências ";
       $sMsgErro .= "combinadas acarretam em deficiência múltipla.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1277,7 +1271,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Deficiência Múltipla\" preenchido com 1 (Sim) mas as deficiências informadas ";
       $sMsgErro .= "não acarretam em deficiência múltipla.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1302,7 +1296,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_def_asperger == 1 ) {
 
       $sMsgErro = "{$sAluno} O campo \"Autismo Infantil\" é incompatível com o campo \"Síndrome de Asperger\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1311,7 +1305,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_def_sindrome_rett == 1 ) {
 
       $sMsgErro = "{$sAluno} O campo \"Autismo Infantil\" é incompatível com o campo \"Síndrome de Rett\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1320,7 +1314,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_desintegrativo_infancia == 1 ) {
 
       $sMsgErro = "{$sAluno} O campo \"Autismo Infantil\" é incompatível com o campo \"Transtorno desintegrativo da infância\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1345,7 +1339,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_def_sindrome_rett == 1 ) {
 
       $sMsgErro = "{$sAluno} O campo \"Síndrome de Asperger\" é incompatível com o campo \"Síndrome de Rett\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1354,7 +1348,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_desintegrativo_infancia == 1 ) {
 
       $sMsgErro = "{$sAluno} O campo \"Síndrome de Asperger\" é incompatível com o campo \"Transtorno desintegrativo da infância\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1380,7 +1374,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_desintegrativo_infancia == 1 ) {
 
       $sMsgErro = "{$sAluno} O campo \"Síndrome de  Rett\" é incompatível com o campo \"Transtorno desintegrativo da infância\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
     return $lValidou;
@@ -1442,7 +1436,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
             $sMsgErro  = "{$sAluno} Os Recursos necessários para a participação do aluno em avaliações do Inep (prova ";
             $sMsgErro .= "Brasil, SAEB, Outros) não foram informados quando deveriam ser informados.";
-            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+            $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
             $lValidou = false;
           }
         }
@@ -1457,7 +1451,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
         $sMsgErro  = "{$sAluno} Os campos \"Recursos necessários para a participação do aluno em avaliações do Inep (prova ";
         $sMsgErro .= "Brasil, SAEB, Outros)\" deve ser preenchido quando o aluno possuir deficiência ou transtorno ";
         $sMsgErro .= "global do desenvolvimento.";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
     }
@@ -1470,7 +1464,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
       $sMsgErro  = "{$sAluno} Os campos \"Recursos necessários para a participação do aluno em avaliações do Inep (prova ";
       $sMsgErro .= "Brasil, SAEB, Outros)\" não pode ser preenchido quando o aluno possuir deficiência ou transtorno ";
       $sMsgErro .= "global do desenvolvimento.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1483,7 +1477,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} Para alunos com cegueira ou surdocegueira não pode ser informado apenas auxílio ";
       $sMsgErro .= "transcrição como recurso necessário para a participação do aluno em avaliações do INEP.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1519,7 +1513,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
     if ( $oDadosAluno->registro60->recurso_auxilio_ledor == 1 && !in_array(1, $aDeficiencias) ) {
 
       $sMsgErro  = "{$sAluno} Combinação de tipos de deficiência incompatíveis com o recurso Auxílio ledor.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1527,7 +1521,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
     if ( $oDadosAluno->registro60->recurso_auxilio_transcricao == 1 && !in_array(1, $aDeficiencias) ) {
 
       $sMsgErro  = "{$sAluno} Combinação de tipos de deficiência incompatíveis com o recurso Auxílio transcrição.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1536,7 +1530,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Auxílio ledor\" deve ser preenchido com 0 (Não) quando o campo \"Nenhum\" ";
       $sMsgErro .= "for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1545,7 +1539,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Auxílio transcrição\" deve ser preenchido com 0 (Não) quando o campo \"Nenhum\" ";
       $sMsgErro .= "for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1554,7 +1548,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Auxílio ledor\" não pode ser preenchido com 1 (Sim) quando o campo \"Surdez\" ";
       $sMsgErro .= "for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1579,7 +1573,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->tipos_defic_transtorno_surdocegueira != 1 ) {
 
       $sMsgErro = "{$sAluno} Combinação de tipos de deficiência incompatíveis com o recurso Guia-Intérprete.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1588,7 +1582,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
          $oDadosAluno->registro60->recurso_auxilio_leitura_labial == 1 ) {
 
       $sMsgErro = "{$sAluno} O campo \"Guia-Intérprete\" é incompatível com o campo \"Leitura Labial\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1598,7 +1592,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Guia-Intérprete\" deve ser preenchido com 0 (Não) quando o campo \"Nenhum\" ";
       $sMsgErro .= "for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1629,7 +1623,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
     if ( $oDadosAluno->registro60->recurso_auxilio_interprete_libras == 1 && !in_array(1, $aDeficiencias) ) {
 
       $sMsgErro  = "{$sAluno} Combinação de tipos de deficiência incompatíveis com o recurso Intérprete de Libras.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1637,7 +1631,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
     if ( $oDadosAluno->registro60->recurso_auxilio_leitura_labial == 1 && !in_array(1, $aDeficiencias) ) {
 
       $sMsgErro  = "{$sAluno} Combinação de tipos de deficiência incompatíveis com o recurso Leitura Labial.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1646,7 +1640,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Intérprete de Libras\" deve ser preenchido com 0 (Não) quando o campo \"Nenhum\" ";
       $sMsgErro .= "for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1655,7 +1649,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Leitura Labial\" deve ser preenchido com 0 (Não) quando o campo \"Nenhum\" ";
       $sMsgErro .= "for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1665,7 +1659,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Intérprete de Libras\" não pode ser preenchido com 1 (Sim) quando o campo \"Cegueira\"";
       $sMsgErro .= " for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1675,7 +1669,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Leitura Labial\" não pode ser preenchido com 1 (Sim) quando o campo \"Cegueira\"";
       $sMsgErro .= " for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1719,7 +1713,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
       if ( $sValue == 1 && !in_array(1, $aDeficiencias) ) {
 
         $sMsgErro = "{$sAluno} Combinação de tipos de deficiência incompatíveis com o recurso {$sRescurso}.";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
 
@@ -1728,7 +1722,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMsgErro  = "{$sAluno} O campo \"{$sRescurso}\" deve ser preenchido com 0 (Não) quando o campo \"Nenhum\" ";
         $sMsgErro .= "for igual a 1 (Sim).";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
 
@@ -1736,7 +1730,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
       if ( $sValue == 1 && $oDadosAluno->registro60->recurso_auxilio_prova_braille == 1) {
 
         $sMsgErro  = "{$sAluno} O campo \"{$sRescurso}\" é incompatível com o campo \"Prova em Braille\".";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
 
@@ -1745,7 +1739,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMsgErro  = "{$sAluno} O campo \"{$sRescurso}\" não pode ser preenchido com 1 (Sim) quando o campo \"Cegueira\"";
         $sMsgErro .= " for igual a 1 (Sim).";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
     }
@@ -1756,7 +1750,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Prova Ampliada (Fonte Tamanho 16)\" é incompatível com o campo ";
       $sMsgErro .= "\"Prova Ampliada (Fonte Tamanho 20)\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1766,7 +1760,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Prova Ampliada (Fonte Tamanho 16)\" é incompatível com o campo ";
       $sMsgErro .= "\"Prova Ampliada (Fonte Tamanho 24)\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1776,7 +1770,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Prova Ampliada (Fonte Tamanho 20)\" é incompatível com o campo ";
       $sMsgErro .= "\"Prova Ampliada (Fonte Tamanho 24)\".";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1786,7 +1780,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
            && $oDadosAluno->registro60->tipos_defic_transtorno_surdocegueira != 1) ) {
 
       $sMsgErro = "{$sAluno} Combinação de tipos de deficiência incompatíveis com o recurso Prova em Braille.";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1796,7 +1790,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Prova em Braille\" deve ser preenchido com 0 (Não) quando o campo \"Nenhum\" ";
       $sMsgErro .= "for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1821,7 +1815,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Nenhum\" não pode ser preenchido com 1 (Sim) quando o campo \"Cegueira\" ";
       $sMsgErro .= "for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1830,7 +1824,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
       $sMsgErro  = "{$sAluno} O campo \"Nenhum\" não pode ser preenchido com 1 (Sim) quando o campo \"Surdocegueira\" ";
       $sMsgErro .= "for igual a 1 (Sim).";
-      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+      $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
       $lValidou = false;
     }
 
@@ -1862,7 +1856,7 @@ class DadosCensoAluno2015 extends DadosCensoAluno {
 
         $sMsgErro  = "{$sAluno} deve ser preenchido com 1 (Em hospital) quando o tipo de atendimento da turma for em ";
         $sMsgErro .= "classe hospitalar.";
-        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2015::LOG_ALUNO);
+        $oExportacaoCenso->logErro($sMsgErro, ExportacaoCenso2022::LOG_ALUNO);
         $lValidou = false;
       }
     }
