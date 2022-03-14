@@ -1,9 +1,10 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+use Classes\PostgresMigration;
 
-class Addusrguilherme extends AbstractMigration
+class AddusrguilhermePatrimonial extends PostgresMigration
 {
+
     public function up()
     {
         $this->_run();
