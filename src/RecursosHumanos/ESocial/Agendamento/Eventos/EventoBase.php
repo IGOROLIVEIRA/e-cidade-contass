@@ -46,6 +46,11 @@ abstract class EventoBase
         $this->modo = $modo;
     }
 
+    public function setDtAlteracao($dt_alteracao)
+    {
+        $this->dt_alteracao = $dt_alteracao;
+    }
+
     /**
      * Retorna dados no formato necessario para envio
      * pela API sped-esocial

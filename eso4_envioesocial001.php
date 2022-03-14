@@ -83,6 +83,22 @@ $mesfolha = DBPessoal::getMesFolha();
                                                 </select>
                                             </td>
                                         </tr>
+                                        <tr id="dtalteracao" style="display:none">
+                                            <td align="left"><label>Data Alteração:</label>
+                                                <?
+                                                db_inputdata(
+                                                    'dt_alteracao',
+                                                    '',
+                                                    '',
+                                                    '',
+                                                    true,
+                                                    'text',
+                                                    1,
+                                                    ""
+                                                );
+                                                ?>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </fieldset>
                             </td>
@@ -214,6 +230,7 @@ $mesfolha = DBPessoal::getMesFolha();
         oParam.iMesValidade = $("mesfolha").value;
         oParam.tpAmb = $("tpAmb").value;
         oParam.modo = $("modo").value;
+        oParam.dtalteracao = $("dt_alteracao").value;
         var oAjax = new Ajax.Request("eso4_esocialapi.RPC.php", {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
@@ -265,6 +282,14 @@ $mesfolha = DBPessoal::getMesFolha();
     function js_consultar() {
 
         js_OpenJanelaIframe('top.corpo', 'iframe_consulta_envio', 'func_consultaenvioesocial.php', 'Pesquisa', true);
+    }
+
+    function js_dataalt() {
+        if (document.getElementById('dtalteracao').style.display == 'none') {
+            document.getElementById('dtalteracao').style.display = 'inline';
+            return true;
+        }
+        document.getElementById('dtalteracao').style.display = 'none';
     }
 
     checkFase('');

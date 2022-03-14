@@ -145,6 +145,8 @@ $db_botao = true;
 
         let erro = false;
 
+        let index = 0;
+
         if (!aSelecionados.length) {
             alert('Informe ao menos um item!');
             return;
@@ -152,17 +154,14 @@ $db_botao = true;
 
         aSelecionados.forEach(elemento => {
 
-
-
-
             let item = new Object();
             item.codigo = elemento.aCells[1].getContent();
             item.sequencial = elemento.aCells[2].getContent();
             item.codprocitem = elemento.aCells[9].getContent();
             item.codproc = document.form1.codproc.value;
 
-            numeroId = parseInt(item.sequencial) - 1;
-            idMeepp = "meEpp" + numeroId;
+
+            idMeepp = "meEpp" + index;
             valorMeepp = document.forms["form1"][idMeepp].value;
 
 
@@ -180,6 +179,7 @@ $db_botao = true;
 
 
             aItensFormatados.push(item);
+            index++;
 
         });
 
