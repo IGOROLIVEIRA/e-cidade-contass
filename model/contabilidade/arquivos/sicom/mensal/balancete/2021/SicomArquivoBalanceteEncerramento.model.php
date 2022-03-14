@@ -53,6 +53,11 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
     }
 
     /**
+     * @var array Fontes encerradas em 2020
+     */
+    protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+
+    /**
      * Retorna o codigo do layout
      *
      * @return Integer
@@ -235,6 +240,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
          */
 
         $nMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
 
         /**
          * Tratamento para o encerramento do exercicio
