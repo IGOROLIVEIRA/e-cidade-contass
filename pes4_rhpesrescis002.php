@@ -72,7 +72,7 @@ function cadastro_164()
     $vlrn;
 
     global $sequencia,$r01_admiss,$r01_recis, $r01_mrenum;
-    global $rh05_codigoseguranca, $rh05_trct, $rh05_saldofgts;
+    global $rh05_codigoseguranca, $rh05_trct, $rh05_saldofgts,$rh173_codigo;
 
     $sql = "select rh22_codaec    as r11_codaec
 	rh22_natest    as r11_natest
@@ -525,7 +525,7 @@ function cadastro_164()
     $matriz2[8] = $rh05_codigoseguranca;
     $matriz2[9] = $rh05_trct;
     $matriz2[10] = empty($rh05_saldofgts) ? 0 : $rh05_saldofgts;
-    $matriz2[10] = empty($rh173_codigo) ? null : $rh173_codigo;
+    $matriz2[11] = empty($rh173_codigo) ? null : $rh173_codigo;
 
     //pg_exec("update pg_class set reltriggers = 0 where relname = 'rhpesrescisao'");
     db_insert("rhpesrescisao", $matriz1, $matriz2);

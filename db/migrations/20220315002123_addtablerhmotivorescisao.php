@@ -72,7 +72,7 @@ class Addtablerhmotivorescisao extends AbstractMigration
             insert into rhmotivorescisao values(nextval('rhmotivorescisao_rh173_sequencial_seq'),'39', 'Aposentadoria de servidor estatutário, por invalidez');
             insert into rhmotivorescisao values(nextval('rhmotivorescisao_rh173_sequencial_seq'),'40', 'Término do exercício do mandato eletivo');
 
-            ALTER TABLE pessoal.rhpesrescisao ADD rh05_motivo _int4 NULL;
+            ALTER TABLE pessoal.rhpesrescisao ADD rh05_motivo int4 NULL;
 
         commit;
         ";
