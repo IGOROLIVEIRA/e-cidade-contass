@@ -72,7 +72,7 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
     oGridNotasPendentes              = new DBGrid('ctnGridNotasPendentes');
     oGridNotasPendentes.nameInstance = 'oGridNotasPendentes_' + this.sNameInstance;
     var aCellWidth                   = new Array('17%','15%', '12%', '48%', '13%', '17%');
-    var aCellAlign                   = new Array('center', 'right', 'center', 'left', 'right', 'right');
+    var aCellAlign                   = new Array('center', 'right', 'center', 'left', 'center', 'right');
     var aHeaders                     = new Array('Nº Ordem de compra',
                                                  'Valor da Ordem',
                                                  'Empenho', 
@@ -83,7 +83,7 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
                                                  'Codigo Nota Item',
                                                  'numeroempenho');
     oGridNotasPendentes.setHeight(200);
-    oGridNotasPendentes.setCellWidth(aCellWidth);
+    //oGridNotasPendentes.setCellWidth(aCellWidth);
     oGridNotasPendentes.setHeader(aHeaders);
     oGridNotasPendentes.aHeaders[6].lDisplayed = false;
     oGridNotasPendentes.aHeaders[7].lDisplayed = false;
