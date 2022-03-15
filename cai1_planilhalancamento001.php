@@ -736,7 +736,7 @@ if ($oInstit->db21_usasisagua == "t") {
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
     
-    var recursoreceita = $('recurso').value;
+    var recursoreceita = iCodigoRecurso;
     
     if ($('anoUsu').value >= 2022) {
         if (iCodigoConta != '' & idb83_codigoopcredito != '') {
@@ -820,7 +820,7 @@ if ($oInstit->db21_usasisagua == "t") {
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
-    var recursoreceita = $('recurso').value;
+    var recursoreceita = iCodigoRecurso;
     
     if ($('anoUsu').value >= 2022) {
       if (idb83_codigoopcredito != '' & iCodigoConta != '') {
@@ -933,10 +933,11 @@ if ($oInstit->db21_usasisagua == "t") {
     $('estrutural').value = chave4;
     $('k02_tipo').value = chave6;
 
-    if($('anoUsu').value >= 2022){
-    $('op01_numerocontratoopc').value = '';
-    $('op01_dataassinaturacop').value = '';
-    }
+    
+    if($('anoUsu').value >= 2022 & !$('k81_conta').value){
+      $('op01_numerocontratoopc').value = '';
+      $('op01_dataassinaturacop').value = '';
+     }
 
     if ($('anoUsu').value >= 2020) {
 
@@ -993,9 +994,11 @@ if ($oInstit->db21_usasisagua == "t") {
     $('recurso').value = chave3;
     $('estrutural').value = chave4;
     $('k02_tipo').value = chave5;
-    $('op01_numerocontratoopc').value = '';
-    $('op01_dataassinaturacop').value = '';
 
+    if(!$('k81_conta').value){
+      $('op01_numerocontratoopc').value = '';
+      $('op01_dataassinaturacop').value = '';
+     }
     if ($('anoUsu').value >= 2020) {
 
       js_verificaEmendaParlamentar();

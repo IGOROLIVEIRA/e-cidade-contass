@@ -29,6 +29,7 @@ class Tipo
     const ESTABELECIMENTOS = 26;
     const ALTERACAODEDADOS = 38;
     const ALTERACAO_CONTRATO = 39;
+    const TSV_INICIO = 44;
 
 
     /**

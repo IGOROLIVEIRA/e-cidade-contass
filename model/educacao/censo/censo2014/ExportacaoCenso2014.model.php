@@ -42,7 +42,7 @@ class ExportacaoCenso2014 extends ExportacaoCensoBase implements IExportacaoCens
    * @var array
    */
   private $aTurmasUnicas          = array();
-  
+
   /**
    * Coleção das turmas que não devem ir no arquivo do censo pois compartilham a mesma sala e não são a turma principal.
    * @var array

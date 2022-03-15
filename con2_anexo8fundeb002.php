@@ -97,14 +97,27 @@ $anousu = db_getsession("DB_anousu");
 $aFuncoes     = array(12);
 $aSubFuncoes = array(122, 272, 271, 361, 365, 366, 367, 843);
 
-$aReceitasImpostos = array(
-    array('1 - FUNDEB - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS', 'title', array('413210011%', '413210051%', '417580111%'), "'118','119'"),
-    array('1.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS  PROFISSIONAIS DA EDUCAÇÃO  - FUNDEB  (NR 1.7.5.8.01.1.1 )', 'text', array('417580111%'), "'118','119'"),
-    array('1.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.00.1.1 + NR 1.3.2.1.00.5.1 )', 'text', array('413210011%', '413210051%'), "'118','119'"),
-    array('2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT', 'title', array('413210011%', '413210051%', '417180911%'), "'166','167'"),
-    array('2.1 - TRANSFERÊNCIAS DE RECURSOS DA COMPLEMENTAÇÃO DA UNIÃO AO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISISONAIS DA EDUCAÇÃO - FUNDEB (VAAT) (NR 1.7.1.8.09.1.1 )', 'text', array('417180911%'), "'166','167'"),
-    array('2.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.00.1.1 + NR 1.3.2.1.00.5.1 )', 'text', array('413210011%', '413210051%'), "'166','167'"),
-);
+if ($anousu >=2022){
+    $aReceitasImpostos = array(
+        array('1 - FUNDEB - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS', 'title', array('413210101%', '413210501%', '417515001%'), "'118','119'"),
+        array('1.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (NR 1.7.5.1.50.0.1 )', 'text', array('417515001%'), "'118','119'"),
+        array('1.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.01.0.1 + NR 1.3.2.1.05.0.1 )', 'text', array('413210101%', '413210501%'), "'118','119'"),
+        array('2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT', 'title', array('413210101%', '413210501%', '417155001%'), "'166','167'"),
+        array('2.1 - TRANSFERÊNCIAS DE RECURSOS DA COMPLEMENTAÇÃO DA UNIÃO AO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (VAAT) (NR 1.7.1.5.50.0.1)', 'text', array('417155001%'), "'166','167'"),
+        array('2.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.01.0.1 + NR 1.3.2.1.05.0.1 )', 'text', array('413210101%', '413210501%'), "'166','167'"),
+    );
+}else{
+    $aReceitasImpostos = array(
+        array('1 - FUNDEB - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS', 'title', array('413210011%', '413210051%', '417580111%'), "'118','119'"),
+        array('1.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS  PROFISSIONAIS DA EDUCAÇÃO  - FUNDEB  (NR 1.7.5.8.01.1.1 )', 'text', array('417580111%'), "'118','119'"),
+        array('1.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.00.1.1 + NR 1.3.2.1.00.5.1 )', 'text', array('413210011%', '413210051%'), "'118','119'"),
+        array('2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT', 'title', array('413210011%', '413210051%', '417180911%'), "'166','167'"),
+        array('2.1 - TRANSFERÊNCIAS DE RECURSOS DA COMPLEMENTAÇÃO DA UNIÃO AO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (VAAT) (NR 1.7.1.8.09.1.1 )', 'text', array('417180911%'), "'166','167'"),
+        array('2.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.00.1.1 + NR 1.3.2.1.00.5.1 )', 'text', array('413210011%', '413210051%'), "'166','167'"),
+    );
+}
+
+
 
 $oDadosexecicioanterior = $cldadosexecicioanterior->getDadosExercicioAnterior(db_getsession("DB_anousu"), $instits, "*", "");
 
@@ -1725,13 +1738,24 @@ ob_start();
                     <td class="s6" dir="ltr" colspan="6">17 - RECURSOS RECEBIDOS DO FUNDEB NO EXERCÍCIO QUE NÃO FORAM
                         UTILIZADOS</td>
                         <?php
-                            $nFundebImpostosTransferencias = getValorNaturezaReceita(array('413210011%', '413210051%', '417580111%'), "'118','119'", $anousu, $dtini, $dtfim, $instits);
-                            $nRestosaPagar = $nTotalPagoItem13Fonte118 + $nTotalPagoItem13Fonte119;
-                            $nFundebItem171 = $nFundebImpostosTransferencias - $nDevolucaoFundeb - $nRestosaPagar;
+                            if ($anousu >=2022){
+                                $nFundebImpostosTransferencias = getValorNaturezaReceita(array('413210101%', '413210501%', '417515001%'), "'118','119'", $anousu, $dtini, $dtfim, $instits);
+                                $nRestosaPagar = $nTotalPagoItem13Fonte118 + $nTotalPagoItem13Fonte119;
+                                $nFundebItem171 = $nFundebImpostosTransferencias - $nDevolucaoFundeb - $nRestosaPagar;
 
-                            $nFundebComplementacao = getValorNaturezaReceita(array('413210011%', '413210051%', '417180911%'), "'166','167'", $anousu, $dtini, $dtfim, $instits);
-                            $nRestosaPagarFonte166_167 = $nTotalPagoItem13Fonte166 + $nTotalPagoItem13Fonte167;
-                            $nFundebItem172 = $nFundebComplementacao - $nRestosaPagarFonte166_167;
+                                $nFundebComplementacao = getValorNaturezaReceita(array('413210101%', '413210501%', '417155001%'), "'166','167'", $anousu, $dtini, $dtfim, $instits);
+                                $nRestosaPagarFonte166_167 = $nTotalPagoItem13Fonte166 + $nTotalPagoItem13Fonte167;
+                                $nFundebItem172 = $nFundebComplementacao - $nRestosaPagarFonte166_167;
+                            }else{
+                                $nFundebImpostosTransferencias = getValorNaturezaReceita(array('413210011%', '413210051%', '417580111%'), "'118','119'", $anousu, $dtini, $dtfim, $instits);
+                                $nRestosaPagar = $nTotalPagoItem13Fonte118 + $nTotalPagoItem13Fonte119;
+                                $nFundebItem171 = $nFundebImpostosTransferencias - $nDevolucaoFundeb - $nRestosaPagar;
+
+                                $nFundebComplementacao = getValorNaturezaReceita(array('413210011%', '413210051%', '417180911%'), "'166','167'", $anousu, $dtini, $dtfim, $instits);
+                                $nRestosaPagarFonte166_167 = $nTotalPagoItem13Fonte166 + $nTotalPagoItem13Fonte167;
+                                $nFundebItem172 = $nFundebComplementacao - $nRestosaPagarFonte166_167;
+
+                            }
                         ?>
                     <td class="s7" dir="ltr"><?php echo db_formatar($nFundebItem171 + $nFundebItem172,"f"); ?></td>
                     <td class="s7" dir="ltr"><?php echo db_formatar((($nFundebItem171 + $nFundebItem172) / $nReceitaTotalFundeb) * 100,"f")."%";?></td>

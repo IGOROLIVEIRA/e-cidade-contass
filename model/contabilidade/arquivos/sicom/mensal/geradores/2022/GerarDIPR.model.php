@@ -24,27 +24,22 @@ class GerarDIPR extends GerarAM
         $this->abreArquivo();
 
         $sSql = "select * from dipr102022 where si230_mes = " . $this->iMes . " and si230_instit = " . db_getsession("DB_instit");
-        $rsCONV10 = db_query($sSql);
+        $rsDIPR10 = db_query($sSql);
 
-        $sSql2 = "select * from conv112022 where si93_mes = 11" . $this->iMes . " and si93_instit = " . db_getsession("DB_instit");
-        $rsCONV11 = db_query($sSql2);
+        $sSql = "select * from dipr202022 where si231_mes = " . $this->iMes . " and si231_instit = " . db_getsession("DB_instit");
+        $rsDIPR20 = db_query($sSql);
 
-        $sSql3 = "select * from conv202022 where si94_mes = 11" . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
-        $rsCONV20 = db_query($sSql3);
+        $sSql = "select * from dipr302022 where si232_mes = " . $this->iMes . " and si232_instit = " . db_getsession("DB_instit");
+        $rsDIPR30 = db_query($sSql);
 
-        $sSql4 = "select * from conv212022 where si232_mes = 11" . $this->iMes . " and si232_instint = " . db_getsession("DB_instit");
-        $rsCONV21 = db_query($sSql4);
+        $sSql = "select * from dipr402022 where si233_mes = " . $this->iMes . " and si233_instit = " . db_getsession("DB_instit");
+        $rsDIPR40 = db_query($sSql);
 
-        $sSql5 = "select * from conv302022 where si203_mes = 11" . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
-        $rsCONV30 = db_query($sSql5);
-
-        $sSql6 = "select * from conv312022 where si204_mes = 11" . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
-        $rsCONV31 = db_query($sSql6);
-
-        //echo $sSql."-".$sSql3; exit;
+        $sSql = "select * from dipr502022 where si234_mes = " . $this->iMes . " and si234_instit = " . db_getsession("DB_instit");
+        $rsDIPR50 = db_query($sSql);
 
 
-        if (pg_num_rows($rsCONV10) == 0 && pg_num_rows($rsCONV20) == 0 && pg_num_rows($rsCONV30) == 0) {
+        if (pg_num_rows($rsDIPR10) == 0 && pg_num_rows($rsDIPR20) == 0 && pg_num_rows($rsDIPR30) == 0 && pg_num_rows($rsDIPR40) == 0 && pg_num_rows($rsDIPR50) == 0) {
             $aCSV['tiporegistro'] = '99';
             $this->sLinha = $aCSV;
             $this->adicionaLinha();
@@ -54,8 +49,8 @@ class GerarDIPR extends GerarAM
              *
              * Registros 10, 11
              */
-            for ($iCont = 0; $iCont < pg_num_rows($rsCONV10); $iCont++) {
-                $aDIPR10 = pg_fetch_array($rsCONV10, $iCont);
+            for ($iCont = 0; $iCont < pg_num_rows($rsDIPR10); $iCont++) {
+                $aDIPR10 = pg_fetch_array($rsDIPR10, $iCont);
 
                 $aCSVDIPR10['si230_tiporegistro']    = $this->padLeftZero($aDIPR10['si230_tiporegistro'], 2);
                 $aCSVDIPR10['si230_coddipr']         = substr($aDIPR10['si230_coddipr'], 0, 20);
@@ -68,87 +63,89 @@ class GerarDIPR extends GerarAM
                 $this->adicionaLinha();
             }
 
-            /**
-             *
-             * Registros 20 e 21
-             */
-            for ($iCont3 = 0; $iCont3 < pg_num_rows($rsCONV20); $iCont3++) {
+            for ($iCont = 0; $iCont < pg_num_rows($rsDIPR20); $iCont++) {
+                $aDIPR20 = pg_fetch_array($rsDIPR20, $iCont);
 
-                $aCONV20 = pg_fetch_array($rsCONV20, $iCont3);
+                $aCSVDIPR20['si231_tiporegistro']                    = $this->padLeftZero($aDIPR20['si231_tiporegistro'], 2);
+                $aCSVDIPR20['si231_codorgao']                        = $this->padLeftZero($aDIPR20['si231_codorgao'], 2);
+                $aCSVDIPR20['si231_coddipr']                         = $aDIPR20['si231_coddipr'];
+                $aCSVDIPR20['si231_tipobasecalculo']                 = $aDIPR20['si231_tipobasecalculo'];
+                $aCSVDIPR20['si231_mescompetencia']                  = $this->padLeftZero($aDIPR20['si231_mescompetencia'], 2);
+                $aCSVDIPR20['si231_exerciciocompetencia']            = $aDIPR20['si231_exerciciocompetencia'];
+                $aCSVDIPR20['si231_tipofundo']                       = $aDIPR20['si231_tipofundo'];
+                $aCSVDIPR20['si231_remuneracaobrutafolhapag']        = $this->sicomNumberReal($aDIPR20['si231_remuneracaobrutafolhapag'], 2);
+                $aCSVDIPR20['si231_tipobasecalculocontrseg']         = $aDIPR20['si231_tipobasecalculocontrseg'] != "0" ? $aDIPR20['si231_tipobasecalculocontrseg'] : " ";
+                $aCSVDIPR20['si231_tipobasecalculocontrprevidencia'] = $aDIPR20['si231_tipobasecalculocontrprevidencia'] != "0" ? $aDIPR20['si231_tipobasecalculocontrprevidencia'] : " ";
+                $aCSVDIPR20['si231_valorbasecalculocontr']           = $this->sicomNumberReal($aDIPR20['si231_valorbasecalculocontr'], 2);
+                $aCSVDIPR20['si231_tipocontribuicao']                = $aDIPR20['si231_tipocontribuicao'];
+                $aCSVDIPR20['si231_aliquota']                        = $this->sicomNumberReal($aDIPR20['si231_aliquota'], 2);
+                $aCSVDIPR20['si231_valorcontribdevida']              = $this->sicomNumberReal($aDIPR20['si231_valorcontribdevida'], 2);
 
-                $aCSVCONV20['si94_tiporegistro']                  = $this->padLeftZero($aCONV20['si94_tiporegistro'], 2);
-                $aCSVCONV20['si94_codorgao']                      = $this->padLeftZero($aCONV20['si94_codorgao'], 2);
-                $aCSVCONV20['si94_nroconvenio']                   = substr($aCONV20['si94_nroconvenio'], 0, 30);
-                $aCSVCONV20['si94_dtassinaturaconvoriginal']      = $this->sicomDate($aCONV20['si94_dtassinaturaconvoriginal']);
-                $aCSVCONV20['si94_nroseqtermoaditivo']            = $this->padLeftZero($aCONV20['si94_nroseqtermoaditivo'], 2);
-                $aCSVCONV20['si94_codconvaditivo']                = $aCONV20['si94_codconvaditivo'];
-                $aCSVCONV20['si94_dscalteracao']                  = substr($aCONV20['si94_dscalteracao'], 0, 500);
-                $aCSVCONV20['si94_dtassinaturatermoaditivo']      = $this->sicomDate($aCONV20['si94_dtassinaturatermoaditivo']);
-                $aCSVCONV20['si94_datafinalvigencia']             = $this->sicomDate($aCONV20['si94_datafinalvigencia']);
-                $aCSVCONV20['si94_valoratualizadoconvenio']       = $this->sicomNumberReal($aCONV20['si94_valoratualizadoconvenio'], 2);
-                $aCSVCONV20['si94_valoratualizadocontrapartida']  = $this->sicomNumberReal($aCONV20['si94_valoratualizadocontrapartida'], 2);
-
-                $this->sLinha = $aCSVCONV20;
+                $this->sLinha = $aCSVDIPR20;
                 $this->adicionaLinha();
-
-                for ($iCont2 = 0; $iCont2 < pg_num_rows($rsCONV21); $iCont2++) {
-
-                    $aCONV21 = pg_fetch_array($rsCONV21, $iCont2);
-
-                    if ($aCONV20['si94_codconvaditivo'] == $aCONV21['si232_codconvaditivo']) {
-
-                        $aCSVCONV21['si232_tiporegistro']         = $this->padLeftZero($aCONV21['si232_tiporegistro'], 2);
-                        $aCSVCONV21['si232_codconvaditivo']       = $aCONV21['si232_codconvaditivo'];
-                        $aCSVCONV21['si232_tipotermoaditivo']     = $this->padLeftZero($aCONV21['si232_tipotermoaditivo'], 2);
-                        $aCSVCONV21['si232_dsctipotermoaditivo']  = substr($aCONV21['si232_dsctipotermoaditivo'], 0, 250);
-
-                        $this->sLinha = $aCSVCONV21;
-                        $this->adicionaLinha();
-                    }
-                }
             }
 
-            /**
-             *
-             * Registros 30
-             */
-            for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCONV30); $iCont4++) {
+            for ($iCont = 0; $iCont < pg_num_rows($rsDIPR30); $iCont++) {
+                $aDIPR30 = pg_fetch_array($rsDIPR30, $iCont);
+   
+                $aCSVDIPR30['si232_tiporegistro']           = $this->padLeftZero($aDIPR30['si232_tiporegistro'], 2);
+                $aCSVDIPR30['si232_codorgao']               = $this->padLeftZero($aDIPR30['si232_codorgao'], 2);
+                $aCSVDIPR30['si232_coddipr']                = $aDIPR30['si232_coddipr'];
+                $aCSVDIPR30['si232_mescompetencia']         = $this->padLeftZero($aDIPR30['si232_mescompetencia'], 2);
+                $aCSVDIPR30['si232_exerciciocompetencia']   = $aDIPR30['si232_exerciciocompetencia'];
+                $aCSVDIPR30['si232_tipofundo']              = $aDIPR30['si232_tipofundo'];
+                $aCSVDIPR30['si232_tiporepasse']            = $aDIPR30['si232_tiporepasse'];
+                $aCSVDIPR30['si232_tipocontripatronal']     = $aDIPR30['si232_tipocontripatronal'] != "0" ? $aDIPR30['si232_tipocontripatronal'] : " ";
+                $aCSVDIPR30['si232_tipocontrisegurado']     = $aDIPR30['si232_tipocontrisegurado'] != "0" ? $aDIPR30['si232_tipocontrisegurado'] : " ";
+                $aCSVDIPR30['si232_tipocontribuicao']        = $aDIPR30['si232_tipocontribuicao'] != "0" ? $aDIPR30['si232_tipocontribuicao'] : " ";
+                $aCSVDIPR30['si232_datarepasse']            = $this->sicomDate($aDIPR30['si232_datarepasse']);
+                $aCSVDIPR30['si232_datavencirepasse']       = $this->sicomDate($aDIPR30['si232_datavencirepasse']);
+                $aCSVDIPR30['si232_valororiginal']          = $this->sicomNumberReal($aDIPR30['si232_valororiginal'], 2);
+                $aCSVDIPR30['si232_valororiginalrepassado'] = $this->sicomNumberReal($aDIPR30['si232_valororiginalrepassado'], 2);
 
-                $aCONV30 = pg_fetch_array($rsCONV30, $iCont4);
-
-                $aCSVCONV30['si203_tiporegistro']                 = $this->padLeftZero($aCONV30['si203_tiporegistro'], 2);
-                $aCSVCONV30['si203_codreceita']                   = $aCONV30['si203_codreceita'];
-                $aCSVCONV30['si203_codorgao']                     = $this->padLeftZero($aCONV30['si203_codorgao'], 2);
-                $aCSVCONV30['si203_naturezareceita']              = substr($aCONV30['si203_naturezareceita'], 1, 8);
-                $aCSVCONV30['si203_codfontrecursos']              = $this->padLeftZero($aCONV30['si203_codfontrecursos'], 3);
-                $aCSVCONV30['si203_vlprevisao']                   = $this->sicomNumberReal($aCONV30['si203_vlprevisao'], 2);
-
-                $this->sLinha = $aCSVCONV30;
+                $this->sLinha = $aCSVDIPR30;
                 $this->adicionaLinha();
-
-                /**
-                 *
-                 * Registros 31
-                 */
-                for ($iCont5 = 0; $iCont5 < pg_num_rows($rsCONV31); $iCont5++) {
-
-                    $aCONV31 = pg_fetch_array($rsCONV31, $iCont5);
-
-                    if ($aCONV30['si203_codreceita'] == $aCONV31['si204_codreceita']) {
-
-                        $aCSVCONV31['si204_tiporegistro']                 = $this->padLeftZero($aCONV31['si204_tiporegistro'], 2);
-                        $aCSVCONV31['si204_codreceita'] = $aCONV31['si204_codreceita'];
-                        $aCSVCONV31['si204_prevorcamentoassin'] = $aCONV31['si204_prevorcamentoassin'];
-                        $aCSVCONV31['si204_nroconvenio'] = $aCONV31['si204_nroconvenio'];
-                        $aCSVCONV31['si204_dataassinatura'] = $this->sicomDate($aCONV31['si204_dataassinatura']);
-                        $aCSVCONV31['si204_vlprevisaoconvenio'] = $this->sicomNumberReal($aCONV31['si204_vlprevisaoconvenio'], 2);
-
-                        $this->sLinha = $aCSVCONV31;
-                        $this->adicionaLinha();
-                    }
-                }
             }
 
+            for ($iCont = 0; $iCont < pg_num_rows($rsDIPR40); $iCont++) {
+                $aDIPR40 = pg_fetch_array($rsDIPR40, $iCont);
+ 
+                $aCSVDIPR40['si233_tiporegistro']           = $this->padLeftZero($aDIPR40['si233_tiporegistro'], 2);
+                $aCSVDIPR40['si233_codorgao']               = $this->padLeftZero($aDIPR40['si233_codorgao'], 2);
+                $aCSVDIPR40['si233_coddipr']                = $aDIPR40['si233_coddipr'];
+                $aCSVDIPR40['si233_mescompetencia']         = $this->padLeftZero($aDIPR40['si233_mescompetencia'], 2);
+                $aCSVDIPR40['si233_exerciciocompetencia']   = $aDIPR40['si233_exerciciocompetencia'];
+                $aCSVDIPR40['si233_tipofundo']              = $aDIPR40['si233_tipofundo'];
+                $aCSVDIPR40['si233_tiporepasse']            = $aDIPR40['si233_tiporepasse'];
+                $aCSVDIPR40['si233_tipocontripatronal']     = $aDIPR40['si233_tipocontripatronal'] != "0" ?  $aDIPR40['si233_tipocontripatronal'] : " ";
+                $aCSVDIPR40['si233_tipocontrisegurado']     = $aDIPR40['si233_tipocontrisegurado'] != "0" ?  $aDIPR40['si233_tipocontrisegurado'] : " ";
+                $aCSVDIPR40['si233_tipocontribuicao']       = $aDIPR40['si233_tipocontribuicao'] != "0" ?  $aDIPR40['si233_tipocontribuicao'] : " ";
+                $aCSVDIPR40['si233_tipodeducao']            = $aDIPR40['si233_tipodeducao'] != "0" ?  $aDIPR40['si233_tipodeducao'] : " ";
+                $aCSVDIPR40['si233_dsctiposdeducoes']       = $aDIPR40['si233_dsctiposdeducoes'];
+                $aCSVDIPR40['si233_valordeducao']           = $this->sicomNumberReal($aDIPR40['si233_valordeducao'], 2);
+
+                $this->sLinha = $aCSVDIPR40;
+                $this->adicionaLinha();
+            }
+
+            for ($iCont = 0; $iCont < pg_num_rows($rsDIPR50); $iCont++) {
+                $aDIPR50 = pg_fetch_array($rsDIPR50, $iCont);
+
+                $aCSVDIPR50['si234_tiporegistro']           = $this->padLeftZero($aDIPR50['si234_tiporegistro'], 2);
+                $aCSVDIPR50['si234_codorgao']               = $this->padLeftZero($aDIPR50['si234_codorgao'], 2);
+                $aCSVDIPR50['si234_coddipr']                = $aDIPR50['si234_coddipr'];
+                $aCSVDIPR50['si234_mescompetencia']         = $this->padLeftZero($aDIPR50['si234_mescompetencia'], 2);
+                $aCSVDIPR50['si234_exerciciocompetencia']   = $aDIPR50['si234_exerciciocompetencia'];
+                $aCSVDIPR50['si234_tipofundo']              = $aDIPR50['si234_tipofundo'];
+                $aCSVDIPR50['si234_tipoaportetransf']       = $aDIPR50['si234_tipoaportetransf'];
+                $aCSVDIPR50['si234_dscoutrosaportestransf'] = $aDIPR50['si234_dscoutrosaportestransf'];
+                $aCSVDIPR50['si234_atonormativo']           = $aDIPR50['si234_atonormativo'] != 0 ? $aDIPR50['si234_atonormativo'] : " ";
+                $aCSVDIPR50['si234_exercicioato']           = $aDIPR50['si234_exercicioato'] != 0 ? $aDIPR50['si234_exercicioato'] : " ";
+                $aCSVDIPR50['si234_valoraportetransf']      = $this->sicomNumberReal($aDIPR50['si234_valoraportetransf'], 2);
+
+                $this->sLinha = $aCSVDIPR50;
+                $this->adicionaLinha();
+            }
 
             $this->fechaArquivo();
         }

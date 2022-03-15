@@ -3065,7 +3065,7 @@ class empenho {
 
       if ($iTipo == 2) {
 
-        $rsNotas              = $this->getNotas($this->numemp,"e50_anousu < {$this->anousu}");
+        $rsNotas              = $this->getNotas($this->numemp,"e50_anousu < {$this->anousu} AND e53_vlranu = 0");
         $nValorProcessado     = 0;
         $nValorProcessadoNota = 0;
         $aNotasProcessadas    = array();
