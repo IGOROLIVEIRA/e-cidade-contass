@@ -16,8 +16,8 @@ class Addtablerhmotivorescisao extends AbstractMigration
 
             -- INSERE db_syscampo
             INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh173_sequencial','int8' ,'Sequencial','', 'Sequencial' ,11	,false, false, false, 1, 'int8', 'Sequencial');
-            INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh173_codigo','text' ,'Codigo Afastaemento','', 'Codigo Afastaemento' ,11	,false, false, false, 1, 'text', 'Codigo Afastaemento');
-            INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh173_descricao' ,'text' ,'Descrição Afastamento','', 'Descrição Afastamento' ,10	,false, false, false, 0, 'text', 'Descrição Afastamento');
+            INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh173_codigo','text' ,'Codigo Rescisão','', 'Codigo Rescisão' ,11	,false, false, false, 1, 'text', 'Codigo Rescisão');
+            INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh173_descricao' ,'text' ,'Descrição Rescisão','', 'Descrição Rescisão' ,10	,false, false, false, 0, 'text', 'Descrição Rescisão');
 
             -- INSERE db_sysarqcamp
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'rh173_sequencial'), 1, 0);
