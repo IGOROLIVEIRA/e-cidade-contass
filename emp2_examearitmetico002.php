@@ -244,7 +244,7 @@ if ($iRestosPagar != 2) {
         order by o58_coddot,o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento,e60_codemp) as xxxxx where 1 = 1";
         
     }
-    echo $sSql;exit;
+    
     $rsResult = db_query($sSql);
     $aDadosAgrupados = array();
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {

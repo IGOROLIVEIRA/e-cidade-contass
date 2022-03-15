@@ -53,6 +53,11 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
     }
 
     /**
+     * @var array Fontes encerradas em 2020
+     */
+    protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+
+    /**
      * Retorna o codigo do layout
      *
      * @return Integer
@@ -235,6 +240,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
          */
 
         $nMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
 
         /**
          * Tratamento para o encerramento do exercicio
@@ -2565,13 +2571,18 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                     $rsReg18saldos = db_query($sSqlReg18saldos) or die("erro 18".$sSqlReg18saldos);
 
+                    //OC12114
+                    $bFonteEncerrada  = in_array($objContasfr->codfontrecursos, $this->aFontesEncerradas);
+
+                    $iFonte = $bFonteEncerrada ? substr($objContasfr->codfontrecursos, 0, 1).'59' : $objContasfr->codfontrecursos;
+
                     for ($iContSaldo18 = 0; $iContSaldo18 < pg_num_rows($rsReg18saldos); $iContSaldo18++) {
 
                         $oReg18Saldo = db_utils::fieldsMemory($rsReg18saldos, $iContSaldo18);
 
                         if (!(($oReg18Saldo->saldoanterior == "" || $oReg18Saldo->saldoanterior == 0) && $oReg18Saldo->debitos == "" && $oReg18Saldo->creditos == "" && $oReg18Saldo->creditosencerramento == "" && $oReg18Saldo->debitosencerramento == "")) {
 
-                            $sHash18 = '18' . $oContas10->si187_contacontaabil . $objContasfr->codfontrecursos;
+                            $sHash18 = '18' . $oContas10->si187_contacontaabil . $iFonte;
 
                             if (!isset($aContasReg10[$reg10Hash]->reg18[$sHash18])) {
 
@@ -2580,7 +2591,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                 $obalancete18->si185_tiporegistro = 18;
                                 $obalancete18->si185_contacontabil = $oContas10->si177_contacontaabil;
                                 $obalancete18->si185_codfundo = $sCodFundo;
-                                $obalancete18->si185_codfontrecursos = $objContasfr->codfontrecursos;
+                                $obalancete18->si185_codfontrecursos = $iFonte;
                                 $obalancete18->si185_saldoinicialfr = $oReg18Saldo->saldoanterior;
                                 $obalancete18->si185_naturezasaldoinicialfr = $oReg18Saldo->saldoanterior >= 0 ? 'D' : 'C';
                                 $obalancete18->si185_totaldebitosfr = $oReg18Saldo->debitos;
@@ -3975,6 +3986,15 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($reg29->si241_saldoinicialfontsf + $reg29->si241_totaldebitosfontsf - $reg29->si241_totalcreditosfontsf) == '' ? 0 : ($reg29->si241_saldoinicialfontsf + $reg29->si241_totaldebitosfontsf - $reg29->si241_totalcreditosfontsf);
                     $obalreg29->si241_saldofinalfontsf = number_format(abs($saldoFinal), 2, ".", "");
                     $obalreg29->si241_naturezasaldofinalfontsf = $saldoFinal == 0 ? $obalreg29->si241_naturezasaldoinicialfontsf : ($saldoFinal > 0 ? 'D' : 'C');
+                    if($this->bEncerramento){
+                        $obalreg29->si241_saldoinicialfontsf = $obalreg29->si241_saldofinalfontsf;
+                        $obalreg29->si241_naturezasaldoinicialfontsf = $obalreg29->si241_naturezasaldofinalfontsf;
+                        $obalreg29->si241_totaldebitosfontsf = number_format(abs($reg29->si241_totaldebitosencerramento), 2, ".", "");
+                        $obalreg29->si241_totalcreditosfontsf = number_format(abs($reg29->si241_totalcreditosencerramento), 2, ".", "");
+                        $saldoFinalEncerramento = ($saldoFinal + $obalreg29->si241_totaldebitosfontsf - $obalreg29->si241_totalcreditosfontsf) == '' ? 0 : ($saldoFinal + $obalreg29->si241_totaldebitosfontsf - $obalreg29->si241_totalcreditosfontsf);
+                        $obalreg29->si241_saldofinalfontsf = number_format(abs($saldoFinalEncerramento == '' ? 0 : $saldoFinalEncerramento), 2, ".", "");
+                        $obalreg29->si241_naturezasaldofinalfontsf = $saldoFinalEncerramento == 0 ? $obalreg29->si241_naturezasaldoinicialfontsf : ($saldoFinalEncerramento > 0 ? 'D' : 'C');
+                    }
                     $obalreg29->si241_instit = $reg29->si241_instit;
                     $obalreg29->si241_mes = 13;
                     $obalreg29->si241_reg10 = $obalancete10->si177_sequencial;
