@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2013  DBselller Servicos de Informatica
@@ -30,41 +30,42 @@
 class cl_rhpesrescisao
 {
     // cria variaveis de erro
-    var $rotulo     = null;
-    var $query_sql  = null;
-    var $numrows    = 0;
-    var $numrows_incluir = 0;
-    var $numrows_alterar = 0;
-    var $numrows_excluir = 0;
-    var $erro_status = null;
-    var $erro_sql   = null;
-    var $erro_banco = null;
-    var $erro_msg   = null;
-    var $erro_campo = null;
-    var $pagina_retorno = null;
+    public $rotulo     = null;
+    public $query_sql  = null;
+    public $numrows    = 0;
+    public $numrows_incluir = 0;
+    public $numrows_alterar = 0;
+    public $numrows_excluir = 0;
+    public $erro_status = null;
+    public $erro_sql   = null;
+    public $erro_banco = null;
+    public $erro_msg   = null;
+    public $erro_campo = null;
+    public $pagina_retorno = null;
     // cria variaveis do arquivo
-    var $rh05_seqpes = 0;
-    var $rh05_recis_dia = null;
-    var $rh05_recis_mes = null;
-    var $rh05_recis_ano = null;
-    var $rh05_recis = null;
-    var $rh05_causa = 0;
-    var $rh05_caub = null;
-    var $rh05_aviso_dia = null;
-    var $rh05_aviso_mes = null;
-    var $rh05_aviso_ano = null;
-    var $rh05_aviso = null;
-    var $rh05_taviso = 0;
-    var $rh05_mremun = 0;
-    var $rh05_empenhado = 'f';
-    var $rh05_trct = null;
-    var $rh05_codigoseguranca = null;
-    var $rh05_feriasavos = 0;
-    var $rh05_feriasvencidas = 0;
-    var $rh05_13salarioavos = 0;
-    var $rh05_saldofgts = 0;
+    public $rh05_seqpes = 0;
+    public $rh05_recis_dia = null;
+    public $rh05_recis_mes = null;
+    public $rh05_recis_ano = null;
+    public $rh05_recis = null;
+    public $rh05_causa = 0;
+    public $rh05_caub = null;
+    public $rh05_aviso_dia = null;
+    public $rh05_aviso_mes = null;
+    public $rh05_aviso_ano = null;
+    public $rh05_aviso = null;
+    public $rh05_taviso = 0;
+    public $rh05_mremun = 0;
+    public $rh05_empenhado = 'f';
+    public $rh05_trct = null;
+    public $rh05_codigoseguranca = null;
+    public $rh05_feriasavos = 0;
+    public $rh05_feriasvencidas = 0;
+    public $rh05_13salarioavos = 0;
+    public $rh05_saldofgts = 0;
+    public $rh05_motivo = null;
     // cria propriedade com as variaveis do arquivo
-    var $campos = "
+    public $campos = "
                  rh05_seqpes = int4 = Sequência
                  rh05_recis = date = Data da Rescisão
                  rh05_causa = int4 = Causa da Rescisão
@@ -79,16 +80,17 @@ class cl_rhpesrescisao
                  rh05_feriasvencidas = int4 = Férias vencidas
                  rh05_13salarioavos = int4 = Avos de 13º salário
                  rh05_saldofgts = float8 = Saldo FGTS
+                 rh05_motivo = int4 = Motivo
                  ";
     //funcao construtor da classe
-    function cl_rhpesrescisao()
+    public function cl_rhpesrescisao()
     {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo("rhpesrescisao");
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
     //funcao erro
-    function erro($mostra, $retorna)
+    public function erro($mostra, $retorna)
     {
         if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
             echo "<script>alert(\"" . $this->erro_msg . "\");</script>";
@@ -98,7 +100,7 @@ class cl_rhpesrescisao
         }
     }
     // funcao para atualizar campos
-    function atualizacampos($exclusao = false)
+    public function atualizacampos($exclusao = false)
     {
         if ($exclusao == false) {
             $this->rh05_seqpes = ($this->rh05_seqpes == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh05_seqpes"] : $this->rh05_seqpes);
@@ -129,12 +131,13 @@ class cl_rhpesrescisao
             $this->rh05_feriasvencidas = ($this->rh05_feriasvencidas == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh05_feriasvencidas"] : $this->rh05_feriasvencidas);
             $this->rh05_13salarioavos = ($this->rh05_13salarioavos == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh05_13salarioavos"] : $this->rh05_13salarioavos);
             $this->rh05_saldofgts = ($this->rh05_saldofgts == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh05_saldofgts"] : $this->rh05_saldofgts);
+            $this->rh05_motivo = ($this->rh05_motivo == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh05_motivo"] : $this->rh05_motivo);
         } else {
             $this->rh05_seqpes = ($this->rh05_seqpes == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh05_seqpes"] : $this->rh05_seqpes);
         }
     }
     // funcao para inclusao
-    function incluir($rh05_seqpes)
+    public function incluir($rh05_seqpes)
     {
         $this->atualizacampos();
         if ($this->rh05_recis == null) {
@@ -142,7 +145,7 @@ class cl_rhpesrescisao
             $this->erro_campo = "rh05_recis_dia";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -151,7 +154,7 @@ class cl_rhpesrescisao
             $this->erro_campo = "rh05_causa";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -163,7 +166,7 @@ class cl_rhpesrescisao
             $this->erro_campo = "rh05_taviso";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -172,7 +175,7 @@ class cl_rhpesrescisao
             $this->erro_campo = "rh05_mremun";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -197,7 +200,7 @@ class cl_rhpesrescisao
             $this->erro_sql = " Campo rh05_seqpes nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -216,6 +219,7 @@ class cl_rhpesrescisao
                                       ,rh05_feriasvencidas
                                       ,rh05_13salarioavos
                                       ,rh05_saldofgts
+                                      ,rh05_motivo
                        )
                 values (
                                 $this->rh05_seqpes
@@ -232,6 +236,7 @@ class cl_rhpesrescisao
                                ,$this->rh05_feriasvencidas
                                ,$this->rh05_13salarioavos
                                ,$this->rh05_saldofgts
+                               ,$this->rh05_motivo
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -240,11 +245,11 @@ class cl_rhpesrescisao
                 $this->erro_sql   = "Funcionários em rescisão ($this->rh05_seqpes) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_banco = "Funcionários em rescisão já Cadastrado";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
                 $this->erro_sql   = "Funcionários em rescisão ($this->rh05_seqpes) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
             $this->numrows_incluir = 0;
@@ -254,7 +259,7 @@ class cl_rhpesrescisao
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->rh05_seqpes;
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
         $resaco = $this->sql_record($this->sql_query_file($this->rh05_seqpes));
@@ -280,7 +285,7 @@ class cl_rhpesrescisao
         return true;
     }
     // funcao para alteracao
-    function alterar($rh05_seqpes = null)
+    public function alterar($rh05_seqpes = null)
     {
         $this->atualizacampos();
         $sql = " update rhpesrescisao set ";
@@ -293,7 +298,7 @@ class cl_rhpesrescisao
                 $this->erro_campo = "rh05_seqpes";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -306,7 +311,7 @@ class cl_rhpesrescisao
                 $this->erro_campo = "rh05_recis_dia";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -319,7 +324,7 @@ class cl_rhpesrescisao
                     $this->erro_campo = "rh05_recis_dia";
                     $this->erro_banco = "";
                     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
                 }
@@ -333,7 +338,7 @@ class cl_rhpesrescisao
                 $this->erro_campo = "rh05_causa";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -359,7 +364,7 @@ class cl_rhpesrescisao
                 $this->erro_campo = "rh05_taviso";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -372,7 +377,7 @@ class cl_rhpesrescisao
                 $this->erro_campo = "rh05_mremun";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -417,6 +422,13 @@ class cl_rhpesrescisao
             $sql  .= $virgula . " rh05_saldofgts = $this->rh05_saldofgts ";
             $virgula = ",";
         }
+        if (trim($this->rh05_motivo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh05_motivo"])) {
+            if (trim($this->rh05_motivo) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh05_motivo"])) {
+                $this->rh05_motivo = null;
+            }
+            $sql  .= $virgula . " rh05_motivo = $this->rh05_motivo ";
+            $virgula = ",";
+        }
         $sql .= " where ";
         if ($rh05_seqpes != null) {
             $sql .= " rh05_seqpes = $this->rh05_seqpes";
@@ -428,32 +440,45 @@ class cl_rhpesrescisao
                 $acount = pg_result($resac, 0, 0);
                 $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
                 $resac = db_query("insert into db_acountkey values($acount,7043,'$this->rh05_seqpes','A')");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_seqpes"]) || $this->rh05_seqpes != "")
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_seqpes"]) || $this->rh05_seqpes != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,7043,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_seqpes')) . "','$this->rh05_seqpes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_recis"]) || $this->rh05_recis != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_recis"]) || $this->rh05_recis != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,7044,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_recis')) . "','$this->rh05_recis'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_causa"]) || $this->rh05_causa != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_causa"]) || $this->rh05_causa != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,7045,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_causa')) . "','$this->rh05_causa'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_caub"]) || $this->rh05_caub != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_caub"]) || $this->rh05_caub != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,7046,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_caub')) . "','$this->rh05_caub'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_aviso"]) || $this->rh05_aviso != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_aviso"]) || $this->rh05_aviso != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,7047,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_aviso')) . "','$this->rh05_aviso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_taviso"]) || $this->rh05_taviso != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_taviso"]) || $this->rh05_taviso != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,7048,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_taviso')) . "','$this->rh05_taviso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_mremun"]) || $this->rh05_mremun != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_mremun"]) || $this->rh05_mremun != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,7049,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_mremun')) . "','$this->rh05_mremun'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_empenhado"]) || $this->rh05_empenhado != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_empenhado"]) || $this->rh05_empenhado != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,17509,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_empenhado')) . "','$this->rh05_empenhado'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_trct"]) || $this->rh05_trct != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_trct"]) || $this->rh05_trct != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,19589,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_trct')) . "','$this->rh05_trct'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_codigoseguranca"]) || $this->rh05_codigoseguranca != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_codigoseguranca"]) || $this->rh05_codigoseguranca != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,19590,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_codigoseguranca')) . "','$this->rh05_codigoseguranca'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_feriasavos"]) || $this->rh05_feriasavos != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_feriasavos"]) || $this->rh05_feriasavos != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,19633,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_feriasavos')) . "','$this->rh05_feriasavos'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_feriasvencidas"]) || $this->rh05_feriasvencidas != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_feriasvencidas"]) || $this->rh05_feriasvencidas != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,19635,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_feriasvencidas')) . "','$this->rh05_feriasvencidas'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_13salarioavos"]) || $this->rh05_13salarioavos != "")
+                }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["rh05_13salarioavos"]) || $this->rh05_13salarioavos != "") {
                     $resac = db_query("insert into db_acount values($acount,1161,19634,'" . AddSlashes(pg_result($resaco, $conresaco, 'rh05_13salarioavos')) . "','$this->rh05_13salarioavos'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                }
             }
         }
         $result = db_query($sql);
@@ -462,7 +487,7 @@ class cl_rhpesrescisao
             $this->erro_sql   = "Funcionários em rescisão nao Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->rh05_seqpes;
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
             return false;
@@ -472,7 +497,7 @@ class cl_rhpesrescisao
                 $this->erro_sql = "Funcionários em rescisão nao foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : " . $this->rh05_seqpes;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
@@ -481,7 +506,7 @@ class cl_rhpesrescisao
                 $this->erro_sql = "Alteração efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $this->rh05_seqpes;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
                 return true;
@@ -489,7 +514,7 @@ class cl_rhpesrescisao
         }
     }
     // funcao para exclusao
-    function excluir($rh05_seqpes = null, $dbwhere = null)
+    public function excluir($rh05_seqpes = null, $dbwhere = null)
     {
         if ($dbwhere == null || $dbwhere == "") {
             $resaco = $this->sql_record($this->sql_query_file($rh05_seqpes));
@@ -536,7 +561,7 @@ class cl_rhpesrescisao
             $this->erro_sql   = "Funcionários em rescisão nao Excluído. Exclusão Abortada.\\n";
             $this->erro_sql .= "Valores : " . $rh05_seqpes;
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
             return false;
@@ -546,7 +571,7 @@ class cl_rhpesrescisao
                 $this->erro_sql = "Funcionários em rescisão nao Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $rh05_seqpes;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
@@ -555,7 +580,7 @@ class cl_rhpesrescisao
                 $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $rh05_seqpes;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
                 return true;
@@ -563,7 +588,7 @@ class cl_rhpesrescisao
         }
     }
     // funcao do recordset
-    function sql_record($sql)
+    public function sql_record($sql)
     {
         $result = db_query($sql);
         if ($result == false) {
@@ -571,7 +596,7 @@ class cl_rhpesrescisao
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -580,14 +605,14 @@ class cl_rhpesrescisao
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:rhpesrescisao";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         return $result;
     }
     // funcao do sql
-    function sql_query($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
+    public function sql_query($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -610,7 +635,7 @@ class cl_rhpesrescisao
             if ($rh05_seqpes != null) {
                 $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
@@ -626,7 +651,7 @@ class cl_rhpesrescisao
         return $sql;
     }
     // funcao do sql
-    function sql_query_file($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
+    public function sql_query_file($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -645,7 +670,7 @@ class cl_rhpesrescisao
             if ($rh05_seqpes != null) {
                 $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
@@ -660,11 +685,11 @@ class cl_rhpesrescisao
         }
         return $sql;
     }
-    function atualiza_incluir()
+    public function atualiza_incluir()
     {
         $this->incluir($this->rh05_seqpes);
     }
-    function sql_query_retorno($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "", $anonovo, $mesnovo)
+    public function sql_query_retorno($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "", $anonovo, $mesnovo)
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -689,7 +714,7 @@ class cl_rhpesrescisao
             if ($rh05_seqpes != null) {
                 $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
@@ -704,7 +729,7 @@ class cl_rhpesrescisao
         }
         return $sql;
     }
-    function sql_query_rescisao($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
+    public function sql_query_rescisao($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -734,7 +759,7 @@ class cl_rhpesrescisao
             if ($rh05_seqpes != null) {
                 $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
@@ -749,7 +774,7 @@ class cl_rhpesrescisao
         }
         return $sql;
     }
-    function sql_query_ngeraferias($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
+    public function sql_query_ngeraferias($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -769,7 +794,7 @@ class cl_rhpesrescisao
             if ($rh05_seqpes != null) {
                 $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
@@ -785,7 +810,7 @@ class cl_rhpesrescisao
         return $sql;
     }
 
-    function sql_relatorios_termo_rescisao($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
+    public function sql_relatorios_termo_rescisao($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -834,7 +859,7 @@ class cl_rhpesrescisao
             if ($rh05_seqpes != null) {
                 $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
@@ -850,7 +875,7 @@ class cl_rhpesrescisao
         return $sql;
     }
 
-    function sql_relatorios_termo_rescisao_pontorescisao($iAno, $iMes, $campos = "*", $dbwhere = "")
+    public function sql_relatorios_termo_rescisao_pontorescisao($iAno, $iMes, $campos = "*", $dbwhere = "")
     {
         $iInstit = db_getsession("DB_instit");
 
@@ -930,7 +955,7 @@ class cl_rhpesrescisao
         return $sSql;
     }
 
-    function sql_servidor_rescisao($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
+    public function sql_servidor_rescisao($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -953,7 +978,7 @@ class cl_rhpesrescisao
             if ($rh05_seqpes != null) {
                 $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
@@ -969,7 +994,7 @@ class cl_rhpesrescisao
         return $sql;
     }
 
-    function sql_dados_rescisao($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
+    public function sql_dados_rescisao($rh05_seqpes = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -1003,7 +1028,7 @@ class cl_rhpesrescisao
             if ($rh05_seqpes != null) {
                 $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;

@@ -75,6 +75,8 @@ class Addtablerhmotivorescisao extends AbstractMigration
             alter table rescisao ADD COLUMN r45_codigorescisao varchar(14);
             alter table rescisao ADD COLUMN r45_mesmadoenca varchar(1);
 
+            ALTER TABLE pessoal.rhpesrescisao ADD rh05_motivo _int4 NULL;
+
         commit;
         ";
         $this->execute($sql);
