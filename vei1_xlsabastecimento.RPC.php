@@ -732,10 +732,6 @@ switch($oParam->exec) {
                     $motorista         = $row->motorista;
                     $nota              = $row->nota;
 
-                    $valor = explode(",",$valor);
-                    $valor = $valor[0].".".$valor[1];
-                    $vUnitario = explode(",",$vUnitario);
-                    $vUnitario = $vUnitario[0].".".$vUnitario[1];
   
 
                 //faz a busca do veiculo por placa
