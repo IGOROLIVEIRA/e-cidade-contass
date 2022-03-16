@@ -49,7 +49,7 @@ class CalculoAtuarialRTM2Ativos extends CalculoAtuarialRTMBase {
 	    $sSql = "SELECT DISTINCT 
 	    rh02_anousu as NU_ANO,
 	    rh02_mesusu as NU_MES,
-	    3 as CO_TIPO_FUNDO,
+	    1 as CO_TIPO_FUNDO,
 	    1 as CO_COMP_MASSA,
 	    instituicao.z01_cgccpf as NU_CNPJ_ORGAO,
 	    db_config.nomeinst as NO_ORGAO,
@@ -136,9 +136,12 @@ class CalculoAtuarialRTM2Ativos extends CalculoAtuarialRTMBase {
 	    JOIN db_config ON codigo = rh01_instit
 	    JOIN cgm instituicao ON db_config.numcgm=instituicao.z01_numcgm
 	    JOIN cgm servidor ON servidor.z01_numcgm = rh01_numcgm
-	    LEFT JOIN afasta ON r45_regist = rh01_regist
-	    AND r45_anousu = {$anofolha}
-	    AND r45_mesusu = {$mesfolha}
+	    LEFT JOIN (SELECT * FROM afasta 
+	    WHERE DATE_PART('YEAR', r45_dtafas) = {$anofolha}
+	    AND  DATE_PART('MONTH', r45_dtafas) = {$mesfolha} LIMIT 1) as afasta
+	    ON r45_regist = rh01_regist
+	    AND DATE_PART('YEAR', r45_dtafas) = {$anofolha}
+	    AND  DATE_PART('MONTH', r45_dtafas) = {$mesfolha}
 	    WHERE rh30_vinculo = 'A'
 	    AND rh30_regime = 1
 	    AND NOT EXISTS
