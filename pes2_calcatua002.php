@@ -64,21 +64,24 @@ if(trim($selecao) != ""){
 }
 
 $db_erro = false;
-
+$sListaArquivos = "'/tmp/calc_ativos.txt','/tmp/calc_inativos.txt','/tmp/calc_pens.txt'";
 if($banco == 1){
 $erro_msg = calcatua_bb($anofolha,$mesfolha,$where);
 }else if ($banco == 2){
 $erro_msg = calcatua_cef($anofolha,$mesfolha,$where);
 }else if ($banco == 3){
     $erro_msg = calcatua_rtm($anofolha,$mesfolha,$where);
-}else{
+}else if ($banco == 4) {
     $erro_msg = calcatua_sprev($anofolha,$mesfolha,$where);
+}else{
+    $erro_msg = calcatua_rtm2($anofolha,$mesfolha,$where);
+    $sListaArquivos = "'/tmp/calc_ativos.txt','/tmp/calc_ativos_dependentes.txt','/tmp/calc_inativos.txt','/tmp/calc_inativos_dependentes.txt','/tmp/calc_pens.txt'";
 }
 
 if(empty($erro_msg)){
   echo "
   <script>
-    parent.js_detectaarquivo('/tmp/calc_ativos.txt','/tmp/calc_inativos.txt','/tmp/calc_pens.txt');
+    parent.js_detectaarquivo({$sListaArquivos});
   </script>
   ";
 }else{
@@ -115,6 +118,12 @@ function calcatua_rtm($anofolha,$mesfolha,$where) {
 function calcatua_sprev($anofolha,$mesfolha,$where){
   require_once('model/pessoal/calculoatuarial/sprev/CalculoAtuarialSPREV.model.php');
   $oCalculoAtuarial = new CalculoAtuarialSPREV();
+  $oCalculoAtuarial->processar($anofolha,$mesfolha,$where);
+}
+
+function calcatua_rtm2($anofolha,$mesfolha,$where) {
+  require_once('model/pessoal/calculoatuarial/rtm/CalculoAtuarialRTM2.model.php');
+  $oCalculoAtuarial = new CalculoAtuarialRTM2();
   $oCalculoAtuarial->processar($anofolha,$mesfolha,$where);
 }
 
