@@ -68,7 +68,7 @@ class CalculoAtuarialRTM2InativosDependentes extends CalculoAtuarialRTMBase {
         rh01_regist as ID_SEGURADO_MATRICULA,
         servidor.z01_cgccpf as ID_SEGURADO_CPF,
         coalesce(servidor.z01_pis,' ') as ID_SEGURADO_PIS_PASEP,
-        CASE WHEN rh01_sexo = 'M' THEN 2 ELSE 1 END  as CO_SEXO_SERVIDOR,
+        CASE WHEN rh01_sexo = 'M' THEN 2 ELSE 1 END  as CO_SEXO_SEGURADO,
         ' ' as ID_DEPENDENTE,
         rh31_cpf as ID_DEPENDENTE_CPF,
         to_char(rh31_dtnasc, 'DD/MM/YYYY') as DT_NASC_DEPENDENTE,
