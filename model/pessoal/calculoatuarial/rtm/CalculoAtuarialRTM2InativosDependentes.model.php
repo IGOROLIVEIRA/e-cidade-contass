@@ -56,7 +56,7 @@ class CalculoAtuarialRTM2InativosDependentes extends CalculoAtuarialRTMBase {
         inner join cadendermunicipiosistema on
             cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
             and cadendermunicipiosistema.db125_db_sistemaexterno = 4
-        where to_ascii(db72_descricao) = to_ascii(trim(instituicao.z01_munic)) ) as CO_IBGE,
+        where to_ascii(db72_descricao) = to_ascii(trim(instituicao.z01_munic)) LIMIT 1) as CO_IBGE,
         db_config.nomeinst as NO_ENTE,
         'MG' as SG_UF,
         1 as CO_COMP_MASSA,
