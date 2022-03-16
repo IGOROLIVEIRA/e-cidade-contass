@@ -1157,7 +1157,7 @@ class ordemCompra {
     $oDaoTransMater = db_utils::getDao("transmater");
     $aItensMaterial = array();
     $sSqlTransMater = $oDaoTransMater->sql_query(null,
-                                                 "m63_codmatmater,m60_descr,m60_controlavalidade",
+                                                 "m63_codmatmater,m60_descr,m60_codmatunid,m60_controlavalidade",
                                                   null,
                                                   "m60_ativo is true
                                                    and m63_codpcmater={$oItemAtivo->pc01_codmater}");
@@ -1173,7 +1173,7 @@ class ordemCompra {
 
     $oItemAtivo->aMateriaisEstoque = $aItensMaterial;
     $oItemAtivo->sServicoQuantidade = ordemCompra::getServicoQuantidade($iSequencialEmpEmpItem);
-    return $oItemAtivo;
+    return $oItemAtivo; 
   }
   /**
    * Cancela o fracionamento do Item passado;
