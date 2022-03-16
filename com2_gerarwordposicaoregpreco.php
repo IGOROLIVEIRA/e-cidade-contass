@@ -238,7 +238,7 @@ header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
                 $oDadosEstimativa                 = new stdClass();
                 $oDadosEstimativa->iSeq           = $oSolicita->pc11_seq;
                 $oDadosEstimativa->iCodItem       = $oSolicita->pc01_codmater;
-                $oDadosEstimativa->sDescrItem     = $oSolicita->pc01_descrmater;
+                $oDadosEstimativa->sDescrItem     = $oSolicita->pc01_descrmater." ".$oSolicita->pc01_complmater;
                 $oDadosEstimativa->sCompl         = $oSolicita->pc11_resum;
                 $oDadosEstimativa->sUnidade       = $oSolicita->m61_descr;
                 $oDadosEstimativa->sFornecedor    = $oSolicita->oDadosFornecedor->vencedor;
@@ -354,7 +354,6 @@ header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
                                 <td><strong>SEQ</strong></td>
                                 <td><strong>ITEM</strong></td>
                                 <td><strong>DESCRIÇÃO</strong></td>
-                                <td><strong>COMPLEMENTO</strong></td>
                                 <td><strong>UN</strong></td>
                                 <td><strong>VLR. UNIT.</strong></td>
                                 <td><strong>FORNECEDOR</strong></td>
@@ -371,8 +370,8 @@ header("Content-Disposition: attachment; Filename=Registro de Preço.doc");
                                 echo "<tr>";
                                 echo "<td>" . $aDadosSolicita['oDados']->iSeq . "</td>";
                                 echo "<td>" . $aDadosSolicita['oDados']->iCodItem . "</td>";
-                                echo "<td>" . substr($aDadosSolicita['oDados']->sDescrItem, 0, 20)  . "</td>";
-                                echo "<td>" . str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)) . "</td>";
+                                echo "<td>" . $aDadosSolicita['oDados']->sDescrItem  . "</td>";
+                                //echo "<td>" . str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)) . "</td>";
                                 echo "<td>" . $aDadosSolicita['oDados']->sUnidade . "</td>";
                                 echo "<td>" . $aDadosSolicita['nTotalVlrUnid'] . "</td>";
                                 echo "<td>" . iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosSolicita['oDados']->sFornecedor)) . "</td>";

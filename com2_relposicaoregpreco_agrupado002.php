@@ -52,6 +52,7 @@ $sHeaderDtVal          = "Validade do Registro: Todos";
 $sHeaderNum            = "Compilação: Todos";
 $sHeaderItens          = "";
 
+
 /**
  * Verifica as datas de criação do registro informadas no formulario.
  */
@@ -156,7 +157,7 @@ $sSql .= "         inner join matunid                on solicitemunid.pc17_unid 
 $sSql .= "         inner join solicitempcmater       on solicitem.pc11_codigo          = solicitempcmater.pc16_solicitem           ";
 $sSql .= "         inner join pcmater                on solicitempcmater.pc16_codmater = pcmater.pc01_codmater                     ";
 
-if ($oGet->lQuebraFornecedor == 't') {
+if ($oGet->lQuebraFornecedor == 't') { 
     $aCgms = array();
 }
 
@@ -212,7 +213,7 @@ for ($iInd = 0; $iInd  < $iRsSql; $iInd++) {
     $oDadosEstimativa                 = new stdClass();
     $oDadosEstimativa->iSeq           = $oSolicita->pc11_seq;
     $oDadosEstimativa->iCodItem       = $oSolicita->pc01_codmater;
-    $oDadosEstimativa->sDescrItem     = $oSolicita->pc01_descrmater;
+    $oDadosEstimativa->sDescrItem     = $oSolicita->pc01_descrmater." ".$oSolicita->pc01_complmater;
     $oDadosEstimativa->sCompl         = $oSolicita->pc11_resum;
     $oDadosEstimativa->sUnidade       = $oSolicita->m61_descr;
     $oDadosEstimativa->sFornecedor    = $oSolicita->oDadosFornecedor->vencedor;
@@ -326,16 +327,31 @@ if (!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
                         $lPreenchimento = 1;
                     }
 
-                    $lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
+                    $lPreenchimento = 0; //$lPreenchimento == 0 ? 1 : 0;
                     $oPdf->setfont('arial', '', 6);
+                    $x = $oPdf->GetX();
+                    $y = $oPdf->GetY();
+
+                    //  if($sIndice==4){
+                    //     echo"<pre>";
+                    //     var_dump($aDadosSolicita['oDados']->sDescrItem);
+                    //     exit;
+                    //  }
 
                     $oPdf->cell(15, $alt, $aDadosSolicita['oDados']->iSeq, 0, 0, "C", $lPreenchimento);
                     $oPdf->cell(15, $alt, $aDadosSolicita['oDados']->iCodItem, 0, 0, "C", $lPreenchimento);
-                    if ($aDados['reservado'] == 't') {
-                        $oPdf->cell(28, $alt, '[ITEM ME/EPP] - ' . substr($aDadosSolicita['oDados']->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
-                    } else {
-                        $oPdf->cell(28, $alt, substr($aDadosSolicita['oDados']->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
+                    $valor = strlen($aDadosSolicita['oDados']->sDescrItem);
+                    $linha = 0;
+                    if($valor>60){
+                        $linha = round($valor/40);
                     }
+                    if ($aDados['reservado'] == 't') {
+                        $oPdf->MultiCell(67,3, '[ITEM ME/EPP] - ' .$aDadosSolicita['oDados']->sDescrItem,0, "J",$lPreenchimento,0);
+                    } else {
+                        $oPdf->MultiCell(67,3,$aDadosSolicita['oDados']->sDescrItem,0, "J",$lPreenchimento,0);
+                    }
+
+                    $oPdf->SetXY($x + 59, $y);
                     $oPdf->cell(39, $alt, str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)), 0, 0, "L", $lPreenchimento);
                     $oPdf->cell(16, $alt, $aDadosSolicita['oDados']->sUnidade, 0, 0, "C", $lPreenchimento);
                     $oPdf->cell(16, $alt, db_formatar($aDadosSolicita['nTotalVlrUnid'], 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
@@ -359,6 +375,12 @@ if (!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
                     $nTotalSolicitar += $aDadosSolicita['oDados']->nSolicitar;
                     $nTotalEmpenhar += $aDadosSolicita['oDados']->nEmpenhar;
                     $nTotalRegistros++;
+                    if($linha==0){
+                        $oPdf->Ln(0);
+                    }else{
+                        $oPdf->Ln(7+$linha);
+                    }
+                    
                 }
             }
         }
@@ -512,8 +534,8 @@ function imprimeCabecalho(&$oPdf, $alt, $iAbertura, $iCompilacao, $sLicitacao, $
 
     $oPdf->cell(15, $alt, "Seq.", 1, 0, "C", 1);
     $oPdf->cell(15, $alt, "Item", 1, 0, "C", 1);
-    $oPdf->cell(28, $alt, "Descrição", 1, 0, "C", 1);
-    $oPdf->cell(39, $alt, "Complemento", 1, 0, "C", 1);
+    $oPdf->cell(67, $alt, "Descrição", 1, 0, "C", 1);
+    //$oPdf->cell(39, $alt, "Complemento", 1, 0, "C", 1); 
 
 
     $oPdf->cell(16, $alt, "Unidade", 1, 0, "C", 1);
