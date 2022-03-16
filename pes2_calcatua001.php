@@ -48,12 +48,14 @@ function js_emite(){
   qry += "&banco="+ document.form1.banco.value;
   js_OpenJanelaIframe('top.corpo','db_iframe_calcatua','pes2_calcatua002.php'+qry,'Gerando Arquivo',true);
 }
-function js_detectaarquivo(arquivo,arquivo1,arquivo2){
+function js_detectaarquivo(arquivo,arquivo1,arquivo2,arquivo3,arquivo4){
   //js_controlarodape(false);
   top.corpo.db_iframe_calcatua.hide();
   listagem  = arquivo+"#Download calc_ativos.txt|";
-  listagem += arquivo1+"#Download calc_inativos.txt|";
-  listagem += arquivo2+"#Download calc_pens.txt";
+  listagem += arquivo1+"#Download calc_ativos_dependentes.txt|";
+  listagem += arquivo2+"#Download calc_inativos.txt|";
+  listagem += arquivo3+"#Download calc_inativos_dependentes.txt|";
+  listagem += arquivo4+"#Download calc_pens.txt";
   js_montarlista(listagem,"form1");
 }
 function js_erro(msg){
@@ -96,7 +98,7 @@ function js_fechaiframe(){
         </td>
         <td> 
           <?
-          $x = array("1"=>"Banco do Brasil","2"=>"Caixa Federal","3"=>"Arquivo RTM","4"=>"Arquivo SPREV");
+          $x = array("1"=>"Banco do Brasil","2"=>"Caixa Federal","3"=>"Arquivo RTM","4"=>"Arquivo SPREV","5"=>"Arquivo RTM 2");
           db_select('banco',$x,true,2,"");
           ?>
         </td>

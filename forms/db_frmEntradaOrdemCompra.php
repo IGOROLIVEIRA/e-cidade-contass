@@ -389,6 +389,7 @@ if (count($aParametrosEmpenho) > 0) {
                   $oItens = db_utils::fieldsMemory($rsUnidades, $i);
                   $aUnidades[$oItens->m61_codmatunid] = $oItens->m61_descr;
                 }
+                
                 db_select('unidadeentrada', $aUnidades, true, 1, "style='width:200pt'");
                 ?>
               </td>
@@ -859,7 +860,7 @@ if (count($aParametrosEmpenho) > 0) {
     js_removeObj("msgBox");
     js_bloqueiaLiberaBotao(false);
     var campo_consumo_imediato = document.getElementById("consumo_imediato").value;
-    
+
     if ($F('sJson') != '' && lSalvo == false) {
 
       var oItemAnt = eval("(" + $F('sJson') + ")");
@@ -873,9 +874,9 @@ if (count($aParametrosEmpenho) > 0) {
       if ($F('quantunid') != oItemAnt.quantunidade) {
         lModificado = true;
       }
-      if ($F('unidadeentrada') != oItemAnt.unidade) {
-        lModificado = true;
-      }
+      // if ($F('unidadeentrada') != oItemAnt.unidade) { 
+      //   lModificado = true;
+      // }
       if ($F('matmater') != oItemAnt.m63_codmatmater) {
         lModificado = true;
       }
@@ -912,7 +913,7 @@ if (count($aParametrosEmpenho) > 0) {
     $('valorRecebido').value = new Number(oItemAtivo.m52_valor).toFixed(2);
     $('saldovalor').innerHTML = new Number(oItemAtivo.saldovalor).toFixed(2);
     $('saldoitens').innerHTML = oItemAtivo.saldoitens;
-    $('unidadeentrada').value = oItemAtivo.unidade;
+    $('unidadeentrada').value = oItemAtivo.aMateriaisEstoque[0].m60_codmatunid;
     $('m52_codlanc').value = oItemAtivo.m52_codlanc;
     $('iIndice').value = oItemAtivo.iIndiceEntrada;
     $('sJson').value = oAjax.responseText;
