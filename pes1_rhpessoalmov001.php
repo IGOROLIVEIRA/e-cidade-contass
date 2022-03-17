@@ -108,18 +108,27 @@ if (isset($incluir) && !$lErro) {
             $sqlerro  = true;
             $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuação devem ser preenchidos';
         } else
-    if (
+        if (
             in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118', '1118', '218', '166', '266')) &&
             $rh02_art61ldb1 == 'f' &&
             $rh02_art61ldb2 == 'f' &&
             $rh02_art61ldb3 == 'f' &&
             $rh02_art61ldb4 == 'f' &&
             $rh02_art61ldb5 == 'f' &&
-            $rh02_art1leiprestpsiccologia == 'f' &&
-            $rh02_art1leiprestservsocial == 'f'
+            $rh02_art61ldboutros == 'f'
         ) {
             $sqlerro  = true;
-            $erro_msg = 'Pelo menos uma das opções do Siope deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
+            $erro_msg = 'Pelo menos uma das opções do Siope(Art. 61 da LDB) deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
+';
+        } else
+        if (
+            in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('119', '1119', '219', '167', '267')) &&
+            $rh02_art1leiprestpsiccologia == 'f' &&
+            $rh02_art1leiprestservsocial == 'f'  &&
+            $rh02_art1leioutros == 'f'
+        ) {
+            $sqlerro  = true;
+            $erro_msg = 'Pelo menos uma das opções do Siope(Art. 1 da Lei nº 13.935/2019) deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (119, 1119, 219, 167, 267)
 ';
         }
     }
@@ -310,18 +319,27 @@ if (isset($incluir) && !$lErro) {
             $sqlerro  = true;
             $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuação devem ser preenchidos';
         } else
-    if (
+        if (
             in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118', '1118', '218', '166', '266')) &&
             $rh02_art61ldb1 == 'f' &&
             $rh02_art61ldb2 == 'f' &&
             $rh02_art61ldb3 == 'f' &&
             $rh02_art61ldb4 == 'f' &&
             $rh02_art61ldb5 == 'f' &&
-            $rh02_art1leiprestpsiccologia == 'f' &&
-            $rh02_art1leiprestservsocial == 'f'
+            $rh02_art61ldboutros == 'f'
         ) {
             $sqlerro  = true;
-            $erro_msg = ' Pelo menos uma das opções do Siope deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
+            $erro_msg = 'Pelo menos uma das opções do Siope(Art. 61 da LDB) deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
+';
+        } else
+        if (
+            in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('119', '1119', '219', '167', '267')) &&
+            $rh02_art1leiprestpsiccologia == 'f' &&
+            $rh02_art1leiprestservsocial == 'f'  &&
+            $rh02_art1leioutros == 'f'
+        ) {
+            $sqlerro  = true;
+            $erro_msg = 'Pelo menos uma das opções do Siope(Art. 1 da Lei nº 13.935/2019) deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (119, 1119, 219, 167, 267)
 ';
         }
     }
