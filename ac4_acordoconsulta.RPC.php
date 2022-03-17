@@ -88,7 +88,15 @@ switch ($oParam->exec) {
           $oItem->tipo       = $oPosicao->getTipo();
         }
 
+
+
         $oItem->codigo      = $oDado->getMaterial()->getMaterial();
+
+        $complmater = db_query("select pc01_complmater from acordoitem inner join pcmater on ac20_pcmater = pc01_codmater where pc01_codmater = $oItem->codigo limit 1");
+        $complmater           = db_utils::fieldsmemory($complmater, 0);
+
+
+
         $oItem->descricao   = $oDado->getMaterial()->getDescricao();
         $oItem->quantidade  = $oDado->getQuantidade();
         $oItem->unidade     = $oDado->getUnidade();
@@ -99,7 +107,8 @@ switch ($oParam->exec) {
         $oItem->ordem       = $oDado->getOrdem();
         $oItem->elemento    = $oDado->getElemento();
         $oItem->unidademed  = $oDado->getDescricaoUnidade();
-        $oItem->observacao  = $oDado->getResumo();
+        //$oItem->observacao  = $oDado->getResumo();
+        $oItem->observacao = urlencode($complmater->pc01_complmater);
         $nSomaTotal        += $oDado->getValorTotal();
         $oRetorno->dados[]  = $oItem;
       }
