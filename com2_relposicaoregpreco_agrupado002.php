@@ -199,7 +199,8 @@ for ($iInd = 0; $iInd  < $iRsSql; $iInd++) {
     if ($oLicitacao) {
 
         $sLicitacao  = "{$oLicitacao->getEdital()} / {$oLicitacao->getAno()} - ";
-        $sLicitacao .= "{$oLicitacao->getModalidade()->getDescricao()}";
+        $sLicitacao .= "{$oLicitacao->getModalidade()->getDescricao()} - ";
+        $sLicitacao .= "{$oLicitacao->getNumeroLicitacao()} / {$oLicitacao->getAno()}";
     }
 
     $oSolicita->oDadosFornecedor   = $oCompilacao->getFornecedorItem($oSolicita->pc01_codmater, $oSolicita->pc11_codigo);
@@ -340,15 +341,22 @@ if (!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
 
                     $oPdf->cell(15, $alt, $aDadosSolicita['oDados']->iSeq, 0, 0, "C", $lPreenchimento);
                     $oPdf->cell(15, $alt, $aDadosSolicita['oDados']->iCodItem, 0, 0, "C", $lPreenchimento);
-                    $valor = strlen($aDadosSolicita['oDados']->sDescrItem);
+                    $valor = strlen(strtoupper($aDadosSolicita['oDados']->sDescrItem));
                     $linha = 0;
                     if($valor>60){
                         $linha = round($valor/40);
+                       
                     }
+                    // if($aDadosSolicita['oDados']->iSeq==39){
+                    //     echo"<pre>";
+                    //     var_dump($aDadosSolicita['oDados']->sDescrItem." - ".$linha);
+                    //     exit;
+                    // }
+                    
                     if ($aDados['reservado'] == 't') {
-                        $oPdf->MultiCell(67,3, '[ITEM ME/EPP] - ' .$aDadosSolicita['oDados']->sDescrItem,0, "J",$lPreenchimento,0);
+                        $oPdf->MultiCell(67,3, '[ITEM ME/EPP] - ' .strtoupper($aDadosSolicita['oDados']->sDescrItem),0, "J",$lPreenchimento,0);
                     } else {
-                        $oPdf->MultiCell(67,3,$aDadosSolicita['oDados']->sDescrItem,0, "J",$lPreenchimento,0);
+                        $oPdf->MultiCell(67,3,strtoupper($aDadosSolicita['oDados']->sDescrItem),0, "J",$lPreenchimento,0);
                     }
 
                     $oPdf->SetXY($x + 59, $y);
@@ -376,9 +384,16 @@ if (!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
                     $nTotalEmpenhar += $aDadosSolicita['oDados']->nEmpenhar;
                     $nTotalRegistros++;
                     if($linha==0){
-                        $oPdf->Ln(0);
-                    }else{
-                        $oPdf->Ln(7+$linha);
+                        $oPdf->Ln(2);
+                    }elseif($linha==2){
+                        $oPdf->Ln(4);
+                    }elseif($linha>2){
+                        if($linha==7){
+                            $oPdf->Ln(($linha+2)*2);
+                        }else{
+                            $oPdf->Ln(($linha+1)*2);
+                        }
+                        
                     }
                     
                 }
@@ -523,10 +538,10 @@ function imprimeCabecalho(&$oPdf, $alt, $iAbertura, $iCompilacao, $sLicitacao, $
     $oPdf->cell(28, $alt, $iCompilacao, 'TB', 0, "L", 1);
 
     $oPdf->setfont('arial', 'b', 8);
-    $oPdf->cell(20, $alt, "Licitação:", 'TB', 0, "C", 1);
+    $oPdf->cell(12, $alt, "Licitação:", 'TB', 0, "C", 1);
 
     $oPdf->setfont('arial', '', 6);
-    $oPdf->cell(($lControlaValor ? 63 : 45), $alt, $sLicitacao, 'RTB', 0, "L", 1);
+    $oPdf->cell(($lControlaValor ? 63 : 53), $alt, $sLicitacao, 'RTB', 0, "L", 1);
 
     $oPdf->setfont('arial', 'b', 8);
     $oPdf->cell(($lControlaValor ? 50 : 68), $alt, ($lControlaValor ? "Valor" : "Quantidade"), 1, 0, "C", 1);
