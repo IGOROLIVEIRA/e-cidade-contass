@@ -61,12 +61,12 @@ if (!isset($db_opcao)) {
             <tr>
                 <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
                     <?
-                    $clcriaabas->identifica = array("acordo" => "Acordo", "inclusaodotacao" => "Alteração/Inclusão de dotações");
-                    $clcriaabas->sizecampo  = array("acordo" => "40", "inclusaodotacao" => "40");
-                    $clcriaabas->title      = array("acordo" => "Acordo", "inclusaodotacao" => "Alteração/Inclusão de dotações");
-                    $clcriaabas->src        = array("acordo" => "m4_acordo.php", "inclusaodotacao" => "m4_inclusaodotacao.php");
+                    $clcriaabas->identifica = array("acordo" => "Acordo", "inclusaodotacao" => "Alteração/Inclusão de dotações", "alteracaodesdobramento" => "Alteração Desdobramento");
+                    $clcriaabas->sizecampo  = array("acordo" => "40", "inclusaodotacao" => "40", "alteracaodesdobramento" => "40");
+                    $clcriaabas->title      = array("acordo" => "Acordo", "inclusaodotacao" => "Alteração/Inclusão de dotações", "alteracaodesdobramento" => "Alteração Desdobramento");
+                    $clcriaabas->src        = array("acordo" => "m4_acordo.php", "inclusaodotacao" => "m4_inclusaodotacao.php", "alteracaodesdobramento" => "m4_acordodesdobramento.php");
                     if ($db_opcao == 1) {
-                        $clcriaabas->disabled   =  array("acordo" => "false", "inclusaodotacao" => "false");
+                        $clcriaabas->disabled   =  array("acordo" => "false", "inclusaodotacao" => "false", "alteracaodesdobramento" => "false");
                     }
                     $clcriaabas->cria_abas();
                     ?>
