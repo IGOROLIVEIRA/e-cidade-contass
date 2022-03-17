@@ -245,6 +245,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp10->si208_exercicio                         = $iValorNumerico;
       $clbpdcasp10->si208_vlativocircucaixaequicaixa        = $oRetornoBP[2]->$sChave;
       $clbpdcasp10->si208_vlativocircucredicurtoprazo       = $oRetornoBP[3]->$sChave;
+      $clbpdcasp10->si208_vlativocircudemaiscredicurtoprazo = 0;
       $clbpdcasp10->si208_vlativocircuinvestapliccurtoprazo = $oRetornoBP[4]->$sChave;
       $clbpdcasp10->si208_vlativocircuestoques              = $oRetornoBP[5]->$sChave;
       $clbpdcasp10->si208_vlativocircuvpdantecipada         = $oRetornoBP[6]->$sChave;
@@ -268,31 +269,32 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $clbpdcasp20  = new cl_bpdcasp202021();
 
-      $clbpdcasp20->si209_ano                                 = $iAnoUsu;
-      $clbpdcasp20->si209_periodo                             = $iCodigoPeriodo;
-      $clbpdcasp20->si209_institu                             = db_getsession("DB_instit");
-      $clbpdcasp20->si209_tiporegistro                        = 20;
-      $clbpdcasp20->si209_exercicio                           = $iValorNumerico;
-      $clbpdcasp20->si209_vlpassivcircultrabprevicurtoprazo   = $oRetornoBP[21]->$sChave;
-      $clbpdcasp20->si209_vlpassivcirculemprefinancurtoprazo  = $oRetornoBP[22]->$sChave;
-      $clbpdcasp20->si209_vlpassivocirculafornecedcurtoprazo  = $oRetornoBP[23]->$sChave;
-      $clbpdcasp20->si209_vlpassicircuobrigfiscacurtoprazo    = $oRetornoBP[24]->$sChave;
-      $clbpdcasp20->si209_vlpassivocirculaobrigacoutrosentes  = $oRetornoBP[25]->$sChave;
-      $clbpdcasp20->si209_vlpassivocirculaprovisoecurtoprazo  = $oRetornoBP[26]->$sChave;
-      $clbpdcasp20->si209_vlpassicircudemaiobrigcurtoprazo    = $oRetornoBP[27]->$sChave;
-      $clbpdcasp20->si209_vlpassinaocircutrabprevilongoprazo  = $oRetornoBP[30]->$sChave;
-      $clbpdcasp20->si209_vlpassnaocircemprfinalongpraz       = $oRetornoBP[31]->$sChave;
-      $clbpdcasp20->si209_vlpassivnaocirculforneclongoprazo   = $oRetornoBP[32]->$sChave;
-      $clbpdcasp20->si209_vlpassnaocircobrifisclongpraz       = $oRetornoBP[33]->$sChave;
-      $clbpdcasp20->si209_vlpassivnaocirculprovislongoprazo   = $oRetornoBP[34]->$sChave;
-      $clbpdcasp20->si209_vlpassnaocircdemaobrilongpraz       = $oRetornoBP[35]->$sChave;
-      $clbpdcasp20->si209_vlpassivonaocircularesuldiferido    = $oRetornoBP[36]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidocapitalsocial         = $oRetornoBP[39]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidoadianfuturocapital    = $oRetornoBP[40]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidoreservacapital        = $oRetornoBP[41]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidoajustavaliacao        = $oRetornoBP[42]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidoreservalucros         = $oRetornoBP[43]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidodemaisreservas        = $oRetornoBP[44]->$sChave;
+      $clbpdcasp20->si209_ano                                       = $iAnoUsu;
+      $clbpdcasp20->si209_periodo                                   = $iCodigoPeriodo;
+      $clbpdcasp20->si209_institu                                   = db_getsession("DB_instit");
+      $clbpdcasp20->si209_tiporegistro                              = 20;
+      $clbpdcasp20->si209_exercicio                                 = $iValorNumerico;
+      $clbpdcasp20->si209_vlpassivcircultrabprevicurtoprazo         = $oRetornoBP[21]->$sChave;
+      $clbpdcasp20->si209_vlpassivcirculemprefinancurtoprazo        = $oRetornoBP[22]->$sChave;
+      $clbpdcasp20->si209_vlpassivocirculafornecedcurtoprazo        = $oRetornoBP[23]->$sChave;
+      $clbpdcasp20->si209_vlpassicircuobrigfiscacurtoprazo          = $oRetornoBP[24]->$sChave;
+      $clbpdcasp20->si209_vlpassivocirculatransffiscalcurtoprazo    = $oRetornoBP[25]->$sChave;
+      $clbpdcasp20->si209_vlpassivocirculaprovisoecurtoprazo        = $oRetornoBP[26]->$sChave;
+      $clbpdcasp20->si209_vlpassicircudemaiobrigcurtoprazo          = $oRetornoBP[27]->$sChave;
+      $clbpdcasp20->si209_vlpassinaocircutrabprevilongoprazo        = $oRetornoBP[30]->$sChave;
+      $clbpdcasp20->si209_vlpassnaocircemprfinalongpraz             = $oRetornoBP[31]->$sChave;
+      $clbpdcasp20->si209_vlpassivnaocirculforneclongoprazo         = $oRetornoBP[32]->$sChave;
+      $clbpdcasp20->si209_vlpassivonaocirculatransffiscallongoprazo = $oRetornoBP[33]->$sChave;
+      $clbpdcasp20->si209_vlpassnaocircobrifisclongpraz             = $oRetornoBP[33]->$sChave;
+      $clbpdcasp20->si209_vlpassivnaocirculprovislongoprazo         = $oRetornoBP[34]->$sChave;
+      $clbpdcasp20->si209_vlpassnaocircdemaobrilongpraz             = $oRetornoBP[35]->$sChave;
+      $clbpdcasp20->si209_vlpassivonaocircularesuldiferido          = $oRetornoBP[36]->$sChave;
+      $clbpdcasp20->si209_vlpatriliquidocapitalsocial               = $oRetornoBP[39]->$sChave;
+      $clbpdcasp20->si209_vlpatriliquidoadianfuturocapital          = $oRetornoBP[40]->$sChave;
+      $clbpdcasp20->si209_vlpatriliquidoreservacapital              = $oRetornoBP[41]->$sChave;
+      $clbpdcasp20->si209_vlpatriliquidoajustavaliacao              = $oRetornoBP[42]->$sChave;
+      $clbpdcasp20->si209_vlpatriliquidoreservalucros               = $oRetornoBP[43]->$sChave;
+      $clbpdcasp20->si209_vlpatriliquidodemaisreservas              = $oRetornoBP[44]->$sChave;
 
       //para pegar o superavit do exercicio atual e anterior é necessário alterar o anousu
       $iAno = db_getsession("DB_anousu");

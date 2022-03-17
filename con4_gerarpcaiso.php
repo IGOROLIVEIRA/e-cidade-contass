@@ -88,7 +88,7 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','DRAA','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','DRAA','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -106,7 +106,7 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','NTA_PLANO_FINANCEIRO','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','NTA_PLANO_FINANCEIRO','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -124,7 +124,7 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','NTA_PLANO_PREVIDENCIARIO','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','NTA_PLANO_PREVIDENCIARIO','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -142,7 +142,7 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','FAA_PLANO_FINANCEIRO','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','FAA_PLANO_FINANCEIRO','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -160,7 +160,7 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','FAA_PLANO_PREVIDENCIARIO','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','FAA_PLANO_PREVIDENCIARIO','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -178,7 +178,7 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','FAF_PLANO_PREVIDENCIARIO','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','FAF_PLANO_PREVIDENCIARIO','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -196,7 +196,7 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','BASE_CADAS_AVA_ATUARIAL','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','BASE_CADAS_AVA_ATUARIAL','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -214,7 +214,7 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','RELA_AVA_ATUA_PLANO_FINANCEIRO','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','RELA_AVA_ATUA_PLANO_FINANCEIRO','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -232,7 +232,7 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','RELA_AVA_ATUA_PLANO_PREVIDENCIARIO','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','RELA_AVA_ATUA_PLANO_PREVIDENCIARIO','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -250,7 +250,25 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                             <td>
                                                 <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','DVP_CUSTEIO','Carregando...','Erro ao carregar')"/>
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','DVP_CUSTEIO','Carregando...','Erro ao carregar')"/>
+                                                <div>&nbsp;</div>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                    <tr>
+                                        <form name="form1" id='form1' method="post" action=""
+                                                enctype="multipart/form-data">
+                                            <td>
+                                                Relatório de Análise das Hipóteses:
+                                                <div>&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input class="isolado" type="file" name="RAH"/>
+                                                <div id="RAH" class="recebe">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input type="button" value="Enviar"
+                                                        onclick="micoxUpload(this.form,'con4_uploadarquivospcaprevidencia.php','RAH','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
@@ -319,10 +337,10 @@ include("dbforms/db_funcoes.php");
     }
 
     function js_retornoProcessamento(oAjax) {
-
         js_removeObj('msgBox');
-        //$('debug').innerHTML = oAjax.responseText;
+        $('debug').innerHTML = oAjax.responseText;
         var oRetorno = eval("(" + oAjax.responseText + ")");
+        console.log(oRetorno);
         if (oRetorno.status == 1) {
 
             alert("Processo concluído com sucesso!");
