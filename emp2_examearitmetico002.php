@@ -196,7 +196,7 @@ if ($iRestosPagar != 2) {
         WHERE " . $sWhere . " and coremp.k12_data BETWEEN '" . $sDataInicial . "' and '" . $sDataFinal . "'
         ORDER BY o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_funcao,o58_programa,o58_projativ,o56_elemento,e60_codemp) AS xxxxx
     WHERE 1 = 1";
-}else if($ordenar == 03) {
+    }else if($ordenar == 03) {
         $sSql = "select * from
         ( select coremp.k12_empen, e60_numemp, e60_codemp, e60_emiss, e60_numerol,e60_tipol,
             case when e49_numcgm is null then e60_numcgm
@@ -244,7 +244,7 @@ if ($iRestosPagar != 2) {
         order by o58_coddot,o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento,e60_codemp) as xxxxx where 1 = 1";
         
     }
-    echo $sSql;exit;
+    
     $rsResult = db_query($sSql);
     $aDadosAgrupados = array();
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
@@ -438,7 +438,10 @@ if ($tipoExame == 2) {
 }
 
 if ($iRestosPagar != 1) {
-
+    if($ordenar == '3')
+        $ordenarcampos = " o58_coddot ";
+    else
+        $ordenarcampos = " z01_nome ";    
     $sSql = "select * from
         ( select coremp.k12_empen, e60_numemp, e60_codemp, e60_emiss, e60_numerol,e60_tipol,
             case when e49_numcgm is null then e60_numcgm
@@ -484,8 +487,8 @@ if ($iRestosPagar != 1) {
             inner join saltes on saltes.k13_conta = corrente.k12_conta
         where " . $sWhere . " and coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' 
         order by o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento) as xxxxx
-        where 1 = 1 and tipo = 'RP' order by z01_nome";
-
+        where 1 = 1 and tipo = 'RP' order by ". $ordenarcampos ."";
+   
     $rsResult = db_query($sSql);
     $aDadosAgrupados = array();
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
