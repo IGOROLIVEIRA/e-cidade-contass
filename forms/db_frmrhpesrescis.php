@@ -275,6 +275,9 @@ function js_verificadados(){
   }else if(x.rh05_causa.value == ""){
     alert("Informe a causa da rescisão.");
     x.rh05_causa.focus();
+  }else if(x.rh173_codigo.value == ""){
+    alert("Informe o motivo da rescisão.");
+    x.rh173_codigo.focus();
   }else{
     js_faltas(x.rh01_regist.value);
   }

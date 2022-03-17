@@ -16,7 +16,7 @@ class Addtablerhmotivorescisao extends AbstractMigration
 
             -- INSERE db_syscampo
             INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh173_sequencial','int8' ,'Sequencial','', 'Sequencial' ,11	,false, false, false, 1, 'int8', 'Sequencial');
-            INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh173_codigo','text' ,'Codigo Rescisão','', 'Codigo Rescisão' ,11	,false, false, false, 1, 'text', 'Codigo Rescisão');
+            INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh173_codigo','text' ,'Motivo Rescisão','', 'Motivo Rescisão' ,11	,false, false, false, 1, 'text', 'Motivo Rescisão');
             INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'rh173_descricao' ,'text' ,'Descrição Rescisão','', 'Descrição Rescisão' ,10	,false, false, false, 0, 'text', 'Descrição Rescisão');
 
             -- INSERE db_sysarqcamp
@@ -73,6 +73,20 @@ class Addtablerhmotivorescisao extends AbstractMigration
             insert into rhmotivorescisao values(nextval('rhmotivorescisao_rh173_sequencial_seq'),'40', 'Término do exercício do mandato eletivo');
 
             ALTER TABLE pessoal.rhpesrescisao ADD rh05_motivo int4 NULL;
+
+            update rhpesrescisao as antigo
+            set rh05_motivo =
+            case
+            when rh05_causa = 10 then 01
+            when rh05_causa = 11 then 02
+            when rh05_causa = 12 then 06
+            when rh05_causa = 20 or rh05_causa = 21 then 07
+            when rh05_causa = 60 or rh05_causa = 62 or rh05_causa = 64 then 10
+            when rh05_causa = 70 or rh05_causa = 71 then 20
+            when rh05_causa = 72 or rh05_causa = 78 or rh05_causa = 79 then 19
+            when rh05_causa = 73 or rh05_causa = 74 or rh05_causa = 76 then 39
+            when rh05_causa = 75 then 18
+            end;
 
         commit;
         ";

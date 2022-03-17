@@ -791,6 +791,7 @@ class cl_rhpesrescisao
         }
         $sql .= " from rhpesrescisao ";
         $sql .= "      inner join rhpessoalmov  on  rhpessoalmov.rh02_seqpes = rhpesrescisao.rh05_seqpes";
+        $sql .= "      left join rhmotivorescisao  on  rh173_codigo::int = rhpesrescisao.rh05_motivo";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($rh05_seqpes != null) {
