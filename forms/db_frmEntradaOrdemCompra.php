@@ -391,7 +391,6 @@ if (count($aParametrosEmpenho) > 0) {
                 }
                 
                 db_select('unidadeentrada', $aUnidades, true, 1, "style='width:200pt'");
-                db_input('teste', 10, null, true, 'text', 1, "");
                 ?>
               </td>
             </tr>
@@ -926,7 +925,7 @@ if (count($aParametrosEmpenho) > 0) {
     $('descrdeptoconsumo').value = oItemAtivo.descrdeptoconsumo.urlDecode();
     $('cc08_sequencial').value = oItemAtivo.cc08_sequencial;
     $('cc08_descricao').value = oItemAtivo.cc08_descricao.urlDecode();
-    lSalvo = false;
+    lSalvo = false; 
     
     //adicionada condição para habilitar o campo quantidade quando o item for controlado por quantidade
     if (oItemAtivo.pc01_servico == 't' && oItemAtivo.sServicoQuantidade == 'f') {

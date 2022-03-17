@@ -144,12 +144,12 @@ if(isset($incluir)){
 	      oOption.descr           = '{$clmatmater->m60_descr}';
 	      parent.$('matmaterdescr').add(oOption,null);
 	      parent.$('matmaterdescr').value    = {$clmatmater->m60_codmater};
+        parent.$('unidadeentrada').value    = {$clmatmater->m60_codmatunid};
 	      parent.$('matmater').disabled      = false;
 	      parent.$('matmaterdescr').disabled = false;
 	    
           </script>";
     } else {
-
         echo "<script>
               location.href='mat1_matmater011.php?m63_codpcmater=$m63_codpcmater&pc01_descrmater=$pc01_descrmater';
 	      parent.iframe_material.hide();
