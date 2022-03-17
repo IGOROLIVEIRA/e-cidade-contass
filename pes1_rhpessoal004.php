@@ -307,8 +307,10 @@ if (isset($incluir)) {
                     $oDaoPesMov->rh02_art61ldb3 = $oMovimento->rh02_art61ldb3;
                     $oDaoPesMov->rh02_art61ldb4 = $oMovimento->rh02_art61ldb4;
                     $oDaoPesMov->rh02_art61ldb5 = $oMovimento->rh02_art61ldb5;
+                    $oDaoPesMov->rh02_art61ldboutros = $oMovimento->rh02_art61ldboutros;
                     $oDaoPesMov->rh02_art1leiprestpsiccologia = $oMovimento->rh02_art1leiprestpsiccologia;
                     $oDaoPesMov->rh02_art1leiprestservsocial = $oMovimento->rh02_art1leiprestservsocial;
+                    $oDaoPesMov->rh02_art1leioutros = $oMovimento->rh02_art1leioutros;
 
                     $oDaoPesMov->rh02_reabreadap      = $oMovimento->rh02_reabreadap;
                     $oDaoPesMov->rh02_cotadeficiencia = $oMovimento->rh02_cotadeficiencia;
