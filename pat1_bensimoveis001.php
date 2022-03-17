@@ -39,11 +39,14 @@ $clbensmater = new cl_bensmater;
 
 if (isset($incluir)) {
   $sqlerro = false;
+  $erroValorTotal = false;
+
 
   $rsValorAquisicao = db_query("select t52_valaqu from bens where t52_bem = $t54_codbem");
   $valorAquisicao  = db_utils::fieldsmemory($rsValorAquisicao, 0);
 
   if (strcmp($valorAquisicao->t52_valaqu, $t54_valor_total)  != 0) {
+    $erroValorTotal = true;
     $sqlerro = true;
     $erro_msg = "Erro, Valor total do imóvel não esta compatível com o valor total da aquisição.";
   }
@@ -59,6 +62,7 @@ if (isset($incluir)) {
   }
 } else if (isset($alterar)) {
   $sqlerro = false;
+  $erroValorTotal = false;
 
   $rsValorAquisicao = db_query("select t52_valaqu from bens where t52_bem = $t54_codbem");
   $valorAquisicao  = db_utils::fieldsmemory($rsValorAquisicao, 0);
@@ -66,7 +70,9 @@ if (isset($incluir)) {
 
   if (strcmp($valorAquisicao->t52_valaqu, $t54_valor_total)  != 0) {
     $sqlerro = true;
+    $erroValorTotal = true;
     $erro_msg = "Erro, Valor total do imóvel não esta compatível com o valor total da aquisição.";
+    $clbensimoveis->erro_campo = "t54_valor_terreno";
   }
 
   if ($sqlerro == false) {
@@ -237,7 +243,13 @@ if (isset($importar) && $importar == true) {
 <?
 if (isset($alterar) || isset($excluir) || isset($incluir)) {
   db_msgbox($erro_msg);
-  if ($clbensimoveis->erro_campo != "") {
+
+  if ($erroValorTotal == true) {
+    echo "<script> document.form1." . "t54_valor_terreno" . ".style.backgroundColor='#99A9AE';</script>";
+    echo "<script> document.form1." . "t54_valor_terreno"  . ".focus();</script>";
+    echo "<script> document.form1." . "t54_valor_area" . ".style.backgroundColor='#99A9AE';</script>";
+    echo "<script> document.form1." . "t54_valor_area"  . ".focus();</script>";
+  } else if ($clbensimoveis->erro_campo != "") {
     echo "<script> document.form1." . $clbensimoveis->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
     echo "<script> document.form1." . $clbensimoveis->erro_campo . ".focus();</script>";
   }

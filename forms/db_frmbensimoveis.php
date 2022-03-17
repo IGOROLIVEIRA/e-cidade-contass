@@ -65,6 +65,7 @@ $clrotulo = new rotulocampo;
         <td>
           <?
           db_textarea('t54_obs', 2, 60, $It54_obs, true, 'text', $db_opcao, "")
+
           ?>
         </td>
 
@@ -218,7 +219,7 @@ $clrotulo = new rotulocampo;
           </td>
           <td title="Nº Registro:">
             <?php
-            db_input('t54_registro_tc', 15, $t54_registro_tc, true, 'text', 1, "onkeyup=js_ValidaCampos(this,1,'Nº Registro','t','t',event);", '', '#E6E4F1', '', "14");
+            db_input('t54_registro_tc', 15, $t54_registro_tc, true, 'text', 1, "onkeyup=js_ValidaCampos(this,1,'Registro','t','t',event);", '', '#E6E4F1', '', "14");
             ?>
           </td>
         </tr>
@@ -330,7 +331,7 @@ $clrotulo = new rotulocampo;
           </td>
           <td title="Escritura:">
             <?php
-            db_textarea('t54_escritura_tp', 2, 60, $t54_escritura_tp, true, 'text', $db_opcao, '', '', '#E6E4F1', "", "200");
+            db_textarea('t54_escritura_tp', 2, 60, $t54_escritura_tp, true, 'text', $db_opcao, '', '', '#E6E4F1', "200");
             ?>
           </td>
         </tr>
@@ -341,7 +342,7 @@ $clrotulo = new rotulocampo;
           </td>
           <td title="Carta de sentença:">
             <?php
-            db_textarea('t54_carta_tp', 2, 60, $t54_carta_tp, true, 'text', $db_opcao, '', '', '#E6E4F1', "", "200");
+            db_textarea('t54_carta_tp', 2, 60, $t54_carta_tp, true, 'text', $db_opcao, '', '', '#E6E4F1', "200");
             ?>
           </td>
         </tr>
