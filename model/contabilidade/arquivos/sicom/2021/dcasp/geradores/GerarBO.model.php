@@ -22,7 +22,7 @@ class GerarBO extends GerarAM
     $sSql = "select * from bodcasp102021 where si201_ano = {$this->iAno} AND si201_periodo = {$this->iPeriodo} AND si201_institu = " . db_getsession("DB_instit");
     $rsBO10 = db_query($sSql);
 
-    $sSql = "select * from bodcasp202121 where si202_anousu = {$this->iAno} AND si202_periodo = {$this->iPeriodo} AND si202_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp202021 where si202_anousu = {$this->iAno} AND si202_periodo = {$this->iPeriodo} AND si202_instit = " . db_getsession("DB_instit");
     $rsBO20 = db_query($sSql);
 
     $sSql = "select * from bodcasp302021 where si203_anousu = {$this->iAno} AND si203_periodo = {$this->iPeriodo} AND si203_instit = " . db_getsession("DB_instit");
