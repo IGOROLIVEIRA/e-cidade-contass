@@ -39,6 +39,15 @@ $clbensmater = new cl_bensmater;
 
 if (isset($incluir)) {
   $sqlerro = false;
+
+  $rsValorAquisicao = db_query("select t52_valaqu from bens where t52_bem = $t54_codbem");
+  $valorAquisicao  = db_utils::fieldsmemory($rsValorAquisicao, 0);
+
+  if (strcmp($valorAquisicao->t52_valaqu, $t54_valor_total)  != 0) {
+    $sqlerro = true;
+    $erro_msg = "Erro, Valor total do imóvel não esta compatível com o valor total da aquisição.";
+  }
+
   if ($sqlerro == false) {
     db_inicio_transacao();
     $clbensimoveis->incluir($t54_codbem, $t54_idbql);
@@ -50,6 +59,16 @@ if (isset($incluir)) {
   }
 } else if (isset($alterar)) {
   $sqlerro = false;
+
+  $rsValorAquisicao = db_query("select t52_valaqu from bens where t52_bem = $t54_codbem");
+  $valorAquisicao  = db_utils::fieldsmemory($rsValorAquisicao, 0);
+
+
+  if (strcmp($valorAquisicao->t52_valaqu, $t54_valor_total)  != 0) {
+    $sqlerro = true;
+    $erro_msg = "Erro, Valor total do imóvel não esta compatível com o valor total da aquisição.";
+  }
+
   if ($sqlerro == false) {
     db_inicio_transacao();
     $clbensimoveis->alterar($t54_codbem, $t54_idbql);

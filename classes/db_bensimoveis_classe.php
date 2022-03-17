@@ -326,12 +326,12 @@ class cl_bensimoveis
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql   = "Bens imóveis ($this->t54_codbem." - ".$this->t54_idbql) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "Bens imóveis ($this->t54_codbem) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_banco = "Bens imóveis já Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = "Bens imóveis ($this->t54_codbem." - ".$this->t54_idbql) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "Bens imóveis ($this->t54_codbem) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
@@ -341,7 +341,7 @@ class cl_bensimoveis
     }
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-    $this->erro_sql .= "Valores : " . $this->t54_codbem . "-" . $this->t54_idbql;
+    $this->erro_sql .= "Valores : " . $this->t54_codbem;
     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
@@ -655,7 +655,7 @@ class cl_bensimoveis
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
         $this->erro_sql = "Bens imóveis nao foi Alterado. Alteracao Executada.\\n";
-        $this->erro_sql .= "Valores : " . $this->t54_codbem . "-" . $this->t54_idbql;
+        $this->erro_sql .= "Valores : " . $this->t54_codbem;
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
@@ -664,7 +664,7 @@ class cl_bensimoveis
       } else {
         $this->erro_banco = "";
         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
-        $this->erro_sql .= "Valores : " . $this->t54_codbem . "-" . $this->t54_idbql;
+        $this->erro_sql .= "Valores : " . $this->t54_codbem;
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
