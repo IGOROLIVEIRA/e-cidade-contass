@@ -1593,7 +1593,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $op++;
                 }
             }
-        }
+        } 
         
 
         /*
