@@ -212,7 +212,7 @@ class cl_bpdcasp202021 {
          $this->si209_vltotalpassivo = 0;
      }
      if($this->si209_vlpassivonaocirculatransffiscallongoprazo == null){
-         $this->si209_vlpassivonaocirculatransffiscallongoprazo 0;
+         $this->si209_vlpassivonaocirculatransffiscallongoprazo = 0;
      }
      $sql = "insert into bpdcasp202021(
                                        si209_sequencial
