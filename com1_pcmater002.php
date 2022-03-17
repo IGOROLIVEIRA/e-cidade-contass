@@ -77,12 +77,6 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
       $sqlerro  = true;
       db_msgbox($erro_msg);
     }
-
-    if ($pc01_justificativaanterior == $pc01_justificativa) {
-      $erro_msgg = "Campo Justificativa não Atualizado !";
-      $sqlerro  = true;
-      db_msgbox($erro_msgg);
-    }
   }
 
   if (!$sqlerro) {
