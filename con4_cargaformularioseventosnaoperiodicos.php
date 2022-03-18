@@ -67,7 +67,7 @@ require_once("dbforms/db_funcoes.php");
                         <input type="checkbox" value="4000116">
                     </td>
                     <td>
-                        <label>S-2400</label>
+                        <label>S-2400 ? Cadastro de Beneficiário</label>
                     </td>
                 </tr>
             </table>
