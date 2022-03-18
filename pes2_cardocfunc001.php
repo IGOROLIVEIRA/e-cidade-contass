@@ -222,7 +222,7 @@ function js_emite(){
         $gform->selecao = false;               
         $gform->onchpad = true;               // MUDAR AS OPÇÕES AO SELECIONAR OS TIPOS DE FILTRO OU RESUMO
     
-        $gform->manomes = true;
+        $gform->manomes = false;
         $gform->gera_form( db_anofolha(), db_mesfolha() );
       ?>
       <tr >

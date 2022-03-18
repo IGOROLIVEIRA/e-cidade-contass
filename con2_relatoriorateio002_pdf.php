@@ -12,9 +12,9 @@ $sSql  = "SELECT db21_codigomunicipoestado,cgc FROM db_config where codigo = ".d
 $rsInst = db_query($sSql);
 $sInstCgc  = str_pad(db_utils::fieldsMemory($rsInst, 0)->cgc, 5, "0", STR_PAD_LEFT);
 //Cimva
-$aCgcExecaoRelFinanceiro = $arrayName = array('21466841000169');
+//$aCgcExecaoRelFinanceiro = $arrayName = array('21466841000169');
 
-//$aCgcExecaoRelFinanceiro = $arrayName = array('');
+$aCgcExecaoRelFinanceiro = $arrayName = array('');
 
 //db_criatabela($rsInst);exit;
 

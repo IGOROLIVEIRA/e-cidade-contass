@@ -124,7 +124,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
     $this->iCodigoLayout = 226;
   }
 
-    /**
+  /**
    * Retorna o Ano do Censo
    * @return integer
    */
@@ -179,7 +179,6 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
    * @return array
    */
   public function getDadosProcessadosTurma() {
-
     return $this->aDadosCensoTurma;
   }
 
@@ -188,7 +187,6 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
    * @return array
    */
   public function getDadosProcessadosDocente() {
-
     return $this->aDadosCensoDocente;
   }
 
@@ -197,7 +195,6 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
    * @return array
    */
   public function getDadosProcessadosAluno() {
-
     return $this->aAlunos;
   }
 
@@ -206,7 +203,6 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
    * @return string
    */
   public function getNomeArquivoLog() {
-
     return $this->sNomeArquivoLog;
   }
 
@@ -222,9 +218,9 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
   }
 
   /**
-   * Cria o arquivo txt.
-   * retorna o caminho do arquivo gerado.
+   * Cria o arquivo txt. Retorna o caminho do arquivo gerado.
    * @return string
+   * @throws Exception
    */
   public function escreverArquivo() {
 
@@ -236,38 +232,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
     $this->getDadosCensoDocente();
     $this->getDadosAluno();
 
-    /**
-     * Validados os dados da escola.
-     */
-    $lTodosDadosValidos = true;
-    if (!DadosCensoEscola2015::validarDados($this)) {
-      $lTodosDadosValidos = false;
-    }
-
-    if (!DadosCensoTurma2015::validarDados($this)) {
-      $lTodosDadosValidos = false;
-    }
-
-    if (!DadosCensoDocente2015::validarDados($this)) {
-      $lTodosDadosValidos = false;
-    }
-
-    if (!DadosCensoAluno2015::validarDados($this)) {
-      $lTodosDadosValidos = false;
-    }
-
-    if (!$lTodosDadosValidos) {
-
-      $oJson          = new services_json();
-      $sNomeArquivo  = "tmp/censo_".$this->iCodigoEscola."_".db_getsession("DB_id_usuario")."_{$this->iAnoCenso}_logerro.json";
-      $sJson         = $oJson->encode($this->aLogCenso);
-
-      $this->sNomeArquivoLog = $sNomeArquivo;
-      $this->rsArquivoLog    = fopen($sNomeArquivo, "w");
-      fwrite($this->rsArquivoLog, "{$sJson}\n");
-      throw new Exception("Existem dados inconsistentes no censo. Verifique o arquivo de log");
-    }
-
+    $this->validarDadosArquivo();
 
     $oLayout->setByLineOfDBUtils($this->oDadosEscola->registro00, 3 , "00");
     $oLayout->setByLineOfDBUtils($this->oDadosEscola->registro10, 3 , "10");
@@ -305,6 +270,7 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
         $oLayout->setByLineOfDBUtils($oDocencia, 3, "51");
       }
     }
+
     /**
      * geramos os dados dos alunos
      */
@@ -324,8 +290,8 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
         $oMatricula->codigo_escola_inep = $this->oDadosEscola->registro00->codigo_escola_inep;
         $oLayout->setByLineOfDBUtils($oMatricula, 3, "80");
       }
-
     }
+
     return $sNomeArquivo;
   }
 
@@ -336,9 +302,6 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
 
     $this->getTurmasUnicas();
 
-    $lCicloObrigatorio = false;
-    $aEtapaInfantil    = array( 1, 2, 3 );
-
     $oDaoTurma     = new cl_turma();
     $sCamposTurma  = "ed57_i_codigo, ed57_c_descr";
     $sWhereTurma   = "     ed57_i_escola = {$this->iCodigoEscola} AND ed52_i_ano = '{$this->iAnoCenso}'";
@@ -348,8 +311,8 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
     $sWhereTurma  .= "            OR (ed60_c_situacao != 'MATRICULADO' and ed60_d_datasaida > '{$this->dtBaseCenso}')))";
     $sSqlTurma     = $oDaoTurma->sql_query("",$sCamposTurma,"ed57_c_descr",$sWhereTurma);
     $rsResultTurma = $oDaoTurma->sql_record($sSqlTurma);
-
     $iTotalTurmas  = $oDaoTurma->numrows;
+
     for ($iTurma = 0; $iTurma < $iTotalTurmas; $iTurma++) {
 
       $iCodigosTurma = db_utils::fieldsMemory($rsResultTurma, $iTurma)->ed57_i_codigo;
@@ -359,43 +322,64 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
       }
 
       $oTurmaCenso = new DadosCensoTurma2015($iCodigosTurma);
+      $oTurmaCenso->setDataCenso( $this->dtBaseCenso );
 
       if ( isset($this->aTurmasUnicas[$iCodigosTurma]) ) {
 
         $oTurmaCenso->setCodigoTurmaCenso($this->aTurmasUnicas[$iCodigosTurma]->ed342_sequencial);
         $oTurmaCenso->setEtapaTurmaCenso($this->aTurmasUnicas[$iCodigosTurma]->ed134_censoetapa);
         $oTurmaCenso->setNomeTurmaCenso($this->aTurmasUnicas[$iCodigosTurma]->ed342_nome);
+        $oTurmaCenso->setTurmaUnificada(true);
       }
 
-      $oDadosTurmaCenso = $oTurmaCenso->getDados();
-
-      if( !in_array( $oDadosTurmaCenso->etapa_ensino_turma, $aEtapaInfantil ) ) {
-        $lCicloObrigatorio = true;
-      }
-
-      $this->aDadosCensoTurma[] = $oDadosTurmaCenso;
+      $this->aDadosCensoTurma[] = $oTurmaCenso->getDados();
     }
 
     $oDaoTurmaAc     = new cl_turmaac();
-    $sCamposTurmaAc  = "distinct ed268_i_codigo, ed268_c_descr";
+    $sCamposTurmaAc  = "distinct ed268_i_codigo, ed268_c_descr, ed268_i_tipoatend";
     $sWhereTurmaAc   = "     ed268_i_escola = {$this->iCodigoEscola}";
     $sWhereTurmaAc  .= " AND ed52_i_ano = '{$this->iAnoCenso}'";
     $sSqlTurmaAc     = $oDaoTurmaAc->sql_query( "", $sCamposTurmaAc, "ed268_c_descr", $sWhereTurmaAc );
-    $sResultTurmaAc  = $oDaoTurmaAc->sql_record( $sSqlTurmaAc );
-    $iTotalTurmasAc  = $oDaoTurmaAc->numrows;
+    $sResultTurmaAc  = db_query( $sSqlTurmaAc );
+    if ( !$sResultTurmaAc ) {
+      throw new DBException("Erro ao buscar Turmas AC. \n" . pg_last_error());
+    }
+
+    $iTotalTurmasAc  = pg_num_rows($sResultTurmaAc);
 
     $iTurmasACAEEMatriculasAntesDataCenso = 0;
+    for ($i = 0; $i < $iTotalTurmasAc; $i++) {
 
-    for ($iTurmaAc = 0; $iTurmaAc < $iTotalTurmasAc; $iTurmaAc++) {
+      $oDadosTurmaAc        = db_utils::fieldsMemory($sResultTurmaAc, $i);
+      $oDaoTurmaACMatricula = new cl_turmaacmatricula();
 
-      $oDadosTurmaAc           = db_utils::fieldsMemory($sResultTurmaAc, $iTurmaAc);
-      $oDaoTurmaACMatricula    = new cl_turmaacmatricula();
-      $sWhereTurmaACMatricula  = "     ed269_i_turmaac = {$oDadosTurmaAc->ed268_i_codigo}";
-      $sWhereTurmaACMatricula .= " AND ed269_d_data <= '{$this->dtBaseCenso}'";
+      $aWhereMatriculas   = array();
+      $aWhereMatriculas[] = " ed269_i_turmaac = {$oDadosTurmaAc->ed268_i_codigo}";
+      $aWhereMatriculas[] = " ed269_d_data <= '{$this->dtBaseCenso}'";
+
+      /**
+       * Quando turma é de atividade complementar, aluno deve ter matrícula ativa na escola
+       */
+      if ($oDadosTurmaAc->ed268_i_tipoatend == 4 ) {
+
+        // Monta uma query para garantir que o aluno vinculado nas Turmas AC possui uma matricula em turmas normais
+        $aFiltro            = array('ed60_i_aluno = ed269_aluno');
+        $oDaoMatricula      = new cl_matricula();
+        $sWhereMatricula    = $this->montarWhereAlunosMatriculados($aFiltro, false);
+
+        $sSqlAlunoMatricula = $oDaoMatricula->sql_query_cancelaravalmatricula(null, " 1 ", null, $sWhereMatricula);
+
+        $aWhereMatriculas[] = " exists ( {$sSqlAlunoMatricula} ) ";
+      }
+      $sWhereTurmaACMatricula  = implode( ' and ', $aWhereMatriculas);
       $sSqlTurmaACMatricula    = $oDaoTurmaACMatricula->sql_query_file( null, '1', null, $sWhereTurmaACMatricula );
       $rsTurmaACMatricula      = db_query( $sSqlTurmaACMatricula );
 
-      if( $rsTurmaACMatricula && pg_num_rows( $rsTurmaACMatricula ) == 0 ) {
+      if( !$rsTurmaACMatricula ) {
+        throw new DBException( "Erro ao validar matrículas de turmas AC/AEE.\n" . pg_last_error() );
+      }
+
+      if( pg_num_rows( $rsTurmaACMatricula ) == 0 ) {
         continue;
       }
 
@@ -405,20 +389,11 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
       $iTurmasACAEEMatriculasAntesDataCenso++;
     }
 
+
     if( $iTurmasACAEEMatriculasAntesDataCenso == 0 ) {
 
       $this->oDadosEscola->registro10->atividade_complementar                = '0';
       $this->oDadosEscola->registro10->atendimento_educacional_especializado = '0';
-    }
-
-    /**
-     * Propriedade cicloObrigatorio criada, para validar o caso onde a escola tem modalidade regular, porem somente
-     * turmas de ensino infantil. Neste caso, o ciclo nao deve ser informado
-     */
-    if( !$lCicloObrigatorio ) {
-
-      $this->oDadosEscola->registro10->ensino_fundamental_organizado_ciclos = '';
-      $this->oDadosEscola->registro10->cicloObrigatorio                     = '0';
     }
 
     return $this->aDadosCensoTurma;
@@ -467,14 +442,11 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
     $sCamposDocentes  = "  distinct (case when cgmrh.z01_numcgm is not null";
     $sCamposDocentes .= "             then cgmrh.z01_numcgm else cgmcgm.z01_numcgm end) as numcgm, ed20_i_codigo ";
     $sWhereDocentes   = "       ed18_i_codigo = {$this->iCodigoEscola} ";
-    $sWhereDocentes  .= "  and (ed75_i_saidaescola is null OR ed75_i_saidaescola  >= '{$this->dtBaseCenso}') ";
+    $sWhereDocentes  .= "    and ed75_d_ingresso <= '{$this->dtBaseCenso}' \n";
+    $sWhereDocentes  .= "    and ( ed75_i_saidaescola is null or ed75_i_saidaescola > '{$this->dtBaseCenso}' ) \n";
+    $sWhereDocentes  .= "    and (    ed321_inicio is null or ed321_inicio > '{$this->dtBaseCenso}' \n";
+    $sWhereDocentes  .= "          or ( ed321_inicio < '{$this->dtBaseCenso}' and ed321_final < '{$this->dtBaseCenso}' ) ) \n";
     $sWhereDocentes  .= "  and (ed01_funcaoatividade in (2,3,4) or (ed01_funcaoatividade = 1 and ed01_c_regencia = 'S'))";
-    $sWhereDocentes  .= "  and (    ed321_sequencial is null ";
-    $sWhereDocentes  .= "        OR (     ed321_inicio <= '{$this->dtBaseCenso}' ";
-    $sWhereDocentes  .= "             AND ed321_final is not null ";
-    $sWhereDocentes  .= "             AND ed321_final <= '{$this->dtBaseCenso}' ";
-    $sWhereDocentes  .= "           ) ";
-    $sWhereDocentes  .= "      )";
     $sSqlDocentes     = $oDaoDocentes->sql_query_censo_2015("", $sCamposDocentes, "", $sWhereDocentes);
     $sSqlDocentes     = "select distinct on(numcgm) numcgm,ed20_i_codigo from ({$sSqlDocentes}) as x ";
     $sResultDocentes  = $oDaoDocentes->sql_record($sSqlDocentes);
@@ -506,19 +478,8 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
    */
   protected function getDadosAluno() {
 
-    $oDaoMatricula    = db_utils::getDao("matricula");
-    $sCamposAluno     = " DISTINCT ed47_i_codigo, ed47_v_nome ";
-    $sWhereMatricula  = " turma.ed57_i_escola = {$this->iCodigoEscola} ";
-    $sWhereMatricula .= "  AND calendario.ed52_i_ano = {$this->iAnoCenso} ";
-    $sWhereMatricula .= "  AND ed60_d_datamatricula <= '{$this->dtBaseCenso}' ";
-    $sWhereMatricula .= "  AND ((ed60_c_situacao = 'MATRICULADO' and ed60_d_datasaida is null) ";
-    $sWhereMatricula .= "       OR (ed60_c_situacao != 'MATRICULADO' and ed60_d_datasaida > '{$this->dtBaseCenso}'))";
-    $sSqlMatricula    = $oDaoMatricula->sql_query("", $sCamposAluno, "", $sWhereMatricula);
-    $sSql             =  "select * from ( ";
-    $sSql            .= $sSqlMatricula;
-    $sSql            .= " )  as t order by ed47_v_nome ";
-    $rsMatricula      = $oDaoMatricula->sql_record($sSql);
-    $iTotalAlunos     = $oDaoMatricula->numrows;
+    $rsMatricula  = $this->buscaAlunos();
+    $iTotalAlunos = pg_num_rows($rsMatricula);
     for ($iAluno = 0; $iAluno < $iTotalAlunos; $iAluno++) {
 
       $oAluno       = db_utils::fieldsMemory($rsMatricula, $iAluno);
@@ -533,6 +494,146 @@ class ExportacaoCenso2015 implements IExportacaoCenso {
       $this->aAlunos[]         = $oDadosAluno;
       unset($oAluno);
     }
+
     return $this->aAlunos;
   }
+
+  protected function buscaAlunos() {
+
+    $oDaoMatricula    = new cl_matricula();
+    $sCamposAluno     = " DISTINCT ed47_i_codigo, ed47_v_nome ";
+    $sWhereMatricula  = $this->montarWhereAlunosMatriculados();
+    $sSqlMatricula    = $oDaoMatricula->sql_query("", $sCamposAluno, "", $sWhereMatricula);
+    $sSql             =  "select * from ( ";
+    $sSql            .= $sSqlMatricula;
+    $sSql            .= " )  as t order by ed47_v_nome ";
+
+    $rsAlunosMatriculados = db_query($sSql);
+    if ( !$rsAlunosMatriculados ) {
+      throw new DBException("Erro ao buscar os alunos.\n" . pg_last_error());
+    }
+    return $rsAlunosMatriculados;
+  }
+
+  protected function montarWhereAlunosMatriculados( $aOutrosFiltros = array(), $lFiltraEscola = true ) {
+
+    $aWhere   = array();
+    if ( $lFiltraEscola ) {
+      $aWhere[] = " turma.ed57_i_escola   = {$this->iCodigoEscola} ";
+    }
+    $aWhere[] = " calendario.ed52_i_ano = {$this->iAnoCenso} ";
+    $aWhere[] = " ed60_d_datamatricula <= '{$this->dtBaseCenso}' ";
+
+    $sSituacaoMatricula  = "    (ed60_c_situacao = 'MATRICULADO' and ed60_d_datasaida is null)  ";
+    $sSituacaoMatricula .= " or (ed60_c_situacao != 'MATRICULADO' and ed60_d_datasaida > '{$this->dtBaseCenso}') ";
+
+    $aWhere[] = "  ( {$sSituacaoMatricula} )";
+
+    foreach ($aOutrosFiltros as $sFiltro) {
+      $aWhere[] = $sFiltro;
+    }
+
+    return implode( ' and ', $aWhere);
+  }
+
+
+  /**
+   * Realiza as validações dos dados de acordo com o layout do censo
+   *
+   * @throws Exception se encontrou erro
+   * @return boolean
+   */
+  protected function validarDadosArquivo() {
+
+    $lTodosDadosValidos = true;
+    if (!$this->validarDadosEscola()) {
+      $lTodosDadosValidos = false;
+    }
+
+    if (!$this->validarDadosTurma()) {
+      $lTodosDadosValidos = false;
+    }
+
+    if (!$this->validarDadosDocente()) {
+      $lTodosDadosValidos = false;
+    }
+
+    if (!$this->validarDadosAluno()) {
+      $lTodosDadosValidos = false;
+    }
+
+    if (!$lTodosDadosValidos) {
+
+      $oJson          = new services_json();
+      $sNomeArquivo  = "tmp/censo_".$this->iCodigoEscola."_".db_getsession("DB_id_usuario")."_{$this->iAnoCenso}_logerro.json";
+      $sJson         = $oJson->encode($this->aLogCenso);
+
+      $this->sNomeArquivoLog = $sNomeArquivo;
+      $this->rsArquivoLog    = fopen($sNomeArquivo, "w");
+      fwrite($this->rsArquivoLog, "{$sJson}\n");
+      throw new Exception("Existem dados inconsistentes no censo. Verifique o arquivo de log");
+    }
+    return true;
+  }
+
+
+  /**
+   * Valida os dados da Escola
+   * @return boolean
+   */
+  protected function validarDadosEscola() {
+
+    if ( !DadosCensoEscola2015::validarDados($this)) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Valida os dados da Turma
+   * @return boolean
+   */
+  protected function validarDadosTurma() {
+
+    if ( !DadosCensoTurma2015::validarDados($this)) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Valida os dados do Docente
+   * @return boolean
+   */
+  protected function validarDadosDocente() {
+
+    if (!DadosCensoDocente2015::validarDados($this)) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Valida os dados dos Alunos
+   * @return boolean
+   */
+  protected function validarDadosAluno() {
+
+    if (!DadosCensoAluno2015::validarDados($this)) {
+      return false;
+    }
+    return true;
+  }
+}
+
+/**
+ * Usado no array reduce
+ * em um array de booleans, reduz a um único booleano;
+ */
+function validaVerdadeiro( $a, $b ) {
+
+  if (is_null($a) ) {
+    return $b;
+  }
+  return $a && $b;
 }

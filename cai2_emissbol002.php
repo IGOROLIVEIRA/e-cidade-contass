@@ -802,7 +802,7 @@ $saldo_atual = 0;
 $pdf->SetTextColor(0);
 $pdf->SetFont('Arial', '', 8);
 if($agrupar_tipo_conta == '2'&& $tipo_conta !=0){
-  if($c63_tipoconta == '1'){
+  if($c63_tipoconta == '1'){ 
     $pdf->SetFont('Arial', 'B', 8);
     $pdf->cell(192, 6, " CONTAS CORRENTES ",1, 1, "L", 0);
   }

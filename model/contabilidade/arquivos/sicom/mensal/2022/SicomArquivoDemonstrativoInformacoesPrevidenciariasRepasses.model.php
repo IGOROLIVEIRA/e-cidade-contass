@@ -136,8 +136,8 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
 
             $cldipr10->si230_tiporegistro = 10;
             $cldipr10->si230_coddipr = $oDados10->c236_coddipr;
-            $cldipr10->si230_segregacaomassa = $oDados10->c236_massainstituida ? 1 : 2;
-            $cldipr10->si230_benefcustesouro = $oDados10->c236_beneficiotesouro ? 1 : 2;
+            $cldipr10->si230_segregacaomassa = $oDados10->c236_massainstituida == 't' ? 1 : 2;
+            $cldipr10->si230_benefcustesouro = $oDados10->c236_beneficiotesouro == 't' ? 1 : 2;
             $cldipr10->si230_atonormativo = $oDados10->c236_atonormativo;
             $cldipr10->si230_exercicioato = $oDados10->c236_exercicionormativo;
             $cldipr10->si230_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -199,7 +199,7 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
             $cldipr30->si232_tiporepasse = $oDados30->c238_tiporepasse;
             $cldipr30->si232_tipocontripatronal = $oDados30->c238_tipocontribuicaopatronal;
             $cldipr30->si232_tipocontrisegurado = $oDados30->c238_tipocontribuicaosegurados;
-            $cldipr30->si232_tipocontribuicao = $oDados30->c238_tipocontribuinte;
+            $cldipr30->si232_tipocontribuicao = $oDados30->c238_tipocontribuicao;
             $cldipr30->si232_datarepasse = $oDados30->c238_datarepasse;
             $cldipr30->si232_datavencirepasse = $oDados30->c238_datavencimentorepasse;
             $cldipr30->si232_valororiginal = $oDados30->c238_valororiginal;
