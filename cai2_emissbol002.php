@@ -811,7 +811,7 @@ if($agrupar_tipo_conta == '2'&& $tipo_conta !=0){
       $pdf->cell(192, 6, " CONTAS POUPANÇA ",1, 1, "L", 0); 
     }  
   if($c63_tipoconta == '3'){
-      $pdf->SetFont('Arial', 'B', 8);
+      $pdf->SetFont('Arial', 'B', 8); 
       $pdf->cell(192, 6, " CONTAS APLICAÇÕES ",1, 1, "L", 0);
       
     }  

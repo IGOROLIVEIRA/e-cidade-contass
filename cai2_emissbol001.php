@@ -353,7 +353,7 @@ function js_mostrarecurso1(chave1,chave2){
             <option value = '0' selected>Todas</option>
             <option value = '1'>Conta corrente</option>
             <option value = '2'>Conta poupança</option>
-            <option value = '3'>Conta aplicação</option>
+            <option value = '3'>Conta aplicação</option> 
 
         </td>
       </tr>
