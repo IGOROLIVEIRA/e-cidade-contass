@@ -27,9 +27,6 @@ $clAcordoItem = new cl_acordoitem;
 if (isset($alterar)) {
     db_inicio_transacao();
 
-    //print_r($itensAcordo);
-    //die();
-
     foreach ($itensAcordo as $ac20_sequencial) {
 
         $result = db_query("update acordoitem set ac20_elemento = $pc07_codele where ac20_sequencial = $ac20_sequencial");
@@ -40,7 +37,7 @@ if (isset($alterar)) {
             break;
         }
 
-        $result1 = db_query("update empautitem set e55_codele = $pc07_codele where e55_autori in (select ac19_autori from acordoitemexecutadoempautitem where ac19_acordoitemexecutado in (select ac29_sequencial from acordoitemexecutado where ac29_acordoitem = $ac20_sequencial))");
+        $result1 = db_query("update empautitem set e55_codele = $pc07_codele where e55_autori in (select ac19_autori from acordoitemexecutadoempautitem where ac19_acordoitemexecutado in (select ac29_sequencial from acordoitemexecutado where ac29_acordoitem = $ac20_sequencial)) and e55_item = (select ac20_pcmater from acordoitem where ac20_sequencial = $ac20_sequencial)");
 
         if ($result1 == false) {
             $sqlerro = true;
