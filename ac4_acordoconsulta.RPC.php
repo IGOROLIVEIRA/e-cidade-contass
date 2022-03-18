@@ -58,53 +58,62 @@ require_once("model/configuracao/Instituicao.model.php");
 require_once("model/ProcessoCompras.model.php");
 
 $oJson    = new services_json();
-$oParam   = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
+$oParam   = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
 $oRetorno = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = 1;
-switch($oParam->exec) {
+switch ($oParam->exec) {
 
-  case 'itensConsulta' :
+  case 'itensConsulta':
 
     $oRetorno->dados = array();
 
-  	$oAcordo    = new Acordo($oParam->ac16_sequencial);
-  	$aPosicao   = $oAcordo->getPosicoes();
-  	$nSomaTotal = 0;
+    $oAcordo    = new Acordo($oParam->ac16_sequencial);
+    $aPosicao   = $oAcordo->getPosicoes();
+    $nSomaTotal = 0;
 
-  	foreach ($aPosicao as $oPosicao) {
-  	  
-  		foreach ($oPosicao->getItens() as $oDado) {
+    foreach ($aPosicao as $oPosicao) {
 
-	  		$oItem = new stdClass();
-	  		
-	  		if ($oPosicao->getTipo() == 1) {
+      foreach ($oPosicao->getItens() as $oDado) {
 
-	  			$oItem->aditamento = '';
+        $oItem = new stdClass();
+
+        if ($oPosicao->getTipo() == 1) {
+
+          $oItem->aditamento = '';
           $oItem->tipo       = '';
-	  		} else {
+        } else {
 
-	  		  $oItem->aditamento = urlencode($oPosicao->getDescricaoTipo());
+          $oItem->aditamento = urlencode($oPosicao->getDescricaoTipo());
           $oItem->tipo       = $oPosicao->getTipo();
-	  		}
+        }
 
-	  		$oItem->codigo      = $oDado->getMaterial()->getMaterial();
-	  		$oItem->descricao   = $oDado->getMaterial()->getDescricao();
-	  		$oItem->quantidade  = $oDado->getQuantidade();
-	  		$oItem->unidade     = $oDado->getUnidade();
-	  		$oItem->vlrUnit     = $oDado->getValorunitario();
-	  		$oItem->vlrTotal    = $oDado->getValorTotal();
-	  		$oItem->dotacoes    = $oDado->getDotacoes();
-	  		$oItem->saldos      = $oDado->getSaldos();
-	  		$oItem->ordem       = $oDado->getOrdem();
-	  		$oItem->elemento    = $oDado->getElemento();
-	  		$oItem->unidademed  = $oDado->getDescricaoUnidade();
-	  		$oItem->observacao  = $oDado->getResumo();
-	      $nSomaTotal        += $oDado->getValorTotal();
-	      $oRetorno->dados[]  = $oItem;
-  		}
-  	}
-  	$oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
+
+
+        $oItem->codigo      = $oDado->getMaterial()->getMaterial();
+
+        $complmater = db_query("select pc01_complmater from acordoitem inner join pcmater on ac20_pcmater = pc01_codmater where pc01_codmater = $oItem->codigo limit 1");
+        $complmater           = db_utils::fieldsmemory($complmater, 0);
+
+
+
+        $oItem->descricao   = $oDado->getMaterial()->getDescricao();
+        $oItem->quantidade  = $oDado->getQuantidade();
+        $oItem->unidade     = $oDado->getUnidade();
+        $oItem->vlrUnit     = $oDado->getValorunitario();
+        $oItem->vlrTotal    = $oDado->getValorTotal();
+        $oItem->dotacoes    = $oDado->getDotacoes();
+        $oItem->saldos      = $oDado->getSaldos();
+        $oItem->ordem       = $oDado->getOrdem();
+        $oItem->elemento    = $oDado->getElemento();
+        $oItem->unidademed  = $oDado->getDescricaoUnidade();
+        //$oItem->observacao  = $oDado->getResumo();
+        $oItem->observacao = urlencode($complmater->pc01_complmater);
+        $nSomaTotal        += $oDado->getValorTotal();
+        $oRetorno->dados[]  = $oItem;
+      }
+    }
+    $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
 
 
     //Soma do valor total de cada item
@@ -145,42 +154,42 @@ switch($oParam->exec) {
     $oAcordo               = new Acordo($oParam->ac16_sequencial);
     $aAdesaoVinculadas     = $oAcordo->getAdesaoRegPreco();
     $oRetorno->dados       = array();
-  
+
     foreach ($aAdesaoVinculadas as $oAdesao) {
-    
+
       $oStdAdesao = new stdClass();
       $oStdAdesao->si06_sequencial      = $oAdesao->si06_sequencial;
       $oStdAdesao->si06_objetoadesao    = utf8_encode($oAdesao->si06_objetoadesao);
-      $oStdAdesao->si06_dataadesao      = implode("/",(array_reverse(explode("-",$oAdesao->si06_dataadesao))));;
+      $oStdAdesao->si06_dataadesao      = implode("/", (array_reverse(explode("-", $oAdesao->si06_dataadesao))));;
       $oStdAdesao->departamento         = utf8_encode($oAdesao->departamento);
       $oRetorno->dados[] = $oStdAdesao;
-      }
-  
-      $oRetorno->detalhe         = $oParam->detalhe;
-      $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
-  
+    }
+
+    $oRetorno->detalhe         = $oParam->detalhe;
+    $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
+
     break;
 
   case "licrealizadaoutrosorgaosConsulta":
 
-      $oAcordo               = new Acordo($oParam->ac16_sequencial);
-      $aLicitacaoOutroOrgao     = $oAcordo->getLicitacaoOutrosOrgaos();
-      $oRetorno->dados       = array();
-    
+    $oAcordo               = new Acordo($oParam->ac16_sequencial);
+    $aLicitacaoOutroOrgao     = $oAcordo->getLicitacaoOutrosOrgaos();
+    $oRetorno->dados       = array();
+
     foreach ($aLicitacaoOutroOrgao as $oLicitacao) {
-      
+
       $oStdLicitacaoOutroOrgao = new stdClass();
       $oStdLicitacaoOutroOrgao->lic211_sequencial    = $oLicitacao->lic211_sequencial;
       $oStdLicitacaoOutroOrgao->lic211_tipo          = utf8_encode($oLicitacao->lic211_tipo);
       $oStdLicitacaoOutroOrgao->sLocalLicitacao      = '';
       $oStdLicitacaoOutroOrgao->dtCriacaoLicitacao   = '';
-        $oRetorno->dados[] = $oStdLicitacaoOutroOrgao;
-      }
-    
-      $oRetorno->detalhe         = $oParam->detalhe;
-      $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
-    
-  break;
+      $oRetorno->dados[] = $oStdLicitacaoOutroOrgao;
+    }
+
+    $oRetorno->detalhe         = $oParam->detalhe;
+    $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
+
+    break;
 
   case "processodecomprasConsulta":
 
@@ -238,31 +247,31 @@ switch($oParam->exec) {
 
     break;
 
-  case 'empenhamentosConsulta' :
+  case 'empenhamentosConsulta':
 
-  	$oAcordo         = new Acordo($oParam->ac16_sequencial);
-  	$aEmpenhamentos  = $oAcordo->getAutorizacoes();
+    $oAcordo         = new Acordo($oParam->ac16_sequencial);
+    $aEmpenhamentos  = $oAcordo->getAutorizacoes();
     $oRetorno->dados = array();
 
-  	foreach ($aEmpenhamentos as $oEmpenhamento) {
+    foreach ($aEmpenhamentos as $oEmpenhamento) {
 
-  		$oAut = new stdClass();
-  		$oAut->codigoAutorizacao = $oEmpenhamento->codigo;
-  		$oAut->empenho           = $oEmpenhamento->empenho;
-  		$oAut->codigoempenho     = $oEmpenhamento->codigoempenho;
-  		$oAut->dataEmissao       = $oEmpenhamento->dataemissao;
-  		$oAut->dataAnulacao      = $oEmpenhamento->dataanulacao;
-  		$oAut->valor             = $oEmpenhamento->valor;
+      $oAut = new stdClass();
+      $oAut->codigoAutorizacao = $oEmpenhamento->codigo;
+      $oAut->empenho           = $oEmpenhamento->empenho;
+      $oAut->codigoempenho     = $oEmpenhamento->codigoempenho;
+      $oAut->dataEmissao       = $oEmpenhamento->dataemissao;
+      $oAut->dataAnulacao      = $oEmpenhamento->dataanulacao;
+      $oAut->valor             = $oEmpenhamento->valor;
 
-  		$oRetorno->dados[]       = $oAut;
-  	}
+      $oRetorno->dados[]       = $oAut;
+    }
 
     $oRetorno->detalhe  = $oParam->detalhe;
     $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
 
     break;
 
-  case 'apostilamentosConsulta' :
+  case 'apostilamentosConsulta':
 
     $oRetorno->dados = array();
 
@@ -271,17 +280,17 @@ switch($oParam->exec) {
 
 
     foreach ($aDados as $oDado) {
-      
-        $oItem = new stdClass();
-        if(urlencode($oDado->getNumeroApostilamento()) != "") {
-            $oItem->codigo = $oDado->getCodigo();
-            $oItem->situacao = urlencode($oDado->getDescricaoTipo());
-            $oItem->data = $oDado->getData();
-            $oItem->emergencial = $oDado->isEmergencial();
-            $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
-            $oItem->numeroAditamento = urlencode($oDado->getNumeroApostilamento());
-            $oRetorno->dados[] = $oItem;
-        }
+
+      $oItem = new stdClass();
+      if (urlencode($oDado->getNumeroApostilamento()) != "") {
+        $oItem->codigo = $oDado->getCodigo();
+        $oItem->situacao = urlencode($oDado->getDescricaoTipo());
+        $oItem->data = $oDado->getData();
+        $oItem->emergencial = $oDado->isEmergencial();
+        $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
+        $oItem->numeroAditamento = urlencode($oDado->getNumeroApostilamento());
+        $oRetorno->dados[] = $oItem;
+      }
     }
 
     $oRetorno->detalhe          = $oParam->detalhe;
@@ -289,62 +298,62 @@ switch($oParam->exec) {
 
     break;
 
-    case 'posicoesConsulta' :
+  case 'posicoesConsulta':
 
-        $oRetorno->dados = array();
+    $oRetorno->dados = array();
 
-        $oAcordo = new Acordo($oParam->ac16_sequencial);
-        $aDados = $oAcordo->getPosicoes();
+    $oAcordo = new Acordo($oParam->ac16_sequencial);
+    $aDados = $oAcordo->getPosicoes();
 
-        foreach ($aDados as $oDado) {
+    foreach ($aDados as $oDado) {
 
-            $oItem = new stdClass();
-            if(urlencode($oDado->getNumeroAditamento()) != "") {
-                $oItem->codigo = $oDado->getCodigo();
-                $oItem->situacao = urlencode($oDado->getDescricaoTipo());
-                $oItem->data = $oDado->getData();
-                $oItem->emergencial = $oDado->isEmergencial();
-                $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
-                $oItem->numeroAditamento = urlencode($oDado->getNumeroAditamento());
-                $oRetorno->dados[] = $oItem;
-            }
-        }
+      $oItem = new stdClass();
+      if (urlencode($oDado->getNumeroAditamento()) != "") {
+        $oItem->codigo = $oDado->getCodigo();
+        $oItem->situacao = urlencode($oDado->getDescricaoTipo());
+        $oItem->data = $oDado->getData();
+        $oItem->emergencial = $oDado->isEmergencial();
+        $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
+        $oItem->numeroAditamento = urlencode($oDado->getNumeroAditamento());
+        $oRetorno->dados[] = $oItem;
+      }
+    }
 
-        $oRetorno->detalhe          = $oParam->detalhe;
-        $oRetorno->ac16_sequencial  = $oParam->ac16_sequencial;
+    $oRetorno->detalhe          = $oParam->detalhe;
+    $oRetorno->ac16_sequencial  = $oParam->ac16_sequencial;
 
-        break;
+    break;
 
-    case 'aditamentosConsulta' :
+  case 'aditamentosConsulta':
 
-        $oRetorno->dados = array();
+    $oRetorno->dados = array();
 
-        $oAcordo = new Acordo($oParam->ac16_sequencial);
-        $aDados = $oAcordo->getPosicoes();
+    $oAcordo = new Acordo($oParam->ac16_sequencial);
+    $aDados = $oAcordo->getPosicoes();
 
 
-        foreach ($aDados as $oDado) {
+    foreach ($aDados as $oDado) {
 
-            $oItem = new stdClass();
-            if(urlencode($oDado->getNumeroAditamento()) != "") {
-                $oItem->codigo = $oDado->getCodigo();
-                $oItem->situacao = urlencode($oDado->getDescricaoTipo());
-                $oItem->data = $oDado->getData();
-                $oItem->emergencial = $oDado->isEmergencial();
-                $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
-                $oItem->numeroAditamento = urlencode($oDado->getNumeroAditamento());
-                $oRetorno->dados[] = $oItem;
-            }
-        }
+      $oItem = new stdClass();
+      if (urlencode($oDado->getNumeroAditamento()) != "") {
+        $oItem->codigo = $oDado->getCodigo();
+        $oItem->situacao = urlencode($oDado->getDescricaoTipo());
+        $oItem->data = $oDado->getData();
+        $oItem->emergencial = $oDado->isEmergencial();
+        $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
+        $oItem->numeroAditamento = urlencode($oDado->getNumeroAditamento());
+        $oRetorno->dados[] = $oItem;
+      }
+    }
 
-        $oRetorno->detalhe          = $oParam->detalhe;
-        $oRetorno->ac16_sequencial  = $oParam->ac16_sequencial;
+    $oRetorno->detalhe          = $oParam->detalhe;
+    $oRetorno->ac16_sequencial  = $oParam->ac16_sequencial;
 
-        break;
+    break;
 
-  case 'rescisoesConsulta' :
+  case 'rescisoesConsulta':
 
-  	$oRetorno->dados = array();
+    $oRetorno->dados = array();
 
     $oAcordo = new Acordo($oParam->ac16_sequencial);
     $aDados = $oAcordo->getRecisoes();
@@ -364,7 +373,7 @@ switch($oParam->exec) {
 
     break;
 
-  case 'anulacoesConsulta' :
+  case 'anulacoesConsulta':
 
 
     $oRetorno->dados = array();
@@ -390,7 +399,7 @@ switch($oParam->exec) {
 
     break;
 
-  case 'aditamentosDetalhes' :
+  case 'aditamentosDetalhes':
 
     $oRetorno->dados = array();
 
@@ -399,35 +408,33 @@ switch($oParam->exec) {
     $nSomaTotal = 0;
     foreach ($aDados as $oPosicao) {
 
-    	if ($oPosicao->getCodigo() == $oParam->ac26_sequencial) {
+      if ($oPosicao->getCodigo() == $oParam->ac26_sequencial) {
 
-    		$aItens = $oPosicao->getItens();
+        $aItens = $oPosicao->getItens();
 
-    		if (count($aItens) > 0) {
+        if (count($aItens) > 0) {
 
-	        foreach ($aItens as $oDado) {
+          foreach ($aItens as $oDado) {
 
-			      $oItem              = new stdClass();
-			      $oItem->codigo      = $oDado->getMaterial()->getMaterial();
-			      $oItem->descricao   = $oDado->getMaterial()->getDescricao();
-			      $oItem->quantidade  = $oDado->getQuantidade();
-			      $oItem->unidade     = $oDado->getUnidade();
-			      $oItem->vlrUnit     = $oDado->getValorunitario();
-			      $oItem->vlrTotal    = $oDado->getValorTotal();
-			      $oItem->dotacoes    = $oDado->getDotacoes();
-			      $oItem->saldos      = $oDado->getSaldos();
-			      $nSomaTotal        += $oDado->getValorTotal();
+            $oItem              = new stdClass();
+            $oItem->codigo      = $oDado->getMaterial()->getMaterial();
+            $oItem->descricao   = $oDado->getMaterial()->getDescricao();
+            $oItem->quantidade  = $oDado->getQuantidade();
+            $oItem->unidade     = $oDado->getUnidade();
+            $oItem->vlrUnit     = $oDado->getValorunitario();
+            $oItem->vlrTotal    = $oDado->getValorTotal();
+            $oItem->dotacoes    = $oDado->getDotacoes();
+            $oItem->saldos      = $oDado->getSaldos();
+            $nSomaTotal        += $oDado->getValorTotal();
 
-			      $oRetorno->dados[]         = $oItem;
-			      $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
+            $oRetorno->dados[]         = $oItem;
+            $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
+          }
+        } else {
 
-			    }
-
-    		} else {
-
-    			$oRetorno->dados = false;
-    		}
-    	}
+          $oRetorno->dados = false;
+        }
+      }
     }
 
     $oRetorno->nValorTotal = $nSomaTotal;
@@ -462,27 +469,27 @@ switch($oParam->exec) {
     }
     break;
 
-    case "getdotacaoacordoConsulta" :
+  case "getdotacaoacordoConsulta":
 
 
-        $oAcordo = new Acordo($oParam->ac16_sequencial);
-        $aDotacoes = $oAcordo->getDotacoesAcordo();
+    $oAcordo = new Acordo($oParam->ac16_sequencial);
+    $aDotacoes = $oAcordo->getDotacoesAcordo();
 
-        $oRetorno->dados    = $aDotacoes;
-        $oRetorno->detalhe  = $oParam->detalhe;
+    $oRetorno->dados    = $aDotacoes;
+    $oRetorno->detalhe  = $oParam->detalhe;
 
-        break;
+    break;
 
-	case 'saldoConsulta':
+  case 'saldoConsulta':
 
-		$oRetorno->dados = array();
+    $oRetorno->dados = array();
 
-		$oAcordo    = new Acordo($oParam->ac16_sequencial);
-		$aPosicao   = $oAcordo->getPosicoes();
+    $oAcordo    = new Acordo($oParam->ac16_sequencial);
+    $aPosicao   = $oAcordo->getPosicoes();
 
-		$nSomaTotal = 0;
+    $nSomaTotal = 0;
 
-		$sql = "
+    $sql = "
 			SELECT ac26_acordoposicaotipo, ac26_sequencial
 					 FROM acordoposicao
 					 WHERE ac26_acordo = $oParam->ac16_sequencial
@@ -492,19 +499,24 @@ switch($oParam->exec) {
 							  WHERE ac26_acordo = $oParam->ac16_sequencial)
 		";
 
-		$rsSql = db_query($sql);
+    $rsSql = db_query($sql);
 
-		$oAcordoPosicao = db_utils::fieldsMemory($rsSql, 0);
+    $oAcordoPosicao = db_utils::fieldsMemory($rsSql, 0);
 
-		foreach ($aPosicao as $oPosicao) {
-			foreach ($oPosicao->getItens() as $oDado) {
+    foreach ($aPosicao as $oPosicao) {
+      foreach ($oPosicao->getItens() as $oDado) {
 
-				if($oPosicao->getTipo() == $oAcordoPosicao->ac26_acordoposicaotipo
-					&& $oPosicao->getCodigo() == $oAcordoPosicao->ac26_sequencial) {
+        if (
+          $oPosicao->getTipo() == $oAcordoPosicao->ac26_acordoposicaotipo
+          && $oPosicao->getCodigo() == $oAcordoPosicao->ac26_sequencial
+        ) {
 
-					$oDaoItem = db_utils::getDao('acordoitemexecutado');
-					$sSqlItem = $oDaoItem->sql_query('', ' sum(ac29_valor) as valor, sum(ac29_quantidade) as quantidade', '',
-						' ac20_pcmater = ' . $oDado->getMaterial()->getMaterial() . '
+          $oDaoItem = db_utils::getDao('acordoitemexecutado');
+          $sSqlItem = $oDaoItem->sql_query(
+            '',
+            ' sum(ac29_valor) as valor, sum(ac29_quantidade) as quantidade',
+            '',
+            ' ac20_pcmater = ' . $oDado->getMaterial()->getMaterial() . '
 						AND ac26_acordoposicaotipo =
 							(SELECT ac26_acordoposicaotipo
 							 FROM acordoposicao
@@ -513,31 +525,32 @@ switch($oParam->exec) {
 									 (SELECT max(ac26_sequencial)
 									  FROM acordoposicao
 									  WHERE ac26_acordo = ' . $oParam->ac16_sequencial . '))
-					  	AND ac26_acordo = ' . $oParam->ac16_sequencial);
+					  	AND ac26_acordo = ' . $oParam->ac16_sequencial
+          );
 
-					$rsItem = $oDaoItem->sql_record($sSqlItem);
-					$valorExecutado = db_utils::fieldsMemory($rsItem, 0)->valor;
-					$qtdeExecutada = db_utils::fieldsMemory($rsItem, 0)->quantidade;
+          $rsItem = $oDaoItem->sql_record($sSqlItem);
+          $valorExecutado = db_utils::fieldsMemory($rsItem, 0)->valor;
+          $qtdeExecutada = db_utils::fieldsMemory($rsItem, 0)->quantidade;
 
-					$oItem = new stdClass();
-					$oItem->codigo = $oDado->getMaterial()->getMaterial();
-					$oItem->descricao = $oDado->getMaterial()->getDescricao();
-					$oItem->quantidade = $oDado->getQuantidade() - $qtdeExecutada;
-					$oItem->vlrUnit = $oDado->getValorunitario();
-					$oItem->vlrTotal = $oDado->getValorTotal() - $valorExecutado;
-					$nSomaTotal += $oDado->getValorTotal();
-					$oRetorno->dados[] = $oItem;
-				}
-			}
-		}
+          $oItem = new stdClass();
+          $oItem->codigo = $oDado->getMaterial()->getMaterial();
+          $oItem->descricao = $oDado->getMaterial()->getDescricao();
+          $oItem->quantidade = $oDado->getQuantidade() - $qtdeExecutada;
+          $oItem->vlrUnit = $oDado->getValorunitario();
+          $oItem->vlrTotal = $oDado->getValorTotal() - $valorExecutado;
+          $nSomaTotal += $oDado->getValorTotal();
+          $oRetorno->dados[] = $oItem;
+        }
+      }
+    }
 
-		$oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
+    $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
 
-		//Soma do valor total de cada item
-		$oRetorno->nValorTotal = $nSomaTotal;
+    //Soma do valor total de cada item
+    $oRetorno->nValorTotal = $nSomaTotal;
 
-		$oRetorno->detalhe  = $oParam->detalhe;
+    $oRetorno->detalhe  = $oParam->detalhe;
 
-		break;
+    break;
 }
 echo $oJson->encode($oRetorno);

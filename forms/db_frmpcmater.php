@@ -336,7 +336,7 @@ function verPermissaoAlteraServico($iItem)
   function js_check() {
 
     if (document.form1.pc01_justificativa.value == '') {
-      alert('Campo Justificativa não Atualizado !.');
+      alert('Campo Justificativa não Atualizado!.');
       document.form1.pc01_justificativa.focus();
       return false;
 
