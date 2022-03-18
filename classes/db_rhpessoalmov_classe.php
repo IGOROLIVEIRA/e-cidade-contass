@@ -91,6 +91,8 @@ class cl_rhpessoalmov
     var $rh02_art61ldb5 = 'f';
     var $rh02_art1leiprestpsiccologia = 'f';
     var $rh02_art1leiprestservsocial = 'f';
+    var $rh02_art61ldboutros = 'f';
+    var $rh02_art1leioutros = 'f';
 
     var $rh02_reabreadap = 'f';
     var $rh02_cotadeficiencia = 'f';
@@ -241,6 +243,8 @@ class cl_rhpessoalmov
             $this->rh02_art61ldb5 = ($this->rh02_art61ldb5 == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldb5"] : $this->rh02_art61ldb5);
             $this->rh02_art1leiprestpsiccologia = ($this->rh02_art1leiprestpsiccologia == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestpsiccologia"] : $this->rh02_art1leiprestpsiccologia);
             $this->rh02_art1leiprestservsocial = ($this->rh02_art1leiprestservsocial == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestservsocial"] : $this->rh02_art1leiprestservsocial);
+            $this->rh02_art61ldboutros = ($this->rh02_art61ldboutros == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_art61ldboutros"] : $this->rh02_art61ldboutros);
+            $this->rh02_art1leioutros = ($this->rh02_art1leioutros == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_art1leioutros"] : $this->rh02_art1leioutros);
 
             $this->rh02_reabreadap = ($this->rh02_reabreadap == "f" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_reabreadap"] : $this->rh02_reabreadap);
             $this->rh02_cotadeficiencia = ($this->rh02_cotadeficiencia == "f" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_cotadeficiencia"] : $this->rh02_cotadeficiencia);
@@ -496,6 +500,12 @@ class cl_rhpessoalmov
         if ($this->rh02_art1leiprestservsocial == null) {
             $this->rh02_art1leiprestservsocial = "f";
         }
+        if ($this->rh02_art61ldboutros == null) {
+            $this->rh02_art61ldboutros = "f";
+        }
+        if ($this->rh02_art1leioutros == null) {
+            $this->rh02_art1leioutros = "f";
+        }
 
         if ($this->rh02_reabreadap == null) {
             $this->rh02_reabreadap = "f";
@@ -673,6 +683,8 @@ class cl_rhpessoalmov
                                       ,rh02_art61ldb5
                                       ,rh02_art1leiprestpsiccologia
                                       ,rh02_art1leiprestservsocial
+                                      ,rh02_art61ldboutros
+                                      ,rh02_art1leioutros
                                       ,rh02_reabreadap
                                       ,rh02_cotadeficiencia
                                       ,rh02_plansegreg
@@ -729,6 +741,8 @@ class cl_rhpessoalmov
                                ," . ($this->rh02_art61ldb5 == "null" || $this->rh02_art61ldb5 == "" ? "f" : "'" . $this->rh02_art61ldb5 . "'") . "
                                ," . ($this->rh02_art1leiprestpsiccologia == "null" || $this->rh02_art1leiprestpsiccologia == "" ? "f" : "'" . $this->rh02_art1leiprestpsiccologia . "'") . "
                                ," . ($this->rh02_art1leiprestservsocial == "null" || $this->rh02_art1leiprestservsocial == "" ? "f" : "'" . $this->rh02_art1leiprestservsocial . "'") . "
+                               ," . ($this->rh02_art61ldboutros == "null" || $this->rh02_art61ldboutros == "" ? "f" : "'" . $this->rh02_art61ldboutros . "'") . "
+                               ," . ($this->rh02_art1leioutros == "null" || $this->rh02_art1leioutros == "" ? "f" : "'" . $this->rh02_art1leioutros . "'") . "
                                ," . ($this->rh02_reabreadap == "null" || $this->rh02_reabreadap == "" ? "null" : "'" . $this->rh02_reabreadap . "'") . "
                                ," . ($this->rh02_cotadeficiencia == "null" || $this->rh02_cotadeficiencia == "" ? "null" : "'" . $this->rh02_cotadeficiencia . "'") . "
                                ," . ($this->rh02_plansegreg == "null" || $this->rh02_plansegreg == "" ? "null" : "'" . $this->rh02_plansegreg . "'") . "
@@ -1236,6 +1250,14 @@ class cl_rhpessoalmov
         }
         if (trim($this->rh02_art1leiprestservsocial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art1leiprestservsocial"])) {
             $sql  .= $virgula . " rh02_art1leiprestservsocial = '{$this->rh02_art1leiprestservsocial}' ";
+            $virgula = ",";
+        }
+        if (trim($this->rh02_art61ldboutros) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art61ldboutros"])) {
+            $sql  .= $virgula . " rh02_art61ldboutros = '{$this->rh02_art61ldboutros}' ";
+            $virgula = ",";
+        }
+        if (trim($this->rh02_art1leioutros) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_art1leioutros"])) {
+            $sql  .= $virgula . " rh02_art1leioutros = '{$this->rh02_art1leioutros}' ";
             $virgula = ",";
         }
 

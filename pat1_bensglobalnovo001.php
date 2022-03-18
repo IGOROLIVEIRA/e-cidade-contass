@@ -169,6 +169,16 @@ if (USE_PCASP) {
       width: 130px !important;
 
     }
+
+    div.header-container table.table-header tr td#col7.table_header.cell {
+      width: 110px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell6.linhagrid.cell {
+      width: 110px !important;
+
+    }
   </style>
 </head>
 

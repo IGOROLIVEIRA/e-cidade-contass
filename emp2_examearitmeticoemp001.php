@@ -73,7 +73,7 @@ include("dbforms/db_classesgenericas.php");
                           <option value="01">Órgão</option>
                           <option value="02">Dotação</option>
                           <option value="03">Reduzido</option>
-                      </select>
+                      </select> 
                   </td>
               </tr>
             <tr>
