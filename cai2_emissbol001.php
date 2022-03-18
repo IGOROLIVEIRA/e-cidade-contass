@@ -333,7 +333,7 @@ function js_mostrarecurso1(chave1,chave2){
         <td> &nbsp; &nbsp;
           <select name="agrupar_fonte" onclick="verconta()">
             <option value = 'N'>Não</option>
-            <option value = 'S'>Sim</option> 
+            <option value = 'S'>Sim</option>  
           </select>
         </td>
       </tr>
