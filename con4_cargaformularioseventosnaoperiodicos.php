@@ -54,6 +54,14 @@ require_once("dbforms/db_funcoes.php");
                         <label>Alteração de Contrato de Trabalho/Relação Estatutária s2206</label>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" value="4000113">
+                    </td>
+                    <td>
+                        <label>Trabalhador Sem Vínculo de Emprego/Estatutário s2300</label>
+                    </td>
+                </tr>
             </table>
         </fieldset>
         <input type="button" value="Processar" id="btnProcessar">

@@ -72,7 +72,8 @@ include("dbforms/db_classesgenericas.php");
                       <select name="ordenar" id="ordenar">
                           <option value="01">Órgão</option>
                           <option value="02">Dotação</option>
-                      </select>
+                          <option value="03">Reduzido</option>
+                      </select> 
                   </td>
               </tr>
             <tr>

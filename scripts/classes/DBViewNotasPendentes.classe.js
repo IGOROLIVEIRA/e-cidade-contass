@@ -71,23 +71,24 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
      */
     oGridNotasPendentes              = new DBGrid('ctnGridNotasPendentes');
     oGridNotasPendentes.nameInstance = 'oGridNotasPendentes_' + this.sNameInstance;
-    var aCellWidth                   = new Array('17%','15%', '12%', '48%', '13%', '17%');
-    var aCellAlign                   = new Array('center', 'right', 'center', 'left', 'right', 'right');
+    var aCellWidth                   = new Array('18%','15%', '12%', '38%', '13%', '15%','12%');
+    var aCellAlign                   = new Array('center', 'right', 'center', 'left', 'right', 'right','right');
     var aHeaders                     = new Array('Nº Ordem de compra',
                                                  'Valor da Ordem',
                                                  'Empenho', 
                                                  'Item', 
                                                  'Quantidade', 
                                                  'Desdobramento', 
+                                                 'Nota Fiscal',
                                                  'Codigo empnotaitembenspendente', 
                                                  'Codigo Nota Item',
                                                  'numeroempenho');
     oGridNotasPendentes.setHeight(200);
     oGridNotasPendentes.setCellWidth(aCellWidth);
     oGridNotasPendentes.setHeader(aHeaders);
-    oGridNotasPendentes.aHeaders[6].lDisplayed = false;
     oGridNotasPendentes.aHeaders[7].lDisplayed = false;
     oGridNotasPendentes.aHeaders[8].lDisplayed = false;
+    oGridNotasPendentes.aHeaders[9].lDisplayed = false;
     oGridNotasPendentes.setCellAlign(aCellAlign);
     oGridNotasPendentes.show($('ctnGridNotasPendentes'));
     
@@ -162,9 +163,10 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
             aLinha[3] = oNotaPendente.descricao.urlDecode();
             aLinha[4] = oNotaPendente.quantidade;
             aLinha[5] = oNotaPendente.desdobramento;
-            aLinha[6] = oNotaPendente.e137_sequencial;
-            aLinha[7] = oNotaPendente.codigoitemnota;
-            aLinha[8] = oNotaPendente.numeroempenho;
+            aLinha[6] = oNotaPendente.notafiscal;
+            aLinha[7] = oNotaPendente.e137_sequencial;
+            aLinha[8] = oNotaPendente.codigoitemnota;
+            aLinha[9] = oNotaPendente.numeroempenho;
             
         oGridNotasPendentes.addRow(aLinha);
 
@@ -227,8 +229,8 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
     oDadosLinha.iNumeroEmpenho      = oGridNotasPendentes.aRows[iLinhaGrid].aCells[8].getContent();
     oDadosLinha.sDescricaoItem      = oGridNotasPendentes.aRows[iLinhaGrid].aCells[3].getContent();
     oDadosLinha.iQuantidadeItem     = oGridNotasPendentes.aRows[iLinhaGrid].aCells[4].getContent();
-    oDadosLinha.iCodigoItemPendente = oGridNotasPendentes.aRows[iLinhaGrid].aCells[6].getContent();
-    oDadosLinha.iCodigoEmpNotaItem  = oGridNotasPendentes.aRows[iLinhaGrid].aCells[7].getContent();
+    oDadosLinha.iCodigoItemPendente = oGridNotasPendentes.aRows[iLinhaGrid].aCells[7].getContent();
+    oDadosLinha.iCodigoEmpNotaItem  = oGridNotasPendentes.aRows[iLinhaGrid].aCells[8].getContent();
 
     /**
      * Executa funcao definida passando como parametro dados da linha clicada

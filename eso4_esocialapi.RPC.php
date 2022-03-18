@@ -262,6 +262,7 @@ try {
             db_inicio_transacao();
 
             $iCgm = $oParam->empregador;
+
             foreach ($oParam->arquivos as $arquivo) {
 
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
@@ -280,7 +281,7 @@ try {
                  */
 
                 foreach (array_chunk($dadosTabela, 50) as $aTabela) {
-                    $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo);
+                    $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
                     $eventoFila->adicionarFila();
                 }
             }

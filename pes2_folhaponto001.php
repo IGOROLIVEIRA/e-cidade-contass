@@ -133,7 +133,6 @@ db_postmemory($HTTP_POST_VARS);
 
   ?>
   <tr>
-  <tr>
     <td><b>Período:</b></td>
     <td>
       <?
@@ -148,6 +147,15 @@ db_postmemory($HTTP_POST_VARS);
       ?>
     </td>
   </tr>
+  <tr>
+    <td>
+      <strong>Mostrar Jornada:</strong>
+    </td>
+    <td>
+      <input type="checkbox" name="mostrarJornada" />
+    </td>
+  </tr>
+  <tr>
     <td colspan="2" align = "center">
       <input style="margin-top: 15px;"  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
     </td>
@@ -240,6 +248,7 @@ function js_emite(){
   qry+= "&hora4="+document.form1.qh4.value;
   qry+= "&anof="+document.form1.anof.value;
   qry+= "&mesf="+document.form1.mesf.value;
+  qry+= "&mostrarJornada="+document.form1.mostrarJornada.checked;
 
   if(document.form1.complementar){
     qry+= "&semest="+document.form1.complementar.value;

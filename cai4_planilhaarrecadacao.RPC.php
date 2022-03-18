@@ -327,8 +327,8 @@ switch ($oParam->exec) {
 
   case 'buscarDeducao':
 
-    try{
-        $oRetorno->oReceita = buscarDeducao($oParam->recurso);
+    try{ 
+        $oRetorno->oReceita = buscarDeducao($oParam->k81_receita); 
         $oRetorno->oReceita->k02_descr = urlencode($oRetorno->oReceita->k02_descr);
 
     }catch (Exception $oExceptionErro) {

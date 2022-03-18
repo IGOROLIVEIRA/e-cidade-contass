@@ -73,7 +73,7 @@
     // db_criatabela($rsResult);
     // exit;
 
-    $sSql = "select si01_datacotacao FROM pcproc
+    $sSql = "select si01_datacotacao, si01_numcgmcotacao FROM pcproc
 JOIN pcprocitem ON pc80_codproc = pc81_codproc
 JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
 JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
@@ -86,6 +86,8 @@ JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
 
+
+
     $rsResultData = db_query($sSql) or die(pg_last_error());
 
 
@@ -93,6 +95,12 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
     $head5 = "Processo de Compra: $codigo_preco";
     $head8 = "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResultData, 0)->si01_datacotacao)));
 
+    $queryCGM = "select z01_nome from cgm where z01_numcgm = ".db_utils::fieldsMemory($rsResultData, 0)->si01_numcgmcotacao;
+
+    $rsCGM = db_query($queryCGM) or die(pg_last_error());
+
+    $nomeResponsavel = db_utils::fieldsMemory($rsCGM, 0);
+    
     $mPDF = new Relatorio('', 'A4-L', 0, "", 7, 7, 50);
 
     $mPDF
@@ -868,7 +876,7 @@ HTML;
         if (count($dadosAssinatura) > 1) {
             $sCotacao = '<div class="linha-vertical">';
             for ($count = 0; $count < count($dadosAssinatura); $count++) {
-                $sCotacao .= "<strong>" . strtoupper(str_replace($chars, $byChars, $dadosAssinatura[$count])) . "</strong>";
+                $sCotacao .= "<strong>" . strtoupper(str_replace($chars, $byChars, $nomeResponsavel->z01_nome)) . "</strong>";
                 $sCotacao .= $count ? '' : "<br/>";
             }
             $sCotacao .= "</div>";
@@ -878,7 +886,7 @@ HTML;
         } else {
             echo <<<HTML
                 <div class="linha-vertical">
-                    <strong>{$dadosAssinatura[0]}</strong>
+                    <strong>{$nomeResponsavel->z01_nome}</strong>
                 </div>
 HTML;
         }
