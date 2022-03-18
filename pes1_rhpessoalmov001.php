@@ -45,6 +45,7 @@ $clrhpessoalmov    = new cl_rhpessoalmov;
 $clrhtipoapos      = new cl_rhtipoapos;
 $clrhpesrescisao   = new cl_rhpesrescisao;
 $clrescisao        = new cl_rescisao;
+$clrhmotivorescisao = new cl_rhmotivorescisao;
 $clrhpesbanco      = new cl_rhpesbanco;
 $clrhpespadrao     = new cl_rhpespadrao;
 $clrhpessoal       = new cl_rhpessoal;
@@ -107,8 +108,7 @@ if (isset($incluir) && !$lErro) {
         ) {
             $sqlerro  = true;
             $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuação devem ser preenchidos';
-        } else
-    if (
+        } elseif (
             in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118', '1118', '218', '166', '266')) &&
             $rh02_art61ldb1 == 'f' &&
             $rh02_art61ldb2 == 'f' &&
@@ -135,7 +135,6 @@ if (isset($incluir) && !$lErro) {
         $clrhpessoalmov->rh02_desctipoparentescoinst = $rh02_desctipoparentescoinst;
         $clrhpessoalmov->rh02_datainicio = implode("-", array_reverse(explode("/", $rh02_datainicio)));
         if ($rh02_diasgozoferias >= 30) {
-
             $clrhpessoalmov->incluir(null, db_getsession("DB_instit"));
             $rh02_seqpes    = $clrhpessoalmov->rh02_seqpes;
             $erro_msg       = $clrhpessoalmov->erro_msg;
@@ -150,7 +149,6 @@ if (isset($incluir) && !$lErro) {
     }
 
     if ($sqlerro == false) {
-
         $clrhpessoal->rh01_funcao = $rh02_funcao;
         $clrhpessoal->rh01_regist = $oPost->rh02_regist;
         $clrhpessoal->alterar($oPost->rh02_regist);
@@ -170,7 +168,6 @@ if (isset($incluir) && !$lErro) {
     }
 
     if ($sqlerro == false) {
-
         if (trim($rh05_recis_dia) != "" && trim($rh05_recis_mes) != "" && trim($rh05_recis_ano) != "") {
             $clrhpesrescisao->rh05_seqpes = $rh02_seqpes;
             $clrhpesrescisao->incluir($rh02_regist);
@@ -179,14 +176,12 @@ if (isset($incluir) && !$lErro) {
                 $erro_msg = $clrhpesrescisao->erro_msg;
                 $sqlerro = true;
             } else {
-
                 $clpontofs->excluir(db_anofolha(), db_mesfolha(), $rh02_regist, null);
 
                 if ($clpontofs->erro_status == 0) {
                     $erro_msg = $clpontofs->erro_msg;
                     $sqlerro = true;
                 } else {
-
                     $clpontofx->excluir(db_anofolha(), db_mesfolha(), $rh02_regist, null);
 
                     if ($clpontofx->erro_status == 0) {
@@ -237,7 +232,6 @@ if (isset($incluir) && !$lErro) {
     }
 
     if ($sqlerro == false) {
-
         $oServidor      = ServidorRepository::getInstanciaByCodigo($rh02_regist, $rh02_anousu, $rh02_mesusu);
 
         if (trim($inputCodigoBanco) != "") {
@@ -256,7 +250,6 @@ if (isset($incluir) && !$lErro) {
                 $oContaBancaria->setTipoConta($cboTipoConta);
                 $oContaBancaria->salvar();
             } catch (Exception $oException) {
-
                 $erro_msg = "Erro ao Cadastrar dados bancários do Servidor";
                 $sqlerro  = true;
             }
@@ -274,14 +267,14 @@ if (isset($incluir) && !$lErro) {
     }
 
     db_fim_transacao($sqlerro);
-} else if (isset($alterar) && !$lErro) {
+} elseif (isset($alterar) && !$lErro) {
     db_inicio_transacao();
 
     $sqlerro = false;
     try {
         if ($rh02_deficientefisico == 't' && !empty($_FILES['rh02_laudodeficiencia_file']['tmp_name'])) {
             $_POST["rh02_laudodeficiencia"] = ServidorRepository::persistLaudoMedico($_FILES['rh02_laudodeficiencia_file'], $rh02_laudodeficiencia);
-        } else if ($rh02_deficientefisico == 'f' && !empty($rh02_laudodeficiencia)) {
+        } elseif ($rh02_deficientefisico == 'f' && !empty($rh02_laudodeficiencia)) {
             $_POST["rh02_laudodeficiencia"] = ServidorRepository::removeLaudoMedico($rh02_laudodeficiencia);
         }
     } catch (Exception $oException) {
@@ -292,7 +285,7 @@ if (isset($incluir) && !$lErro) {
     try {
         if ($rh02_portadormolestia == 't' && !empty($_FILES['rh02_laudoportadormolestia_file']['tmp_name'])) {
             $_POST["rh02_laudoportadormolestia"] = ServidorRepository::persistLaudoMedico($_FILES['rh02_laudoportadormolestia_file'], $rh02_laudoportadormolestia);
-        } else if ($rh02_portadormolestia == 'f' && !empty($rh02_laudoportadormolestia)) {
+        } elseif ($rh02_portadormolestia == 'f' && !empty($rh02_laudoportadormolestia)) {
             $_POST["rh02_laudoportadormolestia"] = ServidorRepository::removeLaudoMedico($rh02_laudoportadormolestia);
         }
     } catch (Exception $oException) {
@@ -309,8 +302,7 @@ if (isset($incluir) && !$lErro) {
         ) {
             $sqlerro  = true;
             $erro_msg = 'Campos Categoria Profissional SIOPE e Segmento de Atuação devem ser preenchidos';
-        } else
-    if (
+        } elseif (
             in_array(db_utils::fieldsMemory($rsRhlotavinc, 0)->rh25_recurso, array('118', '1118', '218', '166', '266')) &&
             $rh02_art61ldb1 == 'f' &&
             $rh02_art61ldb2 == 'f' &&
@@ -336,7 +328,6 @@ if (isset($incluir) && !$lErro) {
         $clrhpessoalmov->rh02_datainicio = implode("-", array_reverse(explode("/", $rh02_datainicio)));
 
         if ($rh02_diasgozoferias >= 30) {
-
             $oRetorno = ServidorRepository::persistServidor(ServidorRepository::getInstanciaByCodigo(
                 $rh02_regist,
                 DBPessoal::getAnoFolha(),
@@ -357,7 +348,6 @@ if (isset($incluir) && !$lErro) {
     }
 
     if ($sqlerro == false) {
-
         $clrhpessoal->rh01_funcao = $rh02_funcao;
         $clrhpessoal->rh01_regist = $oPost->rh02_regist;
         $clrhpessoal->alterar($oPost->rh02_regist);
@@ -406,11 +396,8 @@ if (isset($incluir) && !$lErro) {
     }
 
     if ($sqlerro == false) {
-
         if (trim($inputCodigoBanco) != "") {
-
             try {
-
                 $oServidor      = ServidorRepository::getInstanciaByCodigo($rh02_regist, $rh02_anousu, $rh02_mesusu);
                 $oContaBancaria = $oServidor->getContaBancaria();
 
@@ -431,20 +418,17 @@ if (isset($incluir) && !$lErro) {
                 $oServidor->setContaBancaria($oContaBancaria);
                 $oServidor->salvar();
             } catch (Exception $oException) {
-
                 $erro_msg = "Erro ao Cadastrar dados bancários do Servidor" . $oException->getMessage();
                 $sqlerro  = true;
             }
         }
 
         if (trim($inputCodigoBanco) == "") {
-
             $oDaoRhPessoalMovContaBancaria = db_utils::getDao('rhpessoalmovcontabancaria');
             $sSqlRhPessoalMovContaBancaria = $oDaoRhPessoalMovContaBancaria->sql_query(null, 'rh138_sequencial', null, "rh02_regist = {$rh02_regist}");
             $rsRhPessoalMovContaBancaria   = db_query($sSqlRhPessoalMovContaBancaria);
 
             if (pg_num_rows($rsRhPessoalMovContaBancaria) > 0) {
-
                 $oRhPessoalMovContaBancaria = db_utils::fieldsMemory($rsRhPessoalMovContaBancaria, 0);
                 $oDaoRhPessoalMovContaBancaria->excluir($oRhPessoalMovContaBancaria->rh138_sequencial);
                 $db83_sequencial     = null;
@@ -456,7 +440,6 @@ if (isset($incluir) && !$lErro) {
     $excluiponto = false;
     if ($sqlerro == false) {
         if (trim($rh05_recis_dia) != "" && trim($rh05_recis_mes) != "" && trim($rh05_recis_ano) != "") {
-
             $sCamposPensao = "distinct(r52_regist+r52_numcgm), r52_regist, r52_numcgm";
             $sWherePensao  = " r52_anousu = " . db_anofolha() . " and r52_mesusu = " . db_mesfolha();
             $sWherePensao .= " and rh05_recis is null and r52_regist = {$rh02_regist}";
@@ -468,7 +451,6 @@ if (isset($incluir) && !$lErro) {
                 $aPensoes = db_utils::getCollectionByRecord($rsPensao);
 
                 foreach ($aPensoes as $oPensao) {
-
                     $clpensao->r52_anousu = db_anofolha();
                     $clpensao->r52_mesusu = db_mesfolha();
                     $clpensao->r52_regist = $rh02_regist;
@@ -504,14 +486,12 @@ if (isset($incluir) && !$lErro) {
         if ($clrhpesrescisao->erro_status == 0) {
             $erro_msg = $clrhpesrescisao->erro_msg;
             $sqlerro = true;
-        } else if ($excluiponto == true) {
-
+        } elseif ($excluiponto == true) {
             $clpontofs->excluir(db_anofolha(), db_mesfolha(), $rh02_regist, null);
             if ($clpontofs->erro_status == 0) {
                 $erro_msg = $clpontofs->erro_msg;
                 $sqlerro = true;
             } else {
-
                 $clpontofx->excluir(db_anofolha(), db_mesfolha(), $rh02_regist, null);
                 if ($clpontofx->erro_status == 0) {
                     $erro_msg = $clpontofx->erro_msg;
@@ -524,7 +504,6 @@ if (isset($incluir) && !$lErro) {
              * os eventos financeiros do ponto e do histórico ponto serão excluídos.
              */
             if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-
                 $oCompetencia        = DBPessoal::getCompetenciaFolha();
                 $oServidor           = ServidorRepository::getInstanciaByCodigo($rh02_regist, $oCompetencia->getAno(), $oCompetencia->getMes());
                 $oFolhaComplementar = FolhaPagamentoComplementar::getUltimaFolha();
@@ -629,7 +608,7 @@ if (isset($incluir) && !$lErro) {
     }
 
     db_fim_transacao($sqlerro);
-} else if (isset($excluir)) {
+} elseif (isset($excluir)) {
     if ($sqlerro == false) {
         db_inicio_transacao();
 
@@ -731,8 +710,10 @@ if (isset($rh02_regist)) {
             db_fieldsmemory($result_rescisao, 0);
             if (trim($rh30_regime) != "") {
                 $result_descricoes = $clrescisao->sql_record($clrescisao->sql_query_file($rh02_anousu, $rh02_mesusu, $rh30_regime, $rh05_causa, $rh05_caub, null, null, "r59_descr,r59_descr1"));
+                $result_motivorescisao = $clrhmotivorescisao->sql_record($clrhmotivorescisao->sql_query_file(null, "*", null, "rh173_codigo::int = $rh05_motivo"));
                 if ($clrescisao->numrows > 0) {
                     db_fieldsmemory($result_descricoes, 0);
+                    db_fieldsmemory($result_motivorescisao, 0);
                 } else {
                     $limparrecis = true;
                 }
@@ -792,9 +773,7 @@ if (isset($rh02_regist)) {
 if (isset($limparbanco) && $limparbanco == true) {
     unset($inputCodigoBanco, $inputNomeBanco, $inputNumeroAgencia, $inputDvAgencia, $inputNumeroConta, $inputDvConta);
 } else {
-
     try {
-
         $oServidor           = ServidorRepository::getInstanciaByCodigo($rh02_regist, $rh02_anousu, $rh02_mesusu);
         $oContaBancaria      = $oServidor->getContaBancaria();
 
@@ -804,7 +783,6 @@ if (isset($limparbanco) && $limparbanco == true) {
             $db83_codigooperacao = $oContaBancaria->getCodigoOperacao();
         }
     } catch (Exception $e) {
-
         $db83_sequencial     = "";
         $db83_tipoconta      = "";
         $db83_codigooperacao = "";
@@ -833,7 +811,7 @@ if (isset($rh02_salari)) {
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-    <?
+    <?php
     db_app::load("scripts.js");
     db_app::load("prototype.js");
     db_app::load("strings.js");
@@ -855,7 +833,7 @@ if (isset($rh02_salari)) {
         <tr>
             <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
                 <center>
-                    <?
+                    <?php
                     include("forms/db_frmrhpessoalmov.php");
                     ?>
                 </center>
@@ -866,7 +844,7 @@ if (isset($rh02_salari)) {
 
 </html>
 
-<?
+<?php
 
 if ((isset($alterar) || isset($excluir) || isset($incluir)) && !$lErro) {
 
@@ -920,7 +898,6 @@ if ($lErro) {
  * Verifica se  o  usuário possui permissao para liberar as abas para o lançamento
  */
 if (isset($rh02_seqpes)) {
-
     echo "<script>
           parent.document.formaba.rhpeslocaltrab.disabled=false;
           top.corpo.iframe_rhpeslocaltrab.location.href='pes1_rhpeslocaltrab001.php?rh56_seqpes=" . @$rh02_seqpes . "&rh02_regist={$rh02_regist}';
@@ -929,7 +906,6 @@ if (isset($rh02_seqpes)) {
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4507) == 'true' ||
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4515) == 'true'
     ) {
-
         echo "parent.document.formaba.rhpontofixo.disabled=false;\n";
         echo "top.corpo.iframe_rhpontofixo.location.href='pes1_rhpessoalponto001.php?ponto=fx&r90_regist=" . @$rh02_regist . "'\n";
     }
@@ -937,7 +913,6 @@ if (isset($rh02_seqpes)) {
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4506)  == 'true' ||
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4514)  == 'true'
     ) {
-
         echo "parent.document.formaba.rhpontosalario.disabled=false;\n";
         echo "top.corpo.iframe_rhpontosalario.location.href='pes1_rhpessoalponto001.php?ponto=fs&r90_regist=" . @$rh02_regist . "'\n";
     }
