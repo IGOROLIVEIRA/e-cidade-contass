@@ -84,7 +84,7 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
                                                  'Codigo Nota Item',
                                                  'numeroempenho');
     oGridNotasPendentes.setHeight(200);
-    oGridNotasPendentes.setCellWidth(aCellWidth);
+    //oGridNotasPendentes.setCellWidth(aCellWidth);
     oGridNotasPendentes.setHeader(aHeaders);
     oGridNotasPendentes.aHeaders[7].lDisplayed = false;
     oGridNotasPendentes.aHeaders[8].lDisplayed = false;
