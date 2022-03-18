@@ -188,7 +188,7 @@ if (isset($datafinal)) {
             $where_sol .= " and c.pc10_depto=" . db_getsession('DB_coddepto');
           }
           $where_sol .= " and c.pc10_instit=" . db_getsession('DB_instit');
-          $campos = "c.pc10_numero," . $campos . ",c.pc10_resumo";
+          $campos = "c.pc10_numero," . $campos . ",d.pc10_resumo";
         } else if (isset($sol) && $sol == 'false') {
           if (isset($julg) && $julg == "true") {
             $where_sol = " and pc23_orcamitem is not null ";
@@ -201,9 +201,9 @@ if (isset($datafinal)) {
           $where_sol .= " and d.pc10_instit=" . db_getsession('DB_instit');
           /*OC3770*/
           if ($campos == 0) {
-            $campos = " pc20_codorc,pcproc.pc80_codproc,c.pc10_resumo,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao";
+            $campos = " pc20_codorc,pcproc.pc80_codproc,d.pc10_resumo,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao";
           } else {
-            $campos = $campos . " pc20_codorc,pcproc.pc80_codproc,c.pc10_resumof.coddepto,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao";
+            $campos = $campos . " pc20_codorc,pcproc.pc80_codproc,d.pc10_resumo,f.coddepto,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao";
           }
           /*FIM - OC3770*/
         } else if (isset($lic) && $lic == 'true') {
@@ -282,7 +282,6 @@ if (isset($datafinal)) {
           } else {
             $sql = $clpcorcam->sql_query_solproc(null, $campos, "pc80_codproc desc", ' 1=1 ' . $where_sol);
           }
-          //print_r($sql);
           db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", array(), false);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {

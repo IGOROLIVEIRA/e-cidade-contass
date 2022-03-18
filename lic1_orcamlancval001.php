@@ -46,7 +46,7 @@ require("classes/db_credenciamento_classe.php");
 require("classes/db_liclicitem_classe.php");
 
 $pc20_codorc = '';
-db_postmemory($HTTP_POST_VARS);//echo '<pre>';print_r($HTTP_POST_VARS);die;
+db_postmemory($HTTP_POST_VARS); //echo '<pre>';print_r($HTTP_POST_VARS);die;
 db_postmemory($HTTP_GET_VARS);
 $clpcorcam                   = new cl_pcorcam;
 $clpcorcamitem               = new cl_pcorcamitem;
@@ -61,16 +61,16 @@ $clhabilitacaoforn = new cl_habilitacaoforn;
 $clcflicita = new cl_cflicita();
 $lRegistroPreco              = false;
 $iFormaControleRegistroPreco = 1;
-$pc80_criterioadjudicacao;//OC3770
+$pc80_criterioadjudicacao; //OC3770
 if (isset($l20_codigo) && $l20_codigo) {
 
   $sSqlDadosLicitacao = $clliclicita->sql_query_file($l20_codigo);
   $rsDadosLicitacao   = $clliclicita->sql_record($sSqlDadosLicitacao);
-  $rsHabilitacao = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query(null,"l206_sequencial,z01_numcgm,z01_nome",null,"l206_licitacao=$l20_codigo"));
+  $rsHabilitacao = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query(null, "l206_sequencial,z01_numcgm,z01_nome", null, "l206_licitacao=$l20_codigo"));
 
   $sWhere     = "1!=1";
-   if (isset($pc20_codorc) && !empty($pc20_codorc)) {
-    $sWhere = " pc21_codorc=".@$pc20_codorc;
+  if (isset($pc20_codorc) && !empty($pc20_codorc)) {
+    $sWhere = " pc21_codorc=" . @$pc20_codorc;
     /*OC3770*/
     $rsResultado = db_query("
       SELECT DISTINCT pc80_criterioadjudicacao
@@ -88,11 +88,11 @@ if (isset($l20_codigo) && $l20_codigo) {
     ");
     $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
     /*FIM - OC3770*/
-   } else {
+  } else {
     $result_orcamento = $clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo));
-    $sWhere = " pc21_codorc=".db_utils::fieldsMemory($result_orcamento, 0)->pc20_codorc;
+    $sWhere = " pc21_codorc=" . db_utils::fieldsMemory($result_orcamento, 0)->pc20_codorc;
     /*OC3770*/
-      $rsResultado = db_query("
+    $rsResultado = db_query("
       SELECT DISTINCT pc80_criterioadjudicacao
         FROM pcorcamitem
         INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
@@ -103,13 +103,13 @@ if (isset($l20_codigo) && $l20_codigo) {
         INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
         INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-        WHERE pc20_codorc = ".db_utils::fieldsMemory($result_orcamento, 0)->pc20_codorc."
+        WHERE pc20_codorc = " . db_utils::fieldsMemory($result_orcamento, 0)->pc20_codorc . "
             AND l21_situacao = 0
     ");
     $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
     /*FIM - OC3770*/
-   }
-   $rsFornec = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_numcgm,z01_nome","",$sWhere));
+  }
+  $rsFornec = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null, "pc21_numcgm,z01_nome", "", $sWhere));
 
   if ($clliclicita->numrows > 0) {
 
@@ -127,10 +127,10 @@ if (isset($l20_codigo) && $l20_codigo) {
       $lRegistroPreco = $oDadosLicitacao->l20_usaregistropreco == 't' ? true : false;
     }
 
-    if ($l03_pctipocompratribunal == 102 || $l03_pctipocompratribunal ==103) {
+    if ($l03_pctipocompratribunal == 102 || $l03_pctipocompratribunal == 103) {
 
       $clcredenciamento = new cl_credenciamento();
-      $result_credenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_licitacao = $l20_codigo"));
+      $result_credenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null, "*", null, "l205_licitacao = $l20_codigo"));
 
       if (pg_num_rows($result_credenciamento) == 0) {
         echo "<script>alert('Não existe credenciamento cadastrado para esta Dispensa ou Inexigibilidade');</script>";
@@ -139,51 +139,47 @@ if (isset($l20_codigo) && $l20_codigo) {
     }
     $iFormaControleRegistroPreco = $oDadosLicitacao->l20_formacontroleregistropreco;
   }
-
 }
 $db_opcao = 1;
 $db_botao = true;
 
 if (isset($alterar) || isset($incluir)) {
-    $sqlerro=false;
-  if (isset($valores) && trim($valores)!="") {
-    $arrval = explode("valor_",$valores);
+  $sqlerro = false;
+  if (isset($valores) && trim($valores) != "") {
+    $arrval = explode("valor_", $valores);
   } else {
 
-    $sqlerro=true;
+    $sqlerro = true;
     $erro_msg = "Usuário: \\n\\nValores do orçamento não informados. \\nAltere antes de continuar. \\n\\nAdministrador: ";
-
   }
 
-  if (isset($qtdades) && trim($qtdades)!="") {
+  if (isset($qtdades) && trim($qtdades) != "") {
 
-    $arrqtd = explode("qtde_",$qtdades);
-    $arrqtdorcada = explode("qtdeOrcada_",$qtdadesOrcadas);
-
+    $arrqtd = explode("qtde_", $qtdades);
+    $arrqtdorcada = explode("qtdeOrcada_", $qtdadesOrcadas);
   } else {
 
-    $sqlerro=true;
+    $sqlerro = true;
     $erro_msg = "Usuário: \\n\\nQuantidades do orçamento não informadas. \\nAltere antes de continuar. \\n\\nAdministrador: ";
-
   }
-  if (isset($obss) && trim($obss)!="") {
-    $arrmrk = explode("obs_",$obss);
-  }
-
-  if (isset($valoresun) && trim($valoresun)!="") {
-    $arrvalun = explode("vlrun_",$valoresun);
+  if (isset($obss) && trim($obss) != "") {
+    $arrmrk = explode("obs_", $obss);
   }
 
-  if (isset($dataval) && trim($dataval)!="") {
-    $arrdat = explode("#",$dataval);
+  if (isset($valoresun) && trim($valoresun) != "") {
+    $arrvalun = explode("vlrun_", $valoresun);
+  }
+
+  if (isset($dataval) && trim($dataval) != "") {
+    $arrdat = explode("#", $dataval);
   }
 
   /*OC3770*/
-  if(isset($valorperc) && trim($valorperc)!=""){
-    $arrvalperc = explode("percdesctaxa_",$valorperc);
+  if (isset($valorperc) && trim($valorperc) != "") {
+    $arrvalperc = explode("percdesctaxa_", $valorperc);
   }
-  if(isset($lotes) && trim($lotes)!=""){
-    $arrvallote = explode("chk_",$lotes);
+  if (isset($lotes) && trim($lotes) != "") {
+    $arrvallote = explode("chk_", $lotes);
   }
   /*FIM - OC3770*/
 
@@ -191,13 +187,13 @@ if (isset($alterar) || isset($incluir)) {
 
     if ($sqlerro == false) {
 
-      $validadorc=$pc21_validadorc_ano."-".$pc21_validadorc_mes."-".$pc21_validadorc_dia;
-      $prazoent=$pc21_prazoent_ano."-".$pc21_prazoent_mes."-".$pc21_prazoent_dia ;
-      if (trim($prazoent)=="--" || trim($prazoent)=='') {
-        $prazoent=null;
+      $validadorc = $pc21_validadorc_ano . "-" . $pc21_validadorc_mes . "-" . $pc21_validadorc_dia;
+      $prazoent = $pc21_prazoent_ano . "-" . $pc21_prazoent_mes . "-" . $pc21_prazoent_dia;
+      if (trim($prazoent) == "--" || trim($prazoent) == '') {
+        $prazoent = null;
       }
-      if (trim($validadorc)=="--"){
-        $validadorc=null;
+      if (trim($validadorc) == "--") {
+        $validadorc = null;
       }
       $clpcorcamforne->pc21_validadorc = $validadorc;
       $clpcorcamforne->pc21_prazoent   = $prazoent;
@@ -205,16 +201,15 @@ if (isset($alterar) || isset($incluir)) {
       $clpcorcamforne->alterar($pc21_orcamforne);
       if ($clpcorcamforne->erro_status == 0) {
 
-        $sqlerro=true;
-        $erro_msg=$clpcorcamforne->erro_msg;
-
+        $sqlerro = true;
+        $erro_msg = $clpcorcamforne->erro_msg;
       }
     }
   }
 
   for ($i = 1; $i < sizeof($arrval); $i++) {
-    $codval = explode("_",$arrval[$i]);
-    $lotee  = explode("_",$arrvallote[$i]);
+    $codval = explode("_", $arrval[$i]);
+    $lotee  = explode("_", $arrvallote[$i]);
     $orcamval = $codval[1];
     $lote     = $lotee[1];
     if ($orcamval == 0) {
@@ -226,19 +221,19 @@ if (isset($alterar) || isset($incluir)) {
 
     //db_inicio_transacao();
     for ($i = 1; $i < sizeof($arrval); $i++) {
-      $codvalun = explode("_",$arrvalun[$i]);
-      $codval   = explode("_",$arrval[$i]);
-      $codqtd   = explode("_",$arrqtd[$i]);
-      $desmrk   = explode("_",$arrmrk[$i]);
+      $codvalun = explode("_", $arrvalun[$i]);
+      $codval   = explode("_", $arrval[$i]);
+      $codqtd   = explode("_", $arrqtd[$i]);
+      $desmrk   = explode("_", $arrmrk[$i]);
       $validmin = @$arrdat[$i];
-      $quantOrc = explode("_",$arrqtdorcada[$i]);
+      $quantOrc = explode("_", $arrqtdorcada[$i]);
 
       /*OC3770*/
-      $valpercc  = explode("_",$arrvalperc[$i]);
-      $lotee      = explode("_",$arrvallote[$i]);
+      $valpercc  = explode("_", $arrvalperc[$i]);
+      $lotee      = explode("_", $arrvallote[$i]);
       /*FIM - OC3770*/
 
-      if ($quantOrc >  $codqtd ) {
+      if ($quantOrc >  $codqtd) {
 
         $codfornecedor = "$pc21_orcamforne";
         $item          = $codval[0];
@@ -246,11 +241,11 @@ if (isset($alterar) || isset($incluir)) {
         $clpcorcamdescla->pc32_orcamitem = "$item";
         $clpcorcamdescla->pc32_orcamitem = "$codfornecedor";
         $clpcorcamdescla->pc32_motivo    = "$mensagem";
-        $clpcorcamdescla->incluir($item,$codfornecedor);
+        $clpcorcamdescla->incluir($item, $codfornecedor);
       }
       if (isset($desmrk[1])) {
 
-        $orcammrk = str_replace("yw00000wy"," ",$desmrk[1]);
+        $orcammrk = str_replace("yw00000wy", " ", $desmrk[1]);
       } else {
         $orcammrk = "";
       }
@@ -262,30 +257,28 @@ if (isset($alterar) || isset($incluir)) {
       $valperc    = $valpercc[1];
       $lote       = $lotee[1];
 
-      if (strpos(trim($valorunit),',')!="") {
+      if (strpos(trim($valorunit), ',') != "") {
 
-        $valorunit=str_replace('.','',$valorunit);
-        $valorunit=str_replace(',','.',$valorunit);
+        $valorunit = str_replace('.', '', $valorunit);
+        $valorunit = str_replace(',', '.', $valorunit);
       }
 
-      if (strpos(trim($orcamval),',')!=""){
+      if (strpos(trim($orcamval), ',') != "") {
 
-        $orcamval=str_replace('.','',$orcamval);
-        $orcamval=str_replace(',','.',$orcamval);
-
+        $orcamval = str_replace('.', '', $orcamval);
+        $orcamval = str_replace(',', '.', $orcamval);
       }
 
-      if (isset($alterar) && $sqlerro==false) {
+      if (isset($alterar) && $sqlerro == false) {
         db_inicio_transacao();
-        $clpcorcamval->excluir($pc21_orcamforne,$orcamitem);
+        $clpcorcamval->excluir($pc21_orcamforne, $orcamitem);
         db_fim_transacao();
-        if ($clpcorcamval->erro_status==0) {
+        if ($clpcorcamval->erro_status == 0) {
           $erro_msg = $clpcorcamval->erro_msg;
-          $sqlerro=true;
+          $sqlerro = true;
           unset($incluir);
-
         } else {
-          $incluir="incluir";
+          $incluir = "incluir";
         }
         if ($lRegistroPreco) {
           $oDaoRegistroValor->excluir(null, "pc56_orcamforne = {$pc21_orcamforne} and pc56_orcamitem = {$orcamitem}");
@@ -294,107 +287,102 @@ if (isset($alterar) || isset($incluir)) {
 
       if (isset($incluir) && $sqlerro == false) {
         if (isset($l04_descricao) && $l04_descricao == 'T') {
-            if ($orcamval != 0 && !in_array($lote, $verifica_lote)) {
+          //if ($orcamval != 0 && !in_array($lote, $verifica_lote)) {
 
-              if (trim($validmin)!= '' ) {
-                $arr_d    = explode("-",$validmin);
-                $validmin = $arr_d[2]."-".$arr_d[1]."-".$arr_d[0];
-                if (trim($validmin) == "--" || trim($validmin) == '') {
-                  $validmin=null;
-                }
-              } else {
-                 $validmin=null;
-              }
-
-              $clpcorcamval->pc23_validmin   = $validmin;
-              $clpcorcamval->pc23_orcamforne = $pc21_orcamforne;
-              $clpcorcamval->pc23_orcamitem  = $orcamitem;
-              $clpcorcamval->pc23_valor      = $orcamval;
-              $clpcorcamval->pc23_quant      = $orcamqtd;
-              $clpcorcamval->pc23_obs        = $orcammrk;
-              $clpcorcamval->pc23_vlrun      = $valorunit;
-              $clpcorcamval->importado       = $importado;
-              /*OC3770*/
-                if (isset($pc80_criterioadjudicacao) && trim($pc80_criterioadjudicacao) == 1) {
-                  $clpcorcamval->pc23_perctaxadesctabela = $valperc;
-                }
-                else if (isset($pc80_criterioadjudicacao) && trim($pc80_criterioadjudicacao) == 2) {
-                  $clpcorcamval->pc23_percentualdesconto = $valperc;
-
-                }
-              /*FIM - OC3770*/
-              $clpcorcamval->incluir($pc21_orcamforne,$orcamitem);
-              $erro_msg = $clpcorcamval->erro_msg;
-              if ($clpcorcamval->erro_status==0) {
-
-                $sqlerro=true;
-                break;
-
-              }
-
-              if ($sqlerro == false) {
-                $clpcorcamjulg->excluir($orcamitem);
-
-                if ($clpcorcamjulg->erro_status==0){
-                  $erro_msg = $clpcorcamjulg->erro_msg;
-                  $sqlerro=true;
-                }
-              }
+          if (trim($validmin) != '') {
+            $arr_d    = explode("-", $validmin);
+            $validmin = $arr_d[2] . "-" . $arr_d[1] . "-" . $arr_d[0];
+            if (trim($validmin) == "--" || trim($validmin) == '') {
+              $validmin = null;
+            }
+          } else {
+            $validmin = null;
           }
+
+          $clpcorcamval->pc23_validmin   = $validmin;
+          $clpcorcamval->pc23_orcamforne = $pc21_orcamforne;
+          $clpcorcamval->pc23_orcamitem  = $orcamitem;
+          $clpcorcamval->pc23_valor      = $orcamval;
+          $clpcorcamval->pc23_quant      = $orcamqtd;
+          $clpcorcamval->pc23_obs        = $orcammrk;
+          $clpcorcamval->pc23_vlrun      = $valorunit;
+          $clpcorcamval->importado       = $importado;
+          /*OC3770*/
+          if (isset($pc80_criterioadjudicacao) && trim($pc80_criterioadjudicacao) == 1) {
+            $clpcorcamval->pc23_perctaxadesctabela = $valperc;
+          } else if (isset($pc80_criterioadjudicacao) && trim($pc80_criterioadjudicacao) == 2) {
+            $clpcorcamval->pc23_percentualdesconto = $valperc;
+          }
+          /*FIM - OC3770*/
+          $clpcorcamval->incluir($pc21_orcamforne, $orcamitem);
+          $erro_msg = $clpcorcamval->erro_msg;
+          if ($clpcorcamval->erro_status == 0) {
+
+            $sqlerro = true;
+            break;
+          }
+
+          if ($sqlerro == false) {
+            $clpcorcamjulg->excluir($orcamitem);
+
+            if ($clpcorcamjulg->erro_status == 0) {
+              $erro_msg = $clpcorcamjulg->erro_msg;
+              $sqlerro = true;
+            }
+          }
+          // }
         } else {
 
-            if (trim($validmin)!= '' ) {
+          if (trim($validmin) != '') {
 
-              $arr_d    = explode("-",$validmin);
-              $validmin = $arr_d[2]."-".$arr_d[1]."-".$arr_d[0];
-              if (trim($validmin) == "--" || trim($validmin) == '') {
-                $validmin=null;
-              }
-            } else {
-               $validmin=null;
+            $arr_d    = explode("-", $validmin);
+            $validmin = $arr_d[2] . "-" . $arr_d[1] . "-" . $arr_d[0];
+            if (trim($validmin) == "--" || trim($validmin) == '') {
+              $validmin = null;
             }
-            $clpcorcamval->pc23_validmin   = $validmin;
-            $clpcorcamval->pc23_orcamforne = $pc21_orcamforne;
-            $clpcorcamval->pc23_orcamitem  = $orcamitem;
-            //$clpcorcamval->pc23_valor      = $orcamval;
-            if (empty($orcamval)) {
-              $clpcorcamval->pc23_valor = "0";
-            } else {
-                $clpcorcamval->pc23_valor  = $orcamval;
-            }
-            $clpcorcamval->pc23_quant      = $orcamqtd;
-            $clpcorcamval->pc23_obs        = $orcammrk;
-            if (empty($valorunit)) {
-              $clpcorcamval->pc23_vlrun    = "0";
-            } else {
-              $clpcorcamval->pc23_vlrun    = $valorunit;
-            }
-            /*OC3770*/
-              if (isset($pc80_criterioadjudicacao) && trim($pc80_criterioadjudicacao) == 1) {
-                $clpcorcamval->pc23_perctaxadesctabela = $valperc;
-              }
-              else if (isset($pc80_criterioadjudicacao) && trim($pc80_criterioadjudicacao) == 2) {
-                $clpcorcamval->pc23_percentualdesconto = $valperc;
+          } else {
+            $validmin = null;
+          }
+          $clpcorcamval->pc23_validmin   = $validmin;
+          $clpcorcamval->pc23_orcamforne = $pc21_orcamforne;
+          $clpcorcamval->pc23_orcamitem  = $orcamitem;
+          //$clpcorcamval->pc23_valor      = $orcamval;
+          if (empty($orcamval)) {
+            $clpcorcamval->pc23_valor = "0";
+          } else {
+            $clpcorcamval->pc23_valor  = $orcamval;
+          }
+          $clpcorcamval->pc23_quant      = $orcamqtd;
+          $clpcorcamval->pc23_obs        = $orcammrk;
+          if (empty($valorunit)) {
+            $clpcorcamval->pc23_vlrun    = "0";
+          } else {
+            $clpcorcamval->pc23_vlrun    = $valorunit;
+          }
+          /*OC3770*/
+          if (isset($pc80_criterioadjudicacao) && trim($pc80_criterioadjudicacao) == 1) {
+            $clpcorcamval->pc23_perctaxadesctabela = $valperc;
+          } else if (isset($pc80_criterioadjudicacao) && trim($pc80_criterioadjudicacao) == 2) {
+            $clpcorcamval->pc23_percentualdesconto = $valperc;
+          }
+          /*FIM - OC3770*/
+          $clpcorcamval->incluir($pc21_orcamforne, $orcamitem);
+          $erro_msg = $clpcorcamval->erro_msg;
+          if ($clpcorcamval->erro_status == 0) {
+            $sqlerro = true;
+            break;
+          }
 
-              }
-            /*FIM - OC3770*/
-            $clpcorcamval->incluir($pc21_orcamforne,$orcamitem);
-            $erro_msg = $clpcorcamval->erro_msg;
-            if ($clpcorcamval->erro_status==0) {
-              $sqlerro=true;
-              break;
+          if ($sqlerro == false) {
+            db_inicio_transacao();
+            $clpcorcamjulg->excluir($orcamitem);
+            db_fim_transacao();
+            if ($clpcorcamjulg->erro_status == 0) {
+              $erro_msg = $clpcorcamjulg->erro_msg;
+              $sqlerro = true;
             }
-
-            if ($sqlerro == false) {
-              db_inicio_transacao();
-              $clpcorcamjulg->excluir($orcamitem);
-              db_fim_transacao();
-              if ($clpcorcamjulg->erro_status==0){
-                $erro_msg = $clpcorcamjulg->erro_msg;
-                $sqlerro=true;
-              }
-            }
-      }
+          }
+        }
 
 
         /*
@@ -425,9 +413,9 @@ if (isset($alterar) || isset($incluir)) {
           $oDaoRegistroValor->pc56_orcamforne     = $pc21_orcamforne;
           $oDaoRegistroValor->pc56_orcamitem      = $orcamitem;
           if (empty($valorunit)) {
-              $oDaoRegistroValor->pc56_valorunitario    = "0";
+            $oDaoRegistroValor->pc56_valorunitario    = "0";
           } else {
-              $oDaoRegistroValor->pc56_valorunitario = $valorunit;
+            $oDaoRegistroValor->pc56_valorunitario = $valorunit;
           }
 
           $oDaoRegistroValor->pc56_solicitem      = $oDadosRegistroPreco->pc81_solicitem;
@@ -435,14 +423,13 @@ if (isset($alterar) || isset($incluir)) {
           $erro_msg = $oDaoRegistroValor->erro_msg;
           if ($oDaoRegistroValor->erro_status == 0) {
 
-            $sqlerro=true;
+            $sqlerro = true;
             break;
-
           }
         }
       }
 
-    $sSQL = "
+      $sSQL = "
       SELECT DISTINCT pc22_orcamitem,
        pc01_taxa,
        pc01_tabela
@@ -460,43 +447,42 @@ if (isset($alterar) || isset($incluir)) {
         WHERE pc22_orcamitem = {$orcamitem}
             AND l21_situacao = 0
     ";
-    $verificaItem = db_query($sSQL);
-    db_fieldsmemory($verificaItem, 0);
+      $verificaItem = db_query($sSQL);
+      db_fieldsmemory($verificaItem, 0);
 
-    if ($pc80_criterioadjudicacao == 1) {
-      if ($pc01_tabela == "t") {
-        $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null,null,"pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant, pc23_perctaxadesctabela","pc23_perctaxadesctabela DESC"," pc23_valor <> 0 AND trim(pc23_valor::text) <> '' AND pc23_orcamitem=$orcamitem "));
-      } else {
-          $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null,null,"pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant, pc23_perctaxadesctabela","pc23_valor"," pc23_valor <> 0 AND trim(pc23_valor::text) <> '' AND pc23_orcamitem=$orcamitem "));
-      }
-    }
-    else if($pc80_criterioadjudicacao == 2) {
-      if ($pc01_taxa == "t") {
-        $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null,null,"pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant, pc23_percentualdesconto","pc23_percentualdesconto"," pc23_orcamitem=$orcamitem "));
-      } else {
-          $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null,null,"pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant, pc23_percentualdesconto","pc23_valor"," pc23_orcamitem=$orcamitem "));
-      }
-    } else {
-        $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null,null,"pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant","pc23_valor"," pc23_valor <> 0 AND trim(pc23_valor::text) <> '' AND pc23_orcamitem=$orcamitem "));
-    }
-    $numrows_itemfornec = $clpcorcamval->numrows;
-
-    $pontuacao = 1;
-
-    for ($ii = 0; $ii < $numrows_itemfornec; $ii++) {
-      db_fieldsmemory($result_itemfornec, $ii);
       if ($pc80_criterioadjudicacao == 1) {
+        if ($pc01_tabela == "t") {
+          $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null, null, "pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant, pc23_perctaxadesctabela", "pc23_perctaxadesctabela DESC", " pc23_valor <> 0 AND trim(pc23_valor::text) <> '' AND pc23_orcamitem=$orcamitem "));
+        } else {
+          $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null, null, "pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant, pc23_perctaxadesctabela", "pc23_valor", " pc23_valor <> 0 AND trim(pc23_valor::text) <> '' AND pc23_orcamitem=$orcamitem "));
+        }
+      } else if ($pc80_criterioadjudicacao == 2) {
+        if ($pc01_taxa == "t") {
+          $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null, null, "pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant, pc23_percentualdesconto", "pc23_percentualdesconto", " pc23_orcamitem=$orcamitem "));
+        } else {
+          $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null, null, "pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant, pc23_percentualdesconto", "pc23_valor", " pc23_orcamitem=$orcamitem "));
+        }
+      } else {
+        $result_itemfornec  = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(null, null, "pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant", "pc23_valor", " pc23_valor <> 0 AND trim(pc23_valor::text) <> '' AND pc23_orcamitem=$orcamitem "));
+      }
+      $numrows_itemfornec = $clpcorcamval->numrows;
+
+      $pontuacao = 1;
+
+      for ($ii = 0; $ii < $numrows_itemfornec; $ii++) {
+        db_fieldsmemory($result_itemfornec, $ii);
+        if ($pc80_criterioadjudicacao == 1) {
           if ($pc01_tabela == 't') {
             if ($pc23_valor != 0  || $pc23_perctaxadesctabela != 0) {
               $clpcorcamjulg->pc24_orcamitem  = $pc23_orcamitem;
               $clpcorcamjulg->pc24_orcamforne = $pc23_orcamforne;
               $clpcorcamjulg->pc24_pontuacao  = $pontuacao;
               db_inicio_transacao();
-              $clpcorcamjulg->incluir($pc23_orcamitem,$pc23_orcamforne);
+              $clpcorcamjulg->incluir($pc23_orcamitem, $pc23_orcamforne);
               db_fim_transacao();
               if ($clpcorcamjulg->erro_status == 0) {
                 $erro_msg = $clpcorcamjulg->erro_msg;
-                $sqlerro=true;
+                $sqlerro = true;
                 break;
               }
               $pontuacao++;
@@ -505,162 +491,159 @@ if (isset($alterar) || isset($incluir)) {
               $clpcorcamjulg->pc24_orcamforne = $pc23_orcamforne;
               $clpcorcamjulg->pc24_pontuacao  = $pontuacao;
               db_inicio_transacao();
-              $clpcorcamjulg->incluir($pc23_orcamitem,$pc23_orcamforne);
+              $clpcorcamjulg->incluir($pc23_orcamitem, $pc23_orcamforne);
               db_fim_transacao();
               if ($clpcorcamjulg->erro_status == 0) {
                 $erro_msg = $clpcorcamjulg->erro_msg;
-                $sqlerro=true;
+                $sqlerro = true;
                 break;
               }
               $pontuacao++;
             }
-          }
-          else if ($pc01_tabela == 'f' && $pc23_valor != 0) {
+          } else if ($pc01_tabela == 'f' && $pc23_valor != 0) {
             $clpcorcamjulg->pc24_orcamitem  = $pc23_orcamitem;
             $clpcorcamjulg->pc24_orcamforne = $pc23_orcamforne;
             $clpcorcamjulg->pc24_pontuacao  = $pontuacao;
             db_inicio_transacao();
-            $clpcorcamjulg->incluir($pc23_orcamitem,$pc23_orcamforne);
+            $clpcorcamjulg->incluir($pc23_orcamitem, $pc23_orcamforne);
             db_fim_transacao();
             if ($clpcorcamjulg->erro_status == 0) {
               $erro_msg = $clpcorcamjulg->erro_msg;
-              $sqlerro=true;
+              $sqlerro = true;
               break;
             }
             $pontuacao++;
           }
-      }
-
-      else if ($pc80_criterioadjudicacao == 2) {
-        if ($pc01_taxa == 't') {
-          if ($pc23_valor != 0  || $pc23_percentualdesconto != 0) {
-            $clpcorcamjulg->pc24_orcamitem  = $pc23_orcamitem;
-            $clpcorcamjulg->pc24_orcamforne = $pc23_orcamforne;
-            $clpcorcamjulg->pc24_pontuacao  = $pontuacao;
-            db_inicio_transacao();
-            $clpcorcamjulg->incluir($pc23_orcamitem,$pc23_orcamforne);
-            db_fim_transacao();
-            if ($clpcorcamjulg->erro_status == 0) {
-              $erro_msg = $clpcorcamjulg->erro_msg;
-              $sqlerro=true;
-              break;
+        } else if ($pc80_criterioadjudicacao == 2) {
+          if ($pc01_taxa == 't') {
+            if ($pc23_valor != 0  || $pc23_percentualdesconto != 0) {
+              $clpcorcamjulg->pc24_orcamitem  = $pc23_orcamitem;
+              $clpcorcamjulg->pc24_orcamforne = $pc23_orcamforne;
+              $clpcorcamjulg->pc24_pontuacao  = $pontuacao;
+              db_inicio_transacao();
+              $clpcorcamjulg->incluir($pc23_orcamitem, $pc23_orcamforne);
+              db_fim_transacao();
+              if ($clpcorcamjulg->erro_status == 0) {
+                $erro_msg = $clpcorcamjulg->erro_msg;
+                $sqlerro = true;
+                break;
+              }
+              $pontuacao++;
+            } else {
+              $clpcorcamjulg->pc24_orcamitem  = $pc23_orcamitem;
+              $clpcorcamjulg->pc24_orcamforne = $pc23_orcamforne;
+              $clpcorcamjulg->pc24_pontuacao  = $pontuacao;
+              db_inicio_transacao();
+              $clpcorcamjulg->incluir($pc23_orcamitem, $pc23_orcamforne);
+              db_fim_transacao();
+              if ($clpcorcamjulg->erro_status == 0) {
+                $erro_msg = $clpcorcamjulg->erro_msg;
+                $sqlerro = true;
+                break;
+              }
+              $pontuacao++;
             }
-            $pontuacao++;
-          } else {
+          } else if ($pc01_taxa == 'f' && $pc23_valor != 0) {
             $clpcorcamjulg->pc24_orcamitem  = $pc23_orcamitem;
             $clpcorcamjulg->pc24_orcamforne = $pc23_orcamforne;
             $clpcorcamjulg->pc24_pontuacao  = $pontuacao;
             db_inicio_transacao();
-            $clpcorcamjulg->incluir($pc23_orcamitem,$pc23_orcamforne);
+            $clpcorcamjulg->incluir($pc23_orcamitem, $pc23_orcamforne);
             db_fim_transacao();
             if ($clpcorcamjulg->erro_status == 0) {
               $erro_msg = $clpcorcamjulg->erro_msg;
-              $sqlerro=true;
+              $sqlerro = true;
               break;
             }
             $pontuacao++;
           }
-        }
-        else if ($pc01_taxa == 'f' && $pc23_valor != 0) {
+        } else {
           $clpcorcamjulg->pc24_orcamitem  = $pc23_orcamitem;
           $clpcorcamjulg->pc24_orcamforne = $pc23_orcamforne;
           $clpcorcamjulg->pc24_pontuacao  = $pontuacao;
           db_inicio_transacao();
-          $clpcorcamjulg->incluir($pc23_orcamitem,$pc23_orcamforne);
+          $clpcorcamjulg->incluir($pc23_orcamitem, $pc23_orcamforne);
           db_fim_transacao();
           if ($clpcorcamjulg->erro_status == 0) {
             $erro_msg = $clpcorcamjulg->erro_msg;
-            $sqlerro=true;
+            $sqlerro = true;
             break;
           }
           $pontuacao++;
         }
-      }
-
-      else {
-          $clpcorcamjulg->pc24_orcamitem  = $pc23_orcamitem;
-          $clpcorcamjulg->pc24_orcamforne = $pc23_orcamforne;
-          $clpcorcamjulg->pc24_pontuacao  = $pontuacao;
-          db_inicio_transacao();
-          $clpcorcamjulg->incluir($pc23_orcamitem,$pc23_orcamforne);
-          db_fim_transacao();
-          if ($clpcorcamjulg->erro_status == 0) {
-            $erro_msg = $clpcorcamjulg->erro_msg;
-            $sqlerro=true;
-            break;
-          }
-          $pontuacao++;
       }
     }
-
-   }
-
   }
-
 }
 
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-  <?
-  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-  db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js");
-  db_app::load("widgets/dbtextField.widget.js, dbViewCadEndereco.classe.js");
-  db_app::load("dbmessageBoard.widget.js, dbautocomplete.widget.js,dbcomboBox.widget.js, datagrid.widget.js");
-  db_app::load("estilos.css,grid.style.css");
-  ?>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr><td bgcolor="#CCCCCC">&nbsp;</td></tr>
-  <tr><td bgcolor="#CCCCCC">&nbsp;</td></tr>
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
-  <?php
-  if (isset($lic)&&@$lic!=""&&isset($l20_codigo)&&@$l20_codigo!=""){
-    $result_info=$clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"distinct pc22_codorc as pc20_codorc",null,"l21_codliclicita=$l20_codigo and l21_situacao = 0 and l08_altera is true"));
-    if ($clpcorcamitem->numrows>0){
+<?
+db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js");
+db_app::load("widgets/dbtextField.widget.js, dbViewCadEndereco.classe.js");
+db_app::load("dbmessageBoard.widget.js, dbautocomplete.widget.js,dbcomboBox.widget.js, datagrid.widget.js");
+db_app::load("estilos.css,grid.style.css");
+?>
 
-      db_fieldsmemory($result_info,0);
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table width="790" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td bgcolor="#CCCCCC">&nbsp;</td>
+    </tr>
+    <tr>
+      <td bgcolor="#CCCCCC">&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+        <center>
+          <?php
+          if (isset($lic) && @$lic != "" && isset($l20_codigo) && @$l20_codigo != "") {
+            $result_info = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct pc22_codorc as pc20_codorc", null, "l21_codliclicita=$l20_codigo and l21_situacao = 0 and l08_altera is true"));
+            if ($clpcorcamitem->numrows > 0) {
 
-    }
-  }
-  if ($iFormaControleRegistroPreco == 2) {
+              db_fieldsmemory($result_info, 0);
+            }
+          }
+          if ($iFormaControleRegistroPreco == 2) {
 
-    db_redireciona("lic4_orcamentolicitacaoregistropreco001.php?iLicitacao={$l20_codigo}&pc20_codorc={$pc20_codorc}");
-    exit;
-  }
-  include("forms/db_frmorcamlancvallic.php");
-  ?>
-    </center>
-    </td>
-  </tr>
-</table>
+            db_redireciona("lic4_orcamentolicitacaoregistropreco001.php?iLicitacao={$l20_codigo}&pc20_codorc={$pc20_codorc}");
+            exit;
+          }
+          include("forms/db_frmorcamlancvallic.php");
+          ?>
+        </center>
+      </td>
+    </tr>
+  </table>
 </body>
+
 </html>
 <?
-if (isset($achou)&&$achou==true){
-     db_msgbox('Licitacao tem itens sem lote.\nFavor definir lote para estes itens.');
-     echo "<script>
+if (isset($achou) && $achou == true) {
+  db_msgbox('Licitacao tem itens sem lote.\nFavor definir lote para estes itens.');
+  echo "<script>
               document.location.href='lic1_lancavallic001.php';
            </script>";
 }
 
-if(isset($incluir) || isset($alterar)){
-  if(isset($alterar)){
-    $erro_msg = str_replace("Inclusao","Alteracao",$erro_msg);
-    $erro_msg = str_replace("EXclusão","Alteracao",$erro_msg);
+if (isset($incluir) || isset($alterar)) {
+  if (isset($alterar)) {
+    $erro_msg = str_replace("Inclusao", "Alteracao", $erro_msg);
+    $erro_msg = str_replace("EXclusão", "Alteracao", $erro_msg);
   }
-  if($sqlerro==true){
-    $erro_msg = str_replace("\n","\\n",$erro_msg);
+  if ($sqlerro == true) {
+    $erro_msg = str_replace("\n", "\\n", $erro_msg);
     db_msgbox($erro_msg);
-  }else{
+  } else {
     echo "
     <script>
       x = document.form1;

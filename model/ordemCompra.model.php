@@ -941,7 +941,7 @@ class ordemCompra {
       //echo $this->dadosOrdem->itens[$iInd]->matmater[0]->m60_descr;
 
       $sSqlTransMater = $oDaoTransMater->sql_query(null,
-                                                   "m63_codmatmater,m60_descr,m60_controlavalidade",
+                                                   "m63_codmatmater,m60_descr,m60_codmatunid,m60_controlavalidade",
                                                     null,
                                                     "m60_ativo is true
                                                     and m63_codpcmater={$this->dadosOrdem->itens[$iInd]->e62_item}");
@@ -957,6 +957,7 @@ class ordemCompra {
 
       $oMaterial->m63_codmatmater   = $this->dadosOrdem->itens[$iInd]->matmater[0]->m63_codmatmater;
       $oMaterial->m60_descr         = $this->dadosOrdem->itens[$iInd]->matmater[0]->m60_descr;
+      $oMaterial->m60_codmatunid    = $this->dadosOrdem->itens[$iInd]->matmater[0]->m60_codmatunid;
       $oMaterial->pc01_descrmater   = $this->dadosOrdem->itens[$iInd]->pc01_descrmater;
       $oMaterial->pc01_codmater     = $this->dadosOrdem->itens[$iInd]->e62_item;
       $oMaterial->e62_descr         = $this->dadosOrdem->itens[$iInd]->e62_descr;
@@ -1157,7 +1158,7 @@ class ordemCompra {
     $oDaoTransMater = db_utils::getDao("transmater");
     $aItensMaterial = array();
     $sSqlTransMater = $oDaoTransMater->sql_query(null,
-                                                 "m63_codmatmater,m60_descr,m60_controlavalidade",
+                                                 "m63_codmatmater,m60_descr,m60_codmatunid,m60_controlavalidade",
                                                   null,
                                                   "m60_ativo is true
                                                    and m63_codpcmater={$oItemAtivo->pc01_codmater}");
@@ -1173,7 +1174,7 @@ class ordemCompra {
 
     $oItemAtivo->aMateriaisEstoque = $aItensMaterial;
     $oItemAtivo->sServicoQuantidade = ordemCompra::getServicoQuantidade($iSequencialEmpEmpItem);
-    return $oItemAtivo;
+    return $oItemAtivo; 
   }
   /**
    * Cancela o fracionamento do Item passado;

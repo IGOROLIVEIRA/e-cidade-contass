@@ -45,7 +45,6 @@ $clrotulo->label('r14_valor');
 
 $iInstituicao = db_getsession("DB_instit");
 
-$sRubrica 		= $oParametros->iRubrica;
 $iMes           = $oParametros->iMes;
 $iAno           = $oParametros->iAno;
 $sPonto         = $oParametros->sPonto;
@@ -105,6 +104,16 @@ if($sPonto == 's'){
   $sSigla  = 'r14_';
   $head5   = 'PONTO : SUPLEMENTAR';
   $sTabela = sql_gerfsal_ficticio(FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR, $sSigla);
+} elseif($sPonto == 't'){
+  
+  $aSiglas = array ('r14_' => 'gerfsal',
+                    'r48_' => 'gerfcom',
+                    'r35_' => 'gerfs13',
+                    'r20_' => 'gerfres',
+                    'r22_' => 'gerfadi',
+  );
+  $sSigla = '';
+  $head5   = 'PONTO : TODOS';
 }
 
 if($sQuebra){
@@ -116,23 +125,12 @@ if($sQuebra){
 
 $sWhere = "";
 
-if (!empty($sRubrica)) {
-
-	$oDaoRhRubricas = db_utils::getDao('rhrubricas');
-
-	$sSqlRhRubricas = $oDaoRhRubricas->sql_query_file($sRubrica, $iInstituicao, 'rh27_rubric, rh27_descr');
-
-	$rsRhRubricas   = $oDaoRhRubricas->sql_record($sSqlRhRubricas);
-
-	if ($oDaoRhRubricas->numrows == 0) {
-		db_redireciona("db_erros.php?fechar=true&db_erro=Rubrica não cadastrada no período de {$iMes} / {$iAno}");
-	}
-
-	$oRhRubrica     = db_utils::fieldsMemory($rsRhRubricas, 0);
-
-	$sWhere        .= "and {$sSigla}rubric = '{$sRubrica}'";
-
-} 
+if (!empty($oParametros->rubini) && $sPonto != 't') {
+	$sWhere .= " and {$sSigla}rubric between '{$oParametros->rubini}' and '{$oParametros->rubfim}'";
+} else if (!empty($oParametros->faixarub) && $sPonto != 't') {
+	$oParametros->faixarub = implode("','", explode(',', $oParametros->faixarub));
+	$sWhere .= " and {$sSigla}rubric in ('{$oParametros->faixarub}')";
+}
 
 if (!empty($iCodigoSelecao)) {
 	$oDaoSelecao = db_utils::getDao('selecao');
@@ -185,9 +183,26 @@ if($sOrdem == 'a'){
 }
 
 $oDaoRhPessoalMov = db_utils::getDao('rhpessoalmov');
+if ($sPonto == 't') {
 
-$sSqlFinanceiro   = $oDaoRhPessoalMov->sql_queryFinanceiroPeloCodigo($iAno, $iMes, $sTabela, $sSigla, $sWhere, $sOrderBy, $lPeriodoAtual);
-//print_r($sSqlFinanceiro);die();
+	$aSqlFinanceiro = array();
+	foreach ($aSiglas as $sSigla => $sTabela) {
+
+		if (!empty($oParametros->rubini)) {
+			$sRubWhere = " and {$sSigla}rubric between '{$oParametros->rubini}' and '{$oParametros->rubfim}'";
+		} else if (!empty($oParametros->faixarub)) {
+			$oParametros->faixarub = implode("','", explode(',', $oParametros->faixarub));
+			$sRubWhere = " and {$sSigla}rubric in ('{$oParametros->faixarub}')";
+		}
+	  if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && $sTabela == "gerfsal") {
+	    $sTabela = sql_gerfsal_ficticio(FolhaPagamento::TIPO_FOLHA_SALARIO, "r14_");
+	  }
+		$aSqlFinanceiro[] = "(".$oDaoRhPessoalMov->sql_queryFinanceiroPeloCodigo($iAno, $iMes, $sTabela, $sSigla, "$sRubWhere ".$sWhere, "", $lPeriodoAtual).")";
+	}
+	$sSqlFinanceiro = implode(" UNION ", $aSqlFinanceiro)." $sOrderBy";
+} else {
+  $sSqlFinanceiro   = $oDaoRhPessoalMov->sql_queryFinanceiroPeloCodigo($iAno, $iMes, $sTabela, $sSigla, $sWhere, $sOrderBy, $lPeriodoAtual);
+}
 $rsFinanceiro     = $oDaoRhPessoalMov->sql_record($sSqlFinanceiro);
 
 if ($oDaoRhPessoalMov->numrows == 0 ) {

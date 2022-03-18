@@ -326,8 +326,13 @@ if ($imprimevalidmin=="true"){
 
 //$this->objpdf->text($xcol+ 145,$xlin+$getdoy+4,'MARCA');
 //$this->objpdf->text($xcol+ 139,$xlin+$getdoy+4,'VAL. MIN.');
-$this->objpdf->text($xcol+ 165,$xlin+$getdoy+4,'VLR UNIT.');
-$this->objpdf->text($xcol+ 184,$xlin+$getdoy+4,'VLR TOT.');
+
+if($this->criterioadjudicacao==1||$this->criterioadjudicacao==2){
+  $this->objpdf->text($xcol+ 165,$xlin+$getdoy+4,'TX/TABELA');
+  }else{
+  $this->objpdf->text($xcol+ 165,$xlin+$getdoy+4,'VLR UNIT.');
+  }
+  $this->objpdf->text($xcol+ 184,$xlin+$getdoy+4,'VLR TOT.');
 
 $maiscol = 0;
 

@@ -21,7 +21,7 @@
                         <label for="S2205">S-2205 - Alteração de Dados Cadastrais do Trabalhador</label><br>
                     </td>
                     <td>
-                        <input type="checkbox" value="S2206" id="S2206" />
+                        <input type="checkbox" value="S2206" id="S2206" onclick="js_dataalt()" />
                         <label for="S2206">S-2206 - Alteração de Contrato de Trabalho/Relação Estatutária</label><br>
                     </td>
                 </tr>

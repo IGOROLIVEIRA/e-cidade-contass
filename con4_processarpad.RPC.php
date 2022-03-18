@@ -680,6 +680,11 @@ case "processarBalancete" :
     $iCodOrgao  = str_pad(db_utils::fieldsMemory($rsInst, 0)->si09_codorgaotce, 2, "0", STR_PAD_LEFT);
 
     $iAnoReferencia = db_getsession('DB_anousu');
+    $diaMes = "";
+    if($iAnoReferencia > 2020
+        && $iTipoInst == 5){
+        $diaMes = "31_12_";
+    }
 
       /*
        * gerar arquivos correspondentes a todas as opcoes selecionadas
@@ -692,28 +697,28 @@ case "processarBalancete" :
       //print_r($oParam->arquivos);
       foreach ($oParam->arquivos as $sArquivo) {
 
-        if (file_exists("{$sArquivo}_{$iAnoReferencia}.pdf")) {
+        if (file_exists("{$sArquivo}_{$diaMes}{$iAnoReferencia}.pdf")) {
 
         	$oArquivoCsv          = new stdClass();
-        	$oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.pdf";
-            $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.pdf";
+        	$oArquivoCsv->nome    = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.pdf";
+            $oArquivoCsv->caminho = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.pdf";
             $aArrayArquivos[] = $oArquivoCsv;
 
-        }elseif(file_exists("{$sArquivo}_{$iAnoReferencia}.xls")){
+        }elseif(file_exists("{$sArquivo}_{$diaMes}{$iAnoReferencia}.xls")){
             $oArquivoCsv          = new stdClass();
-            $oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.xls";
-            $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.xls";
+            $oArquivoCsv->nome    = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.xls";
+            $oArquivoCsv->caminho = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.xls";
             $aArrayArquivos[] = $oArquivoCsv;
-        }elseif(file_exists("{$sArquivo}_{$iAnoReferencia}.xlsx")){
+        }elseif(file_exists("{$sArquivo}_{$diaMes}{$iAnoReferencia}.xlsx")){
             $oArquivoCsv          = new stdClass();
-            $oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.xlsx";
-            $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.xlsx";
+            $oArquivoCsv->nome    = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.xlsx";
+            $oArquivoCsv->caminho = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.xlsx";
             $aArrayArquivos[] = $oArquivoCsv;
         } else {
 
           if($iTipoInst == 5 && $sArquivo == 'DRAA') {
               $oRetorno->status = 2;
-              $sGetMessage = "Arquivo {$sArquivo}_{$iAnoReferencia}.pdf não encontrado. Envie este arquivo e tente novamente";
+              $sGetMessage = "Arquivo {$sArquivo}_{$diaMes}{$iAnoReferencia}.pdf não encontrado. Envie este arquivo e tente novamente";
               $oRetorno->message = urlencode(str_replace("\\n", "\n", $sGetMessage));
           }
 

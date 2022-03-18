@@ -85,11 +85,17 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
   private function getDadosGestorEscola() {
 
     $oDaoEscolaGestor     = new cl_escolagestorcenso();
-    $sCamposEscolaGestor  = " ed254_i_codigo, ";
+    $sCamposEscolaGestor  = " ed254_i_codigo, ed20_i_tiposervidor, ";
     $sCamposEscolaGestor .= " case when ed20_i_tiposervidor = 1 ";
-
-    $sCamposEscolaGestor .= "      then trim(cgmrh.z01_nome) ";
-    $sCamposEscolaGestor .= " else trim(cgmcgm.z01_nome) end as z01_nome, ";
+    $sCamposEscolaGestor .= "      then case when cgmrh.z01_nomecomple <> '' ";
+    $sCamposEscolaGestor .= "                     then cgmrh.z01_nomecomple ";
+    $sCamposEscolaGestor .= "                else cgmrh.z01_nome ";
+    $sCamposEscolaGestor .= "            end ";
+    $sCamposEscolaGestor .= "      else case when cgmcgm.z01_nomecomple <> '' ";
+    $sCamposEscolaGestor .= "                     then cgmcgm.z01_nomecomple ";
+    $sCamposEscolaGestor .= "                else cgmcgm.z01_nome ";
+    $sCamposEscolaGestor .= "            end ";
+    $sCamposEscolaGestor .= "  end as z01_nome, ";
     $sCamposEscolaGestor .= " case when ed20_i_tiposervidor = 1 ";
     $sCamposEscolaGestor .= "      then trim(cgmrh.z01_cgccpf) ";
     $sCamposEscolaGestor .= " else trim(cgmcgm.z01_cgccpf) end as z01_cgccpf, ";
@@ -109,7 +115,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
       $oDadosGestor = db_utils::fieldsMemory($rsEscolaGestor, 0);
       $oDadosGestorEscola->numero_cpf_gestor_escolar = $oDadosGestor->z01_cgccpf;
-      $oDadosGestorEscola->nome_gestor_escolar       = trim($oDadosGestor->z01_nome);
+      $oDadosGestorEscola->nome_gestor_escolar       = $this->removeCaracteres(trim($oDadosGestor->z01_nome), 1);
       $oDadosGestorEscola->cargo_gestor_escolar      = 1;
 
       if (empty($oDadosGestor->ed254_i_codigo)) {
@@ -121,10 +127,116 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     return $oDadosGestorEscola;
   }
 
-  public function getDadosInfraEstrutura() {
+  public function criarObjetoInfraestrutura(){
 
     $oDadosInfraEstrutura                = new stdClass();
     $oDadosInfraEstrutura->tipo_registro = "10";
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_televisao           = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_videocassete        = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_dvd                 = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_antena_parabolica   = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_copiadora           = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_retroprojetor       = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_impressora          = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_aparelho_som        = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_projetor_datashow   = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_fax                 = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_maquina_fotografica = '';
+    $oDadosInfraEstrutura->equipamentos_existentes_escola_computador          = '';
+    $oDadosInfraEstrutura->equipamentos_impressora_multifuncional             = '';
+    $oDadosInfraEstrutura->quantidade_computadores_uso_administrativo         = '';
+    $oDadosInfraEstrutura->quantidade_computadores_uso_alunos                 = '';
+    $oDadosInfraEstrutura->acesso_internet                                    = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_nenhuma_relacionada = '';
+    $oDadosInfraEstrutura->numero_salas_aula_existentes_escola                = '';
+    $oDadosInfraEstrutura->numero_salas_usadas_como_salas_aula                = '';
+    $oDadosInfraEstrutura->local_funcionamento_escola_predio_escolar          = '';
+    $oDadosInfraEstrutura->local_funcionamento_escola_templo_igreja           = '';
+    $oDadosInfraEstrutura->local_funcionamento_escola_salas_empresas          = '';
+    $oDadosInfraEstrutura->local_funcionamento_escola_casa_professor          = '';
+    $oDadosInfraEstrutura->local_funcionamento_escola_salas_outras_escolas    = '';
+    $oDadosInfraEstrutura->local_funcionamento_escola_galpao_rancho_paiol_bar = '';
+    $oDadosInfraEstrutura->local_funcionamento_escola_un_internacao_socio     = '';
+    $oDadosInfraEstrutura->local_funcionamento_escola_unidade_prisional       = '';
+    $oDadosInfraEstrutura->local_funcionamento_escola_outros                  = '';
+    $oDadosInfraEstrutura->abastecimento_agua_rede_publica                    = '';
+    $oDadosInfraEstrutura->abastecimento_agua_poco_artesiano                  = '';
+    $oDadosInfraEstrutura->abastecimento_agua_cacimba_cisterna_poco           = '';
+    $oDadosInfraEstrutura->abastecimento_agua_fonte_rio_igarape_riacho_correg = '';
+    $oDadosInfraEstrutura->abastecimento_agua_inexistente                     = '';
+    $oDadosInfraEstrutura->abastecimento_energia_eletrica_inexistente         = '';
+    $oDadosInfraEstrutura->destinacao_lixo_coleta_periodica                   = '';
+    $oDadosInfraEstrutura->destinacao_lixo_queima                             = '';
+    $oDadosInfraEstrutura->destinacao_lixo_joga_outra_area                    = '';
+    $oDadosInfraEstrutura->destinacao_lixo_recicla                            = '';
+    $oDadosInfraEstrutura->destinacao_lixo_enterra                            = '';
+    $oDadosInfraEstrutura->destinacao_lixo_outros                             = '';
+    $oDadosInfraEstrutura->esgoto_sanitario_inexistente                       = '';
+    $oDadosInfraEstrutura->alimentacao_escolar_aluno                          = '';
+    $oDadosInfraEstrutura->materiais_didaticos_especificos_nao_utiliza        = '';
+    $oDadosInfraEstrutura->materiais_didaticos_especificos_quilombola         = '';
+    $oDadosInfraEstrutura->materiais_didaticos_especificos_indigena           = '';
+    $oDadosInfraEstrutura->atendimento_educacional_especializado              = '';
+    $oDadosInfraEstrutura->atividade_complementar                             = '';
+    $oDadosInfraEstrutura->modalidade_ensino_regular                          = 0;
+    $oDadosInfraEstrutura->modalidade_educacao_especial_modalidade_substutiva = 0;
+    $oDadosInfraEstrutura->modalidade_educacao_jovens_adultos                 = 0;
+    $oDadosInfraEstrutura->modalidade_educacao_profissional                   = 0;
+    $oDadosInfraEstrutura->codigo_escola_compartilha_1                        = '';
+    $oDadosInfraEstrutura->codigo_escola_compartilha_2                        = '';
+    $oDadosInfraEstrutura->codigo_escola_compartilha_3                        = '';
+    $oDadosInfraEstrutura->codigo_escola_compartilha_4                        = '';
+    $oDadosInfraEstrutura->codigo_escola_compartilha_5                        = '';
+    $oDadosInfraEstrutura->codigo_escola_compartilha_6                        = '';
+    $oDadosInfraEstrutura->ensino_fundamental_organizado_ciclos               = '0';
+    $oDadosInfraEstrutura->forma_ocupacao_predio                              = '';
+    $oDadosInfraEstrutura->predio_compartilhado_outra_escola                  = '';
+    $oDadosInfraEstrutura->agua_consumida_alunos                              = '';
+    $oDadosInfraEstrutura->abastecimento_energia_eletrica_rede_publica        = '';
+    $oDadosInfraEstrutura->abastecimento_energia_eletrica_gerador             = '';
+    $oDadosInfraEstrutura->abastecimento_energia_eletrica_outros_alternativa  = '';
+    $oDadosInfraEstrutura->esgoto_sanitario_rede_publica                      = '';
+    $oDadosInfraEstrutura->esgoto_sanitario_fossa                             = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_sala_diretoria      = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_sala_professores    = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_sala_secretaria     = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_laboratorio_informa = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_laboratorio_ciencia = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_sala_recursos_multi = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_quadra_esporte_cobe = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_quadra_esporte_desc = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_cozinha             = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_biblioteca          = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_sala_leitura        = '';
+    $oDadosInfraEstrutura->dependencias_existentes_escola_parque_infantil     = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_bercario            = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_banheiro_fora_predi = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_banheiro_dentro_pre = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_banheiro_educ_infan = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_banheiro_alunos_def = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_dep_vias_alunos_def = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_banheiro_chuveiro   = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_refeitorio          = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_despensa            = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_almoxarifado        = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_auditorio           = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_patio_coberto       = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_patio_descoberto    = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_alojamento_aluno    = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_alojamento_professo = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_area_verde          = "";
+    $oDadosInfraEstrutura->dependencias_existentes_escola_lavanderia          = "";
+    $oDadosInfraEstrutura->escola_cede_espaco_turma_brasil_alfabetizado       = "";
+    $oDadosInfraEstrutura->escola_abre_finais_semanas_comunidade              = "";
+    $oDadosInfraEstrutura->escola_formacao_alternancia                        = "";
+
+    return $oDadosInfraEstrutura;
+  }
+
+  public function getDadosInfraEstrutura() {
+
+    $oDadosInfraEstrutura = $this->criarObjetoInfraestrutura();
+
     /**
      * Total de Funcionarios na escola:
      */
@@ -137,15 +249,6 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
     $iTotalFuncionarios  = db_utils::fieldsMemory($rsTotalFuncionarios, 0)->total;
     $oDadosInfraEstrutura->total_funcionarios_prof_aux_assistentes_monitores = $iTotalFuncionarios;
-    /**
-     * carregamos os tipos de ensino que escola disponibiliza
-     */
-    $oDadosInfraEstrutura->modalidade_ensino_regular                          = '0';
-    $oDadosInfraEstrutura->modalidade_educacao_especial_modalidade_substutiva = '0';
-    $oDadosInfraEstrutura->modalidade_educacao_jovens_adultos                 = '0';
-    $oDadosInfraEstrutura->modalidade_educacao_profissional                   = '0';
-
-    $lCicloObrigatorio = false;
 
     foreach ($this->getTiposDeEnsinoNaEscola() as $iTipoEnsino) {
 
@@ -154,15 +257,11 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         case 1:
 
           $oDadosInfraEstrutura->modalidade_ensino_regular = 1;
-          $lCicloObrigatorio = true;
-
           break;
 
         case 2:
 
           $oDadosInfraEstrutura->modalidade_educacao_especial_modalidade_substutiva = 1;
-          $lCicloObrigatorio = true;
-
           break;
 
         case 3:
@@ -177,20 +276,12 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     }
 
     $oDadosInfraEstrutura->localizacao_diferenciada_escola = $this->oRegistro00->localizacao_diferenciada;
-    $oDadosInfraEstrutura->educacao_indigena               = empty($this->oRegistro00->educacao_indigena) ? '0' : 1;
+    $oDadosInfraEstrutura->educacao_indigena               = empty($this->oRegistro00->educacao_indigena) ? 0 : 1;
     $oDadosInfraEstrutura->codigo_escola_inep              = $this->oRegistro00->codigo_escola_inep;
 
     $oDadosInfraEstrutura->lingua_ensino_ministrado_lingua_indigena   = $this->oRegistro00->educacao_indigena_lingua_indigena;
     $oDadosInfraEstrutura->lingua_ensino_ministrada_lingua_portuguesa = $this->oRegistro00->educacao_indigena_lingua_portugues;
     $oDadosInfraEstrutura->codigo_lingua_indigena                     = $this->oRegistro00->codigo_censo_lingua_indigena;
-
-    $oDadosInfraEstrutura->codigo_escola_compartilha_1 = '';
-    $oDadosInfraEstrutura->codigo_escola_compartilha_2 = '';
-    $oDadosInfraEstrutura->codigo_escola_compartilha_3 = '';
-    $oDadosInfraEstrutura->codigo_escola_compartilha_4 = '';
-    $oDadosInfraEstrutura->codigo_escola_compartilha_5 = '';
-    $oDadosInfraEstrutura->codigo_escola_compartilha_6 = '';
-
     /**
      * Percorremos os dados das avaliacoes da escola, onde montamos o restante dos dados da infraEstrutra
      */
@@ -198,8 +289,28 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $oDadosInfraEstrutura->{$oRespostas->campo} = $oRespostas->respostas;
     }
 
-    if( !$lCicloObrigatorio ) {
-      $oDadosInfraEstrutura->ensino_fundamental_organizado_ciclos = '';
+    if ( $oDadosInfraEstrutura->equipamentos_existentes_escola_computador === '' ) {
+      $oDadosInfraEstrutura->acesso_internet = '';
+    }
+
+    if ( $oDadosInfraEstrutura->acesso_internet != 1 ) {
+      $oDadosInfraEstrutura->banda_larga = '';
+    }
+
+    $lTemAtividadeExclusiva = $oDadosInfraEstrutura->atendimento_educacional_especializado == 2;
+    if ( !$lTemAtividadeExclusiva && $oDadosInfraEstrutura->atividade_complementar == 2) {
+      $lTemAtividadeExclusiva = true;
+    }
+
+    /**
+     * Campos 92, 93, 94 e 95 implementado validação da regra 2 e 3
+     */
+    if ( $lTemAtividadeExclusiva ) {
+
+      $oDadosInfraEstrutura->modalidade_ensino_regular                          = '';
+      $oDadosInfraEstrutura->modalidade_educacao_especial_modalidade_substutiva = '';
+      $oDadosInfraEstrutura->modalidade_educacao_jovens_adultos                 = '';
+      $oDadosInfraEstrutura->modalidade_educacao_profissional                   = '';
     }
 
     return $oDadosInfraEstrutura;
@@ -222,7 +333,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
      * acesso_internet
      */
     $aRespostasObjetivas[3000035] = 1;   // SIM
-    $aRespostasObjetivas[3000036] = "0"; // NÃO
+    $aRespostasObjetivas[3000036] = 0; // NÃO
 
     /**
      * 3000017 - Água consumida pelos Alunos
@@ -244,28 +355,28 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
      */
     $aRespostasObjetivas[3000108] = 1;   // NÃO EXCLUSIVAMENTE
     $aRespostasObjetivas[3000109] = 2;   // EXCLUSIVAMENTE
-    $aRespostasObjetivas[3000110] = '0'; // NÃO OFERECE
+    $aRespostasObjetivas[3000110] = 0; // NÃO OFERECE
 
     /**
      * 3000021 - Atividade Complementar
      *  atividade_complementar
      */
     $aRespostasObjetivas[3000105] = 1;    // NÃO EXCLUSIVAMENTE
-    $aRespostasObjetivas[3000106] = "0";  // NÃO OFERECE
-    $aRespostasObjetivas[3000107] = "2";  // EXCLUSIVAMENTE
+    $aRespostasObjetivas[3000106] = 0;  // NÃO OFERECE
+    $aRespostasObjetivas[3000107] = 2;  // EXCLUSIVAMENTE
 
     /**
      *  3000005 - Banda Larga
      *  banda_larga
      */
     $aRespostasObjetivas[3000037] = 1;   // Possui
-    $aRespostasObjetivas[3000038] = "0"; // Não Possui
+    $aRespostasObjetivas[3000038] = 0; // Não Possui
 
     /**
      * 3000023 - Ensino Fundamental em ciclos
      * ensino_fundamental_organizado_ciclos
      */
-    $aRespostasObjetivas[3000111] = "0"; // NÃO
+    $aRespostasObjetivas[3000111] = 0; // NÃO
     $aRespostasObjetivas[3000112] = 1;   // SIM
 
     /**
@@ -273,7 +384,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
      *  escola_cede_espaco_turma_brasil_alfabetizado
      */
     $aRespostasObjetivas[3000122] = 1;   // SIM
-    $aRespostasObjetivas[3000123] = "0"; // NÃO
+    $aRespostasObjetivas[3000123] = 0; // NÃO
 
     /**
      * 3000007 - Forma de Ocupação do Prédio
@@ -287,15 +398,15 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
      * 3000016 - Predio Compartilhad
      * predio_compartilhado_outra_escola
      */
-    $aRespostasObjetivas[3000097] = 1;   // SIM
-    $aRespostasObjetivas[3000098] = "0"; // NÃO
+    $aRespostasObjetivas[3000097] = 1; // SIM
+    $aRespostasObjetivas[3000098] = 0; // NÃO
 
     /**
      * 3000026 - Escola abre aos finais de semana para a comunidade
      * escola_abre_finais_semanas_comunidade
      */
     $aRespostasObjetivas[3000124] = 1;   // SIM
-    $aRespostasObjetivas[3000125] = "0"; // NÃO
+    $aRespostasObjetivas[3000125] = 0; // NÃO
 
 
     /**
@@ -303,7 +414,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
      * escola_formacao_alternancia
      */
     $aRespostasObjetivas[3000561] = 1;   // Sim
-    $aRespostasObjetivas[3000562] = "0"; // Não
+    $aRespostasObjetivas[3000562] = 0; // Não
 
 
     /**
@@ -324,7 +435,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $sSqlResposta = " '' ";
     } else {
 
-      $aPerguntasDevemUsarTexto = array(3000003, 3000019, 3000020, 3000024, 3000154, 3000155, 3000156, 3000157, 3000158, 3000159);
+      $aPerguntasDevemUsarTexto = array(3000003, 3000010, 3000019, 3000020, 3000024, 3000154, 3000155, 3000156, 3000157, 3000158, 3000159);
 
       $iCodigoAvaliacao  = db_utils::fieldsMemory($rsCodigoAvaliacao, 0)->ed308_avaliacaogruporesposta;
       $sSqlResposta      = "(select case when db103_avaliacaotiporesposta = 1        then cast(db104_sequencial as varchar) ";
@@ -361,29 +472,20 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
           $aPerguntas[$oPergunta->campo]->respostas = $aRespostasObjetivas[$iRespostaPergunta];
         }
 
-        if ( trim($iRespostaPergunta) != "" && $oPergunta->db103_sequencial == 3000023 ) {
-
-          $iReposta = "0"; // default NÃO
-          if ($oDadosInfra->modalidade_ensino_regular == 1 || $oDadosInfra->modalidade_educacao_especial_modalidade_substutiva == 1 ) {
-            $iReposta = $aRespostasObjetivas[$iRespostaPergunta];
-          }
-          $aPerguntas[$oPergunta->campo]->respostas = $iReposta;
-        }
-
       } else {
 
         /**
          * Caso a pergunta seja 3000010 (equipamentos existentes) e a resposta esteja como zero, setamos a resposta
          * como vazio
          */
-        if (    in_array($oPergunta->db103_sequencial, $aPerguntasLimparValorZero)
-             && (trim($oPergunta->respostas) == 0 || trim($oPergunta->respostas) == '') ) {
+        $mResposta = trim($oPergunta->respostas);
+        if ( in_array($oPergunta->db103_sequencial, $aPerguntasLimparValorZero) && empty($mResposta) ) {
           $oPergunta->respostas = '';
         }
         $aPerguntas[$oPergunta->campo] = $oPergunta;
 
         if ( in_array($oPergunta->db103_sequencial, $aPerguntasRespostaObrigatoria) && trim($oPergunta->respostas) == '') {
-          $aPerguntas[$oPergunta->campo]->respostas = "0";
+          $aPerguntas[$oPergunta->campo]->respostas = 0;
         }
       }
     }
@@ -429,7 +531,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
       }
     }
-
+    // valida os dados do gestor
     $lValidaAutenticacao = DadosCensoEscola2015::validaAutenticacao($oExportacaoCenso, $oDadosEscola->registro00);
      // se lTodosDadosValidos já esta false, mantem false
     if ( !$lValidaAutenticacao ) {
@@ -449,16 +551,6 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
       $lTodosDadosValidos = false;
       $oExportacaoCenso->logErro("Nome da Escola deve conter no mínimo 4 dígitos", ExportacaoCenso2015::LOG_ESCOLA);
-    }
-
-    // valida os seguintes caracters (ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ªº-)
-    if ( preg_match ('/[^a-z0-9ªº\s\-]+/i',  $oDadosEscola->registro00->nome_escola) ) {
-
-      $sMensagem  = "Nome da Escola ({$oDadosEscola->registro00->nome_escola}) deve conter somente os caractéres entre";
-      $sMensagem .= " parêntesis: (ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 ªº-)";
-
-      $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
     }
 
     $lvalidaLatitudeLongitude = DadosCensoEscola2015::validaLatitudeLongitude($oExportacaoCenso, $oDadosEscola->registro00);
@@ -487,49 +579,19 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $lTodosDadosValidos = false;
         $oExportacaoCenso->logErro("CEP  da escola deve conter 8 dígitos.", ExportacaoCenso2015::LOG_ESCOLA);
       }
+
+      if (preg_match ('/1{8}|2{8}|3{8}|4{8}|5{8}|6{8}|7{8}|8{8}|9{8}/', $oDadosEscola->registro00->cep)) {
+
+        $lTodosDadosValidos = false;
+        $sMensagem          = "O Campo CEP foi preenchido com um valor inválido. CEP: {$oDadosEscola->registro00->cep}";
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      }
     }
 
     if ($oDadosEscola->registro00->endereco == '') {
 
       $lTodosDadosValidos = false;
       $oExportacaoCenso->logErro("Endereço da escola é obrigatório.", ExportacaoCenso2015::LOG_ESCOLA);
-    }
-
-    $sRegexEndereco = '/[^a-z0-9ªº.,\s\-\/]+/i';
-    $sValorValido   = " parêntesis: (ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 ªº-/.,)";
-    if ( preg_match ($sRegexEndereco,  $oDadosEscola->registro00->endereco) ) {
-
-      $sMensagem  = "Endereço ({$oDadosEscola->registro00->endereco}) deve conter somente os caractéres entre";
-      $sMensagem .= $sValorValido;
-      $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
-    }
-
-    if (    !empty($oDadosEscola->registro00->endereco_numero)
-         && preg_match($sRegexEndereco, $oDadosEscola->registro00->endereco_numero)) {
-
-      $sMensagem  = "Número do endereço da escola ({$oDadosEscola->registro00->endereco_numero}) deve conter somente ";
-      $sMensagem .= "os caractéres entre {$sValorValido}.";
-      $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
-    }
-
-    if (    !empty($oDadosEscola->registro00->complemento_endereco)
-         && preg_match($sRegexEndereco, $oDadosEscola->registro00->complemento_endereco)) {
-
-      $sMensagem  = "Complemento do endereço da escola ({$oDadosEscola->registro00->complemento_endereco}) deve conter somente ";
-      $sMensagem .= "os caractéres entre {$sValorValido}.";
-      $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
-    }
-
-    if (    !empty($oDadosEscola->registro00->bairro)
-         && preg_match($sRegexEndereco, $oDadosEscola->registro00->bairro)) {
-
-      $sMensagem  = "Bairro da escola ({$oDadosEscola->registro00->bairro}) deve conter somente ";
-      $sMensagem .= "os caractéres entre {$sValorValido}.";
-      $lTodosDadosValidos = false;
-      $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
     }
 
     if ($oDadosEscola->registro00->uf == '') {
@@ -551,8 +613,35 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     }
 
     /**
+     * Situação de funcionamento diferente de 1
+     * coluna 7
+     */
+    if ($oDadosEscola->registro00->situacao_funcionamento != 1) {
+
+      $sMsgPadrao = 'quando o campo situação de funcionamento da escola for diferente de 1 (em atividade)';
+      if ( !empty($oDadosEscola->registro00->data_inicio_ano_letivo) ) {
+
+        $lTodosDadosValidos = false;
+        $sMensagem          = "O campo data de início letivo não pode ser preenchido {$sMsgPadrao}";
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+
+      if ( !empty($oDadosEscola->registro00->data_termino_ano_letivo) ) {
+
+        $lTodosDadosValidos = false;
+        $sMensagem          = "O campo data de término do ano letivo não pode ser preenchido {$sMsgPadrao}";
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+
+      if ( !is_null($oDadosEscola->registro00->unidade_vinculada_escola_educacao_basica) ) {
+        $oDadosEscola->registro00->unidade_vinculada_escola_educacao_basica = '';
+      }
+    }
+
+    /**
      * Validações que serão executadas caso a situação de funcionamento seja igual a 1
      * 1 - em atividade
+     * coluna 7
      */
     if ($oDadosEscola->registro00->situacao_funcionamento == 1) {
 
@@ -579,7 +668,6 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
           $oExportacaoCenso->logErro($sMensagem , ExportacaoCenso2015::LOG_ESCOLA );
         }
 
-
         try {
           $oDataTermino = new DBDate( $dtFimAnoLetivo );
         } catch( Exception $o) {
@@ -596,7 +684,6 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
           $lTodosDadosValidos = false;
           $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
         }
-
         if ($oDataInicio->getAno() < $oExportacaoCenso->getAnoCenso() && $oDataInicio->getAno() > $oExportacaoCenso->getAnoCenso()) {
 
           $sMensagem          = "Ano da data de início não pode ser inferior/superior a " . $oExportacaoCenso->getAnoCenso();
@@ -788,7 +875,10 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
 
   /**
-   * Valida dos dados da Autenticação
+   * Valida dos dados da Autenticação... campos:
+   * coluna 3 - CPF gestor escola
+   * coluna 4 - Nome do Gestor Escolar
+   *
    * @param  IExportacaoCenso $oExportacaoCenso
    * @param  stdClass         $oDados
    * @return boolean
@@ -810,19 +900,20 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $sMensagem          .= " gestor informado é inválido.";
       $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
     }
+
     if ($oDados->nome_gestor_escolar == '') {
 
       $lValidou = false;
       $oExportacaoCenso->logErro("Nome do gestor é obrigatório", ExportacaoCenso2015::LOG_ESCOLA);
     }
 
-    $sExpressao          = '/([a-zA-Z])\1{3}/';
+    $sExpressao          = '/[^a-zA-Z\s]+/';
     $lValidacaoExpressao = preg_match($sExpressao, $oDados->nome_gestor_escolar) ? true : false;
 
     if ($lValidacaoExpressao) {
 
       $lValidou = false;
-      $oExportacaoCenso->logErro("Nome do gestor inválido. Não é possível informar mais de 4 letras repetidas em sequência.", ExportacaoCenso2015::LOG_ESCOLA);
+      $oExportacaoCenso->logErro("Nome do gestor inválido. Não é possível ter caractéres acentuados.", ExportacaoCenso2015::LOG_ESCOLA);
     }
 
     if ($oDados->cargo_gestor_escolar == '') {
@@ -840,6 +931,13 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
   }
 
 
+  /**
+   * Valida as colunas 11 - Latitude e 12 - Longitude do layout
+   *
+   * @param  IExportacaoCenso $oExportacaoCenso
+   * @param  StdClass         $oDados
+   * @return boolean
+   */
   static protected function validaLatitudeLongitude(IExportacaoCenso $oExportacaoCenso, $oDados) {
 
     $lTodosDadosValidos = true;
@@ -868,9 +966,9 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
       }
 
-      if ( $oDados->latitude < -33.750833 || $oDados->latitude > 5.272222) {
+      if ( $oDados->latitude < -33.75208 || $oDados->latitude > 5.271841) {
 
-        $sMensagem  = "Latitude informada deve ser maior ou igual a -33.750833 e menor ou igual a 5.272222 .";
+        $sMensagem  = "Latitude informada deve ser maior ou igual a -33.75208 e menor ou igual a 5.271841 .";
         $lTodosDadosValidos = false;
         $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
       }
@@ -899,9 +997,9 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
       }
 
-      if ( $oDados->longitude < -73.992222 || $oDados->longitude > -32.411280) {
+      if ( $oDados->longitude < -73.99045 || $oDados->longitude > -32.39091) {
 
-        $sMensagem  = "Latitude informada deve ser maior ou igual a -73.992222 e menor ou igual a -32.411280.";
+        $sMensagem  = "Latitude informada deve ser maior ou igual a -73.99045 e menor ou igual a -32.39091.";
         $lTodosDadosValidos = false;
         $oExportacaoCenso->logErro($sMensagem, ExportacaoCenso2015::LOG_ESCOLA);
       }
@@ -917,58 +1015,26 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
    */
   protected function validarDadosInfraEstrutura(IExportacaoCenso $oExportacaoCenso) {
 
-    $lValidouInfraEstrutura = true;
+    $aValidou = array();
 
-    $lValidouEquipamento = DadosCensoEscola2015::validarEquipamentos($oExportacaoCenso);
-    if ( !$lValidouEquipamento ) {
-      $lValidouInfraEstrutura = $lValidouEquipamento;
-    }
+    $aValidou[] = self::validarEquipamentos($oExportacaoCenso);
+    $aValidou[] = self::validarDependencias($oExportacaoCenso);
+    $aValidou[] = self::validarLocalFuncionamento($oExportacaoCenso);
+    $aValidou[] = self::validarAbastecimentoAgua( $oExportacaoCenso );
+    $aValidou[] = self::validarAbastecimentoEnergia( $oExportacaoCenso );
+    $aValidou[] = self::validarDestinacaoLixo( $oExportacaoCenso );
+    $aValidou[] = self::validarEsgotoSanitario( $oExportacaoCenso );
+    $aValidou[] = self::validarInformacoesGeraisInfraestrutura( $oExportacaoCenso );
+    $aValidou[] = self::validarAtendimentoModalidade( $oExportacaoCenso );
+    $aValidou[] = self::validarLinguaEnsinoMinistrado( $oExportacaoCenso );
+    $aValidou[] = self::validarRegistro10Colunas14a19( $oExportacaoCenso );
+    $aValidou[] = self::validarRegistro10Colunas20( $oExportacaoCenso );
+    $aValidou[] = self::validarRegistro10Colunas21a25( $oExportacaoCenso );
+    $aValidou[] = self::validarRegistro10Colunas105a107( $oExportacaoCenso );
 
-    $lValidouDependencias = DadosCensoEscola2015::validarDependencias($oExportacaoCenso);
-    if ( !$lValidouDependencias ) {
-      $lValidouInfraEstrutura = $lValidouDependencias;
-    }
+    $lValidou = array_reduce( $aValidou, 'validaVerdadeiro');
 
-    $lValidouLocalFuncionamento = DadosCensoEscola2015::validarLocalFuncionamento($oExportacaoCenso);
-    if ( !$lValidouLocalFuncionamento ) {
-      $lValidouInfraEstrutura = $lValidouLocalFuncionamento;
-    }
-
-    $lValidouAbastecimentoAgua = DadosCensoEscola2015::validarAbastecimentoAgua( $oExportacaoCenso );
-    if ( !$lValidouAbastecimentoAgua ) {
-      $lValidouInfraEstrutura = $lValidouAbastecimentoAgua;
-    }
-
-    $lValidouAbastecimentoEnergia = DadosCensoEscola2015::validarAbastecimentoEnergia( $oExportacaoCenso );
-    if ( !$lValidouAbastecimentoEnergia ) {
-      $lValidouInfraEstrutura = $lValidouAbastecimentoEnergia;
-    }
-
-    $lValidouDestinacaoLixo = DadosCensoEscola2015::validarDestinacaoLixo( $oExportacaoCenso );
-    if ( !$lValidouDestinacaoLixo ) {
-      $lValidouInfraEstrutura = $lValidouDestinacaoLixo;
-    }
-
-    $lValidouEsgotoSanitario = DadosCensoEscola2015::validarEsgotoSanitario( $oExportacaoCenso );
-    if ( !$lValidouEsgotoSanitario ) {
-      $lValidouInfraEstrutura = $lValidouEsgotoSanitario;
-    }
-
-    $lValidouInformacoesGerais = DadosCensoEscola2015::validarInformacoesGeraisInfraestrutura( $oExportacaoCenso );
-    if ( !$lValidouInformacoesGerais ) {
-      $lValidouInfraEstrutura = $lValidouInformacoesGerais;
-    }
-
-    $lValidouAtendimentoModalidade = DadosCensoEscola2015::validarAtendimentoModalidade( $oExportacaoCenso );
-    if ( !$lValidouAtendimentoModalidade ) {
-      $lValidouInfraEstrutura = $lValidouAtendimentoModalidade;
-    }
-
-    $lValidouLinguaEnsinoMinistrado =  DadosCensoEscola2015::validarLinguaEnsinoMinistrado( $oExportacaoCenso );
-    if ( !$lValidouLinguaEnsinoMinistrado ) {
-      $lValidouInfraEstrutura = $lValidouLinguaEnsinoMinistrado;
-    }
-    return $lValidouInfraEstrutura;
+    return $lValidou;
   }
 
   /**
@@ -1017,6 +1083,10 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $aErros[] = "Deve ser informado ao menos um local de funcionamento para a escola.";
     }
 
+    if ($oRegistro10->local_funcionamento_escola_predio_escolar === 0 ) {
+      $oDadosEscola->registro10->predio_compartilhado_outra_escola = '';
+    }
+
     foreach( $aErros as $sMensagem ) {
 
       $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
@@ -1039,59 +1109,52 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
     $lValidouDependencias = true;
     $aDependenciasEscola  = array(
-                                  "dependencias_existentes_escola_sala_diretoria",
-                                  "dependencias_existentes_escola_sala_professores",
-                                  "dependencias_existentes_escola_sala_secretaria",
-                                  "dependencias_existentes_escola_laboratorio_informa",
-                                  "dependencias_existentes_escola_laboratorio_ciencia",
-                                  "dependencias_existentes_escola_sala_recursos_multi",
-                                  "dependencias_existentes_escola_quadra_esporte_cobe",
-                                  "dependencias_existentes_escola_quadra_esporte_desc",
-                                  "dependencias_existentes_escola_cozinha",
-                                  "dependencias_existentes_escola_biblioteca",
-                                  "dependencias_existentes_escola_sala_leitura",
-                                  "dependencias_existentes_escola_parque_infantil",
-                                  "dependencias_existentes_escola_bercario",
-                                  "dependencias_existentes_escola_banheiro_fora_predi",
-                                  "dependencias_existentes_escola_banheiro_dentro_pre",
-                                  "dependencias_existentes_escola_banheiro_educ_infan",
-                                  "dependencias_existentes_escola_banheiro_alunos_def",
-                                  "dependencias_existentes_escola_dep_vias_alunos_def",
-                                  "dependencias_existentes_escola_banheiro_chuveiro",
-                                  "dependencias_existentes_escola_refeitorio",
-                                  "dependencias_existentes_escola_despensa",
-                                  "dependencias_existentes_escola_almoxarifado",
-                                  "dependencias_existentes_escola_auditorio",
-                                  "dependencias_existentes_escola_patio_coberto",
-                                  "dependencias_existentes_escola_patio_descoberto",
-                                  "dependencias_existentes_escola_alojamento_aluno",
-                                  "dependencias_existentes_escola_alojamento_professo",
-                                  "dependencias_existentes_escola_area_verde",
-                                  "dependencias_existentes_escola_lavanderia",
-                                  "dependencias_existentes_escola_nenhuma_relacionada"
-                                );
+      isset( $oRegistro10->dependencias_existentes_escola_sala_diretoria )      ? $oRegistro10->dependencias_existentes_escola_sala_diretoria      : null,
+      isset( $oRegistro10->dependencias_existentes_escola_sala_professores )    ? $oRegistro10->dependencias_existentes_escola_sala_professores    : null,
+      isset( $oRegistro10->dependencias_existentes_escola_sala_secretaria )     ? $oRegistro10->dependencias_existentes_escola_sala_secretaria     : null,
+      isset( $oRegistro10->dependencias_existentes_escola_laboratorio_informa ) ? $oRegistro10->dependencias_existentes_escola_laboratorio_informa : null,
+      isset( $oRegistro10->dependencias_existentes_escola_laboratorio_ciencia ) ? $oRegistro10->dependencias_existentes_escola_laboratorio_ciencia : null,
+      isset( $oRegistro10->dependencias_existentes_escola_sala_recursos_multi ) ? $oRegistro10->dependencias_existentes_escola_sala_recursos_multi : null,
+      isset( $oRegistro10->dependencias_existentes_escola_quadra_esporte_cobe ) ? $oRegistro10->dependencias_existentes_escola_quadra_esporte_cobe : null,
+      isset( $oRegistro10->dependencias_existentes_escola_quadra_esporte_desc ) ? $oRegistro10->dependencias_existentes_escola_quadra_esporte_desc : null,
+      isset( $oRegistro10->dependencias_existentes_escola_cozinha )             ? $oRegistro10->dependencias_existentes_escola_cozinha             : null,
+      isset( $oRegistro10->dependencias_existentes_escola_biblioteca )          ? $oRegistro10->dependencias_existentes_escola_biblioteca          : null,
+      isset( $oRegistro10->dependencias_existentes_escola_sala_leitura )        ? $oRegistro10->dependencias_existentes_escola_sala_leitura        : null,
+      isset( $oRegistro10->dependencias_existentes_escola_parque_infantil )     ? $oRegistro10->dependencias_existentes_escola_parque_infantil     : null,
+      isset( $oRegistro10->dependencias_existentes_escola_bercario )            ? $oRegistro10->dependencias_existentes_escola_bercario            : null,
+      isset( $oRegistro10->dependencias_existentes_escola_banheiro_fora_predi ) ? $oRegistro10->dependencias_existentes_escola_banheiro_fora_predi : null,
+      isset( $oRegistro10->dependencias_existentes_escola_banheiro_dentro_pre ) ? $oRegistro10->dependencias_existentes_escola_banheiro_dentro_pre : null,
+      isset( $oRegistro10->dependencias_existentes_escola_banheiro_educ_infan ) ? $oRegistro10->dependencias_existentes_escola_banheiro_educ_infan : null,
+      isset( $oRegistro10->dependencias_existentes_escola_banheiro_alunos_def ) ? $oRegistro10->dependencias_existentes_escola_banheiro_alunos_def : null,
+      isset( $oRegistro10->dependencias_existentes_escola_dep_vias_alunos_def ) ? $oRegistro10->dependencias_existentes_escola_dep_vias_alunos_def : null,
+      isset( $oRegistro10->dependencias_existentes_escola_banheiro_chuveiro )   ? $oRegistro10->dependencias_existentes_escola_banheiro_chuveiro   : null,
+      isset( $oRegistro10->dependencias_existentes_escola_refeitorio )          ? $oRegistro10->dependencias_existentes_escola_refeitorio          : null,
+      isset( $oRegistro10->dependencias_existentes_escola_despensa )            ? $oRegistro10->dependencias_existentes_escola_despensa            : null,
+      isset( $oRegistro10->dependencias_existentes_escola_almoxarifado )        ? $oRegistro10->dependencias_existentes_escola_almoxarifado        : null,
+      isset( $oRegistro10->dependencias_existentes_escola_auditorio )           ? $oRegistro10->dependencias_existentes_escola_auditorio           : null,
+      isset( $oRegistro10->dependencias_existentes_escola_patio_coberto )       ? $oRegistro10->dependencias_existentes_escola_patio_coberto       : null,
+      isset( $oRegistro10->dependencias_existentes_escola_patio_descoberto )    ? $oRegistro10->dependencias_existentes_escola_patio_descoberto    : null,
+      isset( $oRegistro10->dependencias_existentes_escola_alojamento_aluno )    ? $oRegistro10->dependencias_existentes_escola_alojamento_aluno    : null,
+      isset( $oRegistro10->dependencias_existentes_escola_alojamento_professo ) ? $oRegistro10->dependencias_existentes_escola_alojamento_professo : null,
+      isset( $oRegistro10->dependencias_existentes_escola_area_verde )          ? $oRegistro10->dependencias_existentes_escola_area_verde          : null,
+      isset( $oRegistro10->dependencias_existentes_escola_lavanderia )          ? $oRegistro10->dependencias_existentes_escola_lavanderia          : null
+    );
 
-    if( $oRegistro10->dependencias_existentes_escola_nenhuma_relacionada == 1 ) {
+    if ( !in_array(1, $aDependenciasEscola) && $oRegistro10->dependencias_existentes_escola_nenhuma_relacionada == 0 ) {
 
-      $lSelecionouDependencia = false;
-      foreach( $aDependenciasEscola as $sDependencia ) {
+        $sMensagem  = 'Dependências existentes na escola inválido. Não podem ser informadas todas as opções com valor';
+        $sMensagem .= ' igual a 0 (Não).';
+        $aErros[]   = $sMensagem;
+    }
 
-        if(    $oRegistro10->{$sDependencia} != "dependencias_existentes_escola_nenhuma_relacionada"
-            && $oRegistro10->{$sDependencia} == 1
-          ) {
+    if ( in_array(1, $aDependenciasEscola) && $oRegistro10->dependencias_existentes_escola_nenhuma_relacionada == 1 ) {
 
-          $lSelecionouDependencia = true;
-          break;
-        }
-      }
-
-      if( $lSelecionouDependencia ) {
         $sMensagem  = "Informação das dependências da escola inválida. Ao selecionar 'Nenhuma das dependências";
         $sMensagem .= " relacionadas', nenhuma das outras dependências pode ser selecionada.";
-        $aErros[]  = $sMensagem;
-      }
+        $aErros[]   = $sMensagem;
     }
-    if ( $oRegistro10->local_funcionamento_escola_predio_escolar == 1 && empty($oRegistro10->numero_salas_aula_existentes_escola) ) {
+
+    if ( $oRegistro10->local_funcionamento_escola_predio_escolar == 1 && $oRegistro10->numero_salas_aula_existentes_escola == '' ) {
 
       $sMensagem  = "Numero de salas de aula existentes na escola é obrigatório para escolas que informaram" ;
       $sMensagem .= " \"Prédio Escolar\" como local de funcionamento da escola.";
@@ -1099,7 +1162,9 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     }
 
     $lNumeroSalasExistentesValido = true;
-    if( !DBNumber::isInteger( trim( $oDadosEscola->registro10->numero_salas_aula_existentes_escola ) ) ) {
+
+    if( $oDadosEscola->registro10->numero_salas_aula_existentes_escola != ''
+      && !DBNumber::isInteger( trim( $oDadosEscola->registro10->numero_salas_aula_existentes_escola ) ) ) {
 
       $sMensagem                    = "Valor do 'N° de Salas de Aula Existentes na Escola' inválido. Deve ser";
       $sMensagem                   .= " informado somente números.";
@@ -1107,18 +1172,23 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $lNumeroSalasExistentesValido = false;
     }
 
-			if (    $lNumeroSalasExistentesValido
-           && trim( $oDadosEscola->registro10->numero_salas_aula_existentes_escola == 0 )
-         ) {
-				$aErros[] = "O valor do campo 'N° de Salas de Aula Existentes na Escola' deve ser maior que 0.";
-			}
+    if (    $lNumeroSalasExistentesValido
+         && trim( $oDadosEscola->registro10->numero_salas_aula_existentes_escola == '0' )
+       ) {
+      $aErros[] = "O valor do campo 'N° de Salas de Aula Existentes na Escola' deve ser maior que 0.";
+    }
 
-    if ( $oRegistro10->numero_salas_usadas_como_salas_aula == 0) {
-      $aErros[] = "Numero de salas utilizadas como sala de aula não pode ser zero (0).";
+    if ( strlen($oDadosEscola->registro10->numero_salas_aula_existentes_escola) > 4 ) {
+      $aErros[] = 'O campo "Número de salas de aula existentes na escola" está maior que o especificado.';
+    }
+
+    if (  $oDadosEscola->registro10->numero_salas_usadas_como_salas_aula === '' ) {
+      $aErros[] = 'O campo "Número de salas utilizadas como sala de aula - Dentro e fora do prédio" deve ser preenchido.';
     }
 
     $lNumeroSalasUsadasValido = true;
-    if( !DBNumber::isInteger( trim( $oDadosEscola->registro10->numero_salas_usadas_como_salas_aula ) ) ) {
+    if( $oDadosEscola->registro10->numero_salas_usadas_como_salas_aula !== ''
+      && !DBNumber::isInteger( trim( $oDadosEscola->registro10->numero_salas_usadas_como_salas_aula ) ) ) {
 
       $lNumeroSalasUsadasValido = false;
       $sMensagem                = "Valor do 'N° de Salas Utilizadas como Sala de Aula' inválido. Deve ser";
@@ -1126,8 +1196,12 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $aErros[]                 = $sMensagem;
     }
 
-    if ( $lNumeroSalasUsadasValido && trim( $oDadosEscola->registro10->numero_salas_usadas_como_salas_aula == 0 ) ) {
+    if ( $lNumeroSalasUsadasValido && trim( $oDadosEscola->registro10->numero_salas_usadas_como_salas_aula == '0' ) ) {
       $aErros[] = "O valor do campo 'N° de Salas Utilizadas como Sala de Aula' deve ser maior de 0.";
+    }
+
+    if ( strlen($oDadosEscola->registro10->numero_salas_usadas_como_salas_aula) > 4 ) {
+      $aErros[] = 'O campo "Número de salas utilizadas como sala de aula - Dentro e fora do prédio" está maior que o especificado.';
     }
 
     foreach ($aErros as $sMsg) {
@@ -1152,30 +1226,35 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     $aErros = array();
 
     $lValidouEquipamento    = true;
-    $aEquipamentosValidacao = array( "equipamentos_existentes_escola_televisao",
-                                     "equipamentos_existentes_escola_videocassete",
-                                     "equipamentos_existentes_escola_dvd",
-                                     "equipamentos_existentes_escola_antena_parabolica",
-                                     "equipamentos_existentes_escola_copiadora",
-                                     "equipamentos_existentes_escola_retroprojetor",
-                                     "equipamentos_existentes_escola_impressora",
-                                     "equipamentos_existentes_escola_aparelho_som",
-                                     "equipamentos_existentes_escola_projetor_datashow",
-                                     "equipamentos_existentes_escola_fax",
-                                     "equipamentos_existentes_escola_maquina_fotografica",
-                                     "equipamentos_existentes_escola_computador",
-                                     "equipamentos_impressora_multifuncional"
-                                   );
+    $aEquipamentosValidacao = array(
+      "Aparelho de Televisão"           => "equipamentos_existentes_escola_televisao",
+      "Videocassete"                    => "equipamentos_existentes_escola_videocassete",
+      "Aparelho de DVD"                 => "equipamentos_existentes_escola_dvd",
+      "Antena parabólica"               => "equipamentos_existentes_escola_antena_parabolica",
+      "Copiadora"                       => "equipamentos_existentes_escola_copiadora",
+      "Retroprojetor"                   => "equipamentos_existentes_escola_retroprojetor",
+      "Impressora"                      => "equipamentos_existentes_escola_impressora",
+      "Aparelho de som"                 => "equipamentos_existentes_escola_aparelho_som",
+      "Projetor Multimídia (Data show)" => "equipamentos_existentes_escola_projetor_datashow",
+      "Fax"                             => "equipamentos_existentes_escola_fax",
+      "Máquina Fotográfica/Filmadora"   => "equipamentos_existentes_escola_maquina_fotografica",
+      "Computadores"                    => "equipamentos_existentes_escola_computador",
+      "Impressora Multifuncional"       => "equipamentos_impressora_multifuncional"
+    );
 
-    foreach ($aEquipamentosValidacao as $sEquipamentoValidacao) {
+    foreach ($aEquipamentosValidacao as $sNome => $sEquipamentoValidacao) {
 
-      if (!DadosCensoEscola::validarEquipamentosExistentes($oExportacaoCenso, $oRegistro10->$sEquipamentoValidacao)) {
+      if (!DadosCensoEscola::validarEquipamentosExistentes($oExportacaoCenso, $oRegistro10->$sEquipamentoValidacao, $sNome)) {
         $lValidouEquipamento = false;
       }
     }
 
     if ( $oRegistro10->quantidade_computadores_uso_administrativo === 0) {
       $aErros[] = "Quantidade de computadores de uso administrativo não pode ser zero (0).";
+    }
+
+    if ( strlen($oRegistro10->quantidade_computadores_uso_administrativo) > 4 ) {
+      $aErros[] = 'O campo "Quantidade de computadores de uso administrativo" está maior que o especificado.';
     }
 
     if ( $oRegistro10->quantidade_computadores_uso_administrativo > $oRegistro10->equipamentos_existentes_escola_computador) {
@@ -1190,11 +1269,20 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $aErros[] = "Quantidade de computadores de uso dos alunos não pode maior que os computadores existentes na escola.";
     }
 
-    if ( !empty($oRegistro10->equipamentos_existentes_escola_computador) && $oRegistro10->acesso_internet == '') {
+    if ( strlen($oRegistro10->quantidade_computadores_uso_alunos) > 4 ) {
+      $aErros[] = 'O campo "Quantidade de computadores de uso dos alunos" está maior que o especificado.';
+    }
+
+    if ( $oRegistro10->equipamentos_existentes_escola_computador !== 0 &&
+         empty($oRegistro10->quantidade_computadores_uso_alunos) && empty($oRegistro10->quantidade_computadores_uso_administrativo) ) {
+      $aErros[] = 'Pelo menos um dos campos "Quantidade de computadores de uso administrativo" ou "Quantidade de computadores de uso dos alunos" deve ser preenchido quando o campo "Quantidade de equipamentos existentes na escola - Computadores" for preenchido.';
+    }
+
+    if ( !empty($oRegistro10->equipamentos_existentes_escola_computador) && $oRegistro10->acesso_internet === '') {
      $aErros[] = "Obrigatório para escolas que informaram possuir computador. ";
     }
 
-    if ( $oRegistro10->acesso_internet == 1 && $oRegistro10->banda_larga == '') {
+    if ( $oRegistro10->acesso_internet == 1 && $oRegistro10->banda_larga === '') {
      $aErros[] = "Obrigatório para escolas que informaram possuir acesso à internet.";
     }
 
@@ -1333,16 +1421,16 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     $lValidouLixo = true;
 
     if (    $oDadosEscola->registro10->destinacao_lixo_coleta_periodica == 0
-				 && $oDadosEscola->registro10->destinacao_lixo_queima           == 0
-				 && $oDadosEscola->registro10->destinacao_lixo_joga_outra_area  == 0
-				 && $oDadosEscola->registro10->destinacao_lixo_recicla          == 0
-				 && $oDadosEscola->registro10->destinacao_lixo_enterra          == 0
-				 && $oDadosEscola->registro10->destinacao_lixo_outros           == 0
+         && $oDadosEscola->registro10->destinacao_lixo_queima           == 0
+         && $oDadosEscola->registro10->destinacao_lixo_joga_outra_area  == 0
+         && $oDadosEscola->registro10->destinacao_lixo_recicla          == 0
+         && $oDadosEscola->registro10->destinacao_lixo_enterra          == 0
+         && $oDadosEscola->registro10->destinacao_lixo_outros           == 0
        ) {
 
-				$lValidouLixo = false;
-				$oExportacaoCenso->logErro( "Destinação do lixo da escola não informado.", ExportacaoCenso2015::LOG_ESCOLA );
-			}
+        $lValidouLixo = false;
+        $oExportacaoCenso->logErro( "Destinação do lixo da escola não informado.", ExportacaoCenso2015::LOG_ESCOLA );
+      }
 
     return $lValidouLixo;
   }
@@ -1354,18 +1442,48 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
    */
   static protected function validarInformacoesGeraisInfraestrutura( IExportacaoCenso $oExportacaoCenso ) {
 
-    $oDadosEscola        = $oExportacaoCenso->getDadosProcessadosEscola();
+    $oDadosEscola = $oExportacaoCenso->getDadosProcessadosEscola();
+    $aDadosTurma  = $oExportacaoCenso->getDadosProcessadosTurma();
     $lValidouInformacoes = true;
 
-    if(    $oDadosEscola->registro00->dependencia_administrativa != 4
-        && $oDadosEscola->registro10->alimentacao_escolar_aluno  == 0
-      ) {
+    // regra removida em 2017
+    // if(    $oDadosEscola->registro00->dependencia_administrativa != 4
+    //     && $oDadosEscola->registro10->alimentacao_escolar_aluno  == 0
+    //   ) {
 
-      $lValidouInformacoes = false;
-      $sMensagem           = "Escola informada como pública( Federal / Estadual / Municipal ). A mesma deve estar com";
-      $sMensagem          .= " a opção \"Alimentação Escolar para os Alunos\" selecionada como Oferece.";
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+    //   $lValidouInformacoes = false;
+    //   $sMensagem           = "Escola informada como pública( Federal / Estadual / Municipal ). A mesma deve estar com";
+    //   $sMensagem          .= " a opção \"Alimentação Escolar para os Alunos\" selecionada como Oferece.";
+    //   $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+    // }
+
+
+    /* Coluna 89 do Registro 10 - INICIO */
+    if ( $oDadosEscola->registro10->alimentacao_escolar_aluno == 1 ) {
+
+      /**
+       * regra 4 deve haver pelo menos um registro 20 com o campo 6 (Tipo de mediação didático-pedagógica) igual a
+       * 1 (Presencial) ou 2 (Semipresencial).
+       **/
+      $lEscolaPossuiTurmaPresencialOuSemi = true;
+      foreach ($aDadosTurma as $oRegistro20) {
+
+        if ( !in_array($oRegistro20->mediacao_didatico_pedagogica, array(1,2)) ) {
+          $lEscolaPossuiTurmaPresencialOuSemi = false;
+        }
+      }
+
+      if ( !$lEscolaPossuiTurmaPresencialOuSemi ) {
+
+        $sMensagem  = 'O campo "Alimentação escolar para os alunos" não pode ser igual a 1 (Oferece) quando o';
+        $sMensagem .= ' campo "Tipo de mediação didático-pedagógica" de todas as turmas da escola for';
+        $sMensagem .= ' igual a 3 (Educação a Distância).';
+        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+        $lValidouInformacoes = false;
+      }
     }
+    /* Coluna 89 do Registro 10 - FIM */
+
 
     if(    $oDadosEscola->registro10->localizacao_diferenciada_escola == 1
         && $oDadosEscola->registro00->localizacao_zona_escola         != 2
@@ -1393,6 +1511,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
         && $oDadosEscola->registro10->materiais_didaticos_especificos_indigena    == 0
       ) {
 
+
       $lValidouInformacoes = false;
       $sMensagem           = "Materais Didáticos Específicos: Ao menos uma das opções devem ser selecionadas.";
       $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
@@ -1414,7 +1533,7 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
     $lValidou     = true;
 
     $lTurmaEscolarizacao = true;
-    if (    $oDadosEscola->registro10->atendimento_educacional_especializado == 2 
+    if (    $oDadosEscola->registro10->atendimento_educacional_especializado == 2
          || $oDadosEscola->registro10->atividade_complementar == 2 ) {
 
       foreach ($oDadosTurma as $oRegistro20) {
@@ -1439,11 +1558,40 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
     }
 
+    // coluna 90 regra 3
+    if ( $oDadosEscola->registro10->atendimento_educacional_especializado != 0 &&
+         $oDadosEscola->registro10->atividade_complementar == 2) {
 
-    if ( $oDadosEscola->registro10->atendimento_educacional_especializado == 1 ) {
+      $sMensagem  = 'O campo "Atendimento educacional especializado - AEE" não pode ser preenchido diferente de não ';
+      $sMensagem .= 'oferece (0), quando o campo "Atividade complementar" for preenchido com exclusivamente (2).';
+      $lValidou   = false;
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+    }
+
+    // coluna 91 regra 3
+    if ( $oDadosEscola->registro10->atividade_complementar != 0 &&
+         $oDadosEscola->registro10->atendimento_educacional_especializado == 2) {
+
+      $sMensagem  = 'O campo "Atividade complementar" não pode ser preenchido diferente de não oferece (0), quando o ';
+      $sMensagem .= 'campo "Atendimento educacional especializado - AEE" for preenchido com exclusivamente (2).';
+      $lValidou   = false;
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+    }
+
+    if( $oDadosEscola->registro10->atendimento_educacional_especializado === '' &&
+        $oDadosEscola->registro10->atividade_complementar                === ''
+      ) {
+
+      $sMensagem  = "É necessário marcar uma das opções referentes a Atendimento Educacional Especializado";
+      $sMensagem .= " e Atividade Complementar.";
+      $lValidou   = false;
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+    }
+
+    // coluna 90 regra 5
+    if ( in_array($oDadosEscola->registro10->atendimento_educacional_especializado, array(1, 2)) ) {
 
       $lSemTurmaAEE = false;
-
       foreach ($oDadosTurma as $oRegistro20) {
 
         if ( $oRegistro20->tipo_atendimento == 5 ) {
@@ -1453,17 +1601,16 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
       if ( !$lSemTurmaAEE ) {
 
-        $sMensagem  = "Escola oferece turma de AEE mas não possui turma com este tipo de atendimento.";
+        $sMensagem  = 'O campo "Atendimento educacional especializado - AEE" foi preenchido com 1 (Não exclusivamente) ';
+        $sMensagem .= 'ou 2 (Exclusivamente), mas não há nenhuma turma com esse tipo de atendimento.';
         $lValidou   = false;
         $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
       }
     }
-
-
-    if ( $oDadosEscola->registro10->atividade_complementar == 1 ) {
+    // coluna 91 regra 5
+    if ( in_array($oDadosEscola->registro10->atividade_complementar, array(1, 2)) ) {
 
       $lTemTurmaComplementar = false;
-
       foreach ($oDadosTurma as $oRegistro20) {
 
         if (    $oRegistro20->tipo_atendimento == 4
@@ -1481,69 +1628,29 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
       }
     }
 
+    /* Coluna 96 do Registro 10 - INICIO */
+    $aEtapasCiclos = array(4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 41, 56);
+    $lPossuiEtapasCompativelComCiclos = false;
+    foreach ($oDadosTurma as $oRegistro20) {
 
-    if(    $oDadosEscola->registro10->atendimento_educacional_especializado == ''
-        || $oDadosEscola->registro10->atividade_complementar                == ''
-      ) {
-
-      $sMensagem  = "É necessário marcar uma das opções referentes a Atendimento Educacional Especializado";
-      $sMensagem .= " e Atividade Complementar.";
-      $lValidou   = false;
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
-    }
-
-    if(    (    $oDadosEscola->registro10->atendimento_educacional_especializado == 2
-             && $oDadosEscola->registro10->atividade_complementar                != 0 )
-        || (    $oDadosEscola->registro10->atendimento_educacional_especializado != 0
-             && $oDadosEscola->registro10->atividade_complementar                == 2 )
-      ) {
-
-      $sMensagem  = "Atendimento Educacional Especializado ou Atividade Complementar foram marcados como";
-      $sMensagem .= " 'Exclusivamente'. Ao marcar uma das opções como 'Exclusivamente', a outra deve";
-      $sMensagem .= " ser marcada como 'Não Oferece'.";
-      $lValidou   = false;
-      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
-    }
-
-    if(    $oDadosEscola->registro10->atendimento_educacional_especializado != 1
-        && $oDadosEscola->registro10->atividade_complementar                != 1
-      ) {
-
-      if(    $oDadosEscola->registro10->modalidade_ensino_regular                          != 1
-          && $oDadosEscola->registro10->modalidade_educacao_especial_modalidade_substutiva != 1
-          && $oDadosEscola->registro10->modalidade_educacao_jovens_adultos                 != 1
-          && $oDadosEscola->registro10->modalidade_educacao_profissional                   != 1
-        ) {
-
-        $sMensagem  = 'Ao informar que a escola não é do tipo exclusiva para Atividade Complementar ou';
-        $sMensagem .= ' Atendimento Educacional Especializado, ao menos uma turma das seguintes modalidades';
-        $sMensagem .= ' deve existir: Ensino Regular, Educação Especial - Modalidade Substitutiva, ';
-        $sMensagem .= ' Educação de Jovens e Adultos e/ou Educação Profissional.';
-        $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+      if ( in_array($oRegistro20->etapa_ensino_turma, $aEtapasCiclos) ) {
+        $lPossuiEtapasCompativelComCiclos = true;
       }
     }
 
-    if(    $oDadosEscola->registro10->ensino_fundamental_organizado_ciclos == ''
-        && (    $oDadosEscola->registro10->modalidade_ensino_regular                          == 1
-             || $oDadosEscola->registro10->modalidade_educacao_especial_modalidade_substutiva == 1 )
-      ) {
-
-      /**
-       * Propriedade cicloObrigatorio criada, para validar o caso onde a escola tem modalidade regular, porem somente
-       * turmas de ensino infantil. Neste caso, o ciclo nao deve ser informado
-       */
-      if( !isset( $oDadosEscola->registro10->cicloObrigatorio )
-          || ( isset( $oDadosEscola->registro10->cicloObrigatorio ) && $oDadosEscola->registro10->cicloObrigatorio == '1' )
-        ) {
-
-        $sMensagem  = 'Informado que a escola possui turma(s) com modalidade Ensino Regular e/ou Educação Especial';
-        $sMensagem .= ' - Modalidade Substitutiva. É obrigatório informar se a escola possui Ensino Fundamental';
-        $sMensagem .= ' Organizado em Ciclos';
-        $lValidou   = false;
-        $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
-      }
+    if ( !$lPossuiEtapasCompativelComCiclos ) {
+      $oDadosEscola->registro10->ensino_fundamental_organizado_ciclos = '';
     }
+
+
+    if ( $lPossuiEtapasCompativelComCiclos && $oDadosEscola->registro10->ensino_fundamental_organizado_ciclos === '' ) {
+
+      $sMensagem  = 'O campo "Ensino fundamental organizado em ciclos" deve ser preenchido quando a escola possuir ';
+      $sMensagem .= 'turma(s) do ensino fundamental.';
+      $lValidou   = false;
+      $oExportacaoCenso->logErro( $sMensagem, ExportacaoCenso2015::LOG_ESCOLA );
+    }
+    /* Coluna 96 do Registro 10 - FIM */
 
     return $lValidou;
   }
@@ -1588,4 +1695,254 @@ class DadosCensoEscola2015 extends DadosCensoEscola {
 
     return $lValidou;
   }
+
+  /**
+   * [atualizarDados description]
+   * @param  DBLayoutLinha $oLinha
+   * @throws DBException
+   * @return boolean
+   */
+  public function atualizarDados(DBLayoutLinha $oLinha)  {
+
+    $oDaoEscola                        = new cl_escola();
+    $oDaoEscola->ed18_latitude         = $oLinha->latitude;
+    $oDaoEscola->ed18_longitude        = $oLinha->longitude;
+    $oDaoEscola->ed18_c_cep            = $oLinha->cep;
+    $oDaoEscola->ed18_i_censouf        = $oLinha->uf;
+    $oDaoEscola->ed18_i_censomunic     = $oLinha->municipio;
+    $oDaoEscola->ed18_i_censodistrito  = $this->getDistrito($oLinha->municipio, $oLinha->distrito);
+    $oDaoEscola->ed18_i_censoorgreg    = $this->getCensoOrgaoRegional($oLinha->uf, $oLinha->codigo_orgao_regional_ensino);
+    $oDaoEscola->ed18_c_mantenedora    = $oLinha->dependencia_administrativa;
+    $oDaoEscola->ed18_c_local          = $oLinha->localizacao_zona_escola;
+    $oDaoEscola->ed18_i_credenciamento = $oLinha->regulamentacao_autorizacao_conselho_orgao;
+    $oDaoEscola->ed18_i_codigo         = $this->iCodigoEscola;
+    $oDaoEscola->alterar($this->iCodigoEscola);
+
+    if ( $oDaoEscola->erro_status == 0 ) {
+      throw new DBException($oDaoEscola->erro_msg);
+    }
+    return true;
+  }
+
+  /**
+   * Validações do registro 10 colunas  14 a 19
+   *
+   * @param  IExportacaoCenso $oExportacaoCenso
+   * @return boolean
+   */
+  protected static function validarRegistro10Colunas14a19( $oExportacaoCenso ) {
+
+    $oDadosEscola = $oExportacaoCenso->getDadosProcessadosEscola();
+    $oRegistro10  = $oDadosEscola->registro10;
+    $lValidou     = true;
+
+    $aCompartilha   = array();
+    $lRepitiuEscola = false;
+    for ($i = 1; $i <= 6; $i++) {
+
+      $sKey    = "Escola compartilhada {$i}";
+      $sPropry = "codigo_escola_compartilha_{$i}";
+      if ( !empty($oRegistro10->$sPropry) && in_array($oRegistro10->$sPropry, $aCompartilha) ) {
+        $lRepitiuEscola = true;
+      }
+      $aCompartilha[$sKey] = $oRegistro10->$sPropry;
+    }
+
+    // 14 a 19 regra - Não pode haver dois dos campos de 14 a 19 igualmente preenchidos.
+    if ( $lRepitiuEscola ) {
+
+      $sMsgErro  = "Código da escola com a qual compartilha inválido. Não pode haver dois códigos da escola com a ";
+      $sMsgErro .= "qual compartilha iguais.";
+      $lValidou  = false;
+      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+    }
+
+    foreach ($aCompartilha as $sCompartilha => $sValue) {
+
+      if ( !empty($sValue) && $oRegistro10->predio_compartilhado_outra_escola != 1 ) {
+
+        $sMsgErro  = "O campo \"{$sCompartilha}\" não pode ser preenchido quando o campo \"Prédio compartilhado com ";
+        $sMsgErro .= "outra escola\" for diferente de 1 (Sim).";
+        $lValidou   = false;
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+
+      if ( !empty($sValue) && strlen($sValue) != 8 ) {
+
+        $sMsgErro  = "O campo \"{$sCompartilha}\" deve ter 8 caractéres.";
+        $lValidou   = false;
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+
+      if ( preg_match("/[^1-9]/", $sValue) ) {
+
+        $sMsgErro  = "O campo \"{$sCompartilha}\", quando preenchido, apenas números podem ser informados.";
+        $lValidou   = false;
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+
+      if ($oDadosEscola->registro00->codigo_escola_inep == $sValue ) {
+
+        $sMsgErro  = "O campo \"{$sCompartilha}\", não pode ser igual ao da escola atual.";
+        $lValidou   = false;
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+    }
+
+    return $lValidou;
+      }
+
+  /**
+   * Validações da Água consumida pelos alunos
+   *
+   * @param  IExportacaoCenso $oExportacaoCenso
+   * @return boolean
+   */
+  protected static function validarRegistro10Colunas20( $oExportacaoCenso ) {
+
+    $oDadosEscola = $oExportacaoCenso->getDadosProcessadosEscola();
+    $oRegistro10  = $oDadosEscola->registro10;
+    $lValidou     = true;
+
+    if ( empty($oRegistro10->agua_consumida_alunos) ) {
+
+      $sMsgErro = 'O campo "Água consumida pelos alunos" é uma informação obrigatória.';
+      $lValidou = false;
+      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+    }
+
+    if ( isset($oRegistro10->agua_consumida_alunos) && !in_array($oRegistro10->agua_consumida_alunos, array(1, 2)) ) {
+
+      $sMsgErro = 'O campo "Água consumida pelos alunos" foi preenchido com valor inválido.';
+      $lValidou = false;
+      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+    }
+
+    return $lValidou;
+  }
+
+  /**
+   * Validações do Abastecimento de água
+   *
+   * @param  IExportacaoCenso $oExportacaoCenso
+   * @return boolean
+   */
+  protected static function validarRegistro10Colunas21a25 ( $oExportacaoCenso ) {
+
+    $oDadosEscola = $oExportacaoCenso->getDadosProcessadosEscola();
+    $oRegistro10  = $oDadosEscola->registro10;
+    $lValidou     = true;
+
+    $aAbastecimentoAgua = array(
+      "Rede pública"                            => $oRegistro10->abastecimento_agua_rede_publica,
+      "Poço artesiano"                          => $oRegistro10->abastecimento_agua_poco_artesiano,
+      "Cacimba / cisterna / poço"               => $oRegistro10->abastecimento_agua_cacimba_cisterna_poco,
+      "Fonte / rio / igarapé/ riacho/ córrego." => $oRegistro10->abastecimento_agua_fonte_rio_igarape_riacho_correg,
+      "Inexistente"                             => $oRegistro10->abastecimento_agua_inexistente,
+    );
+
+    // colunas 21 a 25 regra Pelo menos um dos campos de 21 a 25 deve ser preenchido com 1 (Sim)
+    if ( !in_array(1, $aAbastecimentoAgua) ) {
+
+      $sMsgErro = 'Abastecimento de água inválido. Não podem ser informadas todas as opções com valor igual a 0 (Não).';
+      $lValidou = false;
+      $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+    }
+
+    foreach ($aAbastecimentoAgua as $sAbastecimento => $iValue) {
+
+      // colunas 21-25 regra 2
+      if ( !in_array($iValue, array(0, 1)) ) {
+
+        $sMsgErro = "O campo \"Abastecimento de água - {$sAbastecimento}\" foi preenchido com valor inválido.";
+        $lValidou = false;
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+
+      // colunas 21-24 regra 3
+      if ( $sAbastecimento != "Inexistente" && $iValue !== 0 && $oRegistro10->abastecimento_agua_inexistente == 1) {
+
+        $sMsgErro  = "O campo \"Abastecimento de água - {$sAbastecimento}\" não pode ser preenchido com 1 (Sim) ";
+        $sMsgErro .= "quando o campo \"Abastecimento de água - Inexistente\" for preenchido com 1 (Sim).";
+        $lValidou  = false;
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+
+    }
+
+    return $lValidou;
+  }
+
+  /**
+   * Validações dos campos:
+   * Escola cede espaço para turmas do Brasil Alfabetizado
+   * Escola abre aos finais de semana para a comunidade
+   * Escola com proposta pedagógica de formação por alternância
+   *
+   * @param  IExportacaoCenso $oExportacaoCenso
+   * @return boolean
+   */
+  protected static function validarRegistro10Colunas105a107( $oExportacaoCenso ) {
+
+    $oDadosEscola = $oExportacaoCenso->getDadosProcessadosEscola();
+    $oRegistro10  = $oDadosEscola->registro10;
+    $lValidou     = true;
+
+    $iCedeEspaco          = isset($oRegistro10->escola_cede_espaco_turma_brasil_alfabetizado) ? $oRegistro10->escola_cede_espaco_turma_brasil_alfabetizado : null;
+    $iAbreFinaisSemana    = isset($oRegistro10->escola_abre_finais_semanas_comunidade) ? $oRegistro10->escola_abre_finais_semanas_comunidade : null;
+    $iFormacaoAlternancia = isset($oRegistro10->escola_formacao_alternancia) ? $oRegistro10->escola_formacao_alternancia : null;
+
+    $aCampos = array(
+      "Escola cede espaço para turmas do Brasil Alfabetizado"      => $iCedeEspaco,
+      "Escola abre aos finais de semana para a comunidade"         => $iAbreFinaisSemana,
+      "Escola com proposta pedagógica de formação por alternância" => $iFormacaoAlternancia,
+    );
+
+    foreach ($aCampos as $sColuna => $mValor) {
+
+      // regra 1
+      if ( $mValor === '' ) {
+        $sMsgErro = "O campo \"{$sColuna}\" é uma informação obrigatória.";
+        $lValidou = false;
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+
+      // regra 2
+      if ( $mValor !== '' && !in_array($mValor, array(0,1)) ) {
+
+        $sMsgErro = "O campo \"{$sColuna}\" foi preenchido com valor inválido.";
+        $lValidou = false;
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+      }
+    }
+
+    // coluna 107 regra 3
+    if ( isset($oRegistro10->escola_formacao_alternancia) && $oRegistro10->escola_formacao_alternancia != 0 ) {
+
+      // etapas de educação infantil e de anos iniciais do ensino fundamental
+      $aEtapas       = array(1, 2, 3, 4, 5, 6, 7, 14, 15, 16, 17, 18);
+      $oDadosTurma   = $oExportacaoCenso->getDadosProcessadosTurma();
+      $lPossuiEtapas = false;
+      foreach ($oDadosTurma as $oRegistro20) {
+
+        if ( in_array($oRegistro20->etapa_ensino_turma, $aEtapas) ) {
+          $lPossuiEtapas = true;
+        }
+      }
+
+      if ( in_array($oRegistro10->atendimento_educacional_especializado, array(1,2)) ||
+           in_array($oRegistro10->atividade_complementar, array(1,2) ) ||
+           $lPossuiEtapas ) {
+
+        $sMsgErro  = 'Escolas que possuem apenas turmas de atividade complementar, de atendimento educacional ';
+        $sMsgErro .= 'especializando, de educação infantil e de anos iniciais do ensino fundamental devem informar o ';
+        $sMsgErro .= 'campo "Escola com proposta pedagógica de formação por alternância" com 0 (Não).';
+        $oExportacaoCenso->logErro( $sMsgErro, ExportacaoCenso2015::LOG_ESCOLA );
+        $lValidou = false;
+      }
+    }
+
+    return $lValidou;
+  }
+
 }

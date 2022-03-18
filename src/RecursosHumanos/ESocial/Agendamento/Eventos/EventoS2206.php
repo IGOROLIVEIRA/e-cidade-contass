@@ -30,19 +30,19 @@ class EventoS2206 extends EventoBase
     public function montarDados()
     {
         $aDadosAPI = array();
-
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
 
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtAltContratual                      = new \stdClass;
             $oDadosAPI->evtAltContratual->sequencial          = $iSequencial;
+            $oDadosAPI->evtAltContratual->modo                = $this->modo;
+            $oDadosAPI->evtAltContratual->dtAlteracao         = implode('-', array_reverse(explode('/', $this->dt_alteracao))); //'2021-01-29'; //$oDados->altContratual->dtAlteracao;
             $oDadosAPI->evtAltContratual->indRetif            = 1;
             $oDadosAPI->evtAltContratual->nrRecibo            = null;
             $oDadosAPI->evtAltContratual->cpfTrab             = $oDados->ideVinculo->cpfTrab;
             $oDadosAPI->evtAltContratual->matricula           = $oDados->ideVinculo->matricula;
 
-            $oDadosAPI->evtAltContratual->dtAlteracao         = '2021-01-29'; //$oDados->altContratual->dtAlteracao;
             $oDadosAPI->evtAltContratual->altContratual->dtEf                = $oDados->altContratual->dtEf;
             $oDadosAPI->evtAltContratual->altContratual->dscAlt              = $oDados->altContratual->dscAlt;
 
@@ -61,10 +61,12 @@ class EventoS2206 extends EventoBase
                 }
                 $oDadosAPI->evtAltContratual->infoCeletista->aprend = empty($oDados->aprend) ? null : $oDados->aprend;
             } else {
-                $oDadosAPI->evtAltContratual->infoEstatutario = $oDados->infoEstatutario;
-                $oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP = $oDados->infoEstatutario->tpPlanRP;
-                $oDadosAPI->evtAltContratual->infoEstatutario->indTetoRGPS = $oDados->infoEstatutario->indTetoRGPS;
-                $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = $oDados->infoEstatutario->indAbonoPerm;
+                if (!empty($oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP)) {
+                    // $oDadosAPI->evtAltContratual->infoEstatutario = $oDados->infoEstatutario;
+                    $oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP = $oDados->infoEstatutario->tpPlanRP;
+                    $oDadosAPI->evtAltContratual->infoEstatutario->indTetoRGPS = $oDados->infoEstatutario->indTetoRGPS;
+                    $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = $oDados->infoEstatutario->indAbonoPerm;
+                }
             }
 
             if (!empty($oDados->infoContrato)) {

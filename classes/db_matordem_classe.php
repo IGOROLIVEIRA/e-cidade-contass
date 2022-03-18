@@ -272,16 +272,6 @@ class cl_matordem
 
     $this->atualizacampos();
 
-    if (strtotime($this->m51_data) < strtotime($this->getDataEmp($this->m51_codordem))) {
-      $this->erro_sql = " Data da ordem não pode ser anterior a data de emissão do empenho.";
-      $this->erro_campo = "m51_data";
-      $this->erro_banco = "";
-      $this->erro_data   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: " . $this->erro_sql . ""));
-      $this->erro_status = "0";
-      return false;
-    }
-
     $sql = " update matordem set ";
     $virgula = "";
     if (trim($this->m51_codordem) != "" || isset($GLOBALS["HTTP_POST_VARS"]["m51_codordem"])) {
@@ -842,12 +832,12 @@ class cl_matordem
 
   public function getDataEmp($m51_codordem)
   {
-    $sSql = "select e60_emiss,e60_numemp
+    $sSql = "select to_char(e60_emiss,'dd/mm/yyyy') e60_emiss
              from empempenho
              inner join matordemitem on m52_numemp = e60_numemp
              inner join matordem on m51_codordem = m52_codordem
              where m51_codordem = $m51_codordem";
-    $resSsql = db_query($sSql) or die(pg_last_error());
-    return db_utils::fieldsMemory($resSsql, 0)->e60_emiss;
+    $resSql = db_query($sSql) or die(pg_last_error());
+    return db_utils::fieldsMemory($resSql, 0)->e60_emiss;
   }
 }
