@@ -27,14 +27,14 @@ require_once("classes/db_bpdcasp712021_classe.php");
 require_once("model/contabilidade/arquivos/sicom/2021/dcasp/geradores/GerarBP.model.php");
 
 /**
- * gerar arquivo de BalanÃ§o Patrimonial
+ * gerar arquivo de Balanço Patrimonial
  * @author gabriel
  * @package Contabilidade
  */
 class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
-  protected $iCodigoLayout = 151; // CÃ³digo do relatÃ³rio
+  protected $iCodigoLayout = 151; // Código do relatório
 
   protected $sNomeArquivo = 'BP';
 
@@ -75,7 +75,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function __construct() { }
 
   /**
-   * selecionar os dados do balanÃ§o patrimonial pra gerar o arquivo
+   * selecionar os dados do balanço patrimonial pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
@@ -83,6 +83,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
+    $lInstit            = false;
 
     if ($this->getTipoGeracao() == 'CONSOLIDADO') {
 
@@ -91,6 +92,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $aInstituicoes = array_map(function ($oItem) {
         return $oItem->codigo;
       }, $aInstits);
+
+      $lInstit = true;
 
     } else {
       $aInstituicoes = array(db_getsession("DB_instit"));
@@ -205,11 +208,11 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     /**
-     * O mÃ©todo `getDados()`, da classe `BalancoPatromonialDCASP2021()`,
-     * retorna um array enorme. Para pegar os dados necessÃ¡rios para cada
-     * registro do SICOM DCASP, estamos passando os Ã­ndices exatos do array.
-     * Se eles forem alterados (nas configuraÃ§Ãµes dos relatÃ³rios), devem
-     * ser alterados aqui tambÃ©m.
+     * O método `getDados()`, da classe `BalancoPatromonialDCASP2015()`,
+     * retorna um array enorme. Para pegar os dados necessários para cada
+     * registro do SICOM DCASP, estamos passando os índices exatos do array.
+     * Se eles forem alterados (nas configurações dos relatórios), devem
+     * ser alterados aqui também.
      */
 
     $oBalancoPatrimonial = new BalancoPatrimonialDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
@@ -227,7 +230,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oRetornoBP = $oBalancoPatrimonial->getDados();
 
     /** BPDCASP102021
-     *  Quadro principal do relatÃ³rio
+     *  Quadro principal do relatório
      */
 
     $aExercicios = array(
@@ -248,11 +251,10 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp10->si208_vlativocircudemaiscredicurtoprazo = 0;
       $clbpdcasp10->si208_vlativocircuinvestapliccurtoprazo = $oRetornoBP[4]->$sChave;
       $clbpdcasp10->si208_vlativocircuestoques              = $oRetornoBP[5]->$sChave;
+      $clbpdcasp10->si208_vlativonaocircumantidovenda       = 0;
       $clbpdcasp10->si208_vlativocircuvpdantecipada         = $oRetornoBP[6]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircucredilongoprazo    = $oRetornoBP[10]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuinvestemplongpraz  = $oRetornoBP[11]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuestoques           = $oRetornoBP[12]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuvpdantecipada      = $oRetornoBP[13]->$sChave;
+      $vlativonaocircurlp = $oRetornoBP[10]->$sChave + $oRetornoBP[11]->$sChave + $oRetornoBP[12]->$sChave + $oRetornoBP[13]->$sChave;
+      $clbpdcasp10->si208_vlativonaocircurlp                = $vlativonaocircurlp;
       $clbpdcasp10->si208_vlativonaocircuinvestimentos      = $oRetornoBP[14]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuimobilizado        = $oRetornoBP[15]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuintagivel          = $oRetornoBP[16]->$sChave;
@@ -284,9 +286,9 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp20->si209_vlpassinaocircutrabprevilongoprazo        = $oRetornoBP[30]->$sChave;
       $clbpdcasp20->si209_vlpassnaocircemprfinalongpraz             = $oRetornoBP[31]->$sChave;
       $clbpdcasp20->si209_vlpassivnaocirculforneclongoprazo         = $oRetornoBP[32]->$sChave;
-      $clbpdcasp20->si209_vlpassivonaocirculatransffiscallongoprazo = $oRetornoBP[33]->$sChave;
       $clbpdcasp20->si209_vlpassnaocircobrifisclongpraz             = $oRetornoBP[33]->$sChave;
       $clbpdcasp20->si209_vlpassivnaocirculprovislongoprazo         = $oRetornoBP[34]->$sChave;
+      $clbpdcasp20->si209_vlpassivonaocirculatransffiscallongoprazo = 0;
       $clbpdcasp20->si209_vlpassnaocircdemaobrilongpraz             = $oRetornoBP[35]->$sChave;
       $clbpdcasp20->si209_vlpassivonaocircularesuldiferido          = $oRetornoBP[36]->$sChave;
       $clbpdcasp20->si209_vlpatriliquidocapitalsocial               = $oRetornoBP[39]->$sChave;
@@ -296,7 +298,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp20->si209_vlpatriliquidoreservalucros               = $oRetornoBP[43]->$sChave;
       $clbpdcasp20->si209_vlpatriliquidodemaisreservas              = $oRetornoBP[44]->$sChave;
 
-      //para pegar o superavit do exercicio atual e anterior Ã© necessÃ¡rio alterar o anousu
+      //para pegar o superavit do exercicio atual e anterior é necessário alterar o anousu
       $iAno = db_getsession("DB_anousu");
       if($iValorNumerico == 2){
         $iAno = $iAno-1;
@@ -412,7 +414,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult60
 
     /**
-     * @see funcao getSuperavitDeficit em BalancoPatrimonialDCASP2021.model.php
+     * @see funcao getSuperavitDeficit em BalancoPatrimonialDCASP2015.model.php
      */
 
 
@@ -440,7 +442,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         $clbpdcasp71 = new cl_bpdcasp712021();
         $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
-        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false,$objContasfr->o15_codigo)) ;
+        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente($lInstit,$objContasfr->o15_codigo)) ;
         //db_criatabela($rsSaldoFontes);
         $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
         //echo "<pre>";print_r($oSaldoFontes);
@@ -504,7 +506,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         }
       }
       /**
-       * o registro 70 Ã© o total do registro 71
+       * o registro 70 é o total do registro 71
        */
       $clbpdcasp70  = new cl_bpdcasp702021();
 
