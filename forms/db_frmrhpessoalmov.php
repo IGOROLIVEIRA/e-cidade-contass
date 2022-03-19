@@ -812,6 +812,23 @@ if (isset($db_opcaoal)) {
                                 </tr>
 
                                 <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td nowrap title="<?= @$Trh05_caub ?>">
+                                        <?php
+                                        db_ancora(@$Lrh05_caub, "", 3);
+                                        ?>
+                                    </td>
+                                    <td nowrap>
+                                        <?php
+                                        db_input('rh05_caub', 6, $Irh05_caub, true, 'text', 3, "")
+                                        ?>
+                                        <?php
+                                        db_input('r59_descr1', 40, $Ir59_descr1, true, 'text', 3, "")
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>
                                     </td>
                                     <td>
@@ -827,24 +844,6 @@ if (isset($db_opcaoal)) {
                                         ?>
                                         <?php
                                         db_input('rh173_descricao', 40, $Irh173_descricao, true, 'text', 3, "")
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td nowrap title="<?= @$Trh05_caub ?>">
-                                        <?php
-                                        db_ancora(@$Lrh05_caub, "", 3);
-                                        ?>
-                                    </td>
-                                    <td nowrap>
-                                        <?php
-                                        db_input('rh05_caub', 6, $Irh05_caub, true, 'text', 3, "")
-                                        ?>
-                                        <?php
-                                        db_input('r59_descr1', 40, $Ir59_descr1, true, 'text', 3, "")
                                         ?>
                                     </td>
                                 </tr>
@@ -1462,6 +1461,8 @@ if (isset($db_opcaoal)) {
                     document.form1.rh05_caub.value = '';
                     document.form1.r59_descr.value = '';
                     document.form1.r59_descr1.value = '';
+                    document.form1.rh05_motivo.value = '';
+                    document.form1.rh173_descricao.value = '';
                 }
             }
 
@@ -1472,6 +1473,7 @@ if (isset($db_opcaoal)) {
                     document.form1.rh05_causa.value = '';
                     document.form1.rh05_caub.value = '';
                     document.form1.r59_descr1.value = '';
+
                 } else {
                     document.form1.rh05_caub.value = chave2;
                     document.form1.r59_descr1.value = chave3;

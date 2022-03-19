@@ -474,9 +474,11 @@ if (isset($incluir) && !$lErro) {
 
             if ($clrhpesrescisao->numrows > 0) {
                 $clrhpesrescisao->rh05_seqpes = $rh02_seqpes;
+                $clrhpesrescisao->rh05_motivo = ltrim($rh05_motivo, "0");
                 $clrhpesrescisao->alterar($rh02_seqpes);
             } else {
                 $clrhpesrescisao->rh05_seqpes = $rh02_seqpes;
+                $clrhpesrescisao->rh05_motivo = ltrim($rh05_motivo, "0");
                 $clrhpesrescisao->incluir($rh02_seqpes);
             }
         } else {
@@ -790,7 +792,7 @@ if (isset($limparbanco) && $limparbanco == true) {
 }
 
 if (isset($limparrecis) && $limparrecis == true) {
-    unset($rh05_recis_dia, $rh05_recis_mes, $rh05_recis_ano, $rh05_causa, $rh05_caub, $r59_descr, $rh05_aviso_dia, $rh05_aviso_mes, $rh05_aviso_ano, $r59_descr1, $rh05_taviso, $rh05_saldofgts);
+    unset($rh05_recis_dia, $rh05_recis_mes, $rh05_recis_ano, $rh05_causa, $rh05_caub, $r59_descr, $rh05_aviso_dia, $rh05_aviso_mes, $rh05_aviso_ano, $r59_descr1, $rh05_taviso, $rh05_saldofgts,$rh05_motivo,$rh173_codigo,$rh173_descricao);
 }
 
 if (!isset($rh30_vinculo)) {

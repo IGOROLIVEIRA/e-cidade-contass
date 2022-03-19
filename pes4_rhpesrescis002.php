@@ -525,7 +525,7 @@ function cadastro_164()
     $matriz2[8] = $rh05_codigoseguranca;
     $matriz2[9] = $rh05_trct;
     $matriz2[10] = empty($rh05_saldofgts) ? 0 : $rh05_saldofgts;
-    $matriz2[11] = empty($rh173_codigo) ? null : $rh173_codigo;
+    $matriz2[11] = empty($rh173_codigo) ? null : ltrim($rh173_codigo, "0");
 
     //pg_exec("update pg_class set reltriggers = 0 where relname = 'rhpesrescisao'");
     db_insert("rhpesrescisao", $matriz1, $matriz2);

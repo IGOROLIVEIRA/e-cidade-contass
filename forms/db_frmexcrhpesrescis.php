@@ -108,23 +108,18 @@ $clrotulo->label("rh173_codigo");
               db_input('r59_descr', 40, $Ir59_descr, true, 'text', 3, "")
               ?>
             </td>
-            <td nowrap title="<?=@$Trh173_codigo?>" align="right">
+          </tr>
+          <tr>
+          <td nowrap title="<?=@$Trh05_taviso?>" align="right">
               <?php
-              db_ancora(@$Lrh173_codigo, "", 3);
+              db_ancora(@$Lrh05_taviso, "", 3);
               ?>
             </td>
             <td>
               <?php
-              db_input('rh05_motivo', 6, $Irh05_motivo, true, 'text', 3, "")
-              ?>
-              <?php
-              db_input('rh173_descricao', 40, $Ir173_descr, true, 'text', 3, "")
+              db_input('taviso', 20, 0, true, 'text', 3, "")
               ?>
             </td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
             <td nowrap title="<?=@$Trh05_caub?>" align="right">
               <?php
               db_ancora(@$Lrh05_caub, "", 3);
@@ -140,22 +135,25 @@ $clrotulo->label("rh173_codigo");
             </td>
           </tr>
           <tr>
-            <td nowrap title="<?=@$Trh05_taviso?>" align="right">
-              <?php
-              db_ancora(@$Lrh05_taviso, "", 3);
-              ?>
-            </td>
-            <td>
-              <?php
-              db_input('taviso', 20, 0, true, 'text', 3, "")
-              ?>
-            </td>
-            <td nowrap title="<?=@$Trh05_aviso?>" align="right">
+          <td nowrap title="<?=@$Trh05_aviso?>" align="right">
               <?=@$Lrh05_aviso?>
             </td>
             <td>
               <?php
               db_inputdata('rh05_aviso', @$rh05_aviso_dia, @$rh05_aviso_mes, @$rh05_aviso_ano, true, 'text', 3)
+              ?>
+            </td>
+          <td nowrap title="<?=@$Trh173_codigo?>" align="right">
+              <?php
+              db_ancora(@$Lrh173_codigo, "", 3);
+              ?>
+            </td>
+            <td>
+              <?php
+              db_input('rh05_motivo', 6, $Irh05_motivo, true, 'text', 3, "")
+              ?>
+              <?php
+              db_input('rh173_descricao', 40, $Ir173_descr, true, 'text', 3, "")
               ?>
             </td>
           </tr>

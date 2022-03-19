@@ -238,8 +238,6 @@ class cl_rhpesrescisao
                                ,$this->rh05_saldofgts
                                ," . ($this->rh05_motivo == "null" || $this->rh05_motivo == "" ? "null" : $this->rh05_motivo) . "
                       )";
-        echo $sql;
-        exit;
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
