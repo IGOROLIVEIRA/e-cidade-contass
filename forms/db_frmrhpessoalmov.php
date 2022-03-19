@@ -1014,13 +1014,17 @@ if (isset($db_opcaoal)) {
                                         ?>
                                     </td>
                                 </tr>
+                            </table>
+                            <fieldset>
+                            <legend align="left"><b>Art. 61 da LDB</b></legend>
+                            <table width="100%">
                                 <?php
                                 $aArtSiopeOpcao = array(
                                     'f' => 'Não',
                                     't' => 'Sim',
                                 );
                                 $cldbsyscampo = db_utils::getDao('db_syscampo');
-                                $rsArtSiopeCampos = $cldbsyscampo->sql_record($cldbsyscampo->sql_query_file(null, "descricao", null, "nomecam in ('rh02_art61ldb1','rh02_art61ldb2','rh02_art61ldb3','rh02_art61ldb4','rh02_art61ldb5','rh02_art1leiprestpsiccologia','rh02_art1leiprestservsocial')"));
+                                $rsArtSiopeCampos = $cldbsyscampo->sql_record($cldbsyscampo->sql_query_file(null, "descricao", "codcam", "nomecam in ('rh02_art61ldb1','rh02_art61ldb2','rh02_art61ldb3','rh02_art61ldb4','rh02_art61ldb5','rh02_art1leiprestpsiccologia','rh02_art1leiprestservsocial','rh02_art61ldboutros','rh02_art1leioutros')"));
                                 $aArtSiopeCampos = db_utils::getColectionByRecord($rsArtSiopeCampos);
                                 ?>
                                 <tr>
@@ -1064,6 +1068,20 @@ if (isset($db_opcaoal)) {
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td nowrap="nowrap" title="<?php echo $aArtSiopeCampos[7]->descricao; ?>" align="left" colspan="2">
+                                        <?php
+                                        db_select("rh02_art61ldboutros", $aArtSiopeOpcao, true, $db_opcao);
+                                        ?>
+                                        <strong><?= @substr($aArtSiopeCampos[7]->descricao, 0, 140) ?> </strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            </fieldset>
+
+                            <fieldset>
+                                <legend align="left"><b>Art. 1 da Lei nº 13.935/2019</b></legend>
+                            <table width="100%">
+                                <tr>
                                     <td nowrap="nowrap" title="<?php echo $Trh02_art1leiprestpsiccologia; ?>" align="left" colspan="2">
                                         <?php
                                         db_select("rh02_art1leiprestpsiccologia", $aArtSiopeOpcao, true, $db_opcao);
@@ -1079,7 +1097,16 @@ if (isset($db_opcaoal)) {
                                         <strong><?= @substr($aArtSiopeCampos[6]->descricao, 0, 140) ?> </strong>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td nowrap="nowrap" title="<?php echo $aArtSiopeCampos[8]->descricao; ?>" align="left" colspan="2">
+                                        <?php
+                                        db_select("rh02_art1leioutros", $aArtSiopeOpcao, true, $db_opcao);
+                                        ?>
+                                        <strong><?= @substr($aArtSiopeCampos[8]->descricao, 0, 140) ?> </strong>
+                                    </td>
+                                </tr>
                             </table>
+                            </fieldset>
                             <center>
                     </fieldset>
                 </td>

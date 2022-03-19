@@ -860,7 +860,7 @@ if (count($aParametrosEmpenho) > 0) {
     js_removeObj("msgBox");
     js_bloqueiaLiberaBotao(false);
     var campo_consumo_imediato = document.getElementById("consumo_imediato").value;
-
+    
     if ($F('sJson') != '' && lSalvo == false) {
 
       var oItemAnt = eval("(" + $F('sJson') + ")");
@@ -876,7 +876,7 @@ if (count($aParametrosEmpenho) > 0) {
       }
       // if ($F('unidadeentrada') != oItemAnt.unidade) { 
       //   lModificado = true;
-      // }
+      //  }
       if ($F('matmater') != oItemAnt.m63_codmatmater) {
         lModificado = true;
       }
@@ -902,7 +902,6 @@ if (count($aParametrosEmpenho) > 0) {
     oItemAtivo = eval("(" + oAjax.responseText + ")");
     $('m77_lote').value = oItemAtivo.m77_lote;
     $('m77_dtvalidade').value = oItemAtivo.m77_dtvalidade;
-
     if(campo_consumo_imediato =="t"){
       $('consumoImediato').value = oItemAtivo.m52_quant;
     }else{
@@ -913,7 +912,7 @@ if (count($aParametrosEmpenho) > 0) {
     $('valorRecebido').value = new Number(oItemAtivo.m52_valor).toFixed(2);
     $('saldovalor').innerHTML = new Number(oItemAtivo.saldovalor).toFixed(2);
     $('saldoitens').innerHTML = oItemAtivo.saldoitens;
-    $('unidadeentrada').value = oItemAtivo.aMateriaisEstoque[0].m60_codmatunid;
+    $('unidadeentrada').value = oItemAtivo.m60_codmatunid;
     $('m52_codlanc').value = oItemAtivo.m52_codlanc;
     $('iIndice').value = oItemAtivo.iIndiceEntrada;
     $('sJson').value = oAjax.responseText;
@@ -926,7 +925,7 @@ if (count($aParametrosEmpenho) > 0) {
     $('descrdeptoconsumo').value = oItemAtivo.descrdeptoconsumo.urlDecode();
     $('cc08_sequencial').value = oItemAtivo.cc08_sequencial;
     $('cc08_descricao').value = oItemAtivo.cc08_descricao.urlDecode();
-    lSalvo = false;
+    lSalvo = false; 
     
     //adicionada condição para habilitar o campo quantidade quando o item for controlado por quantidade
     if (oItemAtivo.pc01_servico == 't' && oItemAtivo.sServicoQuantidade == 'f') {
@@ -984,6 +983,9 @@ if (count($aParametrosEmpenho) > 0) {
 
     }
     $('qtdeRecebido').focus();
+  }
+  function teste(valor){
+    alert(valor)
   }
   /**
    * grava as informações do material na sessao
@@ -1423,12 +1425,12 @@ if (count($aParametrosEmpenho) > 0) {
    * Abre a lookup para cadastro de um novo item.
    */
   function js_novomatmater() {
-
+    
     oObject = $F('sJson');
     var oItemAtivo = eval("(" + oObject + ")");
     cod = oItemAtivo.pc01_codmater;
     numemp = oItemAtivo.e60_numemp;
-    sequen = oItemAtivo.e62_sequencial;
+    sequen = oItemAtivo.e62_sequencial;  
     js_OpenJanelaIframe('top.corpo', 'iframe_material',
       'mat1_matmater011.php?m63_codpcmater=' + cod + '&numemp=' + numemp + '&sequen=' + sequen + '&lLotes=1',
       'Incluir Item de Entrada Novo', true);
