@@ -316,7 +316,8 @@ switch($oParam->exec) {
             }
 
             $arrayValores = array();
-            $j = 0;
+            $arrayEmanterior = array();
+            $j = 0; $empA = 0;
             foreach($resultadoEmpenho as $row){
                 $valorEm[$e] = $row;
                 $codemp = explode("/",$valorEm[$e]);
@@ -417,18 +418,42 @@ switch($oParam->exec) {
                     
                     if($clempempenho->numrows==0){
                         $controleAno = 1;
+                        $arrayEmanterior[$empA][0] = $codEmp."/".$anoEmp;
+                        $empA++;
+                    }else{
+                        $resultadoEmpresto = $clempresto->sql_record($clempresto->sql_query(null,$resultEmpenho->e60_numemp,"*",""));
+                        $resultEmpre = db_utils::fieldsMemory($resultadoEmpresto, 0);
+
+                        if($clempresto->numrows==0){
+                            $controleAno = 1;
+                            $arrayEmanterior[$empA][0] = $codEmp."/".$anoEmp;
+                            $empA++;
+                        }
                     }
 
-                    $resultadoEmpresto = $clempresto->sql_record($clempresto->sql_query(null,$resultEmpenho->e60_numemp,"*",""));
-                    $resultEmpre = db_utils::fieldsMemory($resultadoEmpresto, 0);
-
-                    if($clempresto->numrows==0){
-                        $controleAno = 1;
-                    }
+                    
                     
                 }
                 
                 $e++;
+            }
+
+            if($controleAno==1){
+                $arrayRetornoEmpAno = array();
+                foreach ($arrayEmanterior as $keyRow => $Row){
+
+                    
+                    $objItensEmpAno = new stdClass();
+                    foreach ($Row as $keyCel => $cell){
+                        
+                        if($keyCel == 0){
+                            $objItensEmpAno->emp   =  $cell;
+                        }
+                        
+                    }
+
+                    $arrayRetornoEmpAno[] = $objItensEmpAno;
+                }
             }
             //mudança
             $deixarInserir = 0;
@@ -919,8 +944,9 @@ switch($oParam->exec) {
                     $oRetorno->itens = $arrayRetornoVeiculoN;
 
                 }else if($controleAno==1){
-                    $oRetorno->status = 2;
+                    $oRetorno->status = 5;
                     $oRetorno->message = urlencode("Empenho com ano anterior não consta para uso!");
+                    $oRetorno->itens = $arrayRetornoEmpAno;
                     $erro = true;
                 }else if($controleAno==2){
                     $oRetorno->status = 4;

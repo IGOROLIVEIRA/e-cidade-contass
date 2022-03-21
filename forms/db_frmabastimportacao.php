@@ -473,6 +473,20 @@ if(isset($_POST["processar"])) {
                             </th>
                         </tr>
                     </table>
+                    <table style="width: 10%; border: 0px solid black; display: none;" id="tblEmpAn" >
+
+                    <tr>
+                            <th colspan="2" style="text-align: center; width: 150px;" >
+                             Empenhos não podem ser utilizados
+                            </th>
+                    <tr>
+                    
+                        <tr style='background-color:#ffffff;'>
+                            <th style="width: 150px;">
+                            Empenho 
+                            </th>
+                        </tr>
+                    </table>
                     <table style="width: 40%; border: 0px solid black; display: none;" id="tblMotorista" >
 
                     <tr>
@@ -695,6 +709,41 @@ if(isset($_POST["processar"])) {
             alert(oRetorno.message.urlDecode());
             //var url_atual = window.location.href;
             //window.location.href = url_atual;
+
+        }else if (oRetorno.status == 5) {
+            $op = 0;
+            alert(oRetorno.message.urlDecode());
+            oRetorno.itens.forEach(function (oItem) {
+                    var vemp = oItem.emp;
+                    document.getElementById("tblEmpAn").style.display="block";
+                    op = 0;
+                    if(id>0){
+                        for(i = 0; i<id; i++){
+                            if(valorC[i]== vemp){
+                                op = 1;
+                            }
+                        }
+                        if(op == 0){
+                            
+                            valorC[id] = vemp;
+                            id++;
+                        }
+                    }else{
+                        valorC[id] = vemp;
+                        id++;
+                    }
+                    if(op == 0 ){
+
+                        var tabela = document.getElementById("tblEmpAn");
+
+                        var numeroLinhas = tabela.rows.length;
+                        var linha = tabela.insertRow(numeroLinhas);
+                        var celula1 = linha.insertCell(0);
+                    
+                        celula1.innerHTML =  "<div style='text-align:center'>"+vemp+"</div>"; 
+                    }
+            
+            });
 
         }else{
             var cont = 1;
