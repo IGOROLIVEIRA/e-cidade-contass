@@ -25,16 +25,16 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("std/db_stdClass.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("libs/JSON.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("dbforms/db_classesgenericas.php");
+require_once("std/db_stdClass.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/JSON.php");
+require_once("dbforms/db_funcoes.php");
+require_once("dbforms/db_classesgenericas.php");
 require_once("std/DBDate.php");
 
 db_app::import("MaterialCompras");
@@ -58,7 +58,7 @@ db_postmemory($_POST);
 
 $oPlacaBem          = new PlacaBem();
 $oJson              = new services_json();
-$oParam             = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam             = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 
 $oRetorno           = new stdClass();
 $oRetorno->dados    = new stdClass();
@@ -69,10 +69,10 @@ if (isset($oParam->dbOpcao)) {
   $oRetorno->dbOpcao  = $oParam->dbOpcao;
 }
 
-switch ($oParam->exec){
+switch ($oParam->exec) {
 
 
-  case "getBens" :
+  case "getBens":
 
     try {
 
@@ -83,37 +83,37 @@ switch ($oParam->exec){
       $aWhere[] = "t55_codbem is null";
 
       // montamos o where  conforme os filtros selecionados pelo usuario
-      if ( !empty($oParam->iCodigoDepartamento) ) {
+      if (!empty($oParam->iCodigoDepartamento)) {
         $aWhere[] = "t52_depart = {$oParam->iCodigoDepartamento}";
       }
-      if ( !empty($oParam->iCodigoDivisao) ) {
+      if (!empty($oParam->iCodigoDivisao)) {
         $aWhere[] = "t30_codigo = {$oParam->iCodigoDivisao}";
       }
-      if ( !empty($oParam->iCodigoBemInicial) ) {
+      if (!empty($oParam->iCodigoBemInicial)) {
         $aWhere[] = "t52_bem >= {$oParam->iCodigoBemInicial}";
       }
-      if ( !empty($oParam->iCodigoBemFinal) ) {
+      if (!empty($oParam->iCodigoBemFinal)) {
         $aWhere[] = "t52_bem <= {$oParam->iCodigoBemFinal}";
       }
-      if ( !empty($oParam->iCodigoClassificacaoInicial) ) {
+      if (!empty($oParam->iCodigoClassificacaoInicial)) {
         $aWhere[] = "t64_class >= '{$oParam->iCodigoClassificacaoInicial}'";
       }
-      if ( !empty($oParam->iCodigoClassificacaoFinal) ) {
+      if (!empty($oParam->iCodigoClassificacaoFinal)) {
         $aWhere[] = "t64_class <= '{$oParam->iCodigoClassificacaoFinal}'";
       }
-      if ( !empty($oParam->iPlacaInicial) ) {
+      if (!empty($oParam->iPlacaInicial)) {
         $aWhere[] = "t52_ident >= '{$oParam->iPlacaInicial}'";
       }
-      if ( !empty($oParam->iPlacaFinal) ) {
+      if (!empty($oParam->iPlacaFinal)) {
         $aWhere[] = "t52_ident <= '{$oParam->iPlacaFinal}'";
       }
-      if ( !empty($oParam->iPlacaBem) ) {
-      	$aWhere = array();
-      	$aWhere[] = "t55_codbem is null";
+      if (!empty($oParam->iPlacaBem)) {
+        $aWhere = array();
+        $aWhere[] = "t55_codbem is null";
         $aWhere[] = "t52_ident = '{$oParam->iPlacaBem}'";
       }
 
-      $sWhere  = implode(" and ",$aWhere);
+      $sWhere  = implode(" and ", $aWhere);
 
       $sCamposBens  = "t52_bem, t52_ident, t52_descr, t64_descr, descrdepto ";
 
@@ -132,7 +132,7 @@ switch ($oParam->exec){
       /*
        * percorremos os registros criando um standard class para retornar os dados desejados
        */
-      for ($iBem = 0; $iBem < $oDaoBem->numrows; $iBem++ ) {
+      for ($iBem = 0; $iBem < $oDaoBem->numrows; $iBem++) {
 
         $oDadosBem     = db_utils::fieldsMemory($rsBens, $iBem);
         $oDadosRetorno = new stdClass();
@@ -150,7 +150,6 @@ switch ($oParam->exec){
           new DBDate(date("Y-m-d", db_getsession('DB_datausu'))),
           new Instituicao(db_getsession('DB_instit'))
         );
-
     } catch (DBException $oException) {
 
       db_fim_transacao(true);
@@ -160,7 +159,7 @@ switch ($oParam->exec){
 
 
 
-  break;
+    break;
 
 
   case "carregaInclusao":
@@ -185,7 +184,6 @@ switch ($oParam->exec){
         $oDepartamento->t30_descr  = urlencode($oDivisao->getDescricao());
         $oRetorno->departamento[]  = $oDepartamento;
       }
-
     } catch (Exception $oException) {
 
       db_fim_transacao(true);
@@ -193,7 +191,7 @@ switch ($oParam->exec){
       $oRetorno->message = urlencode($oException->getMessage());
     }
 
-  break;
+    break;
   case "buscaOrgaoUnidade":
 
     $oDaoCfPatri = db_utils::getDao("cfpatri");
@@ -242,38 +240,38 @@ switch ($oParam->exec){
      */
     if (db_stdClass::normalizeStringJson($oParam->acao) == "Incluir") {
 
-    	$lErroDataAquisicao = false;
-	    $oHistoricoCalculo  = null;
+      $lErroDataAquisicao = false;
+      $oHistoricoCalculo  = null;
 
-	    if (hasDepreciacaoIniciada(null, $lTipoManual)) {
+      if (hasDepreciacaoIniciada(null, $lTipoManual)) {
 
-	    	$dtImplantacao = getDataImplantacaoDepreciacao();
+        $dtImplantacao = getDataImplantacaoDepreciacao();
 
-	    	if (!empty($dtImplantacao)) {
+        if (!empty($dtImplantacao)) {
 
-		    	list($iAnoImplantacao, $iMesImplantacao, $iDiaImplantacao) = explode("-", $dtImplantacao);
-		    	list($iDiaAquisicao,   $iMesAquisicao, $iAnoAquisicao) = explode("/", $oParam->t52_dtaqu);
+          list($iAnoImplantacao, $iMesImplantacao, $iDiaImplantacao) = explode("-", $dtImplantacao);
+          list($iDiaAquisicao,   $iMesAquisicao, $iAnoAquisicao) = explode("/", $oParam->t52_dtaqu);
 
-		    	$oHistoricoCalculo = getUltimoMesAnoHistoricoCalculoDepreciacao($lTipoManual);
+          $oHistoricoCalculo = getUltimoMesAnoHistoricoCalculoDepreciacao($lTipoManual);
 
-		    	if ($oHistoricoCalculo) {
+          if ($oHistoricoCalculo) {
 
             if ($oHistoricoCalculo->t57_ano > $iAnoAquisicao) {
-  	    			$lErroDataAquisicao = true;
-  	    		}
-  	    		if (($oHistoricoCalculo->t57_ano >= $iAnoAquisicao) && ($oHistoricoCalculo->mes >= $iMesAquisicao)) {
-  	    			$lErroDataAquisicao = true;
-  	    		}
-  	    	}
-	    	}
-	    }
-		  if ($lErroDataAquisicao) {
+              $lErroDataAquisicao = true;
+            }
+            if (($oHistoricoCalculo->t57_ano >= $iAnoAquisicao) && ($oHistoricoCalculo->mes >= $iMesAquisicao)) {
+              $lErroDataAquisicao = true;
+            }
+          }
+        }
+      }
+      if ($lErroDataAquisicao) {
 
-		  	$sMsgErro = " A data de aquisição deve ser posterior ao último período depreciado {$oHistoricoCalculo->mes}/{$oHistoricoCalculo->t57_ano}.";
-		  	$oRetorno->message = urlencode($sMsgErro);
-		  	$oRetorno->status = 2;
-		  	break;
-		  }
+        $sMsgErro = " A data de aquisição deve ser posterior ao último período depreciado {$oHistoricoCalculo->mes}/{$oHistoricoCalculo->t57_ano}.";
+        $oRetorno->message = urlencode($sMsgErro);
+        $oRetorno->status = 2;
+        break;
+      }
     }
 
     if (!empty($oParam->t52_bem)) {
@@ -294,7 +292,7 @@ switch ($oParam->exec){
        * Inclusao
        * - Define placa do bem
        */
-      if ( empty($oParam->t52_bem) ) {
+      if (empty($oParam->t52_bem)) {
 
         /**
          * Parametro para c ontrole da numeracao da placa
@@ -307,12 +305,11 @@ switch ($oParam->exec){
         /**
          * SEQUENCIAL DIGITADO
          */
-        if ( $iParametroPlaca == BensParametroPlaca::PLACA_SEQUENCIAL_DIGITADO ) {
+        if ($iParametroPlaca == BensParametroPlaca::PLACA_SEQUENCIAL_DIGITADO) {
 
-	        $oParam->t41_placa = mb_strtoupper($oParam->t41_placa);
-	        $oPlacaBem->setPlacaSeq($oParam->t41_placa);
-
-	      } else {
+          $oParam->t41_placa = mb_strtoupper($oParam->t41_placa);
+          $oPlacaBem->setPlacaSeq($oParam->t41_placa);
+        } else {
 
           /**
            * SEQUENCIAL AUTOMATICO || CLASSIFICACAO + SEQUENCIAL
@@ -324,18 +321,18 @@ switch ($oParam->exec){
            * CLASSIFICACAO + SEQUENCIAL
            * - campo sPlaca nao vazio
            */
-          if ( $iParametroPlaca == BensParametroPlaca::PLACA_CLASSIFICACAO_SEQUENCIAL && !empty($oParam->sPlaca) ) {
+          if ($iParametroPlaca == BensParametroPlaca::PLACA_CLASSIFICACAO_SEQUENCIAL && !empty($oParam->sPlaca)) {
             $oPlacaBem->setPlaca($oParam->sPlaca);
           }
-	      }
+        }
 
-	      $oPlacaBem->setData(date("d/m/Y", db_getsession("DB_datausu")));
+        $oPlacaBem->setData(date("d/m/Y", db_getsession("DB_datausu")));
 
-	      if (empty($oParam->obser)) {
-	        $oPlacaBem->setObservacao(db_stdClass::normalizeStringJson($oParam->obser));
-	      }
+        if (empty($oParam->obser)) {
+          $oPlacaBem->setObservacao(db_stdClass::normalizeStringJson($oParam->obser));
+        }
 
-	      $oBem->setPlaca($oPlacaBem);
+        $oBem->setPlaca($oPlacaBem);
       }
 
       $oBem->setDataAquisicao($oParam->t52_dtaqu);
@@ -360,7 +357,7 @@ switch ($oParam->exec){
       /**
        * Só são setados os valores, caso seja um novo Bem
        */
-      if (empty($oParam->t52_bem) || ( !empty($oParam->t52_bem) && !hasDepreciacaoIniciada($oParam->t52_bem, $lTipoManual) )) {
+      if (empty($oParam->t52_bem) || (!empty($oParam->t52_bem) && !hasDepreciacaoIniciada($oParam->t52_bem, $lTipoManual))) {
 
         $oBem->setValorAquisicao($oParam->vlAquisicao);
         $oBem->setValorResidual($oParam->vlResidual);
@@ -375,13 +372,20 @@ switch ($oParam->exec){
         throw new Exception("Informe a observação do lançamento.");
       }
 
-      $oBem->setObservacao( addslashes(db_stdClass::normalizeStringJson($oParam->obser)));
+      $oBem->setObservacao(addslashes(db_stdClass::normalizeStringJson($oParam->obser)));
       $oBem->setInstituicao(db_getsession("DB_instit"));
       $oBem->setCodigoItemNota($oParam->iCodigoItemNota);
       $oBem->salvar();
       db_fim_transacao(false);
-      $oRetorno->dados->t52_bem = $oBem->getCodigoBem();
 
+      $result = db_query("select t64_bemtipos from clabens where t64_codcla = $oParam->t64_codcla");
+      $clabens = db_utils::fieldsmemory($result, 0);
+
+      if ($clabens->t64_bemtipos == 2) {
+        $oRetorno->clabens = 2;
+      }
+
+      $oRetorno->dados->t52_bem = $oBem->getCodigoBem();
     } catch (Exception $oException) {
 
       db_fim_transacao(true);
@@ -426,13 +430,13 @@ switch ($oParam->exec){
         $oBem = new Bem($iCodigoBem);
 
         if ($oBem->getCodigoTipoDepreciacao() == null) {
-        	$aBensErro[] = $iCodigoBem;
+          $aBensErro[] = $iCodigoBem;
         } else {
           $oBem->baixar($iMotivo, $dDataBaixa, $sObservacao, $iDestino);
         }
       }
       if (count($aBensErro) > 0) {
-      	throw new Exception("Necessario atualizar os dados financeiros dos bens (".implode(",", $aBensErro).")");
+        throw new Exception("Necessario atualizar os dados financeiros dos bens (" . implode(",", $aBensErro) . ")");
       }
       db_fim_transacao(false);
     } catch (Exception $eErro) {
@@ -440,7 +444,6 @@ switch ($oParam->exec){
       db_fim_transacao(true);
       $oRetorno->status = 2;
       $oRetorno->message = urlencode($eErro->getMessage());
-
     }
     break;
 
@@ -457,38 +460,37 @@ switch ($oParam->exec){
       db_fim_transacao(true);
       $oRetorno->status = 2;
       $oRetorno->message = urlencode($eErro->getMessage());
-
     }
     break;
 
   case "getDadosItemNota":
 
-  	$oDaoNotaItemBensPendentes  = db_utils::getDao('empnotaitembenspendente');
-  	$sCamposItemBensPendentes   = "e69_codnota, ";
-  	$sCamposItemBensPendentes  .= "e69_dtnota, ";
-  	$sCamposItemBensPendentes  .= "e69_numemp, ";
-  	$sCamposItemBensPendentes  .= "e60_numcgm, ";
-  	$sCamposItemBensPendentes  .= "z01_nome, ";
-  	$sCamposItemBensPendentes  .= "e62_vlrun, ";
-  	$sCamposItemBensPendentes  .= "pc01_descrmater, ";
-  	$sCamposItemBensPendentes  .= "e69_numero as nota_fiscal, ";
-  	$sCamposItemBensPendentes  .= "m52_codordem as ordem_compra ";
-  	$sWhereItemBensPendentes    = "e72_sequencial = {$oParam->iCodigoItemNota}";
-  	$sSqlBuscaDadosBem          = $oDaoNotaItemBensPendentes->sql_query_bens(null, $sCamposItemBensPendentes, null, $sWhereItemBensPendentes);
-  	$rsBuscaDadosBem            = $oDaoNotaItemBensPendentes->sql_record($sSqlBuscaDadosBem);
+    $oDaoNotaItemBensPendentes  = db_utils::getDao('empnotaitembenspendente');
+    $sCamposItemBensPendentes   = "e69_codnota, ";
+    $sCamposItemBensPendentes  .= "e69_dtnota, ";
+    $sCamposItemBensPendentes  .= "e69_numemp, ";
+    $sCamposItemBensPendentes  .= "e60_numcgm, ";
+    $sCamposItemBensPendentes  .= "z01_nome, ";
+    $sCamposItemBensPendentes  .= "e62_vlrun, ";
+    $sCamposItemBensPendentes  .= "pc01_descrmater, ";
+    $sCamposItemBensPendentes  .= "e69_numero as nota_fiscal, ";
+    $sCamposItemBensPendentes  .= "m52_codordem as ordem_compra ";
+    $sWhereItemBensPendentes    = "e72_sequencial = {$oParam->iCodigoItemNota}";
+    $sSqlBuscaDadosBem          = $oDaoNotaItemBensPendentes->sql_query_bens(null, $sCamposItemBensPendentes, null, $sWhereItemBensPendentes);
+    $rsBuscaDadosBem            = $oDaoNotaItemBensPendentes->sql_record($sSqlBuscaDadosBem);
 
-  	$oDadoItem                 = db_utils::fieldsMemory($rsBuscaDadosBem, 0);
-  	$oRetorno->e69_codnota     = $oDadoItem->e69_codnota;
-  	$oRetorno->e69_dtnota      = $oDadoItem->e69_dtnota;
-  	$oRetorno->e69_numemp      = $oDadoItem->e69_numemp;
-  	$oRetorno->e60_numcgm      = $oDadoItem->e60_numcgm;
-  	$oRetorno->z01_nome        = $oDadoItem->z01_nome;
-  	$oRetorno->e62_vlrun       = $oDadoItem->e62_vlrun;
-  	$oRetorno->pc01_descrmater = $oDadoItem->pc01_descrmater;
-  	$oRetorno->nota_fiscal     = urlencode($oDadoItem->nota_fiscal);
-  	$oRetorno->ordem_compra    = $oDadoItem->ordem_compra;
+    $oDadoItem                 = db_utils::fieldsMemory($rsBuscaDadosBem, 0);
+    $oRetorno->e69_codnota     = $oDadoItem->e69_codnota;
+    $oRetorno->e69_dtnota      = $oDadoItem->e69_dtnota;
+    $oRetorno->e69_numemp      = $oDadoItem->e69_numemp;
+    $oRetorno->e60_numcgm      = $oDadoItem->e60_numcgm;
+    $oRetorno->z01_nome        = $oDadoItem->z01_nome;
+    $oRetorno->e62_vlrun       = $oDadoItem->e62_vlrun;
+    $oRetorno->pc01_descrmater = $oDadoItem->pc01_descrmater;
+    $oRetorno->nota_fiscal     = urlencode($oDadoItem->nota_fiscal);
+    $oRetorno->ordem_compra    = $oDadoItem->ordem_compra;
 
-  break;
+    break;
 
   case 'verificaVinculoBens':
 
@@ -530,10 +532,12 @@ switch ($oParam->exec){
   case "getCodigoDoItemNaNota":
 
     $oDaoBensEmpNotaItem = new cl_bensempnotaitem();
-    $sSqlBuscaItem       = $oDaoBensEmpNotaItem->sql_query_file(null,
-                                                                "e136_empnotaitem",
-                                                                null,
-                                                                "e136_bens = {$oParam->iCodigoBem}");
+    $sSqlBuscaItem       = $oDaoBensEmpNotaItem->sql_query_file(
+      null,
+      "e136_empnotaitem",
+      null,
+      "e136_bens = {$oParam->iCodigoBem}"
+    );
     $rsBuscaItem = $oDaoBensEmpNotaItem->sql_record($sSqlBuscaItem);
     $oRetorno->lEmpenhoVinculado = false;
     if ($oDaoBensEmpNotaItem->numrows > 0) {
@@ -544,171 +548,166 @@ switch ($oParam->exec){
 
     break;
 
-    case 'adicionarFoto':
-        try{
-            if(isset($oParam->iLote) && $oParam->iLote != ''){
-                $oDaoBemLote  = db_utils::getDao('benslote');
-                $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.$oParam->iLote);
-                $rsBemLote = $oDaoBemLote->sql_record($sql);
+  case 'adicionarFoto':
+    try {
+      if (isset($oParam->iLote) && $oParam->iLote != '') {
+        $oDaoBemLote  = db_utils::getDao('benslote');
+        $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem', 't43_codlote = ' . $oParam->iLote);
+        $rsBemLote = $oDaoBemLote->sql_record($sql);
 
-                if($oDaoBemLote->numrows > 0){
-                    for($cont=0;$cont<$oDaoBemLote->numrows;$cont++){
-                        $codigoBem = db_utils::fieldsMemory($rsBemLote, $cont)->t52_bem;
-                        $oBem = new Bem($codigoBem);
-                        db_inicio_transacao();
-                        $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
-                        db_fim_transacao(false);
-                    }
-                    unlink($oParam->arquivo);
-                  $oRetorno->status = 1;
-                }
-
-            }elseif (isset($oParam->iPlaca) && $oParam->iPlaca != ''){
-              $sql = 'select t43_codlote from bensplaca join benslote on t43_bem = t41_bem where t41_placaseq = '.$oParam->iPlaca;
-              $rsBemPlaca = db_query($sql);
-              $oDaoBemLote  = db_utils::getDao('benslote');
-              $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.db_utils::fieldsMemory($rsBemPlaca, 0)->t43_codlote);
-              $rsBemLote = $oDaoBemLote->sql_record($sql);
-
-              if(pg_num_rows($rsBemLote) > 0){
-                for($cont=0;$cont<pg_num_rows($rsBemLote);$cont++){
-                  $codigoBem = db_utils::fieldsMemory($rsBemLote, $cont)->t52_bem;
-                  $oBem = new Bem($codigoBem);
-                  db_inicio_transacao();
-                  $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
-                  db_fim_transacao(false);
-                }
-                unlink($oParam->arquivo);
-                $oRetorno->status = 1;
-              }
-            }
-            else{
-                $oBem = new Bem($oParam->iBem);
-                db_inicio_transacao();
-                $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
-                $oRetorno->status = 1;
-                unlink($oParam->arquivo);
-                db_fim_transacao(false);
-            }
-        }catch (Exception $eErro){
-            db_fim_transacao(true);
-            $oRetorno->status = 2;
-            $oRetorno->message = urlencode($eErro->getMessage());
-        }
-
-        break;
-
-    case 'getFotos':
-        if(isset($oParam->iBem) && $oParam->iBem ){
-          $codigoBem = $oParam->iBem;
-        }
-        elseif(isset($oParam->iLote) && $oParam->iLote){
-          $oDaoBemLote  = db_utils::getDao('benslote');
-          $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.$oParam->iLote);
-          $rsBemLote = $oDaoBemLote->sql_record($sql);
-          $codigoBem = db_utils::fieldsMemory($rsBemLote, 0)->t52_bem;
-        }else{
-          $sql = 'select t43_codlote from bensplaca join benslote on t43_bem = t41_bem where t41_placaseq = '.$oParam->iPlaca;
-          $rsBemPlaca = db_query($sql);
-          $oDaoBemLote  = db_utils::getDao('benslote');
-          $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.db_utils::fieldsMemory($rsBemPlaca, 0)->t43_codlote);
-          $rsBemLote = $oDaoBemLote->sql_record($sql);
-          $codigoBem = db_utils::fieldsMemory($rsBemLote, 0)->t52_bem;
-        }
-
-        $oBem   = new Bem($codigoBem);
-        $aFotos = $oBem->getFotos();
-        $oRetorno->itens = $aFotos;
-
-        break;
-
-    case 'excluirFoto':
-
-        $oBem = new Bem($oParam->iBem);
-        try {
-
+        if ($oDaoBemLote->numrows > 0) {
+          for ($cont = 0; $cont < $oDaoBemLote->numrows; $cont++) {
+            $codigoBem = db_utils::fieldsMemory($rsBemLote, $cont)->t52_bem;
+            $oBem = new Bem($codigoBem);
             db_inicio_transacao();
-            $oBem->excluirFoto($oParam->iFoto);
-            $oRetorno->status = 1;
-
+            $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
             db_fim_transacao(false);
-        } catch (Exception $eErro) {
-
-            db_fim_transacao(true);
-            $oRetorno->status = 2;
-            $oRetorno->message = urlencode($eErro->getMessage());
+          }
+          unlink($oParam->arquivo);
+          $oRetorno->status = 1;
         }
-        break ;
+      } elseif (isset($oParam->iPlaca) && $oParam->iPlaca != '') {
+        $sql = 'select t43_codlote from bensplaca join benslote on t43_bem = t41_bem where t41_placaseq = ' . $oParam->iPlaca;
+        $rsBemPlaca = db_query($sql);
+        $oDaoBemLote  = db_utils::getDao('benslote');
+        $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem', 't43_codlote = ' . db_utils::fieldsMemory($rsBemPlaca, 0)->t43_codlote);
+        $rsBemLote = $oDaoBemLote->sql_record($sql);
 
-    case 'alterarFoto':
-
-        $oBem = new Bem($oParam->iBem);
-        try {
-
+        if (pg_num_rows($rsBemLote) > 0) {
+          for ($cont = 0; $cont < pg_num_rows($rsBemLote); $cont++) {
+            $codigoBem = db_utils::fieldsMemory($rsBemLote, $cont)->t52_bem;
+            $oBem = new Bem($codigoBem);
             db_inicio_transacao();
-            $oBem->alterarFoto($oParam->iFoto, $oParam->lPrincipal, $oParam->lAtiva);
-            $oRetorno->status = 1;
+            $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
             db_fim_transacao(false);
-        } catch (Exception $eErro) {
-
-            db_fim_transacao(true);
-            $oRetorno->status = 2;
-            $oRetorno->message = urlencode($eErro->getMessage());
+          }
+          unlink($oParam->arquivo);
+          $oRetorno->status = 1;
         }
-        break ;
-
-
-    case 'excluiTermoGuarda':
-
+      } else {
+        $oBem = new Bem($oParam->iBem);
+        db_inicio_transacao();
+        $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
         $oRetorno->status = 1;
-        $clbensguardaitemdev = db_utils::getDao('bensguardaitemdev');
-        $clbensguardaitem = db_utils::getDao('bensguardaitem');
-        $sSqlGuardaDev = $clbensguardaitemdev->sql_query('', 'count(*)', '', 't21_codigo = '. $oParam->t21_codigo);
-        $rsGuardaDev = $clbensguardaitemdev->sql_record($sSqlGuardaDev);
+        unlink($oParam->arquivo);
+        db_fim_transacao(false);
+      }
+    } catch (Exception $eErro) {
+      db_fim_transacao(true);
+      $oRetorno->status = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+    }
 
-        $iLinhas = db_utils::fieldsMemory($rsGuardaDev, 0)->count;
-        $sqlerro = false;
-        
-        if($iLinhas){
-            $sqlerro = true;
-            $erro_msg = 'Exclusão não efetuada. Já existe devolução para essa guarda!';
-        }else{
+    break;
 
-            $clbensguardaitem->excluir('', "t22_bensguarda = $oParam->t21_codigo");
-            
-            if ($clbensguardaitem->erro_status == 0) {
-                $sqlerro = true;
-            }
+  case 'getFotos':
+    if (isset($oParam->iBem) && $oParam->iBem) {
+      $codigoBem = $oParam->iBem;
+    } elseif (isset($oParam->iLote) && $oParam->iLote) {
+      $oDaoBemLote  = db_utils::getDao('benslote');
+      $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem', 't43_codlote = ' . $oParam->iLote);
+      $rsBemLote = $oDaoBemLote->sql_record($sql);
+      $codigoBem = db_utils::fieldsMemory($rsBemLote, 0)->t52_bem;
+    } else {
+      $sql = 'select t43_codlote from bensplaca join benslote on t43_bem = t41_bem where t41_placaseq = ' . $oParam->iPlaca;
+      $rsBemPlaca = db_query($sql);
+      $oDaoBemLote  = db_utils::getDao('benslote');
+      $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem', 't43_codlote = ' . db_utils::fieldsMemory($rsBemPlaca, 0)->t43_codlote);
+      $rsBemLote = $oDaoBemLote->sql_record($sql);
+      $codigoBem = db_utils::fieldsMemory($rsBemLote, 0)->t52_bem;
+    }
 
-        }
+    $oBem   = new Bem($codigoBem);
+    $aFotos = $oBem->getFotos();
+    $oRetorno->itens = $aFotos;
 
-        if(!$sqlerro){
-            $clbensguarda = db_utils::getDao('bensguarda');
-            $clbensguarda->excluir($oParam->t21_codigo);
+    break;
 
-            if ($clbensguarda->erro_status == 0) {
-                $sqlerro = true;
-            }
+  case 'excluirFoto':
 
-            $erro_msg = $clbensguarda->erro_msg;
+    $oBem = new Bem($oParam->iBem);
+    try {
 
-        }
-        
-        if($sqlerro){
-            $oRetorno->status = 2;
-        }
+      db_inicio_transacao();
+      $oBem->excluirFoto($oParam->iFoto);
+      $oRetorno->status = 1;
 
-        $oRetorno->msg = urlencode($erro_msg);
+      db_fim_transacao(false);
+    } catch (Exception $eErro) {
 
-        break;
+      db_fim_transacao(true);
+      $oRetorno->status = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+    }
+    break;
 
+  case 'alterarFoto':
+
+    $oBem = new Bem($oParam->iBem);
+    try {
+
+      db_inicio_transacao();
+      $oBem->alterarFoto($oParam->iFoto, $oParam->lPrincipal, $oParam->lAtiva);
+      $oRetorno->status = 1;
+      db_fim_transacao(false);
+    } catch (Exception $eErro) {
+
+      db_fim_transacao(true);
+      $oRetorno->status = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+    }
+    break;
+
+
+  case 'excluiTermoGuarda':
+
+    $oRetorno->status = 1;
+    $clbensguardaitemdev = db_utils::getDao('bensguardaitemdev');
+    $clbensguardaitem = db_utils::getDao('bensguardaitem');
+    $sSqlGuardaDev = $clbensguardaitemdev->sql_query('', 'count(*)', '', 't21_codigo = ' . $oParam->t21_codigo);
+    $rsGuardaDev = $clbensguardaitemdev->sql_record($sSqlGuardaDev);
+
+    $iLinhas = db_utils::fieldsMemory($rsGuardaDev, 0)->count;
+    $sqlerro = false;
+
+    if ($iLinhas) {
+      $sqlerro = true;
+      $erro_msg = 'Exclusão não efetuada. Já existe devolução para essa guarda!';
+    } else {
+
+      $clbensguardaitem->excluir('', "t22_bensguarda = $oParam->t21_codigo");
+
+      if ($clbensguardaitem->erro_status == 0) {
+        $sqlerro = true;
+      }
+    }
+
+    if (!$sqlerro) {
+      $clbensguarda = db_utils::getDao('bensguarda');
+      $clbensguarda->excluir($oParam->t21_codigo);
+
+      if ($clbensguarda->erro_status == 0) {
+        $sqlerro = true;
+      }
+
+      $erro_msg = $clbensguarda->erro_msg;
+    }
+
+    if ($sqlerro) {
+      $oRetorno->status = 2;
+    }
+
+    $oRetorno->msg = urlencode($erro_msg);
+
+    break;
 }
 
 /**
  * @param $iCodigoBem
  * @return stdClass
  */
-function buscaDadosBem($iCodigoBem) {
+function buscaDadosBem($iCodigoBem)
+{
 
   $oBem            = new Bem($iCodigoBem);
   $oDadosBem       = new stdClass();
@@ -789,11 +788,10 @@ function buscaDadosBem($iCodigoBem) {
   $oDadosBem->hasDepreciacao = false;
 
   if (hasDepreciacaoIniciada($oBem->getCodigoBem())) {
-  	$oDadosBem->hasDepreciacao = true;
+    $oDadosBem->hasDepreciacao = true;
   }
 
   return $oDadosBem;
-
 }
 
 /**
@@ -801,7 +799,8 @@ function buscaDadosBem($iCodigoBem) {
  * Busca Descrição da Situação
  * @param integer $iCodigoSituacao
  */
-function buscaDescricaoSituacao($iCodigoSituacao) {
+function buscaDescricaoSituacao($iCodigoSituacao)
+{
 
   $sSituacao    = null;
   $oDaoSituacao = db_utils::getDao("situabens");
@@ -819,7 +818,8 @@ function buscaDescricaoSituacao($iCodigoSituacao) {
  * Busca Descrição do Departamento
  * @param integer $iCodigoDepartamento
  */
-function buscaDescricaoDepartamento($iCodigoDepartamento) {
+function buscaDescricaoDepartamento($iCodigoDepartamento)
+{
 
   $sDepart    = null;
   $oDaoDepart = db_utils::getDao("db_depart");
@@ -839,12 +839,13 @@ function buscaDescricaoDepartamento($iCodigoDepartamento) {
  * @param Object  $oPlacaBem
  * @param String  $sParam
  */
-function buscaSequencia($iParametroPlaca, $oPlacaBem, $oRetorno, $sParam = null) {
+function buscaSequencia($iParametroPlaca, $oPlacaBem, $oRetorno, $sParam = null)
+{
 
   $oPlaca               = new stdClass();
   $oPlaca->bloqueia     = true;
   $oPlaca->parametro    = $iParametroPlaca;
-  if($iParametroPlaca == 3) {
+  if ($iParametroPlaca == 3) {
     $oPlaca->bloqueia = false;
   }
   try {
@@ -867,9 +868,10 @@ function buscaSequencia($iParametroPlaca, $oPlacaBem, $oRetorno, $sParam = null)
  * Retorna um objeto com mês e ano ou false
  * @return object|boolean
  */
-function getUltimoMesAnoHistoricoCalculoDepreciacao ($lTipoManual = false) {
+function getUltimoMesAnoHistoricoCalculoDepreciacao($lTipoManual = false)
+{
 
-	$oDaoHistoricoCalculo    = db_utils::getDao("benshistoricocalculo");
+  $oDaoHistoricoCalculo    = db_utils::getDao("benshistoricocalculo");
   $sWhereHistoricoCalculo  = " t57_ano = (select max(t57_ano)              ";
   $sWhereHistoricoCalculo .= "                   from benshistoricocalculo ";
   $sWhereHistoricoCalculo .= "	  				  where t57_processado = true    ";
@@ -879,68 +881,75 @@ function getUltimoMesAnoHistoricoCalculoDepreciacao ($lTipoManual = false) {
   $sWhereHistoricoCalculo .= " and t57_tipocalculo = 1                  ";
   $sWhereHistoricoCalculo .= " and t57_instituicao = " . db_getsession("DB_instit");
   if ($lTipoManual) {
-  	$sWhereHistoricoCalculo .= " and t57_tipoprocessamento = 2";
+    $sWhereHistoricoCalculo .= " and t57_tipoprocessamento = 2";
   }
   $sWhereHistoricoCalculo .= " group by t57_ano 													 ";
 
-	$sSqlHistoricoCalculo    = $oDaoHistoricoCalculo->sql_query_file(null,
-																																	 "max(t57_mes) as mes, t57_ano",
-																																	 null,
-																																	 $sWhereHistoricoCalculo);
-	$rsHistoricoCalculo      = $oDaoHistoricoCalculo->sql_record($sSqlHistoricoCalculo);
+  $sSqlHistoricoCalculo    = $oDaoHistoricoCalculo->sql_query_file(
+    null,
+    "max(t57_mes) as mes, t57_ano",
+    null,
+    $sWhereHistoricoCalculo
+  );
+  $rsHistoricoCalculo      = $oDaoHistoricoCalculo->sql_record($sSqlHistoricoCalculo);
 
-	if ($oDaoHistoricoCalculo->numrows > 0) {
-		return db_utils::fieldsMemory($rsHistoricoCalculo, 0);
-	}
-	return false;
+  if ($oDaoHistoricoCalculo->numrows > 0) {
+    return db_utils::fieldsMemory($rsHistoricoCalculo, 0);
+  }
+  return false;
 }
 
 /**
  * Verifica se a depreciação já foi inicializada
  */
-function hasDepreciacaoIniciada($iCodigoBem = null, $lTipoManual = false) {
+function hasDepreciacaoIniciada($iCodigoBem = null, $lTipoManual = false)
+{
 
-	$oDaoHistoricoCalculo    = db_utils::getDao("benshistoricocalculo");
-	$sWhereCalculo           = "t57_instituicao = ".db_getsession("DB_instit");
-	if (!empty($iCodigoBem)) {
-		$sWhereCalculo .= " and t58_bens = {$iCodigoBem}";
-	}
+  $oDaoHistoricoCalculo    = db_utils::getDao("benshistoricocalculo");
+  $sWhereCalculo           = "t57_instituicao = " . db_getsession("DB_instit");
+  if (!empty($iCodigoBem)) {
+    $sWhereCalculo .= " and t58_bens = {$iCodigoBem}";
+  }
 
-	if ($lTipoManual) {
-		$sWhereCalculo .= " and t57_tipoprocessamento = 2";
-	}
+  if ($lTipoManual) {
+    $sWhereCalculo .= " and t57_tipoprocessamento = 2";
+  }
 
-	$sSqlCalculosInstituicao = $oDaoHistoricoCalculo->sql_query_historico_depreciacao_iniciada(null,
-									                                                                           "t57_sequencial",
-									                                                                           "t57_sequencial limit 1",
-									                                                                           $sWhereCalculo);
+  $sSqlCalculosInstituicao = $oDaoHistoricoCalculo->sql_query_historico_depreciacao_iniciada(
+    null,
+    "t57_sequencial",
+    "t57_sequencial limit 1",
+    $sWhereCalculo
+  );
 
-	$rsCalculoBem = $oDaoHistoricoCalculo->sql_record($sSqlCalculosInstituicao);
-	if ($oDaoHistoricoCalculo->numrows > 0) {
-		return true;
-	}
-	return false;
+  $rsCalculoBem = $oDaoHistoricoCalculo->sql_record($sSqlCalculosInstituicao);
+  if ($oDaoHistoricoCalculo->numrows > 0) {
+    return true;
+  }
+  return false;
 }
 
 /**
  * Retorna uma String com a data da implantação da depreciação ou retorna null.
  * @return string|NULL
  */
-function getDataImplantacaoDepreciacao() {
+function getDataImplantacaoDepreciacao()
+{
 
-	$oDaoImplantacaoDepreciacao   = db_utils::getDao("cfpatriinstituicao");
-	$sWhereImplantacaoDepreciacao = "t59_instituicao = " . db_getsession("DB_instit");
-	$sSqlImplantacaoDepreciacao   = $oDaoImplantacaoDepreciacao->sql_query_file(null,
-	    																																				"t59_dataimplanatacaodepreciacao",
-																																							null,
-																																							$sWhereImplantacaoDepreciacao);
-	$rsImplantacaoDepreciacao     = $oDaoImplantacaoDepreciacao->sql_record($sSqlImplantacaoDepreciacao);
+  $oDaoImplantacaoDepreciacao   = db_utils::getDao("cfpatriinstituicao");
+  $sWhereImplantacaoDepreciacao = "t59_instituicao = " . db_getsession("DB_instit");
+  $sSqlImplantacaoDepreciacao   = $oDaoImplantacaoDepreciacao->sql_query_file(
+    null,
+    "t59_dataimplanatacaodepreciacao",
+    null,
+    $sWhereImplantacaoDepreciacao
+  );
+  $rsImplantacaoDepreciacao     = $oDaoImplantacaoDepreciacao->sql_record($sSqlImplantacaoDepreciacao);
 
-	if ($oDaoImplantacaoDepreciacao->numrows > 0) {
-		return db_utils::fieldsMemory($rsImplantacaoDepreciacao, 0)->t59_dataimplanatacaodepreciacao;
-	}
-	return null;
+  if ($oDaoImplantacaoDepreciacao->numrows > 0) {
+    return db_utils::fieldsMemory($rsImplantacaoDepreciacao, 0)->t59_dataimplanatacaodepreciacao;
+  }
+  return null;
 }
 
 echo $oJson->encode($oRetorno);
-?>
