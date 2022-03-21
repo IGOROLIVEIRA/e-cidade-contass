@@ -51,7 +51,7 @@ if (isset($this->iPlanoPacto) && $this->iPlanoPacto != "") {
   $this->objpdf->text(142, $xlin + 2, ': ' . substr($this->iPlanoPacto . "-" . $this->SdescrPacto, 0, 40));
 }
 $this->objpdf->Setfont('Arial', 'B', 9);
-$this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 25);
+$this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 22);
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
 $this->objpdf->Setfont('Arial', '', 9);
