@@ -73,27 +73,31 @@ $pdf->SetLeftMargin(5);
 $pdf->Cell(150, 5, $valor_inserido, "", 1, "R", 0);
 $pdf->SetFont('Times', 'b', 9);
 
-// Textos do cheque
+// Textos do cheque 
 
 for($count = strlen($text_transformado); $count < 160; $count++){
   if(strlen($text_transformado) < 160)
     $text_transformado .= ' X';
 }
-
-$pdf->MultiCell(165, 6, $text_transformado, 0, "L", 0, 20);
+if($munic == 'SERRANOPOLIS DE MINAS') 
+  $pdf->MultiCell(165, 6, $text_transformado, 0, "L", 0, 21);
+else
+  $pdf->MultiCell(165, 6, $text_transformado, 0, "L", 0, 20);
 $pdf->ln(1);
 $pdf->setx(6);
 $pdf->Cell(0 , 6, $credor, "", 1, "L", 0);
 
 // Rodapé do cheque
-$pdf->setXY(72, 33);
-
+if($munic == 'SERRANOPOLIS DE MINAS') 
+  $pdf->setXY(63, 33); 
+else
+  $pdf->setXY(72, 33); 
 $size_munic = strlen($munic);
 $pdf->Cell(15, 5, $munic,"", 0,"L", 0);
 $pdf->setXY(100, 33);
 $pdf->Cell(13, 5, $dia_emissao, "", 0, "R", 0);
-$pdf->setx(115);
-$pdf->Cell(26, 5, $mes_emissao, "", 0, "C", 0);
+$pdf->setx(115);  
+$pdf->Cell(26, 5, strtoupper($mes_emissao), "", 0, "C", 0);
 $pdf->Cell(26, 5, "$ano_emissao", "", 0,"R", 0);
 
 $pdf->Output();

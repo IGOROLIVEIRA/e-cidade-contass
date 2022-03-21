@@ -31,9 +31,9 @@ class cl_bodcasp302021 {
    var $si203_vlreservacontingen = 0;
    var $si203_vlreservarpps = 0;
    var $si203_vlamortizadiviintermob = 0;
-   var $si203_vlamortizaoutrasdivinter = 0;
+   var $si203_vlamortizadividacontratualinternas = 0;
    var $si203_vlamortizadivextmob = 0;
-   var $si203_vlamortizaoutrasdivext = 0;
+   var $si203_vlamortizadividacontratualexternas = 0;
    var $si203_vlsuperavit = 0;
    var $si203_vltotalquadrodespesa = 0;
    // cria propriedade com as variaveis do arquivo
@@ -53,9 +53,9 @@ class cl_bodcasp302021 {
                  si203_vlreservacontingen = float4 = si203_vlreservacontingen
                  si203_vlreservarpps = float4 = si203_vlreservarpps
                  si203_vlamortizadiviintermob = float4 = si203_vlamortizadiviintermob
-                 si203_vlamortizaoutrasdivinter = float4 = si203_vlamortizaoutrasdivinter
+                 si203_vlamortizadividacontratualinternas = float4 = si203_vlamortizadividacontratualinternas
                  si203_vlamortizadivextmob = float4 = si203_vlamortizadivextmob
-                 si203_vlamortizaoutrasdivext = float4 = si203_vlamortizaoutrasdivext
+                 si203_vlamortizadividacontratualexternas = float4 = si203_vlamortizadividacontratualexternas
                  si203_vlsuperavit = float4 = si203_vlsuperavit
                  si203_vltotalquadrodespesa = float4 = si203_vltotalquadrodespesa
                  ";
@@ -92,9 +92,9 @@ class cl_bodcasp302021 {
        $this->si203_vlreservacontingen = ($this->si203_vlreservacontingen == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vlreservacontingen"]:$this->si203_vlreservacontingen);
        $this->si203_vlreservarpps = ($this->si203_vlreservarpps == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vlreservarpps"]:$this->si203_vlreservarpps);
        $this->si203_vlamortizadiviintermob = ($this->si203_vlamortizadiviintermob == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vlamortizadiviintermob"]:$this->si203_vlamortizadiviintermob);
-       $this->si203_vlamortizaoutrasdivinter = ($this->si203_vlamortizaoutrasdivinter == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vlamortizaoutrasdivinter"]:$this->si203_vlamortizaoutrasdivinter);
+       $this->si203_vlamortizadividacontratualinternas = ($this->si203_vlamortizadividacontratualinternas == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vlamortizadividacontratualinternas"]:$this->si203_vlamortizadividacontratualinternas);
        $this->si203_vlamortizadivextmob = ($this->si203_vlamortizadivextmob == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vlamortizadivextmob"]:$this->si203_vlamortizadivextmob);
-       $this->si203_vlamortizaoutrasdivext = ($this->si203_vlamortizaoutrasdivext == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vlamortizaoutrasdivext"]:$this->si203_vlamortizaoutrasdivext);
+       $this->si203_vlamortizadividacontratualexternas = ($this->si203_vlamortizadividacontratualexternas == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vlamortizadividacontratualexternas"]:$this->si203_vlamortizadividacontratualexternas);
        $this->si203_vlsuperavit = ($this->si203_vlsuperavit == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vlsuperavit"]:$this->si203_vlsuperavit);
        $this->si203_vltotalquadrodespesa = ($this->si203_vltotalquadrodespesa == ""?@$GLOBALS["HTTP_POST_VARS"]["si203_vltotalquadrodespesa"]:$this->si203_vltotalquadrodespesa);
      }else{
@@ -146,14 +146,14 @@ class cl_bodcasp302021 {
      if (empty($this->si203_vlamortizadiviintermob)) {
         $this->si203_vlamortizadiviintermob = 0;
      }
-     if (empty($this->si203_vlamortizaoutrasdivinter)) {
-        $this->si203_vlamortizaoutrasdivinter = 0;
+     if (empty($this->si203_vlamortizadividacontratualinternas)) {
+        $this->si203_vlamortizadividacontratualinternas = 0;
      }
      if (empty($this->si203_vlamortizadivextmob)) {
         $this->si203_vlamortizadivextmob = 0;
      }
-     if (empty($this->si203_vlamortizaoutrasdivext)) {
-        $this->si203_vlamortizaoutrasdivext = 0;
+     if (empty($this->si203_vlamortizadividacontratualexternas)) {
+        $this->si203_vlamortizadividacontratualexternas = 0;
      }
      if (empty($this->si203_vlsuperavit)) {
         $this->si203_vlsuperavit = 0;
@@ -206,9 +206,9 @@ class cl_bodcasp302021 {
                                       ,si203_vlreservacontingen
                                       ,si203_vlreservarpps
                                       ,si203_vlamortizadiviintermob
-                                      ,si203_vlamortizaoutrasdivinter
+                                      ,si203_vlamortizadividacontratualinternas
                                       ,si203_vlamortizadivextmob
-                                      ,si203_vlamortizaoutrasdivext
+                                      ,si203_vlamortizadividacontratualexternas
                                       ,si203_vlsuperavit
                                       ,si203_vltotalquadrodespesa
                        )
@@ -228,9 +228,9 @@ class cl_bodcasp302021 {
                                ,$this->si203_vlreservacontingen
                                ,$this->si203_vlreservarpps
                                ,$this->si203_vlamortizadiviintermob
-                               ,$this->si203_vlamortizaoutrasdivinter
+                               ,$this->si203_vlamortizadividacontratualinternas
                                ,$this->si203_vlamortizadivextmob
-                               ,$this->si203_vlamortizaoutrasdivext
+                               ,$this->si203_vlamortizadividacontratualexternas
                                ,$this->si203_vlsuperavit
                                ,$this->si203_vltotalquadrodespesa
                       )";
@@ -423,12 +423,12 @@ class cl_bodcasp302021 {
          return false;
        }
      }
-     if(trim($this->si203_vlamortizaoutrasdivinter)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si203_vlamortizaoutrasdivinter"])){
-       $sql  .= $virgula." si203_vlamortizaoutrasdivinter = $this->si203_vlamortizaoutrasdivinter ";
+     if(trim($this->si203_vlamortizadividacontratualinternas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si203_vlamortizadividacontratualinternas"])){
+       $sql  .= $virgula." si203_vlamortizadividacontratualinternas = $this->si203_vlamortizadividacontratualinternas ";
        $virgula = ",";
-       if(trim($this->si203_vlamortizaoutrasdivinter) == null ){
-         $this->erro_sql = " Campo si203_vlamortizaoutrasdivinter não informado.";
-         $this->erro_campo = "si203_vlamortizaoutrasdivinter";
+       if(trim($this->si203_vlamortizadividacontratualinternas) == null ){
+         $this->erro_sql = " Campo si203_vlamortizadividacontratualinternas não informado.";
+         $this->erro_campo = "si203_vlamortizadividacontratualinternas";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -449,12 +449,12 @@ class cl_bodcasp302021 {
          return false;
        }
      }
-     if(trim($this->si203_vlamortizaoutrasdivext)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si203_vlamortizaoutrasdivext"])){
-       $sql  .= $virgula." si203_vlamortizaoutrasdivext = $this->si203_vlamortizaoutrasdivext ";
+     if(trim($this->si203_vlamortizadividacontratualexternas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si203_vlamortizadividacontratualexternas"])){
+       $sql  .= $virgula." si203_vlamortizadividacontratualexternas = $this->si203_vlamortizadividacontratualexternas ";
        $virgula = ",";
-       if(trim($this->si203_vlamortizaoutrasdivext) == null ){
-         $this->erro_sql = " Campo si203_vlamortizaoutrasdivext não informado.";
-         $this->erro_campo = "si203_vlamortizaoutrasdivext";
+       if(trim($this->si203_vlamortizadividacontratualexternas) == null ){
+         $this->erro_sql = " Campo si203_vlamortizadividacontratualexternas não informado.";
+         $this->erro_campo = "si203_vlamortizadividacontratualexternas";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

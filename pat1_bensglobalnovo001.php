@@ -53,69 +53,151 @@ if (USE_PCASP) {
 ?>
 
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <?
   db_app::load("estilos.css, grid.style.css");
   db_app::load("scripts.js, prototype.js, strings.js, DBToogle.widget.js, dbmessageBoard.widget.js, widgets/messageboard.widget.js");
   db_app::load("classes/DBViewNotasPendentes.classe.js, widgets/windowAux.widget.js, datagrid.widget.js");
-?>
-<style type="text/css">
-  .bold {
-    font-weight: bold;
-  }
-  div#fieldsetInclusaoBensGlobal table {
-    border-collapse: collapse;
-  }
-  div#fieldsetInclusaoBensGlobal table tr td{
-    padding-top:4px;
-    white-space:nowrap;
-  }
-  div#fieldsetInclusaoBensGlobal table tr td:first-child{
-    text-align: left;
-    width: 130px;
-  }
-  /* pega a segunda td */
-  div#fieldsetInclusaoBensGlobal table tr td + td{
-    
-  }
-  /* pega a terceira td */
-  div#fieldsetInclusaoBensGlobal table tr td + td + td{
-    text-align: right;
-    padding-left: 5px;
-    width: 100px;
-  }
-  div#fieldsetInclusaoBensGlobal table tr td + td + td + td{
-    text-align: left;
-    width: 150px;
-  }
-  .ancora, legend {
-    font-weight: bold;
-  }
-  .leitura { 
-    background-color: #DEB887; 
-  } 
-</style>
+  ?>
+  <style type="text/css">
+    .bold {
+      font-weight: bold;
+    }
+
+    div#fieldsetInclusaoBensGlobal table {
+      border-collapse: collapse;
+    }
+
+    div#fieldsetInclusaoBensGlobal table tr td {
+      padding-top: 4px;
+      white-space: nowrap;
+    }
+
+    div#fieldsetInclusaoBensGlobal table tr td:first-child {
+      text-align: left;
+      width: 130px;
+    }
+
+    /* pega a segunda td */
+    div#fieldsetInclusaoBensGlobal table tr td+td {}
+
+    /* pega a terceira td */
+    div#fieldsetInclusaoBensGlobal table tr td+td+td {
+      text-align: right;
+      padding-left: 5px;
+      width: 100px;
+    }
+
+    div#fieldsetInclusaoBensGlobal table tr td+td+td+td {
+      text-align: left;
+      width: 150px;
+    }
+
+    .ancora,
+    legend {
+      font-weight: bold;
+    }
+
+    .leitura {
+      background-color: #DEB887;
+    }
+
+    div.header-container table.table-header tr td#col1.table_header.cell {
+      width: 120px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell0.linhagrid.cell {
+      width: 120px !important;
+
+    }
+
+    div.header-container table.table-header tr td#col2.table_header.cell {
+      width: 90px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell1.linhagrid.cell {
+      width: 90px !important;
+
+    }
+
+
+    div.header-container table.table-header tr td#col3.table_header.cell {
+      width: 80px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell2.linhagrid.cell {
+      width: 80px !important;
+
+    }
+
+
+    div.header-container table.table-header tr td#col4.table_header.cell {
+      width: 255px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell3.linhagrid.cell {
+      width: 255px !important;
+
+    }
+
+
+    div.header-container table.table-header tr td#col5.table_header.cell {
+      width: 65px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell4.linhagrid.cell {
+      width: 65px !important;
+
+    }
+
+
+    div.header-container table.table-header tr td#col6.table_header.cell {
+      width: 130px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell5.linhagrid.cell {
+      width: 130px !important;
+
+    }
+
+    div.header-container table.table-header tr td#col7.table_header.cell {
+      width: 110px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell6.linhagrid.cell {
+      width: 110px !important;
+
+    }
+  </style>
 </head>
-<body bgcolor="#CCCCCC" onload="js_carregaDadosNota(); js_carregaDadosForm(<?=$db_opcao?>);" >
-<div style="margin-top: 25px;" ></div>
-<center>
-  <div align="center" style="width: 720px; display: block;">
-    <?
-      include ("forms/db_frm_bensglobalnovo.php");
-    ?>
-  </div>
-</center>
+
+<body bgcolor="#CCCCCC" onload="js_carregaDadosNota(); js_carregaDadosForm(<?= $db_opcao ?>);">
+  <div style="margin-top: 25px;"></div>
+  <center>
+    <div align="center" style="width: 720px; display: block;">
+      <?
+      include("forms/db_frm_bensglobalnovo.php");
+      ?>
+    </div>
+  </center>
 </body>
 <script>
-
   var sUrl = window.location.search;
   var oUrl = null;
   var lViewNotasPendentes = true;
   if (sUrl) {
-    
+
     oUrl = js_urlToObject(sUrl);
     if (oUrl.iCodigoEmpNotaItem != "") {
       lViewNotasPendentes = false;
@@ -129,31 +211,33 @@ if (USE_PCASP) {
      */
     function loadDadosBem(oDadosLinha) {
 
-      var iQuantidadeItem    = oDadosLinha.iQuantidadeItem;
+      var iQuantidadeItem = oDadosLinha.iQuantidadeItem;
       var iCodigoEmpNotaItem = oDadosLinha.iCodigoEmpNotaItem;
 
-      var sUrlDireciona      = "";
+      var sUrlDireciona = "";
       if (iQuantidadeItem == 1) {
-        sUrlDireciona  = "pat1_bens001.php?iCodigoEmpNotaItem="+iCodigoEmpNotaItem;
+        sUrlDireciona = "pat1_bens001.php?iCodigoEmpNotaItem=" + iCodigoEmpNotaItem;
       } else {
-        sUrlDireciona  = "pat1_bensglobalnovo001.php?iCodigoEmpNotaItem="+iCodigoEmpNotaItem;
+        sUrlDireciona = "pat1_bensglobalnovo001.php?iCodigoEmpNotaItem=" + iCodigoEmpNotaItem;
       }
 
-      if ( oDBViewNotasPendentes.getLocationGlobal() ) {
+      if (oDBViewNotasPendentes.getLocationGlobal()) {
         window.location = sUrlDireciona;
       } else {
         parent.window.location = sUrlDireciona;
       }
     }
 
-    var oDBViewNotasPendentes = new DBViewNotasPendentes('oDBViewNotasPendentes', <?php echo $lUsaPCASP;?>);
+    var oDBViewNotasPendentes = new DBViewNotasPendentes('oDBViewNotasPendentes', <?php echo $lUsaPCASP; ?>);
     oDBViewNotasPendentes.setTextoRodape("<b>* Dois cliques sob a linha para carregar o bem</b>");
     oDBViewNotasPendentes.setLocationGlobal(true);
     oDBViewNotasPendentes.setCallBackDoubleClick(loadDadosBem);
     oDBViewNotasPendentes.show();
   }
 </script>
+
 </html>
-<?//
+<? //
 //  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-//?>
+//
+?>

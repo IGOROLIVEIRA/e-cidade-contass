@@ -249,9 +249,9 @@ class Caspweb {
                                 substr(o56_elemento,2,6) AS naturezadadespesa,
                                 substr(o56_elemento,8,2) AS itemdespesa,
                                 CASE 
-                                    WHEN substr(o56_elemento,2,2) = '31' THEN '01'
-                                    WHEN substr(o56_elemento,2,2) = '33' THEN '03'
-                                    WHEN substr(o56_elemento,2,2) = '44' THEN '04'
+                                    WHEN substr(o56_elemento,2,2) = '31' and e60_anousu < 2021 THEN '01'
+                                    WHEN substr(o56_elemento,2,2) = '33' and e60_anousu < 2021 THEN '03'
+                                    WHEN substr(o56_elemento,2,2) = '44' and e60_anousu < 2021 THEN '04'
                                     ELSE '00'
                                 END AS fonte,
                                 e60_codemp nroempenho,

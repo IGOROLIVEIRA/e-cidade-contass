@@ -32,42 +32,45 @@
  */
 
 require_once("model/AcordoMovimentacao.model.php");
-class AcordoHomologacao extends AcordoMovimentacao {
+class AcordoHomologacao extends AcordoMovimentacao
+{
 
   /**
    * Tipo da Movimentação
    *
    * @var integer
    */
-	protected $iTipo               = 11;
-	
+  protected $iTipo               = 11;
+
   /**
    * Código do Movimento de Cancelamento
    *
    * @var integer
    */
-	protected $iCodigoCancelamento = 12;
+  protected $iCodigoCancelamento = 12;
 
   /**
    * Método construtor
    * 
    * @param integer $iCodigo
    */
-  public function __construct($iCodigo = null) {
-  	
-  	parent::__construct($iCodigo);
+  public function __construct($iCodigo = null)
+  {
+
+    parent::__construct($iCodigo);
   }
-  
+
   /**
    * Persiste os dados da Acordo Movimentacao na base de dados
    *
    * @return AcordoHomologacao
    */
-  public function save() {
-  	
-  	parent::save();
-  	$oDaoAcordoMovimentacao = db_utils::getDao("acordomovimentacao");
-  	$oDaoAcordo             = db_utils::getDao("acordo");
+  public function save()
+  {
+
+    parent::save();
+    $oDaoAcordoMovimentacao = db_utils::getDao("acordomovimentacao");
+    $oDaoAcordo             = db_utils::getDao("acordo");
     /**
      * Acerta movimentacao corrente para alterar um movimento anterior
      */
@@ -79,41 +82,52 @@ class AcordoHomologacao extends AcordoMovimentacao {
     $rsSqlAcordoMovimentacao    = db_query($sSqlAcordoMovimentacao);
     $iNumRowsAcordoMovimentacao = pg_num_rows($rsSqlAcordoMovimentacao);
     if ($iNumRowsAcordoMovimentacao > 0) {
-      
+
       /**
        * Altera situacao do movimento
        */
       $oAcordoMovimentacao             = db_utils::fieldsMemory($rsSqlAcordoMovimentacao, 0);
       $oDaoAcordo->ac16_sequencial     = $oAcordoMovimentacao->ac10_acordo;
       $oDaoAcordo->ac16_acordosituacao = $oAcordoMovimentacao->ac09_acordosituacao;
-		$rsDataAssinatura = db_query('SELECT ac16_dataassinatura from acordo where ac16_sequencial = '.$oAcordoMovimentacao->ac10_acordo);
-		$oDaoAcordo->ac16_dataassinatura = db_utils::fieldsMemory( $rsDataAssinatura, 0)->ac16_dataassinatura;
+
+      /**
+       * Somo o valor total dos itens e altero na tabela Acordo.
+       * Alteração realizado por que alguns contratos em clientes estavam retornando com valor zerado OC16888.
+       */
+      $sSqlValorTotalAcordo = "SELECT sum(ac20_valortotal) as totalacordo FROM acordoposicao INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+      WHERE ac26_acordo = {$oAcordoMovimentacao->ac10_acordo}";
+
+      $rsValorAcordo = db_query($sSqlValorTotalAcordo);
+      $oDaoAcordo->ac16_valor = db_utils::fieldsMemory($rsValorAcordo, 0)->totalacordo;
+      $rsDataAssinatura = db_query('SELECT ac16_dataassinatura from acordo where ac16_sequencial = ' . $oAcordoMovimentacao->ac10_acordo);
+      $oDaoAcordo->ac16_dataassinatura = db_utils::fieldsMemory($rsDataAssinatura, 0)->ac16_dataassinatura;
       $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);
       if ($oDaoAcordo->erro_status == 0) {
         throw new Exception($oDaoAcordo->erro_msg);
       }
     }
-  	return $this;
+    return $this;
   }
-  
+
   /**
    * Seta o tipo de acordo para a movimentação, alterado para protected para nao poder atribuir um novo valor
    * 
    * @param integer $iTipo
    */
-  public  function setTipo($iTipo) {
-  	$this->iTipo = 11;
+  public  function setTipo($iTipo)
+  {
+    $this->iTipo = 11;
   }
-  
+
   /**
    * Cancela o movimento
    *
    * @return AcordoHomologacao
    */
-  public function cancelar() {
-  	
-  	parent::cancelar();
-  	return $this;
+  public function cancelar()
+  {
+
+    parent::cancelar();
+    return $this;
   }
 }
-?>
