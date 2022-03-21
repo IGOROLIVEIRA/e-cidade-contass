@@ -153,9 +153,7 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
     if (oRetorno.aNotasPendentes.length == 0) {
       //$('db_opcao').disabled = true;
     } else {
-      
       oRetorno.aNotasPendentes.each(function (oNotaPendente, iLinha) {
-        
         var aLinha    = new Array();
             aLinha[0] = oNotaPendente.codigonota;
             aLinha[1] = js_formatar(oNotaPendente.valornota, "f");
@@ -226,7 +224,7 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
 
     oDadosLinha.iCodigoNota         = oGridNotasPendentes.aRows[iLinhaGrid].aCells[0].getContent();
     oDadosLinha.nValorNota          = oGridNotasPendentes.aRows[iLinhaGrid].aCells[1].getContent();
-    oDadosLinha.iNumeroEmpenho      = oGridNotasPendentes.aRows[iLinhaGrid].aCells[8].getContent();
+    oDadosLinha.iNumeroEmpenho      = oGridNotasPendentes.aRows[iLinhaGrid].aCells[9].getContent();
     oDadosLinha.sDescricaoItem      = oGridNotasPendentes.aRows[iLinhaGrid].aCells[3].getContent();
     oDadosLinha.iQuantidadeItem     = oGridNotasPendentes.aRows[iLinhaGrid].aCells[4].getContent();
     oDadosLinha.iCodigoItemPendente = oGridNotasPendentes.aRows[iLinhaGrid].aCells[7].getContent();
