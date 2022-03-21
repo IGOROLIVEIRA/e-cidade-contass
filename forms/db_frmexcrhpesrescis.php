@@ -263,6 +263,8 @@ function js_mostrarhpessoal(chave,chave2,chave3,chave4,chave5,chave6,chave7,chav
     document.form1.rh01_admiss_dia.value = chave2.substring(8,10);
     document.form1.rh02_seqpes.value = chave3;
     document.form1.rh02_codreg.value = chave8;
+    document.form1.rh05_motivo.value = chave13;
+    document.form1.rh173_descricao.value = chave14;
     js_faltas();
   }
 }

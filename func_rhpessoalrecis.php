@@ -212,7 +212,7 @@ if (!isset($pesquisa_chave)) {
           }
       } else {
           if ($pesquisa_chave!=null && $pesquisa_chave!="") {
-//        die($clrhpessoal->sql_query_ferias(null,"*,($sqlres_anter) as rescindido","r30_perai desc"," rh01_regist = $pesquisa_chave $dbwhere"));
+              //die($clrhpessoal->sql_query_ferias(null, "*,($sqlres_anter) as rescindido", "r30_perai desc", " rh01_regist = $pesquisa_chave $dbwhere"));
               $result = $clrhpessoal->sql_record($clrhpessoal->sql_query_ferias(null, "*,($sqlres_anter) as rescindido", "r30_perai desc", " rh01_regist = $pesquisa_chave $dbwhere"));
               if ($clrhpessoal->numrows!=0) {
                   db_fieldsmemory($result, 0);
@@ -222,7 +222,7 @@ if (!isset($pesquisa_chave)) {
                           db_msgbox($retorno);
                       }
                   }
-                  echo "<script>".$funcao_js."('$z01_nome','$rh01_admiss','$rh02_seqpes','$r30_proc1','$r30_proc2','$r30_per1f','$r30_per2f','$rh02_codreg','$rh14_matipe','$rh14_dtvinc','$rh05_recis','$rescindido',false);</script>";
+                  echo "<script>".$funcao_js."('$z01_nome','$rh01_admiss','$rh02_seqpes','$r30_proc1','$r30_proc2','$r30_per1f','$r30_per2f','$rh02_codreg','$rh14_matipe','$rh14_dtvinc','$rh05_recis','$rescindido','$rh173_codigo','$rh173_descricao',false);</script>";
               } else {
                   echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','','','','','','','','','','','',true);</script>";
               }
