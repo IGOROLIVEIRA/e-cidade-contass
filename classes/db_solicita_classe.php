@@ -609,7 +609,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= "      left  join solicitaregistropreco  on  solicita.pc10_numero = solicitaregistropreco.pc54_solicita";
      $sql .= "      left  join pcprocitem   on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
      $sql .= "      left  join liclicitem   on  pcprocitem.pc81_codprocitem = l21_codpcprocitem";
-     $sql .= "      left  join liclicita    on  l21_codliclicita = l20_codigo";
+     $sql .= "      inner  join liclicita    on  l21_codliclicita = l20_codigo";
      $sql .= "      inner join solicitacaotipo  on  solicitacaotipo.pc52_sequencial = solicita.pc10_solicitacaotipo";
      $sql .= "      left  join solicitaanulada  on  solicitaanulada.pc67_solicita = solicita.pc10_numero ";
      $sql2 = "";
