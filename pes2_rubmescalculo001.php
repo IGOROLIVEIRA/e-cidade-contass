@@ -31,17 +31,18 @@ require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once ("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
+require_once("dbforms/db_classesgenericas.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt23');
 $clrotulo->label('DBtxt25');
 $clrotulo->label('DBtxt27');
 $clrotulo->label('DBtxt28');
-$clrotulo->label('rh27_rubric');
 $clrotulo->label('rh27_descr');
 $clrotulo->label('r44_des');
 
 //db_postmemory($HTTP_POST_VARS);
 $oPost = db_utils::postMemory($_POST);
+$geraform = new cl_formulario_rel_pes;
 ?>
 
 <html>
@@ -85,19 +86,23 @@ $oPost = db_utils::postMemory($_POST);
               </td>
             </tr>
             
-            <tr> 
-                <td title="<?=$Trh27_rubric?>"> 
-                  <?
-                  db_ancora(@ $Lrh27_rubric, "js_pesquisarrubric(true);", 1);
-                  ?>
-                </td>
-                <td> 
-                  <?
-                  db_input('rh27_rubric', 8, $Irh27_rubric, true, 'text', 1, " onchange='js_pesquisarrubric(false);'");
-                  db_input('rh27_descr', 30, $Irh27_descr,  true, 'text', 3, '');
-                  ?>
-                </td>
-            </tr>
+            <?
+            $geraform->usarubr = true;
+            $geraform->ru1nome = "rubrica1";
+            $geraform->ru2nome = "rubrica2";
+            $geraform->ru3nome = "selrubri";
+            $geraform->campo_auxilio_rubr = "faixa_rubrica";
+            $geraform->manomes = false;
+      
+
+            $geraform->resumopadrao = "r";
+            $geraform->filtropadrao = "i";
+            $geraform->strngtipores = "r";
+            $geraform->tipofol = true;
+            $geraform->onchpad = true;
+            $geraform->arr_tipofil = Array("i"=>"Intervalo","s"=>"Selecionados");
+            $geraform->gera_form(db_anofolha(), db_mesfolha());
+            ?>
             
             <tr title="Seleção">
               <td>
@@ -121,7 +126,8 @@ $oPost = db_utils::postMemory($_POST);
                                  "c"=>"Complementar",
                                  "d"=>"13o. Salário",
                                  "r"=>"Rescisão",
-                                 "a"=>"Adiantamento");
+                                 "a"=>"Adiantamento",
+                                 "t" => "Todos");
                  
                  if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
                    $aTipos["u"] = "Suplementar"; 
@@ -211,52 +217,6 @@ $oPost = db_utils::postMemory($_POST);
     ?>
   </body>
   <script>
-    /**
-    * Realiza a busca de rubricas, retornando o código e descrição da rubrica escolhida
-    */
-    function js_pesquisarrubric(lMostra) {
-        
-      if ( lMostra) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricas.php?funcao_js=parent.js_mostrarubricas1|rh27_rubric|rh27_descr','Pesquisa',true);
-      } else {
-          
-         if ( $F(rh27_rubric) != '' ) {
-             
-           quantcaracteres = $F(rh27_rubric).length;
-           
-           for ( i=quantcaracteres;i<4;i++ ) {
-             $(rh27_rubric).setValue("0"+$F(rh27_rubric));
-           }
-           
-           js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricas.php?pesquisa_chave='+$F(rh27_rubric)+'&funcao_js=parent.js_mostrarubricas','Pesquisa',false);
-         } else { 
-           $(rh27_descr).setValue(''); 
-         }
-      }
-    }
-
-    /**
-    * Trata o retorno da função js_pesquisarrubric()
-    */
-    function js_mostrarubricas(sChave, lErro) {
-        
-      $(rh27_descr).setValue(sChave);
-      if ( lErro ) {
-          
-        $(rh27_rubric).setValue('');
-        $(rh27_rubric).focus();
-      }
-    }
-
-    /**
-    * Trata o retorno da função js_pesquisarrubric()
-    */
-    function js_mostrarubricas1(sChave1,sChave2){
-        
-      $(rh27_rubric).setValue(sChave1);
-      $(rh27_descr).setValue(sChave2);
-      $(db_iframe_rhrubricas).hide();
-    }
 
     /**
     * Realiza a busca de seleções retornando o código e descrição da rubrica escolhida;
@@ -308,16 +268,23 @@ $oPost = db_utils::postMemory($_POST);
     function js_emite(){
     	  
       var lEmite = true;
-            
-      if ( $F(rh27_rubric) == '' ) {
-          
-        if ( confirm ( "Você escolheu nenhuma rubrica. Imprimir todas ?" ) ) {
-        	lEmite = true;
-        } else {
-        	lEmite = false;
+      var rubrica = new Object();
+      if (document.form1.selrubri && document.form1.selrubri.length > 0) {
+          rubrica.faixarub = js_campo_recebe_valores();
+      } else if (document.form1.rubrica1 && document.form1.rubrica1.value.length > 0) {
+        rubrica.rubini = document.form1.rubrica1.value;
+        rubrica.rubfim = document.form1.rubrica2.value;
+        if (document.form1.rubrica2.value.length == 0) {
+          alert("Selecione uma rubrica para o final do intervalo.");
         }
       }
-      
+
+      if (!rubrica.rubini && !rubrica.faixarub ) {
+        if (!confirm("Confirma impressão do relatório sem filtro por rubrica?")) {
+          lEmite = false;
+        }
+      }
+
       if ( lEmite ) {
 
         /**
@@ -331,12 +298,17 @@ $oPost = db_utils::postMemory($_POST);
         oDados.sTipo            = $F(tipo);
         oDados.sPonto           = $F(ponto);
         oDados.sPagina          = $F(pagina);
-        oDados.iRubrica         = $F(rh27_rubric);
         oDados.iSelecao         = $F(r44_selec);
         oDados.iAno             = $F(DBtxt23);
         oDados.iMes             = $F(DBtxt25);
         oDados.sDadosCadastrais = $F(mes_dados);
         oDados.sQuebra          = $F(opcao);
+        if (rubrica.faixarub) {
+          oDados.faixarub = rubrica.faixarub;
+        } else if (rubrica.rubini) {
+          oDados.rubini = rubrica.rubini;
+          oDados.rubfim = rubrica.rubfim;
+        }
 
         if ( $F(tipo) == 'a' || $F(tipo) == 'p' ) {
           js_OpenJanelaIframe('top.corpo','db_iframe_bbrubmescalculo','pes2_rubmescalculo002.php?sParametros='+Object.toJSON(oDados),'Gerando Arquivo',false);

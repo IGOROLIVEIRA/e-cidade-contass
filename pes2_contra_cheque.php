@@ -345,7 +345,7 @@ for($i=0;$i<$num;$i++){
   //modificado 
   $pdf1->registro	        = $rh01_regist;
   $pdf1->nome		      = $z01_nome;
-  $pdf1->descr_funcao	  = $rh37_descr;
+  $pdf1->descr_funcao	  = substr($rh37_descr, 0, 37);
   $pdf1->descr_lota       = $estrut.'-'.$r70_descr;
   $pdf1->f010          	  = $f010;
   $pdf1->padrao        	  = $padrao;

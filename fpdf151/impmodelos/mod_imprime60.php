@@ -208,7 +208,7 @@
          $sqlparagpadrao .= "       inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
          $sqlparagpadrao .= "       inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
          $sqlparagpadrao .= " where db60_tipodoc = 1502 order by db62_ordem";
-            
+            die($sqlparagpadrao);
          $resparagpadrao = @pg_query($sqlparagpadrao);
          if (@pg_numrows($resparagpadrao) > 0) {
               db_fieldsmemory($resparagpadrao,0);
@@ -426,5 +426,3 @@
 //	$this->objpdf->multicell(202,4,"OS PRODUTOS DEVERAO SER ENTREGUES NO ALMOXARIFADO CENTRAL - CAM - CENTRO ADM MUNICIPAL NO PRAZO MAXIMO DE " . $this->prazoent. " DIAS A CONTAR DA DATA DO RECEBIMENTO DESTA ORDEM DE COMPRA",1);
 	$posicao_depois=$this->objpdf->gety();
     $xlin+=$posicao_depois-$posicao_atual+2;
-
-?>

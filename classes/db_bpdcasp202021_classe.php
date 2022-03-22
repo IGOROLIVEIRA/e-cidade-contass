@@ -22,7 +22,7 @@ class cl_bpdcasp202021 {
    var $si209_vlpassivcirculemprefinancurtoprazo = 0;
    var $si209_vlpassivocirculafornecedcurtoprazo = 0;
    var $si209_vlpassicircuobrigfiscacurtoprazo = 0;
-   var $si209_vlpassivocirculaobrigacoutrosentes = 0;
+   var $si209_vlpassivocirculatransffiscalcurtoprazo = 0;
    var $si209_vlpassivocirculaprovisoecurtoprazo = 0;
    var $si209_vlpassicircudemaiobrigcurtoprazo = 0;
    var $si209_vlpassinaocircutrabprevilongoprazo = 0;
@@ -42,6 +42,7 @@ class cl_bpdcasp202021 {
    var $si209_vlpatriliquidresultacumexeranteri = 0;
    var $si209_vlpatriliquidoacoescotas = 0;
    var $si209_vltotalpassivo = 0;
+   var $si209_vlpassivonaocirculatransffiscallongoprazo = 0;
    var $si209_ano = 0;
    var $si209_periodo = 0;
    var $si209_institu = 0;
@@ -53,13 +54,14 @@ class cl_bpdcasp202021 {
                  si209_vlpassivcirculemprefinancurtoprazo = float4 = si209_vlpassivcirculemprefinancurtoprazo
                  si209_vlpassivocirculafornecedcurtoprazo = float4 = si209_vlpassivocirculafornecedcurtoprazo
                  si209_vlpassicircuobrigfiscacurtoprazo = float4 = si209_vlpassicircuobrigfiscacurtoprazo
-                 si209_vlpassivocirculaobrigacoutrosentes = float4 = si209_vlpassivocirculaobrigacoutrosentes
+                 si209_vlpassivocirculatransffiscalcurtoprazo = float4 = si209_vlpassivocirculatransffiscalcurtoprazo
                  si209_vlpassivocirculaprovisoecurtoprazo = float4 = si209_vlpassivocirculaprovisoecurtoprazo
                  si209_vlpassicircudemaiobrigcurtoprazo = float4 = si209_vlpassicircudemaiobrigcurtoprazo
                  si209_vlpassinaocircutrabprevilongoprazo = float4 = si209_vlpassinaocircutrabprevilongoprazo
                  si209_vlpassnaocircemprfinalongpraz = float4 = si209_vlpassnaocircemprfinalongpraz
                  si209_vlpassivnaocirculforneclongoprazo = float4 = si209_vlpassivnaocirculforneclongoprazo
                  si209_vlpassnaocircobrifisclongpraz = float4 = si209_vlpassnaocircobrifisclongpraz
+                 si209_vlpassivonaocirculatransffiscallongoprazo = float4 = si209_vlpassivonaocirculatransffiscallongoprazo
                  si209_vlpassivnaocirculprovislongoprazo = float4 = si209_vlpassivnaocirculprovislongoprazo
                  si209_vlpassnaocircdemaobrilongpraz = float4 = si209_vlpassnaocircdemaobrilongpraz
                  si209_vlpassivonaocircularesuldiferido = float4 = si209_vlpassivonaocircularesuldiferido
@@ -98,7 +100,7 @@ class cl_bpdcasp202021 {
        $this->si209_vlpassivcirculemprefinancurtoprazo = ($this->si209_vlpassivcirculemprefinancurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassivcirculemprefinancurtoprazo"]:$this->si209_vlpassivcirculemprefinancurtoprazo);
        $this->si209_vlpassivocirculafornecedcurtoprazo = ($this->si209_vlpassivocirculafornecedcurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculafornecedcurtoprazo"]:$this->si209_vlpassivocirculafornecedcurtoprazo);
        $this->si209_vlpassicircuobrigfiscacurtoprazo = ($this->si209_vlpassicircuobrigfiscacurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassicircuobrigfiscacurtoprazo"]:$this->si209_vlpassicircuobrigfiscacurtoprazo);
-       $this->si209_vlpassivocirculaobrigacoutrosentes = ($this->si209_vlpassivocirculaobrigacoutrosentes == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculaobrigacoutrosentes"]:$this->si209_vlpassivocirculaobrigacoutrosentes);
+       $this->si209_vlpassivocirculatransffiscalcurtoprazo = ($this->si209_vlpassivocirculatransffiscalcurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculatransffiscalcurtoprazo"]:$this->si209_vlpassivocirculatransffiscalcurtoprazo);
        $this->si209_vlpassivocirculaprovisoecurtoprazo = ($this->si209_vlpassivocirculaprovisoecurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculaprovisoecurtoprazo"]:$this->si209_vlpassivocirculaprovisoecurtoprazo);
        $this->si209_vlpassicircudemaiobrigcurtoprazo = ($this->si209_vlpassicircudemaiobrigcurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassicircudemaiobrigcurtoprazo"]:$this->si209_vlpassicircudemaiobrigcurtoprazo);
        $this->si209_vlpassinaocircutrabprevilongoprazo = ($this->si209_vlpassinaocircutrabprevilongoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassinaocircutrabprevilongoprazo"]:$this->si209_vlpassinaocircutrabprevilongoprazo);
@@ -149,8 +151,8 @@ class cl_bpdcasp202021 {
      if($this->si209_vlpassicircuobrigfiscacurtoprazo == null ){
          $this->si209_vlpassicircuobrigfiscacurtoprazo = 0;
      }
-     if($this->si209_vlpassivocirculaobrigacoutrosentes == null ){
-         $this->si209_vlpassivocirculaobrigacoutrosentes = 0;
+     if($this->si209_vlpassivocirculatransffiscalcurtoprazo == null ){
+         $this->si209_vlpassivocirculatransffiscalcurtoprazo = 0;
      }
      if($this->si209_vlpassivocirculaprovisoecurtoprazo == null ){
          $this->si209_vlpassivocirculaprovisoecurtoprazo = 0;
@@ -209,7 +211,9 @@ class cl_bpdcasp202021 {
      if($this->si209_vltotalpassivo == null ){
          $this->si209_vltotalpassivo = 0;
      }
-
+     if($this->si209_vlpassivonaocirculatransffiscallongoprazo == null){
+         $this->si209_vlpassivonaocirculatransffiscallongoprazo = 0;
+     }
      $sql = "insert into bpdcasp202021(
                                        si209_sequencial
                                       ,si209_tiporegistro
@@ -217,13 +221,14 @@ class cl_bpdcasp202021 {
                                       ,si209_vlpassivcirculemprefinancurtoprazo
                                       ,si209_vlpassivocirculafornecedcurtoprazo
                                       ,si209_vlpassicircuobrigfiscacurtoprazo
-                                      ,si209_vlpassivocirculaobrigacoutrosentes
+                                      ,si209_vlpassivocirculatransffiscalcurtoprazo
                                       ,si209_vlpassivocirculaprovisoecurtoprazo
                                       ,si209_vlpassicircudemaiobrigcurtoprazo
                                       ,si209_vlpassinaocircutrabprevilongoprazo
                                       ,si209_vlpassnaocircemprfinalongpraz
                                       ,si209_vlpassivnaocirculforneclongoprazo
                                       ,si209_vlpassnaocircobrifisclongpraz
+                                      ,si209_vlpassivonaocirculatransffiscallongoprazo
                                       ,si209_vlpassivnaocirculprovislongoprazo
                                       ,si209_vlpassnaocircdemaobrilongpraz
                                       ,si209_vlpassivonaocircularesuldiferido
@@ -248,7 +253,7 @@ class cl_bpdcasp202021 {
                                ,$this->si209_vlpassivcirculemprefinancurtoprazo
                                ,$this->si209_vlpassivocirculafornecedcurtoprazo
                                ,$this->si209_vlpassicircuobrigfiscacurtoprazo
-                               ,$this->si209_vlpassivocirculaobrigacoutrosentes
+                               ,$this->si209_vlpassivocirculatransffiscalcurtoprazo
                                ,$this->si209_vlpassivocirculaprovisoecurtoprazo
                                ,$this->si209_vlpassicircudemaiobrigcurtoprazo
                                ,$this->si209_vlpassinaocircutrabprevilongoprazo
@@ -256,6 +261,7 @@ class cl_bpdcasp202021 {
                                ,$this->si209_vlpassivnaocirculforneclongoprazo
                                ,$this->si209_vlpassnaocircobrifisclongpraz
                                ,$this->si209_vlpassivnaocirculprovislongoprazo
+                               ,$this->si209_vlpassivonaocirculatransffiscallongoprazo
                                ,$this->si209_vlpassnaocircdemaobrilongpraz
                                ,$this->si209_vlpassivonaocircularesuldiferido
                                ,$this->si209_vlpatriliquidocapitalsocial
@@ -383,12 +389,12 @@ class cl_bpdcasp202021 {
          return false;
        }
      }
-     if(trim($this->si209_vlpassivocirculaobrigacoutrosentes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculaobrigacoutrosentes"])){
-       $sql  .= $virgula." si209_vlpassivocirculaobrigacoutrosentes = $this->si209_vlpassivocirculaobrigacoutrosentes ";
+     if(trim($this->si209_vlpassivocirculatransffiscalcurtoprazo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculatransffiscalcurtoprazo"])){
+       $sql  .= $virgula." si209_vlpassivocirculatransffiscalcurtoprazo = $this->si209_vlpassivocirculatransffiscalcurtoprazo ";
        $virgula = ",";
-       if(trim($this->si209_vlpassivocirculaobrigacoutrosentes) == null ){
-         $this->erro_sql = " Campo si209_vlpassivocirculaobrigacoutrosentes não informado.";
-         $this->erro_campo = "si209_vlpassivocirculaobrigacoutrosentes";
+       if(trim($this->si209_vlpassivocirculatransffiscalcurtoprazo) == null ){
+         $this->erro_sql = " Campo si209_vlpassivocirculatransffiscalcurtoprazo não informado.";
+         $this->erro_campo = "si209_vlpassivocirculatransffiscalcurtoprazo";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -672,8 +678,8 @@ class cl_bpdcasp202021 {
              $resac = db_query("insert into db_acount values($acount,1010203,1009392,'".AddSlashes(pg_result($resaco,$conresaco,'si209_vlpassivocirculafornecedcurtoprazo'))."','$this->si209_vlpassivocirculafornecedcurtoprazo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si209_vlpassicircuobrigfiscacurtoprazo"]) || $this->si209_vlpassicircuobrigfiscacurtoprazo != "")
              $resac = db_query("insert into db_acount values($acount,1010203,1009393,'".AddSlashes(pg_result($resaco,$conresaco,'si209_vlpassicircuobrigfiscacurtoprazo'))."','$this->si209_vlpassicircuobrigfiscacurtoprazo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculaobrigacoutrosentes"]) || $this->si209_vlpassivocirculaobrigacoutrosentes != "")
-             $resac = db_query("insert into db_acount values($acount,1010203,1009394,'".AddSlashes(pg_result($resaco,$conresaco,'si209_vlpassivocirculaobrigacoutrosentes'))."','$this->si209_vlpassivocirculaobrigacoutrosentes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if(isset($GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculatransffiscalcurtoprazo"]) || $this->si209_vlpassivocirculatransffiscalcurtoprazo != "")
+             $resac = db_query("insert into db_acount values($acount,1010203,1009394,'".AddSlashes(pg_result($resaco,$conresaco,'si209_vlpassivocirculatransffiscalcurtoprazo'))."','$this->si209_vlpassivocirculatransffiscalcurtoprazo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculaprovisoecurtoprazo"]) || $this->si209_vlpassivocirculaprovisoecurtoprazo != "")
              $resac = db_query("insert into db_acount values($acount,1010203,1009395,'".AddSlashes(pg_result($resaco,$conresaco,'si209_vlpassivocirculaprovisoecurtoprazo'))."','$this->si209_vlpassivocirculaprovisoecurtoprazo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si209_vlpassicircudemaiobrigcurtoprazo"]) || $this->si209_vlpassicircudemaiobrigcurtoprazo != "")

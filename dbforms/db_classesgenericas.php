@@ -2518,7 +2518,7 @@ class cl_formulario_rel_pes {
       }
       if((trim($this->strngtipores) != "" || count($this->arr_tipores) > 0)){
         $this->monta_select_tdrtable($this->arr_tipores,$this->trenome,$this->tipresumo.":",$this->tipresumo,$this->onchres);
-        $this->arr_tipofil = Array("0"=>"----------","i"=>"Intervalo","s"=>"Selecionados");
+        $this->arr_tipofil = empty($this->arr_tipofil) ? Array("0"=>"----------","i"=>"Intervalo","s"=>"Selecionados") : $this->arr_tipofil;
         $valortipres = $this->trenome;
         global $$valortipres;
         if(trim($this->strngtipores) != "" && $$valortipres != "g"){

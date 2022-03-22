@@ -207,22 +207,7 @@ class cl_dipr102022
         } else {
             $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
         }
-        if (($resaco != false) || ($this->numrows != 0)) {
-            for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-                $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac, 0, 0);
-                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                $resac = db_query("insert into db_acountkey values($acount,2011145,'$si230_sequencial','E')");
-                $resac = db_query("insert into db_acount values($acount,2010379,2011145,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si230_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2010379,2011146,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si230_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2010379,2011147,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si230_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2010379,2011148,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si230_nroleiautorizacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2010379,2011363,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si230_dtleiautorizacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2010379,2011149,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si230_dtpublicacaoleiautorizacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2010379,2011150,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si230_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2010379,2011663,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si230_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            }
-        }
+  
         $sql = " delete from dipr102022
                     where ";
         $sql2 = "";
@@ -236,6 +221,7 @@ class cl_dipr102022
         } else {
             $sql2 = $dbwhere;
         }
+
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("", "", @pg_last_error());

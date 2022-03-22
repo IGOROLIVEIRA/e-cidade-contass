@@ -882,12 +882,10 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
         if (value == 3) {
             document.getElementById("trchassi").style.display = "";
             document.getElementById("trrenavam").style.display = "";
-            document.getElementById("trnumserie").style.display = "";
             document.getElementById("trnumcertificado").style.display = "";
         } else {
             document.getElementById("trchassi").style.display = "none";
             document.getElementById("trrenavam").style.display = "none";
-            document.getElementById("trnumserie").style.display = "none";
             document.getElementById("trnumcertificado").style.display = "none";
         }
 
@@ -895,6 +893,12 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
             document.getElementsByClassName('tr__categoriacnh')[0].style.display = 'none';
         } else {
             document.getElementsByClassName('tr__categoriacnh')[0].style.display = '';
+        }
+
+        if (value != 99 && value != 3) {
+            document.getElementById("trnumserie").style.display = "";
+        } else {
+            document.getElementById("trnumserie").style.display = 'none';
         }
     }
 
