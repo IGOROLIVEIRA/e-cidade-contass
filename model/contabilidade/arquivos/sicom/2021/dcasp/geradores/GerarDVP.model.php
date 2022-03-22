@@ -20,7 +20,7 @@ class GerarDVP extends GerarAM
     $sSql = "select * from dvpdcasp102021 where si216_ano = {$this->iAno} AND si216_periodo = {$this->iPeriodo} AND si216_institu = " . db_getsession("DB_instit");
     $rsDVP10 = db_query($sSql);
 
-    $sSql = "select * from dvpdcasp202121 where si217_ano = {$this->iAno} AND si217_periodo = {$this->iPeriodo} AND si217_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from dvpdcasp202021 where si217_ano = {$this->iAno} AND si217_periodo = {$this->iPeriodo} AND si217_institu = " . db_getsession("DB_instit");
     $rsDVP20 = db_query($sSql);
 
     $sSql = "select * from dvpdcasp302021 where si218_ano = {$this->iAno} AND si218_periodo = {$this->iPeriodo} AND si218_institu = " . db_getsession("DB_instit");
