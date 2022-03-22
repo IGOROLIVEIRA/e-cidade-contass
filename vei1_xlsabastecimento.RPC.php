@@ -435,7 +435,7 @@ switch($oParam->exec) {
                     
                 }
                 
-                $e++;
+                $e++; 
             }
 
             if($controleAno==1){
@@ -930,13 +930,7 @@ switch($oParam->exec) {
 
             } else{
                 //mudança
-                if($deixarInserir==1){
-                    if($erro==false){
-                        unlink($arquivo);
-                    }
-                    $oRetorno->itens = $arrayRetornoSoma;
-
-                }else if($opVeic==1){
+                if($opVeic==1){
                     if($erro == false){
                         unlink($arquivo);
                     }
@@ -1009,6 +1003,12 @@ switch($oParam->exec) {
                     }
                     
                     $oRetorno->itens = $arrayRetornoComb;
+
+                }else if($deixarInserir==1){
+                    if($erro==false){
+                        unlink($arquivo);
+                    }
+                    $oRetorno->itens = $arrayRetornoSoma;
 
                 }
 
