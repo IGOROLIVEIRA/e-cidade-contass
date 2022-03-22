@@ -42,42 +42,44 @@ $clbenstransf->rotulo->label("t93_codtran");
 $clbenstransf->rotulo->label("t93_data");
 
 ?>
-    <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <link href="estilos.css" rel="stylesheet" type="text/css">
-        <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-    </head>
-    <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-    <table height="100%" width="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+</head>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+    <table height="100%" width="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
         <tr>
             <td height="63" align="center" valign="top">
                 <table width="35%" border="0" align="center" cellspacing="0">
-                    <form name="form1" method="post" action="" >
+                    <form name="form1" method="post" action="">
                         <tr>
-                            <td width="4%" align="right" nowrap title="<?=$Tt93_codtran?>">
-                                <?=$Lt93_codtran?>
+                            <td width="4%" align="right" nowrap title="<?= $Tt93_codtran ?>">
+                                <?= $Lt93_codtran ?>
                             </td>
                             <td width="96%" align="left" nowrap>
                                 <?
-                                db_input("t93_codtran",10,$It93_codtran,true,"text",4,"","chave_t93_codtran");
+                                db_input("t93_codtran", 10, $It93_codtran, true, "text", 4, "", "chave_t93_codtran");
                                 ?>
                             </td>
                         </tr>
                         <tr>
-                            <td width="4%" align="right" nowrap title="<?=$Tt93_data?>">
-                                <?=$Lt93_data?>
+                            <td width="4%" align="right" nowrap title="<?= $Tt93_data ?>">
+                                <?= $Lt93_data ?>
                             </td>
                             <td width="96%" align="left" nowrap>
                                 <?
-                                db_inputdata('t93_data',@$t93_data_dia,@$t93_data_mes,@$t93_data_ano,true,'text',1,"");
+                                db_inputdata('t93_data', @$t93_data_dia, @$t93_data_mes, @$t93_data_ano, true, 'text', 1, "");
                                 ?>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2" align="center">
                                 <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                                <input name="limpar" type="reset" id="limpar" value="Limpar" >
+                                <input name="limpar" type="reset" id="limpar" value="Limpar">
                                 <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_benstransf.hide();">
                             </td>
                         </tr>
@@ -89,62 +91,57 @@ $clbenstransf->rotulo->label("t93_data");
             <td align="center" valign="top">
                 <?
                 $id_depart    = db_getsession("DB_coddepto");
-                $where_instit = " and t93_instit = ".db_getsession("DB_instit");
+                $where_instit = " and t93_instit = " . db_getsession("DB_instit");
 
-                if((isset($t93)) && $t93 == 'true'){
+                if ((isset($t93)) && $t93 == 'true') {
                     $campo_where = 't93_depart';
-                }else{
+                } else {
                     $campo_where = ' t95_codtran is not null and t95_codbem is not null and t94_depart';
                 }
-                if(isset($transfdireta) && $transfdireta == 'false'){
-                    $tipo_where = 't93_tipo in (1,3)';
-                }else{
-                    $tipo_where = 't93_tipo = 2';
-                }
 
-                $where_db_param = " $campo_where=$id_depart and $tipo_where and";
+                $where_db_param = " $campo_where=$id_depart and";
 
-                if(isset($campos)==false){
-                    if(file_exists("funcoes/db_func_benstransf.php")==true){
+                if (isset($campos) == false) {
+                    if (file_exists("funcoes/db_func_benstransf.php") == true) {
                         include("funcoes/db_func_benstransf.php");
-                    }else{
+                    } else {
                         $campos = "benstransf.*";
                     }
                 }
-                if((isset($t93_data_ano) && trim($t93_data_ano) != "") && (isset($t93_data_mes) && trim($t93_data_mes) != "") && (isset($t93_data_dia) && trim($t93_data_dia) != "")){
-                    $chave_t93_data =  $t93_data_ano."-".$t93_data_mes."-".$t93_data_dia;
-                }else if(isset($t93_data_ano) && trim($t93_data_ano) != ""){
-                    $chave_t93_data = $t93_data_ano."%";
+                if ((isset($t93_data_ano) && trim($t93_data_ano) != "") && (isset($t93_data_mes) && trim($t93_data_mes) != "") && (isset($t93_data_dia) && trim($t93_data_dia) != "")) {
+                    $chave_t93_data =  $t93_data_ano . "-" . $t93_data_mes . "-" . $t93_data_dia;
+                } else if (isset($t93_data_ano) && trim($t93_data_ano) != "") {
+                    $chave_t93_data = $t93_data_ano . "%";
                 }
-                if(isset($rel) && $rel == 'true'){
+                if (isset($rel) && $rel == 'true') {
                     $param = " in ";
-                }else{
+                } else {
                     $param = " not in ";
                 }
                 $campos = "distinct $campos";
 
-                if(!isset($pesquisa_chave)){
-                    if(isset($chave_t93_codtran) && (trim($chave_t93_codtran)!="") ){
-                        $sql = $clbenstransf->sql_query(null,$campos,"t93_codtran"," $where_db_param t93_codtran $param (select t96_codtran from benstransfconf) and t93_codtran = $chave_t93_codtran $where_instit ");
-                    }else if(isset($chave_t93_data) && (trim($chave_t93_data)!="") ){
-                        $sql = $clbenstransf->sql_query("",$campos,"t93_data"," $where_db_param t93_codtran $param (select t96_codtran from benstransfconf) and t93_data like '$chave_t93_data' $where_instit ");
-                    }else{
-                        $sql = $clbenstransf->sql_query("",$campos,"t93_codtran"," $where_db_param t93_codtran $param (select t96_codtran from benstransfconf) $where_instit ");
+                if (!isset($pesquisa_chave)) {
+                    if (isset($chave_t93_codtran) && (trim($chave_t93_codtran) != "")) {
+                        $sql = $clbenstransf->sql_query(null, $campos, "t93_codtran", " $where_db_param t93_codtran $param (select t96_codtran from benstransfconf) and t93_codtran = $chave_t93_codtran $where_instit ");
+                    } else if (isset($chave_t93_data) && (trim($chave_t93_data) != "")) {
+                        $sql = $clbenstransf->sql_query("", $campos, "t93_data", " $where_db_param t93_codtran $param (select t96_codtran from benstransfconf) and t93_data like '$chave_t93_data' $where_instit ");
+                    } else {
+                        $sql = $clbenstransf->sql_query("", $campos, "t93_codtran", " $where_db_param t93_codtran $param (select t96_codtran from benstransfconf) $where_instit ");
                     }
 
-//	die($sql);
-                    db_lovrot($sql,15,"()","",$funcao_js);
-                }else{
-                    if($pesquisa_chave!=null && $pesquisa_chave!=""){
-                        $result = $clbenstransf->sql_record($clbenstransf->sql_query(null,$campos,""," $where_db_param t93_codtran $param (select t96_codtran from benstransfconf) and t93_codtran = $pesquisa_chave and t93_instit = ".db_getsession("DB_instit")));
-                        if($clbenstransf->numrows!=0){
-                            db_fieldsmemory($result,0);
-                            echo "<script>".$funcao_js."('$nome',false);</script>";
-                        }else{
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                    //	die($sql);
+                    db_lovrot($sql, 15, "()", "", $funcao_js);
+                } else {
+                    if ($pesquisa_chave != null && $pesquisa_chave != "") {
+                        $result = $clbenstransf->sql_record($clbenstransf->sql_query(null, $campos, "", " $where_db_param t93_codtran $param (select t96_codtran from benstransfconf) and t93_codtran = $pesquisa_chave and t93_instit = " . db_getsession("DB_instit")));
+                        if ($clbenstransf->numrows != 0) {
+                            db_fieldsmemory($result, 0);
+                            echo "<script>" . $funcao_js . "('$nome',false);</script>";
+                        } else {
+                            echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
                         }
-                    }else{
-                        echo "<script>".$funcao_js."('',false);</script>";
+                    } else {
+                        echo "<script>" . $funcao_js . "('',false);</script>";
                     }
                 }
                 //select * from benstransf where t93_depart=1 and benstransf.t93_codtran
@@ -153,13 +150,14 @@ $clbenstransf->rotulo->label("t93_data");
             </td>
         </tr>
     </table>
-    </body>
-    </html>
+</body>
+
+</html>
 <?
-if(!isset($pesquisa_chave)){
-    ?>
+if (!isset($pesquisa_chave)) {
+?>
     <script>
     </script>
-    <?
+<?
 }
 ?>
