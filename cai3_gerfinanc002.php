@@ -1306,15 +1306,14 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
           $verEntidade      = verEntidade();
                          
           If ($verEntidade == 0 || $qteParcelamento == 0){
-            echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" 
-                  onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$REGISTRO[$i]["k00_numpre"])."'\" 
-                  type=\"button\" value=\"".$REGISTRO[$i]["k00_numpre"]."\"></td>\n";            
+            $xNumpre = $REGISTRO[$i]["k00_numpre"];
           }else{
-            echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" 
-                  onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$REGISTRO[$i]["k00_numpre"])."'\" 
-                  type=\"button\" value=\"".$REGISTRO[$i]["k00_numpre"]."\"<h6> ($qteParcelamento)</h6>"."</td>\n";
-          }
-          
+            $xNumpre = $REGISTRO[$i]["k00_numpre"]." ($qteParcelamento)";
+          }  
+
+          echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" 
+          onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$REGISTRO[$i]["k00_numpre"])."'\" 
+          type=\"button\" value=\"".$xNumpre."\"></td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" " . ($corDtoper == "" ? "" : "bgcolor=$corDtoper") . " nowrap>" . $iMatric . "</td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>
         <input type=\"hidden\" id=\"parc$i\" value=\"0#".$REGISTRO[$i]["k00_numtot"]."#".$REGISTRO[$i]["k00_numpre"]."\">0 </td>\n";
@@ -1596,12 +1595,14 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
 
             $qteParcelamento  = pg_result(qtdParcelamento($elementos_numpres[$x]),0,'TotalParcelamento');            
             $verEntidade      = verEntidade();
-                         
+
             If ($verEntidade == 0 || $qteParcelamento == 0){
-              echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$elementos_numpres[$x])."'\" type=\"button\" value=\"".$elementos_numpres[$x]."\"></td>\n";
+              $xNumpre = $elementos_numpres[$x];
             }else{
-              echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$elementos_numpres[$x])."'\" type=\"button\" value=\"".$elementos_numpres[$x]."\"<h6> ($qteParcelamento)</h6>"."</td>\n";
-            }              
+              $xNumpre = $elementos_numpres[$x]." ($qteParcelamento)";
+            }
+            
+            echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$elementos_numpres[$x])."'\" type=\"button\" value=\"".$xNumpre."\"></td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" " . ($corDtoper == "" ? "" : "bgcolor=$corDtoper") . " nowrap>" . $iMatric . "</td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input type=\"hidden\" id=\"parc$i\" value=\"".$elementos_parcelas[$i]."#".$REGISTRO[$i]["k00_numtot"]."#".$elementos_numpres[$x]."\">".$elementos_parcelas[$i]."</td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>".$REGISTRO[$i]["k00_numtot"]."</td>\n";
@@ -1912,12 +1913,12 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
           $verEntidade      = verEntidade();
                          
           If ($verEntidade == 0 || $qteParcelamento == 0){
-            echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".pg_result($result,$i,"k00_numpre"))."'\" type=\"button\" value=\"".pg_result($result,$i,"k00_numpre")."\"></td>\n";
+            $xNumpre = pg_result($result,$i,"k00_numpre");
           }else{
-            echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".pg_result($result,$i,"k00_numpre"))."'\" type=\"button\" value=\"".pg_result($result,$i,"k00_numpre")."\"<h6> ($qteParcelamento)</h6>"."</td>\n";
+            $xNumpre = pg_result($result,$i,"k00_numpre")." ($qteParcelamento)";
           }
-
-          //      echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>".pg_result($result,$i,"k00_numpre")."</td>\n";
+          
+          echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".pg_result($result,$i,"k00_numpre"))."'\" type=\"button\" value=\"".$xNumpre."\"></td>\n";
           echo "  <td class=\"borda\" style=\"font-size:11px\" nowrap>$iMatric</td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>".(trim(pg_result($result,$i,"k00_numpar"))==""?"&nbsp":pg_result($result,$i,"k00_numpar"))."</td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>".(trim(pg_result($result,$i,"k00_numtot"))==""?"&nbsp":pg_result($result,$i,"k00_numtot"))."</td>\n";
