@@ -326,10 +326,8 @@ if ($agrupar_fonte == 'S') {
 }
 
 if ($agrupar_fonte == 'N') {
-    if ($tipo_conta and $agrupar_tipo_conta == 2) {
-      if($tipo_conta == '0')
-        $sWhere .= " and c63_tipoconta > '{$tipo_conta}' ";
-      else
+    if ($agrupar_tipo_conta == 2) {
+      if($tipo_conta != '0')
         $sWhere .= " and c63_tipoconta = '{$tipo_conta}' ";
     }else
       $ordem_conta =" c63_tipoconta ";
