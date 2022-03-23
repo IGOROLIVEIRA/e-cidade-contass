@@ -830,17 +830,75 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
     public function lancamentosGenericos($aExt20)
     {
-        foreach ($aExt20 as $oExt20) {
+        return $this->buscarGenericos($aExt20);
+    }
+
+    public function buscarGenericos($aExt20)
+    {
+        $sSqlGenerico = "SELECT DISTINCT codext as si165_codext, fonte as si165_codfontrecursos, codorgao AS si165_codorgao FROM (
+                SELECT
+                    CASE
+                        WHEN c61_codtce IS NULL THEN c69_debito
+                        ELSE c61_codtce
+                    END codext,
+                    orctiporec.o15_codigo as fonte,
+                    si09_codorgaotce AS codorgao
+                FROM
+                    conlancamdoc
+                    inner join conlancamval on conlancamval.c69_codlan = conlancamdoc.c71_codlan
+                    inner join conplanoreduz on conlancamval.c69_debito = conplanoreduz.c61_reduz
+                    and conlancamval.c69_anousu = conplanoreduz.c61_anousu
+                    inner join contacorrentedetalheconlancamval on conlancamval.c69_sequen = contacorrentedetalheconlancamval.c28_conlancamval
+                    inner join contacorrentedetalhe on contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                    AND c19_reduz = c69_debito
+                    left join orctiporec on orctiporec.o15_codigo = contacorrentedetalhe.c19_orctiporec
+                    LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
+                where
+                    conlancamdoc.c71_coddoc in (3000)
+                    and DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . "
+                    and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                    and conplanoreduz.c61_instit = " . db_getsession("DB_instit") . "
+
+                UNION 
+                
+                SELECT
+                    CASE
+                        WHEN c61_codtce IS NULL THEN c69_credito
+                        ELSE c61_codtce
+                    END codext,
+                    orctiporec.o15_codigo as fonte,
+                    si09_codorgaotce AS codorgao
+                FROM
+                    conlancamdoc
+                    inner join conlancamval on conlancamval.c69_codlan = conlancamdoc.c71_codlan
+                    inner join conplanoreduz on conlancamval.c69_credito = conplanoreduz.c61_reduz
+                    and conlancamval.c69_anousu = conplanoreduz.c61_anousu
+                    inner join contacorrentedetalheconlancamval on conlancamval.c69_sequen = contacorrentedetalheconlancamval.c28_conlancamval
+                    inner join contacorrentedetalhe on contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                    AND c19_reduz = c69_credito
+                    left join orctiporec on orctiporec.o15_codigo = contacorrentedetalhe.c19_orctiporec
+                    LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
+                where
+                    conlancamdoc.c71_coddoc in (3000)
+                    and DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . "
+                    and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                    and conplanoreduz.c61_instit = " . db_getsession("DB_instit") . "
+            ) as x ";
+        
+        $rsGenerico = db_query($sSqlGenerico);
+        for ($iC = 0; $iC < pg_num_rows($rsGenerico); $iC++) {
+            $oExt20 = db_utils::fieldsMemory($rsGenerico, $iC);
+
             $fSaldoInicial = 0;
             $fDebito       = 0;
             $fCredito      = 0;
-      
+    
             $fSaldoInicial  += $this->getInicialDebitoGenerico($oExt20);  
             $fSaldoInicial  -= $this->getInicialCreditoGenerico($oExt20);  
             $fDebito        += $this->getDebitoGenerico($oExt20);
             $fCredito       += $this->getCreditoGenerico($oExt20);  
 
-            $this->atualizaEXT20($aExt20, $oExt20, $fSaldoInicial, $fDebito, $fCredito);
+            $aExt20 = $this->atualizaEXT20($aExt20, $oExt20, $fSaldoInicial, $fDebito, $fCredito);
         }
         return $aExt20;
     }
@@ -854,6 +912,23 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 $aExt20[$chave]->si165_totaldebitos += $fDebito;
                 $aExt20[$chave]->si165_totalcreditos += $fCredito;
                 $aExt20[$chave]->si165_vlsaldoatualfonte = $aExt20[$chave]->si165_vlsaldoanteriorfonte + $aExt20[$chave]->si165_totaldebitos - $aExt20[$chave]->si165_totalcreditos; 
+                return $aExt20;
+            } else {
+                $aExt20[$chave] = new stdClass();
+                $aExt20[$chave]->si165_tiporegistro = 20;
+                $aExt20[$chave]->si165_codorgao = $oExt20->si165_codorgao;
+                $aExt20[$chave]->si165_codext = $oExt20->si165_codext;
+                $aExt20[$chave]->si165_codfontrecursos = $oExt20->si165_codfontrecursos;
+                $aExt20[$chave]->si165_exerciciocompdevo = "";
+                $aExt20[$chave]->si165_vlsaldoanteriorfonte = $fSaldoInicial;
+                $aExt20[$chave]->si165_natsaldoanteriorfonte = "C";
+                $aExt20[$chave]->si165_totaldebitos = $fDebito;
+                $aExt20[$chave]->si165_totalcreditos = $fCredito;
+                $aExt20[$chave]->si165_vlsaldoatualfonte = $fSaldoInicial + $fDebito - $fCredito;
+                $aExt20[$chave]->si165_natsaldoatualfonte = "C";
+                $aExt20[$chave]->si165_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $aExt20[$chave]->si165_instit = db_getsession("DB_instit");
+                $aExt20[$chave]->ext30 = array(); 
                 return $aExt20;
             } 
         }
@@ -873,7 +948,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
     public function getInicialCreditoGenerico($oExt20)
     {
-        return $this->getLancamentoGenerico($oExt20, "debito", true);
+        return $this->getLancamentoGenerico($oExt20, "credito", true);
     }
 
     public function getDebitoGenerico($oExt20)
@@ -898,7 +973,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
         $sql .= "           and conlancamval.c69_anousu = conplanoreduz.c61_anousu ";
         $sql .= "       inner join contacorrentedetalheconlancamval on conlancamval.c69_sequen = contacorrentedetalheconlancamval.c28_conlancamval ";
         $sql .= "       inner join contacorrentedetalhe on contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe ";
-        $sql .= "       left join orctiporec on orctiporec.o15_codigo = contacorrentedetalhe.c19_orctiporec ";
+        $sql .= "       left join orctiporec on orctiporec.o15_codigo = contacorrentedetalhe.c19_orctiporec AND c19_reduz = c69_{$sTipoValor} ";
         $sql .= "     where conlancamdoc.c71_coddoc in (3000) ";
         $sql .= "       and ( ";
         $sql .= "           (conlancamval.c69_{$sTipoValor} = {$oExt20->si165_codext} AND conplanoreduz.c61_codtce IS NULL) ";
