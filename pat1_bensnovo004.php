@@ -50,7 +50,7 @@ $db_botao = false;
 
 $lUsaPCASP = "false";
 if (USE_PCASP) {
-    $lUsaPCASP = "true";
+  $lUsaPCASP = "true";
 }
 
 $lMostraViewNotasPendentes = 'true';
@@ -59,82 +59,156 @@ if (isset($oGet->iCodigoEmpNotaItem) && !empty($oGet->iCodigoEmpNotaItem)) {
 
   $db_opcao = 1;
   $db_botao = true;
-	$lMostraViewNotasPendentes = 'false';
-	$iCodigoNota               = $oGet->iCodigoEmpNotaItem;
+  $lMostraViewNotasPendentes = 'false';
+  $iCodigoNota               = $oGet->iCodigoEmpNotaItem;
 }
 ?>
 
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<?php
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <?php
   db_app::load("scripts.js, prototype.js, strings.js, DBToogle.widget.js, dbmessageBoard.widget.js");
   db_app::load("estilos.css, grid.style.css, classes/DBViewNotasPendentes.classe.js, widgets/windowAux.widget.js, datagrid.widget.js");
-?>
-<style type="text/css">
-  .bold {
-    font-weight: bold;
-  }
+  ?>
+  <style type="text/css">
+    .bold {
+      font-weight: bold;
+    }
 
-  #fieldsetBensNovo table {
-    border-collapse: collapse;
-  }
+    #fieldsetBensNovo table {
+      border-collapse: collapse;
+    }
 
-  #fieldsetBensNovo table tr td{
-    padding-top:4px;
-    white-space:nowrap;
-  }
+    #fieldsetBensNovo table tr td {
+      padding-top: 4px;
+      white-space: nowrap;
+    }
 
-  #fieldsetBensNovo table tr td:first-child{
-    text-align: left;
-    width: 130px;
-  }
+    #fieldsetBensNovo table tr td:first-child {
+      text-align: left;
+      width: 130px;
+    }
 
-  /* pega a segunda td */
-  #fieldsetBensNovo table tr td + td{
+    /* pega a segunda td */
+    #fieldsetBensNovo table tr td+td {}
 
-  }
+    /* pega a terceira td */
+    #fieldsetBensNovo table tr td+td+td {
+      text-align: right;
+      padding-left: 5px;
+      width: 100px;
+    }
 
-  /* pega a terceira td */
-  #fieldsetBensNovo table tr td + td + td{
-    text-align: right;
-    padding-left: 5px;
-    width: 100px;
-  }
+    #fieldsetBensNovo table tr td+td+td+td {
+      text-align: left;
+      width: 150px;
+    }
 
-  #fieldsetBensNovo table tr td + td + td + td{
-    text-align: left;
-    width: 150px;
-  }
+    .ancora {
+      font-weight: bold;
+    }
 
-  .ancora {
-    font-weight: bold;
-  }
+    .readOnly {
+      backgroud-color: #DEB887;
+    }
 
-  .readOnly {
-    backgroud-color: #DEB887;
-  }
+    div.header-container table.table-header tr td#col1.table_header.cell {
+      width: 120px !important;
 
-</style>
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell0.linhagrid.cell {
+      width: 120px !important;
+
+    }
+
+    div.header-container table.table-header tr td#col2.table_header.cell {
+      width: 90px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell1.linhagrid.cell {
+      width: 90px !important;
+
+    }
+
+
+    div.header-container table.table-header tr td#col3.table_header.cell {
+      width: 80px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell2.linhagrid.cell {
+      width: 80px !important;
+
+    }
+
+
+    div.header-container table.table-header tr td#col4.table_header.cell {
+      width: 255px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell3.linhagrid.cell {
+      width: 255px !important;
+
+    }
+
+
+    div.header-container table.table-header tr td#col5.table_header.cell {
+      width: 65px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell4.linhagrid.cell {
+      width: 65px !important;
+
+    }
+
+
+    div.header-container table.table-header tr td#col6.table_header.cell {
+      width: 130px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell5.linhagrid.cell {
+      width: 130px !important;
+
+    }
+
+
+    div.header-container table.table-header tr td#col7.table_header.cell {
+      width: 110px !important;
+
+    }
+
+    div.body-container table.table-body tr td#ctnGridNotasPendentesrow0cell6.linhagrid.cell {
+      width: 110px !important;
+
+    }
+  </style>
 </head>
-<body bgcolor="#CCCCCC" onload="js_carregaDadosForm(<?=$db_opcao?>);" >
-<div style="margin-top: 25px;" ></div>
-<center>
-  <div align="center" style="width: 720px; display: block;">
-    <?php
-      include ("forms/db_frm_bensnovo.php");
-    ?>
-  </div>
-</center>
+
+<body bgcolor="#CCCCCC" onload="js_carregaDadosForm(<?= $db_opcao ?>);">
+  <div style="margin-top: 25px;"></div>
+  <center>
+    <div align="center" style="width: 720px; display: block;">
+      <?php
+      include("forms/db_frm_bensnovo.php");
+      ?>
+    </div>
+  </center>
 </body>
+
 </html>
 
 <script>
-
-  lMostraViewNotasPendentes = <?php echo $lMostraViewNotasPendentes;?>;
+  lMostraViewNotasPendentes = <?php echo $lMostraViewNotasPendentes; ?>;
 
   if (lMostraViewNotasPendentes == true) {
 
@@ -144,86 +218,86 @@ if (isset($oGet->iCodigoEmpNotaItem) && !empty($oGet->iCodigoEmpNotaItem)) {
      */
     function loadDadosBem(oDadosLinha) {
 
-      var iQuantidadeItem    = oDadosLinha.iQuantidadeItem;
+      var iQuantidadeItem = oDadosLinha.iQuantidadeItem;
       var iCodigoEmpNotaItem = oDadosLinha.iCodigoEmpNotaItem;
 
-      var sUrlDireciona      = "";
+      var sUrlDireciona = "";
       if (iQuantidadeItem == 1) {
-        sUrlDireciona  = "pat1_bens001.php?iCodigoEmpNotaItem="+iCodigoEmpNotaItem;
+        sUrlDireciona = "pat1_bens001.php?iCodigoEmpNotaItem=" + iCodigoEmpNotaItem;
       } else {
-        sUrlDireciona  = "pat1_bensglobalnovo001.php?iCodigoEmpNotaItem="+iCodigoEmpNotaItem;
+        sUrlDireciona = "pat1_bensglobalnovo001.php?iCodigoEmpNotaItem=" + iCodigoEmpNotaItem;
       }
 
-      if ( oDBViewNotasPendentes.getLocationGlobal() ) {
+      if (oDBViewNotasPendentes.getLocationGlobal()) {
         window.location = sUrlDireciona;
       } else {
         parent.window.location = sUrlDireciona;
       }
     }
 
-    var oDBViewNotasPendentes = new DBViewNotasPendentes('oDBViewNotasPendentes', <?php echo $lUsaPCASP;?>);
+    var oDBViewNotasPendentes = new DBViewNotasPendentes('oDBViewNotasPendentes', <?php echo $lUsaPCASP; ?>);
     oDBViewNotasPendentes.setCallBackDoubleClick(loadDadosBem);
     oDBViewNotasPendentes.setTextoRodape("<b>* Dois cliques sob a linha para carregar o bem</b>");
-	  oDBViewNotasPendentes.show();
+    oDBViewNotasPendentes.show();
 
   } else {
 
-		var oParam             = new Object();
-    oParam.exec            = "getDadosItemNota";
-    oParam.iCodigoItemNota = <?php echo $iCodigoNota;?>;
+    var oParam = new Object();
+    oParam.exec = "getDadosItemNota";
+    oParam.iCodigoItemNota = <?php echo $iCodigoNota; ?>;
 
     js_divCarregando(_M('patrimonial.patrimonio.db_frm_bensnovo.carregando'), "msgBox");
-    var oAjax   = new Ajax.Request("pat1_bensnovo.RPC.php",
-														        {method: 'post',
-														         parameters: 'json='+Object.toJSON(oParam),
-														         onComplete: js_preencheFormulario
-														        });
+    var oAjax = new Ajax.Request("pat1_bensnovo.RPC.php", {
+      method: 'post',
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_preencheFormulario
+    });
 
   }
 
   function js_preencheFormulario(oAjax) {
 
-		js_removeObj("msgBox");
-    var oRetorno = eval("("+oAjax.responseText+")");
-    
-    if (oRetorno.status == 1) {
-      
-      $("t52_dtaqu").value   = js_formatar(oRetorno.e69_dtnota, 'd');
-      $("t52_numcgm").value  = oRetorno.e60_numcgm;
-      $("z01_nome").value    = oRetorno.z01_nome;
-      $("vlAquisicao").value = oRetorno.e62_vlrun;
-      $("t52_descr").value   = oRetorno.pc01_descrmater;
-      $("iCodigoItemNota").value = <?php echo $iCodigoNota;?>;
-      
-      $("t52_dtaqu").style.backgroundColor   = '#DEB887';
-      $("t52_numcgm").style.backgroundColor  = '#DEB887';
-      $("z01_nome").style.backgroundColor    = '#DEB887';
-      $("vlAquisicao").style.backgroundColor = '#DEB887';
-      $('tdFornecedor').innerHTML            = "<b>Fornecedor:</b>";
+    js_removeObj("msgBox");
+    var oRetorno = eval("(" + oAjax.responseText + ")");
 
-      $("t52_dtaqu").readOnly   = true;
-      $("t52_numcgm").readOnly  = true;
-      $("z01_nome").readOnly    = true;
+    if (oRetorno.status == 1) {
+
+      $("t52_dtaqu").value = js_formatar(oRetorno.e69_dtnota, 'd');
+      $("t52_numcgm").value = oRetorno.e60_numcgm;
+      $("z01_nome").value = oRetorno.z01_nome;
+      $("vlAquisicao").value = oRetorno.e62_vlrun;
+      $("t52_descr").value = oRetorno.pc01_descrmater;
+      $("iCodigoItemNota").value = <?php echo $iCodigoNota; ?>;
+
+      $("t52_dtaqu").style.backgroundColor = '#DEB887';
+      $("t52_numcgm").style.backgroundColor = '#DEB887';
+      $("z01_nome").style.backgroundColor = '#DEB887';
+      $("vlAquisicao").style.backgroundColor = '#DEB887';
+      $('tdFornecedor').innerHTML = "<b>Fornecedor:</b>";
+
+      $("t52_dtaqu").readOnly = true;
+      $("t52_numcgm").readOnly = true;
+      $("z01_nome").readOnly = true;
       $("vlAquisicao").readOnly = true;
     }
   }
 </script>
 
 <?
-if(isset($incluir)) {
+if (isset($incluir)) {
 
   if (trim(@$erro_msg) != "") {
-       db_msgbox($erro_msg);
+    db_msgbox($erro_msg);
   }
-  if($sqlerro == true) {
+  if ($sqlerro == true) {
 
-    if($clbens->erro_campo != "") {
+    if ($clbens->erro_campo != "") {
 
-      echo "<script> document.form1.".$clbens->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clbens->erro_campo.".focus();</script>";
+      echo "<script> document.form1." . $clbens->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clbens->erro_campo . ".focus();</script>";
     }
   } else {
-    db_redireciona("pat1_bensglobal001.php?".$parametros."liberaaba=true&chavepesquisa=$t52_bem");
+    db_redireciona("pat1_bensglobal001.php?" . $parametros . "liberaaba=true&chavepesquisa=$t52_bem");
   }
 }
 ?>

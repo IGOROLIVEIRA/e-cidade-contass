@@ -201,7 +201,7 @@ for ($iInd = 0; $iInd  < $iRsSql; $iInd++) {
     $oDadosEstimativa                 = new stdClass();
     $oDadosEstimativa->iSeq           = $oSolicita->pc11_seq;
     $oDadosEstimativa->iCodItem       = $oSolicita->pc01_codmater;
-    $oDadosEstimativa->sDescrItem     = $oSolicita->pc01_descrmater;
+    $oDadosEstimativa->sDescrItem     = $oSolicita->pc01_descrmater." ".$oSolicita->pc01_complmater;
     $oDadosEstimativa->sCompl         = $oSolicita->pc11_resum;
     $oDadosEstimativa->sUnidade       = $oSolicita->m61_descr;
     $oDadosEstimativa->sFornecedor    = $oSolicita->oDadosFornecedor->vencedor;
@@ -308,7 +308,7 @@ if (!$oGet->fornecedores && $oGet->lQuebraFornecedor == 'f') {
         $objWorkSheet->setCellValue('A4', 'Seq.');
         $objWorkSheet->setCellValue('B4', 'Item.');
         $objWorkSheet->setCellValue('C4', 'Descricao');
-        $objWorkSheet->setCellValue('F4', 'Complemento');
+        //$objWorkSheet->setCellValue('F4', 'Complemento');
         $objWorkSheet->setCellValue('I4', 'Unidade');
         $objWorkSheet->setCellValue('J4', 'Vlr. Unit.');
         $objWorkSheet->setCellValue('K4', 'Fornecedor');
@@ -321,8 +321,8 @@ if (!$oGet->fornecedores && $oGet->lQuebraFornecedor == 'f') {
         $objWorkSheet->mergeCells('A1:B1');
         $objWorkSheet->mergeCells('A2:B2');
         $objWorkSheet->mergeCells('A3:B3');
-        $objWorkSheet->mergeCells('C4:E4');
-        $objWorkSheet->mergeCells('F4:H4');
+        $objWorkSheet->mergeCells('C4:H4');
+        //$objWorkSheet->mergeCells('F4:H4');
         $objWorkSheet->mergeCells('K4:M4');
 
         //cabeçalho
@@ -369,10 +369,10 @@ if (!$oGet->fornecedores && $oGet->lQuebraFornecedor == 'f') {
 
                     $objWorkSheet->setCellValue($collA, $aDadosSolicita['oDados']->iSeq);
                     $objWorkSheet->setCellValue($collB, $aDadosSolicita['oDados']->iCodItem);
-                    $objWorkSheet->mergeCells($collC . ':' . $collE);
+                    $objWorkSheet->mergeCells($collC . ':' . $collH);
                     $objWorkSheet->setCellValue($collC, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosSolicita['oDados']->sDescrItem)));
-                    $objWorkSheet->mergeCells($collF . ':' . $collH);
-                    $objWorkSheet->setCellValue($collF, str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)));
+                    //$objWorkSheet->mergeCells($collF . ':' . $collH);
+                    //$objWorkSheet->setCellValue($collF, str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)));
                     $objWorkSheet->setCellValue($collI, $aDadosSolicita['oDados']->sUnidade);
                     $objWorkSheet->getStyle($collJ)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
                     $objWorkSheet->setCellValue($collJ, $aDadosSolicita['nTotalVlrUnid']);
@@ -452,7 +452,7 @@ if (!$oGet->fornecedores && $oGet->lQuebraFornecedor == 'f') {
         $objWorkSheet->setCellValue('A4', 'Seq.');
         $objWorkSheet->setCellValue('B4', 'Item.');
         $objWorkSheet->setCellValue('C4', 'Descricao');
-        $objWorkSheet->setCellValue('F4', 'Complemento');
+        //$objWorkSheet->setCellValue('F4', 'Complemento');
         $objWorkSheet->setCellValue('I4', 'Unidade');
         $objWorkSheet->setCellValue('J4', 'Vlr. Unit.');
         $objWorkSheet->setCellValue('K4', 'Fornecedor');
@@ -465,8 +465,8 @@ if (!$oGet->fornecedores && $oGet->lQuebraFornecedor == 'f') {
         $objWorkSheet->mergeCells('A1:B1');
         $objWorkSheet->mergeCells('A2:B2');
         $objWorkSheet->mergeCells('A3:B3');
-        $objWorkSheet->mergeCells('C4:E4');
-        $objWorkSheet->mergeCells('F4:H4');
+        $objWorkSheet->mergeCells('C4:H4');
+        //$objWorkSheet->mergeCells('F4:H4');
         $objWorkSheet->mergeCells('K4:M4');
 
         //cabeçalho
@@ -506,10 +506,10 @@ if (!$oGet->fornecedores && $oGet->lQuebraFornecedor == 'f') {
 
             $objWorkSheet->setCellValue($collA, $aDadosPosRegPreco['oDados']->iSeq);
             $objWorkSheet->setCellValue($collB, $aDadosPosRegPreco['oDados']->iCodItem);
-            $objWorkSheet->mergeCells($collC . ':' . $collE);
+            $objWorkSheet->mergeCells($collC . ':' . $collH);
             $objWorkSheet->setCellValue($collC, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $aDadosPosRegPreco['oDados']->sDescrItem)));
-            $objWorkSheet->mergeCells($collF . ':' . $collH);
-            $objWorkSheet->setCellValue($collF, str_replace("\\n", "\n", substr(trim($aDadosPosRegPreco['oDados']->sCompl), 0, 20)));
+            //$objWorkSheet->mergeCells($collF . ':' . $collH);
+            //$objWorkSheet->setCellValue($collF, str_replace("\\n", "\n", substr(trim($aDadosPosRegPreco['oDados']->sCompl), 0, 20)));
             $objWorkSheet->setCellValue($collI, $aDadosPosRegPreco['oDados']->sUnidade);
             $objWorkSheet->getStyle($collJ)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
             $objWorkSheet->setCellValue($collJ, $aDadosPosRegPreco['nTotalVlrUnid']);
