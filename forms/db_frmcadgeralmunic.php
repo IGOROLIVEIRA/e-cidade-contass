@@ -869,6 +869,12 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
 
 <script type="text/javascript">
+    var input = document.querySelector("#z01_obs");
+    input.addEventListener("keypress", function(e) {
+        if (!checkChar(e)) {
+            e.preventDefault();
+        }
+    });
 
     function checkChar(e) {
         var char = String.fromCharCode(e.keyCode);

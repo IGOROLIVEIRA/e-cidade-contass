@@ -167,7 +167,7 @@ $clrotulo->label("pc01_descrmater");
             <input type="hidden" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdAderida]" value="<?= $oItem->pc11_quant ?>">
           </td>
           <td class="linhagrid">
-            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdLicitada]" onkeypress="mascaraQtdLicitada(event,this,<?= $iItem ?>)" onkeyup="comparaValor(event,this,<?= $iItem ?>)" value="<?= $oItem->si07_quantidadelicitada ?>">
+            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdLicitada]" onkeypress="mascaraQtdLicitada(event,this,<?= $iItem ?>)" onblur="comparaValor(event,this,<?= $iItem ?>)" value="<?= $oItem->si07_quantidadelicitada ?>">
           </td>
           <td class="linhagrid">
             <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][precoUnitario]" onkeypress="mascaraPrecoUnitario(event,this)" onkeyup="verificaPrecoUnitario(event,this,<?= $iItem ?>,<?= $oItem->si07_precounitario ?>)" value="<?= $oItem->si07_precounitario ?>">
@@ -226,8 +226,8 @@ $clrotulo->label("pc01_descrmater");
     var qtdAderida = document.getElementsByName(`aItensAdesaoRegPreco[${item}][qtdAderida]`)[0];
 
 
-    if (parseFloat(oObject.value) > parseFloat(qtdAderida.value)) {
-      alert('Usuário: Quantidade Licitada não pode ser maior que a quantidade aderida! ');
+    if (parseFloat(qtdAderida.value) > parseFloat(oObject.value)) {
+      alert('Usuário: Quantidade Aderida não pode ser maior que a quantidade licitada! ');
 
       oObject.value = qtdAderida.value;
       return false;

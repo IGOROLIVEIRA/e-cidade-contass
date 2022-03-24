@@ -332,6 +332,96 @@ include("dbforms/db_funcoes.php");
                                             </td>
                                         </form>
                                     </tr>
+                                    <tr>
+                                        <form name="form1" id='form1' method="post" action=""
+                                              enctype="multipart/form-data">
+                                            <td>
+                                                Balanço Orçamentário:
+                                                <div>&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input class="consolidado" type="file" name="BO"/>
+                                                <div id="BO" class="recebe">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input type="button" value="Enviar"
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','BO','Carregando...','Erro ao carregar')"/>
+                                                <div>&nbsp;</div>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                    <tr>
+                                        <form name="form1" id='form1' method="post" action=""
+                                              enctype="multipart/form-data">
+                                            <td>
+                                            Balanço financeiro:
+                                                <div>&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input class="consolidado" type="file" name="BF"/>
+                                                <div id="BF" class="recebe">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input type="button" value="Enviar"
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','BF','Carregando...','Erro ao carregar')"/>
+                                                <div>&nbsp;</div>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                    <tr>
+                                        <form name="form1" id='form1' method="post" action=""
+                                              enctype="multipart/form-data">
+                                            <td>
+                                            Balanço patrimonial:
+                                                <div>&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input class="consolidado" type="file" name="BP"/>
+                                                <div id="BP" class="recebe">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input type="button" value="Enviar"
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','BP','Carregando...','Erro ao carregar')"/>
+                                                <div>&nbsp;</div>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                    <tr>
+                                        <form name="form1" id='form1' method="post" action=""
+                                              enctype="multipart/form-data">
+                                            <td>
+                                            Demonstração das variações patrimoniais:
+                                                <div>&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input class="consolidado" type="file" name="DVP"/>
+                                                <div id="DVP" class="recebe">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input type="button" value="Enviar"
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','DVP','Carregando...','Erro ao carregar')"/>
+                                                <div>&nbsp;</div>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                    <tr>
+                                        <form name="form1" id='form1' method="post" action=""
+                                              enctype="multipart/form-data">
+                                            <td>
+                                            Demonstração dos fluxos de caixa:
+                                                <div>&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input class="consolidado" type="file" name="DFC"/>
+                                                <div id="DFC" class="recebe">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input type="button" value="Enviar"
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','DFC','Carregando...','Erro ao carregar')"/>
+                                                <div>&nbsp;</div>
+                                            </td>
+                                        </form>
+                                    </tr>
 
                                 </table>
 

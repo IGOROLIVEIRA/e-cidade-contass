@@ -90,34 +90,161 @@ $fMJDAITR = 0;
 $fRJDAIPTU  = 0;
 $fRJDAITBI  = 0;
 $fRJDAISS = 0;
+$fMJMIPTU = 0;
+$fDAIPTU = 0;
+$fMJMDAIPTU = 0;
+$fMIPTU = 0;
+$fJMIPTU = 0;
+$fMDAIPTU = 0;
+$fJMDAIPTU = 0;
 
-foreach ($aReceitas as $Receitas) {
+$fMJMITBI = 0;
+$fDAITBI = 0;
+$fMJDAITBI = 0;
+$fMITBI = 0;
+$fJMITBI = 0;
+$fMDAITBI = 0;
+$fJMDAITBI = 0;
 
-    if (strstr($Receitas->o57_fonte, '411120111000000')) $fIPTR += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180111000000')) $fIPTU += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411130311000000')) $fIRRF += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411130341000000')) $fIRRFO += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180141000000')) $fITBI += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180231000000')) $fISS += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '417180121000000')) $fFPM += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '417180151000000')) $fITR += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '417180611000000')) $fICMS += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '417280111000000')) $fPARTICMS += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '417280121000000')) $fIPVA += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '417280131000000')) $fIPI += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411120112000000')) $fMJITR += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180112000000')) $fMJIPTU += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180142000000')) $fMJTIBI += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180232000000')) $fMJISS += $Receitas->saldo_arrecadado;
+$fMJMISS = 0;
+$fDAISS = 0;
+$fMJMDAISS = 0; 
+$fMISS = 0; 
+$fJMISS = 0;             
+$fMDAISS = 0;
+$fJMDAISS = 0; 
 
-    if (strstr($Receitas->o57_fonte, '411180114000000')) $fMJDAIPTU += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180144000000')) $fMJDAITBI += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180234000000')) $fMJDAISS += $Receitas->saldo_arrecadado;
+$fFMISS = 0;
+$fFMMJMISS = 0;
+$fFMDAISS = 0;
+$fFMMJMDAISS = 0; 
+$fFMMISS = 0; 
+$fFMJMISS = 0;             
+$fFMMDAISS = 0;
+$fFMJMDAISS = 0;
 
-    if (strstr($Receitas->o57_fonte, '411180113000000')) $fRJDAIPTU += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180143000000')) $fRJDAITBI += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '411180233000000')) $fRJDAISS += $Receitas->saldo_arrecadado;
+$fMJMITR = 0;
+$fDAITR = 0;
+$fMJMDAITR = 0;
+$fMITR = 0;
+$fJMITR = 0;
+$fMDAITR = 0;
+$fJMDAITR = 0;
+$fISP = 0;
+$fISO = 0;
+
+if ($anousu >=2022){
+    $aReceitasImpostosIPTU = array(
+        array('(-) Deduções da Receita do IPTU', 'text', '49%11125001%',''),
+    );
+    $aReceitasImpostosITBI = array( 
+        array('(-) Deduções da Receita do ITBI', 'text', '49%1112530%',''),
+    );
+    $aReceitasImpostosISS = array(
+        array('(-) Deduções da Receita do ISS', 'text', '49%111451%',''),
+    );
+    $aReceitasImpostosIRRF = array(
+        array('(-) Deduções da Receita do IRRF', 'text', '49%111303%',''),
+    );
+    $aReceitasImpostosITR = array(
+        array('(-) Deduções da Receita do ITR ', 'text', '49%1112011%',''),
+    );
+}    
+if($anousu>=2022){
+    foreach ($aReceitas as $Receitas) {
+        //IPTU
+        if (strstr($Receitas->o57_fonte, '41112500100000')) $fIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '41112500200000')) $fMJMIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '41112500300000')) $fDAIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '41112500400000')) $fMJMDAIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '41112500500000')) $fMIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '41112500600000')) $fJMIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '41112500700000')) $fMDAIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '41112500800000')) $fJMDAIPTU += $Receitas->saldo_arrecadado;
+        //ITBI
+        if (strstr($Receitas->o57_fonte, '411125301000000')) $fITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411125302000000')) $fMJMITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411125303000000')) $fDAITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411125304000000')) $fMJDAITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411125305000000')) $fMITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411125306000000')) $fJMITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411125307000000')) $fMDAITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411125308000000')) $fJMDAITBI += $Receitas->saldo_arrecadado;
+        //ISS 
+        if (strstr($Receitas->o57_fonte, '411145111000000')) $fISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145112000000')) $fMJMISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145113000000')) $fDAISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145114000000')) $fMJMDAISS += $Receitas->saldo_arrecadado; 
+        if (strstr($Receitas->o57_fonte, '411145115000000')) $fMISS += $Receitas->saldo_arrecadado; 
+        if (strstr($Receitas->o57_fonte, '411145116000000')) $fJMISS += $Receitas->saldo_arrecadado;             
+        if (strstr($Receitas->o57_fonte, '411145117000000')) $fMDAISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145118000000')) $fJMDAISS += $Receitas->saldo_arrecadado; 
+
+        if (strstr($Receitas->o57_fonte, '411145121000000')) $fFMISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145122000000')) $fFMMJMISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145123000000')) $fFMDAISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145124000000')) $fFMMJMDAISS += $Receitas->saldo_arrecadado; 
+        if (strstr($Receitas->o57_fonte, '411145125000000')) $fFMMISS += $Receitas->saldo_arrecadado; 
+        if (strstr($Receitas->o57_fonte, '411145126000000')) $fFMJMISS += $Receitas->saldo_arrecadado;             
+        if (strstr($Receitas->o57_fonte, '411145127000000')) $fFMMDAISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145128000000')) $fFMJMDAISS += $Receitas->saldo_arrecadado;
+        // IRRF
+        if (strstr($Receitas->o57_fonte, '411130311000000')) $fIRRF += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411130341000000')) $fIRRFO += $Receitas->saldo_arrecadado;
+        // ITR
+        if (strstr($Receitas->o57_fonte, '411120111000000')) $fITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411120112000000')) $fMJMITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411120113000000')) $fDAITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411120114000000')) $fMJMDAITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411120115000000')) $fMITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411120116000000')) $fJMITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411120117000000')) $fMDAITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411120118000000')) $fJMDAITR += $Receitas->saldo_arrecadado;
+        // FPM
+        if (strstr($Receitas->o57_fonte, '417115111000000')) $fFPM += $Receitas->saldo_arrecadado;
+        // ISP
+        if (strstr($Receitas->o57_fonte, '417115201000000')) $fISP += $Receitas->saldo_arrecadado;
+         // ISO
+        if (strstr($Receitas->o57_fonte, '411711550100000')) $fISO += $Receitas->saldo_arrecadado;
+        // ICMS
+        if (strstr($Receitas->o57_fonte, '417195101000000')) $fPARTICMS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '417215001000000')) $fICMS += $Receitas->saldo_arrecadado;
+        //IPVA
+        if (strstr($Receitas->o57_fonte, '417215101000000')) $fIPVA += $Receitas->saldo_arrecadado;    
+        // IPI
+        if (strstr($Receitas->o57_fonte, '417215201000000')) $fIPI += $Receitas->saldo_arrecadado; 
+        
+    }
 }
+else{
+    foreach ($aReceitas as $Receitas) {
+
+        if (strstr($Receitas->o57_fonte, '411120111000000')) $fIPTR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180111000000')) $fIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411130311000000')) $fIRRF += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411130341000000')) $fIRRFO += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180141000000')) $fITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180231000000')) $fISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '417180121000000')) $fFPM += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '417180151000000')) $fITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '417215001000000')) $fICMS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '417280111000000')) $fPARTICMS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '417280121000000')) $fIPVA += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '417280131000000')) $fIPI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411120112000000')) $fMJITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180112000000')) $fMJIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180142000000')) $fMJTIBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180232000000')) $fMJISS += $Receitas->saldo_arrecadado;
+
+        if (strstr($Receitas->o57_fonte, '411180114000000')) $fMJDAIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180144000000')) $fMJDAITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180234000000')) $fMJDAISS += $Receitas->saldo_arrecadado;
+
+        if (strstr($Receitas->o57_fonte, '411180113000000')) $fRJDAIPTU += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180143000000')) $fRJDAITBI += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411180233000000')) $fRJDAISS += $Receitas->saldo_arrecadado;
+    }
+}    
 db_query("drop table if exists work_receita");
 criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 
@@ -736,6 +863,761 @@ ob_start();
                     <th id="0C9" style="width:100px" class="column-headers-background">&nbsp;</th>
                 </tr>
             </thead>
+            <?php if (db_getsession('DB_anousu') >= 2022) : ?>
+                <tbody>
+                    <tr style='height:20px;'>
+                        <td class="s3 bdleft bdtop" colspan="10">&nbsp;</td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s4 bdleft" colspan="10">DEMONSTRATIVO DA APLICAÇÃO EM AÇÕES E SERVIÇOS PÚBLICOS DE SAÚDE</td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s4 bdleft" colspan="10">(ART. 198, § 2.º, III, DA CF/88)</td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s5 bdleft" colspan="10">&nbsp;</td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s6 bdleft" colspan="8">1 - Receita de impostos </td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s6 bdleft" colspan="8">1.1 - Receita resultante do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU) </td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11125001</td>
+                        <td class="s12" colspan="6"> Imposto sobre a Propriedade Predial e Territorial Urbana -  Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fIPTU, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11125002</td>
+                        <td class="s6" colspan="6"> Imposto Sobre a Propriedade Predial e Territorial Urbana -  Multas e Juros de Mora </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fMJMIPTU, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11125003</td>
+                        <td class="s12" colspan="6"> Imposto sobre a Propriedade Predial e Territorial Urbana -   Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fDAIPTU, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11125004</td>
+                        <td class="s6" colspan="6"> Imposto Sobre a Propriedade Predial e Territorial Urbana -   Multas e Juros de Mora da Dívida Ativa </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fMJMDAIPTU, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11125005</td>
+                        <td class="s12" colspan="6"> Imposto sobre a Propriedade Predial e Territorial Urbana -    Multas</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fMIPTU, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11125006</td>
+                        <td class="s6" colspan="6"> Imposto Sobre a Propriedade Predial e Territorial Urbana -    Juros de Mora </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fJMIPTU, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11125007</td>
+                        <td class="s12" colspan="6"> Imposto sobre a Propriedade Predial e Territorial Urbana -    Multas da Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fMDAIPTU, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11125008</td>
+                        <td class="s6" colspan="6"> Imposto Sobre a Propriedade Predial e Territorial Urbana -    Juros de Mora da Dívida Ativa</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fJMDAIPTU, "f");
+                            ?>
+                        </td>
+                    </tr>                     
+                   <?php
+                $nTotalReceitaImpostos = 0;
+                foreach ($aReceitasImpostosIPTU as $receita) {
+                    echo "<tr style='height:20px;'>";
+                    echo "<td class='s6 bdleft' colspan='8'>{$receita[0]}</td>";
+                    echo "<td class='s9' colspan='2'>";
+                    $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%11125001%'");
+                    $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
+
+                    $nTotalReceitaDeducao = 0;
+                    if($receita[3] != ''){
+                        $aReceitasDeducao = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%11125001%'");
+                        $nTotalReceitaDeducao = count($aReceitasDeducao) > 0 ? $aReceitasDeducao[0]->saldo_arrecadado_acumulado : 0;
+                    }
+                    $nTotalReceita = $nReceita + $nTotalReceitaDeducao;
+                    $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
+                    if ($receita[1] == 'title') {
+                        echo "";
+                    } else {
+                        $totalIPTU = $nTotalReceita;
+                        echo db_formatar(abs($nTotalReceita), "f");
+                    }
+                    echo "    </td>";
+                    echo " </tr>";
+                }
+                ?>   
+                   
+                    
+                    <tr style='height:20px;'>
+                        <td class="s3 bdleft" colspan="8">&nbsp;</td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+
+                    <!-- ITBI -->
+                    <tr style='height:20px;'>
+                        <td class="s6 bdleft" colspan="8">1.2 - Receita resultante do Imposto sobre Transmissão Inter Vivos (ITBI)</td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11125301</td>
+                        <td class="s12" colspan="6"> Impostos sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -  Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fITBI, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11125302</td>
+                        <td class="s6" colspan="6"> Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -  Multas e Juros de Mora </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fMJMITBI, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11125303</td>
+                        <td class="s12" colspan="6"> Impostos sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -   Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fDAITBI, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11125304</td>
+                        <td class="s6" colspan="6"> Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -   Multas e Juros de Mora da Dívida Ativa </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fMJDAITBI, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11125305</td>
+                        <td class="s12" colspan="6"> Impostos sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -   Multas</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fMITBI, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11125306</td>
+                        <td class="s6" colspan="6"> Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -   Juros de Mora </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fJMITBI, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11125307</td>
+                        <td class="s12" colspan="6"> Impostos sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -   Multas da Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fMDAITBI, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11125308</td>
+                        <td class="s6" colspan="6"> Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -  Juros de Mora da Dívida Ativa </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fJMDAITBI, "f");
+                            ?>
+                        </td>
+                    </tr>
+                <?php
+                $nTotalReceitaImpostos = 0;
+                foreach ($aReceitasImpostosITBI as $receita) {
+                    echo "<tr style='height:20px;'>";
+                    echo "<td class='s6 bdleft' colspan='8'>{$receita[0]}</td>";
+                    echo "    <td class='s9' colspan='2'>";
+                    $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%1112530%'");
+                    $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
+
+                    $nTotalReceitaDeducao = 0;
+                    if($receita[3] != ''){
+                        $aReceitasDeducao = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%1112530%'");
+                        $nTotalReceitaDeducao = count($aReceitasDeducao) > 0 ? $aReceitasDeducao[0]->saldo_arrecadado_acumulado : 0;
+                    }
+                    $nTotalReceita = $nReceita + $nTotalReceitaDeducao;
+                    $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
+                    if ($receita[1] == 'title') {
+                        echo "";
+                    } else {
+                        $totalIBI=$nTotalReceita;
+                        echo db_formatar(abs($nTotalReceita), "f");
+                    }
+                    echo "    </td>";
+                    echo " </tr>";
+                }
+                ?>   
+                    <tr style='height:20px;'>
+                        <td class="s3 bdleft" colspan="8">&nbsp;</td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+
+                <!-- ISS -->
+                    <tr style='height:20px;'>
+                        <td class="s6 bdleft" colspan="8">1.3 -  Receita resultante do Imposto sobre Serviços de Qualquer Natureza (ISS) </td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11145111</td>
+                        <td class="s12" colspan="6">  Imposto sobre Serviços de Qualquer Natureza  -     Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11145112</td>
+                        <td class="s6" colspan="6">  Imposto sobre Serviços de Qualquer Natureza  -     Multas e Juros de Mora</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fMJMISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11145113</td>
+                        <td class="s12" colspan="6">  Imposto sobre Serviços de Qualquer Natureza  -     Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fDAISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11145114</td>
+                        <td class="s6" colspan="6">  Imposto sobraassdase Serviços de Qualquer Natureza  -     Multas e Juros de Mora da Dívida Ativa</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fMJMDAISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11145115</td>
+                        <td class="s12" colspan="6">  Imposto sobre Serviços de Qualquer Natureza  -    Multas </td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fMISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11145116</td>
+                        <td class="s6" colspan="6">  Imposto sobre Serviços de Qualquer Natureza  -    Juros de Mora </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fJMISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11145117</td>
+                        <td class="s12" colspan="6">  Imposto sobre Serviços de Qualquer Natureza  -    Multas da Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fMDAISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11145118</td>
+                        <td class="s6" colspan="6">  Imposto sobre Serviços de Qualquer Natureza  -    Juros de Mora da Dívida Ativa</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fJMDAISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11145121</td>
+                        <td class="s12" colspan="6">  Adicional ISS -  Fundo Municipal de Combate à Pobreza -  Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fFMISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11145122</td>
+                        <td class="s6" colspan="6"> Adicional ISS -  Fundo Municipal de Combate à Pobreza -  Multas e Juros de Mora</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fFMMJMISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11145123</td>
+                        <td class="s12" colspan="6"> Adicional ISS -  Fundo Municipal de Combate à Pobreza -  Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fFMDAISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11145124</td>
+                        <td class="s6" colspan="6"> Adicional ISS -  Fundo Municipal de Combate à Pobreza -  Multas e Juros de Mora da Dívida Ativa</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fFMMJMDAISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11145125</td>
+                        <td class="s12" colspan="6"> Adicional ISS -  Fundo Municipal de Combate à Pobreza -  Multas </td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fFMMISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11145126</td>
+                        <td class="s6" colspan="6"> Adicional ISS -  Fundo Municipal de Combate à Pobreza -  Juros de Mora </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fFMJMISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11145127</td>
+                        <td class="s12" colspan="6"> Adicional ISS -  Fundo Municipal de Combate à Pobreza -  Multas da Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fFMMDAISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11145128</td>
+                        <td class="s6" colspan="6"> Adicional ISS -  Fundo Municipal de Combate à Pobreza -  Juros de Mora da Dívida Ativa</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fFMJMDAISS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <?php
+                $nTotalReceitaImpostos = 0;
+                foreach ($aReceitasImpostosISS as $receita) {
+                    echo "<tr style='height:20px;'>";
+                    echo "<td class='s6 bdleft' colspan='8'>{$receita[0]}</td>";
+                    echo "    <td class='s9' colspan='2'>";
+                    $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%111451%'");
+                    $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
+
+                    $nTotalReceitaDeducao = 0;
+                    if($receita[3] != ''){
+                        $aReceitasDeducao = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%111451%'");
+                        $nTotalReceitaDeducao = count($aReceitasDeducao) > 0 ? $aReceitasDeducao[0]->saldo_arrecadado_acumulado : 0;
+                    }
+                    $nTotalReceita = $nReceita + $nTotalReceitaDeducao;
+                    $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
+                    if ($receita[1] == 'title') {
+                        echo "";
+                    } else {
+                        $totalISS = $nTotalReceita;
+                        echo db_formatar(abs($nTotalReceita), "f");
+                    }
+                    echo "    </td>";
+                    echo " </tr>";
+                }
+                ?>   
+                    <tr style='height:20px;'>
+                        <td class="s3 bdleft" colspan="8">&nbsp;</td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                    <!-- IRRF -->
+                    <tr style='height:20px;'>
+                        <td class="s6 bdleft" colspan="8">1.4 -   Receita resultante do Imposto de Renda Retido na Fonte (IRRF) </td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11130311</td>
+                        <td class="s12" colspan="6">   Imposto sobre a Renda  -   Retido na Fonte - Trabalho  -   Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fIRRF, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11130341</td>
+                        <td class="s6" colspan="6">  Imposto sobre a Renda  -   Retido na Fonte - Trabalho  -    Outros Rendimentos     Principal</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fIRRFO, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <?php
+                $nTotalReceitaImpostos = 0;
+                foreach ($aReceitasImpostosIRRF as $receita) {
+                    echo "<tr style='height:20px;'>";
+                    echo "<td class='s6 bdleft' colspan='8'>{$receita[0]}</td>";
+                    echo "    <td class='s9' colspan='2'>";
+                    $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%111303%'");
+                    $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
+
+                    $nTotalReceitaDeducao = 0;
+                    if($receita[3] != ''){
+                        $aReceitasDeducao = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%111303%'");
+                        $nTotalReceitaDeducao = count($aReceitasDeducao) > 0 ? $aReceitasDeducao[0]->saldo_arrecadado_acumulado : 0;
+                    }
+                    $nTotalReceita = $nReceita + $nTotalReceitaDeducao;
+                    $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
+                    if ($receita[1] == 'title') {
+                        echo "";
+                    } else {
+                        $totalIRRF = $nTotalReceita;
+                        echo db_formatar(abs($nTotalReceita), "f");
+                    }
+                    echo "    </td>";
+                    echo " </tr>";
+                }
+                ?>   
+                    <tr style='height:20px;'>
+                        <td class="s3 bdleft" colspan="8">&nbsp;</td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                     <!-- ITR -->
+                     <tr style='height:20px;'>
+                        <td class="s6 bdleft" colspan="8">1.5 -   Receita resultante do Imposto Territorial Rural (ITR) (CF, ART 153, §4º, inciso III)</td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11120111</td>
+                        <td class="s12" colspan="6">  Imposto sobre a Propriedade Territorial Rural  -   Municípios Conveniados  -  Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fITR, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11120112</td>
+                        <td class="s6" colspan="6">  Imposto sobre a Propriedade Territorial Rural  -   Municípios Conveniados  -  Multas e Juros de Mora </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fMJMITR, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11120113</td>
+                        <td class="s12" colspan="6">  Imposto sobre a Propriedade Territorial Rural  -   Municípios Conveniados  -   Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fDAITR, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11120114</td>
+                        <td class="s6" colspan="6">  Imposto sobre a Propriedade Territorial Rural  -   Municípios Conveniados  -   Multas e Juros de Mora da Dívida Ativa </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fMJMDAITR, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11120115</td>
+                        <td class="s12" colspan="6">  Imposto sobre a Propriedade Territorial Rural  -   Municípios Conveniados  -   Multas</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fMITR, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11120116</td>
+                        <td class="s6" colspan="6">  Imposto sobre a Propriedade Territorial Rural  -   Municípios Conveniados  -   Juros de Mora </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fJMITR, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">11120117</td>
+                        <td class="s12" colspan="6">  Imposto sobre a Propriedade Territorial Rural  -   Municípios Conveniados  -   Multas da Dívida Ativa</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fMDAITR, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">11120118</td>
+                        <td class="s6" colspan="6">  Imposto sobre a Propriedade Territorial Rural  -   Municípios Conveniados  -  Juros de Mora da Dívida Ativa </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fJMDAITR, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <?php
+                $nTotalReceitaImpostos = 0;
+                foreach ($aReceitasImpostosITR as $receita) {
+                    echo "<tr style='height:20px;'>";
+                    echo "<td class='s6 bdleft' colspan='8'>{$receita[0]}</td>";
+                    echo "    <td class='s9' colspan='2'>";
+                    $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%1112011%'");
+                    $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
+
+                    $nTotalReceitaDeducao = 0;
+                    if($receita[3] != ''){
+                        $aReceitasDeducao = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49%1112011%'");
+                        $nTotalReceitaDeducao = count($aReceitasDeducao) > 0 ? $aReceitasDeducao[0]->saldo_arrecadado_acumulado : 0;
+                    }
+                    $nTotalReceita = $nReceita + $nTotalReceitaDeducao;
+                    $receita[1] == 'subtitle' ? $nTotalReceitaImpostos += $nTotalReceita : $nTotalReceitaImpostos += 0;
+                    if ($receita[1] == 'title') {
+                        echo "";
+                    } else {
+                        $totalITR = $nTotalReceita;
+                        echo db_formatar(abs($nTotalReceita), "f");
+                    }
+                    echo "    </td>";
+                    echo " </tr>";
+                }
+                ?>   
+                     <tr style='height:20px;'>
+                     <td class="s20 bdleft" colspan="8"><b>Subtotal</b></td>
+                        <td class="s21" colspan="2"> <?php
+                                                    $fSubTotalImposto = array_sum(array($fITR, $fMJMITR, $fDAITR, $fMJMDAITR, $fMITR, $fJMITR,$fMDAITR,$fJMDAITR,$fIRRF,$fIRRFO,$fISS, $fMJMISS, $fDAISS, $fMJMDAISS, $fMISS, $fJMISS,$fMDAISS,$fJMDAISS,$fFMISS,$fFMMJMISS,$fFMDAISS,$fFMMJMDAISS,$fFMMISS,$fFMJMISS,$fFMMDAISS,$fFMJMDAISS,$fITBI, $fMJMITBI, $fDAITBI, $fMJDAITBI, $fMITB, $fJMITBI,$fMDAITBI,$fJMDAITBI,$fIPTU, $fMJMIPTU, $fDAIPTU, $fMJMDAIPTU, $fMIPTU, $fJMIPTU,$fMDAIPTU,$fJMDAIPTU));
+                                                    echo db_formatar($fSubTotalImposto-(abs($totalIPTU)+abs($totalITBI)+abs($totalISS)+abs($totalIRRF)+abs($totalITR)), "f"); 
+                                                    $fSubTotalImposto = $fSubTotalImposto-(abs($totalIPTU)+abs($totalITBI)+abs($totalISS)+abs($totalIRRF)+abs($totalITR));
+                                                   ?></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s3 bdleft" colspan="8">&nbsp;</td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                     <!-- Cota -->
+                     <tr style='height:20px;'>
+                        <td class="s6 bdleft" colspan="8">2 -    Receita de transferências constitucionais e legais</td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">17115111</td>
+                        <td class="s12" colspan="6">  Cota  -  Parte do Fundo de Participação dos Municípios  -	 Cota Mensal  -	 Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fFPM, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">17115201</td>
+                        <td class="s6" colspan="6">  Cota  -  Parte do Imposto Sobre a Propriedade Territorial Rural  -  Principal </td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fISP, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">17115501</td>
+                        <td class="s12" colspan="6">  Cota  -   Parte do Imposto Sobre Operações de Crédito, Câmbio e Seguro, ou Relativas a Títulos ou Valores Mobiliários  -	 Comercialização do Ouro  -	 Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fISO, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">17195101</td>
+                        <td class="s6" colspan="6">   Transferência Financeira do ICMS 	 Desoneração  -	 LC Nº 87/96  -	 Principal</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fPARTICMS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">17215001</td>
+                        <td class="s12" colspan="6">  Cota  -   Parte do ICMS  -  Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fICMS, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s7 bdleft"></td>
+                        <td class="s8">17215101</td>
+                        <td class="s6" colspan="6">  Cota  -   Parte do IPVA  -	 Principal</td>
+                        <td class="s9" colspan="2">
+                            <?php
+                            echo db_formatar($fIPVA, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s10 bdleft"></td>
+                        <td class="s11">17215201</td>
+                        <td class="s12" colspan="6">  Cota  -   Parte do IPI  -	 Municípios  -	 Principal</td>
+                        <td class="s13" colspan="2">
+                            <?php
+                            echo db_formatar($fIPI, "f");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s20 bdleft" colspan="8"><b>Subtotal</b></td>
+                        <td class="s21" colspan="2"> <?php
+                                                    $fSubTotalOutrasCorrentes = array_sum(array($fIPI,$fIPVA,$fICMS,$fPARTICMS,$fISO,$fISP,$fFPM));
+                                                    echo db_formatar($fSubTotalOutrasCorrentes, "f"); ?></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s3 bdleft" colspan="8">&nbsp;</td>
+                        <td class="s3" colspan="2"></td>
+                    </tr>
+    
+                    <tr style='height:20px;'>
+                        <td class="s6 bdleft bdbottom" colspan="8">&nbsp;</td>
+                        <td class="s3 bdbottom" colspan="2"></td>
+                    </tr>
+
+                    <tr style='height:20px;'>
+                        <td class="s20 bdleft" colspan="8">02 - Total das Receitas (A+B)</td>
+                        <td class="s21" colspan="2"><?php $fTotalReceitas = ($fSubTotalImposto + $fSubTotalOutrasCorrentes) - (abs($fTotalDeducoes));
+                                                    echo db_formatar($fTotalReceitas, "f"); ?> </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <td class="s20 bdleft" colspan="8">03 - Valor legal de Aplicação em Ações e Serviços de Saúde</td>
+                        <td class="s21" colspan="2"><?php echo db_formatar($fTotalReceitas * 0.15, "f"); ?></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <?php
+                        db_query("drop table if exists work_receita");
+                        db_fim_transacao();
+                        $fTotalAnexoII = getTotalAnexoIISaude($instits, $dtini, $dtfim, $anousu);
+                        ?>
+                        <td class="s20 bdleft" dir="ltr" colspan="8">04 - Aplicação no exercício</td>
+                        <td class="s21" colspan="2"><?= db_formatar($fTotalAnexoII, "f") ?></td>
+                    </tr>
+
+                    <tr style='height:20px;'>
+                        <?php
+                        db_query("drop table if exists work_receita");
+                        db_fim_transacao();
+                        $fTotalAnexoII = getTotalAnexoIISaude($instits, $dtini, $dtfim, $anousu);
+                        ?>
+                        <td class="s20 bdleft" dir="ltr" colspan="8">05 - Restos a pagar pagos inscritos sem disponibilidade - (Consulta 932.736/2015)</td>
+                        <td class="s21" colspan="2"><?= db_formatar($iRestosAPagar, "f") ?></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                        <?php
+                        db_query("drop table if exists work_receita");
+                        db_fim_transacao();
+                        $fTotalAnexoII = getTotalAnexoIISaude($instits, $dtini, $dtfim, $anousu);
+                        ?>
+                        <td class="s20 bdleft" dir="ltr" colspan="8">06 - Aplicação total no exercício (Total do Anexo II-B) = <?php echo db_formatar(((($fTotalAnexoII + $iRestosAPagar) / ($fTotalReceitas * 0.15)) * 0.15) * 100, "f"); ?>%</td>
+                        <td class="s21" colspan="2"><?= db_formatar(($fTotalAnexoII + $iRestosAPagar), "f") ?></td>
+                    </tr>
+                </tbody>
+            <?php endif; ?>            
             <?php if (db_getsession('DB_anousu') < 2018) : ?>
                 <tbody>
                     <tr style='height:20px;'>
@@ -1174,7 +2056,8 @@ ob_start();
                     </tr>
 
                 </tbody>
-            <?php else : ?>
+            <?php endif; ?>    
+            <?php  if ((db_getsession('DB_anousu') >= 2018 ) and  (db_getsession('DB_anousu') <= 2021)) : ?>
                 <tbody>
                     <tr style='height:20px;'>
                         <td class="s3 bdleft bdtop" colspan="10">&nbsp;</td>

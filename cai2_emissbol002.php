@@ -289,9 +289,10 @@ if ($agrupar == 'S') {
                                         j.c61_anousu = h.c60_anousu
                                         and j.c61_instit = ".db_getsession("DB_instit")."
     ";
+   
 $resultdespesaextra = db_query($sql);
 //echo ' Despesa Extra-Orçamentaria ';
-//db_criatabela($resultdespesaextra);exit;
+// db_criatabela($resultdespesaextra);exit;
 if ($ordem_conta == 1) {
   $ordem_conta = " c63_banco, k13_reduz ";
 }elseif ($ordem_conta == 2) {
@@ -308,15 +309,30 @@ if($agrupar=='S'){
   $ordem_conta = "c63_banco,lpad(c63_agencia,4,0),c63_dvagencia,c63_conta,c63_dvconta,c63_tipoconta";
 }
 
-if ($agrupar_fonte == 'S') {
-  $ordem_conta = "c61_codigo,".$ordem_conta;
-}
+
 
 $sWhere = "";
 if (isset($fonte) && $fonte != '') {
   $sWhere .= " and o15_codtri = '{$fonte}' ";
   $descr_conta = "CONTAS DA FONTE {$fonte}";
 }
+
+if ($agrupar_fonte == 'S') {
+  if($tipo_conta == '0')
+        $sWhere .= " and c63_tipoconta > '{$tipo_conta}' ";
+  else
+        $sWhere .= " and c63_tipoconta = '{$tipo_conta}' ";
+  $ordem_conta = "c61_codigo,".$ordem_conta;
+}
+
+if ($agrupar_fonte == 'N') {
+    if ($agrupar_tipo_conta == 2) {
+      if($tipo_conta != '0')
+        $sWhere .= " and c63_tipoconta = '{$tipo_conta}' ";
+    }else
+      $ordem_conta =" c63_tipoconta ";
+}
+
 
 /// CONTAS MOVIMENTO
 $sql="select   o15_codtri,c61_codigo,
@@ -342,8 +358,7 @@ $sql="select   o15_codtri,c61_codigo,
          c63_banco::integer||lpad(c63_agencia,4,0)||c63_conta||c63_dvconta||c63_dvagencia as hashconta, ";
 
          if ($agrupar == 'S') {
-          $sql .= " fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',$ip,".db_getsession("DB_instit").",
-                     c63_banco::integer||lpad(c63_agencia,4,0)||c63_conta||c63_dvconta||c63_dvagencia) ";
+          $sql .= " fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',$ip,".db_getsession("DB_instit").") ";
         } else {
           $sql .= " fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',$ip,".db_getsession("DB_instit").") ";
         }
@@ -361,8 +376,40 @@ $sql .=	" from  saltes
 
           ) as x
 	      ";
-//echo $sql;exit;
+
+
 $resultcontasmovimento = db_query($sql);
+
+if($agrupar_tipo_conta == '1'){
+  $atualc = 0;$atualp=0;$atuala  = 0;
+  $anteriorc = 0; $anteriorp = 0;$anteriora = 0;
+  $debitadoc = 0;$debitadop = 0;$debitadoa = 0;
+  $creditadoc = 0;$creditadop = 0;$creditadoa = 0;
+$conttipo = array();
+for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
+	db_fieldsmemory($resultcontasmovimento, $i);
+  if($c63_tipoconta == '1'){
+      $atualc += $atual;
+      $debitadoc += $debitado;
+      $creditadoc += $creditado;
+      $anteriorc += $anterior;
+      $conttipo[0] += 1;}
+  if($c63_tipoconta == '2'){
+      $atualp += $atual;
+      $debitadop += $debitado;
+      $creditadop += $creditado;
+      $anteriorp += $anterior;
+      $conttipo[1] += 1;  }
+  if($c63_tipoconta == '3'){
+      $atuala += $atual;
+      $debitadoa += $debitado;
+      $creditadoa += $creditado;
+      $anteriora += $anterior;
+      $conttipo[2] += 1; }
+}
+
+}
+
 //db_criatabela($resultcontasmovimento);echo pg_last_error();exit;
 
 /*
@@ -624,6 +671,7 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
       if ($sVerificaFonte != "") {
         $pdf->cell(192, $alt, "", 1, 1, 1, 0);
       }
+      // $pdf->cell(96, $alt, 'teste', "LRT", 0, 'C', 0);
       $pdf->SetFont('Arial', 'B', 7);
       $pdf->cell(96, $alt, $c61_codigo.' - '.substr($o15_descr,0,57), "LTB", 0, 'L', 0);
       $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o15_codtri]->anterior, 'f'), 1, 0, 'R', 0);
@@ -644,6 +692,7 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 		$saldoc_creditado += $creditado;
 		$saldoc_atual += $atual;
 	}
+  
 }
 $pdf->SetFont('Arial', 'B', 8);
 //$pdf->SetTextColor(0,100,255);
@@ -750,8 +799,26 @@ $saldo_creditado = 0;
 $saldo_atual = 0;
 $pdf->SetTextColor(0);
 $pdf->SetFont('Arial', '', 8);
+if($agrupar_tipo_conta == '2'&& $tipo_conta !=0){
+  if($c63_tipoconta == '1'){ 
+    $pdf->SetFont('Arial', 'B', 8);
+    $pdf->cell(192, 6, " CONTAS CORRENTES ",1, 1, "L", 0);
+  }
+  if($c63_tipoconta == '2'){
+      $pdf->SetFont('Arial', 'B', 8);
+      $pdf->cell(192, 6, " CONTAS POUPANÇA ",1, 1, "L", 0); 
+    }  
+  if($c63_tipoconta == '3'){
+      $pdf->SetFont('Arial', 'B', 8); 
+      $pdf->cell(192, 6, " CONTAS APLICAÇÕES ",1, 1, "L", 0);
+      
+    }  
+
+} 
+
 //db_criatabela($resultcontasmovimento);exit;
 $aContasMovs = array();
+
 for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
   db_fieldsmemory($resultcontasmovimento, $i);
 
@@ -788,8 +855,39 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
     }
   }
 }
+
 $sVerificaFonte = "";
+$itipo = 0;
 foreach ($aContasMovs as $oConta) {
+  $itipo++;
+  if($agrupar_tipo_conta == '1' and $agrupar_fonte == 'N'){
+    if($itipo == 1 && (count($conttipo[0])>0)){
+      $pdf->SetFont('Arial', 'B', 8);
+      $pdf->cell(96, $alt, " I. CONTAS CORRENTES ", "LTB", 0, 'L', 0);
+      $pdf->cell(24, $alt, db_formatar($anteriorc, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($debitadoc, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($creditadoc, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($atualc, 'f'), 1, 1, 'R', 0);
+    }
+    if($itipo == ($conttipo[0]+1) && (count($conttipo[1])>0)){
+      $pdf->SetFont('Arial', 'B', 8);
+      $pdf->cell(96, $alt, " II. CONTAS POUPANÇA ", "LTB", 0, 'L', 0);
+      $pdf->cell(24, $alt, db_formatar($anteriorp, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($debitadop, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($creditadop, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($atualp, 'f'), 1, 1, 'R', 0);
+    }
+    if($itipo == ($conttipo[0]+$conttipo[1])+1 && (count($conttipo[2])>0)){
+      $pdf->SetFont('Arial', 'B', 8);
+      $pdf->cell(96, $alt, " III. CONTAS APLICAÇÕES ", "LTB", 0, 'L', 0);
+      $pdf->cell(24, $alt, db_formatar($anteriora, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($debitadoa, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($creditadoa, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($atuala, 'f'), 1, 1, 'R', 0);
+    
+    }
+  }
+
 	if ($contassemmov == "f" and $oConta->debitado == 0 and $oConta->creditado == 0 and $oConta->anterior==0 and $oConta->atual ==0) {
     continue;
   }
@@ -808,9 +906,11 @@ foreach ($aContasMovs as $oConta) {
 		$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
 		$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'ATUAL', "LRB", 1, 'C', 0);
+   
 		$pdf->SetFont('Arial', '', 8);
 
 	}
+    
 
   $pre = 0;
   if($contasnegativas == 'S' && $oConta->atual < 0){
@@ -846,7 +946,10 @@ foreach ($aContasMovs as $oConta) {
 		$saldo_creditado += $oConta->creditado;
 		$saldo_atual += $oConta->atual;
 	}
+  
+
 }
+
 $pdf->SetFont('Arial', 'B', 8);
 //$pdf->SetTextColor(0,100,255);
 $pdf->cell(96, $alt, 'TOTAL', 1, 0, 'L', 0);

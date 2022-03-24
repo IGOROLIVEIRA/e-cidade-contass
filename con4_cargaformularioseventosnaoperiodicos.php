@@ -56,6 +56,22 @@ require_once("dbforms/db_funcoes.php");
                 </tr>
                 <tr>
                     <td>
+                        <input type="checkbox" value="4000113">
+                    </td>
+                    <td>
+                        <label>Trabalhador Sem Vínculo de Emprego/Estatutário s2300</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" value="4000116">
+                    </td>
+                    <td>
+                        <label>S-2400 - Cadastro de Beneficiário</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         <input type="checkbox" value="4000112">
                     </td>
                     <td>

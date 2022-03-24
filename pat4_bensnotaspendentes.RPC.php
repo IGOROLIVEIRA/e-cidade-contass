@@ -43,7 +43,7 @@ $oDaoBensEmpNotaItem       = db_utils::getDao('bensempnotaitem');
 $oPost = db_utils::postMemory($_POST);
 
 $oJson            = new services_json();
-$oParam           = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam           = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno         = new stdClass();
 $oRetorno->status = 1;
 
@@ -57,6 +57,7 @@ switch ($oParam->exec) {
     $sCamposBensPendentes  = "distinct ";
     $sCamposBensPendentes .= "m52_codordem as codigonota,";
     $sCamposBensPendentes .= "e69_numemp as numeroempenho,";
+    $sCamposBensPendentes .= "e69_numero as notafiscal,";
     $sCamposBensPendentes .= "o56_elemento as desdobramento,";
     $sCamposBensPendentes .= "e72_qtd as quantidade,";
     $sCamposBensPendentes .= "pc01_descrmater as descricao,";
@@ -78,18 +79,17 @@ switch ($oParam->exec) {
      */
     // $sWhereBensPendentes  .= " and empempenho.e60_anousu >= ".date('Y',strtotime($dtImplantacaoDepreciacao));
     if (!empty($dtImplantacaoDepreciacao)) {
-   
+
       // $sWhereBensPendentes  .= " and empempenho.e60_emiss >= '{$dtImplantacaoDepreciacao}' ";
-   
+
       if (!USE_PCASP) {
-       $sWhereBensPendentes  .="  and o56_elemento in (select distinct e135_desdobramento from configuracaodesdobramentopatrimonio)";
+        $sWhereBensPendentes  .= "  and o56_elemento in (select distinct e135_desdobramento from configuracaodesdobramentopatrimonio)";
       }
-   
     }
-   
+
     $iInstituicaoSessao = db_getsession("DB_instit");
     if (USE_PCASP) {
-   
+
       $sNomeTabelaPlanoConta      = "conplanoorcamento";
       $sNomeTabelaGrupoPlanoConta = "conplanoorcamentogrupo";
       $sWhereBensPendentes  .= " and exists ( select 1
@@ -103,13 +103,13 @@ switch ($oParam->exec) {
                                                  and oe.o56_codele = orcelemento.o56_codele
                                                  and oe.o56_anousu = orcelemento.o56_anousu )";
     }
-    
-    $sWhereBensPendentes .= " and e60_instit = {$iInstituicaoSessao} "; 
+
+    $sWhereBensPendentes .= " and e60_instit = {$iInstituicaoSessao} ";
     $sWhereBensPendentes .= " and m53_codordem is null ";
     $sWhereBensPendentes .= " and e70_vlranu = 0 ";
-    
+
     $sSqlDadosBensPendentes = $oDaoNotaItemBensPendentes->sql_query_bens_nota(null, $sCamposBensPendentes, null, $sWhereBensPendentes);
-    $sSqlBensPendentes      = "select *                                                ";              
+    $sSqlBensPendentes      = "select *                                                ";
     $sSqlBensPendentes     .= "  from ($sSqlDadosBensPendentes) as xx                  ";
     $sSqlBensPendentes     .= " order by anoempenho, codigoempenho::int                ";
     $rsBensPendentes        = $oDaoNotaItemBensPendentes->sql_record($sSqlBensPendentes);
@@ -117,13 +117,14 @@ switch ($oParam->exec) {
       $oRetorno->aNotasPendentes = db_utils::getCollectionByRecord($rsBensPendentes, false, false, true);
     }
 
-  break;
+    break;
 
   case "getBensPorCodigoNota":
 
     $oRetorno->aNotasPendentes = array();
     $sCamposBensNotaPendentes  = "distinct e69_codnota as codigonota,";
     $sCamposBensNotaPendentes .= "         e69_numemp as numeroempenho,";
+    $sCamposBensPendentes .= "e69_numero as notafiscal,";
     $sCamposBensNotaPendentes .= "         o56_elemento as desdobramento,";
     $sCamposBensNotaPendentes .= "         e72_qtd as quantidade,";
     $sCamposBensNotaPendentes .= "         pc01_descrmater as descricao,";
@@ -132,13 +133,12 @@ switch ($oParam->exec) {
     $sCamposBensNotaPendentes .= "         e60_codemp as codigoempenho,";
     $sCamposBensNotaPendentes .= "         e60_anousu as anoempenho,";
     $sCamposBensNotaPendentes .= "         e72_sequencial as codigoitemnota";
-    $sWhereBensNotaPendente    = "e69_codnota in (". implode(",", $oParam->aCodigoNota). ")";
+    $sWhereBensNotaPendente    = "e69_codnota in (" . implode(",", $oParam->aCodigoNota) . ")";
     $sSqlBensNotaPendente      = $oDaoNotaItemBensPendentes->sql_query_bens(null, $sCamposBensNotaPendentes, null, $sWhereBensNotaPendente);
     $rsBensNotaPendente        = $oDaoNotaItemBensPendentes->sql_record($sSqlBensNotaPendente);
     if ($oDaoNotaItemBensPendentes->numrows > 0) {
       $oRetorno->aNotasPendentes = db_utils::getCollectionByRecord($rsBensNotaPendente, false, false, true);
     }
     break;
-
 }
 echo $oJson->encode($oRetorno);

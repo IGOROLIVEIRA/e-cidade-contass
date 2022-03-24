@@ -398,7 +398,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                                 </td>
                                 <td title="<?php echo $Trh27_codincidirrf; ?>">
                                     <?php
-                                    $result = $oDaoAvaliacaoperguntaopcao->sql_record($oDaoAvaliacaoperguntaopcao->sql_query_file(null, "db104_sequencial,db104_valorresposta||' - '||db104_descricao AS db104_descricao", "db104_valorresposta", "db104_avaliacaopergunta = " . ESOCIAL_OPCAO_IRRF));
+                                    $result = $oDaoAvaliacaoperguntaopcao->sql_record($oDaoAvaliacaoperguntaopcao->sql_query_file(null, "db104_sequencial,db104_valorresposta||' - '||db104_descricao AS db104_descricao", "db104_valorresposta::integer", "db104_avaliacaopergunta = " . ESOCIAL_OPCAO_IRRF));
                                     $aSelect = array("" => "Selecione");
                                     for ($iCont = 0; $iCont < $oDaoAvaliacaoperguntaopcao->numrows; $iCont++) {
                                         $aSelect[db_utils::fieldsMemory($result, $iCont)->db104_sequencial] = db_utils::fieldsMemory($result, $iCont)->db104_descricao;

@@ -146,7 +146,7 @@ for ($i = 0; $i < $numrows_pcorcamforne; $i++) {
         db_fieldsmemory($result_pcproc, 0);
     }
 
-
+    $pdf1->criterioadjudicacao = @$pc80_criterioadjudicacao;
 
     /*
   die($clpcprocitemunid->sql_query(null,"pc17_codigo,m61_descr","","ere pc17_codigo in (".$clpcorcamitemsol->sql_query_pcmater(null,null,"pc11_codigo","","pc22_codorc=$pc20_codorc").") "));

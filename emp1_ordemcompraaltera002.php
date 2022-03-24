@@ -104,21 +104,32 @@ if (isset($dados->altera)) {
     $result_ordem = $clmatordem->sql_record($clmatordem->sql_query_file("", "*", "", "m51_codordem = $dados->m51_codordem"));
     db_fieldsmemory($result_ordem, 0);
 
-    $clmatordem->m51_codordem    = $m51_codordem;
-    $clmatordem->m51_data        = $dados->m51_data;
-    $clmatordem->m51_depto       = $dados->coddepto;
-    $clmatordem->m51_deptoorigem = $dados->m51_deptoorigem;
-    $clmatordem->m51_numcgm      = $m51_numcgm;
-    $clmatordem->m51_obs         = $dados->obs;
-    $clmatordem->m51_valortotal  = $valor_total;
-    $clmatordem->m51_prazoent    = $dados->m51_prazoent;
-    $clmatordem->alterar($m51_codordem);
+    $dataemp = $clmatordem->getDataEmp($m51_codordem);
 
-    if ($clmatordem->erro_status == 0) {
+    $dataempenho = DateTime::createFromFormat('d/m/Y', $dataemp);
+    $dataordemcompra = DateTime::createFromFormat('d/m/Y', $dados->m51_data);
+
+    if ($dataordemcompra < $dataempenho) {
         $sqlerro = true;
-        $erro_msg = $clmatordem->erro_msg;
+        $erro_msg = "Data da ordem não pode ser anterior a data de emissão do empenho.";
     } else {
-        $erro_msg = 'Ordem de Compra alterada com sucesso!';
+
+        $clmatordem->m51_codordem    = $m51_codordem;
+        $clmatordem->m51_data        = $dados->m51_data;
+        $clmatordem->m51_depto       = $dados->coddepto;
+        $clmatordem->m51_deptoorigem = $dados->m51_deptoorigem;
+        $clmatordem->m51_numcgm      = $m51_numcgm;
+        $clmatordem->m51_obs         = $dados->obs;
+        $clmatordem->m51_valortotal  = $valor_total;
+        $clmatordem->m51_prazoent    = $dados->m51_prazoent;
+        $clmatordem->alterar($m51_codordem);
+
+        if ($clmatordem->erro_status == 0) {
+            $sqlerro = true;
+            $erro_msg = $clmatordem->erro_msg;
+        } else {
+            $erro_msg = 'Ordem de Compra alterada com sucesso!';
+        }
     }
 
     for ($count = 0; $count < count($dados->itens); $count++) {
