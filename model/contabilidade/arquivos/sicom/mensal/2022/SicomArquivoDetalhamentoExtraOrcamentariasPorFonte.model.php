@@ -831,7 +831,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
     public function lancamentosGenericos($aExt20)
     {
         return $this->buscarGenericos($aExt20);
-    }
+    } 
 
     public function buscarGenericos($aExt20)
     {
@@ -853,8 +853,10 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                     AND c19_reduz = c69_debito
                     left join orctiporec on orctiporec.o15_codigo = contacorrentedetalhe.c19_orctiporec
                     LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
+                    inner join conplano on conplanoreduz.c61_codcon = conplano.c60_codcon and conplanoreduz.c61_anousu = conplano.c60_anousu
                 where
                     conlancamdoc.c71_coddoc in (3000)
+                     AND c60_codsis = 7
                     and DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . "
                     and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                     and conplanoreduz.c61_instit = " . db_getsession("DB_instit") . "
@@ -878,8 +880,10 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                     AND c19_reduz = c69_credito
                     left join orctiporec on orctiporec.o15_codigo = contacorrentedetalhe.c19_orctiporec
                     LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
+                    inner join conplano on conplanoreduz.c61_codcon = conplano.c60_codcon and conplanoreduz.c61_anousu = conplano.c60_anousu
                 where
                     conlancamdoc.c71_coddoc in (3000)
+                     AND c60_codsis = 7
                     and DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . "
                     and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                     and conplanoreduz.c61_instit = " . db_getsession("DB_instit") . "
