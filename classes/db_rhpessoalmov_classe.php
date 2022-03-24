@@ -588,7 +588,7 @@ class cl_rhpessoalmov
             $this->rh02_dataadmisorgcedente = "null";
         }
 
-        if (empt($this->rh02_jornadadetrabalho)) {
+        if (empty($this->rh02_jornadadetrabalho)) {
             if ($GLOBALS["HTTP_POST_VARS"]["rh30_regime"] == 2) {
                 $this->erro_sql = " Campo Jornada de Trabalho não informado.";
                 $this->erro_campo = "rh02_jornadadetrabalho";
