@@ -1442,7 +1442,6 @@ switch ($oParam->exec) {
                         }
                     }
 
-
                     if (!$sqlerro) {
 
                         if (!$achou) {
@@ -1457,7 +1456,7 @@ switch ($oParam->exec) {
                              * Vincula os itens ao lote
                              **/
 
-                            $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_sol($coditem, "pc11_codigo, pc68_nome"));
+                            $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_sol($coditem, "pc11_codigo, pc68_nome, pc69_seq"));
 
                             if ($clliclicitem->numrows > 0) {
                                 db_fieldsmemory($res_liclicitem, 0);
@@ -1472,7 +1471,7 @@ switch ($oParam->exec) {
                             if ($clliclicitemreservado->l21_reservado) {
 
                                 $res_liclicitemreservado = $clliclicitemreservado->sql_record(
-                                    $clliclicitemreservado->sql_query_sol($coditemreservado, "pc11_codigo, pc68_nome")
+                                    $clliclicitemreservado->sql_query_sol($coditemreservado, "pc11_codigo, pc68_nome, pc69_seq")
                                 );
 
                                 if ($clliclicitemreservado->numrows > 0) {
@@ -1505,12 +1504,20 @@ switch ($oParam->exec) {
                                 }
                             }
 
+                            if ($oParam->tipojulg == 3) {
+                                $clliclicitemlote->l04_descricao = $pc68_nome;   
+                            }
+                           
 
-                            if (!empty($clliclicitemlote->l04_descricao) && in_array($oParam->tipojulg, array(1, 2))) {
+                            if (!empty($clliclicitemlote->l04_descricao) && in_array($oParam->tipojulg, array(1, 2, 3))) {
                                 // echo 'tst' . $count + 1;
                                 // exit;
-                                $seqlote++;
-                                $clliclicitemlote->l04_seq = $seqlote;
+                                if($oParam->tipojulg == 3){
+                                    $clliclicitemlote->l04_seq = $pc69_seq;
+                                }else{
+                                    $seqlote++;
+                                    $clliclicitemlote->l04_seq = $seqlote;
+                                }
                                 $clliclicitemlote->incluir(null);
 
                                 if ($clliclicitemlote->erro_status == 0) {
@@ -1655,6 +1662,8 @@ switch ($oParam->exec) {
 
         if ($sqlerro) {
             $oRetorno->status = 2;
+        }else{
+            $oRetorno->status = 1;
         }
         $oRetorno->erro_msg = urlencode($erro_msg);
 

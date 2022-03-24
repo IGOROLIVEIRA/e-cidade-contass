@@ -137,7 +137,7 @@ $db_botao = true;
 </html>
 <script>
     function js_insereItens() {
-
+        
         let aItens = oItensLicitacao.oGridItens.aRows;
 
         let aSelecionados = aItens.filter(e => e.isSelected);
@@ -209,7 +209,6 @@ $db_botao = true;
         let tipoJulgamento = "<?= $tipojulg ?>";
         let licitacao = "<?= $licitacao ?>";
 
-
         if (oRetorno.status == 1) {
             alert('Item incluído com sucesso!');
 
@@ -240,7 +239,7 @@ $db_botao = true;
                 }
             });
 
-        } else {
+        }else{
             //db_msgbox(@$erro_msg);
             db_msgbox("Operação Cancelada!!Contate Suporte!!");
         }
