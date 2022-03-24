@@ -1586,15 +1586,15 @@ if (isset($db_opcaoal)) {
                     }
                 }
 
-                if (document.form1.rh30_vinculo.value == 'A') {
-                    if (document.form1.rh02_hrsmen.value == '' ||
-                        document.form1.rh02_hrssem.value == '' ||
-                        document.form1.rh02_tipojornada.value == 0 ||
-                        document.form1.rh02_jornadadetrabalho.value == ''
-                    ) {
-                        alert('Os campos de Horário de Trabalho são obrigatórios');
-                        return false;
-                    }
+                if (document.form1.rh30_regime.value == 2 
+                    && document.form1.rh02_jornadadetrabalho.value == '') {
+                    alert('O campo Jornada de Trabalho é obrigatório.');
+                    return false;
+                }
+                if (document.form1.rh30_regime.value == 2 
+                    && document.form1.rh02_tipojornada.value == 0) {
+                    alert('O campo Tipo de Jornada é obrigatório.');
+                    return false;
                 }
 
 
