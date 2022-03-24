@@ -273,6 +273,7 @@ class Dirf {
     if ($lProcessarEmpenhos) {
       /**
        * processa os pagamentos realizados na contabilidade
+       * Este processarDadosContabilidade esta em model/pessoal/Dirf2012.model.php
        */
       $this->processarDadosContabilidade();
     }
@@ -776,7 +777,7 @@ class Dirf {
                   $oPessoa->aValorGrupo[1] -= $folhaSalarioBase[0]->r14_valor;
                 }
               }
-      
+
               $ina      += $oPessoa->aValorGrupo[1];
               $tributo  = 0;
             }
@@ -1232,9 +1233,9 @@ class Dirf {
            * Solução paliativa utilizada para o cliente Osório. Verifica se os dados que estão sendo
            * processados são referentes a Rescisão(gerfres) caso sejam, irá considerar os valores para as rubricas da base
            * B913, que são apenas para os casos de­ 'Rendimentos Isentos ­ Indenizações por Rescisão de Contrato de Trabalho, inclusive a título de PDV(RIIRP)'.
-           * Pois rubricas que estavam lançadas no ponto de férias, estavam sendo consideradas como RIIRP, 
-           * quando o correto é apenas rescisão ser considerada RIIRP. 
-           * 
+           * Pois rubricas que estavam lançadas no ponto de férias, estavam sendo consideradas como RIIRP,
+           * quando o correto é apenas rescisão ser considerada RIIRP.
+           *
            * O problema ocorre pelo fato das rubricas que estão na B913 serem utilizadas tanto para rescisão quanto para férias.
            */
 
@@ -1260,7 +1261,6 @@ class Dirf {
    *
    */
   public function processarDadosContabilidade() {
-
 
     $sSqlDadosContabilidade  = "SELECT z01_numcgm, ";
     $sSqlDadosContabilidade .= "       trim(z01_cgccpf) as z01_cgccpf, ";
