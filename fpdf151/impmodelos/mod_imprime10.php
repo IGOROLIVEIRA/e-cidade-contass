@@ -55,7 +55,7 @@
 
 
 	$this->objpdf->Setfont('Arial','B',9);
-	$this->objpdf->Image('imagens/files/'.$this->logo,15,$xlin-17,12);
+	$this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 25);
 	$this->objpdf->Setfont('Arial','B',9);
 	$this->objpdf->text(40,$xlin-15,$this->prefeitura);
 	$this->objpdf->Setfont('Arial','',9);
@@ -327,7 +327,7 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 	    $this->objpdf->Setfont('Arial','B',9);
 	    $this->objpdf->text(130,$xlin-13,'ORDEM DE COMPRA N'.CHR(176));
 	    $this->objpdf->text(185,$xlin-13,db_formatar($this->numordem,'s','0',6,'e'));
-	    $this->objpdf->Image('imagens/files/'.$this->logo,15,$xlin-17,12);
+	    $this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 25);
 	    $this->objpdf->Setfont('Arial','B',9);
 	    $this->objpdf->text(40,$xlin-15,$this->prefeitura);
 	    $this->objpdf->Setfont('Arial','',9);
@@ -511,4 +511,3 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 	}
 	$posicao_depois=$this->objpdf->gety();
   $xlin+=$posicao_depois-$posicao_atual+2;
-?>

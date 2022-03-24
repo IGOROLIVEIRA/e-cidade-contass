@@ -97,7 +97,7 @@ class FilaESocialTask extends Task implements iTarefa
 
             $dao = new \cl_esocialenvio();
             $daoEsocialCertificado = new \cl_esocialcertificado();
-            $sql = $daoEsocialCertificado->sql_query(null, "rh214_senha as senha,rh214_certificado as certificado, z01_cgccpf as nrinsc, z01_nome as nmRazao", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
+            $sql = $daoEsocialCertificado->sql_query(null, "rh214_senha as senha,rh214_certificado as certificado, cgc as nrinsc, z01_nome as nmRazao", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
             $rsEsocialCertificado  = \db_query($sql);
 
             if (!$rsEsocialCertificado && pg_num_rows($rsEsocialCertificado) == 0) {

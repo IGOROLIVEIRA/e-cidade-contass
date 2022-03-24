@@ -28,7 +28,7 @@ $this->objpdf->Setfont('Arial', 'B', 6.5);
 $oDaoDbConfig    = db_utils::getDao("db_config");
 $sLogo           = $oDaoDbConfig->getParametrosInstituicao()->logo;
 
-$this->objpdf->Image('imagens/files/' . $sLogo, 15, $xlin - 17, 12); //.$this->logo
+$this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 25); //.$this->logo
 $this->objpdf->text(130, $xlin - 15, "ORÇAMENTO N" . CHR(176));
 $this->objpdf->text(185, $xlin - 15, db_formatar($this->orccodigo, 's', '0', 6, 'e'));
 $this->objpdf->text(130, $xlin - 11, $this->labdados . CHR(176));
@@ -388,7 +388,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 
         $this->objpdf->setfillcolor(255, 255, 255);
         $this->objpdf->Setfont('Arial', 'B', 5);
-        $this->objpdf->Image('imagens/files/' . $sLogo, 15, $xlin - 17, 12); //.$this->logo
+        $this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 25); //.$this->logo
         $this->objpdf->text(130, $xlin - 15, "ORÇAMENTO N" . CHR(176));
         $this->objpdf->text(185, $xlin - 15, db_formatar($this->orccodigo, 's', '0', 6, 'e'));
         $this->objpdf->text(130, $xlin - 11, $this->labdados . CHR(176));

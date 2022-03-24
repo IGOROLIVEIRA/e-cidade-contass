@@ -62,6 +62,22 @@ require_once("dbforms/db_funcoes.php");
                         <label>Trabalhador Sem Vínculo de Emprego/Estatutário s2300</label>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" value="4000116">
+                    </td>
+                    <td>
+                        <label>S-2400 - Cadastro de Beneficiário</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" value="4000112">
+                    </td>
+                    <td>
+                        <label>Desligamento s2299</label>
+                    </td>
+                </tr>
             </table>
         </fieldset>
         <input type="button" value="Processar" id="btnProcessar">

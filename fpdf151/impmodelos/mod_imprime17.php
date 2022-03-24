@@ -104,7 +104,7 @@ if (isset($this->StipoSolicitacao) && !$lImprimeTipo) {
 }
 
 $this->objpdf->Setfont('Arial', 'B', 9);
-$this->objpdf->Image('imagens/files/' . $this->logo, 15, $xlin - 17, 12);
+$this->objpdf->Image('imagens/files/' . $this->logo, 12, $xlin - 15, 16);
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
 $this->objpdf->Setfont('Arial', '', 9);
