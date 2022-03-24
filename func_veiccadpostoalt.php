@@ -116,7 +116,6 @@ $clveiccadpostoexterno = new cl_veiccadpostoexterno;
         }if(isset($chave_numcgm) && (trim($chave_numcgm)!="") ){
            $sql = $clveiccadposto->sql_query_tip(null,$campos,"ve29_codigo","z01_numcgm = $chave_numcgm $and $dbwhere");
            $s = $clveiccadposto->sql_record($clveiccadposto->sql_query_tip(null,$campos,"ve29_codigo","z01_numcgm = $chave_numcgm $and $dbwhere"));
-           
            if($clveiccadposto->numrows==0){
             $clveiccadposto->ve29_tipo = 2;
             $clveiccadposto->incluir();
@@ -133,10 +132,9 @@ $clveiccadpostoexterno = new cl_veiccadpostoexterno;
            $sql = $clveiccadposto->sql_query_tip("",$campos,"ve29_codigo",$dbwhere);
         }
         // print_r($sql);die();
-  
-        /*echo"<pre>";
-        var_dump($sql);
-        exit;*/
+        
+        
+
         $repassa = array();
         if(isset($chave_ve29_codigo)){
           $repassa = array("chave_ve29_codigo"=>$chave_ve29_codigo,"chave_ve29_codigo"=>$chave_ve29_codigo);
