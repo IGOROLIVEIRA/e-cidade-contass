@@ -127,6 +127,10 @@ class FilaESocialTask extends Task implements iTarefa
                 throw new Exception("Não foi possível adicionar o protocolo.");
             }
 
+            /**
+             * Esperar alguns segundos pois em muitos casos, o lote ainda não havia sido processado
+             */
+            sleep(15);
             $exportar = new ESocial(Registry::get('app.config'), "consulta.php");
             $exportar->setDados($dados);
             $retorno = $exportar->request();
@@ -218,7 +222,8 @@ class FilaESocialTask extends Task implements iTarefa
                 for ($iCont = 0; $iCont < pg_num_rows($rs); $iCont++) {
 
                     $dadosConsulta = \db_utils::fieldsMemory($rs, $iCont);
-                    $dados = array($dadosCertificado, json_decode($dadosConsulta->rh213_dados), $dadosConsulta->rh213_evento, $dadosConsulta->rh213_ambienteenvio);
+                    $fase = $this->getFaseEvento($dadosConsulta->rh213_evento);
+                    $dados = array($dadosCertificado, json_decode($dadosConsulta->rh213_dados), $dadosConsulta->rh213_evento, $dadosConsulta->rh213_ambienteenvio, $fase);
 
                     $dados[] = $dadosConsulta->rh213_protocolo;
                     $exportar = new ESocial(Registry::get('app.config'), "consulta.php");
