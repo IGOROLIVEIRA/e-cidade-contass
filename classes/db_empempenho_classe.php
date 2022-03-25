@@ -25,8 +25,8 @@
  *                                licenca/licenca_pt.txt
  */
 
-//MODULO: empenho   
-//CLASSE DA ENTIDADE empempenho    
+//MODULO: empenho
+//CLASSE DA ENTIDADE empempenho
 class cl_empempenho {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -439,7 +439,7 @@ class cl_empempenho {
                                ,$this->e60_vlranu
                                ,$this->e60_codtipo
                                ,'$this->e60_resumo'
-                               ,'$this->e60_informacaoop' 
+                               ,'$this->e60_informacaoop'
                                ,'$this->e60_destin'
                                ,$this->e60_salant
                                ,$this->e60_instit
@@ -2356,7 +2356,7 @@ class cl_empempenho {
         $sSql .= "        e60_anousu,                                                                                                                                       ";
         $sSql .= "        c70_anousu,                                                                                                                                       ";
         $sSql .= "        e60_numcgm,                                                                                                                                       ";
-        $sSql .= "        e58_coddot,                                                                                                                                       ";
+        $sSql .= "        o58_coddot,                                                                                                                                       ";
         $sSql .= "        e60_instit,                                                                                                                                       ";
         $sSql .= "        o58_funcao,                                                                                                                                       ";
         $sSql .= "        o58_subfuncao,                                                                                                                                    ";
