@@ -114,6 +114,17 @@ db_select('ve50_postoproprio',$x,true,$db_opcao,"");
     </td>
   </tr>
   <tr>
+    <td nowrap title="<?=@$Tve50_postoproprio?>">
+       <strong>Validar Abastecimento por Empenho:</strong>
+    </td>
+    <td> 
+<?
+$x = array('1'=>'Sim','0'=>'Não');
+db_select('ve50_abastempenho',$x,true,$db_opcao,"");
+?>
+    </td>
+  </tr>
+  <tr>
     <td nowrap title="<?=@$Tve50_integrapessoal?>"><?=@$Lve50_integrapessoal?></td>
     <td>
 <?
