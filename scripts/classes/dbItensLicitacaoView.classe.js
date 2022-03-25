@@ -38,7 +38,7 @@ function dbViewItensLicitacao(sNomeInstance, oNode, destinacaoExclusiva) {
                 me.preencheItens(oRetorno.itens);
             }
 
-        }).setMessage("Aguarde, pesquisando acordos.")
+        }).setMessage("Aguarde, pesquisando itens.")
             .execute();
     }
 
