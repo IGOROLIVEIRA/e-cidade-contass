@@ -165,8 +165,10 @@ function getEmpenhosApagar($aFontes, $dtini, $dtfim, $instits, $tipo) {
         $valorEmpNaoLQDAPagar = 0;
         foreach($aEmpEmpenho as $oEmp){
             $valorEmpLQDAPagar += ($oEmp->vlrliq - $oEmp->vlrpago);
-            $valorEmpNaoLQDAPagar += ($oEmp->vlremp - $oEmp->vlranu - $oEmp->vlrpago);
+            $valorEmpNaoLQDAPagar += ($oEmp->vlremp - $oEmp->vlranu - $oEmp->vlrliq);
         }
+
+        //echo "<pre>";print_r($aEmpEmpenho);exit;
         if($tipo == 'lqd'){
             return  $valorEmpLQDAPagar;
         }
