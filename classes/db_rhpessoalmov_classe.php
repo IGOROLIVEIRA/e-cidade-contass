@@ -524,6 +524,18 @@ class cl_rhpessoalmov
         if ($this->rh02_tipojornada == null) {
             $this->rh02_tipojornada = "null";
         }
+        if (empty($this->rh02_tipojornada)) {
+            if ($GLOBALS["HTTP_POST_VARS"]["rh30_regime"] == 2) {
+                $this->erro_sql = " Campo Tipo de Jornada não informado.";
+                $this->erro_campo = "rh02_tipojornada";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+            $this->rh02_tipojornada = "null";
+        }
 
         if ($this->rh02_horarionoturno == null) {
             $this->rh02_horarionoturno = "f";
@@ -576,8 +588,8 @@ class cl_rhpessoalmov
             $this->rh02_dataadmisorgcedente = "null";
         }
 
-        if ($this->rh02_jornadadetrabalho == null) {
-            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+        if (empty($this->rh02_jornadadetrabalho)) {
+            if ($GLOBALS["HTTP_POST_VARS"]["rh30_regime"] == 2) {
                 $this->erro_sql = " Campo Jornada de Trabalho não informado.";
                 $this->erro_campo = "rh02_jornadadetrabalho";
                 $this->erro_banco = "";
@@ -1301,11 +1313,19 @@ class cl_rhpessoalmov
             }
         }
 
-        if (trim($this->rh02_tipojornada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipojornada"])) {
-            if (trim($this->rh02_tipojornada) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipojornada"])) {
-                $this->rh02_tipojornada = "0";
-            }
+        if (!empty($this->rh02_tipojornada) && isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipojornada"])) {
             $sql  .= $virgula . " rh02_tipojornada = $this->rh02_tipojornada ";
+            $virgula = ",";
+        } else if (empty($this->rh02_tipojornada) && isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipojornada"]) && $GLOBALS["HTTP_POST_VARS"]["rh30_regime"] == 2) {
+            $this->erro_sql = " Campo Tipo de Jornada não informado.";
+            $this->erro_campo = "rh02_tipojornada";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        } else if (isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipojornada"])) {
+            $sql  .= $virgula . " rh02_tipojornada = null ";
             $virgula = ",";
         }
 
@@ -1366,19 +1386,19 @@ class cl_rhpessoalmov
             }
         }
 
-        if (trim($this->rh02_jornadadetrabalho) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"])) {
-            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_jornadadetrabalho) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"])) {
-                $this->erro_sql = " Campo Jornada de Trabalho não informado.";
-                $this->erro_campo = "rh02_jornadadetrabalho";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            } else if (trim($this->rh02_jornadadetrabalho) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
-                $this->rh02_jornadadetrabalho = "null";
-            }
+        if (trim($this->rh02_jornadadetrabalho) != "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"])) {
             $sql  .= $virgula . " rh02_jornadadetrabalho = $this->rh02_jornadadetrabalho ";
+            $virgula = ",";
+        } else if (empty($this->rh02_jornadadetrabalho) && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"]) && $GLOBALS["HTTP_POST_VARS"]["rh30_regime"] == 2) {
+            $this->erro_sql = " Campo Jornada de Trabalho não informado.";
+            $this->erro_campo = "rh02_jornadadetrabalho";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        } else if (isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"])) {
+            $sql  .= $virgula . " rh02_jornadadetrabalho = null ";
             $virgula = ",";
         }
 
