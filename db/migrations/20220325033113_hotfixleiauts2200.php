@@ -30,6 +30,15 @@ class Hotfixleiauts2200 extends AbstractMigration
         UPDATE habitacao.avaliacaopergunta SET db103_camposql='nmcid_exterior' WHERE db103_sequencial=4000575;
         UPDATE habitacao.avaliacaopergunta SET db103_camposql='codpostal_exterior' WHERE db103_sequencial=4000576;
 
+        UPDATE habitacao.avaliacaopergunta SET db103_camposql='tplograd_localtrabdom' WHERE db103_sequencial=4000645;
+        UPDATE habitacao.avaliacaopergunta SET db103_camposql='dsclograd_localtrabdom' WHERE db103_sequencial=4000646;
+        UPDATE habitacao.avaliacaopergunta SET db103_camposql='nrlograd_localtrabdom' WHERE db103_sequencial=4000647;
+        UPDATE habitacao.avaliacaopergunta SET db103_camposql='complemento_localtrabdom' WHERE db103_sequencial=4000648;
+        UPDATE habitacao.avaliacaopergunta SET db103_camposql='bairro_localtrabdom' WHERE db103_sequencial=4000649;
+        UPDATE habitacao.avaliacaopergunta SET db103_camposql='cep_localtrabdom' WHERE db103_sequencial=4000650;
+        UPDATE habitacao.avaliacaopergunta SET db103_camposql='codmunic_localtrabdom' WHERE db103_sequencial=4000651;
+        UPDATE habitacao.avaliacaopergunta SET db103_camposql='uf_localtrabdom' WHERE db103_sequencial=4000652;
+
         UPDATE habitacao.avaliacaopergunta SET db103_tipo=6 WHERE db103_sequencial=4000643;
 
         INSERT INTO habitacao.avaliacaopergunta (db103_sequencial, db103_avaliacaotiporesposta, db103_avaliacaogrupopergunta, db103_descricao, db103_obrigatoria, db103_ativo, db103_ordem, db103_identificador, db103_tipo, db103_mascara, db103_dblayoutcampo, db103_perguntaidentificadora, db103_camposql, db103_identificadorcampo) VALUES((select max(db103_sequencial)+1 from avaliacaopergunta), 1, 4000188, 'Instituição no e-Cidade:', true, true, 1, 'instituicao-no-ecidade', 6, '', 0, true, 'instituicao', 'instituicao');
