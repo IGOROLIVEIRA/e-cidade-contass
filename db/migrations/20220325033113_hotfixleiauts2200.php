@@ -43,16 +43,6 @@ class Hotfixleiauts2200 extends AbstractMigration
 
         UPDATE avaliacaopergunta SET db103_avaliacaotiporesposta = 2 WHERE db103_identificador = 'instituicao-no-ecidade-4000102';
 
-        INSERT INTO avaliacaoperguntaopcao VALUES (
-            (SELECT max(db104_sequencial)+1 FROM avaliacaoperguntaopcao),
-            (SELECT db103_sequencial FROM avaliacaopergunta WHERE db103_identificador = 'instituicao-no-ecidade-4000102'),
-            NULL,
-            't',
-            (SELECT db103_identificadorcampo FROM avaliacaopergunta WHERE db103_identificador = 'instituicao-no-ecidade-4000102')||'-'||(SELECT max(db104_sequencial)+1 FROM avaliacaoperguntaopcao)::varchar,
-            0,
-            NULL,
-            (SELECT db103_identificadorcampo FROM avaliacaopergunta WHERE db103_identificador = 'instituicao-no-ecidade-4000102'));
-
             UPDATE habitacao.avaliacao SET db101_avaliacaotipo=5, db101_descricao='Formulário S-2200 versão S-1.0', db101_obs='Formulário S-2200 versão S-1.0', db101_ativo=true, db101_identificador='s2200-vs1', db101_cargadados='select distinct
             --Informações Pessoais do Trabalhador
                 rh02_instit AS instituicao,
