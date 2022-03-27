@@ -17,7 +17,7 @@ class EventoS2200 extends EventoBase
      *
      * @param \stdClass $dados
      */
-    function __construct($dados)
+    public function __construct($dados)
     {
         parent::__construct($dados);
     }
@@ -33,9 +33,9 @@ class EventoS2200 extends EventoBase
         // echo '<pre>';
         // print_r($this->dados);
         // exit;
+
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
-
             if (!empty($oDados->RIC) && empty($oDados->RIC->dtExped)) {
                 $oDados->RIC->dtExped = null;
             }
@@ -189,7 +189,6 @@ class EventoS2200 extends EventoBase
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->opcFGTS = $oDados->FGTS->opcFGTS;
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->dtOpcFGTS = empty($oDados->FGTS->dtOpcFGTS) ? null : $oDados->FGTS->dtOpcFGT;
                 if (!empty($oDados->trabTemporario)) {
-
                     $oDadosAPI->evtAdmissao->vinculo->infoCeletista->trabTemporario = $oDados->trabTemporario;
                     $oDadosAPI->evtAdmissao->vinculo->infoCeletista->trabTemporario->ideTomadorServ = $oDados->ideTomadorServ;
                     $oDadosAPI->evtAdmissao->vinculo->infoCeletista->trabTemporario->ideTomadorServ->ideEstabVinc = $oDados->ideEstabVinc;
@@ -204,23 +203,29 @@ class EventoS2200 extends EventoBase
             }
 
             if (!empty($oDados->infoContrato)) {
-
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato = $oDados->infoContrato;
 
                 // $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCargo = empty($oDados->infoContrato->codCargo) ? null : $oDados->codCargo;
                 // $oDadosAPI->evtAdmissao->vinculo->infoContrato->codFuncao = empty($oDados->infoContrato->codFuncao) ? null : $oDados->infoContrato->codFuncao;
                 // $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCarreira = empty($oDados->infoContrato->codCarreira) ? null : $oDados->infoContrato->codCarreira;
                 // $oDadosAPI->evtAdmissao->vinculo->infoContrato->dtIngrCarr = empty($oDados->infoContrato->dtIngrCarr) ? null : $oDados->infoContrato->dtIngrCarr;
-                // print_r($oDados->remuneracao);
-                // exit;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = $oDados->remuneracao->vrSalFx;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->undSalFixo = $oDados->remuneracao->undSalFixo;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
 
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->tpContr = $oDados->duracao->tpContr;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->dtTerm = empty($oDados->duracao->dtTerm) ? null : $oDados->duracao->dtTerm;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->clauAssec = empty($oDados->duracao->clauAssec) ? null : $oDados->duracao->clauAssec;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->objDet = empty($oDados->duracao->objDet) ? null : $oDados->duracao->objDet;
+                if (!empty($oDados->remuneracao->vrSalFx)) {
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = $oDados->remuneracao->vrSalFx;
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->undSalFixo = $oDados->remuneracao->undSalFixo;
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
+                } else {
+                    unset($oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao);
+                }
+
+                if (!empty($oDados->duracao->tpContr)) {
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->tpContr = $oDados->duracao->tpContr;
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->dtTerm = empty($oDados->duracao->dtTerm) ? null : $oDados->duracao->dtTerm;
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->clauAssec = empty($oDados->duracao->clauAssec) ? null : $oDados->duracao->clauAssec;
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->objDet = empty($oDados->duracao->objDet) ? null : $oDados->duracao->objDet;
+                } else {
+                    unset($oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao);
+                }
 
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->localTrabGeral = empty($oDados->localTrabGeral) ? null : $oDados->localTrabGeral;
 
@@ -228,7 +233,7 @@ class EventoS2200 extends EventoBase
 
                 if (empty($oDados->horContratual) && !empty($oDados->infoCeletista)) {
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = $oDados->horContratual;
-                    //$oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->horario = $this->buscarHorarios($oDados->vinculo->matricula);
+                //$oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->horario = $this->buscarHorarios($oDados->vinculo->matricula);
                 } else {
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = null;
                 }
@@ -269,7 +274,6 @@ class EventoS2200 extends EventoBase
      */
     private function buscarDependentes($matricula)
     {
-
         $oDaorhdepend = \db_utils::getDao("rhdepend");
         $sqlDependentes = $oDaorhdepend->sql_query_file(null, "*", "rh31_codigo", "rh31_regist = {$matricula}");
         $rsDependentes = db_query($sqlDependentes);
@@ -317,7 +321,6 @@ class EventoS2200 extends EventoBase
      */
     private function buscarHorarios($matricula)
     {
-
         $aHorarios = array();
         $oDaoJornada = \db_utils::getDao("jornada");
         $rsHorarios = db_query($oDaoJornada->sqlQueryHorario($matricula));
@@ -341,8 +344,6 @@ class EventoS2200 extends EventoBase
      */
     private function buscarAfastamentos($matricula)
     {
-
-
         $acodMotAfastEsocial = array(
             'O1' => '01',
             'O2' => '01',
