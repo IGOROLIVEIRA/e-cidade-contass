@@ -168,7 +168,24 @@ class Hotfixleiauts2200 extends AbstractMigration
             order by
                 db72_sequencial asc limit 1)
                 else
-                 (select db21_codigomunicipoestado from db_config limit 1 )
+                ( select
+                db125_codigosistema
+            from
+                cadendermunicipio
+            inner join cadendermunicipiosistema on
+                cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
+                and cadendermunicipiosistema.db125_db_sistemaexterno = 4
+            inner join cadenderestado on
+                cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial
+            inner join cadenderpais on
+                cadenderestado.db71_cadenderpais = cadenderpais.db70_sequencial
+            inner join cadenderpaissistema on
+                cadenderpais.db70_sequencial = cadenderpaissistema.db135_db_cadenderpais
+            where
+                to_ascii(db72_descricao) = ( select db72_descricao from cadenderparam inner join cadenderpais on cadenderpais.db70_sequencial = cadenderparam.db99_cadenderpais inner join cadenderestado on cadenderestado.db71_sequencial = cadenderparam.db99_cadenderestado inner join cadendermunicipio on cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial inner join cadenderpais as p on p.db70_sequencial = cadenderestado.db71_cadenderpais inner join cadenderestado as a on a.db71_sequencial = cadendermunicipio.db72_cadenderestado INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial where db125_db_sistemaexterno = 4 and db72_sequencial = ( SELECT db125_cadendermunicipio FROM cadendermunicipiosistema INNER JOIN cadenderparam ON db125_cadendermunicipio = db99_cadendermunicipio AND db125_db_sistemaexterno = 4 LIMIT 1) order by db72_descricao asc)
+                and cadenderestado.db71_descricao = (select cadenderestado.db71_descricao from cadenderparam inner join cadenderpais on cadenderpais.db70_sequencial = cadenderparam.db99_cadenderpais inner join cadenderestado on cadenderestado.db71_sequencial = cadenderparam.db99_cadenderestado inner join cadendermunicipio on cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial inner join cadenderpais as p on p.db70_sequencial = cadenderestado.db71_cadenderpais inner join cadenderestado as a on a.db71_sequencial = cadendermunicipio.db72_cadenderestado INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial where db125_db_sistemaexterno = 4 and db72_sequencial = ( SELECT db125_cadendermunicipio FROM cadendermunicipiosistema INNER JOIN cadenderparam ON db125_cadendermunicipio = db99_cadendermunicipio AND db125_db_sistemaexterno = 4 LIMIT 1))
+            order by
+                db72_sequencial asc )
                 end as codMunic,
                 case when trim(z01_uf) = '''' then ''MG''
                 when z01_uf is null then ''MG''
