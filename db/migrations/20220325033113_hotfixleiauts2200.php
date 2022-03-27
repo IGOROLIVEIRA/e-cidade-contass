@@ -41,8 +41,6 @@ class Hotfixleiauts2200 extends AbstractMigration
 
         UPDATE habitacao.avaliacaopergunta SET db103_tipo=6 WHERE db103_sequencial=4000643;
 
-        INSERT INTO habitacao.avaliacaopergunta (db103_sequencial, db103_avaliacaotiporesposta, db103_avaliacaogrupopergunta, db103_descricao, db103_obrigatoria, db103_ativo, db103_ordem, db103_identificador, db103_tipo, db103_mascara, db103_dblayoutcampo, db103_perguntaidentificadora, db103_camposql, db103_identificadorcampo) VALUES((select max(db103_sequencial)+1 from avaliacaopergunta), 1, 4000188, 'Instituição no e-Cidade:', true, true, 1, 'instituicao-no-ecidade', 6, '', 0, true, 'instituicao', 'instituicao');
-
         UPDATE avaliacaopergunta SET db103_avaliacaotiporesposta = 2 WHERE db103_identificador = 'instituicao-no-ecidade-4000102';
 
         INSERT INTO avaliacaoperguntaopcao VALUES (
