@@ -201,7 +201,6 @@ class EventoS2200 extends EventoBase
                 //$oDadosAPI->evtAdmissao->vinculo->infoEstatutario->infoDecJud = empty($oDados->infoDecJud) ? null : $oDados->infoDecJud;
                 //}
             }
-
             if (!empty($oDados->infoContrato)) {
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato = $oDados->infoContrato;
 
