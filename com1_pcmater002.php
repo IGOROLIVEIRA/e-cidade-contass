@@ -66,6 +66,13 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
   db_fieldsmemory($result_pesquisa_material, 0);
 
   if ($pc01_descrmateranterior != $pc01_descrmater) {
+
+    if ($pc01_justificativa == "") {
+      $erro_msg = "Campo Justificativa não Atualizado!.";
+      $sqlerro  = true;
+      db_msgbox($erro_msg);
+    }
+
     $dt_session = date("Y-m-d", db_getsession("DB_datausu"));
     $anousu = db_getsession('DB_anousu');
     $instituicao = db_getsession('DB_instit');
