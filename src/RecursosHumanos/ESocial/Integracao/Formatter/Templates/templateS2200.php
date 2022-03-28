@@ -253,10 +253,10 @@ return array(
     'infoContrato' => array(
         'properties' => array(
             'nmCargo' => 'nmCargo',
-            'cboCargo' => 'cboCargo',
+            'CBOCargo' => 'cbocargo',
             'dtIngrcargo' => 'dtIngrcargo',
             'nmFuncao' => 'nmFuncao',
-            'cboFuncao' => 'cboFuncao',
+            'CBOFuncao' => 'cbofuncao',
             'acumCargo' => 'acumCargo',
             'codCateg' => array(
                 'codCateg' => 'codCateg',
