@@ -204,7 +204,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         </td>
         <td nowrap>
           <?
-          db_input('pc11_seq', 8, $Ipc11_seq, true, 'text', 3);
+          db_input('pc11_seq', 8, $Ipc11_seq, true, 'text', $db_opcao);
           ?>
         </td>
         <td>
@@ -717,7 +717,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                                 m61_descr,
                                 pc13_quant,
                                 pc13_valor";
-          $cliframe_alterar_excluir->sql = $clsolicitem->sql_query_pcmater(null, $sCampos, "pc11_seq, pc11_codigo", "$codigos pc11_numero= " . @$pc11_numero);
+          $cliframe_alterar_excluir->sql = $clsolicitem->sql_query_pcmater(null, $sCampos, "pc11_seq desc", "$codigos pc11_numero= " . @$pc11_numero);
           $cliframe_alterar_excluir->campos = "pc11_seq,pc11_codigo,pc11_numero,pc13_coddot,pc19_orctiporec,pc01_codmater,pc01_descrmater,m61_descr,pc13_quant,pc13_valor";
           $cliframe_alterar_excluir->legenda = "ITENS LANÇADOS";
           $cliframe_alterar_excluir->iframe_height = "150";

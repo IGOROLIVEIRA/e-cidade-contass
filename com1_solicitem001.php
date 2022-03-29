@@ -212,6 +212,15 @@ if (isset($incluir) || isset($alterar)) {
       }
     }
   }
+  if (isset($incluir)) {
+    $sSqlItens = $clsolicitem->sql_query(null, "*", null, "pc11_numero = {$pc11_numero} and pc11_seq = {$pc11_seq}");
+    $rsItens = $clsolicitem->sql_record($sSqlItens);
+    if ($clsolicitem->numrows > 0) {
+      $naodig = true;
+      $sqlerro = true;
+      $erro_msg = "Usuário: Já existe um item com sequencial {$pc11_seq} ja incluido para essa solicitacao.";
+    }
+  }
 }
 
 if (isset($incluir) && $sqlerro == false) {
