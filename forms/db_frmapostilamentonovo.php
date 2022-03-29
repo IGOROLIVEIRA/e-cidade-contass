@@ -5,11 +5,11 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 ?>
-<fieldset style="width: 60%; margin-left:10px; margin-top: 25px;">
-    <legend><b>Apostilamento</b></legend>
+<fieldset style="width: 1000px;  margin-top: 25px;">
+    <legend><b>Dados do acordo</b></legend>
     <form name="form1" method="post" action="">
 
-        <table border="0" style="margin-right: 10px">
+        <table border="0" style="margin-right: 10px; margin-left: -25%">
             <tr>
                 <td title="<?= @$Tac16_sequencial ?>">
                     <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
@@ -31,12 +31,15 @@ $clrotulo->label("ac16_resumoobjeto");
                     ?>
                 </td>
 
+
+
                 <td title="<?= @$Tsi03_dataassinacontrato ?>">
                     <?= @$Lsi03_dataassinacontrato ?>
                     <?
                     db_inputdata('si03_dataassinacontrato', @$si03_dataassinacontrato_dia, @$si03_dataassinacontrato_mes, @$si03_dataassinacontrato_ano, true, 'text', 3, "")
                     ?>
                 </td>
+
             </tr>
             <tr>
                 <td title="<?= @$Tsi03_numapostilamento ?>">
