@@ -117,7 +117,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                            AND orcorgao.o40_anousu = orcunidade.o41_anousu                   
                 WHERE c53_tipo in (30,31) and e60_instit = ".$oInstit->codigo." and o15_codtri = '" . $iFonte . "' 
                 and DATE_PART('YEAR',c70_data) = ".db_getsession("DB_anousu") ."
-                and e60_anousu < ".db_getsession("DB_anousu") ."
+                and e60_anousu between 2012 and 2019
                       group by 1,2,3,4,5,6,7,8,9,10,11
                       order by e60_emiss";
               $rsRPPago = db_query($sSqlRP);
