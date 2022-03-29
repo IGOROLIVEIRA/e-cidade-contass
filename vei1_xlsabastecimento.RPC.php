@@ -27,7 +27,7 @@ require_once("classes/db_veicbaixa_classe.php");
 require_once("classes/db_veiccentral_classe.php"); 
 require_once("classes/db_veiccadcentral_classe.php");
 require_once("classes/db_veiccadcomb_classe.php");
-require_once("classes/db_veicparam_classe.php");
+require_once("classes/db_veicparam_classe.php"); 
 
 
 $oJson             = new services_json();
@@ -35,7 +35,7 @@ $oJson             = new services_json();
 $oParam           = $oJson->decode(str_replace("\\","",$_POST["json"]));
 $oErro             = new stdClass();
 $oRetorno          = new stdClass();
-$oRetorno->status  = 1;
+$oRetorno->status  = 1;   
 
 $clveicretirada    = new cl_veicretirada();
 $clveiculos        = new cl_veiculos();
@@ -334,15 +334,45 @@ switch($oParam->exec) {
 
                 $quantidade = count($arrayValores);
                 $opEmpenho = 0;
+                $controleData = 0;
                 if($resultParamres->ve50_abastempenho==1){
-                    if($quantidade>0){
-                        for($i=0;$i<$quantidade;$i++){
-                            if($arrayValores[$i][0]==$resultEm->e60_numemp){
-                                $opEmpenho = 1;
-                                break;
+                    if(strtotime($resultEm->e60_emiss)>=strtotime($resultParamres->ve50_datacorte)){
+                        if($quantidade>0){
+                            for($i=0;$i<$quantidade;$i++){
+                                if($arrayValores[$i][0]==$resultEm->e60_numemp){
+                                    $opEmpenho = 1;
+                                    break;
+                                }
                             }
-                        }
-                        if($opEmpenho==0){
+                            if($opEmpenho==0){
+                                if($resultEm->e60_vlrutilizado==""||$resultEm->e60_vlrutilizado==0){
+                                    $sql = "select si05_codabast from empveiculos where si05_numemp = $resultEm->e60_numemp";
+                            
+                                    $result = db_query($sql);
+                                    $soma = 0;
+                                    for($i=0;$i<pg_num_rows($result);$i++){
+                                    $rsAbastecimento = db_utils::fieldsMemory($result,$i);
+                                    $sql = "select ve70_valor from veicabast where ve70_codigo = $rsAbastecimento->si05_codabast";
+                                    $result1 = db_query($sql);
+                                    $rsAbastecimento1 = db_utils::fieldsMemory($result1,0);
+                            
+                                    $valorutilizado += $rsAbastecimento1->ve70_valor;
+                                    }
+                                    $clempempenho->e60_vlrutilizado =  $valorutilizado;
+                                    $clempempenho->sql_query_valorutilizado($resultEm->e60_numemp);
+                                    $valorautilizar = $resultEm->e60_vlremp - $valorutilizado;
+                                    $arrayValores[$j][0] = $resultEm->e60_numemp;
+                                    $arrayValores[$j][1] = $valorautilizar;
+                                    $arrayValores[$j][2] = $codEmp;
+                                    $j++;
+                                }else{
+                                    $arrayValores[$j][0] = $resultEm->e60_numemp;
+                                    $arrayValores[$j][1] = $resultEm->e60_vlremp - $resultEm->e60_vlrutilizado;
+                                    $arrayValores[$j][2] = $codEmp;
+                                    $j++;  
+                                }
+                            }
+                        }else{
                             if($resultEm->e60_vlrutilizado==""||$resultEm->e60_vlrutilizado==0){
                                 $sql = "select si05_codabast from empveiculos where si05_numemp = $resultEm->e60_numemp";
                         
@@ -370,34 +400,12 @@ switch($oParam->exec) {
                                 $j++;  
                             }
                         }
+                        
                     }else{
-                        if($resultEm->e60_vlrutilizado==""||$resultEm->e60_vlrutilizado==0){
-                            $sql = "select si05_codabast from empveiculos where si05_numemp = $resultEm->e60_numemp";
-                    
-                            $result = db_query($sql);
-                            $soma = 0;
-                            for($i=0;$i<pg_num_rows($result);$i++){
-                            $rsAbastecimento = db_utils::fieldsMemory($result,$i);
-                            $sql = "select ve70_valor from veicabast where ve70_codigo = $rsAbastecimento->si05_codabast";
-                            $result1 = db_query($sql);
-                            $rsAbastecimento1 = db_utils::fieldsMemory($result1,0);
-                    
-                            $valorutilizado += $rsAbastecimento1->ve70_valor;
-                            }
-                            $clempempenho->e60_vlrutilizado =  $valorutilizado;
-                            $clempempenho->sql_query_valorutilizado($resultEm->e60_numemp);
-                            $valorautilizar = $resultEm->e60_vlremp - $valorutilizado;
-                            $arrayValores[$j][0] = $resultEm->e60_numemp;
-                            $arrayValores[$j][1] = $valorautilizar;
-                            $arrayValores[$j][2] = $codEmp;
-                            $j++;
-                        }else{
-                            $arrayValores[$j][0] = $resultEm->e60_numemp;
-                            $arrayValores[$j][1] = $resultEm->e60_vlremp - $resultEm->e60_vlrutilizado;
-                            $arrayValores[$j][2] = $codEmp;
-                            $j++;  
-                        }
+                        $controleData = 1;
+                        break;
                     }
+                    
                 }
                 //final 
                 
@@ -747,7 +755,7 @@ switch($oParam->exec) {
 
             //após a verificação de todas validações realiza a importar
         
-            if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1==0 && $opBaixaCompleta==0 && $opBaixa==0 && $opKm==0 && $opVeic==0 && $controleCom==0 && $deixarInserir==0){
+            if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1==0 && $opBaixaCompleta==0 && $opBaixa==0 && $opKm==0 && $opVeic==0 && $controleCom==0 && $deixarInserir==0 && $controleData==0){
                 $emp = 0;
                 foreach($resultadoPlanilha as $row){
                     $test1       = $row->placa;
@@ -946,6 +954,10 @@ switch($oParam->exec) {
                     
                     $oRetorno->itens = $arrayRetornoVeiculoN;
 
+                }else if($controleData==1){
+                    $oRetorno->status = 6;
+                    $oRetorno->message = urlencode("Usuário: Abastecimento não incluído, data de liberação de validação do empenho maior do que data da Emissão do empenho");
+                    $erro = true;
                 }else if($controleAno==1){
                     $oRetorno->status = 5;
                     $oRetorno->message = urlencode("Empenho com ano anterior não consta para uso!");

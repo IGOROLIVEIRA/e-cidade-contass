@@ -745,6 +745,11 @@ if(isset($_POST["processar"])) {
             
             });
 
+        }else if (oRetorno.status == 6) {
+            alert(oRetorno.message.urlDecode());
+            //var url_atual = window.location.href;
+            //window.location.href = url_atual;
+
         }else{
             var cont = 1;
             oRetorno.itens.forEach(function (oItem) {
