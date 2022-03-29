@@ -62,8 +62,17 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
     $sqlerro  = true;
     db_msgbox($erro_msg);
   }
-  $result_pesquisa_material = $clpcmater->sql_record($clpcmater->sql_query(null, "pc01_descrmater as pc01_descrmateranterior,pc01_justificativa as pc01_justificativaanterior", null, "pc01_codmater = $pc01_codmater"));
+  $result_pesquisa_material = $clpcmater->sql_record($clpcmater->sql_query(null, "pc01_descrmater as pc01_descrmateranterior,pc01_justificativa as pc01_justificativaanterior, pc01_complmater as pc01_complmateranterior", null, "pc01_codmater = $pc01_codmater"));
   db_fieldsmemory($result_pesquisa_material, 0);
+
+  if ($pc01_complmateranterior != $pc01_complmater) {
+
+    if ($pc01_justificativa == "") {
+      $erro_msg = "Campo Justificativa não Atualizado!.";
+      $sqlerro  = true;
+      db_msgbox($erro_msg);
+    }
+  }
 
   if ($pc01_descrmateranterior != $pc01_descrmater) {
 
@@ -79,7 +88,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
     $result = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), "c99_datapat", null, null));
     $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-    if (strtotime($dt_session) <= strtotime($c99_datapat)) {
+    if (strtotime($dt_session) <= strtotime($c99_datapat) && $sqlerro != false) {
       $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
       $sqlerro  = true;
       db_msgbox($erro_msg);
