@@ -79,47 +79,54 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
               $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes, 0);
               $nSaldoFinal = ($oSaldoFontes->saldoanterior);
 
-              $sSqlRP = "SELECT  10 AS tiporegistro,
-                      e60_numemp AS codreduzidorsp,
-                    CASE WHEN orcorgao.o40_codtri = '0'
-                    OR NULL THEN orcorgao.o40_orgao :: VARCHAR ELSE orcorgao.o40_codtri END AS o58_orgao,
-                    CASE WHEN orcunidade.o41_codtri = '0'
-                    OR NULL THEN orcunidade.o41_unidade :: VARCHAR ELSE orcunidade.o41_codtri END AS o58_unidade,
-                    si09_codorgaotce AS codorgao,
-                    lpad((
-                            CASE WHEN orcorgao.o40_codtri = '0'
-                            OR NULL THEN orcorgao.o40_orgao :: VARCHAR ELSE orcorgao.o40_codtri END ),2,0) 
-                            || lpad((
-                            CASE WHEN orcunidade.o41_codtri = '0'
-                            OR NULL THEN orcunidade.o41_unidade :: VARCHAR ELSE orcunidade.o41_codtri END
-                        ),3,0) AS codunidadesub,
-                    e60_codemp AS nroempenho,
-                    e60_anousu AS exercicioempenho,
-                    e60_emiss AS dtEmpenho,   
-                    o15_codtri AS codfontrecursos,
-                    CASE WHEN c53_coddoc = 35 THEN 1 ELSE 2 END AS tipopagamentorsp,
-                    sum(CASE WHEN c53_tipo = 31 then c70_valor * -1 else c70_valor end)  as vlpagofontersp
-                FROM empempenho 
-                    INNER JOIN orcdotacao ON e60_coddot = o58_coddot
-                           AND e60_anousu = o58_anousu
-                    INNER JOIN orcprojativ ON o58_anousu = o55_anousu
-                           AND o58_projativ = o55_projativ
-                    INNER JOIN orctiporec ON o58_codigo = o15_codigo
-                    INNER JOIN conlancamemp ON c75_numemp=e60_numemp
-                    INNER JOIN conlancam ON c75_codlan=c70_codlan
-                    INNER JOIN conlancamdoc ON c75_codlan = c71_codlan
-                    INNER JOIN conhistdoc ON c71_coddoc = c53_coddoc
-                     LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
-                     LEFT JOIN orcunidade ON o58_anousu = orcunidade.o41_anousu
-                           AND o58_orgao = orcunidade.o41_orgao
-                           AND o58_unidade = orcunidade.o41_unidade
-                     LEFT JOIN orcorgao ON orcorgao.o40_orgao = orcunidade.o41_orgao
-                           AND orcorgao.o40_anousu = orcunidade.o41_anousu                   
-                WHERE c53_tipo in (30,31) and e60_instit = ".$oInstit->codigo." and o15_codtri = '" . $iFonte . "' 
-                and DATE_PART('YEAR',c70_data) = ".db_getsession("DB_anousu") ."
-                and e60_anousu between 2012 and 2019
-                      group by 1,2,3,4,5,6,7,8,9,10,11
-                      order by e60_emiss";
+              $sSqlRP = "SELECT 10 AS tiporegistro,
+                                e60_numemp AS codreduzidorsp,
+                                CASE
+                                    WHEN orcorgao.o40_codtri = '0' OR NULL THEN orcorgao.o40_orgao :: VARCHAR 
+                                    ELSE orcorgao.o40_codtri 
+                                END AS o58_orgao,
+                                CASE 
+                                    WHEN orcunidade.o41_codtri = '0' OR NULL THEN orcunidade.o41_unidade :: VARCHAR 
+                                    ELSE orcunidade.o41_codtri 
+                                END AS o58_unidade,
+                                si09_codorgaotce AS codorgao,
+                                lpad((CASE 
+                                          WHEN orcorgao.o40_codtri = '0' OR NULL THEN orcorgao.o40_orgao :: VARCHAR 
+                                          ELSE orcorgao.o40_codtri 
+                                      END ),2,0) || lpad((CASE 
+                                                              WHEN orcunidade.o41_codtri = '0' OR NULL THEN orcunidade.o41_unidade :: VARCHAR
+                                                              ELSE orcunidade.o41_codtri 
+                                                          END),3,0) AS codunidadesub,
+                                e60_codemp AS nroempenho,
+                                e60_anousu AS exercicioempenho,
+                                e60_emiss AS dtEmpenho,   
+                                o15_codtri AS codfontrecursos,
+                                CASE 
+                                    WHEN c53_coddoc = 35 THEN 1
+                                    ELSE 2
+                                END AS tipopagamentorsp,
+                                sum(CASE
+                                        WHEN c53_tipo = 31 THEN c70_valor * -1 
+                                        ELSE c70_valor 
+                                    END) AS vlpagofontersp
+                         FROM empempenho 
+                         INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu
+                         INNER JOIN orcprojativ ON o58_anousu = o55_anousu AND o58_projativ = o55_projativ
+                         INNER JOIN orctiporec ON o58_codigo = o15_codigo
+                         INNER JOIN conlancamemp ON c75_numemp=e60_numemp
+                         INNER JOIN conlancam ON c75_codlan=c70_codlan
+                         INNER JOIN conlancamdoc ON c75_codlan = c71_codlan
+                         INNER JOIN conhistdoc ON c71_coddoc = c53_coddoc
+                         LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
+                         LEFT JOIN orcunidade ON o58_anousu = orcunidade.o41_anousu AND o58_orgao = orcunidade.o41_orgao AND o58_unidade = orcunidade.o41_unidade
+                         LEFT JOIN orcorgao ON orcorgao.o40_orgao = orcunidade.o41_orgao AND orcorgao.o40_anousu = orcunidade.o41_anousu                   
+                         WHERE c53_tipo IN (30,31) 
+                           AND e60_instit = ".$oInstit->codigo."
+                           AND o15_codtri = '" . $iFonte . "' 
+                           AND DATE_PART('YEAR',c70_data) = ".db_getsession("DB_anousu") ."
+                           AND e60_anousu between 2012 AND 2019
+                         GROUP BY 1,2,3,4,5,6,7,8,9,10,11
+                         ORDER BY e60_emiss";
               $rsRPPago = db_query($sSqlRP);
 
 
