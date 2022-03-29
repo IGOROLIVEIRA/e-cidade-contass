@@ -683,7 +683,7 @@ case "processarBalancete" :
     $diaMes = "";
     if($iAnoReferencia > 2020
         && $iTipoInst == 5){
-        $diaMes = "31_12_";
+            $diaMes = "31_12_";
     }
 
       /*
@@ -700,17 +700,26 @@ case "processarBalancete" :
         if (file_exists("{$sArquivo}_{$diaMes}{$iAnoReferencia}.pdf")) {
 
         	$oArquivoCsv          = new stdClass();
+            if($sArquivo == "RAH"){
+                $diaMes = "31_07_";
+            }
         	$oArquivoCsv->nome    = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.pdf";
             $oArquivoCsv->caminho = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.pdf";
             $aArrayArquivos[] = $oArquivoCsv;
 
         }elseif(file_exists("{$sArquivo}_{$diaMes}{$iAnoReferencia}.xls")){
             $oArquivoCsv          = new stdClass();
+            if($sArquivo == "RAH"){
+                $diaMes = "31_07_";
+            }
             $oArquivoCsv->nome    = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.xls";
             $oArquivoCsv->caminho = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.xls";
             $aArrayArquivos[] = $oArquivoCsv;
         }elseif(file_exists("{$sArquivo}_{$diaMes}{$iAnoReferencia}.xlsx")){
             $oArquivoCsv          = new stdClass();
+            if($sArquivo == "RAH"){
+                $diaMes = "31_07_";
+            }
             $oArquivoCsv->nome    = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.xlsx";
             $oArquivoCsv->caminho = "{$sArquivo}_{$diaMes}{$iAnoReferencia}.xlsx";
             $aArrayArquivos[] = $oArquivoCsv;
