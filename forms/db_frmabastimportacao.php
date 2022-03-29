@@ -87,7 +87,7 @@ if(isset($_POST["processar"])) {
         unlink($nometmp);
         $lFail = true;
         return false;
-    } 
+    }
 
     $dir = "libs/Pat_xls_import/";
     $files1 = scandir($dir,1);
@@ -473,20 +473,6 @@ if(isset($_POST["processar"])) {
                             </th>
                         </tr>
                     </table>
-                    <table style="width: 10%; border: 0px solid black; display: none;" id="tblEmpAn" >
-
-                    <tr>
-                            <th colspan="2" style="text-align: center; width: 150px;" >
-                             Empenhos não podem ser utilizados
-                            </th>
-                    <tr>
-                    
-                        <tr style='background-color:#ffffff;'>
-                            <th style="width: 150px;">
-                            Empenho 
-                            </th>
-                        </tr>
-                    </table>
                     <table style="width: 40%; border: 0px solid black; display: none;" id="tblMotorista" >
 
                     <tr>
@@ -576,28 +562,10 @@ if(isset($_POST["processar"])) {
                             Combustível
                             </th>    
                         </tr>
-                    </table>
-                    <table style="width: 20%; border: 0px solid black; display: none;" id="tblValorLiberado" >
-
-                    <tr>
-                            <th colspan="2" style="text-align: center;" >
-                             Valores Liberados no Empenho 
-                            </th>
-                    <tr>
-                    
-                        <tr style='background-color:#ffffff;'>
-                            
-                            <th style="width: 150px;">
-                            Empenho
-                            </th>
-                            <th style="width: 150px;">
-                            Valor
-                            </th>    
-                        </tr>
-                    </table>                 
+                    </table>               
   </form>
     
-<script>  
+<script>
 
     function gerar(){
         window.location.href = "vei1_xlsabastecimentoPlanilha.php";
@@ -935,27 +903,6 @@ if(isset($_POST["processar"])) {
                     var celula2 = linha.insertCell(1);
                     celula1.innerHTML =  "<div style='text-align:center;'>"+vplaca+"<div>";
                     celula2.innerHTML =  "<div style='text-align:center;'>"+vcom+"<div>";
-                    
-
-                }else if(identificador==8){
-                    if(cont==1){
-                        alert("Empenho(s) listado(s) abaixo sem saldo disponível!"); 
-                        cont++;
-                    }
-                    
-                    
-                    var vnumemp = oItem.numemp;
-                    var vliberado = oItem.liberado;
-                    var vcodemp = oItem.codemp;
-                    document.getElementById("tblValorLiberado").style.display="block";
-
-                    var tabela = document.getElementById("tblValorLiberado");
-                    var numeroLinhas = tabela.rows.length;
-                    var linha = tabela.insertRow(numeroLinhas);
-                    var celula1 = linha.insertCell(0);
-                    var celula2 = linha.insertCell(1);
-                    celula1.innerHTML =  "<div style='text-align:center;'>"+vcodemp+"<div>";
-                    celula2.innerHTML =  "<div style='text-align:center;'>"+vliberado+"<div>";
                     
 
                 }

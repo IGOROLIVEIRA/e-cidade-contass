@@ -31,34 +31,17 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_veicabastanu_classe.php");
 include("classes/db_veicabast_classe.php");
-include("classes/db_empveiculos_classe.php");
-include("classes/db_empempenho_classe.php");
 include("classes/db_condataconf_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clveicabast = new cl_veicabast;
 $clveicabastanu = new cl_veicabastanu;
-$clempveiculos     = new cl_empveiculos;
-$clempempenho      = new cl_empempenho;
 $db_opcao = 1;
 $db_botao = true;
 $pesq=false;
 if(isset($incluir)){
   $sqlerro=false;
   db_inicio_transacao();
-  $buscaValor = $clveicabast->sql_record($clveicabast->sql_query_file($ve74_veicabast,"*",null,""));
-  $resultValor = db_utils::fieldsMemory($buscaValor, 0);
-
-  $buscarEmp = $clempveiculos->sql_record($clempveiculos->sql_query(null,"si05_numemp",null,"si05_codabast = $ve74_veicabast"));
-  $resultEmp = db_utils::fieldsMemory($buscarEmp, 0);
-
-  $buscarVlrEm = $clempempenho->sql_record($clempempenho->sql_query_file($resultEmp->si05_numemp,"*",null,""));
-  $resultVlrEm = db_utils::fieldsMemory($buscarVlrEm, 0);
-
-  $clempempenho->e60_vlrutilizado = $resultVlrEm->e60_vlrutilizado - $resultValor->ve70_valor;
-  $clempempenho->sql_query_valorutilizado($resultEmp->si05_numemp); 
-  
-
   $clveicabastanu->ve74_data=date("Y-m-d",db_getsession("DB_datausu"));
   $clveicabastanu->ve74_hora=db_hora();
   $clveicabastanu->ve74_usuario=db_getsession("DB_id_usuario");  
@@ -67,9 +50,6 @@ if(isset($incluir)){
   if ($clveicabastanu->erro_status==0){
   	$sqlerro=true;
   }
- 
-
- 
   if ($sqlerro==false){
   	$clveicabast->ve70_ativo="0";
   	$clveicabast->ve70_codigo=$ve74_veicabast;

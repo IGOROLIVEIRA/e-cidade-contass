@@ -126,12 +126,12 @@ $texto1 = @$ordemdecompra1;
 $texto2 = @$ordemdecompra2;
 
 $result_endent = db_query("select j14_nome as j14_nome_almox, numero as numero_almox, compl as compl_almox,
-        													 j13_descr as j13_descr_almox, fonedepto as fone_almox, ramaldepto as ramal_almox,
-        													 faxdepto as fax_almox
-																	 from db_departender
-														inner join db_depart on db_depart.coddepto = db_departender.coddepto
-														inner join ruas on j14_codigo = codlograd
-														inner join bairro on j13_codi = codbairro where db_departender.coddepto = " . $this->depto);
+        				   j13_descr as j13_descr_almox, fonedepto as fone_almox, ramaldepto as ramal_almox,
+        				   faxdepto as fax_almox
+                           from db_departender
+						   inner join db_depart on db_depart.coddepto = db_departender.coddepto
+						   inner join ruas on j14_codigo = codlograd
+						   inner join bairro on j13_codi = codbairro where db_departender.coddepto = " . $this->depto);
 if (pg_numrows($result_endent) > 0) {
 
     db_fieldsmemory($result_endent, 0, true);
@@ -161,7 +161,6 @@ $posicao_depois = $this->objpdf->gety();
 $xlin += $posicao_depois - $posicao_atual + 2;
 
 if ($this->obs != "") {
-
     $this->objpdf->sety($xlin + 24);
     $posicao_atual = $this->objpdf->gety();
     $this->objpdf->multicell(202, 4, "OBSERVAÇÕES:  " . $this->obs, 1);
@@ -182,41 +181,74 @@ $this->objpdf->Cell(20, 5, 'Unitário', 1, 0, 'C');
 $this->objpdf->Cell(20, 5, 'Total', 1, 1, 'C');
 $this->objpdf->Setfont('Arial', '', 8);
 
-$this->objpdf->SetWidths(array(20, 20, 20, 102, 20, 20));  //$this->objpdf->SetWidths(array(12,16,10,104,30,30));
+$this->objpdf->SetWidths(array(20, 20, 20, 102, 20, 20));
 $this->objpdf->SetAligns(array('C', 'C', 'C', 'L', 'C', 'C'));
 
 for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     db_fieldsmemory($this->recorddositens, $ii);
 
+    /* Realizar a consulta de item anulado */
+    $sql = " SELECT m52_valor,
+        m36_vrlanu,
+        m36_qtd
+        FROM matordemitem
+        INNER JOIN empempitem ON empempitem.e62_numemp = matordemitem.m52_numemp
+        INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
+        AND empempitem.e62_sequen = matordemitem.m52_sequen
+        INNER JOIN empempenho ON empempenho.e60_numemp = empempitem.e62_numemp
+        INNER JOIN matordem ON matordem.m51_codordem = matordemitem.m52_codordem
+        INNER JOIN cgm ON cgm.z01_numcgm = matordem.m51_numcgm
+        INNER JOIN db_depart ON db_depart.coddepto = matordem.m51_depto
+        INNER JOIN orcelemento ON orcelemento.o56_codele = empempitem.e62_codele
+        AND orcelemento.o56_anousu = empempenho.e60_anousu
+        INNER JOIN pcmater ON pcmater.pc01_codmater = empempitem.e62_item
+        WHERE m52_codordem =  " . $this->numordem . " and e62_item = " . pg_result($this->recorddositens, $ii, $this->codmater);
+
+    $resItens = @db_query($sql);
+    $valorItemAnulado = db_utils::fieldsMemory($resItens, 0)->m36_vrlanu;
+    $valorItem = db_utils::fieldsMemory($resItens, 0)->m52_valor;
+    $qtdAnulada = db_utils::fieldsMemory($resItens, 0)->m36_qtd;
+
+    //valorAnulado
+    if ($valorItemAnulado) {
+        $valorItemTotal = pg_result($this->recorddositens, $ii, $this->valoritem) - $valorItemAnulado;
+    } else $valorItemTotal = pg_result($this->recorddositens, $ii, $this->valoritem);
+    //QtdAnulada
+    if ($qtdAnulada > 0) {
+        $qtdItem = pg_result($this->recorddositens, $ii, $this->quantitem) - $qtdAnulada;
+    } else $qtdItem = pg_result($this->recorddositens, $ii, $this->quantitem);
+
     $this->objpdf->Row(
         array(
             pg_result($this->recorddositens, $ii, $this->codmater),
-            pg_result($this->recorddositens, $ii, $this->quantitem),
+            $qtdItem,
             pg_result($this->recorddositens, $ii, $this->unid),
             pg_result($this->recorddositens, $ii, $this->descricaoitem) . pg_result($this->recorddositens, $ii, $this->pc01_complmater) . "\n" . 'Marca: ' . pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval),
             db_formatar(pg_result($this->recorddositens, $ii, $this->vlrunitem), 'v', " ", $this->numdec),
-            db_formatar(pg_result($this->recorddositens, $ii, $this->valoritem), 'f')
+            db_formatar($valorItemTotal, 'f')
         ),
         5,
         true,
-        5,
+        8,
         0,
         false
     );
-    $totalgeral +=  pg_result($this->recorddositens, $ii, $this->valoritem);
-    /*var_dump($this->objpdf->gety());
-    echo "<br>";
-    var_dump($this->objpdf->h - 85);
-    echo "<br>";
-    var_dump($pagina);
-    exit;*/
+
+    if ($valorItemAnulado == $valorItem && $valorItemAnulado > 0) {
+        $this->objpdf->Setfont('Arial', 'B', 8);
+        $this->objpdf->text($this->objpdf->getx() + 61, $this->objpdf->gety() - 3, "(ANULADO)");
+        $this->objpdf->Setfont('Arial', '', 8);
+    } else if ($valorItemAnulado < $valorItem) {
+        $this->objpdf->Setfont('Arial', 'B', 8);
+        $this->objpdf->text($this->objpdf->getx() + 61, $this->objpdf->gety() - 3, "(ANULADO PARCIALMENTE)");
+        $this->objpdf->Setfont('Arial', '', 8);
+    }
+    $totalgeral +=  $valorItemTotal;
 
     if (($this->objpdf->gety() > $this->objpdf->h - 30 && $pagina == 1) || ($this->objpdf->gety() > $this->objpdf->h - 50 && $pagina != 1)) {
         $this->objpdf->sety($xlin + 22);
         $this->objpdf->Setfont('Arial', 'B', 8);
         $this->objpdf->AddPage();
-        //$this->objpdf->Cell(60, 5, 'Empenho: ' . pg_result($this->recorddositens, $ii, $this->empempenho) . "/" . pg_result($this->recorddositens, $ii, $this->anousuemp), 1, 0, 'L');
-        //$this->objpdf->Cell(142, 5, 'Data da Emissão:', 1, 1, 'L');
         $this->objpdf->Cell(20, 5, 'Item', 1, 0, 'C');
         $this->objpdf->Cell(20, 5, 'Quant.', 1, 0, 'C');
         $this->objpdf->Cell(20, 5, 'Unid.', 1, 0, 'C');

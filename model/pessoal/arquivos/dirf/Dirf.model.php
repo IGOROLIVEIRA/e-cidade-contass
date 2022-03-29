@@ -758,7 +758,7 @@ class Dirf {
                   $oPessoa->aValorGrupo[1] -= $folhaSalarioBase[0]->r14_valor;
                 }
               }
-      
+
               $ina      += $oPessoa->aValorGrupo[1];
               $tributo  = 0;
             }
@@ -1197,13 +1197,13 @@ class Dirf {
            * Solução paliativa utilizada para o cliente Osório. Verifica se os dados que estão sendo
            * processados são referentes a Rescisão(gerfres) caso sejam, irá considerar os valores para as rubricas da base
            * B913, que são apenas para os casos de­ 'Rendimentos Isentos ­ Indenizações por Rescisão de Contrato de Trabalho, inclusive a título de PDV(RIIRP)'.
-           * Pois rubricas que estavam lançadas no ponto de férias, estavam sendo consideradas como RIIRP, 
-           * quando o correto é apenas rescisão ser considerada RIIRP. 
-           * 
+           * Pois rubricas que estavam lançadas no ponto de férias, estavam sendo consideradas como RIIRP,
+           * quando o correto é apenas rescisão ser considerada RIIRP.
+           *
            * O problema ocorre pelo fato das rubricas que estão na B913 serem utilizadas tanto para rescisão quanto para férias.
            */
           if ($oCodigoCliente->db21_codcli == '20') {
-            
+
             if (db_at($mrubr, $this->sel_B913) > 0 && $sigla == 'r20_') {
 
               if (!isset($oPessoa->aValorGrupo[9])) {

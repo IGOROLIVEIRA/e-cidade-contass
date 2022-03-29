@@ -15,13 +15,15 @@ include("dbforms/db_funcoes.php");
 
 $sNomeCampo   = key($_FILES);
 $extensao = strtolower(end(explode('.', $_FILES["$sNomeCampo"]['name'])));
-
 $diaMes = "";
 if(db_getsession("DB_anousu") > 2020){
     $diaMes = "31_12_";
+    if($sNomeCampo == "RAH"){
+        $diaMes = "31_07_";
+    }
 }
-
 $sNomeArquivo = $sNomeCampo."_{$diaMes}".db_getsession("DB_anousu").".".$extensao;
+
 
 if ($extensao != "pdf" && $extensao != "xls" && $extensao != "xlsx") {
 	echo "<div style=\"color: red;\">Envie arquivos somente com extensão .pdf ou .xls ou .xlsx</div>";
