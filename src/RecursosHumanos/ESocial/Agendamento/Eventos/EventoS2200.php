@@ -127,6 +127,7 @@ class EventoS2200 extends EventoBase
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtAdmissao                      = new \stdClass;
             $oDadosAPI->evtAdmissao->sequencial          = $iSequencial;
+            $oDadosAPI->evtAdmissao->modo                = $this->modo;
             $oDadosAPI->evtAdmissao->indRetif            = 1;
             $oDadosAPI->evtAdmissao->nrRecibo            = null;
             $oDadosAPI->evtAdmissao->cpfTrab             = $oDados->trabalhador->cpfTrab;
@@ -209,12 +210,13 @@ class EventoS2200 extends EventoBase
                 // $oDadosAPI->evtAdmissao->vinculo->infoContrato->codCarreira = empty($oDados->infoContrato->codCarreira) ? null : $oDados->infoContrato->codCarreira;
                 // $oDadosAPI->evtAdmissao->vinculo->infoContrato->dtIngrCarr = empty($oDados->infoContrato->dtIngrCarr) ? null : $oDados->infoContrato->dtIngrCarr;
 
-                if (!empty($oDados->remuneracao->vrSalFx)) {
+                if (!empty($oDados->remuneracao->vrSalFx) && !empty($oDados->remuneracao->undSalFixo)) {
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = $oDados->remuneracao->vrSalFx;
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->undSalFixo = $oDados->remuneracao->undSalFixo;
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
                 } else {
-                    unset($oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao);
+                    //unset($oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao);
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao = null;
                 }
 
                 if (!empty($oDados->duracao->tpContr)) {
@@ -223,7 +225,8 @@ class EventoS2200 extends EventoBase
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->clauAssec = empty($oDados->duracao->clauAssec) ? null : $oDados->duracao->clauAssec;
                     $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->objDet = empty($oDados->duracao->objDet) ? null : $oDados->duracao->objDet;
                 } else {
-                    unset($oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao);
+                    //unset($oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao);
+                    $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao  = null;
                 }
 
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->localTrabGeral = empty($oDados->localTrabGeral) ? null : $oDados->localTrabGeral;
@@ -305,7 +308,7 @@ class EventoS2200 extends EventoBase
             $oDependFormatado->cpfdep = empty($oDependentes->rh31_cpf) ? null : $oDependentes->rh31_cpf;
             $oDependFormatado->depirrf = ($oDependentes->rh31_depirrf == "0" ? "N" : "S");
             $oDependFormatado->depsf = ($oDependentes->rh31_depend == "N" ? "N" : "S");
-            $oDependFormatado->inctrab = ($oDependentes->rh31_depirrf == "N" ? "N" : "S");
+            $oDependFormatado->inctrab = ($oDependentes->rh31_especi == "N" ? "N" : "S");
 
             $aDependentes[] = $oDependFormatado;
         }
