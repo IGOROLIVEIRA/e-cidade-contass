@@ -263,28 +263,30 @@ for ($i = 0; $i < $num; $i++) {
     $e30_numdec = 4;
   }
 
-  $pdf1->numdec         = $e30_numdec;
-  $pdf1->valoritem      = 'm52_valor';
-  $pdf1->vlrunitem      = 'm52_vlruni';
-  $pdf1->descricaoitem  = 'pc01_descrmater';
-  $pdf1->pc01_complmater  = 'pc01_complmater';
-  $pdf1->codmater       = 'pc01_codmater';
-  $pdf1->observacaoitem = 'e62_descr';
-  $pdf1->depto          = $m51_depto;
-  $pdf1->prazoent       = $m51_prazoent;
-  $pdf1->Snumeroproc    = "pc81_codproc";
-  $pdf1->Snumero        = "pc11_numero";
-  $pdf1->obs_ordcom_orcamval = "pc23_obs";
+  for ($n = 0; $n < pg_numrows($resultitem); $n++) {
 
-  $resultado = db_utils::fieldsMemory($resultitem, 0);
-  if ($resultado->pc01_servico ==  't' && $resultado->e62_servicoquantidade == 'f') {
-    $pdf1->vlrunitem      = 'm52_valor';
+    $pdf1->numdec         = $e30_numdec;
+    $pdf1->valoritem      = 'm52_valor';
+    $pdf1->vlrunitem      = 'm52_vlruni';
+    $pdf1->descricaoitem  = 'pc01_descrmater';
+    $pdf1->pc01_complmater  = 'pc01_complmater';
+    $pdf1->codmater       = 'pc01_codmater';
+    $pdf1->observacaoitem = 'e62_descr';
+    $pdf1->depto          = $m51_depto;
+    $pdf1->prazoent       = $m51_prazoent;
+    $pdf1->Snumeroproc    = "pc81_codproc";
+    $pdf1->Snumero        = "pc11_numero";
+    $pdf1->obs_ordcom_orcamval = "pc23_obs";
+
+    $resultado = db_utils::fieldsMemory($resultitem, $n);
+
+    if ($resultado->pc01_servico ==  't' && $resultado->e62_servicoquantidade == 'f' && $resultado->m52_quant == 1) {
+      $pdf1->vlrunitem      = 'm52_valor';
+    }
   }
 
   $pdf1->imprime();
 }
-
-
 
 if ($flag_imprime == true) {
 
