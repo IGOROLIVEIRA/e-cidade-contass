@@ -9,10 +9,10 @@ $clrotulo->label("ac16_resumoobjeto");
     <legend><b>Dados do acordo</b></legend>
     <form name="form1" method="post" action="">
 
-        <table border="0" style="margin-right: 10px; margin-left: -25%">
+        <table border="0" style="margin-right: 10px; margin-left: -5%">
             <tr>
                 <td title="<?= @$Tac16_sequencial ?>">
-                    <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
+                    <?php db_ancora("Acordo", "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
                 </td>
                 <td>
                     <?
@@ -27,36 +27,15 @@ $clrotulo->label("ac16_resumoobjeto");
                     );
                     ?>
                     <?
-                    db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
+                    db_input('ac16_resumoobjeto', 35, $Iac16_resumoobjeto, true, 'text', 3, "", "", "", "");
                     ?>
                 </td>
 
 
 
-                <td title="<?= @$Tsi03_dataassinacontrato ?>">
-                    <?= @$Lsi03_dataassinacontrato ?>
-                    <?
-                    db_inputdata('si03_dataassinacontrato', @$si03_dataassinacontrato_dia, @$si03_dataassinacontrato_mes, @$si03_dataassinacontrato_ano, true, 'text', 3, "")
-                    ?>
-                </td>
 
             </tr>
-            <tr>
-                <td title="<?= @$Tsi03_numapostilamento ?>">
-                    <?= @$Lsi03_numapostilamento ?>
-                </td>
-                <td>
-                    <?
-                    db_input('si03_numapostilamento', 2, $Isi03_numapostilamento, true, 'text', $db_opcao, "")
-                    ?>
 
-                    <?= @$Lsi03_dataapostila ?>
-
-                    <?
-                    db_inputdata('si03_dataapostila', @$si03_dataapostila_dia, @$si03_dataapostila_mes, @$si03_dataapostila_ano, true, 'text', $db_opcao, "")
-                    ?>
-                </td>
-            </tr>
             <tr>
                 <td nowrap>
                     <?= @$Lsi03_tipoapostila ?>
@@ -71,18 +50,8 @@ $clrotulo->label("ac16_resumoobjeto");
             </tr>
 
             <tr>
-                <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
-                    <?= @$Lsi03_descrapostila ?>
-                </td>
-                <td>
-                    <?
-                    db_textarea('si03_descrapostila', 4, 40, $Isi03_descrapostila, true, 'text', $db_opcao, "")
-                    ?>
-                </td>
-            </tr>
-            <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_tipoalteracaoapostila ?>">
-                    <?= @$Lsi03_tipoalteracaoapostila ?>
+                    <b>Tipo da alteração:</b>
                 </td>
                 <td>
                     <?
@@ -91,6 +60,44 @@ $clrotulo->label("ac16_resumoobjeto");
                     ?>
                 </td>
             </tr>
+
+            <tr>
+                <td title="<?= @$Tsi03_numapostilamento ?>">
+                    <b>Número da Apostila:</b>
+                </td>
+                <td>
+                    <?
+                    db_input('si03_numapostilamento', 2, $Isi03_numapostilamento, true, 'text', $db_opcao, "")
+                    ?>
+
+                </td>
+            </tr>
+
+
+            <tr>
+                <td title="<?= @$Tsi03_dataapostila ?>">
+                    <b>Data de Apostila:</b>
+                </td>
+                <td>
+
+                    <?
+                    db_inputdata('si03_dataapostila', @$si03_dataapostila_dia, @$si03_dataapostila_mes, @$si03_dataapostila_ano, true, 'text', $db_opcao, "")
+                    ?>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
+                    <b>Descrição da alteração:</b>
+                </td>
+                <td>
+                    <?
+                    db_input('si03_descrapostila', 40, $Isi03_descrapostila, true, 'text', $db_opcao, "", "", "", "", "200");
+                    ?>
+                </td>
+            </tr>
+
 
             <?
             $si03_instit = db_getsession("DB_instit");
@@ -103,7 +110,7 @@ $clrotulo->label("ac16_resumoobjeto");
             ?>
             <tr>
                 <td colspan='2'>
-                    <fieldset class="separator">
+                    <fieldset class="">
                         <legend>Vigência</legend>
                         <table border='0'>
                             <tr>
@@ -119,11 +126,9 @@ $clrotulo->label("ac16_resumoobjeto");
                         </table>
                     </fieldset>
                 </td>
-            </tr>
 
-            <tr>
                 <td colspan='2'>
-                    <fieldset class="separator">
+                    <fieldset class="">
                         <legend>Valores</legend>
                         <table>
                             <tr>
@@ -140,6 +145,8 @@ $clrotulo->label("ac16_resumoobjeto");
                     </fieldset>
                 </td>
             </tr>
+
+
         </table>
 
     </form>
@@ -254,13 +261,13 @@ $clrotulo->label("ac16_resumoobjeto");
 
             $('ac16_sequencial').value = '';
             $('ac16_resumoobjeto').value = chave1;
-            $('si03_dataassinacontrato').value = '';
+            //$('si03_dataassinacontrato').value = '';
             $('ac16_sequencial').focus();
         } else {
 
             $('ac16_sequencial').value = chave1;
             $('ac16_resumoobjeto').value = chave2;
-            $('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
+            //$('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
             pesquisarDadosAcordo(chave1);
         }
     }
@@ -272,7 +279,7 @@ $clrotulo->label("ac16_resumoobjeto");
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
 
-        $('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
+        //$('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
         pesquisarDadosAcordo(chave1);
         db_iframe_acordo.hide();
     }
