@@ -1519,6 +1519,12 @@ ob_start();
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
                     <td class="s12" dir="ltr" colspan="5">11 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
+                    <?php
+                        $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
+                        $nSaldoFonteAno119 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
+                        $nSaldoFonteAno166 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
+                        $nSaldoFonteAno167 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
+                    ?>
                     <td class="s10" dir="ltr">0,00</td>
                     <td class="s10" dir="ltr">0,00</td>
                     <td class="s10" dir="ltr">0,00</td>
