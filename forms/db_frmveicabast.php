@@ -94,16 +94,11 @@ db_app::load("estilos.css");
                 </td>
                 <td>
                   <?
-                  db_input(
-                    've70_veiculos',
-                    10,
-                    $Ive70_veiculos,
-                    true,
-                    'text',
-                    $db_opcao,
-                    " onchange='js_pesquisave70_veiculos(false);'"
-                  );
-                  db_input('ve01_placa', 10, $Ive01_placa, true, 'text', 3, '')
+                  db_input('ve70_veiculos', 10, $Ive70_veiculos, true, 'text', $db_opcao, " onchange='js_pesquisave70_veiculos(false);'");
+                  ?>
+                  <strong>Placa:</strong>
+                  <?
+                  db_input('ve01_placa', 10, $Ive01_placa, true, 'text', $db_opcao, "onchange='js_pesquisaplaca(false);'")
                   ?>
                 </td>
               </tr>
@@ -157,6 +152,8 @@ db_app::load("estilos.css");
                   ?>
                 </td>
               </tr>
+
+
               <tr>
                 <td nowrap title="<?= @$Tve70_veiculoscomb ?>">
                   <?
@@ -186,6 +183,8 @@ db_app::load("estilos.css");
               ?>
               <tr>
                 <td nowrap title="<?= @$Tve70_origemgasto ?>">
+                  <? //= @$Lve70_origemgasto 
+                  ?>
                   <strong>Origem Gasto</strong>
                 </td>
                 <td>
@@ -384,7 +383,7 @@ db_app::load("estilos.css");
                     </td>
                     <td>
                       <?
-                      db_input('ve70_litros', 10, $Ive70_litros, true, 'text', $db_opcao, "onchange='js_calcula_total();' step='0.0001'")
+                      db_input('ve70_litros', 10, $Ive70_litros, true, 'text', $db_opcao, "onchange='js_calcula_total();'")
                       ?>
                     </td>
                   </tr>
@@ -433,6 +432,8 @@ db_app::load("estilos.css");
               }
               ?>
               <tr>
+
+
                 <?
                 $x = array("f" => "Não", "t" => "Sim");
                 db_select('ve70_importado', $x, true, 1, 'hidden');
@@ -483,6 +484,8 @@ db_app::load("estilos.css");
     } else if (valor_e60Codemp == "") {
       alert("Preencher Número do Empenho");
     }
+
+    /// ; utilizando desta forma o this aqui dentro sera o input
   }
 
   // Libera a ancora Posto de acordo com origem do gasto
@@ -561,6 +564,15 @@ db_app::load("estilos.css");
 
     }
   }
+
+  /*
+   * Funcao antiga
+   * function js_mostraempempenho2(chave1, chave2, chave3) {
+   *   document.form1.si05_numemp.value = chave1;
+   *   document.form1.e60_codemp.value = chave2 + ' / ' + chave3;
+   *   db_iframe_empempenho.hide();
+   * }
+   * */
 
   function js_mostraempempenho(chave1) {
     document.form1.e60_codemp.value = chave1;
@@ -770,6 +782,20 @@ db_app::load("estilos.css");
     document.form1.ve01_placa.value = chave2;
     js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
     db_iframe_veiculos.hide();
+    js_pesquisave70_veiculoscomb(true, 0);
+  }
+
+  function js_pesquisaplaca(mostra) {
+    if (document.form1.ve01_placa.value != '') {
+      js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave_placa=' + document.form1.ve01_placa.value + '&funcao_js=parent.js_mostraveiculosplaca', 'Pesquisa', false);
+    } else {
+      document.form1.ve01_placa.value = '';
+    }
+  }
+
+  function js_mostraveiculosplaca(chave) {
+    document.form1.ve70_veiculos.value = chave;
+    js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
     js_pesquisave70_veiculoscomb(true, 0);
   }
 
@@ -1131,6 +1157,7 @@ db_app::load("estilos.css");
     new MaskedInput("#ve70_hora", "00:00", {
       placeholder: "0"
     });
+    // new MaskedInput("#ve61_horadevol", "00:00", {placeholder:"0"});
   }
 
 
