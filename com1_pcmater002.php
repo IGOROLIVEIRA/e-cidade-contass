@@ -50,6 +50,7 @@ $db_botao = false;
 if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alterar") {
   db_inicio_transacao();
   $sqlerro = false;
+  $erro_justificativa = false;
   $db_opcao = 2;
   $clpcmater->pc01_data   = $pc01_data;
   /*OC3770*/
@@ -68,18 +69,14 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
   if ($pc01_complmateranterior != $pc01_complmater) {
 
     if ($pc01_justificativa == "") {
-      $erro_msg = "Campo Justificativa não Atualizado!.";
-      $sqlerro  = true;
-      db_msgbox($erro_msg);
+      $erro_justificativa = true;
     }
   }
 
   if ($pc01_descrmateranterior != $pc01_descrmater) {
 
     if ($pc01_justificativa == "") {
-      $erro_msg = "Campo Justificativa não Atualizado!.";
-      $sqlerro  = true;
-      db_msgbox($erro_msg);
+      $erro_justificativa = true;
     }
 
     $dt_session = date("Y-m-d", db_getsession("DB_datausu"));
@@ -93,6 +90,12 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
       $sqlerro  = true;
       db_msgbox($erro_msg);
     }
+  }
+
+  if ($erro_justificativa == true) {
+    $erro_msg = "Campo Justificativa não Atualizado!.";
+    $sqlerro  = true;
+    db_msgbox($erro_msg);
   }
 
   if (!$sqlerro) {
