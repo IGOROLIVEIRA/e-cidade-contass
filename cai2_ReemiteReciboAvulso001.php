@@ -51,7 +51,7 @@ if (isset($oPost->k00_numpre)) {
   $oDadosRecibo = db_utils::fieldsMemory($rsDadosRecibo, 0);
 
   $sUrl  = "cai4_recibo003.php?iNumpre={$oDadosRecibo->k00_numpre}&tipo={$oDadosRecibo->k00_tipo}&ver_inscr=";
-  $sUrl .= "&numcgm={$oDadosRecibo->k00_numcgm}&emrec=t&CHECK10=&tipo_debito={$oDadosRecibo->k00_tipo}&lReemissao=true";
+  $sUrl .= "&numcgm={$oDadosRecibo->k00_numcgm}&z01_numcgm={$oDadosRecibo->k00_numcgm}&emrec=t&CHECK10=&tipo_debito={$oDadosRecibo->k00_tipo}&lReemissao=true";
   $sUrl .= "&k03_tipo={$oDadosRecibo->k00_tipo}&k03_parcelamento=f&k03_perparc=f&ver_numcgm={$oDadosRecibo->k00_numcgm}";
 
   echo "<script> ";

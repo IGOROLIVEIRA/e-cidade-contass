@@ -111,7 +111,9 @@ $rsSlip = $clSlip->sql_record($clSlip->sql_query_fundeb($dtini, $dtfim, $aInstit
 $nDevolucaoRecursoFundeb = db_utils::fieldsMemory($rsSlip, 0)->k17_valor;
 
 $nTransferenciaRecebidaFundeb = 0;
-$aTransferenciasRecebidasFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '417580111%'");
+
+$aTransferenciasRecebidasFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '417515001%'");
+
 $nTransferenciaRecebidaFundeb = count($aTransferenciasRecebidasFundeb) > 0 ? $aTransferenciasRecebidasFundeb[0]->saldo_arrecadado_acumulado : 0;
 
 $aTotalContribuicaoFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495%'");
@@ -722,8 +724,8 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">17.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO <br/>DOS  PROFISSIONAIS DA EDUCAÇÃO  - FUNDEB  (NR 1.7.5.8.01.1.1 )</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nTransferenciaRecebidaFundeb, "f"); ?></td>
+                           <td class='text-row' style='text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;'>17.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (NR 1.7.5.1.50.0.1)</td>
+                           <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nTransferenciaRecebidaFundeb, "f"); ?></td>
                         </tr>
                         <tr>
                             <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">17.2 - DEVOLUÇÃO DE RECURSOS DO FUNDEB, RECEBIDOS EM ATRASOS, PARA AS CONTAS DE ORIGEM DOS RECURSOS (CONSULTA 1.047.710)</td>
@@ -738,7 +740,7 @@ ob_start();
                         <tr>
                             <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.1 - COTA-PARTE FPM</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
-                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '4951718012101%'");
+                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495171151%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
                                 $nContribuicaoFundeb += abs($nReceita);
                                 echo db_formatar(abs($nReceita), "f"); ?>
@@ -747,7 +749,7 @@ ob_start();
                         <tr>
                             <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.2 - COTA-PARTE ICMS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
-                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '4951728011101%'");
+                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495172150%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
                                 $nContribuicaoFundeb += abs($nReceita);
                                 echo db_formatar(abs($nReceita), "f"); ?>
@@ -756,7 +758,7 @@ ob_start();
                         <tr>
                             <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.3 - COTA-PARTE IPI - EXPORTAÇÃO</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
-                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '4951728013101%'");
+                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495172152%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
                                 $nContribuicaoFundeb += abs($nReceita);
                                 echo db_formatar(abs($nReceita), "f"); ?>
@@ -765,7 +767,7 @@ ob_start();
                         <tr>
                             <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.4 - COTA-PARTE ITR</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
-                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '4951718015101%'");
+                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495171152%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
                                 $nContribuicaoFundeb += abs($nReceita);
                                 echo db_formatar(abs($nReceita), "f"); ?>
@@ -774,7 +776,7 @@ ob_start();
                         <tr>
                             <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.5 - COTA-PARTE IPVA</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
-                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '4951728012101%'");
+                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495172151%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
                                 $nContribuicaoFundeb += abs($nReceita);
                                 echo db_formatar(abs($nReceita), "f"); ?>

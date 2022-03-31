@@ -869,22 +869,6 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
 
 <script type="text/javascript">
-    var input = document.querySelector("#z01_obs");
-    input.addEventListener("keypress", function(e) {
-        if (!checkChar(e)) {
-            e.preventDefault();
-        }
-    });
-
-    function checkChar(e) {
-        var char = String.fromCharCode(e.keyCode);
-        var pattern = '^[a-zA-Z0-9 ]+$';
-        if (char.match(pattern)) {
-            return true;
-        }
-    }
-
-
 
     var lPessoaFisica = "<?= $lPessoaFisica ?>";
     if (lPessoaFisica) {
@@ -1619,7 +1603,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                 oPessoa.z01_cxpostal = $F('z01_cxpostal');
                 oPessoa.z01_cxposcon = $F('z01_cxposcon');
                 oPessoa.z01_incest = $F('z01_incest');
-                oPessoa.z01_obs = $F('z01_obs');
+                oPessoa.z01_obs = $F('z01_obs').urlDecode();
                 oPessoa.z04_rhcbo = $F('rh70_sequencial');
                 oPessoa.z01_incmunici = $F('z01_incmunici');
                 oPessoa.z01_escolaridade = $F('z01_escolaridade');
@@ -1679,7 +1663,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                 oPessoa.z01_ultalt = js_formatar($F('z01_ultalt'), 'd');
                 oPessoa.z01_nomecomple = tagString($F('z01_nomecomple'));
                 oPessoa.z01_nomefanta = tagString($F('z01_nomefanta'));
-                oPessoa.z01_obs = $F('z01_obs');
+                oPessoa.z01_obs = $F('z01_obs').urlDecode();
                 oPessoa.z01_incmunici = $F('z01_incmunici');
 
                 var oEndereco = new Object();

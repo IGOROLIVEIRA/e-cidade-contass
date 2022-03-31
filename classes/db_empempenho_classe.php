@@ -80,7 +80,7 @@ class cl_empempenho {
     /*FIM OC4604 - LQD*/
     /*OC4401*/
     var $e60_id_usuario = null;
-    var $e60_vlrutilizado = 0; 
+    var $e60_vlrutilizado = 0;  
     /*FIM - OC4401*/
     // cria propriedade com as variaveis do arquivo
     var $campos = "
