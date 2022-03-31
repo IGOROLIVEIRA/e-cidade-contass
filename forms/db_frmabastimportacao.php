@@ -678,6 +678,46 @@ if(isset($_POST["processar"])) {
             //var url_atual = window.location.href;
             //window.location.href = url_atual;
 
+        }else if (oRetorno.status == 5) {
+            $op = 0;
+            alert(oRetorno.message.urlDecode());
+            oRetorno.itens.forEach(function (oItem) {
+                    var vemp = oItem.emp;
+                    document.getElementById("tblEmpAn").style.display="block";
+                    op = 0;
+                    if(id>0){
+                        for(i = 0; i<id; i++){
+                            if(valorC[i]== vemp){
+                                op = 1;
+                            }
+                        }
+                        if(op == 0){
+                            
+                            valorC[id] = vemp;
+                            id++;
+                        }
+                    }else{
+                        valorC[id] = vemp;
+                        id++;
+                    }
+                    if(op == 0 ){
+
+                        var tabela = document.getElementById("tblEmpAn");
+
+                        var numeroLinhas = tabela.rows.length;
+                        var linha = tabela.insertRow(numeroLinhas);
+                        var celula1 = linha.insertCell(0);
+                    
+                        celula1.innerHTML =  "<div style='text-align:center'>"+vemp+"</div>"; 
+                    }
+            
+            });
+
+        }else if (oRetorno.status == 6) {
+            alert(oRetorno.message.urlDecode());
+            //var url_atual = window.location.href;
+            //window.location.href = url_atual;
+
         }else{
             var cont = 1;
             oRetorno.itens.forEach(function (oItem) {

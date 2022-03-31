@@ -114,6 +114,28 @@ db_select('ve50_postoproprio',$x,true,$db_opcao,"");
     </td>
   </tr>
   <tr>
+    <td nowrap title="<?=@$Tve50_postoproprio?>">
+       <strong>Validar Abastecimento por Empenho:</strong>
+    </td>
+    <td> 
+<?
+$x = array('1'=>'Sim','0'=>'Não');
+db_select('ve50_abastempenho',$x,true,$db_opcao,"onclick='controle()'");
+?>
+<span id="data" style="display:none">
+<?
+
+$data = explode('-',$ve50_datacorte);
+$dia  = $data[2];
+$mes  = $data[1];
+$ano  = $data[0];
+
+db_inputdata('ve50_datacorte', $dia, $mes, $ano, true, 'text',1, "","","","");
+?>
+</span>
+    </td>
+  </tr>
+  <tr>
     <td nowrap title="<?=@$Tve50_integrapessoal?>"><?=@$Lve50_integrapessoal?></td>
     <td>
 <?
@@ -128,6 +150,16 @@ db_select("ve50_integrapessoal",$x,true,$db_opcao,"");
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
+function formatar(){
+  
+  document.getElementById("ve50_postoproprio").style.width = "85px";
+  document.getElementById("ve50_integrapatri").style.width = "85px";
+  document.getElementById("ve50_abastempenho").style.width = "85px";
+  controle();
+
+}
+
+formatar();
 function js_pesquisave50_instit(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
@@ -207,5 +239,14 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }
   ?>
+}
+function controle(){
+  var op = document.getElementById("ve50_abastempenho").value;
+  if(op==1){
+    document.getElementById("data").style.display = "inline-table";
+  }else{
+    document.getElementById("data").style.display = "none";
+  }
+  
 }
 </script>
