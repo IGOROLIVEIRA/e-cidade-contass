@@ -42,11 +42,11 @@ class DadosESocial
      * @param integer $tipo
      * @return ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento[]
      */
-    public function getPorTipo($tipo)
+    public function getPorTipo($tipo, $matricula=null)
     {
         $this->tipo = $tipo;
 
-        $preenchimentos = $this->buscaPreenchimentos();
+        $preenchimentos = $this->buscaPreenchimentos($matricula);
 
         $this->buscaRespostas($preenchimentos);
         /**
@@ -66,7 +66,7 @@ class DadosESocial
      * @throws \Exception
      * @return \stdClass[]
      */
-    private function buscaPreenchimentos()
+    private function buscaPreenchimentos($matricula = null)
     {
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);
@@ -92,7 +92,7 @@ class DadosESocial
             case Tipo::ALTERACAODEDADOS:
             case Tipo::ALTERACAO_CONTRATO:
             case Tipo::TSV_INICIO:
-                return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId);
+                return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             default:
                 throw new Exception('Tipo não encontrado.');
         }

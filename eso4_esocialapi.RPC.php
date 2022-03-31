@@ -147,7 +147,6 @@ $oRetorno->iStatus = 1;
 $oRetorno->sMessage = '';
 
 try {
-
     switch ($oParam->exec) {
         case "getEmpregadores":
             $campos = ' distinct z01_numcgm as cgm, z01_cgccpf as documento, nomeinst as nome, codigo as instituicao,
@@ -262,11 +261,11 @@ try {
             db_inicio_transacao();
 
             $iCgm = $oParam->empregador;
-
+            //print_r($oParam);exit;
             foreach ($oParam->arquivos as $arquivo) {
-
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
-                $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo));
+
+                $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
                 // echo '<pre>';
                 // var_dump($dadosDoPreenchimento);
                 // exit;
