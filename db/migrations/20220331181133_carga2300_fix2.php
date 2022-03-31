@@ -7,6 +7,17 @@ class Carga2300Fix2 extends AbstractMigration
     public function up()
     {
         $sql = "
+        UPDATE avaliacaopergunta SET db103_avaliacaotiporesposta = 2 WHERE db103_identificador = 'preencher-com-o-codigo-correspondente-a-ca-4001087';
+        INSERT INTO avaliacaoperguntaopcao VALUES (
+            (SELECT max(db104_sequencial)+1 FROM avaliacaoperguntaopcao),
+            (SELECT db103_sequencial FROM avaliacaopergunta WHERE db103_identificador = 'preencher-com-o-codigo-correspondente-a-ca-4001087'), 
+            NULL,
+            't',
+            (SELECT db103_identificadorcampo FROM avaliacaopergunta WHERE db103_identificador = 'preencher-com-o-codigo-correspondente-a-ca-4001087')||'-'||(SELECT max(db104_sequencial)+1 FROM avaliacaoperguntaopcao)::varchar,
+            0,
+            NULL,
+            (SELECT db103_identificadorcampo FROM avaliacaopergunta WHERE db103_identificador = 'tipo-de-logradouro-4001028'));
+
         UPDATE avaliacao SET db101_cargadados = '
         SELECT distinct
         --trabalhador
@@ -142,11 +153,13 @@ class Carga2300Fix2 extends AbstractMigration
             case when rhpessoal.rh01_tipadm in (3,4) then rh02_cnpjcedente else \'\' end as cnpjCednt,
             case when rhpessoal.rh01_tipadm in (3,4) then rh02_mattraborgcedente else \'\' end as matricCed,
             case when rhpessoal.rh01_tipadm in (3,4) then rh02_dataadmisorgcedente else NULL end as dtAdmCed,
-            case when rhpessoal.rh01_tipadm in (3,4) and rh30_regime in (1,3) then 2
-            when rhpessoal.rh01_tipadm in (3,4) and rh30_regime = 2 then 1
+            case when rhpessoal.rh01_tipadm in (3,4) and rh30_regime in (1,3) then 4001824
+            when rhpessoal.rh01_tipadm in (3,4) and rh30_regime = 2 then 4001823
             else NULL end as tpRegTrab,
-            case when rhpessoal.rh01_tipadm in (3,4) and r33_tiporegime in(\'1\',\'2\') then r33_tiporegime
-            else \'\' end as tpRegPrev,
+            case 
+            when rhpessoal.rh01_tipadm in (3,4) and r33_tiporegime = \'1\' then 4001825
+            when rhpessoal.rh01_tipadm in (3,4) and r33_tiporegime = \'2\' then 4001826
+            else NULL end as tpRegPrev,
             --infoMandElet
             case when h13_categoria = 304 then 4001832 ELSE NULL end as indRemunCargo,
             case when h13_categoria = 304 and rh30_regime in (1,3) then 4001834 
