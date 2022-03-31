@@ -306,9 +306,9 @@ class EventoS2200 extends EventoBase
             $oDependFormatado->nmdep = $oDependentes->rh31_nome;
             $oDependFormatado->dtnascto = $oDependentes->rh31_dtnasc;
             $oDependFormatado->cpfdep = empty($oDependentes->rh31_cpf) ? null : $oDependentes->rh31_cpf;
-            $oDependFormatado->depirrf = ($oDependentes->rh31_depirrf == "0" ? "N" : "S");
+            $oDependFormatado->depirrf = ($oDependentes->rh31_irf == "0" ? "N" : "S");
             $oDependFormatado->depsf = ($oDependentes->rh31_depend == "N" ? "N" : "S");
-            $oDependFormatado->inctrab = ($oDependentes->rh31_especi == "N" ? "N" : "S");
+            $oDependFormatado->inctrab = ($oDependentes->rh31_especi == "C" || $oDependentes->rh31_especi == "S" ? "S" : "N");
 
             $aDependentes[] = $oDependFormatado;
         }

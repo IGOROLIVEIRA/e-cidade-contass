@@ -38,6 +38,9 @@ $clrotulo->label("z01_nome");
 
 $db_opcao = 1;
 
+$anofolha = DBPessoal::getAnoFolha();
+$mesfolha = DBPessoal::getMesFolha();
+
 ?>
 <html>
 
@@ -80,6 +83,45 @@ $db_opcao = 1;
                     </td>
                     <td><?php db_input('z01_nome', 50, $Iz01_nome, true, "text", $db_opcao); ?></td>
                 </tr>
+                <tr>
+                    <td align="left"><label for="cboEmpregador">Empregador:</label></td>
+                    <td>
+                        <select name="empregador" id="cboEmpregador" style="width: 78%;">
+                            <option value="">selecione</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right"><label for="tpAmb">Ambiente:</label></td>
+                    <td>
+                        <select name="tpAmb" id="tpAmb" style="width: 76%;">
+                            <option value="">selecione</option>
+                            <option value="1">Produção</option>
+                            <option value="2">Produção restrita - dados reais</option>
+                            <option value="3">Produção restrita - dados fictícios</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right"><label for="modo">Tipo:</label></td>
+                    <td>
+                        <select name="modo" id="modo" style="width: 76%;">
+                            <option value="">selecione</option>
+                            <option value="INC">Inclusão</option>
+                            <option value="ALT">Alteração</option>
+                            <option value="EXC">Exclusão</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left"><label>Início de Validade:</label></td>
+                    <td>
+                      <?php
+                      db_input('anofolha', 4, 1, true, 'text', 2, "class='field-size1'");
+                      db_input('mesfolha', 2, 1, true, 'text', 2, "class='field-size1'");
+                      ?>
+                    </td>
+                </tr>
             </table>
         </fieldset>
         <input type="button" id="pesquisar" name="pesquisar" value="Pesquisar" />
@@ -87,6 +129,7 @@ $db_opcao = 1;
         <br>
         <br>
         <input type="button" id="envioESocial" name="envioESocial" value="Enviar para eSocial" />
+        <input type="button" id="btnConsultar" value="Consultar Envio" onclick="js_consultar();" />
     </form>
 
     <div id="questionario"></div>
@@ -96,6 +139,26 @@ $db_opcao = 1;
 </html>
 
 <script>
+var arrEvts = ['EvtIniciaisTabelas', 'EvtNaoPeriodicos', 'EvtPeriodicos'];
+var empregador = Object();
+    (function() {
+
+        new AjaxRequest('eso4_esocialapi.RPC.php', {
+            exec: 'getEmpregadores'
+        }, function(retorno, lErro) {
+
+            if (lErro) {
+                alert(retorno.sMessage);
+                return false;
+            }
+            empregador = retorno.empregador;
+
+            $('cboEmpregador').length = 0;
+            $('cboEmpregador').add(new Option(empregador.nome, empregador.cgm));
+        }).setMessage('Buscando servidores.').execute();
+    })();
+
+
     (function() {
 
         $('pesquisar').observe("click", function pesquisar() {
@@ -116,10 +179,20 @@ $db_opcao = 1;
             'oObjetoLookUp': 'func_nome'
         });
 
+        let aArquivosSelecionados = new Array();
+        aArquivosSelecionados.push('S2200');
+
         $('envioESocial').addEventListener('click', function() {
 
             var parametros = {
-                'exec': 37
+                'exec': 'transmitir',
+                'arquivos': aArquivosSelecionados,
+                'empregador': $F('cboEmpregador'),
+                'modo': $F('modo'),
+                'tpAmb': $F('tpAmb'),
+                'iAnoValidade': $F('anofolha'),
+                'iMesValidade': $F('mesfolha'),
+                'matricula': $F('rh01_regist')
             }; //Codigo Tipo::CADASTRAMENTO_INICIAL
             new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
 
@@ -130,4 +203,9 @@ $db_opcao = 1;
             }).setMessage('Agendando envio para o eSocial').execute();
         });
     })();
+
+    function js_consultar() {
+
+        js_OpenJanelaIframe('top.corpo', 'iframe_consulta_envio', 'func_consultaenvioesocial.php', 'Pesquisa', true);
+    }
 </script>
