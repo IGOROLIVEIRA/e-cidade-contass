@@ -702,11 +702,7 @@ switch($oParam->exec) {
 
             //após a verificação de todas validações realiza a importar
         
-<<<<<<< HEAD
             if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1==0 && $opBaixaCompleta==0 && $opBaixa==0 && $opKm==0 && $opVeic==0 && $controleCom==0 && $deixarInserir==0 && $controleData==0){
-=======
-            if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1==0 && $opBaixaCompleta==0 && $opBaixa==0 && $opKm==0 && $opVeic==0 && $controleCom==0){
->>>>>>> 1c536949f059fda924c430364e675631cd72962f
                 $emp = 0;
                 foreach($resultadoPlanilha as $row){
                     $test1       = $row->placa;

@@ -369,11 +369,7 @@ if (isset($incluir) && $self != "") {
         }
     }
 
-<<<<<<< HEAD
     db_fim_transacao($sqlerro); 
-=======
-    db_fim_transacao($sqlerro);
->>>>>>> 1c536949f059fda924c430364e675631cd72962f
   }
 }
 ?>
