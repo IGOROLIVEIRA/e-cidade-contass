@@ -42,95 +42,97 @@ $clveicretirada->rotulo->label("ve60_codigo");
 ?>
 
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
-    <td height="63" align="center" valign="top">
+  <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
+    <tr>
+      <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
-	     <form name="form2" method="post" action="" >
-          <tr> 
-            <td width="4%" align="right" nowrap title="<?=$Tve60_codigo?>">
-              <?=$Lve60_codigo?>
-            </td>
-            <td width="96%" align="left" nowrap> 
-              <?
-		       db_input("ve60_codigo",10,$Ive60_codigo,true,"text",4,"","chave_ve60_codigo");
-		       ?>
-            </td>
-          </tr>          
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
-              <input name="limpar" type="reset" id="limpar" value="Limpar" >
-              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_veicretirada.hide();">
-             </td>
-          </tr>
-        </form>
+          <form name="form2" method="post" action="">
+            <tr>
+              <td width="4%" align="right" nowrap title="<?= $Tve60_codigo ?>">
+                <?= $Lve60_codigo ?>
+              </td>
+              <td width="96%" align="left" nowrap>
+                <?
+                db_input("ve60_codigo", 10, $Ive60_codigo, true, "text", 4, "", "chave_ve60_codigo");
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center">
+                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                <input name="limpar" type="reset" id="limpar" value="Limpar">
+                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_veicretirada.hide();">
+              </td>
+            </tr>
+          </form>
         </table>
       </td>
-  </tr>
-  <tr> 
-    <td align="center" valign="top"> 
-      <?
-       $dbwhere="";
-      if (isset($codigoveiculo) and $codigoveiculo!=null){
-          $dbwhere.=" ve60_veiculo=$codigoveiculo and " ;
-      }
-      if(!isset($pesquisa_chave)){
-        if(isset($campos)==false){
-           if(file_exists("funcoes/db_func_veicretirada.php")==true){
-             include("funcoes/db_func_veicretirada.php");
-           }else{
-           $campos = "veicretirada.*";
-           }
+    </tr>
+    <tr>
+      <td align="center" valign="top">
+        <?
+        $dbwhere = "";
+        if (isset($codigoveiculo) and $codigoveiculo != null) {
+          $dbwhere .= " ve60_veiculo=$codigoveiculo and ";
         }
-        $dbwhere .= "(veiccadcentral.ve36_coddepto = ".db_getsession("DB_coddepto")." or  veiccadcentraldepart.ve37_coddepto = ".db_getsession("DB_coddepto").")" ;
-
-        if(isset($chave_ve60_codigo) && (trim($chave_ve60_codigo)!="") ){
-	         $sql = $clveicretirada->sql_query(null,$campos,"ve60_codigo","ve60_codigo = $chave_ve60_codigo and $dbwhere");
-        }else{
-           $sql = $clveicretirada->sql_query("",$campos,"ve60_codigo","$dbwhere");
-           
-        }
-
-        $repassa = array();
-        if(isset($chave_ve60_codigo)){
-          $repassa = array("chave_ve60_codigo"=>$chave_ve60_codigo,"chave_ve60_codigo"=>$chave_ve60_codigo);
-        }
-
-        db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
-      }else{
-        if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clveicretirada->sql_record($clveicretirada->sql_query($pesquisa_chave));
-          if($clveicretirada->numrows!=0){
-            db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$ve60_codigo',false,'$ve60_datasaida','$ve60_horasaida');</script>";
-          }else{
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+        if (!isset($pesquisa_chave)) {
+          if (isset($campos) == false) {
+            if (file_exists("funcoes/db_func_veicretirada.php") == true) {
+              include("funcoes/db_func_veicretirada.php");
+            } else {
+              $campos = "veicretirada.*";
+            }
           }
-        }else{
-	       echo "<script>".$funcao_js."('',false);</script>";
+          $dbwhere .= "(veiccadcentral.ve36_coddepto = " . db_getsession("DB_coddepto") . " or  veiccadcentraldepart.ve37_coddepto = " . db_getsession("DB_coddepto") . ")";
+
+          if (isset($chave_ve60_codigo) && (trim($chave_ve60_codigo) != "")) {
+            $sql = $clveicretirada->sql_query(null, $campos, "ve60_codigo", "ve60_codigo = $chave_ve60_codigo and $dbwhere");
+          } else {
+            $sql = $clveicretirada->sql_query("", $campos, "ve60_codigo", "$dbwhere");
+          }
+
+          $repassa = array();
+          if (isset($chave_ve60_codigo)) {
+            $repassa = array("chave_ve60_codigo" => $chave_ve60_codigo, "chave_ve60_codigo" => $chave_ve60_codigo);
+          }
+
+          db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
+        } else {
+          if ($pesquisa_chave != null && $pesquisa_chave != "") {
+            $result = $clveicretirada->sql_record($clveicretirada->sql_query($pesquisa_chave));
+            if ($clveicretirada->numrows != 0) {
+              db_fieldsmemory($result, 0);
+              echo "<script>" . $funcao_js . "('$ve60_codigo',false,'$ve60_datasaida','$ve60_horasaida');</script>";
+            } else {
+              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+            }
+          } else {
+            echo "<script>" . $funcao_js . "('',false);</script>";
+          }
         }
-      }
-      ?>
-     </td>
-   </tr>
-</table>
+        ?>
+      </td>
+    </tr>
+  </table>
 </body>
+
 </html>
 <?
-if(!isset($pesquisa_chave)){
-  ?>
+if (!isset($pesquisa_chave)) {
+?>
   <script>
   </script>
-  <?
+<?
 }
 ?>
 <script>
-js_tabulacaoforms("form2","chave_ve60_codigo",true,1,"chave_ve60_codigo",true);
+  js_tabulacaoforms("form2", "chave_ve60_codigo", true, 1, "chave_ve60_codigo", true);
 </script>
