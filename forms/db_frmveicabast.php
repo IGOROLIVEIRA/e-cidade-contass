@@ -771,6 +771,7 @@ db_app::load("estilos.css");
     document.form1.ve01_placa.value = chave;
     document.form1.ve70_veiculoscomb.value = chave2;
     js_pesquisave70_veiculoscomb(false, 0);
+    js_buscarultimaretirada(false);
     if (erro == true) {
       document.form1.ve70_veiculos.focus();
       document.form1.ve70_veiculos.value = '';
@@ -785,6 +786,17 @@ db_app::load("estilos.css");
     document.form1.ve70_veiculoscomb.value = chave3;
     db_iframe_veiculos.hide();
     js_pesquisave70_veiculoscomb(false, 0);
+    js_buscarultimaretirada(false);
+  }
+
+  function js_buscarultimaretirada(mostra) {
+    js_OpenJanelaIframe('top.corpo', 'db_iframe_veicretirada', 'func_veicretirada.php?pesquisa_chave_veiculo=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraretirada', 'Pesquisa', false);
+  }
+
+  function js_mostraretirada(chave, erro, dtRetirada, sHoraRetirada) {
+    document.form1.ve73_veicretirada.value = chave;
+    $("ve60_datasaida").value = js_formatar(dtRetirada, "d");
+    $("ve60_horasaida").value = sHoraRetirada;
   }
 
   function js_pesquisaplaca(mostra) {
@@ -800,6 +812,7 @@ db_app::load("estilos.css");
     document.form1.ve70_veiculoscomb.value = chave2;
     js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
     js_pesquisave70_veiculoscomb(false, 0);
+    js_buscarultimaretirada(false);
   }
 
   function js_pesquisave70_veiculoscomb(mostra, controlador) {

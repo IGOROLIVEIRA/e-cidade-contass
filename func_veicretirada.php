@@ -118,6 +118,18 @@ $clveicretirada->rotulo->label("ve60_codigo");
             echo "<script>" . $funcao_js . "('',false);</script>";
           }
         }
+        //Busco Ultima Retirada para carregar de forma automatica na tela
+        if ($pesquisa_chave_veiculo != null && $pesquisa_chave_veiculo != "") {
+          $result = $clveicretirada->sql_record($clveicretirada->sql_query(null, "distinct ve60_codigo,ve60_datasaida,ve60_horasaida", null, "veiculos.ve01_codigo = {$pesquisa_chave_veiculo} and veicretirada.ve60_codigo not in (select veicdevolucao.ve61_veicretirada from veicdevolucao)"));
+          if ($clveicretirada->numrows != 0) {
+            db_fieldsmemory($result, 0);
+            echo "<script>" . $funcao_js . "('$ve60_codigo',false,'$ve60_datasaida','$ve60_horasaida');</script>";
+          } else {
+            echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave_veiculo . ") não Encontrado',true);</script>";
+          }
+        } else {
+          echo "<script>" . $funcao_js . "('',false);</script>";
+        }
         ?>
       </td>
     </tr>
