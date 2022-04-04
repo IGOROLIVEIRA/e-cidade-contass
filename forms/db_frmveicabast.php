@@ -793,10 +793,11 @@ db_app::load("estilos.css");
     }
   }
 
-  function js_mostraveiculosplaca(chave) {
+  function js_mostraveiculosplaca(chave, chave2) {
     document.form1.ve70_veiculos.value = chave;
+    document.form1.ve70_veiculoscomb.value = chave2;
     js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
-    js_pesquisave70_veiculoscomb(true, 0);
+    js_pesquisave70_veiculoscomb(false, 0);
   }
 
   function js_pesquisave70_veiculoscomb(mostra, controlador) {
@@ -1049,10 +1050,7 @@ db_app::load("estilos.css");
   }
 
   function js_pesquisa_ultimamedida() {
-
-    var databanco = document.form1.ve70_dtabast_ano.value + '-' +
-      document.form1.ve70_dtabast_mes.value + '-' +
-      document.form1.ve70_dtabast_dia.value;
+    var databanco = document.form1.ve70_dtabast.value;
     var abastecimento = document.form1.ve70_codigo.value;
     var hora = document.form1.ve70_hora.value;
     js_OpenJanelaIframe('top.corpo', 'db_iframe_medida',

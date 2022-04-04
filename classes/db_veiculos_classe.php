@@ -1200,6 +1200,8 @@ class cl_veiculos
     $sql .= "      inner join veictipoabast  on  veictipoabast.ve07_sequencial = veiculos.ve01_veictipoabast";
     $sql .= "      inner join cepestados  on  cepestados.cp03_sigla = ceplocalidades.cp05_sigla";
     $sql .= "      inner  join veiccentral  on  veiccentral.ve40_veiculos=veiculos.ve01_codigo ";
+    $sql .= "      left join veiculoscomb on veiculoscomb.ve06_veiculos = veiculos.ve01_codigo and veiculoscomb.ve06_padrao = true ";
+    $sql .= "      left join veiccadcomb on veiccadcomb.ve26_codigo = veiculoscomb.ve06_veiccadcomb ";
     $sql .= "      inner  join veiccadcentral  on  veiccadcentral.ve36_sequencial=veiccentral.ve40_veiccadcentral ";
 
     $sql2 = "";

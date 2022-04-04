@@ -134,7 +134,7 @@ $oDaoVeicCadCentralDepart->rotulo->label("ve37_veiccadcentral");
         }
 
         $sCampos  = "distinct ve01_codigo,ve01_placa,ve20_descr,ve21_descr,ve22_descr,ve23_descr,ve01_chassi, ";
-        $sCampos .= "ve01_certif,ve01_anofab,ve01_anomod, ve01_quantcapacidad ";
+        $sCampos .= "ve01_certif,ve01_anofab,ve01_anomod, ve01_quantcapacidad,ve26_codigo ";
         if (!isset($pesquisa_chave)) {
 
           if (isset($chave_ve01_codigo) && (trim($chave_ve01_codigo) != "")) {
@@ -201,29 +201,16 @@ $oDaoVeicCadCentralDepart->rotulo->label("ve37_veiccadcentral");
             $sWhere = " and " . $sWhere;
           }
 
-          $sSqlVeiculos = $oDaoVeiculos->sql_query_central(
-            null,
-            $sCampos,
-            null,
-            "ve01_placa like'%$pesquisa_chave_placa%' $sWhere"
-          );
+          $sSqlVeiculos = $oDaoVeiculos->sql_query_central(null, $sCampos, null, "ve01_placa like'%$pesquisa_chave_placa%' $sWhere");
           $result = $oDaoVeiculos->sql_record($sSqlVeiculos);
 
-          if (isset($iParam) && $iParam == 1 && $oDaoVeiculos->numrows != 0) {
+          if ($oDaoVeiculos->numrows != 0) {
 
             db_fieldsmemory($result, 0);
-            echo "<script>" . $funcao_js . "('$ve01_codigo', '$ve01_quantcapacidad', false);</script>";
-          } elseif (isset($iParam) && $iParam == 1 && $oDaoVeiculos->numrows == 0) {
-            echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado', '', true);</script>";
-          } elseif ($oDaoVeiculos->numrows != 0) {
-
-            db_fieldsmemory($result, 0);
-            echo "<script>" . $funcao_js . "('$ve01_codigo',false);</script>";
+            echo "<script>" . $funcao_js . "('$ve01_codigo', '$ve26_codigo', false);</script>";
           } else {
             echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
           }
-        } else {
-          echo "<script>" . $funcao_js . "('',false);</script>";
         }
 
         ?>
