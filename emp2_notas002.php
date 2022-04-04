@@ -108,10 +108,22 @@ $prenc   = 0;
 $alt     = 4;
 $total   = 0;
 $cod_cgm = 0;
+$condicao = 0;
+$totale70_valor = 0;
+$totale70_vlranu = 0;
+$totale70_vlrliq = 0;
+   
 
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x,true);
+
+   $totale70_valor += $e70_valor;
+   $totale70_vlranu += $e70_vlranu;
+   $totale70_vlrliq += $e70_vlrliq;
+   
+
    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
+      
       $pdf->addpage("");
       $pdf->setfont('arial','b',10);
       $pdf->cell(185,$alt,$RLz01_numcgm."-".$RLz01_nome,1,1,"L",1);
@@ -127,19 +139,24 @@ for($x = 0; $x < pg_numrows($result);$x++){
 
       $troca = 0;
       $prenc = 1;
+          
    }
      if ($prenc == 0){
         $prenc = 1;
        }else $prenc = 0;
    
-
+      
+   
+   
    if($cod_cgm != $z01_numcgm) {
+     
 	   $pdf->setfont('arial','b',10);
 	   $pdf->cell(185,$alt,$z01_numcgm."-".$z01_nome,"BT",1,"L",$prenc);
-	   
+          
 	   $cod_cgm = $z01_numcgm;
+     
    } 	 	
-   
+  
    $pdf->setfont('arial','',7);
    $pdf->cell(20,$alt,$e69_codnota,0,0,"C",$prenc);
    $pdf->cell(25,$alt,$e69_numero,0,0,"C",$prenc); 
@@ -149,10 +166,25 @@ for($x = 0; $x < pg_numrows($result);$x++){
    $pdf->cell(25,$alt,db_formatar($e70_vlrliq,"f"),0,0,"C",$prenc); 
    $pdf->cell(25,$alt,$e69_dtnota,0,0,"C",$prenc); 
    $pdf->cell(25,$alt,$e69_dtrecebe,0,1,"C",$prenc); 
- 
-   $total++;
 
+   
+   
+   $total++;
+   $totalvg += $e70_valor;
+   $totalag += $e70_vlranu;
+   $totallg += $e70_vlrliq;
+  
 }
+
+$pdf->setfont('arial','b',8);
+$pdf->cell(20,$alt,"",0,1,"C",$prenc);
+$pdf->cell(20,$alt,"TOTAL GERAL",0,0,"C",$prenc);
+$pdf->cell(25,$alt,"",0,0,"C",$prenc); 
+$pdf->cell(20,$alt,"",0,0,"C",$prenc); 
+$pdf->cell(20,$alt,db_formatar($totalvg,"f"),0,0,"C",$prenc); 
+$pdf->cell(25,$alt,db_formatar($totalag,"f"),0,0,"C",$prenc); 
+$pdf->cell(25,$alt,db_formatar($totallg,"f"),0,1,"C",$prenc); 
+
 
 $pdf->setfont('arial','b',8);
 

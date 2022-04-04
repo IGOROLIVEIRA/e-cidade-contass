@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2013  DBselller Servicos de Informatica
@@ -1301,9 +1301,19 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
             $vMacroMat = pg_fetch_object($rMacroMat);
             //busca ref anterior:
             $iMatric = $vMacroMat->k00_matric;
-          }
+          }          
+          $qteParcelamento  = pg_result(qtdParcelamento($REGISTRO[$i]["k00_numpre"]),0,'TotalParcelamento');
+          $verEntidade      = verEntidade();
+                         
+          If ($verEntidade == 0 || $qteParcelamento == 0){
+            $xNumpre = $REGISTRO[$i]["k00_numpre"];
+          }else{
+            $xNumpre = $REGISTRO[$i]["k00_numpre"]." ($qteParcelamento)";
+          }  
 
-          echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$REGISTRO[$i]["k00_numpre"])."'\" type=\"button\" value=\"".$REGISTRO[$i]["k00_numpre"]."\"></td>\n";
+          echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" 
+          onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$REGISTRO[$i]["k00_numpre"])."'\" 
+          type=\"button\" value=\"".$xNumpre."\"></td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" " . ($corDtoper == "" ? "" : "bgcolor=$corDtoper") . " nowrap>" . $iMatric . "</td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>
         <input type=\"hidden\" id=\"parc$i\" value=\"0#".$REGISTRO[$i]["k00_numtot"]."#".$REGISTRO[$i]["k00_numpre"]."\">0 </td>\n";
@@ -1583,8 +1593,16 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
               $iMatric = $vMacroMat->k00_matric;
             }
 
+            $qteParcelamento  = pg_result(qtdParcelamento($elementos_numpres[$x]),0,'TotalParcelamento');            
+            $verEntidade      = verEntidade();
 
-            echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$elementos_numpres[$x])."'\" type=\"button\" value=\"".$elementos_numpres[$x]."\"></td>\n";
+            If ($verEntidade == 0 || $qteParcelamento == 0){
+              $xNumpre = $elementos_numpres[$x];
+            }else{
+              $xNumpre = $elementos_numpres[$x]." ($qteParcelamento)";
+            }
+            
+            echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".$elementos_numpres[$x])."'\" type=\"button\" value=\"".$xNumpre."\"></td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" " . ($corDtoper == "" ? "" : "bgcolor=$corDtoper") . " nowrap>" . $iMatric . "</td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input type=\"hidden\" id=\"parc$i\" value=\"".$elementos_parcelas[$i]."#".$REGISTRO[$i]["k00_numtot"]."#".$elementos_numpres[$x]."\">".$elementos_parcelas[$i]."</td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>".$REGISTRO[$i]["k00_numtot"]."</td>\n";
@@ -1891,9 +1909,16 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
             &nbsp</td>\n";
           }
 
-      echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".pg_result($result,$i,"k00_numpre"))."'\" type=\"button\" value=\"".pg_result($result,$i,"k00_numpre")."\"></td>\n";
-
-          //      echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>".pg_result($result,$i,"k00_numpre")."</td>\n";
+          $qteParcelamento  = pg_result(qtdParcelamento(pg_result($result,$i,"k00_numpre")),0,'TotalParcelamento');            
+          $verEntidade      = verEntidade();
+                         
+          If ($verEntidade == 0 || $qteParcelamento == 0){
+            $xNumpre = pg_result($result,$i,"k00_numpre");
+          }else{
+            $xNumpre = pg_result($result,$i,"k00_numpre")." ($qteParcelamento)";
+          }
+          
+          echo "<td class=\"borda\" style=\"font-size:11px\" nowrap><input style=\"border:none;background-color:$cor\" onclick=\"location.href='cai3_gerfinanc008.php?".base64_encode("numpre=".pg_result($result,$i,"k00_numpre"))."'\" type=\"button\" value=\"".$xNumpre."\"></td>\n";
           echo "  <td class=\"borda\" style=\"font-size:11px\" nowrap>$iMatric</td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>".(trim(pg_result($result,$i,"k00_numpar"))==""?"&nbsp":pg_result($result,$i,"k00_numpar"))."</td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>".(trim(pg_result($result,$i,"k00_numtot"))==""?"&nbsp":pg_result($result,$i,"k00_numtot"))."</td>\n";
@@ -2009,5 +2034,41 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
 echo "<script>
           parent.document.js_parc = parent.js_parc_copia;
 		      </script>";
+
+function qtdParcelamento($numpre){
+
+  $sqlParcelamento = "SELECT COUNT(*)TotalParcelamento 
+                      FROM (
+                        SELECT t.v07_parcel
+                        FROM termo t
+                        INNER JOIN termodiv td  ON td.parcel    = t.v07_parcel
+                        INNER JOIN divida d     ON d.v01_coddiv = td.coddiv
+                        WHERE d.v01_numpre = $numpre
+                        GROUP BY t.v07_parcel
+                        UNION 
+                        SELECT t.v07_parcel
+                        FROM termo t
+                        INNER JOIN termoini ti    ON ti.parcel      = t.v07_parcel
+                        INNER JOIN inicial i      ON i.v50_inicial  = ti.inicial
+                        INNER JOIN inicialcert ic ON ic.v51_inicial = i.v50_inicial
+                        INNER JOIN certdiv cd     ON cd.v14_certid = ic.v51_certidao
+                        INNER JOIN divida d       ON d.v01_coddiv   = cd.v14_coddiv
+                        WHERE d.v01_numpre = $numpre 
+                        GROUP BY t.v07_parcel)x";
+
+  $result = db_query($sqlParcelamento);
+  
+  return $result;
+}
+
+function verEntidade(){
+  $oInstit = new Instituicao(db_getsession('DB_instit'));
+
+  if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
+    return true;
+  }else{
+    return false;
+  }
+}
 
 ?>

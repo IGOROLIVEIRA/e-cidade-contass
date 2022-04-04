@@ -135,6 +135,7 @@ class Evento
     private function adicionarEvento()
     {
         $dados                                          = $this->montarDadosAPI();
+
         $daoFilaEsocial                                 = new \cl_esocialenvio();
         $daoFilaEsocial->rh213_evento                   = $this->tipoEvento;
         $daoFilaEsocial->rh213_empregador               = $this->empregador;

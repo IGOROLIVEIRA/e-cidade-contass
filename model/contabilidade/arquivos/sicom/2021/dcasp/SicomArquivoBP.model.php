@@ -43,6 +43,11 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
   protected $sTipoGeracao;
 
   /**
+   * @var array Fontes encerradas em 2020
+   */
+  protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+
+  /**
    * @return mixed
    */
   public function getTipoGeracao()
@@ -446,12 +451,19 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         //db_criatabela($rsSaldoFontes);
         $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
         //echo "<pre>";print_r($oSaldoFontes);
-        $nHash = $objContasfr->o15_codtri;
+        $bFonteEncerrada        = in_array($objContasfr->o15_codtri, $this->aFontesEncerradas);
+
+        if (!$bFonteEncerrada) {
+            $iFonte = $objContasfr->o15_codtri;
+        } elseif ($bFonteEncerrada) {
+            $iFonte = substr($objContasfr->o15_codtri, 0, 1).'59';
+        }
+        $nHash = $iFonte;
         $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
         if(!isset($aDadosSuperavitFontes[$nHash])){
           $oDadosSuperavitFonte = new stdClass();
           $oDadosSuperavitFonte->si215_exercicio = $iValorNumerico;
-          $oDadosSuperavitFonte->si215_codfontrecursos = $objContasfr->o15_codtri;
+          $oDadosSuperavitFonte->si215_codfontrecursos = $iFonte;
           if($iValorNumerico == 2){
             $oDadosSuperavitFonte->si215_vlsaldofonte = $oSaldoFontes->saldoanterior;
           }else{

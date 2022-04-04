@@ -318,11 +318,11 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
    
 
     
-        $campos = "DISTINCT pc01_codmater,pc01_tabela,pc01_taxa,pc01_descrmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,pc11_quant,pc23_valor,pcorcamval.pc23_vlrun,pcorcamval.pc23_percentualdesconto as mediapercentual,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
+        $campos = "DISTINCT pc01_codmater,pc01_tabela,pc01_taxa,pc01_descrmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,m61_abrev,pc11_quant,pc23_obs,pc23_valor,pcorcamval.pc23_vlrun,pcorcamval.pc23_percentualdesconto as mediapercentual,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
     
             //$sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
             $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$sequencial}";
-            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
+            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere)); 
             $array1 = array();
             $op = 0;
             for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
@@ -400,6 +400,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
             for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
                 $oDadosDaLinha = new stdClass();
                 $oResult = db_utils::fieldsMemory($result, $iCont);
+                 
                 if($array1[$j][1]==$oResult->z01_cgccpf){
 
                 if($tipojulgamento==3){
@@ -454,7 +455,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                 $valor +=$lTotal;
                 $oDadosDaLinha->seq = $iCont + 1;
                 $oDadosDaLinha->item = $oResult->pc01_codmater;
-                $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+                $oDadosDaLinha->descricao = strtoupper($oResult->pc01_descrmater);
                 if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
                     
                     $oDadosDaLinha->quantidade = $oResult->pc11_quant;
@@ -463,7 +464,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                     } else {
                         $oDadosDaLinha->valorUnitario = number_format($oResult->mediapercentual, 2) . "%";
                     }
-                    $oDadosDaLinha->unidadeDeMedida = $oResult->m61_descr;
+                    $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                 } else {
                     $oDadosDaLinha->valorUnitario = "R$".number_format($oResult->pc23_vlrun, $oGet->quant_casas, ",", ".");
@@ -473,8 +474,13 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                     } else {
                         $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
                     }
-                    $oDadosDaLinha->unidadeDeMedida = $oResult->m61_descr;
+                    $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+                }
+                if($oResult->pc23_obs==""){
+                    $oDadosDaLinha->marca = "-";
+                }else{
+                    $oDadosDaLinha->marca = strtoupper($oResult->pc23_obs);
                 }
 
                 
@@ -491,7 +497,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
             {$oDadosDaLinha->unidadeDeMedida}
           </div>
           <div class="td col-valor_un  align-center">
-            -
+            {$oDadosDaLinha->marca}
           </div>
           <div class="td col-quant align-center">
             {$oDadosDaLinha->quantidade}
