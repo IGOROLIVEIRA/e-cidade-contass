@@ -92,6 +92,7 @@ class DadosESocial
             case Tipo::ALTERACAODEDADOS:
             case Tipo::ALTERACAO_CONTRATO:
             case Tipo::TSV_INICIO:
+            case Tipo::TSV_ALT_CONTR:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             default:
                 throw new Exception('Tipo não encontrado.');
@@ -148,6 +149,7 @@ class DadosESocial
             case Tipo::ALTERACAODEDADOS:
             case Tipo::ALTERACAO_CONTRATO:
             case Tipo::TSV_INICIO:
+            case Tipo::TSV_ALT_CONTR:
                 return $preenchimento->pk;
             default:
                 throw new Exception('Tipo não encontrado.');
