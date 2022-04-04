@@ -25,8 +25,8 @@
  *                                licenca/licenca_pt.txt
  */
 
-//MODULO: empenho
-//CLASSE DA ENTIDADE empempenho
+//MODULO: empenho   
+//CLASSE DA ENTIDADE empempenho    
 class cl_empempenho {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -80,6 +80,7 @@ class cl_empempenho {
     /*FIM OC4604 - LQD*/
     /*OC4401*/
     var $e60_id_usuario = null;
+    var $e60_vlrutilizado = 0;  
     /*FIM - OC4401*/
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -112,6 +113,7 @@ class cl_empempenho {
                  e60_datasentenca = date = Data Senteça Judicial
                  e60_id_usuario = int4 = Número
                  e60_e60_tipodespesa = int8 = tipo de despesa
+                 e60_vlrutilizado = float8 = Valor utilizado
                  ";
     //funcao construtor da classe
     function cl_empempenho() {
@@ -136,6 +138,7 @@ class cl_empempenho {
             $this->e60_anousu = ($this->e60_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_anousu"]:$this->e60_anousu);
             $this->e60_coddot = ($this->e60_coddot == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_coddot"]:$this->e60_coddot);
             $this->e60_numcgm = ($this->e60_numcgm == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_numcgm"]:$this->e60_numcgm);
+            $this->e60_vlrutilizado = ($this->e60_vlrutilizado == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vlrutilizado"]:$this->e60_vlrutilizado);
             if($this->e60_emiss == ""){
                 $this->e60_emiss_dia = ($this->e60_emiss_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_emiss_dia"]:$this->e60_emiss_dia);
                 $this->e60_emiss_mes = ($this->e60_emiss_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_emiss_mes"]:$this->e60_emiss_mes);
@@ -393,6 +396,9 @@ class cl_empempenho {
             return false;
         }
         /*FIM - OC4401*/
+        if($this->e60_vlrutilizado == null ){
+            $this->e60_vlrutilizado = 0;
+        }
         $sql = "insert into empempenho(
                                        e60_numemp
                                       ,e60_codemp
@@ -423,6 +429,7 @@ class cl_empempenho {
                                       ,e60_datasentenca
                                       ,e60_id_usuario
                                       ,e60_tipodespesa
+                                      ,e60_vlrutilizado
                        )
                 values (
                                 $this->e60_numemp
@@ -439,7 +446,7 @@ class cl_empempenho {
                                ,$this->e60_vlranu
                                ,$this->e60_codtipo
                                ,'$this->e60_resumo'
-                               ,'$this->e60_informacaoop'
+                               ,'$this->e60_informacaoop' 
                                ,'$this->e60_destin'
                                ,$this->e60_salant
                                ,$this->e60_instit
@@ -454,6 +461,7 @@ class cl_empempenho {
                                ,".($this->e60_datasentenca == "null" || $this->e60_datasentenca == ""?"null":"'".$this->e60_datasentenca."'")."
                                ,$this->e60_id_usuario
                                ,$this->e60_tipodespesa
+                               ,$this->e60_vlrutilizado
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -1243,6 +1251,22 @@ class cl_empempenho {
         }
         return $sql;
     }
+    function sql_query_valorutilizado($numemp=null){
+        $sql = " update empempenho set e60_vlrutilizado = $this->e60_vlrutilizado where e60_numemp = $numemp";
+
+        $result = db_query($sql);
+        if($result==false){
+            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_sql   = "Empenhos na prefeitura nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql .= "Valores : ".$this->e60_numemp;
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            $this->numrows_alterar = 0;
+            return false;
+        }
+
+    } 
     function sql_query_doc ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){
@@ -2356,7 +2380,7 @@ class cl_empempenho {
         $sSql .= "        e60_anousu,                                                                                                                                       ";
         $sSql .= "        c70_anousu,                                                                                                                                       ";
         $sSql .= "        e60_numcgm,                                                                                                                                       ";
-        $sSql .= "        o58_coddot,                                                                                                                                       ";
+        $sSql .= "        e58_coddot,                                                                                                                                       ";
         $sSql .= "        e60_instit,                                                                                                                                       ";
         $sSql .= "        o58_funcao,                                                                                                                                       ";
         $sSql .= "        o58_subfuncao,                                                                                                                                    ";
