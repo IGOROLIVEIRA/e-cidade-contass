@@ -96,7 +96,11 @@ db_app::load("prototype.js");
                 <td>
                   <?
                   db_input('ve60_veiculo', 10, $Ive60_veiculo, true, 'text', 3, " onchange='js_pesquisave60_veiculo(false);'");
-                  db_input('ve01_placa', 10, $Ive01_placa, true, 'text', 3, '')
+
+                  ?>
+                  <strong>Placa:</strong>
+                  <?
+                  db_input('ve01_placa', 10, $Ive01_placa, true, 'text', $db_opcao, "onchange='js_pesquisaplaca(false);'");
                   ?>
                 </td>
               </tr>
@@ -589,5 +593,18 @@ db_app::load("prototype.js");
     }
 
     return true;
+  }
+
+  function js_pesquisaplaca(mostra) {
+    if (document.form1.ve01_placa.value != '') {
+      js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave_placa=' + document.form1.ve01_placa.value + '&funcao_js=parent.js_mostraveiculosplaca', 'Pesquisa', false);
+    } else {
+      document.form1.ve01_placa.value = '';
+    }
+  }
+
+  function js_mostraveiculosplaca(chave, chave2) {
+    document.form1.ve60_veiculo.value = chave;
+    js_pesquisa_medida();
   }
 </script>

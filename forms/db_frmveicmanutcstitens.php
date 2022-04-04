@@ -90,16 +90,11 @@ db_app::load("estilos.css, grid.style.css");
                                 </td>
                                 <td>
                                     <?
-                                    db_input(
-                                        've62_veiculos',
-                                        10,
-                                        $Ive62_veiculos,
-                                        true,
-                                        'text',
-                                        $db_opcao,
-                                        " onchange='js_pesquisave62_veiculos(false);'"
-                                    );
-                                    db_input('ve01_placa', 10, $Ive01_placa, true, 'text', 3, '')
+                                    db_input('ve62_veiculos', 10, $Ive62_veiculos, true, 'text', $db_opcao, " onchange='js_pesquisave62_veiculos(false);'");
+                                    ?>
+                                    <strong>Placa:</strong>
+                                    <?
+                                    db_input('ve01_placa', 10, $Ive01_placa, true, 'text', $db_opcao, "onchange='js_pesquisaplaca(false);'");
                                     ?>
                                 </td>
                             </tr>
@@ -982,6 +977,21 @@ db_app::load("estilos.css, grid.style.css");
             //alert("Selecione uma opção Itens do Empenho");
         }
 
+    }
+
+
+    function js_pesquisaplaca(mostra) {
+        if (document.form1.ve01_placa.value != '') {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave_placa=' + document.form1.ve01_placa.value + '&funcao_js=parent.js_mostraveiculosplaca', 'Pesquisa', false);
+        } else {
+            document.form1.ve01_placa.value = '';
+        }
+    }
+
+    function js_mostraveiculosplaca(chave, chave2) {
+        alert(chave);
+        document.form1.ve62_veiculos.value = chave;
+        js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve62_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
     }
 
     function js_mostraempempenho2(chave1, chave2, chave3, chave4) {
