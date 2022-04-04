@@ -750,10 +750,10 @@ db_app::load("estilos.css");
     $("ve60_horasaida").value = "";
 
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa', 'Pesquisa', true);
+      js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa|ve26_codigo', 'Pesquisa', true);
     } else {
       if (document.form1.ve70_veiculos.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveiculos', 'Pesquisa', false);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?veiccadcomb=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveiculos', 'Pesquisa', false);
       } else {
         document.form1.ve01_placa.value = '';
       }
@@ -767,8 +767,10 @@ db_app::load("estilos.css");
     }
   }
 
-  function js_mostraveiculos(chave, erro) {
+  function js_mostraveiculos(chave, chave2, erro) {
     document.form1.ve01_placa.value = chave;
+    document.form1.ve70_veiculoscomb.value = chave2;
+    js_pesquisave70_veiculoscomb(false, 0);
     if (erro == true) {
       document.form1.ve70_veiculos.focus();
       document.form1.ve70_veiculos.value = '';
@@ -777,12 +779,12 @@ db_app::load("estilos.css");
     }
   }
 
-  function js_mostraveiculos1(chave1, chave2) {
+  function js_mostraveiculos1(chave1, chave2, chave3) {
     document.form1.ve70_veiculos.value = chave1;
     document.form1.ve01_placa.value = chave2;
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
+    document.form1.ve70_veiculoscomb.value = chave3;
     db_iframe_veiculos.hide();
-    js_pesquisave70_veiculoscomb(true, 0);
+    js_pesquisave70_veiculoscomb(false, 0);
   }
 
   function js_pesquisaplaca(mostra) {

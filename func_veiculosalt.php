@@ -143,12 +143,7 @@ $oDaoVeicCadCentralDepart->rotulo->label("ve37_veiccadcentral");
               $sWhere = " and " . $sWhere;
             }
 
-            $sSql = $oDaoVeiculos->sql_query_central(
-              $chave_ve01_codigo,
-              $sCampos,
-              "ve01_codigo",
-              "ve01_codigo=$chave_ve01_codigo $sWhere"
-            );
+            $sSql = $oDaoVeiculos->sql_query_central($chave_ve01_codigo, $sCampos, "ve01_codigo", "ve01_codigo=$chave_ve01_codigo $sWhere");
           } else {
             $sSql = $oDaoVeiculos->sql_query_central("", $sCampos, "ve01_codigo", $sWhere);
           }
@@ -171,20 +166,17 @@ $oDaoVeicCadCentralDepart->rotulo->label("ve37_veiccadcentral");
               $sWhere = " and " . $sWhere;
             }
 
-            $sSqlVeiculos = $oDaoVeiculos->sql_query_central(
-              null,
-              $sCampos,
-              null,
-              "ve01_codigo = $pesquisa_chave $sWhere"
-            );
+            $sSqlVeiculos = $oDaoVeiculos->sql_query_central(null, $sCampos, null, "ve01_codigo = $pesquisa_chave $sWhere");
             $result = $oDaoVeiculos->sql_record($sSqlVeiculos);
-
             if (isset($iParam) && $iParam == 1 && $oDaoVeiculos->numrows != 0) {
 
               db_fieldsmemory($result, 0);
               echo "<script>" . $funcao_js . "('$ve01_placa', '$ve01_quantcapacidad', false);</script>";
             } elseif (isset($iParam) && $iParam == 1 && $oDaoVeiculos->numrows == 0) {
               echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado', '', true);</script>";
+            } elseif (isset($veiccadcomb) && $veiccadcomb == "true") {
+              db_fieldsmemory($result, 0);
+              echo "<script>" . $funcao_js . "('$ve01_placa','$ve26_codigo',false);</script>";
             } elseif ($oDaoVeiculos->numrows != 0) {
 
               db_fieldsmemory($result, 0);
