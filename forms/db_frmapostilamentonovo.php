@@ -51,7 +51,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_tipoalteracaoapostila ?>">
-                    <b>Tipo da alteração:</b>
+                    <b>Tipo da Alteração:</b>
                 </td>
                 <td>
                     <?
@@ -146,6 +146,24 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
             </tr>
 
+            <tr id="edicaoBloco" style="display: none;">
+                <td colspan='2'>
+                    <fieldset class="">
+                        <legend>Edição em bloco</legend>
+                        <table>
+                            <td title="<?= @$Tac16_sequencial ?>">
+                                <?php db_ancora("Dotações", "pesquisao_coddot(true);", $db_opcao); ?>
+                            </td>
+                            <td id='inputdotacao'></td>
+                            <td>
+                                <input type='button' id='btnAp?icar' value='Aplicar' onclick="aplicarDotacoes();">
+                            </td>
+                        </table>
+
+                </td>
+
+            </tr>
+
 
         </table>
 
@@ -172,11 +190,19 @@ $clrotulo->label("ac16_resumoobjeto");
     oGridItens.setCellWidth(["3%", "25%", "8%", "8%"]);
     oGridItens.setHeader(["Cód", "Item", "Qtde Anterior", "Vl Unit Anterior", "Quantidade", "Vl Unitário", "Vl Total", "Vl Apostilado", "Qt Aditada", "Dotações", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
+    oGridItens.aHeaders[10].lDisplayed = false;
+    oGridItens.aHeaders[5].lDisplayed = false;
     oGridItens.aHeaders[9].lDisplayed = false;
     oGridItens.setHeight(300);
     oGridItens.show($('ctnGridItens'));
 
+
     var opcao = document.form1.controle.value;
+    var elemento = "";
+
+    oTxtDotacao = new DBTextField('oTxtDotacao', 'oTxtDotacao', '', 10);
+    oTxtDotacao.show($('inputdotacao'));
+    oTxtDotacao.setReadOnly(true);
 
     function js_pesquisasi03_licitacao(mostra) {
         if (mostra == true) {
@@ -325,7 +351,23 @@ $clrotulo->label("ac16_resumoobjeto");
 
     function preencheItens(aItens) {
 
+        /* Calculo realizado para ajuste do tamanho do label dos itens
+         *  conforme a quantidade de itens.
+         */
+        var sizeLabelItens = 0;
+        if (aItens.length < 12) {
+            sizeLabelItens = (aItens.length / 2) * 50;
+            sizeLabelItens = sizeLabelItens + "px";
+            document.getElementById('body-container-oGridItens').style.height = sizeLabelItens;
+
+        }
+
+
         oGridItens.clearAll(true);
+
+        var aEventsIn = ["onmouseover"];
+        var aEventsOut = ["onmouseout"];
+        aDadosHintGrid = new Array();
 
         aItens.each(function(oItem, iSeq) {
 
@@ -337,6 +379,10 @@ $clrotulo->label("ac16_resumoobjeto");
             aLinha[1] = oItem.descricaoitem.urlDecode();
             aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', 2);
             aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 2);
+
+
+
+
 
             var nQuantidade = oItem.quantidade || oItem.qtdeanterior,
                 nUnitario = oItem.valorunitario || oItem.vlunitanterior;
@@ -352,6 +398,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oInputUnitario.addStyle("width", "100%");
             oInputUnitario.setClassName("text-right");
             oInputUnitario.setReadOnly(false);
+            //oInputUnitario.onChange
 
             if (iTipoAltApostila != 3) {
                 oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
@@ -382,8 +429,22 @@ $clrotulo->label("ac16_resumoobjeto");
             oBotaoDotacao.setAttribute("onclick", "ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
             aLinha[9] = oBotaoDotacao.outerHTML;
             aLinha[10] = new String(iSeq);
+            elemento = oItem.elemento;
 
             oGridItens.addRow(aLinha, false, false, false);
+
+            var sTextEvent = " ";
+
+            if (aLinha[1] !== '') {
+                sTextEvent += "<b>Item: </b>" + aLinha[1];
+            } else {
+                sTextEvent += "<b>Nenhum dado à mostrar</b>";
+            }
+
+            var oDadosHint = new Object();
+            oDadosHint.idLinha = `oGridItensrow${iSeq}cell1`;
+            oDadosHint.sText = sTextEvent;
+            aDadosHintGrid.push(oDadosHint);
 
             if (oItem.dotacoesoriginal == undefined) {
 
@@ -402,7 +463,27 @@ $clrotulo->label("ac16_resumoobjeto");
             salvarInfoDotacoes(iSeq);
         });
 
+
         oGridItens.renderRows();
+
+
+        me.oGridItens.renderRows();
+
+
+        aDadosHintGrid.each(function(oHint, id) {
+            var oDBHint = eval("oDBHint_" + id + " = new DBHint('oDBHint_" + id + "')");
+            oDBHint.setText(oHint.sText);
+            oDBHint.setShowEvents(aEventsIn);
+            oDBHint.setHideEvents(aEventsOut);
+            oDBHint.setPosition('B', 'L');
+            oDBHint.setUseMouse(true);
+            oDBHint.make($(oHint.idLinha), 2);
+        });
+    }
+
+    function changeValorUnitario(iLinha, valor) {
+        var aLinha = oGridItens.aRows[iLinha];
+
     }
 
     /**
@@ -414,10 +495,16 @@ $clrotulo->label("ac16_resumoobjeto");
             nQuantidade = aLinha.aCells[5].getValue().getNumber();
         nUnitario = aLinha.aCells[6].getValue().getNumber();
 
+
         aItensPosicao[iLinha].quantidade = nQuantidade;
         aItensPosicao[iLinha].valorunitario = nUnitario;
 
         aLinha.aCells[7].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
+        if (aItensPosicao[iLinha].dotacoes.length > 0) {
+            aItensPosicao[iLinha].dotacoes[0].valor = js_formatar(nQuantidade * nUnitario, 'f', 2);
+            atualizarItemDotacao(iLinha, 0, js_formatar(nQuantidade * nUnitario, 'f', 2));
+        }
+
 
         salvarInfoDotacoes(iLinha);
     }
@@ -748,6 +835,32 @@ $clrotulo->label("ac16_resumoobjeto");
         });
     }
 
+    function pesquisao_coddot(mostra) {
+
+        query = '';
+        if (elemento != '') {
+            query = "elemento=" + elemento + "&";
+        }
+
+        if (mostra == true) {
+            js_OpenJanelaIframe('',
+                'db_iframe_orcdotacao',
+                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot',
+                'Pesquisa de Dotações',
+                true, 0);
+
+            $('Jandb_iframe_orcdotacao').style.zIndex = '100000000';
+        } else {
+            js_OpenJanelaIframe('',
+                'db_iframe_orcdotacao',
+                'func_permorcdotacao.php?' + query + 'pesquisa_chave=' + document.form1.o47_coddot.value +
+                '&funcao_js=parent.' + me.sInstance + '.mostraorcdotacao',
+                'Pesquisa de Dotações',
+                false
+            );
+        }
+    }
+
     function pesquisao47_coddot(mostra) {
 
         query = '';
@@ -788,8 +901,43 @@ $clrotulo->label("ac16_resumoobjeto");
         oTxtDotacao.setValue(chave1);
         db_iframe_orcdotacao.hide();
         $('Jandb_iframe_orcdotacao').style.zIndex = '0';
-        $('oTxtValorDotacao').focus();
+        //$('oTxtValorDotacao').focus();
         getSaldoDotacao(chave1);
+    }
+
+    function aplicarDotacoes() {
+
+
+
+        var oDotacao = {
+            dotacao: oTxtDotacao.getValue(),
+            quantidade: 1,
+            valor: 0,
+            valororiginal: 0
+        };
+
+
+
+        var oSelecionados = {};
+        var iSelecionados = [];
+        var i = 0;
+        var itensSelecionados = false;
+
+
+        oGridItens.getRows().forEach(function(oRow) {
+
+            if (oRow.isSelected) {
+                aItensPosicao[i].dotacoes.push(oDotacao);
+                itensSelecionados = true;
+
+            }
+            i++;
+
+        });
+
+        if (itensSelecionados == false) {
+            return alert('Nenhum item selecionado para aplicar dotação.');
+        }
     }
 
     function apostilar() {
@@ -928,6 +1076,16 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     function js_changeTipoApostila(iTipo) {
+
+        if (iTipo == "03") {
+            oGridItens.aHeaders[10].lDisplayed = true;
+            oGridItens.aHeaders[5].lDisplayed = true;
+        } else {
+            oGridItens.aHeaders[10].lDisplayed = false;
+            oGridItens.aHeaders[5].lDisplayed = false;
+        }
+
+
         aItensPosicao.forEach(function(oItem, iIndice) {
 
             if (iTipo == "03") {
@@ -937,16 +1095,30 @@ $clrotulo->label("ac16_resumoobjeto");
                 document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = false;
                 document.getElementById('valorunitario' + iIndice).addClassName('readonly');
                 document.getElementById('valorunitario' + iIndice).readOnly = true;
+                document.getElementById('edicaoBloco').style.display = "";
+
+                document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "";
+                document.getElementById('col11').style.display = "";
+
+
+
+
             } else {
                 $("si03_tipoalteracaoapostila").value = 1;
                 document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = false;
                 document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = false;
                 document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = true;
+
             }
 
             if (iTipo == "01" || iTipo == "02") {
                 document.getElementById('valorunitario' + iIndice).removeClassName('readonly');
                 document.getElementById('valorunitario' + iIndice).readOnly = false;
+                document.getElementById('edicaoBloco').style.display = "none";
+
+                document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "none";
+                document.getElementById('col11').style.display = "none";
+
             }
 
         });

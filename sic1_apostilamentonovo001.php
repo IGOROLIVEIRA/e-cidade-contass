@@ -55,6 +55,46 @@ if (isset($incluir)) {
     #si03_dataapostila {
       width: 80px !important;
     }
+
+    #oGridItensrow0checkbox {
+      width: 21px !important;
+
+    }
+
+    #col1 {
+      width: 21px !important;
+
+    }
+
+    #oGridItensrow0cell0 {
+      width: 30px !important;
+
+    }
+
+    #col2 {
+      width: 30px !important;
+
+    }
+
+    #oGridItensrow0cell1 {
+      width: 244px !important;
+
+    }
+
+    #col3 {
+      width: 244px !important;
+
+    }
+
+    #oGridItensrow0cell3 {
+      width: 90px !important;
+
+    }
+
+    #col5 {
+      width: 90px !important;
+
+    }
   </style>
 
 </head>
