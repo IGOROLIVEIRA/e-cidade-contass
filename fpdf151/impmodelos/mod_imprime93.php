@@ -221,9 +221,9 @@ if ($oldsetaut > 64 && $this->linhasdosfornec == 0) {
 $this->objpdf->rect($xcol, $xlin + $getdoy, 10, 6, 2, 'DF', '12');
 $this->objpdf->rect($xcol + 10, $xlin + $getdoy, 12, 6, 2, 'DF', '12');
 $this->objpdf->rect($xcol + 22, $xlin + $getdoy, 22, 6, 2, 'DF', '12');
-$this->objpdf->rect($xcol + 44, $xlin + $getdoy, 98, 6, 2, 'DF', '12');
-$this->objpdf->rect($xcol + 142, $xlin + $getdoy, 30, 6, 2, 'DF', '12');
-$this->objpdf->rect($xcol + 172, $xlin + $getdoy, 30, 6, 2, 'DF', '12');
+$this->objpdf->rect($xcol + 44, $xlin + $getdoy, 158, 6, 2, 'DF', '12');
+//$this->objpdf->rect($xcol + 142, $xlin + $getdoy, 30, 6, 2, 'DF', '12');
+//$this->objpdf->rect($xcol + 172, $xlin + $getdoy, 30, 6, 2, 'DF', '12');
 
 $menos = 37;
 
@@ -259,12 +259,12 @@ $this->objpdf->rect($xcol + 10, $xlin + $getdoy + 6, 12, 224 - $menos, 2, 'DF', 
 
 $this->objpdf->rect($xcol + 22, $xlin + $getdoy + 6, 22, 224 - $menos, 2, 'DF', '34');
 // Caixa dos materiais ou serviços
-$this->objpdf->rect($xcol + 44, $xlin + $getdoy + 6, 98, 224 - $menos, 2, 'DF', '34');
+$this->objpdf->rect($xcol + 44, $xlin + $getdoy + 6, 158, 224 - $menos, 2, 'DF', '34');
 // Caixa dos valores unitários
-$this->objpdf->rect($xcol + 142, $xlin + $getdoy + 6, 30, 224 - $menos, 2, 'DF', '');
+//$this->objpdf->rect($xcol + 142, $xlin + $getdoy + 6, 30, 224 - $menos, 2, 'DF', '');
 
 // Caixa dos valores totais dos itens
-$this->objpdf->rect($xcol + 172, $xlin + $getdoy + 6, 30, 224 - $menos, 2, 'DF', '34');
+//$this->objpdf->rect($xcol + 172, $xlin + $getdoy + 6, 30, 224 - $menos, 2, 'DF', '34');
 
 $this->objpdf->sety($xlin + 28);
 
@@ -274,8 +274,8 @@ $this->objpdf->text($xcol +   2, $xlin + $getdoy + 4, 'ITEM');
 $this->objpdf->text($xcol + 11, $xlin + $getdoy + 4, 'QUANT');
 $this->objpdf->text($xcol + 26, $xlin + $getdoy + 4, 'UNIDADE');
 $this->objpdf->text($xcol +  70, $xlin + $getdoy + 4, 'MATERIAL OU SERVIÇO');
-$this->objpdf->text($xcol + 145, $xlin + $getdoy + 4, 'VALOR UNITÁRIO');
-$this->objpdf->text($xcol + 176, $xlin + $getdoy + 4, 'VALOR TOTAL');
+//$this->objpdf->text($xcol + 145, $xlin + $getdoy + 4, 'VALOR UNITÁRIO');
+//$this->objpdf->text($xcol + 176, $xlin + $getdoy + 4, 'VALOR TOTAL');
 $maiscol = 0;
 
 $this->objpdf->setleftmargin(3);
@@ -311,8 +311,8 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     $dtiporec   = pg_result($this->recorddasdotac, $ii, $this->dtiporec);
     $ddescrest  = pg_result($this->recorddasdotac, $ii, $this->ddescrest);
 
-    $this->objpdf->SetWidths(array(10, 12, 24, 95, 30, 30));
-    $this->objpdf->SetAligns(array('C', 'C', 'C', 'J', 'R', 'R'));
+    $this->objpdf->SetWidths(array(10, 12, 24, 155));
+    $this->objpdf->SetAligns(array('C', 'C', 'C', 'J'));
     if (!empty($dotacao)) {
 
       if (!in_array($dotacao . $danousu, $arr_antigadotac)) {
@@ -372,8 +372,8 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
   /////////////////////////////////////////////////////////////////////////////////////
   $itemant = "";
   $pass = false;
-  $this->objpdf->SetWidths(array(10, 12, 24, 95, 30, 30));
-  $this->objpdf->SetAligns(array('C', 'C', 'C', 'J', 'R', 'R'));
+  $this->objpdf->SetWidths(array(10, 12, 24, 155));
+  $this->objpdf->SetAligns(array('C', 'C', 'C', 'J'));
   $pagina = $this->objpdf->PageNo();
   db_fieldsmemory($this->recorddositens, $ii);
 
@@ -396,15 +396,15 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
   $item           = pg_result($this->recorddositens, $ii, $this->item);
   $quantitem      = pg_result($this->recorddositens, $ii, $this->quantitem);
   $descricaoitem  = pg_result($this->recorddositens, $ii, $this->descricaoitem);
-  $valoritem      = pg_result($this->recorddositens, $ii, $this->valoritem);
-  $valtot         = pg_result($this->recorddositens, $ii, $this->svalortot);
+ // $valoritem      = pg_result($this->recorddositens, $ii, $this->valoritem);
+ // $valtot         = pg_result($this->recorddositens, $ii, $this->svalortot);
   $reservado      = pg_result($this->recorddositens, $ii, 'pc11_reservado');
 
-  if ($valtot == 0) {
+ /* if ($valtot == 0) {
     $valtot = ($valoritem * $quantitem);
-  }
+  }*/
 
-  $valimp         = db_formatar($valtot, 'f');
+//  $valimp         = db_formatar($valtot, 'f');
   $prazo          = pg_result($this->recorddositens, $ii, $this->sprazo);
   $pgto           = pg_result($this->recorddositens, $ii, $this->spgto);
   $resum          = pg_result($this->recorddositens, $ii, $this->sresum);
@@ -453,7 +453,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
   /*echo '$servico: '.$servico;
 		echo ' $unid: '.$unid;exit;*/
 
-  if ((isset($servico) && (trim($servico) == "f" || trim($servico) == "")) || !isset($servico)) {
+/*  if ((isset($servico) && (trim($servico) == "f" || trim($servico) == "")) || !isset($servico)) {
     $unid = trim(substr($unid, 0, 10));
     if ($susaquant == "t") {
       $unid .= " \n$quantunid \n";
@@ -462,7 +462,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     //$unid = "SERVIÇO";
     $unid = trim(substr($unid, 0, 10));
     $unid .= " \n$quantunid \n";
-  }
+  }*/
 
   //    $descricaoitem .= " - ".$unid;
 
@@ -583,11 +583,11 @@ if ($contapagina == 1) {
 
 if ($contapagina == 1) {
 
-  $this->objpdf->rect($xcol, $xlin + 224.7, 142, 10.8, 2, 'DF', '34');
-  $this->objpdf->rect($xcol + 142, $xlin + 224.7, 30, 10.8, 2, 'DF', '34');
-  $this->objpdf->rect($xcol + 172, $xlin + 224.7, 30, 10.8, 2, 'DF', '34');
-  $this->objpdf->text($xcol + 120, $xlin + 230.7, 'T O T A L');
-  $this->objpdf->text(180, $xlin + 230, db_formatar($xtotal, 'f'));
+//  $this->objpdf->rect($xcol, $xlin + 224.7, 142, 10.8, 2, 'DF', '34');
+//  $this->objpdf->rect($xcol + 142, $xlin + 224.7, 30, 10.8, 2, 'DF', '34');
+//  $this->objpdf->rect($xcol + 172, $xlin + 224.7, 30, 10.8, 2, 'DF', '34');
+//  $this->objpdf->text($xcol + 120, $xlin + 230.7, 'T O T A L');
+//  $this->objpdf->text(180, $xlin + 230, db_formatar($xtotal, 'f'));
   $this->objpdf->rect($xcol, $xlin + 237, 102, 33, 2, 'DF', '1234');
   $this->objpdf->rect($xcol + 103, $xlin + 237, 99, 33, 2, 'DF', '1234');
   $this->objpdf->setfillcolor(0, 0, 0);
@@ -600,8 +600,8 @@ if ($contapagina == 1) {
   $this->objpdf->rect($xcol, $xlin + 262, 142, 10, 2, 'DF', '34');
   $this->objpdf->rect($xcol + 142, $xlin + 262, 30, 10, 2, 'DF', '34');
   $this->objpdf->rect($xcol + 172, $xlin + 262, 30, 10, 2, 'DF', '34');
-  $this->objpdf->text($xcol + 120, $xlin + 268, 'T O T A L');
-  $this->objpdf->text($xcol + 180, $xlin + 268, db_formatar($xtotal, "f"));
+//  $this->objpdf->text($xcol + 120, $xlin + 268, 'T O T A L');
+//  $this->objpdf->text($xcol + 180, $xlin + 268, db_formatar($xtotal, "f"));
 }
 
 /**
