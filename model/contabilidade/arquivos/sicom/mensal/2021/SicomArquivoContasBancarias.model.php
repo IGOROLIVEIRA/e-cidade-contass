@@ -12,8 +12,7 @@ require_once("classes/db_ctb412021_classe.php");
 require_once("classes/db_ctb502021_classe.php");
 require_once("classes/db_ctb602021_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCTB.model.php");
-// ini_set('display_errors', 'On');
-// error_reporting(E_ALL);
+
 
 /**
  * Contas bancarias Sicom Acompanhamento Mensal

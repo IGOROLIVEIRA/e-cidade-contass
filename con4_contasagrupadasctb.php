@@ -32,31 +32,52 @@ $head3 = "CONTAS AGRUPADAS SICOM";
 
 $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
-$sSqlGeral = "select  10 as tiporegistro,
-					     k13_reduz as codctb,
-					     c61_codtce as codtce,
-					     si09_codorgaotce,
-				             c63_banco,
-				             c63_agencia,
-				             c63_conta,
-				             c63_dvconta,
-				             c63_dvagencia,
-				             case when db83_tipoconta in (2,3) then 2 else 1 end as tipoconta,
-				             ' ' as tipoaplicacao,
-				             ' ' as nroseqaplicacao,
-				             db83_descricao as desccontabancaria,
-				             CASE WHEN (db83_convenio is null or db83_convenio = 2) then 2 else  1 end as contaconvenio,
-				             case when db83_convenio = 1 then db83_numconvenio else null end as nroconvenio,
-				             case when db83_convenio = 1 then db83_dataconvenio else null end as dataassinaturaconvenio,
-				             o15_codtri as recurso
-				       from saltes
-				       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = ".db_getsession("DB_anousu")."
-				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
-				       join orctiporec on c61_codigo = o15_codigo
-				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
-				  left join contabancaria on c56_contabancaria = db83_sequencial
-				  left join infocomplementaresinstit on si09_instit = c61_instit
-				    where c61_instit = ".db_getsession("DB_instit")." order by k13_reduz";
+$sSqlGeral = "SELECT 10 AS tiporegistro,
+                     k13_reduz AS codctb,
+                     c61_codtce AS codtce,
+                     si09_codorgaotce,
+                     si09_tipoinstit,
+                     c63_banco,
+                     c63_agencia,
+                     c63_conta,
+                     c63_dvconta,
+                     c63_dvagencia,
+                     CASE
+                         WHEN db83_tipoconta IN (2, 3) THEN 2
+                         ELSE 1
+                     END AS tipoconta,
+                     CASE
+                         WHEN (SELECT si09_tipoinstit FROM infocomplementaresinstit WHERE si09_instit = " . db_getsession("DB_instit") . " ) = 5 AND db83_tipoconta IN (2, 3) THEN db83_tipoaplicacao::varchar
+                         ELSE ' '
+                     END AS tipoaplicacao,
+                     CASE
+                         WHEN (SELECT si09_tipoinstit FROM infocomplementaresinstit WHERE si09_instit = " . db_getsession("DB_instit") . " ) = 5 AND db83_tipoconta IN (2, 3) THEN db83_nroseqaplicacao::varchar
+                         ELSE ' '
+                     END AS nroseqaplicacao,
+                     db83_descricao AS desccontabancaria,
+                     CASE
+                         WHEN (db83_convenio IS NULL
+                             OR db83_convenio = 2) THEN 2
+                         ELSE 1
+                     END AS contaconvenio,
+                     CASE
+                         WHEN db83_convenio = 1 THEN db83_numconvenio
+                         ELSE NULL
+                     END AS nroconvenio,
+                     CASE
+                         WHEN db83_convenio = 1 THEN db83_dataconvenio
+                         ELSE NULL
+                     END AS dataassinaturaconvenio,
+                     o15_codtri AS recurso
+              FROM saltes
+              JOIN conplanoreduz ON k13_reduz = c61_reduz AND c61_anousu = ".db_getsession("DB_anousu")."
+              JOIN conplanoconta ON c63_codcon = c61_codcon AND c63_anousu = c61_anousu
+              JOIN orctiporec ON c61_codigo = o15_codigo
+              LEFT JOIN conplanocontabancaria ON c56_codcon = c61_codcon AND c56_anousu = c61_anousu
+              LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
+              LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
+              WHERE c61_instit = ".db_getsession("DB_instit")."
+              ORDER BY k13_reduz";
 //echo $sSqlGeral;
 $rsContas = db_query($sSqlGeral);//db_criatabela($rsContas);
 
@@ -72,12 +93,14 @@ for ($iCont = 0;$iCont < pg_num_rows($rsContas); $iCont++) {
     $aHash  = $oRegistro10->si09_codorgaotce;
     $aHash .= intval($oRegistro10->c63_banco);
     $aHash .= intval($oRegistro10->c63_agencia);
-    $aHash .= intval($oRegistro10->c63_dvagencia);
+    $aHash .= $oRegistro10->c63_dvagencia;
     $aHash .= intval($oRegistro10->c63_conta);
-    $aHash .= intval($oRegistro10->c63_dvconta);
+    $aHash .= $oRegistro10->c63_dvconta;
     $aHash .= $oRegistro10->tipoconta;
-    if ($oRegistro10->si09_codorgaotce == 5) {
+    
+    if ($oRegistro10->si09_tipoinstit == 5) {
         $aHash .= $oRegistro10->tipoaplicacao;
+        $aHash .= $oRegistro10->nroseqaplicacao;
     }
 
     if($oRegistro10->si09_tipoinstit != 5){
@@ -103,9 +126,25 @@ for ($iCont = 0;$iCont < pg_num_rows($rsContas); $iCont++) {
 
 
     }else{
-        /*
-         * FALTA AGRUPA AS CONTAS QUANDO A INSTIUICAO FOR IGUAL A 5 RPPS
-         */
+
+        if(!isset($aBancosAgrupados[$aHash])){
+
+            $cCtb10    =  new stdClass();
+
+            $cCtb10->codctb =	$oRegistro10->codctb;
+            $cCtb10->codtce =	$oRegistro10->codtce;
+            $cCtb10->recurso =	in_array($oRegistro10->recurso, $aFontesEncerradas) ? substr($oRegistro10->recurso, 0, 1).'59' : $oRegistro10->recurso;
+            $cCtb10->contas	= array();
+
+            $aBancosAgrupados[$aHash] = $cCtb10;
+
+        }else{
+            $oConta = new stdClass();
+            $oConta->codctb = $oRegistro10->codctb;
+            $oConta->recurso = in_array($oRegistro10->recurso, $aFontesEncerradas) ? substr($oRegistro10->recurso, 0, 1).'59' : $oRegistro10->recurso;
+
+            $aBancosAgrupados[$aHash]->contas[] = $oConta;
+        }
     }
 
 }
