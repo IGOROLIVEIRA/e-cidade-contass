@@ -125,11 +125,11 @@ if (isset($_POST["processar"])) {
                 $data = explode("/", $data);
                 $data = $data[2] . "-" . $data[1] . "-" . $data[0];
             } else {
+                PHPExcel_Shared_Date::setExcelCalendar(PHPExcel_Shared_Date::CALENDAR_MAC_1904);
                 $data = date('d/m/Y', PHPExcel_Shared_Date::ExcelToPHP($cell->getValue()));
                 $data = explode("/", $data);
-                $data = $data[2] . "-" . $data[1] . "-" . ($data[0] + 1);
+                $data = $data[2] - 4 . "-" . $data[1] . "-" . ($data[0]);
             }
-
             //$hora = PHPExcel_Shared_Date::stringToExcel($data+1);
 
             $cell = $objWorksheet->getCellByColumnAndRow(2, $row);
