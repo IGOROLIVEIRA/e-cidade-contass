@@ -109,7 +109,7 @@ class Siops {
         }
 
     }
-
+ 
     public function setNomeArquivo($sNomeArquivo) {
         $this->sNomeArquivo = $sNomeArquivo;
     }

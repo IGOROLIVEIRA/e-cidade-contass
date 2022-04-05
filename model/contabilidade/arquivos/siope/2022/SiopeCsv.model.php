@@ -10,7 +10,7 @@ class SiopeCsv extends Siope {
 
     //@var String
     protected $_arquivo;
-
+ 
     //@var String
     protected $sLinha;
 

@@ -1,7 +1,7 @@
 <?php
 
 class SiopeReceita extends Siope {
-
+   
     //@var array
     public $aReceitas = array();
 

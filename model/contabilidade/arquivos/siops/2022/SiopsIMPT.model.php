@@ -9,7 +9,7 @@ class SiopeIMPT extends Siops {
 
     //@var String
     protected $sDelim = ";";
-
+ 
     //@var String
     protected $_arquivo;
 
