@@ -168,7 +168,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
             /* $sSqlValor = "SELECT SUM(c70_valor) c70_valor, k81_regrepasse, k81_exerc, k81_emparlamentar, o57_fonte, c53_tipo FROM (" . $sSql . ") x
                     WHERE ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
                         OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49')) GROUP BY 2, 3, 4, 5, 6 ORDER BY 3"; */
-
+  
             $rsDocRec = db_query($sSql);
             //$rsDocRecVlr = db_query($sSqlValor);
 
@@ -238,15 +238,13 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         /**
                          * agrupar registro 11
                          */
-                        $sHash11 = $oDadosRec->o70_codigo . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
-
-                        if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
+                        // if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
 
                             $var = trim("\ ");
                             $sSql = "SELECT taborc.k02_estorc,
                                     CASE
-                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1218', '7218') AND cgm.z01_cgccpf IS NULL OR cgm.z01_cgccpf = '' THEN t2.z01_cgccpf
-                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1218', '7218') THEN cgm.z01_cgccpf
+                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1215', '7215') AND cgm.z01_cgccpf IS NULL OR cgm.z01_cgccpf = '' THEN t2.z01_cgccpf
+                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1215', '7215') THEN cgm.z01_cgccpf
                                         ELSE ''
                                     END AS z01_cgccpf,
                                     o70_codrec,
@@ -256,8 +254,16 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                             WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
                                             ELSE 0::FLOAT8
                                         END) AS c70_valor,
-                                    c206_nroconvenio,
-                                    c206_dataassinatura,
+                                    CASE
+                                        WHEN o15_codtri IN ('122', '123', '124', '142', '163', '171', '172', '173', '176', '177', '178', '181', '182', '183')  
+                                        THEN c206_nroconvenio
+                                        ELSE null
+                                    END c206_nroconvenio,
+                                    CASE
+                                        WHEN o15_codtri IN ('122', '123', '124', '142', '163', '171', '172', '173', '176', '177', '178', '181', '182', '183') 
+                                        THEN c206_dataassinatura
+                                        ELSE null
+                                    END c206_dataassinatura,
                                     op01_numerocontratoopc, 
                                     op01_dataassinaturacop
                              FROM conlancamrec
@@ -295,20 +301,22 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                AND c74_data BETWEEN '". $this->sDataInicial ." 'AND '". $this->sDataFinal ."'
                                AND ((c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) != '49') 
                                       OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
-                             GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm, op01_numerocontratoopc, op01_dataassinaturacop
+                                      AND c70_valor = " . $oCodDoc2->c70_valor . "
+                             GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, c206_nroconvenio, c206_dataassinatura, k81_numcgm, op01_numerocontratoopc, op01_dataassinaturacop
                              ORDER BY 1, 4, 2";
-                         
+                           
                             $result = db_query($sSql);
                 
                             $aDadosCgm11 = array();
 
                             for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++) {
-
                                 $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
 
-                                $sHashCgm = $sHash10.$sHash11.$oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
+                                $sHash11 = $oDadosRec->o70_codigo . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar . $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
 
-                                if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->z01_cgccpf != ''){
+                                $sHashCgm = $sHash10 . $sHash11;
+
+                                if (!isset($aDadosCgm11[$sHashCgm])){
                                     
                                     $oDados11 = new stdClass();
                                     $oDados11->si26_tiporegistro = 11;
@@ -331,17 +339,12 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                     $aDadosCgm11[$sHashCgm] = $oDados11;
 
                                 } 
-
-                                if($oCodFontRecursos->z01_cgccpf != ''){
-                                    $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
-                                }
-
+                                $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
                             }
 
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
-                                
+                        
                             if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                                                       
-                                
                                 $aDados = new stdClass();
                                 $aDados->si26_tiporegistro = 11;
                                 $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
@@ -365,11 +368,11 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                             }
 
-                        } elseif (array_key_exists($sHash10.$sHash11, $aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
+                        // } elseif (array_key_exists($sHash10.$sHash11, $aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
                             
-                            $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
+                           // $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
 
-                        }
+                        // }
                     }
                 }
             }
@@ -469,5 +472,4 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         $oGerarREC->gerarDados();
 
     }
-
 }

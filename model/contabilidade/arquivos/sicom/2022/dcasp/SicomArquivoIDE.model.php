@@ -95,7 +95,7 @@ class SicomArquivoIDE extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clidedcasp->si200_cnpjorgao           = $oDadosIde->cnpjorgao;
       $clidedcasp->si200_codorgao            = $oDadosIde->codorgao;
       $clidedcasp->si200_tipoorgao           = $oDadosIde->tipoorgao;
-      $clidedcasp->si200_tipodemcontabil     = $oDadosIde->tipoorgao == '2' ? 2 : 1;
+      $clidedcasp->si200_tipodemcontabil     = $oDadosIde->tipoorgao == '2' ? ($this->sTipoGeracao == 'CONSOLIDADO' ? 2 : 1) : 1;
       $clidedcasp->si200_exercicioreferencia = db_getsession("DB_anousu");
       $clidedcasp->si200_datageracao         = date("d-m-Y");
       $clidedcasp->si200_codcontroleremessa  = ' ';

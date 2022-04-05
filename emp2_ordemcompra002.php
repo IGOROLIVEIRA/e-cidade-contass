@@ -263,6 +263,8 @@ for ($i = 0; $i < $num; $i++) {
     $e30_numdec = 4;
   }
 
+  $resultado = db_utils::fieldsMemory($resultitem, $n);
+
   $pdf1->numdec         = $e30_numdec;
   $pdf1->valoritem      = 'm52_valor';
   $pdf1->vlrunitem      = 'm52_vlruni';
@@ -276,14 +278,8 @@ for ($i = 0; $i < $num; $i++) {
   $pdf1->Snumero        = "pc11_numero";
   $pdf1->obs_ordcom_orcamval = "pc23_obs";
 
-  $resultado = db_utils::fieldsMemory($resultitem, 0);
-  if ($resultado->pc01_servico ==  't' && $resultado->e62_servicoquantidade == 'f') {
-    $pdf1->vlrunitem      = 'm52_valor';
-  }
-
   $pdf1->imprime();
 }
-
 
 
 if ($flag_imprime == true) {
