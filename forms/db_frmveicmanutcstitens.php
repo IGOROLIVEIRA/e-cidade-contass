@@ -445,7 +445,8 @@ db_app::load("estilos.css, grid.style.css");
                                 <td colspan="2" align="center">
                                     <span style="cursor:pointer; height: 17px !important;background-color: #d9d5d5; border-radius: 2px;font-family: Arial, Helvetica, sans-serif, verdana; font-size: 12px; height: 17px; border: 1px solid #999999;padding: 1px 8px; color: #2d2d54;"> <a onclick="incluir_item(event);">Incluir item</a>
                                     </span>
-
+                                </td>
+                            </tr>
                         </table>
 
                     </fieldset>
@@ -464,12 +465,8 @@ db_app::load("estilos.css, grid.style.css");
                                                 <td class="cabec"><strong>Quantidade</strong></td>
                                                 <td class="cabec"><strong>Valor Unitário</strong></td>
                                                 <td class="cabec"><strong>Valor Total</strong></td>
-                                                <!--<td class="cabec" id="material"><strong>Material</strong></td>
-                                            <td class="cabec" style="display:none;" id="descri"><strong>Descrição do Material</strong></td>-->
                                                 <td class="cabec"><b>Opções</b></td>
                                             </tr>
-
-
                                         </table>
                                     </td>
                                 </tr>
@@ -982,14 +979,13 @@ db_app::load("estilos.css, grid.style.css");
 
     function js_pesquisaplaca(mostra) {
         if (document.form1.ve01_placa.value != '') {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave_placa=' + document.form1.ve01_placa.value + '&funcao_js=parent.js_mostraveiculosplaca', 'Pesquisa', false);
+            js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave_placa=' + document.form1.ve01_placa.value + '&funcao_js=parent.js_mostraveiculosplaca', 'Pesquisa', false);
         } else {
             document.form1.ve01_placa.value = '';
         }
     }
 
     function js_mostraveiculosplaca(chave, chave2) {
-        alert(chave);
         document.form1.ve62_veiculos.value = chave;
         js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve62_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
     }
