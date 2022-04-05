@@ -320,8 +320,9 @@ ob_start();
         <?php
             if(db_getsession("DB_anousu") >= 2021){
                 $nSaldoFonteAno = getSaldoPlanoContaFonte("'101'", $dtini, $dtfim, $instits);
-                $nRPSEMDisponibilidade = $nRPInscritosExercicio - $nSaldoFonteAno;
-                if($nRPSEMDisponibilidade < 0){
+                $nRpAPagarFonte = getSaldoAPagarRPFonte("'101'", $dtini, $dtfim, $instits);
+                $nRPSEMDisponibilidade = $nSaldoFonteAno - ($nRPInscritosExercicio + $nRpAPagarFonte);
+                if($nRPSEMDisponibilidade > 0){
                     $nRPSEMDisponibilidade = 0;
                 }
                 if($dtfim < db_getsession("DB_anousu")."-12-31" ){
@@ -330,7 +331,7 @@ ob_start();
                 echo "<tr style='height:20px;'>";
                 echo  "<td class='s16 bdleft' colspan='8'>RESTO A PAGAR (PROCESSADOS E NÃO PROCESSADOS) INSCRITOS SEM DISPONIBILIDADE DE CAIXA (D)</td>";
                 echo "<td class='s15'>";
-                echo db_formatar($nRPSEMDisponibilidade,"f");
+                echo db_formatar(abs($nRPSEMDisponibilidade),"f");
                 echo "</td>";
                 echo "</tr>";
 
@@ -342,7 +343,7 @@ ob_start();
                 echo "</td>";
                 echo "</tr>";
 
-                $nTotalAPlicado = $nSubTotalC - $nRPSEMDisponibilidade + $nRPAnteriorSEMDisponibilidade;
+                $nTotalAPlicado = $nSubTotalC - abs($nRPSEMDisponibilidade) + $nRPAnteriorSEMDisponibilidade;
                 echo "<tr style='height:20px;'>";
                 echo  "<td class='s17 bdleft' colspan='8'>TOTAL APLICADO (F = C - D + E)</td>";
                 echo "<td class='s18'>";
