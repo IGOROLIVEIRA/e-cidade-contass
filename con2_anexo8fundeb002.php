@@ -1520,9 +1520,9 @@ ob_start();
                     <td class="s11" dir="ltr"></td>
                     <td class="s12" dir="ltr" colspan="5">11 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
                     <?php
-                        $nRPIncritosSemDesponibilidade118 = 0;
                         $nRPIncritosSemDesponibilidade119 = 0;
                         $nRPIncritosSemDesponibilidade166 = 0;
+                        $nRPIncritosSemDesponibilidade118 = 0;
                         $nRPIncritosSemDesponibilidade167 = 0;
                         if($dtfim == $dtfimExercicio){
                             $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
@@ -1581,10 +1581,10 @@ ob_start();
                     <td class="s5" dir="ltr"></td>
                     <td class="s47" dir="ltr" colspan="5">13 - TOTAL (10 - 11 + 12)</td>
                     <?php
-                        $nTotalPagoItem13Fonte118 =  $nTotalPagoItem10Fonte118 + ($nRPNPAnteriorSemDispFonte118);
-                        $nTotalPagoItem13Fonte119 =  $nTotalPagoItem10Fonte119 + ($nRPNPAnteriorSemDispFonte119);
-                        $nTotalPagoItem13Fonte166 =  $nTotalPagoItem10Fonte166 + ($nRPNPAnteriorSemDispFonte166);
-                        $nTotalPagoItem13Fonte167 =  $nTotalPagoItem10Fonte167 + ($nRPNPAnteriorSemDispFonte167);
+                        $nTotalPagoItem13Fonte118 =  ($nTotalPagoItem10Fonte118 - $nRPIncritosSemDesponibilidade118) + ($nRPNPAnteriorSemDispFonte118);
+                        $nTotalPagoItem13Fonte119 =  ($nTotalPagoItem10Fonte119 - $nRPIncritosSemDesponibilidade119) + ($nRPNPAnteriorSemDispFonte119);
+                        $nTotalPagoItem13Fonte166 =  ($nTotalPagoItem10Fonte166 - $nRPIncritosSemDesponibilidade166) + ($nRPNPAnteriorSemDispFonte166);
+                        $nTotalPagoItem13Fonte167 =  ($nTotalPagoItem10Fonte167 - $nRPIncritosSemDesponibilidade167) + ($nRPNPAnteriorSemDispFonte167);
 
                         echo "<td class='s48' dir='ltr'>";
                         echo db_formatar($nTotalPagoItem13Fonte118,"f");
