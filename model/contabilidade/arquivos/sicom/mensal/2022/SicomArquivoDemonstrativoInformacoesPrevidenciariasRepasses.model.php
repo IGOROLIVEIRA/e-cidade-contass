@@ -150,8 +150,8 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
             }
         }
 
-        $sSql = "SELECT diprbasecontribuicao.*, c236_orgao FROM diprbasecontribuicao LEFT JOIN dipr ON c236_coddipr = c237_coddipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c237_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr202022 where si231_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si231_instit = " . db_getsession("DB_instit") . ");";
-
+        $sSql = "SELECT diprbasecontribuicao.*, CASE WHEN c237_tipoente = 1 THEN i1.si09_codorgaotce WHEN c237_tipoente = 2 THEN i2.si09_codorgaotce WHEN c237_tipoente = 3 THEN i3.si09_codorgaotce END as c236_orgao FROM diprbasecontribuicao LEFT JOIN dipr ON c236_coddipr = c237_coddipr LEFT JOIN db_config db1 ON db1.numcgm = c236_numcgmexecutivo LEFT JOIN infocomplementaresinstit i1 ON i1.si09_instit = db1.codigo LEFT JOIN db_config db2 ON db2.numcgm = c236_numcgmlegislativo LEFT JOIN infocomplementaresinstit i2 ON i2.si09_instit = db2.codigo LEFT JOIN db_config db3 ON db3.numcgm = c236_numcgmgestora LEFT JOIN infocomplementaresinstit i3 ON i3.si09_instit = db3.codigo WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c237_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr202022 where si231_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si231_instit = " . db_getsession("DB_instit") . ");";
+    
         $rsResult20 = db_query($sSql);
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
@@ -182,7 +182,7 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
             }
         }
          
-        $sSql = "SELECT diprbaseprevidencia.*, c236_orgao FROM diprbaseprevidencia LEFT JOIN dipr ON c236_coddipr = c238_coddipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c238_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr302022 where si232_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si232_instit = " . db_getsession("DB_instit") . ");";
+        $sSql = "SELECT diprbaseprevidencia.*, CASE WHEN c238_tipoente = 1 THEN i1.si09_codorgaotce WHEN c238_tipoente = 2 THEN i2.si09_codorgaotce WHEN c238_tipoente = 3 THEN i3.si09_codorgaotce END as c236_orgao FROM diprbaseprevidencia LEFT JOIN dipr ON c236_coddipr = c238_coddipr LEFT JOIN db_config db1 ON db1.numcgm = c236_numcgmexecutivo LEFT JOIN infocomplementaresinstit i1 ON i1.si09_instit = db1.codigo LEFT JOIN db_config db2 ON db2.numcgm = c236_numcgmlegislativo LEFT JOIN infocomplementaresinstit i2 ON i2.si09_instit = db2.codigo LEFT JOIN db_config db3 ON db3.numcgm = c236_numcgmgestora LEFT JOIN infocomplementaresinstit i3 ON i3.si09_instit = db3.codigo WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c238_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr302022 where si232_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si232_instit = " . db_getsession("DB_instit") . ");";
 
         $rsResult30 = db_query($sSql);
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
@@ -214,8 +214,8 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
             }
         }
 
-        $sSql = "SELECT diprdeducoes.*, c236_orgao FROM diprdeducoes LEFT JOIN dipr ON c236_coddipr = c239_coddipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c239_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr402022 where si233_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si233_instit = " . db_getsession("DB_instit") . ");";
-        
+        $sSql = "SELECT diprdeducoes.*, CASE WHEN c239_tipoente = 1 THEN i1.si09_codorgaotce WHEN c239_tipoente = 2 THEN i2.si09_codorgaotce WHEN c239_tipoente = 3 THEN i3.si09_codorgaotce END as c236_orgao FROM diprdeducoes LEFT JOIN dipr ON c236_coddipr = c239_coddipr LEFT JOIN db_config db1 ON db1.numcgm = c236_numcgmexecutivo LEFT JOIN infocomplementaresinstit i1 ON i1.si09_instit = db1.codigo LEFT JOIN db_config db2 ON db2.numcgm = c236_numcgmlegislativo LEFT JOIN infocomplementaresinstit i2 ON i2.si09_instit = db2.codigo LEFT JOIN db_config db3 ON db3.numcgm = c236_numcgmgestora LEFT JOIN infocomplementaresinstit i3 ON i3.si09_instit = db3.codigo WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c239_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr402022 where si233_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si233_instit = " . db_getsession("DB_instit") . ");";
+
         $rsResult40 = db_query($sSql);
         for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
@@ -245,8 +245,8 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
             }
         }
 
-        $sSql = "SELECT dipraportes.*, c236_orgao FROM dipraportes LEFT JOIN dipr ON c236_coddipr = c240_coddipr WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c240_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr502022 where si234_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si234_instit = " . db_getsession("DB_instit") . ");";
-       
+        $sSql = "SELECT dipraportes.*, CASE WHEN c240_tipoente = 1 THEN i1.si09_codorgaotce WHEN c240_tipoente = 2 THEN i2.si09_codorgaotce WHEN c240_tipoente = 3 THEN i3.si09_codorgaotce END as c236_orgao FROM dipraportes LEFT JOIN dipr ON c236_coddipr = c240_coddipr LEFT JOIN db_config db1 ON db1.numcgm = c236_numcgmexecutivo LEFT JOIN infocomplementaresinstit i1 ON i1.si09_instit = db1.codigo LEFT JOIN db_config db2 ON db2.numcgm = c236_numcgmlegislativo LEFT JOIN infocomplementaresinstit i2 ON i2.si09_instit = db2.codigo LEFT JOIN db_config db3 ON db3.numcgm = c236_numcgmgestora LEFT JOIN infocomplementaresinstit i3 ON i3.si09_instit = db3.codigo WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c240_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' AND not exists (select 1 from dipr502022 where si234_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si234_instit = " . db_getsession("DB_instit") . ");";
+
         $rsResult50 = db_query($sSql);
         for ($iCont50 = 0; $iCont50 < pg_num_rows($rsResult50); $iCont50++) {
 
