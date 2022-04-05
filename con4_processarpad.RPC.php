@@ -431,7 +431,7 @@ switch($oParam->exec) {
 
              $oRetorno->status  = 2;
              $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
-             $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+             $oRetorno->message = $sGetMessage;
 
            }
          }
