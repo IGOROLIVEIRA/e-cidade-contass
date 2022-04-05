@@ -1479,19 +1479,19 @@ ob_start();
                     <td class="s21" dir="ltr" colspan="5">10 - TOTAL (6 + 9)</td>
                     <?php
                         echo "<td class='s22' dir='ltr'>";
-                        $nTotalPagoItem10Fonte118 = $pagoFuncao118 + $aTotoalPago118;
+                        $nTotalPagoItem10Fonte118 = $pagoFuncao118 + $aTotalPago118;
                         echo db_formatar($nTotalPagoItem10Fonte118, "f");
                         echo "</td>";
                         echo "<td class='s22' dir='ltr'>";
-                        $nTotalPagoItem10Fonte119 = $pagoFuncao119 + $aTotoalPago119;
+                        $nTotalPagoItem10Fonte119 = $pagoFuncao119 + $aTotalPago119;
                         echo db_formatar($nTotalPagoItem10Fonte119, "f");
                         echo "</td>";
                         echo "<td class='s22' dir='ltr'>";
-                        $nTotalPagoItem10Fonte166 = $pagoFuncao166 + $aTotoalPago166;
+                        $nTotalPagoItem10Fonte166 = $pagoFuncao166 + $aTotalPago166;
                         echo db_formatar($nTotalPagoItem10Fonte166, "f");
                         echo "</td>";
                         echo "<td class='s22' dir='ltr'>";
-                        $nTotalPagoItem10Fonte167 = $pagoFuncao167 + $aTotoalPago167;
+                        $nTotalPagoItem10Fonte167 = $pagoFuncao167 + $aTotalPago167;
                         echo db_formatar($nTotalPagoItem10Fonte167, "f");
                         echo "</td>";
                     ?>
@@ -1520,15 +1520,39 @@ ob_start();
                     <td class="s11" dir="ltr"></td>
                     <td class="s12" dir="ltr" colspan="5">11 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
                     <?php
-                        $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
-                        $nSaldoFonteAno119 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
-                        $nSaldoFonteAno166 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
-                        $nSaldoFonteAno167 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
+                        $nRPIncritosSemDesponibilidade118 = 0;
+                        $nRPIncritosSemDesponibilidade119 = 0;
+                        $nRPIncritosSemDesponibilidade166 = 0;
+                        $nRPIncritosSemDesponibilidade167 = 0;
+                        if($dtfim == $dtfimExercicio){
+                            $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
+                            $nSaldoFonteAno119 = getSaldoPlanoContaFonte("'119'", $dtini, $dtfim, $instits);
+                            $nSaldoFonteAno166 = getSaldoPlanoContaFonte("'166'", $dtini, $dtfim, $instits);
+                            $nSaldoFonteAno167 = getSaldoPlanoContaFonte("'167'", $dtini, $dtfim, $instits);
+                            $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                            $nRPSemDesponibilidade118 = $aTotalPago118 - $nSaldoFonteAno118;
+                            $nRPSemDesponibilidade119 = $aTotalPago119 - $nSaldoFonteAno119;
+                            $nRPSemDesponibilidade166 = $aTotalPago166 - $nSaldoFonteAno166;
+                            $nRPSemDesponibilidade167 = $aTotalPago167 - $nSaldoFonteAno167;
+
+                            if($nRPSemDesponibilidade118 > 0){
+                                $nRPIncritosSemDesponibilidade118 = $nRPSemDesponibilidade118;
+                            }
+                            if($nRPSemDesponibilidade119 > 0){
+                                $nRPIncritosSemDesponibilidade119 = $nRPSemDesponibilidade119;
+                            }
+                            if($nRPSemDesponibilidade166 > 0){
+                                $nRPIncritosSemDesponibilidade166 = $nRPSemDesponibilidade166;
+                            }
+                            if($nRPSemDesponibilidade167 > 0){
+                                $nRPIncritosSemDesponibilidade167 = $nRPSemDesponibilidade167;
+                            }
+                        }
                     ?>
-                    <td class="s10" dir="ltr">0,00</td>
-                    <td class="s10" dir="ltr">0,00</td>
-                    <td class="s10" dir="ltr">0,00</td>
-                    <td class="s10" dir="ltr">0,00</td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nRPIncritosSemDesponibilidade118,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nRPIncritosSemDesponibilidade119,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nRPIncritosSemDesponibilidade166,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nRPIncritosSemDesponibilidade167,"f"); ?></td>
                 </tr>
                 <tr style="height: 20px">
                     <td class="s8" dir="ltr"></td>
