@@ -57,7 +57,7 @@ $iAnoSessao = db_getsession("DB_anousu");
         <legend><b>Importação Saldo Conta Corrente</b></legend>
         <table width="100%">
           <tr>
-            <td nowrap="nowrap"><b>Ano:</b></td>
+            <td nowrap="nowrap"><b>Ano Destino:</b></td>
             <td>
               <?php
                 db_input("iAnoSessao", 10, null, true, 'text', 3);

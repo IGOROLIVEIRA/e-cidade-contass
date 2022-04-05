@@ -40,134 +40,94 @@ try {
 
 		$iAnoUsu = $oParam->ano;
 
-		$sSqlConSaldoCtbExt = "	SELECT c.ces01_reduz AS reduzido,
-											c.ces01_fonte AS fonte,
-											c61_codtce AS codtce,
-											c.ces01_valor AS valor,
-											c.ces01_anousu AS anousu,
-											c.ces01_inst AS instit,
-											CASE
-												WHEN c.ces01_valor < 0 THEN c62_vlrcre
-												ELSE c62_vlrdeb
-											END AS saldoinicial,
-											(SELECT coalesce(sum(ces01_valor),0)
-												FROM conextsaldo
-												WHERE ces01_reduz = c.ces01_reduz
-													AND ces01_anousu = c.ces01_anousu) AS totalconta,
-											'EXT' AS tipo
-									FROM conextsaldo AS c
-										INNER JOIN conplanoexe ON c62_reduz = c.ces01_reduz AND c62_anousu = c.ces01_anousu
-										INNER JOIN conplanoreduz ON c61_reduz = c.ces01_reduz AND c61_anousu = c.ces01_anousu
-									WHERE c.ces01_anousu = {$iAnoUsu}
-											AND c.ces01_valor <> 0
-									UNION ALL
-									SELECT c.ces02_reduz AS reduzido,
-											c.ces02_fonte AS fonte,
-											c61_codtce AS codtce,
-											c.ces02_valor AS valor,
-											c.ces02_anousu AS anousu,
-											c.ces02_inst AS instit,
-											CASE
-												WHEN c.ces02_valor < 0 THEN c62_vlrcre
-												ELSE c62_vlrdeb
-											END AS saldoinicial,
-											(SELECT coalesce(sum(ces02_valor),0)
-												FROM conctbsaldo
-												WHERE ces02_reduz = c.ces02_reduz
-													AND ces02_anousu = c.ces02_anousu) AS totalconta,
-											'CTB' AS tipo
-									FROM conctbsaldo AS c
-										INNER JOIN conplanoexe ON c62_reduz = c.ces02_reduz AND c.ces02_anousu = c62_anousu
-										INNER JOIN conplanoreduz ON c61_reduz = c.ces02_reduz AND c61_anousu = c.ces02_anousu
-									WHERE c.ces02_anousu = {$iAnoUsu}
-										AND c.ces02_valor <> 0";
+		$sSqlContaCorrenteSaldo = "";
 
-			$rsConSaldoCtbExt = db_query($sSqlConSaldoCtbExt);
+		$rsContaCorrenteSaldo = db_query($sSqlContaCorrenteSaldo);
 
-			if (pg_num_rows($rsConSaldoCtbExt) < 1) {
-				throw new DBException(urlencode('ERRO - [ 2 ] - Nenhum registro encontrado nas tabelas conctbsaldo/conextsaldo!'));
-			}
+        if (pg_num_rows($rsContaCorrenteSaldo) < 1) {
+            throw new DBException(urlencode('ERRO - [ 2 ] - Nenhum registro encontrado con saldo!'));
+        }
 
-			db_inicio_transacao();
+		db_inicio_transacao();
 
-			$sLogContasNaoImplantadas = '';
+		$sLogContasNaoImplantadas = '';
 
-			for ($iCont = 0;$iCont < pg_num_rows($rsConSaldoCtbExt); $iCont++) {
+        for ($iCont = 0;$iCont < pg_num_rows($rsContaCorrenteSaldo); $iCont++) {
 
-				$oConta = db_utils::fieldsMemory($rsConSaldoCtbExt,$iCont);
+            $oConta = db_utils::fieldsMemory($rsContaCorrenteSaldo, $iCont);
 
-				if ($oConta->saldoinicial != abs($oConta->totalconta)) {
+            if ($oConta->saldoinicial != abs($oConta->totalconta)) {
 
-					$sLogContasNaoImplantadas .= "Tipo: {$oConta->tipo}, ";
-					$sLogContasNaoImplantadas .= "Cod. Reduzido: {$oConta->reduzido}, ";
-					$sLogContasNaoImplantadas .= "Fonte: {$oConta->fonte}, ";
-					$sLogContasNaoImplantadas .= "Cod. TCE: {$oConta->codtce}, ";
-					$sLogContasNaoImplantadas .= "Valor: {$oConta->valor}, ";
-					$sLogContasNaoImplantadas .= "Instituição: {$oConta->instit}, ";
-					$sLogContasNaoImplantadas .= "Saldo Inicial: {$oConta->saldoinicial}. \n\n";
+                $sLogContasNaoImplantadas .= "Tipo: {$oConta->tipo}, ";
+                $sLogContasNaoImplantadas .= "Cod. Reduzido: {$oConta->reduzido}, ";
+                $sLogContasNaoImplantadas .= "Fonte: {$oConta->fonte}, ";
+                $sLogContasNaoImplantadas .= "Cod. TCE: {$oConta->codtce}, ";
+                $sLogContasNaoImplantadas .= "Valor: {$oConta->valor}, ";
+                $sLogContasNaoImplantadas .= "Instituição: {$oConta->instit}, ";
+                $sLogContasNaoImplantadas .= "Saldo Inicial: {$oConta->saldoinicial}. \n\n";
 
-					continue;
+                continue;
 
-				}
+            }
 
-				$oDaoContaCorrenteDetalhe 	= db_utils::getDao('contacorrentedetalhe');
-              	$oDaoVerificaDetalhe 		= db_utils::getDao('contacorrentedetalhe');
+            $oDaoContaCorrenteDetalhe 	= db_utils::getDao('contacorrentedetalhe');
+            $oDaoVerificaDetalhe 		= db_utils::getDao('contacorrentedetalhe');
 
-              	$iReduzido 		= $oConta->reduzido;
-				$iContaCorrente = 103;
-				$iInstituicao 	= db_getsession("DB_instit");
-				$iTipoReceita 	= $oConta->fonte;
+            $iReduzido 		= $oConta->reduzido;
+            $iContaCorrente = 103;
+            $iInstituicao 	= db_getsession("DB_instit");
+            $iTipoReceita 	= $oConta->fonte;
 
-				$sWhereVerificacao =  "     c19_contacorrente       = {$iContaCorrente}    ";
-				$sWhereVerificacao .= " and c19_orctiporec          = {$iTipoReceita}      ";
-				$sWhereVerificacao .= " and c19_instit              = {$iInstituicao}      ";
-				$sWhereVerificacao .= " and c19_reduz               = {$iReduzido}         ";
-				$sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}           ";
+            $sWhereVerificacao =  "     c19_contacorrente       = {$iContaCorrente}    ";
+            $sWhereVerificacao .= " and c19_orctiporec          = {$iTipoReceita}      ";
+            $sWhereVerificacao .= " and c19_instit              = {$iInstituicao}      ";
+            $sWhereVerificacao .= " and c19_reduz               = {$iReduzido}         ";
+            $sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}           ";
 
-              	$sSqlVerificaDetalhe 	= $oDaoVerificaDetalhe->sql_query_file(null, "*", null, $sWhereVerificacao);
-              	$rsVerificacao 			= $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);
+            $sSqlVerificaDetalhe 	= $oDaoVerificaDetalhe->sql_query_file(null, "*", null, $sWhereVerificacao);
+            $rsVerificacao 			= $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);
 
-				$oDaoContaCorrenteDetalhe->c19_contacorrente 		= $iContaCorrente;
-				$oDaoContaCorrenteDetalhe->c19_orctiporec 			= $iTipoReceita;
-				$oDaoContaCorrenteDetalhe->c19_instit 				= $iInstituicao;
-				$oDaoContaCorrenteDetalhe->c19_reduz 				= $iReduzido;
-				$oDaoContaCorrenteDetalhe->c19_conplanoreduzanousu 	= $iAnoUsu;
+            $oDaoContaCorrenteDetalhe->c19_contacorrente 		= $iContaCorrente;
+            $oDaoContaCorrenteDetalhe->c19_orctiporec 			= $iTipoReceita;
+            $oDaoContaCorrenteDetalhe->c19_instit 				= $iInstituicao;
+            $oDaoContaCorrenteDetalhe->c19_reduz 				= $iReduzido;
+            $oDaoContaCorrenteDetalhe->c19_conplanoreduzanousu 	= $iAnoUsu;
 
-              	if ($oDaoVerificaDetalhe->numrows == 0) {
+            if ($oDaoVerificaDetalhe->numrows == 0) {
 
-                  	$oDaoContaCorrenteDetalhe->incluir(null);
-                  	if ($oDaoContaCorrenteDetalhe->erro_status == 0 || $oDaoContaCorrenteDetalhe->erro_status == '0') {
-                      	$sqlerro = true;
-                      	throw new DBException(urlencode('ERRO - [ 3 ] - Erro ao incluir no Conta Corrente Detalhe!: '
-                        	. $oDaoContaCorrenteDetalhe->erro_msg));
-                  	}
+                $oDaoContaCorrenteDetalhe->incluir(null);
+                if ($oDaoContaCorrenteDetalhe->erro_status == 0 || $oDaoContaCorrenteDetalhe->erro_status == '0') {
+                    $sqlerro = true;
+                    throw new DBException(urlencode('ERRO - [ 3 ] - Erro ao incluir no Conta Corrente Detalhe!: '
+                        . $oDaoContaCorrenteDetalhe->erro_msg));
+                }
 
-					salvarSaldo($oDaoContaCorrenteDetalhe, $oConta->valor);
-                  	continue;
-              	}
+                salvarSaldo($oDaoContaCorrenteDetalhe, $oConta->valor);
+                continue;
+            }
 
-				if ($oDaoVerificaDetalhe->numrows > 0) {
-					$sDescricaoContaCorrenteErro = "103 - Fonte de Recurso";
-					$oContaCorrente = db_utils::fieldsMemory($rsVerificacao, 0);
-				}
+            if ($oDaoVerificaDetalhe->numrows > 0) {
+                $sDescricaoContaCorrenteErro = "103 - Fonte de Recurso";
+                $oContaCorrente = db_utils::fieldsMemory($rsVerificacao, 0);
+            }
 
-				salvarSaldo($oContaCorrente, $oConta->valor);
+            salvarSaldo($oContaCorrente, $oConta->valor);
 
-              	$oRetorno->message = urlencode("Implantação no conta corrente detalhe realizada com sucesso.");
+            $oRetorno->message = urlencode("Implantação no conta corrente detalhe realizada com sucesso.");
 
-			}
+        }
 
-			$oRetorno->sArquivoLog = '';
+        $oRetorno->sArquivoLog = '';
 
-			if (!empty($sLogContasNaoImplantadas)) {
+        if (!empty($sLogContasNaoImplantadas)) {
 
-				$sArquivoLog = 'tmp/implantacao_saldo_conta_corrente_' . date('Y-m-d_H:i:s') . '.log';
-				file_put_contents($sArquivoLog, $sLogContasNaoImplantadas);
-				$oRetorno->sArquivoLog = $sArquivoLog;
+            $sArquivoLog = 'tmp/implantacao_saldo_conta_corrente_' . date('Y-m-d_H:i:s') . '.log';
+            file_put_contents($sArquivoLog, $sLogContasNaoImplantadas);
+            $oRetorno->sArquivoLog = $sArquivoLog;
 
-			}
+        }
 
-			db_fim_transacao($sqlerro);
+        db_fim_transacao($sqlerro);
 
 		break;
 
