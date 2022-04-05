@@ -271,7 +271,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
             $nTotalItens = 0;
             
                 
-            $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,pc11_quant,pc23_valor,pcorcamval.pc23_vlrun,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
+            $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,m61_abrev,pc11_quant,pc23_valor,pc23_obs,pcorcamval.pc23_vlrun,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
 
             $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$sequencial}";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
@@ -412,7 +412,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
                 $oDadosDaLinha = new stdClass();
                 $oDadosDaLinha->seq = $iCont + 1;
                 $oDadosDaLinha->item = $oResult->pc01_codmater;
-                $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+                $oDadosDaLinha->descricao = strtoupper($oResult->pc01_descrmater);
                 
                 if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
                     
@@ -422,7 +422,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
                     } else {
                         $oDadosDaLinha->valorUnitario = number_format($oResult->mediapercentual, 2) . "%";
                     }
-                    $oDadosDaLinha->unidadeDeMedida = $oResult->m61_descr;
+                    $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                 } else {
                     $oDadosDaLinha->valorUnitario = "R$".number_format($oResult->pc23_vlrun, $oGet->quant_casas, ",", ".");
@@ -432,8 +432,13 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
                     } else {
                         $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
                     }
-                    $oDadosDaLinha->unidadeDeMedida = $oResult->m61_descr;
+                    $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+                }
+                if($oResult->pc23_obs==""){
+                    $oDadosDaLinha->marca = "-";
+                }else{
+                    $oDadosDaLinha->marca = strtoupper($oResult->pc23_obs);
                 }
             echo"<tr>";
                 echo"<td>".$oDadosDaLinha->item."</td>";
@@ -448,7 +453,7 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
             
 
            
-                echo"<td>-</td>";
+                echo"<td>".$oDadosDaLinha->marca."</td>";
            
 
           

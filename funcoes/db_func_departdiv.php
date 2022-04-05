@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "distinct departdiv.t30_codigo,departdiv.t30_descr,departdiv.t30_depto,departdiv.t30_ativo,departdiv.t30_numcgm";
+$campos = "distinct departdiv.t30_codigo,departdiv.t30_descr,departdiv.t30_depto,db_depart.descrdepto,departdiv.t30_ativo,departdiv.t30_numcgm,cgm.z01_nome";
 ?>
