@@ -85,7 +85,7 @@ $clrotulo->label("rh01_numcgm");
           </td>
           <td>
             <?
-            db_input('h83_matricula', 8, $Ih83_matricula, true, 'text', $db_opcao, "")
+            db_input('h83_matricula', 10, $Ih83_matricula, true, 'text', $db_opcao, "", "", "", "width: 84px;")
             ?>
           </td>
         </tr>
