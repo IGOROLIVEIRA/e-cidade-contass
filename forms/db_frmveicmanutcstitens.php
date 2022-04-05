@@ -988,6 +988,15 @@ db_app::load("estilos.css, grid.style.css");
     function js_mostraveiculosplaca(chave, chave2) {
         document.form1.ve62_veiculos.value = chave;
         js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve62_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
+        js_buscarultimaretirada(false);
+    }
+
+    function js_buscarultimaretirada(mostra) {
+        js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veicretirada', 'func_veicretirada.php?pesquisa_chave_veiculo=' + document.form1.ve62_veiculos.value + '&funcao_js=parent.js_mostraretirada', 'Pesquisa', false);
+    }
+
+    function js_mostraretirada(chave, erro, dtRetirada, sHoraRetirada) {
+        document.form1.ve65_veicretirada.value = chave;
     }
 
     function js_mostraempempenho2(chave1, chave2, chave3, chave4) {
