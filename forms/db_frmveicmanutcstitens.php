@@ -992,11 +992,13 @@ db_app::load("estilos.css, grid.style.css");
     }
 
     function js_buscarultimaretirada(mostra) {
+        js_divCarregando('Aguarde... Carregando Retirada', 'msgbox');
         js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veicretirada', 'func_veicretirada.php?pesquisa_chave_veiculo=' + document.form1.ve62_veiculos.value + '&funcao_js=parent.js_mostraretirada', 'Pesquisa', false);
     }
 
     function js_mostraretirada(chave, erro, dtRetirada, sHoraRetirada) {
         document.form1.ve65_veicretirada.value = chave;
+        js_removeObj("msgbox");
     }
 
     function js_mostraempempenho2(chave1, chave2, chave3, chave4) {

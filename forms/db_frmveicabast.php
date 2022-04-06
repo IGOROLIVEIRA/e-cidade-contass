@@ -790,6 +790,7 @@ db_app::load("estilos.css");
   }
 
   function js_buscarultimaretirada(mostra) {
+    js_divCarregando('Aguarde... Carregando Retirada', 'msgbox');
     js_OpenJanelaIframe('top.corpo', 'db_iframe_veicretirada', 'func_veicretirada.php?pesquisa_chave_veiculo=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraretirada', 'Pesquisa', false);
   }
 
@@ -797,6 +798,7 @@ db_app::load("estilos.css");
     document.form1.ve73_veicretirada.value = chave;
     $("ve60_datasaida").value = js_formatar(dtRetirada, "d");
     $("ve60_horasaida").value = sHoraRetirada;
+    js_removeObj("msgbox");
   }
 
   function js_pesquisaplaca(mostra) {
