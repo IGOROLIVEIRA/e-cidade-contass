@@ -23,7 +23,7 @@ date_default_timezone_set('America/Sao_Paulo');
 db_postmemory($_POST);
 
 $protprocesso = new cl_protprocesso();
-$email        = new PHPMailer(true);
+$email        = new PHPMailer();
 
 $oJson  = new services_json();
 $oParam = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -40,18 +40,18 @@ switch ($oParam->exec) {
         $campos = "p58_codproc,cast(p58_numero||'/'||p58_ano AS varchar) AS p58_numero,z01_numcgm AS p58_numcgm,z01_nome";
 
         switch ($oParam->aba) {
-            case 'geral' :
+            case 'geral':
                 $sSQLF = $protprocesso->sql_query(null, $campos, "p58_codproc DESC", "p58_instit = $instit AND p58_codproc IN ({$oParam->aCodFornec})");
                 $sSQLTN = "select p110_sequencial, p110_vinculonotificacao, p110_tipo from tiposnotificacao order by p110_sequencial";
                 break;
 
-            case 'aberturaprocesso' :
+            case 'aberturaprocesso':
                 $campos .= ",p111_nfe,p111_sequencial";
                 $sSQLF = $protprocesso->sql_query_abertura_processo(null, $campos, "p111_dataenvio DESC", "p58_instit = $instit AND p111_sequencial IN ({$oParam->aCodAberturaProcesso})");
                 $sSQLTN = "select p110_sequencial, p110_vinculonotificacao, p110_tipo from tiposnotificacao where coalesce(p110_vinculonotificacao,0) not in (1) order by p110_sequencial";
                 break;
 
-            case 'previsaopagamento' :
+            case 'previsaopagamento':
                 $campos .= ",p112_nfe,to_char(p112_dataliquidacao,'DD/MM/YYYY') p112_dataliquidacao,to_char(p112_dataprevisao,'DD/MM/YYYY') p112_dataprevisao,p112_sequencial";
                 $sSQLF = $protprocesso->sql_query_previsao_pagamento(null, $campos, "p112_dataenvio DESC", "p58_instit = $instit AND p112_sequencial IN ({$oParam->aCodPrevisaoPagamento})");
                 $sSQLTN = "select p110_sequencial, p110_vinculonotificacao, p110_tipo from tiposnotificacao where coalesce(p110_vinculonotificacao,0) not in (1,2) order by p110_sequencial";
@@ -107,17 +107,15 @@ switch ($oParam->exec) {
 
             foreach ($oParam->fornecedores as $fornecedor) {
 
-                if(isset($fornecedor->codproc_p111)) {
-                    $codigos = explode("-",$fornecedor->codproc_p111);
+                if (isset($fornecedor->codproc_p111)) {
+                    $codigos = explode("-", $fornecedor->codproc_p111);
                     $codproc = $codigos[0];
                     $p111_sequencial = $codigos[1];
-                }
-                else if(isset($fornecedor->codproc_p112)) {
-                    $codigos = explode("-",$fornecedor->codproc_p112);
+                } else if (isset($fornecedor->codproc_p112)) {
+                    $codigos = explode("-", $fornecedor->codproc_p112);
                     $codproc = $codigos[0];
                     $p112_sequencial = $codigos[1];
-                }
-                else {
+                } else {
                     $codproc = $fornecedor->codproc;
                 }
                 $protocolo = $fornecedor->protocolo;
@@ -143,10 +141,10 @@ switch ($oParam->exec) {
                 $email->ClearAllRecipients();
 
                 if (!$enviado) {
-                    $sFornecedoresErroEmail += "Ocorreu um ao enviar email para o fornecedor {$numcgm}, protocolo {$protocolo}\n\n".$email->ErrorInfo;
+                    $sFornecedoresErroEmail += "Ocorreu um ao enviar email para o fornecedor {$numcgm}, protocolo {$protocolo}\n\n" . $email->ErrorInfo;
                 } else {
                     switch ($tiponotificacao->p110_vinculonotificacao) {
-                        case '1' :
+                        case '1':
 
                             $nfaberturaprocesso = new cl_nfaberturaprocesso();
                             $nfaberturaprocesso->p111_codproc = $codproc;
@@ -156,14 +154,14 @@ switch ($oParam->exec) {
 
                             if ($nfaberturaprocesso->erro_status != 1) {
                                 $sFornecErroEmailInsert += array($numcgm => $protocolo);
-                                $erroSQL.= "\n$nfpagamentorealizado->erro_sql";
+                                $erroSQL .= "\n$nfpagamentorealizado->erro_sql";
                             }
 
                             unset($nfaberturaprocesso);
 
                             break;
 
-                        case '2' :
+                        case '2':
 
                             $nfprevisaopagamento  = new cl_nfprevisaopagamento();
                             $nfprevisaopagamento->p112_codproc            = $codproc;
@@ -183,7 +181,7 @@ switch ($oParam->exec) {
 
                             break;
 
-                        case '3' :
+                        case '3':
 
                             $nfpagamentorealizado = new cl_nfpagamentorealizado();
                             $nfpagamentorealizado->p113_codproc             = $codproc;
@@ -227,8 +225,8 @@ if (isset($oRetorno->erro)) {
     $oRetorno->erro = utf8_encode($oRetorno->erro);
 }
 
-for ($i=0; $i<count($oRetorno->tiposnotificacao); $i++){
-    $oRetorno->tiposnotificacao[$i]->p110_tipo = htmlentities($oRetorno->tiposnotificacao[$i]->p110_tipo, UTF-8);
+for ($i = 0; $i < count($oRetorno->tiposnotificacao); $i++) {
+    $oRetorno->tiposnotificacao[$i]->p110_tipo = htmlentities($oRetorno->tiposnotificacao[$i]->p110_tipo, UTF - 8);
 }
 
 echo $oJson->encode($oRetorno);

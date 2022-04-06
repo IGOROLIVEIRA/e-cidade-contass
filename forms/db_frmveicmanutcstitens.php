@@ -90,16 +90,11 @@ db_app::load("estilos.css, grid.style.css");
                                 </td>
                                 <td>
                                     <?
-                                    db_input(
-                                        've62_veiculos',
-                                        10,
-                                        $Ive62_veiculos,
-                                        true,
-                                        'text',
-                                        $db_opcao,
-                                        " onchange='js_pesquisave62_veiculos(false);'"
-                                    );
-                                    db_input('ve01_placa', 10, $Ive01_placa, true, 'text', 3, '')
+                                    db_input('ve62_veiculos', 10, $Ive62_veiculos, true, 'text', $db_opcao, " onchange='js_pesquisave62_veiculos(false);'");
+                                    ?>
+                                    <strong>Placa:</strong>
+                                    <?
+                                    db_input('ve01_placa', 10, $Ive01_placa, true, 'text', $db_opcao, "onchange='js_pesquisaplaca(false);'");
                                     ?>
                                 </td>
                             </tr>
@@ -450,7 +445,8 @@ db_app::load("estilos.css, grid.style.css");
                                 <td colspan="2" align="center">
                                     <span style="cursor:pointer; height: 17px !important;background-color: #d9d5d5; border-radius: 2px;font-family: Arial, Helvetica, sans-serif, verdana; font-size: 12px; height: 17px; border: 1px solid #999999;padding: 1px 8px; color: #2d2d54;"> <a onclick="incluir_item(event);">Incluir item</a>
                                     </span>
-
+                                </td>
+                            </tr>
                         </table>
 
                     </fieldset>
@@ -469,12 +465,8 @@ db_app::load("estilos.css, grid.style.css");
                                                 <td class="cabec"><strong>Quantidade</strong></td>
                                                 <td class="cabec"><strong>Valor Unitário</strong></td>
                                                 <td class="cabec"><strong>Valor Total</strong></td>
-                                                <!--<td class="cabec" id="material"><strong>Material</strong></td>
-                                            <td class="cabec" style="display:none;" id="descri"><strong>Descrição do Material</strong></td>-->
                                                 <td class="cabec"><b>Opções</b></td>
                                             </tr>
-
-
                                         </table>
                                     </td>
                                 </tr>
@@ -982,6 +974,31 @@ db_app::load("estilos.css, grid.style.css");
             //alert("Selecione uma opção Itens do Empenho");
         }
 
+    }
+
+
+    function js_pesquisaplaca(mostra) {
+        if (document.form1.ve01_placa.value != '') {
+            js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave_placa=' + document.form1.ve01_placa.value + '&funcao_js=parent.js_mostraveiculosplaca', 'Pesquisa', false);
+        } else {
+            document.form1.ve01_placa.value = '';
+        }
+    }
+
+    function js_mostraveiculosplaca(chave, chave2) {
+        document.form1.ve62_veiculos.value = chave;
+        js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve62_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
+        js_buscarultimaretirada(false);
+    }
+
+    function js_buscarultimaretirada(mostra) {
+        js_divCarregando('Aguarde... Carregando Retirada', 'msgbox');
+        js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veicretirada', 'func_veicretirada.php?pesquisa_chave_veiculo=' + document.form1.ve62_veiculos.value + '&funcao_js=parent.js_mostraretirada', 'Pesquisa', false);
+    }
+
+    function js_mostraretirada(chave, erro, dtRetirada, sHoraRetirada) {
+        document.form1.ve65_veicretirada.value = chave;
+        js_removeObj("msgbox");
     }
 
     function js_mostraempempenho2(chave1, chave2, chave3, chave4) {
