@@ -39,7 +39,6 @@ include("classes/db_veicabastretirada_classe.php");
 include("classes/db_veicparam_classe.php");
 include("classes/db_veicretirada_classe.php");
 include("classes/db_empveiculos_classe.php");
-include("classes/db_empempenho_classe.php"); 
 require_once("classes/db_condataconf_classe.php");
 
 require("libs/db_app.utils.php");
@@ -54,7 +53,6 @@ $clveicabastretirada     = new cl_veicabastretirada;
 $clveicparam             = new cl_veicparam;
 $clveicretirada          = new cl_veicretirada;
 $clempveiculos           = new cl_empveiculos;
-$clempempenho            = new cl_empempenho;  
 
 $clempveiculos->rotulo->label();
 
@@ -86,37 +84,62 @@ if (isset($incluir)) {
     $datahoraAbastecimento = strtotime($oDataAbast->getDate()." ".$ve70_hora);
     $dataabast = $oDataAbast->getDate();
 
-    $resultadoEmp = $clempempenho->sql_record($clempempenho->sql_query_file($si05_numemp,"*",null,""));
-    $resultadoEmp = db_utils::fieldsMemory($resultadoEmp,0);
+    $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(1,"*",null,""));
+    $resultParamres = db_utils::fieldsMemory($resultParam,0);
 
+    if($resultParamres->ve50_abastempenho==1){
 
-    if($resultadoEmp->e60_vlrutilizado==""){
-      $sql = "select si05_codabast from empveiculos where si05_numemp = $si05_numemp";
+        $resultadoEmp = $clempempenho->sql_record($clempempenho->sql_query_file($si05_numemp,"*",null,""));
+        $resultadoEmp = db_utils::fieldsMemory($resultadoEmp,0);
 
-      $result = db_query($sql);
-      $soma = 0;
-      for($i=0;$i<pg_num_rows($result);$i++){
-        $rsAbastecimento = db_utils::fieldsMemory($result,$i);
-        $sql = "select ve70_valor from veicabast where ve70_codigo = $rsAbastecimento->si05_codabast";
-        $result1 = db_query($sql);
-        $rsAbastecimento1 = db_utils::fieldsMemory($result1,0);
+        
 
-        $valorutilizado += $rsAbastecimento1->ve70_valor;
-      }
-      $clempempenho->e60_vlrutilizado =  $valorutilizado;
-      $clempempenho->sql_query_valorutilizado($si05_numemp);
-      $valorautilizar = $resultadoEmp->e60_vlremp - $valorutilizado;
-    }else{
-      $valorautilizar = $resultadoEmp->e60_vlremp - $resultadoEmp->e60_vlrutilizado;
-    }
+        if(strtotime($resultadoEmp->e60_emiss)>=strtotime($resultParamres->ve50_datacorte)){
+          if($resultadoEmp->e60_vlrutilizado==""){
+            $sql = "select si05_codabast from empveiculos where si05_numemp = $si05_numemp";
+  
+            $result = db_query($sql);
+            $soma = 0;
+            for($i=0;$i<pg_num_rows($result);$i++){
+              $rsAbastecimento = db_utils::fieldsMemory($result,$i);
+              $sql = "select ve70_valor from veicabast where ve70_codigo = $rsAbastecimento->si05_codabast";
+              $result1 = db_query($sql);
+              $rsAbastecimento1 = db_utils::fieldsMemory($result1,0);
+  
+              $valorutilizado += $rsAbastecimento1->ve70_valor;
+            }
+            $clempempenho->e60_vlrutilizado =  $valorutilizado;
+            $clempempenho->sql_query_valorutilizado($si05_numemp);
+            $valorautilizar = $resultadoEmp->e60_vlremp - $valorutilizado;
+          }else{
+            $valorautilizar = $resultadoEmp->e60_vlremp - $resultadoEmp->e60_vlrutilizado;
+          }
+  
+          if($ve70_valor>$valorautilizar){
+              db_msgbox("Usuário: Abastecimento não incluído, valor total do abastecimento ultrapassou o valor disponível no empenho. Saldo disponível R$ $valorautilizar");
+              $sqlerro=true;
+              $erro_msg="Não foi possível incluir.";
+          }
+          if($sqlerro==false){
+            if($resultadoEmp->e60_vlrutilizado==""){
+              $valor = $valorutilizado+$ve70_valor;
+            }else{
+              $valor = $resultadoEmp->e60_vlrutilizado+$ve70_valor;
+            }
+            
+            $clempempenho->e60_vlrutilizado =  $valor;
+            $clempempenho->sql_query_valorutilizado($si05_numemp);
+      
+          }
+        }else{
+              db_msgbox("Usuário: Abastecimento não incluído, data de liberação de validação do empenho maior do que data da Emissão do empenho");
+              $sqlerro=true;
+              $erro_msg="Não foi possível incluir.";
+        }
 
-    
+        
+  }
 
-    if($ve70_valor>$valorautilizar){
-        db_msgbox("Usuário: Abastecimento não incluído, valor total do abastecimento ultrapassou o valor disponível no empenho. Saldo disponível R$ $valorautilizar");
-        $sqlerro=true;
-        $erro_msg="Não foi possível incluir.";
-    }
 
     if (isset($ve70_medida) and $ve70_medida==0) {
     $medidazero=true;
@@ -344,18 +367,6 @@ if (isset($incluir) && $self != "") {
           $sqlerro=true;
           $erro_msg=$clempveiculos->erro_msg;
         }
-    }
-
-    if($sqlerro==false){
-      if($resultadoEmp->e60_vlrutilizado==""){
-        $valor = $valorutilizado+$ve70_valor;
-      }else{
-        $valor = $resultadoEmp->e60_vlrutilizado+$ve70_valor;
-      }
-      
-      $clempempenho->e60_vlrutilizado =  $valor;
-      $clempempenho->sql_query_valorutilizado($si05_numemp);
-
     }
 
     db_fim_transacao($sqlerro); 

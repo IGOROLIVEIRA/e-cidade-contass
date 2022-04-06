@@ -155,15 +155,24 @@ db_query("drop table if exists work_dotacao");
 criaWorkDotacao($sWhereDespesa,array($anousu), $dtini, $dtfim);
 
 
-function getRestosaPagar($aFontes, $dtini, $dtfim, $instits) {
-// ini_set('display_errors', 'On');
-// error_reporting(E_ALL);
-    $clempresto = new cl_empresto();
-    $sSqlOrder = "";
-    $sCampos = " o15_codtri, sum(vlrpag) as vlrpag, sum(vlrpagnproc) as vlrpagnproc ";
-    $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
-    $aEmpRestos = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    return $aEmpRestos;
+function getEmpenhosApagar($aFontes, $dtini, $dtfim, $instits, $tipo) {
+        $clempempenho = new cl_empempenho();
+        $sSqlOrder    = "";
+        $sCampos      = "o15_codtri, sum(e60_vlremp) as vlremp, sum(vlranu) as vlranu,  sum(vlrpag) as vlrpago, sum(vlrliq) as vlrliq ";
+        $sSqlWhere    = " o15_codtri in (".implode(",", $aFontes).") group by 1";
+        $aEmpEmpenho  = $clempempenho->getEmpenhosMovimentosPeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits, $sCampos, $sSqlWhere, $sSqlOrder);
+        $valorEmpLQDAPagar = 0;
+        $valorEmpNaoLQDAPagar = 0;
+        foreach($aEmpEmpenho as $oEmp){
+            $valorEmpLQDAPagar += ($oEmp->vlrliq - $oEmp->vlrpago);
+            $valorEmpNaoLQDAPagar += ($oEmp->vlremp - $oEmp->vlranu - $oEmp->vlrliq);
+        }
+
+        //echo "<pre>";print_r($aEmpEmpenho);exit;
+        if($tipo == 'lqd'){
+            return  $valorEmpLQDAPagar;
+        }
+        return  $valorEmpNaoLQDAPagar;
 }
 
 function getPagamentoFuncao($iFuncao, $aFontes, $dtini, $dtfim, $instits)
@@ -1388,29 +1397,28 @@ ob_start();
                     <td class="s32" dir="ltr"></td>
                     <td class="s33" dir="ltr" colspan="5">7 - RESTOS A PAGAR PROCESSADOS DO EXERCÍCIO</td>
                     <?php
-                        // $aPago118 = getRestosaPagar(array("'118'"), $dtini, $dtfim, $instits);
-                        // $aPago119 = getRestosaPagar(array("'119'"), $dtini, $dtfim, $instits);
-                        // $aPago166 = getRestosaPagar(array("'166'"), $dtini, $dtfim, $instits);
-                        // $aPago167 = getRestosaPagar(array("'167'"), $dtini, $dtfim, $instits);
-                        $aPago118[1] = 0;
-                        $aPago119[1] = 0;
-                        $aPago166[1] = 0;
-                        $aPago167[1] = 0;
-                        $aPago118[2] = 0;
-                        $aPago119[2] = 0;
-                        $aPago166[2] = 0;
-                        $aPago167[2] = 0;
+                        $nLiqAPagar118 = 0;
+                        $nLiqAPagar119 = 0;
+                        $nLiqAPagar166 = 0;
+                        $nLiqAPagar167 = 0;
+                        $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                        if($dtfim == $dtfimExercicio){
+                            $nLiqAPagar118 = getEmpenhosApagar(array("'118'"), $dtini, $dtfim, $instits, 'lqd');
+                            $nLiqAPagar119 = getEmpenhosApagar(array("'119'"), $dtini, $dtfim, $instits, 'lqd');
+                            $nLiqAPagar166 = getEmpenhosApagar(array("'166'"), $dtini, $dtfim, $instits, 'lqd');
+                            $nLiqAPagar167 = getEmpenhosApagar(array("'167'"), $dtini, $dtfim, $instits, 'lqd');
+                        }
                         echo "<td class='s10' dir='ltr' >";
-                        echo db_formatar($aPago118[1], "f");
+                        echo db_formatar($nLiqAPagar118, "f");
                         echo "</td>";
                         echo "<td class='s10' dir='ltr'>";
-                        echo db_formatar($aPago119[1], "f");
+                        echo db_formatar($nLiqAPagar119, "f");
                         echo "</td>";
                         echo "<td class='s10' dir='ltr'>";
-                        echo db_formatar($aPago166[1], "f");
+                        echo db_formatar($nLiqAPagar166, "f");
                         echo "</td>";
                         echo "<td class='s10' dir='ltr'>";
-                        echo db_formatar($aPago167[1], "f");
+                        echo db_formatar($nLiqAPagar167, "f");
                         echo "</td>";
                     ?>
 
@@ -1419,22 +1427,33 @@ ob_start();
                     <td class="s32" dir="ltr"></td>
                     <td class="s34" dir="ltr" colspan="5">8 - RESTOS A PAGAR NÃO PROCESSADOS DO EXERCÍCIO</td>
                     <?php
+                        $nNaoLiqAPagar118 = 0;
+                        $nNaoLiqAPagar119 = 0;
+                        $nNaoLiqAPagar166 = 0;
+                        $nNaoLiqAPagar167 = 0;
+                        $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                        if($dtfim == $dtfimExercicio){
+                            $nNaoLiqAPagar118 = getEmpenhosApagar(array("'118'"), $dtini, $dtfim, $instits, '');
+                            $nNaoLiqAPagar119 = getEmpenhosApagar(array("'119'"), $dtini, $dtfim, $instits, '');
+                            $nNaoLiqAPagar166 = getEmpenhosApagar(array("'166'"), $dtini, $dtfim, $instits, '');
+                            $nNaoLiqAPagar167 = getEmpenhosApagar(array("'167'"), $dtini, $dtfim, $instits, '');
+                        }
                         echo "<td class='s38' dir='ltr'>";
-                        echo db_formatar($aPago118[2], "f");
+                        echo db_formatar($nNaoLiqAPagar118, "f");
                         echo "</td>";
                         echo "<td class='s38' dir='ltr'>";
-                        echo db_formatar($aPago119[2], "f");
+                        echo db_formatar($nNaoLiqAPagar119, "f");
                         echo "</td>";
                         echo "<td class='s38' dir='ltr'>";
-                        echo db_formatar($aPago166[2], "f");
+                        echo db_formatar($nNaoLiqAPagar166, "f");
                         echo "</td>";
                         echo "<td class='s38' dir='ltr'>";
-                        echo db_formatar($aPago167[2], "f");
+                        echo db_formatar($nNaoLiqAPagar167, "f");
                         echo "</td>";
-                        $aTotalPago118 = $aPago118[1] + $aPago118[2];
-                        $aTotalPago119 = $aPago119[1] + $aPago119[2];
-                        $aTotalPago166 = $aPago166[1] + $aPago166[2];
-                        $aTotalPago167 = $aPago167[1] + $aPago167[2];
+                        $aTotalPago118 = $nLiqAPagar118 + $nNaoLiqAPagar118;
+                        $aTotalPago119 = $nLiqAPagar119 + $nNaoLiqAPagar119;
+                        $aTotalPago166 = $nLiqAPagar166 + $nNaoLiqAPagar166;
+                        $aTotalPago167 = $nLiqAPagar167 + $nNaoLiqAPagar167;
                     ?>
                 </tr>
                 <tr style="height: 20px">
@@ -1460,19 +1479,19 @@ ob_start();
                     <td class="s21" dir="ltr" colspan="5">10 - TOTAL (6 + 9)</td>
                     <?php
                         echo "<td class='s22' dir='ltr'>";
-                        $nTotalPagoItem10Fonte118 = $pagoFuncao118 + $aTotoalPago118;
+                        $nTotalPagoItem10Fonte118 = $pagoFuncao118 + $aTotalPago118;
                         echo db_formatar($nTotalPagoItem10Fonte118, "f");
                         echo "</td>";
                         echo "<td class='s22' dir='ltr'>";
-                        $nTotalPagoItem10Fonte119 = $pagoFuncao119 + $aTotoalPago119;
+                        $nTotalPagoItem10Fonte119 = $pagoFuncao119 + $aTotalPago119;
                         echo db_formatar($nTotalPagoItem10Fonte119, "f");
                         echo "</td>";
                         echo "<td class='s22' dir='ltr'>";
-                        $nTotalPagoItem10Fonte166 = $pagoFuncao166 + $aTotoalPago166;
+                        $nTotalPagoItem10Fonte166 = $pagoFuncao166 + $aTotalPago166;
                         echo db_formatar($nTotalPagoItem10Fonte166, "f");
                         echo "</td>";
                         echo "<td class='s22' dir='ltr'>";
-                        $nTotalPagoItem10Fonte167 = $pagoFuncao167 + $aTotoalPago167;
+                        $nTotalPagoItem10Fonte167 = $pagoFuncao167 + $aTotalPago167;
                         echo db_formatar($nTotalPagoItem10Fonte167, "f");
                         echo "</td>";
                     ?>
@@ -1500,10 +1519,40 @@ ob_start();
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
                     <td class="s12" dir="ltr" colspan="5">11 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
-                    <td class="s10" dir="ltr">0,00</td>
-                    <td class="s10" dir="ltr">0,00</td>
-                    <td class="s10" dir="ltr">0,00</td>
-                    <td class="s10" dir="ltr">0,00</td>
+                    <?php
+                        $nRPIncritosSemDesponibilidade119 = 0;
+                        $nRPIncritosSemDesponibilidade166 = 0;
+                        $nRPIncritosSemDesponibilidade118 = 0;
+                        $nRPIncritosSemDesponibilidade167 = 0;
+                        if($dtfim == $dtfimExercicio){
+                            $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
+                            $nSaldoFonteAno119 = getSaldoPlanoContaFonte("'119'", $dtini, $dtfim, $instits);
+                            $nSaldoFonteAno166 = getSaldoPlanoContaFonte("'166'", $dtini, $dtfim, $instits);
+                            $nSaldoFonteAno167 = getSaldoPlanoContaFonte("'167'", $dtini, $dtfim, $instits);
+                            $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                            $nRPSemDesponibilidade118 = $aTotalPago118 - $nSaldoFonteAno118;
+                            $nRPSemDesponibilidade119 = $aTotalPago119 - $nSaldoFonteAno119;
+                            $nRPSemDesponibilidade166 = $aTotalPago166 - $nSaldoFonteAno166;
+                            $nRPSemDesponibilidade167 = $aTotalPago167 - $nSaldoFonteAno167;
+
+                            if($nRPSemDesponibilidade118 > 0){
+                                $nRPIncritosSemDesponibilidade118 = $nRPSemDesponibilidade118;
+                            }
+                            if($nRPSemDesponibilidade119 > 0){
+                                $nRPIncritosSemDesponibilidade119 = $nRPSemDesponibilidade119;
+                            }
+                            if($nRPSemDesponibilidade166 > 0){
+                                $nRPIncritosSemDesponibilidade166 = $nRPSemDesponibilidade166;
+                            }
+                            if($nRPSemDesponibilidade167 > 0){
+                                $nRPIncritosSemDesponibilidade167 = $nRPSemDesponibilidade167;
+                            }
+                        }
+                    ?>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nRPIncritosSemDesponibilidade118,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nRPIncritosSemDesponibilidade119,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nRPIncritosSemDesponibilidade166,"f"); ?></td>
+                    <td class="s10" dir="ltr"><?php echo db_formatar($nRPIncritosSemDesponibilidade167,"f"); ?></td>
                 </tr>
                 <tr style="height: 20px">
                     <td class="s8" dir="ltr"></td>
@@ -1532,10 +1581,10 @@ ob_start();
                     <td class="s5" dir="ltr"></td>
                     <td class="s47" dir="ltr" colspan="5">13 - TOTAL (10 - 11 + 12)</td>
                     <?php
-                        $nTotalPagoItem13Fonte118 =  $nTotalPagoItem10Fonte118 + ($nRPNPAnteriorSemDispFonte118);
-                        $nTotalPagoItem13Fonte119 =  $nTotalPagoItem10Fonte119 + ($nRPNPAnteriorSemDispFonte119);
-                        $nTotalPagoItem13Fonte166 =  $nTotalPagoItem10Fonte166 + ($nRPNPAnteriorSemDispFonte166);
-                        $nTotalPagoItem13Fonte167 =  $nTotalPagoItem10Fonte167 + ($nRPNPAnteriorSemDispFonte167);
+                        $nTotalPagoItem13Fonte118 =  ($nTotalPagoItem10Fonte118 - $nRPIncritosSemDesponibilidade118) + ($nRPNPAnteriorSemDispFonte118);
+                        $nTotalPagoItem13Fonte119 =  ($nTotalPagoItem10Fonte119 - $nRPIncritosSemDesponibilidade119) + ($nRPNPAnteriorSemDispFonte119);
+                        $nTotalPagoItem13Fonte166 =  ($nTotalPagoItem10Fonte166 - $nRPIncritosSemDesponibilidade166) + ($nRPNPAnteriorSemDispFonte166);
+                        $nTotalPagoItem13Fonte167 =  ($nTotalPagoItem10Fonte167 - $nRPIncritosSemDesponibilidade167) + ($nRPNPAnteriorSemDispFonte167);
 
                         echo "<td class='s48' dir='ltr'>";
                         echo db_formatar($nTotalPagoItem13Fonte118,"f");

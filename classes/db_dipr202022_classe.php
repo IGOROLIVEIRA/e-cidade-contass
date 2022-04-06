@@ -227,7 +227,7 @@ class cl_dipr202022
             $sql2 = $dbwhere;
         }
         $result = db_query($sql . $sql2);
-
+     
         if ($result == false) {
             $this->erro_banco = str_replace("", "", @pg_last_error());
             $this->erro_sql = "dipr202022 nao Excluído. Exclusão Abortada.\n";

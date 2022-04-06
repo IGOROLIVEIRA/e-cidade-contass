@@ -137,7 +137,7 @@ $db_botao = true;
 </html>
 <script>
     function js_insereItens() {
-
+        
         let aItens = oItensLicitacao.oGridItens.aRows;
 
         let aSelecionados = aItens.filter(e => e.isSelected);
@@ -186,7 +186,7 @@ $db_botao = true;
         if (erro == true) {
             return;
         }
-
+        js_divCarregando('Aguarde, processando.....', 'msgbox');
         let oParam = new Object();
         oParam.licitacao = document.form1.licitacao.value;
         oParam.aItens = aItensFormatados;
@@ -209,8 +209,8 @@ $db_botao = true;
         let tipoJulgamento = "<?= $tipojulg ?>";
         let licitacao = "<?= $licitacao ?>";
 
-
         if (oRetorno.status == 1) {
+            js_removeObj('msgbox');
             alert('Item incluído com sucesso!');
 
             parent.parent.iframe_liclicita.bloquearRegistroPreco;
@@ -240,7 +240,10 @@ $db_botao = true;
                 }
             });
 
-        } else {
+        }if (oRetorno.status == 2) {
+            js_removeObj('msgbox');
+            alert('Inclusão abortada, processo de compra por lote!');
+        }else{
             //db_msgbox(@$erro_msg);
             db_msgbox("Operação Cancelada!!Contate Suporte!!");
         }
