@@ -95,7 +95,7 @@ db_app::load("prototype.js");
                 </td>
                 <td>
                   <?
-                  db_input('ve60_veiculo', 10, $Ive60_veiculo, true, 'text', 3, " onchange='js_pesquisave60_veiculo(false);'");
+                  db_input('ve60_veiculo', 10, $Ive60_veiculo, true, 'text', $db_opcao, " onchange='js_pesquisave60_veiculo(false);'");
 
                   ?>
                   <strong>Placa:</strong>
@@ -313,9 +313,9 @@ db_app::load("prototype.js");
     }
   }
 
-  function js_mostraveiculos(chave, erro) {
+  function js_mostraveiculos(error, codigoveiculo, placa, descr, qtdcapacidade) {
 
-    document.form1.ve01_placa.value = chave;
+    document.form1.ve01_placa.value = placa;
     if (erro == true) {
 
       document.form1.ve60_veiculo.focus();
