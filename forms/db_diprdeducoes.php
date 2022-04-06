@@ -168,14 +168,14 @@
                     </td>
                 </tr>
 
-                <tr id="LinhaContribuicao">
+                <tr id="">
                     <td><b>Tipo de contribuição:</b></td>
                     <td>
                         <?php
                         $arrayTipoContribuicao = array(
                             0 => "Selecione",
-                            1 => "Normal",
-                            2 => "Suplementar"
+                            1 => "Ordinária",
+                            2 => "Extraordinária"
                         );
                         db_select('c239_tipocontribuicao', $arrayTipoContribuicao, true, 1, "");
                         ?>
@@ -320,10 +320,6 @@
         }
         if (identificador == "LinhaContribuicaoSegurados") {
             document.form1.c239_tipocontribuicaosegurados.value = 0;
-            return;
-        }
-        if (identificador == "c239_tipocontribuicao") {
-            document.form1.c239_tipocontribuicao.value = 0;
             return;
         }
     }

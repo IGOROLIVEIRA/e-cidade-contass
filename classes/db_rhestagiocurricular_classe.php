@@ -497,7 +497,7 @@ class cl_rhestagiocurricular
       }
     }
     if (trim($this->h83_naturezaestagio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["h83_naturezaestagio"])) {
-      $sql  .= $virgula . " h83_naturezaestagio = $this->h83_naturezaestagio ";
+      $sql  .= $virgula . " h83_naturezaestagio = '$this->h83_naturezaestagio' ";
       $virgula = ",";
       if (trim($this->h83_naturezaestagio) == null) {
         $this->erro_sql = " Campo Natureza do Estagio não informado.";

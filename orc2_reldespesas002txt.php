@@ -88,13 +88,19 @@ if (substr($nivel,1,1) == 'A'){
     $completo = true;
     $nivela = "8";
   }
-
+  
   $anousu  = db_getsession("DB_anousu");
   $dataini = date("Y-m-d",db_getsession("DB_datausu"));
   $datafin = date("Y-m-d",db_getsession("DB_datausu"));
+
+  $dataini = @$data_ini_ano."-".@$data_ini_mes."-".@$data_ini_dia;
+  $datafin = @$data_fin_ano."-".@$data_fin_mes."-".@$data_fin_dia;
   $result = db_dotacaosaldo($nivela,1,2,true,$sele_work,$anousu,$dataini,$datafin);
 
+  
+
   if($formato_arq == 'C'){
+   
      $fp = fopen("tmp/reldesp.csv","w");
      /**
       * Em caso de falha ao tentar abrir o arquivo para escrita
@@ -103,14 +109,149 @@ if (substr($nivel,1,1) == 'A'){
        db_redireciona('db_erros.php?fechar=true&db_erro=Ocorreu um erro ao tentar gerar o relatório, por favor entre o contato com o suporte.');
      }
 
-     fputs($fp,"Orgao;Unidade;Função,Subfunção,Projativ;Elemento;CodDot;Recurso;liqui acumulado;saldo\n");
-     while($ln = pg_fetch_array($result)){
-        fputs($fp,$ln["o58_orgao"]." - ".$ln["o40_descr"].";".$ln["o58_unidade"]." - ".$ln["o41_descr"].";");
-        fputs($fp,$ln["o58_funcao"]." - ".$ln["o52_descr"].";".$ln["o58_subfuncao"]." - ".$ln["o53_descr"].";");
-        fputs($fp,$ln["o58_projativ"]." - ".$ln["o55_descr"].";".$ln["o58_elemento"]." - ".$ln["o56_descr"].";");
-        fputs($fp,$ln["o58_coddot"].";".$ln["o58_codigo"]." - ".$ln["o15_descr"].";".$ln["liquidado_acumulado"].";"
-        .$ln["atual_menos_reservado"]."\n");
-     }
+    //  fputs($fp,"Orgao;Unidade;Função;Subfunção;Projativ;Elemento;CodDot;Recurso;Liqui acumulado;Saldo;Saldo inicial;Cred. Suplem;Cred. Especial;Reduções;Empenhado;Pago\n");
+    if($nivel == '9A'){
+
+      fputs($fp,"Orgao;Unidade;Função;Subfunção;Projativ;Elemento;CodDot;Recurso;Saldo Orçamentario Inicial;Saldo Orçamentario Inicial Cred. Especial;Saldo Orçamentário Disponível; Saldo Orçamentário Disponível Reduções;Saldo Reservado Comprometido;Saldo Reservado Comprometido Empenhado;Saldo Reservado Automático;Saldo Reservado Automático Liquidado;Saldo Reservado Total;Saldo Reservado Total Pago;Saldo Atual\n");
+       
+      while($ln = pg_fetch_array($result)){
+        //validação para aparecer "vazio" no lugar de zero e '-'
+        if($ln["o58_orgao"] == '0')   $ln["o58_orgao"] = '';
+        if($ln["o40_descr"] == '0')   $ln["o40_descr"] = '';  
+        if($ln["o58_unidade"] == '0') $ln["o58_unidade"] = '';
+        if($ln["o41_descr"] == '0')   $ln["o41_descr"] = '';  
+        if($ln["o58_funcao"] == '0')  $ln["o58_funcao"] = '';  
+        if($ln["o52_descr"] == '0')   $ln["o52_descr"] = '';
+        if($ln["o58_subfuncao"]=='0') $ln["o58_subfuncao"] = '';
+        if($ln["o53_descr"] == '0')   $ln["o53_descr"] = '';
+        if($ln["o58_projativ"]=='0')  $ln["o58_projativ"]='';
+        if($ln["o55_descr"] == '0')   $ln["o55_descr"] = '';
+        if($ln["o58_elemento"]=='0')  $ln["o58_elemento"] = '';
+        if($ln["o56_descr"] == '0')   $ln["o56_descr"] = '';
+        if($ln["o58_coddot"] == '0')  $ln["o58_coddot"] =''; 
+        if($ln["o58_codigo"] == '0')  $ln["o58_codigo"] = '';
+        if($ln["o15_descr"] == '0')   $ln["o15_descr"] = '';
+        if($ln["liquidado_acumulado"] == '0') $ln["liquidado_acumulado"] = '';
+        if($ln["atual_menos_reservado"] == '0') $ln["atual_menos_reservado"] = '';
+        if($ln["dot_ini"] == '0') $ln["dot_ini"] = '';
+        if($ln["suplementado"] == '0') $ln["suplementado"] = '';
+        if($ln["especial"] == '0') $ln["especial"] = '';
+        if($ln["reduzido"] == '0') $ln["reduzido"] = '';
+        if($ln["empenhado"] == '0') $ln["empenhado"] = '0';
+        if($ln["pago"] == '0') $ln["pago"] = '0';
+
+        if( $ln["o58_codigo"] == ''){
+            $ln["o15_descr"] = '';
+            $ln["o58_codigo"] = '';
+        }
+          if($ln["o58_orgao"] == '' & $ln["o58_unidade"] == '') 
+            fputs($fp,$ln["o58_orgao"]."  ".$ln["o40_descr"].";".$ln["o58_unidade"]."  ".$ln["o41_descr"].";");
+          else  if($ln["o58_orgao"] != '' & $ln["o58_unidade"] == '') 
+            fputs($fp,$ln["o58_orgao"]." - ".$ln["o40_descr"].";".$ln["o58_unidade"]."  ".$ln["o41_descr"].";");
+          else  if($ln["o58_orgao"] == '' & $ln["o58_unidade"] != '') 
+            fputs($fp,$ln["o58_orgao"]."  ".$ln["o40_descr"].";".$ln["o58_unidade"]." - ".$ln["o41_descr"].";");  
+          else
+            fputs($fp,$ln["o58_orgao"]." - ".$ln["o40_descr"].";".$ln["o58_unidade"]." - ".$ln["o41_descr"].";");  
+
+          if($ln["o58_funcao"] == '' & $ln["o58_subfuncao"] == '')  
+            fputs($fp,$ln["o58_funcao"]."  ".$ln["o52_descr"].";".$ln["o58_subfuncao"]."  ".$ln["o53_descr"].";");
+          else  if($ln["o58_funcao"] != '' & $ln["o58_subfuncao"] =='')   
+            fputs($fp,$ln["o58_funcao"]." - ".$ln["o52_descr"].";".$ln["o58_subfuncao"]."  ".$ln["o53_descr"].";");
+          else  if($ln["o58_funcao"] == '' & $ln["o58_subfuncao"] !='')   
+            fputs($fp,$ln["o58_funcao"]."  ".$ln["o52_descr"].";".$ln["o58_subfuncao"]." - ".$ln["o53_descr"].";");
+          else 
+            fputs($fp,$ln["o58_funcao"]." - ".$ln["o52_descr"].";".$ln["o58_subfuncao"]." - ".$ln["o53_descr"].";");
+
+          if($ln["o58_projativ"]=='' & $ln["o58_elemento"]=='') 
+            fputs($fp,$ln["o58_projativ"]."  ".$ln["o55_descr"].";".$ln["o58_elemento"]."  ".$ln["o56_descr"].";");
+          else if($ln["o58_projativ"]!='' & $ln["o58_elemento"]=='') 
+            fputs($fp,$ln["o58_projativ"]." - ".$ln["o55_descr"].";".$ln["o58_elemento"]."  ".$ln["o56_descr"].";");
+          else if($ln["o58_projativ"]=='' & $ln["o58_elemento"]!='') 
+            fputs($fp,$ln["o58_projativ"]."  ".$ln["o55_descr"].";".$ln["o58_elemento"]." - ".$ln["o56_descr"].";");  
+          else
+            fputs($fp,$ln["o58_projativ"]." - ".$ln["o55_descr"].";".$ln["o58_elemento"]." - ".$ln["o56_descr"].";"); 
+
+          if($ln["o15_descr"] == '' || $ln["o58_codigo"] == '') 
+            fputs($fp,$ln["o58_coddot"].";".$ln["o58_codigo"]."  ".$ln["o15_descr"].";".$ln["dot_ini"].";");
+          else
+          fputs($fp,$ln["o58_coddot"].";".$ln["o58_codigo"]."  ".$ln["o15_descr"].";".number_format($ln["dot_ini"], 2, ',', '.').";");
+          
+          
+          fputs($fp,number_format($ln["especial_acumulado"], 2, ',', '.').";".number_format(($ln["atual_menos_reservado"]+$ln["empenhado_acumulado"]-$ln["anulado_acumulado"]), 2, ',', '.').";".number_format($ln["reduzido_acumulado"], 2, ',', '.').";".number_format($ln["reservado_ate_data"], 2, ',', '.').";".number_format($ln["empenhado"], 2, ',', '.').";".number_format($ln["reservado_automatico_ate_data"], 2, ',', '.').";".number_format($ln["liquidado"], 2, ',', '.').";".number_format($ln["reservado"], 2, ',', '.').";".number_format($ln["pago"], 2, ',', '.').";".number_format($ln["atual_menos_reservado"], 2, ',', '.')."\n"); 
+          
+      }
+    }else{
+
+      
+        fputs($fp,"Orgao;Unidade;Função;Subfunção;Projativ;Elemento;CodDot;Recurso;Saldo Orçamentario Inicial;Saldo Orçamentário Disponível;Saldo Reservado Comprometido;Saldo Reservado Automático;Saldo Reservado Total;Saldo Atual\n");
+        
+        while($ln = pg_fetch_array($result)){
+          //validação para aparecer "vazio" no lugar de zero e '-'
+          if($ln["o58_orgao"] == '0')   $ln["o58_orgao"] = '';
+          if($ln["o40_descr"] == '0')   $ln["o40_descr"] = '';  
+          if($ln["o58_unidade"] == '0') $ln["o58_unidade"] = '';
+          if($ln["o41_descr"] == '0')   $ln["o41_descr"] = '';  
+          if($ln["o58_funcao"] == '0')  $ln["o58_funcao"] = '';  
+          if($ln["o52_descr"] == '0')   $ln["o52_descr"] = '';
+          if($ln["o58_subfuncao"]=='0') $ln["o58_subfuncao"] = '';
+          if($ln["o53_descr"] == '0')   $ln["o53_descr"] = '';
+          if($ln["o58_projativ"]=='0')  $ln["o58_projativ"]='';
+          if($ln["o55_descr"] == '0')   $ln["o55_descr"] = '';
+          if($ln["o58_elemento"]=='0')  $ln["o58_elemento"] = '';
+          if($ln["o56_descr"] == '0')   $ln["o56_descr"] = '';
+          if($ln["o58_coddot"] == '0')  $ln["o58_coddot"] =''; 
+          if($ln["o58_codigo"] == '0')  $ln["o58_codigo"] = '';
+          if($ln["o15_descr"] == '0')   $ln["o15_descr"] = '';
+          if($ln["liquidado_acumulado"] == '0') $ln["liquidado_acumulado"] = '';
+          if($ln["atual_menos_reservado"] == '0') $ln["atual_menos_reservado"] = '';
+          if($ln["dot_ini"] == '0') $ln["dot_ini"] = '';
+          if($ln["suplementado"] == '0') $ln["suplementado"] = '';
+          if($ln["especial"] == '0') $ln["especial"] = '';
+          if($ln["reduzido"] == '0') $ln["reduzido"] = '';
+          if($ln["empenhado"] == '0') $ln["empenhado"] = '0';
+          if($ln["pago"] == '0') $ln["pago"] = '0';
+
+          if( $ln["o58_codigo"] == ''){
+              $ln["o15_descr"] = '';
+              $ln["o58_codigo"] = '';
+          }
+            if($ln["o58_orgao"] == '' & $ln["o58_unidade"] == '') 
+              fputs($fp,$ln["o58_orgao"]."  ".$ln["o40_descr"].";".$ln["o58_unidade"]."  ".$ln["o41_descr"].";");
+            else  if($ln["o58_orgao"] != '' & $ln["o58_unidade"] == '') 
+              fputs($fp,$ln["o58_orgao"]." - ".$ln["o40_descr"].";".$ln["o58_unidade"]."  ".$ln["o41_descr"].";");
+            else  if($ln["o58_orgao"] == '' & $ln["o58_unidade"] != '') 
+              fputs($fp,$ln["o58_orgao"]."  ".$ln["o40_descr"].";".$ln["o58_unidade"]." - ".$ln["o41_descr"].";");  
+            else
+              fputs($fp,$ln["o58_orgao"]." - ".$ln["o40_descr"].";".$ln["o58_unidade"]." - ".$ln["o41_descr"].";");  
+
+            if($ln["o58_funcao"] == '' & $ln["o58_subfuncao"] == '')  
+              fputs($fp,$ln["o58_funcao"]."  ".$ln["o52_descr"].";".$ln["o58_subfuncao"]."  ".$ln["o53_descr"].";");
+            else  if($ln["o58_funcao"] != '' & $ln["o58_subfuncao"] =='')   
+              fputs($fp,$ln["o58_funcao"]." - ".$ln["o52_descr"].";".$ln["o58_subfuncao"]."  ".$ln["o53_descr"].";");
+            else  if($ln["o58_funcao"] == '' & $ln["o58_subfuncao"] !='')   
+              fputs($fp,$ln["o58_funcao"]."  ".$ln["o52_descr"].";".$ln["o58_subfuncao"]." - ".$ln["o53_descr"].";");
+            else 
+              fputs($fp,$ln["o58_funcao"]." - ".$ln["o52_descr"].";".$ln["o58_subfuncao"]." - ".$ln["o53_descr"].";");
+
+            if($ln["o58_projativ"]=='' & $ln["o58_elemento"]=='') 
+              fputs($fp,$ln["o58_projativ"]."  ".$ln["o55_descr"].";".$ln["o58_elemento"]."  ".$ln["o56_descr"].";");
+            else if($ln["o58_projativ"]!='' & $ln["o58_elemento"]=='') 
+              fputs($fp,$ln["o58_projativ"]." - ".$ln["o55_descr"].";".$ln["o58_elemento"]."  ".$ln["o56_descr"].";");
+            else if($ln["o58_projativ"]=='' & $ln["o58_elemento"]!='') 
+              fputs($fp,$ln["o58_projativ"]."  ".$ln["o55_descr"].";".$ln["o58_elemento"]." - ".$ln["o56_descr"].";");  
+            else
+              fputs($fp,$ln["o58_projativ"]." - ".$ln["o55_descr"].";".$ln["o58_elemento"]." - ".$ln["o56_descr"].";"); 
+
+            if($ln["o15_descr"] == '' || $ln["o58_codigo"] == '') 
+              fputs($fp,$ln["o58_coddot"].";".$ln["o58_codigo"]."  ".$ln["o15_descr"].";".$ln["dot_ini"].";");
+            else
+            fputs($fp,$ln["o58_coddot"].";".$ln["o58_codigo"]."  ".$ln["o15_descr"].";".number_format($ln["dot_ini"], 2, ',', '.').";");
+            
+            
+            fputs($fp,number_format($ln["atual"], 2, ',', '.').";".number_format($ln["reservado_ate_data"], 2, ',', '.').";".number_format($ln["reservado_automatico_ate_data"], 2, ',', '.').";".number_format($ln["reservado"], 2, ',', '.').";".number_format($ln["atual_menos_reservado"], 2, ',', '.')."\n"); 
+            
+       }
+      }
      echo "<html><body bgcolor='#cccccc'><center><a href='tmp/reldesp.csv'>Clique para Salvar o arquivo <b>reldesp.csv</b></a></body></html>";
      fclose($fp);
      exit;

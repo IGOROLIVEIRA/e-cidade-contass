@@ -79,6 +79,19 @@ if ($xxnum == 0){
 
 }
 
+$arr_gparen = array(
+                'C' => 'Cônjuge',
+                'F' => 'Filho',
+                'P' => 'Pai',
+                'M' => 'Mãe',
+                'A' => 'Avó',
+                'O' => 'Outros'
+            );
+$arr_sexo = array(
+   'M' => 'Masculino',
+   'F' => 'Feminino'
+);
+
 $pdf = new PDF(); 
 $pdf->Open(); 
 $pdf->AliasNbPages(); 
@@ -94,7 +107,11 @@ for($x = 0; $x < pg_numrows($result);$x++){
       $pdf->setfont('arial','b',8);
       $pdf->cell(20,$alt,'MATRÍCULA',1,0,"C",1);
       $pdf->cell(60,$alt,'NOME',1,0,"C",1);
-      $pdf->cell(20,$alt,'NASCIMENTO',1,1,"C",1);
+      $pdf->cell(20,$alt,'NASCIMENTO',1,0,"C",1);
+      $pdf->cell(20,$alt,'PRENTESCO',1,0,"C",1);
+      $pdf->cell(30,$alt,'NASCIMENTO DEP',1,0,"C",1);
+      $pdf->cell(20,$alt,'CPF',1,0,"C",1);
+      $pdf->cell(20,$alt,'SEXO',1,1,"C",1);
       $total = 0;
       $troca = 0;
    }
@@ -113,9 +130,10 @@ for($x = 0; $x < pg_numrows($result);$x++){
       else
         $pdf->cell(40,$alt,'',0,0,"C",0);
       $pdf->cell(60,$alt,$rh31_nome,0,0,"L",0);
-      $pdf->cell(20,$alt,$rh31_gparen,0,0,"L",0);
-      $pdf->cell(20,$alt,db_formatar($rh31_dtnasc,'d'),0,0,"C",0);
-      $pdf->cell(20,$alt,str_replace('/','-',db_formatar($rh31_cpf,'cpf')),0,1,"C",0);
+      $pdf->cell(20,$alt,$arr_gparen[$rh31_gparen],0,0,"C",0);
+      $pdf->cell(30,$alt,db_formatar($rh31_dtnasc,'d'),0,0,"C",0);
+      $pdf->cell(20,$alt,str_replace('/','-',db_formatar($rh31_cpf,'cpf')),0,0,"C",0);
+      $pdf->cell(20,$alt,$arr_sexo[$rh31_sexo],0,1,"C",0);
    }
    $pdf->cell(0,$alt,'','T',1,"C",0);
    
