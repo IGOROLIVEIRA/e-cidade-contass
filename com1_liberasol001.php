@@ -71,14 +71,14 @@ $clsolordemtransf    = new cl_solordemtransf;
 $clprocandam         = new cl_procandam;
 $db_botao            = true;
 $db_opcao            = 1;
-if (isset ($incluir)) {
+if (isset($incluir)) {
 	db_inicio_transacao();
 	$result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_gerareserva,pc30_contrandsol"));
 	db_fieldsmemory($result_pcparam, 0);
 	$sqlerro = false;
 	$arr_valores = split(",", $valores);
-	if ($pc30_contrandsol=='t'){		 		
-	  	 $sqltran = "select distinct x.p62_codtran                   
+	if ($pc30_contrandsol == 't') {
+		$sqltran = "select distinct x.p62_codtran                   
       
 			from ( select distinct p62_codtran, 
                     p62_dttran, 
@@ -102,41 +102,27 @@ if (isset ($incluir)) {
 				            left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori
 				                                           and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen
 										left join empautoriza           on empautoriza.e54_autori              = empautitem.e55_autori  
-             			where  p62_coddeptorec = ".db_getsession("DB_coddepto")."
+             			where  p62_coddeptorec = " . db_getsession("DB_coddepto") . "
                  ) as x
 				 left join proctransand 	on p64_codtran = x.p62_codtran
 				 left join arqproc 	on p68_codproc = x.p63_codproc
 			where p64_codtran is null and p68_codproc is null and x.pc11_numero = $pc10_numero";
-			$result_tran=pg_exec($sqltran);
-			if(pg_numrows($result_tran)!=0){				
-				for($w=0;$w<pg_numrows($result_tran);$w++){					
-					db_fieldsmemory($result_tran,$w);					
-					$recebetransf=recprocandsol($p62_codtran);
-					if ($recebetransf==true){
-						$sqlerro=true;
-						break;			
-					}
+		$result_tran = pg_exec($sqltran);
+		if (pg_numrows($result_tran) != 0) {
+			for ($w = 0; $w < pg_numrows($result_tran); $w++) {
+				db_fieldsmemory($result_tran, $w);
+				$recebetransf = recprocandsol($p62_codtran);
+				if ($recebetransf == true) {
+					$sqlerro = true;
+					break;
 				}
-				
 			}
-	}
-	/*
-	$result_solicitem = $clsolicitem->sql_record($clsolicitem->sql_query_file(null, "distinct pc11_codigo as codigoaltera", "pc11_codigo", "pc11_numero=$pc10_numero"));
-	$numrows_itenssolic = $clsolicitem->numrows;
-	for ($i = 0; $i < $numrows_itenssolic; $i ++) {
-		
-		$clsolicitem->pc11_liberado = "false";
-		$clsolicitem->pc11_codigo = $codigoaltera;
-		$clsolicitem->alterar($codigoaltera);
-		if ($clsolicitem->erro_status == 0) {
-			$erro_msg = $clsolicitem->erro_msg;
-			$sqlerro = true;
 		}
 	}
-	*/
+
 	if (trim($valores) != "") {
-		
-		for ($i = 0; $i < sizeof($arr_valores); $i ++) {
+
+		for ($i = 0; $i < sizeof($arr_valores); $i++) {
 			$arr_item = split("_", $arr_valores[$i]);
 			$codigo = $arr_item[2];
 			$clsolicitem->pc11_liberado = "false";
@@ -145,22 +131,22 @@ if (isset ($incluir)) {
 			if ($clsolicitem->erro_status == 0) {
 				$erro_msg = $clsolicitem->erro_msg;
 				$sqlerro = true;
-		 	}			        
+			}
 		}
-		
-		for ($i = 0; $i < sizeof($arr_valores); $i ++) {
+
+		for ($i = 0; $i < sizeof($arr_valores); $i++) {
 			$arr_item = split("_", $arr_valores[$i]);
-			$codigo = $arr_item[2];			        
+			$codigo = $arr_item[2];
 			//// Controle do andamento da solicitação  
 			if ($i == 0) {
 				$result_proc = $clsolicitemprot->sql_record($clsolicitemprot->sql_query_file($codigo));
 				if ($clsolicitemprot->numrows > 0) {
 					db_fieldsmemory($result_proc, 0);
-					$result_ord = $clsolandam->sql_record($clsolandam->sql_query_file(null, "pc43_ordem as ordem", "pc43_codigo desc limit 1", "pc43_solicitem=".$codigo));
+					$result_ord = $clsolandam->sql_record($clsolandam->sql_query_file(null, "pc43_ordem as ordem", "pc43_codigo desc limit 1", "pc43_solicitem=" . $codigo));
 					if ($clsolandam->numrows > 0) {
 						db_fieldsmemory($result_ord, 0);
-						$ordem = $ordem +1;
-						$result_deptorec = $clsolandpadraodepto->sql_record($clsolandpadraodepto->sql_query(null, "*", null, "pc47_solicitem = ".$codigo."   and pc47_ordem = $ordem"));
+						$ordem = $ordem + 1;
+						$result_deptorec = $clsolandpadraodepto->sql_record($clsolandpadraodepto->sql_query(null, "*", null, "pc47_solicitem = " . $codigo . "   and pc47_ordem = $ordem"));
 						if ($clsolandpadraodepto->numrows > 0) {
 							db_fieldsmemory($result_deptorec, 0);
 							$clproctransfer->p62_hora = db_hora();
@@ -194,28 +180,28 @@ if (isset ($incluir)) {
 					} else {
 						//db_msgbox("gravo o $codigo do proctransferproc!!");
 					}
-					$result_ord = $clsolandam->sql_record($clsolandam->sql_query_file(null, "pc43_ordem as ordem_transf", "pc43_codigo desc limit 1", "pc43_solicitem=".$codigo));
+					$result_ord = $clsolandam->sql_record($clsolandam->sql_query_file(null, "pc43_ordem as ordem_transf", "pc43_codigo desc limit 1", "pc43_solicitem=" . $codigo));
 					if ($clsolandam->numrows > 0) {
 						db_fieldsmemory($result_ord, 0);
-						$ordem_transf=$ordem_transf+1;
+						$ordem_transf = $ordem_transf + 1;
 						if ($sqlerro == false) {
-							$clsolordemtransf->pc41_solicitem=$codigo;
-							$clsolordemtransf->pc41_codtran=$codtran;
-							$clsolordemtransf->pc41_ordem=$ordem_transf;
+							$clsolordemtransf->pc41_solicitem = $codigo;
+							$clsolordemtransf->pc41_codtran = $codtran;
+							$clsolordemtransf->pc41_ordem = $ordem_transf;
 							$clsolordemtransf->incluir(null);
-							if($clsolordemtransf->erro_status==0){
-								$sqlerro=true;
-								$erro_msg=$clsolordemtransf->erro_msg;
+							if ($clsolordemtransf->erro_status == 0) {
+								$sqlerro = true;
+								$erro_msg = $clsolordemtransf->erro_msg;
 							}
 						}
-					}					
+					}
 				}
 			}
 			if ($pc30_gerareserva == "t") {
 				$result_vlrun = $clpcdotac->sql_record($clpcdotac->sql_query_file($codigo, null, null, "pc13_sequencial,pc13_quant,pc13_anousu,pc13_coddot,pc13_codigo,pc13_valor"));
 				$numrows_pcdotac = $clpcdotac->numrows;
 
-				for ($ix = 0; $ix < $numrows_pcdotac; $ix ++) {
+				for ($ix = 0; $ix < $numrows_pcdotac; $ix++) {
 					db_fieldsmemory($result_vlrun, $ix);
 
 					$valor_da_reserva = $pc13_valor;
@@ -224,12 +210,13 @@ if (isset ($incluir)) {
 					if ($valor_da_reserva > 0) {
 
 						$result_vlres = $clorcreservasol->sql_record($clorcreservasol->sql_query_orcreserva(
-						                                             null,
-						                                             null,
-						                                             "o80_codres,o80_valor",
-						                                             "",
-						                                             "o80_coddot = $pc13_coddot and pc13_codigo = $codigo"));
-						echo "consulta:".pg_last_error();                                             
+							null,
+							null,
+							"o80_codres,o80_valor",
+							"",
+							"o80_coddot = $pc13_coddot and pc13_codigo = $codigo"
+						));
+						echo "consulta:" . pg_last_error();
 						$numrows_orcres = $clorcreservasol->numrows;
 
 						if ($numrows_orcres > 0) {
@@ -239,21 +226,21 @@ if (isset ($incluir)) {
 
 						$result_saldatac = db_dotacaosaldo(8, 2, 2, "true", "o58_coddot=$pc13_coddot", db_getsession("DB_anousu"));
 						db_fieldsmemory($result_saldatac, 0);
-						
+
 						if (($valor_da_reserva - $valor_do_somator) >= $atual_menos_reservado) {
 							$valor_da_reserva = $atual_menos_reservado;
 						} else
 							if (($valor_da_reserva - $valor_do_somator) < $atual_menos_reservado) {
-								$valor_da_reserva = $valor_da_reserva - $valor_do_somator;
-							}
+							$valor_da_reserva = $valor_da_reserva - $valor_do_somator;
+						}
 
 						if ($valor_da_reserva > 0) {
-							if (isset ($o80_codres)) {
-								$clorcreserva->atualiza_valor($o80_codres, "(o80_valor + ".$valor_da_reserva.")");
+							if (isset($o80_codres)) {
+								$clorcreserva->atualiza_valor($o80_codres, "(o80_valor + " . $valor_da_reserva . ")");
 							} else {
 								$clorcreserva->o80_anousu = db_getsession("DB_anousu");
 								$clorcreserva->o80_coddot = $pc13_coddot;
-								$clorcreserva->o80_dtfim = date('Y', db_getsession('DB_datausu'))."-12-31";
+								$clorcreserva->o80_dtfim = date('Y', db_getsession('DB_datausu')) . "-12-31";
 								$clorcreserva->o80_dtini = date('Y-m-d', db_getsession('DB_datausu'));
 								$clorcreserva->o80_dtlanc = date('Y-m-d', db_getsession('DB_datausu'));
 								$clorcreserva->o80_valor = $valor_da_reserva;
@@ -266,10 +253,10 @@ if (isset ($incluir)) {
 									$sqlerro = true;
 								}
 								if ($sqlerro == false) {
-								    
-								    $clorcreservasol->o82_codres    = $codreserva;
-								    $clorcreservasol->o82_pcdotac   = $pc13_sequencial;
-								    $clorcreservasol->o82_solicitem = $codigo;
+
+									$clorcreservasol->o82_codres    = $codreserva;
+									$clorcreservasol->o82_pcdotac   = $pc13_sequencial;
+									$clorcreservasol->o82_solicitem = $codigo;
 									$clorcreservasol->incluir(null);
 									if ($clorcreservasol->erro_status == 0) {
 										$erro_msg = $clorcreservasol->erro_msg;
@@ -281,8 +268,10 @@ if (isset ($incluir)) {
 					}
 				}
 			}
+			$seq = $i + 1;
 			$clsolicitem->pc11_liberado = "true";
 			$clsolicitem->pc11_codigo = $codigo;
+			$clsolicitem->pc11_seq = $seq;
 			$clsolicitem->alterar($codigo);
 			$erro_msg = $clsolicitem->erro_msg;
 			if ($clsolicitem->erro_status == 0) {
@@ -303,56 +292,59 @@ if (isset ($incluir)) {
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script>
-arr_dados = new Array();
-<?
+	<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Expires" CONTENT="0">
+	<script>
+		arr_dados = new Array();
+		<?
 
 
-/*
+		/*
 $result_solicitem = $clpcprocitem->sql_record($clpcprocitem->sql_query(null,"pc11_numero,pc11_codigo,pc81_codprocitem,pc81_codproc"," pc11_numero desc,pc11_codigo desc "));
 for($i=0;$i<$clpcprocitem->numrows;$i++){
   db_fieldsmemory($result_solicitem,$i,true);
   echo "arr_dados.unshift('item".$pc11_numero."_".$pc11_codigo."')";
 }
 */
-?>
-</script>
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+		?>
+	</script>
+	<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+	<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.pc10_numero.select();" >
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="450" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
-        <?
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.pc10_numero.select();">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td height="450" align="left" valign="top" bgcolor="#CCCCCC">
+				<center>
+					<?
 
 
-include ("forms/db_frmliberasol.php");
-?>
-    </center>
-    </td>
-  </tr>
-</table>
+					include("forms/db_frmliberasol.php");
+					?>
+				</center>
+			</td>
+		</tr>
+	</table>
 </body>
 <?
 
 
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
 ?>
+
 </html>
 <?
 
 
-if (isset ($incluir)) {
+if (isset($incluir)) {
 	if ($clpcproc->erro_campo != "") {
 		db_msgbox($erro_msg);
-		echo "<script> document.form1.".$clsolicitem->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-		echo "<script> document.form1.".$clsolicitem->erro_campo.".focus();</script>";
+		echo "<script> document.form1." . $clsolicitem->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+		echo "<script> document.form1." . $clsolicitem->erro_campo . ".focus();</script>";
 	} else {
 		db_msgbox("Itens da solicitação liberados.");
 		//  	echo "<script>location.href='com1_liberasol001.php';</script>";
@@ -363,7 +355,7 @@ if(isset($solicita) && trim($solicita)!=""){
   echo "<script>location.href = 'com1_liberasol001.php?solicita=$codigo'</script>";
 }
 */
-if (!isset ($solicita) or isset($incluir)) {
+if (!isset($solicita) or isset($incluir)) {
 	echo "<script>js_pesquisapc10_numero(true);</script>";
 }
 ?>
