@@ -473,7 +473,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         if (($pc11_vlrun == 0 || $pc11_vlrun == "") && $hidval != "hidden") {
           $pc11_vlrun = 1;
         }
-        db_input('pc11_vlrun', 8, $Ipc11_vlrun, true, $hidval, $db_opcaovunit);
+        db_input('pc11_vlrun', 8, $Ipc11_vlrun, true, $hidval, 3);
         if ($pc30_digval == 't') {
           echo "</td>";
         }
