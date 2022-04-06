@@ -44,7 +44,6 @@ class GerarDIPR extends GerarAM
             $this->sLinha = $aCSV;
             $this->adicionaLinha();
         } else {
-
             /**
              *
              * Registros 10, 11
@@ -80,7 +79,7 @@ class GerarDIPR extends GerarAM
                 $aCSVDIPR20['si231_tipocontribuicao']                = $aDIPR20['si231_tipocontribuicao'];
                 $aCSVDIPR20['si231_aliquota']                        = $this->sicomNumberReal($aDIPR20['si231_aliquota'], 2);
                 $aCSVDIPR20['si231_valorcontribdevida']              = $this->sicomNumberReal($aDIPR20['si231_valorcontribdevida'], 2);
-
+          
                 $this->sLinha = $aCSVDIPR20;
                 $this->adicionaLinha();
             }
