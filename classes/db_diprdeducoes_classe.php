@@ -228,9 +228,6 @@ class cl_diprdeducoes
         if (!$this->verificaContribuicaoSegurados())
             return false;
 
-        if (!$this->verificaTipoContribuicao())
-            return false;
-
         if (!$this->verificaDescricao())
             return false;      
 
@@ -572,11 +569,7 @@ class cl_diprdeducoes
     {
         $nomeCampo = "c239_tipocontribuicao";
         $descricaoCampo = "Tipo Contribuição";
-        if ($this->$nomeCampo == 0 AND $this->c239_tiporepasse == 1) {
-            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
-            return false;
-        }
-        return true;   
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);  
     }
 
     public function verificaTipoDeducao()

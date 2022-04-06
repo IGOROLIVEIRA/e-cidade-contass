@@ -92,10 +92,10 @@ class EventoS2300 extends EventoBase
             $oDadosAPI->evtTSVInicio->nrProcTrab = empty($oDados->infoTSVInicio) ? null : $oDados->infoTSVInicio->nrProcTrab;
             $oDadosAPI->evtTSVInicio->natatividade = null;
 
-            $oDadosAPI->evtTSVInicio->cargoduncao->nmCargo = empty($oDados->cargoFuncao->nmCargo) ? null : $oDados->cargoFuncao->nmCargo;
-            $oDadosAPI->evtTSVInicio->cargoduncao->cboCargo = empty($oDados->cargoFuncao->CBOCargo) ? null : $oDados->cargoFuncao->CBOCargo;
-            $oDadosAPI->evtTSVInicio->cargoduncao->nmFuncao = empty($oDados->cargoFuncao->nmFuncao) ? null : $oDados->cargoFuncao->nmFuncao;
-            $oDadosAPI->evtTSVInicio->cargoduncao->cboFuncao = empty($oDados->cargoFuncao->cboFuncao) ? null : $oDados->infoContrato->cboFuncao;
+            $oDadosAPI->evtTSVInicio->cargofuncao->nmCargo = empty($oDados->cargoFuncao->nmCargo) ? null : $oDados->cargoFuncao->nmCargo;
+            $oDadosAPI->evtTSVInicio->cargofuncao->cboCargo = empty($oDados->cargoFuncao->CBOCargo) ? null : $oDados->cargoFuncao->CBOCargo;
+            $oDadosAPI->evtTSVInicio->cargofuncao->nmFuncao = empty($oDados->cargoFuncao->nmFuncao) ? null : $oDados->cargoFuncao->nmFuncao;
+            $oDadosAPI->evtTSVInicio->cargofuncao->cboFuncao = empty($oDados->cargoFuncao->cboFuncao) ? null : $oDados->infoContrato->cboFuncao;
             
             $oDadosAPI->evtTSVInicio->remuneracao->vrSalFx = empty($oDados->remuneracao->vrSalFx) ? null : $oDados->remuneracao->vrSalFx;
             $oDadosAPI->evtTSVInicio->remuneracao->undSalFixo = empty($oDados->remuneracao->undSalFixo) ? null : $oDados->remuneracao->undSalFixo;
@@ -126,7 +126,7 @@ class EventoS2300 extends EventoBase
                 $oDadosAPI->evtTSVInicio->infoEstagiario->nrApol = empty($oDados->infoEstagiario->nrApol) ? null : $oDados->infoEstagiario->nrApol;
                 $oDadosAPI->evtTSVInicio->infoEstagiario->dtPrevTerm = empty($oDados->infoEstagiario->dtPrevTerm) ? null : $oDados->infoEstagiario->dtPrevTerm;
 
-                $oDadosAPI->evtTSVInicio->infoEstagiario->instEnsino->cnpjInstEnsino = empty($oDados->infoEstagiario->instEnsino->cnpjInstEnsino) ? null : $oDados->infoEstagiario->instEnsino->cnpjInstEnsino;
+                $oDadosAPI->evtTSVInicio->infoEstagiario->instEnsino->cnpjInstEnsino = empty($oDados->instEnsino->cnpjInstEnsino) ? null : $oDados->instEnsino->cnpjInstEnsino;
                 $oDadosAPI->evtTSVInicio->infoEstagiario->cnpjAgntInteg = empty($oDados->ageIntegracao->cnpjAgntInteg) ? null : $oDados->ageIntegracao->cnpjAgntInteg;
 
                 $oDadosAPI->evtTSVInicio->infoEstagiario->cpfSupervisor = empty($oDados->supervisorEstagio->cpfSupervisor) ? null : $oDados->supervisorEstagio->cpfSupervisor;
@@ -190,9 +190,9 @@ class EventoS2300 extends EventoBase
             $oDependFormatado->nmdep = $oDependentes->rh31_nome;
             $oDependFormatado->dtnascto = $oDependentes->rh31_dtnasc;
             $oDependFormatado->cpfdep = empty($oDependentes->rh31_cpf) ? null : $oDependentes->rh31_cpf;
-            $oDependFormatado->depirrf = ($oDependentes->rh31_depirrf == "0" ? "N" : "S");
+            $oDependFormatado->depirrf = ($oDependentes->rh31_irf == "0" ? "N" : "S");
             $oDependFormatado->depsf = ($oDependentes->rh31_depend == "N" ? "N" : "S");
-            $oDependFormatado->inctrab = ($oDependentes->rh31_depirrf == "N" ? "N" : "S");
+            $oDependFormatado->inctrab = ($oDependentes->rh31_especi == "C" || $oDependentes->rh31_especi == "S" ? "S" : "N");
 
             $aDependentes[] = $oDependFormatado;
         }

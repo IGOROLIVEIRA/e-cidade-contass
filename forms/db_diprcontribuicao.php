@@ -194,8 +194,8 @@ $cldipr->rotulo->label();
                         <?
                         $tipoBase = array(
                             "0" => "Selecione",
-                            "1" => "Normal",
-                            "2" => "Suplementar"
+                            "1" => "Ordinária",
+                            "2" => "Extraordinária"
                         );
                         db_select('c237_tipocontribuinte', $tipoBase, true, 1, "");
                         ?>
@@ -302,14 +302,5 @@ $cldipr->rotulo->label();
 
     function zerarValor(identificador) {
         document.getElementById(identificador).value = 0;
-    }
-
-    function validarCampos() {
-        if (document.form1.c237_tipocontribuinte.value === "2" && document.form1.c237_basecalculocontribuinte.value != "1") {
-            alert("Tipo de Contribuição Suplementar permitida somente para Tipo de Base de Calculo da Contribuição igual a Patronal.");
-            document.form1.c237_tipocontribuinte.focus();
-            return false;
-        }
-        return true;
     }
 </script>

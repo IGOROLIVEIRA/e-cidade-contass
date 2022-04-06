@@ -39,7 +39,6 @@
                             and pc68_sequencial is not null
                             order by pc68_sequencial asc");
 
-
     $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
     $criterio    = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
     $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : "";
@@ -95,12 +94,12 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
     $head5 = "Processo de Compra: $codigo_preco";
     $head8 = "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResultData, 0)->si01_datacotacao)));
 
-    $queryCGM = "select z01_nome from cgm where z01_numcgm = ".db_utils::fieldsMemory($rsResultData, 0)->si01_numcgmcotacao;
+    $queryCGM = "select z01_nome from cgm where z01_numcgm = " . db_utils::fieldsMemory($rsResultData, 0)->si01_numcgmcotacao;
 
     $rsCGM = db_query($queryCGM) or die(pg_last_error());
 
     $nomeResponsavel = db_utils::fieldsMemory($rsCGM, 0);
-    
+
     $mPDF = new Relatorio('', 'A4-L', 0, "", 7, 7, 50);
 
     $mPDF
@@ -120,58 +119,52 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
         <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">
         <style type="text/css">
             .content {
-                width: 1070px;
+                width: 1070px
             }
 
             .table {
                 font-size: 10px;
-                background: url("imagens/px_preto.jpg") repeat center;
+                background: url(imagens/px_preto.jpg) repeat center;
                 background-repeat: repeat-y;
                 background-position: 0 50px;
-                height: 30px;
+                height: 30px
             }
 
             .col-item {
-                width: 45px;
+                width: 45px
             }
 
             .col-descricao_item {
-                width: 650px;
+                width: 650px
             }
 
             .col-valor_un {
                 width: 80px;
-                padding-right: 5px;
+                padding-right: 5px
             }
 
             .col-quant {
-                width: 60px;
+                width: 60px
             }
 
             .col-un {
-                width: 45px;
+                width: 45px
             }
 
             .col-total {
                 width: 90px;
-                padding-left: 5px;
+                padding-left: 5px
             }
 
             .col-valor_total-text {
                 width: 925px;
-                padding-left: 5px;
+                padding-left: 5px
             }
 
             .col-valor_total-valor {
                 width: 120px;
-                padding-right: 5px;
+                padding-right: 5px
             }
-
-            .row .col-un,
-            .row .col-total,
-            .row .col-quant,
-            .row .col-valor_un,
-            .row .col-valor_un {}
 
             .linha-vertical {
                 border-top: 2px solid;
@@ -179,39 +172,38 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                 margin-top: 80px;
                 margin-left: 19%;
                 width: 50%;
-                line-height: 1.3em;
+                line-height: 1.3em
             }
 
-
             .item-menu {
-                border: 1px solid #000000;
+                border: 1px solid #000;
                 text-align: center;
-                font-weight: bold;
+                font-weight: 700
             }
 
             .item-text-descricao {
-                border: 1px solid #000000;
-                text-align: justify;
+                border: 1px solid #000;
+                text-align: justify
             }
 
             .item-text {
-                border: 1px solid #000000;
-                text-align: center;
+                border: 1px solid #000;
+                text-align: center
             }
 
             .item-text-total {
-                font-weight: bold;
+                font-weight: 700
             }
 
             .item-menu-color {
                 background: #f5f5f0;
-                font-weight: bold;
+                font-weight: 700
             }
 
             .item-total-color {
                 background: #f5f5f0;
-                font-weight: bold;
-                width: 935px;
+                font-weight: 700;
+                width: 935px
             }
 
             td
@@ -228,17 +220,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
             for ($i = 0; $i < pg_num_rows($rsLotes); $i++) {
                 $oLotes = db_utils::fieldsMemory($rsLotes, $i);
 
-                $sSql = "select * from (SELECT
-                pc01_codmater,
-                case when pc01_complmater is not null and pc01_complmater != pc01_descrmater then pc01_descrmater ||'. '|| pc01_complmater
-		        else pc01_descrmater end as pc01_descrmater,
-                m61_abrev,
-                sum(pc11_quant) as pc11_quant,
-                pc69_seq,
-                pc11_seq,
-                pc11_reservado
-from (
-SELECT DISTINCT pc01_servico,
+                $sSql = "SELECT pc01_servico,
                 pc11_codigo,
                 pc11_seq,
                 pc11_quant,
@@ -250,63 +232,39 @@ SELECT DISTINCT pc01_servico,
                 m61_descr,
                 pc17_quant,
                 pc01_codmater,
-                pc01_descrmater,pc01_complmater,
+                CASE
+                    WHEN pc01_complmater IS NOT NULL
+                         AND pc01_complmater != pc01_descrmater THEN pc01_descrmater ||'. '|| pc01_complmater
+                    ELSE pc01_descrmater
+                END AS pc01_descrmater,
+                pc01_complmater,
                 pc10_numero,
                 pc90_numeroprocesso AS processo_administrativo,
                 (pc11_quant * pc11_vlrun) AS pc11_valtot,
                 m61_usaquant,
                 pc69_seq,
-                pc11_reservado
-FROM solicitem
-INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
-LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-LEFT JOIN pcprocitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
-LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
-LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
-left join processocompraloteitem on
-		pc69_pcprocitem = pcprocitem.pc81_codprocitem
-left join processocompralote on
-			pc68_sequencial = pc69_processocompralote
-AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
-WHERE pc81_codproc = {$codigo_preco}
-  AND pc68_sequencial = $oLotes->pc68_sequencial
-  AND pc10_instit = " . db_getsession("DB_instit") . "
-ORDER BY pc11_seq) as x GROUP BY
-                pc01_codmater,
-                pc11_seq,
-                pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq,pc11_reservado ) as matquan join
-(SELECT DISTINCT
-                pc11_seq,
-                {$tipoReferencia} as si02_vlprecoreferencia,
-                                     case when pc80_criterioadjudicacao = 1 then
-                     round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
-                     when pc80_criterioadjudicacao = 2 then
-                     round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
-                     end as mediapercentual,
-                pc01_codmater,
-                si01_datacotacao,
-                pc80_criterioadjudicacao,
-                pc01_tabela,
-                pc01_taxa,
-                si01_justificativa
-FROM pcproc
-JOIN pcprocitem ON pc80_codproc = pc81_codproc
-JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-JOIN solicitem ON pc81_solicitem = pc11_codigo 
-JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
-JOIN pcmater ON pc16_codmater = pc01_codmater
-JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
-GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
+                pc11_reservado,
+                si02_vlprecoreferencia
+         FROM pcprocitem
+         JOIN solicitem ON pc11_codigo=pc81_solicitem
+         JOIN solicita ON pc10_numero = pc11_numero
+         JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+         JOIN solicitemunid ON pc17_codigo = pc11_codigo
+         JOIN matunid ON pc17_unid = m61_codmatunid
+         JOIN pcmater ON pc01_codmater = pc16_codmater
+         JOIN pcorcamitemproc ON pc31_pcprocitem=pc81_codprocitem
+         JOIN pcorcamitem ON pc22_orcamitem=pc31_orcamitem
+         JOIN itemprecoreferencia ON si02_itemproccompra = pc22_orcamitem
+         JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
+         JOIN pcorcamforne ON pc21_orcamforne=pc23_orcamforne
+         AND pc23_orcamitem=pc22_orcamitem
+         JOIN pcorcamjulg ON pc24_orcamforne=pc21_orcamforne
+         AND pc24_orcamitem=pc22_orcamitem
+         LEFT JOIN solicitaprotprocesso ON pc90_solicita = pc10_numero
+         LEFT JOIN processocompraloteitem ON pc69_pcprocitem = pcprocitem.pc81_codprocitem
+         WHERE pc81_codproc={$codigo_preco}
+             AND pc24_pontuacao=1 order by pc11_seq;
+         ";
 
                 $rsResult = db_query($sSql) or die(pg_last_error());
 
@@ -376,18 +334,12 @@ HTML;
 
                     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-                    //    if($quant_casas){
                     $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $oResult->pc11_quant;
-                    //    }
-                    // if($quant_casas == 2){
-                    //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
-                    // }
-                    // else $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 3);
 
                     $nTotalItens += $lTotal;
                     $oDadosDaLinha = new stdClass();
                     $oDadosDaLinha->seq = $iCont + 1;
-                    $oDadosDaLinha->item = $oResult->pc01_codmater; //$oResult->pc11_seq;
+                    $oDadosDaLinha->item = $oResult->pc01_codmater;
                     if ($oResult->pc11_reservado == 't') {
                         $oDadosDaLinha->descricao = '<span style="font-weight: bold;">[ME/EPP]</span> - ' . $oResult->pc01_descrmater;
                     } else {
@@ -459,80 +411,6 @@ HTML;
                 }
             }
         } else {
-
-            /*$sSql = "select * from (SELECT
-                pc01_codmater,
-                case when pc01_complmater is not null and pc01_complmater != pc01_descrmater then pc01_descrmater ||'. '|| pc01_complmater
-		     else pc01_descrmater end as pc01_descrmater,
-                m61_abrev,
-                sum(pc11_quant) as pc11_quant,
-                pc11_seq,
-                pc11_reservado,
-                l21_ordem
-from (
-SELECT DISTINCT pc01_servico,
-                pc11_seq,
-                pc11_quant,
-                pc11_just,
-                m61_abrev,
-                pc01_codmater,
-                pc01_descrmater,pc01_complmater,
-                (pc11_quant * pc11_vlrun) AS pc11_valtot,
-                pc11_reservado,
-                l21_ordem
-FROM solicitem
-INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
-LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-LEFT JOIN pcprocitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
-LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
-LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
-left join processocompraloteitem on
-		pc69_pcprocitem = pcprocitem.pc81_codprocitem
-left join processocompralote on
-			pc68_sequencial = pc69_processocompralote
-AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
-left join liclicitem on l21_codpcprocitem = pc81_codprocitem
-WHERE pc81_codproc = {$codigo_preco}
-  AND pc10_instit = " . db_getsession("DB_instit") . "
-ORDER BY l21_ordem) as x GROUP BY
-                pc01_codmater,
-                pc11_seq,
-                pc01_descrmater,pc01_complmater,m61_abrev,pc11_reservado,l21_ordem
-                order by
-                l21_ordem) as matquan join
-(SELECT DISTINCT
-                pc11_seq,
-                {$tipoReferencia} as si02_vlprecoreferencia,
-                                     case when pc80_criterioadjudicacao = 1 then
-                     round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
-                     when pc80_criterioadjudicacao = 2 then
-                     round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
-                     end as mediapercentual,
-                pc01_codmater,
-                si01_datacotacao,
-                pc80_criterioadjudicacao,
-                pc01_tabela,
-                pc01_taxa,
-                si01_justificativa
-FROM pcproc
-JOIN pcprocitem ON pc80_codproc = pc81_codproc
-JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-JOIN solicitem ON pc81_solicitem = pc11_codigo
-JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
-JOIN pcmater ON pc16_codmater = pc01_codmater
-JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
-GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by l21_ordem asc"; */
-            //die($sSql); exit;
             $sSql = "select
             *
         from
