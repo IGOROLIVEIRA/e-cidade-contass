@@ -94,8 +94,13 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
             AND DATE_PART('MONTH',licobrasresponsaveis.obr05_dtcadastrores)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
             AND z01_cgccpf NOT IN
             (SELECT si194_nrodocumento
-                 FROM pessoasobra102021
-            INNER JOIN cgm ON si194_nrodocumento = z01_cgccpf)
+            FROM pessoasobra102021
+            INNER JOIN cgm ON si194_nrodocumento = z01_cgccpf
+            UNION
+            SELECT si194_nrodocumento
+            FROM pessoasobra102022
+            INNER JOIN cgm ON si194_nrodocumento = z01_cgccpf
+            )
     ";
     $rsResult10 = db_query($sql); //db_criatabela($rsResult10);die($sql);
 
