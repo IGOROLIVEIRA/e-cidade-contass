@@ -254,7 +254,7 @@ if (isset($incluir) && $self != "") {
       $clveicabast->ve70_data    = date("Y-m-d", db_getsession("DB_datausu"));
       $clveicabast->ve70_hora    = $ve70_hora; //db_hora();
       $clveicabast->ve70_ativo = "1";
-      $clveicabast->incluir($ve70_codigo);
+      $clveicabast->incluir();
       $erro_msg = $clveicabast->erro_msg;
       if ($clveicabast->erro_status == "0") {
         $sqlerro = true;
