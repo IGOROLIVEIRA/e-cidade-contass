@@ -133,7 +133,7 @@ class cl_veicabast {
      }
    }
    // funcao para inclusao
-   function incluir ($ve70_codigo){ 
+   function incluir (){ 
       $this->atualizacampos();
      if($this->ve70_veiculos == null ){ 
        $this->erro_sql = " Campo Veiculo nao Informado.";
@@ -226,7 +226,7 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
-     if($ve70_codigo == "" || $ve70_codigo == null ){
+     if($this->ve70_codigo == "" || $this->ve70_codigo == null ){
        $result = db_query("select nextval('veicabast_ve70_codigo_seq')"); 
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -237,7 +237,9 @@ class cl_veicabast {
          return false; 
        }
        $this->ve70_codigo = pg_result($result,0,0); 
-     }else{
+     }
+     
+     /*else{
        $result = db_query("select last_value from veicabast_ve70_codigo_seq");
        if(($result != false) && (pg_result($result,0,0) < $ve70_codigo)){
          $this->erro_sql = " Campo ve70_codigo maior que último número da sequencia.";
@@ -249,7 +251,7 @@ class cl_veicabast {
        }else{
          $this->ve70_codigo = $ve70_codigo; 
        }
-     }
+     }*/
      if(($this->ve70_codigo == null) || ($this->ve70_codigo == "") ){ 
        $this->erro_sql = " Campo ve70_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
@@ -1438,4 +1440,3 @@ if($dbwhere==""){
         return $sql;
     }
 }
-?>
