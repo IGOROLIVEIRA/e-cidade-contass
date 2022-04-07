@@ -80,6 +80,14 @@ require_once("dbforms/db_funcoes.php");
                 </tr>
                 <tr>
                     <td>
+                        <input type="checkbox" value="4000118">
+                    </td>
+                    <td>
+                        <label>S-2410 - Cadastro de benefício</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         <input type="checkbox" value="4000112">
                     </td>
                     <td>
