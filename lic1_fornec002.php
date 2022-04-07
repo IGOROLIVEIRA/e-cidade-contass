@@ -185,16 +185,6 @@ if (isset($incluir)) {
 
       db_inicio_transacao();
 
-
-      /*
-             * logica para verificaÃ§Ã£o de saldos das modalidades
-             */
-
-      //$lSaldoModalidade = licitacao::verificaSaldoModalidade($l20_codigo, $iModadalidade, $iItem, $dtJulgamento)
-
-      //echo ("<pre>".print_r($oLicitacao, 1)."</pre>");
-      //die();
-
       $result = $clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo));
 
       if ($clliclicita->numrows == 0) {
@@ -252,8 +242,8 @@ if (isset($incluir)) {
         $clpcorcamforne->pc21_codorc = $pc20_codorc;
         $clpcorcamforne->incluir($pc21_orcamforne);
         $pc21_orcamforne = $clpcorcamforne->pc21_orcamforne;
-        $erro_msg = $clpcorcamforne->erro_msg;
         if ($clpcorcamforne->erro_status == 0) {
+          $erro_msg = $clpcorcamforne->erro_msg;
           $sqlerro = true;
         }
       }
@@ -265,7 +255,7 @@ if (isset($incluir)) {
           $erro_msg = $clpcorcamfornelic->erro_msg;
         }
       }
-      db_fim_transacao($sqlerro);
+      db_fim_transacao();
       $op = 1;
     } else {
       echo "<script>alert('É necessário cadastrar pelo menos um representante legal e demais membros para o fornecedor.')</script>";
@@ -273,16 +263,6 @@ if (isset($incluir)) {
     }
   } else {
     db_inicio_transacao();
-
-
-    /*
-         * logica para verificação de saldos das modalidades
-         */
-
-    //$lSaldoModalidade = licitacao::verificaSaldoModalidade($l20_codigo, $iModadalidade, $iItem, $dtJulgamento)
-
-    //echo ("<pre>".print_r($oLicitacao, 1)."</pre>");
-    //die();
 
     $result = $clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo));
 
@@ -341,8 +321,8 @@ if (isset($incluir)) {
       $clpcorcamforne->pc21_codorc = $pc20_codorc;
       $clpcorcamforne->incluir($pc21_orcamforne);
       $pc21_orcamforne = $clpcorcamforne->pc21_orcamforne;
-      $erro_msg = $clpcorcamforne->erro_msg;
       if ($clpcorcamforne->erro_status == 0) {
+        $erro_msg = $clpcorcamforne->erro_msg;
         $sqlerro = true;
       }
     }
@@ -432,7 +412,7 @@ if (isset($incluir)) {
 
     if ($sqlerro == false) {
       $clpcorcamforne->excluir($pc21_orcamforne);
-      $erro_msg = $clpcorcamforne->erro_msg;
+      //$erro_msg = $clpcorcamforne->erro_msg;
       if ($clpcorcamforne->erro_status == 0) {
         $sqlerro = true;
       }
@@ -567,8 +547,11 @@ if ($l03_pctipocompratribunal == "102" || $l03_pctipocompratribunal == "103") {
 
 
 if (isset($alterar) || isset($excluir) || isset($incluir) || isset($verificado)) {
+
   if (isset($excluir) && isset($exc_tudo) && $exc_tudo == true) {
-    db_msgbox($erro_msg);
+    if ($sqlerro == true) {
+      db_msgbox($erro_msg);
+    }
     //echo "<script>location.href='lic1_fornec001.php';</script>";
   } else {
     if ($sqlerro == true) {
@@ -579,7 +562,9 @@ if (isset($alterar) || isset($excluir) || isset($incluir) || isset($verificado))
       }
     } else {
       if (isset($tipopart1) && isset($tipopart2)) {
-        db_msgbox($erro_msg);
+        if ($sqlerro == true) {
+          db_msgbox($erro_msg);
+        }
       }
       //echo "<script>location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';</script>";
     }

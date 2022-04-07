@@ -170,14 +170,14 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
-                <tr id="LinhaContribuicao">
+                <tr>
                     <td><b>Tipo de contribuição:</b></td>
                     <td>
                         <?php
                         $arrayTipoContribuicao = array(
                             0 => "Selecione",
-                            1 => "Normal",
-                            2 => "Suplementar"
+                            1 => "Ordinária",
+                            2 => "Extraordinária"
                         );
                         db_select('c238_tipocontribuicao', $arrayTipoContribuicao, true, 1, "");
                         ?>
@@ -277,21 +277,18 @@ $cldipr->rotulo->label();
         }
         ocultarLinha('LinhaContribuicaoPatronal');
         ocultarLinha('LinhaContribuicaoSegurados');
-        ocultarLinha('LinhaContribuicao');
         return;
     }
 
     function condicoesPatronal() {
         mostrarLinha('LinhaContribuicaoPatronal');
         ocultarLinha('LinhaContribuicaoSegurados');
-        mostrarLinha('LinhaContribuicao');
         return;
     }
     
     function condicoesSegurados() {
         ocultarLinha('LinhaContribuicaoPatronal');
         mostrarLinha('LinhaContribuicaoSegurados');
-        ocultarLinha('LinhaContribuicao');
         return;
     }
 
@@ -310,20 +307,10 @@ $cldipr->rotulo->label();
             return;
         }
         document.getElementById('c238_tipocontribuicaopatronal').value = 0;
-        document.getElementById('c238_tipocontribuicao').value = 0;
         return;
     }
 
     function alterarDisplayDaLinha(identificador, display) {
         document.getElementById(identificador).style.display = display;
-    }
-
-    function validarCampos() {
-        if (document.form1.c238_tipocontribuicao.value === "2" && document.form1.c238_tiporepasse.value != "1") {
-            alert("Tipo de Contribuição Suplementar permitida somente para Tipo de Repasse igual a Patronal.");
-            document.form1.c238_tipocontribuicao.focus();
-            return false;
-        }
-        return true;
     }
 </script>

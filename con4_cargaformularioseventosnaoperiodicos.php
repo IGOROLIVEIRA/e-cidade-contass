@@ -35,7 +35,7 @@ require_once("dbforms/db_funcoes.php");
                         <input type="checkbox" value="4000102">
                     </td>
                     <td>
-                        <label>Cadastramento Inicial do Vínculo e Admissão/Ingresso de Trabalhador s2200</label>
+                        <label>S-2200 - Cadastramento Inicial do Vínculo e Admissão/Ingresso de Trabalhador</label>
                     </td>
                 </tr>
                 <tr>
@@ -43,7 +43,7 @@ require_once("dbforms/db_funcoes.php");
                         <input type="checkbox" value="4000103">
                     </td>
                     <td>
-                        <label>Alteração de Dados Cadastrais do Trabalhador s2205</label>
+                        <label>S-2205 - Alteração de Dados Cadastrais do Trabalhador</label>
                     </td>
                 </tr>
                 <tr>
@@ -51,7 +51,7 @@ require_once("dbforms/db_funcoes.php");
                         <input type="checkbox" value="4000104">
                     </td>
                     <td>
-                        <label>Alteração de Contrato de Trabalho/Relação Estatutária s2206</label>
+                        <label>S-2206 - Alteração de Contrato de Trabalho/Relação Estatutária</label>
                     </td>
                 </tr>
                 <tr>
@@ -59,7 +59,15 @@ require_once("dbforms/db_funcoes.php");
                         <input type="checkbox" value="4000113">
                     </td>
                     <td>
-                        <label>Trabalhador Sem Vínculo de Emprego/Estatutário s2300</label>
+                        <label>S-2300 - Trabalhador Sem Vínculo de Emprego/Estatutário</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" value="4000114">
+                    </td>
+                    <td>
+                        <label>S-2306 - Trabalhador Sem Vínculo de Emprego/Estatutário - Alteração Contratual</label>
                     </td>
                 </tr>
                 <tr>
@@ -72,10 +80,18 @@ require_once("dbforms/db_funcoes.php");
                 </tr>
                 <tr>
                     <td>
+                        <input type="checkbox" value="4000118">
+                    </td>
+                    <td>
+                        <label>S-2410 - Cadastro de benefício</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         <input type="checkbox" value="4000112">
                     </td>
                     <td>
-                        <label>Desligamento s2299</label>
+                        <label>S-2299 - Desligamento</label>
                     </td>
                 </tr>
                 <tr>
