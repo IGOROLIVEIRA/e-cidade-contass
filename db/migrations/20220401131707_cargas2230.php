@@ -82,7 +82,29 @@ class Cargas2230 extends AbstractMigration
             UPDATE db_itensmenu
             SET funcao = 'con4_manutencaoformulario001.php?esocial=40'
             WHERE descricao LIKE '%S-2230%';
-                    
+
+            UPDATE avaliacaopergunta
+            SET db103_avaliacaotiporesposta = 2
+            WHERE db103_sequencial = 4000849;
+
+            DELETE
+            FROM avaliacaoperguntaopcao
+            WHERE db104_avaliacaopergunta = 4000849;
+
+            INSERT INTO avaliacaoperguntaopcao(db104_sequencial,db104_avaliacaopergunta,db104_descricao,db104_identificador,db104_aceitatexto,db104_peso,db104_identificadorcampo,db104_valorresposta)
+            VALUES ((SELECT nextval('avaliacaoperguntaopcao_db104_sequencial_seq')), 4000849,'','codMotAfast-4003010','true',0,'codMotAfast','');
+
+            UPDATE avaliacaopergunta
+            SET db103_avaliacaotiporesposta = 2
+            WHERE db103_sequencial = 4000847;
+            
+            DELETE
+            FROM avaliacaoperguntaopcao
+            WHERE db104_avaliacaopergunta = 4000847;
+
+            INSERT INTO avaliacaoperguntaopcao(db104_sequencial,db104_avaliacaopergunta,db104_descricao,db104_identificador,db104_aceitatexto,db104_peso,db104_identificadorcampo,db104_valorresposta)
+            VALUES ((SELECT nextval('avaliacaoperguntaopcao_db104_sequencial_seq')), 4000847,'','codCateg-4003009','true',0,'codCateg','');
+                                
         COMMIT;
 SQL;
         $this->execute($sql);
