@@ -278,7 +278,6 @@ switch ($oParam->exec) {
                 }
             }
 
-
             foreach ($resultadoEmpenho as $row) {
                 $valorEm[$e] = $row;
                 $codemp = explode("/", $valorEm[$e]);
@@ -684,10 +683,13 @@ switch ($oParam->exec) {
 
 
             //após a verificação de todas validações realiza a importar
+            /**
+             * ###########################################INICIOOO IMPORTACAO#################################################################################
+             */
 
             if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1 == 0 && $opBaixaCompleta == 0 && $opBaixa == 0 && $opKm == 0 && $opVeic == 0 && $controleCom == 0 && $deixarInserir == 0 && $controleData == 0) {
                 $emp = 0;
-                foreach ($resultadoPlanilha as $row) {
+                foreach ($resultadoPlanilha as $chave => $row) {
                     $test1       = $row->placa;
                     $datasaida   = $row->data;
                     $hora        = $row->hora;
@@ -703,12 +705,6 @@ switch ($oParam->exec) {
                     $medidasaida       = $row->medidasaida;
                     $motorista         = $row->motorista;
                     $nota              = $row->nota;
-
-                    $valor = explode(",", $valor);
-                    $valor = $valor[0] . "." . $valor[1];
-                    $vUnitario = explode(",", $vUnitario);
-                    $vUnitario = $vUnitario[0] . "." . $vUnitario[1];
-
 
                     //faz a busca do veiculo por placa
                     //$resultadoVeiculo = $clveiculos->sql_record($clveiculos->sql_query(null,"ve01_codigo,z01_cgccpf",null,"ve01_placa = '$test1'"));
@@ -748,8 +744,6 @@ switch ($oParam->exec) {
                         }
                     }
 
-
-
                     //Verifica codigo do departamento de cada veiculo.
                     $resultCodDepart =  $clveiccentral->sql_record($clveiccentral->sql_query_file(null, "*", null, "ve40_veiculos = $codigoVeic"));
                     $resultCodDeparto = db_utils::fieldsMemory($resultCodDepart, 0);
@@ -758,7 +752,7 @@ switch ($oParam->exec) {
                     $resultDepartaCod = db_utils::fieldsMemory($resultDeparta, 0);
 
                     // Incluir a retirada do veiculo
-
+                    db_inicio_transacao();
                     $clveicretirada->ve60_veiculo              = $codigoVeic;
                     $clveicretirada->ve60_veicmotoristas       = $motoristaCodigo;
                     $clveicretirada->ve60_datasaida            = $datasaida;
@@ -772,7 +766,8 @@ switch ($oParam->exec) {
                     $clveicretirada->ve60_destinonovo          = null;
                     $clveicretirada->ve60_importado            = "t";
                     $clveicretirada->incluir(null);
-
+                    
+                    $clveicabast                       = new cl_veicabast();
                     $clveicabast->ve70_veiculos        = $codigoVeic;
                     $clveicabast->ve70_veiculoscomb    = $codCombust;
                     $clveicabast->ve70_litros          = $litros;
@@ -787,39 +782,29 @@ switch ($oParam->exec) {
                     $clveicabast->ve70_observacao      = null;
                     $clveicabast->ve70_origemgasto     = 2;
                     $clveicabast->ve70_importado       = "t";
-                    $clveicabast->incluir(null);
+                    $clveicabast->incluir();
 
-                    //fazendo inserção na tabela empveiculos
-                    $resultadoAba = $clveicabast->sql_record($clveicabast->sql_query_valorMax1(null, "max(ve70_codigo)", null, "ve70_veiculos = $codigoVeic"));
-                    $resultAba = db_utils::fieldsMemory($resultadoAba, 0);
-
-                    $codemp = explode("/", $valorEm[$emp]);
+                    $codemp = explode("/", $resultadoEmpenho[$chave]);
                     $codEmp = $codemp[0];
                     $anoEmp = $codemp[1];
 
 
-                    $resultadoEmpenho = $clempempenho->sql_record($clempempenho->sql_query(null, "*", null, "e60_codemp like '$codEmp' and e60_anousu = $anoEmp"));
-                    $resultEmpenho = db_utils::fieldsMemory($resultadoEmpenho, 0);
-
+                    $resultadoEmpenhox = $clempempenho->sql_record($clempempenho->sql_query(null, "*", null, "e60_codemp like '$codEmp' and e60_anousu = $anoEmp"));
+                    $resultEmpenho = db_utils::fieldsMemory($resultadoEmpenhox, 0);
 
                     $clempveiculos->si05_numemp            = $resultEmpenho->e60_numemp;
                     $clempveiculos->si05_atestado          = "t";
-                    $clempveiculos->si05_codabast          = $resultAba->max;
+                    $clempveiculos->si05_codabast          = $clveicabast->ve70_codigo;
                     $clempveiculos->si05_item_empenho      = "f";
                     $clempveiculos->incluir(null);
 
                     $emp++;
 
-
-
-                    $resultadoRetirada = $clveicretirada->sql_record($clveicretirada->sql_query(null, "max(veicretirada.ve60_codigo)", null, "ve60_veiculo = $codigoVeic"));
-                    $resultRetirada = db_utils::fieldsMemory($resultadoRetirada, 0);
-
-                    $clveicabastretirada->ve73_veicabast    = $resultAba->max;
-                    $clveicabastretirada->ve73_veicretirada = $resultRetirada->max;
+                    $clveicabastretirada->ve73_veicabast    = $clveicabast->ve70_codigo;
+                    $clveicabastretirada->ve73_veicretirada = $clveicretirada->ve60_codigo;
                     $clveicabastretirada->incluir(null);
 
-                    $clveicdevolucao->ve61_veicretirada      = $resultRetirada->max;
+                    $clveicdevolucao->ve61_veicretirada      = $clveicretirada->ve60_codigo;
                     $clveicdevolucao->ve61_veicmotoristas    = $motoristaCodigo;
                     $clveicdevolucao->ve61_datadevol         = $datasaida;
                     $clveicdevolucao->ve61_horadevol         = $hora;
@@ -830,7 +815,8 @@ switch ($oParam->exec) {
                     $clveicdevolucao->ve61_importado         = "t";
                     $clveicdevolucao->incluir(null);
 
-                    $verificarposto = $clveiccadpostoexterno->sql_record($clveiccadpostoexterno->sql_query_file(null, "*", null, "ve34_numcgm = $resultEmpenho->e60_numcgm"));
+                    /*$verificarposto = $clveiccadpostoexterno->sql_record($clveiccadpostoexterno->sql_query_file(null, "*", null, "ve34_numcgm = $resultEmpenho->e60_numcgm"));
+                    die($clveiccadpostoexterno->sql_query_file(null, "*", null, "ve34_numcgm = $resultEmpenho->e60_numcgm"));
                     if ($clveiccadpostoexterno->numrows == 0) {
 
                         $clveiccadposto->ve29_tipo = 2;
@@ -839,8 +825,8 @@ switch ($oParam->exec) {
                         $resultadoPost = $clveiccadposto->sql_record($clveiccadposto->sql_query(null, "max(veiccadposto.ve29_codigo)", null, ""));
                         $resultPost = db_utils::fieldsMemory($resultadoPost, 0);
 
-                        $clveicabastposto->ve71_veicabast = $resultAba->max;
-                        $clveicabastposto->ve71_veiccadposto = $resultPost->max;
+                        $clveicabastposto->ve71_veicabast = $clveicabast->ve70_codigo;
+                        $clveicabastposto->ve71_veiccadposto = $clveiccadposto->ve29_codigo;
                         $clveicabastposto->ve71_nota = $nota;
                         $clveicabastposto->incluir(null);
 
@@ -853,12 +839,13 @@ switch ($oParam->exec) {
                         $resultadoPost = $clveiccadposto->sql_record($clveiccadposto->sql_query(null, "*", null, "ve29_codigo = $verificarpostoresult->ve34_veiccadposto"));
                         $resultPost = db_utils::fieldsMemory($resultadoPost, 0);
 
-                        $clveicabastposto->ve71_veicabast = $resultAba->max;
+                        $clveicabastposto->ve71_veicabast = $clveicabast->ve70_codigo;
                         $clveicabastposto->ve71_veiccadposto = $resultPost->ve29_codigo;
                         $clveicabastposto->ve71_nota = $nota;
                         $clveicabastposto->incluir(null);
                     }
-
+                    */
+                    db_fim_transacao();
 
                     if ($erro == false) {
                         unlink($arquivo);
