@@ -276,7 +276,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
                             $sSql = " SELECT taborc.k02_estorc,
                                             CASE
-                                                WHEN substr(taborc.k02_estorc,2,4) IN ('1218', '7218') THEN cgm.z01_cgccpf
+                                                WHEN substr(taborc.k02_estorc,2,4) IN ('1215', '7215') THEN cgm.z01_cgccpf
                                                 ELSE ''
                                             END AS z01_cgccpf,
                                             o70_codrec,

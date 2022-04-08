@@ -232,9 +232,6 @@ class cl_diprbaseprevidencia
         if (!$this->verificaContribuicaoSegurados())
             return false;
 
-        if (!$this->verificaTipoContribuicao())
-            return false;
-
         $sql = " UPDATE {$this->nomeTabela} SET ";
         $virgula = "";
 
@@ -577,11 +574,7 @@ class cl_diprbaseprevidencia
     {
         $nomeCampo = "c238_tipocontribuicao";
         $descricaoCampo = "Tipo de Contribuicao";
-        if ($this->$nomeCampo == 0 AND $this->c238_tiporepasse == 1) {
-            $this->erroCampo("Campo {$descricaoCampo} não Informado.", $nomeCampo);
-            return false;
-        }
-        return true;   
+        return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
     }
 
     public function verificaDataRepasse()
