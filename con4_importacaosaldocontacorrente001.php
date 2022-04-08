@@ -96,13 +96,13 @@ $iAnoSessao = db_getsession("DB_anousu");
     js_divCarregando('Aguarde', 'div_aguarde');
     var params = {
       exec: exec,
-      ano: iAnoSessao,
+      ano: iAnoSessao.value,
     };
 
     novoAjax(params, function(e) {
       var oRetorno = JSON.parse(e.responseText);
       js_removeObj('div_aguarde');
-		console.log(oRetorno.sArquivoLog);
+
 	  if (oRetorno.sArquivoLog != '') {
 		$('retorno').innerHTML = "<b>Contas não implantadas: </b>"
 	  	$('retorno').innerHTML += "<a href='db_download.php?arquivo="+oRetorno.sArquivoLog+"'>"+oRetorno.sArquivoLog+"</a><br>";
