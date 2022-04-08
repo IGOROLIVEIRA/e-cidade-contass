@@ -41,6 +41,7 @@ try {
 		$iAnoUsu       = $oParam->ano;
         $iAnoUsuOrigin = $iAnoUsu - 1;
         $iInstituicao = db_getsession("DB_instit");
+        $aContas = array('1', '2', '5', '6', '7', '8');
 
 		$sSqlContaCorrenteSaldo = "select distinct c29_debito, c29_credito, c19_contacorrente,
         c19_orctiporec,
@@ -66,18 +67,19 @@ try {
         sum(case when c28_tipo = 'D' then c69_valor else 0 end) as total_debito,
         sum(case when c28_tipo = 'C' then c69_valor else 0 end) as total_credito
         from contacorrentedetalhe
-        left join contacorrentedetalheconlancamval on c28_contacorrentedetalhe=c19_sequencial
-        left join contacorrentesaldo on c29_contacorrentedetalhe=c19_sequencial and c29_anousu=c19_conplanoreduzanousu and c29_mesusu = 0
-        left join conlancamval on c28_conlancamval=c69_sequen
+             inner join conplanoreduz on c61_anousu=c19_conplanoreduzanousu and c61_reduz=c19_reduz
+             inner join conplano on c60_anousu=c61_anousu and c60_codcon=c61_codcon
+             left join contacorrentedetalheconlancamval on c28_contacorrentedetalhe=c19_sequencial
+             left join contacorrentesaldo on c29_contacorrentedetalhe=c19_sequencial and c29_anousu=c19_conplanoreduzanousu and c29_mesusu = 0
+             left join conlancamval on c28_conlancamval=c69_sequen
         where c19_instit = {$iInstituicao}
-        and c19_conplanoreduzanousu = {$iAnoUsuOrigin}
+          and c19_conplanoreduzanousu = {$iAnoUsuOrigin}
+          and substr(c60_estrut, 1, 1)::int8 in (".implode(",", $aContas).")
+          and c60_codsis not in (5,6,7)
         group by 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ";
 
-        //echo $sSqlContaCorrenteSaldo;
+        //echo $sSqlContaCorrenteSaldo;exit;
 		$rsContaCorrenteSaldo = db_query($sSqlContaCorrenteSaldo);
-        //db_criatabela($rsContaCorrenteSaldo);exit;
-
-
 
         if (pg_num_rows($rsContaCorrenteSaldo) < 1) {
             throw new DBException(urlencode('ERRO - [ 2 ] - Nenhum registro encontrado com saldo!'));
