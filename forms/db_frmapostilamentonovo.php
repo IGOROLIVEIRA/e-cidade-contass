@@ -151,11 +151,28 @@ $clrotulo->label("ac16_resumoobjeto");
                     <fieldset class="">
                         <legend>Edição em bloco</legend>
                         <table>
-                            <td title="<?= @$Tac16_sequencial ?>">
-                                <?php db_ancora("Dotações", "pesquisao_coddot(true);", $db_opcao); ?>
-                            </td>
-                            <td id='inputdotacao'></td>
                             <td>
+                                <?php db_ancora("Dotações", "pesquisao_coddot(true);", $db_opcao); ?>
+
+                            </td>
+                            <td>
+                                <?
+
+                                db_input(
+                                    'o58_coddot',
+                                    5,
+                                    $o58_coddot,
+                                    true,
+                                    'text',
+                                    $db_opcao,
+                                    "onchange='pesquisadotacao();'"
+                                );
+                                ?>
+                            </td>
+                            <td>
+                                <?
+                                db_input('o55_descricao', 35, $Io55_descricao, true, 'text', 3, "", "", "", "");
+                                ?>
                                 <input type='button' id='btnAp?icar' value='Aplicar' onclick="aplicarDotacoes();">
                             </td>
                         </table>
@@ -200,9 +217,35 @@ $clrotulo->label("ac16_resumoobjeto");
     var opcao = document.form1.controle.value;
     var elemento = "";
 
-    oTxtDotacao = new DBTextField('oTxtDotacao', 'oTxtDotacao', '', 10);
-    oTxtDotacao.show($('inputdotacao'));
-    oTxtDotacao.setReadOnly(true);
+    function pesquisadotacao() {
+
+        var oParam = new Object();
+        oParam.dotacao = $('o58_coddot').value;
+        var oAjax = new Ajax.Request(
+            "func_dotacao.php", {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: retornoDotacao
+
+            }
+        );
+
+    }
+
+    function retornoDotacao(oAjax) {
+
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+
+        if (oRetorno.erro != "") {
+            $('o58_coddot').value = "";
+            $('o55_descricao').value = "";
+            alert("Sem permissão para esta dotação!");
+            return;
+        }
+
+        $('o55_descricao').value = oRetorno.descricao.urlDecode();
+
+    }
 
     function js_pesquisasi03_licitacao(mostra) {
         if (mostra == true) {
@@ -442,7 +485,7 @@ $clrotulo->label("ac16_resumoobjeto");
             }
 
             var oDadosHint = new Object();
-            oDadosHint.idLinha = `oGridItensrow${iSeq}cell1`;
+            oDadosHint.idLinha = `oGridItensrowoGridItens${iSeq}`;
             oDadosHint.sText = sTextEvent;
             aDadosHintGrid.push(oDadosHint);
 
@@ -466,10 +509,6 @@ $clrotulo->label("ac16_resumoobjeto");
 
         oGridItens.renderRows();
 
-
-        me.oGridItens.renderRows();
-
-
         aDadosHintGrid.each(function(oHint, id) {
             var oDBHint = eval("oDBHint_" + id + " = new DBHint('oDBHint_" + id + "')");
             oDBHint.setText(oHint.sText);
@@ -479,10 +518,11 @@ $clrotulo->label("ac16_resumoobjeto");
             oDBHint.setUseMouse(true);
             oDBHint.make($(oHint.idLinha), 2);
         });
-    }
 
-    function changeValorUnitario(iLinha, valor) {
-        var aLinha = oGridItens.aRows[iLinha];
+
+        me.oGridItens.renderRows();
+
+
 
     }
 
@@ -502,6 +542,7 @@ $clrotulo->label("ac16_resumoobjeto");
         aLinha.aCells[7].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
         if (aItensPosicao[iLinha].dotacoes.length > 0) {
             aItensPosicao[iLinha].dotacoes[0].valor = js_formatar(nQuantidade * nUnitario, 'f', 2);
+            //aItensPosicao[iLinha].dotacoes[0].quantidade = js_round((nUnitario / aItensPosicao[iLinha].valorunitario), 2);
             atualizarItemDotacao(iLinha, 0, js_formatar(nQuantidade * nUnitario, 'f', 2));
         }
 
@@ -591,7 +632,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         oTxtDotacao = new DBTextField('oTxtDotacao', 'oTxtDotacao', '', 10);
         oTxtDotacao.show($('inputdotacao'));
-        oTxtDotacao.setReadOnly(true);
+        //oTxtDotacao.setReadOnly(true);
 
         oTxtSaldoDotacao = new DBTextField('oTxtSaldoDotacao', 'oTxtSaldoDotacao', '', 10);
         oTxtSaldoDotacao.show($('inputsaldodotacao'));
@@ -607,7 +648,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oMessageBoard.show();
         oGridDotacoes = new DBGrid('gridDotacoes');
         oGridDotacoes.nameInstance = 'oGridDotacoes';
-        oGridDotacoes.setCellWidth(['20%', '60%', '20%']);
+        oGridDotacoes.setCellWidth(['20% !important', '60% !important', '20% !important']);
         oGridDotacoes.setHeader(["Dotação", "Valor", "&nbsp;"]);
         oGridDotacoes.setCellAlign(["center", "right", "Center"]);
         oGridDotacoes.setHeight(100);
@@ -660,8 +701,15 @@ $clrotulo->label("ac16_resumoobjeto");
      */
     function atualizarItemDotacao(iLinha, iDotacao, oValor) {
 
-        aItensPosicao[iLinha].dotacoes[iDotacao].valor = oValor.value.getNumber();
-        aItensPosicao[iLinha].dotacoes[iDotacao].quantidade = js_round((oValor.value.getNumber() / aItensPosicao[iLinha].valorunitario), 2);
+        if (oValor.value == undefined) {
+            aItensPosicao[iLinha].dotacoes[iDotacao].valor = oValor;
+            aItensPosicao[iLinha].dotacoes[iDotacao].quantidade = js_round((oValor / aItensPosicao[iLinha].valorunitario), 2);
+        } else {
+            aItensPosicao[iLinha].dotacoes[iDotacao].valor = oValor.value.getNumber();
+            aItensPosicao[iLinha].dotacoes[iDotacao].quantidade = js_round((oValor.value.getNumber() / aItensPosicao[iLinha].valorunitario), 2);
+
+        }
+
 
         nValorTotal = 0;
         var nQuantTotal = 0;
@@ -845,7 +893,7 @@ $clrotulo->label("ac16_resumoobjeto");
         if (mostra == true) {
             js_OpenJanelaIframe('',
                 'db_iframe_orcdotacao',
-                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot',
+                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot|o55_descr',
                 'Pesquisa de Dotações',
                 true, 0);
 
@@ -853,8 +901,8 @@ $clrotulo->label("ac16_resumoobjeto");
         } else {
             js_OpenJanelaIframe('',
                 'db_iframe_orcdotacao',
-                'func_permorcdotacao.php?' + query + 'pesquisa_chave=' + document.form1.o47_coddot.value +
-                '&funcao_js=parent.' + me.sInstance + '.mostraorcdotacao',
+                'func_permorcdotacao.php?' + query + 'pesquisa_chave=' + $('o58_coddot').value +
+                '&funcao_js=parent.mostraorcdotacao',
                 'Pesquisa de Dotações',
                 false
             );
@@ -871,7 +919,7 @@ $clrotulo->label("ac16_resumoobjeto");
         if (mostra == true) {
             js_OpenJanelaIframe('',
                 'db_iframe_orcdotacao',
-                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot',
+                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao2|o58_coddot',
                 'Pesquisa de Dotações',
                 true, 0);
 
@@ -896,7 +944,18 @@ $clrotulo->label("ac16_resumoobjeto");
         getSaldoDotacao(chave);
     }
 
-    function mostraorcdotacao1(chave1) {
+    function mostraorcdotacao1(chave1, chave2) {
+
+        //oTxtDotacao.setValue(chave1);
+        $('o58_coddot').value = chave1;
+        $('o55_descricao').value = chave2;
+        db_iframe_orcdotacao.hide();
+        $('Jandb_iframe_orcdotacao').style.zIndex = '0';
+        //$('oTxtValorDotacao').focus();
+        getSaldoDotacao(chave1);
+    }
+
+    function mostraorcdotacao2(chave1, chave2) {
 
         oTxtDotacao.setValue(chave1);
         db_iframe_orcdotacao.hide();
@@ -910,8 +969,8 @@ $clrotulo->label("ac16_resumoobjeto");
 
 
         var oDotacao = {
-            dotacao: oTxtDotacao.getValue(),
-            quantidade: 1,
+            dotacao: $('o58_coddot').value,
+            quantidade: 0,
             valor: 0,
             valororiginal: 0
         };

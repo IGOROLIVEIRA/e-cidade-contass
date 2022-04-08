@@ -274,7 +274,7 @@ if (!isset($filtroquery)) {
             if (isset($obriga_depto) && $obriga_depto == "sim") {
               $funcao_js = "js_verifica_depto|o58_coddot";
             }
-            
+
             $variaveis["secretaria"] =  (isset($secretaria) ? $secretaria : 0);
             $variaveis["departamento"] = (isset($departamento) ? $departamento : 0);
             db_lovrot($clpermusuario_dotacao->sql, 15, "()", "", $funcao_js, "", "NoMe", $variaveis, false);

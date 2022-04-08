@@ -3,6 +3,7 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
+require_once("libs/db_app.utils.php");
 include("classes/db_apostilamentonovo_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
@@ -35,6 +36,8 @@ if (isset($incluir)) {
   <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBHint.widget.js"></script>
+
   <link href="estilos.css" rel="stylesheet" type="text/css">
 
   <style>
