@@ -94,6 +94,14 @@ require_once("dbforms/db_funcoes.php");
                         <label>S-2299 - Desligamento</label>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" value="4000108">
+                    </td>
+                    <td>
+                        <label>S-2230 - Afastamento Temporario</label>
+                    </td>
+                </tr>
             </table>
         </fieldset>
         <input type="button" value="Processar" id="btnProcessar">
