@@ -41,7 +41,11 @@ class Cargas2230 extends AbstractMigration
                 NULL AS dttermafast,
                 cadferia.r30_per1i AS dtiniafastferias,
                 cadferia.r30_perai AS dtinicio,
-                cadferia.r30_peraf AS dtfim,
+                CASE
+                    WHEN (cadferia.r30_peraf - cadferia.r30_perai) < 365 THEN cadferia.r30_peraf
+                    WHEN (cadferia.r30_peraf - cadferia.r30_perai) > 365 THEN cadferia.r30_peraf
+                    ELSE NULL
+                END AS dtfim,
                 r30_per1f AS dttermafastferias
             FROM cadferia
             INNER JOIN rhpessoal ON rhpessoal.rh01_regist = cadferia.r30_regist
