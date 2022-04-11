@@ -151,7 +151,7 @@ $depart= db_getsession("DB_coddepto");
            $sql = $clempnotaord->sql_query_elemento("","",$campos,"m72_codnota#m72_codordem","matordem.m51_depto=$depart {$sWhere} and {$where_instit}");
            
         }
-        echo $sql;exit;
+
         db_lovrot($sql,15,"()","",$funcao_js);
         
       } else{
