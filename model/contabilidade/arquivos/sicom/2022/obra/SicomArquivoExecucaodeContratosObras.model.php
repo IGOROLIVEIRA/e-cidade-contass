@@ -199,7 +199,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
       $clexeobras102022->si197_codunidadesubresp = $oDados10->si197_codunidadesubresp;
       $clexeobras102022->si197_nrolote = $oDados10->si197_nrolote;
       $clexeobras102022->si197_codobra = $oDados10->si197_codobra;
-      $clexeobras102022->si197_objeto = $oDados10->si197_objeto;
+      $clexeobras102022->si197_objeto = $this->removeCaracteres($oDados10->si197_objeto);
       $clexeobras102022->si197_linkobra = $oDados10->si197_linkobra;
       $clexeobras102022->si197_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clexeobras102022->si197_instit = db_getsession("DB_instit");
@@ -290,7 +290,8 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
              when l03_pctipocompratribunal = 103 then 4 end AS si204_tipoprocesso,
              obr01_numeroobra AS si204_codobra,
              ac16_objeto AS si204_objeto,
-             obr01_linkobra AS si204_linkobra
+             obr01_linkobra AS si204_linkobra,
+             ac16_tipoorigem
       FROM acordo
       INNER JOIN liclicita ON l20_codigo = ac16_licitacao
       INNER JOIN licobras ON obr01_licitacao = l20_codigo
@@ -313,12 +314,17 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
             $clexeobras202022->si204_codunidadesub = $oDados20->si204_codunidadesub;
             $clexeobras202022->si204_nrocontrato = $oDados20->si204_nrocontrato;
             $clexeobras202022->si204_exerciciocontrato = $oDados20->si204_exerciciocontrato;
+            if($oDados20->ac16_tipoorigem){
+                $clexeobras202022->si204_contdeclicitacao = $oDados20->ac16_tipoorigem;
+            }else{
+                $clexeobras202022->si204_contdeclicitacao = null;
+            }
             $clexeobras202022->si204_exercicioprocesso = $oDados20->si204_exercicioprocesso;
             $clexeobras202022->si204_nroprocesso = $oDados20->si204_nroprocesso;
             $clexeobras202022->si204_codunidadesubresp = $oDados20->si204_codunidadesubresp;
             $clexeobras202022->si204_tipoprocesso = $oDados20->si204_tipoprocesso;
             $clexeobras202022->si204_codobra = $oDados20->si204_codobra;
-            $clexeobras202022->si204_objeto = $oDados20->si204_objeto;
+            $clexeobras202022->si204_objeto = $this->removeCaracteres($oDados20->si204_objeto);
             $clexeobras202022->si204_linkobra = $oDados20->si204_linkobra;
             $clexeobras202022->si204_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clexeobras202022->si204_instit = db_getsession("DB_instit");

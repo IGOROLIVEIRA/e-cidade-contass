@@ -175,7 +175,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras102022->si198_nrodocumento = $oDados10->z01_cgccpf;
       $clcadobras102022->si198_tiporegistroconselho = $oDados10->obr05_tiporegistro;
       if($oDados10->obr05_tiporegistro == "3"){
-          $clcadobras102022->si198_dscoutroconselho = $oDados10->obr05_dscoutroconselho;
+          $clcadobras102022->si198_dscoutroconselho = $this->removeCaracteres($oDados10->obr05_dscoutroconselho);
       }else{
           $clcadobras102022->si198_dscoutroconselho = "";
       }
@@ -214,7 +214,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras202022->si199_tiporegistro = 20;
       $clcadobras202022->si199_codorgaoresp = $oDados20->si09_codorgaotce;
       $clcadobras202022->si199_codobra = $oDados20->obr01_numeroobra;
-      $clcadobras202022->si199_situacaodaobra = $oDados20->obr02_situacao;
+      $clcadobras202022->si199_situacaodaobra = $this->removeCaracteres($oDados20->obr02_situacao);
       $clcadobras202022->si199_dtsituacao = $oDados20->obr02_dtsituacao;
       $clcadobras202022->si199_veiculopublicacao = $this->removeCaracteres($oDados20->obr02_veiculopublicacao);
       $clcadobras202022->si199_dtpublicacao = $oDados20->obr02_dtpublicacao;
@@ -252,7 +252,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras212022->si200_codobra = $oDados21->obr01_numeroobra;
       $clcadobras212022->si200_dtparalisacao = $oDados21->obr02_dtparalisacao;
       $clcadobras212022->si200_motivoparalisacap = $oDados21->obr02_motivoparalisacao;
-      $clcadobras212022->si200_descoutrosparalisacao = $oDados21->obr02_outrosmotivos;
+      $clcadobras212022->si200_descoutrosparalisacao = $this->removeCaracteres($oDados21->obr02_outrosmotivos);
       $clcadobras212022->si200_dtretomada = $oDados21->obr02_dtretomada;
       $clcadobras212022->si200_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clcadobras212022->si200_instit = db_getsession("DB_instit");

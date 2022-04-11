@@ -169,7 +169,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras102022->si195_exerciciolicitacao = $oDados10->si195_exerciciolicitacao;
         $cllicobras102022->si195_nroprocessolicitatorio = $oDados10->si195_nroprocessolicitatorio;
         $cllicobras102022->si195_codobra = $oDados10->si195_codobra;
-        $cllicobras102022->si195_objeto = $oDados10->si195_objeto;
+        $cllicobras102022->si195_objeto = $this->removeCaracteres($oDados10->si195_objeto);
         $cllicobras102022->si195_linkobra = $oDados10->si195_linkobra;
         $cllicobras102022->si195_nrolote = $oDados10->si195_nrolote;
         $cllicobras102022->si195_nrocontrato = $oDados10->si195_nrocontrato;
@@ -239,7 +239,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras202022->si196_nroprocessolicitatorio = $oDados20->si195_nroprocessolicitatorio;
         $cllicobras202022->si196_tipoprocesso = $oDados20->si196_tipoprocesso;
         $cllicobras202022->si196_codobra = $oDados20->si195_codobra;
-        $cllicobras202022->si196_objeto = $oDados20->si195_objeto;
+        $cllicobras202022->si196_objeto = $this->removeCaracteres($oDados20->si195_objeto);
         $cllicobras202022->si196_linkobra = $oDados20->si195_linkobra;
         $cllicobras202022->si196_nrocontrato = $oDados20->si196_nrocontrato;
         $cllicobras202022->si196_exerciciocontrato = $oDados20->si196_exerciciocontrato;
