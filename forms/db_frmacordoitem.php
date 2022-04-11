@@ -1347,12 +1347,13 @@ db_app::load("estilos.css, grid.style.css");
         if (itipocompra === '103' || itipocompra === '102') {
             oGridItensOrigem.setCellAlign(new Array("right", "right", "right", "left", 'right', 'right', 'right', "left", "center", "center", "center", "center", "center", "center", "center"));
 
-            oGridItensOrigem.setCellWidth(new Array("10%", '1%', "10%", "40%", '10%', '10%', '10%', "10%", "1%", "20%", "20%", "15%", "15%", "15%", "15%"));
+            oGridItensOrigem.setCellWidth(new Array("10%", '6%',"10%", "35%", '10%', '10%', '10%', "10%", "1%", "20%", "20%", "15%", "15%", "15%", "15%"));
 
-            oGridItensOrigem.setHeader(new Array("Código", '', "Cod.Mater", "Material", "Quantidade", "Vlr Un", "Total", "Tipo", "", "Qtd. Disponivel", "Qtd. Contratada", "Previsão Inicial", "Previsão Final", "Serviço", "Elemento"));
+            oGridItensOrigem.setHeader(new Array("Código", "Item", "Cod.Mater", "Material", "Quantidade", "Vlr Un", "Total", "Tipo", "", "Qtd. Disponivel", "Qtd. Contratada", "Previsão Inicial", "Previsão Final", "Serviço", "Elemento"));
 
             oGridItensOrigem.aHeaders[1].lDisplayed = false;
-            oGridItensOrigem.aHeaders[2].lDisplayed = false;
+            //oGridItensOrigem.aHeaders[2].lDisplayed = false;
+            
             oGridItensOrigem.aHeaders[7].lDisplayed = false;
             oGridItensOrigem.aHeaders[8].lDisplayed = false;
             oGridItensOrigem.aHeaders[9].lDisplayed = false;
@@ -1360,7 +1361,11 @@ db_app::load("estilos.css, grid.style.css");
             oGridItensOrigem.aHeaders[13].lDisplayed = false;
             oGridItensOrigem.aHeaders[14].lDisplayed = false;
             oGridItensOrigem.aHeaders[15].lDisplayed = false;
+
+            
+            
             oGridItensOrigem.show($('ctngridItensOrigem'));
+            
         } else {
 
             oGridItensOrigem.setCellAlign(new Array("right",
@@ -1378,9 +1383,9 @@ db_app::load("estilos.css, grid.style.css");
             ));
 
             oGridItensOrigem.setCellWidth(new Array("10%",
-                '1%',
+                '6%',
                 "10%",
-                "40%",
+                "35%",
                 '10%',
                 '10%',
                 '10%',
@@ -1393,7 +1398,7 @@ db_app::load("estilos.css, grid.style.css");
             ));
 
             oGridItensOrigem.setHeader(new Array("Código",
-                '',
+                "Item",
                 "Cod.Mater",
                 "Material",
                 "Quantidade",
@@ -1408,7 +1413,7 @@ db_app::load("estilos.css, grid.style.css");
             ));
 
             oGridItensOrigem.aHeaders[1].lDisplayed = false;
-            oGridItensOrigem.aHeaders[2].lDisplayed = false;
+            //oGridItensOrigem.aHeaders[2].lDisplayed = false;
             oGridItensOrigem.aHeaders[7].lDisplayed = false;
             oGridItensOrigem.aHeaders[9].lDisplayed = false;
             oGridItensOrigem.aHeaders[12].lDisplayed = false;
@@ -1420,6 +1425,7 @@ db_app::load("estilos.css, grid.style.css");
          * Verifica o 'click' do botao Replicar. Percorre as linhas da Grid, verificando quais estao selecionadas e quais
          * campos devem ser replicados para estas linhas selecionadas, substituindo os valores
          */
+        
         $('btnReplicar').observe("click", function() {
 
             var iLinhasSelecionadas = 0;
@@ -1507,7 +1513,7 @@ db_app::load("estilos.css, grid.style.css");
         sContent += "</center>";
         windowItensOrigem.setContent(sContent);
         windowItensOrigem.allowCloseWithEsc(false);
-
+        
         var sAjuda = 'Selecione abaixo os itens que irão fazer parte do contrato. Caso não seja exibido nenhum item, selecione na aba <b>Acordo</b> o empenho, processo de compra ou licitação que possui os itens.';
         oMessageBoard = new DBMessageBoard('msgboardItensOrigem',
             'Escolha os Itens que farão parte do contrato',
@@ -1532,11 +1538,13 @@ db_app::load("estilos.css, grid.style.css");
     }
 
     function js_getItensOrigem() {
-
+        
         var oParam = new Object();
         oParam.exec = "getItensOrigem";
         js_divCarregando('Aguarde, pesquisando itens do contratante', 'msgBox');
+        
         var oAjax = new Ajax.Request(
+            
             sURL, {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
@@ -1570,6 +1578,7 @@ db_app::load("estilos.css, grid.style.css");
         $('btnVincularItens').disabled = false;
 
         var aCodigos = new Array();
+        
         oRetorno.itens.each(function(oRow, iSeq) {
             if (iTipoCompra === '103' || iTipoCompra === '102') {
                 var aLinha = new Array();
@@ -1583,7 +1592,7 @@ db_app::load("estilos.css, grid.style.css");
                 oTxtQtdContratada.addEvent("onBlur", "js_ValidaCampos(this, 4)");
 
                 aLinha[0] = oRow.codigo;
-                aLinha[1] = iTotalLinhas;
+                aLinha[1] = iTotalLinhas + 1;
                 aLinha[2] = oRow.codigomaterial;
                 aLinha[3] = oRow.material.urlDecode();
                 aLinha[4] = oRow.quantidade;
@@ -1607,10 +1616,11 @@ db_app::load("estilos.css, grid.style.css");
                 var nValorTotalItem = new Number(oRow.quantidade) * new Number(oRow.valorunitario);
                 var nValorTotalFracionado = 0;
 
-                oGridItensOrigem.addRow(aLinha, false, lDisabled, lMarcado);
-
+                oGridItensOrigem.addRow(aLinha);
+                
                 iLinhaAtual = iTotalLinhas;
                 iTotalLinhas++;
+                
             } else {
 
                 var aLinha = new Array();
@@ -1620,7 +1630,7 @@ db_app::load("estilos.css, grid.style.css");
                 oTxtDataEmissaoFinal = new DBTextFieldData('oTxtDataEmissaoFinal' + oRow.codigo, 'oTxtDataEmissao', null);
 
                 aLinha[0] = oRow.codigo;
-                aLinha[1] = iTotalLinhas;
+                aLinha[1] = iTotalLinhas + 1;
                 aLinha[2] = oRow.codigomaterial;
                 aLinha[3] = oRow.material.urlDecode();
                 aLinha[4] = oRow.quantidade;
@@ -1638,13 +1648,14 @@ db_app::load("estilos.css, grid.style.css");
                 var nValorTotalItem = new Number(oRow.quantidade) * new Number(oRow.valorunitario);
                 var nValorTotalFracionado = 0;
 
-                oGridItensOrigem.addRow(aLinha, false, lDisabled, lMarcado);
-
+                oGridItensOrigem.addRow(aLinha);
+                
                 iLinhaAtual = iTotalLinhas;
                 iTotalLinhas++;
             }
         });
         oGridItensOrigem.renderRows();
+        
 
         /**
          * Percorremos o array com os codigos para criar um className padrão para todos inputs existentes na Grid
@@ -1656,6 +1667,10 @@ db_app::load("estilos.css, grid.style.css");
 
             $('oTxtDataEmissaoFinal' + oLinha).setValue(oRetorno.dtFinalAcordo);
             $('oTxtDataEmissaoFinal' + oLinha).className = 'classDataEmissaoFinal';
+        });
+        oRetorno.itens.each(function(oRow, iSeq) {
+            oGridItensOrigem.setHint(iSeq, aLinha[3], oRow.material.urlDecode());
+            
         });
     }
 
