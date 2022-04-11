@@ -197,7 +197,7 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
               $sWhere .= " and exists (select 1 from conlancamacordo where c87_acordo = ac16_sequencial limit 1) ";
             }
             //verifica se foi o aco4_homologacaoinclusao001 que chamou
-            if ( !empty($frame) && $frame =="homologacao") {
+            if (isset($frame) && $frame =="homologacao") {
             
             
               if ( !empty($assinatura) && $assinatura ==true) {
