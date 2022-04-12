@@ -1504,9 +1504,11 @@ db_app::load("estilos.css, grid.style.css");
         sContent += "  <input type='button' value='Replicar' id='btnReplicar'>";
         sContent += "</center>";
         sContent += "<fieldset><legend><b>Escolha os Itens</b></legend>";
-        sContent += "  <div id='ctngridItensOrigem'>";
+        sContent += "  <div id='ctngridItensOrigem'> ";
         sContent += "  </div>";
         sContent += "</fieldset>";
+        sContent += "<div id='ajudaItem' style='position:absolute;border:1px solid #FFDD00; display:none; text-indent: 15px;background-color: #FFFFCC;width: 70%;'>";
+        sContent += "</div> ";
         sContent += "</div>";
         sContent += "<center>";
         sContent += "  <input type='button' value='Salvar' id='btnVincularItens'>";
@@ -1617,6 +1619,9 @@ db_app::load("estilos.css, grid.style.css");
                 var nValorTotalFracionado = 0;
 
                 oGridItensOrigem.addRow(aLinha);
+
+                oGridItensOrigem.aRows[iSeq].aCells[4].sEvents += "onmouseover='mostrarAjuda(\""+aLinha[3]+"\", true)'";
+                oGridItensOrigem.aRows[iSeq].aCells[4].sEvents += "onmouseout='mostrarAjuda(\"\", false)'";
                 
                 iLinhaAtual = iTotalLinhas;
                 iTotalLinhas++;
@@ -1650,6 +1655,10 @@ db_app::load("estilos.css, grid.style.css");
 
                 oGridItensOrigem.addRow(aLinha);
                 
+                oGridItensOrigem.aRows[iSeq].aCells[4].sEvents += "onmouseover='mostrarAjuda(\""+aLinha[3]+"\", true)'";
+                oGridItensOrigem.aRows[iSeq].aCells[4].sEvents += "onmouseout='mostrarAjuda(\"\", false)'";
+                
+                
                 iLinhaAtual = iTotalLinhas;
                 iTotalLinhas++;
             }
@@ -1668,11 +1677,28 @@ db_app::load("estilos.css, grid.style.css");
             $('oTxtDataEmissaoFinal' + oLinha).setValue(oRetorno.dtFinalAcordo);
             $('oTxtDataEmissaoFinal' + oLinha).className = 'classDataEmissaoFinal';
         });
-        oRetorno.itens.each(function(oRow, iSeq) {
-            oGridItensOrigem.setHint(iSeq, aLinha[3], oRow.material.urlDecode());
-            
-        });
+        
     }
+
+
+    function mostrarAjuda(sTexto, lShow) {
+
+        if (lShow) {
+        
+            el     =  $('ctngridItensOrigem'); 
+            var x  = 0;
+            var y  = el.offsetHeight;
+                x += el.offsetLeft;
+                //y += el.offsetTop;
+            $('ajudaItem').innerHTML     = sTexto;
+            $('ajudaItem').style.display = '';
+            $('ajudaItem').style.top     = $('ctngridItensOrigem').scrollTop + 20;
+            $('ajudaItem').style.left    = x;
+        
+        } else {
+            $('ajudaItem').style.display = 'none';
+        }
+}
 
     function js_vincularItens() {
 

@@ -72,7 +72,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         <tr class="DBgrid">
             <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
             <td class="table_header" style="width: 44px">Ordem</td>
-            <td class="table_header" style="width: 44px">Item</td>
+            
             <td class="table_header" style="width: 52px">Cod.Mat</td>
             <td class="table_header" style="width: 259px">Descrição Item</td>
             <td class="table_header" style="width: 55px">Unidade</td>
@@ -94,11 +94,6 @@ $cliframe_seleciona = new cl_iframe_seleciona;
                         <th class="table_header" style="width: 34px">
                             <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem?>">
                         </th>
-
-                        <td class="linhagrid" style="width: 44px">
-                            <?= $aItem->pc11_seq ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc11_seq ?>" id="<?= $iItem?>">
-                        </td>
 
                         <td class="linhagrid" style="width: 44px">
                             <?= $aItem->pc11_seq ?>
