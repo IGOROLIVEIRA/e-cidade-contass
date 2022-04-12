@@ -42,44 +42,129 @@ try {
         $iAnoUsuOrigin = $iAnoUsu - 1;
         $iInstituicao = db_getsession("DB_instit");
         $aContas = array('1', '2', '5', '6', '7', '8');
+        $dataInicio = $iAnoUsuOrigin."-01-01";
+        $dataFim = $iAnoUsuOrigin."-12-31";
 
-		$sSqlContaCorrenteSaldo = "select distinct c29_debito, c29_credito, c19_contacorrente,
-        c19_orctiporec,
-        c19_instit,
-        c19_concarpeculiar,
-        c19_contabancaria,
-        c19_reduz,
-        c19_numemp,
-        c19_numcgm,
-        c19_orcunidadeanousu,
-        c19_orcunidadeorgao,
-        c19_orcunidadeunidade,
-        c19_orcorgaoanousu,
-        c19_orcorgaoorgao,
-        c19_conplanoreduzanousu,
-        c19_acordo,
-        c19_estrutural,
-        c19_orcdotacao,
-        c19_orcdotacaoanousu,
-        c19_programa,
-        c19_projativ,
-        c19_emparlamentar,
-        sum(case when c28_tipo = 'D' then c69_valor else 0 end) as total_debito,
-        sum(case when c28_tipo = 'C' then c69_valor else 0 end) as total_credito
-        from contacorrentedetalhe
-             inner join conplanoreduz on c61_anousu=c19_conplanoreduzanousu and c61_reduz=c19_reduz
-             inner join conplano on c60_anousu=c61_anousu and c60_codcon=c61_codcon
-             left join contacorrentedetalheconlancamval on c28_contacorrentedetalhe=c19_sequencial
-             left join contacorrentesaldo on c29_contacorrentedetalhe=c19_sequencial and c29_anousu=c19_conplanoreduzanousu and c29_mesusu = 0
-             left join conlancamval on c28_conlancamval=c69_sequen
-        where c19_instit = {$iInstituicao}
-          and c19_conplanoreduzanousu = {$iAnoUsuOrigin}
-          and substr(c60_estrut, 1, 1)::int8 in (".implode(",", $aContas).")
-          and c60_codsis not in (5,6,7)
-        group by 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ";
+		$sSqlContaCorrenteSaldo = "select c19_sequencial,
+                                             c19_contacorrente,
+                                             c19_orctiporec,
+                                             c19_instit,
+                                             c19_concarpeculiar,
+                                             c19_contabancaria,
+                                             c19_reduz,
+                                             c19_numemp,
+                                             c19_numcgm,
+                                             c19_orcunidadeanousu,
+                                             c19_orcunidadeorgao,
+                                             c19_orcunidadeunidade,
+                                             c19_orcorgaoanousu,
+                                             c19_orcorgaoorgao,
+                                             c19_conplanoreduzanousu,
+                                             c19_acordo,
+                                             c19_estrutural,
+                                             c19_orcdotacao,
+                                             c19_orcdotacaoanousu,
+                                             c19_programa,
+                                             c19_projativ,
+                                             c19_emparlamentar, abs(round((case when substr(fc_planosaldonovo,60,1)::varchar(1) = 'C' then substr(fc_planosaldonovo,45,14)::float8 * -1 else substr(fc_planosaldonovo,45,14)::float8 end  )  + substr(fc_movencerramentomsc,1,15)::float8 - substr(fc_movencerramentomsc,17,54)::float8,2)::float8) AS saldofinal,
+                                             case when round((case when substr(fc_planosaldonovo,60,1)::varchar(1) = 'C' then substr(fc_planosaldonovo,45,14)::float8 * -1 else substr(fc_planosaldonovo,45,14)::float8 end  )  + substr(fc_movencerramentomsc,1,15)::float8 - substr(fc_movencerramentomsc,17,54)::float8,2)::float8 > 0 then 'D' else 'C' end AS sinalsaldofinal
+                                             from
+                                  (select c19_sequencial,
+                                         c19_contacorrente,
+                                         c19_orctiporec,
+                                         c19_instit,
+                                         c19_concarpeculiar,
+                                         c19_contabancaria,
+                                         c19_reduz,
+                                         c19_numemp,
+                                         c19_numcgm,
+                                         c19_orcunidadeanousu,
+                                         c19_orcunidadeorgao,
+                                         c19_orcunidadeunidade,
+                                         c19_orcorgaoanousu,
+                                         c19_orcorgaoorgao,
+                                         c19_conplanoreduzanousu,
+                                         c19_acordo,
+                                         c19_estrutural,
+                                         c19_orcdotacao,
+                                         c19_orcdotacaoanousu,
+                                         c19_programa,
+                                         c19_projativ,
+                                         c19_emparlamentar,
+                                         fc_planosaldonovo(".$iAnoUsuOrigin.", c61_reduz, '".$dataInicio."', '".$dataFim."', false),
+                                         fc_movencerramentomsc('".$dataInicio."', '".$dataFim."', c61_reduz)
+                                    from conplanoexe e
+                                         INNER JOIN conplanoreduz r ON (r.c61_anousu, r.c61_reduz) = (c62_anousu, c62_reduz)
+                                         INNER JOIN conplano on c60_anousu=c61_anousu and c60_codcon=c61_codcon
+                                         LEFT JOIN contacorrentedetalhe ON (c19_conplanoreduzanousu, c19_reduz) = ({$iAnoUsuOrigin}, c61_reduz)
+                                    where c19_instit = {$iInstituicao}
+                                      and c62_anousu = {$iAnoUsu}
+                                      and (c62_vlrcre != 0 or c62_vlrdeb  != 0 )
+                                      and substr(c60_estrut, 1, 1)::int8 in (".implode(",", $aContas).")
+                                      and (c60_infcompmsc is null or c60_infcompmsc in (0, 1, 2, 8 ) )
+                                      and c60_codsis not in (5,6,7) ) as movimento ";
+        $sSqlContaCorrenteSaldo .= " UNION ALL";
+        $sSqlContaCorrenteSaldo .= " select   c19_sequencial,
+                                              c19_contacorrente,
+                                              c19_orctiporec,
+                                              c19_instit,
+                                              c19_concarpeculiar,
+                                              c19_contabancaria,
+                                              c19_reduz,
+                                              c19_numemp,
+                                              c19_numcgm,
+                                              c19_orcunidadeanousu,
+                                              c19_orcunidadeorgao,
+                                              c19_orcunidadeunidade,
+                                              c19_orcorgaoanousu,
+                                              c19_orcorgaoorgao,
+                                              c19_conplanoreduzanousu,
+                                              c19_acordo,
+                                              c19_estrutural,
+                                              c19_orcdotacao,
+                                              c19_orcdotacaoanousu,
+                                              c19_programa,
+                                              c19_projativ,
+                                              c19_emparlamentar, round(substr(fc_saldocontacorrente,161,15)::float8,2)::float8 AS saldofinal,
+                                              substr(fc_saldocontacorrente,181,1)::varchar(1) AS sinalsaldofinal
+                                              from
+                                (select c19_sequencial,
+                                    c19_contacorrente,
+                                    c19_orctiporec,
+                                    c19_instit,
+                                    c19_concarpeculiar,
+                                    c19_contabancaria,
+                                    c19_reduz,
+                                    c19_numemp,
+                                    c19_numcgm,
+                                    c19_orcunidadeanousu,
+                                    c19_orcunidadeorgao,
+                                    c19_orcunidadeunidade,
+                                    c19_orcorgaoanousu,
+                                    c19_orcorgaoorgao,
+                                    c19_conplanoreduzanousu,
+                                    c19_acordo,
+                                    c19_estrutural,
+                                    c19_orcdotacao,
+                                    c19_orcdotacaoanousu,
+                                    c19_programa,
+                                    c19_projativ,
+                                    c19_emparlamentar,
+                                    fc_saldocontacorrente({$iAnoUsuOrigin},c19_sequencial, c19_contacorrente, 12, {$iInstituicao})
+                                from conplanoexe e
+                                    INNER JOIN conplanoreduz r ON (r.c61_anousu, r.c61_reduz) = (c62_anousu, c62_reduz)
+                                    INNER JOIN conplano on c60_anousu=c61_anousu and c60_codcon=c61_codcon
+                                    LEFT JOIN contacorrentedetalhe ON (c19_conplanoreduzanousu, c19_reduz) = ({$iAnoUsuOrigin}, c61_reduz)
+                                where c19_instit = {$iInstituicao}
+                                      and c62_anousu = {$iAnoUsu}
+                                      and (c62_vlrcre != 0 or c62_vlrdeb  != 0 )
+                                      and substr(c60_estrut, 1, 1)::int8 in (".implode(",", $aContas).")
+                                      and (c60_infcompmsc is not null or c60_infcompmsc not in (0, 1, 2, 8 ))
+                                      and c60_codsis not in (5,6,7)  ) as movimento";
+                                // echo $sSqlContaCorrenteSaldo;
 
-        //echo $sSqlContaCorrenteSaldo;exit;
 		$rsContaCorrenteSaldo = db_query($sSqlContaCorrenteSaldo);
+        // db_criatabela($rsContaCorrenteSaldo);exit;
 
         if (pg_num_rows($rsContaCorrenteSaldo) < 1) {
             throw new DBException(urlencode('ERRO - [ 2 ] - Nenhum registro encontrado com saldo!'));
@@ -93,7 +178,9 @@ try {
 
             $oConta = db_utils::fieldsMemory($rsContaCorrenteSaldo, $iCont);
 
-            $nSaldoInicial = $oConta->c29_debito - $oConta->c29_credito + $oConta->total_debito - $oConta->total_credito;
+            $aSaldos = explode(";", $oConta->fc_saldocontacorrente);
+
+            $nSaldoInicial = $aSaldos[9] == 'C' ? $aSaldos[6] * -1 : $aSaldos[6];
 
             if ($nSaldoInicial == 0) {
                 continue;
