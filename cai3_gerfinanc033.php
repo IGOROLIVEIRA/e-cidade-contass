@@ -1255,12 +1255,12 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
           $pdf1->descr12_1 .= $pdf1->tipodebito."\n".
                               $pdf1->titulo1." - ".$pdf1->descr1." / ".
-                              $pdf1->titulo4." ".$pdf1->descr4_1." Parcela 01 Única \n";
+                              $pdf1->titulo4." ".$pdf1->descr4_1." Parcela Única \n";
                               (isset($bql)&&$bql!=""?" - ".$bql."\n":"\n").
                                 (isset($obsdiver)&&$obsdiver!=""?$obsdiver:"")."\n";
                               (isset($pdf1->predescr12_1)?$pdf1->predescr12_1 .= $pdf1->pretipodebito."\n":"").
                                 $pdf1->titulo1." - ".$pdf1->descr1." / ".
-                                $pdf1->titulo4." ".$pdf1->descr4_1." Parcela 02 Única \n";
+                                $pdf1->titulo4." ".$pdf1->descr4_1." Parcela Única \n";
                               (isset($bql)&&$bql!=""?" - ".$bql."\n":"\n").
                                 (isset($obsdiver)&&$obsdiver!=""?$obsdiver:"")."\n";
 
