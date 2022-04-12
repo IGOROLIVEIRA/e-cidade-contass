@@ -164,7 +164,7 @@ try {
                                 // echo $sSqlContaCorrenteSaldo;
 
 		$rsContaCorrenteSaldo = db_query($sSqlContaCorrenteSaldo);
-        // db_criatabela($rsContaCorrenteSaldo);exit;
+        //db_criatabela($rsContaCorrenteSaldo);exit;
 
         if (pg_num_rows($rsContaCorrenteSaldo) < 1) {
             throw new DBException(urlencode('ERRO - [ 2 ] - Nenhum registro encontrado com saldo!'));
@@ -178,9 +178,7 @@ try {
 
             $oConta = db_utils::fieldsMemory($rsContaCorrenteSaldo, $iCont);
 
-            $aSaldos = explode(";", $oConta->fc_saldocontacorrente);
-
-            $nSaldoInicial = $aSaldos[9] == 'C' ? $aSaldos[6] * -1 : $aSaldos[6];
+            $nSaldoInicial = $oConta->sinalsaldofinal == 'C' ? $oConta->saldofinal * -1 : $oConta->saldofinal;
 
             if ($nSaldoInicial == 0) {
                 continue;
