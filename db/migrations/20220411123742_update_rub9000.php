@@ -79,7 +79,7 @@ class UpdateRub9000 extends AbstractMigration
 
     private function checkRubInst($rubric)
     {
-        $result = $this->fetchRow("SELECT rh27_instit FROM rhrubricas WHERE rh27_rubricas = '{$rubric}'");
+        $result = $this->fetchRow("SELECT rh27_instit FROM rhrubricas WHERE rh27_rubric = '{$rubric}'");
         return !empty($result);
     }
 }
