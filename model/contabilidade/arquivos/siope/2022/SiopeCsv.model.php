@@ -10,7 +10,7 @@ class SiopeCsv extends Siope {
 
     //@var String
     protected $_arquivo;
- 
+
     //@var String
     protected $sLinha;
 
@@ -48,9 +48,10 @@ class SiopeCsv extends Siope {
 
             $this->sArquivo = $this->getNomeArquivo();
             $this->abreArquivo();
-
+           
             foreach ($aDados as $oReceita) {
 
+              
                 if (!($oReceita->prev_atualizada == 0 && $oReceita->rec_realizada == 0  && $oReceita->ded_fundeb == 0
                         && $oReceita->outras_ded == 0 && $oReceita->intra == 0)) {
 
