@@ -1,7 +1,7 @@
 <?php
 
 class SiopeDespesa extends Siope {
- 
+
     //@var array
     public $aDespesas = array();
     //@var array

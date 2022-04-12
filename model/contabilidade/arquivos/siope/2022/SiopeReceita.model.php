@@ -1,7 +1,7 @@
 <?php
 
 class SiopeReceita extends Siope {
-   
+
     //@var array
     public $aReceitas = array();
 
@@ -80,11 +80,11 @@ class SiopeReceita extends Siope {
         $sSqlPrinc = db_receitasaldo(11,1,3,true,$this->sFiltros,$this->iAnoUsu,$this->dtIni,$this->dtFim,true,' * ',true,0);
         
         $sSql = "   SELECT  CASE 
-                                WHEN c224_natrececidade IS NOT NULL THEN substr(c224_natrececidade,2,12)
+                                WHEN c224_natrecsiope IS NOT NULL THEN substr(c224_natrecsiope,2,12)
                                 ELSE substr(o57_fonte,2,12)
                             END AS naturezareceita,
                             CASE 
-                                WHEN c224_natrececidade IS NOT NULL THEN c225_descricao
+                                WHEN c224_natrecsiope IS NOT NULL THEN c225_descricao
                                 ELSE o57_descr
                             END AS descricao,
                             o70_codrec,
@@ -94,16 +94,18 @@ class SiopeReceita extends Siope {
                     FROM ($sSqlPrinc) AS principal
                     LEFT JOIN naturrecsiope ON o57_fonte = c224_natrececidade AND c224_anousu = {$this->iAnoUsu}
                     LEFT JOIN elerecsiope ON substr(naturrecsiope.c224_natrecsiope, 1, 11) = elerecsiope.c225_natrecsiope AND naturrecsiope.c224_anousu = elerecsiope.c225_anousu
-
-                    WHERE o70_codrec > 0
+                    WHERE o70_codrec > 0 
+                                 
                     ";
+                  
         $result = db_query($sSql);
 
         for ($i = 0; $i < pg_num_rows($result); $i++) {
 
             $oReceita = db_utils::fieldsMemory($result, $i);
             
-            if (substr($oReceita->naturezareceita,0,1) == 7 || substr($oReceita->naturezareceita,0,1) == 8) {              
+            if (substr($oReceita->naturezareceita,0,1) == 7 || substr($oReceita->naturezareceita,0,1) == 8) { 
+                           
                 
                 $sNatureza = substr($oReceita->naturezareceita,0,1) == 7 ? '1' : '2';
                 $sNatureza .= substr($oReceita->naturezareceita,1,7);
@@ -127,30 +129,8 @@ class SiopeReceita extends Siope {
                     $this->aReceitas[$sNatureza]->intra             += abs($oReceita->saldo_arrecadado);
                 }
 
-            } elseif (substr($oReceita->naturezareceita,0,2) == 95) {  
-
-                $sNatureza = substr($oReceita->naturezareceita,2,8);
-
-                if (!isset($this->aReceitas[$sNatureza])) {
-
-                    $oRec = new stdClass();
-
-                    $oRec->natureza         = $sNatureza;
-                    $oRec->descricao        = $oReceita->descricao;
-                    $oRec->prev_atualizada  = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
-                    $oRec->rec_realizada    = 0;
-                    $oRec->ded_fundeb       = abs($oReceita->saldo_arrecadado);
-                    $oRec->outras_ded       = 0;
-                    $oRec->intra            = 0;
-
-                    $this->aReceitas[$sNatureza] = $oRec;
-
-                } else {
-                    $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
-                    $this->aReceitas[$sNatureza]->ded_fundeb        += abs($oReceita->saldo_arrecadado);
-                }
-
-            } elseif (in_array(substr($oReceita->naturezareceita,0,2), array(91, 92, 93, 96, 98, 99))) {
+            }elseif (in_array(substr($oReceita->naturezareceita,0,2), array(91, 92, 93, 96, 98, 99))) {
+                
 
                 $sNatureza = substr($oReceita->naturezareceita,2,8);
 
@@ -170,17 +150,45 @@ class SiopeReceita extends Siope {
 
                 } else {
                     $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
-                    $this->aReceitas[$sNatureza]->ded_fundeb        += abs($oReceita->saldo_arrecadado);
+                    $this->aReceitas[$sNatureza]->outras_ded        += abs($oReceita->saldo_arrecadado);
                 }
 
-            } else {
+            }
+            // elseif (substr($oReceita->naturezareceita,0,2) == 95) {  
+           //     $sNatureza = substr($oReceita->naturezareceita,2,8);
 
-                $sNatureza = substr($oReceita->naturezareceita,0,8);
+            //     if (!isset($this->aReceitas[$sNatureza])) {
 
-                if (!isset($this->aReceitas[$sNatureza])) {
+            //         $oRec = new stdClass();
 
+            //         $oRec->natureza         = $sNatureza;
+            //         $oRec->descricao        = $oReceita->descricao;
+            //         $oRec->prev_atualizada  = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
+            //         $oRec->rec_realizada    = 0;
+            //         $oRec->ded_fundeb       = abs($oReceita->saldo_arrecadado);
+            //         $oRec->outras_ded       = 0;
+            //         $oRec->intra            = 0;
+
+            //         $this->aReceitas[$sNatureza] = $oRec;
+
+            //     } else {
+            //         $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
+            //         $this->aReceitas[$sNatureza]->ded_fundeb        += abs($oReceita->saldo_arrecadado);
+
+            //     }
+
+            //  }
+              else {
+               
+                if (substr($oReceita->naturezareceita,0,2) == 95){
+                    $sNatureza = 1..substr($oReceita->naturezareceita,2,7);
+                }else{
+                    $sNatureza = substr($oReceita->naturezareceita,0,8);
+                }
+          
+
+                if (!isset($this->aReceitas[$sNatureza])) { 
                     $oRec = new stdClass();
-
                     $oRec->natureza         = $sNatureza;
                     $oRec->descricao        = $oReceita->descricao;
                     $oRec->prev_atualizada  = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
@@ -190,14 +198,25 @@ class SiopeReceita extends Siope {
                     $oRec->intra            = 0;
 
                     $this->aReceitas[$sNatureza] = $oRec;
-
-                } else {
-                    $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
-                    $this->aReceitas[$sNatureza]->rec_realizada     += abs($oReceita->saldo_arrecadado);
+ 
+                } else { 
+                    if (substr($oReceita->naturezareceita,0,2) == 95){
+                        $this->aReceitas[$sNatureza]->prev_atualizada   -= (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                        // $this->aReceitas[$sNatureza]->rec_realizada     -= abs($oReceita->saldo_arrecadado);
+                        // $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
+                        $this->aReceitas[$sNatureza]->ded_fundeb        += abs($oReceita->saldo_arrecadado);
+            
+             
+                    }else{
+                        $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                        $this->aReceitas[$sNatureza]->rec_realizada     += abs($oReceita->saldo_arrecadado);
+             
+                    }      
                 }
             }
 
         }
+            
 
     }
 
