@@ -69,9 +69,17 @@ class UpdateRub9000 extends AbstractMigration
 
     private function insertBaseRubricaEsocial($rubricEsocial, $rubric)
     {
-        $result = $this->fetchAll("SELECT codigo FROM db_config");
+        $result = $this->fetchAll("SELECT codigo FROM db_config WHERE codigo IN (SELECT rh27_instit FROM rhrubricas)");
         foreach ($result as $instit) {
-            $this->execute("INSERT INTO baserubricasesocial VALUES ('{$rubricEsocial}','{$rubric}',{$instit['codigo']})");
+            if ($this->checkRubInst($rubric)) {
+                $this->execute("INSERT INTO baserubricasesocial VALUES ('{$rubricEsocial}','{$rubric}',{$instit['codigo']})");
+            }
         }
+    }
+
+    private function checkRubInst($rubric)
+    {
+        $result = $this->fetchRow("SELECT rh27_instit FROM rhrubricas WHERE rh27_rubricas = '{$rubric}'");
+        return !empty($result);
     }
 }
