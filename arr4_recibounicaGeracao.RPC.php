@@ -104,18 +104,18 @@ try {
   		  $oDaoReciboUnicaGeracao->ar40_observacao         = $oParam->oDados->sObservacoes;
   		  $oDaoReciboUnicaGeracao->incluir(null);
 
-			/** 
-			   * Verifica a receita quando é IPTU (desconto somente sobre o valor do iptu)
-			   */
-			  if($oParam->oDados->iCadTipoDebito == EmissaoGeral::TIPO_IPTU){
-				  $iReceitaIptu = getReceitaIptu();
-			  }
-			  
-			  $oInstit = new Instituicao(db_getsession('DB_instit'));
-	      //19 - Vistoria e 9 - Alvara
-	      if( ($oParam->oDados->iCadTipoDebito == 19 OR $oParam->oDados->iCadTipoDebito == 9)  && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA) ){
-	      		$iReceitaIptu = 25;
-	      }
+				/** 
+				* Verifica a receita quando é IPTU (desconto somente sobre o valor do iptu)
+				*/
+				if($oParam->oDados->iCadTipoDebito == EmissaoGeral::TIPO_IPTU){
+						$iReceitaIptu = getReceitaIptu();
+				}
+
+				$oInstit = new Instituicao(db_getsession('DB_instit'));
+				//19 - Vistoria e 9 - Alvara
+				if( ($oParam->oDados->iCadTipoDebito == 19 OR $oParam->oDados->iCadTipoDebito == 9)  && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA) ){
+						$iReceitaIptu = 25;
+				}
 
 
   		  if($oDaoReciboUnicaGeracao->erro_status == 0) {
