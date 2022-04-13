@@ -114,8 +114,8 @@ if (!isset($valormonimo) || $valorminimo == ""){
 $oInstit = new Instituicao(db_getsession('DB_instit'));
 
 if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-$lbProcedencia = 'PROCEDÊNCIA-HISTÓRICO';
-$obsParam = "\nEnquadramento legal: Código Tributário Municipal.\nLeis Complementares: 1815/2005 e 2.517/2021.";    
+$lbProcedencia  = "PROCEDÊNCIA-HISTÓRICO";
+$obsParam       = "\nEnquadramento legal: Código Tributário Municipal.\nLeis Complementares: 1815/2005 e 2.517/2021.";
 } 
 //Fim da inclusão/concatenação na observação da CDA
 
@@ -1135,9 +1135,21 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
         }
 
         /**
-         * Escrevemos o quadro dos creditos ;
+         * Escrevemos o quadro dos creditos ;         
          */
         foreach ($aDebitosOrdenado as $iTipo => $aTipo) {
+
+            //Data inicial para costumização da coluna Data Inscr. para Data Oper.
+            $dtInicialModelo  = strtotime('2022-04-11');
+            $dtEmissao        = strtotime($oCertidao->getDataEmissao());   
+            //die($dtInicialModelo.' - '.$dtEmissao);
+            if (($dtEmissao >= $dtInicialModelo) && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA)){
+                $lbDtInscricao  = "DATA OPER.";
+                $vlrInscrOper   = db_formatar($oDebito->dataoperacao,'d');
+            }else{
+                $lbDtInscricao  = "DATA INSCR.";
+                $vlrInscrOper   = db_formatar($oDebito->datainscricao,'d');
+            }
 
             /*if ($pdf->gety() > $pdf->h -35) {
 
@@ -1161,7 +1173,7 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
             $pdf->Cell(10,5,"1 EXERC.",1,0,"C",1);
             $pdf->Cell(9,5,"PARC",1,0,"C",1);
             $pdf->Cell(30,5,"$lbProcedencia",1,0,"C",1);
-            $pdf->Cell(16,5,"DATA INSCR.",1,0,"C",1);
+            $pdf->Cell(16,5,$lbDtInscricao,1,0,"C",1);
             $pdf->Cell(16,5,"DATA VENC.",1,0,"C",1);
             $pdf->Cell(20,5,"VLR HIST.",1,0,"C",1);
             $pdf->Cell(20,5,"CORRIGIDO",1,0,"C",1);
@@ -1200,7 +1212,7 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
                     $pdf->Cell(10,5,"2 EXERC.",1,0,"C",1);
                     $pdf->Cell(9,5,"PARC",1,0,"C",1);
                     $pdf->Cell(30,5,$lbProcedencia,1,0,"C",1);
-                    $pdf->Cell(16,5,"DATA INSCR.",1,0,"C",1);
+                    $pdf->Cell(16,5,$lbDtInscricao,1,0,"C",1);
                     $pdf->Cell(16,5,"DATA VENC.",1,0,"C",1);
                     $pdf->Cell(20,5,"VLR HIST.",1,0,"C",1);
                     $pdf->Cell(20,5,"CORRIGIDO",1,0,"C",1);
@@ -1211,16 +1223,17 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
                     $pagina = $pdf->PageNo();
 
                 }
-
+                
                 $pdf->SetFont('','',6);
                 $pdf->Cell(10,5,$oDebito->exercicio,1,0,"C",0);
                 $pdf->Cell(9,5,$oDebito->numpar,1,0,"C",0);
                 if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
                     $pdf->Cell(30,5,substr($oDebito->procedencia,0,12) . '-' . substr($oDebito->procedenciaHist,0,12),1,0,"L",0);
                 }else{
-                    $pdf->Cell(30,5,$oDebito->procedencia,1,0,"L",0);
+                    $pdf->Cell(30,5,$oDebito->procedencia,1,0,"L",0);                    
                 };
-                $pdf->Cell(16,5,db_formatar($oDebito->datainscricao,'d'),1,0,"C",0);
+
+                $pdf->Cell(16,5,$vlrInscrOper,1,0,"C",0);
                 $pdf->Cell(16,5,db_formatar($oDebito->datavencimento,'d'),1,0,"C",0);
                 $pdf->Cell(20,5,db_formatar($oDebito->valorhistorico,'f')    ,1,0,"R",0);
                 $pdf->Cell(20,5,db_formatar($oDebito->valorcorrigido,'f')    ,1,0,"R",0);
