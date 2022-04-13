@@ -1127,7 +1127,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
           $pdf1->tipocompl     = 'Número:';
           $pdf1->tipobairro    = 'Bairro:';
           $pdf1->bairropri     = $z01_bairro;
-          $pdf1->descr11_1     = $z01_cgmpri." - ".$z01_nome;
+          $pdf1->descr11_1     = $z01_cgmpri." - ".$z01_cgccpf." - ".$z01_nome;
           $pdf1->descr11_2     = strtoupper($z01_ender). ($z01_numero == "" ? "" : ', '.$z01_numero.'  '.$z01_compl);
           $pdf1->descr11_3     = $xbairro;
           $pdf1->bairrocontri  = $z01_bairro;
@@ -1135,7 +1135,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
           $pdf1->premunic      = $z01_munic;
           $pdf1->uf            = $z01_uf;
           $pdf1->ufcgm         = $z01_uf;
-          $pdf1->descr3_1      = $z01_cgmpri." - ".$z01_nome;
+          $pdf1->descr3_1      = $z01_cgmpri." - ".$z01_cgccpf." - ".$z01_nome;
           $pdf1->cgmpessoa     = $z01_cgmpri;
           $pdf1->nomepessoa    = $z01_nome;
           $pdf1->descr3_2      = strtoupper($z01_ender). ($z01_numero == "" ? "" : ', '.$z01_numero.'  '.$z01_compl);
