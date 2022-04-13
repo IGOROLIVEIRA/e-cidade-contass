@@ -475,6 +475,8 @@ switch ($oParam->exec) {
       $oEndereco->setBdi($oParam->endereco->bdi);
       $oEndereco->setLicita($oParam->endereco->licitacao);
       $oEndereco->setSequencial($oParam->endereco->sequencial);
+      $oEndereco->setSeqObrasCodigos($oParam->endereco->seqobrascodigo);
+
 
       $oEndereco->salvaDadosComplementares($oParam->acao);
       db_fim_transacao(false);
@@ -582,7 +584,7 @@ switch ($oParam->exec) {
             $sSqlItens = "
                             SELECT obrasdadoscomplementareslote.*
                               FROM obrasdadoscomplementareslote
-                              INNER JOIN obrascodigos ON db151_sequencial = db150_codobras
+                              INNER JOIN obrascodigos ON db151_sequencial = db150_seqobrascodigos
                               WHERE db151_liclicita = $oParam->licitacao
                         ";
 

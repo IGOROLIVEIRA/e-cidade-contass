@@ -65,6 +65,7 @@ class obrasDadosComplementares
   private $sequencial = null;
   private $sLote = null;
   private $lLote = false;
+  private $seqobrascodigo = null;
 
 
   /**
@@ -124,6 +125,7 @@ class obrasDadosComplementares
       $this->setBdi($oDados->db150_bdi);
       $this->setLicita($oDados->db151_liclicita);
       $this->setSequencial($oDados->db150_sequencial);
+      $this->setSeqObrasCodigos($oDados->db150_seqobrascodigos);
     }
   }
 
@@ -468,6 +470,25 @@ class obrasDadosComplementares
   }
 
   /**
+   * Metodo para setar o sequencial da obra
+   * @param string seqobrascodigo
+   * @return void
+   */
+  public function setSeqObrasCodigos($sSeqObrasCodigo)
+  {
+    $this->seqobrascodigo = $sSeqObrasCodigo;
+  }
+
+  /**
+   * Metodo para retornar o sequencial da obra
+   * @return string seqobrascodigo
+   */
+  public function getSeqObrasCodigos()
+  {
+    return $this->seqobrascodigo;
+  }
+
+  /**
    * Metodo para setar a propriedade grupobempublico
    * @param integer grupobempublico
    * @return void
@@ -729,6 +750,7 @@ class obrasDadosComplementares
     $tabela_base = !$this->getFlagLote() ? 'obrasdadoscomplementares' : 'obrasdadoscomplementareslote';
     $oDaoObras = db_utils::getDao($tabela_base);
     $oDaoObrasCodigo = db_utils::getDao('obrascodigos');
+    $oDaoLiclicitasituacao = db_utils::getDao('liclicitasituacao');
 
     $sSqlCodigo = $oDaoObrasCodigo->sql_query($this->getCodigoObra(), 'db151_codigoobra, db151_liclicita', '', 'db151_liclicita = ' . $this->getLicita());
     $rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
@@ -753,9 +775,25 @@ class obrasDadosComplementares
       $rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
       $iLicitacao = db_utils::fieldsMemory($rsCodigo, 0)->db151_liclicita;
 
-      if (pg_num_rows($rsCodigo) && $iLicitacao != $this->getLicita()) {
-        throw new Exception('Código da Obra já cadastrado.');
+      //if (pg_num_rows($rsCodigo) && $iLicitacao != $this->getLicita()) {
+      //  throw new Exception('Código da Obra já cadastrado.');
+      //}
+
+      if (pg_num_rows($rsCodigo) > 0) {
+
+        $sSqlSituacaoLicitaold = $oDaoLiclicitasituacao->sql_query('', 'distinct l20_licsituacao', '', 'l20_codigo = ' . $iLicitacao);
+        $rsSituacaoLicitaold = $oDaoLiclicitasituacao->sql_record($sSqlSituacaoLicitaold);
+        $iSituacaoLicitaold = db_utils::fieldsMemory($rsSituacaoLicitaold, 0)->l20_licsituacao;
+
+        $situacoes = array(2, 3, 4, 5, 12);
+        if (!in_array($iSituacaoLicitaold, $situacoes)) {
+          throw new Exception('Código da Obra já cadastrado.');
+        }
       }
+
+      //alterar na taleba obrascodigos
+      $alteraCodObra = db_query('update obrascodigos set db151_codigoobra = ' . $this->getCodigoObra() . ' where db151_liclicita = ' . $this->getLicita());
+
 
       if (!pg_num_rows($rsCodigo)) {
         $oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
@@ -802,6 +840,9 @@ class obrasDadosComplementares
   public function preencheObjetoItem($inclusao)
   {
 
+    $sSqlSeqObra = db_query('SELECT db151_sequencial as seqobrascodigo from obrascodigos where db151_liclicita = ' . $this->getLicita());
+    $iSeqObra = db_utils::fieldsMemory($sSqlSeqObra, 0)->seqobrascodigo;
+
     $sSqlNatureza = db_query('SELECT l20_naturezaobjeto as natureza from liclicita where l20_codigo = ' . $this->getLicita());
     $iNatureza = db_utils::fieldsMemory($sSqlNatureza, 0)->natureza;
 
@@ -828,6 +869,7 @@ class obrasDadosComplementares
     $oDaoObras->db150_descratividadeservico = $this->getDescrAtividadeServico();
     $oDaoObras->db150_atividadeservicoesp = $this->getAtividadeServicoEsp();
     $oDaoObras->db150_descratividadeservicoesp = $this->getDescrAtividadeServicoEsp();
+    $oDaoObras->db150_seqobrascodigos = $iSeqObra;
 
     if (!$this->getBdi() && $iNatureza == '1') {
       throw new Exception('Campo BDI não informado!');
@@ -853,6 +895,9 @@ class obrasDadosComplementares
    */
   public function preencheObjetoLote($inclusao)
   {
+
+    $sSqlSeqObra = db_query('SELECT db151_sequencial as seqobrascodigo from obrascodigos where db151_liclicita = ' . $this->getLicita());
+    $iSeqObra = db_utils::fieldsMemory($sSqlSeqObra, 0)->seqobrascodigo;
 
     $sSqlNatureza = db_query('SELECT l20_naturezaobjeto as natureza from liclicita where l20_codigo = ' . $this->getLicita());
     $iNatureza = db_utils::fieldsMemory($sSqlNatureza, 0)->natureza;
@@ -882,6 +927,7 @@ class obrasDadosComplementares
       $oDaoObras->db150_descratividadeservico = $this->getDescrAtividadeServico();
       $oDaoObras->db150_atividadeservicoesp = $this->getAtividadeServicoEsp();
       $oDaoObras->db150_descratividadeservicoesp = $this->getDescrAtividadeServicoEsp();
+      $oDaoObras->db150_seqobrascodigos = $iSeqObra;
 
       if (!$this->getBdi() && $iNatureza == '1') {
         throw new Exception('Campo BDI não informado!');
@@ -927,10 +973,10 @@ class obrasDadosComplementares
     if (trim($iSequencial) != "") {
       $sWhere = " db150_sequencial = " . $iSequencial;
     } else {
-      $sWhere = " db150_codobra = (select max(db150_codobra) from $tabela_base join obrascodigos on db151_codigoobra = db150_codobra where db151_liclicita =" . $iLicitacao . ")";
+      $sWhere = " db150_seqobrascodigos = (select max(db150_seqobrascodigos) from $tabela_base join obrascodigos on db151_sequencial = db150_seqobrascodigos where l04_codigo is not null and db151_liclicita =" . $iLicitacao . ")";
     }
 
-    $sSqlObra = $oDaoObra->sql_query_completo(null, $sCampos, 'db150_sequencial', $sWhere);
+    $sSqlObra = $oDaoObra->sql_query_obraslicitacao(null, $sCampos, 'db150_sequencial', $sWhere);
 
     $rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 
@@ -999,9 +1045,9 @@ class obrasDadosComplementares
       $sCampos .= "$tabela_base.*";
       $sCampos .= $tabela_base === 'obrasdadoscomplementareslote' ? ',l04_descricao, l04_codigo' : '';
 
-      $sWhere = " db151_liclicita = " . $iCodigoLicitacao;
+      $sWhere = " l04_codigo is not null and db151_liclicita = " . $iCodigoLicitacao;
 
-      $sSqlObra = $oDaoObra->sql_query_completo(null, $sCampos, 'db150_sequencial', $sWhere);
+      $sSqlObra = $oDaoObra->sql_query_obraslicitacao(null, $sCampos, 'db150_sequencial', $sWhere);
       $rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 
       $rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $iCodigoLicitacao);

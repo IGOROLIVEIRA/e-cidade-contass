@@ -1487,10 +1487,10 @@ switch ($oParam->exec) {
                              */
                             if ($oParam->tipojulg == 1) {
                                 $clliclicitemlote->l04_descricao = "LOTE_AUTOITEM_" . $pc11_codigo;
-                                if($pc80_tipoprocesso==2){
+                                if ($pc80_tipoprocesso == 2) {
                                     $erro_msg = "Tipo de compra é por Lote";
                                     $sqlerro = true;
-                                    break;  
+                                    break;
                                 }
 
                                 if ($clliclicitemreservado->l21_reservado) {
@@ -1512,16 +1512,16 @@ switch ($oParam->exec) {
                              * Tipo de julgamento por lote 
                              */
                             if ($oParam->tipojulg == 3) {
-                                $clliclicitemlote->l04_descricao = $pc68_nome;  
+                                $clliclicitemlote->l04_descricao = $pc68_nome;
                             }
-                           
+
 
                             if (!empty($clliclicitemlote->l04_descricao) && in_array($oParam->tipojulg, array(1, 2, 3))) {
                                 // echo 'tst' . $count + 1;
                                 // exit;
-                                if($oParam->tipojulg == 3){
+                                if ($oParam->tipojulg == 3) {
                                     $clliclicitemlote->l04_seq = $pc69_seq;
-                                }else{
+                                } else {
                                     $seqlote++;
                                     $clliclicitemlote->l04_seq = $seqlote;
                                 }
@@ -1669,7 +1669,7 @@ switch ($oParam->exec) {
 
         if ($sqlerro) {
             $oRetorno->status = 2;
-        }else{
+        } else {
             $oRetorno->status = 1;
         }
         $oRetorno->erro_msg = urlencode($erro_msg);
@@ -1694,18 +1694,18 @@ switch ($oParam->exec) {
                 $countLote += 1;
             }
 
-            $sSqlLoteCad = 'SELECT * from obrasdadoscomplementareslote where db150_lote = ' . $oDadosLote->l04_codigo;
-            $rsLoteCad   = db_query($sSqlLoteCad);
+            //            $sSqlLoteCad = 'SELECT * from obrasdadoscomplementareslote where db150_lote = ' . $oDadosLote->l04_codigo;
+            //            $rsLoteCad   = db_query($sSqlLoteCad);
 
-            if (!pg_numrows($rsLoteCad)) {
+            //            if (!pg_numrows($rsLoteCad)) {
 
-                $oLote = new stdClass();
-                $oLote->sequencial = $countLote;
-                $oLote->codigo     = $oDadosLote->l04_codigo;
-                $oLote->descricao  = $oDadosLote->l04_descricao;
+            $oLote = new stdClass();
+            $oLote->sequencial = $countLote;
+            $oLote->codigo     = $oDadosLote->l04_codigo;
+            $oLote->descricao  = $oDadosLote->l04_descricao;
 
-                $oRetorno->itens[] = $oLote;
-            }
+            $oRetorno->itens[] = $oLote;
+            //            }
         }
 
         break;
@@ -1716,8 +1716,7 @@ switch ($oParam->exec) {
         $oLicitacao = db_utils::fieldsMemory($rsTipo, 0);
         $oRetorno->tipo = $oLicitacao->l20_tipojulg;
         $oRetorno->data = $oLicitacao->l20_datacria;
-        //$oRetorno->ano = $oLicitacao->l20_anousu;
-        //$oRetorno->mes = date("m", db_getsession("DB_datausu"));
+
         break;
 
     case 'getLotes':

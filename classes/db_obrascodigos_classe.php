@@ -400,4 +400,3 @@ class cl_obrascodigos {
 		return $sql;
 	}
 }
-?>

@@ -696,5 +696,3 @@ class cl_obrasdadoscomplementares
 		return $sql;
 	}
 }
-
-?>
