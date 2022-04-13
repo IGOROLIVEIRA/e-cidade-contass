@@ -1484,7 +1484,7 @@ class Oc17313 extends AbstractMigration
         ('49571801610','Cota-Parte do Imposto Sobre Produtos Industrializados - Estados Exportadores de Produtos Industriali','2022'), 
         ('49572801110','Cota-Parte do Icms - Principal','2022'), 
         ('49572801210','Cota-Parte do Ipva - Principal','2022'), 
-        ('49572801310','Cota-Parte do Ipi - Municípios - Principal','2022')
+        ('49572801310','Cota-Parte do Ipi - Municípios - Principal','2022');
 
 
 
