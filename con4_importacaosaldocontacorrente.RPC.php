@@ -45,66 +45,7 @@ try {
         $dataInicio = $iAnoUsuOrigin."-01-01";
         $dataFim = $iAnoUsuOrigin."-12-31";
 
-		$sSqlContaCorrenteSaldo = "select c19_sequencial,
-                                             c19_contacorrente,
-                                             c19_orctiporec,
-                                             c19_instit,
-                                             c19_concarpeculiar,
-                                             c19_contabancaria,
-                                             c19_reduz,
-                                             c19_numemp,
-                                             c19_numcgm,
-                                             c19_orcunidadeanousu,
-                                             c19_orcunidadeorgao,
-                                             c19_orcunidadeunidade,
-                                             c19_orcorgaoanousu,
-                                             c19_orcorgaoorgao,
-                                             c19_conplanoreduzanousu,
-                                             c19_acordo,
-                                             c19_estrutural,
-                                             c19_orcdotacao,
-                                             c19_orcdotacaoanousu,
-                                             c19_programa,
-                                             c19_projativ,
-                                             c19_emparlamentar, abs(round((case when substr(fc_planosaldonovo,60,1)::varchar(1) = 'C' then substr(fc_planosaldonovo,45,14)::float8 * -1 else substr(fc_planosaldonovo,45,14)::float8 end  )  + substr(fc_movencerramentomsc,1,15)::float8 - substr(fc_movencerramentomsc,17,54)::float8,2)::float8) AS saldofinal,
-                                             case when round((case when substr(fc_planosaldonovo,60,1)::varchar(1) = 'C' then substr(fc_planosaldonovo,45,14)::float8 * -1 else substr(fc_planosaldonovo,45,14)::float8 end  )  + substr(fc_movencerramentomsc,1,15)::float8 - substr(fc_movencerramentomsc,17,54)::float8,2)::float8 > 0 then 'D' else 'C' end AS sinalsaldofinal
-                                             from
-                                  (select c19_sequencial,
-                                         c19_contacorrente,
-                                         c19_orctiporec,
-                                         c19_instit,
-                                         c19_concarpeculiar,
-                                         c19_contabancaria,
-                                         c19_reduz,
-                                         c19_numemp,
-                                         c19_numcgm,
-                                         c19_orcunidadeanousu,
-                                         c19_orcunidadeorgao,
-                                         c19_orcunidadeunidade,
-                                         c19_orcorgaoanousu,
-                                         c19_orcorgaoorgao,
-                                         c19_conplanoreduzanousu,
-                                         c19_acordo,
-                                         c19_estrutural,
-                                         c19_orcdotacao,
-                                         c19_orcdotacaoanousu,
-                                         c19_programa,
-                                         c19_projativ,
-                                         c19_emparlamentar,
-                                         fc_planosaldonovo(".$iAnoUsuOrigin.", c61_reduz, '".$dataInicio."', '".$dataFim."', false),
-                                         fc_movencerramentomsc('".$dataInicio."', '".$dataFim."', c61_reduz)
-                                    from conplanoexe e
-                                         INNER JOIN conplanoreduz r ON (r.c61_anousu, r.c61_reduz) = (c62_anousu, c62_reduz)
-                                         INNER JOIN conplano on c60_anousu=c61_anousu and c60_codcon=c61_codcon
-                                         LEFT JOIN contacorrentedetalhe ON (c19_conplanoreduzanousu, c19_reduz) = ({$iAnoUsuOrigin}, c61_reduz)
-                                    where c19_instit = {$iInstituicao}
-                                      and c62_anousu = {$iAnoUsu}
-                                      and (c62_vlrcre != 0 or c62_vlrdeb  != 0 )
-                                      and substr(c60_estrut, 1, 1)::int8 in (".implode(",", $aContas).")
-                                      and (c60_infcompmsc is null or c60_infcompmsc in (0, 1, 2, 8 ) )
-                                      and c60_codsis not in (5,6,7) ) as movimento ";
-        $sSqlContaCorrenteSaldo .= " UNION ALL";
-        $sSqlContaCorrenteSaldo .= " select   c19_sequencial,
+        $sSqlContaCorrenteSaldo = " select   c19_sequencial,
                                               c19_contacorrente,
                                               c19_orctiporec,
                                               c19_instit,
@@ -159,12 +100,9 @@ try {
                                       and c62_anousu = {$iAnoUsu}
                                       and (c62_vlrcre != 0 or c62_vlrdeb  != 0 )
                                       and substr(c60_estrut, 1, 1)::int8 in (".implode(",", $aContas).")
-                                      and (c60_infcompmsc is not null or c60_infcompmsc not in (0, 1, 2, 8 ))
-                                      and c60_codsis not in (5,6,7)  ) as movimento";
-                                // echo $sSqlContaCorrenteSaldo;
+                                      and c60_codsis not in (5,6,7) ) as movimento";
 
 		$rsContaCorrenteSaldo = db_query($sSqlContaCorrenteSaldo);
-        //db_criatabela($rsContaCorrenteSaldo);exit;
 
         if (pg_num_rows($rsContaCorrenteSaldo) < 1) {
             throw new DBException(urlencode('ERRO - [ 2 ] - Nenhum registro encontrado com saldo!'));
@@ -179,10 +117,6 @@ try {
             $oConta = db_utils::fieldsMemory($rsContaCorrenteSaldo, $iCont);
 
             $nSaldoInicial = $oConta->sinalsaldofinal == 'C' ? $oConta->saldofinal * -1 : $oConta->saldofinal;
-
-            if ($nSaldoInicial == 0) {
-                continue;
-            }
 
             $oDaoContaCorrenteDetalhe 	                       = db_utils::getDao('contacorrentedetalhe');
             $oDaoContaCorrenteDetalhe->c19_contacorrente       = $oConta->c19_contacorrente;
@@ -269,6 +203,10 @@ try {
             $rsVerificacao 			= $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);
 
             if ($oDaoVerificaDetalhe->numrows == 0) {
+
+                if ($nSaldoInicial == 0) {
+                    continue;
+                }
 
                 $oDaoContaCorrenteDetalhe->incluir(null);
                 if ($oDaoContaCorrenteDetalhe->erro_status == 0 || $oDaoContaCorrenteDetalhe->erro_status == '0') {
@@ -369,7 +307,6 @@ function salvarSaldo($saldo, $valorSaldo){
           if ($oDaoContaCorrenteSaldo->numrows > 0) {
 
               $oValoresInplantados = db_utils::fieldsMemory($rsImplantacao, 0);
-
               $oDaoContaCorrenteSaldo->c29_sequencial = $oValoresInplantados->c29_sequencial;
               $oDaoContaCorrenteSaldo->alterar($oDaoContaCorrenteSaldo->c29_sequencial);
 
@@ -378,7 +315,6 @@ function salvarSaldo($saldo, $valorSaldo){
               $oDaoContaCorrenteSaldo->incluir(null);
 
           }
-
 
           if ($oDaoContaCorrenteSaldo->erro_status == "0") {
               throw new DBException(urlencode("ERRO [ 2 ] - Atualizando Registros - " . $oDaoContaCorrenteSaldo->erro_msg));
