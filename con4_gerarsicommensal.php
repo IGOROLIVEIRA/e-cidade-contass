@@ -51,6 +51,7 @@ $clrotulo->label("o15_codigo");
                                     <tr>
                                         <td>Mês Referência:
                                             <select id="MesReferencia" class="MesReferencia" onchange="js_mostraMetaEncerramento(this.value)">
+                                                <option value="00">SELECIONE</option>
                                                 <option value="01">Janeiro</option>
                                                 <option value="02">Fevereiro</option>
                                                 <option value="03">Março</option>
@@ -342,6 +343,13 @@ $clrotulo->label("o15_codigo");
             alert("Nenhum arquivo foi selecionado para ser gerado");
             return false;
         }
+
+        if (iMesReferencia.value == 0) {
+            
+            alert("Selecione um Mês Referência para geração do(s) arquivo(s)!");
+            return false;
+        }
+
         js_divCarregando('Aguarde, processando arquivos','msgBox');
         var oParam           = new Object();
         oParam.exec          = "processarSicomMensal";
