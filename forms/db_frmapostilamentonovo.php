@@ -42,7 +42,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
                 <td>
                     <?
-                    $x = array("01" => "Reajuste de preço previsto no contrato", "02" => "Atualizações, compensações ou penalizações", "03" => "Empenho de dotações orçamentárias suplementares");
+                    $x = array("00" => "Selecione...", "01" => "Reajuste de preço previsto no contrato", "02" => "Atualizações, compensações ou penalizações", "03" => "Empenho de dotações orçamentárias suplementares");
                     db_select('si03_tipoapostila', $x, true, $db_opcao, "onchange='js_changeTipoApostila(this.value)'");
                     //db_input('si03_tipoapostila',1,$Isi03_tipoapostila,true,'text',$db_opcao,"")
                     ?>
@@ -198,6 +198,7 @@ $clrotulo->label("ac16_resumoobjeto");
 </table>
 <input type='button' disabled id='btnSalvar' value='Salvar' onclick="apostilar();">
 <script>
+    document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
     aItensPosicao = new Array();
     oGridItens = new DBGrid('oGridItens');
@@ -205,7 +206,7 @@ $clrotulo->label("ac16_resumoobjeto");
     oGridItens.setCheckbox(0);
     oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
     oGridItens.setCellWidth(["3%", "25%", "8%", "8%"]);
-    oGridItens.setHeader(["Cód", "Item", "Qtde Anterior", "Vl Unit Anterior", "Quantidade", "Vl Unitário", "Vl Total", "Vl Apostilado", "Qt Aditada", "Dotações", "Seq"]);
+    oGridItens.setHeader(["Cód", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotações", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
     oGridItens.aHeaders[10].lDisplayed = false;
     oGridItens.aHeaders[5].lDisplayed = false;
@@ -980,23 +981,43 @@ $clrotulo->label("ac16_resumoobjeto");
         var oSelecionados = {};
         var iSelecionados = [];
         var i = 0;
-        var itensSelecionados = false;
+        var itensSelecionados = undefined;
+        var dotacaoAplicada = false;
 
+        aItensPosicao[i].dotacoes.forEach(function(oDotacaoItem) {
 
-        oGridItens.getRows().forEach(function(oRow) {
-
-            if (oRow.isSelected) {
-                aItensPosicao[i].dotacoes.push(oDotacao);
-                itensSelecionados = true;
-
+            if (oDotacaoItem.dotacao == oDotacao.dotacao) {
+                dotacaoAplicada = true;
+                return alert("Dotação já incluida para o item.");
             }
             i++;
 
         });
 
+        if (dotacaoAplicada == false) {
+
+            oGridItens.getRows().forEach(function(oRow) {
+
+                if (oRow.isSelected) {
+                    aItensPosicao[i].dotacoes.push(oDotacao);
+                    itensSelecionados = true;
+
+                }
+                i++;
+
+            });
+
+            return alert('Dotação aplicada aos itens');
+
+
+        }
+
+
+
         if (itensSelecionados == false) {
             return alert('Nenhum item selecionado para aplicar dotação.');
         }
+
     }
 
     function apostilar() {
@@ -1007,6 +1028,9 @@ $clrotulo->label("ac16_resumoobjeto");
         /**
          * @todo incluir aqui todas as validações de campos obrigatórios para o SICOM contratos
          */
+        if ($("si03_tipoapostila").value == "00") {
+            return alert("Obrigatório informar o  tipo de Apostila.");
+        }
 
         if ($("si03_numapostilamento").value == "") {
             return alert("Obrigatório informar o  Numero Seq. Apostila.");
@@ -1136,10 +1160,18 @@ $clrotulo->label("ac16_resumoobjeto");
 
     function js_changeTipoApostila(iTipo) {
 
+
+
         if (iTipo == "03") {
             oGridItens.aHeaders[10].lDisplayed = true;
             oGridItens.aHeaders[5].lDisplayed = true;
+            document.getElementById("si03_tipoalteracaoapostila").disabled = true;
+
+        } else if (iTipo == "00") {
+            document.getElementById("si03_tipoalteracaoapostila").disabled = true;
+
         } else {
+            document.getElementById("si03_tipoalteracaoapostila").disabled = false;
             oGridItens.aHeaders[10].lDisplayed = false;
             oGridItens.aHeaders[5].lDisplayed = false;
         }
@@ -1191,6 +1223,6 @@ $clrotulo->label("ac16_resumoobjeto");
         $("si03_tipoalteracaoapostila").value = 1;
         $("si03_numapostilamento").value = "";
     }
-    js_changeTipoApostila();
+    //js_changeTipoApostila();
     js_pesquisaac16_sequencial(true);
 </script>
