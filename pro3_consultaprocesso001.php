@@ -136,6 +136,8 @@ if (!isset($grupo)) {
 
 </html>
 <script type="text/javascript">
+  js_OpenJanelaIframe('top.corpo', 'db_iframe', 'func_pesquisaprocesso.php', 'Pesquisa de Processos', true);
+
   function js_consultaProcesso() {
 
     var iNumeroProcesso = $F('p58_numero');
