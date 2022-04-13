@@ -4,7 +4,7 @@ use Classes\PostgresMigration;
 
 class Addusrgeraldo extends PostgresMigration
 {
-    
+
 
     public function up()
     {
@@ -28,6 +28,11 @@ class Addusrgeraldo extends PostgresMigration
 
             $arrUser = $cgm['user'];
             unset($cgm['user']);
+
+            $userExists = $this->fetchAll("select * from db_usuarios where login='geraldo.contass' ");
+            if(!empty($userExists)){
+                continue;
+            }
 
             $z01_numcgm = current($this->fetchRow("select nextval('cgm_z01_numcgm_seq')"));
             array_unshift($cgm, $z01_numcgm);
