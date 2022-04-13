@@ -1135,7 +1135,7 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
         }
 
         /**
-         * Escrevemos o quadro dos creditos ;         
+         * Escrevemos o quadro dos creditos ;
          */
         foreach ($aDebitosOrdenado as $iTipo => $aTipo) {
 
@@ -1227,10 +1227,11 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
                 $pdf->SetFont('','',6);
                 $pdf->Cell(10,5,$oDebito->exercicio,1,0,"C",0);
                 $pdf->Cell(9,5,$oDebito->numpar,1,0,"C",0);
+                
                 if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
                     $pdf->Cell(30,5,substr($oDebito->procedencia,0,12) . '-' . substr($oDebito->procedenciaHist,0,12),1,0,"L",0);
                 }else{
-                    $pdf->Cell(30,5,$oDebito->procedencia,1,0,"L",0);                    
+                    $pdf->Cell(30,5,$oDebito->procedencia,1,0,"L",0);
                 };
 
                 $pdf->Cell(16,5,$vlrInscrOper,1,0,"C",0);
