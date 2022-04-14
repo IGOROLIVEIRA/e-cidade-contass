@@ -28,6 +28,8 @@ class cl_balancete312022
   var $si243_naturezasaldoinicialcre = null;
   var $si243_totaldebitoscre = 0;
   var $si243_totalcreditoscre = 0;
+  var $si243_nrocontratoop = null;
+  var $si243_dataassinaturacontratoop = null;
   var $si243_saldofinalcre = 0;
   var $si243_naturezasaldofinalcre = null;
   var $si243_mes = 0;
@@ -35,23 +37,25 @@ class cl_balancete312022
   var $si243_reg10 = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si243_sequencial = int8 = si243_sequencial 
-                 si243_tiporegistro = int8 = si243_tiporegistro 
-                 si243_contacontabil = int8 = si243_contacontabil 
-                 si243_codfundo = varchar(8) = si243_codfundo 
-                 si243_naturezareceita = int8 = si243_naturezareceita 
-                 si243_codfontrecursos = int8 = si243_codfontrecursos 
+                 si243_sequencial = int8 = si243_sequencial
+                 si243_tiporegistro = int8 = si243_tiporegistro
+                 si243_contacontabil = int8 = si243_contacontabil
+                 si243_codfundo = varchar(8) = si243_codfundo
+                 si243_naturezareceita = int8 = si243_naturezareceita
+                 si243_codfontrecursos = int8 = si243_codfontrecursos
                  si243_emendaparlamentar = int4 = si243_emendaparlamentar
-                 si243_saldoinicialcre = float8 = si243_saldoinicialcre 
-                 si243_naturezasaldoinicialcre = varchar(1) = si243_naturezasaldoinicialcre 
-                 si243_totaldebitoscre = float8 = si243_totaldebitoscre 
-                 si243_totalcreditoscre = float8 = si243_totalcreditoscre 
-                 si243_saldofinalcre = float8 = si243_saldofinalcre 
-                 si243_naturezasaldofinalcre = varchar(1) = si243_naturezasaldofinalcre 
-                 si243_mes = int8 = si243_mes 
-                 si243_instit = int8 = si243_instit 
+                 si243_nrocontratoop = varchar(30) = si243_nrocontratoop,
+                 si243_dataassinaturacontratoop = date = si243_dataassinaturacontratoop,
+                 si243_saldoinicialcre = float8 = si243_saldoinicialcre
+                 si243_naturezasaldoinicialcre = varchar(1) = si243_naturezasaldoinicialcre
+                 si243_totaldebitoscre = float8 = si243_totaldebitoscre
+                 si243_totalcreditoscre = float8 = si243_totalcreditoscre
+                 si243_saldofinalcre = float8 = si243_saldofinalcre
+                 si243_naturezasaldofinalcre = varchar(1) = si243_naturezasaldofinalcre
+                 si243_mes = int8 = si243_mes
+                 si243_instit = int8 = si243_instit
                  ";
-  
+
   //funcao construtor da classe
   function cl_balancete312022()
   {
@@ -59,7 +63,7 @@ class cl_balancete312022
     $this->rotulo = new rotulo("balancete312022");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -70,7 +74,7 @@ class cl_balancete312022
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -94,7 +98,7 @@ class cl_balancete312022
       $this->si243_sequencial = ($this->si243_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_sequencial"] : $this->si243_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si243_sequencial)
   {
@@ -106,7 +110,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_contacontabil == null) {
@@ -116,7 +120,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_naturezareceita == null) {
@@ -126,7 +130,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_codfontrecursos == null) {
@@ -136,7 +140,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_emendaparlamentar == null) {
@@ -146,7 +150,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     if ($this->si243_saldoinicialcre == null) {
@@ -156,7 +160,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_naturezasaldoinicialcre == null) {
@@ -166,7 +170,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_totaldebitoscre == null) {
@@ -176,7 +180,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_totalcreditoscre == null) {
@@ -186,7 +190,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_saldofinalcre == null) {
@@ -196,7 +200,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_naturezasaldofinalcre == null) {
@@ -206,7 +210,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_mes == null) {
@@ -216,7 +220,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si243_instit == null) {
@@ -226,7 +230,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si243_sequencial == "" || $si243_sequencial == null) {
@@ -238,7 +242,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si243_sequencial = pg_result($result, 0, 0);
@@ -250,7 +254,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si243_sequencial = $si243_sequencial;
@@ -262,49 +266,59 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
+    if ($this->si243_nrocontratoop == null) {
+        $this->si243_nrocontratoop = "null";
+    }
+    if ($this->si243_dataassinaturacontratoop == null) {
+        $this->si243_dataassinaturacontratoop = "null";
+    }
     $sql = "insert into balancete312022(
-                                       si243_sequencial 
-                                      ,si243_tiporegistro 
-                                      ,si243_contacontabil 
-                                      ,si243_codfundo 
-                                      ,si243_naturezareceita 
-                                      ,si243_codfontrecursos 
+                                       si243_sequencial
+                                      ,si243_tiporegistro
+                                      ,si243_contacontabil
+                                      ,si243_codfundo
+                                      ,si243_naturezareceita
+                                      ,si243_codfontrecursos
                                       ,si243_emendaparlamentar
-                                      ,si243_saldoinicialcre 
-                                      ,si243_naturezasaldoinicialcre 
-                                      ,si243_totaldebitoscre 
-                                      ,si243_totalcreditoscre 
-                                      ,si243_saldofinalcre 
-                                      ,si243_naturezasaldofinalcre 
-                                      ,si243_mes 
+                                      ,si243_nrocontratoop
+                                      ,si243_dataassinaturacontratoop
+                                      ,si243_saldoinicialcre
+                                      ,si243_naturezasaldoinicialcre
+                                      ,si243_totaldebitoscre
+                                      ,si243_totalcreditoscre
+                                      ,si243_saldofinalcre
+                                      ,si243_naturezasaldofinalcre
+                                      ,si243_mes
                                       ,si243_instit
                                       ,si243_reg10
                        )
                 values (
-                                $this->si243_sequencial 
-                               ,$this->si243_tiporegistro 
-                               ,$this->si243_contacontabil 
-                               ,'$this->si243_codfundo' 
-                               ,$this->si243_naturezareceita 
-                               ,$this->si243_codfontrecursos 
+                                $this->si243_sequencial
+                               ,$this->si243_tiporegistro
+                               ,$this->si243_contacontabil
+                               ,'$this->si243_codfundo'
+                               ,$this->si243_naturezareceita
+                               ,$this->si243_codfontrecursos
                                ,$this->si243_emendaparlamentar
-                               ,$this->si243_saldoinicialcre 
-                               ,'$this->si243_naturezasaldoinicialcre' 
-                               ,$this->si243_totaldebitoscre 
-                               ,$this->si243_totalcreditoscre 
-                               ,$this->si243_saldofinalcre 
-                               ,'$this->si243_naturezasaldofinalcre' 
-                               ,$this->si243_mes 
+                               ,$this->si243_nrocontratoop
+                               ,$this->si243_dataassinaturacontratoop
+                               ,$this->si243_saldoinicialcre
+                               ,'$this->si243_naturezasaldoinicialcre'
+                               ,$this->si243_totaldebitoscre
+                               ,$this->si243_totalcreditoscre
+                               ,$this->si243_saldofinalcre
+                               ,'$this->si243_naturezasaldofinalcre'
+                               ,$this->si243_mes
                                ,$this->si243_instit
                                ,$this->si243_reg10
                       )";
-    $result = db_query($sql);
+
+    $result = db_query($sql) or die($sql);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
         $this->erro_sql = "balancete312022 ($this->si243_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
@@ -317,7 +331,7 @@ class cl_balancete312022
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -327,10 +341,10 @@ class cl_balancete312022
     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si243_sequencial = null)
   {
@@ -347,7 +361,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -361,7 +375,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -375,7 +389,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -389,7 +403,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -403,7 +417,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -417,7 +431,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -431,7 +445,7 @@ class cl_balancete312022
           $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
           $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
           $this->erro_status = "0";
-          
+
           return false;
         }
       }
@@ -445,7 +459,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -459,7 +473,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -473,7 +487,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -487,7 +501,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -501,7 +515,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -515,7 +529,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -529,7 +543,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -543,7 +557,7 @@ class cl_balancete312022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -562,7 +576,7 @@ class cl_balancete312022
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -573,7 +587,7 @@ class cl_balancete312022
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -583,12 +597,12 @@ class cl_balancete312022
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si243_sequencial = null, $dbwhere = null)
   {
@@ -615,7 +629,7 @@ class cl_balancete312022
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -626,7 +640,7 @@ class cl_balancete312022
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -636,12 +650,12 @@ class cl_balancete312022
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -654,7 +668,7 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -664,13 +678,13 @@ class cl_balancete312022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si243_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -706,10 +720,10 @@ class cl_balancete312022
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si243_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -745,7 +759,7 @@ class cl_balancete312022
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }
