@@ -523,8 +523,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             if ($oContas10->nregobrig == 11 || $oContas10->nregobrig == 30) {
 
                 //Natureza de despesa que precisam informar campo Tipo de Despesa (Reg30)
-                $aNaturDespTipoDespesa = "'319001', '319003', '319091', '319092', '319094', '319191', '319192', '319194'";
-
+                //$aNaturDespTipoDespesa = "'319001', '319003', '319091', '319092', '319094', '319191', '319192', '319194'";
+                $aNaturDespTipoDespesa  = "'31900101', '31900102', '31900301', '31900302', '31909102',";
+                $aNaturDespTipoDespesa .= "'31909103', '31909201', '31909203', '31909403', '31909413'";
                 /*
                  * SQL PARA PEGA AS DOTACOES QUE DIVERAM MOVIMENTACAO NO MES
                  */
@@ -545,7 +546,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					                o15_codtri as codfontrecursos, si08_orcmodalidadeaplic,
                                     case
                                         when si09_tipoinstit IN (5,6)
-                                            and substr(o56_elemento,2,6) in ({$aNaturDespTipoDespesa})
+                                            and substr(o56_elemento,2,8) in ({$aNaturDespTipoDespesa})
                                             and $oContas10->nregobrig = 30 then e60_tipodespesa
                 	                    else 0
                                     end as e60_tipodespesa
@@ -580,7 +581,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 								    e60_numemp,
                                     case
                                         when si09_tipoinstit IN (5,6)
-                                            and substr(o56_elemento,2,6) in ({$aNaturDespTipoDespesa})
+                                            and substr(o56_elemento,2,8) in ({$aNaturDespTipoDespesa})
                                             and $oContas10->nregobrig = 30 then e60_tipodespesa
                 	                    else 0
                                     end as e60_tipodespesa
@@ -619,7 +620,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					                e60_numemp,
                                     case
                                         when si09_tipoinstit IN (5,6)
-                                            and substr(o56_elemento,2,6) in ({$aNaturDespTipoDespesa})
+                                            and substr(o56_elemento,2,8) in ({$aNaturDespTipoDespesa})
                                             and $oContas10->nregobrig = 30 then e60_tipodespesa
                 	                    else 0
                                     end as e60_tipodespesa
