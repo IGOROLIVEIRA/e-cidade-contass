@@ -2534,11 +2534,14 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oBdi.setMaxLength(5);
     me.oBdi.show($('ctnBdi' + sId));
     if(me.iNaturezaObjeto == '7'){
+        $('txtBdi'+sId).value = me.iBdi;
         $('txtBdi'+sId).setAttribute('class', 'readonly');
         $('txtBdi'+sId).setAttribute('disabled', 'disabled');
     }
 
     if(me.iBdi != null){
+        $('txtBdi'+sId).value = me.iBdi;
+        console.log(me.iBdi);
         $('txtBdi'+sId).setAttribute('class', 'readonly');
         $('txtBdi'+sId).setAttribute('disabled', 'disabled');
     }
@@ -3845,8 +3848,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 me.setSubGrupoBemPublico('');
                 $('txtDescrAtividadeServico' + sId).value = '';
                 $('txtDescrAtividadeServicoEsp' + sId).value = '';
-                me.setBdi('');
-                $('txtBdi' + sId).value = '';
+                //me.setBdi('');
+                //$('txtBdi' + sId).value = '';
 
 
                 //me.oCboRuasTipo.setValue(3);

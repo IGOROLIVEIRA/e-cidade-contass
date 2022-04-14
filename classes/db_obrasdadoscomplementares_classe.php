@@ -68,6 +68,7 @@ class cl_obrasdadoscomplementares
 	var $db150_descratividadeservicoesp = '';
 	var $db150_bdi = 0;
 	var $db150_cep = 0;
+	var $db150_seqobrascodigos = 0;
 
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
@@ -96,6 +97,7 @@ class cl_obrasdadoscomplementares
                     db150_descratividadeservicoesp = varchar(150) = Descrição da Atividade do Serviço Especializado
                     db150_bdi = numeric = BDI
                     db150_cep = char(8) = CEP
+					db150_seqobrascodigos = int4 = Sequencial da Obra
                   ";
 
 	//funcao construtor da classe
@@ -146,7 +148,7 @@ class cl_obrasdadoscomplementares
 			$this->db150_subgrupobempublico = ($this->db150_subgrupobempublico == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_subgrupobempublico"] : $this->db150_subgrupobempublico);
 			$this->db150_bdi = ($this->db150_bdi == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_bdi"] : $this->db150_bdi);
 			$this->db150_cep = ($this->db150_cep == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_cep"] : $this->db150_cep);
-
+			$this->db150_seqobrascodigos = ($this->db150_seqobrascodigos == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_seqobrascodigos"] : $this->db150_seqobrascodigos);
 		} else {
 			$this->db150_sequencial = ($this->db150_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["db150_sequencial"] : $this->db150_sequencial);
 		}
@@ -225,8 +227,8 @@ class cl_obrasdadoscomplementares
 			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 			$this->erro_status = "0";
 			return false;
-		}else{
-			if($this->db150_grupobempublico == '99')
+		} else {
+			if ($this->db150_grupobempublico == '99')
 				$this->db150_subgrupobempublico = 'null';
 		}
 
@@ -236,14 +238,14 @@ class cl_obrasdadoscomplementares
 		if ($this->db150_descratividadeservicoesp == null) {
 			$this->db150_descratividadeservicoesp = '';
 		}
-//		if ($this->db150_bairro == null || $this->db150_bairro == "") {
-//			$this->erro_sql = " Campo Bairro nao declarado.";
-//			$this->erro_banco = "Campo db150_bairro nao declarado.";
-//			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//			$this->erro_status = "0";
-//			return false;
-//		}
+		//		if ($this->db150_bairro == null || $this->db150_bairro == "") {
+		//			$this->erro_sql = " Campo Bairro nao declarado.";
+		//			$this->erro_banco = "Campo db150_bairro nao declarado.";
+		//			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+		//			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+		//			$this->erro_status = "0";
+		//			return false;
+		//		}
 		if ($this->db150_cep == null || $this->db150_cep == "") {
 			$this->erro_sql = " Campo CEP nao declarado.";
 			$this->erro_banco = "Campo db150_cep nao declarado.";
@@ -253,13 +255,18 @@ class cl_obrasdadoscomplementares
 			return false;
 		}
 
-		if(!$this->db150_bdi){
+		if (!$this->db150_bdi) {
 			$this->db150_bdi = 'null';
 		}
 
-		if(!$this->db150_numero){
+		if (!$this->db150_numero) {
 			$this->db150_numero = 'null';
 		}
+
+		if (!$this->db150_seqobrascodigos) {
+			$this->db150_seqobrascodigos = 0;
+		}
+
 		$sql = "insert into obrasdadoscomplementares(
                                         db150_sequencial
                                         ,db150_codobra
@@ -286,6 +293,7 @@ class cl_obrasdadoscomplementares
                                         ,db150_subgrupobempublico
                                         ,db150_bdi
                                         ,db150_cep
+										,db150_seqobrascodigos
                         )
                 values (
                                 $this->db150_sequencial
@@ -313,6 +321,7 @@ class cl_obrasdadoscomplementares
                                ,$this->db150_subgrupobempublico
                                ,$this->db150_bdi
                                ,'$this->db150_cep'
+							   ,$this->db150_seqobrascodigos
                       )";
 		$result = db_query($sql);
 
@@ -389,21 +398,21 @@ class cl_obrasdadoscomplementares
 		if (trim($this->db150_distrito) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_distrito"])) {
 			$sql .= $virgula . " db150_distrito = '$this->db150_distrito' ";
 			$virgula = ",";
-		}else{
+		} else {
 			$sql .= $virgula . " db150_distrito = null ";
 			$virgula = ",";
 		}
 		if (trim($this->db150_bairro) != null || isset($GLOBALS["HTTP_POST_VARS"]["db150_bairro"])) {
 			$sql .= $virgula . " db150_bairro = '$this->db150_bairro' ";
 			$virgula = ",";
-		}else{
+		} else {
 			$sql .= $virgula . " db150_bairro = null ";
 			$virgula = ",";
 		}
 
-		$sql .= $virgula . " db150_numero = ".(!$this->db150_numero ? 'null' : $this->db150_numero);
+		$sql .= $virgula . " db150_numero = " . (!$this->db150_numero ? 'null' : $this->db150_numero);
 		$virgula = ",";
-		
+
 		if (trim($this->db150_logradouro) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_logradouro"])) {
 			$sql .= $virgula . " db150_logradouro = '$this->db150_logradouro' ";
 			$virgula = ",";
@@ -466,12 +475,17 @@ class cl_obrasdadoscomplementares
 		}
 		if (trim($this->db150_bdi) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_bdi"])) {
 			$sql .= $virgula . " db150_bdi = $this->db150_bdi ";
-		}else{
+		} else {
 			$sql .= $virgula . " db150_bdi = null ";
 		}
 		if (trim($this->db150_cep) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_cep"])) {
 			$sql .= $virgula . " db150_cep = $this->db150_cep ";
 		}
+
+		if (trim($this->db150_seqobrascodigos) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_seqobrascodigos"])) {
+			$sql .= $virgula . " db150_seqobrascodigos = $this->db150_seqobrascodigos ";
+		}
+
 		$sql .= " where ";
 
 		if ($db150_sequencial != null) {
@@ -600,7 +614,7 @@ class cl_obrasdadoscomplementares
 			$sql .= $campos;
 		}
 		$sql .= " from obrasdadoscomplementares ";
-		$sql .= " join obrascodigos on db151_codigoobra = db150_codobra ";
+		$sql .= " join obrascodigos on db151_sequencial = db150_seqobrascodigos ";
 		$sql2 = "";
 		if ($dbwhere == "") {
 			if ($db150_sequencial != null) {
@@ -636,7 +650,7 @@ class cl_obrasdadoscomplementares
 			$sql .= $campos;
 		}
 		$sql .= " from obrasdadoscomplementares ";
-		$sql .= " JOIN obrascodigos on db151_codigoobra = db150_codobra ";
+		$sql .= " JOIN obrascodigos on db151_sequencial = db150_seqobrascodigos ";
 		$sql .= " JOIN liclicita on l20_codigo = db151_liclicita ";
 		$sql .= " INNER JOIN cadendermunicipio on db72_sequencial = db150_municipio ";
 		$sql2 = "";
