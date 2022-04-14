@@ -1694,18 +1694,12 @@ switch ($oParam->exec) {
                 $countLote += 1;
             }
 
-            //            $sSqlLoteCad = 'SELECT * from obrasdadoscomplementareslote where db150_lote = ' . $oDadosLote->l04_codigo;
-            //            $rsLoteCad   = db_query($sSqlLoteCad);
-
-            //            if (!pg_numrows($rsLoteCad)) {
-
             $oLote = new stdClass();
             $oLote->sequencial = $countLote;
             $oLote->codigo     = $oDadosLote->l04_codigo;
             $oLote->descricao  = $oDadosLote->l04_descricao;
 
             $oRetorno->itens[] = $oLote;
-            //            }
         }
 
         break;

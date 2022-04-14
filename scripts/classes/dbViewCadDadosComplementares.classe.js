@@ -1,4 +1,4 @@
-DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto, sLote='', sDescricaoLote='') {
+DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto, sLote='', sDescricaoLote='', iBdi=null) {
     var me = this;
 
     this.iCodigoPais = '';
@@ -43,7 +43,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.iGrausLongitude = '';
     this.iMinutoLongitude = '';
     this.iSegundoLongitude = '';
-    this.iBdi = '';
+    this.iBdi = iBdi;
     this.iLicitacao = '';
     this.acao = incluir;
     this.iNaturezaObjeto = iNaturezaObjeto;
@@ -2534,6 +2534,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oBdi.setMaxLength(5);
     me.oBdi.show($('ctnBdi' + sId));
     if(me.iNaturezaObjeto == '7'){
+        $('txtBdi'+sId).setAttribute('class', 'readonly');
+        $('txtBdi'+sId).setAttribute('disabled', 'disabled');
+    }
+
+    if(me.iBdi != null){
         $('txtBdi'+sId).setAttribute('class', 'readonly');
         $('txtBdi'+sId).setAttribute('disabled', 'disabled');
     }

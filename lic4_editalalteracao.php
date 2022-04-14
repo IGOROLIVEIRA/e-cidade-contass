@@ -1,29 +1,29 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
+*     E-cidade Software Publico para Gestao Municipal
+*  Copyright (C) 2014  DBselller Servicos de Informatica
+*                            www.dbseller.com.br
+*                         e-cidade@dbseller.com.br
+*
+*  Este programa e software livre; voce pode redistribui-lo e/ou
+*  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+*  publicada pela Free Software Foundation; tanto a versao 2 da
+*  Licenca como (a seu criterio) qualquer versao mais nova.
+*
+*  Este programa e distribuido na expectativa de ser util, mas SEM
+*  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+*  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+*  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+*  detalhes.
+*
+*  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+*  junto com este programa; se nao, escreva para a Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+*  02111-1307, USA.
+*
+*  Copia da licenca no diretorio licenca/licenca_en.txt
+*                                licenca/licenca_pt.txt
+*/
 
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -50,15 +50,19 @@ $db_opcao = 2;
 
 if (!isset($alterar)) {
   $sWhere = "
-    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
-                                     AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
-                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
-                                     AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
-                                END) >= 2020
-    ";
+    AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+                                    AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
+                                    WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
+                                    AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
+                              END) >= 2020
+  ";
   $sqlEdital = $clliclicita->sql_query_edital('', 'DISTINCT *', 'l47_sequencial DESC', 'l20_codigo = ' . $licitacao . $sWhere);
   $rsEdital = $clliclicita->sql_record($sqlEdital);
   $oDados = db_utils::fieldsMemory($rsEdital, 0);
+
+  $sqlBdi = 'select distinct db150_bdi from obrasdadoscomplementareslote inner join obrascodigos on db151_sequencial = db150_seqobrascodigos inner join liclicita on l20_codigo = db151_liclicita where l20_codigo =  ' . $licitacao;
+  $rsBdi   = db_query($sqlBdi);
+  $valorBdi = db_utils::fieldsMemory($rsBdi, 0)->db150_bdi;
 
   $numero_edital = $oDados->l20_nroedital;
   $objeto = $oDados->l20_objeto;

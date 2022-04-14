@@ -279,7 +279,7 @@ $db_botao = true;
 
       oDadosLotesPendentes.setCallBackDoubleClick((oDadosLinha) => {
         oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir,
-          codigoLicitacao, "<?= $natureza_objeto ?>", oDadosLinha.sLote, oDadosLinha.sDescricao);
+          codigoLicitacao, "<?= $natureza_objeto ?>", oDadosLinha.sLote, oDadosLinha.sDescricao, "<?= $valorBdi ?>");
         oDadosComplementares.setObjetoRetorno($('idObra'));
         oDadosComplementares.setLicitacao(codigoLicitacao);
         oDadosComplementares.setCallBackFunction(() => {

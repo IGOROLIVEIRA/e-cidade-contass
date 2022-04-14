@@ -5,10 +5,10 @@ use Phinx\Migration\AbstractMigration;
 class Oc16361sprint24 extends AbstractMigration
 {
 
-    public function up()
-    {
+  public function up()
+  {
 
-        $sql = "begin;
+    $sql = "begin;
 
         /*cria campo db150_seqobrascodigos nas tabelas obrasdadoscomplementares*/
         alter table obrasdadoscomplementares 
@@ -59,10 +59,10 @@ class Oc16361sprint24 extends AbstractMigration
           
        commit";
 
-        $this->execute($sql);
-    }
+    $this->execute($sql);
+  }
 
-    public function down()
-    {
-    }
+  public function down()
+  {
+  }
 }
