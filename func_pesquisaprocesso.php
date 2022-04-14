@@ -45,9 +45,14 @@ $clprotprocesso->rotulo->label("p58_codproc");
 $clprotprocesso->rotulo->label("p58_requer");
 $clprotprocesso->rotulo->label("p58_numero");
 
+$teste = $_POST["chave_p58_requer"];
+
+
+
 /**
  * Evita o escape dos campos
  */
+
 if (isset($chave_p58_numero)) {
     $chave_p58_numero = stripslashes($chave_p58_numero);
 }
@@ -109,273 +114,274 @@ if (isset($chave_p58_requer)) {
 
 
     <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
-        <tr>
-            <td height="63" align="center" valign="top">
+        <form name="form3" method="post" action="">
 
-                <fieldset>
-                    <legend class="bold">Pesquisa</legend>
-                    <div class="container">
+            <tr>
+                <td height="63" align="center" valign="top">
 
-                        <div class="op1">
-                            <table border="1px">
+                    <fieldset>
+                        <legend class="bold">Pesquisa</legend>
+                        <div class="container">
+
+                            <div class="op1">
+                                <table border="1px">
+                                    <tr>
+                                        <th style="background-color: #C0C0C0;">Selecione</th>
+                                        <th style="background-color: #C0C0C0;">Descrição</th>
+                                    </tr>
+                                    <tr>
+                                        <td align="center"> <input type="checkbox" id="filtro1">
+                                        </td>
+                                        <td>Com todas as palavras </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center"><input type="checkbox" id="filtro2"></td>
+                                        <td>Com expressão</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center"><input type="checkbox" id="filtro3"></td>
+                                        <td>Com qualquer uma das palavras</td>
+                                    </tr>
+
+                                </table>
+
+                            </div>
+                            <div class="op2">
+                                <table>
+                                    <tr>
+                                        <td width="4%" align="right" nowrap>
+                                            <strong>Nome/Razão Social:</strong>
+                                        </td>
+                                        <td width="96%" align="left" nowrap>
+                                            <?
+                                            db_input("z01_numcgm", 10, '', true, "text", 4, "", "z01_numcgm");
+                                            ?>
+                                            <?
+                                            db_input("z01_nome", 36, $Ip58_requer, true, "text", 4, "", "z01_nome");
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="4%" align="right" nowrap title="<?= $Tp58_numero ?>">
+                                            <strong>Protocolo Geral:</strong>
+                                        </td>
+                                        <td width="5%" align="left" nowrap>
+                                            <?
+                                            db_input("p58_numero", 10, $Ip58_numero, true, "text", 4, "", "p58_numero");
+                                            ?>
+                                            <strong>Tipo de Processo:</strong>
+                                            <?
+                                            db_input("p51_descr", 20, $Ip58_numero, true, "text", 4, "", "p51_descr");
+                                            ?>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td width="4%" align="right" nowrap>
+                                            <strong>Observação:</strong>
+                                        </td>
+                                        <td width="96%" align="left" nowrap>
+                                            <?
+                                            db_input("p58_obs", 50, '', true, "text", 4, "", "p58_obs");
+                                            ?>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td width="4%" align="right" nowrap title="<?= $Tp58_requer ?>">
+                                            <strong>Data do Processo:</strong>
+                                        </td>
+                                        <td width="96%" align="left" nowrap>
+                                            <?
+                                            db_inputdata('datainicial', @$datainicial_dia, @$datainicial_mes, @$datainicial_ano, true, 'text', $db_opcao, "");                                        ?>
+                                            <strong>a </strong>
+                                            <?
+                                            db_inputdata('datafinal', @$datafinal_dia, @$datafinal_mes, @$datafinal_ano, true, 'text', $db_opcao, "");                                        ?>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <form name="form2" method="post" action="">
+                            <table width="35%" border="0" align="center" cellspacing="0">
+
+
+
                                 <tr>
-                                    <th style="background-color: #C0C0C0;">Selecione</th>
-                                    <th style="background-color: #C0C0C0;">Descrição</th>
-                                </tr>
-                                <tr>
-                                    <td align="center"> <input type="checkbox" id="filtro1">
+                                    <td colspan="2" align="center">
+                                        <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                                        <input name=" limpar" type="reset" id="limpar" value="Limpar">
+                                        <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_proc.hide();">
                                     </td>
-                                    <td>Com todas as palavras </td>
-                                </tr>
-                                <tr>
-                                    <td align="center"><input type="checkbox" id="filtro2"></td>
-                                    <td>Com expressão</td>
-                                </tr>
-                                <tr>
-                                    <td align="center"><input type="checkbox" id="filtro3"></td>
-                                    <td>Com qualquer uma das palavras</td>
                                 </tr>
 
                             </table>
 
-                        </div>
-                        <div class="op2">
-                            <table>
-                                <tr>
-                                    <td width="4%" align="right" nowrap>
-                                        <strong>Nome/Razão Social:</strong>
-                                    </td>
-                                    <td width="96%" align="left" nowrap>
-                                        <?
-                                        db_input("numeroprocesso", 10, '', true, "text", 4, "", "chave_numeroprocesso");
-                                        ?>
-                                        <?
-                                        db_input("p58_requer", 36, $Ip58_requer, true, "text", 4, "", "chave_p58_requer");
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="4%" align="right" nowrap title="<?= $Tp58_numero ?>">
-                                        <strong>Protocolo Geral:</strong>
-                                    </td>
-                                    <td width="5%" align="left" nowrap>
-                                        <?
-                                        db_input("p58_numero", 10, $Ip58_numero, true, "text", 4, "", "chave_p58_numero");
-                                        ?>
-                                        <strong>Tipo de Processo:</strong>
-                                        <?
-                                        db_input("p58_numero", 20, $Ip58_numero, true, "text", 4, "", "chave_p58_numero");
-                                        ?>
-                                    </td>
+                        </form>
 
-                                </tr>
-                                <tr>
-                                    <td width="4%" align="right" nowrap>
-                                        <strong>Observação:</strong>
-                                    </td>
-                                    <td width="96%" align="left" nowrap>
-                                        <?
-                                        db_input("numeroprocesso", 50, '', true, "text", 4, "", "chave_numeroprocesso");
-                                        ?>
-                                    </td>
-                                </tr>
-
-
-                                <tr>
-                                    <td width="4%" align="right" nowrap title="<?= $Tp58_requer ?>">
-                                        <strong>Data do Processo:</strong>
-                                    </td>
-                                    <td width="96%" align="left" nowrap>
-                                        <?
-                                        db_inputdata('p51_dtlimite', @$p51_dtlimite_dia, @$p51_dtlimite_mes, @$p51_dtlimite_ano, true, 'text', $db_opcao, "");                                        ?>
-                                        <strong>a </strong>
-                                        <?
-                                        db_inputdata('p51_dtlimite', @$p51_dtlimite_dia, @$p51_dtlimite_mes, @$p51_dtlimite_ano, true, 'text', $db_opcao, "");                                        ?>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <form name="form2" method="post" action="">
-                        <table width="35%" border="0" align="center" cellspacing="0">
+                    </fieldset>
+                </td>
+            </tr>
 
 
 
-                            <tr>
-                                <td colspan="2" align="center">
-                                    <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar" onclick="return chamarPhpAjax();">
-                                    <input name="limpar" type="reset" id="limpar" value="Limpar">
-                                    <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_proc.hide();">
-                                </td>
-                            </tr>
-
-                        </table>
-
-                    </form>
-
-                </fieldset>
-            </td>
-        </tr>
+            <tr>
+                <td align="center" valign="top">
+                    <?
 
 
+                    /**
+                     * Evita o escape dos campos
+                     */
+                    if (isset($chave_p58_numero)) {
+                        $chave_p58_numero = addslashes($chave_p58_numero);
+                    }
 
-        <tr>
-            <td align="center" valign="top">
-                <?
-
-
-                /**
-                 * Evita o escape dos campos
-                 */
-                if (isset($chave_p58_numero)) {
-                    $chave_p58_numero = addslashes($chave_p58_numero);
-                }
-
-                if (isset($chave_p58_requer)) {
-                    $chave_p58_requer = addslashes($chave_p58_requer);
-                }
+                    if (isset($chave_p58_requer)) {
+                        $chave_p58_requer = addslashes($chave_p58_requer);
+                    }
 
 
-                $sLeft = "";
-                $where = " p58_instit = " . db_getsession("DB_instit");
+                    $sLeft = "";
+                    $where = " p58_instit = " . db_getsession("DB_instit");
 
-                if (isset($grupo) && trim($grupo) != '') {
-                    $where .= " and tipoproc.p51_tipoprocgrupo = $grupo";
-                }
-                if (isset($tipo) && trim($tipo) != '') {
-                    $where .= " and p58_codigo = {$tipo} ";
-                }
-                if (isset($apensado)) {
-                    //Não permite que um secundário tenha mais de um principal.
-                    $where .= " and not exists ( select *
+                    if (isset($grupo) && trim($grupo) != '') {
+                        $where .= " and tipoproc.p51_tipoprocgrupo = $grupo";
+                    }
+                    if (isset($tipo) && trim($tipo) != '') {
+                        $where .= " and p58_codigo = {$tipo} ";
+                    }
+                    if (isset($apensado)) {
+                        //Não permite que um secundário tenha mais de um principal.
+                        $where .= " and not exists ( select *
                                        from processosapensados
                                       where p30_procapensado  = p58_codproc limit 1)";
-                    if (trim($apensado) != '') {
-                        $aPartesNumero = explode("/", $apensado);
-                        $iAno = db_getsession("DB_anousu");
-                        if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
-                            $iAno = $aPartesNumero[1];
+                        if (trim($apensado) != '') {
+                            $aPartesNumero = explode("/", $apensado);
+                            $iAno = db_getsession("DB_anousu");
+                            if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
+                                $iAno = $aPartesNumero[1];
+                            }
+                            $iNumero = $aPartesNumero[0];
+                            $where .= " and p58_codproc not in (select p58_codproc from protprocesso where p58_ano = {$iAno} and p58_numero = '{$iNumero}') ";
                         }
-                        $iNumero = $aPartesNumero[0];
-                        $where .= " and p58_codproc not in (select p58_codproc from protprocesso where p58_ano = {$iAno} and p58_numero = '{$iNumero}') ";
                     }
-                }
-                //Lista apenas os processos do departamento da sessão
-                if ($validaDepartamento) {
-                    $where .= " and (select p61_coddepto from procandam where p61_codproc = p58_codproc order by p61_codandam DESC limit 1) = " . db_getsession('DB_coddepto');
-                }
-
-                /**
-                 * Removido verificação de processos arquivados, conforme solicitado na ocorrência 2558
-                 */
-                /**
-                 * Adicionado novamente verificação de processos arquivados, conforme solicitado na ocorrência 3689
-                 */
-                //Não permite apensar processos arquivados.
-                $where .= " and not exists (select 1 from arqproc where p68_codproc = p58_codproc) ";
-                if (!isset($pesquisa_chave)) {
-
-                    if (isset($campos) == false) {
-
-                        $campos = "p58_dtproc,p58_codproc,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero,z01_numcgm as DB_p58_numcgm,";
-                        $campos .= "z01_nome,p58_obs,p51_descr,p58_requer as DB_p58_requer";
-                    }
-                    if (isset($chave_p58_numcgm) && (trim($chave_p58_numcgm) != "")) {
-                        $sql = $clprotprocesso->sql_query(null, $campos, "p58_codproc desc", "p58_numcgm = $chave_p58_numcgm  and $where");
-                    } else if (isset($chave_p58_codproc) && (trim($chave_p58_codproc) != "")) {
-
-                        if (trim($where) != "") {
-                            $where .= " and p58_codproc = " . $chave_p58_codproc;
-                        } else {
-                            $where .= " p58_codproc = " . $chave_p58_codproc;
-                        }
-                        $sql = $clprotprocesso->sql_query($chave_p58_codproc, $campos, "p58_codproc desc", $where);
-                    } else if (isset($chave_p58_requer) && (trim($chave_p58_requer) != "")) {
-                        $sql = $clprotprocesso->sql_query("", $campos, "p58_codproc desc", " p58_requer like '$chave_p58_requer%'  and $where");
-                    } else if (isset($chave_p58_numero) && (trim($chave_p58_numero) != "")) {
-
-                        $aPartesNumero = explode("/", $chave_p58_numero);
-                        $iAno = db_getsession("DB_anousu");
-                        if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
-                            $iAno = $aPartesNumero[1];
-                        }
-                        $iNumero = $aPartesNumero[0];
-                        $where .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
-                        $sql = $clprotprocesso->sql_query(
-                            "",
-                            $campos,
-                            "p58_codproc desc",
-                            "$where "
-                        );
-                    } else if (isset($chave_unica) and ($chave_unica != '')) {
-
-                        $sql = $clprotprocesso->sql_query($chave_unica, $campos);
-                    } else if (isset($ntfornec)) {
-                        if (!empty($p58_codigo)) {
-                            $nrProcesso = explode("/", $p58_codigo);
-                            !empty($where) ? $where .= " and p58_codigo = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} " : $where .= " p58_codigo = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} ";
-                        }
-                        if (!empty($p58_numero)) {
-                            !empty($where) ? $where .= " and p58_codigo = {$p58_numero} " : $where .= " p58_codigo = {$p58_numero} ";
-                        }
-                        if (!empty($p58_requer)) {
-                            !empty($where) ? $where .= " and p58_requer like '%{$p58_requer}%' " : $where .= " p58_requer like '%{$p58_requer}%' ";
-                        }
-                        if (!empty($p51_codigo)) {
-                            !empty($where) ? $where .= " and p51_codigo = {$p51_codigo} " : $where .= " p51_codigo = {$p51_codigo} ";
-                        }
-                        $sql = $clprotprocesso->sql_query("", $campos, "p58_codproc desc", $where);
-                    } else {
-                        $sql = $clprotprocesso->sql_query("", $campos, "p58_dtproc desc", $where);
-                    }
-                    $repassa = array();
-                    if (isset($chave_p58_codproc)) {
-                        $repassa = array("chave_p58_codproc" => $chave_p58_codproc);
+                    //Lista apenas os processos do departamento da sessão
+                    if ($validaDepartamento) {
+                        $where .= " and (select p61_coddepto from procandam where p61_codproc = p58_codproc order by p61_codandam DESC limit 1) = " . db_getsession('DB_coddepto');
                     }
 
-                    echo $sql;
-                    echo $funcao_js;
-                    echo $repassa;
-                    db_lovrot($sql . " ", 15, "()", "", $funcao_js, "", "NoMe", $repassa);
-                    db_lovrot($sql . " ", 10, "()", "", $funcao_js, "", "NoMe", $repassa);
-                } else {
+                    /**
+                     * Removido verificação de processos arquivados, conforme solicitado na ocorrência 2558
+                     */
+                    /**
+                     * Adicionado novamente verificação de processos arquivados, conforme solicitado na ocorrência 3689
+                     */
+                    //Não permite apensar processos arquivados.
+                    $where .= " and not exists (select 1 from arqproc where p68_codproc = p58_codproc) ";
+                    if (!isset($pesquisa_chave)) {
 
-                    if ($pesquisa_chave != null && $pesquisa_chave != "") {
+                        if (isset($campos) == false) {
 
-                        $aPartesNumero = explode("/", $pesquisa_chave);
-                        $iAno = db_getsession("DB_anousu");
-                        if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
-                            $iAno = $aPartesNumero[1];
+                            $campos = "p58_dtproc,p58_codproc,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero,z01_numcgm as DB_p58_numcgm,";
+                            $campos .= "z01_nome,p58_obs,p51_descr,p58_requer as DB_p58_requer";
                         }
-                        $iNumero = $aPartesNumero[0];
-                        $where .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
+                        if (isset($chave_p58_numcgm) && (trim($chave_p58_numcgm) != "")) {
+                            $sql = $clprotprocesso->sql_query(null, $campos, "p58_codproc desc", "p58_numcgm = $chave_p58_numcgm  and $where");
+                        } else if (isset($chave_p58_codproc) && (trim($chave_p58_codproc) != "")) {
 
-                        $result = $clprotprocesso->sql_record($clprotprocesso->sql_query("", "*", "", $where));
-                        $pesquisa_chave = strlen($pesquisa_chave) == 4 ? $pesquisa_chave . '/' . $iAno : $pesquisa_chave;
-                        if ($clprotprocesso->numrows != 0 && ($apensado != $pesquisa_chave)) {
-
-                            db_fieldsmemory($result, 0);
-                            if (isset($retobs)) {
-
-                                echo "<script>" . $funcao_js . "('$p58_numcgm','$p58_obs',false);</script>";
-                            } elseif (isset($rettipoproc)) {
-
-                                echo "<script>" . $funcao_js . "('$p58_numero/$p58_ano','$p51_descr','$p58_codproc',false);</script>";
+                            if (trim($where) != "") {
+                                $where .= " and p58_codproc = " . $chave_p58_codproc;
                             } else {
+                                $where .= " p58_codproc = " . $chave_p58_codproc;
+                            }
+                            $sql = $clprotprocesso->sql_query($chave_p58_codproc, $campos, "p58_codproc desc", $where);
+                        } else if (isset($chave_p58_requer) && (trim($chave_p58_requer) != "")) {
+                            $sql = $clprotprocesso->sql_query("", $campos, "p58_codproc desc", " p58_requer like '$chave_p58_requer%'  and $where");
+                        } else if (isset($chave_p58_numero) && (trim($chave_p58_numero) != "")) {
 
-                                echo "<script>" . $funcao_js . "('$p58_numero/$p58_ano','$z01_nome','$p58_codproc',false);</script>";
+                            $aPartesNumero = explode("/", $chave_p58_numero);
+                            $iAno = db_getsession("DB_anousu");
+                            if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
+                                $iAno = $aPartesNumero[1];
+                            }
+                            $iNumero = $aPartesNumero[0];
+                            $where .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
+                            $sql = $clprotprocesso->sql_query(
+                                "",
+                                $campos,
+                                "p58_codproc desc",
+                                "$where "
+                            );
+                        } else if (isset($chave_unica) and ($chave_unica != '')) {
+
+                            $sql = $clprotprocesso->sql_query($chave_unica, $campos);
+                        } else if (isset($ntfornec)) {
+                            if (!empty($p58_codigo)) {
+                                $nrProcesso = explode("/", $p58_codigo);
+                                !empty($where) ? $where .= " and p58_codigo = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} " : $where .= " p58_codigo = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} ";
+                            }
+                            if (!empty($p58_numero)) {
+                                !empty($where) ? $where .= " and p58_codigo = {$p58_numero} " : $where .= " p58_codigo = {$p58_numero} ";
+                            }
+                            if (!empty($p58_requer)) {
+                                !empty($where) ? $where .= " and p58_requer like '%{$p58_requer}%' " : $where .= " p58_requer like '%{$p58_requer}%' ";
+                            }
+                            if (!empty($p51_codigo)) {
+                                !empty($where) ? $where .= " and p51_codigo = {$p51_codigo} " : $where .= " p51_codigo = {$p51_codigo} ";
+                            }
+                            $sql = $clprotprocesso->sql_query("", $campos, "p58_codproc desc", $where);
+                        } else {
+                            $sql = $clprotprocesso->sql_query("", $campos, "p58_dtproc desc", $where);
+                        }
+                        $repassa = array();
+                        if (isset($chave_p58_codproc)) {
+                            $repassa = array("chave_p58_codproc" => $chave_p58_codproc);
+                        }
+
+                        echo $sql;
+
+                        db_lovrot($sql . " ", 15, "()", "", $funcao_js, "", "NoMe", $repassa);
+                    } else {
+
+                        if ($pesquisa_chave != null && $pesquisa_chave != "") {
+
+                            $aPartesNumero = explode("/", $pesquisa_chave);
+                            $iAno = db_getsession("DB_anousu");
+                            if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
+                                $iAno = $aPartesNumero[1];
+                            }
+                            $iNumero = $aPartesNumero[0];
+                            $where .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
+
+                            $result = $clprotprocesso->sql_record($clprotprocesso->sql_query("", "*", "", $where));
+                            $pesquisa_chave = strlen($pesquisa_chave) == 4 ? $pesquisa_chave . '/' . $iAno : $pesquisa_chave;
+                            if ($clprotprocesso->numrows != 0 && ($apensado != $pesquisa_chave)) {
+
+                                db_fieldsmemory($result, 0);
+                                if (isset($retobs)) {
+
+                                    echo "<script>" . $funcao_js . "('$p58_numcgm','$p58_obs',false);</script>";
+                                } elseif (isset($rettipoproc)) {
+
+                                    echo "<script>" . $funcao_js . "('$p58_numero/$p58_ano','$p51_descr','$p58_codproc',false);</script>";
+                                } else {
+
+                                    echo "<script>" . $funcao_js . "('$p58_numero/$p58_ano','$z01_nome','$p58_codproc',false);</script>";
+                                }
+                            } else {
+                                echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
                             }
                         } else {
-                            echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
-                        }
-                    } else {
 
-                        echo "<script>" . $funcao_js . "('','',false);</script>";
+                            echo "<script>" . $funcao_js . "('','',false);</script>";
+                        }
                     }
-                }
-                ?>
-            </td>
-        </tr>
+                    ?>
+                </td>
+            </tr>
+        </form>
     </table>
 </body>
 
@@ -385,14 +391,4 @@ if (isset($chave_p58_requer)) {
 
         $('chave_p58_codproc').onkeyup = evt;
     }
-
-    function chamarPhpAjax() {
-        var oAjax = new Ajax.Request('func_recarregaprocessos.php', {
-            method: 'post',
-            parameters: 'json=' + Object.toJSON(oParam),
-            onComplete: retorno
-        })
-    }
-
-    function js_retornoGetAutorizacoesAcordo(oAjax) {}
 </script>
