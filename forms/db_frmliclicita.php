@@ -1306,7 +1306,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("diario").style.display = '';
             document.getElementById("dtpubedital").style.display = '';
             document.getElementById("linkedital").style.display = '';
-            document.getElementById("disputa").style.display = '';
+            //document.getElementById("disputa").style.display = '';
+            //OC17312 SÓ VAI APARECER QUANDO COLOCAR A LEI 14133
 
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display = 'inline';
