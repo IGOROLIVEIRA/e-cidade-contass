@@ -927,22 +927,30 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  */
 
                 if ($oContas10->nregobrig == 31) {
-                    $sSqlVinculoContaOrcamento = "
-                                                select DISTINCT conplanoorcamento.c60_codcon,
-                                                            conplanoorcamento.c60_descr,
-                                                            conplanoorcamento.c60_estrut,
-                                                            o15_codtri,
-                                                            op01_numerocontratoopc,
-                                                            op01_dataassinaturacop,
-                                                            case when c19_emparlamentar is not null then c19_emparlamentar else 3 end as c19_emparlamentar
-                                                FROM conplanoorcamento
-                                                INNER JOIN conplanoorcamentoanalitica ON c61_codcon = conplanoorcamento.c60_codcon AND c61_anousu = conplanoorcamento.c60_anousu
-                                                INNER JOIN orctiporec ON conplanoorcamentoanalitica.c61_codigo = orctiporec.o15_codigo
-                                                LEFT JOIN contacorrentedetalhe ON c61_reduz = c19_reduz AND c61_anousu = c19_conplanoreduzanousu
-                                                LEFT JOIN contabancaria on c19_contabancaria=db83_sequencial
-                                                LEFT JOIN db_operacaodecredito ON op01_sequencial=db83_codigoopcredito
-                                                WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4') and conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
-                                                AND conplanoorcamentoanalitica.c61_anousu = " . db_getsession("DB_anousu");
+                    $sSqlVinculoContaOrcamento = " SELECT DISTINCT k81_conta,
+                                                                   c60_codcon,
+                                                                   c60_descr,
+                                                                   c60_estrut,
+                                                                   o15_codtri,
+                                                                   op01_numerocontratoopc,
+                                                                   op01_dataassinaturacop,
+                                                                   case when c19_emparlamentar is not null then c19_emparlamentar else 3 end as c19_emparlamentar
+                                                 FROM conplanoorcamento
+                                                      INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                                                      INNER JOIN orctiporec ON c61_codigo = o15_codigo
+                                                       LEFT JOIN contacorrentedetalhe ON c19_estrutural = c60_estrut AND c61_anousu = c19_conplanoreduzanousu
+                                                       LEFT JOIN orcreceita on o70_codfon = c61_codcon and o70_anousu = c60_anousu
+                                                       LEFT JOIN taborc on taborc.k02_anousu=o70_anousu and taborc.k02_codrec=o70_codrec
+                                                       LEFT JOIN tabrec on tabrec.k02_codigo=taborc.k02_codigo
+                                                       LEFT JOIN placaixarec on k81_receita = tabrec.k02_codigo
+                                                       LEFT JOIN saltes ON k13_reduz=k81_conta
+                                                       LEFT JOIN conplanoreduz on k13_reduz=conplanoreduz.c61_reduz and conplanoreduz.c61_anousu=c60_anousu
+                                                       LEFT JOIN conplanocontabancaria ON c56_codcon=conplanoreduz.c61_codcon and conplanoreduz.c61_anousu=c56_anousu
+                                                       LEFT JOIN contabancaria ON c56_contabancaria=db83_sequencial
+                                                       LEFT JOIN db_operacaodecredito ON db83_codigoopcredito=op01_sequencial
+                                                WHERE substr(c60_estrut,1 ,1 ) in ('4')
+                                                  AND conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
+                                                  AND conplanoorcamentoanalitica.c61_anousu = " . db_getsession("DB_anousu");
                 } else {
 
                     $sSqlVinculoContaOrcamento = "
@@ -1182,8 +1190,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete31->si243_naturezareceita            = str_replace(" ", "", $sNaturezaReceita);
                                     $obalancete31->si243_codfontrecursos            = $objContas->o15_codtri;
                                     $obalancete31->si243_emendaparlamentar          = $objContas->c19_emparlamentar;
-                                    $obalancete31->si243_nrocontratoop              = $objContas->op01_numerocontratoopc;
-                                    $obalancete31->si243_dataassinaturacontratoop   = $objContas->op01_dataassinaturacop;
+                                    $obalancete31->si243_nrocontratoop              = "$objContas->op01_numerocontratoopc";
+                                    $obalancete31->si243_dataassinaturacontratoop   = "$objContas->op01_dataassinaturacop";
                                     $obalancete31->si243_saldoinicialcre            = $oReg12Saldo->saldoanterior;
                                     $obalancete31->si243_naturezasaldoinicialcre    = $oReg12Saldo->saldoanterior >= 0 ? 'D' : 'C';
                                     $obalancete31->si243_totaldebitoscre            = $oReg12Saldo->debitos;
@@ -3632,6 +3640,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $obalreg31->si243_codfundo = $sCodFundo;
                 $obalreg31->si243_naturezareceita = $reg31->si243_naturezareceita;
                 $obalreg31->si243_codfontrecursos = $reg31->si243_codfontrecursos;
+                $obalreg31->si243_nrocontratoop = $reg31->si243_nrocontratoop;
+                $obalreg31->si243_dataassinaturacontratoop = $reg31->si243_dataassinaturacontratoop;
                 $obalreg31->si243_emendaparlamentar = $reg31->si243_emendaparlamentar;
                 $obalreg31->si243_saldoinicialcre = number_format(abs($reg31->si243_saldoinicialcre == '' ? 0 : $reg31->si243_saldoinicialcre), 2, ".", "");
                 $obalreg31->si243_naturezasaldoinicialcre = $reg31->si243_saldoinicialcre == 0 ? $oDado10->naturezasaldo : ($reg31->si243_saldoinicialcre > 0 ? 'D' : 'C');

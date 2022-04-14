@@ -303,8 +303,8 @@ class cl_balancete312022
                                ,$this->si243_naturezareceita
                                ,$this->si243_codfontrecursos
                                ,$this->si243_emendaparlamentar
-                               ,$this->si243_nrocontratoop
-                               ,$this->si243_dataassinaturacontratoop
+                               ,".($this->si243_nrocontratoop == "null" || $this->si243_nrocontratoop == ""?"null":"'".$this->si243_nrocontratoop."'")."
+                               ,".($this->si243_dataassinaturacontratoop == "null" || $this->si243_dataassinaturacontratoop == ""?"null":"'".$this->si243_dataassinaturacontratoop."'")."
                                ,$this->si243_saldoinicialcre
                                ,'$this->si243_naturezasaldoinicialcre'
                                ,$this->si243_totaldebitoscre
