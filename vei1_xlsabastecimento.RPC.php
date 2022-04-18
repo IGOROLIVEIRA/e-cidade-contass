@@ -815,6 +815,35 @@ switch ($oParam->exec) {
                     $clveicdevolucao->ve61_importado         = "t";
                     $clveicdevolucao->incluir(null);
                     
+                    $verificarposto = $clveiccadpostoexterno->sql_record($clveiccadpostoexterno->sql_query_file(null, "*", null, "ve34_numcgm = $resultEmpenho->e60_numcgm"));
+                    if ($clveiccadpostoexterno->numrows == 0) {
+
+                        $clveiccadposto->ve29_tipo = 2;
+                        $clveiccadposto->incluir(null);
+
+                        $resultadoPost = $clveiccadposto->sql_record($clveiccadposto->sql_query(null, "max(veiccadposto.ve29_codigo)", null, ""));
+                        $resultPost = db_utils::fieldsMemory($resultadoPost, 0);
+
+                        $clveicabastposto->ve71_veicabast = $clveicabast->ve70_codigo;
+                        $clveicabastposto->ve71_veiccadposto = $clveiccadposto->ve29_codigo;
+                        $clveicabastposto->ve71_nota = $nota;
+                        $clveicabastposto->incluir(null);
+
+                        $clveiccadpostoexterno->ve34_veiccadposto = $resultPost->max;
+                        $clveiccadpostoexterno->ve34_numcgm = $resultEmpenho->e60_numcgm;
+                        $clveiccadpostoexterno->incluir(null);
+                    } else {
+                        $verificarpostoresult = db_utils::fieldsMemory($verificarposto, 0);
+
+                        $resultadoPost = $clveiccadposto->sql_record($clveiccadposto->sql_query(null, "*", null, "ve29_codigo = $verificarpostoresult->ve34_veiccadposto"));
+                        $resultPost = db_utils::fieldsMemory($resultadoPost, 0);
+
+                        $clveicabastposto->ve71_veicabast = $clveicabast->ve70_codigo;
+                        $clveicabastposto->ve71_veiccadposto = $resultPost->ve29_codigo;
+                        $clveicabastposto->ve71_nota = $nota;
+                        $clveicabastposto->incluir(null);
+                    }
+                    
                     db_fim_transacao();
 
                     if ($erro == false) {
