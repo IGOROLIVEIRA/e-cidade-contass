@@ -433,10 +433,10 @@ class importacaoCenso2022 extends ImportacaoCenso2012
         $sData = $aLinha[3];
         $aData = explode("/", $sData);
 
-        if ($this->iAnoEscolhido != $aData[2]+2) {
+        if ($this->iAnoEscolhido != $aData[2]) {
 
             fclose($pArquivoCenso);
-            throw new Exception(" Arquivo informado não pertence ao ano de " . $this->iAnoEscolhido);
+            throw new Exception("1 Arquivo informado não pertence ao ano de " . $this->iAnoEscolhido);
         }
 
         return true;

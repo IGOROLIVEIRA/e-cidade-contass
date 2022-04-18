@@ -1,5 +1,5 @@
 <?php
- 
+
 class Siope {
 
     //@var integer
@@ -100,7 +100,7 @@ class Siope {
     public function getElementoDespesaFormat($elemento) {
         return substr($elemento, 0, 1).".".substr($elemento, 1, 1).".".substr($elemento, 2, 2).".".substr($elemento, 4, 2).".".substr($elemento, 6, 2);
     }
-
+   
     public function getElementoReceitaFormat($elemento) {
         return substr($elemento, 0, 1).".".substr($elemento, 1, 1).".".substr($elemento, 2, 1).".".substr($elemento, 3, 1).".".substr($elemento, 4, 2).".".substr($elemento, 6, 1).".".substr($elemento, 7, 1);
     }

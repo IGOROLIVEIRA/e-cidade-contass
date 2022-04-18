@@ -44,28 +44,28 @@ $db_opcao = 1;
 $clrotulo = new rotulocampo();
 $clrotulo->label("coddepto");
 $clrotulo->label("descrdepto");
-if(isset($excluir)){
+if (isset($excluir)) {
 
-  if ($coddepto=="") {
-		$sqlerro=true;
-		$clmatestoque->erro_status="1";
-		$clmatestoque->erro_msg="Preencha um departamento!";
+	if ($coddepto == "") {
+		$sqlerro = true;
+		$clmatestoque->erro_status = "1";
+		$clmatestoque->erro_msg = "Preencha um departamento!";
 	} else {
 
 		db_inicio_transacao();
 
-// 		$sql = "
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoquedev           DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoquedevitem       DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE atendrequi              DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE atendrequiitem          DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matrequiitem            DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoqueinimei        DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoqueini           DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE empnota                 DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoqueitemlote      DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoqueitemfabric    DISABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE empnotaitembenspendente DISABLE TRIGGER ALL");
+		// 		$sql = "
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoquedev           DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoquedevitem       DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE atendrequi              DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE atendrequiitem          DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matrequiitem            DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoqueinimei        DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoqueini           DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE empnota                 DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoqueitemlote      DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoqueitemfabric    DISABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE empnotaitembenspendente DISABLE TRIGGER ALL");
 
 
 		$rsExcluirEstoque = db_query("DELETE FROM matestoquedev
@@ -140,7 +140,7 @@ if(isset($excluir)){
 		                                     INNER JOIN matestoque           ON matestoque.m70_codigo = matestoqueitem.m71_codmatestoque
 		                               WHERE matestoque.m70_coddepto = {$coddepto}");
 
-    $rsExcluirEstoque = db_query("DELETE FROM matestoquetransferencia
+		$rsExcluirEstoque = db_query("DELETE FROM matestoquetransferencia
                                    USING matestoqueitem
                                          INNER JOIN matestoque ON matestoqueitem.m71_codmatestoque = matestoque.m70_codigo
                                    WHERE matestoqueitem.m71_codlanc                                = matestoquetransferencia.m84_matestoqueitem
@@ -233,7 +233,12 @@ if(isset($excluir)){
 		                               USING matestoque, matestoqueitem
                                    WHERE e137_matestoqueitem = m71_codlanc
                                      and m71_codmatestoque = matestoque.m70_codigo
-		                                 and matestoque.m70_coddepto = {$coddepto}");
+		                             and matestoque.m70_coddepto = {$coddepto}");
+
+		$rsExcluirEstoque = db_query("DELETE FROM inventariomaterial
+										USING matestoque
+									WHERE i77_estoque = matestoque.m70_codigo
+									 and matestoque.m70_coddepto = {$coddepto}");
 
 		$rsExcluirEstoque = db_query("DELETE FROM matestoqueitem
 		                               USING matestoque
@@ -242,68 +247,72 @@ if(isset($excluir)){
 
 		$rsExcluirEstoque = db_query("DELETE FROM matestoque WHERE m70_coddepto = {$coddepto}");
 
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoquedev           ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoquedevitem       ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE atendrequi              ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE atendrequiitem          ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matrequiitem            ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoqueinimei        ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoqueini           ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE empnota                 ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoqueitemlote      ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE matestoqueitemfabric    ENABLE TRIGGER ALL");
-    $rsExcluirEstoque = db_query("ALTER TABLE empnotaitembenspendente ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoquedev           ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoquedevitem       ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE atendrequi              ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE atendrequiitem          ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matrequiitem            ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoqueinimei        ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoqueini           ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE empnota                 ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoqueitemlote      ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE matestoqueitemfabric    ENABLE TRIGGER ALL");
+		$rsExcluirEstoque = db_query("ALTER TABLE empnotaitembenspendente ENABLE TRIGGER ALL");
 
-//		$result = db_query($sql) or die($sql);
+		//		$result = db_query($sql) or die($sql);
 
 		$sqlerro = false;
 		$sMsg    = "Processo efetuado com sucesso";
-    if (!$rsExcluirEstoque) {
+		if (!$rsExcluirEstoque) {
 
-      $sMsg    = "Não foi possível zerar o estoque. Contate o suporte";
-      $sqlerro = true;
-    }
+			$sMsg    = "Não foi possível zerar o estoque. Contate o suporte";
+			$sqlerro = true;
+		}
 
 		db_fim_transacao($sqlerro);
 
-		$clmatestoque->erro_status="0";
+		$clmatestoque->erro_status = "0";
 		$clmatestoque->erro_msg = $sMsg;
-
 	}
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+	<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Expires" CONTENT="0">
+	<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+	<link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr>
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-<center>
-<fieldset style="width: 600px">
-<legend><b>Zerar Estoque por Departamento</b></legend>
-	<?php
-	include("forms/db_frmzeraestdepto.php");
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+	<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+		<tr>
+			<td width="360" height="18">&nbsp;</td>
+			<td width="263">&nbsp;</td>
+			<td width="25">&nbsp;</td>
+			<td width="140">&nbsp;</td>
+		</tr>
+	</table>
+	<br>
+	<center>
+		<fieldset style="width: 600px">
+			<br>
+			<legend><b>Zerar Estoque por Departamento</b></legend>
+			<?php
+			include("forms/db_frmzeraestdepto.php");
+			?>
+		</fieldset>
+	</center>
+	<?
+	db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
 	?>
-</fieldset>
-</center>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
 </body>
+
 </html>
 <?
-if(isset($excluir)){
-	$clmatestoque->erro(true,true);
+if (isset($excluir)) {
+	$clmatestoque->erro(true, true);
 };
 ?>

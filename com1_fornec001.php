@@ -128,10 +128,10 @@ if (isset($incluir)) {
         $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
         db_fieldsmemory($resultControle,0);
 
-        if($dtsession <= $c99_datapat){
+        /*if($dtsession <= $c99_datapat){
             $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
             $sqlerro = true;
-        }
+        }*/
     }
 
     //VERIFICA CPF E CNPJ ZERADOS OC 7037

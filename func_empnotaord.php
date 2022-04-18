@@ -140,7 +140,7 @@ $depart= db_getsession("DB_coddepto");
 	         
         }else if(isset($chave_m72_codordem) && (trim($chave_m72_codordem)!="") ){
 
-	         $sql = $clempnotaord->sql_query_elemento("","",$campos,"m72_codordem"," m72_codordem like '$chave_m72_codordem%' and  matordem.m51_depto=$depart {$sWhere} and {$where_instit}");
+	         $sql = $clempnotaord->sql_query_elemento("","",$campos,"m72_codordem"," m72_codordem = $chave_m72_codordem and  matordem.m51_depto=$depart {$sWhere} and {$where_instit}");
 	         
         }else if(isset($chave_e69_dtnota) && (trim($chave_e69_dtnota)!="") ){
 
@@ -151,7 +151,7 @@ $depart= db_getsession("DB_coddepto");
            $sql = $clempnotaord->sql_query_elemento("","",$campos,"m72_codnota#m72_codordem","matordem.m51_depto=$depart {$sWhere} and {$where_instit}");
            
         }
-        
+
         db_lovrot($sql,15,"()","",$funcao_js);
         
       } else{

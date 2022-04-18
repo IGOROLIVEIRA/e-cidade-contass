@@ -47,14 +47,6 @@ try {
     for ($iCont = 0; $iCont < pg_num_rows($rsBalancete); $iCont++) {
         $oBalancete = db_utils::fieldsMemory($rsBalancete, $iCont);
 
-        // retirar as contas sem movimento e com saldo zero
-        if($oBalancete->saldo_anterior == 0
-            && $oBalancete->saldo_anterior_debito == 0
-            && $oBalancete->saldo_anterior_credito == 0
-            && $oBalancete->saldo_final == 0) {
-            continue;
-        }
-
         $oNovoResgistro                         = new stdClass;
         $oNovoResgistro->estrutural             = $oBalancete->estrutural;
         $oNovoResgistro->c61_reduz              = $oBalancete->c61_reduz != '0' ?  $oBalancete->c61_reduz : '';
