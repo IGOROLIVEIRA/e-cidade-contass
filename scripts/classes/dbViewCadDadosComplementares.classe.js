@@ -2541,7 +2541,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     if(me.iBdi != null){
         $('txtBdi'+sId).value = me.iBdi;
-        console.log(me.iBdi);
         $('txtBdi'+sId).setAttribute('class', 'readonly');
         $('txtBdi'+sId).setAttribute('disabled', 'disabled');
     }

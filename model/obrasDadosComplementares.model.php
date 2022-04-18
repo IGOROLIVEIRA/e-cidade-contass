@@ -1011,7 +1011,7 @@ class obrasDadosComplementares
 
       for ($count = 0; $count < count($aPesquisa); $count++) {
 
-        $indice = $aPesquisa[$count]->l04_descricao;
+        $indice = $aPesquisa[$count]->l04_descricao . $aPesquisa[$count]->descrMunicipio . $aPesquisa[$count]->db150_numero;
 
         if (!$aObras[$indice]) {
           $aObras[$indice] = $aPesquisa[$count];
@@ -1048,6 +1048,7 @@ class obrasDadosComplementares
       $sWhere = " l04_codigo is not null and db151_liclicita = " . $iCodigoLicitacao;
 
       $sSqlObra = $oDaoObra->sql_query_obraslicitacao(null, $sCampos, 'db150_sequencial', $sWhere);
+      //die($sSqlObra);
       $rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 
       $rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $iCodigoLicitacao);

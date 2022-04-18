@@ -410,6 +410,7 @@ $db_botao = true;
 
     let oRetorno = eval("(" + oAjax.responseText + ")");
 
+    console.log(oRetorno.dadoscomplementares);
     oRetorno.dadoscomplementares.forEach((dado) => {
 
       let descMunicipio = dado.descrmunicipio.urlDecode();

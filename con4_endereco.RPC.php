@@ -498,6 +498,8 @@ switch ($oParam->exec) {
     try {
       if ($oParam->codLicitacao) {
         $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByLicitacao($oParam->codLicitacao);
+        //echo "<pre>";
+        //var_dump(obrasDadosComplementares::findObrasByLicitacao($oParam->codLicitacao));
       }
       $oRetorno->status = 1;
     } catch (Exception $error) {
