@@ -243,8 +243,22 @@ if (isset($chave_p58_requer)) {
                     }
 
 
+
+
                     $sLeft = "";
-                    $where = " p58_instit = " . db_getsession("DB_instit");
+                    $where .= " p58_instit = " . db_getsession("DB_instit");
+
+                    if (isset($z01_numcgm) && trim($z01_numcgm) != '') {
+                        $where .= " and z01_numcgm = " . $z01_numcgm;
+                    }
+
+                    if (isset($z01_nome) && trim($z01_nome) != '') {
+                        $where .= " and z01_nome = " . "'" . $z01_nome . "'";
+                    }
+
+                    if (isset($p51_descr) && trim($p51_descr) != '') {
+                        $where .= " and p51_descr = " . "'" . $p51_descr . "'";
+                    }
 
                     if (isset($grupo) && trim($grupo) != '') {
                         $where .= " and tipoproc.p51_tipoprocgrupo = $grupo";
@@ -338,6 +352,10 @@ if (isset($chave_p58_requer)) {
                         $repassa = array();
                         if (isset($chave_p58_codproc)) {
                             $repassa = array("chave_p58_codproc" => $chave_p58_codproc);
+                        }
+
+                        if (isset($z01_numcgm)) {
+                            echo "CGM:" . $z01_numcgm;
                         }
 
                         echo $sql;
