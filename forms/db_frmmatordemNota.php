@@ -247,9 +247,21 @@ if ($lBloquear) {
                 <? } ?>
               </tr>
               <tr>
+                <td align="right"><b>Origem do recurso:</b></td>
+                <td>
+                  <?
+                  $sSql = db_query("select o58_programa||' - '||o54_descr as programa from orcdotacao inner join orcprograma on o54_programa = o58_programa and o54_anousu = o58_anousu inner join empempenho on e60_coddot = o58_coddot and e60_anousu = o58_anousu where e60_numemp = $e60_numemp");
+                  db_fieldsmemory($sSql, 0, true);
+                  db_input("programa", 45, @$Iprograma, true, 'text', 3, '');
+                  ?>
+                </td>
+              </tr>
+              <tr>
                 <td align='right'><b>Obs:</b></td>
                 <td colspan='3' align='left'>
                   <?
+                  $sSql = db_query("select e60_resumo as m51_obs from empempenho where e60_numemp = $e60_numemp");
+                  db_fieldsmemory($sSql, 0, true);
                   db_textarea("m51_obs", "", "110", $Im51_obs, true, 'text', $dbopcao);
 
                   ?>

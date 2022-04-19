@@ -711,14 +711,6 @@ e55_sequen is not null and e54_anulad is null"
       }
     }
 
-    $sSqlItens = $clsolicitem->sql_query_serv(null, "pc16_codmater as codmater", null, "pc11_numero = {$pc11_numero} and pc11_seq = {$pc11_seq}");
-    $rsItens = $clsolicitem->sql_record($sSqlItens);
-    if ($clsolicitem->numrows > 0) {
-      $codmater = db_utils::fieldsMemory($rsItens, 0)->codmater;
-      $naodig = true;
-      $sqlerro = true;
-      $erro_msg = "O item $codmater já foi incluído com o sequencial $pc11_seq nesta solicitação.";
-    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //$clsolicitempcmater->excluir(@ $pc16_codmater, @ $pc11_codigo);
 

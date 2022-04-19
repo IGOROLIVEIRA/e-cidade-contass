@@ -247,6 +247,7 @@ return array(
             'tpProv' => 'tpProv',
             'dtExercicio' => 'dtExercicio',
             'tpPlanRP' => 'tpPlanRP',
+            'indTetoRGPS' => 'indTetoRGPS',
             'indAbonoPerm' => 'indAbonoPerm',
         )
     ),
