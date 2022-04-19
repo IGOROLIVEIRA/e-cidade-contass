@@ -356,13 +356,16 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
 
 
             $result = $clacordo->sql_record($sSqlBuscaAcordo);
-
+            
             if ($clacordo->numrows != 0) {
 
               db_fieldsmemory($result,0);
               if (isset($descricao) && $descricao == 'true') {
+                
                 echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto','$ac16_origem',false);</script>";
+                
               } else {
+                
                 echo "<script>".$funcao_js."('$ac16_sequencial',false);</script>";
               }
             } else {
@@ -370,9 +373,9 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
               if (isset($descricao) && $descricao == 'true') {
                 
                 if( !empty($frame) && $frame =="homologacao"){
-                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','',true);</script>";
+                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','','',true);</script>";
                 } else {
-                  echo "<script>".$funcao_js."('','Chave(".$pesquisa_chave.") não Encontrado','',true);</script>";  
+                  echo "<script>".$funcao_js."('','Chave(".$pesquisa_chave.") não Encontrado','','',true);</script>";  
                 }
               } else {
                 echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";

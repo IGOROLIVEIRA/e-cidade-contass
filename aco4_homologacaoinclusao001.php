@@ -177,7 +177,8 @@ $clrotulo->label("ac10_obs");
   /**
    * Retorno da pesquisa acordos
    */
-  function js_mostraacordo(chave1, chave2, erro) {
+  //foi adicionado uma varaviavel para receber da chamada em func_acordo pois lá são enviado 4 pareametros.
+  function js_mostraacordo(chave1, chave2,chave3, erro) {
 
     if (erro == true) {
       $('ac16_sequencial').value = '';
