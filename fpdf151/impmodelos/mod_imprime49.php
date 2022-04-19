@@ -25,9 +25,9 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->rect(10, 2, 29, 28);
     $this->objpdf->Image('imagens/files/' . $this->logo, 19, $xlin - 12, 12);
-//    $this->objpdf->rect(39,2,121,28);
+    //$this->objpdf->rect(39,2,121,28);
     $this->objpdf->Setfont('Arial', 'B', 9);
-//    $this->objpdf->text(69, $xlin -15, $this->prefeitura);
+    //$this->objpdf->text(69, $xlin -15, $this->prefeitura);
     $this->objpdf->sety(2);
     $this->objpdf->setx($xlin + 19);
     $this->objpdf->cell(121, 5, "$this->prefeitura", "T", 1, "C");
@@ -53,17 +53,24 @@ for ($j = 0; $j < $confNumRows; $j++) {
         $this->objpdf->cell(121, 5, "NOTA FISCAL DE SERVIÇOS ELETRÔNICA - AVULSA", 0, 1, "C");
     }
 
-    //Descricao VIA
-    $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->sety(2);
-    $this->objpdf->setx(160);
-    $this->objpdf->cell(40, 28, $oConf->q67_via . "ª via - " . $oConf->q67_descr, 1, 1, "C");
+    if ($confNumRows > 1){
+        //Descricao VIA
+        $this->objpdf->Setfont('Arial', '', 7);
+        $this->objpdf->sety(2);
+        $this->objpdf->setx(160);
+        $this->objpdf->cell(40, 28, $oConf->q67_via . "ª via - " . $oConf->q67_descr, 1, 1, "C");
 
-    //Numero da Nota
-    $this->objpdf->Setfont('Arial', 'B', 10);
-    $this->objpdf->sety($xlin + 5);
-    $this->objpdf->setx(160);
-    $this->objpdf->cell(40, 5, "Nº " . $this->dadosPrestador->q51_numnota, 0, 1, "C");
+        //Numero da Nota
+        $this->objpdf->Setfont('Arial', 'B', 10);
+        $this->objpdf->sety($xlin + 5);
+        $this->objpdf->setx(160);
+        $this->objpdf->cell(40, 5, "Nº " . $this->dadosPrestador->q51_numnota, 0, 1, "C");
+    }else{
+        //Numero da nota
+        $this->objpdf->sety(2);
+        $this->objpdf->setx(160);
+        $this->objpdf->cell(40, 28, "Nº " . $this->dadosPrestador->q51_numnota, 1, 1, "C");
+    }
 
     //Data / Hora Emissão
     $this->objpdf->Setfont('Arial', 'B', 7);
