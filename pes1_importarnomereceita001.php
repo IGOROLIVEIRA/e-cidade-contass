@@ -49,36 +49,9 @@ require_once("dbforms/db_funcoes.php");
     <div class='container'>
         <form >
             <fieldset>
-                <legend>Envio do certificado</legend>
-                <table class='form-container'>
-                    <tr>
-                        <td><label for="cboEmpregador">Empregador:</label></td>
-                        <td>
-                            <select name="empregador" id="cboEmpregador">
-                                <option value="">selecione</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="documento">Documento:</label></td>
-                        <td>
-                            <input type="text" id='documento' class='readonly field-size3' disabled='disabled'>
-                            <input type="text" id='tipo' class='readonly field-size1' disabled='disabled'>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="certificado_enviado">Certificado incluído:</label></td>
-                        <td>
-                            <input type="text" id='certificado_enviado' class='readonly field-size1' disabled='disabled'>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="password">Senha do certificado:</label></td>
-                        <td><input type="password" id='password' ></td>
-                    </tr>
-                </table>
+                <legend>Importação de Nomes da Receita</legend>
                 <fieldset class="separator">
-                    <legend>Clique no botão "Arquivo" e selecione o certificado</legend>
+                    <legend>Clique no botão "Arquivo" e selecione o arquivo a ser importado</legend>
                     <div id="ctnImportacao"></div>
                 </fieldset>
             </fieldset>
@@ -90,30 +63,8 @@ require_once("dbforms/db_funcoes.php");
 ?>
 <script type="text/javascript">
 
-var empregador = Object();
-(function(){
-
-    new AjaxRequest( 'eso4_esocialapi.RPC.php', {exec : 'getEmpregadores'}, function ( retorno, lErro ) {
-
-        if ( lErro ) {
-            alert(retorno.sMessage);
-            return false;
-        }
-        empregador = retorno.empregador;
-
-        $('cboEmpregador').length = 0;
-        $('cboEmpregador').add(new Option(empregador.nome, empregador.cgm));
-        $('documento').value = empregador.documento;
-        $('tipo').value = empregador.documento.length == 11 ? 'CPF' : 'CNPJ';
-        $('certificado_enviado').value = empregador.certificado == 1 ? 'SIM' : 'NÃO';
-
-
-    }).setMessage('Buscando servidores.').execute();
-})();
-
 function limpar() {
 
-    $('password').value = '';
     document.querySelector(".inputUploadFile").value = '';
 }
 
@@ -126,10 +77,10 @@ function retornoEnvioArquivo(retorno) {
     return false;
   }
 
-  var extension = ['crt', 'pfx', 'p12'];
+  var extension = ['processado'];
   if (!extension.in_array(retorno.extension.toLowerCase())) {
 
-    alert("Arquivo inválido.\nArquivo selecionado deve ser um certificado com a extensão \"" + extension.join(', ') + "\".");
+    alert("Arquivo inválido.\nArquivo selecionado deve ser um arquivo com a extensão \"" + extension.join(', ') + "\".");
     $('btnProcessar').disabled = true;
     document.querySelector(".inputUploadFile").value = '';
     return false;
@@ -144,52 +95,20 @@ var fileUpload = new DBFileUpload( {callBack: retornoEnvioArquivo, labelButton :
 
 document.querySelector(".inputUploadFile").addClassName('field-size5');
 
-
-function validar() {
-
-    if ($F('cboEmpregador') == '') {
-        alert('Selecione o emrpegador.');
-        return false;
-    }
-
-    if ($F('password') == '') {
-        alert('Informe a senha do certificado.');
-        return false;
-    }
-
-    return true;
-}
-
 $('btnProcessar').addEventListener('click', function() {
 
-    if (!validar()) {
-        return;
-    }
-
-    lCertificadoCadastrado = Boolean(Number(empregador.certificado));
-    if (lCertificadoCadastrado === true && !confirm("Deseja alterar o certificado existente?")) {
-        return false;
-    }
-
     var paramentros = {
-        'exec' : 'empregador',
-        'empregador' : $F('cboEmpregador'),
-        'razao_social' : $('cboEmpregador').options[$('cboEmpregador').selectedIndex].innerHTML,
-        'documento' : empregador.documento,
-        'senha' : $F('password'),
+        'exec' : 'importarReceita',
         'sFile' : fileUpload.file,
         'sPath' : fileUpload.filePath
     };
 
-    new AjaxRequest( 'eso4_esocialapi.RPC.php', paramentros, function ( retorno, lErro ) {
+    new AjaxRequest( 'pes1_importarnomereceita.RPC.php', paramentros, function ( retorno, lErro ) {
 
         alert(retorno.sMessage);
         if ( lErro ) {
             return false;
         }
-
-        $('certificado_enviado').value = 'SIM';
-        empregador.certificado = 1;
         limpar();
         $('btnProcessar').disabled = false;
     }).setMessage('Enviando dados para ').execute();

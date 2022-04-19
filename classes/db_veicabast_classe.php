@@ -1347,14 +1347,14 @@ if($dbwhere==""){
                           inner join veiccadmarca      on ve21_codigo       = ve01_veiccadmarca
                           inner join veiccadmodelo     on ve22_codigo       = ve01_veiccadmodelo
                           inner join veiccadtipo       on ve20_codigo       = ve01_veiccadtipo
-                          inner join veiculoscomb      on ve06_veiccadcomb  = ve70_veiculoscomb
+                          left join veiculoscomb      on ve06_veiccadcomb  = ve70_veiculoscomb
                                                       and ve06_veiculos     = ve70_veiculos
-                          inner join veiccadcomb       on ve06_veiccadcomb  = ve26_codigo
+                          left join veiccadcomb       on ve06_veiccadcomb  = ve26_codigo
                           left  join veiccentral       on ve40_veiculos     = ve01_codigo
                           left  join veiccadcentral    on ve36_sequencial   = ve40_veiccadcentral
 													left  join db_depart         on ve36_coddepto     = coddepto
 						  left join veicabastposto on ve71_veicabast = ve70_codigo
-						  inner join veiccadposto on ve29_codigo = ve71_veiccadposto
+						  left join veiccadposto on ve29_codigo = ve71_veiccadposto
 						  left join veiccadpostointerno on ve35_veiccadposto=ve29_codigo
                           left join veiccadpostoexterno on ve34_veiccadposto=ve29_codigo
                           left join cgm on ve34_numcgm=z01_numcgm
