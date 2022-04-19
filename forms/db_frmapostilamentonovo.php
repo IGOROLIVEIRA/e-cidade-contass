@@ -217,6 +217,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
     var opcao = document.form1.controle.value;
     var elemento = "";
+    var elemento_dotacao = "";
 
     function pesquisadotacao() {
 
@@ -412,6 +413,9 @@ $clrotulo->label("ac16_resumoobjeto");
         var aEventsIn = ["onmouseover"];
         var aEventsOut = ["onmouseout"];
         aDadosHintGrid = new Array();
+        var objelemento = new Object();
+        elementos = [];
+
 
         aItens.each(function(oItem, iSeq) {
 
@@ -473,6 +477,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oBotaoDotacao.setAttribute("onclick", "ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
             aLinha[9] = oBotaoDotacao.outerHTML;
             aLinha[10] = new String(iSeq);
+            elementos[iSeq] = oItem.elemento;
             elemento = oItem.elemento;
 
             oGridItens.addRow(aLinha, false, false, false);
@@ -885,16 +890,16 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     function pesquisao_coddot(mostra) {
-
         query = '';
-        if (elemento != '') {
-            query = "elemento=" + elemento + "&";
-        }
+        apostilamentonovo = true;
+        elemento = "";
+        query = "elementos=" + elementos + "&" + "apostilamentonovo=" + apostilamentonovo + "&";
+
 
         if (mostra == true) {
             js_OpenJanelaIframe('',
                 'db_iframe_orcdotacao',
-                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot|o55_descr',
+                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot|o55_descr|o50_estrutdespesa',
                 'Pesquisa de Dotações',
                 true, 0);
 
@@ -945,7 +950,7 @@ $clrotulo->label("ac16_resumoobjeto");
         getSaldoDotacao(chave);
     }
 
-    function mostraorcdotacao1(chave1, chave2) {
+    function mostraorcdotacao1(chave1, chave2, chave3) {
 
         //oTxtDotacao.setValue(chave1);
         $('o58_coddot').value = chave1;
@@ -953,6 +958,8 @@ $clrotulo->label("ac16_resumoobjeto");
         db_iframe_orcdotacao.hide();
         $('Jandb_iframe_orcdotacao').style.zIndex = '0';
         //$('oTxtValorDotacao').focus();
+        alert(chave3.substr(23, 7));
+        elemento_dotacao = chave3.substr(23, 7);
         getSaldoDotacao(chave1);
     }
 
@@ -967,6 +974,9 @@ $clrotulo->label("ac16_resumoobjeto");
 
     function aplicarDotacoes() {
 
+        if ($('o58_coddot').value == "") {
+            return alert('Obrigatório selecionar uma dotação');
+        }
 
 
         var oDotacao = {
@@ -976,47 +986,66 @@ $clrotulo->label("ac16_resumoobjeto");
             valororiginal: 0
         };
 
-
-
-        var oSelecionados = {};
-        var iSelecionados = [];
         var i = 0;
-        var itensSelecionados = undefined;
+        var itensSelecionados = false;
         var dotacaoAplicada = false;
+        var elementoIncompativel = false;
 
-        aItensPosicao[i].dotacoes.forEach(function(oDotacaoItem) {
+        oGridItens.getRows().forEach(function(oRow) {
 
-            if (oDotacaoItem.dotacao == oDotacao.dotacao) {
-                dotacaoAplicada = true;
-                return alert("Dotação já incluida para o item.");
+            if (oRow.isSelected) {
+                if (aItensPosicao[i].elemento != elemento_dotacao) {
+                    elementoIncompativel = true;
+                }
+                itensSelecionados = true;
+
+                aItensPosicao[i].dotacoes.forEach(function(oDotacaoItem) {
+
+                    if (oDotacaoItem.dotacao == oDotacao.dotacao) {
+                        dotacaoAplicada = true;
+
+                    }
+
+                });
+
             }
             i++;
 
         });
 
-        if (dotacaoAplicada == false) {
-
-            oGridItens.getRows().forEach(function(oRow) {
-
-                if (oRow.isSelected) {
-                    aItensPosicao[i].dotacoes.push(oDotacao);
-                    itensSelecionados = true;
-
-                }
-                i++;
-
-            });
-
-            return alert('Dotação aplicada aos itens');
-
-
-        }
-
-
 
         if (itensSelecionados == false) {
             return alert('Nenhum item selecionado para aplicar dotação.');
         }
+
+        if (elementoIncompativel == true) {
+            return alert('Erro! Itens selecionados não possuem o elemento referente a dotação selecionada.');
+        }
+
+        if (dotacaoAplicada == true) {
+            return alert("Erro! Dotação já incluida para o item.");
+
+        }
+
+        var i = 0;
+
+
+
+
+        oGridItens.getRows().forEach(function(oRow) {
+
+            if (oRow.isSelected) {
+                aItensPosicao[i].dotacoes.push(oDotacao);
+            }
+            i++;
+
+        });
+
+
+
+        return alert('Dotação aplicada aos itens');
+
+
 
     }
 

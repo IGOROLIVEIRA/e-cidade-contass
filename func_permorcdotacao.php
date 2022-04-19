@@ -44,6 +44,24 @@ $clorcdotacao = new cl_orcdotacao;
 $clorcdotacao->rotulo->label();
 $clestrutura = new cl_estrutura;
 $sWhere = null;
+
+$array_elementos = explode(",", $elementos);
+$elementos = "";
+
+/* Transformando todos os elementos do array de elementos em uma única String
+*  para que possa ser utilizada na consulta das dotacoes */
+
+for ($i = 0; $i < count($array_elementos); $i++) {
+  $array_elementos[$i] = "'" . $array_elementos[$i] . "%" . "'";
+  if ($i == count($array_elementos) - 1) {
+    $elementos = $elementos . $array_elementos[$i];
+  } else {
+    $elementos = $elementos . $array_elementos[$i] . ",";
+  }
+}
+
+
+
 if (isset($pactoplano) && $pactoplano != "") {
 
   $oDaoPactoSolicita = db_utils::getDao("pactoplano");
@@ -55,21 +73,7 @@ if (isset($pactoplano) && $pactoplano != "") {
     $sWhere .= " (o15_tipo = 1  or o58_codigo = {$oPlano->o16_orctiporec})";
   }
 }
-/**
- * comentado por robson
- * retirado condição pois não estava permitindo retornar dotações na hora
- * de empenhar
- */
-/*else{
-  $result=db_dotacaosaldo(8,2,2,"true","" ,db_getsession("DB_anousu"),'','','','',false);
-  for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
-    if(db_utils::fieldsMemory($result, $iCont)->atual_menos_reservado == 0) {
-      $aDados[] = db_utils::fieldsMemory($result, $iCont)->o58_coddot;
-    }
-  }
-  $Dados = implode(',',$aDados);
-  $sWhere .= " o58_coddot not in ($Dados)";
-}*/
+
 // variável que determina o obrigatoriedade de digitar departamento
 //$obriga_depto = "sim";
 
@@ -166,8 +170,7 @@ if (!isset($filtroquery)) {
       if (document.form1.departamento == undefined || document.form1.departamento.value == 0) {
         alert('Selecione um departamento.');
       } else {
-        //    alert(coddot);
-        //    alert(document.form1.departamento.value);
+
         <?
         $executa = split("\|", $funcao_js);
         echo $executa[0] . "(coddot,document.form1.departamento.value);";
@@ -201,16 +204,14 @@ if (!isset($filtroquery)) {
                 </td>
               </tr>
               <?
-              //$clestrutura->nomeform="form2";//o nome do campo é DB_txtdotacao
-              //$clestrutura->estrutura('o50_estrutdespesa')
+
               ?>
               <tr>
                 <td><strong>Secretaria:</strong></td>
                 <td>
                   <?
                   if ($clpermusuario_dotacao->sql != "") {
-                    //            echo "<br>";
-                    //            echo $clpermusuario_dotacao->orgaos;
+
                     $result = pg_query($clpermusuario_dotacao->orgaos);
                     if ($result != false && pg_numrows($result) > 0) {
                       db_selectrecord("secretaria", $result, true, 2, "", "", "", "0", "js_secretaria()");
@@ -231,16 +232,11 @@ if (!isset($filtroquery)) {
                 <td>
                   <?
                   if ($clpermusuario_dotacao->sql != "") {
-                    //echo "<br>";
-                    //echo $clpermusuario_dotacao->depart;
+
                     $result = pg_query($clpermusuario_dotacao->depart);
                     if ($result != false && pg_numrows($result) > 0) {
                       db_selectrecord("departamento", $result, true, 2, "", "", "", "0", "js_departamento()");
                       if (pg_numrows($result) == 1) {
-                        //	 	 echo "<script>
-                        //		      document.form1.departamento[1].selected = true;
-                        //		      document.form1.departamentodescr[1].selected = true;
-                        //		      </script>";
                       }
                     } else {
                       global $sem_departamento;
@@ -267,8 +263,6 @@ if (!isset($filtroquery)) {
           </form>
           <?
 
-          //echo $elemento;
-          //echo "<br>sql: " . $clpermusuario_dotacao->sql;
 
           if ($clpermusuario_dotacao->sql != "") {
             if (isset($obriga_depto) && $obriga_depto == "sim") {
@@ -277,6 +271,14 @@ if (!isset($filtroquery)) {
 
             $variaveis["secretaria"] =  (isset($secretaria) ? $secretaria : 0);
             $variaveis["departamento"] = (isset($departamento) ? $departamento : 0);
+
+            $sql = $clpermusuario_dotacao->sql;
+            /* Concatenando na string correspondente pela consulta das dotacoes os elementos*/
+
+            if ($apostilamentonovo == "true") {
+              $clpermusuario_dotacao->sql = substr($sql, 0, 987) . "and o56_elemento like any " . "(array[$elementos])"  . " " . substr($sql, 987);
+            }
+
             db_lovrot($clpermusuario_dotacao->sql, 15, "()", "", $funcao_js, "", "NoMe", $variaveis, false);
           } else {
             echo "<table><tr><td><br><strong>Não existe dotação para este item</strong>.</td></tr></table>";
