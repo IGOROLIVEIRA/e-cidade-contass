@@ -93,7 +93,7 @@ class cl_quadrosuperavitdeficit
 
         $sql = "insert into quadrosuperavitdeficit(c241_fonte, c241_valor, c241_anousu)
                 values ($this->c241_fonte, $this->c241_valor, $this->c241_anousu) ";
-        echo "<br/>" . $sql . "<br/>";
+
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());

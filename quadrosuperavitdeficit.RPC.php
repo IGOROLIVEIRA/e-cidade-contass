@@ -53,7 +53,7 @@ try {
             
                 $recursos = $clorctiporec->sql_record($sql);
                 $aRecurso = db_utils::getCollectionByRecord($recursos);
-
+                $aDadosSuperavitFontes = array();
                 foreach ($aRecurso as $oFot) :
                     // Tem que condicionar a classe do ano
                     $clbpdcasp71 = new cl_bpdcasp712022();
@@ -73,7 +73,7 @@ try {
                         }
                     } else {
                         $oDadosSuperavitFonte = new stdClass();
-                        $oDadosSuperavitFonte->c241_anousu = $iValorNumerico;
+                        $oDadosSuperavitFonte->c241_anousu = $anousu;
                         $oDadosSuperavitFonte->c241_fonte = "1" . substr($oFot->o15_codtri, 1, 2);
                         if($iValorNumerico == 2){
                             $oDadosSuperavitFonte->c241_valor = $oSaldoFontes->saldoanterior;
@@ -85,8 +85,12 @@ try {
                     }
                    
                 endforeach;
-                ksort($aDadosSuperavitFontes);
-                $oRetorno->fonte = $aDadosSuperavitFontes;
+         
+                foreach ($aDadosSuperavitFontes as $chave => $oFonte) {
+                    $aFonte[] = $oFonte;
+                }
+                ksort($aFonte);
+                $oRetorno->fonte = $aFonte;
                 
                 break;    
 

@@ -97,9 +97,8 @@
 
     function js_carregarValores(oRetorno) {
         var valores = JSON.parse(oRetorno.responseText.urlDecode());
-
+        console.log(valores);
         valores.fonte.forEach(function(fonte, b) {
-            console.log(fonte);
             document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value = fonte.c241_valor;
             var valor = fonte.c241_valor - document.form1['aFonte[' + fonte.c241_fonte + '][suplementado]'].value;
             document.form1['aFonte[' + fonte.c241_fonte + '][saldo]'].value = valor.toFixed(2);
