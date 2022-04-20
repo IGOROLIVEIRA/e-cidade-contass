@@ -46,6 +46,8 @@ $clprotprocesso->rotulo->label("p58_requer");
 $clprotprocesso->rotulo->label("p58_numero");
 
 $teste = $_POST["chave_p58_requer"];
+$filtro = $_POST["filtropesquisa"];
+
 
 
 
@@ -121,6 +123,7 @@ if (isset($chave_p58_requer)) {
 
                     <fieldset>
                         <legend class="bold">Pesquisa</legend>
+
                         <div class="container">
 
                             <div class="op1">
@@ -130,16 +133,17 @@ if (isset($chave_p58_requer)) {
                                         <th style="background-color: #C0C0C0;">Descrição</th>
                                     </tr>
                                     <tr>
-                                        <td align="center"> <input type="checkbox" id="filtro1">
+
+                                        <td align="center"> <input type="radio" name="filtropesquisa" value="filtro1" id="filtro1">
                                         </td>
                                         <td>Com todas as palavras </td>
                                     </tr>
                                     <tr>
-                                        <td align="center"><input type="checkbox" id="filtro2"></td>
+                                        <td align="center"><input type="radio" name="filtropesquisa" id="value2" id="filtro2"></td>
                                         <td>Com expressão</td>
                                     </tr>
                                     <tr>
-                                        <td align="center"><input type="checkbox" id="filtro3"></td>
+                                        <td align="center"><input type="radio" name="filtropesquisa" value="filtro3" id="filtro3"></td>
                                         <td>Com qualquer uma das palavras</td>
                                     </tr>
 
@@ -247,6 +251,10 @@ if (isset($chave_p58_requer)) {
 
                     $sLeft = "";
                     $where .= " p58_instit = " . db_getsession("DB_instit");
+                    $data = str_replace("/", "-", $datainicial);
+                    echo date('Y-m-d', strtotime($data));
+
+                    /*
 
                     if (isset($z01_numcgm) && trim($z01_numcgm) != '') {
                         $where .= " and z01_numcgm = " . $z01_numcgm;
@@ -259,6 +267,114 @@ if (isset($chave_p58_requer)) {
                     if (isset($p51_descr) && trim($p51_descr) != '') {
                         $where .= " and p51_descr = " . "'" . $p51_descr . "'";
                     }
+
+                    if (isset($p58_obs) && trim($p58_obs) != '') {
+                        $where .= " and p58_obs = " . "'" . $p58_obs . "'";
+                    }
+
+                    if (isset($p58_numero) && trim($p58_numero) != '') {
+                        $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                    }
+                    */
+
+                    if (isset($filtro)) {
+                        if ($filtro == "filtro1") {
+                            if (isset($z01_numcgm) && trim($z01_numcgm) != '') {
+                                $where .= " and z01_numcgm = " . $z01_numcgm;
+                            }
+
+                            if (isset($z01_nome) && trim($z01_nome) != '') {
+
+                                $array_palavras = explode(" ", $z01_nome);
+                                $palavras = "";
+                                for ($i = 0; $i < count($array_palavras); $i++) {
+
+                                    $where .= " and z01_nome like '%" . $array_palavras[$i] . "%'";
+                                }
+                            }
+
+                            if (isset($p51_descr) && trim($p51_descr) != '') {
+                                $where .= " and p51_descr = " . "'" . $p51_descr . "'";
+                            }
+
+                            if (isset($p58_obs) && trim($p58_obs) != '') {
+                                $array_palavras = explode(" ", $p58_obs);
+                                $palavras = "";
+                                for ($i = 0; $i < count($array_palavras); $i++) {
+
+                                    $where .= " and z01_nome like '%" . $array_palavras[$i] . "%'";
+                                }
+                            }
+
+                            if (isset($p58_numero) && trim($p58_numero) != '') {
+                                $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                            }
+                        }
+
+                        if ($filtro == "filtro2") {
+                            if (isset($z01_numcgm) && trim($z01_numcgm) != '') {
+                                $where .= " and z01_numcgm = " . $z01_numcgm;
+                            }
+
+                            if (isset($z01_nome) && trim($z01_nome) != '') {
+                                $where .= " and z01_nome = " . "'" . $z01_nome . "'";
+                            }
+
+                            if (isset($p51_descr) && trim($p51_descr) != '') {
+                                $where .= " and p51_descr = " . "'" . $p51_descr . "'";
+                            }
+
+                            if (isset($p58_obs) && trim($p58_obs) != '') {
+                                $where .= " and p58_obs = " . "'" . $p58_obs . "'";
+                            }
+
+                            if (isset($p58_numero) && trim($p58_numero) != '') {
+                                $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                            }
+                        }
+
+                        if ($filtro == "filtro3") {
+
+                            if (isset($z01_numcgm) && trim($z01_numcgm) != '') {
+                                $where .= " and z01_numcgm = " . $z01_numcgm;
+                            }
+
+                            if (isset($z01_nome) && $z01_nome != '') {
+                                $array_palavras = explode(" ", $z01_nome);
+                                $palavras = "";
+                                for ($i = 0; $i < count($array_palavras); $i++) {
+                                    if ($i == count($array_palavras) - 1) {
+                                        $palavras .= "'%" . $array_palavras[$i] . "%'";
+                                    } else {
+                                        $palavras .= "'%" . $array_palavras[$i] . "%'" . ",";
+                                    }
+                                }
+                                $where .= " and z01_nome like any(array[$palavras]) ";
+                            }
+
+                            if (isset($p51_descr) && trim($p51_descr) != '') {
+                                $where .= " and p51_descr = " . "'" . $p51_descr . "'";
+                            }
+
+                            if (isset($p58_obs) && trim($p58_obs) != '') {
+                                $array_palavras = explode(" ", $p58_obs);
+                                $palavras = "";
+                                for ($i = 0; $i < count($array_palavras); $i++) {
+                                    if ($i == count($array_palavras) - 1) {
+                                        $palavras .= "'" . $array_palavras[$i] . "%'";
+                                    } else {
+                                        $palavras .= "'" . $array_palavras[$i] . "%'" . ",";
+                                    }
+                                }
+                                $where .= " and z01_nome like any(array[$palavras]) ";
+                            }
+
+                            if (isset($p58_numero) && trim($p58_numero) != '') {
+                                $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                            }
+                        }
+                    }
+
 
                     if (isset($grupo) && trim($grupo) != '') {
                         $where .= " and tipoproc.p51_tipoprocgrupo = $grupo";
@@ -359,6 +475,8 @@ if (isset($chave_p58_requer)) {
                         }
 
                         echo $sql;
+                        echo $filtro;
+
 
                         db_lovrot($sql . " ", 15, "()", "", $funcao_js, "", "NoMe", $repassa);
                     } else {
