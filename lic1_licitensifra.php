@@ -137,7 +137,7 @@ $db_botao = true;
 </html>
 <script>
     function js_insereItens() {
-        
+
         let aItens = oItensLicitacao.oGridItens.aRows;
 
         let aSelecionados = aItens.filter(e => e.isSelected);
@@ -215,7 +215,7 @@ $db_botao = true;
 
             parent.parent.iframe_liclicita.bloquearRegistroPreco;
 
-            parent.location.href = `lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
+            parent.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
 
             if (tipoJulgamento == '3') {
                 parent.parent.iframe_liclicitemlote.location.href = `lic1_liclicitemlote001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
@@ -240,10 +240,11 @@ $db_botao = true;
                 }
             });
 
-        }if (oRetorno.status == 2) {
+        }
+        if (oRetorno.status == 2) {
             js_removeObj('msgbox');
             alert('Inclusão abortada, processo de compra por lote!');
-        }else{
+        } else {
             //db_msgbox(@$erro_msg);
             db_msgbox("Operação Cancelada!!Contate Suporte!!");
         }

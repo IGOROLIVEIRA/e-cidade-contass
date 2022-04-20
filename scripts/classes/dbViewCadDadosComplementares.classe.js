@@ -1,4 +1,4 @@
-DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto, sLote='', sDescricaoLote='', iBdi=null) {
+DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto, sLote='', sDescricaoLote='', iBdi='') {
     var me = this;
 
     this.iCodigoPais = '';
@@ -2539,7 +2539,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('txtBdi'+sId).setAttribute('disabled', 'disabled');
     }
 
-    if(me.iBdi != null){
+    if(me.iBdi != ''){
         $('txtBdi'+sId).value = me.iBdi;
         $('txtBdi'+sId).setAttribute('class', 'readonly');
         $('txtBdi'+sId).setAttribute('disabled', 'disabled');

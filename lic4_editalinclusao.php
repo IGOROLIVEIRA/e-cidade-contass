@@ -62,6 +62,10 @@ if ($licitacao) {
         l47_dataenvio, l20_anousu, l20_tipojulg', '', 'l20_codigo = ' . $licitacao . $sWhere, '', 1);
     $rsLicita = $clliclicita->sql_record($sqlLicita);
 
+    $sqlBdi = 'select distinct db150_bdi from obrasdadoscomplementareslote inner join obrascodigos on db151_sequencial = db150_seqobrascodigos inner join liclicita on l20_codigo = db151_liclicita where l20_codigo =  ' . $licitacao;
+    $rsBdi   = db_query($sqlBdi);
+    $valorBdi = db_utils::fieldsMemory($rsBdi, 0)->db150_bdi;
+
     $oDadosLicitacao = db_utils::fieldsMemory($rsLicita, 0);
     $natureza_objeto = $oDadosLicitacao->natureza_objeto;
     $objeto = $oDadosLicitacao->l20_objeto;
@@ -116,9 +120,9 @@ if (isset($incluir) && isset($licitacao)) {
                 }
 
                 if (in_array($tipo_tribunal, array(100, 101, 102, 103, 106))) {
-                    $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'td'));
+                    $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'td', 'fl'));
                 } elseif (in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))) {
-                    $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
+                    $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed', 'fl'));
                 }
 
                 if (!$sqlerro) {

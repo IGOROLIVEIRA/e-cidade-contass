@@ -1045,14 +1045,21 @@ class obrasDadosComplementares
       $sCampos .= "$tabela_base.*";
       $sCampos .= $tabela_base === 'obrasdadoscomplementareslote' ? ',l04_descricao, l04_codigo' : '';
 
-      $sWhere = " l04_codigo is not null and db151_liclicita = " . $iCodigoLicitacao;
+      $rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $iCodigoLicitacao);
+      $iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0)->l20_tipojulg;
+
+      if ($iTipoJulgamento == 3) {
+        $sWhere = " l04_codigo is not null and db151_liclicita = " . $iCodigoLicitacao;
+      } else {
+        $sWhere = " db151_liclicita = " . $iCodigoLicitacao;
+      }
 
       $sSqlObra = $oDaoObra->sql_query_obraslicitacao(null, $sCampos, 'db150_sequencial', $sWhere);
       //die($sSqlObra);
       $rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 
-      $rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $iCodigoLicitacao);
-      $iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0)->l20_tipojulg;
+      //$rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $iCodigoLicitacao);
+      //$iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0)->l20_tipojulg;
 
       if ($tabela_base == 'obrasdadoscomplementareslote' && $iTipoJulgamento == 3) {
         $aRetorno = self::retorno($rsQueryObra);
