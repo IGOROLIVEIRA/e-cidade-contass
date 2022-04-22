@@ -535,13 +535,21 @@ class cl_avaliacaogrupoperguntaresposta {
         $sql .= "      inner join avaliacaopergunta       on  db103_sequencial = db104_avaliacaopergunta";
         $sql .= "      inner join avaliacaogrupopergunta  on  db103_avaliacaogrupopergunta = db102_sequencial";
         $sql .= "      inner join avaliacao               on  db102_avaliacao              = db101_sequencial";
-        $sql2 = "";
+        $sql2 = " WHERE COALESCE(
+                     (SELECT db106_resposta::integer
+                      FROM avaliacaogrupoperguntaresposta
+                      JOIN avaliacaoresposta ON avaliacaogrupoperguntaresposta.db108_avaliacaoresposta=avaliacaoresposta.db106_sequencial
+                      JOIN avaliacaoperguntaopcao ON avaliacaoperguntaopcao.db104_sequencial = avaliacaoresposta.db106_avaliacaoperguntaopcao
+                      WHERE db108_avaliacaogruporesposta=db107_sequencial
+                          AND db104_identificadorcampo = 'instituicao'),0) IN (".db_getsession("DB_instit").",
+                                                                               0)
+    AND db107_datalancamento::varchar || db107_hora = (SELECT db107_datalancamento::varchar || db107_hora FROM avaliacaogruporesposta ORDER BY db107_sequencial DESC LIMIT 1)";
         if($dbwhere==""){
             if($db108_sequencial!=null ){
-                $sql2 .= " where avaliacaogrupoperguntaresposta.db108_sequencial = $db108_sequencial ";
+                $sql2 .= " AND avaliacaogrupoperguntaresposta.db108_sequencial = $db108_sequencial ";
             }
         }else if($dbwhere != ""){
-            $sql2 = " where $dbwhere";
+            $sql2 .= " AND $dbwhere";
         }
         $sql .= $sql2;
         if($ordem != null ){
