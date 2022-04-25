@@ -1743,7 +1743,7 @@ switch ($oParam->exec) {
         $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
         $sequencial = db_utils::fieldsMemory($rsSql, 0)->l47_sequencial;
 
-        if (in_array(intval($natureza_objeto), array(1, 7)) && $oParam->licitacao && !$sequencial) {
+        if (in_array(intval($natureza_objeto), array(1, 7))) {
             $oRetorno->redireciona_edital = true;
         } else {
             $oRetorno->redireciona_edital = false;

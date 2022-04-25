@@ -224,7 +224,7 @@ $db_botao = true;
             }
 
             if (naturezaObj == '1' || naturezaObj == '7') {
-                window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+                parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
             }
 
             let oParam = new Object();
@@ -238,7 +238,7 @@ $db_botao = true;
                     let response = eval('(' + oAjax.responseText + ')');
 
                     if (response.redireciona_edital && tipoJulgamento != '3') {
-                        window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+                        parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
                     } else {
                         //parent.parent.mo_camada('liclicitemlote');
                     }

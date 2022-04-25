@@ -306,18 +306,13 @@ class cl_liclancedital
 			}
 		}
 
-		if (trim($this->l47_descrecurso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_descrecurso"])) {
-			$sql .= $virgula . " l47_descrecurso = '$this->l47_descrecurso' ";
+		if ((trim($this->l47_descrecurso) != "" && $this->l47_origemrecurso != 9) || isset($GLOBALS["HTTP_POST_VARS"]["l47_descrecurso"])) {
+			$sql .= $virgula . " l47_descrecurso = '' ";
 			$virgula = ",";
 		} else {
-			if (!in_array($iTribunal, array('100', '101', '102', '103'))) {
-				$this->erro_sql = " Campo Descricao do Recurso não Informado.";
-				$this->erro_campo = "l47_descrecurso";
-				$this->erro_banco = "";
-				$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-				$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-				$this->erro_status = "0";
-				return false;
+			if ((trim($this->l47_descrecurso) != "" && $this->l47_origemrecurso == 9) || isset($GLOBALS["HTTP_POST_VARS"]["l47_descrecurso"])) {
+				$sql .= $virgula . " l47_descrecurso = '$this->l47_descrecurso' ";
+				$virgula = ",";
 			}
 		}
 
