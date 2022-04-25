@@ -26,6 +26,9 @@ class cl_licobras102022 {
   public $si195_codobra = 0;
   public $si195_linkobra = null;
   public $si195_nrolote = null;
+  public $si195_contdeclicitacao = null;
+  public $si195_codorgaorespsicom = null;
+  public $si195_codunidadesubsicom = null;
   public $si195_nrocontrato = null;
   public $si195_exerciciocontrato = null;
   public $si195_dataassinatura = null;
@@ -46,6 +49,9 @@ class cl_licobras102022 {
                  si195_codobra = int8 = codigoobra
                  si195_linkobra = text = linkobra
                  si195_nrolote = int8 = numero do lote
+                 si195_contdeclicitacao = int8 = si195_contdeclicitacao
+                 si195_codorgaorespsicom = int8 = si195_codorgaorespsicom
+                 si195_codunidadesubsicom = int8 = si195_codunidadesubsicom 
                  si195_nrocontrato = int8 = numero do contrato
                  si195_exerciciocontrato = int8 = execicio do contrato
                  si195_dataassinatura = date = data de assinatura
@@ -85,6 +91,9 @@ class cl_licobras102022 {
       $this->si195_codobra = ($this->si195_codobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codobra"]:$this->si195_codobra);
       $this->si195_linkobra = ($this->si195_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_linkobra"]:$this->si195_linkobra);
       $this->si195_nrolote = ($this->si195_nrolote == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_nrolote"]:$this->si195_nrolote);
+      $this->si195_contdeclicitacao = ($this->si195_contdeclicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_contdeclicitacao"]:$this->si195_contdeclicitacao);
+      $this->si195_codorgaorespsicom = ($this->si195_codorgaorespsicom == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codorgaorespsicom"]:$this->si195_codorgaorespsicom);
+      $this->si195_codunidadesubsicom = ($this->si195_codunidadesubsicom == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codunidadesubsicom"]:$this->si195_codunidadesubsicom);
       $this->si195_nrocontrato = ($this->si195_nrocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_nrocontrato"]:$this->si195_nrocontrato);
       $this->si195_exerciciocontrato = ($this->si195_exerciciocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_exerciciocontrato"]:$this->si195_exerciciocontrato);
       $this->si195_dataassinatura = ($this->si195_dataassinatura == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dataassinatura"]:$this->si195_dataassinatura);
@@ -272,10 +281,13 @@ class cl_licobras102022 {
                                       ,si195_codunidadesubrespestadual
                                       ,si195_exerciciolicitacao
                                       ,si195_nroprocessolicitatorio
+                                      ,si195_nrolote
+                                      ,si195_contdeclicitacao
                                       ,si195_codobra
                                       ,si195_objeto
                                       ,si195_linkobra
-                                      ,si195_nrolote               
+                                      ,si195_codorgaorespsicom
+                                      ,si195_codunidadesubsicom
                                       ,si195_nrocontrato           
                                       ,si195_exerciciocontrato     
                                       ,si195_dataassinatura
@@ -292,10 +304,13 @@ class cl_licobras102022 {
                                ,'$this->si195_codunidadesubrespestadual'
                                ,$this->si195_exerciciolicitacao
                                ,'$this->si195_nroprocessolicitatorio'
+                               ,$this->si195_nrolote
+                               ,$this->si195_contdeclicitacao  
                                ,$this->si195_codobra
                                ,'$this->si195_objeto'
                                ,'$this->si195_linkobra'
-                               ,$this->si195_nrolote         
+                               ,$this->si195_codorgaorespsicom
+                               ,$this->si195_codunidadesubsicom    
                                ,$this->si195_nrocontrato
                                ,$this->si195_exerciciocontrato
                                ,'$this->si195_dataassinatura'

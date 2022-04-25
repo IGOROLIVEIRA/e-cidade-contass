@@ -138,7 +138,8 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                    ac16_dataassinatura as si195_dataassinatura,
                    ac16_valor as si195_vlcontrato,
                    ac16_tipounidtempoperiodo as si195_undmedidaprazoexecucao,
-                   ac16_qtdperiodo as si195_prazoexecucao
+                   ac16_qtdperiodo as si195_prazoexecucao,
+                   ac16_tipoorigem
             FROM licobras
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             INNER  JOIN acordo on ac16_licitacao = l20_codigo
@@ -168,10 +169,17 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras102022->si195_codunidadesubrespestadual = substr($oDados10->si195_codunidadesubrespestadual, 0, 4);
         $cllicobras102022->si195_exerciciolicitacao = $oDados10->si195_exerciciolicitacao;
         $cllicobras102022->si195_nroprocessolicitatorio = $oDados10->si195_nroprocessolicitatorio;
+        $cllicobras102022->si195_nrolote = $oDados10->si195_nrolote;
+        if($oDados10->ac16_tipoorigem){
+          $cllicobras102022->si195_contdeclicitacao = $oDados10->ac16_tipoorigem;
+        }else{
+          $cllicobras102022->si195_contdeclicitacao = null;
+        }
         $cllicobras102022->si195_codobra = $oDados10->si195_codobra;
         $cllicobras102022->si195_objeto = $this->removeCaracteres($oDados10->si195_objeto);
         $cllicobras102022->si195_linkobra = $oDados10->si195_linkobra;
-        $cllicobras102022->si195_nrolote = $oDados10->si195_nrolote;
+        $cllicobras102022->si195_codorgaorespsicom = 3;
+        $cllicobras102022->si195_codunidadesubsicom = 4;
         $cllicobras102022->si195_nrocontrato = $oDados10->si195_nrocontrato;
         $cllicobras102022->si195_exerciciocontrato = $oDados10->si195_exerciciocontrato;
         $cllicobras102022->si195_dataassinatura = $oDados10->si195_dataassinatura;
@@ -213,7 +221,8 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                    ac16_dataassinatura as si196_dataassinatura,
                    ac16_valor as si196_vlcontrato,
                    ac16_tipounidtempoperiodo as si196_undmedidaprazoexecucao,
-                   ac16_qtdperiodo as si196_prazoexecucao
+                   ac16_qtdperiodo as si196_prazoexecucao,
+                   ac16_tipoorigem
             FROM licobras
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             LEFT  JOIN acordo on ac16_licitacao = l20_codigo
@@ -238,9 +247,16 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras202022->si196_exerciciolicitacao = $oDados20->si195_exerciciolicitacao;
         $cllicobras202022->si196_nroprocessolicitatorio = $oDados20->si195_nroprocessolicitatorio;
         $cllicobras202022->si196_tipoprocesso = $oDados20->si196_tipoprocesso;
+        if($oDados20->ac16_tipoorigem){
+          $cllicobras202022->si196_contdeclicitacao = $oDados20->ac16_tipoorigem;
+        }else{
+          $cllicobras202022->si196_contdeclicitacao = null;
+        }
         $cllicobras202022->si196_codobra = $oDados20->si195_codobra;
         $cllicobras202022->si196_objeto = $this->removeCaracteres($oDados20->si195_objeto);
         $cllicobras202022->si196_linkobra = $oDados20->si195_linkobra;
+        $cllicobras202022->si196_codorgaorespsicom = 3;
+        $cllicobras202022->si196_codunidadesubsicom = 4;
         $cllicobras202022->si196_nrocontrato = $oDados20->si196_nrocontrato;
         $cllicobras202022->si196_exerciciocontrato = $oDados20->si196_exerciciocontrato;
         $cllicobras202022->si196_dataassinatura = $oDados20->si196_dataassinatura;
@@ -311,7 +327,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         }
         $cllicobras302022->si203_tipoalteracaovalor = $iTipoAlteracaoValor;
         $cllicobras302022->si203_tipotermoaditivo = $oDados30->si203_tipotermoaditivo;
-        $cllicobras302022->si203_dscalteracao = $oDados30->si203_dscalteracao;
+        $cllicobras302022->si203_dscalteracao = $this->removeCaracteres($oDados30->si203_dscalteracao);
         $cllicobras302022->si203_novadatatermino = $oDados30->si203_novadatatermino;
         $cllicobras302022->si203_tipodetalhamento = $oDados30->si203_tipodetalhamento;
         $cllicobras302022->si203_valoraditivo = abs($oDados30->si203_valoraditivo);

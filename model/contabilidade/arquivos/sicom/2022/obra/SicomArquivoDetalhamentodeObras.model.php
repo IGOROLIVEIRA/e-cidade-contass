@@ -253,7 +253,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras212022->si200_dtparalisacao = $oDados21->obr02_dtparalisacao;
       $clcadobras212022->si200_motivoparalisacap = $oDados21->obr02_motivoparalisacao;
       $clcadobras212022->si200_descoutrosparalisacao = $this->removeCaracteres($oDados21->obr02_outrosmotivos);
-      $clcadobras212022->si200_dtretomada = $oDados21->obr02_dtretomada;
+      //$clcadobras212022->si200_dtretomada = $oDados21->obr02_dtretomada;
       $clcadobras212022->si200_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clcadobras212022->si200_instit = db_getsession("DB_instit");
       $clcadobras212022->incluir(null);

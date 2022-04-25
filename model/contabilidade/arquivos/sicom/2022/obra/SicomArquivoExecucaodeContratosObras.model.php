@@ -168,8 +168,9 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
              obr01_linkobra AS si197_linkobra,
             CASE
                 WHEN l20_tipojulg = 1 THEN '1'
-                    ELSE l04_codigo
-                END AS si197_nrolote
+                ELSE l04_codigo
+            END AS si197_nrolote,
+            ac16_tipoorigem
       FROM acordo
       INNER JOIN liclicita ON l20_codigo = ac16_licitacao
       inner join liclicitem on l21_codliclicita = l20_codigo
@@ -194,6 +195,11 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
       $clexeobras102022->si197_codunidadesub = $oDados10->si197_codunidadesub;
       $clexeobras102022->si197_nrocontrato = $oDados10->si197_nrocontrato;
       $clexeobras102022->si197_exerciciocontrato = $oDados10->si197_exerciciocontrato;
+      if($oDados10->ac16_tipoorigem){
+        $clexeobras102022->si197_contdeclicitacao = $oDados10->ac16_tipoorigem;
+      }else{
+        $clexeobras102022->si197_contdeclicitacao = null;
+      }
       $clexeobras102022->si197_exerciciolicitacao = $oDados10->si197_exerciciolicitacao;
       $clexeobras102022->si197_nroprocessolicitatorio = $oDados10->si197_nroprocessolicitatorio;
       $clexeobras102022->si197_codunidadesubresp = $oDados10->si197_codunidadesubresp;
