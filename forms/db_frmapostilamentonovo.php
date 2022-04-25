@@ -127,7 +127,11 @@ $clrotulo->label("ac16_resumoobjeto");
                     </fieldset>
                 </td>
 
-                <td colspan='2'>
+                <!-- tag <td> a seguir ocultada pois apresenta inconsistencia
+                     no valor apresentado, a tag só ficará visivel novamente 
+                    caso cliente solicite o retorno -->
+
+                <td colspan='2' style="visibility: hidden;">
                     <fieldset class="">
                         <legend>Valores</legend>
                         <table>
@@ -144,6 +148,8 @@ $clrotulo->label("ac16_resumoobjeto");
                         </table>
                     </fieldset>
                 </td>
+
+
             </tr>
 
             <tr id="edicaoBloco" style="display: none;">
@@ -549,7 +555,7 @@ $clrotulo->label("ac16_resumoobjeto");
         if (aItensPosicao[iLinha].dotacoes.length > 0) {
             aItensPosicao[iLinha].dotacoes[0].valor = js_formatar(nQuantidade * nUnitario, 'f', 2);
             //aItensPosicao[iLinha].dotacoes[0].quantidade = js_round((nUnitario / aItensPosicao[iLinha].valorunitario), 2);
-            atualizarItemDotacao(iLinha, 0, js_formatar(nQuantidade * nUnitario, 'f', 2));
+            //atualizarItemDotacao(iLinha, 0, js_formatar(nQuantidade * nUnitario, 'f', 2));
         }
 
 
@@ -958,7 +964,7 @@ $clrotulo->label("ac16_resumoobjeto");
         db_iframe_orcdotacao.hide();
         $('Jandb_iframe_orcdotacao').style.zIndex = '0';
         //$('oTxtValorDotacao').focus();
-        alert(chave3.substr(23, 7));
+        //alert(chave3.substr(23, 7));
         elemento_dotacao = chave3.substr(23, 7);
         getSaldoDotacao(chave1);
     }
@@ -990,12 +996,14 @@ $clrotulo->label("ac16_resumoobjeto");
         var itensSelecionados = false;
         var dotacaoAplicada = false;
         var elementoIncompativel = false;
+        var elementosIncompativeis = "";
 
         oGridItens.getRows().forEach(function(oRow) {
 
             if (oRow.isSelected) {
                 if (aItensPosicao[i].elemento != elemento_dotacao) {
                     elementoIncompativel = true;
+                    elementosIncompativeis = elementosIncompativeis + aItensPosicao[i].codigoitem + " ";
                 }
                 itensSelecionados = true;
 
@@ -1019,7 +1027,8 @@ $clrotulo->label("ac16_resumoobjeto");
         }
 
         if (elementoIncompativel == true) {
-            return alert('Erro! Itens selecionados não possuem o elemento referente a dotação selecionada.');
+            console.log(elementosIncompativeis)
+            return alert('Usuário: Item(ns) ' + elementosIncompativeis + ' possui(em) elemento(s) divergente da dotação selecionada');
         }
 
         if (dotacaoAplicada == true) {
@@ -1028,8 +1037,6 @@ $clrotulo->label("ac16_resumoobjeto");
         }
 
         var i = 0;
-
-
 
 
         oGridItens.getRows().forEach(function(oRow) {
@@ -1041,10 +1048,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         });
 
-
-
-        return alert('Dotação aplicada aos itens');
-
+        return alert('Dotação aplicada aos itens selecionados');
 
 
     }
