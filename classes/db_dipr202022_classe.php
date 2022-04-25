@@ -179,7 +179,7 @@ class cl_dipr202022
                     ,$this->si231_valorcontribdevida
                     ,$this->si231_mes 
                     ,$this->si231_instit )";
-        echo $sql;
+
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("", "", @pg_last_error());
