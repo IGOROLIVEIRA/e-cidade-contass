@@ -139,7 +139,7 @@ if (isset($chave_p58_requer)) {
                                         <td>Com todas as palavras </td>
                                     </tr>
                                     <tr>
-                                        <td align="center"><input type="radio" name="filtropesquisa" id="value2" id="filtro2"></td>
+                                        <td align="center"><input type="radio" name="filtropesquisa" value="filtro2" id="filtro2"></td>
                                         <td>Com expressão</td>
                                     </tr>
                                     <tr>
@@ -235,46 +235,27 @@ if (isset($chave_p58_requer)) {
                     <?
 
 
-                    /**
-                     * Evita o escape dos campos
-                     */
-                    if (isset($chave_p58_numero)) {
-                        $chave_p58_numero = addslashes($chave_p58_numero);
-                    }
-
-                    if (isset($chave_p58_requer)) {
-                        $chave_p58_requer = addslashes($chave_p58_requer);
-                    }
-
-
-
 
                     $sLeft = "";
                     $where .= " p58_instit = " . db_getsession("DB_instit");
-                    $data = str_replace("/", "-", $datainicial);
-                    echo date('Y-m-d', strtotime($data));
 
-                    /*
-
-                    if (isset($z01_numcgm) && trim($z01_numcgm) != '') {
-                        $where .= " and z01_numcgm = " . $z01_numcgm;
+                    if (isset($datainicial)) {
+                        $data = str_replace("/", "-", $datainicial);
+                        $datainicialformatada = date('Y-m-d', strtotime($data));
                     }
 
-                    if (isset($z01_nome) && trim($z01_nome) != '') {
-                        $where .= " and z01_nome = " . "'" . $z01_nome . "'";
+                    if (isset($datafinal)) {
+                        $data = str_replace("/", "-", $datafinal);
+                        $datafinalformatada = date('Y-m-d', strtotime($data));
                     }
 
-                    if (isset($p51_descr) && trim($p51_descr) != '') {
-                        $where .= " and p51_descr = " . "'" . $p51_descr . "'";
-                    }
 
-                    if (isset($p58_obs) && trim($p58_obs) != '') {
-                        $where .= " and p58_obs = " . "'" . $p58_obs . "'";
-                    }
-
-                    if (isset($p58_numero) && trim($p58_numero) != '') {
-                        $where .= " and p58_numero = " . "'" . $p58_numero . "'";
-                    }
+                    /* 
+                        valores dos filtros de pesquisa:
+                        filtro1 = Com todas as palavras
+                        filtro2 = Com expressão
+                        filtro3 = Com qualquer uma das palavras
+                    
                     */
 
                     if (isset($filtro)) {
@@ -331,6 +312,11 @@ if (isset($chave_p58_requer)) {
                             if (isset($p58_numero) && trim($p58_numero) != '') {
                                 $where .= " and p58_numero = " . "'" . $p58_numero . "'";
                             }
+
+                            if (isset($datainicial) && isset($datafinal)) {
+                                $where .= " and p58_dtproc >= " . "'" . $datainicialformatada . "'";
+                                $where .= " and p58_dtproc < " . "'" . $datafinalformatada . "'";
+                            }
                         }
 
                         if ($filtro == "filtro3") {
@@ -373,42 +359,34 @@ if (isset($chave_p58_requer)) {
                                 $where .= " and p58_numero = " . "'" . $p58_numero . "'";
                             }
                         }
-                    }
+                    } else {
+                        if (isset($z01_numcgm) && trim($z01_numcgm) != '') {
+                            $where .= " and z01_numcgm = " . $z01_numcgm;
+                        }
 
+                        if (isset($z01_nome) && trim($z01_nome) != '') {
+                            $where .= " and z01_nome like " . "'" . $z01_nome . "%'";
+                        }
 
-                    if (isset($grupo) && trim($grupo) != '') {
-                        $where .= " and tipoproc.p51_tipoprocgrupo = $grupo";
-                    }
-                    if (isset($tipo) && trim($tipo) != '') {
-                        $where .= " and p58_codigo = {$tipo} ";
-                    }
-                    if (isset($apensado)) {
-                        //Não permite que um secundário tenha mais de um principal.
-                        $where .= " and not exists ( select *
-                                       from processosapensados
-                                      where p30_procapensado  = p58_codproc limit 1)";
-                        if (trim($apensado) != '') {
-                            $aPartesNumero = explode("/", $apensado);
-                            $iAno = db_getsession("DB_anousu");
-                            if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
-                                $iAno = $aPartesNumero[1];
-                            }
-                            $iNumero = $aPartesNumero[0];
-                            $where .= " and p58_codproc not in (select p58_codproc from protprocesso where p58_ano = {$iAno} and p58_numero = '{$iNumero}') ";
+                        if (isset($p51_descr) && trim($p51_descr) != '') {
+                            $where .= " and p51_descr like " . "'" . $p51_descr . "%'";
+                        }
+
+                        if (isset($p58_obs) && trim($p58_obs) != '') {
+                            $where .= " and p58_obs like " . "'" . $p58_obs . "%'";
+                        }
+
+                        if (isset($p58_numero) && trim($p58_numero) != '') {
+                            $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                        }
+
+                        if (isset($datainicial) && isset($datafinal) && $datainicial != '' && $datafinal != '') {
+                            $where .= " and p58_dtproc >= " . "'" . $datainicialformatada . "'";
+                            $where .= " and p58_dtproc < " . "'" . $datafinalformatada . "'";
                         }
                     }
-                    //Lista apenas os processos do departamento da sessão
-                    if ($validaDepartamento) {
-                        $where .= " and (select p61_coddepto from procandam where p61_codproc = p58_codproc order by p61_codandam DESC limit 1) = " . db_getsession('DB_coddepto');
-                    }
 
-                    /**
-                     * Removido verificação de processos arquivados, conforme solicitado na ocorrência 2558
-                     */
-                    /**
-                     * Adicionado novamente verificação de processos arquivados, conforme solicitado na ocorrência 3689
-                     */
-                    //Não permite apensar processos arquivados.
+
                     $where .= " and not exists (select 1 from arqproc where p68_codproc = p58_codproc) ";
                     if (!isset($pesquisa_chave)) {
 
@@ -470,14 +448,7 @@ if (isset($chave_p58_requer)) {
                             $repassa = array("chave_p58_codproc" => $chave_p58_codproc);
                         }
 
-                        if (isset($z01_numcgm)) {
-                            echo "CGM:" . $z01_numcgm;
-                        }
-
-                        echo $sql;
-                        echo $filtro;
-
-
+                        $funcao_js = "funcao_js=parent.js_consultarProcesso|p58_codproc";
                         db_lovrot($sql . " ", 15, "()", "", $funcao_js, "", "NoMe", $repassa);
                     } else {
 

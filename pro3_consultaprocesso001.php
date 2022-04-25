@@ -154,6 +154,23 @@ if (!isset($grupo)) {
     js_OpenJanelaIframe('top.corpo', 'db_iframe', sUrl, 'Pesquisa de Processos', true);
   }
 
+  function js_consultarProcesso(numeroProcesso) {
+    var iTipoProcesso = '';
+    var iNumeroCgm = '';
+    var iNumeroProcesso = numeroProcesso;
+
+    var sUrl = 'pro3_consultaprocesso003.php?numeroprocesso=' + iNumeroProcesso + '&cgm=' + iNumeroCgm + '&tipo=' + iTipoProcesso;
+
+    if (iNumeroProcesso == "") {
+
+      alert("Preencha um dos campos.");
+      return false;
+    }
+
+    js_OpenJanelaIframe('top.corpo', 'db_iframe', sUrl, 'Pesquisa de Processos', true);
+  }
+
+
   var sGrupo = <?= $grupo ?>;
 
   /**
