@@ -208,6 +208,7 @@ $db_botao = true;
         let oRetorno = eval("(" + oAjax.responseText + ")");
         let tipoJulgamento = "<?= $tipojulg ?>";
         let licitacao = "<?= $licitacao ?>";
+        let naturezaObj = "<?= $naturezaobj ?>";
 
         if (oRetorno.status == 1) {
             js_removeObj('msgbox');
@@ -215,11 +216,15 @@ $db_botao = true;
 
             parent.parent.iframe_liclicita.bloquearRegistroPreco;
 
-            parent.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+            parent.location.href = `lic1_liclicitemalt001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
 
             if (tipoJulgamento == '3') {
                 parent.parent.iframe_liclicitemlote.location.href = `lic1_liclicitemlote001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
                 parent.parent.document.formaba.liclicitemlote.disabled = false;
+            }
+
+            if (naturezaObj == '1' || naturezaObj == '7') {
+                window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
             }
 
             let oParam = new Object();
@@ -233,7 +238,7 @@ $db_botao = true;
                     let response = eval('(' + oAjax.responseText + ')');
 
                     if (response.redireciona_edital && tipoJulgamento != '3') {
-                        parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+                        window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
                     } else {
                         //parent.parent.mo_camada('liclicitemlote');
                     }

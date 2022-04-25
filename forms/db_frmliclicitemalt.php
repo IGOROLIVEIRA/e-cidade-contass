@@ -69,6 +69,9 @@ $clrotulo->label("nome");
                                 JOIN cflicita ON l20_codtipocom = l03_codigo
                                 WHERE l20_codigo = ' . $licitacao);
                     $iTribunal = db_utils::fieldsMemory($rsSql, 0)->l03_pctipocompratribunal;
+
+                    $sSqlNat = db_query('SELECT l20_naturezaobjeto as naturezaobj FROM liclicita WHERE l20_codigo = ' . $licitacao);
+                    $naturezaobj = db_utils::fieldsMemory($sSqlNat, 0)->naturezaobj;
                     ?>
                     <?php if ($iTribunal == 53) : ?>
                         <input name='exportarcsv' type='button' value='Exportar CSV' onclick='js_exportarcsv();'>
@@ -77,7 +80,7 @@ $clrotulo->label("nome");
             </tr>
             <tr colspan="2">
                 <td>
-                    <iframe name="itens" id="itens" src="lic1_licitensifra.php?licitacao=<?= @$licitacao ?>&tipojulg=<?= $tipojulg ?>&redireciona=<?= $redireciona_edital ?> " width="1200" height="400" marginwidth="0" marginheight="0" frameborder="0">
+                    <iframe name="itens" id="itens" src="lic1_licitensifra.php?licitacao=<?= @$licitacao ?>&tipojulg=<?= $tipojulg ?>&redireciona=<?= $redireciona_edital ?>&naturezaobj=<?= $naturezaobj ?> " width="1200" height="400" marginwidth="0" marginheight="0" frameborder="0">
                     </iframe>
                 </td>
             </tr>
@@ -90,6 +93,7 @@ $clrotulo->label("nome");
                 db_input('criterioadj_item', 10, '', true, 'hidden', 3);
                 db_input('criterioadj_contrato', 10, '', true, 'hidden', 3);
                 db_input('codTipoLicitacao', 10, '', true, 'hidden', 3);
+                db_input('naturezaobj', 0, '', true, 'hidden', 3);
 
                 ?>
 
