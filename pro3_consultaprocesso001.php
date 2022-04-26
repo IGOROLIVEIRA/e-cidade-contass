@@ -58,6 +58,12 @@ if (!isset($grupo)) {
   $grupo = 1;
 }
 
+$resultConsulta = db_query("select * from protparam");
+$p90_novatelaprotocolo = db_utils::fieldsMemory($resultConsulta, 0)->p90_novatelaprotocolo;
+if ($p90_novatelaprotocolo == 'f') {
+  echo "aqui" . $p90_novatelaprotocolo;
+}
+
 ?>
 <html>
 
@@ -73,7 +79,9 @@ if (!isset($grupo)) {
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
   <center>
     <div style="margin-top: 25px; width: 570px;">
-      <form method="post" action="" name="form1">
+      <form method="post" action="" name="form1" <? if ($p90_novatelaprotocolo == 't') {
+                                                    echo 'style="visibility:' . ' hidden;"';
+                                                  } ?>>
         <fieldset>
           <legend>
             <b>Consulta de Processos</b>
@@ -131,12 +139,18 @@ if (!isset($grupo)) {
   </center>
 
   <?php db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit")); ?>
+  <?php
+  if ($p90_novatelaprotocolo == 't') {
+    echo "<script>js_OpenJanelaIframe('top.corpo', 'db_iframe', 'func_pesquisaprocesso.php', 'Pesquisa de Processos', true);</script>";
+  }
+  ?>
+
 
 </body>
 
 </html>
 <script type="text/javascript">
-  js_OpenJanelaIframe('top.corpo', 'db_iframe', 'func_pesquisaprocesso.php', 'Pesquisa de Processos', true);
+  //js_OpenJanelaIframe('top.corpo', 'db_iframe', 'func_pesquisaprocesso.php', 'Pesquisa de Processos', true);
 
   function js_consultaProcesso() {
 
