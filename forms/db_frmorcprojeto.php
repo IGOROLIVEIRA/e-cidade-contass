@@ -37,7 +37,7 @@ $clrotulo->label("o45_numlei");
       <tr>
         <td valign=top>
 
-          <table border="0">
+          <table border=1 style="border:0px solid #999999; width:60%;margin:auto;">
             <tr>
               <td nowrap title="<?= @$To39_anousu ?>"><?= @$Lo39_anousu ?></td>
               <td><? $o39_anousu = db_getsession('DB_anousu');
@@ -59,19 +59,19 @@ $clrotulo->label("o45_numlei");
             </tr>
             <tr>
               <td nowrap title="<?= @$To39_descr ?>"><?= @$Lo39_descr ?></td>
-              <td><? db_textarea('o39_descr', 0, 67, $Io39_descr, true, 'text', $db_opcao, "") ?></td>
+              <td><? db_textarea('o39_descr', 0, 72, $Io39_descr, true, 'text', $db_opcao, "") ?></td>
             </tr>
             <?php if (db_getsession('DB_anousu') > 2021) { ?>
             <tr>
               <td nowrap title="<?= @$To39_justi ?>"><?= @$Lo39_justi ?></td>
-              <td><? db_textarea('o39_justi', 0, 67, $Io39_justi, true, 'text', $db_opcao, "") ?></td>
+              <td><? db_textarea('o39_justi', 0, 72, $Io39_justi, true, 'text', $db_opcao, "", "","",1000) ?></td>
             </tr>
             <?php } ?>
             <tr>
               <td nowrap title="<?= @$To39_codlei ?>"><? db_ancora(@$Lo39_codlei, "js_pesquisao39_codlei(true);", $db_opcao); ?></td>
               <td>
-                <? db_input('o39_codlei', 8, $Io39_codlei, true, 'text', $db_opcao, " onchange='js_pesquisao39_codlei(false);'") ?>
-                <? db_input('o45_numlei', 30, $Io45_numlei, true, 'text', 3, '', '', '', 'width: 421px')     ?>
+                <? db_input('o39_codlei', 14, $Io39_codlei, true, 'text', $db_opcao, " onchange='js_pesquisao39_codlei(false);'") ?>
+                <? db_input('o45_numlei', 40, $Io45_numlei, true, 'text', 3, '', '', '', 'width: 100%')     ?>
                 <input type="hidden" id="iTipoLei" value="" name="iTipoLei">
                 <input type="hidden" id="bModalidadeAplic" value="<?= $bModalidadeAplic ?>" name="bModalidadeAplic">
               </td>
@@ -87,7 +87,7 @@ $clrotulo->label("o45_numlei");
             }
             ?>
             <tr>
-              <td><b>Tipo Suplementação: </b></td>
+              <td><b>Tipo :</b></td>
               <td> <?
 
                     //$aWhere=array();
@@ -116,7 +116,7 @@ $clrotulo->label("o45_numlei");
                 $x = array('f' => 'Não', 't' => 'Sim');
                 db_select('o39_usalimite', $x, true, 3, ""); ?>
                 <script>
-                  document.getElementById('o39_usalimite_select_descr').setAttribute("style", "width: 73px; background-color:#DEB887;");
+                  document.getElementById('o39_usalimite_select_descr').setAttribute("style", "width: 15%; background-color:#DEB887;");
                 </script>
               </td>
             </tr>
@@ -138,6 +138,10 @@ $clrotulo->label("o45_numlei");
 </form>
 </fieldset>
 <script>
+  document.getElementById('o39_tiposuplementacao').style.width = "15%";
+  document.getElementById('o45_numlei').style.width = "84%";
+  document.getElementById('o39_codlei').style.width = "15%";
+
   function js_validaTipoSup() {
 
     let iTipoLei = document.getElementById('iTipoLei').value;
@@ -214,6 +218,12 @@ $clrotulo->label("o45_numlei");
 
   function js_validaSubmit() {
 
+    if ( document.form1.o39_justi.value.length < 100) {
+      alert("O campo Justificativa deve ter no mínimo 100 caracteres");
+      event.preventDefault();
+    }
+
+     
     if (document.form1.o39_tiposuplementacao.value == 'Selecione') {
       alert("Informe o Tipo de Suplementação.");
       event.preventDefault();

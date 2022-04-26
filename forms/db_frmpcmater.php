@@ -333,14 +333,9 @@ function verPermissaoAlteraServico($iItem)
   ?>
 </form>
 <script>
+  document.getElementById('pc01_justificativa').value = "";
+
   function js_check() {
-
-    if (document.form1.pc01_justificativa.value == '') {
-      alert('Campo Justificativa não Atualizado!.');
-      document.form1.pc01_justificativa.focus();
-      return false;
-
-    }
 
     if (document.form1.pc01_obras.value == 0) {
       alert('Campo Material Utilizado em Obras/serviços? não informado.');

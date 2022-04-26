@@ -131,9 +131,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                 throw new Exception($clrec10->erro_msg);
             }
         }
-
-        db_fim_transacao();
-
         /* RECEITAS QUE DEVEM SER SUBSTIUIDAS RUBRICA CADASTRADA ERRADA */
         $aRectce = array('111202', '111208', '172136', '191138', '191139', '191140',
             '191308', '191311', '191312', '191313', '193104', '193111', '193112',
@@ -245,8 +242,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                             $var = trim("\ ");
                             $sSql = "SELECT taborc.k02_estorc,
                                     CASE
-                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1218', '7218') AND cgm.z01_cgccpf IS NULL OR cgm.z01_cgccpf = '' THEN t2.z01_cgccpf
-                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1218', '7218') THEN cgm.z01_cgccpf
+                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1215', '7215') AND cgm.z01_cgccpf IS NULL OR cgm.z01_cgccpf = '' THEN t2.z01_cgccpf
+                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1215', '7215') THEN cgm.z01_cgccpf
                                         ELSE ''
                                     END AS z01_cgccpf,
                                     o70_codrec,
@@ -256,15 +253,22 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                             WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
                                             ELSE 0::FLOAT8
                                         END) AS c70_valor,
-                                    c206_nroconvenio,
-                                    c206_dataassinatura,
+                                    CASE
+                                        WHEN o15_codtri IN ('122', '123', '124', '142', '163', '171', '172', '173', '176', '177', '178', '181', '182', '183')  
+                                        THEN c206_nroconvenio
+                                        ELSE null
+                                    END c206_nroconvenio,
+                                    CASE
+                                        WHEN o15_codtri IN ('122', '123', '124', '142', '163', '171', '172', '173', '176', '177', '178', '181', '182', '183') 
+                                        THEN c206_dataassinatura
+                                        ELSE null
+                                    END c206_dataassinatura,
                                     op01_numerocontratoopc, 
                                     op01_dataassinaturacop
                              FROM conlancamrec
                              INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
                              INNER JOIN orctiporec ON o70_codigo = o15_codigo
-            
-                            LEFT JOIN conlancamcorrente ON c86_conlancam = c74_codlan
+                             LEFT JOIN conlancamcorrente ON c86_conlancam = c74_codlan
                              LEFT JOIN corplacaixa ON (k82_id, k82_data, k82_autent) = (c86_id, c86_data, c86_autent)
                              LEFT JOIN placaixarec ON k81_seqpla = k82_seqpla
                              LEFT JOIN convconvenios ON c206_sequencial = k81_convenio
@@ -285,7 +289,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                 AND c61_anousu = c60_anousu
                             INNER JOIN conplanocontabancaria ON c56_codcon = c60_codcon AND c56_anousu = c60_anousu
                             INNER JOIN contabancaria on contabancaria.db83_sequencial = c56_contabancaria
-                            LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
+                             LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
                              WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
                                AND o70_instit = " . db_getsession('DB_instit') . "
                                AND (CASE
@@ -297,9 +301,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                       OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
                              GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm, op01_numerocontratoopc, op01_dataassinaturacop
                              ORDER BY 1, 4, 2";
-                         
+                            
                             $result = db_query($sSql);
-                
+
                             $aDadosCgm11 = array();
 
                             for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++) {
@@ -423,7 +427,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados11->si26_vlarrecadadofonte), 2, ".", "");
                         $clrec11->si26_mes = $oDados11->si26_mes;
                         $clrec11->si26_instit = db_getsession("DB_instit");
-
+           
                         $clrec11->incluir(null);
                         if ($clrec11->erro_status == 0) {
                             throw new Exception($clrec11->erro_msg);
@@ -449,7 +453,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         $clrec11->si26_vlarrecadadofonte = abs($oDados11->si26_vlarrecadadofonte);
                         $clrec11->si26_mes = $oDados11->si26_mes;
                         $clrec11->si26_instit = db_getsession("DB_instit");
-
+    
                         $clrec11->incluir(null);
                         if ($clrec11->erro_status == 0) {
                             throw new Exception($clrec11->erro_msg);

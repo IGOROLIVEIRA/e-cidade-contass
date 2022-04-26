@@ -6114,6 +6114,21 @@ class cl_estrutura_sistema {
         return $nTotalFinal;
     }
     // para uso dos anexos da educação e saude
+    function getSaldoAPagarRPFonte($sFontes, $dtIni, $dtFim, $aInstits) {
+        $clEmpResto = new cl_empresto();
+        $sSqlOrder = "";
+        $sCampos = " o15_codtri, sum(e91_vlremp) as vlremp, sum(e91_vlranu) as vlranu, sum(e91_vlrpag) as vlrpag ";
+        $sSqlWhere = " o15_codtri in ($sFontes) group by 1 ";
+        $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
+
+        $nValorARpPagar = 0;
+        foreach($aEmpRestos as $oEmpResto){
+            $nValorARpPagar += $oEmpResto->vlremp - $oEmpResto->vlranu - $oEmpResto->vlrpag;
+        }
+        return  $nValorARpPagar;
+    }
+
+    // para uso dos anexos da educação e saude
     function getRestosSemDisponilibidade($sFontes, $dtIni, $dtFim, $aInstits) {
         db_inicio_transacao();
         db_query("drop table if exists work_pl");

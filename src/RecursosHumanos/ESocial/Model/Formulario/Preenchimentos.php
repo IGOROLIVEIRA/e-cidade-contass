@@ -116,14 +116,24 @@ class Preenchimentos
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarUltimoPreenchimentoInstituicao($codigoFormulario)
+    public function buscarUltimoPreenchimentoInstituicao($codigoFormulario, $matricula=null)
     {
         $where  = " db101_sequencial = {$codigoFormulario} ";
+
+        if ($matricula != null) {
+            $where .= " AND COALESCE((SELECT db106_resposta::integer
+            FROM avaliacaogrupoperguntaresposta
+            JOIN avaliacaoresposta ON avaliacaogrupoperguntaresposta.db108_avaliacaoresposta=avaliacaoresposta.db106_sequencial
+            JOIN avaliacaoperguntaopcao ON avaliacaoperguntaopcao.db104_sequencial = avaliacaoresposta.db106_avaliacaoperguntaopcao
+            WHERE db108_avaliacaogruporesposta=db107_sequencial and db104_identificadorcampo = 'matricula'),0) IN ($matricula)";
+        }
+
         $where .= " AND COALESCE((SELECT db106_resposta::integer
                 FROM avaliacaogrupoperguntaresposta
                 JOIN avaliacaoresposta ON avaliacaogrupoperguntaresposta.db108_avaliacaoresposta=avaliacaoresposta.db106_sequencial
                 JOIN avaliacaoperguntaopcao ON avaliacaoperguntaopcao.db104_sequencial = avaliacaoresposta.db106_avaliacaoperguntaopcao
-                WHERE db108_avaliacaogruporesposta=db107_sequencial and db104_identificadorcampo = 'instituicao'),0) IN (" . db_getsession("DB_instit") . ",0)";
+                WHERE db108_avaliacaogruporesposta=db107_sequencial and db104_identificadorcampo = 'instituicao'),0) IN (" . db_getsession("DB_instit") . ",0)
+                AND db107_datalancamento::varchar || db107_hora = (SELECT db107_datalancamento::varchar || db107_hora FROM avaliacaogruporesposta ORDER BY db107_sequencial DESC LIMIT 1)";
         $campos = 'distinct db107_sequencial as preenchimento, ';
         $campos .= '(select db106_resposta';
         $campos .= '   from avaliacaoresposta as ar ';
@@ -200,7 +210,6 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         return \db_utils::makeCollectionFromRecord($rs, function ($dado) {
-
             $dadoResposta = new DadosResposta();
             $dadoResposta->grupo = $dado->grupo;
             $dadoResposta->pergunta = $dado->pergunta;
