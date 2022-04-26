@@ -272,13 +272,13 @@ $clrotulo->label("p90_db_documentotemplate");
               </tr>
 
               <tr>
-                <td nowrap title="<?= @$Tp90_impdepto ?>" align="right">
+                <td nowrap title="<?= @$Tp90_novatelaprotocolo ?>" align="right">
                   <strong>Utilizar nova tela de protocolo:&nbsp;</strong>
                 </td>
                 <td>
                   <?
                   $x = array("f" => "Não", "t" => "Sim");
-                  db_select('p90_impdepto', $x, true, $db_opcao, "");
+                  db_select('p90_novatelaprotocolo', $x, true, $db_opcao, "");
                   ?>
                 </td>
               </tr>
