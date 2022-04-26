@@ -46,11 +46,15 @@ if ($clpermusuario_dotacao->sql != "") {
 
 $rsResult = db_query("select * from orcdotacao where o58_coddot = $oParam->dotacao");
 $projativ = db_utils::fieldsMemory($rsResult, 0)->o58_projativ;
+$codele = db_utils::fieldsMemory($rsResult, 0)->o58_codele;
 $result = db_query("select * from orcprojativ where o55_projativ = $projativ and o55_anousu = 2022 ");
 $descricao = db_utils::fieldsMemory($result, 0)->o55_descr;
+$elemento = db_query("select * from orcelemento where o56_codele = $codele");
+$elemento = db_utils::fieldsMemory($elemento, 0)->o56_elemento;
 
 $oRetorno->dotacao = $projativ;
 $oRetorno->descricao = $descricao;
 $oRetorno->descricao = utf8_encode($descricao);
 $oRetorno->erro = $erro;
+$oRetorno->elemento = $elemento;
 echo json_encode($oRetorno);
