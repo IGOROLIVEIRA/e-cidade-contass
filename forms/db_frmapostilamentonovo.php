@@ -1003,7 +1003,8 @@ $clrotulo->label("ac16_resumoobjeto");
             if (oRow.isSelected) {
                 if (aItensPosicao[i].elemento != elemento_dotacao) {
                     elementoIncompativel = true;
-                    elementosIncompativeis = elementosIncompativeis + aItensPosicao[i].codigoitem + " ";
+                    elementosIncompativeis = elementosIncompativeis + aItensPosicao[i].codigoitem + ",";
+
                 }
                 itensSelecionados = true;
 
@@ -1021,13 +1022,14 @@ $clrotulo->label("ac16_resumoobjeto");
 
         });
 
+        elementosIncompativeis = elementosIncompativeis.substring(0, elementosIncompativeis.length - 1);
+
 
         if (itensSelecionados == false) {
             return alert('Nenhum item selecionado para aplicar dotação.');
         }
 
         if (elementoIncompativel == true) {
-            console.log(elementosIncompativeis)
             return alert('Usuário: Item(ns) ' + elementosIncompativeis + ' possui(em) elemento(s) divergente da dotação selecionada');
         }
 
