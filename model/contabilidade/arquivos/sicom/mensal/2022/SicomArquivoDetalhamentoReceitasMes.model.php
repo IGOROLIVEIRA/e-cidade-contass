@@ -310,10 +310,36 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                                 $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
 
-                                $sHashCgm = $sHash10.$sHash11.$oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
+                                // Criação padrão de hash
+                                $sHashCgm = $sHash10 . $sHash11 
+                                    . $oCodFontRecursos->z01_cgccpf 
+                                    . $oCodFontRecursos->c206_nroconvenio 
+                                    . $oCodFontRecursos->c206_dataassinatura;
+ 
+                                // Condição para criação do convênio
+                                if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->c206_nroconvenio != '') {
+                                    $oDados11 = new stdClass();
+                                    $oDados11->si26_tiporegistro = 11;
+                                    $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
+                                    $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+                                    if (strlen($oCodFontRecursos->z01_cgccpf) == 11) {
+                                        $oDados11->si26_tipodocumento = 1;
+                                    } else if (strlen($oCodFontRecursos->z01_cgccpf) == 14) {
+                                        $oDados11->si26_tipodocumento = 2;
+                                    } else {
+                                        $oDados11->si26_tipodocumento = "";
+                                    }
+                                    $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
+                                    $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
+                                    $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
+                                    $oDados11->si26_nrocontratoop = $oCodFontRecursos->op01_numerocontratoopc;
+                                    $oDados11->si26_dataassinaturacontratoop = $oCodFontRecursos->op01_dataassinaturacop;
+                                    $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-                                if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->z01_cgccpf != ''){
-                                    
+                                    $aDadosCgm11[$sHashCgm] = $oDados11;
+                                }
+
+                                if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->z01_cgccpf != ''){       
                                     $oDados11 = new stdClass();
                                     $oDados11->si26_tiporegistro = 11;
                                     $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
@@ -336,16 +362,15 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                                 } 
 
-                                if($oCodFontRecursos->z01_cgccpf != ''){
+                                if ($oCodFontRecursos->z01_cgccpf != '' OR $oCodFontRecursos->c206_nroconvenio != '') {
                                     $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
                                 }
 
                             }
 
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
-                                
-                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                                                       
-                                
+                             
+                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                                                         
                                 $aDados = new stdClass();
                                 $aDados->si26_tiporegistro = 11;
                                 $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
@@ -369,10 +394,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                             }
 
-                        } elseif (array_key_exists($sHash10.$sHash11, $aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
-                            
+                        } elseif (array_key_exists($sHash10.$sHash11, $aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {   
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
-
                         }
                     }
                 }
