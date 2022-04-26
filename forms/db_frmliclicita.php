@@ -284,7 +284,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             db_selectrecord("l20_codtipocom", @$result_tipo, true, $db_opcao, "js_mostraRegistroPreco()");
                                             if (isset($l20_codtipocom) && $l20_codtipocom != "") {
                                                 echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
-                                            }
+                                            }   
                                         }
                                         ?>
                                         <input type="hidden" id="descricao" name="descricao" value="" onchange="js_convite()">
@@ -1295,6 +1295,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respPublic").style.display = "none";
             document.getElementById("disputa").style.display = "none";
 
+            //OC17312 toda vez que fizer uma alteração na modalidade a opção de lei de licitação volta para selecionar para que o usuario coloque novamente a lei
+            document.form1.l20_leidalicitacao.value = 0;
+            
+
         } else {
 
             document.getElementById("l20_justificativa").disabled = true;
@@ -1306,8 +1310,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("diario").style.display = '';
             document.getElementById("dtpubedital").style.display = '';
             document.getElementById("linkedital").style.display = '';
-            //document.getElementById("disputa").style.display = '';
-            //OC17312 SÓ VAI APARECER QUANDO COLOCAR A LEI 14133
+
+
+            //OC17312toda vez que fizer uma alteração na modalidade a opção de lei de licitação volta para selecionar para que o usuario coloque novamente a lei
+            document.form1.l20_leidalicitacao.value = 0;
 
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display = 'inline';
@@ -1849,7 +1855,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             parameters: 'json=' + Object.toJSON(oParam),
             onComplete: js_retornoRegistroPreco
         });
-
+        
     }
 
     function js_retornoRegistroPreco(oAjax) {
@@ -2016,14 +2022,18 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_verificalei(lei) {
         let opcoesreg = document.getElementById('l20_tipliticacao').options;
-
+        
+        tipo_modalidade = document.getElementById('l20_codtipocom').value;
+        
         if (lei == 1) {
+            if(tipo_modalidade != 8 && tipo_modalidade != 9 && tipo_modalidade != 10 && tipo_modalidade != 11){
             document.getElementById('disputa').style.display = '';
             opcoesreg.add(new Option('6- Maior Retorno Econômico'), 6);
             opcoesreg.add(new Option('7- Maior desconto'), 7);
             opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico'), 8);
+            }  
         }
-        if (lei == 2) {
+        if (lei == 2 || lei == 0) {
             document.getElementById('disputa').style.display = 'none';
             opcoesreg.remove(6);
             opcoesreg.remove(7);
