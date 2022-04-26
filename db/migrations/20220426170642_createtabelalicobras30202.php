@@ -8,9 +8,9 @@ class Createtabelalicobras30202 extends AbstractMigration
     public function up()
     {
         $sql = "
-        DROP TABLE if exists licobras302021;
+        DROP TABLE if exists licobras302022;
 
-            CREATE TABLE licobras30202
+            CREATE TABLE licobras302022
             (
               si203_sequencial bigint,
               si203_tiporegistro bigint,
