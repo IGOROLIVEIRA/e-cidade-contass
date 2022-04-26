@@ -31,6 +31,7 @@ class Tipo
     const ALTERACAO_CONTRATO = 39;
     const TSV_INICIO = 44;
     const TSV_ALT_CONTR = 45;
+    const AFASTAMENTO_TEMPORARIO = 40;
 
 
     /**
@@ -116,7 +117,7 @@ class Tipo
             28 => 'S2210',
             29 => 'S2220',
             30 => 'S2221',
-            31 => 'S2230',
+            31 => 'S2399',
             32 => 'S2240',
             33 => 'S2245',
             34 => 'S2250',
@@ -125,7 +126,7 @@ class Tipo
             37 => 'S2200',
             38 => 'S2205',
             39 => 'S2206',
-            40 => 'S2399',
+            40 => 'S2230',
             41 => 'S2400',
             42 => 'S3000',
             43 => 'S5001',
