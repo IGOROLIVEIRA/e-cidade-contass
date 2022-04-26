@@ -1349,7 +1349,7 @@ db_app::load("estilos.css, grid.style.css");
 
             oGridItensOrigem.setCellWidth(new Array("10%", '6%',"10%", "35%", '10%', '10%', '10%', "10%", "1%", "20%", "20%", "15%", "15%", "15%", "15%"));
 
-            oGridItensOrigem.setHeader(new Array("Código", "Item", "Cod.Mater", "Material", "Quantidade", "Vlr Un", "Total", "Tipo", "", "Qtd. Disponivel", "Qtd. Contratada", "Previsão Inicial", "Previsão Final", "Serviço", "Elemento"));
+            oGridItensOrigem.setHeader(new Array("Código", "Ordem", "Cod.Mater", "Material", "Quantidade", "Vlr Un", "Total", "Tipo", "", "Qtd. Disponivel", "Qtd. Contratada", "Previsão Inicial", "Previsão Final", "Serviço", "Elemento"));
 
             oGridItensOrigem.aHeaders[1].lDisplayed = false;
             //oGridItensOrigem.aHeaders[2].lDisplayed = false;
@@ -1398,7 +1398,7 @@ db_app::load("estilos.css, grid.style.css");
             ));
 
             oGridItensOrigem.setHeader(new Array("Código",
-                "Item",
+                "Ordem",
                 "Cod.Mater",
                 "Material",
                 "Quantidade",
@@ -1594,7 +1594,7 @@ db_app::load("estilos.css, grid.style.css");
                 oTxtQtdContratada.addEvent("onBlur", "js_ValidaCampos(this, 4)");
 
                 aLinha[0] = oRow.codigo;
-                aLinha[1] = iTotalLinhas + 1;
+                aLinha[1] = oRow.sequencia;
                 aLinha[2] = oRow.codigomaterial;
                 aLinha[3] = oRow.material.urlDecode();
                 aLinha[4] = oRow.quantidade;

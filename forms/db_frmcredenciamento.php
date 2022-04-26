@@ -54,7 +54,6 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         $sOrdem   = "l21_ordem";
         $sWhere   = "l21_codliclicita = {$l20_codigo} ";
         $sSqlItemLicitacao = $clliclicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere);
-        //var_dump($sSqlItemLicitacao);exit;
         $sResultitens = $clliclicitem->sql_record($sSqlItemLicitacao);
         $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $clliclicitem->numrows;
@@ -72,7 +71,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         <tr class="DBgrid">
             <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
             <td class="table_header" style="width: 44px">Ordem</td>
-            
+
             <td class="table_header" style="width: 52px">Cod.Mat</td>
             <td class="table_header" style="width: 259px">Descrição Item</td>
             <td class="table_header" style="width: 55px">Unidade</td>
