@@ -1,8 +1,8 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+use Classes\PostgresMigration;
 
-class Addusuariodardy extends AbstractMigration
+class Addusuariodardy extends PostgresMigration
 {
     public function up()
     {
