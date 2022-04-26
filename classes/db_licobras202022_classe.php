@@ -24,6 +24,9 @@ class cl_licobras202022 {
     public $si196_nroprocessolicitatorio = null;
     public $si196_tipoprocesso = null;
     public $si196_codobra = 0;
+    public $si196_contdeclicitacao = null;
+    public $si196_codorgaorespsicom = null;
+    public $si196_codunidadesubsicom = null;
     public $si196_objeto = null;
     public $si196_linkobra = null;
     public $si196_nrocontrato = null;
@@ -44,6 +47,9 @@ class cl_licobras202022 {
                  si196_nroprocessolicitatorio = text = nroProcessoLicitatorio
                  si196_tipoprocesso = int8 = si196_tipoprocesso
                  si196_codobra = int8 = codigoobra
+                 si196_contdeclicitacao = int8 = si196_contdeclicitacao
+                 si196_codorgaorespsicom = int8 = si196_codorgaorespsicom
+                 si196_codunidadesubsicom = int8 = si196_codunidadesubsicom
                  si196_objeto = text = objeto
                  si196_linkobra = text = linkobra
                  si196_nrocontrato            
@@ -86,6 +92,9 @@ class cl_licobras202022 {
             $this->si196_codobra = ($this->si196_codobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codobra"]:$this->si196_codobra);
             $this->si196_objeto = ($this->si196_objeto == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_objeto"]:$this->si196_objeto);
             $this->si196_linkobra = ($this->si196_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_linkobra"]:$this->si196_linkobra);
+            $this->si196_codorgaorespsicom = ($this->si196_codorgaorespsicom == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codorgaorespsicom"]:$this->si196_codorgaorespsicom);
+            $this->si196_codunidadesubsicom = ($this->si196_codunidadesubsicom == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codunidadesubsicom"]:$this->si196_codunidadesubsicom);
+            $this->si196_contdeclicitacao = ($this->si196_contdeclicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_contdeclicitacao"]:$this->si196_contdeclicitacao);
             $this->si196_nrocontrato = ($this->si196_nrocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_nrocontrato"]:$this->si196_nrocontrato);
             $this->si196_exerciciocontrato = ($this->si196_exerciciocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_exerciciocontrato"]:$this->si196_exerciciocontrato);
             $this->si196_dataassinatura = ($this->si196_dataassinatura == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_dataassinatura"]:$this->si196_dataassinatura);
@@ -280,9 +289,12 @@ class cl_licobras202022 {
                                       ,si196_exerciciolicitacao
                                       ,si196_nroprocessolicitatorio
                                       ,si196_tipoprocesso
+                                      ,si196_contdeclicitacao
                                       ,si196_codobra
                                       ,si196_objeto
                                       ,si196_linkobra
+                                      ,si196_codorgaorespsicom
+                                      ,si196_codunidadesubsicom
                                       ,si196_nrocontrato           
                                       ,si196_exerciciocontrato     
                                       ,si196_dataassinatura        
@@ -300,9 +312,12 @@ class cl_licobras202022 {
                                ,$this->si196_exerciciolicitacao
                                ,'$this->si196_nroprocessolicitatorio'
                                ,$this->si196_tipoprocesso
+                               ,$this->si196_contdeclicitacao
                                ,$this->si196_codobra
                                ,'$this->si196_objeto'
                                ,'$this->si196_linkobra'
+                               ,$this->si196_codorgaorespsicom
+                               ,$this->si196_codunidadesubsicom
                                ,$this->si196_nrocontrato           
                                ,$this->si196_exerciciocontrato     
                                ,'$this->si196_dataassinatura'        
