@@ -216,7 +216,7 @@ if (isset($chave_p58_requer)) {
                                     <td colspan="2" align="center">
                                         <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
                                         <input name=" limpar" type="reset" id="limpar" value="Limpar">
-                                        <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_proc.hide();">
+                                        <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe.hide();">
                                     </td>
                                 </tr>
 
@@ -448,7 +448,7 @@ if (isset($chave_p58_requer)) {
                             $repassa = array("chave_p58_codproc" => $chave_p58_codproc);
                         }
 
-                        $funcao_js = "funcao_js=parent.js_consultarProcesso|p58_codproc";
+                        $funcao_js = "funcao_js=parent.js_consultarProcesso|p58_numero";
                         db_lovrot($sql . " ", 15, "()", "", $funcao_js, "", "NoMe", $repassa);
                     } else {
 
