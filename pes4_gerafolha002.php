@@ -74,6 +74,9 @@ $aParamKeys = array(
 //  Buscar complementares
 $oDaoGerfcom = db_utils::getDao("gerfcom");
 $sWhere = str_replace(' where', '', bb_condicaosubpes("r48_"));
+if (!empty($faixa_regis)) {
+  $sWhere .= " AND r48_regist in({$faixa_regis}) "; 
+}
 $sSqlBuscaComplementares = $oDaoGerfcom->sql_query_file(null, null, null, null, 'r48_anousu,r48_mesusu,r48_regist,r48_rubric,r48_semest', null, $sWhere);
 
 $rsBuscaContas = $oDaoGerfcom->sql_record($sSqlBuscaComplementares);

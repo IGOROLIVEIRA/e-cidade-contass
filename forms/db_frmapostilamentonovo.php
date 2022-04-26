@@ -5,14 +5,14 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 ?>
-<fieldset style="width: 60%; margin-left:10px; margin-top: 25px;">
-    <legend><b>Apostilamento</b></legend>
+<fieldset style="width: 1000px;  margin-top: 25px;">
+    <legend><b>Dados do acordo</b></legend>
     <form name="form1" method="post" action="">
 
-        <table border="0" style="margin-right: 10px">
+        <table border="0" style="margin-right: 10px; margin-left: -5%">
             <tr>
                 <td title="<?= @$Tac16_sequencial ?>">
-                    <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
+                    <?php db_ancora("Acordo", "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
                 </td>
                 <td>
                     <?
@@ -27,40 +27,22 @@ $clrotulo->label("ac16_resumoobjeto");
                     );
                     ?>
                     <?
-                    db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
+                    db_input('ac16_resumoobjeto', 35, $Iac16_resumoobjeto, true, 'text', 3, "", "", "", "");
                     ?>
                 </td>
 
-                <td title="<?= @$Tsi03_dataassinacontrato ?>">
-                    <?= @$Lsi03_dataassinacontrato ?>
-                    <?
-                    db_inputdata('si03_dataassinacontrato', @$si03_dataassinacontrato_dia, @$si03_dataassinacontrato_mes, @$si03_dataassinacontrato_ano, true, 'text', 3, "")
-                    ?>
-                </td>
+
+
+
             </tr>
-            <tr>
-                <td title="<?= @$Tsi03_numapostilamento ?>">
-                    <?= @$Lsi03_numapostilamento ?>
-                </td>
-                <td>
-                    <?
-                    db_input('si03_numapostilamento', 2, $Isi03_numapostilamento, true, 'text', $db_opcao, "")
-                    ?>
 
-                    <?= @$Lsi03_dataapostila ?>
-
-                    <?
-                    db_inputdata('si03_dataapostila', @$si03_dataapostila_dia, @$si03_dataapostila_mes, @$si03_dataapostila_ano, true, 'text', $db_opcao, "")
-                    ?>
-                </td>
-            </tr>
             <tr>
                 <td nowrap>
                     <?= @$Lsi03_tipoapostila ?>
                 </td>
                 <td>
                     <?
-                    $x = array("01" => "Reajuste de preço previsto no contrato", "02" => "Atualizações, compensações ou penalizações", "03" => "Empenho de dotações orçamentárias suplementares");
+                    $x = array("00" => "Selecione...", "01" => "Reajuste de preço previsto no contrato", "02" => "Atualizações, compensações ou penalizações", "03" => "Empenho de dotações orçamentárias suplementares");
                     db_select('si03_tipoapostila', $x, true, $db_opcao, "onchange='js_changeTipoApostila(this.value)'");
                     //db_input('si03_tipoapostila',1,$Isi03_tipoapostila,true,'text',$db_opcao,"")
                     ?>
@@ -68,18 +50,8 @@ $clrotulo->label("ac16_resumoobjeto");
             </tr>
 
             <tr>
-                <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
-                    <?= @$Lsi03_descrapostila ?>
-                </td>
-                <td>
-                    <?
-                    db_textarea('si03_descrapostila', 4, 40, $Isi03_descrapostila, true, 'text', $db_opcao, "")
-                    ?>
-                </td>
-            </tr>
-            <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_tipoalteracaoapostila ?>">
-                    <?= @$Lsi03_tipoalteracaoapostila ?>
+                    <b>Tipo da Alteração:</b>
                 </td>
                 <td>
                     <?
@@ -88,6 +60,44 @@ $clrotulo->label("ac16_resumoobjeto");
                     ?>
                 </td>
             </tr>
+
+            <tr>
+                <td title="<?= @$Tsi03_numapostilamento ?>">
+                    <b>Número da Apostila:</b>
+                </td>
+                <td>
+                    <?
+                    db_input('si03_numapostilamento', 2, $Isi03_numapostilamento, true, 'text', $db_opcao, "")
+                    ?>
+
+                </td>
+            </tr>
+
+
+            <tr>
+                <td title="<?= @$Tsi03_dataapostila ?>">
+                    <b>Data de Apostila:</b>
+                </td>
+                <td>
+
+                    <?
+                    db_inputdata('si03_dataapostila', @$si03_dataapostila_dia, @$si03_dataapostila_mes, @$si03_dataapostila_ano, true, 'text', $db_opcao, "")
+                    ?>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
+                    <b>Descrição da alteração:</b>
+                </td>
+                <td>
+                    <?
+                    db_input('si03_descrapostila', 40, $Isi03_descrapostila, true, 'text', $db_opcao, "", "", "", "", "200");
+                    ?>
+                </td>
+            </tr>
+
 
             <?
             $si03_instit = db_getsession("DB_instit");
@@ -100,7 +110,7 @@ $clrotulo->label("ac16_resumoobjeto");
             ?>
             <tr>
                 <td colspan='2'>
-                    <fieldset class="separator">
+                    <fieldset class="">
                         <legend>Vigência</legend>
                         <table border='0'>
                             <tr>
@@ -116,11 +126,13 @@ $clrotulo->label("ac16_resumoobjeto");
                         </table>
                     </fieldset>
                 </td>
-            </tr>
 
-            <tr>
-                <td colspan='2'>
-                    <fieldset class="separator">
+                <!-- tag <td> a seguir ocultada pois apresenta inconsistencia
+                     no valor apresentado, a tag só ficará visivel novamente 
+                    caso cliente solicite o retorno -->
+
+                <td colspan='2' style="visibility: hidden;">
+                    <fieldset class="">
                         <legend>Valores</legend>
                         <table>
                             <tr>
@@ -136,7 +148,46 @@ $clrotulo->label("ac16_resumoobjeto");
                         </table>
                     </fieldset>
                 </td>
+
+
             </tr>
+
+            <tr id="edicaoBloco" style="display: none;">
+                <td colspan='2'>
+                    <fieldset class="">
+                        <legend>Edição em bloco</legend>
+                        <table>
+                            <td>
+                                <?php db_ancora("Dotações", "pesquisao_coddot(true);", $db_opcao); ?>
+
+                            </td>
+                            <td>
+                                <?
+
+                                db_input(
+                                    'o58_coddot',
+                                    5,
+                                    $o58_coddot,
+                                    true,
+                                    'text',
+                                    $db_opcao,
+                                    "onchange='pesquisadotacao();'"
+                                );
+                                ?>
+                            </td>
+                            <td>
+                                <?
+                                db_input('o55_descricao', 35, $Io55_descricao, true, 'text', 3, "", "", "", "");
+                                ?>
+                                <input type='button' id='btnAp?icar' value='Aplicar' onclick="aplicarDotacoes();">
+                            </td>
+                        </table>
+
+                </td>
+
+            </tr>
+
+
         </table>
 
     </form>
@@ -153,6 +204,7 @@ $clrotulo->label("ac16_resumoobjeto");
 </table>
 <input type='button' disabled id='btnSalvar' value='Salvar' onclick="apostilar();">
 <script>
+    document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
     aItensPosicao = new Array();
     oGridItens = new DBGrid('oGridItens');
@@ -160,13 +212,48 @@ $clrotulo->label("ac16_resumoobjeto");
     oGridItens.setCheckbox(0);
     oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
     oGridItens.setCellWidth(["3%", "25%", "8%", "8%"]);
-    oGridItens.setHeader(["Cód", "Item", "Qtde Anterior", "Vl Unit Anterior", "Quantidade", "Vl Unitário", "Vl Total", "Vl Apostilado", "Qt Aditada", "Dotações", "Seq"]);
+    oGridItens.setHeader(["Cód", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotações", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
+    oGridItens.aHeaders[10].lDisplayed = false;
+    oGridItens.aHeaders[5].lDisplayed = false;
     oGridItens.aHeaders[9].lDisplayed = false;
     oGridItens.setHeight(300);
     oGridItens.show($('ctnGridItens'));
 
+
     var opcao = document.form1.controle.value;
+    var elemento = "";
+    var elemento_dotacao = "";
+
+    function pesquisadotacao() {
+
+        var oParam = new Object();
+        oParam.dotacao = $('o58_coddot').value;
+        var oAjax = new Ajax.Request(
+            "func_dotacao.php", {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: retornoDotacao
+
+            }
+        );
+
+    }
+
+    function retornoDotacao(oAjax) {
+
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+
+        if (oRetorno.erro != "") {
+            $('o58_coddot').value = "";
+            $('o55_descricao').value = "";
+            alert("Sem permissão para esta dotação!");
+            return;
+        }
+
+        $('o55_descricao').value = oRetorno.descricao.urlDecode();
+
+    }
 
     function js_pesquisasi03_licitacao(mostra) {
         if (mostra == true) {
@@ -251,13 +338,13 @@ $clrotulo->label("ac16_resumoobjeto");
 
             $('ac16_sequencial').value = '';
             $('ac16_resumoobjeto').value = chave1;
-            $('si03_dataassinacontrato').value = '';
+            //$('si03_dataassinacontrato').value = '';
             $('ac16_sequencial').focus();
         } else {
 
             $('ac16_sequencial').value = chave1;
             $('ac16_resumoobjeto').value = chave2;
-            $('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
+            //$('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
             pesquisarDadosAcordo(chave1);
         }
     }
@@ -269,7 +356,7 @@ $clrotulo->label("ac16_resumoobjeto");
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
 
-        $('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
+        //$('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
         pesquisarDadosAcordo(chave1);
         db_iframe_acordo.hide();
     }
@@ -315,7 +402,26 @@ $clrotulo->label("ac16_resumoobjeto");
 
     function preencheItens(aItens) {
 
+        /* Calculo realizado para ajuste do tamanho do label dos itens
+         *  conforme a quantidade de itens.
+         */
+        var sizeLabelItens = 0;
+        if (aItens.length < 12) {
+            sizeLabelItens = (aItens.length / 2) * 50;
+            sizeLabelItens = sizeLabelItens + "px";
+            document.getElementById('body-container-oGridItens').style.height = sizeLabelItens;
+
+        }
+
+
         oGridItens.clearAll(true);
+
+        var aEventsIn = ["onmouseover"];
+        var aEventsOut = ["onmouseout"];
+        aDadosHintGrid = new Array();
+        var objelemento = new Object();
+        elementos = [];
+
 
         aItens.each(function(oItem, iSeq) {
 
@@ -327,6 +433,10 @@ $clrotulo->label("ac16_resumoobjeto");
             aLinha[1] = oItem.descricaoitem.urlDecode();
             aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', 2);
             aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 2);
+
+
+
+
 
             var nQuantidade = oItem.quantidade || oItem.qtdeanterior,
                 nUnitario = oItem.valorunitario || oItem.vlunitanterior;
@@ -342,6 +452,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oInputUnitario.addStyle("width", "100%");
             oInputUnitario.setClassName("text-right");
             oInputUnitario.setReadOnly(false);
+            //oInputUnitario.onChange
 
             if (iTipoAltApostila != 3) {
                 oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
@@ -372,8 +483,23 @@ $clrotulo->label("ac16_resumoobjeto");
             oBotaoDotacao.setAttribute("onclick", "ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
             aLinha[9] = oBotaoDotacao.outerHTML;
             aLinha[10] = new String(iSeq);
+            elementos[iSeq] = oItem.elemento;
+            elemento = oItem.elemento;
 
             oGridItens.addRow(aLinha, false, false, false);
+
+            var sTextEvent = " ";
+
+            if (aLinha[1] !== '') {
+                sTextEvent += "<b>Item: </b>" + aLinha[1];
+            } else {
+                sTextEvent += "<b>Nenhum dado à mostrar</b>";
+            }
+
+            var oDadosHint = new Object();
+            oDadosHint.idLinha = `oGridItensrowoGridItens${iSeq}`;
+            oDadosHint.sText = sTextEvent;
+            aDadosHintGrid.push(oDadosHint);
 
             if (oItem.dotacoesoriginal == undefined) {
 
@@ -392,7 +518,24 @@ $clrotulo->label("ac16_resumoobjeto");
             salvarInfoDotacoes(iSeq);
         });
 
+
         oGridItens.renderRows();
+
+        aDadosHintGrid.each(function(oHint, id) {
+            var oDBHint = eval("oDBHint_" + id + " = new DBHint('oDBHint_" + id + "')");
+            oDBHint.setText(oHint.sText);
+            oDBHint.setShowEvents(aEventsIn);
+            oDBHint.setHideEvents(aEventsOut);
+            oDBHint.setPosition('B', 'L');
+            oDBHint.setUseMouse(true);
+            oDBHint.make($(oHint.idLinha), 2);
+        });
+
+
+        me.oGridItens.renderRows();
+
+
+
     }
 
     /**
@@ -404,10 +547,17 @@ $clrotulo->label("ac16_resumoobjeto");
             nQuantidade = aLinha.aCells[5].getValue().getNumber();
         nUnitario = aLinha.aCells[6].getValue().getNumber();
 
+
         aItensPosicao[iLinha].quantidade = nQuantidade;
         aItensPosicao[iLinha].valorunitario = nUnitario;
 
         aLinha.aCells[7].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
+        if (aItensPosicao[iLinha].dotacoes.length > 0) {
+            aItensPosicao[iLinha].dotacoes[0].valor = js_formatar(nQuantidade * nUnitario, 'f', 2);
+            //aItensPosicao[iLinha].dotacoes[0].quantidade = js_round((nUnitario / aItensPosicao[iLinha].valorunitario), 2);
+            //atualizarItemDotacao(iLinha, 0, js_formatar(nQuantidade * nUnitario, 'f', 2));
+        }
+
 
         salvarInfoDotacoes(iLinha);
     }
@@ -494,7 +644,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         oTxtDotacao = new DBTextField('oTxtDotacao', 'oTxtDotacao', '', 10);
         oTxtDotacao.show($('inputdotacao'));
-        oTxtDotacao.setReadOnly(true);
+        //oTxtDotacao.setReadOnly(true);
 
         oTxtSaldoDotacao = new DBTextField('oTxtSaldoDotacao', 'oTxtSaldoDotacao', '', 10);
         oTxtSaldoDotacao.show($('inputsaldodotacao'));
@@ -510,7 +660,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oMessageBoard.show();
         oGridDotacoes = new DBGrid('gridDotacoes');
         oGridDotacoes.nameInstance = 'oGridDotacoes';
-        oGridDotacoes.setCellWidth(['20%', '60%', '20%']);
+        oGridDotacoes.setCellWidth(['20% !important', '60% !important', '20% !important']);
         oGridDotacoes.setHeader(["Dotação", "Valor", "&nbsp;"]);
         oGridDotacoes.setCellAlign(["center", "right", "Center"]);
         oGridDotacoes.setHeight(100);
@@ -563,8 +713,15 @@ $clrotulo->label("ac16_resumoobjeto");
      */
     function atualizarItemDotacao(iLinha, iDotacao, oValor) {
 
-        aItensPosicao[iLinha].dotacoes[iDotacao].valor = oValor.value.getNumber();
-        aItensPosicao[iLinha].dotacoes[iDotacao].quantidade = js_round((oValor.value.getNumber() / aItensPosicao[iLinha].valorunitario), 2);
+        if (oValor.value == undefined) {
+            aItensPosicao[iLinha].dotacoes[iDotacao].valor = oValor;
+            aItensPosicao[iLinha].dotacoes[iDotacao].quantidade = js_round((oValor / aItensPosicao[iLinha].valorunitario), 2);
+        } else {
+            aItensPosicao[iLinha].dotacoes[iDotacao].valor = oValor.value.getNumber();
+            aItensPosicao[iLinha].dotacoes[iDotacao].quantidade = js_round((oValor.value.getNumber() / aItensPosicao[iLinha].valorunitario), 2);
+
+        }
+
 
         nValorTotal = 0;
         var nQuantTotal = 0;
@@ -738,6 +895,32 @@ $clrotulo->label("ac16_resumoobjeto");
         });
     }
 
+    function pesquisao_coddot(mostra) {
+        query = '';
+        apostilamentonovo = true;
+        elemento = "";
+        query = "elementos=" + elementos + "&" + "apostilamentonovo=" + apostilamentonovo + "&";
+
+
+        if (mostra == true) {
+            js_OpenJanelaIframe('',
+                'db_iframe_orcdotacao',
+                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot|o55_descr|o50_estrutdespesa',
+                'Pesquisa de Dotações',
+                true, 0);
+
+            $('Jandb_iframe_orcdotacao').style.zIndex = '100000000';
+        } else {
+            js_OpenJanelaIframe('',
+                'db_iframe_orcdotacao',
+                'func_permorcdotacao.php?' + query + 'pesquisa_chave=' + $('o58_coddot').value +
+                '&funcao_js=parent.mostraorcdotacao',
+                'Pesquisa de Dotações',
+                false
+            );
+        }
+    }
+
     function pesquisao47_coddot(mostra) {
 
         query = '';
@@ -748,7 +931,7 @@ $clrotulo->label("ac16_resumoobjeto");
         if (mostra == true) {
             js_OpenJanelaIframe('',
                 'db_iframe_orcdotacao',
-                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot',
+                'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao2|o58_coddot',
                 'Pesquisa de Dotações',
                 true, 0);
 
@@ -773,13 +956,103 @@ $clrotulo->label("ac16_resumoobjeto");
         getSaldoDotacao(chave);
     }
 
-    function mostraorcdotacao1(chave1) {
+    function mostraorcdotacao1(chave1, chave2, chave3) {
+
+        //oTxtDotacao.setValue(chave1);
+        $('o58_coddot').value = chave1;
+        $('o55_descricao').value = chave2;
+        db_iframe_orcdotacao.hide();
+        $('Jandb_iframe_orcdotacao').style.zIndex = '0';
+        //$('oTxtValorDotacao').focus();
+        //alert(chave3.substr(23, 7));
+        elemento_dotacao = chave3.substr(23, 7);
+        getSaldoDotacao(chave1);
+    }
+
+    function mostraorcdotacao2(chave1, chave2) {
 
         oTxtDotacao.setValue(chave1);
         db_iframe_orcdotacao.hide();
         $('Jandb_iframe_orcdotacao').style.zIndex = '0';
-        $('oTxtValorDotacao').focus();
+        //$('oTxtValorDotacao').focus();
         getSaldoDotacao(chave1);
+    }
+
+    function aplicarDotacoes() {
+
+        if ($('o58_coddot').value == "") {
+            return alert('Obrigatório selecionar uma dotação');
+        }
+
+
+        var oDotacao = {
+            dotacao: $('o58_coddot').value,
+            quantidade: 0,
+            valor: 0,
+            valororiginal: 0
+        };
+
+        var i = 0;
+        var itensSelecionados = false;
+        var dotacaoAplicada = false;
+        var elementoIncompativel = false;
+        var elementosIncompativeis = "";
+
+        oGridItens.getRows().forEach(function(oRow) {
+
+            if (oRow.isSelected) {
+                if (aItensPosicao[i].elemento != elemento_dotacao) {
+                    elementoIncompativel = true;
+                    elementosIncompativeis = elementosIncompativeis + aItensPosicao[i].codigoitem + ",";
+
+                }
+                itensSelecionados = true;
+
+                aItensPosicao[i].dotacoes.forEach(function(oDotacaoItem) {
+
+                    if (oDotacaoItem.dotacao == oDotacao.dotacao) {
+                        dotacaoAplicada = true;
+
+                    }
+
+                });
+
+            }
+            i++;
+
+        });
+
+        elementosIncompativeis = elementosIncompativeis.substring(0, elementosIncompativeis.length - 1);
+
+
+        if (itensSelecionados == false) {
+            return alert('Nenhum item selecionado para aplicar dotação.');
+        }
+
+        if (elementoIncompativel == true) {
+            return alert('Usuário: Item(ns) ' + elementosIncompativeis + ' possui(em) elemento(s) divergente da dotação selecionada');
+        }
+
+        if (dotacaoAplicada == true) {
+            return alert("Erro! Dotação já incluida para o item.");
+
+        }
+
+        var i = 0;
+
+
+        oGridItens.getRows().forEach(function(oRow) {
+
+            if (oRow.isSelected) {
+                aItensPosicao[i].dotacoes.push(oDotacao);
+            }
+            i++;
+
+        });
+
+        return alert('Dotação aplicada aos itens selecionados');
+
+
     }
 
     function apostilar() {
@@ -790,6 +1063,9 @@ $clrotulo->label("ac16_resumoobjeto");
         /**
          * @todo incluir aqui todas as validações de campos obrigatórios para o SICOM contratos
          */
+        if ($("si03_tipoapostila").value == "00") {
+            return alert("Obrigatório informar o  tipo de Apostila.");
+        }
 
         if ($("si03_numapostilamento").value == "") {
             return alert("Obrigatório informar o  Numero Seq. Apostila.");
@@ -918,6 +1194,24 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     function js_changeTipoApostila(iTipo) {
+
+
+
+        if (iTipo == "03") {
+            oGridItens.aHeaders[10].lDisplayed = true;
+            oGridItens.aHeaders[5].lDisplayed = true;
+            document.getElementById("si03_tipoalteracaoapostila").disabled = true;
+
+        } else if (iTipo == "00") {
+            document.getElementById("si03_tipoalteracaoapostila").disabled = true;
+
+        } else {
+            document.getElementById("si03_tipoalteracaoapostila").disabled = false;
+            oGridItens.aHeaders[10].lDisplayed = false;
+            oGridItens.aHeaders[5].lDisplayed = false;
+        }
+
+
         aItensPosicao.forEach(function(oItem, iIndice) {
 
             if (iTipo == "03") {
@@ -927,16 +1221,30 @@ $clrotulo->label("ac16_resumoobjeto");
                 document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = false;
                 document.getElementById('valorunitario' + iIndice).addClassName('readonly');
                 document.getElementById('valorunitario' + iIndice).readOnly = true;
+                document.getElementById('edicaoBloco').style.display = "";
+
+                document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "";
+                document.getElementById('col11').style.display = "";
+
+
+
+
             } else {
                 $("si03_tipoalteracaoapostila").value = 1;
                 document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = false;
                 document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = false;
                 document.getElementById("si03_tipoalteracaoapostila").options[2].disabled = true;
+
             }
 
             if (iTipo == "01" || iTipo == "02") {
                 document.getElementById('valorunitario' + iIndice).removeClassName('readonly');
                 document.getElementById('valorunitario' + iIndice).readOnly = false;
+                document.getElementById('edicaoBloco').style.display = "none";
+
+                document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "none";
+                document.getElementById('col11').style.display = "none";
+
             }
 
         });
@@ -950,6 +1258,6 @@ $clrotulo->label("ac16_resumoobjeto");
         $("si03_tipoalteracaoapostila").value = 1;
         $("si03_numapostilamento").value = "";
     }
-    js_changeTipoApostila();
+    //js_changeTipoApostila();
     js_pesquisaac16_sequencial(true);
 </script>
