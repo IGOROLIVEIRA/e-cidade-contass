@@ -22,6 +22,7 @@ class cl_exeobras102022 {
   public $si197_codunidadesub = null;
   public $si197_nrocontrato = 0;
   public $si197_exerciciocontrato  = 0;
+  public $si197_contdeclicitacao = 0;
   public $si197_nroprocessolicitatorio  = null;
   public $si197_codunidadesubresp = null;
   public $si197_exerciciolicitacao = 0;
@@ -39,6 +40,7 @@ class cl_exeobras102022 {
                  si197_codunidadesub = text = codUnidadeSubRespEstadual
                  si197_nrocontrato = int8 = nroContrato
                  si197_exerciciocontrato = int4 = si197_exerciciocontrato
+                 si197_contdeclicitacao = int4 = si197_contdeclicitacao
                  si197_nroprocessolicitatorio = int4 = si197_nroprocessolicitatorio
                  si197_codunidadesubresp = text = si197_codunidadesubresp
                  si197_exerciciolicitacao = int4 = si197_exerciciolicitacao
@@ -76,6 +78,7 @@ class cl_exeobras102022 {
       $this->si197_codunidadesub = ($this->si197_codunidadesub == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codunidadesub"]:$this->si197_codunidadesub);
       $this->si197_nrocontrato = ($this->si197_nrocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nrocontrato"]:$this->si197_nrocontrato);
       $this->si197_exerciciocontrato = ($this->si197_exerciciocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_exerciciocontrato"]:$this->si197_exerciciocontrato);
+      $this->si197_contdeclicitacao = ($this->si197_contdeclicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_contdeclicitacao"]:$this->si197_contdeclicitacao);
       $this->si197_nroprocessolicitatorio = ($this->si197_nroprocessolicitatorio == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nroprocessolicitatorio"]:$this->si197_nroprocessolicitatorio);
       $this->si197_codunidadesubresp = ($this->si197_codunidadesubresp == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codunidadesubresp"]:$this->si197_codunidadesubresp);
       $this->si197_exerciciolicitacao = ($this->si197_exerciciolicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_exerciciolicitacao"]:$this->si197_exerciciolicitacao);
@@ -231,21 +234,22 @@ class cl_exeobras102022 {
       return false;
     }
     $sql = "insert into exeobras102022(
-                                       si197_sequencial
-                                      ,si197_tiporegistro
-                                      ,si197_codorgao
-                                      ,si197_codunidadesub
-                                      ,si197_nrocontrato
-                                      ,si197_exerciciocontrato
-                                      ,si197_exerciciolicitacao
-                                      ,si197_nroprocessolicitatorio
-                                      ,si197_codunidadesubresp
-                                      ,si197_nrolote
-                                      ,si197_codobra
-                                      ,si197_objeto
-                                      ,si197_linkobra
-                                      ,si197_mes
-                                      ,si197_instit
+                                 si197_sequencial
+                                ,si197_tiporegistro
+                                ,si197_codorgao
+                                ,si197_codunidadesub
+                                ,si197_nrocontrato
+                                ,si197_exerciciocontrato
+                                ,si197_contdeclicitacao 
+                                ,si197_exerciciolicitacao
+                                ,si197_nroprocessolicitatorio
+                                ,si197_codunidadesubresp
+                                ,si197_nrolote
+                                ,si197_codobra
+                                ,si197_objeto
+                                ,si197_linkobra
+                                ,si197_mes
+                                ,si197_instit
                        )
                 values (
                                 $this->si197_sequencial
@@ -254,6 +258,7 @@ class cl_exeobras102022 {
                                ,'$this->si197_codunidadesub'
                                ,$this->si197_nrocontrato
                                ,$this->si197_exerciciocontrato
+                               ,$this->si197_contdeclicitacao
                                ,$this->si197_exerciciolicitacao
                                ,$this->si197_nroprocessolicitatorio
                                ,'$this->si197_codunidadesubresp'
