@@ -275,21 +275,21 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                              LEFT JOIN taborc ON (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
                              AND k02_codigo = (SELECT max(k02_codigo) FROM taborc tab
                                        WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
-                             INNER JOIN conlancam ON c74_codlan = c70_codlan
-                             INNER JOIN conlancamcompl ON c72_codlan = c70_codlan
-                             LEFT JOIN conlancamcgm ON c72_codlan = c76_codlan
-                             LEFT JOIN cgm ON c76_numcgm = z01_numcgm
-                             LEFT JOIN cgm t2 ON k81_numcgm = t2.z01_numcgm
-                             INNER JOIN conlancamdoc ON c71_codlan = c74_codlan
-                             INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
-                             INNER JOIN saltes ON k13_conta = k81_conta
-                            INNER join conplanoreduz on c61_reduz = k13_reduz
-                            and c61_anousu = o70_anousu
-                            INNER JOIN conplano on conplanoreduz.c61_codcon = conplano.c60_codcon
+                            LEFT JOIN conlancam ON c74_codlan = c70_codlan
+                            LEFT JOIN conlancamcompl ON c72_codlan = c70_codlan
+                            LEFT JOIN conlancamcgm ON c72_codlan = c76_codlan
+                            LEFT JOIN cgm ON c76_numcgm = z01_numcgm
+                            LEFT JOIN cgm t2 ON k81_numcgm = t2.z01_numcgm
+                            LEFT JOIN conlancamdoc ON c71_codlan = c74_codlan
+                            LEFT JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                            LEFT JOIN saltes ON k13_conta = k81_conta
+                            LEFT join conplanoreduz on c61_reduz = k13_reduz
+                                and c61_anousu = o70_anousu
+                            LEFT JOIN conplano on conplanoreduz.c61_codcon = conplano.c60_codcon
                                 AND c61_anousu = c60_anousu
-                            INNER JOIN conplanocontabancaria ON c56_codcon = c60_codcon AND c56_anousu = c60_anousu
-                            INNER JOIN contabancaria on contabancaria.db83_sequencial = c56_contabancaria
-                             LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
+                            LEFT JOIN conplanocontabancaria ON c56_codcon = c60_codcon AND c56_anousu = c60_anousu
+                            LEFT JOIN contabancaria on contabancaria.db83_sequencial = c56_contabancaria
+                            LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
                              WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
                                AND o70_instit = " . db_getsession('DB_instit') . "
                                AND (CASE
@@ -301,7 +301,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                       OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
                              GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm, op01_numerocontratoopc, op01_dataassinaturacop
                              ORDER BY 1, 4, 2";
-                            
+
                             $result = db_query($sSql);
 
                             $aDadosCgm11 = array();
@@ -310,10 +310,36 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                                 $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
 
-                                $sHashCgm = $sHash10.$sHash11.$oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
+                                // Criação padrão de hash
+                                $sHashCgm = $sHash10 . $sHash11 
+                                    . $oCodFontRecursos->z01_cgccpf 
+                                    . $oCodFontRecursos->c206_nroconvenio 
+                                    . $oCodFontRecursos->c206_dataassinatura;
+ 
+                                // Condição para criação do convênio
+                                if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->c206_nroconvenio != '') {
+                                    $oDados11 = new stdClass();
+                                    $oDados11->si26_tiporegistro = 11;
+                                    $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
+                                    $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+                                    if (strlen($oCodFontRecursos->z01_cgccpf) == 11) {
+                                        $oDados11->si26_tipodocumento = 1;
+                                    } else if (strlen($oCodFontRecursos->z01_cgccpf) == 14) {
+                                        $oDados11->si26_tipodocumento = 2;
+                                    } else {
+                                        $oDados11->si26_tipodocumento = "";
+                                    }
+                                    $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
+                                    $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
+                                    $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
+                                    $oDados11->si26_nrocontratoop = $oCodFontRecursos->op01_numerocontratoopc;
+                                    $oDados11->si26_dataassinaturacontratoop = $oCodFontRecursos->op01_dataassinaturacop;
+                                    $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-                                if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->z01_cgccpf != ''){
-                                    
+                                    $aDadosCgm11[$sHashCgm] = $oDados11;
+                                }
+
+                                if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->z01_cgccpf != ''){       
                                     $oDados11 = new stdClass();
                                     $oDados11->si26_tiporegistro = 11;
                                     $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
@@ -336,16 +362,15 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                                 } 
 
-                                if($oCodFontRecursos->z01_cgccpf != ''){
+                                if ($oCodFontRecursos->z01_cgccpf != '' OR $oCodFontRecursos->c206_nroconvenio != '') {
                                     $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
                                 }
 
                             }
 
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
-                                
-                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                                                       
-                                
+                             
+                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                                                         
                                 $aDados = new stdClass();
                                 $aDados->si26_tiporegistro = 11;
                                 $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
@@ -369,10 +394,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                             }
 
-                        } elseif (array_key_exists($sHash10.$sHash11, $aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
-                            
+                        } elseif (array_key_exists($sHash10.$sHash11, $aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {   
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
-
                         }
                     }
                 }
