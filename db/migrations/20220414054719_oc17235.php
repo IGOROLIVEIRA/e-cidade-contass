@@ -38,7 +38,7 @@ class Oc17235 extends AbstractMigration
      */
     private function checkExistsDbEstruturaValor($serviceCode)
     {
-        $result = $this->fetchRow("SELECT * FROM db_estruturavalor WHERE db121_sequencial = '{$serviceCode}' and db121_db_estrutura = 150000");
+        $result = $this->fetchRow("SELECT * FROM db_estruturavalor WHERE db121_estrutural = '{$serviceCode}' and db121_db_estrutura = 150000");
         return empty($result);
     }
 
@@ -48,7 +48,7 @@ class Oc17235 extends AbstractMigration
      */
     private function checkExistsIssGrupoServico($serviceCode)
     {
-        $result = $this->fetchRow("SELECT * FROM issgruposervico WHERE q126_db_estruturavalor IN (select db121_sequencial FROM db_estruturavalor WHERE db121_sequencial = '{$serviceCode}' and db121_db_estrutura = 150000)");
+        $result = $this->fetchRow("SELECT * FROM issgruposervico WHERE q126_db_estruturavalor IN (select db121_sequencial FROM db_estruturavalor WHERE db121_estrutural = '{$serviceCode}' and db121_db_estrutura = 150000)");
         return empty($result);
     }
 
@@ -78,7 +78,7 @@ class Oc17235 extends AbstractMigration
         INSERT INTO issgruposervico
         VALUES (
                 (SELECT nextval('issgruposervico_q126_sequencial_seq')),
-                (select db121_sequencial FROM db_estruturavalor WHERE db121_sequencial = '{$serviceCode}' and db121_db_estrutura = 150000)
+                (select db121_sequencial FROM db_estruturavalor WHERE db121_estrutural = '{$serviceCode}' and db121_db_estrutura = 150000)
         );";
 
         $this->execute($insert);
@@ -90,7 +90,7 @@ class Oc17235 extends AbstractMigration
      */
     private function checkExistsIssConfiguracaoGrupoServico($serviceCode)
     {
-        $result = $this->fetchRow("SELECT * FROM issconfiguracaogruposervico WHERE q136_issgruposervico IN (SELECT q121_sequencial FROM issgruposervico WHERE q126_db_estruturavalor IN (select db121_sequencial FROM db_estruturavalor WHERE db121_sequencial = '{$serviceCode}' and db121_db_estrutura = 150000))");
+        $result = $this->fetchRow("SELECT * FROM issconfiguracaogruposervico WHERE q136_issgruposervico IN (SELECT q121_sequencial FROM issgruposervico WHERE q126_db_estruturavalor IN (select db121_sequencial FROM db_estruturavalor WHERE db121_estrutural = '{$serviceCode}' and db121_db_estrutura = 150000))");
         return empty($result);
     }
 
@@ -104,7 +104,7 @@ class Oc17235 extends AbstractMigration
         INSERT INTO issconfiguracaogruposervico
         VALUES (
                 (SELECT nextval('issconfiguracaogruposervico_q136_sequencial_seq')),
-                (select db121_sequencial FROM db_estruturavalor WHERE db121_sequencial = '{$serviceCode}' and db121_db_estrutura = 150000),
+                (select db121_sequencial FROM db_estruturavalor WHERE db121_estrutural = '{$serviceCode}' and db121_db_estrutura = 150000),
                 2022,
                 2,
                 3,
