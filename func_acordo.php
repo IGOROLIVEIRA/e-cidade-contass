@@ -151,6 +151,7 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
           $sWhere  = " 1 = 1 ";
 
           $sWhere .= " and ac16_instit = {$iInstituicaoSessao} ";
+          
 
           if (!isset($lNovoDetalhe)) {
 
@@ -195,10 +196,18 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             if ( !empty($lLancamento) ) {
               $sWhere .= " and exists (select 1 from conlancamacordo where c87_acordo = ac16_sequencial limit 1) ";
             }
-            if ( !empty($assinatura) && $assinatura ==true ) {
+            //verifica se foi o aco4_homologacaoinclusao001 que chamou
+            if (isset($frame) && $frame =="homologacao") {
+            
+            
+              if ( !empty($assinatura) && $assinatura ==true) {
+                
+                $sWhere .= " and (acordo.ac16_dataassinatura IS NOT NULL) ";
+              }
+            }else if ( !empty($assinatura) && $assinatura ==true) {
               $sWhere .= " and (acordo.ac16_dataassinatura IS NULL) ";
             }
-
+            
           /**
            * Caso tenha sido setado $lComExecucao como false, buscamos os acordos que nao tiveram item executado
            */
@@ -278,8 +287,21 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
           /**
            * Numero e ano do acordo - separados por '/', caso nao for informado ano, pega da sessao
            */
-          if(isset($semvigencia) && $semvigencia == true){
+          if(isset($semvigencia) && $semvigencia == false){
             $sWhere .= " and ac16_semvigencia = 'f' ";
+          }
+          
+          if ( !empty($frame) && $frame =="homologacao") {
+            
+            
+            if ( !empty($assinatura) && $assinatura ==true) {
+              
+              $sWhere .= " and (acordo.ac16_dataassinatura IS NOT NULL) ";
+            }
+          }  
+          if ( !empty($assinatura) && $assinatura ==false) {
+            
+            $sWhere .= " and (acordo.ac16_dataassinatura IS NULL) ";
           }
           if (!empty($ac16_numeroacordo)) {
 
@@ -300,7 +322,7 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
           }
 
           if (isset($chave_ac16_sequencial) && (trim($chave_ac16_sequencial)!="")) {
-
+            
             $sql = $clacordo->sql_query_acordoitemexecutado(null, $campos,"ac16_sequencial desc",
               "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao} {$sql_departamentos}", $apostilamento);
 
@@ -310,7 +332,7 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
               "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao} {$sql_departamentos}", $apostilamento);
           } else {
             $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc", $sWhere . " and ac16_instit = {$iInstituicaoSessao} {$sql_departamentos} ", $apostilamento);
-          }
+            }
 
           $repassa = array();
 
@@ -318,10 +340,10 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             $repassa = array("chave_ac16_sequencial"=>$chave_ac16_sequencial,"chave_ac16_sequencial"=>$chave_ac16_sequencial);
           }
           db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
-
+          
         } else {
 
-          if(isset($semvigencia) && $semvigencia == true){
+          if(isset($semvigencia) && $semvigencia == false){
             $sWhere .= " and ac16_semvigencia = 'f' ";
           }
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
@@ -334,19 +356,27 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
 
 
             $result = $clacordo->sql_record($sSqlBuscaAcordo);
-
+            
             if ($clacordo->numrows != 0) {
 
               db_fieldsmemory($result,0);
               if (isset($descricao) && $descricao == 'true') {
+                
                 echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto','$ac16_origem',false);</script>";
+                
               } else {
+                
                 echo "<script>".$funcao_js."('$ac16_sequencial',false);</script>";
               }
             } else {
 
               if (isset($descricao) && $descricao == 'true') {
-                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','',true);</script>";
+                
+                if( !empty($frame) && $frame =="homologacao"){
+                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','','',true);</script>";
+                } else {
+                  echo "<script>".$funcao_js."('','Chave(".$pesquisa_chave.") não Encontrado','','',true);</script>";  
+                }
               } else {
                 echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
               }
