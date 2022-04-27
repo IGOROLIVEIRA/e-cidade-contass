@@ -126,7 +126,7 @@ class GerarJULGLIC extends GerarAM
         $aCSVJULGLIC40['si62_exerciciolicitacao']     = $this->padLeftZero($aJULGLIC40['si62_exerciciolicitacao'], 4);
         $aCSVJULGLIC40['si62_nroprocessolicitatorio'] = substr($aJULGLIC40['si62_nroprocessolicitatorio'], 0, 12);
         $aCSVJULGLIC40['si62_dtjulgamento']           = $this->sicomDate($aJULGLIC40['si62_dtjulgamento']);
-        $aCSVJULGLIC40['si62_presencalicitantes']     = $this->padLeftZero($aJULGLIC40['si62_presencalicitantes'], 1);
+        $aCSVJULGLIC40['si62_presencalicitantes']     = $aJULGLIC40['si62_presencalicitantes'];
         $aCSVJULGLIC40['si62_renunciarecurso']        = $aJULGLIC40['si62_renunciarecurso'];
 
         $this->sLinha = $aCSVJULGLIC40;

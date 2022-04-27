@@ -537,8 +537,6 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 		$rsResult40 = db_query($sSql);
 
-		db_criatabela($rsResult40);
-		die;
 		$aDadosAgrupados40 = array();
 		for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 			$oResult40 = db_utils::fieldsMemory($rsResult40, $iCont40);
@@ -577,8 +575,8 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 			$cljulglic40->si62_nroprocessolicitatorio = $oDados40->si62_nroprocessolicitatorio;
 			$cljulglic40->si62_dtjulgamento = $oDados40->si62_dtjulgamento;
 			if ($oResult40->leidalicitacao == 2) {
-				$cljulglic40->si62_presencalicitantes = $oDados40->presencalicitantes;
-				$cljulglic40->si62_renunciarecurso = $oDados40->renunciarecurso;
+				$cljulglic40->si62_presencalicitantes = $oDados40->si62_presencalicitantes;
+				$cljulglic40->si62_renunciarecurso = $oDados40->si62_renunciarecurso;
 			} else {
 				$cljulglic40->si62_presencalicitantes = null;
 				$cljulglic40->si62_renunciarecurso = null;
