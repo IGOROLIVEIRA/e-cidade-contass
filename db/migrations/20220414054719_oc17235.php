@@ -10,9 +10,9 @@ class Oc17235 extends AbstractMigration
     public function up()
     {
         $services = array(
-            array('code' => '01.09', 'description' => 'Disponibilização, sem cessão definitiva, de conteúdos de áudio, vídeo, imagem e texto por meio da internet, respeitada a imunidade de livros, jornais e periódicos (exceto a distribuição de conteúdos pelas prestadoras de Serviço de Acesso Condicionado, de.', 'parent' => '01.00'),
+            array('code' => '01.09', 'description' => 'Disponibilização, sem cessão definitiva, de conteúdos de áudio, vídeo, imagem e texto por meio da internet, respeitada a imunidade de livros, jornais e periódicos (exceto a distribuição de conteúdos pelas prestadoras de ...).', 'parent' => '01.00'),
             array('code' => '06.06', 'description' => 'Aplicação de tatuagens, piercings e congêneres.', 'parent' => '06.00'),
-            array('code' => '11.05', 'description' => 'Serviços relacionados ao monitoramento e rastreamento a distância, em qualquer via ou local, de veículos, cargas, pessoas e semoventes em circulação ou movimento, realizados por meio de telefonia móvel, transmissão de satélites, rádio ou qualquer outro', 'parent' => '11.00'),
+            array('code' => '11.05', 'description' => 'Serviços relacionados ao monitoramento e rastreamento a distância, em qualquer via ou local, de veículos, cargas, pessoas e semoventes em circulação ou movimento, realizados por meio de telefonia móvel...', 'parent' => '11.00'),
             array('code' => '14.14', 'description' => 'Recauchutagem ou regeneração de pneus.', 'parent' => '14.00'),
             array('code' => '17.25', 'description' => 'Inserção de textos, desenhos e outros materiais de propaganda e publicidade, em qualquer meio (exceto em livros, jornais, periódicos e nas modalidades de serviços de radiodifusão sonora e de sons e imagens de recepção livre e gratuita).', 'parent' => '17.00'),
             array('code' => '25.05', 'description' => 'Cessão de uso de espaços em cemitérios para sepultamento.', 'parent' => '25.00')
