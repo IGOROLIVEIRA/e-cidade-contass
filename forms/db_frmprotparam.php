@@ -270,19 +270,32 @@ $clrotulo->label("p90_db_documentotemplate");
                   </select>
                 </td>
               </tr>
+<<<<<<< HEAD
 
               <tr>
                 <td nowrap title="<?= @$Tp90_novatelaprotocolo ?>" align="right">
                   <strong>Utilizar nova tela de protocolo:&nbsp;</strong>
+=======
+              <tr>
+                <td nowrap title="<?= @$Tp90_protocolosigiloso ?>" align="right">
+                  <strong>Ativar Protocolo Sigiloso</strong>
+>>>>>>> ab131b850... OC17299 inclusao de campo protocolo sigiloso na tela de parametros
                 </td>
                 <td>
                   <?
                   $x = array("f" => "Não", "t" => "Sim");
+<<<<<<< HEAD
                   db_select('p90_novatelaprotocolo', $x, true, $db_opcao, "");
                   ?>
                 </td>
               </tr>
 
+=======
+                  db_select('p90_protocolosigiloso', $x, true, $db_opcao, "");
+                  ?>
+                </td>
+              </tr>
+>>>>>>> ab131b850... OC17299 inclusao de campo protocolo sigiloso na tela de parametros
             </table>
           </fieldset>
         </td>
@@ -363,6 +376,7 @@ $clrotulo->label("p90_db_documentotemplate");
       }
     }
   }
+<<<<<<< HEAD
 
   function js_mostrataxagrupo(chave, erro) {
     document.form1.k06_descr.value = chave;
@@ -391,6 +405,36 @@ $clrotulo->label("p90_db_documentotemplate");
     ?>
   }
 
+=======
+
+  function js_mostrataxagrupo(chave, erro) {
+    document.form1.k06_descr.value = chave;
+    if (erro == true) {
+      document.form1.p90_taxagrupo.focus();
+      document.form1.p90_taxagrupo.value = '';
+    }
+  }
+
+  function js_mostrataxagrupo1(chave1, chave2) {
+    document.form1.p90_taxagrupo.value = chave1;
+    document.form1.k06_descr.value = chave2;
+    db_iframe_taxagrupo.hide();
+  }
+
+  function js_pesquisa() {
+    js_OpenJanelaIframe('top.corpo', 'db_iframe_protparam', 'func_protparam.php?funcao_js=parent.js_preenchepesquisa|0', 'Pesquisa', true);
+  }
+
+  function js_preenchepesquisa(chave) {
+    db_iframe_protparam.hide();
+    <?
+    if ($db_opcao != 1) {
+      echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
+    }
+    ?>
+  }
+
+>>>>>>> ab131b850... OC17299 inclusao de campo protocolo sigiloso na tela de parametros
   function js_liberaDocumentoTemplate(modeloDoc) {
 
     if (modeloDoc == 3) {
@@ -427,4 +471,8 @@ $clrotulo->label("p90_db_documentotemplate");
     document.form1.db82_descricao.value = chave2;
     db_iframe_db_documentotemplate.hide();
   }
+<<<<<<< HEAD
 </script>
+=======
+</script>
+>>>>>>> ab131b850... OC17299 inclusao de campo protocolo sigiloso na tela de parametros
