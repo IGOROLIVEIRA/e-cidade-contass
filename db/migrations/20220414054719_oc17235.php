@@ -19,7 +19,7 @@ class Oc17235 extends AbstractMigration
         );
         foreach ($services as $service) {
             if ($this->checkExistsDbEstruturaValor($service['parent']) === false) {
-                throw new Exception('Parent is not found');
+                throw new Exception("Parent ${$service['parent']} is not found");
             }
 
             if ($this->checkExistsDbEstruturaValor($service['code']) === false) {
