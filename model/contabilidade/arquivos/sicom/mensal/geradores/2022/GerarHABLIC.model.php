@@ -9,45 +9,44 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.
  */
 class GerarHABLIC extends GerarAM
 {
-  
+
   /**
    *
    * Mes de referência
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
-    
+
     $this->sArquivo = "HABLIC";
     $this->abreArquivo();
-    
+
     $sSql = "select * from hablic102022 where si57_mes = " . $this->iMes . " and si57_instit=" . db_getsession("DB_instit");
     $rsHABLIC10 = db_query($sSql);
-    
+
     $sSql2 = "select * from hablic112022 where si58_mes = " . $this->iMes . " and si58_instit=" . db_getsession("DB_instit");
     $rsHABLIC11 = db_query($sSql2);
-    
+
     $sSql3 = "select * from hablic202221 where si59_mes = " . $this->iMes . " and si59_instit=" . db_getsession("DB_instit");
     $rsHABLIC20 = db_query($sSql3);
-    
+
     if (pg_num_rows($rsHABLIC10) == 0 && pg_num_rows($rsHABLIC20) == 0) {
-      
+
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
-      
     } else {
-      
+
       /**
        *
        * Registros 10 e 11
        */
       for ($iCont = 0; $iCont < pg_num_rows($rsHABLIC10); $iCont++) {
-        
+
         $aHABLIC10 = pg_fetch_array($rsHABLIC10, $iCont);
-        
+
         $aCSVHABLIC10['si57_tiporegistro']                        = $this->padLeftZero($aHABLIC10['si57_tiporegistro'], 2);
         $aCSVHABLIC10['si57_codorgao']                            = $this->padLeftZero($aHABLIC10['si57_codorgao'], 2);
         $aCSVHABLIC10['si57_codunidadesub']                       = $this->padLeftZero($aHABLIC10['si57_codunidadesub'], 5);
@@ -73,16 +72,16 @@ class GerarHABLIC extends GerarAM
         $aCSVHABLIC10['si57_dtemissaocndt']                       = $this->sicomDate($aHABLIC10['si57_dtemissaocndt']);
         $aCSVHABLIC10['si57_dtvalidadecndt']                      = $this->sicomDate($aHABLIC10['si57_dtvalidadecndt']);
         $aCSVHABLIC10['si57_dthabilitacao']                       = $this->sicomDate($aHABLIC10['si57_dthabilitacao']);
-        $aCSVHABLIC10['si57_presencalicitantes']                  = $this->padLeftZero($aHABLIC10['si57_presencalicitantes'], 1);
-        $aCSVHABLIC10['si57_renunciarecurso']                     = $this->padLeftZero($aHABLIC10['si57_renunciarecurso'], 1);
-        
+        $aCSVHABLIC10['si57_presencalicitantes']                  = $aHABLIC10['si57_presencalicitantes'];
+        $aCSVHABLIC10['si57_renunciarecurso']                     = $aHABLIC10['si57_renunciarecurso'];
+
         $this->sLinha = $aCSVHABLIC10;
         $this->adicionaLinha();
-        
+
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsHABLIC11); $iCont2++) {
-          
+
           $aHABLIC11 = pg_fetch_array($rsHABLIC11, $iCont2);
-          
+
           if ($aHABLIC10['si57_sequencial'] == $aHABLIC11['si58_reg10']) {
 
             $aCSVHABLIC11['si58_tiporegistro']                    = $this->padLeftZero($aHABLIC11['si58_tiporegistro'], 2);
@@ -95,21 +94,19 @@ class GerarHABLIC extends GerarAM
             $aCSVHABLIC11['si58_tipodocumentosocio']              = substr($aHABLIC11['si58_tipodocumentosocio'], 0, 1);
             $aCSVHABLIC11['si58_nrodocumentosocio']               = substr($aHABLIC11['si58_nrodocumentosocio'], 0, 14);
             $aCSVHABLIC11['si58_tipoparticipacao']                = $this->padLeftZero($aHABLIC11['si58_tipoparticipacao'], 1);
-            
+
             $this->sLinha = $aCSVHABLIC11;
             $this->adicionaLinha();
           }
-          
         }
-        
       }
-      
+
       /**
        *
        * Registros 20
        */
       for ($iCont3 = 0; $iCont3 < pg_num_rows($rsHABLIC20); $iCont3++) {
-        
+
         $aHABLIC20 = pg_fetch_array($rsHABLIC20, $iCont3);
 
         $aCSVHABLIC20['si59_tiporegistro']                        = $this->padLeftZero($aHABLIC20['si59_tiporegistro'], 2);
@@ -133,15 +130,12 @@ class GerarHABLIC extends GerarAM
         $aCSVHABLIC20['si59_nrocndt']                             = substr($aHABLIC20['si59_nrocndt'], 0, 30);
         $aCSVHABLIC20['si59_dtemissaocndt']                       = $this->sicomDate($aHABLIC20['si59_dtemissaocndt']);
         $aCSVHABLIC20['si59_dtvalidadecndt']                      = $this->sicomDate($aHABLIC20['si59_dtvalidadecndt']);
-        
+
         $this->sLinha = $aCSVHABLIC20;
         $this->adicionaLinha();
-        
       }
-      
+
       $this->fechaArquivo();
-      
     }
-    
   }
 }
