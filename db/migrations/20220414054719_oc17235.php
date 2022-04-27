@@ -19,7 +19,7 @@ class Oc17235 extends AbstractMigration
         );
         foreach ($services as $service) {
             if ($this->checkExistsDbEstruturaValor($service['parent']) === false) {
-                throw new Exception("Parent ${$service['parent']} is not found");
+                throw new Exception("Parent {$service['parent']} is not found");
             }
 
             if ($this->checkExistsDbEstruturaValor($service['code']) === false) {
@@ -39,7 +39,7 @@ class Oc17235 extends AbstractMigration
     private function checkExistsDbEstruturaValor($serviceCode)
     {
         $result = $this->fetchRow("SELECT * FROM db_estruturavalor WHERE db121_estrutural = '{$serviceCode}' and db121_db_estrutura = 150000");
-        return empty($result);
+        return empty($result) === true;
     }
 
     /**
@@ -49,7 +49,7 @@ class Oc17235 extends AbstractMigration
     private function checkExistsIssGrupoServico($serviceCode)
     {
         $result = $this->fetchRow("SELECT * FROM issgruposervico WHERE q126_db_estruturavalor IN (select db121_sequencial FROM db_estruturavalor WHERE db121_estrutural = '{$serviceCode}' and db121_db_estrutura = 150000)");
-        return empty($result);
+        return empty($result) === true;
     }
 
     private function insertDbEstruturaValor($service)
@@ -91,7 +91,7 @@ class Oc17235 extends AbstractMigration
     private function checkExistsIssConfiguracaoGrupoServico($serviceCode)
     {
         $result = $this->fetchRow("SELECT * FROM issconfiguracaogruposervico WHERE q136_issgruposervico IN (SELECT q121_sequencial FROM issgruposervico WHERE q126_db_estruturavalor IN (select db121_sequencial FROM db_estruturavalor WHERE db121_estrutural = '{$serviceCode}' and db121_db_estrutura = 150000))");
-        return empty($result);
+        return empty($result) === true;
     }
 
     /**
