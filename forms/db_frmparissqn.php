@@ -337,7 +337,9 @@ fieldset fieldset table tr td:first-child {
                       								     '6'=> 'Pré-impresso A4 com código cnae',
                       								     '7'=> 'A4 Frente/Verso',
                       								     '8'=> 'A4 Processo/Área',
-                      								     '9'=> 'Documento Alvará');
+                      								     '9'=> 'Documento Alvará',
+                                                         '99' => 'A4 com numeração'
+                                        );
 
     								db_select('q60_modalvara', $aModeloAlvara, true, $db_opcao, "onchange='js_trtemplatealvara();'");
   								?>
