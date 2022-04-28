@@ -173,6 +173,7 @@ $rotulo->label("z01_cgccpf");
            *
            */
 
+          /*
 
           if ($filtroabast == 1) {
             $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
@@ -182,8 +183,10 @@ $rotulo->label("z01_cgccpf");
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
             $dbwhere .= "AND ((date_part('year', empempenho.e60_emiss) < date_part('year', date '" . $ve70_abast . "') AND date_part('month', empempenho.e60_emiss) <= 12)
                                OR (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "') AND date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')))";
-            $filtroempelemento = 1; 
-          }  
+            $filtroempelemento = 1;
+          }
+
+          */
 
           /**
            * Filtro $filtromanut
@@ -224,7 +227,7 @@ $rotulo->label("z01_cgccpf");
                   UNION
                   SELECT e69_numemp FROM empnota)";
           }
-          
+
           if (isset($chave_e60_numemp) && !empty($chave_e60_numemp)) {
             $sql = $clempempenho->sql_query($chave_e60_numemp, $campos, "empempenho.e60_emiss desc", "$dbwhere and e60_numemp=$chave_e60_numemp ", $filtroempelemento);
           } elseif (isset($chave_e60_codemp) && !empty($chave_e60_codemp)) {
@@ -237,7 +240,6 @@ $rotulo->label("z01_cgccpf");
               $dbwhere_ano = "";
             }
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and e60_codemp='" . $arr[0] . "'$dbwhere_ano", $filtroempelemento);
-           
           } elseif (isset($chave_z01_nome) && !empty($chave_z01_nome)) {
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_nome like '$chave_z01_nome%'", $filtroempelemento);
           } elseif (isset($chave_z01_cgccpf) && !empty($chave_z01_cgccpf)) {
@@ -283,7 +285,7 @@ $rotulo->label("z01_cgccpf");
             $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
           }
           // echo $sql;
-          
+
           $result = $clempempenho->sql_record($sql);
 
         ?>

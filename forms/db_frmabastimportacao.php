@@ -32,6 +32,10 @@ $clpcorcamforne->rotulo->label();
 $clpcorcamval->rotulo->label();
 $clrotulo = new rotulocampo;
 
+ini_set('display_startup_errors', 1);
+ini_set('display_errors', 1);
+error_reporting(-1);
+
 if (isset($_POST["processar"])) {
     $contTama = 1;
 
@@ -348,9 +352,41 @@ if (isset($_POST["processar"])) {
 
                 </td>
             </tr>
+
+
+
         </table>
     </center>
 </form>
+
+<table style="width: 70%; border: 0px solid black;">
+
+    <tr id="edicaoBloco">
+        <td colspan='2'>
+            <fieldset>
+                <legend>Empenho para abastecimentos</legend>
+                <table>
+                    <td>
+                        <?php db_ancora("Empenho:", "js_pesquisae60_codemp(true,0);", 1); ?>
+
+                    </td>
+                    <td>
+                        <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 1); ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('z01_nome', 35, $Iz01_nome, true, 'text', 3, "", "", "", "");
+                        ?>
+                        <input type='button' id='btnAp?icar' value='Aplicar' onclick="aplicarDotacoes();">
+                    </td>
+                </table>
+
+        </td>
+
+    </tr>
+
+</table>
+
 <form name="form1" id="form1" method="post" action="" enctype="multipart/form-data">
     <table style="width: 70%; border: 0px solid black;" id="tableResult">
 
@@ -568,6 +604,36 @@ if (isset($_POST["processar"])) {
 </form>
 
 <script>
+    function js_pesquisae60_codemp(mostra, controlador) {
+        if (mostra == true) {
+            var ve70_abast = "";
+            var e60_codemp = "";
+            var e60_numemp = "";
+
+            if (controlador == 0) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|z01_nome', 'Pesquisa', true);
+            } else {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
+            }
+
+        } else {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
+        }
+    }
+
+    function js_mostraempempenho(chave1) {
+        //$F("e60_codemp").val(chave1);
+        //db_iframe_empempenho.hide();
+    }
+
+    function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5, chave6) {
+        document.getElementById("e60_codemp").value = chave2;
+        document.getElementById("z01_nome").value = chave6;
+
+        db_iframe_empempenho.hide();
+
+    }
+
     function gerar() {
         window.location.href = "vei1_xlsabastecimentoPlanilha.php";
     }
