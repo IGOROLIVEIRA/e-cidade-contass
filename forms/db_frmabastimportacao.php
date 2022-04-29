@@ -32,9 +32,6 @@ $clpcorcamforne->rotulo->label();
 $clpcorcamval->rotulo->label();
 $clrotulo = new rotulocampo;
 
-ini_set('display_startup_errors', 1);
-ini_set('display_errors', 1);
-error_reporting(-1);
 
 if (isset($_POST["processar"])) {
     $contTama = 1;
@@ -388,10 +385,12 @@ if (isset($_POST["processar"])) {
 </table>
 
 <form name="form1" id="form1" method="post" action="" enctype="multipart/form-data">
-    <table style="width: 70%; border: 0px solid black;" id="tableResult">
+    <table class="DBGrid" style="width: 70%; border: 0px solid black;" id="tableResult">
 
 
         <tr>
+            <th class="table_header" style="width: 30px; cursor: pointer;" onclick="marcarTodos();">M</th>
+
             <th style="border: 0px solid red; width:120px; background:#ffffff;">
                 Placa
             </th>
@@ -421,7 +420,15 @@ if (isset($_POST["processar"])) {
         }
         foreach ($arrayItensPlanilha as $rown) {
 
+
             echo "<tr style='background-color:#ffffff;'>";
+
+            echo "<td style='text-align:center;'>";
+            echo "<input type='checkbox' class='marca_itens' name='aItonsMarcados[]' value='$i'> ";
+
+            echo "</td>";
+
+
             echo "<td style='text-align:center;'>";
             echo $rown->placa;
             echo "</td>";
@@ -604,6 +611,37 @@ if (isset($_POST["processar"])) {
 </form>
 
 <script>
+    function getItensMarcados() {
+        return aItens().filter(function(item) {
+            return item.checked;
+        });
+    }
+
+    function aItens() {
+        var itensNum = document.querySelectorAll('.marca_itens');
+
+        return Array.prototype.map.call(itensNum, function(item) {
+            return item;
+        });
+    }
+
+    function marcarTodos() {
+
+        aItens().forEach(function(item) {
+
+            var check = item.classList.contains('marcado');
+
+            if (check) {
+                item.classList.remove('marcado');
+            } else {
+                item.classList.add('marcado');
+            }
+            item.checked = !check;
+
+        });
+
+    }
+
     function js_pesquisae60_codemp(mostra, controlador) {
         if (mostra == true) {
             var ve70_abast = "";
