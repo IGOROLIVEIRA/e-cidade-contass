@@ -50,6 +50,7 @@ class Instituicao {
   const COD_CLI_MONTEAZUL = 106;
   const COD_CLI_PMMONTALVANIA = 104;
   const COD_CLI_LAGOADOSPATOS = 19932;
+  const COD_CLI_SERRANOPOLIS_DE_MINAS = 107;
 
   /**
    * Código da Instituicao
