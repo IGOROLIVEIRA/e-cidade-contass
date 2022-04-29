@@ -33,6 +33,8 @@ $clpcorcamval->rotulo->label();
 $clrotulo = new rotulocampo;
 
 $totalitens = 0;
+$visibilidadeEmpenhos = "hidden";
+
 
 
 if (isset($_POST["processar"])) {
@@ -103,7 +105,7 @@ if (isset($_POST["processar"])) {
         $highestRow = $objWorksheet->getHighestRow();
 
         $highestRow = $highestRow;
-
+        $visibilidadeEmpenhos = "";
 
         $i = 0;
         for ($row = 7; $row <= $highestRow; $row++) {
@@ -359,7 +361,7 @@ if (isset($_POST["processar"])) {
     </center>
 </form>
 
-<table style="width: 70%; border: 0px solid black;">
+<table style="width: 70%; border: 0px solid black; visibility: <?php echo $visibilidadeEmpenhos; ?>">
 
     <tr id="edicaoBloco">
         <td colspan='2'>
