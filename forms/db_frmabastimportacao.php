@@ -374,7 +374,7 @@ if (isset($_POST["processar"])) {
                         <?
                         db_input('z01_nome', 35, $Iz01_nome, true, 'text', 3, "", "", "", "");
                         ?>
-                        <input type='button' id='btnAp?icar' value='Aplicar' onclick="aplicarDotacoes();">
+                        <input type='button' id='btnAp?icar' value='Aplicar' onclick="aplicarEmpenho();">
                     </td>
                 </table>
 
@@ -611,6 +611,25 @@ if (isset($_POST["processar"])) {
 </form>
 
 <script>
+    var empenhoselecionado = "";
+
+    function aplicarEmpenho() {
+
+        var itens = getItensMarcados();
+
+        if (itens.length < 1) {
+
+            alert('Selecione pelo menos um item da lista. ');
+            return;
+
+        }
+
+        itens.forEach(function(item) {
+            var id_empenho = 'empenho' + item.value;
+            document.getElementById(id_empenho).value = empenhoselecionado;
+        });
+    }
+
     function getItensMarcados() {
         return aItens().filter(function(item) {
             return item.checked;
@@ -665,6 +684,7 @@ if (isset($_POST["processar"])) {
     }
 
     function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5, chave6) {
+        empenhoselecionado = chave2 + "/" + chave3;
         document.getElementById("e60_codemp").value = chave2;
         document.getElementById("z01_nome").value = chave6;
 
