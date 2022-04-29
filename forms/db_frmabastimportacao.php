@@ -32,6 +32,8 @@ $clpcorcamforne->rotulo->label();
 $clpcorcamval->rotulo->label();
 $clrotulo = new rotulocampo;
 
+$totalitens = 0;
+
 
 if (isset($_POST["processar"])) {
     $contTama = 1;
@@ -205,6 +207,7 @@ if (isset($_POST["processar"])) {
                 $i++;
             }
         }
+        $totalitens = $i;
         $arrayItensPlanilha = array();
 
         foreach ($dataArr as $keyRow => $Row) {
@@ -391,22 +394,22 @@ if (isset($_POST["processar"])) {
         <tr>
             <th class="table_header" style="width: 30px; cursor: pointer;" onclick="marcarTodos();">M</th>
 
-            <th style="border: 0px solid red; width:120px; background:#ffffff;">
+            <th style="border: 0px solid red; width:120px; background:#eeeff2;">
                 Placa
             </th>
 
-            <th style="border: 0px solid red; width:120px; background:#ffffff;">
+            <th style="border: 0px solid red; width:120px; background:#eeeff2;">
                 Data
             </th>
 
-            <th style="border: 0px solid red; width:100px; background:#ffffff;">
+            <th style="border: 0px solid red; width:100px; background:#eeeff2;">
                 Valor
             </th>
 
-            <th style="border: 0px solid red; width:200px; background:#ffffff;">
+            <th style="border: 0px solid red; width:200px; background:#eeeff2;">
                 Departamento
             </th>
-            <th style="background:#ffffff;">
+            <th style="background:#eeeff2;">
                 Empenho
             </th>
         </tr>
@@ -457,16 +460,24 @@ if (isset($_POST["processar"])) {
         ?>
         </tr>
 
+        <tr style='background-color:#eeeff2;'>
+
+            <td colspan="6" align="center"> <strong>Total de itens:</strong>
+                <span class="nowrap" id="totalitens"> <?php echo $totalitens ?> </span>
+            </td>
+
+        </tr>
+
 
 
         <?
 
         echo
         "<tr>
-                            <td colspan='5' align='center'>
+                            <td colspan='6' align='center'>
                 
                                     
-                                <input type='button' id='db_opcao' value='Salvar'  " . ($db_botao == false ? "disabled" : "") . " onclick='js_verificarEmpenho();'>
+                                <input style='margin-top:10px;' type='button' id='db_opcao' value='Salvar'  " . ($db_botao == false ? "disabled" : "") . " onclick='js_verificarEmpenho();'>
                                 
                                 
                                 
