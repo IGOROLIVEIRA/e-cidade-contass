@@ -223,8 +223,10 @@ $db_botao = true;
                 parent.parent.document.formaba.liclicitemlote.disabled = false;
             }
 
-            if (naturezaObj == '1' || naturezaObj == '7') {
-                parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+            if (tipoJulgamento == '1') {
+                if (naturezaObj == '1' || naturezaObj == '7') {
+                    parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+                }
             }
 
             let oParam = new Object();

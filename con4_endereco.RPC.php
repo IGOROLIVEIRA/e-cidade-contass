@@ -488,6 +488,7 @@ switch ($oParam->exec) {
     echo $oJson->encode($oRetorno);
     break;
 
+
   case 'findDadosObra':
     $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByCodigo($oParam->iSequencial, $oParam->licitacao);
     $oRetorno->status = 1;
@@ -644,6 +645,22 @@ switch ($oParam->exec) {
       $oRetorno->status = 1;
     } else {
       $oRetorno->status = 2;
+    }
+
+    echo $oJson->encode($oRetorno);
+
+    break;
+
+  case 'getBdi':
+    $rsBdi = db_query('select distinct db150_bdi as bdi from obrasdadoscomplementareslote inner join obrascodigos on db151_sequencial = db150_seqobrascodigos inner join liclicita on l20_codigo = db151_liclicita where l20_codigo =  ' . $oParam->licitacao);
+
+    $bdi = db_utils::fieldsMemory($rsBdi, 0);
+
+    if ($bdi->bdi) {
+
+      $oRetorno->bdi = $bdi->bdi;
+    } else {
+      $oRetorno->bdi = '';
     }
 
     echo $oJson->encode($oRetorno);

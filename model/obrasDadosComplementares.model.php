@@ -755,10 +755,13 @@ class obrasDadosComplementares
     $sSqlCodigo = $oDaoObrasCodigo->sql_query($this->getCodigoObra(), 'db151_codigoobra, db151_liclicita', '', 'db151_liclicita = ' . $this->getLicita());
     $rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
 
+    $rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $this->getLicita());
+    $iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0)->l20_tipojulg;
+
     if ($incluir) {
 
-      if (!$oDaoObrasCodigo->numrows) {
 
+      if (!$oDaoObrasCodigo->numrows) {
         $oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
         $oDaoObrasCodigo->db151_liclicita = $this->getLicita();
         $oDaoObrasCodigo->incluir();
@@ -766,6 +769,10 @@ class obrasDadosComplementares
         if ($oDaoObrasCodigo->erro_status == '0') {
           throw new Exception($oDaoObrasCodigo->erro_msg);
         }
+      } else if ($oDaoObrasCodigo->numrows && $iTipoJulgamento == 3) {
+        $oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
+        $oDaoObrasCodigo->db151_liclicita = $this->getLicita();
+        $oDaoObrasCodigo->incluir();
       }
 
       !$this->getFlagLote() ? $this->preencheObjetoItem($incluir) : $this->preencheObjetoLote($incluir);
@@ -793,7 +800,6 @@ class obrasDadosComplementares
 
       //alterar na taleba obrascodigos
       $alteraCodObra = db_query('update obrascodigos set db151_codigoobra = ' . $this->getCodigoObra() . ' where db151_liclicita = ' . $this->getLicita());
-
 
       if (!pg_num_rows($rsCodigo)) {
         $oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();

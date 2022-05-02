@@ -1,4 +1,4 @@
-DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto, sLote='', sDescricaoLote='', iBdi='') {
+DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto, sLote='', sDescricaoLote='') {
     var me = this;
 
     this.iCodigoPais = '';
@@ -43,7 +43,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.iGrausLongitude = '';
     this.iMinutoLongitude = '';
     this.iSegundoLongitude = '';
-    this.iBdi = iBdi;
+    this.iBdi = '';
     this.iLicitacao = '';
     this.acao = incluir;
     this.iNaturezaObjeto = iNaturezaObjeto;
@@ -383,7 +383,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
 //Metodo para fechar a janela e retornar o endereco salvo
     me.close = function () {
-        if(!me.acao){
+        if(me.acao){
             js_buscaDadosComplementares();
         }
 
@@ -662,11 +662,13 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     function retornoCodigoObra(oAjax){
         let oRetorno = eval('(' + oAjax.responseText + ')');
 
-        if(oRetorno.status == 1){
+        if(oRetorno.status == 1 && me.iTipoJulgamento == 1){
             me.setCodigoObra(oRetorno.obra);
             $('txtCodigoObra'+sId).value = oRetorno.obra;
             $('txtCodigoObra'+sId).setAttribute('class', 'readonly');
             $('txtCodigoObra'+sId).setAttribute('disabled', 'disabled');
+        } else{
+            $('txtCodigoObra'+sId).value = '';
         }
     }
 
@@ -713,6 +715,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oTxtCodigoObra.setMaxLength(8);
     me.oTxtCodigoObra.show($('ctnCodigoObra' + sId));
     $('ctnCodigoObra' + sId).observe('change', me.changeValorObra);
+
+
 
     /**
      *Metodo para realizar a busca do endereco pelo cep informado
@@ -2528,27 +2532,64 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.changeBdi = (event) => {
         me.setBdi(event.target.value);
     }
+
     me.oBdi = new DBTextField('txtBdi' + sId, 'txtBdi' + sId, '');
     me.oBdi.addStyle('width', '100%');
     me.oBdi.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo BDI\",\"f\",\"t\",event)");
     me.oBdi.setMaxLength(5);
     me.oBdi.show($('ctnBdi' + sId));
+  
+    $('ctnBdi' + sId).observe('change', me.changeBdi);
+    $('ctnBdi' + sId).observe('keyup',() => {
+        me.js_formataValor($('txtBdi' + sId), 4);
+    });
+
+        /*
+     * Buscar valor Bdi da funcao getBdi no con4_endereco.RPC.php
+     */
+
+    this.verificaBdi = () => {
+
+        let oParam = new Object();
+        oParam.exec = 'getBdi';
+        oParam.licitacao = codLicitacao;
+    
+        let oAjax = new Ajax.Request(
+            'con4_endereco.RPC.php',
+            {
+                parameters: 'json=' + Object.toJSON(oParam),
+                method: 'post',
+                asynchronous: false,
+                onComplete: retornoBdi
+            }
+        )
+    }
+    
+    me.verificaBdi();
+    
+    function retornoBdi(oAjax){
+        let oRetorno = eval('(' + oAjax.responseText + ')');
+    
+        if(oRetorno.bdi){
+            me.setBdi(oRetorno.bdi);    
+            $('txtBdi'+sId).value = oRetorno.bdi;
+            $('txtBdi'+sId).setAttribute('class', 'readonly');
+            $('txtBdi'+sId).setAttribute('disabled', 'disabled');
+        } else {
+            $('txtBdi'+sId).value = '';
+        }
+    }
+
     if(me.iNaturezaObjeto == '7'){
         $('txtBdi'+sId).value = me.iBdi;
         $('txtBdi'+sId).setAttribute('class', 'readonly');
         $('txtBdi'+sId).setAttribute('disabled', 'disabled');
     }
 
-    if(me.iBdi != ''){
-        $('txtBdi'+sId).value = me.iBdi;
-        $('txtBdi'+sId).setAttribute('class', 'readonly');
-        $('txtBdi'+sId).setAttribute('disabled', 'disabled');
-    }
+//    if(me.iBdi != ''){
+//        $('txtBdi'+sId).value = me.iBdi;
+//    }
 
-    $('ctnBdi' + sId).observe('change', me.changeBdi);
-    $('ctnBdi' + sId).observe('keyup',() => {
-        me.js_formataValor($('txtBdi' + sId), 4);
-    });
 //-------------------------------------Fim da Manipulação do BDI-------------------------------------------------
 //-------------------------------------Início da Manipulação do Logradouro----------------------------------------------
      /**

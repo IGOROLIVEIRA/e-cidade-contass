@@ -60,10 +60,6 @@ if (!isset($alterar)) {
   $rsEdital = $clliclicita->sql_record($sqlEdital);
   $oDados = db_utils::fieldsMemory($rsEdital, 0);
 
-  $sqlBdi = 'select distinct db150_bdi from obrasdadoscomplementareslote inner join obrascodigos on db151_sequencial = db150_seqobrascodigos inner join liclicita on l20_codigo = db151_liclicita where l20_codigo =  ' . $licitacao;
-  $rsBdi   = db_query($sqlBdi);
-  $valorBdi = db_utils::fieldsMemory($rsBdi, 0)->db150_bdi;
-
   $numero_edital = $oDados->l20_nroedital;
   $objeto = $oDados->l20_objeto;
   $edital = $oDados->l20_edital;

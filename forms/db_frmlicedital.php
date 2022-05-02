@@ -65,6 +65,14 @@ $db_botao = true;
   #origem_recurso {
     width: 100%;
   }
+
+  div.header-container table#tablectnGridLotesPendentesheader tr td#col1.table_header.cell {
+    width: 150px;
+  }
+
+  div.header-container table#tablectnGridLotesPendentesheader tr td#col2.table_header.cell {
+    width: 400px;
+  }
 </style>
 <form name="form1" method="post" action="" onsubmit="">
   <center>
@@ -279,7 +287,7 @@ $db_botao = true;
 
       oDadosLotesPendentes.setCallBackDoubleClick((oDadosLinha) => {
         oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir,
-          codigoLicitacao, "<?= $natureza_objeto ?>", oDadosLinha.sLote, oDadosLinha.sDescricao, "<?= $valorBdi ?>");
+          codigoLicitacao, "<?= $natureza_objeto ?>", oDadosLinha.sLote, oDadosLinha.sDescricao);
         oDadosComplementares.setObjetoRetorno($('idObra'));
         oDadosComplementares.setLicitacao(codigoLicitacao);
         oDadosComplementares.setCallBackFunction(() => {
@@ -290,7 +298,6 @@ $db_botao = true;
       });
 
       oDadosLotesPendentes.show();
-      document.getElementById('tablectnGridLotesPendentesheader').style.width = '557px';
 
     } else {
 

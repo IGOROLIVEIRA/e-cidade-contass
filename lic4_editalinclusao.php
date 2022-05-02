@@ -62,10 +62,6 @@ if ($licitacao) {
         l47_dataenvio, l20_anousu, l20_tipojulg', '', 'l20_codigo = ' . $licitacao . $sWhere, '', 1);
     $rsLicita = $clliclicita->sql_record($sqlLicita);
 
-    $sqlBdi = 'select distinct db150_bdi from obrasdadoscomplementareslote inner join obrascodigos on db151_sequencial = db150_seqobrascodigos inner join liclicita on l20_codigo = db151_liclicita where l20_codigo =  ' . $licitacao;
-    $rsBdi   = db_query($sqlBdi);
-    $valorBdi = db_utils::fieldsMemory($rsBdi, 0)->db150_bdi;
-
     $oDadosLicitacao = db_utils::fieldsMemory($rsLicita, 0);
     $natureza_objeto = $oDadosLicitacao->natureza_objeto;
     $objeto = $oDadosLicitacao->l20_objeto;
@@ -130,7 +126,7 @@ if (isset($incluir) && isset($licitacao)) {
                         $sqlerro = true;
                         $erro_msg = 'Nenhum documento anexo à licitação';
                     } else {
-                        if (count($tiposCadastrados) < 5) {
+                        if (count($tiposCadastrados) < 6) {
                             $sqlerro = true;
                             $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
                         }
