@@ -477,7 +477,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102022 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -489,7 +489,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -500,7 +500,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102020 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -511,7 +511,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102019 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -522,7 +522,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102018 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -533,7 +533,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102017 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -544,7 +544,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102016 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -555,7 +555,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102015 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -566,7 +566,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102014 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -608,7 +608,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102022 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -621,7 +621,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102021 on
                       si95_banco   = c63_banco and
                       si95_agencia = c63_agencia and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -634,7 +634,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102020 on
                       si95_banco   = c63_banco and
                       si95_agencia = c63_agencia and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -647,7 +647,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102019 on
                       si95_banco   = c63_banco and
                       si95_agencia = c63_agencia and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -660,7 +660,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102018 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -673,7 +673,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102017 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -686,7 +686,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102016 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -699,7 +699,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102015 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -711,7 +711,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102014 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1118,7 +1118,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102022 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1130,7 +1130,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1141,7 +1141,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102020 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1152,7 +1152,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102019 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1163,7 +1163,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102018 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1174,7 +1174,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102017 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1185,7 +1185,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102016 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1196,7 +1196,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102015 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1207,7 +1207,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102014 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1248,7 +1248,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102022 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1260,7 +1260,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1272,7 +1272,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102020 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1284,7 +1284,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102019 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1296,7 +1296,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102018 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1308,7 +1308,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102017 on
                       si95_banco = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1320,7 +1320,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102016 on
                       si95_banco = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1332,7 +1332,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102015 on
                       si95_banco = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
@@ -1344,7 +1344,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join ctb102014 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
-                      si95_digitoverificadoragencia = c63_dvagencia and
+                      coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes

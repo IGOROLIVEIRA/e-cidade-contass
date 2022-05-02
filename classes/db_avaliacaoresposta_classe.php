@@ -418,5 +418,19 @@ class cl_avaliacaoresposta {
      }
      return $sql;
   }
+
+  function getCodGrupoAndCodResposta($evento)
+  {
+    $sql = "SELECT DISTINCT db107_sequencial,db108_sequencial,db106_sequencial FROM avaliacaoresposta
+    LEFT JOIN avaliacaogrupoperguntaresposta ON db106_sequencial = db108_avaliacaoresposta
+    INNER JOIN avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
+    INNER JOIN avaliacaoperguntaopcao ON db104_sequencial = db106_avaliacaoperguntaopcao
+    INNER JOIN avaliacaopergunta ON db103_sequencial = db104_avaliacaopergunta
+    INNER JOIN avaliacaogrupopergunta ON db103_avaliacaogrupopergunta = db102_sequencial
+    INNER JOIN avaliacao ON db102_avaliacao = db101_sequencial
+    WHERE db101_identificador='{$evento}'
+    AND date_part('month', db107_datalancamento) = ".date("m", db_getsession("DB_datausu"))." AND date_part('year', db107_datalancamento) = ".db_getsession("DB_anousu");
+    return db_query($sql);
+  }
 }
 ?>
