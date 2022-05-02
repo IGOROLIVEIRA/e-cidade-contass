@@ -176,5 +176,35 @@ class Resposta {
     }
     return null;
   }
+
+  public function deleteResposta($oCodGrupoResposta)
+  {
+    $avaliacaogrupoperguntaresposta = \db_utils::getDao('avaliacaogrupoperguntaresposta');
+    $avaliacaogrupoperguntaresposta->excluir($oCodGrupoResposta->db108_sequencial);
+    if ($avaliacaogrupoperguntaresposta->erro_status = "0") {
+      throw new \Exception("Erro ao deletar Resposta da Carga.\\n {$avaliacaogrupoperguntaresposta->erro_msg}");
+    }
+
+    $avaliacaogruporespostacgm = \db_utils::getDao('avaliacaogruporespostacgm');
+    $avaliacaogruporespostacgm->excluir(null, "eso03_avaliacaogruporesposta = {$oCodGrupoResposta->db107_sequencial}");
+    if ($avaliacaogruporespostacgm->erro_status = "0") {
+      throw new \Exception("Erro ao deletar Resposta da Carga.\\n {$avaliacaogruporespostacgm->erro_msg}");
+    }
+    
+    $avaliacaoresposta = \db_utils::getDao('avaliacaoresposta');
+    $avaliacaoresposta->excluir($oCodGrupoResposta->db106_sequencial);
+    if ($avaliacaoresposta->erro_status = "0") {
+      throw new \Exception("Erro ao deletar Resposta da Carga.\\n {$avaliacaoresposta->erro_msg}");
+    }
+  }
+
+  public function deleteGrupoResposta($iCodGrupoResposta)
+  {
+    $avaliacaogruporesposta = \db_utils::getDao('avaliacaogruporesposta');
+    $avaliacaogruporesposta->excluir($iCodGrupoResposta);
+    if ($avaliacaogruporesposta->erro_status = "0") {
+      throw new \Exception(" $oCodGrupoResposta->db108_sequencial Erro ao deletar Resposta da Carga.\\n {$avaliacaogruporesposta->erro_msg}");
+    }
+  }
   
 }
