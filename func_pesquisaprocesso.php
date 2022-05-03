@@ -215,8 +215,7 @@ if (isset($chave_p58_requer)) {
                                 <tr>
                                     <td colspan="2" align="center">
                                         <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                                        <input name=" limpar" type="reset" id="limpar" value="Limpar">
-                                        <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe.hide();">
+                                        <input name="limpar" type="reset" id="limpar" value="Limpar" onclick="limpar()">
                                     </td>
                                 </tr>
 
@@ -270,7 +269,7 @@ if (isset($chave_p58_requer)) {
                                 $palavras = "";
                                 for ($i = 0; $i < count($array_palavras); $i++) {
 
-                                    $where .= " and z01_nome like '%" . $array_palavras[$i] . "%'";
+                                    $where .= " and LOWER (z01_nome) like LOWER ('%" . $array_palavras[$i] . "%')";
                                 }
                             }
 
@@ -283,12 +282,21 @@ if (isset($chave_p58_requer)) {
                                 $palavras = "";
                                 for ($i = 0; $i < count($array_palavras); $i++) {
 
-                                    $where .= " and z01_nome like '%" . $array_palavras[$i] . "%'";
+                                    $where .= " and LOWER (p58_obs) like LOWER ('%" . $array_palavras[$i] . "%')";
                                 }
                             }
 
                             if (isset($p58_numero) && trim($p58_numero) != '') {
                                 $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                            }
+
+                            if (isset($datainicial) && isset($datafinal) && $datainicial != '' && $datafinal != '') {
+                                $where .= " and p58_dtproc >= " . "'" . $datainicialformatada . "'";
+                                $where .= " and p58_dtproc < " . "'" . $datafinalformatada . "'";
+                            } else if (isset($datainicial) && $datainicial != '') {
+                                $where .= " and p58_dtproc = " . "'" . $datainicialformatada . "'";
+                            } else if (isset($datafinal) && $datafinal != '') {
+                                $where .= " and p58_dtproc = " . "'" . $datafinalformatada . "'";
                             }
                         }
 
@@ -298,24 +306,28 @@ if (isset($chave_p58_requer)) {
                             }
 
                             if (isset($z01_nome) && trim($z01_nome) != '') {
-                                $where .= " and z01_nome = " . "'" . $z01_nome . "'";
+                                $where .= " and z01_nome ~* " . "'" . $z01_nome . "'";
                             }
 
                             if (isset($p51_descr) && trim($p51_descr) != '') {
-                                $where .= " and p51_descr = " . "'" . $p51_descr . "'";
+                                $where .= " and p51_descr ~* " . "'" . $p51_descr . "'";
                             }
 
                             if (isset($p58_obs) && trim($p58_obs) != '') {
-                                $where .= " and p58_obs = " . "'" . $p58_obs . "'";
+                                $where .= " and p58_obs ~* " . "'" . $p58_obs . "'";
                             }
 
                             if (isset($p58_numero) && trim($p58_numero) != '') {
                                 $where .= " and p58_numero = " . "'" . $p58_numero . "'";
                             }
 
-                            if (isset($datainicial) && isset($datafinal)) {
+                            if (isset($datainicial) && isset($datafinal) && $datainicial != '' && $datafinal != '') {
                                 $where .= " and p58_dtproc >= " . "'" . $datainicialformatada . "'";
                                 $where .= " and p58_dtproc < " . "'" . $datafinalformatada . "'";
+                            } else if (isset($datainicial) && $datainicial != '') {
+                                $where .= " and p58_dtproc = " . "'" . $datainicialformatada . "'";
+                            } else if (isset($datafinal) && $datafinal != '') {
+                                $where .= " and p58_dtproc = " . "'" . $datafinalformatada . "'";
                             }
                         }
 
@@ -330,12 +342,12 @@ if (isset($chave_p58_requer)) {
                                 $palavras = "";
                                 for ($i = 0; $i < count($array_palavras); $i++) {
                                     if ($i == count($array_palavras) - 1) {
-                                        $palavras .= "'%" . $array_palavras[$i] . "%'";
+                                        $palavras .= "LOWER('%" . $array_palavras[$i] . "%')";
                                     } else {
-                                        $palavras .= "'%" . $array_palavras[$i] . "%'" . ",";
+                                        $palavras .= "LOWER('%" . $array_palavras[$i] . "%')" . ",";
                                     }
                                 }
-                                $where .= " and z01_nome like any(array[$palavras]) ";
+                                $where .= " and LOWER (z01_nome) like any(array[$palavras]) ";
                             }
 
                             if (isset($p51_descr) && trim($p51_descr) != '') {
@@ -347,16 +359,25 @@ if (isset($chave_p58_requer)) {
                                 $palavras = "";
                                 for ($i = 0; $i < count($array_palavras); $i++) {
                                     if ($i == count($array_palavras) - 1) {
-                                        $palavras .= "'" . $array_palavras[$i] . "%'";
+                                        $palavras .= "LOWER('%" . $array_palavras[$i] . "%')";
                                     } else {
-                                        $palavras .= "'" . $array_palavras[$i] . "%'" . ",";
+                                        $palavras .= "LOWER('%" . $array_palavras[$i] . "%')" . ",";
                                     }
                                 }
-                                $where .= " and z01_nome like any(array[$palavras]) ";
+                                $where .= " and LOWER (p58_obs) like any(array[$palavras]) ";
                             }
 
                             if (isset($p58_numero) && trim($p58_numero) != '') {
                                 $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                            }
+
+                            if (isset($datainicial) && isset($datafinal) && $datainicial != '' && $datafinal != '') {
+                                $where .= " and p58_dtproc >= " . "'" . $datainicialformatada . "'";
+                                $where .= " and p58_dtproc < " . "'" . $datafinalformatada . "'";
+                            } else if (isset($datainicial) && $datainicial != '') {
+                                $where .= " and p58_dtproc = " . "'" . $datainicialformatada . "'";
+                            } else if (isset($datafinal) && $datafinal != '') {
+                                $where .= " and p58_dtproc = " . "'" . $datafinalformatada . "'";
                             }
                         }
                     } else {
@@ -365,15 +386,15 @@ if (isset($chave_p58_requer)) {
                         }
 
                         if (isset($z01_nome) && trim($z01_nome) != '') {
-                            $where .= " and z01_nome like " . "'" . $z01_nome . "%'";
+                            $where .= " and LOWER (z01_nome) like LOWER " . "('" . $z01_nome . "%')";
                         }
 
                         if (isset($p51_descr) && trim($p51_descr) != '') {
-                            $where .= " and p51_descr like " . "'" . $p51_descr . "%'";
+                            $where .= " and LOWER (p51_descr) like LOWER" . "('" . $p51_descr . "%')";
                         }
 
                         if (isset($p58_obs) && trim($p58_obs) != '') {
-                            $where .= " and p58_obs like " . "'" . $p58_obs . "%'";
+                            $where .= " and LOWER (p58_obs) like LOWER " . "('" . $p58_obs . "%')";
                         }
 
                         if (isset($p58_numero) && trim($p58_numero) != '') {
@@ -383,6 +404,10 @@ if (isset($chave_p58_requer)) {
                         if (isset($datainicial) && isset($datafinal) && $datainicial != '' && $datafinal != '') {
                             $where .= " and p58_dtproc >= " . "'" . $datainicialformatada . "'";
                             $where .= " and p58_dtproc < " . "'" . $datafinalformatada . "'";
+                        } else if (isset($datainicial) && $datainicial != '') {
+                            $where .= " and p58_dtproc = " . "'" . $datainicialformatada . "'";
+                        } else if (isset($datafinal) && $datafinal != '') {
+                            $where .= " and p58_dtproc = " . "'" . $datafinalformatada . "'";
                         }
                     }
 
