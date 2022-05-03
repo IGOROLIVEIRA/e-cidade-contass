@@ -50,6 +50,9 @@ if (isset($_POST["processar"])) {
 
 
 
+
+
+
     $novo_nome = $_FILES["uploadfile"]["name"];
 
     // Nome do novo arquivo
@@ -373,7 +376,7 @@ if (isset($_POST["processar"])) {
 
                     </td>
                     <td>
-                        <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 1); ?>
+                        <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 1, "onchange='js_pesquisae60_codemp(false,0);'") ?>
                     </td>
                     <td>
                         <?
@@ -395,6 +398,10 @@ if (isset($_POST["processar"])) {
 
         <tr>
             <th class="table_header" style="width: 30px; cursor: pointer;" onclick="marcarTodos();">M</th>
+
+            <th style="border: 0px solid red; width:120px; background:#eeeff2; display:none">
+                Cód Abastecimento
+            </th>
 
             <th style="border: 0px solid red; width:120px; background:#eeeff2;">
                 Placa
@@ -423,10 +430,15 @@ if (isset($_POST["processar"])) {
         if ($contTama == 1 && $tamanho == 0) {
             echo "<script>alert('Nenhum registro encontrato!')</script>";
         }
+        //var_dump($arrayItensPlanilha);
         foreach ($arrayItensPlanilha as $rown) {
 
 
             echo "<tr style='background-color:#ffffff;'>";
+
+            echo "<td id='abastecimento$i' style='text-align:center; display:none' >";
+            echo $rown->nota;
+            echo "</td>";
 
             echo "<td style='text-align:center;'>";
             echo "<input type='checkbox' class='marca_itens' name='aItonsMarcados[]' value='$i'> ";
@@ -434,11 +446,11 @@ if (isset($_POST["processar"])) {
             echo "</td>";
 
 
-            echo "<td style='text-align:center;'>";
+            echo "<td id='placa$i' style='text-align:center;' >";
             echo $rown->placa;
             echo "</td>";
 
-            echo "<td style='text-align:center;'>";
+            echo "<td id='data$i' style='text-align:center;'>";
             $dataV = $rown->data;
             $dataV = explode("-", $dataV);
             echo $dataV[2] . "-" . $dataV[1] . "-" . $dataV[0];
@@ -548,6 +560,24 @@ if (isset($_POST["processar"])) {
             </th>
         </tr>
     </table>
+    <table style="width: 20%; border: 0px solid black; display: none;" id="tblDataEmpenho">
+
+        <tr>
+            <th colspan="2" style="text-align: center;">
+                Veículos com o empenho aplicado maior que a data de abastecimento
+            </th>
+        <tr>
+
+        <tr style='background-color:#ffffff;'>
+            <th style="width: 150px;">
+                Código
+            </th>
+            <th style="width: 150px;">
+                Placa
+            </th>
+        </tr>
+        </tr>
+    </table>
     <table style="width: 20%; border: 0px solid black; display: none;" id="tblBaixa">
 
         <tr>
@@ -625,10 +655,12 @@ if (isset($_POST["processar"])) {
 
 <script>
     var empenhoselecionado = "";
+    var dataempenho = "";
 
     function aplicarEmpenho() {
 
         var itens = getItensMarcados();
+        var gerartabela = 0;
 
         if (itens.length < 1) {
 
@@ -637,10 +669,53 @@ if (isset($_POST["processar"])) {
 
         }
 
+
+
+
         itens.forEach(function(item) {
+
+
+
             var id_empenho = 'empenho' + item.value;
+            var id_dataabastecimento = 'data' + item.value;
+            var data_abastecimento = document.getElementById(id_dataabastecimento).innerText;
+
+            var id_abastecimento = 'abastecimento' + item.value;
+            var abastecimento = document.getElementById(id_abastecimento).innerText;
+
+            var id_placa = 'placa' + item.value;
+            var placa = document.getElementById(id_placa).innerText;
+
+
+            var dataFormatada1 = new Date(data_abastecimento.substring(6, 10), data_abastecimento.substring(3, 5), data_abastecimento.substring(0, 2));
+            var dataFormatada2 = new Date(dataempenho);
             document.getElementById(id_empenho).value = empenhoselecionado;
+
+
+            if (dataFormatada2 > dataFormatada1) {
+                gerartabela = 1;
+                var tabela = document.getElementById("tblDataEmpenho");
+                var numeroLinhas = tabela.rows.length;
+                var linha = tabela.insertRow(numeroLinhas);
+                var celula1 = linha.insertCell(0);
+                var celula2 = linha.insertCell(1);
+                celula1.innerHTML = "<div style='text-align:center'>" + abastecimento + "<div>";
+                celula2.innerHTML = "<div style='text-align:center'>" + placa + "<div>";
+            }
+
+
+
         });
+
+        if (gerartabela == 1) {
+            document.getElementById("tblDataEmpenho").style.display = "block";
+
+        } else {
+            document.getElementById("tblDataEmpenho").style.display = "none";
+
+        }
+
+        alert("Dotação aplicada aos veículos selecionados");
     }
 
     function getItensMarcados() {
@@ -679,26 +754,44 @@ if (isset($_POST["processar"])) {
             var ve70_abast = "";
             var e60_codemp = "";
             var e60_numemp = "";
+            var datainicial = "<?php print $dataI; ?>";
+            var datafinal = "<?php print $dataF; ?>";
+
+
 
             if (controlador == 0) {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|z01_nome', 'Pesquisa', true);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=0&ve70_abast=' + ve70_abast + '&importacaoveiculo=1&datainicial=' + datainicial + '&datafinal=' + datafinal + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|z01_nome', 'Pesquisa', true);
             } else {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&importacaoveiculo=1&datainicial=' + datainicial + '&datafinal=' + datafinal + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
             }
 
         } else {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
+            var datainicial = "<?php print $dataI; ?>";
+            var datafinal = "<?php print $dataF; ?>";
+
+            e60_numemp = document.getElementById("e60_codemp").value;
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=0&ve70_abast=' + ve70_abast + '&importacaoveiculo=1&datainicial=' + datainicial + '&datafinal=' + datafinal + '&pesquisa_chave=' + e60_numemp + '&funcao_js=parent.js_mostraempempenho&lPesquisaPorCodigoEmpenho=1', 'Pesquisa', false);
         }
     }
 
-    function js_mostraempempenho(chave1) {
-        //$F("e60_codemp").val(chave1);
-        //db_iframe_empempenho.hide();
+    function js_mostraempempenho(chave1, chave2, chave3, chave4, chave5) {
+        if (chave2 == true) {
+            document.getElementById("z01_nome").value = "";
+            document.getElementById("e60_codemp").value = "";
+
+
+        } else {
+            empenhoselecionado = chave1;
+
+            document.getElementById("z01_nome").value = chave2;
+
+        }
     }
 
     function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5, chave6) {
-        empenhoselecionado = chave2 + "/" + chave3;
-        document.getElementById("e60_codemp").value = chave2;
+        empenhoselecionado = chave1 + "/" + chave3;
+        dataempenho = chave4;
+        document.getElementById("e60_codemp").value = chave1;
         document.getElementById("z01_nome").value = chave6;
 
         db_iframe_empempenho.hide();
