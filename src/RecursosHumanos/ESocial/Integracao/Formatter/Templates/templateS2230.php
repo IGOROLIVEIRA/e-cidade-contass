@@ -17,9 +17,13 @@ return array(
             'peraquis' => array(
                 'dtinicio' => 'dtinicio',
                 'dtfim' => 'dtfim'
-            ),
-            ''
+            )
         )
     ),
+    'fimafastamento' => array(
+        'properties' => array(
+            'dttermafast' => 'dttermafast'
+        )
+    )
     
 );
