@@ -1219,53 +1219,46 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos20->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao);
                 $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250);
                 $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal()); //317
-                if (in_array($oAcordoPosicao->getTipo(), array(6, 13, 14))) {
-                    if ($oAcordoPosicao->getTipo() == 14) {
-                        $clcontratos20->si87_novadatatermino = ($oAcordoPosicao->getVigenciaAlterada() == 's') ? $oDataTermino->getDate() : "";
-                    } else {
+                if (in_array($oAcordoPosicao->getTipo(), array(6, 13))) {
                         $clcontratos20->si87_novadatatermino = $oDataTermino->getDate();
-                    }
                 } else {
                     $clcontratos20->si87_novadatatermino = "";
                 }
-
                 $iTotalPosicaoAnterior = 0;
                 $iTotalPosicaoAditivo = 0;
                 $iQuantidadeAditada = 0;
                 $valortotaladitado = 0;
-                
+                $iValorAditado=0;
+                //ini_set('display_errors','on');
                 /**
                  * AQUI IREI CALCULAR O VALOR ADITADO DO REGISTRO 20
                  */
                 foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
+                    if($oAcordoItem->getQuantiAditada() != 0 || $oAcordoItem->getValorAditado() != 0){
+                        $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
+                        $iTotalPosicaoAditivo += $oAcordoItem->getValorAditado();
 
-                    $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
-                    $iTotalPosicaoAditivo += $oAcordoItem->getValorAditado();
-
-                    $sqlServico = "select pc01_servico, ac20_servicoquantidade
-                        from acordoitem
-                        inner join pcmater on pc01_codmater = ac20_pcmater
-                        inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
-                        where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
-                        and ac26_sequencial = {$oDados20->ac26_sequencial}";
-                        $rsMatServicoR21  = db_query($sqlServico);
-                        $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
-                    if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
-                        $valortotaladitado += abs($oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero) - $oAcordoItem->getValorTotal());
-                    } else {
-                        //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
-                        //2 = reequilibrio 5 = reajuste
-                        if($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5){
-                            $iQuantidadeAditada = abs($oAcordoItem->getQuantiAditada());
-                        }else{
-                            //esse if foi feito por causa do tipo 14 onde e feito um reajuste
-                            if($oAcordoItem->getQuantiAditada() == $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero)){
-                                $iQuantidadeAditada = abs($oAcordoItem->getQuantiAditada());
+                        $sqlServico = "select pc01_servico, ac20_servicoquantidade
+                            from acordoitem
+                            inner join pcmater on pc01_codmater = ac20_pcmater
+                            inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                            where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                            and ac26_sequencial = {$oDados20->ac26_sequencial}";
+                            $rsMatServicoR21  = db_query($sqlServico);
+                            $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                        if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                            $valortotaladitado += abs($oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero) - $oAcordoItem->getValorTotal());
+                        } else {
+                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
+                            //2 = reequilibrio 5 = reajuste
+                            if($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5){
+                                $iQuantidadeAditada = $oAcordoItem->getQuantidade();
+                                $iValorAditado += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_sequencial) - $oAcordoItem->getValorTotal();
                             }else{
                                 $iQuantidadeAditada = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
                             }
+                            $valortotaladitado = abs($iTotalPosicaoAnterior - $iTotalPosicaoAditivo);
                         }
-                        $valortotaladitado += abs($oAcordoItem->getValorUnitario() * $iQuantidadeAditada);
                     }
                 }
 
@@ -1372,12 +1365,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             if($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5){
                                 $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantiAditada());
                             }else{
-                                //esse if foi feito por causa do tipo 14 onde e feito um reajuste
-                                if($oAcordoItem->getQuantiAditada() == $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero)){
-                                    $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantiAditada());
-                                }else{
-                                    $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
-                                }
+                                $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
                             }
                         }
         
