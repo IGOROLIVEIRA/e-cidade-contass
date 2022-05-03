@@ -1159,7 +1159,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       INNER JOIN acordo ON ac26_acordo = ac16_sequencial
       INNER JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
       LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-      WHERE ac16_sequencial = 742 and ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+      WHERE ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
           AND ac16_instit = " . db_getsession("DB_instit") . " ORDER BY ac26_sequencial ";
 
         $rsResult20 = db_query($sSql);
@@ -1415,14 +1415,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             *SOMENTE DOS TIPOS 11 e 14 
             */
             else{
-                /*echo "<pre>";
-                print_r($oAcordoPosicao->getItens());*/
-                //ini_set('display_errors','on');
-                /*$iQuantidadeItem = 0;
-                $iQuantidadeItemAnterior = 0;
-                $iValorTotalItem = 0;
-                $iValorTotalItemAnterior = 0;
-                $iValorUnitarioAditadoItem = 0;*/
                 
                 foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
 
@@ -1591,26 +1583,26 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         }
                         $oDadosgerados[$sHashGeracao] = $dados;
                     }
-                        //registro 21
-                        $clcontratos21->si88_tiporegistro = 21;
-                        $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
-                        $clcontratos21->si88_codaditivo = $dados->si87_codaditivo;
-                        $clcontratos21->si88_coditem = $dados->si88_coditem;
-                        $clcontratos21->si88_valorunitarioitem = $dados->valorunitarioaditado;
-                        $clcontratos21->si88_tipoalteracaoitem = $dados->tipoalteracao;
-                        $clcontratos21->si88_quantacrescdecresc =  $dados->quantidade;
-                        $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                        $clcontratos21->si88_instit = db_getsession("DB_instit");
-                        $clcontratos21->si88_tipomaterial = $dados->si88_tipomaterial;
-                        $clcontratos21->si88_coditemsinapi = $dados->si88_coditemsinapi;
-                        $clcontratos21->si88_coditemsimcro = $dados->si88_coditemsimcro;
-                        $clcontratos21->si88_descoutrosmateriais = $dados->si88_descoutrosmateriais;
-                        $clcontratos21->si88_itemplanilha = $dados->si88_itemplanilha;
-                        $clcontratos21->incluir(null);
+                    //registro 21
+                    $clcontratos21->si88_tiporegistro = 21;
+                    $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
+                    $clcontratos21->si88_codaditivo = $dados->si87_codaditivo;
+                    $clcontratos21->si88_coditem = $dados->si88_coditem;
+                    $clcontratos21->si88_valorunitarioitem = $dados->valorunitarioaditado;
+                    $clcontratos21->si88_tipoalteracaoitem = $dados->tipoalteracao;
+                    $clcontratos21->si88_quantacrescdecresc =  $dados->quantidade;
+                    $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                    $clcontratos21->si88_instit = db_getsession("DB_instit");
+                    $clcontratos21->si88_tipomaterial = $dados->si88_tipomaterial;
+                    $clcontratos21->si88_coditemsinapi = $dados->si88_coditemsinapi;
+                    $clcontratos21->si88_coditemsimcro = $dados->si88_coditemsimcro;
+                    $clcontratos21->si88_descoutrosmateriais = $dados->si88_descoutrosmateriais;
+                    $clcontratos21->si88_itemplanilha = $dados->si88_itemplanilha;
+                    $clcontratos21->incluir(null);
 
-                        if ($clcontratos21->erro_status == 0) {
-                            throw new Exception($clcontratos21->erro_msg);
-                        }
+                    if ($clcontratos21->erro_status == 0) {
+                        throw new Exception($clcontratos21->erro_msg);
+                    }
                 }            
             }
         }
