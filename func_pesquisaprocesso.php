@@ -215,7 +215,7 @@ if (isset($chave_p58_requer)) {
                                 <tr>
                                     <td colspan="2" align="center">
                                         <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                                        <input name="limpar" type="reset" id="limpar" value="Limpar" onclick="limpar()">
+                                        <input name="limpar" type="button" id="limpar" value="Limpar" onclick="limpar();">
                                     </td>
                                 </tr>
 
@@ -519,6 +519,12 @@ if (isset($chave_p58_requer)) {
 
 </html>
 <script type="text/javascript">
+    function limpar() {
+        document.location.reload(true);
+
+
+    }
+
     function js_validar(evt) {
 
         $('chave_p58_codproc').onkeyup = evt;
