@@ -99,7 +99,7 @@ class GerarRALIC extends GerarAM
             $this->adicionaLinha();
           }
 
-          $sSql3 = "select * from ralic122022 where si182_mes = " . $this->iMes . " and si182_instit=" . db_getsession("DB_instit") . " and si182_nrolote=" . $aRALIC11['si181_nrolote'];
+          $sSql3 = "select * from ralic122022 where si182_mes = " . $this->iMes . " and si182_instit=" . db_getsession("DB_instit");
           $rsRALIC12 = db_query($sSql3);
 
           for ($iCont3 = 0; $iCont3 < pg_num_rows($rsRALIC12); $iCont3++) {

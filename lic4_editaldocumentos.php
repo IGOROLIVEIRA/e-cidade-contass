@@ -230,13 +230,13 @@ $db_opcao = 1;
     js_removeObj("msgbox");
     var oRetorno = eval('(' + oAjax.responseText + ")");
 
-    alert(oRetorno.message.urlDecode());
-
     if (oRetorno.status == 1) {
       js_getDocumento();
       $('uploadfile').value = '';
       $("caddocumento").value = "";
       $('namefile').value = '';
+    } else {
+      alert(oRetorno.message.urlDecode());
     }
 
     if ($('caddocumento').length == 2)
