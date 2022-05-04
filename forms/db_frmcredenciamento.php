@@ -6,7 +6,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
 ?>
 
 <form name="form1" method="post" action="" style="margin-top: 2%;margin-left: 15%;" onsubmit="return js_ICredenciamento(this);">
-    <fieldset style="width: 809px; margin-bottom: 5px;">
+    <fieldset style="width: 850px; margin-bottom: 5px;">
         <legend>
             <strong>Dados</strong>
         </legend>
@@ -57,6 +57,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         $sResultitens = $clliclicitem->sql_record($sSqlItemLicitacao);
         $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $clliclicitem->numrows;
+        
         if ($numrows > 0) {
             $sWhere   = "l21_codliclicita = {$l20_codigo} and l205_fornecedor = {$l205_fornecedor} and l205_licitacao = {$l20_codigo}";
             $sql     = $clcredenciamento->itensCredenciados(null, $sCampos, $sOrdem, $sWhere);
@@ -70,7 +71,8 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         <tr class="DBgrid">
             <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
             <td class="table_header" style="width: 44px">Ordem</td>
-            <td class="table_header" style="width: 52px">Item</td>
+
+            <td class="table_header" style="width: 52px">Cod.Mat</td>
             <td class="table_header" style="width: 259px">Descrição Item</td>
             <td class="table_header" style="width: 55px">Unidade</td>
             <td class="table_header" style="width: 80px">Valor Unitário</td>
@@ -79,15 +81,16 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         </tr>
     </table>
 
-    <div style="overflow:scroll;height:60%;width:75%;overflow:auto">
+    <div style="overflow:scroll;height:60%;width:80%;overflow:auto">
         <table>
             <th class="table_header">
                 <?php foreach ($aItensLicitacao as $key => $aItem):
                     $iItem = $aItem->pc81_codprocitem;
 
                     ?>
-                    <table class="DBgrid">
-                        <th class="table_header" style="width: 33px">
+                    <table >
+                    <tr class="DBgrid">
+                        <th class="table_header" style="width: 34px">
                             <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem?>">
                         </th>
 
@@ -97,11 +100,11 @@ $cliframe_seleciona = new cl_iframe_seleciona;
                         </td>
 
                         <td class="linhagrid" style="width: 52px">
-                            <?= $aItem->pc81_codprocitem ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc81_codprocitem ?>" id="<?= $iItem?>">
+                            <?= $aItem->pc01_codmater ?>
+                            <input type="hidden" name="" value="<?= $aItem->pc01_codmater ?>" id="<?= $iItem?>">
                         </td>
 
-                        <td class="linhagrid" style="width: 260px">
+                        <td class="linhagrid" style="width: 259px">
                             <?= $aItem->pc01_descrmater ?>
                             <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem?>">
                         </td>
@@ -125,9 +128,11 @@ $cliframe_seleciona = new cl_iframe_seleciona;
                             <?php
                             db_inputdata('l205_datacreditem'.$iItem ,null,null,null,true,'text',1,"") ?>
                         </th>
+                </tr>                        
                     </table>
                 <?php
                 endforeach;
+                
                 ?>
             </th>
 
@@ -139,6 +144,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         <input id="Julgar" type="button" name="Julgar" value="Julgar" onclick="julgarLic()" disabled>
     </div>
 </form>
+
 <script>
 
     if(document.getElementById('l205_fornecedor').value){

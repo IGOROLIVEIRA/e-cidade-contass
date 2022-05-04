@@ -43,6 +43,8 @@ $clparissqnviasnotaavulsavias = new cl_parissqnviasnotaavulsavias();
 $clissnotaavulsacanc = new cl_issnotaavulsacanc();
 $oDaoParIssqn                 = db_utils::getDao("parissqn");
 
+$oInstit = new Instituicao(db_getsession('DB_instit'));
+
 $pdf   = new scpdf();
 $pdf->open();
 
@@ -88,7 +90,11 @@ $pdf1->dadosTomador = db_utils::fieldsMemory($rsTom,0);
 $rsNotaCancelada = $clissnotaavulsacanc->sql_record($clissnotaavulsacanc->sql_query(null,"q63_sequencial",null,"q63_issnotaavulsa = ".$get->q51_sequencial));
 $pdf1->notaCancelada = empty(db_utils::fieldsMemory($rsNotaCancelada,0)->q63_sequencial) ? false : true;
 
-$pdf1->texto_aviso = "Acesse {$pdf1->urlautenticacao} e utilize o código de verificação {$pdf1->dadosPrestador->q51_codautent} para confirmar a autenticidade. ";
+if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){
+    $pdf1->texto_aviso = "";
+}else{    
+    $pdf1->texto_aviso = "Acesse {$pdf1->urlautenticacao} e utilize o código de verificação {$pdf1->dadosPrestador->q51_codautent} para confirmar a autenticidade.";
+}
 
 $pdf1->imprime();
 $pdf1->objpdf->Output();

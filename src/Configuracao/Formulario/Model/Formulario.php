@@ -28,6 +28,7 @@ namespace ECidade\Configuracao\Formulario\Model;
 
 use ECidade\Configuracao\Formulario\Repository\Pergunta;
 use ECidade\Configuracao\Formulario\Model\FormularioModelFactory;
+use ECidade\Configuracao\Formulario\Resposta\Model\Resposta;
 
 /**
  * Class Formulario
@@ -222,6 +223,22 @@ class Formulario {
   {
     $formularioModel = FormularioModelFactory::getStatic($tipo);
     return $formularioModel::getIdentColunas();
+  }
+
+  public function deleteRespostas()
+  {
+    $avaliacaoresposta = \db_utils::getDao('avaliacaoresposta');
+    $rsCodGrupoResposta = $avaliacaoresposta->getCodGrupoAndCodResposta($this->identificador);
+    $oRepostaModel = new Resposta();
+    $aGrupoResposta = array();
+    for($iCont = 0; $iCont < pg_num_rows($rsCodGrupoResposta); $iCont++) {
+      $oCodGrupoResposta = \db_utils::fieldsMemory($rsCodGrupoResposta, $iCont);
+      $oRepostaModel->deleteResposta($oCodGrupoResposta);
+      $aGrupoResposta[$oCodGrupoResposta->db107_sequencial] = $oCodGrupoResposta->db107_sequencial;
+    }
+    foreach($aGrupoResposta as $iGrupoResposta) {
+      $oRepostaModel->deleteGrupoResposta($iGrupoResposta);
+    }
   }
 
 }

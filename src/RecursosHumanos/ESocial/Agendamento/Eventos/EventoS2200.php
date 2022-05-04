@@ -107,6 +107,8 @@ class EventoS2200 extends EventoBase
                 }
             }
 
+            unset($oDados->contato->fonePrinc);
+
             if (!empty($oDados->localTrabGeral) && empty($oDados->localTrabGeral->descComp)) {
                 $oDados->localTrabGeral->descComp = null;
             }

@@ -29,6 +29,7 @@ class cl_exeobras202022 {
     public $si204_codobra = 0;
     public $si204_objeto = null;
     public $si204_linkobra = null;
+    public $si204_contdeclicitacao = null;
     public $si204_mes = 0;
     public $si204_instit = 0;
     // cria propriedade com as variaveis do arquivo
@@ -46,6 +47,7 @@ class cl_exeobras202022 {
                  si204_codobra = int8 = codigoobra
                  si204_objeto = text = objeto
                  si204_linkobra = text = linkobra
+                 si204_contdeclicitacao = int4 = cont dec licitacao
                  si204_mes = int4 = Mes
                  si204_instit = int4 = Instituição
                  ";
@@ -82,6 +84,7 @@ class cl_exeobras202022 {
             $this->si204_tipoprocesso = ($this->si204_tipoprocesso == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_tipoprocesso"]:$this->si204_tipoprocesso);
             $this->si204_objeto = ($this->si204_objeto == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_objeto"]:$this->si204_objeto);
             $this->si204_linkobra = ($this->si204_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_linkobra"]:$this->si204_linkobra);
+            $this->si204_contdeclicitacao = ($this->si204_contdeclicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_contdeclicitacao"]:$this->si204_contdeclicitacao);
             $this->si204_mes = ($this->si204_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_mes"]:$this->si204_mes);
             $this->si204_instit = ($this->si204_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_instit"]:$this->si204_instit);
         } else {
@@ -193,6 +196,15 @@ class cl_exeobras202022 {
             $this->erro_status = "0";
             return false;
         }
+        if ($this->si204_contdeclicitacao == null ) {
+            $this->erro_sql = " Campo si204_contdeclicitacao não informado.";
+            $this->erro_campo = "si204_contdeclicitacao";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
         if ($this->si204_mes == null ) {
             $this->erro_sql = " Campo Mes não informado.";
             $this->erro_campo = "si204_mes";
@@ -218,6 +230,7 @@ class cl_exeobras202022 {
                                       ,si204_codunidadesub
                                       ,si204_nrocontrato
                                       ,si204_exerciciocontrato
+                                      ,si204_contdeclicitacao
                                       ,si204_exercicioprocesso
                                       ,si204_nroprocesso
                                       ,si204_codunidadesubresp
@@ -235,6 +248,7 @@ class cl_exeobras202022 {
                                ,'$this->si204_codunidadesub'
                                ,$this->si204_nrocontrato
                                ,$this->si204_exerciciocontrato
+                               ,$this->si204_contdeclicitacao
                                ,$this->si204_exercicioprocesso
                                ,$this->si204_nroprocesso
                                ,$this->si204_codunidadesubresp
@@ -365,6 +379,19 @@ class cl_exeobras202022 {
             if (trim($this->si204_codobra) == null ) {
                 $this->erro_sql = " Campo codigoobra não informado.";
                 $this->erro_campo = "si204_codobra";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->si204_contdeclicitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si204_contdeclicitacao"])) {
+            $sql  .= $virgula." si204_contdeclicitacao = $this->si204_contdeclicitacao ";
+            $virgula = ",";
+            if (trim($this->si204_contdeclicitacao) == null ) {
+                $this->erro_sql = " Campo si204_contdeclicitacao não informado.";
+                $this->erro_campo = "si204_contdeclicitacao";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
