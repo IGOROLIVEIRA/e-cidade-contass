@@ -135,9 +135,8 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
      */
     if (pg_num_rows($rsProjetoPPA) > 0) {
       $oPPADespesa->setInstituicoes($sListaInstit);
-      $aDespesa = $oPPADespesa->getQuadroEstimativas(null, 6);
+      $aDespesa = $oPPADespesa->getQuadroEstimativas(null, 9);
     }
-
     $sSqlVALOR = "	SELECT  o28_orcprojativ,
 							o28_anoref,
 							round(sum(o28_valor),2) AS o28_valor
@@ -285,20 +284,30 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
             $oDadosAMP12->$sMeta = number_format($oMetas->o28_valor, 2, ",", "");
           }
         }
-
         foreach ($aDespesa as $sEstimativa) {
 
-          if ($sEstimativa->iCodigo == $oMetasPPA->o55_projativ) {
+
+            // echo "<pre>";print_r($oMetasPPA);exit;
+            if ($sEstimativa->iProjeto == $oMetasPPA->o55_projativ
+            && $sEstimativa->funcao == $oMetasPPA->o08_funcao
+            && $sEstimativa->subfuncao == $oMetasPPA->o08_subfuncao
+            && $sEstimativa->iPrograma == $oMetasPPA->o08_programa
+            && $sEstimativa->iOrgao == $oMetasPPA->o08_orgao
+            && $sEstimativa->iUnidade == $oMetasPPA->o08_unidade) {
 
             $iNum = 1;
             foreach ($sEstimativa->aEstimativas as $iAno => $nValorAno) {
 
-
               if ($iAno == db_getsession("DB_anousu")) {
 
                 $sqlValorPro = "select sum(o58_valor) as valor ";
-                $sqlValorPro .= "  from orcdotacao where o58_anousu = " . db_getsession("DB_anousu") . "
-                                         and o58_projativ = " . $oMetasPPA->o55_projativ;
+                $sqlValorPro .= "  from orcdotacao where o58_anousu = " . db_getsession("DB_anousu");
+                $sqlValorPro .= "  and o58_projativ = ". $oMetasPPA->o55_projativ;
+                $sqlValorPro .= "  and o58_funcao = ". $oMetasPPA->o08_funcao;
+                $sqlValorPro .= "  and o58_subfuncao = ". $oMetasPPA->o08_subfuncao;
+                $sqlValorPro .= "  and o58_programa = ". $oMetasPPA->o08_programa;
+                $sqlValorPro .= "  and o58_orgao = ". $oMetasPPA->o08_orgao;
+                $sqlValorPro .= "  and o58_unidade = ". $oMetasPPA->o08_unidade;
                 $rsValorPro = db_query($sqlValorPro);
                 $nValorAno = db_utils::fieldsMemory($rsValorPro, 0)->valor;
               }
@@ -312,11 +321,17 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
             }
           }
         }
+
         if (!isset($oDadosAMP12->recursos1Ano)) {
 
           $sqlValorPro = "select sum(o58_valor) as valor ";
-          $sqlValorPro .= "  from orcdotacao where o58_anousu = " . db_getsession("DB_anousu") . "
-                            and o58_projativ = " . $oMetasPPA->o55_projativ;
+          $sqlValorPro .= "  from orcdotacao where o58_anousu = " . db_getsession("DB_anousu");
+          $sqlValorPro .= "  and o58_projativ = ". $oMetasPPA->o55_projativ;
+          $sqlValorPro .= "  and o58_funcao = ". $oMetasPPA->o08_funcao;
+          $sqlValorPro .= "  and o58_subfuncao = ". $oMetasPPA->o08_subfuncao;
+          $sqlValorPro .= "  and o58_programa = ". $oMetasPPA->o08_programa;
+          $sqlValorPro .= "  and o58_orgao = ". $oMetasPPA->o08_orgao;
+          $sqlValorPro .= "  and o58_unidade = ". $oMetasPPA->o08_unidade;
           $rsValorPro = db_query($sqlValorPro);
           $nValorAno = db_utils::fieldsMemory($rsValorPro, 0)->valor;
 
@@ -351,9 +366,8 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
             $iNum++;
           }
         }
-      }
-
-      if ($oDadosAMP12->recursos1Ano == 0 || $oDadosAMP12->recursos2Ano == 0 || $oDadosAMP12->recursos3Ano == 0 || $oDadosAMP12->recursos4Ano == 0) {
+    }
+    if ($oDadosAMP12->recursos1Ano == 0 || $oDadosAMP12->recursos2Ano == 0 || $oDadosAMP12->recursos3Ano == 0 || $oDadosAMP12->recursos4Ano == 0) {
 
         $sSqlOrcProjProgFisica = "select * from orcprojativprogramfisica where o28_orcprojativ = $oDadosAMP12->idAcao and o28_anousu = " . db_getsession("DB_anousu") . " ORDER BY o28_anoref";
         $rsOrcProjProgFisica = db_query($sSqlOrcProjProgFisica);
@@ -374,7 +388,7 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
         $aDadosAgrupados[$sHash]->Reg12[] = $oDadosAMP12;
       }
     }
-    // echo "<pre>";print_r($aDadosAgrupados);
+    //echo "<pre>";print_r($aDadosAgrupados);
     foreach ($aDadosAgrupados as $oDado) {
       $oDados10 = clone $oDado;
       unset($oDados10->Reg12);
