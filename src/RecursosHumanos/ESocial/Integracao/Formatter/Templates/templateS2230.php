@@ -1,28 +1,29 @@
 <?php
 return array(
-    'idevinculo' => array(
+    'ideVinculo' => array(
         'properties' => array(
-            'cpftrab' => 'cpftrab',
+            'cpfTrab' => 'cpfTrab',
             'matricula' => 'matricula',
-            'codcateg' => 'codcateg',
+            'codCateg' => 'codCateg',
         )
     ),
-    'iniafastamento' => array(
+    'iniAfastamento' => array(
         'properties' => array(
-            'dtiniafast' => 'dtiniafast',
-            'codmotafast' => 'codmotafast',
+            'dtInicio' => 'dtInicio',
+            'codMotAfast' => 'codMotAfast',
             'infomesmomtv' => 'infomesmomtv',
             'tpacidtransito' => 'tpacidtransito',
             'observacao' => 'observacao',
-            'peraquis' => array(
-                'dtinicio' => 'dtinicio',
-                'dtfim' => 'dtfim'
+            'perAquis' => array(
+                'dtInicio' => 'dtInicio',
+                'dtFim' => 'dtFim'
             )
         )
     ),
-    'fimafastamento' => array(
+    'perAquis' => array(
         'properties' => array(
-            'dttermafast' => 'dttermafast'
+            'dtInicio' => 'dtInicio',
+            'dtFim' => 'dtFim'
         )
     )
     
