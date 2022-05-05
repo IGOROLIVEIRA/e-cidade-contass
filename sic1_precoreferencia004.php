@@ -37,7 +37,7 @@
                         where
                             pc80_codproc = {$codigo_preco}
                             and pc68_sequencial is not null
-                            order by pc68_sequencial asc");
+                            order by pc68_sequencial asc limit 1");
 
     $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
     $criterio    = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
@@ -72,21 +72,18 @@
     // db_criatabela($rsResult);
     // exit;
 
-    $sSql = "select si01_datacotacao, si01_numcgmcotacao FROM pcproc
-JOIN pcprocitem ON pc80_codproc = pc81_codproc
-JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-JOIN solicitem ON pc81_solicitem = pc11_codigo
-JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
-JOIN pcmater ON pc16_codmater = pc01_codmater
-JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
-
-
-
+    $sSql = "select distinct si01_datacotacao, si01_numcgmcotacao FROM pcproc
+            JOIN pcprocitem ON pc80_codproc = pc81_codproc
+            JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+            JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+            JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+            JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+            JOIN solicitem ON pc81_solicitem = pc11_codigo
+            JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
+            JOIN pcmater ON pc16_codmater = pc01_codmater
+            JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+            JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+            WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
     $rsResultData = db_query($sSql) or die(pg_last_error());
 
 
@@ -217,61 +214,59 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
 
         if (pg_num_rows($rsLotes) > 0) {
 
+            $sSql = "SELECT pc01_servico,
+            pc11_codigo,
+            pc11_seq,
+            pc11_quant,
+            pc11_prazo,
+            pc11_pgto,
+            pc11_resum,
+            pc11_just,
+            m61_abrev,
+            m61_descr,
+            pc17_quant,
+            pc01_codmater,
+            CASE
+                WHEN pc01_complmater IS NOT NULL
+                     AND pc01_complmater != pc01_descrmater THEN pc01_descrmater ||'. '|| pc01_complmater
+                ELSE pc01_descrmater
+            END AS pc01_descrmater,
+            pc01_complmater,
+            pc10_numero,
+            pc90_numeroprocesso AS processo_administrativo,
+            (pc11_quant * pc11_vlrun) AS pc11_valtot,
+            m61_usaquant,
+            pc69_seq,
+            pc11_reservado,
+            si02_vlprecoreferencia
+            FROM pcprocitem
+            JOIN solicitem ON pc11_codigo=pc81_solicitem
+            JOIN solicita ON pc10_numero = pc11_numero
+            JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+            JOIN solicitemunid ON pc17_codigo = pc11_codigo
+            JOIN matunid ON pc17_unid = m61_codmatunid
+            JOIN pcmater ON pc01_codmater = pc16_codmater
+            JOIN pcorcamitemproc ON pc31_pcprocitem=pc81_codprocitem
+            JOIN pcorcamitem ON pc22_orcamitem=pc31_orcamitem
+            JOIN itemprecoreferencia ON si02_itemproccompra = pc22_orcamitem
+            JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
+            JOIN pcorcamforne ON pc21_orcamforne=pc23_orcamforne
+            AND pc23_orcamitem=pc22_orcamitem
+            JOIN pcorcamjulg ON pc24_orcamforne=pc21_orcamforne
+            AND pc24_orcamitem=pc22_orcamitem
+            LEFT JOIN solicitaprotprocesso ON pc90_solicita = pc10_numero
+            LEFT JOIN processocompraloteitem ON pc69_pcprocitem = pcprocitem.pc81_codprocitem
+            WHERE pc81_codproc={$codigo_preco}
+                AND pc24_pontuacao=1 order by pc11_seq;
+            ";
+
+            $rsResult = db_query($sSql) or die(pg_last_error());
+
+            $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
+            $oLinha = null;
+
             for ($i = 0; $i < pg_num_rows($rsLotes); $i++) {
                 $oLotes = db_utils::fieldsMemory($rsLotes, $i);
-
-                $sSql = "SELECT pc01_servico,
-                pc11_codigo,
-                pc11_seq,
-                pc11_quant,
-                pc11_prazo,
-                pc11_pgto,
-                pc11_resum,
-                pc11_just,
-                m61_abrev,
-                m61_descr,
-                pc17_quant,
-                pc01_codmater,
-                CASE
-                    WHEN pc01_complmater IS NOT NULL
-                         AND pc01_complmater != pc01_descrmater THEN pc01_descrmater ||'. '|| pc01_complmater
-                    ELSE pc01_descrmater
-                END AS pc01_descrmater,
-                pc01_complmater,
-                pc10_numero,
-                pc90_numeroprocesso AS processo_administrativo,
-                (pc11_quant * pc11_vlrun) AS pc11_valtot,
-                m61_usaquant,
-                pc69_seq,
-                pc11_reservado,
-                si02_vlprecoreferencia
-         FROM pcprocitem
-         JOIN solicitem ON pc11_codigo=pc81_solicitem
-         JOIN solicita ON pc10_numero = pc11_numero
-         JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
-         JOIN solicitemunid ON pc17_codigo = pc11_codigo
-         JOIN matunid ON pc17_unid = m61_codmatunid
-         JOIN pcmater ON pc01_codmater = pc16_codmater
-         JOIN pcorcamitemproc ON pc31_pcprocitem=pc81_codprocitem
-         JOIN pcorcamitem ON pc22_orcamitem=pc31_orcamitem
-         JOIN itemprecoreferencia ON si02_itemproccompra = pc22_orcamitem
-         JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
-         JOIN pcorcamforne ON pc21_orcamforne=pc23_orcamforne
-         AND pc23_orcamitem=pc22_orcamitem
-         JOIN pcorcamjulg ON pc24_orcamforne=pc21_orcamforne
-         AND pc24_orcamitem=pc22_orcamitem
-         LEFT JOIN solicitaprotprocesso ON pc90_solicita = pc10_numero
-         LEFT JOIN processocompraloteitem ON pc69_pcprocitem = pcprocitem.pc81_codprocitem
-         WHERE pc81_codproc={$codigo_preco}
-             AND pc24_pontuacao=1 order by pc11_seq;
-         ";
-
-                $rsResult = db_query($sSql) or die(pg_last_error());
-
-                $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
-                // die($sSql);
-                $rsResult = db_query($sSql) or die(pg_last_error());
-                $oLinha = null;
 
                 $sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
                 //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONS햂EL PELA DECLARA플O DE RECURSOS FINANCEIROS' ";
@@ -294,36 +289,36 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
 
                     echo <<<HTML
 
-    <table class="table">
-        <tr class="">
-            <td class="item-menu item-menu-color">{$oLotes->pc68_nome}</td>
-        </tr>
-        <tr class="">
-            <td class="item-menu item-menu-color" style="width:50px">ITEM LOTE</td>
-            <td class="item-menu item-menu-color">CODIGO</td>
-            <td class="item-menu item-menu-color">DESCRI플O DO ITEM</td>
-            <td class="item-menu item-menu-color"><strong>TAXA/TABELA</strong></td>
-            <td class="item-menu item-menu-color">VALOR UN</td>
-            <td class="item-menu item-menu-color">QUANT</td>
-            <td class="item-menu item-menu-color">UN</td>
-            <td class="item-menu item-menu-color">TOTAL/VLR ESTIMADO</td>
-        </tr>
+                    <table class="table">
+                        <tr class="">
+                            <td class="item-menu item-menu-color">{$oLotes->pc68_nome}</td>
+                        </tr>
+                        <tr class="">
+                            <td class="item-menu item-menu-color" style="width:50px">ITEM LOTE</td>
+                            <td class="item-menu item-menu-color">CODIGO</td>
+                            <td class="item-menu item-menu-color">DESCRI플O DO ITEM</td>
+                            <td class="item-menu item-menu-color"><strong>TAXA/TABELA</strong></td>
+                            <td class="item-menu item-menu-color">VALOR UN</td>
+                            <td class="item-menu item-menu-color">QUANT</td>
+                            <td class="item-menu item-menu-color">UN</td>
+                            <td class="item-menu item-menu-color">TOTAL/VLR ESTIMADO</td>
+                        </tr>
 HTML;
                 } else {
-                    echo <<<HTML
-  <div class="table" autosize="1">
-    <div class="tr bg_eb">
-      <div class="th">{$oLotes->pc68_nome}</div>
-    </div>
-    <div class="tr bg_eb">
-      <div class="th col-item align-center" style="width:55px">ITEM LOTE</div>
-      <div class="th col-item align-center" style="width:49px">CODIGO</div>
-      <div class="th col-descricao_item align-center" style="width:620px">DESCRI플O DO ITEM</div>
-      <div class="th col-valor_un align-center" style="margin-left:20px">VALOR UN</div>
-      <div class="th col-quant align-center">QUANT</div>
-      <div class="th col-un align-center">UN</div>
-      <div class="th col-total align-center">TOTAL</div>
-    </div>
+                        echo <<<HTML
+                    <div class="table" autosize="1">
+                        <div class="tr bg_eb">
+                        <div class="th">{$oLotes->pc68_nome}</div>
+                        </div>
+                        <div class="tr bg_eb">
+                        <div class="th col-item align-center" style="width:55px">ITEM LOTE</div>
+                        <div class="th col-item align-center" style="width:49px">CODIGO</div>
+                        <div class="th col-descricao_item align-center" style="width:620px">DESCRI플O DO ITEM</div>
+                        <div class="th col-valor_un align-center" style="margin-left:20px">VALOR UN</div>
+                        <div class="th col-quant align-center">QUANT</div>
+                        <div class="th col-un align-center">UN</div>
+                        <div class="th col-total align-center">TOTAL</div>
+                        </div>
 HTML;
                 }
         ?>
@@ -369,16 +364,16 @@ HTML;
 
                     if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
                         echo <<<HTML
-        <tr class="">
-          <td class="item-text" style="width:55px">{$oDadosDaLinha->seq}</td>
-          <td class="item-text">{$oDadosDaLinha->item}</td>
-          <td class="item-text-descricao" >{$oDadosDaLinha->descricao}</td>
-          <td class="item-text" >{$oDadosDaLinha->mediapercentual}</td>
-          <td class="item-text">{$oDadosDaLinha->valorUnitario}</td>
-          <td class="item-text">{$oDadosDaLinha->quantidade}</td>
-          <td class="item-text">{$oDadosDaLinha->unidadeDeMedida}</td>
-          <td class="item-text">{$oDadosDaLinha->total}</td>
-        </tr>
+                        <tr class="">
+                        <td class="item-text" style="width:55px">{$oDadosDaLinha->seq}</td>
+                        <td class="item-text">{$oDadosDaLinha->item}</td>
+                        <td class="item-text-descricao" >{$oDadosDaLinha->descricao}</td>
+                        <td class="item-text" >{$oDadosDaLinha->mediapercentual}</td>
+                        <td class="item-text">{$oDadosDaLinha->valorUnitario}</td>
+                        <td class="item-text">{$oDadosDaLinha->quantidade}</td>
+                        <td class="item-text">{$oDadosDaLinha->unidadeDeMedida}</td>
+                        <td class="item-text">{$oDadosDaLinha->total}</td>
+                        </tr>
 
 HTML;
                     } else {
