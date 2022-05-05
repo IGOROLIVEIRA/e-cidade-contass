@@ -1296,7 +1296,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("disputa").style.display = "none";
 
             //OC17312 toda vez que fizer uma alteração na modalidade a opção de lei de licitação volta para selecionar para que o usuario coloque novamente a lei
+            var codigo_lic = document.form1.l20_codigo.value;
+            if(codigo_lic==""){
             document.form1.l20_leidalicitacao.value = 0;
+            }
             
 
         } else {
@@ -1313,8 +1316,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
             //OC17312toda vez que fizer uma alteração na modalidade a opção de lei de licitação volta para selecionar para que o usuario coloque novamente a lei
+            
+            var codigo_lic = document.form1.l20_codigo.value;
+            if(codigo_lic==""){
             document.form1.l20_leidalicitacao.value = 0;
-
+            }
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display = 'inline';
             document.form1.l20_tipnaturezaproced.style.display = 'inline';
