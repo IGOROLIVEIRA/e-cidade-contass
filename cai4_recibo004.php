@@ -65,7 +65,7 @@ if(isset($codtaxa) && (!empty($codtaxa)) ) {
       parent.document.form1.valor.value      = '$k07_valorf';		
       parent.document.form1.codsubrec.value  = '$codsubrec';		
       parent.document.form1.k07_descr.value  = '$k07_descr';		
-      parent.document.form1.o15_codigo.value = '$recurso';
+      parent.document.form1.o15_codigo.value = '$o70_codigo';
       parent.document.form1.arretipo.value = '$arretipo';
       parent.document.form1.descrarretipo.value = '$k00_descr';
       parent.document.form1.o15_codigo.onchange();		
@@ -119,7 +119,7 @@ function js_verificavalor(vvalor){
     top.corpo.db_recibo.jan.document.form1.k02_drecei.value='<?=$k02_drecei?>';
     top.corpo.db_recibo.jan.document.form1.codsubrec.value='<?=$codsubrec?>';
     top.corpo.db_recibo.jan.document.form1.k07_descr.value='<?=$k07_descr?>';
-    top.corpo.db_recibo.jan.document.form1.o15_codigo.value='<?=$recurso?>';		
+    top.corpo.db_recibo.jan.document.form1.o15_codigo.value='<?=$o70_codigo?>';		
     top.corpo.db_recibo.jan.document.form1.o15_codigo.onchange();		
     top.corpo.db_recibo.jan.document.form1.valor.value = vvalor;		
     top.corpo.db_recibo.jan.document.form1.gravar.focus();		
@@ -128,7 +128,7 @@ function js_verificavalor(vvalor){
     parent.document.form1.k02_drecei.value='<?=$k02_drecei?>';
     parent.document.form1.codsubrec.value='<?=$codsubrec?>';
     parent.document.form1.k07_descr.value='<?=$k07_descr?>';
-    parent.document.form1.o15_codigo.value='<?=$recurso?>' ;
+    parent.document.form1.o15_codigo.value='<?=$o70_codigo?>' ;
     parent.document.form1.arretipo.value='<?=$arretipo?>'		;
     parent.document.form1.descrarretipo.value = '<?=$k00_descr?>';
     parent.document.form1.o15_codigo.onchange();		
