@@ -8,6 +8,8 @@ include("dbforms/db_funcoes.php");
 include("libs/db_utils.php");
 include("libs/db_usuariosonline.php");
 
+
+
 db_postmemory($HTTP_POST_VARS);
 $clpermanexo = new cl_permanexo;
 $db_opcao = 1;
@@ -15,7 +17,8 @@ $db_botao = true;
 
 if (isset($incluir)) {
   db_inicio_transacao();
-  $clpermanexo->incluir();
+  $perfis   = $HTTP_POST_VARS["aItonsMarcados"];
+  $clpermanexo->incluir($perfis);
   db_fim_transacao();
 }
 ?>

@@ -81,8 +81,8 @@ $clpermanexo->rotulo->label();
                 for ($i = 0; $i < $numrows; $i++) {
 
                   echo "<tr>
-                          <td style='text-align:center; background:#e6e6e6; border: 1px solid #a4a4a4;'>
-                              <input type='checkbox' class='marca_itens' name='aItonsMarcados[]' value='" . pg_result($result, $i, "id_usuario") . "'>
+                          <td  style='text-align:center; background:#e6e6e6; border: 1px solid #a4a4a4;'>
+                              <input id=" . pg_result($result, $i, "id_usuario") . " type='checkbox' class='marca_itens' name='aItonsMarcados[]' value='" . pg_result($result, $i, "id_usuario") . "'>
                         </td>
 
                         <td style='text-align:center; background:#ffffff; border: 1px solid #a4a4a4;'>" .
