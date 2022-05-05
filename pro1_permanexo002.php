@@ -42,9 +42,9 @@ if (isset($alterar)) {
       <td width="140">&nbsp;</td>
     </tr>
   </table>
-  <table width="790" border="0" cellspacing="0" cellpadding="0">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+      <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
         <center>
           <?
           include("forms/db_frmpermanexo.php");
