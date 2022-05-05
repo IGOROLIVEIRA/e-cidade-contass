@@ -41,6 +41,69 @@ $clpermanexo->rotulo->label();
 
             </table>
 
+            <fieldset>
+              <legend><b>Perfis de Acesso</b></legend>
+
+              <table id="tablePerfis" class="DBGrid" style="width: 70%; border: 1px solid #a4a4a4;">
+                <tr>
+                  <th class="table_header" style="background:#e6e6e6; cursor: pointer; border: 1px solid #a4a4a4;" onclick="marcarTodos();">M</th>
+                  <th style="border: 0px solid red;  background:#e6e6e6; border: 1px solid #a4a4a4;">Perfis</th>
+                </tr>
+
+
+
+                <?php
+                if (db_getsession("DB_id_usuario") == "1"  || db_getsession("DB_administrador") == "1") {
+                  $instit = db_getsession("DB_instit");
+                  $result = db_query("select * from (select distinct u.id_usuario,u.nome,u.login 
+                                                   from db_usuarios u
+                                                        inner join db_permissao p on p.id_usuario = u.id_usuario 
+                                                   where u.usuarioativo = 1 and u.usuext = 2
+                                                    and p.id_instit = $instit ) as x
+                                                   order by lower(login) ");
+                } else {
+
+                  $result = db_query("select * from ( select distinct u.id_usuario,u.nome,u.login,u.usuext 
+                         from db_usuarios u
+                                                        inner join db_permissao p on p.id_usuario = u.id_usuario
+              
+                             inner join db_userinst i
+                             on i.id_usuario = u.id_usuario								   
+                             where u.usuarioativo = 1 
+                             and i.id_instit = " . db_getsession("DB_instit") . "
+                              and p.id_instit = $instit
+                                                                        and u.usuext = 2 ) as x
+                             order by lower(login)");
+                }
+
+
+                $numrows = pg_numrows($result);
+                for ($i = 0; $i < $numrows; $i++) {
+
+                  echo "<tr>
+                          <td style='text-align:center; background:#e6e6e6; border: 1px solid #a4a4a4;'>
+                              <input type='checkbox' class='marca_itens' name='aItonsMarcados[]' value='" . pg_result($result, $i, "id_usuario") . "'>
+                        </td>
+
+                        <td style='text-align:center; background:#ffffff; border: 1px solid #a4a4a4;'>" .
+                    pg_result($result, $i, "nome") . "
+                        </td>
+
+                        
+                      </tr>";
+                }
+
+
+                ?>
+
+              </table>
+
+            </fieldset>
+
+            <div align="center">
+              <input style="margin-top: 10px;" align="center" name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
+              <input align="center" name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
+            </div>
           </fieldset>
 
 
@@ -51,11 +114,6 @@ $clpermanexo->rotulo->label();
 
   </center>
 
-
-
-
-  <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
-  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 <script>
   function js_pesquisa() {

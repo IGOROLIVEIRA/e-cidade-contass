@@ -5,6 +5,9 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_permanexo_classe.php");
 include("dbforms/db_funcoes.php");
+include("libs/db_utils.php");
+include("libs/db_usuariosonline.php");
+
 db_postmemory($HTTP_POST_VARS);
 $clpermanexo = new cl_permanexo;
 $db_opcao = 1;
@@ -24,6 +27,11 @@ if (isset($incluir)) {
   <meta http-equiv="Expires" CONTENT="0">
   <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
   <link href="estilos.css" rel="stylesheet" type="text/css">
+
+  <style type="text/css">
+
+  </style>
+
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
