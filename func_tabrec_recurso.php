@@ -37,6 +37,7 @@ $cltabrec = new cl_tabrec;
 $cltabrec->rotulo->label("k02_codigo");
 $cltabrec->rotulo->label("k02_descr");
 $cltabrec->rotulo->label("k02_drecei");
+$cltabrec->rotulo->label("c61_codigo");
 
 $clrotulo = new rotulocampo;
 
@@ -123,12 +124,13 @@ $clrotulo->label("c61_reduz");
         }else{
            $sql = $cltabrec->sql_query_inst("",$campos,"k02_codigo","");
         }
+       
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         $result = $cltabrec->sql_record($cltabrec->sql_query_inst($pesquisa_chave));
         if($cltabrec->numrows!=0){
           db_fieldsmemory($result,0);
-          echo "<script>".$funcao_js."('$k02_codigo','$k02_drecei','$recurso','$k02_estorc',false,'$k02_tipo');</script>";
+          echo "<script>".$funcao_js."('$k02_codigo','$k02_drecei','$o70_codigo','$k02_estorc',false,'$k02_tipo');</script>";
         }else{
 	       echo "<script>".$funcao_js."('','Chave(".$pesquisa_chave.") não Encontrado','','',true);</script>";
         }

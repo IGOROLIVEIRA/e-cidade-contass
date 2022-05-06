@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -325,10 +325,10 @@ class ppaDespesa {
         $sSqlPpaDotacao .= "   and o08_recurso           = {$oValorBase->o08_recurso}                   ";
         $sSqlPpaDotacao .= "   and o08_elemento          = {$oValorBase->o08_elemento}                  ";
         $sSqlPpaDotacao .= "   and o08_localizadorgastos = {$oValorBase->o08_localizadorgastos}         ";
-        $sSqlPpaDotacao .= "   and o08_instit            = {$oValorBase->o08_instit}                    ";         
-        
+        $sSqlPpaDotacao .= "   and o08_instit            = {$oValorBase->o08_instit}                    ";
+
         $rsPPADotacao    = $oPPADotacao->sql_record($sSqlPpaDotacao);
-        
+
         $nValorSalvar = round($nValor);
         if ($oParametroOrcamento->o50_liberadecimalppa == "t") {
            $nValorSalvar = round($nValor, 2);
@@ -515,6 +515,10 @@ class ppaDespesa {
       $oLinhaQuadro->sDescricao      = "";
       $oLinhaQuadro->iRecurso        = @$oFonteDados->o08_recurso;
       $oLinhaQuadro->iEstrutural     = $oFonteDados->c60_estrut;
+      $oLinhaQuadro->iOrgao          = $oFonteDados->o08_orgao;
+      $oLinhaQuadro->iUnidade        = $oFonteDados->o08_unidade;
+      $oLinhaQuadro->iPrograma       = $oFonteDados->o08_programa;
+      $oLinhaQuadro->iProjeto        = $oFonteDados->o08_projativ;
       $oLinhaQuadro->lDeducao        = "f";
       $oLinhaQuadro->subfuncao       = 0;
       $oLinhaQuadro->iConcarPeculiar = 0;
@@ -580,7 +584,7 @@ class ppaDespesa {
     $sWhere         .= " and o08_instit = ".db_getsession("DB_instit")." and o08_ano = {$iAno} and o08_ppaversao = {$this->iCodigoVersao}";
     $sSqlEstimativa = $oDaoPPADespesa->sql_query_conplano(null,"*",null,$sWhere);
     $rsEstimativa   = $oDaoPPADespesa->sql_record(analiseQueryPlanoOrcamento($sSqlEstimativa));
-    
+
     if ($oDaoPPADespesa->numrows == 1) {
 
       $nValorSalvar = round($nValor);
@@ -841,6 +845,7 @@ class ppaDespesa {
      * ex.:  nivel = 1 oLinhaQuadro->o19_coddot VAI ser o valor do campo o08_orgao;
      * esse campo é retorno via db_utils,
      */
+
     switch ($iNivel) {
 
       case 1:
@@ -881,6 +886,15 @@ class ppaDespesa {
       case 8:
 
         $sSql   .= "   and o08_recurso   = {$oLinhaQuadro->o19_coddot}";
+        break;
+      case 9:
+
+        $sSql   .= "   and o08_orgao   = {$oLinhaQuadro->o08_orgao}";
+        $sSql   .= "   and o08_unidade   = {$oLinhaQuadro->o08_unidade}";
+        $sSql   .= "   and o08_funcao   = {$oLinhaQuadro->o08_funcao}";
+        $sSql   .= "   and o08_programa   = {$oLinhaQuadro->o08_programa}";
+        $sSql   .= "   and o08_projativ   = {$oLinhaQuadro->o08_projativ}";
+        $sSql   .= "   and o08_projativ   = {$oLinhaQuadro->o08_projativ}";
         break;
 
     }
@@ -1039,6 +1053,12 @@ class ppaDespesa {
         $oFields->sOrder  = "o08_recurso,o15_descr";
         break;
 
+      case 9:
+
+            $oFields->sCampos = "o08_orgao, o08_unidade, o08_funcao, o08_subfuncao, o08_programa, o08_projativ, o08_projativ as o19_coddot,  trim(o55_descr) as c60_estrut";
+            $oFields->sOrder  = "1,2,3,4,5,6 ";
+            break;
+
     }
     return $oFields;
   }
@@ -1070,7 +1090,7 @@ class ppaDespesa {
     $oDaoPPaVersao = db_utils::getDao("ppaversao");
     $sSqlVersao    = $oDaoPPaVersao->sql_query($iPerspectiva);
     $rsVersao      = $oDaoPPaVersao->sql_record($sSqlVersao);
-    
+
     if ($oDaoPPaVersao->numrows == 0) {
 
       $sErro  = "Erro [1] - Erro ao verificar existência da perspectiva ($iPerspectiva).\n";
@@ -1096,7 +1116,7 @@ class ppaDespesa {
       $aAnosVersao[] = $iAno;
     }
 
-    
+
     /**
      * Criamos o array com os anos iguais,
      */
@@ -1185,7 +1205,7 @@ class ppaDespesa {
           }
         }
       }
-      
+
       $oDaoPPAEstimativaNova = new cl_ppaestimativa;
       $oDaoPPAEstimativaNova->o05_anoreferencia = $oEstimativa->o05_anoreferencia;
       $oDaoPPAEstimativaNova->o05_base          = $oEstimativa->o05_base == "t"?"true":"false";
@@ -1212,9 +1232,9 @@ class ppaDespesa {
      * processamos os anos que nao sao iguais
      */
     asort($aAnosProcessar);
-        
+
     if (count($aAnosProcessar) > 1) {
-      
+
       $iAnoInicial = $aAnosProcessar[0];
       $iAnoFinal   = end($aAnosProcessar);
       $this->processarEstimativasGlobais($iAnoInicial, $iAnoFinal, true);
