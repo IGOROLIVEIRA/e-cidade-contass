@@ -113,6 +113,35 @@ $oRotulo->label("z01_nome");
           </tr>
 
           <tr>
+            <td>
+              Nível de Acesso:
+            </td>
+            <td>
+              <?
+
+              $result = db_query("select * from permanexo");
+              $numrows = pg_numrows($result);
+              $permissoes = array();
+              $permissoes[0] =  'Selecione';
+              for ($i = 0; $i < $numrows; $i++) {
+
+                $permissoes[$i + 1] = pg_result($result, $i, "p202_tipo");
+              }
+
+
+              db_select(
+                'p01_nivelacesso',
+                $permissoes,
+                true,
+                $db_opcao,
+                "style='width:48%;'"
+              );
+
+              ?>
+            </td>
+          </tr>
+
+          <tr>
             <td nowrap title="<?php echo $Tp01_descricao; ?>">
               <?php echo $Lp01_descricao; ?>
             </td>
