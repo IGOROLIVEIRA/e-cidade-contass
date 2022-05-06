@@ -201,7 +201,7 @@ $rotulo->label("z01_cgccpf");
             //$dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
             //adicionado nova validadacao OC 6848 
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-            $dbwhere .= " and empempenho.e60_emiss >= '$datainicial' AND empempenho.e60_emiss < '$datafinal'";
+            $dbwhere .= " and empempenho.e60_emiss < '$dataAbastecimento'";
             $filtroempelemento = 1;
           }
 
@@ -351,7 +351,7 @@ $rotulo->label("z01_cgccpf");
                 //$dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
                 //adicionado nova validadacao OC 6848 
                 $where .= " or elementoempenho.o56_elemento like '335041%')";
-                $where .= " and empempenho.e60_emiss >= '$datainicial' AND empempenho.e60_emiss < '$datafinal'";
+                $where .= " and empempenho.e60_emiss < '$datainicial'";
                 $filtroempelemento = 1;
               }
 
