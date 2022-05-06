@@ -437,7 +437,8 @@ ORDER BY nroprocessolicitatorio
                     obrasdadoscomplementareslote.db150_descratividadeservicoesp AS dscAtividadeServEspecializado,
                     obrasdadoscomplementareslote.db150_sequencial AS dscatividadeservespecializado,
                     CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico,
-                    l04_descricao as lote
+                    l04_descricao as lote,
+                    l20_tipojulg as julg
                 FROM liclicita
                 INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
                 INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
@@ -480,8 +481,12 @@ ORDER BY nroprocessolicitatorio
             $oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
             $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
-              $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-              $oResult11->tipoatividadeservespecializado . $oResult11->codobralocal . $oResult11->dscatividadeservespecializado . $oResult11->codbempublico;
+              $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio;
+
+            if ($oResult11->julg == 3) {
+              $sHash11 .= $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
+                $oResult11->tipoatividadeservespecializado . $oResult11->codobralocal . $oResult11->dscatividadeservespecializado . $oResult11->codbempublico;
+            }
 
             if (!isset($aDadosAgrupados11[$sHash11])) {
 
