@@ -535,6 +535,7 @@ $oRotulo->label("z01_nome");
     $('uploadfile').disabled = true;
     $('p01_descricao').value = sDescricaoDocumento.urlDecode();
 
+
     /**
      * Altera acao do botao salvar
      * @return void
@@ -543,6 +544,8 @@ $oRotulo->label("z01_nome");
 
       var iCodigoProcesso = $('p58_codproc').value;
       var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+      var iNivelAcesso = $('p01_nivelacesso').value;
+
       var oParametros = new Object();
 
       if (empty(iCodigoProcesso)) {
@@ -563,6 +566,8 @@ $oRotulo->label("z01_nome");
       oParametros.iCodigoDocumento = iCodigoDocumento;
       oParametros.iCodigoProcesso = iCodigoProcesso;
       oParametros.sDescricaoDocumento = sDescricaoDocumento;
+      oParametros.iNivelAcesso = iNivelAcesso;
+
 
       var oAjax = new Ajax.Request(
         sUrlRpc, {
@@ -737,6 +742,8 @@ $oRotulo->label("z01_nome");
     var iCodigoDocumento = $('p01_sequencial').value;
     var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
     var sCaminhoArquivo = $('namefile').value;
+    var iNivelAcesso = $('p01_nivelacesso').value;
+
 
     if (empty(iCodigoProcesso)) {
 
@@ -765,6 +772,7 @@ $oRotulo->label("z01_nome");
     oParametros.iCodigoProcesso = iCodigoProcesso;
     oParametros.sDescricaoDocumento = sDescricaoDocumento;
     oParametros.sCaminhoArquivo = sCaminhoArquivo;
+    oParametros.iNivelAcesso = iNivelAcesso;
 
     var oAjax = new Ajax.Request(
       sUrlRpc, {

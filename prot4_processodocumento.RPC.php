@@ -89,6 +89,8 @@ try {
       $oProcessoDocumento = new ProcessoDocumento($oParam->iCodigoDocumento);
       $oProcessoDocumento->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoDocumento));
       $oProcessoDocumento->setProcessoProtocolo($oProcessoProtocolo);
+      $oProcessoDocumento->setProcessoProtocolo($oParam->$iNivelAcesso);
+
 
       if (!empty($oParam->sCaminhoArquivo)) {
         $oProcessoDocumento->setCaminhoArquivo($oParam->sCaminhoArquivo);
@@ -100,37 +102,36 @@ try {
 
     case "excluirDocumento":
 
-			$aDocumentosNaoExcluidos = array();
+      $aDocumentosNaoExcluidos = array();
 
       foreach ($oParam->aDocumentosExclusao as $iCodigoDocumento) {
 
-				$oProcessoDocumento = new ProcessoDocumento($iCodigoDocumento);
+        $oProcessoDocumento = new ProcessoDocumento($iCodigoDocumento);
 
-				if ($oProcessoDocumento->getDepart() === db_getsession("DB_coddepto")) {
-					$oProcessoDocumento->excluir();
-					continue;
-				}
-				$aDocumentosNaoExcluidos[] = $oProcessoDocumento->getDescricao();
+        if ($oProcessoDocumento->getDepart() === db_getsession("DB_coddepto")) {
+          $oProcessoDocumento->excluir();
+          continue;
+        }
+        $aDocumentosNaoExcluidos[] = $oProcessoDocumento->getDescricao();
+      }
 
-			}
+      $sMensagemDeNaoExclusao = "Alguns documentos não foram excluídos pois não" .
+        " pertencem ao departamento atual.\n\nDocumentos não excluídos:";
+      $sDocumentosNaoExcluidos = '';
+      foreach ($aDocumentosNaoExcluidos as $sDocumentoNaoExcluido) {
+        $sDocumentosNaoExcluidos .= "\n- $sDocumentoNaoExcluido";
+      }
 
-			$sMensagemDeNaoExclusao = "Alguns documentos não foram excluídos pois não".
-			" pertencem ao departamento atual.\n\nDocumentos não excluídos:";
-			$sDocumentosNaoExcluidos = '';
-			foreach($aDocumentosNaoExcluidos as $sDocumentoNaoExcluido) {
-				$sDocumentosNaoExcluidos .= "\n- $sDocumentoNaoExcluido";
-			}		
+      if (count($aDocumentosNaoExcluidos) === 1) {
+        $sMensagemDeNaoExclusao = "Um documento não foi excluído pois não" .
+          " pertence ao departamento atual.\n\nDocumento não excluído:";
+      }
 
-			if (count($aDocumentosNaoExcluidos) === 1) {
-				$sMensagemDeNaoExclusao = "Um documento não foi excluído pois não" .
-				" pertence ao departamento atual.\n\nDocumento não excluído:";
-			}
-
-			if (!empty($aDocumentosNaoExcluidos)) {
-				$oRetorno->sMensagem = urlencode($sMensagemDeNaoExclusao.$sDocumentosNaoExcluidos);
-			} else {
-				$oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
-			}
+      if (!empty($aDocumentosNaoExcluidos)) {
+        $oRetorno->sMensagem = urlencode($sMensagemDeNaoExclusao . $sDocumentosNaoExcluidos);
+      } else {
+        $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
+      }
 
       break;
 

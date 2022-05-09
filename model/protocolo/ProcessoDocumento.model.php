@@ -230,6 +230,18 @@ class ProcessoDocumento
   }
 
   /**
+   * Define o OID do documento
+   *
+   * @param int $iOid
+   * @access public
+   * @return void
+   */
+  public function setNivelAcesso($iNivelAcesso)
+  {
+    $this->iNivelAcesso = $iNivelAcesso;
+  }
+
+  /**
    * Retorna o OID do documento
    *
    * @access public
