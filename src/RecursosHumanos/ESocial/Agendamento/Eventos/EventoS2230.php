@@ -31,27 +31,35 @@ class EventoS2230 extends EventoBase
     {
         $aDadosAPI = array();
         $iSequencial = 1;
+        //echo "<pre>";
+        //print_r($this->dados);
+        //exit();
         foreach ($this->dados as $oDados) {
-
-            $oDadosAPI                                = new \stdClass;
-            $oDadosAPI->evtAfastTemp                      = new \stdClass;
-            $oDadosAPI->evtAfastTemp->sequencial          = $iSequencial;
-            $oDadosAPI->evtAfastTemp->modo                = $this->modo;
-            $oDadosAPI->evtAfastTemp->indRetif            = 1;
-            $oDadosAPI->evtAfastTemp->nrRecibo            = null;
+            $oDadosAPI                                                        = new \stdClass;
+            $oDadosAPI->evtAfastTemp                                          = new \stdClass;
+            $oDadosAPI->evtAfastTemp->sequencial                              = $iSequencial;
+            $oDadosAPI->evtAfastTemp->modo                                    = $this->modo;
+            $oDadosAPI->evtAfastTemp->indRetif                                = 1;
+            $oDadosAPI->evtAfastTemp->nrRecibo                                = null;
             $oDadosAPI->evtAfastTemp->idevinculo->cpftrab                     = $oDados->ideVinculo->cpfTrab;
             $oDadosAPI->evtAfastTemp->idevinculo->matricula                   = $oDados->ideVinculo->matricula;
             $oDadosAPI->evtAfastTemp->idevinculo->codcateg                    = $oDados->ideVinculo->codCateg;
-            $oDadosAPI->evtAfastTemp->iniafastamento->dtiniafast              = $oDados->perAquis->dtInicio;
-            $oDadosAPI->evtAfastTemp->iniafastamento->codmotafast             = $oDados->iniAfastamento->codMotAfast;
-            $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtinicio      = $oDados->perAquis->dtInicio;
-            $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtfim         = $oDados->perAquis->dtFim;
+            if(!empty($oDados->iniAfastamento->dtIniAfast)){
+                $oDadosAPI->evtAfastTemp->iniafastamento->dtiniafast          = $oDados->iniAfastamento->dtIniAfast;
+                $oDadosAPI->evtAfastTemp->iniafastamento->codmotafast         = $oDados->iniAfastamento->codMotAfast;
+                if(!empty($oDados->perAquis->dtInicio)){
+                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtinicio  = $oDados->perAquis->dtInicio;                
+                }
+                if(!empty($oDados->perAquis->dtFim)){
+                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtfim = $oDados->perAquis->dtFim;
+                }
+            }
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
-        // echo '<pre>';
-        // print_r($aDadosAPI);
-        // exit;
+        //echo "<pre>";
+        //print_r($aDadosAPI);
+        //exit();
         return $aDadosAPI;
     }
 }

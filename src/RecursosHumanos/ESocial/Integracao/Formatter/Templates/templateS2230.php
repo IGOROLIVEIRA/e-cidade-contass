@@ -9,7 +9,7 @@ return array(
     ),
     'iniAfastamento' => array(
         'properties' => array(
-            'dtInicio' => 'dtInicio',
+            'dtIniAfast' => 'dtIniAfast',
             'codMotAfast' => 'codMotAfast',
             'infomesmomtv' => 'infomesmomtv',
             'tpacidtransito' => 'tpacidtransito',
