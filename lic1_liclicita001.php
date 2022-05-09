@@ -210,7 +210,14 @@ if (isset($incluir)) {
 	if ($l20_codtipocom == 99) {
 		$erro_msg = "Selecione uma modalidade para a licitação.";
 		$sqlerro = true;
-		
+	}
+	if ($l20_codtipocom != 8 || $l20_codtipocom != 9 || $l20_codtipocom != 10 || $l20_codtipocom != 11 || $l20_codtipocom != 99) {
+		if($l20_leidalicitacao == 1){
+			if($l20_mododisputa == 0){
+			$erro_msg = "Selecione um modo de disputa para a licitação.";
+			$sqlerro = true;
+			}
+		}	
 	}
 
 	//numeracao por modalidade
