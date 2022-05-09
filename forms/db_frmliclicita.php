@@ -460,7 +460,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr id="disputa">
+                                <tr id="disputa" style="display:none;">
                                     <td nowrap title="Modo de disputa">
                                         <b>Modo de disputa: </b>
                                     </td>
