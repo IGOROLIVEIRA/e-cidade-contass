@@ -343,6 +343,19 @@ class cl_itemprecoreferencia {
          return false;
        }
      }
+     if(trim($this->si02_qtditem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si02_qtditem"])){
+      $sql  .= $virgula." si02_qtditem = $this->si02_qtditem ";
+      $virgula = ",";
+      if(trim($this->si02_qtditem) == null ){
+        $this->erro_sql = " Campo Media de desconto referencia nao Informado.";
+        $this->erro_campo = "si02_qtditem";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";  
      if($si02_sequencial==null){
         $sql .= " si02_sequencial = $this->si02_sequencial";
@@ -366,8 +379,11 @@ class cl_itemprecoreferencia {
            $resac = db_query("insert into db_acount values($acount,2010196,2009257,'".AddSlashes(pg_result($resaco,$conresaco,'si02_vlprecoreferencia'))."','$this->si02_vlprecoreferencia',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
-     
-     $result = db_query($sql);
+     die($sql);
+     echo $sql;
+     var_dump($sql);
+     exit;
+     //$result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Item do preco de referencia nao Alterado. Alteracao Abortada.\\n";
@@ -556,5 +572,29 @@ class cl_itemprecoreferencia {
      }
      return $sql;
   }
+
+  public function sql_query_precoreferencia($pc80_codproc){
+    $sSql  = "select si01_sequencial "; 
+    $sSql .= " from sicom.precoreferencia "; 
+    $sSql .= " where si01_processocompra=$pc80_codproc";
+
+    return $sSql;
+
+  }
+
+
+
+  public function sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem){
+    $sSql  = "select si02_sequencial ";  
+    $sSql  .= "from itemprecoreferencia "; 
+    $sSql  .= "where si02_precoreferencia = $si01_sequencial and si02_itemproccompra = $pc23_orcamitem "; 
+
+    return $sSql;
+  }
+
+
+
+
+
 }
 ?>

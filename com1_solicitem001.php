@@ -129,6 +129,7 @@ $clpcorcamfornelic   = new cl_pcorcamfornelic;
 $clsolicitalog       = new cl_solicitalog;
 $clliclicita         = new cl_liclicita;
 $clliclicitemlote    = new cl_liclicitemlote;
+$clitemprecoreferencia   = new cl_itemprecoreferencia;
 $iPactoPlano = null;
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
@@ -738,17 +739,32 @@ e55_sequen is not null and e54_anulad is null"
   
             }else{
             
-            $result_valorpcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_atualizavalor($pc23_orcamforne, $pc23_orcamitem));
-            db_fieldsmemory($result_valorpcorcamval,0);
-            
-            $clpcorcamval->pc23_quant = $pc23_quant;
-            $clpcorcamval->pc23_vlrun = $pc23_vlrun;
-            $clpcorcamval->pc23_valor = $pc23_quant * $pc23_vlrun;
-            $clpcorcamval->alterar($pc23_orcamforne,$pc23_orcamitem);
-            $clpcorcamval->pc23_quant =0;
-            $clpcorcamval->pc23_vlrun = 0;
-            $clpcorcamval->pc23_valor = 0;
-          }
+              $result_valorpcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_atualizavalor($pc23_orcamforne, $pc23_orcamitem));
+              db_fieldsmemory($result_valorpcorcamval,0);
+              
+              $clpcorcamval->pc23_quant = $pc23_quant;
+              $clpcorcamval->pc23_vlrun = $pc23_vlrun;
+              $clpcorcamval->pc23_valor = $pc23_quant * $pc23_vlrun;
+              $clpcorcamval->alterar($pc23_orcamforne,$pc23_orcamitem);
+              $clpcorcamval->pc23_quant =0;
+              $clpcorcamval->pc23_vlrun = 0;
+              $clpcorcamval->pc23_valor = 0;
+
+              $result_itemprecorefe = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferencia($pc80_codproc));
+              
+              if($clitemprecoreferencia->erro_status == 0){
+                db_fieldsmemory($result_itemprecorefe,0);
+                $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
+                $clitemprecoreferencia->si02_itemproccompra = $pc23_orcamitem;
+                $result_precoreferensequncial = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem));
+                db_fieldsmemory($result_precoreferensequncial,0);
+                $clitemprecoreferencia->$si02_sequencial = $si02_sequencial;
+                $clitemprecoreferencia->$si02_qtditem = $pc23_quant;
+                $clitemprecoreferencia->alterar($si02_sequencial);
+
+              }
+
+            }
 
           }
           
