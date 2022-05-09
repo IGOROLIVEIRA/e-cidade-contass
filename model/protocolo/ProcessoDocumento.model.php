@@ -26,7 +26,7 @@
  */
 
 
-require_once ('std/DBLargeObject.php');
+require_once('std/DBLargeObject.php');
 
 /**
  * Caminho das mensagens json do documento 
@@ -40,7 +40,8 @@ define('URL_MENSAGEM_PROCESSO_DOCUMENTO', 'patrimonial.protocolo.ProcessoDocumen
  * @version $Revision: 1.17 $
  * @author Jeferson Belmiro <jeferson.belmiro@dbseller.com.br> 
  */
-class ProcessoDocumento {
+class ProcessoDocumento
+{
 
   /**
    * Codigo do documento
@@ -49,7 +50,7 @@ class ProcessoDocumento {
    * @var int
    * @access private
    */
-  private $iCodigo; 
+  private $iCodigo;
 
   /**
    * Processo do protocolo
@@ -58,7 +59,7 @@ class ProcessoDocumento {
    * @var processoProtocolo
    * @access private
    */
-  private $oProcessoProtocolo; 
+  private $oProcessoProtocolo;
 
   /**
    * Descricao do documento
@@ -67,7 +68,7 @@ class ProcessoDocumento {
    * @var mixed
    * @access private
    */
-  private $sDescricao; 
+  private $sDescricao;
 
   /**
    * OID do documento anexado ao processo
@@ -76,7 +77,7 @@ class ProcessoDocumento {
    * @var int
    * @access private
    */
-  private $iOid; 
+  private $iOid;
 
   /**
    * Departamento do anexo
@@ -85,7 +86,16 @@ class ProcessoDocumento {
    * @var int
    * @access private
    */
-  private $iDepart; 
+  private $iDepart;
+
+  /**
+   * Nível de acesso
+   * - campo p01_nivelacesso
+   * 
+   * @var int
+   * @access private
+   */
+  private $iNivelAcesso;
 
   /**
    * Tamanho limite do arquivo em bytes
@@ -111,7 +121,7 @@ class ProcessoDocumento {
    * @var string
    * @access private
    */
-  private $sCaminhoArquivo; 
+  private $sCaminhoArquivo;
 
   /**
    * Contrutor da classe, executa lazy load
@@ -120,12 +130,13 @@ class ProcessoDocumento {
    * @access public
    * @return void
    */
-  public function __construct($iCodigo = 0) {
+  public function __construct($iCodigo = 0)
+  {
 
     /**
      * Documento nao inforamdo, contrutor nao fara nada 
      */
-    if ( empty($iCodigo) ) {
+    if (empty($iCodigo)) {
       return false;
     }
 
@@ -133,19 +144,20 @@ class ProcessoDocumento {
     $sSqlDocumento = $oDaoProtprocessodocumento->sql_query_file($iCodigo);
     $rsDocumento   = $oDaoProtprocessodocumento->sql_record($sSqlDocumento);
 
-    if ( $oDaoProtprocessodocumento->erro_status  == "0" ) {
+    if ($oDaoProtprocessodocumento->erro_status  == "0") {
 
       $oStdMsgErro = (object)array("iDocumento" => "$iCodigo");
       throw new BusinessException(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_buscar_documento_pelo_codigo', $oStdMsgErro));
     }
 
     $oDocumento = db_utils::fieldsMemory($rsDocumento, 0);
-    $this->iCodigo            = $oDocumento->p01_sequencial;   
-    $this->oProcessoProtocolo = $oDocumento->p01_protprocesso; 
-    $this->sDescricao         = $oDocumento->p01_descricao;    
-    $this->iOid               = $oDocumento->p01_documento;    
-    $this->iDepart            = $oDocumento->p01_depart;    
-    $this->sNomeDocumento     = substr($oDocumento->p01_descricao, 0, 15) . " " . $oDocumento->p01_nomedocumento;    
+    $this->iCodigo            = $oDocumento->p01_sequencial;
+    $this->oProcessoProtocolo = $oDocumento->p01_protprocesso;
+    $this->sDescricao         = $oDocumento->p01_descricao;
+    $this->iOid               = $oDocumento->p01_documento;
+    $this->iDepart            = $oDocumento->p01_depart;
+    $this->iNivelAcesso       = $oDocumento->p01_nivelacesso;
+    $this->sNomeDocumento     = substr($oDocumento->p01_descricao, 0, 15) . " " . $oDocumento->p01_nomedocumento;
   }
 
   /**
@@ -154,7 +166,8 @@ class ProcessoDocumento {
    * @access public
    * @return int
    */
-  public function getCodigo() {
+  public function getCodigo()
+  {
     return $this->iCodigo;
   }
 
@@ -165,7 +178,8 @@ class ProcessoDocumento {
    * @access public
    * @return void
    */
-  public function setProcessoProtocolo(processoProtocolo $oProcessoProtocolo) {
+  public function setProcessoProtocolo(processoProtocolo $oProcessoProtocolo)
+  {
     $this->oProcessoProtocolo = $oProcessoProtocolo;
   }
 
@@ -175,7 +189,8 @@ class ProcessoDocumento {
    * @access public
    * @return processoProtocolo
    */
-  public function getProcessoProtocolo() {
+  public function getProcessoProtocolo()
+  {
     return $this->oProcessoProtocolo;
   }
 
@@ -186,9 +201,10 @@ class ProcessoDocumento {
    * @access public
    * @return void
    */
-  public function setDescricao($sDescricao) {
+  public function setDescricao($sDescricao)
+  {
     $this->sDescricao = $sDescricao;
-  } 
+  }
 
   /**
    * Retorna a descricao do documento
@@ -196,9 +212,10 @@ class ProcessoDocumento {
    * @access public
    * @return string
    */
-  public function getDescricao() {
+  public function getDescricao()
+  {
     return $this->sDescricao;
-  } 
+  }
 
   /**
    * Define o OID do documento
@@ -207,7 +224,8 @@ class ProcessoDocumento {
    * @access public
    * @return void
    */
-  public function setOID($iOid) {
+  public function setOID($iOid)
+  {
     $this->iOid = $iOid;
   }
 
@@ -217,7 +235,8 @@ class ProcessoDocumento {
    * @access public
    * @return int
    */
-  public function getOID() {
+  public function getOID()
+  {
     return $this->iOid;
   }
 
@@ -227,8 +246,20 @@ class ProcessoDocumento {
    * @access public
    * @return int
    */
-  public function getDepart() {
+  public function getDepart()
+  {
     return $this->iDepart;
+  }
+
+  /**
+   * Retorna o Nível de acesso
+   *
+   * @access public
+   * @return int
+   */
+  public function getNivelAcesso()
+  {
+    return $this->iNivelAcesso;
   }
 
   /**
@@ -237,7 +268,8 @@ class ProcessoDocumento {
    * @access public
    * @return int
    */
-  public function setCaminhoArquivo($sCaminhoArquivo) {
+  public function setCaminhoArquivo($sCaminhoArquivo)
+  {
     $this->sCaminhoArquivo = $sCaminhoArquivo;
   }
 
@@ -247,7 +279,8 @@ class ProcessoDocumento {
    * @access public
    * @return int
    */
-  public function getCaminhoArquivo() {
+  public function getCaminhoArquivo()
+  {
     return $this->sCaminhoArquivo;
   }
 
@@ -256,7 +289,8 @@ class ProcessoDocumento {
    * @access public
    * @return string
    */
-  public function getNomeDocumento() {
+  public function getNomeDocumento()
+  {
     return $this->sNomeDocumento;
   }
 
@@ -268,17 +302,18 @@ class ProcessoDocumento {
    * @access public
    * @return boolean
    */
-  private function validarArquivo() {
+  private function validarArquivo()
+  {
 
     $oStdMensagemErro    = new stdClass();
     $oStdMensagemErro->sCaminhoArquivo = $this->sCaminhoArquivo;
-    $oStdMensagemErro->iLimiteTamanho  = $this->iLimiteTamanho;  
+    $oStdMensagemErro->iLimiteTamanho  = $this->iLimiteTamanho;
 
     /** filesize($this->sCaminhoArquivo) > $this->iLimiteTamanho 
      * Arquivo nao encontrado
      */
-    if ( !file_exists($this->sCaminhoArquivo) ) {
-      throw new BusinessException(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_arquivo_invalido', $oStdMensagemErro)); 
+    if (!file_exists($this->sCaminhoArquivo)) {
+      throw new BusinessException(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_arquivo_invalido', $oStdMensagemErro));
     }
 
     $aInformacoesArquivo = pathinfo($this->sCaminhoArquivo);
@@ -286,17 +321,17 @@ class ProcessoDocumento {
     /**
      * Arquivo maior que o permitido 
      */
-    if ( filesize($this->sCaminhoArquivo) > $this->iLimiteTamanho ) {
-      throw new BusinessException(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_tamanho_limite', $oStdMensagemErro)); 
+    if (filesize($this->sCaminhoArquivo) > $this->iLimiteTamanho) {
+      throw new BusinessException(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_tamanho_limite', $oStdMensagemErro));
     }
 
     /**
      * Arquivo com extensao invalida
      */
-    if ( !empty($aInformacoesArquivo['extension']) && in_array($aInformacoesArquivo['extension'], $this->aExtensoesInvalidas) ) {
+    if (!empty($aInformacoesArquivo['extension']) && in_array($aInformacoesArquivo['extension'], $this->aExtensoesInvalidas)) {
 
       $oStdMensagemErro->sExtensao = $aInformacoesArquivo['extension'];
-      throw new BusinessException(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_extensao_invalida', $oStdMensagemErro)); 
+      throw new BusinessException(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_extensao_invalida', $oStdMensagemErro));
     }
 
     return true;
@@ -308,15 +343,16 @@ class ProcessoDocumento {
    * @access public
    * @return boolean
    */
-  public function salvar() {
+  public function salvar()
+  {
 
-    if ( !db_utils::inTransaction() ) {
+    if (!db_utils::inTransaction()) {
       throw new DBException(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_nenhuma_transacao_banco'));
     }
 
-    if ( !empty($this->iCodigo) ) {
+    if (!empty($this->iCodigo)) {
       return $this->alterar();
-    } 
+    }
 
     /**
      * Valida arquivo, tamanho e extensao 
@@ -325,7 +361,7 @@ class ProcessoDocumento {
 
     return $this->incluir();
   }
-  
+
   /**
    * Inclui documento para o processo do protocolo
    * - salva arquivo no banco
@@ -333,36 +369,37 @@ class ProcessoDocumento {
    * @access private
    * @return boolean
    */
-  private function incluir() {
+  private function incluir()
+  {
 
     /**
      * Processo do protocolo nao informado
      */
-    if ( !($this->oProcessoProtocolo instanceof processoProtocolo) && $this->getProcessoProtocolo()->getCodProcesso() != '' ) {
+    if (!($this->oProcessoProtocolo instanceof processoProtocolo) && $this->getProcessoProtocolo()->getCodProcesso() != '') {
       throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_processo_nao_informado'));
-    } 
-    
+    }
+
     $this->iOi = $this->salvarArquivoBanco();
     $this->sNomeDocumento = basename($this->sCaminhoArquivo);
 
     $oDaoProtprocessodocumento = db_utils::getDao('protprocessodocumento');
-    $oDaoProtprocessodocumento->p01_sequencial    = null;   
-    $oDaoProtprocessodocumento->p01_protprocesso  = $this->getProcessoProtocolo()->getCodProcesso(); 
-    $oDaoProtprocessodocumento->p01_descricao     = $this->sDescricao;    
-    $oDaoProtprocessodocumento->p01_documento     = $this->iOi;    
+    $oDaoProtprocessodocumento->p01_sequencial    = null;
+    $oDaoProtprocessodocumento->p01_protprocesso  = $this->getProcessoProtocolo()->getCodProcesso();
+    $oDaoProtprocessodocumento->p01_descricao     = $this->sDescricao;
+    $oDaoProtprocessodocumento->p01_documento     = $this->iOi;
     $oDaoProtprocessodocumento->p01_nomedocumento = $this->sNomeDocumento;
     $oDaoProtprocessodocumento->p01_depart        = db_getsession('DB_coddepto');
-    $oDaoProtprocessodocumento->incluir(null);   
+    $oDaoProtprocessodocumento->incluir(null);
 
     /**
      * Erro ao incluir documento
      */
-    if ( $oDaoProtprocessodocumento->erro_status == "0" ) {
+    if ($oDaoProtprocessodocumento->erro_status == "0") {
       throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_incluir_documento'));
     }
 
     $this->iCodigo = $oDaoProtprocessodocumento->p01_sequencial;
-    return _M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'documento_salvo');//true;
+    return _M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'documento_salvo'); //true;
   }
 
   /**
@@ -373,20 +410,22 @@ class ProcessoDocumento {
    * @access private
    * @return boolean
    */
-  private function alterar() {
+  private function alterar()
+  {
 
     $oDaoProtprocessodocumento = db_utils::getDao('protprocessodocumento');
-    $oDaoProtprocessodocumento->p01_descricao     = $this->sDescricao;    
-    $oDaoProtprocessodocumento->p01_sequencial    = $this->iCodigo;   
-    $oDaoProtprocessodocumento->alterar($this->iCodigo);   
+    $oDaoProtprocessodocumento->p01_descricao     = $this->sDescricao;
+    $oDaoProtprocessodocumento->p01_sequencial    = $this->iCodigo;
+    $oDaoProtprocessodocumento->p01_nivelacesso = $this->iNivelAcesso;
+    $oDaoProtprocessodocumento->alterar($this->iCodigo);
 
     /**
      * Erro ao alterar documento
      */
-    if ( $oDaoProtprocessodocumento->erro_status == "0" ) {
+    if ($oDaoProtprocessodocumento->erro_status == "0") {
       throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_alterar_documento'));
     }
-    return _M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'documento_alterado');//true;
+    return _M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'documento_alterado'); //true;
   }
 
   /**
@@ -396,14 +435,15 @@ class ProcessoDocumento {
    * @access private
    * @return int
    */
-  private function salvarArquivoBanco() {
+  private function salvarArquivoBanco()
+  {
 
-    $iOid = DBLargeObject::criaOID(true); 
+    $iOid = DBLargeObject::criaOID(true);
     $lEscreveuArquivo = DBLargeObject::escrita($this->sCaminhoArquivo, $iOid);
 
-    if ( !$lEscreveuArquivo ) {
+    if (!$lEscreveuArquivo) {
       throw new BusinessException(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_escrever_arquivo_banco'));
-    } 
+    }
 
     return $iOid;
   }
@@ -415,7 +455,8 @@ class ProcessoDocumento {
    * @access public
    * @return string - caminho do arquivo extraido do banco
    */
-  public function download() {
+  public function download()
+  {
 
 
     $sCaracteres = "/[^a-z0-9\\_\.]/i";
@@ -424,7 +465,7 @@ class ProcessoDocumento {
     $sCaminhoArquivo  = 'tmp/' . $sNomeArquivo;
     $lEscreveuArquivo = DBLargeObject::leitura($this->iOid, $sCaminhoArquivo);
 
-    if ( !$lEscreveuArquivo ) {
+    if (!$lEscreveuArquivo) {
 
       $oStdMensagemErro                  = new StdClass();
       $oStdMensagemErro->sCaminhoArquivo = $sCaminhoArquivo;
@@ -440,16 +481,17 @@ class ProcessoDocumento {
    * @access public
    * @return boolean
    */
-  public function excluir() {
+  public function excluir()
+  {
 
-    if ( empty($this->iCodigo) ) {
+    if (empty($this->iCodigo)) {
       throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_documento_nao_especificado'));
     }
 
     $oDaoProtprocessodocumento = db_utils::getDao('protprocessodocumento');
     $oDaoProtprocessodocumento->excluir($this->iCodigo);
 
-    if ( $oDaoProtprocessodocumento->erro_status  == "0" ) {
+    if ($oDaoProtprocessodocumento->erro_status  == "0") {
       throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_excluir_documento'));
     }
 
@@ -458,11 +500,10 @@ class ProcessoDocumento {
     /**
      * Erro ao excluir documento do banco
      */
-    if ( !$lExclusao ) {
+    if (!$lExclusao) {
       throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_excluir_documento_banco'));
     }
 
     return true;
   }
-
 }
