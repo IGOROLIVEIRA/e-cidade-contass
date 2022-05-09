@@ -322,6 +322,8 @@ for ($i = 0; $i < $iTotalRetencoes; $i++) {
    }
 }
 
+if ($oParametros->tipo == "p"){
+
 $oPdf  = new PDF("L","mm","A4");
 $oPdf->Open();
 $oPdf->SetAutoPageBreak(false);
@@ -446,3 +448,72 @@ $oPdf->cell(15, 5, db_formatar($nTotalOrdemPagamento, "f"), "TBR", 0, "R");
 $oPdf->cell(131,5,"Total Geral:","TBR",0,"R");
 $oPdf->cell(25, 5,db_formatar($nTotalRetencoes,"f"),"TBL",1,"R");
 $oPdf->Output();
+}
+else{
+  $totalOP = 0;
+  $totalgeralOP = 0;
+  $totalRetencoes = 0;
+  $totalgeral = 0;
+  $fp = fopen("tmp/emp2_confereretencoes002.csv","w");
+
+  fputs($fp,"Retenção;");
+  if ($oParametros->group != 2)
+    fputs($fp,"Conta;"); 
+  fputs($fp,"OP;Empenho;Recurso;Receita;Valor OP;Nota;Data Nota;Data Rec.;");
+  if ($oParametros->group != 3)
+    fputs($fp,"Credor;");
+  fputs($fp,"Slip;Valor Ret.\n"); 
+  foreach ($aRetencoes as $oQuebra) {
+    if ($oQuebra->texto != "") {
+      
+      // Quebra por ano
+  
+      if($oParametros->group == 4){
+        fputs($fp,$sNomeQuebra."\n");
+        }
+      // fputs($fp,substr($ln["k12_conta"]."-".$ln["c60_descr"],0,30).";");
+      fputs($fp,$oQuebra->texto."\n");
+      
+      }
+      foreach ($oQuebra->itens as $aRetencoes) {
+  // foreach ($aRetencoes as $oQuebra) {
+      $ln = pg_fetch_array($rsRetencoes);
+      $totalOP += $ln["e53_valor"];  
+      $totalgeralOP += $ln["e53_valor"];
+      $totalRetencoes += $ln["e23_valorretencao"];
+      $totalgeral += $ln["e23_valorretencao"];
+  
+      fputs($fp,$ln["e21_sequencial"].";");
+      if ($oParametros->group != 2) {
+        fputs($fp,substr($ln["k12_conta"]."-".$ln["c60_descr"],0,30).";");
+      }
+      fputs($fp,$ln["e50_codord"].";"
+      .$ln["e60_codemp"]."/".$ln["e60_anousu"].";"
+      .$ln["o58_codigo"].";"
+      .substr($ln["k02_codigo"]."-".$ln["k02_descr"],0,20).";"
+      .db_formatar($ln["e53_valor"],"f").";"
+      .substr($ln["e69_numero"],0,14).";"
+      .db_formatar($ln["e69_dtnota"],"d").";"
+      .db_formatar($ln["k12_data"],"d").";"
+      );
+      if($oParametros->group != 3) {
+       fputs($fp,substr($ln["z01_numcgm"]."-".$ln["z01_nome"],0,40).";");
+      }
+       fputs($fp,$ln["k17_codigo"].";"
+       .db_formatar($ln["e23_valorretencao"],"f").";\n");
+  }
+}
+  if ($oParametros->group != 2){
+       fputs($fp,";;;;;Total da OP:".";".db_formatar($totalOP,"f").";;;;;Total da Retenção:".";".db_formatar($totalRetencoes,"f").";\n"); 
+       fputs($fp,";;;;;Total Geral OP:".";".db_formatar($totalgeralOP,"f").";;;;;Total Geral:".";".db_formatar($totalgeral,"f").";\n");
+  }else{
+        fputs($fp,";;;;Total da OP:".";".db_formatar($totalOP,"f").";;;;;Total da Retenção:".";".db_formatar($totalRetencoes,"f").";\n"); 
+        fputs($fp,";;;;Total Geral OP:".";".db_formatar($totalgeralOP,"f").";;;;;Total Geral:".";".db_formatar($totalgeral,"f").";\n");
+
+  }
+
+  echo "<html><body bgcolor='#cccccc'><center><a href='tmp/emp2_confereretencoes002.csv'>Clique com botão direito para Salvar o arquivo <b>emp2_confereretencoes002.csv</b></a></body></html>";
+  fclose($fp);
+
+
+}

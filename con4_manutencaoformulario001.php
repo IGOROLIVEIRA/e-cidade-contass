@@ -273,9 +273,9 @@ db_menu();
                 $('proximo').disabled = false;
             }
 
-            if (!status.grupoPosterior) {
+            /*if (!status.grupoPosterior) {
                 $('btnsenviar').style.display = "";
-            }
+            }*/
 
             if (status.grupoAnterior) {
                 $('anterior').disabled = false;
