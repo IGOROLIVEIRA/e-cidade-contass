@@ -1405,7 +1405,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             *SOMENTE DOS TIPOS 11 e 14 
             */
             else{
-                
+                $valorAcrescimo = 0;
+                $valorDecrescimo = 0;
                 foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
 
                     $sSql = "SELECT si43_coditem FROM
@@ -1443,7 +1444,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $iQuantidadeItemAnterior = $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero);
                         $iValorTotalItem = $oAcordoItem->getValorTotal();
                         $iValorTotalItemAnterior = $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
-                        
+
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                             $iQuantidadeItem = 1;
                             if($iValorTotalItem > $iValorTotalItemAnterior){
@@ -1467,9 +1468,16 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 }
                             }
                             $iQuantidadeItem = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
-                            $iValorUnitarioAditadoItem = abs($iValorTotalItem - $iValorTotalItemAnterior);
+                            $iValorUnitarioAditadoItem = $oAcordoItem->getValorUnitario();
                         }
+
                         $sHash = $oDados20->ac26_sequencial.$oAcordoItem->getCodigo().$tipoalteracao;
+                        if($tipoalteracao == 1){
+                            $valorAcrescimo += $iQuantidadeItem * $iValorUnitarioAditadoItem;
+                        }else{
+                            $valorDecrescimo += $iQuantidadeItem * $iValorUnitarioAditadoItem;
+                        }
+
                         if(!isset($oDadosAgrupados21[$sHash])){
                             $oDados21 = new stdClass();
                             $oDados21->codigoitem = $oAcordoItem->getCodigo();
@@ -1477,7 +1485,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $oDados21->numeroaditamento = $oDados20->ac26_numeroaditamento;
                             $oDados21->quantidade = $iQuantidadeItem;
                             $oDados21->valorunitarioaditado = $iValorUnitarioAditadoItem;
-                            $oDados21->valoraditamento = $iQuantidadeItem * $iValorUnitarioAditadoItem;
+                            $oDados21->valoraditamento = $tipoalteracao == 1 ? $valorAcrescimo : $valorDecrescimo;
                             $oDados21->si87_codaditivo = $oDados20->ac26_sequencial;
                             $oDados21->sCodorgao = $sCodorgao;
                             $oDados21->sCodUnidade = $sCodUnidade;
@@ -1532,6 +1540,16 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $oDadosAgrupados21[$sHash] = $oDados21;
                         }
                     }//fim quantidade aditada
+
+                    if($tipoalteracao == 1){
+                        if($valorAcrescimo > 0){
+                            $oDadosAgrupados21[$sHash]->valoraditamento = $valorAcrescimo;
+                        }
+                    }else{
+                        if($valorAcrescimo > 0){
+                            $oDadosAgrupados21[$sHash]->valoraditamento = $valorDecrescimo;
+                        }
+                    }
                 }//fim itens
                 $oDadosAgrupados20[$oDados20->ac26_sequencial] = $oDadosAgrupados21;
             }//fim tipo 14 e 15
@@ -1541,7 +1559,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         if(!empty($oDadosAgrupados20)){
             $oDadosgerados = array();
             foreach($oDadosAgrupados20 as $dadosposicao){
-                foreach($dadosposicao as $dados){
+                //esse array reverse foi uma forma que encontrei para pegar sempre o ultimo valor aditado
+                $dadosPosicaoReverte = array_reverse($dadosposicao);
+                foreach($dadosPosicaoReverte as $dados){
                     $sHashGeracao = $dados->ac26_numeroaditamento.$dados->tipoalteracao;
                     if(!isset($oDadosgerados[$sHashGeracao])){
                         //registro 20

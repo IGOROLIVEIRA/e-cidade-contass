@@ -49,7 +49,7 @@ class GerarCONTRATOS extends GerarAM
         $rsCONTRATOS40    = db_query($sSql8);
 
 
-        /*if (pg_num_rows($rsCONTRATOS10) == 0 && pg_num_rows($rsCONTRATOS20) == 0 && pg_num_rows($rsCONTRATOS30) == 0 && pg_num_rows($rsCONTRATOS40) == 0) {
+        if (pg_num_rows($rsCONTRATOS10) == 0 && pg_num_rows($rsCONTRATOS20) == 0 && pg_num_rows($rsCONTRATOS30) == 0 && pg_num_rows($rsCONTRATOS40) == 0) {
 
             $aCSV['tiporegistro']       =   '99';
             $this->sLinha = $aCSV;
@@ -60,7 +60,7 @@ class GerarCONTRATOS extends GerarAM
              *
              * Registros 10, 11, 12, 13, 14, 15
              */
-           /* for ($iCont = 0; $iCont < pg_num_rows($rsCONTRATOS10); $iCont++) {
+            for ($iCont = 0; $iCont < pg_num_rows($rsCONTRATOS10); $iCont++) {
 
                 $aCONTRATOS10  = pg_fetch_array($rsCONTRATOS10, $iCont);
 
@@ -102,7 +102,7 @@ class GerarCONTRATOS extends GerarAM
                  * OC11837
                  */
 
-                /*if ($aCONTRATOS10['si83_naturezaobjeto'] == "7" || $aCONTRATOS10['si83_naturezaobjeto'] == "1") {
+                if ($aCONTRATOS10['si83_naturezaobjeto'] == "7" || $aCONTRATOS10['si83_naturezaobjeto'] == "1") {
                     for ($iCont2 = 0; $iCont2 < pg_num_rows($rsCONTRATOS11); $iCont2++) {
 
                         $aCONTRATOS11  = pg_fetch_array($rsCONTRATOS11, $iCont2);
@@ -276,7 +276,7 @@ class GerarCONTRATOS extends GerarAM
              *
              * Registros 30
              */
-            /*for ($iCont7 = 0; $iCont7 < pg_num_rows($rsCONTRATOS30); $iCont7++) {
+            for ($iCont7 = 0; $iCont7 < pg_num_rows($rsCONTRATOS30); $iCont7++) {
 
                 $aCONTRATOS30  = pg_fetch_array($rsCONTRATOS30, $iCont7);
 
@@ -304,7 +304,7 @@ class GerarCONTRATOS extends GerarAM
              *
              * Registros 40
              */
-            /*for ($iCont8 = 0; $iCont8 < pg_num_rows($rsCONTRATOS40); $iCont8++) {
+            for ($iCont8 = 0; $iCont8 < pg_num_rows($rsCONTRATOS40); $iCont8++) {
 
                 $aCONTRATOS40  = pg_fetch_array($rsCONTRATOS40, $iCont8);
 
@@ -319,8 +319,8 @@ class GerarCONTRATOS extends GerarAM
                 $this->sLinha = $aCSVCONTRATOS40;
                 $this->adicionaLinha();
             }
-*/
+
             $this->fechaArquivo();
         }
-    
+    }
 }
