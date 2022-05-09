@@ -70,8 +70,8 @@ class cl_hablic102022
   var $si57_dthabilitacao_mes = null;
   var $si57_dthabilitacao_ano = null;
   var $si57_dthabilitacao = null;
-  var $si57_presencalicitantes = 0;
-  var $si57_renunciarecurso = 0;
+  var $si57_presencalicitantes = null;
+  var $si57_renunciarecurso = null;
   var $si57_mes = 0;
   var $si57_instit = 0;
   // cria propriedade com as variaveis do arquivo
@@ -280,10 +280,10 @@ class cl_hablic102022
       $this->si57_dthabilitacao = "null";
     }
     if ($this->si57_presencalicitantes == null) {
-      $this->si57_presencalicitantes = "0";
+      $this->si57_presencalicitantes = "null";
     }
     if ($this->si57_renunciarecurso == null) {
-      $this->si57_renunciarecurso = "0";
+      $this->si57_renunciarecurso = "null";
     }
     if ($this->si57_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -538,8 +538,8 @@ class cl_hablic102022
           $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
           $this->erro_status = "0";
 
-        return false;
-      }
+          return false;
+        }
       }
       $sql .= $virgula . " si57_exerciciolicitacao = $this->si57_exerciciolicitacao ";
       $virgula = ",";
@@ -1074,5 +1074,3 @@ class cl_hablic102022
     return $sql;
   }
 }
-
-?>

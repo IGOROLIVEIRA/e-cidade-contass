@@ -216,7 +216,8 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	join pcorcamforne on pc31_orcamforne = pc21_orcamforne where pc31_liclicita = liclicita.l20_codigo and pc21_numcgm = pcforne.pc60_numcgm) as PresencaLicitantes,
 	(select case when pc31_renunrecurso is null then 2 else pc31_renunrecurso end as pc31_renunrecurso from pcorcamfornelic
 	join pcorcamforne on pc31_orcamforne = pc21_orcamforne where pc31_liclicita = liclicita.l20_codigo and pc21_numcgm = pcforne.pc60_numcgm) as renunciaRecurso,
-	l20_codigo as codlicitacao
+	l20_codigo as codlicitacao,
+    liclicita.l20_leidalicitacao as leidalicitacao
 	FROM liclicita as liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 	INNER JOIN habilitacaoforn as habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
@@ -229,13 +230,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	WHERE db_config.codigo=  " . db_getsession("DB_instit") . "
 	AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= " . db_getsession("DB_anousu") . "
 	AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-	AND cflicita.l03_pctipocompratribunal IN ('48',
-		                                                  '49',
-		                                                  '50',
-		                                                  '51',
-		                                                  '52',
-		                                                  '53',
-		                                                  '54')";
+	AND cflicita.l03_pctipocompratribunal IN ('48','49','50','51','52','53','54')";
 
         $rsResult10 = db_query($sSql);
 
@@ -273,15 +268,12 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
             $clhablic10->si57_dtemissaocndt = $oDados10->dtemissaocndt;
             $clhablic10->si57_dtvalidadecndt = $oDados10->dtvalidadecndt;
             $clhablic10->si57_dthabilitacao = $oDados10->dthabilitacao;
-            if($oDados10->presencalicitantes == null ){
-                $clhablic10->si57_presencalicitantes = 1;
-            }else{
+            if ($oDados10->leidalicitacao == 2) {
                 $clhablic10->si57_presencalicitantes = $oDados10->presencalicitantes;
-            }
-            if($oDados10->renunciarecurso == null){
-                $clhablic10->si57_renunciarecurso = 1;
-            }else{
                 $clhablic10->si57_renunciarecurso = $oDados10->renunciarecurso;
+            } else {
+                $clhablic10->si57_presencalicitantes = null;
+                $clhablic10->si57_renunciarecurso = null;
             }
             $clhablic10->si57_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clhablic10->si57_instit = db_getsession("DB_instit");

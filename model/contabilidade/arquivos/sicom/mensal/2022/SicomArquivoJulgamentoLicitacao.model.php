@@ -35,7 +35,8 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	 * Construtor da classe
 	 */
 	public function __construct()
-	{ }
+	{
+	}
 
 	/**
 	 * Retorna o codigo do layout
@@ -453,8 +454,8 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
 			$oResult30 = db_utils::fieldsMemory($rsResult30, $iCont30);
-			$sHash30 = '30' . $oResult30->codorgaoresp . $oResult30->codunidadesubresp . $oResult30->exerciciolicitacao . $oResult30->nroprocessolicitatorio.
-				$oResult30->tipodocumento.$oResult30->nrodocumento.$oResult30->nrolote.$oResult30->coditem;
+			$sHash30 = '30' . $oResult30->codorgaoresp . $oResult30->codunidadesubresp . $oResult30->exerciciolicitacao . $oResult30->nroprocessolicitatorio .
+				$oResult30->tipodocumento . $oResult30->nrodocumento . $oResult30->nrolote . $oResult30->coditem;
 
 			if (!$aDadosAgrupados30[$sHash30]) {
 				if ($oResult30->criterioadjudicacao == 2) {
@@ -497,7 +498,6 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 			if ($cljulglic30->erro_status == 0) {
 				throw new Exception($cljulglic30->erro_msg);
 			}
-
 		}
 
 
@@ -524,7 +524,8 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	liclicita.l20_edital as nroProcessoLicitatorio,
 	liclicitasituacao.l11_data as dtJulgamento,
 	'1' as PresencaLicitantes,
-	(case when pc31_renunrecurso is null then 2 else pc31_renunrecurso end) as renunciaRecurso
+	(case when pc31_renunrecurso is null then 2 else pc31_renunrecurso end) as renunciaRecurso,
+	liclicita.l20_leidalicitacao as leidalicitacao
 	FROM liclicita as liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 	INNER JOIN liclicitasituacao on (liclicita.l20_codigo = liclicitasituacao.l11_liclicita)
@@ -539,10 +540,10 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		$aDadosAgrupados40 = array();
 		for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 			$oResult40 = db_utils::fieldsMemory($rsResult40, $iCont40);
-			$sHash40 = '40' . $oResult40->codorgaoresp . $oResult40->codunidadesubresp . $oResult40->exerciciolicitacao . $oResult40->nroprocessolicitatorio.
+			$sHash40 = '40' . $oResult40->codorgaoresp . $oResult40->codunidadesubresp . $oResult40->exerciciolicitacao . $oResult40->nroprocessolicitatorio .
 				$oResult40->dtjulgamento;
 
-			if(!$aDadosAgrupados40[$sHash40]) {
+			if (!$aDadosAgrupados40[$sHash40]) {
 				$oDados40 = new stdClass();
 
 				$oDados40->si62_tiporegistro = $oResult40->tiporegistro;
@@ -551,15 +552,20 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 				$oDados40->si62_exerciciolicitacao = $oResult40->exerciciolicitacao;
 				$oDados40->si62_nroprocessolicitatorio = $oResult40->nroprocessolicitatorio;
 				$oDados40->si62_dtjulgamento = $oResult40->dtjulgamento;
-				$oDados40->si62_presencalicitantes = $oResult40->presencalicitantes;
-				$oDados40->si62_renunciarecurso = $oResult40->renunciarecurso;
+				if ($oResult40->leidalicitacao == 2) {
+					$oDados40->si62_presencalicitantes = $oResult40->presencalicitantes;
+					$oDados40->si62_renunciarecurso = $oResult40->renunciarecurso;
+				} else {
+					$oDados40->si62_presencalicitantes = null;
+					$oDados40->si62_renunciarecurso = null;
+				}
 				$oDados40->si62_instit = db_getsession("DB_instit");
 				$oDados40->si62_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 				$aDadosAgrupados40[$sHash40] = $oDados40;
 			}
 		}
 
-		foreach ($aDadosAgrupados40 as $oDados40){
+		foreach ($aDadosAgrupados40 as $oDados40) {
 			$cljulglic40 = new cl_julglic402022();
 
 			$cljulglic40->si62_tiporegistro = $oDados40->si62_tiporegistro;
@@ -568,8 +574,13 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 			$cljulglic40->si62_exerciciolicitacao = $oDados40->si62_exerciciolicitacao;
 			$cljulglic40->si62_nroprocessolicitatorio = $oDados40->si62_nroprocessolicitatorio;
 			$cljulglic40->si62_dtjulgamento = $oDados40->si62_dtjulgamento;
-			$cljulglic40->si62_presencalicitantes = $oDados40->si62_presencalicitantes;
-			$cljulglic40->si62_renunciarecurso = $oDados40->si62_renunciarecurso;
+			if ($oResult40->leidalicitacao == 2) {
+				$cljulglic40->si62_presencalicitantes = $oDados40->si62_presencalicitantes;
+				$cljulglic40->si62_renunciarecurso = $oDados40->si62_renunciarecurso;
+			} else {
+				$cljulglic40->si62_presencalicitantes = null;
+				$cljulglic40->si62_renunciarecurso = null;
+			}
 			$cljulglic40->si62_instit = db_getsession("DB_instit");
 			$cljulglic40->si62_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 

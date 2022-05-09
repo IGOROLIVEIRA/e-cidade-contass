@@ -23,7 +23,7 @@ class cl_resplic202022
   var $si56_codunidadesub = null;
   var $si56_exerciciolicitacao = 0;
   var $si56_nroprocessolicitatorio = null;
-  var $si56_codtipocomissao = 0;
+  var $si56_codtipocomissao = null;
   var $si56_descricaoatonomeacao = 0;
   var $si56_nroatonomeacao = 0;
   var $si56_dataatonomeacao_dia = null;
@@ -151,7 +151,7 @@ class cl_resplic202022
       $this->si56_exerciciolicitacao = "0";
     }
     if ($this->si56_codtipocomissao == null) {
-      $this->si56_codtipocomissao = "0";
+      $this->si56_codtipocomissao = "null";
     }
     if ($this->si56_descricaoatonomeacao == null) {
       $this->si56_descricaoatonomeacao = "0";
@@ -742,5 +742,3 @@ class cl_resplic202022
     return $sql;
   }
 }
-
-?>
