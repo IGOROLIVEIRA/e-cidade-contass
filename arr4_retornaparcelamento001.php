@@ -53,6 +53,8 @@ db_app::import('exceptions.*');
 
 $oPost = db_utils::postMemory($_POST);
 
+$oInstit = new Instituicao(db_getsession('DB_instit'));
+
 if (isset($oPost->processar)) {
 
   try {
@@ -511,7 +513,8 @@ if (isset($oPost->processar)) {
    * casos extremos onde não exista outra alternativa.
    *
    */
-  if(db_getsession("DB_id_usuario") == 1) {
+  //Liberação adicional para a prefeitura de Pirapora, usuário 2050 - Gisele Pereira Cunha
+  if((db_getsession("DB_id_usuario") == 1) || ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA && db_getsession("DB_id_usuario")==2050)) {
     echo "<script> document.form1.processar.disabled = false </script>";
   } else {
     echo "<script> alert('Rotina bloqueada!') </script>";
