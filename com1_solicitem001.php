@@ -25,6 +25,8 @@
  *                                licenca/licenca_pt.txt
  */
 
+use ECidade\V3\Extension\Document;
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -82,6 +84,7 @@ require_once("classes/db_proctransferproc_classe.php");
 require_once("model/itempacto.model.php");
 require_once("classes/solicitacaocompras.model.php");
 require_once("model/ItemEstimativa.model.php");
+require_once("classes/db_itemprecoreferencia_classe.php");
 
 $clsolicitem         = new cl_solicitem;
 $clsolicitemunid     = new cl_solicitemunid;
@@ -130,6 +133,7 @@ $clsolicitalog       = new cl_solicitalog;
 $clliclicita         = new cl_liclicita;
 $clliclicitemlote    = new cl_liclicitemlote;
 $clitemprecoreferencia   = new cl_itemprecoreferencia;
+$cod_proc = null;
 $iPactoPlano = null;
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
@@ -722,6 +726,7 @@ e55_sequen is not null and e54_anulad is null"
 
       if ($clsolicitem->erro_status == 0) {
         $sqlerro = true;
+        $erro_msg = $clsolicitem->erro_msg;
       }else{
         $result_pcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_pcorcamval($pc11_codigo,$pc11_numero));
         if($clpcorcamval->erro_status == 0){
@@ -749,25 +754,43 @@ e55_sequen is not null and e54_anulad is null"
               $clpcorcamval->pc23_quant =0;
               $clpcorcamval->pc23_vlrun = 0;
               $clpcorcamval->pc23_valor = 0;
-
-              $result_itemprecorefe = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferencia($pc80_codproc));
               
-              if($clitemprecoreferencia->erro_status == 0){
-                db_fieldsmemory($result_itemprecorefe,0);
-                $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
-                $clitemprecoreferencia->si02_itemproccompra = $pc23_orcamitem;
-                $result_precoreferensequncial = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem));
-                db_fieldsmemory($result_precoreferensequncial,0);
-                $clitemprecoreferencia->$si02_sequencial = $si02_sequencial;
-                $clitemprecoreferencia->$si02_qtditem = $pc23_quant;
-                $clitemprecoreferencia->alterar($si02_sequencial);
+              
+              /*$result_codprocesso = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_codprocesso($pc11_codigo));
+              db_fieldsmemory($result_codprocesso,0);
 
-              }
+              //if($clitemprecoreferencia->erro_status == 0){
+                $result_itemprecorefe = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferencia($pc81_codproc));
+              
+                if($clitemprecoreferencia->erro_status == 0){
+                  db_fieldsmemory($result_itemprecorefe,0);
+                  
+                  $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
+                  
+                  $clitemprecoreferencia->si02_itemproccompra = $pc23_orcamitem;
+                  $result_precoreferensequncial = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem));
+                  db_fieldsmemory($result_precoreferensequncial,0);
+                  
+                  $clitemprecoreferencia->si02_sequencial = $si02_sequencial;
+                  $clitemprecoreferencia->si02_qtditem = $pc23_quant;
+                  
+                  $clitemprecoreferencia->alterar($si02_sequencial);
+                }else {
+                  $sqlerro = true;
+                  $erro_msg = $clitemprecoreferencia->erro_msg;
+                }
+              }else {
+                $sqlerro = true;
+                $erro_msg = $clitemprecoreferencia->erro_msg;
+              }*/
 
             }
 
           }
           
+        }else {
+          $sqlerro = true;
+          $erro_msg = $clpcorcamval->erro_msg;
         }
       }
       $erro_msg = $clsolicitem->erro_msg;
@@ -1899,7 +1922,10 @@ function js_ver(){
   }
 }
 */
-
+  //$codigo_proc = localStorage.getItem("codigoprocesso");
+  
+   
+  
   function teste() {
 
     teste = new ultimosOrcamentos();

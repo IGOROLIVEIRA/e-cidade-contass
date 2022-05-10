@@ -355,7 +355,7 @@ class cl_itemprecoreferencia {
         $this->erro_status = "0";
         return false;
       }
-    }
+      }
      $sql .= " where ";  
      if($si02_sequencial==null){
         $sql .= " si02_sequencial = $this->si02_sequencial";
@@ -379,11 +379,8 @@ class cl_itemprecoreferencia {
            $resac = db_query("insert into db_acount values($acount,2010196,2009257,'".AddSlashes(pg_result($resaco,$conresaco,'si02_vlprecoreferencia'))."','$this->si02_vlprecoreferencia',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
-     die($sql);
-     echo $sql;
-     var_dump($sql);
-     exit;
-     //$result = db_query($sql);
+     
+     $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Item do preco de referencia nao Alterado. Alteracao Abortada.\\n";
@@ -592,6 +589,17 @@ class cl_itemprecoreferencia {
     return $sSql;
   }
 
+  public function sql_query_codprocesso($pc11_numero){
+    $sSql  = "select pc81_codproc ";  
+    $sSql  .= "from pcprocitem "; 
+    $sSql  .= "where pc81_solicitem = $pc11_numero "; 
+
+    return $sSql;
+  }
+
+
+
+  
 
 
 
