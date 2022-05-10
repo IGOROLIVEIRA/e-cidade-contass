@@ -115,7 +115,7 @@ if (isset($chave_p58_requer)) {
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
 
-    <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
+    <table height="100%" width="80%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
         <form name="form3" method="post" action="">
 
             <tr>
@@ -215,7 +215,7 @@ if (isset($chave_p58_requer)) {
                                 <tr>
                                     <td colspan="2" align="center">
                                         <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                                        <input name="limpar" type="button" id="limpar" value="Limpar" onclick="limpar();">
+                                        <input name="limpar" type="button" id="limpar" value="Limpar" onclick="limparTela();">
                                     </td>
                                 </tr>
 
@@ -274,7 +274,13 @@ if (isset($chave_p58_requer)) {
                             }
 
                             if (isset($p51_descr) && trim($p51_descr) != '') {
-                                $where .= " and p51_descr = " . "'" . $p51_descr . "'";
+
+                                $array_palavras = explode(" ", $p51_descr);
+                                $palavras = "";
+                                for ($i = 0; $i < count($array_palavras); $i++) {
+
+                                    $where .= " and LOWER (p51_descr) like LOWER ('%" . $array_palavras[$i] . "%')";
+                                }
                             }
 
                             if (isset($p58_obs) && trim($p58_obs) != '') {
@@ -287,7 +293,9 @@ if (isset($chave_p58_requer)) {
                             }
 
                             if (isset($p58_numero) && trim($p58_numero) != '') {
-                                $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                                $numero = substr($p58_numero, 0, strpos($p58_numero, "/"));
+                                $ano = substr($p58_numero, strpos($p58_numero, "/") + 1);
+                                $where .= " and p58_numero = " . "'" . $numero . "'" . " and p58_ano = $ano";
                             }
 
                             if (isset($datainicial) && isset($datafinal) && $datainicial != '' && $datafinal != '') {
@@ -318,7 +326,9 @@ if (isset($chave_p58_requer)) {
                             }
 
                             if (isset($p58_numero) && trim($p58_numero) != '') {
-                                $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                                $numero = substr($p58_numero, 0, strpos($p58_numero, "/"));
+                                $ano = substr($p58_numero, strpos($p58_numero, "/") + 1);
+                                $where .= " and p58_numero = " . "'" . $numero . "'" . " and p58_ano = $ano";
                             }
 
                             if (isset($datainicial) && isset($datafinal) && $datainicial != '' && $datafinal != '') {
@@ -351,7 +361,17 @@ if (isset($chave_p58_requer)) {
                             }
 
                             if (isset($p51_descr) && trim($p51_descr) != '') {
-                                $where .= " and p51_descr = " . "'" . $p51_descr . "'";
+
+                                $array_palavras = explode(" ", $p51_descr);
+                                $palavras = "";
+                                for ($i = 0; $i < count($array_palavras); $i++) {
+                                    if ($i == count($array_palavras) - 1) {
+                                        $palavras .= "LOWER('%" . $array_palavras[$i] . "%')";
+                                    } else {
+                                        $palavras .= "LOWER('%" . $array_palavras[$i] . "%')" . ",";
+                                    }
+                                }
+                                $where .= " and LOWER (p51_descr) like any(array[$palavras]) ";
                             }
 
                             if (isset($p58_obs) && trim($p58_obs) != '') {
@@ -368,7 +388,9 @@ if (isset($chave_p58_requer)) {
                             }
 
                             if (isset($p58_numero) && trim($p58_numero) != '') {
-                                $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                                $numero = substr($p58_numero, 0, strpos($p58_numero, "/"));
+                                $ano = substr($p58_numero, strpos($p58_numero, "/") + 1);
+                                $where .= " and p58_numero = " . "'" . $numero . "'" . " and p58_ano = $ano";
                             }
 
                             if (isset($datainicial) && isset($datafinal) && $datainicial != '' && $datafinal != '') {
@@ -398,7 +420,9 @@ if (isset($chave_p58_requer)) {
                         }
 
                         if (isset($p58_numero) && trim($p58_numero) != '') {
-                            $where .= " and p58_numero = " . "'" . $p58_numero . "'";
+                            $numero = substr($p58_numero, 0, strpos($p58_numero, "/"));
+                            $ano = substr($p58_numero, strpos($p58_numero, "/") + 1);
+                            $where .= " and p58_numero = " . "'" . $numero . "'" . " and p58_ano = $ano";
                         }
 
                         if (isset($datainicial) && isset($datafinal) && $datainicial != '' && $datafinal != '') {
@@ -519,9 +543,8 @@ if (isset($chave_p58_requer)) {
 
 </html>
 <script type="text/javascript">
-    function limpar() {
-        document.location.reload(true);
-
+    function limparTela() {
+        location.href = 'pro3_consultaprocesso001.php';
 
     }
 
