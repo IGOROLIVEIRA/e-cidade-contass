@@ -1099,11 +1099,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }
             //FIM OC10386
             $sSql = "select case when length(fornecedor.z01_cgccpf) = 11 then 1 else 2 end as tipodocumento,fornecedor.z01_cgccpf as nrodocumento,
-      representante.z01_cgccpf as nrodocrepresentantelegal
-      from cgm as fornecedor
-      join pcfornereprlegal on fornecedor.z01_numcgm = pcfornereprlegal.pc81_cgmforn
-      join cgm as representante on pcfornereprlegal.pc81_cgmresp = representante.z01_numcgm
-      where pcfornereprlegal.pc81_tipopart in (1,3) and fornecedor.z01_numcgm = " . $oAcordo->getContratado()->getCodigo();
+                representante.z01_cgccpf as nrodocrepresentantelegal
+                from cgm as fornecedor
+                join pcfornereprlegal on fornecedor.z01_numcgm = pcfornereprlegal.pc81_cgmforn
+                join cgm as representante on pcfornereprlegal.pc81_cgmresp = representante.z01_numcgm
+                where pcfornereprlegal.pc81_tipopart in (1,3) and fornecedor.z01_numcgm = " . $oAcordo->getContratado()->getCodigo();
 
             $rsResult13 = db_query($sSql); //db_criatabela($rsResult13);
             $oDados13 = db_utils::fieldsMemory($rsResult13, 0);
@@ -1154,12 +1154,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 ac26_data,
                 ac02_acordonatureza,
                 manutac_codunidsubanterior
-      FROM acordoposicaoaditamento
-      INNER JOIN acordoposicao ON ac26_sequencial = ac35_acordoposicao
-      INNER JOIN acordo ON ac26_acordo = ac16_sequencial
-      INNER JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
-      LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-      WHERE ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+        FROM acordoposicaoaditamento
+        INNER JOIN acordoposicao ON ac26_sequencial = ac35_acordoposicao
+        INNER JOIN acordo ON ac26_acordo = ac16_sequencial
+        INNER JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
+        LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
+        WHERE ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
           AND ac16_instit = " . db_getsession("DB_instit") . " ORDER BY ac26_sequencial ";
 
         $rsResult20 = db_query($sSql);
@@ -1452,7 +1452,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             }else{
                                 $tipoalteracao = 2;
                             }
-                            $iValorUnitarioAditadoItem = abs($iValorTotalItem - $iValorTotalItemAnterior);
+
+                            if($iValorTotalItem == $iValorTotalItemAnterior){
+                                $iValorUnitarioAditadoItem =$iValorTotalItem;
+                                $tipoalteracao = 1;
+                            }
+                            
                         }else{
                             if($iQuantidadeItem != $iQuantidadeItemAnterior){
                                 if($iQuantidadeItem > $iQuantidadeItemAnterior){
