@@ -56,6 +56,9 @@ class cl_adesaoregprecos
   var $si06_exercicioedital = null;
   var $si06_anocadastro = null;
   var $si06_leidalicitacao = null;
+  var $si06_anomodadm = null;
+  var $si06_nummodadm = null;
+
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si06_sequencial = int8 = Sequencial 
@@ -81,6 +84,8 @@ class cl_adesaoregprecos
                  si06_cadinicial = int4 = Cadastro Inicial 
                  si06_anocadastro = int4 = Ano cadastro 
                  si06_leidalicitacao = int4 = Lei de licitacao
+                 si06_anomodadm = int4 = Ano do Processo
+                 si06_nummodadm = int8 = Numero Modalidade
                  ";
   //funcao construtor da classe 
   function cl_adesaoregprecos()
@@ -162,6 +167,8 @@ class cl_adesaoregprecos
       $this->si06_cadinicial = ($this->si06_cadinicial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_cadinicial"] : $this->si06_cadinicial);
       $this->si06_anocadastro = ($this->si06_anocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_anocadastro"] : $this->si06_anocadastro);
       $this->si06_leidalicitacao = ($this->si06_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_leidalicitacao"] : $this->si06_leidalicitacao);
+      $this->si06_anomodadm = ($this->si06_anomodadm == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_anomodadm"] : $this->si06_anomodadm);
+      $this->si06_nummodadm = ($this->si06_nummodadm == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_nummodadm"] : $this->si06_nummodadm);
     } else {
       $this->si06_sequencial = ($this->si06_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_sequencial"] : $this->si06_sequencial);
     }
@@ -358,6 +365,26 @@ class cl_adesaoregprecos
       return false;
     }
 
+    if ($this->si06_anomodadm == null || $this->si06_anomodadm == '0') {
+      $this->erro_sql = " Campo Exercicio do Processo nao Informado.";
+      $this->erro_campo = "si06_anomodadm";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->si06_nummodadm == null || $this->si06_nummodadm == '0') {
+      $this->erro_sql = " Campo Numero da Modalidade nao Informado.";
+      $this->erro_campo = "si06_nummodadm";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
     if ($this->si06_cadinicial == null && db_getsession('DB_anousu') >= 2020) {
       $this->si06_cadinicial = 1;
     } else {
@@ -422,6 +449,8 @@ class cl_adesaoregprecos
                                       ,si06_cadinicial
                                       ,si06_anocadastro
                                       ,si06_leidalicitacao
+                                      ,si06_anomodadm
+                                      ,si06_nummodadm
                        )
                 values (
                                 $this->si06_sequencial
@@ -448,6 +477,9 @@ class cl_adesaoregprecos
                                ,$this->si06_cadinicial
                                ,$this->si06_anocadastro
                                ,$this->si06_leidalicitacao
+                               ,$this->si06_anomodadm
+                               ,$this->si06_nummodadm
+
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -497,6 +529,8 @@ class cl_adesaoregprecos
       $resac = db_query("insert into db_acount values($acount,2010205,2009311,'','" . AddSlashes(pg_result($resaco, 0, 'si06_processocompra')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010205,2009312,'','" . AddSlashes(pg_result($resaco, 0, 'si06_fornecedor')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010205,2009313,'','" . AddSlashes(pg_result($resaco, 0, 'si06_anoproc')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010205,2009314,'','" . AddSlashes(pg_result($resaco, 0, 'si06_anomodadm')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010205,2009315,'','" . AddSlashes(pg_result($resaco, 0, 'si06_nummodadm')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
     return true;
   }
@@ -836,6 +870,36 @@ class cl_adesaoregprecos
         return false;
       }
     }
+
+    if (trim($this->si06_anomodadm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_anomodadm"])) {
+      $sql  .= $virgula . " si06_anomodadm = $this->si06_anomodadm ";
+      $virgula = ",";
+      if (trim($this->si06_anomodadm) == null) {
+        $this->erro_sql = " Campo Exercicio do Processo nao Informado.";
+        $this->erro_campo = "si06_anomodadm";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+    if (trim($this->si06_nummodadm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_nummodadm"])) {
+      $sql  .= $virgula . " si06_nummodadm = $this->si06_nummodadm ";
+      $virgula = ",";
+      if (trim($this->si06_nummodadm) == null) {
+        $this->erro_sql = " Campo Numero da Modalidade nao Informado.";
+        $this->erro_campo = "si06_nummodadm";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+
     if (trim($this->si06_edital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"])) {
       $sql  .= $virgula . " si06_edital = $this->si06_edital ";
       $virgula = ",";
@@ -1042,7 +1106,7 @@ class cl_adesaoregprecos
     return $result;
   }
   // funcao do sql 
-  function sql_query($si06_sequencial = null, $campos = "si06_sequencial, si06_orgaogerenciador, si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgm.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data", $ordem = null, $dbwhere = "")
+  function sql_query($si06_sequencial = null, $campos = "si06_sequencial, si06_orgaogerenciador, si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_anomodadm,si06_nummodadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgm.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {

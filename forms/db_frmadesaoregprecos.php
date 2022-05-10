@@ -194,14 +194,38 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
       </td>
     </tr>
     <tr>
-      <td nowrap title="<?= @$Tsi06_dataabertura ?>">
-        <?= @$Lsi06_dataabertura ?>
+      <td>
+        <b>
+          Exercício do Processo de Adesão:
+        </b>
       </td>
       <td>
         <?
-        db_inputdata('si06_dataabertura', @$si06_dataabertura_dia, @$si06_dataabertura_mes, @$si06_dataabertura_ano, true, 'text', $db_opcao, "")
+        db_input('si06_anomodadm', 10, '', true, 'text', $db_opcao, "", "", "", "", 4);
         ?>
       </td>
+    </tr>
+    <tr>
+    <tr>
+      <td>
+        <b>
+          Nº Modalidade:
+        </b>
+      </td>
+      <td>
+        <?
+        db_input('si06_nummodadm', 10, '', true, 'text', $db_opcao, "");
+        ?>
+      </td>
+    </tr>
+    <td nowrap title="<?= @$Tsi06_dataabertura ?>">
+      <?= @$Lsi06_dataabertura ?>
+    </td>
+    <td>
+      <?
+      db_inputdata('si06_dataabertura', @$si06_dataabertura_dia, @$si06_dataabertura_mes, @$si06_dataabertura_ano, true, 'text', $db_opcao, "")
+      ?>
+    </td>
     </tr>
     <tr>
       <td nowrap title="<?= @$Tsi06_dataadesao ?>">
