@@ -571,24 +571,27 @@ if (isset($_POST["processar"])) {
             </th>
         </tr>
     </table>
-    <table style="width: 20%; border: 0px solid black; display: none;" id="tblDataEmpenho">
+    <div id="divtblDataEmpenho">
+        <table style="width: 20%; border: 0px solid black; display: none;" id="tblDataEmpenho">
 
-        <tr>
-            <th colspan="2" style="text-align: center;">
-                Veículos com o empenho aplicado maior que a data de abastecimento
-            </th>
-        <tr>
+            <tr>
+                <th colspan="1" style="text-align: center;">
+                    Veículos em que a data do empenho aplicado é maior que a data do abastecimento
+                </th>
+            <tr>
 
-        <tr style='background-color:#ffffff;'>
-            <th style="width: 150px;">
-                Código
-            </th>
-            <th style="width: 150px;">
-                Placa
-            </th>
-        </tr>
-        </tr>
-    </table>
+            <tr style='background-color:#ffffff;'>
+                <th style="width: 150px;">
+                    Código
+                </th>
+                <th style="width: 150px;">
+                    Placa
+                </th>
+            </tr>
+
+
+        </table>
+    </div>
     <table style="width: 20%; border: 0px solid black; display: none;" id="tblBaixa">
 
         <tr>
@@ -668,6 +671,16 @@ if (isset($_POST["processar"])) {
     var empenhoselecionado = "";
     var dataempenho = "";
 
+    function js_removelinha(linha) {
+        var tab = (document.all) ? document.all.tab : document.getElementById('tblDataEmpenho');
+        for (i = 0; i < tab.rows.length; i++) {
+            if (linha == tab.rows[i].id) {
+                tab.deleteRow(i);
+                break;
+            }
+        }
+    }
+
     function aplicarEmpenho() {
 
 
@@ -683,7 +696,12 @@ if (isset($_POST["processar"])) {
         }
 
 
+        var i = 0;
 
+        document.getElementById('tblDataEmpenho').remove();
+
+        var element = document.getElementById('divtblDataEmpenho');
+        element.innerHTML = ' <table style="width: 20%; border: 0px solid black; display: none;" id="tblDataEmpenho"><tr><th colspan="2" style="text-align: center;">Veículos em que a data do empenho aplicado é maior que a data do abastecimento</th><tr><tr style="background-color: #ffffff;"><th style="width: 150px;">Código</th><th style="width: 150px;">Placa</th></tr></table>'
 
         itens.forEach(function(item) {
 
@@ -702,33 +720,39 @@ if (isset($_POST["processar"])) {
 
             var dataFormatada1 = new Date(data_abastecimento.substring(6, 10), data_abastecimento.substring(3, 5), data_abastecimento.substring(0, 2));
             var dataFormatada2 = new Date(dataempenho);
-            document.getElementById(id_empenho).value = empenhoselecionado;
 
 
             if (dataFormatada2 > dataFormatada1) {
                 gerartabela = 1;
                 var tabela = document.getElementById("tblDataEmpenho");
+
                 var numeroLinhas = tabela.rows.length;
+
+                var tabela = document.getElementById("tblDataEmpenho");
                 var linha = tabela.insertRow(numeroLinhas);
                 var celula1 = linha.insertCell(0);
                 var celula2 = linha.insertCell(1);
-                celula1.innerHTML = "<div style='text-align:center'>" + abastecimento + "<div>";
-                celula2.innerHTML = "<div style='text-align:center'>" + placa + "<div>";
+                celula1.innerHTML = " <div style='text-align:center'>" + abastecimento + "<div>";
+                celula2.innerHTML = " <div style='text-align:center'>" + placa + "<div>";
+            } else {
+                document.getElementById(id_empenho).value = empenhoselecionado;
+
             }
 
-
+            i++;
 
         });
 
         if (gerartabela == 1) {
             document.getElementById("tblDataEmpenho").style.display = "block";
-
+            return;
         } else {
+
             document.getElementById("tblDataEmpenho").style.display = "none";
 
         }
 
-        alert("Dotação aplicada aos veículos selecionados");
+        alert("Empenho aplicado aos abastecimentos selecionados");
     }
 
     function getItensMarcados() {
