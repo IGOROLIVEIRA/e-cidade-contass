@@ -230,9 +230,9 @@ class ProcessoDocumento
   }
 
   /**
-   * Define o OID do documento
+   * Define o nível de acesso
    *
-   * @param int $iOid
+   * @param int $iNivelAcesso
    * @access public
    * @return void
    */

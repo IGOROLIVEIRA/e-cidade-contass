@@ -176,6 +176,16 @@ $oRotulo->label("z01_nome");
 </html>
 <script type="text/javascript">
   /**
+   * Inserindo ID nos options do select de nível de acesso
+   */
+
+  var select = document.getElementById('p01_nivelacesso');
+  for (var i = 0; i < select.options.length; i++) {
+    var value = select.options[i].value;
+    select.options[i].setAttribute("id", value);
+  }
+
+  /**
    * Pesquisa processo do protocolo e depois os documentos anexados
    */
   if (!empty($('p58_numero').value)) {
@@ -244,14 +254,18 @@ $oRotulo->label("z01_nome");
           oGridDocumentos.clearAll(true);
           var iDocumentos = oRetorno.aDocumentosVinculados.length;
 
+
+
           for (var iIndice = 0; iIndice < iDocumentos; iIndice++) {
 
             var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
             var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
+            var nivelacesso = document.getElementById(oDocumento.nivelacesso).innerText;
+
 
             if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
 
-              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
+              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
               $bBloquea = false;
@@ -264,7 +278,7 @@ $oRotulo->label("z01_nome");
 
             } else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0) {
 
-              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
+              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\');" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
               $bBloquea = false;
@@ -272,7 +286,7 @@ $oRotulo->label("z01_nome");
 
 
 
-            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
+            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, nivelacesso, sHTMLBotoes];
             oGridDocumentos.addRow(aLinha, false, $bBloquea);
           }
 
@@ -528,12 +542,20 @@ $oRotulo->label("z01_nome");
    * @param string sDescricaoDocumento
    * @return void
    */
-  function js_alterarDocumento(iCodigoDocumento, sDescricaoDocumento) {
+  function js_alterarDocumento(iCodigoDocumento, sDescricaoDocumento, nivelAcesso) {
 
     $('namefile').value = '';
     $('uploadfile').value = '';
     $('uploadfile').disabled = true;
     $('p01_descricao').value = sDescricaoDocumento.urlDecode();
+    var text = 'Ford 2.0';
+    var select = document.querySelector('#p01_nivelacesso');
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].text === nivelAcesso) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
 
 
     /**
@@ -546,7 +568,7 @@ $oRotulo->label("z01_nome");
       var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
       var iNivelAcesso = $('p01_nivelacesso').value;
 
-      var oParametros = new Object();
+      var oParam = new Object();
 
       if (empty(iCodigoProcesso)) {
 
@@ -562,16 +584,16 @@ $oRotulo->label("z01_nome");
 
       js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
 
-      oParametros.exec = 'salvarDocumento';
-      oParametros.iCodigoDocumento = iCodigoDocumento;
-      oParametros.iCodigoProcesso = iCodigoProcesso;
-      oParametros.sDescricaoDocumento = sDescricaoDocumento;
-      oParametros.iNivelAcesso = iNivelAcesso;
+      oParam.exec = 'salvarDocumento';
+      oParam.iCodigoDocumento = iCodigoDocumento;
+      oParam.iCodigoProcesso = iCodigoProcesso;
+      oParam.sDescricaoDocumento = sDescricaoDocumento;
+      oParam.iNivelAcesso = iNivelAcesso;
 
 
       var oAjax = new Ajax.Request(
         sUrlRpc, {
-          parameters: 'json=' + Object.toJSON(oParametros),
+          parameters: 'json=' + Object.toJSON(oParam),
           method: 'post',
           asynchronous: false,
           onComplete: function(oAjax) {

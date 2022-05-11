@@ -59,6 +59,7 @@ try {
       foreach ($aDocumentosVinculados as $oProcessoDocumento) {
 
         $oStdDocumento = new stdClass();
+        $oStdDocumento->nivelacesso = $oProcessoDocumento->getNivelAcesso();
         $oStdDocumento->iCodigoDocumento    = $oProcessoDocumento->getCodigo();
         $oStdDocumento->sDescricaoDocumento = urlencode($oProcessoDocumento->getDescricao());
         $oStdDocumento->iDepart             = $oProcessoDocumento->getDepart();
@@ -85,11 +86,11 @@ try {
         $oStdErro = (object)array("sDepartamento" => "{$oDepartamentoAtual->getCodigo()} - {$oDepartamentoAtual->getNomeDepartamento()}");
         throw new BusinessException(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO . "departamento_diferente_vinculo_documento", $oStdErro));
       }
-
+      ini_set("display_errors", "on");
       $oProcessoDocumento = new ProcessoDocumento($oParam->iCodigoDocumento);
       $oProcessoDocumento->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoDocumento));
       $oProcessoDocumento->setProcessoProtocolo($oProcessoProtocolo);
-      $oProcessoDocumento->setProcessoProtocolo($oParam->$iNivelAcesso);
+      $oProcessoDocumento->setNivelAcesso($oParam->iNivelAcesso);
 
 
       if (!empty($oParam->sCaminhoArquivo)) {
