@@ -206,10 +206,10 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
                 $rsResult10Preco = db_query($slq1);
                 $oDados10Preco = db_utils::fieldsMemory($rsResult10Preco, 0);
 
-                if($oDados10Preco->si01_tipocotacao!=""){
-                  $slq2 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmcotacao";
-                  $rsResultCPF = db_query($slq2);
-                  $rsResultCPF = db_utils::fieldsMemory($rsResultCPF, 0);
+                if ($oDados10Preco->si01_tipocotacao != "") {
+                    $slq2 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmcotacao";
+                    $rsResultCPF = db_query($slq2);
+                    $rsResultCPF = db_utils::fieldsMemory($rsResultCPF, 0);
 
                     $clresplic10->si55_tiporegistro = 10;
                     $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
@@ -222,9 +222,9 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
                     $clresplic10->si55_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clresplic10->incluir(null);
 
-                  $slq3 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmorcamento";
-                  $rsResultCPF1 = db_query($slq3);
-                  $rsResultCPF1 = db_utils::fieldsMemory($rsResultCPF1, 0);
+                    $slq3 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmorcamento";
+                    $rsResultCPF1 = db_query($slq3);
+                    $rsResultCPF1 = db_utils::fieldsMemory($rsResultCPF1, 0);
 
                     $clresplic10->si55_tiporegistro = 10;
                     $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
@@ -236,9 +236,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
                     $clresplic10->si55_instit = db_getsession("DB_instit");
                     $clresplic10->si55_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clresplic10->incluir(null);
-
                 }
-
             }
         }
 
@@ -277,7 +275,8 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 				case when l46_tipo = 1 then 'Leiloeiro' when l46_tipo = 2 then 'Membro/Equipe de Apoio'
 	 when l46_tipo = 3 then 'Presidente' when l46_tipo = 4 then 'Secretário' when l46_tipo = 5 then 'Servidor Designado'
 	 when l46_tipo = 6 then 'Pregoeiro' end as cargo,
-				l46_naturezacargo as naturezaCargo
+				l46_naturezacargo as naturezaCargo,
+                liclicita.l20_leidalicitacao as leidalicitacao
 				FROM liclicita as liclicita
 				INNER JOIN licpregao as licpregao on (liclicita.l20_equipepregao=licpregao.l45_sequencial)
 				INNER JOIN licpregaocgm as licpregaocgm on (licpregao.l45_sequencial=licpregaocgm.l46_licpregao)
@@ -299,7 +298,11 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
             $clresplic20->si56_codunidadesub = $oDados20->codunidadesubresp;
             $clresplic20->si56_exerciciolicitacao = $oDados20->exerciciolicitacao;
             $clresplic20->si56_nroprocessolicitatorio = $oDados20->nroprocessolicitatorio;
-            $clresplic20->si56_codtipocomissao = $oDados20->codtipocomissao;
+            if ($oDados20->leidalicitacao == 2) {
+                $clresplic20->si56_codtipocomissao = $oDados20->codtipocomissao;
+            } else {
+                $clresplic20->si56_codtipocomissao = null;
+            }
             $clresplic20->si56_descricaoatonomeacao = $oDados20->descricaoatonomeacao;
             $clresplic20->si56_nroatonomeacao = $oDados20->nroatonomeacao;
             $clresplic20->si56_dataatonomeacao = $oDados20->dataatonomeacao;

@@ -54,6 +54,7 @@ class Carga {
    */
   public function executar() {
 
+    $this->formulario->deleteRespostas();
     $resource = $this->rodarConsultar();
     $iTotalLinhas = pg_num_rows($resource);
     for ($iLinha = 0; $iLinha < $iTotalLinhas; $iLinha++) {
@@ -94,7 +95,7 @@ class Carga {
 
       $oResposta = new Resposta();
       $oResposta->setFormulario($formulario);
-      $oResposta->setData(new \DBDate(date('Y-m-d')));
+      $oResposta->setData(new \DBDate(date('Y-m-d',db_getsession("DB_datausu"))));
     }
     foreach ($formulario->getPerguntas() as $pergunta) {
 

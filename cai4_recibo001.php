@@ -1020,12 +1020,12 @@ function js_preenche(chave,chave1){
  alterada para js_Open..
 */
 function js_pesquisatabrec(mostra) {
-
+  
   if (mostra==true) {
 
     js_OpenJanelaIframe("<?=$sIframeLocation?>",
                         'db_iframe_tabrec',
-                        'func_tabrec.php?funcao_js=parent.js_mostratabrec1|k02_codigo|k02_drecei|recurso|arretipo|k00_descr',
+                        'func_tabrec.php?funcao_js=parent.js_mostratabrec1|k02_codigo|k02_drecei|o70_codigo|arretipo|k00_descr',
                         'Pesquisa',true);
   } else {
 
@@ -1063,6 +1063,7 @@ function js_mostratabrec(chave2,erro,chave3,chave4,chave5){
 }
 
 function js_mostratabrec1(chave1,chave2,chave3,chave4,chave5) {
+       
      document.form1.k02_codigo.value = chave1;
      document.form1.k02_drecei.value = chave2;
      document.form1.o15_codigo.value = chave3;
