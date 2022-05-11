@@ -180,8 +180,9 @@ if ($p90_novatelaprotocolo == 'f') {
       alert("Preencha um dos campos.");
       return false;
     }
+    js_OpenJanelaIframe('top.corpo', 'db_iframeprocesso', 'func_pesquisaprocesso.php', 'Pesquisa de Processos', true)
+    js_OpenJanelaIframe('top.corpo', 'db_iframe', sUrl, 'Pesquisa de Processos', false);
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe', sUrl, 'Pesquisa de Processos', true);
   }
 
 
