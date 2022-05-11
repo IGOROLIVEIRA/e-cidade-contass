@@ -189,15 +189,6 @@ class cl_liclancedital
 			}
 		}
 
-		if ((!$this->l47_descrecurso || $this->l47_descrecurso == null) && in_array($iTribunal, array(100, 101, 102, 103)) && $iAnoUsu >= 2021) {
-			$this->erro_banco = str_replace("\n", "", @pg_last_error());
-			$this->erro_sql = "Verifique a descricao do recurso";
-			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-			$this->erro_status = "0";
-			return false;
-		}
-
 		if ((!$this->l47_linkpub || $this->l47_linkpub == null) && in_array($iTribunal, array(100, 101, 102, 103)) && $iAnoUsu >= 2021) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());
 			$this->erro_sql = "Verifique o Link da Publicação";
@@ -207,15 +198,13 @@ class cl_liclancedital
 			return false;
 		}
 
-		if ($this->l47_origemrecurso == 9) {
-			if (!$this->l47_descrecurso == null || trim($this->l47_descrecurso) == '') {
-				$this->erro_banco = str_replace("\n", "", @pg_last_error());
-				$this->erro_sql = "Verifique a descrição da origem do recurso";
-				$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-				$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-				$this->erro_status = "0";
-				return false;
-			}
+		if ($this->l47_origemrecurso == 9 && ($this->l47_descrecurso == null || $this->l47_descrecurso == '')) {
+			$this->erro_banco = str_replace("\n", "", @pg_last_error());
+			$this->erro_sql = "Verifique a descrição da origem do recurso";
+			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+			$this->erro_status = "0";
+			return false;
 		}
 
 		$sql = "insert into liclancedital(
