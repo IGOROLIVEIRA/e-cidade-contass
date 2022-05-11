@@ -32,7 +32,7 @@ use ECidade\Configuracao\Formulario\Model\Formulario as FormularioModel;
  * Class RemoveCarga
  * @package ECidade\Configuracao\Formulario\Processamento
  */
-class RemoverCarga {
+class RemoveCarga {
 
   /**
    * @var \ECidade\Configuracao\Formulario\Model\Formulario

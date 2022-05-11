@@ -70,7 +70,7 @@ try {
       foreach ($oParametros->formularios as $formulario) {
         
         $formulario    = \ECidade\Configuracao\Formulario\Repository\Formulario::getById((int)$formulario);
-        $processamento = new \ECidade\Configuracao\Formulario\Processamento\RemoverCarga($formulario);
+        $processamento = new \ECidade\Configuracao\Formulario\Processamento\RemoveCarga($formulario);
         $processamento->executar();
 
       }
