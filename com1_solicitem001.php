@@ -678,7 +678,7 @@ db_fieldsmemory($result_pcparam1, 0);
         "distinct pc81_codprocitem",
         null,
         "pc81_solicitem = $pc11_codigo and
-e55_sequen is not null and e54_anulad is null"
+        e55_sequen is not null and e54_anulad is null"
       ));
       if ($clpcproc->numrows > 0) {
         $sqlerro  = true;
@@ -726,10 +726,12 @@ e55_sequen is not null and e54_anulad is null"
 
       if ($clsolicitem->erro_status == 0) {
         $sqlerro = true;
-        $erro_msg = $clsolicitem->erro_msg;
+        
       }else{
         $result_pcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_pcorcamval($pc11_codigo,$pc11_numero));
-        if($clpcorcamval->erro_status == 0){
+        
+        
+        if($clpcorcamval->numrows > 0){
           $quant_linha = $clpcorcamval->numrows;
           for($i=0;$i<$quant_linha;$i++){
             db_fieldsmemory($result_pcorcamval,$i);
@@ -756,10 +758,10 @@ e55_sequen is not null and e54_anulad is null"
               $clpcorcamval->pc23_valor = 0;
               
               
-              /*$result_codprocesso = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_codprocesso($pc11_codigo));
+              $result_codprocesso = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_codprocesso($pc11_codigo));
               db_fieldsmemory($result_codprocesso,0);
 
-              //if($clitemprecoreferencia->erro_status == 0){
+              if($clitemprecoreferencia->erro_status == 0){
                 $result_itemprecorefe = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferencia($pc81_codproc));
               
                 if($clitemprecoreferencia->erro_status == 0){
@@ -775,23 +777,21 @@ e55_sequen is not null and e54_anulad is null"
                   $clitemprecoreferencia->si02_qtditem = $pc23_quant;
                   
                   $clitemprecoreferencia->alterar($si02_sequencial);
-                }else {
-                  $sqlerro = true;
-                  $erro_msg = $clitemprecoreferencia->erro_msg;
                 }
-              }else {
-                $sqlerro = true;
-                $erro_msg = $clitemprecoreferencia->erro_msg;
-              }*/
+              }
 
             }
-
           }
           
-        }else {
-          $sqlerro = true;
-          $erro_msg = $clpcorcamval->erro_msg;
-        }
+        }/*else{ 
+          if($clpcorcamval->erro_banco == ""){
+              
+          
+          }else{
+            $sqlerro = true;
+            $erro_msg = $clpcorcamval->erro_msg;
+          }
+        }*/
       }
       $erro_msg = $clsolicitem->erro_msg;
     }
@@ -801,7 +801,9 @@ e55_sequen is not null and e54_anulad is null"
       $clsolicitemunid->pc17_unid = $pc17_unid;
       $clsolicitemunid->pc17_quant = $pc17_quant;
       $clsolicitemunid->pc17_codigo = $pc11_codigo;
+      
       $result_solicitemunid = $clsolicitemunid->sql_record($clsolicitemunid->sql_query_file($pc11_codigo));
+      db_msgbox($clsolicitemunid->numrows);
       if ($clsolicitemunid->numrows > 0) {
         $clsolicitemunid->alterar($pc11_codigo);
       } else {

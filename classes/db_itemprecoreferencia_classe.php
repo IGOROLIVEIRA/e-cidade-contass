@@ -583,7 +583,7 @@ class cl_itemprecoreferencia {
 
   public function sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem){
     $sSql  = "select si02_sequencial ";  
-    $sSql  .= "from itemprecoreferencia "; 
+    $sSql  .= "from sicom.itemprecoreferencia "; 
     $sSql  .= "where si02_precoreferencia = $si01_sequencial and si02_itemproccompra = $pc23_orcamitem "; 
 
     return $sSql;
