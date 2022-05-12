@@ -806,9 +806,11 @@ if (isset($_POST["processar"])) {
         } else {
             var datainicial = "<?php print $dataI; ?>";
             var datafinal = "<?php print $dataF; ?>";
+            var dataAbastecimento = "<?php print $dataAbastecimento; ?>";
+
 
             e60_numemp = document.getElementById("e60_codemp").value;
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=0&ve70_abast=' + ve70_abast + '&importacaoveiculo=1dataAbastecimento=' + dataAbastecimento + '&pesquisa_chave=' + e60_numemp + '&funcao_js=parent.js_mostraempempenho&lPesquisaPorCodigoEmpenho=1', 'Pesquisa', false);
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=0&ve70_abast=' + ve70_abast + '&importacaoveiculo=1&dataAbastecimento=' + dataAbastecimento + '&pesquisa_chave=' + e60_numemp + '&funcao_js=parent.js_mostraempempenho&lPesquisaPorCodigoEmpenho=1', 'Pesquisa', false);
         }
     }
 
@@ -821,15 +823,17 @@ if (isset($_POST["processar"])) {
         } else {
             empenhoselecionado = chave1;
 
+            alert(chave1 + chave2 + chave3 + chave4 + chave5);
+
             document.getElementById("z01_nome").value = chave2;
 
         }
     }
 
     function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5, chave6) {
-        empenhoselecionado = chave1 + "/" + chave3;
+        empenhoselecionado = chave2 + "/" + chave3;
         dataempenho = chave4;
-        document.getElementById("e60_codemp").value = chave1;
+        document.getElementById("e60_codemp").value = chave2;
         document.getElementById("z01_nome").value = chave6;
 
         db_iframe_empempenho.hide();

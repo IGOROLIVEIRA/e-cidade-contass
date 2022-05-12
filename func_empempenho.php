@@ -345,13 +345,15 @@ $rotulo->label("z01_cgccpf");
               }
 
               if ($importacaoveiculo == 1) {
-                $where .= "empempenho.e60_numemp = $pesquisa_chave";
+                $aCodEmp  = explode("/", $pesquisa_chave);
+                $where .= "empempenho.e60_codemp = '" . $aCodEmp[0] . "'";
+                $where .= " and e60_anousu = " . db_getsession("DB_anousu");
                 $where .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
                 //removido por meio da solicitacao da oc 6848 
                 //$dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
                 //adicionado nova validadacao OC 6848 
                 $where .= " or elementoempenho.o56_elemento like '335041%')";
-                $where .= " and empempenho.e60_emiss < '$datainicial'";
+                $where .= " and empempenho.e60_emiss < '$dataAbastecimento'";
                 $filtroempelemento = 1;
               }
 
@@ -379,7 +381,6 @@ $rotulo->label("z01_cgccpf");
               //               UNION
               //               SELECT e69_numemp FROM empnota)";
 
-              echo $sWherePesquisaPorCodigoEmpenho;
 
               $sSql = $clempempenho->sql_query(null, $campos, null, $sWherePesquisaPorCodigoEmpenho, $filtroempelemento);
             }
@@ -417,7 +418,6 @@ $rotulo->label("z01_cgccpf");
             }
 
             $result = $clempempenho->sql_record($sSql);
-            echo $sSql;
 
             if ($clempempenho->numrows != 0) {
 
@@ -426,7 +426,7 @@ $rotulo->label("z01_cgccpf");
               if (isset($lNovoDetalhe) && $lNovoDetalhe == 1) {
                 echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', false);</script>";
               } elseif (isset($lPesquisaPorCodigoEmpenho)) {
-                echo "<script>" . $funcao_js . "('{$e60_numemp}/{$e60_anousu}', '" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
+                echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', '" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
               } else {
                 if ($funcao_js == 'parent.js_mostraempempenhotesta') {
                   echo "<script>" . $funcao_js . "('{$e60_codemp} / {$e60_anousu}', false);</script>";
