@@ -1472,7 +1472,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                     $tipoalteracao = 2;
                                 }
                             }
-                            $iQuantidadeItem = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
+                            if($oAcordoItem->getQuantidade() != $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero)){
+                                $iQuantidadeItem = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
+                            }else{
+                                $iQuantidadeItem = $oAcordoItem->getQuantidade();
+                            }
                             $iValorUnitarioAditadoItem = $oAcordoItem->getValorUnitario();
                         }
 
