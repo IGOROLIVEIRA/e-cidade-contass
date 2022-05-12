@@ -587,10 +587,8 @@ ORDER BY nroprocessolicitatorio
                       INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
                       INNER JOIN cadendermunicipio on db72_sequencial = db150_municipio
                       WHERE db_config.codigo= " . db_getsession('DB_instit') . "
-                          AND pctipocompratribunal.l44_sequencial NOT IN ('100',
-                                                                          '101',
-                                                                          '102', '103', '106') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
-          ";
+                          AND pctipocompratribunal.l44_sequencial NOT IN ('100','101','102', '103', '106') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
+                      ORDER BY obrasdadoscomplementareslote.db150_codobra";
 
         $rsResult12 = db_query($sSql12);
 
