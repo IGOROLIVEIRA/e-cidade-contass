@@ -760,6 +760,26 @@ class obrasDadosComplementares
 
     if ($incluir) {
 
+      $sSqlCodigo = $oDaoObrasCodigo->sql_query('', 'db151_liclicita', '', 'db151_codigoobra = ' . $this->getCodigoObra() . ' and db151_liclicita not in (' . $this->getLicita() . ')');
+      $rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
+
+      if (pg_num_rows($rsCodigo) > 0) {
+
+        for ($i = 0; $i < pg_numrows($rsCodigo); $i++) {
+
+          $iLicitacao = db_utils::fieldsMemory($rsCodigo, $i)->db151_liclicita;
+
+          $sSqlSituacaoLicitaold = $oDaoLiclicitasituacao->sql_query('', 'distinct l20_licsituacao', '', 'l20_codigo = ' . $iLicitacao);
+          $rsSituacaoLicitaold = $oDaoLiclicitasituacao->sql_record($sSqlSituacaoLicitaold);
+          $iSituacaoLicitaold = db_utils::fieldsMemory($rsSituacaoLicitaold, 0)->l20_licsituacao;
+
+          $situacoes = array(2, 3, 4, 5, 12);
+          if (!in_array($iSituacaoLicitaold, $situacoes)) {
+            throw new Exception('Código da Obra já cadastrado.');
+          }
+        }
+      }
+
 
       if (!$oDaoObrasCodigo->numrows) {
         $oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
@@ -778,27 +798,34 @@ class obrasDadosComplementares
       !$this->getFlagLote() ? $this->preencheObjetoItem($incluir) : $this->preencheObjetoLote($incluir);
     } else {
 
-      $sSqlCodigo = $oDaoObrasCodigo->sql_query('', 'db151_liclicita', '', 'db151_codigoobra = ' . $this->getCodigoObra());
+      $sSqlCodigo = $oDaoObrasCodigo->sql_query('', 'db151_liclicita', '', 'db151_codigoobra = ' . $this->getCodigoObra() . ' and db151_liclicita not in (' . $this->getLicita() . ')');
       $rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
-      $iLicitacao = db_utils::fieldsMemory($rsCodigo, 0)->db151_liclicita;
 
       if (pg_num_rows($rsCodigo) > 0) {
 
-        $sSqlSituacaoLicitaold = $oDaoLiclicitasituacao->sql_query('', 'distinct l20_licsituacao', '', 'l20_codigo = ' . $iLicitacao);
-        $rsSituacaoLicitaold = $oDaoLiclicitasituacao->sql_record($sSqlSituacaoLicitaold);
-        $iSituacaoLicitaold = db_utils::fieldsMemory($rsSituacaoLicitaold, 0)->l20_licsituacao;
+        for ($i = 0; $i < pg_numrows($rsCodigo); $i++) {
 
-        $rsObra = db_query('select db151_codigoobra from obrascodigos where db151_liclicita = ' . $iLicitacao);
-        $iObra = db_utils::fieldsMemory($rsObra, 0)->db151_codigoobra;
+          $iLicitacao = db_utils::fieldsMemory($rsCodigo, $i)->db151_liclicita;
 
-        $situacoes = array(2, 3, 4, 5, 12);
-        if (!in_array($iSituacaoLicitaold, $situacoes) && $iObra->db151_codigoobra != null) {
-          throw new Exception('Código da Obra já cadastrado.');
+          $sSqlSituacaoLicitaold = $oDaoLiclicitasituacao->sql_query('', 'distinct l20_licsituacao', '', 'l20_codigo = ' . $iLicitacao);
+          $rsSituacaoLicitaold = $oDaoLiclicitasituacao->sql_record($sSqlSituacaoLicitaold);
+          $iSituacaoLicitaold = db_utils::fieldsMemory($rsSituacaoLicitaold, 0)->l20_licsituacao;
+
+          $situacoes = array(2, 3, 4, 5, 12);
+          if (!in_array($iSituacaoLicitaold, $situacoes)) {
+            throw new Exception('Código da Obra já cadastrado.');
+          }
         }
       }
 
-      //alterar na taleba obrascodigos
-      $alteraCodObra = db_query('update obrascodigos set db151_codigoobra = ' . $this->getCodigoObra() . ' where db151_liclicita = ' . $this->getLicita());
+      //alterar na tabela obrascodigos
+
+      $rsSeqObra = db_query('select db151_sequencial from obrascodigos where (db151_liclicita,db151_codigoobra) = (' . $this->getLicita() . ',' . $this->getCodigoObra() . ')');
+      $iSeqObra = db_utils::fieldsMemory($rsSeqObra, 0)->db151_sequencial;
+      $alteraCodObra = db_query('update obrascodigos set db151_codigoobra = ' . $this->getCodigoObra() . ' where db151_sequencial = ' . $iSeqObra . ' and db151_liclicita = ' . $this->getLicita());
+
+      $sSqlCodigo = $oDaoObrasCodigo->sql_query($this->getCodigoObra(), 'db151_codigoobra, db151_liclicita', '', 'db151_liclicita = ' . $this->getLicita());
+      $rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
 
       if (!pg_num_rows($rsCodigo)) {
         $oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
