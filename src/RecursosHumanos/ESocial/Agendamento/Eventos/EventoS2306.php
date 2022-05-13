@@ -33,29 +33,6 @@ class EventoS2306 extends EventoBase
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
 
-            if (!empty($oDados->brasil) && empty($oDados->brasil->complemento)) {
-                $oDados->brasil->complemento = null;
-            }
-            if (!empty($oDados->brasil) && empty($oDados->brasil->bairro)) {
-                $oDados->brasil->bairro = null;
-            }
-            if (!empty($oDados->brasil) && empty($oDados->brasil->tpLograd)) {
-                $oDados->brasil->tpLograd = null;
-            }
-
-            if (!empty($oDados->infoDeficiencia) && empty($oDados->infoDeficiencia->observacao)) {
-                unset($oDados->infoDeficiencia->observacao);
-            }
-
-            if (!empty($oDados->contato)) {
-                if (empty($oDados->contato->fonePrinc)) {
-                    $oDados->contato->fonePrinc = null;
-                }
-                if (empty($oDados->contato->emailPrinc)) {
-                    $oDados->contato->emailPrinc = null;
-                }
-            }
-
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtTSVAltContr                    = new \stdClass;
             $oDadosAPI->evtTSVAltContr->sequencial = $iSequencial;
@@ -126,50 +103,4 @@ class EventoS2306 extends EventoBase
         return $aDadosAPI;
     }
 
-    /**
-     * Retorna dados dos dependentes no formato necessario para envio
-     * pela API sped-esocial
-     * @return array stdClass
-     */
-    private function buscarDependentes($matricula)
-    {
-
-        $oDaorhdepend = \db_utils::getDao("rhdepend");
-        $sqlDependentes = $oDaorhdepend->sql_query_file(null, "*", "rh31_codigo", "rh31_regist = {$matricula}");
-        $rsDependentes = db_query($sqlDependentes);
-        if (pg_num_rows($rsDependentes) == 0) {
-            return null;
-        }
-        $aDependentes = array();
-        for ($iCont = 0; $iCont < pg_num_rows($rsDependentes); $iCont++) {
-            $oDependentes = \db_utils::fieldsMemory($rsDependentes, $iCont);
-            $oDependFormatado = new \stdClass;
-            switch ($oDependentes->rh31_gparen) {
-                case 'C':
-                    $oDependFormatado->tpdep = '01';
-                    break;
-                case 'F':
-                    $oDependFormatado->tpdep = '03';
-                    break;
-                case 'P':
-                case 'M':
-                case 'A':
-                    $oDependFormatado->tpdep = '09';
-                    break;
-
-                default:
-                    $oDependFormatado->tpdep = '99';
-                    break;
-            }
-            $oDependFormatado->nmdep = $oDependentes->rh31_nome;
-            $oDependFormatado->dtnascto = $oDependentes->rh31_dtnasc;
-            $oDependFormatado->cpfdep = empty($oDependentes->rh31_cpf) ? null : $oDependentes->rh31_cpf;
-            $oDependFormatado->depirrf = ($oDependentes->rh31_irf == "0" ? "N" : "S");
-            $oDependFormatado->depsf = ($oDependentes->rh31_depend == "N" ? "N" : "S");
-            $oDependFormatado->inctrab = ($oDependentes->rh31_especi == "C" || $oDependentes->rh31_especi == "S" ? "S" : "N");
-
-            $aDependentes[] = $oDependFormatado;
-        }
-        return $aDependentes;
-    }
 }
