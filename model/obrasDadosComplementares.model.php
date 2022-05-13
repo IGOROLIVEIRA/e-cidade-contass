@@ -782,18 +782,17 @@ class obrasDadosComplementares
       $rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
       $iLicitacao = db_utils::fieldsMemory($rsCodigo, 0)->db151_liclicita;
 
-      //if (pg_num_rows($rsCodigo) && $iLicitacao != $this->getLicita()) {
-      //  throw new Exception('Código da Obra já cadastrado.');
-      //}
-
       if (pg_num_rows($rsCodigo) > 0) {
 
         $sSqlSituacaoLicitaold = $oDaoLiclicitasituacao->sql_query('', 'distinct l20_licsituacao', '', 'l20_codigo = ' . $iLicitacao);
         $rsSituacaoLicitaold = $oDaoLiclicitasituacao->sql_record($sSqlSituacaoLicitaold);
         $iSituacaoLicitaold = db_utils::fieldsMemory($rsSituacaoLicitaold, 0)->l20_licsituacao;
 
+        $rsObra = db_query('select db151_codigoobra from obrascodigos where db151_liclicita = ' . $iLicitacao);
+        $iObra = db_utils::fieldsMemory($rsObra, 0)->db151_codigoobra;
+
         $situacoes = array(2, 3, 4, 5, 12);
-        if (!in_array($iSituacaoLicitaold, $situacoes)) {
+        if (!in_array($iSituacaoLicitaold, $situacoes) && $iObra->db151_codigoobra != null) {
           throw new Exception('Código da Obra já cadastrado.');
         }
       }
