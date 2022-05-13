@@ -56,8 +56,6 @@ if (count($aInstits) > 1) {
     }
 }
 
-db_inicio_transacao();
-
 /**
  * pego todas as instituições;
  */
@@ -137,39 +135,40 @@ for( $codEmpVazio = 1; $codEmpVazio <= $nUltimoEmpenhoUsado; $codEmpVazio++ ){
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', '', 0, '', 15, 15, 20, 15, 5, 11);
+$mPDF = new mpdf('', '', 0, '', 20, 15, 20, 15, 1, 5);
 
-$header = " <header>
-                <div style=\" height: 120px; font-family:Arial\">
-                    <div style=\"width:33%; float:left; padding:5px; font-size:10px;\">
-                        <b><i>{$oInstit->getDescricao()}</i></b><br/>
-                        <i>{$oInstit->getLogradouro()}, {$oInstit->getNumero()}</i><br/>
-                        <i>{$oInstit->getMunicipio()} - {$oInstit->getUf()}</i><br/>
-                        <i>{$oInstit->getTelefone()} - CNPJ: " . db_formatar($oInstit->getCNPJ(), "cnpj") . "</i><br/>
-                        <i>{$oInstit->getSite()}</i>
-                    </div>
-                    <div style=\"width:25%; float:right\" class=\"box\">
-                        <b>Empenhos Vagos</b><br/>
-                        <b>INSTITUIÇÕES:</b> ";
+$header  = " <header> ";
+$header .= "   <div style=' height: 120px; font-family:Arial'>";
+$header .= "     <div style='width:33%; float:left; padding:5px; font-size:10px;'>";
+$header .= "       <b><i>{$oInstit->getDescricao()}</i></b><br/>";
+$header .= "          <i>{$oInstit->getLogradouro()}, {$oInstit->getNumero()}</i><br/>";
+$header .= "          <i>{$oInstit->getMunicipio()} - {$oInstit->getUf()}</i><br/>";
+$header .= "          <i>{$oInstit->getTelefone()} - CNPJ: " . db_formatar($oInstit->getCNPJ(), "cnpj") . "</i><br/>";
+$header .= "          <i>{$oInstit->getSite()}</i>";
+$header .= "     </div>";
+$header .= "     <div style='width:25%; float:right' class='box'>";
+$header .= "       <b>Empenhos Vagos</b><br/>";
+$header .= "       <b>INSTITUIÇÕES:</b> ";
 foreach ($aInstits as $iInstit) {
     $oInstituicao = new Instituicao($iInstit);
     $header .= "(" . trim($oInstituicao->getCodigo()) . ") " . $oInstituicao->getDescricao() . " ";
 }
-$header .= "<br/> <b>PERÍODO:</b> {$DBtxt21} A {$DBtxt22} <br/>
-                    </div>
-                </div>
-            </header>";
+$header .= "      <br/> <b>PERÍODO:</b> {$DBtxt21} A {$DBtxt22} <br/> ";
+$header .= "    </div>";
+$header .= "  </div>";
+$header .= "</header>";
 
-$footer = "<footer style='padding-top: 20px;'>
-                <div style='border-top:1px solid #000; width:100%; font-family:sans-serif; font-size:10px; height:10px;'>
-                    <div style='text-align:left;font-style:italic;width:90%;float:left;'>
-                        Financeiro>Empenho>Relatórios de Conferência>Empenhos Vagos
-                        Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data:" . date("d/m/Y H:i:s", db_getsession("DB_datausu"))  . "
-                    <div style='text-align:right;float:right;width:10%;'>
-                        {PAGENO}
-                    </div>
-                </div>
-          </footer>";
+$footer  = "<footer style='padding-top: 20px;'>";
+$footer .= "   <div style='border-top:1px solid #000; width:100%; font-family:sans-serif; font-size:10px; height:10px;'>";
+$footer .= "    <div style='text-align:left;font-style:italic;width:90%;float:left;'>";
+$footer .= "       Financeiro>Empenho>Relatórios de Conferência>Empenhos Vagos";
+$footer .= "       Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data:" . date("d/m/Y H:i:s", db_getsession("DB_datausu"))  . "";
+$footer .= "      <div style='text-align:right;float:right;width:10%;'>";
+$footer .= "                        {PAGENO}";
+$footer .= "      </div>";
+$footer .= "    </div>";
+$footer .= "   </div>";
+$footer .= "</footer>";
 
 $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
 $mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
@@ -253,22 +252,23 @@ ob_start();
 </head>
 
 <body>
-    <div class="ritz grid-container" dir="ltr" style="padding-top: 20px">
-        <table class="waffle" cellspacing="0" cellpadding="0">
+    <div class="ritz grid-container" dir="ltr" >
+        <table class="waffle" cellspacing="0" cellpadding="0" >
             <thead>
                 <tr>
                     <th class="row-header freezebar-origin-ltr"></th>
+                </tr>
             </thead>
             <tbody>
                 <tr style="height: 20px">
-                    <td class="s0" dir="ltr">Não Emp. Vago</td>
-                    <td class="s1" dir="ltr">Intervalo data para ordem cronológica</td>
+                    <td class="s0" dir="ltr">Número do Empnho</td>
+                    <td class="s1" dir="ltr">Intervalo de Datas para Ordem Cronológica</td>
                 </tr>
                 <?php
                     foreach($aEmpenhosVagos as $oEmpVago){
                         echo "<tr style='height: 20px'>";
                         echo "<td class='s2'>".$oEmpVago->codemp."</td>";
-                        echo "<td class='s22'>".db_formatar($oEmpVago->dataLivreInicial,"d")." á ".db_formatar($oEmpVago->dataLivreFinal,"d")." </td>";
+                        echo "<td class='s22'>".db_formatar($oEmpVago->dataLivreInicial,"d")." a ".db_formatar($oEmpVago->dataLivreFinal,"d")." </td>";
                         echo "</tr>";
                     }
                 ?>
@@ -286,10 +286,5 @@ $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
-
-db_query("drop table if exists work_dotacao");
-
-db_fim_transacao();
 
 ?>
