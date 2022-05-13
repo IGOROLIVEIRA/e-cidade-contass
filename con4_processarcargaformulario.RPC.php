@@ -64,6 +64,18 @@ try {
       }
       $oRetorno->mensagem = "Carga dos Formulários processadas com sucesso.";
       break;
+
+    case 'remover':
+      
+      foreach ($oParametros->formularios as $formulario) {
+        
+        $formulario    = \ECidade\Configuracao\Formulario\Repository\Formulario::getById((int)$formulario);
+        $processamento = new \ECidade\Configuracao\Formulario\Processamento\RemoveCarga($formulario);
+        $processamento->executar();
+
+      }
+      $oRetorno->mensagem = "Carga dos Formulários removidas com sucesso.";
+      break;
   }
   db_fim_transacao(false);
   
