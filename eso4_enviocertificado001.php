@@ -129,7 +129,7 @@ function retornoEnvioArquivo(retorno) {
   var extension = ['crt', 'pfx', 'p12'];
   if (!extension.in_array(retorno.extension.toLowerCase())) {
 
-    alert("Arquivo inválido.\nArquivo selecionado deve ser um certificado com a extensão \"" + extension.implode(', ') + "\".");
+    alert("Arquivo inválido.\nArquivo selecionado deve ser um certificado com a extensão \"" + extension.join(', ') + "\".");
     $('btnProcessar').disabled = true;
     document.querySelector(".inputUploadFile").value = '';
     return false;

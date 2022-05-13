@@ -795,9 +795,11 @@ db_app::load("estilos.css");
   }
 
   function js_mostraretirada(chave, erro, dtRetirada, sHoraRetirada) {
-    document.form1.ve73_veicretirada.value = chave;
-    $("ve60_datasaida").value = js_formatar(dtRetirada, "d");
-    $("ve60_horasaida").value = sHoraRetirada;
+    if(erro == false){
+      document.form1.ve73_veicretirada.value = chave;
+      $("ve60_datasaida").value = js_formatar(dtRetirada, "d");
+      $("ve60_horasaida").value = sHoraRetirada;
+    }
     js_removeObj("msgbox");
   }
 
@@ -1067,7 +1069,9 @@ db_app::load("estilos.css");
   }
 
   function js_pesquisa_ultimamedida() {
-    var databanco = document.form1.ve70_dtabast.value;
+    var databanco = document.form1.ve70_dtabast_ano.value + '-' +
+      document.form1.ve70_dtabast_mes.value + '-' +
+      document.form1.ve70_dtabast_dia.value;
     var abastecimento = document.form1.ve70_codigo.value;
     var hora = document.form1.ve70_hora.value;
     js_OpenJanelaIframe('top.corpo', 'db_iframe_medida',
@@ -1181,7 +1185,7 @@ db_app::load("estilos.css");
     js_pesquisa_ultimamedida();
 
   };
-  js_pesquisa_ultimamedida();
+  //js_pesquisa_ultimamedida();
   js_formataHora();
   js_pesquisae60_codemp(false);
 

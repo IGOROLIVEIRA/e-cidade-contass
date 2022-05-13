@@ -189,6 +189,7 @@ if (isset($incluir)) {
 		}
 	}
 	//verifica se as duas modalidades esto configuradas.
+	
 	$result_modalidade = $clpccflicitapar->sql_record($clpccflicitapar->sql_query_modalidade(null, "*", null, "l25_codcflicita = $l20_codtipocom and l25_anousu = $anousu and l03_instit = $instit"));
 	if ($clpccflicitapar->numrows == 0) {
 		$erro_msg = "Verifique se esta configurado a numeração de licitação por modalidade.";
@@ -205,6 +206,19 @@ if (isset($incluir)) {
 	if (!$clpccfeditalnum->numrows && in_array($modalidade_tribunal, array(48, 49, 50, 52, 53, 54))) {
 		$erro_msg = "Verifique se esta configurado a numeração do edital por licitação.";
 		$sqlerro = true;
+	}
+	if ($l20_codtipocom == 99) {
+		$erro_msg = "Selecione uma modalidade para a licitação.";
+		$sqlerro = true;
+	}
+	if ($l20_codtipocom != 8 && $l20_codtipocom != 9 && $l20_codtipocom != 10 && $l20_codtipocom != 11) {
+		if($l20_leidalicitacao == 1){
+			if($l20_mododisputa == 0){
+			$erro_msg = "Selecione um modo de disputa para a licitação.";
+			$nomeCampo = "l20_mododisputa";
+			$sqlerro = true;
+			}
+		}	
 	}
 
 	//numeracao por modalidade

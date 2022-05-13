@@ -16,21 +16,21 @@ class GerarJULGLIC extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "JULGLIC";
     $this->abreArquivo();
-    
+
     $sSql = "select * from julglic102022 where si60_mes = " . $this->iMes . " and si60_instit=" . db_getsession("DB_instit");
     $rsJULGLIC10 = db_query($sSql);
 
     $sSql2 = "select * from julglic202022 where si61_mes = " . $this->iMes . " and si61_instit=" . db_getsession("DB_instit");
     $rsJULGLIC20 = db_query($sSql2);
 
-  	$sSql3 = "select * from julglic302022 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
-	$rsJULGLIC30 = db_query($sSql3);
+    $sSql3 = "select * from julglic302022 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
+    $rsJULGLIC30 = db_query($sSql3);
 
     $sSql4 = "select * from julglic402022 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
     $rsJULGLIC40 = db_query($sSql4);
@@ -40,7 +40,6 @@ class GerarJULGLIC extends GerarAM
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
-
     } else {
 
       /**
@@ -65,7 +64,6 @@ class GerarJULGLIC extends GerarAM
 
         $this->sLinha = $aCSVJULGLIC10;
         $this->adicionaLinha();
-
       }
 
       /**
@@ -86,35 +84,33 @@ class GerarJULGLIC extends GerarAM
         $aCSVJULGLIC20['si61_nrolote']                = !$aJULGLIC20['si61_nrolote'] ? '' : substr($aJULGLIC20['si61_nrolote'], 0, 4);
         $aCSVJULGLIC20['si61_coditem']                = substr($aJULGLIC20['si61_coditem'], 0, 15);
         $aCSVJULGLIC20['si61_percdesconto']           = $this->sicomNumberReal($aJULGLIC20['si61_percdesconto'], 2);
-        
+
         $this->sLinha = $aCSVJULGLIC20;
         $this->adicionaLinha();
-
       }
 
-		/**
-		 *
-		 * Registros 20
-		 */
-		for ($iCont3 = 0; $iCont3 < pg_num_rows($rsJULGLIC30); $iCont3++) {
+      /**
+       *
+       * Registros 20
+       */
+      for ($iCont3 = 0; $iCont3 < pg_num_rows($rsJULGLIC30); $iCont3++) {
 
-			$aJULGLIC30 = pg_fetch_array($rsJULGLIC30, $iCont3);
+        $aJULGLIC30 = pg_fetch_array($rsJULGLIC30, $iCont3);
 
-			$aCSVJULGLIC30['si62_tiporegistro']           = $this->padLeftZero($aJULGLIC30['si62_tiporegistro'], 2);
-			$aCSVJULGLIC30['si62_codorgao']               = $this->padLeftZero($aJULGLIC30['si62_codorgao'], 2);
-			$aCSVJULGLIC30['si62_codunidadesub']          = $this->padLeftZero($aJULGLIC30['si62_codunidadesub'], 5);
-			$aCSVJULGLIC30['si62_exerciciolicitacao']     = $this->padLeftZero($aJULGLIC30['si62_exerciciolicitacao'], 4);
-			$aCSVJULGLIC30['si62_nroprocessolicitatorio'] = substr($aJULGLIC30['si62_nroprocessolicitatorio'], 0, 12);
-			$aCSVJULGLIC30['si62_tipodocumento']          = $this->padLeftZero($aJULGLIC30['si62_tipodocumento'], 1);
-			$aCSVJULGLIC30['si62_nrodocumento']           = substr($aJULGLIC30['si62_nrodocumento'], 0, 14);
-			$aCSVJULGLIC30['si62_nrolote']                = !$aJULGLIC30['si62_nrolote'] ? '' : substr($aJULGLIC30['si62_nrolote'], 0, 4);
-			$aCSVJULGLIC30['si62_coditem']                = substr($aJULGLIC30['si62_coditem'], 0, 15);
-			$aCSVJULGLIC30['si62_perctaxaadm']           = $this->sicomNumberReal($aJULGLIC30['si62_perctaxaadm'], 2);
+        $aCSVJULGLIC30['si62_tiporegistro']           = $this->padLeftZero($aJULGLIC30['si62_tiporegistro'], 2);
+        $aCSVJULGLIC30['si62_codorgao']               = $this->padLeftZero($aJULGLIC30['si62_codorgao'], 2);
+        $aCSVJULGLIC30['si62_codunidadesub']          = $this->padLeftZero($aJULGLIC30['si62_codunidadesub'], 5);
+        $aCSVJULGLIC30['si62_exerciciolicitacao']     = $this->padLeftZero($aJULGLIC30['si62_exerciciolicitacao'], 4);
+        $aCSVJULGLIC30['si62_nroprocessolicitatorio'] = substr($aJULGLIC30['si62_nroprocessolicitatorio'], 0, 12);
+        $aCSVJULGLIC30['si62_tipodocumento']          = $this->padLeftZero($aJULGLIC30['si62_tipodocumento'], 1);
+        $aCSVJULGLIC30['si62_nrodocumento']           = substr($aJULGLIC30['si62_nrodocumento'], 0, 14);
+        $aCSVJULGLIC30['si62_nrolote']                = !$aJULGLIC30['si62_nrolote'] ? '' : substr($aJULGLIC30['si62_nrolote'], 0, 4);
+        $aCSVJULGLIC30['si62_coditem']                = substr($aJULGLIC30['si62_coditem'], 0, 15);
+        $aCSVJULGLIC30['si62_perctaxaadm']           = $this->sicomNumberReal($aJULGLIC30['si62_perctaxaadm'], 2);
 
-			$this->sLinha = $aCSVJULGLIC30;
-			$this->adicionaLinha();
-
-		}
+        $this->sLinha = $aCSVJULGLIC30;
+        $this->adicionaLinha();
+      }
 
       /**
        *
@@ -130,17 +126,14 @@ class GerarJULGLIC extends GerarAM
         $aCSVJULGLIC40['si62_exerciciolicitacao']     = $this->padLeftZero($aJULGLIC40['si62_exerciciolicitacao'], 4);
         $aCSVJULGLIC40['si62_nroprocessolicitatorio'] = substr($aJULGLIC40['si62_nroprocessolicitatorio'], 0, 12);
         $aCSVJULGLIC40['si62_dtjulgamento']           = $this->sicomDate($aJULGLIC40['si62_dtjulgamento']);
-        $aCSVJULGLIC40['si62_presencalicitantes']     = $this->padLeftZero($aJULGLIC40['si62_presencalicitantes'], 1);
-        $aCSVJULGLIC40['si62_renunciarecurso']        = $this->padLeftZero($aJULGLIC40['si62_renunciarecurso'], 1);
-        
+        $aCSVJULGLIC40['si62_presencalicitantes']     = $aJULGLIC40['si62_presencalicitantes'];
+        $aCSVJULGLIC40['si62_renunciarecurso']        = $aJULGLIC40['si62_renunciarecurso'];
+
         $this->sLinha = $aCSVJULGLIC40;
         $this->adicionaLinha();
-
       }
 
       $this->fechaArquivo();
-
     }
-
   }
 }

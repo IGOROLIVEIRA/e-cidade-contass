@@ -172,6 +172,7 @@ try {
     $sSqlConsultaAutonomos .= "       inner join conhistdoc   on c71_coddoc       = c53_coddoc                                                           ";
     $sSqlConsultaAutonomos .= " where c53_tipo = 20                                                                                                      ";
     $sSqlConsultaAutonomos .= " AND c70_data BETWEEN '{$sDataCompIni}'::date and '{$sDataCompFim}'::date ";
+    $sSqlConsultaAutonomos .= " AND not exists (SELECT c53_tipo FROM conlancamord JOIN conlancamdoc ON c80_codlan = c71_codlan JOIN conhistdoc ON c71_coddoc = c53_coddoc WHERE c80_codord = codord AND c53_tipo = 21) ";
     $sSqlConsultaAutonomos .= " group by codord,                                                                                                         ";
     $sSqlConsultaAutonomos .= "          z01_nome,                                                                                                       ";
     $sSqlConsultaAutonomos .= "          z01_numcgm,                                                                                                     ";

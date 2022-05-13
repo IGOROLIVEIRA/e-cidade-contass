@@ -109,69 +109,51 @@ switch ($oParam->exec) {
     }
 
     try {
+            /**
+             * corrigimos as strings antes de salvarmos os dados
+             */
+            foreach ($oParam->aAutorizacoes as $oAutorizacao) {
 
-      /**
-       * corrigimos as strings antes de salvarmos os dados
-       */
-      foreach ($oParam->aAutorizacoes as $oAutorizacao) {
+                $oAutorizacao->destino           = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->destino))));
+                $oAutorizacao->sContato          = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sContato))));
+                $oAutorizacao->sOutrasCondicoes  = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sOutrasCondicoes))));
+                $oAutorizacao->condicaopagamento = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->condicaopagamento))));
+                $oAutorizacao->prazoentrega      = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->prazoentrega))));
+                $oAutorizacao->resumo            = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->resumo))));
 
-        $oAutorizacao->destino           = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->destino))));
-        $oAutorizacao->sContato          = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sContato))));
-        $oAutorizacao->sOutrasCondicoes  = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sOutrasCondicoes))));
-        $oAutorizacao->condicaopagamento = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->condicaopagamento))));
-        $oAutorizacao->prazoentrega      = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->prazoentrega))));
-        $oAutorizacao->resumo            = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->resumo))));
-        
-        foreach ($oAutorizacao->itens as $oItem) {
-          $oItem->observacao = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oItem->observacao))));
+                foreach ($oAutorizacao->itens as $oItem) {
+                    $oItem->observacao = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oItem->observacao))));
+                }
+
+                $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$oAutorizacao->cgm}");
+                db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
+
+                if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
+
+                    throw new Exception("ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!");
+                }
+                if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
+
+                    throw new Exception("ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!");
+                }
+            }
+
+            db_inicio_transacao();
+
+            $oProcessoCompra = new ProcessoCompras($oParam->iCodigo);
+            $oRetorno->autorizacoes = $oProcessoCompra->gerarAutorizacoes($oParam->aAutorizacoes);
+            db_fim_transacao(false);
+
+            $oRetorno->status = 1;
+            $oRetorno->message = urlencode("Autorização efetuada com sucesso.");
+        } catch (Exception $eErro) {
+
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+            if (db_utils::inTransaction()) {
+                db_fim_transacao(true);
+            }
         }
-
-          //VERIFICA CPF E CNPJ ZERADOS OC 7037
-          $sqlerro = false;
-          $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$oAutorizacao->cgm}");
-          db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
-
-          if (strlen($z01_cgccpf) == 14) {
-              if ($z01_cgccpf == '00000000000000') {
-                  $sqlerro = true;
-                  $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
-              }
-          }else{
-              if ($z01_cgccpf == '' || $z01_cgccpf == null) {
-                  $sqlerro = true;
-                  $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
-              }
-          }
-
-          if (strlen($z01_cgccpf) == 11) {
-              if ($z01_cgccpf == '00000000000') {
-                  $sqlerro = true;
-                  $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
-              }
-          }else{
-              if ($z01_cgccpf == '' || $z01_cgccpf == null) {
-                  $sqlerro = true;
-                  $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
-              }
-          }
-      }
-
-        db_inicio_transacao();
-      if($sqlerro == false) {
-
-          $oProcessoCompra = new ProcessoCompras($oParam->iCodigo);
-          $oRetorno->autorizacoes = $oProcessoCompra->gerarAutorizacoes($oParam->aAutorizacoes);
-          db_fim_transacao(false);
-
-          $oRetorno->status = 1;
-          $oRetorno->message = urlencode("Autorização efetuada com sucesso.");
-      }
-    } catch (Exception $eErro) {
-
-      $oRetorno->status  = 2;
-      $oRetorno->message = urlencode($eErro->getMessage());
-      db_fim_transacao(true);
-    }
     
   break;
 
@@ -195,4 +177,3 @@ switch ($oParam->exec) {
 
 
 echo $oJson->encode($oRetorno);
-?>
