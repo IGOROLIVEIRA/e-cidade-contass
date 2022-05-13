@@ -1137,8 +1137,8 @@ if ($situacao == 2) {
                         $numrowsarrecad = 0;
                         
                         if ($lDebugAtivo == true) {
-                        	echo "     </br> Guia original da EL:".$numpre. " e <b>valor ".$elvalor." </b> e numpar".$numpar ;
-                        	echo '<br> 1º SQL ---- '.$sqlel;
+                        	echo "</br> Guia original da EL:".$numpre. " e <b>valor ".$elvalor." </b> e numpar".$numpar ;
+                        	echo "<br> 1º SQL ---- ".$sqlel;
                     	}
                         
                         $resultel 	= db_query($sqlel) or die($sqlel);
@@ -1247,7 +1247,7 @@ if ($situacao == 2) {
                             	if ($lDebugAtivo == true) {echo '<br>Tem desconto '.$desconto.' e recibo '.$iNumpreBoleto.'';}
                             	
                             	//Adiciona desconto ao recibo
-								$sqlDescontoRec = "insert into recibopaga 
+                            	$sqlDescontoRec = "insert into recibopaga 
 													  select k00_numcgm,k00_dtoper,k00_receit,918,round(".$desconto."*(sum(k00_valor)/somaarrecadparcela),2) as desconto,k00_dtvenc,k00_numpre,k00_numpar,
 													  k00_numtot,k00_numdig,k00_conta,k00_dtpaga,k00_numnov
 													  from (
@@ -1762,7 +1762,7 @@ if ($situacao == 2) {
 
 		if ($lDebugAtivo == true) {
 			echo "<br/>F I M<br/>";
-			//exit;
+			exit;
 		}
 		
 
