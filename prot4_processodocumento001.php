@@ -265,7 +265,9 @@ $oRotulo->label("z01_nome");
 
             if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
 
-              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+              var sHTMLBotoes = '<input type="button" value="Alterar Acesso" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+
+              sHTMLBotoes += '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
               $bBloquea = false;
@@ -286,7 +288,7 @@ $oRotulo->label("z01_nome");
 
 
 
-            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, nivelacesso, sHTMLBotoes];
+            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
             oGridDocumentos.addRow(aLinha, false, $bBloquea);
           }
 
@@ -535,6 +537,94 @@ $oRotulo->label("z01_nome");
     });
 
   }
+
+  /**
+   * Altera descricao de um documento
+   * @param integer iCodigoDocumento
+   * @param string sDescricaoDocumento
+   * @return void
+   */
+  function js_alterarNivelAcessoDocumento(iCodigoDocumento, sDescricaoDocumento, nivelAcesso) {
+
+    $('namefile').value = '';
+    $('uploadfile').value = '';
+    $('uploadfile').disabled = true;
+    $('p01_descricao').value = sDescricaoDocumento.urlDecode();
+    var text = 'Ford 2.0';
+    var select = document.querySelector('#p01_nivelacesso');
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].text === nivelAcesso) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+
+
+    /**
+     * Altera acao do botao salvar
+     * @return void
+     */
+    $('btnSalvar').onclick = function() {
+
+      var iCodigoProcesso = $('p58_codproc').value;
+      var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+      var iNivelAcesso = $('p01_nivelacesso').value;
+
+      var oParam = new Object();
+
+      if (empty(iCodigoProcesso)) {
+
+        alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
+        return false;
+      }
+
+      if (empty(sDescricaoDocumento)) {
+
+        alert(_M(MENSAGENS + 'erro_descricao_nao_informada'));
+        return false;
+      }
+
+      js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
+
+      oParam.exec = 'salvarDocumento';
+      oParam.iCodigoDocumento = iCodigoDocumento;
+      oParam.iCodigoProcesso = iCodigoProcesso;
+      oParam.sDescricaoDocumento = sDescricaoDocumento;
+      oParam.iNivelAcesso = iNivelAcesso;
+
+
+      var oAjax = new Ajax.Request(
+        sUrlRpc, {
+          parameters: 'json=' + Object.toJSON(oParam),
+          method: 'post',
+          asynchronous: false,
+          onComplete: function(oAjax) {
+
+            js_removeObj("msgbox");
+            var oRetorno = eval('(' + oAjax.responseText + ")");
+            var sMensagem = oRetorno.sMensagem.urlDecode();
+
+            if (oRetorno.iStatus > 1) {
+
+              alert(sMensagem);
+              return false;
+            }
+
+            $('btnSalvar').onclick = js_salvar;
+            $('namefile').value = '';
+            $('uploadfile').value = '';
+            $('uploadfile').disabled = false;
+            $('p01_descricao').value = '';
+
+            alert(sMensagem);
+            js_buscarDocumentos();
+          }
+        });
+
+    }
+  }
+
+
 
   /**
    * Altera descricao de um documento
