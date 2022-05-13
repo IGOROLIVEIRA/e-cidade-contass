@@ -813,7 +813,7 @@ if (isset($_POST["processar"])) {
         }
     }
 
-    function js_mostraempempenho(chave1, chave2, chave3, chave4, chave5) {
+    function js_mostraempempenho(chave1, chave2, chave3, chave4, chave5, chave6) {
         if (chave2 == true) {
             document.getElementById("z01_nome").value = "";
             document.getElementById("e60_codemp").value = "";
@@ -824,9 +824,7 @@ if (isset($_POST["processar"])) {
 
         } else {
             empenhoselecionado = chave1;
-
-            //alert(chave1 + chave2 + chave3 + chave4 + chave5);
-
+            dataempenho = chave6;
             document.getElementById("z01_nome").value = chave2;
 
         }
