@@ -465,7 +465,7 @@ if(isset($incluir)) {
 
         if ($clempparamnum->numrows == 0) {
 
-            $result = $clempparametro->sql_record($clempparametro->sql_query_file($anousu, "(e30_codemp+1) as e60_codemp,e30_notaliquidacao"));
+            $result = $clempparametro->sql_record($clempparametro->sql_query_file($anousu, "(e30_codemp+1) as e60_codemp, e30_notaliquidacao"));
             if ($clempparametro->numrows > 0) {
                 db_fieldsmemory($result, 0);
                 $clempempenho->e60_codemp = $e60_codemp;
@@ -516,6 +516,51 @@ if(isset($incluir)) {
 
                 $sqlerro  = true;
                 $erro_msg = "Já existe um empenho de número {$e60_codemp}/{$anousu} lançado na instituição!" . pg_last_error();
+            }
+        }
+
+        /**
+         * Verificamos se o empenho fora da ordem cronológica:
+         */
+        if (!$sqlerro) {
+
+            $result = $clempparametro->sql_record($clempparametro->sql_query_file($anousu, "e30_empordemcron"));
+            db_fieldsmemory($result, 0);
+            if ($clempparametro->numrows > 0) {
+
+            }
+            if($e30_empordemcron == 'f'){
+
+                // menor ou igual ao proximo e maior ou igual a anterior
+                $where = " e60_codemp::int8 > {$e60_codemp}";
+                $order = " order by e60_codemp::int8 asc";
+                $sSqlEmpenhoProximo = $clempempenho->sql_prox_data_empenho($anousu, $iInstituicao, $where, $order);
+                $rsVerificacaoEmpenhoProximo = $clempempenho->sql_record($sSqlEmpenhoProximo);
+
+                if ($clempempenho->numrows > 0) {
+                    db_fieldsmemory($rsVerificacaoEmpenhoProximo, 0);
+                    echo "Validação 1 Tela".strtotime($dDataMovimento)." Banco".strtotime($emiss);
+                    if(strtotime($dDataMovimento) > strtotime($emiss) ){
+                        $sqlerro  = true;
+                        $erro_msg = "Data ".date("d/m/Y",strtotime($dDataMovimento))." do Empenho {$e60_codemp} maior que Data ".date("d/m/Y",strtotime($emiss))." do Empenho {$codemp}!" . pg_last_error();
+                    }
+                }
+
+                $where = " e60_codemp::int8 < {$e60_codemp}";
+                $order = " order by e60_codemp::int8 desc";
+                $sSqlEmpenhoAnterior = $clempempenho->sql_prox_data_empenho($anousu, $iInstituicao, $where, $order);
+                $rsVerificacaoEmpenhoAnterior = $clempempenho->sql_record($sSqlEmpenhoAnterior);
+
+                if ($clempempenho->numrows > 0) {
+                    db_fieldsmemory($rsVerificacaoEmpenhoAnterior, 0);
+                    echo $sSqlEmpenhoAnterior;
+                    echo "<br/> Validação 2 Tela".$dDataMovimento." Banco".$emiss;
+                    if(strtotime($dDataMovimento) < strtotime($emiss)){
+                        $sqlerro  = true;
+                        $erro_msg = "Data ".date("d/m/Y",strtotime($dDataMovimento))." do Empenho {$e60_codemp} menor que Data ".date("d/m/Y",strtotime($emiss))." do Empenho {$codemp}!" . pg_last_error();
+                    }
+                }
+
             }
         }
 
@@ -648,6 +693,7 @@ if(isset($incluir)) {
 
                 $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
                 db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
+
 
                 if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
 

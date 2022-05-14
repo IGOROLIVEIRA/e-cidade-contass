@@ -2441,4 +2441,16 @@ class cl_empempenho {
         $sSql .= "    where e60_emiss between '{$dtini}' and '{$dtfim}' and e60_instit in ($instits) ";
         return $sSql;
       }
+
+      public function sql_prox_data_empenho($anoUsu, $instit, $where, $order) {
+          $sSql  = "select e60_codemp as codemp, e60_emiss as emiss from empempenho ";
+          $sSql .= " where e60_instit = {$instit} and e60_anousu={$anoUsu} ";
+          if($where != ""){
+              $sSql .= " and  {$where}";
+          }
+          $sSql .= $order;
+          $sSql .= " limit 1";
+
+          return $sSql;
+      }
 }
