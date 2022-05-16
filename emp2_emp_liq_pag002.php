@@ -68,12 +68,20 @@ $clorctiporec->rotulo->label();
 $clorcdotacao->rotulo->label();
 $clorcorgao->rotulo->label();
 $clrotulo = new rotulocampo;
+$totalaux = 0;
+$cont = 0;
 
 // quebra dados do filtro
 $clselorcdotacao->setDados($filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
 // $instits= $clselorcdotacao->getInstit(); // nao usado, somente usada para carregar os parametros do filtro !
 $sele_work = $clselorcdotacao->getDados(false);
 
+if (substr($sele_work,0,7) == "1=1 and"){
+  $sele_work1 =  substr($sele_work,0,9);
+  $sele_work1 .= " y.";
+  $sele_work1 .= substr($sele_work, 9);
+  $sele_work = $sele_work1;
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 $where_credor = '';
@@ -201,9 +209,37 @@ if ($oPost->sDadosFornecedor == 's') {
   $sCampos  = " z01_incest, z01_cgccpf, ";
 }
 
+if ($tipopessoa == 'cpf'){
+    $filtrotipopessoa = " and LENGTH(z01_cgccpf) = 11 "; 
+}
+elseif ($tipopessoa == 'cnpj'){
+    $filtrotipopessoa = " and LENGTH(z01_cgccpf) = 14 ";
+}
+else{
+      $filtrotipopessoa = " ";
+}
+
+$sele_desdobramentos = "";
+$desdobramentos = $clselorcdotacao->getDesdobramento(); // coloca os codele dos desdobramntos no formato (x,y,z)
+  if ($desdobramentos != "") {
+      $sele_desdobramentos = " and empelemento.e64_codele in " . $desdobramentos; // adiciona desdobramentos
+  }
+  if($autonomofiltro == 'a'){
+    if ($desdobramentos != ""){
+      $sele_desdobramentos .= " or SUBSTRING(y.o56_elemento, 1, 9)::INTEGER in (333903604,333903606,333903610,333903611,333903612,333903613,333903615,333903616,333903617,333903618,333903619,
+      333903620,333903621,333903622,333903623,333903624,333903625,333903626,333903627,333903628,333903629,333903630,333903631,333903632,333903633,333903634,333903642,333903643,
+      333903644,333903645,333903699,333903501,333903502,333903503,333903504,333903505,333903506,333903599) "; // adiciona desdobramentos
+  }else{
+    $sele_desdobramentos .= " and SUBSTRING(y.o56_elemento, 1, 9)::INTEGER in (333903604,333903606,333903610,333903611,333903612,333903613,333903615,333903616,333903617,333903618,333903619,
+    333903620,333903621,333903622,333903623,333903624,333903625,333903626,333903627,333903628,333903629,333903630,333903631,333903632,333903633,333903634,333903642,333903643,
+    333903644,333903645,333903699,333903501,333903502,333903503,333903504,333903505,333903506,333903599) "; // adiciona desdobramentos
 
 
-$sqlperiodo  = "  select empempenho.e60_numemp::integer as e60_numemp,                                               ";
+  }
+}
+
+
+$sqlperiodo  = "  select empempenho.e60_numemp::integer as e60_numemp,                                             ";
 $sqlperiodo .= " 	       e60_resumo,                                                                               ";
 $sqlperiodo .= " 	       e60_destin,                                                                               ";
 $sqlperiodo .= " 	       e60_codemp,                                                                               ";
@@ -236,7 +272,8 @@ $sqlperiodo .= " 	       c70_data,                                              
 $sqlperiodo .= " 	       c70_codlan,                                                                               ";
 $sqlperiodo .= " 	       c53_tipo,                                                                                 ";
 $sqlperiodo .= " 	       {$sCampos}                                                                                ";
-$sqlperiodo .= " 	       c53_descr                                                                                 ";
+$sqlperiodo .= " 	       c53_descr,                                                                                ";
+$sqlperiodo .= " 	       y.o56_elemento                                                                            ";
 $sqlperiodo .= "    from empempenho                                                                                ";
 $sqlperiodo .= "   inner join conlancamemp 	on c75_numemp                 = empempenho.e60_numemp                  ";
 $sqlperiodo .= "   inner join conlancam		  on c70_codlan                 = c75_codlan                             ";
@@ -248,6 +285,7 @@ $sqlperiodo .= "   inner join orcdotacao 		on orcdotacao.o58_anousu 	    = empem
 $sqlperiodo .= "                            and orcdotacao.o58_coddot      = empempenho.e60_coddot                 ";
 $sqlperiodo .= "                            and orcdotacao.o58_instit      = empempenho.e60_instit                 ";
 $sqlperiodo .= "   inner join emptipo 		    on emptipo.e41_codtipo 		    = empempenho.e60_codtipo               ";
+$sqlperiodo .= "   inner join empelemento on e60_numemp                   = e64_numemp                             ";                 
 $sqlperiodo .= "   inner join db_config as a on a.codigo 			            = orcdotacao.o58_instit                  ";
 $sqlperiodo .= "   inner join orctiporec 		on orctiporec.o15_codigo 	    = orcdotacao.o58_codigo                  ";
 $sqlperiodo .= "   inner join orcfuncao 		  on orcfuncao.o52_funcao 	    = orcdotacao.o58_funcao                ";
@@ -263,6 +301,8 @@ $sqlperiodo .= "                    			   and orcorgao.o40_orgao         = orcdo
 $sqlperiodo .= "   inner join orcunidade 		on orcunidade.o41_anousu      = orcdotacao.o58_anousu                  ";
 $sqlperiodo .= "                            and orcunidade.o41_orgao       = orcdotacao.o58_orgao                  ";
 $sqlperiodo .= "    	                       and orcunidade.o41_unidade     = orcdotacao.o58_unidade               ";
+$sqlperiodo .= "   inner join orcelemento as y on y.o56_codele             = e64_codele                            ";
+$sqlperiodo .= "                            and e60_anousu             = y.o56_anousu                          ";
 $sqlperiodo .= "   left join  empemphist 		on empemphist.e63_numemp      = empempenho.e60_numemp                  ";
 $sqlperiodo .= "   left join  emphist 		    on emphist.e40_codhist        = empemphist.e63_codhist               ";
 $sqlperiodo .= "   inner join pctipocompra 	on pctipocompra.pc50_codcom   = empempenho.e60_codcom                  ";
@@ -271,7 +311,8 @@ $sqlperiodo .= "                           and e60_anousu                 = e91_
 $sqlperiodo .= "  where $xtipo $where_credor                                                                       ";
 $sqlperiodo .= "    and c70_data between '$dataini' and '$datafin'                                                 ";
 $sqlperiodo .= "    and $sele_work                                                                                 ";
-$sqlperiodo .= "    $instits                                                                                       ";
+$sqlperiodo .= "    $instits  $filtrotipopessoa                                                                    ";
+$sqlperiodo .= "     $sele_desdobramentos                                                                          ";
 $sqlperiodo .= "  group by e60_numemp,                                                                             ";
 $sqlperiodo .= "           e60_resumo,                                                                             ";
 $sqlperiodo .= "           e60_destin,                                                                             ";
@@ -300,11 +341,12 @@ $sqlperiodo .= "           o15_descr,                                           
 $sqlperiodo .= "           e60_codcom,                                                                             ";
 $sqlperiodo .= "           pc50_descr,                                                                             ";
 $sqlperiodo .= "           c70_data,                                                                               ";
-$sqlperiodo .= " 	       c70_codlan,                                                                             ";
+$sqlperiodo .= " 	         c70_codlan,                                                                             ";
 $sqlperiodo .= "           c53_tipo,                                                                               ";
 $sqlperiodo .= "           c53_descr,                                                                              ";
-$sqlperiodo .= "           {$sCampos}                                                                               ";
-$sqlperiodo .= "           e91_numemp                                                                              ";
+$sqlperiodo .= "           {$sCampos}                                                                              ";
+$sqlperiodo .= "           e91_numemp,                                                                              ";
+$sqlperiodo .= "           y.o56_elemento                                                                          ";
 $sqlperiodo .= "     order by $xordem                                                                              ";
 $res=$clempempenho->sql_record($sqlperiodo);
 
@@ -398,19 +440,122 @@ for ($x=0; $x < $rows;$x++){
     $pre = 0;
   else
     $pre = 0;
-  $pdf->SetFont('Arial','',7);
-  $pdf->Cell(15,$tam,$e60_codemp,0,0,"C",$pre);
-  $pdf->Cell(15,$tam,db_formatar($e60_emiss,'d'),0,0,"C",$pre);
-  $pdf->Cell(55,$tam,$dl_estrutural,0,0,"L",$pre);
-  $pdf->Cell(15,$tam,db_formatar($c70_data,'d'),0,0,"C",$pre);
-  $pdf->Cell(45,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
-  if($c53_tipo == 20 || $c53_tipo == 21){
-     $pdf->Cell(45,$tam,((($e60_vlremp - $e60_vlranu) == $c70_valor)?'TOTAL':'PARCIAL'),0,1,"C",$pre);
+
+  if($agrupar == 'c'){
+
+      if($totalaux == 0){
+         $totalaux =$e60_numcgm;
+         $cont = 1;
+      }
+      if($totalaux != $e60_numcgm and  $cont != 1){
+        $pdf->Ln(1);
+        $pdf->SetFont('Arial','B',7);
+        $pdf->Cell(30,$tam,'TOTAL'    ,0,0,"L",0);
+        $pdf->Cell(30,$tam,'EMPENHO'   ,0,0,"R",0);
+        $pdf->Cell(30,$tam,'LIQUIDAÇÃO',0,0,"R",0);
+        $pdf->Cell(30,$tam,'PAGAMENTO' ,0,0,"R",0);
+        $pdf->Cell(30,$tam,'À PAGAR'   ,0,1,"R",0);
+
+        $pdf->Cell(30,$tam,'',0,0,"L",0);
+        $pdf->Cell(30,$tam,db_formatar($totalempenho,"f"),0,0,"R",0);
+        $pdf->Cell(30,$tam,db_formatar($totalliquidacao,"f"),0,0,"R",0);
+        $pdf->Cell(30,$tam,db_formatar($totalpagamento,"f"),0,0,"R",0);
+        $pdf->Cell(30,$tam,db_formatar($totalempenho-$totalpagamento,"f"),0,0,"R",0);
+        $pdf->Cell(30,$tam,"",0,1,"R",0);
+        $pdf->Ln(10);
+          $cont = 2;
+          $totalaux = $e60_numcgm;
+          
+      }
+      if($cont == 1){
+         $totalaux = $e60_numcgm;
+         $cont = 2;
+      }
+      if($credoraux == '')
+        $credoraux =0;
+      if($credoraux != $e60_numcgm){
+        $pdf->SetFont('Arial','B',7);
+        $pdf->Cell(15,$tam,'',0,0,"L",$pre); 
+        $pdf->Cell(0,$tam,'CREDOR : '.$e60_numcgm.' - '.$z01_nome,0,1,"L",$pre); 
+        $sCnpjCpf = strlen($z01_cgccpf) == 11 ? db_formatar($z01_cgccpf, 'cpf') : db_formatar($z01_cgccpf, 'cnpj');
+        $pdf->Cell(15,$tam,'',0,0,"L",$pre); 
+        $pdf->cell(64,$tam, "CPF / CNPJ: {$sCnpjCpf}", 0, 0, "L");
+        $pdf->cell(63,$tam, "INSC. EST.: {$z01_incest}", 0, 1, "L");
+        $totalempenho =0;
+        $totalliquidacao =0;
+        $totalpagamento = 0;
+        $totalapagar = 0; 
+      }
+      if($mostrarlancamentos == 's'){
+        $pdf->SetFont('Arial','',7);
+        $pdf->Cell(15,$tam,$e60_codemp,0,0,"C",$pre);
+        $pdf->Cell(15,$tam,db_formatar($e60_emiss,'d'),0,0,"C",$pre);
+        $pdf->Cell(55,$tam,$dl_estrutural,0,0,"L",$pre);
+        $pdf->Cell(15,$tam,db_formatar($c70_data,'d'),0,0,"C",$pre);
+        $pdf->Cell(45,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
+      }  
+      if($c53_tipo == 10 || $c53_tipo == 11){
+        if($c53_tipo == 10){
+          $totalempenho += $c70_valor;
+          
+        }else{
+          $totalempenho -= $c70_valor;
+        }
+      }elseif($c53_tipo == 20 || $c53_tipo == 21){
+        if($c53_tipo == 20){
+          $totalliquidacao += $c70_valor;
+        }else{
+          $totalliquidacao -= $c70_valor;
+        }
+      }elseif($c53_tipo == 30 || $c53_tipo == 31){
+        if($c53_tipo == 30){
+          $totalpagamento += $c70_valor;  
+        }else{
+          $totalpagamento -= $c70_valor;
+        }
+      }
+         
+      if($c53_tipo == 20 || $c53_tipo == 21){
+        if($mostrarlancamentos == 's')
+          $pdf->Cell(45,$tam,((($e60_vlremp - $e60_vlranu) == $c70_valor)?'TOTAL':'PARCIAL'),0,1,"C",$pre);
+      }else{
+        if($mostrarlancamentos == 's')
+          $pdf->Cell(45,$tam,'',0,1,"C",$pre);
+      }
+
+      $credoraux = $e60_numcgm;
+
   }else{
-     $pdf->Cell(45,$tam,'',0,1,"C",$pre);
+    if($mostrarlancamentos == 's'){
+      $pdf->SetFont('Arial','',7);
+      $pdf->Cell(15,$tam,$e60_codemp,0,0,"C",$pre);
+      $pdf->Cell(15,$tam,db_formatar($e60_emiss,'d'),0,0,"C",$pre);
+      $pdf->Cell(55,$tam,$dl_estrutural,0,0,"L",$pre);
+      $pdf->Cell(15,$tam,db_formatar($c70_data,'d'),0,0,"C",$pre);
+      $pdf->Cell(45,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
+    }
+      if($c53_tipo == 20 || $c53_tipo == 21){
+        if($mostrarlancamentos == 's')
+          $pdf->Cell(45,$tam,((($e60_vlremp - $e60_vlranu) == $c70_valor)?'TOTAL':'PARCIAL'),0,1,"C",$pre);
+      }else{
+        if($mostrarlancamentos == 's')
+          $pdf->Cell(45,$tam,'',0,1,"C",$pre);
+      }
+      $pdf->Cell(85,$tam,'CREDOR : '.$e60_numcgm.' - '.$z01_nome,0,0,"L",$pre);
+  }  
+ 
+  if($agrupar == 'n'){
+    if($mostrarlancamentos == 's'){
+      $pdf->SetFont('Arial','',7);
+      $pdf->Cell(85,$tam,$c53_descr,0,1,"C",$pre);
+    }
+  }else{
+    if($mostrarlancamentos == 's'){
+      $pdf->SetFont('Arial','',7);
+      $pdf->Cell(75,$tam,'',0,0,"C",$pre);
+      $pdf->Cell(100,$tam,$c53_descr,0,1,"C",$pre);
+    }
   }
-  $pdf->Cell(85,$tam,'CREDOR : '.$e60_numcgm.' - '.$z01_nome,0,0,"L",$pre);
-  $pdf->Cell(85,$tam,$c53_descr,0,1,"C",$pre);
   $resNotaOrdemPagamento = db_query("select e69_numero, e71_codord, e50_obs
                                               from conlancamord
                                         inner join pagordemnota on e71_codord=c80_codord
@@ -418,18 +563,22 @@ for ($x=0; $x < $rows;$x++){
                                         inner join pagordem on e50_codord=e71_codord where c80_codlan=".$c70_codlan);
   db_fieldsmemory($resNotaOrdemPagamento,0);
   if ($oPost->sDadosFornecedor == 's' ) {
-
-    $sCnpjCpf = strlen($z01_cgccpf) == 11 ? db_formatar($z01_cgccpf, 'cpf') : db_formatar($z01_cgccpf, 'cnpj');
-    $pdf->cell(64,$tam, "CPF / CNPJ: {$sCnpjCpf}", 0, 0, "L");
-    $pdf->cell(63,$tam, "INSC. EST.: {$z01_incest}", 0, 0, "L");
-
-    $pdf->cell(33,$tam, "NOTA: {$e69_numero}", 0, 0, "R");
-    $pdf->cell(30,$tam, "OP: {$e71_codord}", 0, 1, "R");
+    if($agrupar == 'n'){
+      $sCnpjCpf = strlen($z01_cgccpf) == 11 ? db_formatar($z01_cgccpf, 'cpf') : db_formatar($z01_cgccpf, 'cnpj');
+      $pdf->cell(64,$tam, "CPF / CNPJ: {$sCnpjCpf}", 0, 0, "L");
+      $pdf->cell(63,$tam, "INSC. EST.: {$z01_incest}", 0, 0, "L");
+    }
+    if($mostrarlancamentos == 's'){  
+      $pdf->cell(33,$tam, "NOTA: {$e69_numero}", 0, 0, "R");
+      $pdf->cell(30,$tam, "OP: {$e71_codord}", 0, 1, "R");
+    }
   }else{
-    $pdf->cell(64,$tam, " ", 0, 0, "L");
-    $pdf->cell(63,$tam, " ", 0, 0, "L");
-    $pdf->cell(33,$tam, "NOTA: {$e69_numero}", 0, 0, "R");
-    $pdf->cell(30,$tam, "OP: {$e71_codord}", 0, 1, "R");
+    if($mostrarlancamentos == 's'){
+      $pdf->cell(64,$tam, " ", 0, 0, "L");
+      $pdf->cell(63,$tam, " ", 0, 0, "L");
+      $pdf->cell(33,$tam, "NOTA: {$e69_numero}", 0, 0, "R");
+      $pdf->cell(30,$tam, "OP: {$e71_codord}", 0, 1, "R");
+    }
   }
 
   if ($com_mov == 's') {
@@ -440,9 +589,11 @@ for ($x=0; $x < $rows;$x++){
     if($c53_tipo == 11){
         $resumo = $e94_motivo;
     }
-    $pdf->multiCell(0,$tam,'HISTÓRICO : '.$resumo,0,"L",$pre);
+    if($mostrarlancamentos == 's')
+      $pdf->multiCell(0,$tam,'HISTÓRICO : '.$resumo,0,"L",$pre);
     if ($e60_destin != '') {
-       $pdf->multiCell(0,$tam,'DESTINO : '.$e60_destin,0,"L",$pre);
+      if($mostrarlancamentos == 's')
+         $pdf->multiCell(0,$tam,'DESTINO : '.$e60_destin,0,"L",$pre);
     }
   }
 
@@ -453,14 +604,17 @@ for ($x=0; $x < $rows;$x++){
         db_fieldsmemory($resitem,$item,true);
         $preenche = ($item%2==0?0:1);
 //        $pdf->Cell(40,$tam,"",0,0,"R",$preenche);
-        $pdf->Cell(10,$tam,"$e62_item",0,0,"R",$preenche);
-        $pdf->Cell(100,$tam,substr($pc01_descrmater,0,67),0,0,"L",$preenche);
-        $pdf->Cell(10,$tam,db_formatar($e62_quant,'f'),0,0,"R",$preenche);
-//        $pdf->Cell(20,$tam,db_formatar($e62_vltot,'f'),0,0,"R",$preenche);
-        $pdf->multicell(0,$tam,substr($e62_descr,0,200),0,"L",$preenche);
+        if($mostrarlancamentos == 's'){
+          $pdf->Cell(10,$tam,"$e62_item",0,0,"R",$preenche);
+          $pdf->Cell(100,$tam,substr($pc01_descrmater,0,67),0,0,"L",$preenche);
+          $pdf->Cell(10,$tam,db_formatar($e62_quant,'f'),0,0,"R",$preenche);
+  //        $pdf->Cell(20,$tam,db_formatar($e62_vltot,'f'),0,0,"R",$preenche);
+          $pdf->multicell(0,$tam,substr($e62_descr,0,200),0,"L",$preenche);
       }
+    }
   }
-  $pdf->cell(0,1,'',"B",1,"C",0);
+  if($mostrarlancamentos == 's')
+    $pdf->cell(0,1,'',"B",1,"C",0);
   if($c53_tipo == 10 || $c53_tipo == 11){
     if($c53_tipo == 10){
       $total_emp += $c70_valor;
@@ -487,6 +641,28 @@ for ($x=0; $x < $rows;$x++){
     }
   }
 }
+
+if($agrupar == 'c'){
+  
+  if($rows == $x){
+   
+    $pdf->Ln(1);
+    $pdf->SetFont('Arial','B',7);
+    $pdf->Cell(30,$tam,'TOTAL'    ,0,0,"L",0);
+    $pdf->Cell(30,$tam,'EMPENHO'   ,0,0,"R",0);
+    $pdf->Cell(30,$tam,'LIQUIDAÇÃO',0,0,"R",0);
+    $pdf->Cell(30,$tam,'PAGAMENTO' ,0,0,"R",0);
+    $pdf->Cell(30,$tam,'À PAGAR'   ,0,1,"R",0);
+
+    $pdf->Cell(30,$tam,'',0,0,"L",0);
+    $pdf->Cell(30,$tam,db_formatar($totalempenho,"f"),0,0,"R",0);
+    $pdf->Cell(30,$tam,db_formatar($totalliquidacao,"f"),0,0,"R",0);
+    $pdf->Cell(30,$tam,db_formatar($totalpagamento,"f"),0,0,"R",0);
+    $pdf->Cell(30,$tam,db_formatar($totalempenho-$totalpagamento,"f"),0,0,"R",0);
+    $pdf->Cell(30,$tam,"",0,1,"R",0);
+    $pdf->Ln(10);
+} 
+}   
 //$pdf->SetFont('Arial','B',8);
 
 $pdf->Cell(30,$tam,'TOTAIS'    ,0,0,"L",0);
