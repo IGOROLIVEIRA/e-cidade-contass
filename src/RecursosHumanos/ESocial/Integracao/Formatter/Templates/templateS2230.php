@@ -25,6 +25,11 @@ return array(
             'dtInicio' => 'dtInicio',
             'dtFim' => 'dtFim'
         )
+    ),
+    'fimAfastamento' => array(
+        'properties' => array(
+            'dtTermAfast' => 'dtTermAfast'
+        )
     )
     
 );
