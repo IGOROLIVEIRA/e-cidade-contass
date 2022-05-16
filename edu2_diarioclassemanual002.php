@@ -187,12 +187,10 @@ for ($x = 0; $x < $iLinhasRegencia; $x++) {
       if ($r == (count($array_meses)-1) && ($avaliacao != "true" && $falta != "true")) {
         $iquebra = 1;	
       }
-
-      $monthNum  =  $qtd_diasmes[0];
-      $dateObj   = DateTime::createFromFormat('m', $monthNum);
-      $dateObj->setTimezone(new DateTimeZone('America/Sao_Paulo'));
-      $monthName = $dateObj->format('M');
-      $pdf->cell($larguraindiv*$qtd_diasmes[1],4,$monthName,1,$iquebra,"C",0);
+      $iMes = $qtd_diasmes[0];
+      $what = array("01","02","03","04","05","06","07","08","09","10","11","12");
+      $by = array("Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");
+      $pdf->cell($larguraindiv*$qtd_diasmes[1],4,str_replace($what, $by, $iMes),1,$iquebra,"C",0);
           
     }
     
