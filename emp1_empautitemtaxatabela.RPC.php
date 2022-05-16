@@ -9,6 +9,8 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_db_sysarqcamp_classe.php");
 require_once("classes/db_matunid_classe.php");
 require_once("classes/db_empautitem_classe.php");
+require_once("classes/db_empautoriza_classe.php");
+
 
 $oJson                = new services_json();
 $oParam               = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -16,6 +18,7 @@ $oParam               = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oDaoSysArqCamp    = new cl_db_sysarqcamp();
 $clmatunid         = new cl_matunid;
 $clempautitem      = new cl_empautitem;
+$clempautoriza     = new cl_empautoriza;
 
 
 switch ($_POST["action"]) {
@@ -362,7 +365,7 @@ switch ($_POST["action"]) {
 
             $vlrunit = $item['vlrunit'];
             $vlrunitdesc = ($vlrunit - ($vlrunit * $item['desc'] / 100));
-
+            $total += $item['total'];
             if (pg_numrows($rsItem) == 0) {
                 $clempautitem->e55_codele = $_POST['codele'];
                 $clempautitem->e55_item   = $item['id'];
@@ -394,6 +397,12 @@ switch ($_POST["action"]) {
                 $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
             }
         endforeach;
+        //alterando o valor da autorização que impedia o empenho
+
+        $clempautoriza->e54_autori = $_POST['autori'];
+        $clempautoriza->e54_valor = $total;
+        $clempautoriza->alterar($_POST['autori']);
+        
         db_fim_transacao();
 
         if ($clempautitem->erro_status == 0) {
