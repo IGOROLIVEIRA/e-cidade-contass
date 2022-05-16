@@ -33,6 +33,8 @@ require_once("libs/db_usuariosonline.php");
 require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
 
+$iInstit     = db_getsession('DB_instit');
+$adm = db_getsession('DB_administrador');
 $iOpcaoProcesso = 1;
 $lExibirMenus   = true;
 
@@ -175,6 +177,8 @@ $oRotulo->label("z01_nome");
 
 </html>
 <script type="text/javascript">
+  var descricaoDocumento = "";
+
   /**
    * Inserindo ID nos options do select de nível de acesso
    */
@@ -216,7 +220,10 @@ $oRotulo->label("z01_nome");
    */
   function js_buscarDocumentos() {
 
+    var instituicao = <?php print_r($iInstit) ?>;
+    var adm = <?php print_r($adm) ?>;
     var iCodigoProcesso = $('p58_codproc').value;
+
 
     if (empty(iCodigoProcesso)) {
       return false;
@@ -255,17 +262,28 @@ $oRotulo->label("z01_nome");
           var iDocumentos = oRetorno.aDocumentosVinculados.length;
 
 
+          var anexosSigilosos = new Array();
 
           for (var iIndice = 0; iIndice < iDocumentos; iIndice++) {
 
             var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
             var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
-            var nivelacesso = document.getElementById(oDocumento.nivelacesso).innerText;
+            if (oDocumento.nivelacesso == "") {
+              anexosSigilosos.push(iIndice);
+              var nivelacesso = document.getElementById("0").innerText;
+
+            } else {
+              var nivelacesso = document.getElementById(oDocumento.nivelacesso).innerText;
+
+            }
 
 
             if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
+              var sHTMLBotoes = '';
+              if (instituicao == oDocumento.iDepart && adm == 1) {
+                sHTMLBotoes += '<input type="button" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
 
-              var sHTMLBotoes = '<input type="button" value="Alterar Acesso" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+              }
 
               sHTMLBotoes += '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
@@ -280,12 +298,16 @@ $oRotulo->label("z01_nome");
 
             } else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0) {
 
-              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\');" />  ';
+              var sHTMLBotoes = '';
+              if (instituicao == oDocumento.iDepart && adm == 1) {
+                sHTMLBotoes += '<input type="button" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+
+              }
+              sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\');" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
               $bBloquea = false;
             }
-
 
 
             var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
@@ -293,6 +315,11 @@ $oRotulo->label("z01_nome");
           }
 
           oGridDocumentos.renderRows();
+          for (var i = 0; i < anexosSigilosos.length; i++) {
+            linhaAnexo = anexosSigilosos[i];
+            document.getElementById('gridDocumentosrowgridDocumentos' + linhaAnexo).style.backgroundColor = "red";
+
+          }
         }
       }
     );
@@ -550,7 +577,8 @@ $oRotulo->label("z01_nome");
     $('uploadfile').value = '';
     $('uploadfile').disabled = true;
     $('p01_descricao').value = sDescricaoDocumento.urlDecode();
-    var text = 'Ford 2.0';
+
+    descricaoDocumento = sDescricaoDocumento;
     var select = document.querySelector('#p01_nivelacesso');
     for (var i = 0; i < select.options.length; i++) {
       if (select.options[i].text === nivelAcesso) {
@@ -559,6 +587,7 @@ $oRotulo->label("z01_nome");
       }
     }
 
+    $('p01_descricao').disabled = true;
 
     /**
      * Altera acao do botao salvar
@@ -567,7 +596,7 @@ $oRotulo->label("z01_nome");
     $('btnSalvar').onclick = function() {
 
       var iCodigoProcesso = $('p58_codproc').value;
-      var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+      var sDescricaoDocumento = descricaoDocumento;
       var iNivelAcesso = $('p01_nivelacesso').value;
 
       var oParam = new Object();
@@ -577,12 +606,13 @@ $oRotulo->label("z01_nome");
         alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
         return false;
       }
-
+      /*
       if (empty(sDescricaoDocumento)) {
 
         alert(_M(MENSAGENS + 'erro_descricao_nao_informada'));
         return false;
       }
+      */
 
       js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
 
@@ -620,6 +650,11 @@ $oRotulo->label("z01_nome");
             js_buscarDocumentos();
           }
         });
+
+      $('p01_descricao').disabled = false;
+      $('p01_nivelacesso').disabled = false;
+
+
 
     }
   }
@@ -638,7 +673,6 @@ $oRotulo->label("z01_nome");
     $('uploadfile').value = '';
     $('uploadfile').disabled = true;
     $('p01_descricao').value = sDescricaoDocumento.urlDecode();
-    var text = 'Ford 2.0';
     var select = document.querySelector('#p01_nivelacesso');
     for (var i = 0; i < select.options.length; i++) {
       if (select.options[i].text === nivelAcesso) {
@@ -646,6 +680,8 @@ $oRotulo->label("z01_nome");
         break;
       }
     }
+
+    $('p01_nivelacesso').disabled = true;
 
 
     /**
@@ -708,6 +744,9 @@ $oRotulo->label("z01_nome");
             js_buscarDocumentos();
           }
         });
+
+      $('p01_descricao').disabled = false;
+      $('p01_nivelacesso').disabled = false;
 
     }
   }
