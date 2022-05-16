@@ -3,7 +3,7 @@
     <?php
 
     $clorctiporec = new cl_orctiporec();
-    $sql = "select distinct concat('1', substring(o15_codtri, 2, 2)) as o15_codtri, o15_descr from orctiporec o1 where o15_codtri != '' and o15_codtri::int >= 100 AND o15_codtri::int <= 299 AND o15_datalimite IS NULL order by concat('1', substring(o15_codtri, 2, 2)), o15_descr";
+    $sql = "select distinct concat('1', substring(o15_codtri, 2, 2)) as o15_codtri, o15_descr from orctiporec o1 where o15_codtri != '' and o15_codtri::int >= 100 AND o15_codtri::int <= 299 AND (o15_datalimite IS NULL OR o15_datalimite <= '" . db_getsession("DB_anousu") . "-12-31') order by concat('1', substring(o15_codtri, 2, 2)), o15_descr";
 
     $recursos = $clorctiporec->sql_record($sql);
 
@@ -97,8 +97,15 @@
 
     function js_carregarValores(oRetorno) {
         var valores = JSON.parse(oRetorno.responseText.urlDecode());
-        console.log(valores);
+        for (var [key, fonte] of Object.entries(valores.fonte)) {
+            document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value = fonte.c241_valor;
+            var valor = fonte.c241_valor - document.form1['aFonte[' + fonte.c241_fonte + '][suplementado]'].value;
+            document.form1['aFonte[' + fonte.c241_fonte + '][saldo]'].value = valor.toFixed(2);
+        }
+
         valores.fonte.forEach(function(fonte, b) {
+            console.log(fonte);
+            console.log(fonte.c241_fonte);
             document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value = fonte.c241_valor;
             var valor = fonte.c241_valor - document.form1['aFonte[' + fonte.c241_fonte + '][suplementado]'].value;
             document.form1['aFonte[' + fonte.c241_fonte + '][saldo]'].value = valor.toFixed(2);
@@ -107,6 +114,7 @@
 
     function js_carregarValoresSuplementados(oRetorno) {
         var valores = JSON.parse(oRetorno.responseText.urlDecode());
+        console.log(valores);
         valores.fonte.forEach(function(fonte, b) {
             document.form1['aFonte[' + fonte.fonte + '][suplementado]'].value = fonte.valor;
             var valor = document.form1['aFonte[' + fonte.fonte + '][valor]'].value - fonte.valor;

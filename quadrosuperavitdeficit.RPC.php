@@ -33,8 +33,8 @@ try {
         case "getValores":
             $aFonte = array();
       
-            $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", " CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) c241_fonte, SUM(c241_valor) c241_valor", null, "c241_anousu = {$anousu} GROUP BY CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) ORDER BY CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) " ));
-            // $oRetorno->fonte = $clquadrosuperavitdeficit->sql_query("null","*",null,"c241_anousu = {$anousu}");
+            $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", " CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) c241_fonte, SUM(c241_valor) c241_valor", null, "c241_ano = {$anousu} GROUP BY CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) ORDER BY CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) " ));
+            // $oRetorno->fonte = $clquadrosuperavitdeficit->sql_query("null","*",null,"c241_ano = {$anousu}");
 
             for ($i = 0; $i < pg_num_rows($result); $i++) {
                 $oFonte = db_utils::fieldsMemory($result, $i);
@@ -47,50 +47,40 @@ try {
 
             case "getImportar":
                 $aFonte = array();
-
+                
                 $clorctiporec = new cl_orctiporec();
-                $sql = "select distinct o15_codtri from orctiporec o1 where o15_codtri != '' and o15_codtri::int >= 100 AND o15_codtri::int <= 299 AND o15_datalimite IS NULL order by o15_codtri";
+                $sql = "select DISTINCT o15_codigo, o15_codtri FROM orctiporec where o15_codtri is not null";
             
                 $recursos = $clorctiporec->sql_record($sql);
                 $aRecurso = db_utils::getCollectionByRecord($recursos);
                 $aDadosSuperavitFontes = array();
+
                 foreach ($aRecurso as $oFot) :
                     // Tem que condicionar a classe do ano
                     $clbpdcasp71 = new cl_bpdcasp712022();
 
-                    $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false, $oFot->o15_codtri)) ;
+                    $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(true, $oFot->o15_codigo));
 
-                    $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
-        
-                    $nHash = "1" . substr($oFot->o15_codtri, 1, 2);
+                    $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes, 0);
+                    $nHash = "1" . substr(str_pad($oFot->o15_codtri, 3, "0"), 1, 2);
                     $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
-   
+
                     if (array_key_exists($nHash, $aDadosSuperavitFontes)) {
-                        if($iValorNumerico == 2){
-                            $aDadosSuperavitFontes[$nHash]->c241_valor += $oSaldoFontes->saldoanterior;
-                        }else{
-                            $aDadosSuperavitFontes[$nHash]->c241_valor += $nSaldoFinal;
-                        }
+                        $aDadosSuperavitFontes[$nHash]->c241_valor += -1 * number_format($oSaldoFontes->saldoanterior, 2, ".", "");
                     } else {
                         $oDadosSuperavitFonte = new stdClass();
-                        $oDadosSuperavitFonte->c241_anousu = $anousu;
-                        $oDadosSuperavitFonte->c241_fonte = "1" . substr($oFot->o15_codtri, 1, 2);
-                        if($iValorNumerico == 2){
-                            $oDadosSuperavitFonte->c241_valor = $oSaldoFontes->saldoanterior;
-                        }else{
-                            $oDadosSuperavitFonte->c241_valor = $nSaldoFinal;
-                        }
-
+                        $oDadosSuperavitFonte->c241_ano = $anousu;
+                        $oDadosSuperavitFonte->c241_fonte = $nHash;
+                        $oDadosSuperavitFonte->c241_valor = -1 * number_format($oSaldoFontes->saldoanterior, 2, ".", "");
                         $aDadosSuperavitFontes[$nHash] = $oDadosSuperavitFonte;
                     }
-                   
                 endforeach;
          
                 foreach ($aDadosSuperavitFontes as $chave => $oFonte) {
-                    $aFonte[] = $oFonte;
+                    $aFonte[(int) $oFonte->c241_fonte] = $oFonte;
                 }
                 ksort($aFonte);
-                $oRetorno->fonte = $aFonte;
+                $oRetorno->fonte = (array) $aFonte;
                 
                 break;    
 
@@ -142,3 +132,76 @@ try {
     $oRetorno->message = urlencode($eErro->getMessage());
 }
 echo $oJson->encode($oRetorno);
+
+
+
+function sql_query_saldoInicialContaCorrente ($iInstit=false,$iFonte=null, $sIntituicoes, $iAno=null){
+
+    $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
+                         where substr(c60_estrut,1,5)='82111' and c60_anousu=" . $iAno ." and c61_anousu=" . $iAno;
+    $sWhere =  " AND conhistdoc.c53_tipo not in (1000) ";
+
+    if($iAno==2016){
+        $iAno = 2017;
+        $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
+                         where substr(c60_estrut,1,5)='82910' and c60_anousu=2017 and c61_anousu=2017";
+        $sWhere =  " AND conhistdoc.c53_tipo in (2023) ";
+    }
+
+    if($iInstit==false){
+        $sSqlReduzSuperavit = $sSqlReduzSuperavit." and c61_instit in (".$sIntituicoes.")";
+    }
+
+    $sSqlSaldos = " SELECT saldoanterior , debito , credito
+                                    FROM
+                                      (select coalesce((SELECT SUM(saldoanterior) AS saldoanterior FROM
+                                                (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+                                                 FROM contacorrente
+                                                 INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                                 INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
+                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = c19_conplanoreduzanousu
+                                                 WHERE c19_reduz IN ( $sSqlReduzSuperavit )
+                                                   AND c19_conplanoreduzanousu = " . $iAno . "
+                                                   AND c17_sequencial = 103
+                                                   AND c19_orctiporec = {$iFonte}) as x),0) saldoanterior) AS saldoanteriores,
+
+                                        (select coalesce((SELECT sum(c69_valor) as credito
+                                         FROM conlancamval
+                                         INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                         AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                         INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                         INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                         INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                         INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                         INNER JOIN contacorrente ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                         WHERE c28_tipo = 'C'
+                                           AND DATE_PART('YEAR',c69_data) = " . $iAno . "
+                                           AND c17_sequencial = 103
+                                           AND c19_reduz IN (  $sSqlReduzSuperavit  )
+                                           AND c19_conplanoreduzanousu = " . $iAno . "
+                                           AND c19_orctiporec = {$iFonte}
+                                          ".$sWhere."
+                                         GROUP BY c28_tipo),0) as credito) AS creditos,
+
+                                        (select coalesce((SELECT sum(c69_valor) as debito
+                                         FROM conlancamval
+                                         INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                         AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                         INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                         INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                         INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                         INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                         INNER JOIN contacorrente  ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                         WHERE c28_tipo = 'D'
+                                           AND DATE_PART('YEAR',c69_data) = " . $iAno . "
+                                           AND c17_sequencial = 103
+                                           AND c19_reduz IN ( $sSqlReduzSuperavit )
+                                           AND c19_conplanoreduzanousu = " . $iAno . "
+                                           AND c19_orctiporec = {$iFonte} 
+                                           ".$sWhere."                                              
+                                         GROUP BY c28_tipo),0) as debito) AS debitos";
+
+    return $sSqlSaldos;
+
+
+}

@@ -106,7 +106,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     $sListaInstituicoes = implode(',', $aInstituicoes);
 
-
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
@@ -220,6 +219,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
      * ser alterados aqui também.
      */
 
+if (1==2) {
+    die("Entrei na primeira condição");
     $oBalancoPatrimonial = new BalancoPatrimonialDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oBalancoPatrimonial->setInstituicoes($sListaInstituicoes);
     $oBalancoPatrimonial->setExibirExercicioAnterior(true);
@@ -233,6 +234,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oBalancoPatrimonial->setExibirQuadros($aQuadros);
 
     $oRetornoBP = $oBalancoPatrimonial->getDados();
+}
 
     /** BPDCASP102021
      *  Quadro principal do relatório
@@ -242,6 +244,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         1 => 'vlrexatual'
     );
 
+    if (1 == 2) {
+        die("Entrei na segunda condição");
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
       $clbpdcasp10  = new cl_bpdcasp102021();
@@ -422,8 +426,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
      * @see funcao getSuperavitDeficit em BalancoPatrimonialDCASP2015.model.php
      */
 
-
-
+    }
+    
     foreach ($aExercicios as $iValorNumerico => $sChave) {
       // ini_set('display_errors','On');
       // error_reporting(E_ALL);
@@ -442,7 +446,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
        *
        */
       $nContaCorrente = 103;
-
+     
       for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
 
         $clbpdcasp71 = new cl_bpdcasp712021();
@@ -450,7 +454,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente($lInstit,$objContasfr->o15_codigo)) ;
         //db_criatabela($rsSaldoFontes);
         $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
-        //echo "<pre>";print_r($oSaldoFontes);
+        echo $objContasfr->o15_codigo;
+        echo "<pre>";print_r($oSaldoFontes);
         $bFonteEncerrada        = in_array($objContasfr->o15_codtri, $this->aFontesEncerradas);
 
         if (!$bFonteEncerrada) {
@@ -460,6 +465,11 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         }
         $nHash = $iFonte;
         $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
+        echo "Detalhado: ";
+        echo $objContasfr->o15_codtri;
+        echo " $oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito ";
+        echo $nSaldoFinal;
+        echo "<br/>";
         if(!isset($aDadosSuperavitFontes[$nHash])){
           $oDadosSuperavitFonte = new stdClass();
           $oDadosSuperavitFonte->si215_exercicio = $iValorNumerico;
@@ -492,7 +502,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
           $clbpdcasp71->si215_exercicio = $iValorNumerico;
           $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
           $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->si215_vlsaldofonte*-1;
-
+            print_r($clbpdcasp71);
           $clbpdcasp71->incluir(null);
           if ($clbpdcasp71->erro_status == 0) {
             throw new Exception($clbpdcasp71->erro_msg);

@@ -20,9 +20,9 @@ if ($incluir) {
 
         $clquadrosuperavitdeficit->c241_fonte = $fonte['fonte'];
         $clquadrosuperavitdeficit->c241_valor = $fonte['valor'];
-        $clquadrosuperavitdeficit->c241_anousu = db_getsession("DB_anousu");
+        $clquadrosuperavitdeficit->c241_ano = db_getsession("DB_anousu");
 
-        $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query(null, "c241_fonte", null, " c241_fonte = {$fonte['fonte']} and c241_anousu = " . db_getsession("DB_anousu")));
+        $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query(null, "c241_fonte", null, " c241_fonte = {$fonte['fonte']} and c241_ano = " . db_getsession("DB_anousu")));
 
         if (pg_num_rows($result) == 0) {
             $clquadrosuperavitdeficit->incluir();
