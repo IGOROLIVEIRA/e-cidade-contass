@@ -51,7 +51,11 @@ if (isset($incluir)) {
       <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
         <center>
           <?
-          include("forms/db_frmpermanexo.php");
+          if (db_getsession("DB_administrador") == "1") {
+            include("forms/db_frmpermanexo.php");
+          } else {
+            echo "Acesso restrito para administradores ";
+          }
           ?>
         </center>
       </td>
