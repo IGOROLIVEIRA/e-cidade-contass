@@ -63,6 +63,7 @@ class cl_pcmater {
    var $pc01_obras = 'f';
    var $pc01_justificativa = null;
    var $pc01_dataalteracao = null;
+   var $pc01_instit = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc01_codmater = int4 = Código do Material
@@ -86,6 +87,7 @@ class cl_pcmater {
                  pc01_obras = boll = obras
                  pc01_justificativa = varchar(100) = Justificativa da Alteração
                  pc01_dataalteracao = date = Data da Alteração
+                 pc01_instit = int = instituicao do item
                  ";
    //funcao construtor da classe
    function cl_pcmater() {
@@ -122,6 +124,7 @@ class cl_pcmater {
        $this->pc01_obras = ($this->pc01_obras == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_obras"]:$this->pc01_obras);
        $this->pc01_justificativa = ($this->pc01_justificativa == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_justificativa"]:$this->pc01_justificativa);
        $this->pc01_dataalteracao = ($this->pc01_dataalteracao == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_dataalteracao"]:$this->pc01_dataalteracao);
+       $this->pc01_instit = ($this->pc01_instit == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_instit"]:$this->pc01_instit);
      }else{
        $this->pc01_codmater = ($this->pc01_codmater == ""?@$GLOBALS["HTTP_POST_VARS"]["pc01_codmater"]:$this->pc01_codmater);
      }
@@ -237,6 +240,10 @@ class cl_pcmater {
        $this->erro_status = "0";
        return false;
      }
+     if($this->pc01_instit == null ){ 
+        $this->pc01_instit = db_getsession('DB_instit');
+      }
+
      if($pc01_codmater == "" || $pc01_codmater == null ){
        $result = db_query("select nextval('pcmater_pc01_codmater_seq')");
        if($result==false){
@@ -288,6 +295,7 @@ class cl_pcmater {
                                       ,pc01_tabela
                                       ,pc01_taxa
                                       ,pc01_obras
+                                      ,pc01_instit
                        )
                 values (
                                 $this->pc01_codmater
@@ -308,6 +316,7 @@ class cl_pcmater {
                                ,'$this->pc01_tabela'
                                ,'$this->pc01_taxa'
                                ,'$this->pc01_obras'
+                               ,$this->pc01_instit
                       )";
      $result = db_query($sql);
      if($result==false){
