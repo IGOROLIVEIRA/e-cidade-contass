@@ -250,7 +250,7 @@ class cl_esocialenvio
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        /*if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
             && ($lSessaoDesativarAccount === false))) {
             $resaco = $this->sql_record($this->sql_query_file($this->rh213_sequencial));
             if (($resaco != false) || ($this->numrows != 0)) {
@@ -266,7 +266,7 @@ class cl_esocialenvio
                 $resac = db_query("insert into db_acount values($acount,1010244,1009548,'','" . AddSlashes(pg_result($resaco, 0, 'rh213_md5')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
                 $resac = db_query("insert into db_acount values($acount,1010244,1009549,'','" . AddSlashes(pg_result($resaco, 0, 'rh213_situacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             }
-        }
+        }*/
         return true;
     }
     // funcao para alteracao
@@ -414,7 +414,7 @@ class cl_esocialenvio
             $sql .= " rh213_sequencial = $this->rh213_sequencial";
         }
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        /*if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
             && ($lSessaoDesativarAccount === false))) {
             $resaco = $this->sql_record($this->sql_query_file($this->rh213_sequencial));
             if ($this->numrows > 0) {
@@ -446,7 +446,7 @@ class cl_esocialenvio
                     }
                 }
             }
-        }
+        }*/
         $result = db_query($sql);
         if (!$result) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -483,7 +483,7 @@ class cl_esocialenvio
     public function excluir($rh213_sequencial = null, $dbwhere = null)
     {
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        /*if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
             && ($lSessaoDesativarAccount === false))) {
             if (empty($dbwhere)) {
                 $resaco = $this->sql_record($this->sql_query_file($rh213_sequencial));
@@ -505,7 +505,7 @@ class cl_esocialenvio
                     $resac  = db_query("insert into db_acount values($acount,1010244,1009549,'','" . AddSlashes(pg_result($resaco, $iresaco, 'rh213_situacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
                 }
             }
-        }
+        }*/
         $sql = " delete from esocialenvio
                     where ";
         $sql2 = "";

@@ -61,7 +61,7 @@
                         <label for="S2399">S-2399 - Trabalhador Sem Vínculo de Emprego/Estatutário - Término</label><br>
                     </td>
                     <td>
-                        <input type="checkbox" value="S2405" id="S2405" />
+                        <input type="checkbox" value="S2400" id="S2400" />
                         <label for="S2400">S-2400 - Cadastro de Beneficiário - Entes Públicos - Início</label><br>
                     </td>
                 </tr>
