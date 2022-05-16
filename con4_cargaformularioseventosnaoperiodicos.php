@@ -107,6 +107,7 @@ require_once("dbforms/db_funcoes.php");
         <input type="button" value="Processar" id="btnProcessar">
         <input type="button" value="Marcar Todos" id="btnMarcarTodos">
         <input type="button" value="Desmarcar Todos" id="btnDesmarcarTodos">
+        <input type="button" value="Remover Carga" id="btnRemoverCarga">
     </div>
 </body>
 
@@ -121,6 +122,7 @@ db_menu();
         var btnProcessar = $('btnProcessar');
         var btnMarcarTodos = $('btnMarcarTodos');
         var btnDesmarcarTodos = $('btnDesmarcarTodos');
+        var btnRemoverCarga = $('btnRemoverCarga');
 
         function processar() {
 
@@ -164,6 +166,40 @@ db_menu();
             }
         }
 
+        function removerCarga() {
+
+            if (!confirm('Confirma exclusão da carga dos eventos marcados para o ano e mês do sistema?')) {
+                return;
+            }
+            
+            var arquivos = $$("input[type='checkbox']");
+
+            if (arquivos.length == 0) {
+
+                alert('Selecione ao menos um arquivo.');
+                return false;
+            }
+            var listaArquivos = [];
+            arquivos.forEach(function(arquivo, iSeq) {
+                if (arquivo.checked == true) {
+                    listaArquivos.push(arquivo.value);
+                }
+            })
+
+            var request = {
+                exec: 'remover',
+                formularios: listaArquivos
+            };
+
+            new AjaxRequest(URL_RPC, request, function(response, erro) {
+
+                alert(response.mensagem);
+                if (erro) {
+                    return false;
+                }
+            }).setMessage('Aguarde, processando Arquivos. Esse processamento pode demorar alguns minutos...').execute();
+        }
+
         btnProcessar.observe('click', function() {
             processar();
         }.bind(this));
@@ -174,6 +210,10 @@ db_menu();
 
         btnDesmarcarTodos.observe('click', function() {
             selecionarOuDesmarcarTodos(false);
+        }.bind(this));
+
+        btnRemoverCarga.observe('click', function() {
+            removerCarga();
         }.bind(this));
     })(window);
 </script>
