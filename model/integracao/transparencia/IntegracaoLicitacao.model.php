@@ -119,7 +119,7 @@ class IntegracaoLicitacao extends IntegracaoBase implements IItemIntegracao {
     $sSqlLiclicitem  = $oDaoLIcilicitem->sql_query_portal_transparencia(null,
       $sListaCampos,
       'l21_codliclicita, l21_ordem',
-      "l20_anousu >= {$this->iAnoInicioIntegracao}"
+      "l20_anousu >= {$this->iAnoInicioIntegracao} and pc24_pontuacao = 1 "
     );
 
     $rsItensLicitacao= db_query($this->rsConexaoOrigem, $sSqlLiclicitem);
