@@ -1179,6 +1179,14 @@ $t_anu6 = 0;
 $t_pag6 = 0;
 $t_total6 = 0;
 $quantimp = 0;
+//total agrupado por desdobramento
+$dtotalempenhado = 0;
+$dtotalanulado = 0;
+$dtotalliquidado = 0;
+$dtotalpago = 0;
+$dtotalliguidado = 0;
+$dtotalnaoliguidado = 0;
+$dtotalgeral = 0;
 
 $lanctotemp = 0;
 $lanctotanuemp = 0;
@@ -1599,11 +1607,34 @@ if ($tipo == "a" or 1 == 1) {
             }
             $pdf->SetFont('Arial', 'B', 8);
             $totalforne++;
-            if ($agrupar == "d" and $sememp == "n") {
+            
+            if ($agrupar == "d" and $sememp == "n" and $totalforne > 1) {          
+              $pdf->Cell(165, $tam, "", "T", 0, "L", 1);
+              $pdf->Cell(18, $tam, db_formatar($dtotalempenhado, 'f'), "T", 0, "", 1); //totais globais
+              $pdf->Cell(18, $tam, db_formatar($dtotalanulado, 'f'), "T", 0, "R", 1);
+              $pdf->Cell(18, $tam, db_formatar($dtotalliquidado, 'f'), "T", 0, "R", 1);
+              $pdf->Cell(18, $tam, db_formatar($dtotalpago, 'f'), "T", 0, "R", 1);
+              $pdf->Cell(18, $tam, db_formatar($dtotalliguidado, 'f'), "T", 0, "R", 1);
+              $pdf->Cell(18, $tam, db_formatar($dtotalnaoliguidado, 'f'), "T", 0, "R", 1);
+              $pdf->Cell(18, $tam, db_formatar($dtotalgeral, 'f'), "T", 1, "R", 1);
+
+              $dtotalempenhado = 0;
+              $dtotalanulado = 0;
+              $dtotalliquidado = 0;
+              $dtotalpago = 0;
+              $dtotalliguidado = 0;
+              $dtotalnaoliguidado = 0;
+              $dtotalgeral = 0;         
+          }
+                  
+          if ($agrupar == "d" and $sememp == "n") {
+                
                 $pdf->Cell(45, $tam, "$e64_codele - $o56_elemento", $iBorda, 0, "C", 0);
                 $pdf->Cell(80, $tam, "$o56_descr", $iBorda, 1, "L", 0);
                 $pdf->SetFont('Arial', '', 7);
             }
+
+           
         }
 
         /*----------- AGRUPAR POR RECURSO -----------*/
@@ -2089,12 +2120,24 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->Cell(18, $tam, db_formatar($e60_vlrpag, 'f'), 'B', 0, "R", $preenche);
             $pdf->Cell(18, $tam, db_formatar($e60_vlrliq - $e60_vlrpag, 'f'), 'B', 0, "R", $preenche); //quebra linha
             $pdf->Cell(18, $tam, db_formatar($e60_vlremp - $e60_vlranu - $e60_vlrliq, 'f'), 'B', 0, "R", $preenche);
-            $pdf->Cell(18, $tam, db_formatar($e60_vlremp - $e60_vlranu - $e60_vlrpag, 'f'), 'B', 1, "R", $preenche);
+            $pdf->Cell(18, $tam, db_formatar($e60_vlremp - $e60_vlranu - $e60_vlrpag, 'f'), 'B', 1, "L", $preenche);
             if ($mostrarobs == "m") {
                 $pdf->multicell(270, 4, $e60_resumo);
             }
 
-
+            //totais desdobramentos
+          
+           if ($agrupar == "d" and $sememp == "n") {
+            $dtotalempenhado += $e60_vlremp;
+            $dtotalanulado += $e60_vlranu;
+            $dtotalliquidado += $e60_vlrliq;
+            $dtotalpago += $e60_vlrpag;
+            $dtotalliguidado += $e60_vlrliq - $e60_vlrpag;
+            $dtotalnaoliguidado += $e60_vlremp - $e60_vlranu - $e60_vlrliq;
+            $dtotalgeral += $e60_vlremp - $e60_vlranu - $e60_vlrpag;
+            
+        }
+                       
             if (1 == 1) {
                 $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $e60_numemp " . ($processar == "a" ? "" : " and c75_data between '$dataesp11' and '$dataesp22'")));
                 $rows_lancamemp = $clconlancamemp->numrows;
@@ -2288,7 +2331,7 @@ if ($tipo == "a" or 1 == 1) {
                 $pdf->Ln();
             }*/
             $pdf->Ln();
-            $pdf->Ln();
+            // $pdf->Ln();
             if ($agrupar == "ta") {
                 $pdf->Cell(138, $tam, "TOTAL DE EMPENHOS: " . db_formatar($rows, "s"), "T", 0, "L", 1);
                 $pdf->Cell(27, $tam, "TOTAL GERAL", "T", 0, "L", 1);
@@ -2319,6 +2362,27 @@ if ($tipo == "a" or 1 == 1) {
                 }
                 $pdf->SetFont('Arial', '', 7);
             } else {
+
+                if ($agrupar == "d") {          
+                    $pdf->Cell(165, $tam, "", "T", 0, "L", 1);
+                    $pdf->Cell(18, $tam, db_formatar($dtotalempenhado, 'f'), "T", 0, "", 1); //totais globais
+                    $pdf->Cell(18, $tam, db_formatar($dtotalanulado, 'f'), "T", 0, "R", 1);
+                    $pdf->Cell(18, $tam, db_formatar($dtotalliquidado, 'f'), "T", 0, "R", 1);
+                    $pdf->Cell(18, $tam, db_formatar($dtotalpago, 'f'), "T", 0, "R", 1);
+                    $pdf->Cell(18, $tam, db_formatar($dtotalliguidado, 'f'), "T", 0, "R", 1);
+                    $pdf->Cell(18, $tam, db_formatar($dtotalnaoliguidado, 'f'), "T", 0, "R", 1);
+                    $pdf->Cell(18, $tam, db_formatar($dtotalgeral, 'f'), "T", 1, "R", 1);
+                    $pdf->Ln();
+            
+                    $dtotalempenhado = 0;
+                    $dtotalanulado = 0;
+                    $dtotalliquidado = 0;
+                    $dtotalpago = 0;
+                    $dtotalliguidado = 0;
+                    $dtotalnaoliguidado = 0;
+                    $dtotalgeral = 0;         
+                }
+
                 $pdf->Cell(60, $tam, "TOTAL DE EMPENHOS: " . db_formatar($rows, "s"), "T", 0, "L", 1);
 
                 if ($totalforne > 0) {
@@ -2357,11 +2421,13 @@ if ($tipo == "a" or 1 == 1) {
             }
         }
     }
+    
+    
     // echo $sqlperiodo;db_criatabela($res);exit;
 
-}
-/* geral sintetico */
-if ($tipo == "s") {
+ }
+ /* geral sintetico */
+ if ($tipo == "s") {
 
     $pdf->SetFont('Arial', '', 7);
     for ($x = 0; $x < $rows; $x++) {
