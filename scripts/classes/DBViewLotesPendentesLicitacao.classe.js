@@ -62,9 +62,9 @@ DBViewLotesPendentes = function(sNameInstance) {
      */
     oGridLotesPendentes              = new DBGrid('ctnGridLotesPendentes');
     oGridLotesPendentes.nameInstance = 'oGridLotesPendentes_' + this.sNameInstance;
-    let aCellWidth                   = new Array('30%', '70%', "");
-    let aCellAlign                   = new Array('center', 'center', "");
-    let aHeaders                     = new Array('Sequencial', 'Nome do lote', "");
+    let aCellWidth                   = new Array('150px', '400px','');
+    let aCellAlign                   = new Array('center', 'center', '');
+    let aHeaders                     = new Array('Sequencial', 'Nome do lote', '');
     oGridLotesPendentes.setHeight(200);
     oGridLotesPendentes.setCellWidth(aCellWidth);
     oGridLotesPendentes.setHeader(aHeaders);

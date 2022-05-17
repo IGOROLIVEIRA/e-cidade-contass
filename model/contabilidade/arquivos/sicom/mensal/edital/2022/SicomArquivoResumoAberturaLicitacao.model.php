@@ -435,9 +435,10 @@ ORDER BY nroprocessolicitatorio
                     obrasdadoscomplementareslote.db150_descratividadeservico AS dscAtividadeServico,
                     obrasdadoscomplementareslote.db150_atividadeservicoesp AS tipoAtividadeServEspecializado,
                     obrasdadoscomplementareslote.db150_descratividadeservicoesp AS dscAtividadeServEspecializado,
-                    obrasdadoscomplementareslote.db150_sequencial AS dscAtividadeServEspecializado,
+                    obrasdadoscomplementareslote.db150_sequencial AS dscatividadeservespecializado,
                     CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico,
-                    l04_descricao as lote
+                    l04_descricao as lote,
+                    l20_tipojulg as julg
                 FROM liclicita
                 INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
                 INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
@@ -476,16 +477,16 @@ ORDER BY nroprocessolicitatorio
 
         if (pg_numrows($rsResult11)) {
 
-          // $iNumRows = intval($oDados10->qtdlotes) > 1 ? intval($oDados10->qtdlotes): pg_numrows($rsResult11);
           for ($iCont11 = 0; $iCont11 < pg_numrows($rsResult11); $iCont11++) {
             $oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-            $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
-              $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-              $oResult11->tipoatividadeservespecializado . $oResult11->codobralocal; // Foi adicionado a chave codobralocal
 
-            // if($oDados10->l20_usaregistropreco == 't'){
-            //     $sHash11 .= $oResult11->codfuncao . $oResult11->codsubfuncao;
-            // }
+            $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
+              $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio;
+
+            if ($oResult11->julg == 3) {
+              $sHash11 .= $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
+                $oResult11->tipoatividadeservespecializado . $oResult11->codobralocal . $oResult11->dscatividadeservespecializado . $oResult11->codbempublico;
+            }
 
             if (!isset($aDadosAgrupados11[$sHash11])) {
 
@@ -586,10 +587,8 @@ ORDER BY nroprocessolicitatorio
                       INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
                       INNER JOIN cadendermunicipio on db72_sequencial = db150_municipio
                       WHERE db_config.codigo= " . db_getsession('DB_instit') . "
-                          AND pctipocompratribunal.l44_sequencial NOT IN ('100',
-                                                                          '101',
-                                                                          '102', '103', '106') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
-          ";
+                          AND pctipocompratribunal.l44_sequencial NOT IN ('100','101','102', '103', '106') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
+                      ORDER BY obrasdadoscomplementareslote.db150_codobra";
 
         $rsResult12 = db_query($sSql12);
 
@@ -597,8 +596,7 @@ ORDER BY nroprocessolicitatorio
         for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
           $oResult12 = db_utils::fieldsMemory($rsResult12, $iCont12);
-          $sHash12 = '12' . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->codunidadesubrespestadual .
-            $oResult12->exercicioprocesso . $oResult12->nroprocessolicitatorio . $oResult12->codobralocal . $oResult12->cep;
+          $sHash12 = '12' . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->exercicioprocesso . $oResult12->nroprocessolicitatorio . $oResult12->codobralocal  . $oResult12->cep . $oResult12->latitude . $oResult12->longitude . $oResult12->codbempublico . $oResult12->nrolote;
 
           if (!isset($aDadosAgrupados12[$sHash12])) {
 
