@@ -27,14 +27,14 @@ require_once("classes/db_bpdcasp712022_classe.php");
 require_once("model/contabilidade/arquivos/sicom/2022/dcasp/geradores/GerarBP.model.php");
 
 /**
- * gerar arquivo de BalanÃ§o Patrimonial
+ * gerar arquivo de Balanço Patrimonial
  * @author gabriel
  * @package Contabilidade
  */
 class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
-  protected $iCodigoLayout = 151; // CÃ³digo do relatÃ³rio
+  protected $iCodigoLayout = 151; // Código do relatório
 
   protected $sNomeArquivo = 'BP';
 
@@ -75,7 +75,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function __construct() { }
 
   /**
-   * selecionar os dados do balanÃ§o patrimonial pra gerar o arquivo
+   * selecionar os dados do balanço patrimonial pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
@@ -205,14 +205,13 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     /**
-     * O mÃ©todo `getDados()`, da classe `BalancoPatromonialDCASP2022()`,
-     * retorna um array enorme. Para pegar os dados necessÃ¡rios para cada
-     * registro do SICOM DCASP, estamos passando os Ã­ndices exatos do array.
-     * Se eles forem alterados (nas configuraÃ§Ãµes dos relatÃ³rios), devem
-     * ser alterados aqui tambÃ©m.
+     * O método `getDados()`, da classe `BalancoPatromonialDCASP2022()`,
+     * retorna um array enorme. Para pegar os dados necessários para cada
+     * registro do SICOM DCASP, estamos passando os índices exatos do array.
+     * Se eles forem alterados (nas configurações dos relatórios), devem
+     * ser alterados aqui também.
      */
-if (1 == 2) {
-    die("Entrei na primeira condição");
+
     $oBalancoPatrimonial = new BalancoPatrimonialDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oBalancoPatrimonial->setInstituicoes($sListaInstituicoes);
     $oBalancoPatrimonial->setExibirExercicioAnterior(true);
@@ -226,16 +225,15 @@ if (1 == 2) {
     $oBalancoPatrimonial->setExibirQuadros($aQuadros);
 
     $oRetornoBP = $oBalancoPatrimonial->getDados();
-  }
+
     /** BPDCASP102022
-     *  Quadro principal do relatÃ³rio
+     *  Quadro principal do relatório
      */
 
     $aExercicios = array(
         1 => 'vlrexatual'
     );
- if (1 == 2) {
-     die ("Entrei na condicao");
+
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
       $clbpdcasp10  = new cl_bpdcasp102022();
@@ -265,7 +263,7 @@ if (1 == 2) {
       }
 
     }
-    die ("Entrei na condicao 2");
+
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
       $clbpdcasp20  = new cl_bpdcasp202022();
@@ -296,7 +294,7 @@ if (1 == 2) {
       $clbpdcasp20->si209_vlpatriliquidoreservalucros         = $oRetornoBP[43]->$sChave;
       $clbpdcasp20->si209_vlpatriliquidodemaisreservas        = $oRetornoBP[44]->$sChave;
 
-      //para pegar o superavit do exercicio atual e anterior Ã© necessÃ¡rio alterar o anousu
+      //para pegar o superavit do exercicio atual e anterior é necessário alterar o anousu
       $iAno = db_getsession("DB_anousu");
       if($iValorNumerico == 2){
         $iAno = $iAno-1;
@@ -324,7 +322,7 @@ if (1 == 2) {
       }
 
     }
-    die ("Entrei na condicao 3");
+
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
       $clbpdcasp30  = new cl_bpdcasp302022();
@@ -344,7 +342,7 @@ if (1 == 2) {
       }
 
     }
-    die ("Entrei na condicao4");
+
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
@@ -366,7 +364,7 @@ if (1 == 2) {
 
     }
 
-    die ("Entrei na condicao5");
+
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
       $clbpdcasp50  = new cl_bpdcasp502022();
@@ -384,7 +382,7 @@ if (1 == 2) {
       }
 
     }
-    die ("Entrei na condicao6");
+
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
@@ -410,7 +408,6 @@ if (1 == 2) {
       }
 
     } // $rsResult60
-}
 
     /**
      * @see funcao getSuperavitDeficit em BalancoPatrimonialDCASP2022.model.php
@@ -436,13 +433,15 @@ if (1 == 2) {
        *
        */
       $nContaCorrente = 103;
+
       for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
+
         $clbpdcasp71 = new cl_bpdcasp712022();
         $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
         $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false,$objContasfr->o15_codigo)) ;
         //db_criatabela($rsSaldoFontes);
         $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
-        // echo "<pre>";print_r($oSaldoFontes);
+        //echo "<pre>";print_r($oSaldoFontes);
         $nHash = $objContasfr->o15_codtri;
         $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
         if(!isset($aDadosSuperavitFontes[$nHash])){
@@ -503,7 +502,7 @@ if (1 == 2) {
         }
       }
       /**
-       * o registro 70 Ã© o total do registro 71
+       * o registro 70 é o total do registro 71
        */
       $clbpdcasp70  = new cl_bpdcasp702022();
 
