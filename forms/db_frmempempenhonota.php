@@ -168,22 +168,6 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         <center>
         <table border="0">
                 <tr>
-                    <td nowrap title="<?= @$Te54_autori ?>">
-                        <?= @$Le54_autori ?>
-                    </td>
-                    <td>
-                        <?
-                        db_input('e54_autori', 8, $Ie54_autori, true, 'text', 3);
-                        echo " ","<b></b>","&nbsp;&nbsp;&nbsp;&nbsp;";
-                        ?>
-                        <b> Data Autorização:</b>
-
-                        <?
-                          db_inputData('e54_emiss', @$e54_emiss_dia, @$e54_emiss_mes, @$e54_emiss_ano, true, 'text', 3);
-                        ?>
-                    </td>
-                </tr>
-                <tr>
                     <td nowrap title="Número Empenho">
                         <b>Número Empenho</b>
                     </td>
@@ -200,6 +184,22 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                                 $e60_emiss_ano = date("Y",db_getsession("DB_datausu"));
                             }
                             db_inputData('e60_emiss', @$e60_emiss_dia, @$e60_emiss_mes, @$e60_emiss_ano, true, 'text', $db_opcao);
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="<?= @$Te54_autori ?>">
+                        <?= @$Le54_autori ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('e54_autori', 8, $Ie54_autori, true, 'text', 3);
+                        echo " ","<b></b>","&nbsp;&nbsp;&nbsp;&nbsp;";
+                        ?>
+                        <b> Data Autorização:</b>
+
+                        <?
+                          db_inputData('e54_emiss', @$e54_emiss_dia, @$e54_emiss_mes, @$e54_emiss_ano, true, 'text', 3);
                         ?>
                     </td>
                 </tr>

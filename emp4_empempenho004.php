@@ -531,7 +531,7 @@ if(isset($incluir)) {
             }
             if($e30_empordemcron == 'f'){
 
-                // menor ou igual ao proximo e maior ou igual a anterior
+                // maior ou igual a anterior
                 $where = " e60_codemp::int8 > {$e60_codemp}";
                 $order = " order by e60_codemp::int8 asc";
                 $sSqlEmpenhoProximo = $clempempenho->sql_prox_data_empenho($anousu, $iInstituicao, $where, $order);
@@ -539,13 +539,13 @@ if(isset($incluir)) {
 
                 if ($clempempenho->numrows > 0) {
                     db_fieldsmemory($rsVerificacaoEmpenhoProximo, 0);
-                    echo "Validação 1 Tela".strtotime($dDataMovimento)." Banco".strtotime($emiss);
                     if(strtotime($dDataMovimento) > strtotime($emiss) ){
-                        $sqlerro  = true;
-                        $erro_msg = "Data ".date("d/m/Y",strtotime($dDataMovimento))." do Empenho {$e60_codemp} maior que Data ".date("d/m/Y",strtotime($emiss))." do Empenho {$codemp}!" . pg_last_error();
+                        $sqlerro   = true;
+                        $erro_msg  = "Empenho fora da ordem cronológica: ";
+                        $erro_msg .= "a data ".date("d/m/Y",strtotime($dDataMovimento))." do Empenho {$e60_codemp} é maior que a data ".date("d/m/Y",strtotime($emiss))." do Empenho {$codemp}!" . pg_last_error();
                     }
                 }
-
+                // menor ou igual ao proximo e
                 $where = " e60_codemp::int8 < {$e60_codemp}";
                 $order = " order by e60_codemp::int8 desc";
                 $sSqlEmpenhoAnterior = $clempempenho->sql_prox_data_empenho($anousu, $iInstituicao, $where, $order);
@@ -553,11 +553,10 @@ if(isset($incluir)) {
 
                 if ($clempempenho->numrows > 0) {
                     db_fieldsmemory($rsVerificacaoEmpenhoAnterior, 0);
-                    echo $sSqlEmpenhoAnterior;
-                    echo "<br/> Validação 2 Tela".$dDataMovimento." Banco".$emiss;
                     if(strtotime($dDataMovimento) < strtotime($emiss)){
-                        $sqlerro  = true;
-                        $erro_msg = "Data ".date("d/m/Y",strtotime($dDataMovimento))." do Empenho {$e60_codemp} menor que Data ".date("d/m/Y",strtotime($emiss))." do Empenho {$codemp}!" . pg_last_error();
+                        $sqlerro   = true;
+                        $erro_msg  = "Empenho fora da ordem cronológica: ";
+                        $erro_msg .= "a data ".date("d/m/Y",strtotime($dDataMovimento))." do Empenho {$e60_codemp} é menor que a data ".date("d/m/Y",strtotime($emiss))." do Empenho {$codemp}!" . pg_last_error();
                     }
                 }
 
