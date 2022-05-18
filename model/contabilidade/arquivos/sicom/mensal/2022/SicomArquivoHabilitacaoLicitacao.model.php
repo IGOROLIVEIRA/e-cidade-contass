@@ -217,7 +217,8 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	(select case when pc31_renunrecurso is null then 2 else pc31_renunrecurso end as pc31_renunrecurso from pcorcamfornelic
 	join pcorcamforne on pc31_orcamforne = pc21_orcamforne where pc31_liclicita = liclicita.l20_codigo and pc21_numcgm = pcforne.pc60_numcgm) as renunciaRecurso,
 	l20_codigo as codlicitacao,
-    liclicita.l20_leidalicitacao as leidalicitacao
+    liclicita.l20_leidalicitacao as leidalicitacao,
+    manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 	FROM liclicita as liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 	INNER JOIN habilitacaoforn as habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
@@ -226,14 +227,16 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
-	    INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
+	INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
+    LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
 	WHERE db_config.codigo=  " . db_getsession("DB_instit") . "
 	AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= " . db_getsession("DB_anousu") . "
 	AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 	AND cflicita.l03_pctipocompratribunal IN ('48','49','50','51','52','53','54')";
 
         $rsResult10 = db_query($sSql);
-
+        //db_criatabela($rsResult10); 
+        //exit; 
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
             $clhablic10 = new cl_hablic102022();
@@ -241,7 +244,11 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 
             $clhablic10->si57_tiporegistro = 10;
             $clhablic10->si57_codorgao = $oDados10->codorgaoresp;
-            $clhablic10->si57_codunidadesub = $oDados10->codunidadesubresp;
+            if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
+                $clhablic10->si57_codunidadesub = $oDados10->codunidsubant;    
+            }else{
+                $clhablic10->si57_codunidadesub = $oDados10->codunidadesubresp;
+            }
             $clhablic10->si57_exerciciolicitacao = $oDados10->exerciciolicitacao;
             $clhablic10->si57_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
             $clhablic10->si57_tipodocumento = $oDados10->tipodocumento;
@@ -315,7 +322,8 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		ELSE 2
 	END) as tipoDocumentoSocio,
 	cgmrep.z01_cgccpf as nroDocumentoSocio,
-	pcfornereprlegal.pc81_tipopart as tipoParticipacao
+	pcfornereprlegal.pc81_tipopart as tipoParticipacao,
+    manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 	FROM licitacao.liclicita as liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 	INNER JOIN habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
@@ -325,6 +333,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	INNER JOIN protocolo.cgm as cgmrep on (pcfornereprlegal.pc81_cgmresp=cgmrep.z01_numcgm)
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+    LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
 	WHERE db_config.codigo= " . db_getsession("DB_instit") . "
 	AND length(cgm.z01_cgccpf)>11 AND cgm.z01_cgccpf = '{$oDados10->nrodocumento}'
 	AND liclicita.l20_codigo=  {$oDados10->codlicitacao}";
@@ -339,7 +348,11 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
                 $clhablic11->si58_tiporegistro = 11;
                 $clhablic11->si58_reg10 = $clhablic10->si57_sequencial;
                 $clhablic11->si58_codorgao = $oDados11->codorgaoresp;
-                $clhablic11->si58_codunidadesub = $oDados11->codunidadesubresp;
+                if($oDados11->codunidsubant!= null || $oDados11->codunidsubant!=''){
+                    $clhablic11->si58_codunidadesub = $oDados11->codunidsubant;    
+                }else{
+                    $clhablic11->si58_codunidadesub = $oDados11->codunidadesubresp;
+                }
                 $clhablic11->si58_exerciciolicitacao = $oDados11->exerciciolicitacao;
                 $clhablic11->si58_nroprocessolicitatorio = $oDados11->nroprocessolicitatorio;
                 $clhablic11->si58_tipodocumentocnpjempresahablic = $oDados11->tipodocumentocnpjempresahablic;
@@ -398,7 +411,8 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		habilitacaoforn.l206_datavalidadefgts as dataValidadeCertidaoRegularidadeFGTS,
 		habilitacaoforn.l206_numcertidaocndt as nroCNDT,
 		habilitacaoforn.l206_dataemissaocndt as dtEmissaoCNDT,
-		habilitacaoforn.l206_datavalidadecndt as dtValidadeCNDT
+		habilitacaoforn.l206_datavalidadecndt as dtValidadeCNDT,
+        manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 		FROM liclicita as liclicita
 		INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 		INNER JOIN habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
@@ -414,8 +428,9 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
 		INNER JOIN aberlic112022 on (liclicitemlote.l04_descricao = aberlic112022.si47_dsclote  and aberlic112022.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
 		LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
-    LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
+        LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 		LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+        LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
 		WHERE db_config.codigo=" . db_getsession("DB_instit") . "
 		AND liclicita.l20_codigo= {$oDados10->codlicitacao}";
 
@@ -428,7 +443,11 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 
                 $clhablic20->si59_tiporegistro = '20';
                 $clhablic20->si59_codorgao = $oDados20->codorgaoresp;
-                $clhablic20->si59_codunidadesub = $oDados20->codunidadesubresp;
+                if($oDados20->codunidsubant!= null || $oDados20->codunidsubant!=''){
+                    $clhablic20->si59_codunidadesub = $oDados20->codunidsubant;    
+                }else{
+                    $clhablic20->si59_codunidadesub = $oDados20->codunidadesubresp;
+                }
                 $clhablic20->si59_exerciciolicitacao = $oDados20->exerciciolicitacao;
                 $clhablic20->si59_nroprocessolicitatorio = $oDados20->nroprocessolicitatorio;
                 $clhablic20->si59_tipodocumento = $oDados20->tipodocumento;
