@@ -27,6 +27,8 @@ class gerarEXEOBRAS extends GerarAM
         $sSql = "select * from exeobras202022 where si204_mes = " . $this->iMes . " and si204_instit=" . db_getsession("DB_instit");
         $rsexeobras202022 = db_query($sSql);
 
+        $seqnumlotes = array();
+        $sequencial = 1;
 
         if (pg_num_rows($rsexeobras102022) == 0 && pg_num_rows($rsexeobras202022) == 0) {
 
@@ -34,6 +36,7 @@ class gerarEXEOBRAS extends GerarAM
             $this->sLinha = $aCSV;
             $this->adicionaLinha();
         } else {
+
 
             /**
              *
@@ -52,7 +55,30 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS10['si197_exerciciolicitacao'] = $aEXEOBRAS10['si197_exerciciolicitacao'];
                 $aCSVEXEOBRAS10['si197_nroprocessolicitatorio'] = $aEXEOBRAS10['si197_nroprocessolicitatorio'];
                 $aCSVEXEOBRAS10['si197_codunidadesubresp'] = substr($aEXEOBRAS10['si197_codunidadesubresp'], 0, 8);
-                $aCSVEXEOBRAS10['si197_nrolote'] = $aEXEOBRAS10['si197_nrolote'];
+
+                $nrolote = $aEXEOBRAS10['si197_nrolote'];
+                $sql = "select liclicitemlote.* from liclicitem
+                join liclicita on l20_codigo=l21_codliclicita
+                join liclicitemlote on l04_liclicitem=l21_codigo
+                where l04_codigo=$nrolote order by l04_descricao;";
+                $rslotedescricao = db_query($sql);
+                $rslotedescricao = pg_fetch_array($rslotedescricao, 0);
+
+
+
+                $l04_descricao = $rslotedescricao['l04_descricao'];
+
+                if (in_array($l04_descricao, $seqnumlotes)) {
+                    $seq =  array_search($l04_descricao, $seqnumlotes);
+                    $aCSVEXEOBRAS10['si197_nrolote'] = $seq;
+                } else {
+                    $seqnumlotes[$sequencial] = $l04_descricao;
+                    $aCSVEXEOBRAS10['si197_nrolote'] = $sequencial;
+                    $sequencial++;
+                }
+
+
+                //$aCSVEXEOBRAS10['si197_nrolote'] = $aEXEOBRAS10['si197_nrolote'];
                 $aCSVEXEOBRAS10['si197_codobra'] = $aEXEOBRAS10['si197_codobra'];
                 $aCSVEXEOBRAS10['si197_objeto'] = $aEXEOBRAS10['si197_objeto'];
                 $aCSVEXEOBRAS10['si197_linkobra'] = $aEXEOBRAS10['si197_linkobra'];
