@@ -921,6 +921,8 @@ if (isset($_POST["processar"])) {
         var opE = 0;
         var oRetorno = eval('(' + oAjax.responseText + ")");
         if (oRetorno.status == 2) {
+            alert(oRetorno.message.urlDecode() + "" + valorEmp);
+
             oRetorno.itens.forEach(function(oItem) {
                 if (opE == 0) {
                     valorEmp[opE] = oItem;
@@ -939,7 +941,6 @@ if (isset($_POST["processar"])) {
                 }
             });
 
-            alert(oRetorno.message.urlDecode() + "" + valorEmp);
 
         } else if (oRetorno.status == 3) {
             alert(oRetorno.message.urlDecode());

@@ -346,8 +346,8 @@ $rotulo->label("z01_cgccpf");
 
               if ($importacaoveiculo == 1) {
                 $aCodEmp  = explode("/", $pesquisa_chave);
-                $where .= "empempenho.e60_codemp = '" . $aCodEmp[0] . "'";
-                $where .= " and e60_anousu = " . db_getsession("DB_anousu");
+                $where .= "empempenho.e60_codemp = '" . $aCodEmp[0] . "'" . " and e60_anousu = " . $aCodEmp[1];
+                //$where .= " and e60_anousu = " . db_getsession("DB_anousu");
                 $where .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
                 //removido por meio da solicitacao da oc 6848 
                 //$dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
