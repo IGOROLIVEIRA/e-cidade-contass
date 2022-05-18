@@ -65,9 +65,9 @@ class cl_conciliacaobancariapendencia
                     $this->k173_data = $this->k173_data_ano."-".$this->k173_data_mes."-".$this->k173_data_dia;
                 }
             }
-            $this->k173_numcmg = ($this->k173_numcmg == "" ? @$GLOBALS["HTTP_POST_VARS"]["k173_numcmg"]:$this->k173_numcmg);
-            $this->k173_codigo = ($this->k173_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["k173_codigo"]:$this->k173_codigo);
-            $this->k173_documento = ($this->k173_documento == "" ? @$GLOBALS["HTTP_POST_VARS"]["k173_documento"]:$this->k173_documento);
+            $this->k173_numcmg = ($this->k173_numcmg == "" ? @$GLOBALS["HTTP_POST_VARS"]["k173_conta"]:$this->k173_numcmg);
+            $this->k173_codigo = ($this->k173_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["k173_conta"]:$this->k173_codigo);
+            $this->k173_documento = ($this->k173_documento == "" ? @$GLOBALS["HTTP_POST_VARS"]["k173_conta"]:$this->k173_documento);
             $this->k173_valor = ($this->k173_valor == "" ? @$GLOBALS["HTTP_POST_VARS"]["k173_valor"]:$this->k173_valor);
             $this->k173_mov = ($this->k173_mov == "" ? @$GLOBALS["HTTP_POST_VARS"]["k173_mov"]:$this->k173_mov);
             $this->k173_tipolancamento = ($this->k173_tipolancamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["k173_tipolancamento"]:$this->k173_tipolancamento);
@@ -241,9 +241,6 @@ class cl_conciliacaobancariapendencia
                 $this->erro_status = "0";
                 return false;
             }
-        } else {
-            $sql .= $virgula." k173_numcgm = null ";
-            $virgula = ",";
         }
 
         if (trim($this->k173_codigo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k173_codigo"])) {
