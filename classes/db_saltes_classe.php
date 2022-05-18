@@ -536,7 +536,7 @@ class cl_saltes
     $sql .= "      inner join conplanoreduz  on  conplanoreduz.c61_reduz = saltes.k13_reduz and c61_anousu=" . db_getsession("DB_anousu");
     $sql .= "      inner join conplanoexe    on  conplanoexe.c62_reduz = conplanoreduz.c61_reduz and c62_anousu=c61_anousu";
     $sql .= "      left  join conplanoconta  on  conplanoconta.c63_codcon = conplanoreduz.c61_codcon  and conplanoconta.c63_anousu=conplanoreduz.c61_anousu";
-    $sql .= "      left join contabancaria on contabancaria.db83_conta = conplanoconta.c63_conta";
+    $sql .= "      left join contabancaria on contabancaria.db83_conta = conplanoconta.c63_conta and c63_tipoconta = db83_tipoconta";
     $sql .= "      left join conplano     on  conplanoreduz.c61_codcon = conplano.c60_codcon";	
     $sql2 = "";
     if ($dbwhere == "") {
