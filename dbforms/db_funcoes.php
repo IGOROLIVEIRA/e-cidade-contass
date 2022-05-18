@@ -670,10 +670,19 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
 			$nomedescr = $nome."descr";
 		}
 		if ($numcol == 2) {
-?>
-    <select name="<?=$nome?>" id="<?=$nome?>"
-    <?
-
+      //OC17312 OCULTA A CAIXA DO NUMERO SEQUENCIAL DA MODALIDADE - PEDIDO FEITO PELA ANALISE
+      if($nome=="l20_codtipocom"){
+        
+        ?>
+        
+        <select style ="display : none" name="<?=$nome?>" id="<?=$nome?>"
+        <?
+      }elseif($nome!="l20_codtipocom"){
+        
+        ?>
+        <select name="<?=$nome?>" id="<?=$nome?>"
+        <?
+      }
 
 
 			if ($numcol == 2)
@@ -691,9 +700,16 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
 				}
 			}
 			echo $js_script;
-?>
-     >
-    <?
+      //OC17312 OCULTA A CAIXA DO NUMERO SEQUENCIAL DA MODALIDADE - PEDIDO FEITO PELA ANALISE
+      if($nome=="l20_codtipocom"){
+        ?>
+        >
+        <?
+      }elseif($nome!="l20_codtipocom"){
+        ?>
+        >
+        <?
+      }
 
 
 
@@ -702,7 +718,7 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
 					$todos = split("-", $todos);
 				else
 					$todos = array ("0" => $todos, "1" => "Todos ...");
-?>
+      ?>
       <option value="<?=$todos[0]?>" ><?=$todos[0]?></option>
       <?
 
@@ -711,7 +727,13 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
 			}
 			for ($sqli = 0; $sqli < pg_numrows($record); $sqli ++) {
 				$sqlv = pg_result($record, $sqli, 0);
-?>
+      //OC17312 COLOQUEI UMA VALIDA플O DE CHAMADA PARA ACRESCENTAR UMA OP플O "SELECIONE" NA MODALIDADE
+      if($sqli==0 && $nome=="l20_codtipocom"){
+          ?>
+          <option value="99" selected>99</option>
+          <?
+        }
+      ?>
       <option value="<?=$sqlv?>" <?=(@$GLOBALS[$nome]==$sqlv?"selected":"")?>><?=$sqlv?></option>
       <?
 
@@ -763,6 +785,12 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
 			for ($sqli = 0; $sqli < pg_numrows($record); $sqli ++) {
 				$sqlv = pg_result($record, $sqli, 0);
 				$sqlv1 = pg_result($record, $sqli, 1);
+        //OC17312 COLOQUEI UMA VALIDA플O DE CHAMADA PARA ACRESCENTAR UMA OP플O "SELECIONE" NA MODALIDADE
+        if($sqli==0 && $nome=="l20_codtipocom"){
+          ?>
+          <option value="99" >Selecione</option>
+          <?
+        }
 ?>
       <option value="<?=$sqlv?>" ><?=$sqlv1?></option>
         <?
