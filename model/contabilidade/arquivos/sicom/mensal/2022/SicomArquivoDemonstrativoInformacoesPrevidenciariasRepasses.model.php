@@ -153,10 +153,14 @@ class SicomArquivoDemonstrativoInformacoesPrevidenciariasRepasses extends SicomA
         $sSql = "SELECT diprbasecontribuicao.*, CASE WHEN c237_tipoente = 1 THEN i1.si09_codorgaotce WHEN c237_tipoente = 2 THEN i2.si09_codorgaotce WHEN c237_tipoente = 3 THEN i3.si09_codorgaotce END as c236_orgao FROM diprbasecontribuicao LEFT JOIN dipr ON c236_coddipr = c237_coddipr LEFT JOIN db_config db1 ON db1.numcgm = c236_numcgmexecutivo LEFT JOIN infocomplementaresinstit i1 ON i1.si09_instit = db1.codigo LEFT JOIN db_config db2 ON db2.numcgm = c236_numcgmlegislativo LEFT JOIN infocomplementaresinstit i2 ON i2.si09_instit = db2.codigo LEFT JOIN db_config db3 ON db3.numcgm = c236_numcgmgestora LEFT JOIN infocomplementaresinstit i3 ON i3.si09_instit = db3.codigo WHERE c236_orgao = " . db_getsession("DB_instit") . " AND c237_datasicom BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'; ";
 
         $rsResult20 = db_query($sSql);
+        $aEnte = array(1 => "Executivo", 2 => "Legistalivo", 3 => "Gestor");
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
             $cldipr20 = new cl_dipr202022();
             $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
+
+            if (empty($oDados20->c236_orgao))
+                throw new Exception("O ente " . $aEnte[$oDados20->c237_tipoente] . " informado no <b> Cadastro de InformaçÕes Previdenciarias </b> não está vinculado ao órgão do TCE.");
 
             $cldipr20->si231_tiporegistro = 20;
             $cldipr20->si231_codorgao = $oDados20->c236_orgao;

@@ -83,7 +83,8 @@ class Formulario extends GenericController implements ResourceInterface {
                 FROM avaliacaogrupoperguntaresposta
                 JOIN avaliacaoresposta ON avaliacaogrupoperguntaresposta.db108_avaliacaoresposta=avaliacaoresposta.db106_sequencial
                 JOIN avaliacaoperguntaopcao ON avaliacaoperguntaopcao.db104_sequencial = avaliacaoresposta.db106_avaliacaoperguntaopcao
-                WHERE db108_avaliacaogruporesposta=db107_sequencial and db104_identificadorcampo = 'instituicao'),0) IN ({$instituicao},0)";
+                WHERE db108_avaliacaogruporesposta=db107_sequencial and db104_identificadorcampo = 'instituicao'),0) IN ({$instituicao},0)
+                AND db107_datalancamento::varchar || db107_hora = (SELECT db107_datalancamento::varchar || db107_hora FROM avaliacaogruporesposta ORDER BY db107_sequencial DESC LIMIT 1)";
         }
         $sSqlRespostas  = $oDaoAvaliacaoResposta->sql_query_avaliacao(
             null,

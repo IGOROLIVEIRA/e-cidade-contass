@@ -67,6 +67,7 @@ $cldb_config->rotulo->label("nomeinst");
 
 variavel = 1;
 function js_emite(){
+
  // pega dados da func_selorcdotacao_aba.php
  document.form1.filtra_despesa.value = parent.iframe_filtro.js_atualiza_variavel_retorno();
  jan = window.open('','safo' + variavel,'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -137,7 +138,7 @@ function js_emite(){
         <td align="right" ><strong>Nível :</strong></td>
         <td>
 	  <?
-	     $xy = array('1A'=>'Órgão Até o Nível','1B'=>'Órgão só o Nível','2A'=>'Unidade Até o Nível','2B'=>'Unidade só o Nível','3A'=>'Função Até o Nível','3B'=>'Função só o Nível','4A'=>'Subfunção Até o Nível','4B'=>'Subfunção só o Nível','5A'=>'Programa Até o Nível','5B'=>'Programa só o Nível','6A'=>'Proj/Ativ Até o Nível','6B'=>'Proj/Ativ só o Nível','7A'=>'Elemento Até o Nível','7B'=>'Elemento só o Nível','8A'=>'Recurso Até o Nível','9A'=>'Recurso Até o Nível - Completo','8B'=>'Recurso só o Nível');
+	     $xy = array('8A'=>'Recurso Até o Nível','1A'=>'Órgão Até o Nível','1B'=>'Órgão só o Nível','2A'=>'Unidade Até o Nível','2B'=>'Unidade só o Nível','3A'=>'Função Até o Nível','3B'=>'Função só o Nível','4A'=>'Subfunção Até o Nível','4B'=>'Subfunção só o Nível','5A'=>'Programa Até o Nível','5B'=>'Programa só o Nível','6A'=>'Proj/Ativ Até o Nível','6B'=>'Proj/Ativ só o Nível','7A'=>'Elemento Até o Nível','7B'=>'Elemento só o Nível','9A'=>'Recurso Até o Nível - Completo','8B'=>'Recurso só o Nível');
 	     db_select('nivel',$xy,true,2,"");
 	     $db_selinstit = db_getsession("DB_instit");
        db_input("db_selinstit",10,0,true,"hidden",3);
@@ -211,8 +212,41 @@ function js_emite(){
 	$xx = array('C'=>'CSV','P'=>'PDF');
 	db_select('formato_arq',$xx,true,2,"");
 	?>
+  <?
+  /*
+ *  configura as datas default
+ */
+    $anousu  = db_getsession("DB_anousu");
+    $dataini = date("m-d",db_getsession("DB_datausu"));
+    $datafin = date("m-d",db_getsession("DB_datausu"));
+    $dataini = $anousu."-".$dataini;
+    $datafin = $anousu."-".$datafin;
+
+    $dt = split('-',$dataini);
+    $data_ini_dia   = $dt[2];
+    $data_ini_mes = $dt[1];
+    $data_ini_ano  = $dt[0];
+    $dt = split('-',$datafin);
+    $data_fin_dia   = $dt[2];
+    $data_fin_mes = $dt[1];
+    $data_fin_ano  = $dt[0];
+  ?>
 	</td>
       </tr>
+      </tr>
+     <tr>
+    <td nowrap align="right"><b>  Período inicial: </b></td>
+      <td colspan="2">
+         <? db_inputdata('data_ini',@$data_ini_dia,@$data_ini_mes,@$data_ini_ano,true,'text',1);  ?>
+      </td>
+   </tr>
+
+ <tr>
+    <td nowrap align="right"><b>  Período final: </b></td>
+      <td colspan="2">
+         <? db_inputdata('data_fin',@$data_fin_dia,@$data_fin_mes,@$data_fin_ano,true,'text',1);  ?>
+      </td>
+   </tr>
 
       <tr>
         <td colspan="2" align = "center">

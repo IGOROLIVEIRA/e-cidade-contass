@@ -149,8 +149,8 @@ $clrotulo->label("ac10_obs");
   function js_pesquisaac16_sequencial(lMostrar) {
     document.getElementById('incluir').disabled = true;
     if (lMostrar == true) {
-
-      var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=1&iTipo=2';
+      //acrescentei dois parametro assinatura e frame - só vai executar quando for desse frame não atrapalhando as outras telas que chamam a func_acordo
+      var sUrl = 'func_acordo.php?semvigencia=true&assinatura=true&frame=homologacao&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=1&iTipo=2';
       js_OpenJanelaIframe('top.corpo',
         'db_iframe_acordo',
         sUrl,
@@ -159,8 +159,8 @@ $clrotulo->label("ac10_obs");
     } else {
 
       if ($('ac16_sequencial').value != '') {
-
-        let sUrl = 'func_acordo.php?semvigencia=true&descricao=true&pesquisa_chave=' + $('ac16_sequencial').value +
+      //acrescentei parametro frame - só vai executar quando for desse frame não atrapalhando as outras telas que chamam a func_acordo
+        let sUrl = 'func_acordo.php?semvigencia=true&assinatura=true&frame=homologacao&descricao=true&pesquisa_chave=' + $('ac16_sequencial').value +
           '&funcao_js=parent.js_mostraacordo&iTipoFiltro=1&iTipo=2';
 
         js_OpenJanelaIframe('top.corpo',
@@ -177,7 +177,8 @@ $clrotulo->label("ac10_obs");
   /**
    * Retorno da pesquisa acordos
    */
-  function js_mostraacordo(chave1, chave2, erro) {
+  //foi adicionado uma varaviavel para receber da chamada em func_acordo pois lá são enviado 4 pareametros.
+  function js_mostraacordo(chave1, chave2,chave3, erro) {
 
     if (erro == true) {
       $('ac16_sequencial').value = '';

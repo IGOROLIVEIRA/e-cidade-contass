@@ -520,14 +520,14 @@ foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
     $oPdf->sety($iYlinha + 1);
 
     if($oPost->iPrestacaoConta==2) {
-      $oPdf->cell(240, $iAltura, "Histórico: " . $oDadoEmpenho->e60_resumo, 0, 0, "L", 0);
-      $oPdf->sety($iYlinha + 6);
+      $oPdf->multiCell(260, 3, "Histórico: " . $oDadoEmpenho->e60_resumo, 0, "L", 0);
+      $oPdf->sety($iYlinha + 10);
     }
-
     $total_nadata += $oDadoEmpenho->k12_valor;
     $count_dados += 1;
   }
-  $total_geral += $total_nadata;$oPdf->sety($iYlinha + 1);
+  $total_geral += $total_nadata;
+  $oPdf->sety($iYlinha + 10);
   $oPdf->setfont('arial', 'B', 7);
   $oPdf->cell(226, 4, "SubTotal :", 1, 0, "R", 1);
   $oPdf->cell(20, 4, db_formatar($total_nadata, 'f'), 1, 0, "R", 1);

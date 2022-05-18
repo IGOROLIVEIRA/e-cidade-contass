@@ -213,7 +213,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                 o39_numero AS nrodecreto,
                                 (CASE
                                 WHEN o46_tiposup IN (1006, 1007, 1008, 1009, 1010, 1012) THEN 2
-                                WHEN o46_tiposup IN (1001, 1002, 1003, 1004, 1005) THEN 1
+                                WHEN o46_tiposup IN (1001, 1002, 1003, 1004, 1005,1026,1027,1028,1029) THEN 1
                                 WHEN o46_tiposup = 1012 THEN 6
                                 WHEN o46_tiposup = 1013 THEN 7
                                 WHEN o46_tiposup = 1014 THEN 9
@@ -358,10 +358,10 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 $sSql = "select '13' as tiporegistro,
                                 o46_codlei as codreduzidodecreto,
                                 case 
-                                    when o46_tiposup in (1001, 1006, 1018, 1023) then 3
-                                    when o46_tiposup = 1002 then 4
-                                    when o46_tiposup in (1003, 1008, 1024, 2026) then 1
-                                    when o46_tiposup in (1004,1005,1007,1009,1010,1019,1025) then 2
+                                    when o46_tiposup in (1001, 1006, 1018, 1023,1026) then 3
+                                    when o46_tiposup in (1002,1027) then 4
+                                    when o46_tiposup in (1003, 1008, 1024, 2026,1028) then 1
+                                    when o46_tiposup in (1004,1005,1007,1009,1010,1019,1025,1029) then 2
                                     else 98
                                 end as tipoDecretoAlteracao,
                                 sum(o47_valor) as valorAberto
@@ -402,14 +402,14 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                         o46_codsup,
                                         CASE
                                             WHEN o47_valor > 0 THEN 14
-                                            WHEN o47_valor < 0 AND o46_tiposup IN (1001,1006,1018,1020,1021) THEN 15
+                                            WHEN o47_valor < 0 AND o46_tiposup IN (1001,1006,1018,1020,1021,1026) THEN 15
                                         END AS tipoRegistro,
                                         o46_codlei AS codReduzidoDecreto,
                                         CASE
-                                            WHEN o46_tiposup IN (1001, 1006, 1018, 1023) THEN 3
-                                            WHEN o46_tiposup = 1002 THEN 4
-                                            WHEN o46_tiposup IN (1003, 1008, 1024, 2026) THEN 1
-                                            WHEN o46_tiposup IN (1004, 1005, 1007, 1009, 1010, 1019, 1025) THEN 2
+                                            WHEN o46_tiposup IN (1001, 1006, 1018, 1023,1026) THEN 3
+                                            WHEN o46_tiposup IN (1002,1027) THEN 4
+                                            WHEN o46_tiposup IN (1003, 1008, 1024, 2026,1028) THEN 1
+                                            WHEN o46_tiposup IN (1004, 1005, 1007, 1009, 1010, 1019, 1025,1029) THEN 2
                                             ELSE 98
                                         END AS tipoDecretoAlteracao,
                                         si09_codorgaotce AS codOrgao,
