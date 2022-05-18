@@ -553,7 +553,7 @@ db_app::load("widgets/windowAux.widget.js");
 
         if (oResponse.status == 1) {
             for (var iNotas = 0; iNotas < oResponse.aLinhasExtrato.length; iNotas++) {
-                console.log(oResponse.aLinhasExtrato[iNotas]);
+                // console.log(oResponse.aLinhasExtrato[iNotas]);
                 with (oResponse.aLinhasExtrato[iNotas]) {
                     var nValor = valor;
                     var lDisabled = false;
@@ -590,10 +590,6 @@ db_app::load("widgets/windowAux.widget.js");
                     var color = 'red';
                     if (movimento == 'E')
                         color = 'blue';
-
-                    if (tipo_lancamento == 2)
-                        movimento = movimento + 'P';
-
                     aLinha[7] = "<span style='color:" + color + "'>" + movimento + '</span>';
                     aLinha[8] = "<span style='color:" + color + "'>" + js_formatar(nValor, "f") + '</span>';
                     aLinha[9] = historico;
@@ -612,7 +608,7 @@ db_app::load("widgets/windowAux.widget.js");
                     document.getElementById("comMovs").checked = true;
                     */
 
-                    js_linha_pendencia(iNotas, tipo_lancamento, movimento);
+                    js_linha_pendencia(iNotas, tipo_lancamento);
                     js_linha_conciliada(iNotas, data_conciliacao);
 
                     iRowAtiva++;
@@ -635,24 +631,9 @@ db_app::load("widgets/windowAux.widget.js");
             gridLancamentos.aRows[row].setClassName('conciliado');
     }
 
-    function js_linha_pendencia(row, lancamento, movimento) {
-    	if (lancamento == 1) {
+    function js_linha_pendencia(row, lancamento) {
+    	if (lancamento > 0)
     		gridLancamentos.aRows[row].setClassName('pendente');
-            return;
-        }
-
-        if (lancamento == 2) {
-            if (movimento == "EP") {
-    		    gridLancamentos.aRows[row].setClassName('pendente-entrada');
-                return;
-            }
-            if (movimento == "SP") {
-                gridLancamentos.aRows[row].setClassName('pendente-saida');
-                return
-            }
-            return;
-        }
-        return;
     }
 
    function js_showFiltro(sQualFiltro, lMostrar) {
@@ -703,7 +684,7 @@ db_app::load("widgets/windowAux.widget.js");
                 $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML) + 1;
 
                 // if (oRow.aCells[3].getValue().length == 1) {
-                    if (oRow.aCells[8].getValue() == 'E' || oRow.aCells[8].getValue() == 'EP')
+                    if (oRow.aCells[8].getValue() == 'E')
                         valor += parseFloat(oRow.aCells[9].getValue().replace(".", "").replace(",", "."));
                     else
                         valor -= parseFloat(oRow.aCells[9].getValue().replace(".", "").replace(",", "."));
@@ -715,7 +696,7 @@ db_app::load("widgets/windowAux.widget.js");
                     $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML) - 1;
 
                     // f (oRow.aCells[3].getValue().length == 1) {
-                        if (oRow.aCells[8].getValue() == 'S' || oRow.aCells[8].getValue() == 'SP')
+                        if (oRow.aCells[8].getValue() == 'S')
                             valor = parseFloat(valor) + parseFloat(oRow.aCells[9].getValue().replace(".", "").replace(",", "."));
                         else
                             valor = parseFloat(valor) - parseFloat(oRow.aCells[9].getValue().replace(".", "").replace(",", "."));
