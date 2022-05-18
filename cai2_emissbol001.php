@@ -269,6 +269,19 @@ function js_mostrarecurso1(chave1,chave2){
 		      ?>
 		    </td>
 		  </tr>
+
+
+          <tr>
+		    <td align="right" nowrap title="<?=@$Tk29_destacarnaoconciliadas?>">
+		       <strong>Destacar não Conciliadas:</strong>
+		    </td>
+		    <td align="left" nowrap>&nbsp; &nbsp; 
+		      <?
+		         $x = array('f'=>'Não','t'=>'Sim');
+		         db_select('k29_destacarnaoconciliadas',$x,true,2,"");
+		      ?>
+		    </td>
+		  </tr>
       
      <tr>
         <td align="right"><strong>Contas negativas em cinza:</strong> 

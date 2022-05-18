@@ -188,6 +188,9 @@ db_app::load("widgets/windowAux.widget.js");
                                                 <td align="left">
                                                     <? db_input("total_selecionado", 10, 0, true, "text", 1, "disabled"); ?>
                                                 </td>
+                                                <td><input type="checkbox" name="fechar_conciliacao"/>
+                                                    <b>Fechar Conciliação</b>
+                                                </td>
                                             </tr>
                                         </table>
                                     </fieldset>
