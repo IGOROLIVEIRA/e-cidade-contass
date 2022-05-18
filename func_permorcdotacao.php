@@ -273,10 +273,11 @@ if (!isset($filtroquery)) {
             $variaveis["departamento"] = (isset($departamento) ? $departamento : 0);
 
             $sql = $clpermusuario_dotacao->sql;
-            /* Concatenando na string correspondente pela consulta das dotacoes os elementos*/
+
+            /* Concatenando na string correspondente pela consulta as dotacoes os elementos*/
 
             if ($apostilamentonovo == "true") {
-              $clpermusuario_dotacao->sql = substr($sql, 0, 987) . "and o56_elemento like any " . "(array[$elementos])"  . " " . substr($sql, 987);
+              $clpermusuario_dotacao->sql = substr_replace($clpermusuario_dotacao->sql, " and o56_elemento like any " . "(array[$elementos]) ", strpos($clpermusuario_dotacao->sql, "ORDER BY O50_ESTRUTDESPESA"), 0);
             }
 
             db_lovrot($clpermusuario_dotacao->sql, 15, "()", "", $funcao_js, "", "NoMe", $variaveis, false);

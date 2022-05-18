@@ -265,6 +265,46 @@ switch ($oParam->exec) {
                 }
             }
 
+            if ($oAcordo->getOrigem() == Acordo::ORIGEM_LICITACAO && count($oAcordo->getItens()) == 0) {
+                $lAcordoValido = false;
+                throw new Exception("Acordo sem itens Cadastrados.");
+            } else {
+                $itens = $oAcordo->getItens();
+                foreach ($itens as $item) {
+                    $dotacaoItem = $item->getDotacoes();
+
+                    if ($dotacaoItem == null) {
+                        $lAcordoValido = false;
+                        throw new Exception("Usuário: Assinatura do contrato não incluída. Item " . $item->getMaterial()->getCodigo() . " sem dotação.");
+                    }
+
+                    if ($item->getPeriodosItem() == null) {
+                        $lAcordoValido = false;
+                        throw new Exception("Preencha as datas de previsão de execução dos ítens.");
+                    }
+                }
+            }
+
+            if ($oAcordo->getOrigem() == Acordo::ORIGEM_PROCESSO_COMPRAS && count($oAcordo->getItens()) == 0) {
+                $lAcordoValido = false;
+                throw new Exception("Acordo sem itens Cadastrados.");
+            } else {
+                $itens = $oAcordo->getItens();
+                foreach ($itens as $item) {
+                    $dotacaoItem = $item->getDotacoes();
+
+                    if ($dotacaoItem == null) {
+                        $lAcordoValido = false;
+                        throw new Exception("Usuário: Assinatura do contrato não incluída. Item " . $item->getMaterial()->getCodigo() . " sem dotação.");
+                    }
+
+                    if ($item->getPeriodosItem() == null) {
+                        $lAcordoValido = false;
+                        throw new Exception("Preencha as datas de previsão de execução dos ítens.");
+                    }
+                }
+            }
+
             $oAssinatura->save();
 
             db_fim_transacao(false);

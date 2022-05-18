@@ -250,7 +250,8 @@ $clrotulo->label("ac16_resumoobjeto");
             alert("Sem permissão para esta dotação!");
             return;
         }
-
+        oRetorno.elemento = oRetorno.elemento.substr(0, 7);
+        elemento_dotacao = oRetorno.elemento;
         $('o55_descricao').value = oRetorno.descricao.urlDecode();
 
     }

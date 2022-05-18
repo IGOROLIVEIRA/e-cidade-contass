@@ -168,6 +168,9 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   } else if (isset($q60_modalvara) && $q60_modalvara == "8") {
     //echo "modelo 64";
     $pdf1 = new db_impcarne($pdf, '64'); // alvara tamanho A4 processo/area
+  } else if (isset($q60_modalvara) && $q60_modalvara == "99") {
+    //echo "modelo 99";
+    $pdf1 = new db_impcarne($pdf, '99'); // alvara tamanho A4 com numeração
   } else {
     db_redireciona('db_erros.php?fechar=true&db_erro=Modelo de alvara não definido !');
     exit();
@@ -310,28 +313,6 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $pdf1->impobsativ = $impobsativ;
   $pdf1->impobslanc = $impobslanc;
 
-  $oInstit = new Instituicao(db_getsession('DB_instit'));
-  /**
-   * Customizações realizadas para alguns clientes
-   * @todo Refatorar para remover esse if
-   */
-  if(in_array($oInstit->getCodigoCliente(),
-      array(
-          Instituicao::COD_CLI_PMPIRAPORA,
-          Instituicao::COD_CLI_PMCAPITAOENEAS,
-          Instituicao::COD_CLI_PMUBAI,
-          Instituicao::COD_CLI_PMGRAOMOGOL,
-          Instituicao::COD_CLI_SANTAFEMINAS,
-          Instituicao::COD_CLI_SAOJOAOMISSOES,
-          Instituicao::COD_CLI_NOVAPORTEIRINHA,
-          Instituicao::COD_CLI_CURRAL_DE_DENTRO,
-          Instituicao::COD_CLI_BURITIZEIRO,
-          Instituicao::COD_CLI_MONTEAZUL,
-          Instituicao::COD_CLI_LAGOADOSPATOS,
-          
-      )
-  )) {
-
   $pdf1->horariofuncionamento = empty($q07_horaini) || empty($q07_horafim) ? "08:00 às 18:00" : $q07_horaini." às ".$q07_horafim;
 
     /**
@@ -375,12 +356,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
       } else {
         $pdf1->validadealvara = "31/12/" . db_getsession('DB_anousu');
       }
-    } else {
-      db_redireciona('db_erros.php?fechar=true&db_erro=Não existem alvará liberado.');
-      exit();
     }
-
-  }
 
   // PEGA AS ATIVIDADES SECUNDARIAS
   //die($cltabativ->sql_queryinf($q02_inscr,"","*",""," q88_inscr is null "));

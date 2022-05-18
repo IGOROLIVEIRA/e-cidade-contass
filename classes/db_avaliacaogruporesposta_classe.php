@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -30,42 +30,42 @@
 class cl_avaliacaogruporesposta
 {
     // cria variaveis de erro
-    var $rotulo     = null;
-    var $query_sql  = null;
-    var $numrows    = 0;
-    var $numrows_incluir = 0;
-    var $numrows_alterar = 0;
-    var $numrows_excluir = 0;
-    var $erro_status = null;
-    var $erro_sql   = null;
-    var $erro_banco = null;
-    var $erro_msg   = null;
-    var $erro_campo = null;
-    var $pagina_retorno = null;
+    public $rotulo     = null;
+    public $query_sql  = null;
+    public $numrows    = 0;
+    public $numrows_incluir = 0;
+    public $numrows_alterar = 0;
+    public $numrows_excluir = 0;
+    public $erro_status = null;
+    public $erro_sql   = null;
+    public $erro_banco = null;
+    public $erro_msg   = null;
+    public $erro_campo = null;
+    public $pagina_retorno = null;
     // cria variaveis do arquivo
-    var $db107_sequencial = 0;
-    var $db107_usuario = 0;
-    var $db107_datalancamento_dia = null;
-    var $db107_datalancamento_mes = null;
-    var $db107_datalancamento_ano = null;
-    var $db107_datalancamento = null;
-    var $db107_hora = null;
+    public $db107_sequencial = 0;
+    public $db107_usuario = 0;
+    public $db107_datalancamento_dia = null;
+    public $db107_datalancamento_mes = null;
+    public $db107_datalancamento_ano = null;
+    public $db107_datalancamento = null;
+    public $db107_hora = null;
     // cria propriedade com as variaveis do arquivo
-    var $campos = "
+    public $campos = "
                  db107_sequencial = int4 = Sequencial
                  db107_usuario = int4 = Usuário
                  db107_datalancamento = date = Data Lançamento
                  db107_hora = char(5) = Hora
                  ";
     //funcao construtor da classe
-    function cl_avaliacaogruporesposta()
+    public function cl_avaliacaogruporesposta()
     {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo("avaliacaogruporesposta");
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
     //funcao erro
-    function erro($mostra, $retorna)
+    public function erro($mostra, $retorna)
     {
         if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
             echo "<script>alert(\"" . $this->erro_msg . "\");</script>";
@@ -75,7 +75,7 @@ class cl_avaliacaogruporesposta
         }
     }
     // funcao para atualizar campos
-    function atualizacampos($exclusao = false)
+    public function atualizacampos($exclusao = false)
     {
         if ($exclusao == false) {
             $this->db107_sequencial = ($this->db107_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["db107_sequencial"] : $this->db107_sequencial);
@@ -94,7 +94,7 @@ class cl_avaliacaogruporesposta
         }
     }
     // funcao para inclusao
-    function incluir($db107_sequencial)
+    public function incluir($db107_sequencial)
     {
         $this->atualizacampos();
         if ($this->db107_usuario == null) {
@@ -102,7 +102,7 @@ class cl_avaliacaogruporesposta
             $this->erro_campo = "db107_usuario";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -111,7 +111,7 @@ class cl_avaliacaogruporesposta
             $this->erro_campo = "db107_datalancamento_dia";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -120,7 +120,7 @@ class cl_avaliacaogruporesposta
             $this->erro_campo = "db107_hora";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -130,7 +130,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_banco = str_replace("\n", "", @pg_last_error());
                 $this->erro_sql   = "Verifique o cadastro da sequencia: avaliacaogruporesposta_db107_sequencial_seq do campo: db107_sequencial";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -141,7 +141,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_sql = " Campo db107_sequencial maior que último número da sequencia.";
                 $this->erro_banco = "Sequencia menor que este número.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             } else {
@@ -152,7 +152,7 @@ class cl_avaliacaogruporesposta
             $this->erro_sql = " Campo db107_sequencial nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -168,6 +168,7 @@ class cl_avaliacaogruporesposta
                                ," . ($this->db107_datalancamento == "null" || $this->db107_datalancamento == "" ? "null" : "'" . $this->db107_datalancamento . "'") . "
                                ,'$this->db107_hora'
                       )";
+        //echo $sql."\n";
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -175,41 +176,41 @@ class cl_avaliacaogruporesposta
                 $this->erro_sql   = "Avaliação Grupo Resposta ($this->db107_sequencial) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_banco = "Avaliação Grupo Resposta já Cadastrado";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
                 $this->erro_sql   = "Avaliação Grupo Resposta ($this->db107_sequencial) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
             $this->numrows_incluir = 0;
             return false;
         }
+        //echo $this->erro_sql;
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->db107_sequencial;
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
-        if (!isset($_SESSION["DB_usaAccount"])) {
-
-            $resaco = $this->sql_record($this->sql_query_file($this->db107_sequencial));
-            if (($resaco != false) || ($this->numrows != 0)) {
-                $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac, 0, 0);
-                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                $resac = db_query("insert into db_acountkey values($acount,16927,'$this->db107_sequencial','I')");
-                $resac = db_query("insert into db_acount values($acount,2987,16927,'','" . AddSlashes(pg_result($resaco, 0, 'db107_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2987,16928,'','" . AddSlashes(pg_result($resaco, 0, 'db107_usuario')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2987,16929,'','" . AddSlashes(pg_result($resaco, 0, 'db107_datalancamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                $resac = db_query("insert into db_acount values($acount,2987,16930,'','" . AddSlashes(pg_result($resaco, 0, 'db107_hora')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            }
-        }
+        // if (!isset($_SESSION["DB_usaAccount"])) {
+        //     $resaco = $this->sql_record($this->sql_query_file($this->db107_sequencial));
+        //     if (($resaco != false) || ($this->numrows != 0)) {
+        //         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+        //         $acount = pg_result($resac, 0, 0);
+        //         $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+        //         $resac = db_query("insert into db_acountkey values($acount,16927,'$this->db107_sequencial','I')");
+        //         $resac = db_query("insert into db_acount values($acount,2987,16927,'','" . AddSlashes(pg_result($resaco, 0, 'db107_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //         $resac = db_query("insert into db_acount values($acount,2987,16928,'','" . AddSlashes(pg_result($resaco, 0, 'db107_usuario')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //         $resac = db_query("insert into db_acount values($acount,2987,16929,'','" . AddSlashes(pg_result($resaco, 0, 'db107_datalancamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //         $resac = db_query("insert into db_acount values($acount,2987,16930,'','" . AddSlashes(pg_result($resaco, 0, 'db107_hora')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //     }
+        // }
         return true;
     }
     // funcao para alteracao
-    function alterar($db107_sequencial = null)
+    public function alterar($db107_sequencial = null)
     {
         $this->atualizacampos();
         $sql = " update avaliacaogruporesposta set ";
@@ -222,7 +223,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_campo = "db107_sequencial";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -235,7 +236,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_campo = "db107_usuario";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -248,7 +249,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_campo = "db107_datalancamento_dia";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -261,7 +262,7 @@ class cl_avaliacaogruporesposta
                     $this->erro_campo = "db107_datalancamento_dia";
                     $this->erro_banco = "";
                     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
                 }
@@ -275,7 +276,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_campo = "db107_hora";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
@@ -284,33 +285,36 @@ class cl_avaliacaogruporesposta
         if ($db107_sequencial != null) {
             $sql .= " db107_sequencial = $this->db107_sequencial";
         }
-        if (!isset($_SESSION["DB_usaAccount"])) {
-
-            $resaco = $this->sql_record($this->sql_query_file($this->db107_sequencial));
-            if ($this->numrows > 0) {
-                for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-                    $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                    $acount = pg_result($resac, 0, 0);
-                    $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                    $resac = db_query("insert into db_acountkey values($acount,16927,'$this->db107_sequencial','A')");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["db107_sequencial"]) || $this->db107_sequencial != "")
-                        $resac = db_query("insert into db_acount values($acount,2987,16927,'" . AddSlashes(pg_result($resaco, $conresaco, 'db107_sequencial')) . "','$this->db107_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["db107_usuario"]) || $this->db107_usuario != "")
-                        $resac = db_query("insert into db_acount values($acount,2987,16928,'" . AddSlashes(pg_result($resaco, $conresaco, 'db107_usuario')) . "','$this->db107_usuario'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["db107_datalancamento"]) || $this->db107_datalancamento != "")
-                        $resac = db_query("insert into db_acount values($acount,2987,16929,'" . AddSlashes(pg_result($resaco, $conresaco, 'db107_datalancamento')) . "','$this->db107_datalancamento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    if (isset($GLOBALS["HTTP_POST_VARS"]["db107_hora"]) || $this->db107_hora != "")
-                        $resac = db_query("insert into db_acount values($acount,2987,16930,'" . AddSlashes(pg_result($resaco, $conresaco, 'db107_hora')) . "','$this->db107_hora'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                }
-            }
-        }
+        // if (!isset($_SESSION["DB_usaAccount"])) {
+        //     $resaco = $this->sql_record($this->sql_query_file($this->db107_sequencial));
+        //     if ($this->numrows > 0) {
+        //         for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+        //             $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+        //             $acount = pg_result($resac, 0, 0);
+        //             $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+        //             $resac = db_query("insert into db_acountkey values($acount,16927,'$this->db107_sequencial','A')");
+        //             if (isset($GLOBALS["HTTP_POST_VARS"]["db107_sequencial"]) || $this->db107_sequencial != "") {
+        //                 $resac = db_query("insert into db_acount values($acount,2987,16927,'" . AddSlashes(pg_result($resaco, $conresaco, 'db107_sequencial')) . "','$this->db107_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             }
+        //             if (isset($GLOBALS["HTTP_POST_VARS"]["db107_usuario"]) || $this->db107_usuario != "") {
+        //                 $resac = db_query("insert into db_acount values($acount,2987,16928,'" . AddSlashes(pg_result($resaco, $conresaco, 'db107_usuario')) . "','$this->db107_usuario'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             }
+        //             if (isset($GLOBALS["HTTP_POST_VARS"]["db107_datalancamento"]) || $this->db107_datalancamento != "") {
+        //                 $resac = db_query("insert into db_acount values($acount,2987,16929,'" . AddSlashes(pg_result($resaco, $conresaco, 'db107_datalancamento')) . "','$this->db107_datalancamento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             }
+        //             if (isset($GLOBALS["HTTP_POST_VARS"]["db107_hora"]) || $this->db107_hora != "") {
+        //                 $resac = db_query("insert into db_acount values($acount,2987,16930,'" . AddSlashes(pg_result($resaco, $conresaco, 'db107_hora')) . "','$this->db107_hora'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             }
+        //         }
+        //     }
+        // }
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Avaliação Grupo Resposta nao Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->db107_sequencial;
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
             return false;
@@ -320,7 +324,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_sql = "Avaliação Grupo Resposta nao foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : " . $this->db107_sequencial;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
@@ -329,7 +333,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_sql = "Alteração efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $this->db107_sequencial;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
                 return true;
@@ -337,29 +341,27 @@ class cl_avaliacaogruporesposta
         }
     }
     // funcao para exclusao
-    function excluir($db107_sequencial = null, $dbwhere = null)
+    public function excluir($db107_sequencial = null, $dbwhere = null)
     {
-
-        if (!isset($_SESSION["DB_usaAccount"])) {
-
-            if ($dbwhere == null || $dbwhere == "") {
-                $resaco = $this->sql_record($this->sql_query_file($db107_sequencial));
-            } else {
-                $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
-            }
-            if (($resaco != false) || ($this->numrows != 0)) {
-                for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-                    $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                    $acount = pg_result($resac, 0, 0);
-                    $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-                    $resac = db_query("insert into db_acountkey values($acount,16927,'$db107_sequencial','E')");
-                    $resac = db_query("insert into db_acount values($acount,2987,16927,'','" . AddSlashes(pg_result($resaco, $iresaco, 'db107_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac = db_query("insert into db_acount values($acount,2987,16928,'','" . AddSlashes(pg_result($resaco, $iresaco, 'db107_usuario')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac = db_query("insert into db_acount values($acount,2987,16929,'','" . AddSlashes(pg_result($resaco, $iresaco, 'db107_datalancamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                    $resac = db_query("insert into db_acount values($acount,2987,16930,'','" . AddSlashes(pg_result($resaco, $iresaco, 'db107_hora')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-                }
-            }
-        }
+        // if (!isset($_SESSION["DB_usaAccount"])) {
+        //     if ($dbwhere == null || $dbwhere == "") {
+        //         $resaco = $this->sql_record($this->sql_query_file($db107_sequencial));
+        //     } else {
+        //         $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
+        //     }
+        //     if (($resaco != false) || ($this->numrows != 0)) {
+        //         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+        //             $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+        //             $acount = pg_result($resac, 0, 0);
+        //             $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+        //             $resac = db_query("insert into db_acountkey values($acount,16927,'$db107_sequencial','E')");
+        //             $resac = db_query("insert into db_acount values($acount,2987,16927,'','" . AddSlashes(pg_result($resaco, $iresaco, 'db107_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             $resac = db_query("insert into db_acount values($acount,2987,16928,'','" . AddSlashes(pg_result($resaco, $iresaco, 'db107_usuario')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             $resac = db_query("insert into db_acount values($acount,2987,16929,'','" . AddSlashes(pg_result($resaco, $iresaco, 'db107_datalancamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //             $resac = db_query("insert into db_acount values($acount,2987,16930,'','" . AddSlashes(pg_result($resaco, $iresaco, 'db107_hora')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        //         }
+        //     }
+        // }
         $sql = " delete from avaliacaogruporesposta
                     where ";
         $sql2 = "";
@@ -379,7 +381,7 @@ class cl_avaliacaogruporesposta
             $this->erro_sql   = "Avaliação Grupo Resposta nao Excluído. Exclusão Abortada.\\n";
             $this->erro_sql .= "Valores : " . $db107_sequencial;
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
             return false;
@@ -389,7 +391,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_sql = "Avaliação Grupo Resposta nao Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $db107_sequencial;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
@@ -398,7 +400,7 @@ class cl_avaliacaogruporesposta
                 $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $db107_sequencial;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
                 return true;
@@ -406,7 +408,7 @@ class cl_avaliacaogruporesposta
         }
     }
     // funcao do recordset
-    function sql_record($sql)
+    public function sql_record($sql)
     {
         $result = db_query($sql);
         if ($result == false) {
@@ -414,7 +416,7 @@ class cl_avaliacaogruporesposta
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -423,14 +425,14 @@ class cl_avaliacaogruporesposta
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:avaliacaogruporesposta";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         return $result;
     }
     // funcao do sql
-    function sql_query($db107_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+    public function sql_query($db107_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -449,7 +451,7 @@ class cl_avaliacaogruporesposta
             if ($db107_sequencial != null) {
                 $sql2 .= " where avaliacaogruporesposta.db107_sequencial = $db107_sequencial ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
@@ -465,7 +467,7 @@ class cl_avaliacaogruporesposta
         return $sql;
     }
     // funcao do sql
-    function sql_query_file($db107_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+    public function sql_query_file($db107_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -484,7 +486,7 @@ class cl_avaliacaogruporesposta
             if ($db107_sequencial != null) {
                 $sql2 .= " where avaliacaogruporesposta.db107_sequencial = $db107_sequencial ";
             }
-        } else if ($dbwhere != "") {
+        } elseif ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
@@ -502,7 +504,6 @@ class cl_avaliacaogruporesposta
 
     public function sql_query_respostas($iCodigoPergunta = null, $codigoAvaliacao, $campos = "*", $ordem = null, $dbwhere = "")
     {
-
         $sql  = "select {$campos}";
         $sql .= "  from avaliacaogruporesposta ";
         $sql .= "      inner join avaliacaogrupoperguntaresposta on db108_avaliacaogruporesposta = db107_sequencial";
@@ -512,7 +513,6 @@ class cl_avaliacaogruporesposta
         $sql2 = "";
 
         if (empty($dbwhere)) {
-
             $sql2 .= " where ";
             $aWhere = array();
 
@@ -523,7 +523,7 @@ class cl_avaliacaogruporesposta
                 $aWhere[] = " db107_sequencial = {$codigoAvaliacao} ";
             }
             $sql2 .= implode("and ", $aWhere);
-        } else if (!empty($dbwhere)) {
+        } elseif (!empty($dbwhere)) {
             $sql2 = " where {$dbwhere}";
         }
 
@@ -549,7 +549,7 @@ class cl_avaliacaogruporesposta
             if (!empty($db107_sequencial)) {
                 $sql2 .= " where avaliacaogruporesposta.db107_sequencial = {$db107_sequencial} ";
             }
-        } else if (!empty($dbwhere)) {
+        } elseif (!empty($dbwhere)) {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;

@@ -658,7 +658,7 @@ class cl_tabrec {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from ( select k02_estorc,tabrec.k02_codigo, tabrec.k02_tipo, tabrec.k02_descr, tabrec.k02_drecei,  tabrec.k02_codjm, tabrec.k02_recjur, tabrec.k02_recmul, tabrec.k02_limite, o70_codrec,0 as c61_reduz,o70_codigo as recurso ";
+     $sql .= " from ( select k02_estorc,tabrec.k02_codigo, tabrec.k02_tipo, tabrec.k02_descr, tabrec.k02_drecei,o70_codigo,  tabrec.k02_codjm, tabrec.k02_recjur, tabrec.k02_recmul, tabrec.k02_limite, o70_codrec,0 as c61_reduz ";
      $sql .= "        from tabrec ";
      $sql .= "             inner join taborc on tabrec.k02_codigo = taborc.k02_codigo and taborc.k02_anousu = ".db_getsession("DB_anousu");
      $sql .= "             inner join orcreceita on taborc.k02_codrec = orcreceita.o70_codrec and orcreceita.o70_anousu = ".db_getsession("DB_anousu")." and orcreceita.o70_instit = ".db_getsession("DB_instit");
@@ -671,7 +671,7 @@ class cl_tabrec {
      }
      $sql .= "        where k02_anousu = ".db_getsession("DB_anousu");
      $sql .= "        union";
-     $sql .= "        select k02_estpla, tabrec.k02_codigo, tabrec.k02_tipo, tabrec.k02_descr, tabrec.k02_drecei, tabrec.k02_codjm, tabrec.k02_recjur, tabrec.k02_recmul, tabrec.k02_limite,0,c61_reduz,c61_codigo  ";
+     $sql .= "        select k02_estpla, tabrec.k02_codigo, tabrec.k02_tipo, tabrec.k02_descr, tabrec.k02_drecei,c61_codigo, tabrec.k02_codjm, tabrec.k02_recjur, tabrec.k02_recmul, tabrec.k02_limite,0,c61_reduz  ";
      $sql .= "        from tabrec ";
      $sql .= "             inner join tabplan on tabrec.k02_codigo = tabplan.k02_codigo and tabplan.k02_anousu = ".db_getsession("DB_anousu");
      $sql .= "             inner join conplanoreduz on   conplanoreduz.c61_anousu=tabplan.k02_anousu and conplanoreduz.c61_reduz = tabplan.k02_reduz and conplanoreduz.c61_instit = ".db_getsession("DB_instit");
@@ -757,7 +757,7 @@ class cl_tabrec {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from ( select k02_estorc,tabrec.*,o70_codrec,0 as c61_reduz,o70_codigo as recurso, " ;
+     $sql .= " from ( select k02_estorc,tabrec.*,o70_codrec,0 as c61_reduz,o70_codigo, " ;
 		 $sql .= "               case when k79_arretipo is not null then k79_arretipo ";
      $sql .= "                    else (select k03_reciboprot from numpref where k03_anousu = ".db_getsession("DB_anousu")." and k03_instit = ".db_getsession("DB_instit")." )";
 		 $sql .= "               end as arretipo ";
@@ -819,7 +819,7 @@ class cl_tabrec {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from ( select tabdesc.*,k02_estorc,tabrec.*,o70_codrec,0 as c61_reduz,o70_codigo as recurso, ";
+     $sql .= " from ( select tabdesc.*,k02_estorc,tabrec.*,o70_codrec,0 as c61_reduz,o70_codigo, ";
      $sql .= " case when k78_arretipo is not null then k78_arretipo ";
      $sql .= "      when k79_arretipo is not null then k79_arretipo ";
      $sql .= "      else (select k03_reciboprot from numpref where k03_anousu= ".db_getsession("DB_anousu")." and k03_instit = ".db_getsession("DB_instit")." )";

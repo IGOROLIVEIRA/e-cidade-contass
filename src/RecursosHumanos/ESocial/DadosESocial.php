@@ -93,6 +93,7 @@ class DadosESocial
             case Tipo::ALTERACAO_CONTRATO:
             case Tipo::TSV_INICIO:
             case Tipo::TSV_ALT_CONTR:
+            case Tipo::CD_BENEF_IN:
             case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             default:
@@ -151,6 +152,7 @@ class DadosESocial
             case Tipo::ALTERACAO_CONTRATO:
             case Tipo::TSV_INICIO:
             case Tipo::TSV_ALT_CONTR:
+            case Tipo::CD_BENEF_IN:
             case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->pk;
             default:

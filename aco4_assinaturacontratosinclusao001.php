@@ -270,7 +270,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     if (erro == true) {
 
       $('ac16_sequencial').value = '';
-      $('ac16_resumoobjeto').value = chave1;
+      $('ac16_resumoobjeto').value = chave2;
       $('ac16_sequencial').focus();
     } else {
 
