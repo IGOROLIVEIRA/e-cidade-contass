@@ -80,7 +80,6 @@ if (isset($alterar)) {
         $pendencia->k173_data = data($data_lancamento);
         $pendencia->k173_valor = $valor;
         $pendencia->k173_historico = $observacao;
-
         if ($pendencia->Alterar()) {
             echo "<script>alert('Pendência alterada com sucesso!')</script>";
         } else {
