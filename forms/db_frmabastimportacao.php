@@ -670,6 +670,8 @@ if (isset($_POST["processar"])) {
 <script>
     var empenhoselecionado = "";
     var dataempenho = "";
+    document.getElementById("z01_nome").value = "";
+    document.getElementById("e60_codemp").value = "";
 
     function js_removelinha(linha) {
         var tab = (document.all) ? document.all.tab : document.getElementById('tblDataEmpenho');
