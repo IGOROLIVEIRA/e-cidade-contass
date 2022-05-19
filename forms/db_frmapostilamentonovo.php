@@ -5,11 +5,11 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 ?>
-<fieldset style="width: 1000px;  margin-top: 25px;">
+<fieldset style="width: 1000px;  margin-top: 25px; ">
     <legend><b>Dados do acordo</b></legend>
     <form name="form1" method="post" action="">
 
-        <table border="0" style="margin-right: 10px; margin-left: -5%">
+        <table border="0" style="margin-right: 10px; margin-left: -45%;">
             <tr>
                 <td title="<?= @$Tac16_sequencial ?>">
                     <?php db_ancora("Acordo", "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
@@ -44,7 +44,6 @@ $clrotulo->label("ac16_resumoobjeto");
                     <?
                     $x = array("00" => "Selecione...", "01" => "Reajuste de preço previsto no contrato", "02" => "Atualizações, compensações ou penalizações", "03" => "Empenho de dotações orçamentárias suplementares");
                     db_select('si03_tipoapostila', $x, true, $db_opcao, "onchange='js_changeTipoApostila(this.value)'");
-                    //db_input('si03_tipoapostila',1,$Isi03_tipoapostila,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -89,12 +88,11 @@ $clrotulo->label("ac16_resumoobjeto");
 
             <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
-                    <b>Descrição da alteração:</b>
+                    <b>Descrição da Alteração:</b>
                 </td>
                 <td>
                     <?
                     db_textarea('si03_descrapostila', 3, 48, $Isi03_descrapostila, true, 'text', $db_opcao, "style='resize: none'", "", "", "250");
-                    //db_input('si03_descrapostila', 40, $Isi03_descrapostila, true, 'text', $db_opcao, "", "", "", "", "200");
                     ?>
                 </td>
             </tr>
@@ -107,11 +105,14 @@ $clrotulo->label("ac16_resumoobjeto");
             <?
             $controle = $db_opcao;
             db_input('controle', 10, $Icontrole, true, 'hidden', $db_opcao, "")
-            //db_input('controle',10,$Icontrole,true,'hidden',$db_opcao,"")
             ?>
+
             <tr>
+
+                <!-- tag <td> a seguir ocultada apos solicitacao de adequamento da tela na OC17626 -->
+
                 <td colspan='2'>
-                    <fieldset class="">
+                    <fieldset class="" style="display: none;">
                         <legend>Vigência</legend>
                         <table border='0'>
                             <tr>
@@ -130,9 +131,9 @@ $clrotulo->label("ac16_resumoobjeto");
 
                 <!-- tag <td> a seguir ocultada pois apresenta inconsistencia
                      no valor apresentado, a tag só ficará visivel novamente 
-                    caso cliente solicite o retorno -->
+                    caso cliente solicite o retorno  -->
 
-                <td colspan='2' style="visibility: hidden;">
+                <td colspan='2' style="display: none;">
                     <fieldset class="">
                         <legend>Valores</legend>
                         <table>
@@ -149,6 +150,7 @@ $clrotulo->label("ac16_resumoobjeto");
                         </table>
                     </fieldset>
                 </td>
+
 
 
             </tr>
