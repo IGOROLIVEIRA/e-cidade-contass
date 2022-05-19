@@ -69,9 +69,9 @@ if (isset($oParam->observacao)) {
     $sObservacao = utf8_decode($oParam->observacao);
 }
 
-switch($oParam->exec) {
+switch ($oParam->exec) {
 
-    /*
+        /*
      * Pesquisa as posicoes do acordo
      */
     case "getPosicoesAcordo":
@@ -81,7 +81,7 @@ switch($oParam->exec) {
             $lGeraAutorizacao = true;
         }
 
-        if (isset ($_SESSION["oContrato"])) {
+        if (isset($_SESSION["oContrato"])) {
             unset($_SESSION["oContrato"]);
         }
 
@@ -99,17 +99,17 @@ switch($oParam->exec) {
                 $lOrigemEmpenho = true;
             }
 
-//       if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_VIGENCIA) {
-//         continue;
-//       }
+            //       if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_VIGENCIA) {
+            //         continue;
+            //       }
             $iTipoPosicao =  $oPosicaoContrato->getTipo();
 
-//            /**
-//             * Mostrará apenas as posições de tipo inclusão ou vigência, para acordos de origem empenho
-//             */
-//            if ($lGeraAutorizacao && $lOrigemEmpenho && ($iTipoPosicao == AcordoPosicao::TIPO_INCLUSAO || $iTipoPosicao == AcordoPosicao::TIPO_VIGENCIA) ) {
-//                continue;
-//            }
+            //            /**
+            //             * Mostrará apenas as posições de tipo inclusão ou vigência, para acordos de origem empenho
+            //             */
+            //            if ($lGeraAutorizacao && $lOrigemEmpenho && ($iTipoPosicao == AcordoPosicao::TIPO_INCLUSAO || $iTipoPosicao == AcordoPosicao::TIPO_VIGENCIA) ) {
+            //                continue;
+            //            }
 
             $oPosicao->codigo         = $oPosicaoContrato->getCodigo();
             $oPosicao->codigoaditivo  = $oPosicaoContrato->getCodigoAditivo();
@@ -117,20 +117,19 @@ switch($oParam->exec) {
             $oPosicao->tipo           = $oPosicaoContrato->getTipo();
             $oPosicao->dataassinatura = $oPosicaoContrato->getDataAssinatura();
             $oPosicao->datapublicacao = $oPosicaoContrato->getDataPublicacao();
-            $oPosicao->numerocontrato = $oContrato->getGrupo()." - ".$oContrato->getNumero()."/".$oContrato->getAno();
+            $oPosicao->numerocontrato = $oContrato->getGrupo() . " - " . $oContrato->getNumero() . "/" . $oContrato->getAno();
             $oPosicao->descricaotipo  = urlencode($oPosicaoContrato->getDescricaoTipo());
-            $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7)."";
-            $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial()?"Sim":"Não");
+            $oPosicao->numero         = (string)"" . str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7) . "";
+            $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial() ? "Sim" : "Não");
             $oPosicao->cgccpf         = $oContrato->getContratado()->getCgccpf();
             array_push($oRetorno->posicoes, $oPosicao);
-
         }
 
         break;
 
     case "getAditamentos":
 
-        if (isset ($_SESSION["oContrato"])) {
+        if (isset($_SESSION["oContrato"])) {
             unset($_SESSION["oContrato"]);
         }
         $oContrato              = new Acordo($oParam->iAcordo);
@@ -151,19 +150,18 @@ switch($oParam->exec) {
             $oPosicao->codigo         = $oPosicaoContrato->getCodigo();
             $oPosicao->data           = $oPosicaoContrato->getData();
             $oPosicao->tipo           = $oPosicaoContrato->getTipo();
-            $oPosicao->numerocontrato = $oContrato->getGrupo()." - ".$oContrato->getNumero()."/".$oContrato->getAno();
+            $oPosicao->numerocontrato = $oContrato->getGrupo() . " - " . $oContrato->getNumero() . "/" . $oContrato->getAno();
             $oPosicao->descricaotipo  = urlencode($oPosicaoContrato->getDescricaoTipo());
-            if($oPosicaoContrato->getTipo() == 14 || $oPosicaoContrato->getTipo() == 15 || $oPosicaoContrato->getTipo() == 16){
-                $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumeroApostilamento(), "0", 7)."";
-            }else{
-                $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7)."";
+            if ($oPosicaoContrato->getTipo() == 14 || $oPosicaoContrato->getTipo() == 15 || $oPosicaoContrato->getTipo() == 16) {
+                $oPosicao->numero         = (string)"" . str_pad($oPosicaoContrato->getNumeroApostilamento(), "0", 7) . "";
+            } else {
+                $oPosicao->numero         = (string)"" . str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7) . "";
             }
-            $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial()?"Sim":"Não");
+            $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial() ? "Sim" : "Não");
             array_push($oRetorno->posicoes, $oPosicao);
-
         }
 
-        if(count($oRetorno->posicoes) == 0 ){
+        if (count($oRetorno->posicoes) == 0) {
             $oRetorno->status   = 2;
             $oRetorno->message  = urlencode('Nenhum aditamento encontrado!');
         }
@@ -172,7 +170,7 @@ switch($oParam->exec) {
 
     case "getApostilamentos":
 
-        if (isset ($_SESSION["oContrato"])) {
+        if (isset($_SESSION["oContrato"])) {
             unset($_SESSION["oContrato"]);
         }
         $oContrato              = new Acordo($oParam->iAcordo);
@@ -192,15 +190,14 @@ switch($oParam->exec) {
             $oPosicao->codigo         = $oPosicaoContrato->getCodigo();
             $oPosicao->data           = $oPosicaoContrato->getData();
             $oPosicao->tipo           = $oPosicaoContrato->getTipo();
-            $oPosicao->numerocontrato = $oContrato->getGrupo()." - ".$oContrato->getNumero()."/".$oContrato->getAno();
+            $oPosicao->numerocontrato = $oContrato->getGrupo() . " - " . $oContrato->getNumero() . "/" . $oContrato->getAno();
             $oPosicao->descricaotipo  = urlencode($oPosicaoContrato->getDescricaoTipo());
-            $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7)."";
-            $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial()?"Sim":"Não");
+            $oPosicao->numero         = (string)"" . str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7) . "";
+            $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial() ? "Sim" : "Não");
             array_push($oRetorno->posicoes, $oPosicao);
-
         }
 
-        if(count($oRetorno->posicoes) == 0 ){
+        if (count($oRetorno->posicoes) == 0) {
             $oRetorno->status   = 2;
             $oRetorno->message  = urlencode('Nenhum apostilamento encontrado!');
         }
@@ -209,7 +206,7 @@ switch($oParam->exec) {
 
     case "getPosicaoItens":
 
-        if (isset ($_SESSION["oContrato"])) {
+        if (isset($_SESSION["oContrato"])) {
 
             $oContrato = $_SESSION["oContrato"];
             $aItens    = array();
@@ -230,10 +227,10 @@ switch($oParam->exec) {
                 $oRetorno->iNumModalidade       = $oStdDados->l20_numero;
                 $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
                 $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
-            }else if ($oRetorno->iOrigemContrato == 3 )  {
+            } else if ($oRetorno->iOrigemContrato == 3) {
                 $aLicitacoesVinculadas = $oContrato->getLicitacoes();
 
-                if(empty($aLicitacoesVinculadas[0])){
+                if (empty($aLicitacoesVinculadas[0])) {
 
                     $oRetorno->iCodigoLicitacao     = '';
                     $oRetorno->iEdital              = '';
@@ -241,8 +238,7 @@ switch($oParam->exec) {
                     $oRetorno->iModalidadeLicitacao = '';
                     $oRetorno->pc50_codcom          = '';
                     $oRetorno->l03_tipo             = '';
-
-                }else{
+                } else {
 
                     $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
                     $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
@@ -252,9 +248,7 @@ switch($oParam->exec) {
                     $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
                     $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
                     $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
-
                 }
-
             }
 
             foreach ($oContrato->getPosicoes() as $oPosicaoContrato) {
@@ -287,7 +281,6 @@ switch($oParam->exec) {
                             $oDotacao->saldodotacao   = $oDotacaoSaldo->getSaldoFinal();
 
                             $oDotacao->valor -= $oDotacao->executado;
-
                         }
                         $oItemRetorno->dotacoes       = $oItem->getDotacoes();
                         $oItemRetorno->saldos         = $oItem->getSaldos();
@@ -312,11 +305,11 @@ switch($oParam->exec) {
 
             db_inicio_transacao();
 
-            if ( !empty($oParam->dados->resumo) ) {
+            if (!empty($oParam->dados->resumo)) {
                 $oParam->dados->resumo = db_stdClass::normalizeStringJsonEscapeString($oParam->dados->resumo);
             }
 
-            if ( !empty($oParam->dados->pagamento) ) {
+            if (!empty($oParam->dados->pagamento)) {
                 $oParam->dados->pagamento = db_stdClass::normalizeStringJsonEscapeString($oParam->dados->pagamento);
             }
 
@@ -334,9 +327,9 @@ switch($oParam->exec) {
 
                 if (round($nTotalExecutar, 2) > round($nValorTotalItem, 2)) {
 
-                    $nExecutar  = trim(db_formatar($nTotalExecutar , "f") );
-                    $nTotalItem = trim(db_formatar($nValorTotalItem , "f"));
-                    throw new BusinessException( " Valor a executar {$nExecutar} maior que o total do item {$nTotalItem}. " ) ;
+                    $nExecutar  = trim(db_formatar($nTotalExecutar, "f"));
+                    $nTotalItem = trim(db_formatar($nValorTotalItem, "f"));
+                    throw new BusinessException(" Valor a executar {$nExecutar} maior que o total do item {$nTotalItem}. ");
                 }
             }
             /**
@@ -345,17 +338,17 @@ switch($oParam->exec) {
              * OC 7425
              */
 
-            $tipoLicitacao = array(52,48,49,50,51,53,54);
-            $tipoDispensaInex = array(100,101,102);
+            $tipoLicitacao = array(52, 48, 49, 50, 51, 53, 54);
+            $tipoDispensaInex = array(100, 101, 102);
             $oAcordo = new Acordo($oParam->iCodigoAcordo);
             $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
 
-            if(!empty($aLicitacoesVinculadas))
+            if (!empty($aLicitacoesVinculadas))
                 $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
 
-            if(in_array($oStdDados->l44_sequencial, $tipoLicitacao)){
+            if (in_array($oStdDados->l44_sequencial, $tipoLicitacao)) {
                 $oParam->dados->sTipoorigem = 2;
-            }else if(in_array($oStdDados->l44_sequencial, $tipoDispensaInex)){
+            } else if (in_array($oStdDados->l44_sequencial, $tipoDispensaInex)) {
                 $oParam->dados->sTipoorigem = 3;
             }
             $oParam->dados->sTipoautorizacao = 2;
@@ -363,13 +356,11 @@ switch($oParam->exec) {
             $oRetorno->itens  = $oContrato->processarAutorizacoes($oParam->aItens, $oParam->lProcessar, $oParam->dados);
 
             db_fim_transacao(false);
-
         } catch (Exception $eErro) {
 
             db_fim_transacao(true);
             $oRetorno->status = 2;
             $oRetorno->message = urlencode($eErro->getMessage());
-
         }
 
         break;
@@ -387,7 +378,7 @@ switch($oParam->exec) {
 
             $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
                       from condataconf
-                        where c99_instit = ".db_getsession('DB_instit')."
+                        where c99_instit = " . db_getsession('DB_instit') . "
                           order by c99_anousu desc limit 1";
 
             $rsResult       = db_query($sSQL);
@@ -395,10 +386,9 @@ switch($oParam->exec) {
 
             $sNSQL = "";
             if ($anousu > $maxC99_datapat) {
-              $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat,db_getsession('DB_instit'),'c99_datapat');
-
+                $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
             } else {
-                $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat');
+                $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat');
             }
 
             $result = db_query($sNSQL);
@@ -410,9 +400,9 @@ switch($oParam->exec) {
             foreach ($oParam->aPosicoes as $oPosicao) {
 
                 $oAcordoPosicao = new AcordoPosicao($oPosicao->codigo);
-                $DataAssinatura = implode("-",array_reverse(explode("/",$oAcordoPosicao->getDataAssinatura())));
+                $DataAssinatura = implode("-", array_reverse(explode("/", $oAcordoPosicao->getDataAssinatura())));
 
-                if(($c99_datapat != "" && $DataAssinatura != '') && $DataAssinatura <= $c99_datapat){
+                if (($c99_datapat != "" && $DataAssinatura != '') && $DataAssinatura <= $c99_datapat) {
                     $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
                     $oRetorno->status = 1;
                     throw new BusinessException($erro_msg);
@@ -420,31 +410,30 @@ switch($oParam->exec) {
                 if ($oPosicao->codigo != $oContrato->getUltimaPosicao(true)->getCodigo()) {
                     throw new BusinessException(" Não é possível excluir uma aditamento/apostilamento que não seja o último. Para excluir um aditamento/apostilamento, faça a partir do último ");
                 }
-                $nValorLancamentoContabil =0;
-                foreach($oAcordoPosicao->getItens() as $oItenAditado){
+                $nValorLancamentoContabil = 0;
+                foreach ($oAcordoPosicao->getItens() as $oItenAditado) {
                     $nValorLancamentoContabil += $oItenAditado->getValorAditado();
                 }
                 // echo "<pre>";print_r($oAcordoPosicao);exit;
                 $dataLancamento = date("Y-m-d", db_getsession("DB_datausu"));
-                if($nValorLancamentoContabil != 0){
+                if ($nValorLancamentoContabil != 0) {
                     $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
                     $sHistorico = "Valor referente a estorno da posição {$oPosicao->codigo} do contrato de código: {$oAcordoPosicao->getAcordo()}.";
-                    if($oAcordoPosicao->getNumeroAditamento()){
-                        if($nValorLancamentoContabil < 0){
+                    if ($oAcordoPosicao->getNumeroAditamento()) {
+                        if ($nValorLancamentoContabil < 0) {
                             $oAcordoLancamentoContabil->registraControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $dataLancamento);
                         }
-                        if($nValorLancamentoContabil > 0){
+                        if ($nValorLancamentoContabil > 0) {
                             $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $dataLancamento);
                         }
-                    }else{
-                        if($nValorLancamentoContabil > 0){
+                    } else {
+                        if ($nValorLancamentoContabil > 0) {
                             $oAcordoLancamentoContabil->registraControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $dataLancamento);
                         }
-                        if($nValorLancamentoContabil < 0){
+                        if ($nValorLancamentoContabil < 0) {
                             $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordoPosicao->getAcordo(),  abs($nValorLancamentoContabil), $sHistorico, $dataLancamento);
                         }
                     }
-
                 }
 
                 $oAcordoPosicao->remover();
@@ -452,7 +441,6 @@ switch($oParam->exec) {
                 $oRetorno->status = 2;
                 $oRetorno->message = urlencode('Aditamento excluído com sucesso!');
             }
-
         } catch (Exception $eErro) {
 
             db_fim_transacao(true);
@@ -464,7 +452,7 @@ switch($oParam->exec) {
 
     case "getAutorizacoesAcordo":
 
-        if (isset ($_SESSION["oContrato"])) {
+        if (isset($_SESSION["oContrato"])) {
             unset($_SESSION["oContrato"]);
         }
 
@@ -522,7 +510,7 @@ switch($oParam->exec) {
             foreach ($oParam->aItens as $oItem) {
 
                 $oItemContrato = $oUltimaPosicao->getItemByCodigo($oItem->codigo);
-                $oItemContrato->baixarMovimentacaoManual(1,$oItem->quantidadeexecutada, $oItem->valorexecutado);
+                $oItemContrato->baixarMovimentacaoManual(1, $oItem->quantidadeexecutada, $oItem->valorexecutado);
             }
             db_fim_transacao(false);
         } catch (Exception $eErro) {
@@ -530,26 +518,25 @@ switch($oParam->exec) {
             db_fim_transacao(true);
             $oRetorno->status  = 2;
             $oRetorno->message = urlencode($eErro->getMessage());
-
         }
         break;
 
-    case 'getDadosAcordo' :
+    case 'getDadosAcordo':
 
         $oAcordo = new Acordo($oParam->iCodigoAcordo);
 
         $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
-        if($aLicitacoesVinculadas[0] != "") {
+        if ($aLicitacoesVinculadas[0] != "") {
             $oStdDados = $aLicitacoesVinculadas[0]->getDados();
             $oRetorno->sLicitacao = urlencode($oAcordo->getLicitacao());
             $oRetorno->iModalidade = urlencode($oAcordo->getModalidade());
             $oRetorno->iNumModalidade = urlencode($oStdDados->l20_numero);
-            $oRetorno->iProcesso = $oStdDados->l20_edital."/".$oStdDados->l20_anousu;
+            $oRetorno->iProcesso = $oStdDados->l20_edital . "/" . $oStdDados->l20_anousu;
             $oRetorno->sTipo = urlencode($oStdDados->l03_codcom);
             $oRetorno->sTipoorigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(2);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
-        }else{
+        } else {
             $oRetorno->sLicitacao = '';
             $oRetorno->iModalidade = '';
             $oRetorno->iNumModalidade = '';
@@ -564,11 +551,11 @@ switch($oParam->exec) {
          *Retorna dados da licitacao de outro orgao
          */
         $aLicOutrosorgaosVinculadas = $oAcordo->getiLicoutroorgao();
-        if($aLicOutrosorgaosVinculadas[0] != ""){
+        if ($aLicOutrosorgaosVinculadas[0] != "") {
             $oDaoAcordo = db_utils::getDao("liclicitaoutrosorgaos");
             $codLicOutrosOrgaos = $aLicOutrosorgaosVinculadas[0];
             $sCampos = "lic211_processo||'/'||lic211_anousu as lic211_processo,lic211_numero,lic211_anousu,lic211_tipo";
-            $sSqlLicoutroorgao = $oDaoAcordo->sql_query($codLicOutrosOrgaos,$sCampos);
+            $sSqlLicoutroorgao = $oDaoAcordo->sql_query($codLicOutrosOrgaos, $sCampos);
             $rsLicoutroorgao = $oDaoAcordo->sql_record($sSqlLicoutroorgao);
             $oDadosLicoutroorgao = db_utils::fieldsMemory($rsLicoutroorgao, 0);
 
@@ -578,25 +565,25 @@ switch($oParam->exec) {
             $oRetorno->iAnoProc = urlencode($oDadosLicoutroorgao->lic211_anousu);
 
             //ACHAR CODCOMPRA
-            if($oDadosLicoutroorgao->lic211_tipo = 5){
+            if ($oDadosLicoutroorgao->lic211_tipo = 5) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 105";
-            }elseif ($oDadosLicoutroorgao->lic211_tipo = 6){
+            } elseif ($oDadosLicoutroorgao->lic211_tipo = 6) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 106";
-            }elseif ($oDadosLicoutroorgao->lic211_tipo = 7){
+            } elseif ($oDadosLicoutroorgao->lic211_tipo = 7) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 107";
-            }elseif ($oDadosLicoutroorgao->lic211_tipo = 8){
+            } elseif ($oDadosLicoutroorgao->lic211_tipo = 8) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 108";
-            }elseif ($oDadosLicoutroorgao->lic211_tipo = 9){
+            } elseif ($oDadosLicoutroorgao->lic211_tipo = 9) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 109";
             }
-            $sqlTipocompra = $oDaoTipocompra->sql_query_file(null,$sPctipocampos,null,$sPctipowhere);
+            $sqlTipocompra = $oDaoTipocompra->sql_query_file(null, $sPctipocampos, null, $sPctipowhere);
             $rsTipocompra  = $oDaoTipocompra->sql_record($sqlTipocompra);
-            $oTipocompra = db_utils::fieldsMemory($rsTipocompra,0)->pc50_codcom;
+            $oTipocompra = db_utils::fieldsMemory($rsTipocompra, 0)->pc50_codcom;
             $oRetorno->sTipo = ($oTipocompra);
             $oRetorno->sTipoorigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(2);
@@ -607,24 +594,24 @@ switch($oParam->exec) {
          */
         $aAdesaoVinculada = $oAcordo->getiAdesaoregpreco();
 
-        if($aAdesaoVinculada[0] != ""){
+        if ($aAdesaoVinculada[0] != "") {
 
             $oDaoAcordo = db_utils::getDao("adesaoregprecos");
-            $sCampos = "si06_numeroprc||'/'||si06_anoproc as si06_numeroprc,si06_numlicitacao";
-            $sSqlAdesao = $oDaoAcordo->sql_query($aAdesaoVinculada,$sCampos);
+            $sCampos = "si06_numeroadm||'/'||si06_anomodadm as si06_numeroadm,si06_nummodadm";
+            $sSqlAdesao = $oDaoAcordo->sql_query($aAdesaoVinculada, $sCampos);
             $rsAdesao = $oDaoAcordo->sql_record($sSqlAdesao);
             $oDadosAdesao = db_utils::fieldsMemory($rsAdesao, 0);
 
             $oRetorno->iModalidade = urlencode($oAcordo->getModalidade());
-            $oRetorno->iNumModalidade = urlencode($oDadosAdesao->si06_numlicitacao);
-            $oRetorno->iProcesso = $oDadosAdesao->si06_numeroprc;
+            $oRetorno->iNumModalidade = urlencode($oDadosAdesao->si06_nummodadm);
+            $oRetorno->iProcesso = $oDadosAdesao->si06_numeroadm;
 
             //ACHAR CODCOMPRA
             $sPctipocampos = "pc50_codcom";
             $sPctipowhere = "pc50_pctipocompratribunal = 104";
-            $sqlTipocompra = $oDaoTipocompra->sql_query_file(null,$sPctipocampos,null,$sPctipowhere);
+            $sqlTipocompra = $oDaoTipocompra->sql_query_file(null, $sPctipocampos, null, $sPctipowhere);
             $rsTipocompra  = $oDaoTipocompra->sql_record($sqlTipocompra);
-            $oTipocompra = db_utils::fieldsMemory($rsTipocompra,0)->pc50_codcom;
+            $oTipocompra = db_utils::fieldsMemory($rsTipocompra, 0)->pc50_codcom;
             $oRetorno->sTipo = ($oTipocompra);
             $oRetorno->sTipoorigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(4);
@@ -636,24 +623,24 @@ switch($oParam->exec) {
     case 'getVigencia':
 
         $oContrato = $_SESSION["oContrato"];
-        $dataFimVigencia = implode("-",array_reverse(explode("/",$oContrato->getUltimaPosicao(true)->getVigenciaFinal())));
-        $dataAssinatura = implode("-",array_reverse(explode("/",$oContrato->getDataAssinatura())));
-        $dataAutorizacao = date("Y-m-d",db_getsession("DB_datausu"));
+        $dataFimVigencia = implode("-", array_reverse(explode("/", $oContrato->getUltimaPosicao(true)->getVigenciaFinal())));
+        $dataAssinatura = implode("-", array_reverse(explode("/", $oContrato->getDataAssinatura())));
+        $dataAutorizacao = date("Y-m-d", db_getsession("DB_datausu"));
         $gerarAutorizacao = array();
 
-        if($dataAutorizacao > $dataFimVigencia){
+        if ($dataAutorizacao > $dataFimVigencia) {
             $gerarAutorizacao[0] = false;
-            $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
+            $gerarAutorizacao[1] = implode("/", array_reverse(explode("-", $dataFimVigencia)));
             $gerarAutorizacao[2] = true;
-            $gerarAutorizacao[3] = implode("/",array_reverse(explode("-",$dataAssinatura)));
-        }elseif($dataAutorizacao < $dataAssinatura){
+            $gerarAutorizacao[3] = implode("/", array_reverse(explode("-", $dataAssinatura)));
+        } elseif ($dataAutorizacao < $dataAssinatura) {
             $gerarAutorizacao[0] = false;
-            $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
+            $gerarAutorizacao[1] = implode("/", array_reverse(explode("-", $dataFimVigencia)));
             $gerarAutorizacao[2] = false;
-            $gerarAutorizacao[3] = implode("/",array_reverse(explode("-",$dataAssinatura)));
-        }else{
+            $gerarAutorizacao[3] = implode("/", array_reverse(explode("-", $dataAssinatura)));
+        } else {
             $gerarAutorizacao[0] = true;
-            $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
+            $gerarAutorizacao[1] = implode("/", array_reverse(explode("-", $dataFimVigencia)));
         }
         $oRetorno = $gerarAutorizacao;
 
@@ -661,4 +648,3 @@ switch($oParam->exec) {
 }
 
 echo $oJson->encode($oRetorno);
-?>

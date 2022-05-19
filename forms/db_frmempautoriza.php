@@ -155,8 +155,8 @@ db_app::load("DBFormCache.js");
                 </td>
                 <td>
                     <?php
-                    db_input('e54_codlicitacao', 10, "", true, "text", 1, "onchange='js_pesquisa_liclicita(false);'");
-                    db_input('l20_objeto', 43, "", true, 'text', 3);
+                    db_input('e54_codlicitacao', 7, "", true, "text", 1, "onchange='js_pesquisa_liclicita(false);'");
+                    db_input('l20_objeto', 40, "", true, 'text', 3);
                     ?>
                 </td>
             </tr>
@@ -168,8 +168,8 @@ db_app::load("DBFormCache.js");
                 </td>
                 <td>
                     <?
-                    db_input('e54_licoutrosorgaos', 10, "", true, 'text', $db_opcao, "onchange='js_pesquisaac16_licoutroorgao(false)';");
-                    db_input('e54_fornelicoutrosorgaos', 43, "", true, 'text', 3);
+                    db_input('e54_licoutrosorgaos', 7, "", true, 'text', $db_opcao, "onchange='js_pesquisaac16_licoutroorgao(false)';");
+                    db_input('e54_fornelicoutrosorgaos', 40, "", true, 'text', 3);
                     ?>
                 </td>
             </tr>
@@ -181,8 +181,8 @@ db_app::load("DBFormCache.js");
                 </td>
                 <td>
                     <?
-                    db_input('e54_adesaoregpreco', 10, "", true, 'text', $db_opcao, "onchange='js_pesquisaaadesaoregpreco(false)';");
-                    db_input('si06_objetoadesao', 43, "", true, 'text', 3);
+                    db_input('e54_adesaoregpreco', 7, "", true, 'text', $db_opcao, "onchange='js_pesquisaaadesaoregpreco(false)';");
+                    db_input('si06_objetoadesao', 40, "", true, 'text', 3);
                     ?>
                 </td>
             </tr>
@@ -215,10 +215,20 @@ db_app::load("DBFormCache.js");
                 </td>
                 <td>
                     <strong>Nº do Processo:</strong>
-                    <? db_input('e54_numerl', 13, "", true, 'text', 1, "", "", "", "", 16); ?>
+                    <? db_input('e54_numerl', 10, "", true, 'text', 3, "", "", "", "", 16); ?>
 
                     <strong> Modalidade:</strong>
-                    <? db_input('e54_nummodalidade', 13, "", true, 'text', 1, "onkeyup='somenteNumeros(this)';", "", "", "", 10); ?>
+                    <?
+                    if ($e54_tipoautorizacao == 2) {
+                        db_input('e54_nummodalidade', 10, "", true, 'text', 3, "onkeyup='somenteNumeros(this)';", "", "", "", 10);
+                    }
+                    if ($e54_tipoautorizacao == 3) {
+                        db_input('e54_nummodalidade', 10, "", true, 'text', 3, "onkeyup='somenteNumeros(this)", "", "", "", 10);
+                    }
+                    if ($e54_tipoautorizacao == 4) {
+                        db_input('si06_nummodadm', 10, "", true, 'text', 3, "onkeyup='somenteNumeros(this)';", "", "", "", 10);
+                    }
+                    ?>
                 </td>
             </tr>
             <tr>
@@ -374,10 +384,11 @@ db_app::load("DBFormCache.js");
                 <td nowrap="nowrap">
                     <?
                     db_input('e57_codhist', 11, $Ie57_codhist, true, '', 1, " onchange='js_pesquisahistorico(false);'");
-                    if ($db_opcao == 1)
-                        db_input('e40_descr', 50, $Ie40_descr, true, 'text', 3);
-                    else
-                        db_input('e40_descr', 42, $Ie40_descr, true, 'text', 3);
+                    if ($db_opcao == 1) {
+                        db_input('e40_descr', 48, $Ie40_descr, true, 'text', 3);
+                    } else {
+                        db_input('e40_descr', 40, $Ie40_descr, true, 'text', 3);
+                    }
                     ?>
                 </td>
             </tr>
