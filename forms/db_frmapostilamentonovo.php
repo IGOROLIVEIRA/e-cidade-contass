@@ -93,7 +93,8 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
                 <td>
                     <?
-                    db_input('si03_descrapostila', 40, $Isi03_descrapostila, true, 'text', $db_opcao, "", "", "", "", "200");
+                    db_textarea('si03_descrapostila', 3, 48, $Isi03_descrapostila, true, 'text', $db_opcao, "style='resize: none'", "", "", "250");
+                    //db_input('si03_descrapostila', 40, $Isi03_descrapostila, true, 'text', $db_opcao, "", "", "", "", "200");
                     ?>
                 </td>
             </tr>
@@ -211,7 +212,7 @@ $clrotulo->label("ac16_resumoobjeto");
     oGridItens.nameInstance = 'oGridItens';
     oGridItens.setCheckbox(0);
     oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
-    oGridItens.setCellWidth(["3%", "25%", "8%", "8%"]);
+    //oGridItens.setCellWidth(["50px", "30%", "8%", "8%", "3%", "25%", "8%", "8%", "3%", "25%", "8%", "8%", "8%"]);
     oGridItens.setHeader(["Cód", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotações", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
     oGridItens.aHeaders[10].lDisplayed = false;
@@ -1095,7 +1096,7 @@ $clrotulo->label("ac16_resumoobjeto");
         var oApostila = new Object();
         oApostila.dataapostila = $("si03_dataapostila").value;
         oApostila.tipoapostila = $("si03_tipoapostila").value;
-        oApostila.descrapostila = $("si03_descrapostila").value;
+        oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
 
