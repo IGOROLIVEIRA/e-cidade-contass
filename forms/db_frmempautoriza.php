@@ -219,15 +219,7 @@ db_app::load("DBFormCache.js");
 
                     <strong> Modalidade:</strong>
                     <?
-                    if ($e54_tipoautorizacao == 2) {
-                        db_input('e54_nummodalidade', 10, "", true, 'text', 3, "onkeyup='somenteNumeros(this)';", "", "", "", 10);
-                    }
-                    if ($e54_tipoautorizacao == 3) {
-                        db_input('e54_nummodalidade', 10, "", true, 'text', 3, "onkeyup='somenteNumeros(this)", "", "", "", 10);
-                    }
-                    if ($e54_tipoautorizacao == 4) {
-                        db_input('si06_nummodadm', 10, "", true, 'text', 3, "onkeyup='somenteNumeros(this)';", "", "", "", 10);
-                    }
+                    db_input('e54_nummodalidade', 10, "", true, 'text', 3, "onkeyup='somenteNumeros(this)';", "", "", "", 10);
                     ?>
                 </td>
             </tr>
@@ -1047,8 +1039,8 @@ db_app::load("DBFormCache.js");
             document.getElementById('e54_licoutrosorgaos').value = '';
             document.getElementById('e54_fornelicoutrosorgaos').value = '';
             document.getElementById('trdadoslicitacao').value = '';
-            document.getElementById('e54_nummodalidade').value = '';
-            document.getElementById('e54_numerl').value = '';
+            //document.getElementById('e54_nummodalidade').value = '';
+            //document.getElementById('e54_numerl').value = '';
             document.getElementById('e54_adesaoregpreco').value = '';
             document.getElementById('si06_objetoadesao').value = '';
             document.form1.e54_nummodalidade.readOnly = true;
@@ -1062,10 +1054,10 @@ db_app::load("DBFormCache.js");
             document.getElementById('tradesao').style.display = 'none';
             document.getElementById('trtipoorigem').style.display = 'none';
             document.getElementById('trdadoslicitacao').value = '';
-            document.getElementById('e54_codlicitacao').value = '';
-            document.getElementById('l20_objeto').value = '';
-            document.getElementById('e54_nummodalidade').value = '';
-            document.getElementById('e54_numerl').value = '';
+            //document.getElementById('e54_codlicitacao').value = '';
+            //document.getElementById('l20_objeto').value = '';
+            //document.getElementById('e54_nummodalidade').value = '';
+            //document.getElementById('e54_numerl').value = '';
             document.getElementById('e54_adesaoregpreco').value = '';
             document.getElementById('si06_objetoadesao').value = '';
             document.form1.e54_nummodalidade.readOnly = true;
@@ -1080,9 +1072,8 @@ db_app::load("DBFormCache.js");
             document.getElementById('trdadoslicitacao').value = '';
             document.getElementById('tradesao').style.display = '';
             document.getElementById('e54_codlicitacao').value = '';
-            document.getElementById('l20_objeto').value = '';
-            document.getElementById('e54_nummodalidade').value = '';
-            document.getElementById('e54_numerl').value = '';
+            //document.getElementById('e54_nummodalidade').value = '';
+            //document.getElementById('e54_numerl').value = '';
             document.getElementById('e54_concarpeculiar').value = '000';
             document.getElementById('c58_descr').value = 'NÃO SE APLICA';
             document.form1.e54_nummodalidade.readOnly = true;
@@ -1173,6 +1164,7 @@ db_app::load("DBFormCache.js");
     }
 
     function js_validacampos(oAjax) {
+
         oRetorno = eval("(" + oAjax.responseText + ")");
 
         if (oRetorno.tipocompratribunal == 13) {

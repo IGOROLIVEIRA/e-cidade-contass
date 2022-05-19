@@ -53,8 +53,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
             if (isset($par) && $par = true) {
-              $sSQL = "select si06_objetoadesao,si06_numeroprc,si06_numlicitacao,si06_anoproc from adesaoregprecos where si06_sequencial = {$pesquisa_chave}";
-              $sSQL = " and si06_instit = " . db_getsession("DB_instit");
+              $sSQL = "select si06_objetoadesao,si06_numeroprc,si06_numlicitacao,si06_anoproc from adesaoregprecos where si06_sequencial = {$pesquisa_chave} and si06_instit = " . db_getsession("DB_instit");
               $result = $cladesaoregprecos->sql_record($sSQL);
             } else {
               $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($pesquisa_chave, "*", "", "si06_instit = " . db_getsession("DB_instit")));
