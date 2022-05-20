@@ -149,19 +149,6 @@ $clempparametro->rotulo->label();
                     ?>
                 </td>
             </tr>
-
-            <tr>
-                <td nowrap title="<?=@$Te30_empordemcron?>">
-                    <strong>Empenho fora da ordem cronológica:</strong>
-                </td>
-                <td>
-                    <?
-                      $matriz = array("f"=>"Não","t"=>"Sim");
-                      db_select("e30_empordemcron", $matriz, true, 1);
-                    ?>
-                </td>
-            </tr>
-
             <tr>
                 <td nowrap title="<?=@$Te30_formvisuitemaut?>"><?=@$Le30_formvisuitemaut?></td>
                 <td><? $matriz = array("1"=>"Por elemento","2"=>"Por Desdobramento","3"=>"Nenhum");
