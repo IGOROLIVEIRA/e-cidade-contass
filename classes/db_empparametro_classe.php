@@ -72,7 +72,6 @@ class cl_empparametro {
     var $e30_prazoentordcompra = 0;
     var $e30_controleprestacao = 'f';
     var $e30_obrigactapagliq = 'f';
-    var $e30_empordemcron = 'f';
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  e39_anousu = int4 = Exercício
@@ -98,13 +97,11 @@ class cl_empparametro {
                  e30_liberaempenho = bool = Controla liberação de empenhos para OC
                  e30_dadosbancoempenho = bool = Emite Dados Bancarios no Empenho
                  e30_tipoanulacaopadrao = int4 = Tipo de anulação padrão
-                 e30_atestocontinterno = bool = Atesto do Controle Interno
+                 e30_atestocontinterno = boll = Atesto do Controle Interno
                  e30_prazoentordcompra = int4 = Dias de prazo para entrada da ordem de compra
                  e30_controleprestacao = bool = Controla Empenho de Prestação de Contas
                  e30_obrigactapagliq = bool = Obriga Conta Pagadora na Liquidação
-                 e30_empordemcron = bool = Empenho fora ordem Cronológica
                  ";
-
     //funcao construtor da classe
     function cl_empparametro() {
         //classes dos rotulos dos campos
@@ -156,7 +153,6 @@ class cl_empparametro {
             $this->e30_atestocontinterno = ($this->e30_atestocontinterno == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_atestocontinterno"]:$this->e30_atestocontinterno);
             $this->e30_prazoentordcompra = ($this->e30_prazoentordcompra == ""?@$GLOBALS["HTTP_POST_VARS"]["e30_prazoentordcompra"]:$this->e30_prazoentordcompra);
             $this->e30_obrigactapagliq = ($this->e30_obrigactapagliq == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_obrigactapagliq"]:$this->e30_obrigactapagliq);
-            $this->e30_empordemcron = ($this->e30_empordemcron == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_empordemcron"]:$this->e30_empordemcron);
         }else{
         }
     }
@@ -388,15 +384,6 @@ class cl_empparametro {
             $this->erro_status = "0";
             return false;
         }
-        if($this->e30_empordemcron == null ){
-            $this->erro_sql = " Campo Empenho fora ordem cronológica nao Informado.";
-            $this->erro_campo = "e30_empordemcron";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         $sql = "insert into empparametro(
                                        e39_anousu
                                       ,e30_codemp
@@ -424,7 +411,6 @@ class cl_empparametro {
                                       ,e30_atestocontinterno
                                       ,e30_prazoentordcompra
                                       ,e30_obrigactapagliq
-                                      ,e30_empordemcron
                        )
                 values (
                                 $this->e39_anousu
@@ -453,9 +439,7 @@ class cl_empparametro {
                                ,'$this->e30_atestocontinterno'
                                ,$this->e30_prazoentordcompra
                                ,$this->e30_obrigactapagliq
-                               ,$this->e30_empordemcron
                       )";
-
         $result = db_query($sql);
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -510,7 +494,7 @@ class cl_empparametro {
             $resac = db_query("insert into db_acount values($acount,893,17307,'','".AddSlashes(pg_result($resaco,0,'e30_dadosbancoempenho'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,893,2012352,'','".AddSlashes(pg_result($resaco,0,'e30_atestocontinterno'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,893,2012400,'','".AddSlashes(pg_result($resaco,0,'e30_prazoentordcompra'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,893,2012515,'','".AddSlashes(pg_result($resaco,0,'e30_obrigactapagliq'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,893,2012515,'','".AddSlashes(pg_result($resaco,0,'e30_obrigactapagliq'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");            
         }
         return true;
     }
@@ -853,19 +837,6 @@ class cl_empparametro {
             if(trim($this->e30_obrigactapagliq) == null ){
                 $this->erro_sql = " Campo Obriga Conta Pagadora na Liquidação nao Informado.";
                 $this->erro_campo = "e30_obrigactapagliq";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        if(trim($this->e30_empordemcron)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e30_empordemcron"])){
-            $sql  .= $virgula." e30_empordemcron = '$this->e30_empordemcron' ";
-            $virgula = ",";
-            if(trim($this->e30_empordemcron) == null ){
-                $this->erro_sql = " Campo Empenho fora da ordem cronológica nao Informado.";
-                $this->erro_campo = "e30_empordemcron";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

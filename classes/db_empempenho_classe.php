@@ -25,8 +25,8 @@
  *                                licenca/licenca_pt.txt
  */
 
-//MODULO: empenho
-//CLASSE DA ENTIDADE empempenho
+//MODULO: empenho   
+//CLASSE DA ENTIDADE empempenho    
 class cl_empempenho {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -80,7 +80,7 @@ class cl_empempenho {
     /*FIM OC4604 - LQD*/
     /*OC4401*/
     var $e60_id_usuario = null;
-    var $e60_vlrutilizado = 0;
+    var $e60_vlrutilizado = 0;  
     /*FIM - OC4401*/
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -446,7 +446,7 @@ class cl_empempenho {
                                ,$this->e60_vlranu
                                ,$this->e60_codtipo
                                ,'$this->e60_resumo'
-                               ,'$this->e60_informacaoop'
+                               ,'$this->e60_informacaoop' 
                                ,'$this->e60_destin'
                                ,$this->e60_salant
                                ,$this->e60_instit
@@ -1266,7 +1266,7 @@ class cl_empempenho {
             return false;
         }
 
-    }
+    } 
     function sql_query_doc ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){
@@ -2433,24 +2433,5 @@ class cl_empempenho {
           $sSql .= " order by {$sOrder} ";
         }
         return db_utils::getColectionByRecord(db_query($sSql));
-      }
-
-      public function slq_ultimo_empenho($dtini, $dtfim, $instits){
-        $sSql  = " select max(e60_codemp::int8) as e60_codemp";
-        $sSql .= "   from empempenho ";
-        $sSql .= "    where e60_emiss between '{$dtini}' and '{$dtfim}' and e60_instit in ($instits) ";
-        return $sSql;
-      }
-
-      public function sql_prox_data_empenho($anoUsu, $instit, $where, $order) {
-          $sSql  = "select e60_codemp as codemp, e60_emiss as emiss from empempenho ";
-          $sSql .= " where e60_instit = {$instit} and e60_anousu={$anoUsu} ";
-          if($where != ""){
-              $sSql .= " and  {$where}";
-          }
-          $sSql .= $order;
-          $sSql .= " limit 1";
-
-          return $sSql;
       }
 }
