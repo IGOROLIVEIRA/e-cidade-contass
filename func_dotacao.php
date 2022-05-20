@@ -43,13 +43,14 @@ if ($clpermusuario_dotacao->sql != "") {
     $erro = "Sem permissão para esta dotação!";
   }
 }
+$dtAnousu = db_getsession("DB_anousu");
 
 $rsResult = db_query("select * from orcdotacao where o58_coddot = $oParam->dotacao");
 $projativ = db_utils::fieldsMemory($rsResult, 0)->o58_projativ;
 $codele = db_utils::fieldsMemory($rsResult, 0)->o58_codele;
-$result = db_query("select * from orcprojativ where o55_projativ = $projativ and o55_anousu = 2022 ");
+$result = db_query("select * from orcprojativ where o55_projativ = $projativ and o55_anousu = $dtAnousu ");
 $descricao = db_utils::fieldsMemory($result, 0)->o55_descr;
-$elemento = db_query("select * from orcelemento where o56_codele = $codele");
+$elemento = db_query("select * from orcelemento where o56_codele = $codele and o56_anousu = $dtAnousu");
 $elemento = db_utils::fieldsMemory($elemento, 0)->o56_elemento;
 
 $oRetorno->dotacao = $projativ;

@@ -157,15 +157,17 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 			liclicita.l20_anousu as exercicioLicitacao, liclicita.l20_edital as nroProcessoLicitatorio,
 			liccomissaocgm.l31_tipo::int as tipoResp, l20_codigo as codigolicitacao, cgm.z01_cgccpf as nroCPFResp,
 			liclicita.l20_codigo as codlicitacao,
-			liclicita.l20_naturezaobjeto
+			liclicita.l20_naturezaobjeto,
+            manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 			FROM liclicita as liclicita
 			INNER JOIN homologacaoadjudica as homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 			INNER JOIN liccomissaocgm AS liccomissaocgm ON (liclicita.l20_codigo=liccomissaocgm.l31_licitacao)
 			INNER JOIN protocolo.cgm as cgm on (liccomissaocgm.l31_numcgm=cgm.z01_numcgm)
 			INNER JOIN configuracoes.db_config as db_config on (liclicita.l20_instit=db_config.codigo)
 			INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom) 
-	    INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
+	        INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 			LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+            LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
 			WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= " . db_getsession("DB_anousu") . "
 			AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 			AND pctipocompratribunal.l44_sequencial IN ('48',
@@ -176,7 +178,8 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 		                                                  '53',
 		                                                  '54') order by liclicita.l20_edital";
         $rsResult10 = db_query($sSql); //echo $sSql;exit;db_criatabela($rsResult10);
-
+        //db_criatabela($rsResult10); 
+        //exit; 
         $aLicitacoes = array();
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -188,7 +191,11 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 
             $clresplic10->si55_tiporegistro = 10;
             $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
-            $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
+            if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
+                $clresplic10->si55_codunidadesub = $oDados10->codunidsubant;    
+            }else{
+                $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
+            }
             $clresplic10->si55_exerciciolicitacao = $oDados10->exerciciolicitacao;
             $clresplic10->si55_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
             $clresplic10->si55_tiporesp = $oDados10->tiporesp;
@@ -206,14 +213,18 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
                 $rsResult10Preco = db_query($slq1);
                 $oDados10Preco = db_utils::fieldsMemory($rsResult10Preco, 0);
 
-                if($oDados10Preco->si01_tipocotacao!=""){
-                  $slq2 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmcotacao";
-                  $rsResultCPF = db_query($slq2);
-                  $rsResultCPF = db_utils::fieldsMemory($rsResultCPF, 0);
+                if ($oDados10Preco->si01_tipocotacao != "") {
+                    $slq2 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmcotacao";
+                    $rsResultCPF = db_query($slq2);
+                    $rsResultCPF = db_utils::fieldsMemory($rsResultCPF, 0);
 
                     $clresplic10->si55_tiporegistro = 10;
                     $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
-                    $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
+                    if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
+                        $clresplic10->si55_codunidadesub = $oDados10->codunidsubant;    
+                    }else{
+                        $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
+                    }
                     $clresplic10->si55_exerciciolicitacao = $oDados10->exerciciolicitacao;
                     $clresplic10->si55_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
                     $clresplic10->si55_tiporesp = $oDados10Preco->si01_tipocotacao;
@@ -222,13 +233,17 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
                     $clresplic10->si55_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clresplic10->incluir(null);
 
-                  $slq3 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmorcamento";
-                  $rsResultCPF1 = db_query($slq3);
-                  $rsResultCPF1 = db_utils::fieldsMemory($rsResultCPF1, 0);
+                    $slq3 = "select z01_cgccpf from cgm where z01_numcgm =  $oDados10Preco->si01_numcgmorcamento";
+                    $rsResultCPF1 = db_query($slq3);
+                    $rsResultCPF1 = db_utils::fieldsMemory($rsResultCPF1, 0);
 
                     $clresplic10->si55_tiporegistro = 10;
                     $clresplic10->si55_codorgao = $oDados10->codorgaoresp;
-                    $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
+                    if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
+                        $clresplic10->si55_codunidadesub = $oDados10->codunidsubant;    
+                    }else{
+                        $clresplic10->si55_codunidadesub = $oDados10->codunidadesubresp;
+                    }
                     $clresplic10->si55_exerciciolicitacao = $oDados10->exerciciolicitacao;
                     $clresplic10->si55_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
                     $clresplic10->si55_tiporesp = $oDados10Preco->si01_tipoorcamento;
@@ -236,9 +251,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
                     $clresplic10->si55_instit = db_getsession("DB_instit");
                     $clresplic10->si55_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clresplic10->incluir(null);
-
                 }
-
             }
         }
 
@@ -277,13 +290,16 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 				case when l46_tipo = 1 then 'Leiloeiro' when l46_tipo = 2 then 'Membro/Equipe de Apoio'
 	 when l46_tipo = 3 then 'Presidente' when l46_tipo = 4 then 'Secretário' when l46_tipo = 5 then 'Servidor Designado'
 	 when l46_tipo = 6 then 'Pregoeiro' end as cargo,
-				l46_naturezacargo as naturezaCargo
+				l46_naturezacargo as naturezaCargo,
+                liclicita.l20_leidalicitacao as leidalicitacao,
+                manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 				FROM liclicita as liclicita
 				INNER JOIN licpregao as licpregao on (liclicita.l20_equipepregao=licpregao.l45_sequencial)
 				INNER JOIN licpregaocgm as licpregaocgm on (licpregao.l45_sequencial=licpregaocgm.l46_licpregao)
 				INNER JOIN protocolo.cgm as cgm  on (licpregaocgm.l46_numcgm=cgm.z01_numcgm)
 				INNER JOIN configuracoes.db_config as db_config on (liclicita.l20_instit=db_config.codigo)
 				LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+                LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
 				WHERE db_config.codigo=" . db_getsession("DB_instit") . "
 				AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
@@ -296,10 +312,19 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 
             $clresplic20->si56_tiporegistro = 20;
             $clresplic20->si56_codorgao = $oDados20->codorgaoresp;
-            $clresplic20->si56_codunidadesub = $oDados20->codunidadesubresp;
+            if($oDados20->codunidsubant!= null || $oDados20->codunidsubant!=''){
+                $clresplic20->si56_codunidadesub = $oDados20->codunidsubant;    
+            }else{
+                $clresplic20->si56_codunidadesub = $oDados20->codunidadesubresp;
+            }
+
             $clresplic20->si56_exerciciolicitacao = $oDados20->exerciciolicitacao;
             $clresplic20->si56_nroprocessolicitatorio = $oDados20->nroprocessolicitatorio;
-            $clresplic20->si56_codtipocomissao = $oDados20->codtipocomissao;
+            if ($oDados20->leidalicitacao == 2) {
+                $clresplic20->si56_codtipocomissao = $oDados20->codtipocomissao;
+            } else {
+                $clresplic20->si56_codtipocomissao = null;
+            }
             $clresplic20->si56_descricaoatonomeacao = $oDados20->descricaoatonomeacao;
             $clresplic20->si56_nroatonomeacao = $oDados20->nroatonomeacao;
             $clresplic20->si56_dataatonomeacao = $oDados20->dataatonomeacao;

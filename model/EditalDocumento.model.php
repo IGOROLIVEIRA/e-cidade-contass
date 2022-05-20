@@ -48,7 +48,7 @@ class EditalDocumento
 	public function __construct($iCodigo = null)
 	{
 		$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
-		if(isset($iCodigo)) {
+		if (isset($iCodigo)) {
 			$sSQL = $oDaoEditalDocumento->sql_query_file($iCodigo, 'l48_sequencial, l48_nomearquivo, l48_tipo, l20_nroedital, l48_liclicita, l48_arquivo');
 			$rsEditalDocumento = $oDaoEditalDocumento->sql_record($sSQL);
 
@@ -118,7 +118,6 @@ class EditalDocumento
 			pg_lo_write($oObjetoBanco, $rsDadosDocumento);
 			pg_lo_close($oObjetoBanco);
 			db_fim_transacao();
-
 		} catch (Exception $oErro) {
 			db_fim_transacao(true);
 		}
@@ -147,7 +146,6 @@ class EditalDocumento
 		}
 
 		return $this->aDocumento;
-
 	}
 
 
@@ -285,7 +283,8 @@ class EditalDocumento
 	 *
 	 * Seta o arquivo
 	 */
-	public function setArquivo($sArquivo){
+	public function setArquivo($sArquivo)
+	{
 		$this->sArquivo = $sArquivo;
 	}
 
@@ -294,7 +293,8 @@ class EditalDocumento
 	 * Retorna o arquivo
 	 * @return String
 	 */
-	public function getArquivo(){
+	public function getArquivo()
+	{
 		return $this->sArquivo;
 	}
 }

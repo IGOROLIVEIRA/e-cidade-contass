@@ -53,6 +53,7 @@ $db_opcao = 1;
 
 ?>
 <html>
+
 <head>
   <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -64,310 +65,310 @@ $db_opcao = 1;
   db_app::load("estilos.css,grid.style.css");
   ?>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
-<div style="margin-top: 10px;"></div>
-<form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
-  <center>
-    <div style="width: 600px;">
-      <fieldset>
-        <legend><b>Adicionar Documento:</b></legend>
-        <table>
-          <tr>
-            <td valign="top">
-              <b>Documento: </b>
-            </td>
-            <td valign='top' style="height: 25px;">
-              <?php
-              db_input("uploadfile",30,0,true,"file",1);
-              db_input("namefile",30,0,true,"hidden",1);
-              ?>
-            </td>
-          </tr>
-          <tr id='lancaDoc'>
-            <td nowrap title="<?=@$Tdb44_descricao?>">
-              <b>Tipo:</b>
-            </td>
-            <td>
-              <?
-              switch ($codtribunal) {
-                case 100:
-                case 101:
-                case 102:
-                case 103:
-                case 106:
-                  if($natureza_objeto != 1 || $natureza_objeto == 7){
-                    $aTipos['td'] = 'Termo de Dispensa';
-                  }else{
-                    $aTipos[] = 'Selecione';
-                    $aTipos['td'] = 'Termo da Dispensa';
-                    $aTipos['mc'] = 'Minuta do Contrato';
-                    $aTipos['po'] = 'Planilha Orçamentária';
-                    $aTipos['cr'] = 'Cronograma';
-                    $aTipos['cb'] = 'Composição BDI';
-                    $aTipos['fl'] = 'Fotos do local';
-                  }
-                  break;
+  <div style="margin-top: 10px;"></div>
+  <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+    <center>
+      <div style="width: 600px;">
+        <fieldset>
+          <legend><b>Adicionar Documento:</b></legend>
+          <table>
+            <tr>
+              <td valign="top">
+                <b>Documento: </b>
+              </td>
+              <td valign='top' style="height: 25px;">
+                <?php
+                db_input("uploadfile", 30, 0, true, "file", 1);
+                db_input("namefile", 30, 0, true, "hidden", 1);
+                ?>
+              </td>
+            </tr>
+            <tr id='lancaDoc'>
+              <td nowrap title="<?= @$Tdb44_descricao ?>">
+                <b>Tipo:</b>
+              </td>
+              <td>
+                <?
+                switch ($codtribunal) {
+                  case 100:
+                  case 101:
+                  case 102:
+                  case 103:
+                  case 106:
+                    if ($natureza_objeto != 1 || $natureza_objeto == 7) {
+                      $aTipos['td'] = 'Termo de Dispensa';
+                    } else {
+                      $aTipos[] = 'Selecione';
+                      $aTipos['td'] = 'Termo da Dispensa';
+                      $aTipos['mc'] = 'Minuta do Contrato';
+                      $aTipos['po'] = 'Planilha Orçamentária';
+                      $aTipos['cr'] = 'Cronograma';
+                      $aTipos['cb'] = 'Composição BDI';
+                      $aTipos['fl'] = 'Fotos do local';
+                    }
+                    break;
 
-                default:
-                  if($natureza_objeto != 1 || $natureza_objeto == 7){
-                    $aTipos['ed'] = 'Edital';
-                  }else{
-                    $aTipos[] = 'Selecione';
-					$aTipos['ed'] = 'Edital';
-                    $aTipos['mc'] = 'Minuta do Contrato';
-                    $aTipos['po'] = 'Planilha Orçamentária';
-                    $aTipos['cr'] = 'Cronograma';
-                    $aTipos['cb'] = 'Composição BDI';
-                    $aTipos['fl'] = 'Fotos do local';
-                  }
-                  break;
-              }
-              db_select('caddocumento', $aTipos, true, $db_opcao, "style='width:233px;'");
-              ?>
-            </td>
-          </tr>
+                  default:
+                    if ($natureza_objeto != 1 || $natureza_objeto == 7) {
+                      $aTipos['ed'] = 'Edital';
+                    } else {
+                      $aTipos[] = 'Selecione';
+                      $aTipos['ed'] = 'Edital';
+                      $aTipos['mc'] = 'Minuta do Contrato';
+                      $aTipos['po'] = 'Planilha Orçamentária';
+                      $aTipos['cr'] = 'Cronograma';
+                      $aTipos['cb'] = 'Composição BDI';
+                      $aTipos['fl'] = 'Fotos do local';
+                    }
+                    break;
+                }
+                db_select('caddocumento', $aTipos, true, $db_opcao, "style='width:233px;'");
+                ?>
+              </td>
+            </tr>
 
-        </table>
-      </fieldset>
-    </div>
-    <input type='button' id='btnSalvar' Value='Salvar' />
-    <div style="width: 600px;">
-      <fieldset>
-        <legend><b>Documentos Cadastrados</b></legend>
-        <div id='ctnDbGridDocumentos'>
-        </div>
-      </fieldset>
-    </div>
-  </center>
-</form>
+          </table>
+        </fieldset>
+      </div>
+      <input type='button' id='btnSalvar' Value='Salvar' />
+      <div style="width: 600px;">
+        <fieldset>
+          <legend><b>Documentos Cadastrados</b></legend>
+          <div id='ctnDbGridDocumentos'>
+          </div>
+        </fieldset>
+      </div>
+    </center>
+  </form>
 </body>
 <div id='teste' style='display:none'></div>
+
 </html>
 
 <script type="text/javascript">
+  var iLicitacao = '<?php echo $oGet->l20_codigo; ?>';
+  var iEdital = '<?php echo $oGet->l20_nroedital; ?>';
+  var iSequencial = '<?php echo $oGet->l47_sequencial; ?>';
+  var sUrlRpc = "lic4_licitacao.RPC.php";
 
-    var iLicitacao = '<?php echo $oGet->l20_codigo;?>';
-    var iEdital = '<?php echo $oGet->l20_nroedital;?>';
-    var iSequencial = '<?php echo $oGet->l47_sequencial;?>';
-    var sUrlRpc = "lic4_licitacao.RPC.php";
+  oGridDocumento = new DBGrid('gridDocumento');
+  oGridDocumento.nameInstance = "oGridDocumento";
+  oGridDocumento.setHeight(200);
+  oGridDocumento.setCellAlign(new Array("right", "right", "left", "center", "center"));
+  //oGridDocumento.setCellWidth("20%", "20%", "20%", "20%","20%");
+  oGridDocumento.setHeader(new Array("Codigo", "Edital", "Tipo", "Download", "Ação"));
+  oGridDocumento.show($('ctnDbGridDocumentos'));
 
-    oGridDocumento     = new DBGrid('gridDocumento');
-    oGridDocumento.nameInstance = "oGridDocumento";
-    oGridDocumento.setHeight(200);
-    oGridDocumento.setCellAlign(new Array("right","right","left","center", "center"));
-    //oGridDocumento.setCellWidth("20%", "20%", "20%", "20%","20%");
-    oGridDocumento.setHeader(new Array("Codigo","Edital","Tipo","Download", "Ação"));
-    oGridDocumento.show($('ctnDbGridDocumentos'));
+  js_getDocumento();
 
-    js_getDocumento();
+  /**
+   * Cria um listener para subir a imagem, e criar um preview da mesma
+   */
+  $("uploadfile").observe('change', function() {
+    if (!tipoArquivoValido($('uploadfile').files[0].type)) {
+      alert('Selecione um arquivo do tipo PDF ou XLS');
+      $('uploadfile').value = '';
+      return false;
+    }
+    startLoading();
+    var iFrame = document.createElement("iframe");
+    iFrame.src = 'func_uploadfiledocumento.php?clone=form1';
+    iFrame.id = 'uploadIframe';
+    $('teste').appendChild(iFrame);
+  });
 
-    /**
-     * Cria um listener para subir a imagem, e criar um preview da mesma
-     */
-    $("uploadfile").observe('change', function() {
-        if(!tipoArquivoValido($('uploadfile').files[0].type)){
-            alert('Selecione um arquivo do tipo PDF ou XLS');
-            $('uploadfile').value = '';
-            return false;
-        }
-        startLoading();
-        var iFrame = document.createElement("iframe");
-        iFrame.src = 'func_uploadfiledocumento.php?clone=form1';
-        iFrame.id  = 'uploadIframe';
-        $('teste').appendChild(iFrame);
+  if ($('caddocumento').length == 2) {
+    $('caddocumento').selectedIndex = 1;
+  }
+
+  function tipoArquivoValido(tipo) {
+    let valido = tipo.includes('pdf') || tipo.includes('xml') ? true : false;
+    return valido;
+  }
+
+  function startLoading() {
+    js_divCarregando('Aguarde... Carregando Documento', 'msgbox');
+  }
+
+  function endLoading() {
+    js_removeObj('msgbox');
+  }
+
+  function js_salvarDocumento() {
+    if ($F('namefile') == '') {
+
+      alert('Escolha um Documento!');
+      return false;
+    }
+
+    if ($F('caddocumento') == 0) {
+      alert('Selecione um Tipo Válido!');
+      return false;
+    }
+
+    var oParam = new Object();
+    oParam.exec = 'adicionarDocumento';
+    oParam.licitacao = iLicitacao;
+
+    oParam.tipo = $F('caddocumento');
+    oParam.arquivo = $F('namefile');
+    js_divCarregando('Aguarde... Salvando Documento', 'msgbox');
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParam),
+        method: 'post',
+        asynchronous: false,
+        onComplete: js_retornoSalvarDocumento
+      });
+  }
+
+  function js_retornoSalvarDocumento(oAjax) {
+
+    js_removeObj("msgbox");
+    var oRetorno = eval('(' + oAjax.responseText + ")");
+
+    if (oRetorno.status == 1) {
+      js_getDocumento();
+      $('uploadfile').value = '';
+      $("caddocumento").value = "";
+      $('namefile').value = '';
+    } else {
+      alert(oRetorno.message.urlDecode());
+    }
+
+    if ($('caddocumento').length == 2)
+      $('caddocumento').selectedIndex = 1;
+
+    document.getElementById('caddocumento').selectedIndex = 0;
+  }
+
+  function js_getDocumento() {
+    var oParam = new Object();
+    oParam.exec = 'getDocumento';
+    oParam.licitacao = iLicitacao;
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParam),
+        asynchronous: false,
+        method: 'post',
+        onComplete: js_retornoGetDocumento
+      });
+  }
+
+  function js_descricaoTipo(sigla) {
+    let nova_sigla = '';
+    switch (sigla) {
+      case 'ed':
+        nova_sigla = 'Edital';
+        break;
+      case 'td':
+        nova_sigla = 'Termo de Dispensa';
+        break;
+      case 'mc':
+        nova_sigla = 'Minuta do Contrato';
+        break;
+      case 'po':
+        nova_sigla = 'Planilha Orçamentária';
+        break;
+      case 'cr':
+        nova_sigla = 'Cronograma';
+        break;
+      case 'cb':
+        nova_sigla = 'Composição do BDI';
+        break;
+      case 'fl':
+        nova_sigla = 'Fotos do local';
+        break;
+    }
+    return nova_sigla;
+  }
+
+  function js_retornoGetDocumento(oAjax) {
+
+    var oRetorno = eval('(' + oAjax.responseText + ")");
+
+    oGridDocumento.clearAll(true);
+
+    if (oRetorno.dados.length == 0) {
+      return false;
+    }
+
+    oRetorno.dados.each((oDocumento, iSeq) => {
+
+      var aLinha = new Array();
+      aLinha[0] = iSeq + 1;
+      aLinha[1] = oDocumento.iEdital != null ? oDocumento.iEdital : ' ';
+      aLinha[2] = js_descricaoTipo(oDocumento.iTipo);
+      aLinha[3] = '<input type="button" value="Dowload" onclick="js_documentoDownload(' + oDocumento.iCodigo + ')">';
+      aLinha[4] = '<input type="button" value="E" onclick="js_excluirDocumento(' + oDocumento.iCodigo + ')">';
+      oGridDocumento.addRow(aLinha);
     });
 
-    if($('caddocumento').length == 2){
-        $('caddocumento').selectedIndex = 1;
+    oGridDocumento.renderRows();
+
+  }
+  $('btnSalvar').observe("click", js_salvarDocumento);
+  js_getDocumento();
+
+  function js_excluirDocumento(iCodigoDocumento) {
+    if (!confirm('Confirma a Exclusão do Documento?')) {
+      return false;
+    }
+    var oParam = new Object();
+    oParam.exec = 'excluirDocumento';
+    oParam.codigoDocumento = iCodigoDocumento;
+    js_divCarregando('Aguarde... excluindo documento', 'msgbox');
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        asynchronous: false,
+        parameters: 'json=' + Object.toJSON(oParam),
+        method: 'post',
+        onComplete: js_retornoExcluiDocumento
+      });
+
+  }
+
+  function js_retornoExcluiDocumento(oAjax) {
+
+    js_removeObj("msgbox");
+    var oRetorno = eval('(' + oAjax.responseText + ")");
+    if (oRetorno.status == 2) {
+      alert("Não foi possivel excluir o documento:\n " + oRetorno.message);
     }
 
-    function tipoArquivoValido(tipo){
-        let valido = tipo.includes('pdf') || tipo.includes('xml') ? true : false;
-        return valido;
-    }
-
-    function startLoading() {
-        js_divCarregando('Aguarde... Carregando Documento','msgbox');
-    }
-
-    function endLoading() {
-        js_removeObj('msgbox');
-    }
-
-    function js_salvarDocumento() {
-        if ($F('namefile') == '') {
-
-            alert('Escolha um Documento!');
-            return false;
-        }
-
-        if($F('caddocumento') == 0){
-            alert('Selecione um Tipo Válido!');
-            return false;
-        }
-
-        var oParam       = new Object();
-        oParam.exec      = 'adicionarDocumento';
-        oParam.licitacao    = iLicitacao;
-
-        oParam.tipo      = $F('caddocumento');
-        oParam.arquivo   = $F('namefile');
-        js_divCarregando('Aguarde... Salvando Documento','msgbox');
-        var oAjax        = new Ajax.Request(
-            sUrlRpc,
-            { parameters: 'json='+Object.toJSON(oParam),
-                method: 'post',
-                asynchronous:false,
-                onComplete : js_retornoSalvarDocumento
-            });
-    }
-
-    function js_retornoSalvarDocumento(oAjax) {
-
-        js_removeObj("msgbox");
-        var oRetorno = eval('('+oAjax.responseText+")");
-
-        alert(oRetorno.message.urlDecode());
-
-        if (oRetorno.status == 1) {
-            js_getDocumento();
-            $('uploadfile').value     = '';
-            $("caddocumento").value = "";
-            $('namefile').value = '';
-        }
-
-        if($('caddocumento').length == 2)
-            $('caddocumento').selectedIndex = 1;
-
-        document.getElementById('caddocumento').selectedIndex = 0;
-    }
-
-    function js_getDocumento() {
-        var oParam       = new Object();
-        oParam.exec      = 'getDocumento';
-        oParam.licitacao   = iLicitacao;
-        var oAjax        = new Ajax.Request(
-            sUrlRpc,
-            { parameters: 'json='+Object.toJSON(oParam),
-                asynchronous:false,
-                method: 'post',
-                onComplete : js_retornoGetDocumento
-            });
-    }
-
-    function js_descricaoTipo(sigla){
-        let nova_sigla = '';
-        switch (sigla) {
-            case 'ed':
-                nova_sigla = 'Edital';
-                break;
-            case 'td':
-                nova_sigla = 'Termo de Dispensa';
-                break;
-            case 'mc':
-                nova_sigla = 'Minuta do Contrato';
-                break;
-            case 'po':
-                nova_sigla = 'Planilha Orçamentária';
-                break;
-            case 'cr':
-                nova_sigla = 'Cronograma';
-                break;
-            case 'cb':
-                nova_sigla = 'Composição do BDI';
-                break;
-            case 'fl':
-                nova_sigla = 'Fotos do local';
-                break;
-        }
-        return nova_sigla;
-    }
-
-    function js_retornoGetDocumento(oAjax) {
-
-        var oRetorno = eval('('+oAjax.responseText+")");
-
-        oGridDocumento.clearAll(true);
-
-        if (oRetorno.dados.length == 0) {
-            return false;
-        }
-
-        oRetorno.dados.each( (oDocumento, iSeq) => {
-
-            var aLinha = new Array();
-            aLinha[0]  = iSeq + 1;
-            aLinha[1]  = oDocumento.iEdital != null ? oDocumento.iEdital : ' ';
-            aLinha[2]  = js_descricaoTipo(oDocumento.iTipo);
-            aLinha[3]  = '<input type="button" value="Dowload" onclick="js_documentoDownload('+oDocumento.iCodigo+')">';
-            aLinha[4]  = '<input type="button" value="E" onclick="js_excluirDocumento('+oDocumento.iCodigo+')">';
-            oGridDocumento.addRow(aLinha);
-        });
-
-        oGridDocumento.renderRows();
-
-    }
-    $('btnSalvar').observe("click",js_salvarDocumento);
     js_getDocumento();
+    alert(oRetorno.message.urlDecode());
+  }
 
-    function js_excluirDocumento(iCodigoDocumento) {
-        if (!confirm('Confirma a Exclusão do Documento?')) {
-            return false;
-        }
-        var oParam             = new Object();
-        oParam.exec            = 'excluirDocumento';
-        oParam.codigoDocumento = iCodigoDocumento;
-        js_divCarregando('Aguarde... excluindo documento','msgbox');
-        var oAjax        = new Ajax.Request(
-            sUrlRpc,
-            { asynchronous:false,
-                parameters: 'json='+Object.toJSON(oParam),
-                method: 'post',
-                onComplete : js_retornoExcluiDocumento
-            });
+  function js_documentoDownload(iCodigoDocumento) {
 
+    if (!confirm('Deseja realizar o Download do Documento?')) {
+      return false;
     }
+    var oParam = new Object();
+    oParam.exec = 'downloadDocumento';
+    oParam.acordo = iLicitacao;
+    oParam.iCodigoDocumento = iCodigoDocumento;
+    js_divCarregando('Aguarde... realizando Download do documento', 'msgbox');
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        asynchronous: false,
+        parameters: 'json=' + Object.toJSON(oParam),
+        method: 'post',
+        onComplete: js_downloadDocumento
+      });
+  }
 
-    function js_retornoExcluiDocumento(oAjax) {
+  function js_downloadDocumento(oAjax) {
 
-        js_removeObj("msgbox");
-        var oRetorno = eval('('+oAjax.responseText+")");
-        if (oRetorno.status == 2) {
-            alert("Não foi possivel excluir o documento:\n "+ oRetorno.message);
-        }
-
-        js_getDocumento();
-        alert(oRetorno.message.urlDecode());
+    js_removeObj("msgbox");
+    var oRetorno = eval('(' + oAjax.responseText + ")");
+    if (oRetorno.status == 2) {
+      alert("Não foi possivel carregar o documento:\n " + oRetorno.message);
     }
-
-    function js_documentoDownload(iCodigoDocumento) {
-
-        if (!confirm('Deseja realizar o Download do Documento?')) {
-            return false;
-        }
-        var oParam             = new Object();
-        oParam.exec            = 'downloadDocumento';
-        oParam.acordo          = iLicitacao;
-        oParam.iCodigoDocumento = iCodigoDocumento;
-        js_divCarregando('Aguarde... realizando Download do documento','msgbox');
-        var oAjax        = new Ajax.Request(
-            sUrlRpc,
-            { asynchronous:false,
-                parameters: 'json='+Object.toJSON(oParam),
-                method: 'post',
-                onComplete : js_downloadDocumento
-            });
-    }
-
-    function js_downloadDocumento(oAjax) {
-
-        js_removeObj("msgbox");
-        var oRetorno = eval('('+oAjax.responseText+")");
-        if (oRetorno.status == 2) {
-            alert("Não foi possivel carregar o documento:\n "+ oRetorno.message);
-        }
-        window.open("db_download.php?arquivo="+oRetorno.nomearquivo);
-    }
-
+    window.open("db_download.php?arquivo=" + oRetorno.nomearquivo);
+  }
 </script>

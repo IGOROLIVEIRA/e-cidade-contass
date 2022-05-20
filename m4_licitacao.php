@@ -139,7 +139,7 @@ if (isset($alterar)) {
     }
   }
 
-  if ($manutlic_codunidsubanterior != $manutlic_codunidsubanterior_old) {
+  if ($manutlic_codunidsubanterior != $manutlic_codunidsubanterior_old || $manutlic_codunidsubanterior == '') {
     $change = true;
 
     $sSqlMaxManutLic = $clmanutencaolicitacao->sql_query_file(null, "max(manutlic_sequencial)", null, "manutlic_licitacao = $l20_codigo");
@@ -393,6 +393,20 @@ if (isset($alterar)) {
               endif;
               ?>
 
+
+
+<tr>
+                    <td nowrap title="Codunidsubanterior">
+                      <strong>Codunidsubanterior:</strong>
+                    </td>
+                    <td>
+                      <?
+                      db_input('manutlic_codunidsubanterior', 10, $Imanutlic_codunidsubanterior, true, 'text', 2, "");
+                      db_input('manutlic_codunidsubanterior_old', 10, $Imanutlic_codunidsubanterior, true, 'hidden', 2, "");
+                      ?>
+                    </td>
+                  </tr>
+
               <?php
               if ($chavepesquisa2 != 101) :
                 if ($chavepesquisa2 != 100) :
@@ -413,18 +427,10 @@ if (isset($alterar)) {
                   db_input('l20_nroedital_old', 10, $Il20_nroedital, true, 'hidden', 2, "");
                   ?>
 
-                  <tr>
-                    <td nowrap title="Codunidsubanterior">
-                      <strong>Codunidsubanterior:</strong>
-                    </td>
-                    <td>
-                      <?
-                      db_input('manutlic_codunidsubanterior', 10, $Imanutlic_codunidsubanterior, true, 'text', 2, "");
-                      db_input('manutlic_codunidsubanterior_old', 10, $Imanutlic_codunidsubanterior, true, 'hidden', 2, "");
-                      ?>
-                    </td>
-                  </tr>
 
+              
+                  
+                  
 
 
                   <?php

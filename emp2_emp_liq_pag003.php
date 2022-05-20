@@ -39,7 +39,13 @@ $cliframe_seleciona = new cl_iframe_seleciona;
 $aux = new cl_arquivo_auxiliar;
 $clpctipocompra = new cl_pctipocompra;
 
+parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
+ 
+
+if (!isset($desdobramento)){
+    $desdobramento = "true";
+ }
 
 ?>
 <html>
@@ -50,6 +56,13 @@ db_postmemory($HTTP_POST_VARS);
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script>
+//habilitar e desabilitar campo mostrar lançamento
+function disable_select(){
+  document.getElementById("mostrarlancamentos").disabled=true
+}
+function enable_select(){
+  document.getElementById("mostrarlancamentos").disabled=false
+}
 function js_imprime(){
  vir="";
  listacredor="";
@@ -57,6 +70,7 @@ function js_imprime(){
   listacredor+=vir+document.form1.credor.options[x].value;
   vir=",";
  }
+
 // document.form1.listacredor.value = listacredor;
   sel_instit  = document.form1.db_selinstit.value;    
   if(sel_instit == 0){
@@ -91,6 +105,10 @@ function js_imprime(){
 	   sURL += '&ordem='+document.form1.ordem.value;
 	   sURL += '&com_mov='+document.form1.com_mov.value;
 	   sURL += '&rp='+document.form1.rp.value;
+     sURL += '&tipopessoa='+document.form1.tipopessoa.value;
+     sURL += '&agrupar='+document.form1.agrupar.value;
+     sURL += '&autonomofiltro='+document.form1.autonomofiltro.value;
+     sURL += '&mostrarlancamentos='+document.form1.mostrarlancamentos.value;
 	   sURL += '&tipocompra='+document.form1.tipocompra.value;							   
 	   sURL += '&mostraritem='+document.form1.mostraritem.value;
 	   sURL += '&com_ou_sem='+document.form1.com_ou_sem.value;
@@ -202,7 +220,7 @@ function js_imprime(){
                     <option name="com_mov" value="s">Sim</option>
                     <option name="com_mov" value="n">Não</option>
                </select><br>
-               <b> Mostrar Items: </b>
+               <b> Mostrar Itens: </b>
                <select name="mostraritem">
                     <option name="mostraritem" value="m">Sim</option>
                     <option name="mostraritem" value="n">Não</option>
@@ -212,6 +230,31 @@ function js_imprime(){
                     <option name="rp" value="s">Sim</option>
                     <option name="rp" value="n">Não</option>
                     <option name="rp" value="somente">Somente RP</option>
+               </select><br>
+               <b>  Tipo Documento: </b>
+               <select name="tipopessoa">
+                    <option name="tipopessoa" value="todos">Todos</option>
+                    <option name="tipopessoa" value="cpf">CPF</option>
+                    <option name="tipopessoa" value="cnpj">CNPJ</option>
+               </select><br>
+               <b>  Agrupar Por: </b>
+               <select name="agrupar">
+                    <option name="agrupar" value="n" onclick="disable_select()">Não Agrupar</option>
+                    <option name="agrupar" value="c" onclick="enable_select()">Credor</option>
+                   
+               </select><br>
+               <b>  Mostrar lançamentos: </b>
+               <select name="mostrarlancamentos" id="mostrarlancamentos" disabled>
+                    <option name="mostrarlancamentos" value="s">Sim</option>
+                    <option name="mostrarlancamentos" value="n">Não</option>    
+               </select><br>
+               
+               </select><br>
+               <b>  Filtro: </b>
+               <select name="autonomofiltro">
+                    <option name="autonomofiltro" value="n">Nenhum</option>
+                    <option name="autonomofiltro" value="a">Autônomos</option>
+                   
                </select><br>
 
            </td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

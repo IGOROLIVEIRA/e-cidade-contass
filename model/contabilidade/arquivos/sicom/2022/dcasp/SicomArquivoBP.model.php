@@ -27,14 +27,14 @@ require_once("classes/db_bpdcasp712022_classe.php");
 require_once("model/contabilidade/arquivos/sicom/2022/dcasp/geradores/GerarBP.model.php");
 
 /**
- * gerar arquivo de Balan√ßo Patrimonial
+ * gerar arquivo de BalanÁo Patrimonial
  * @author gabriel
  * @package Contabilidade
  */
 class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
-  protected $iCodigoLayout = 151; // C√≥digo do relat√≥rio
+  protected $iCodigoLayout = 151; // CÛdigo do relatÛrio
 
   protected $sNomeArquivo = 'BP';
 
@@ -75,7 +75,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function __construct() { }
 
   /**
-   * selecionar os dados do balan√ßo patrimonial pra gerar o arquivo
+   * selecionar os dados do balanÁo patrimonial pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
@@ -205,11 +205,11 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     /**
-     * O m√©todo `getDados()`, da classe `BalancoPatromonialDCASP2022()`,
-     * retorna um array enorme. Para pegar os dados necess√°rios para cada
-     * registro do SICOM DCASP, estamos passando os √≠ndices exatos do array.
-     * Se eles forem alterados (nas configura√ß√µes dos relat√≥rios), devem
-     * ser alterados aqui tamb√©m.
+     * O mÈtodo `getDados()`, da classe `BalancoPatromonialDCASP2022()`,
+     * retorna um array enorme. Para pegar os dados necess·rios para cada
+     * registro do SICOM DCASP, estamos passando os Ìndices exatos do array.
+     * Se eles forem alterados (nas configuraÁıes dos relatÛrios), devem
+     * ser alterados aqui tambÈm.
      */
 
     $oBalancoPatrimonial = new BalancoPatrimonialDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
@@ -227,7 +227,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oRetornoBP = $oBalancoPatrimonial->getDados();
 
     /** BPDCASP102022
-     *  Quadro principal do relat√≥rio
+     *  Quadro principal do relatÛrio
      */
 
     $aExercicios = array(
@@ -294,7 +294,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp20->si209_vlpatriliquidoreservalucros         = $oRetornoBP[43]->$sChave;
       $clbpdcasp20->si209_vlpatriliquidodemaisreservas        = $oRetornoBP[44]->$sChave;
 
-      //para pegar o superavit do exercicio atual e anterior √© necess√°rio alterar o anousu
+      //para pegar o superavit do exercicio atual e anterior È necess·rio alterar o anousu
       $iAno = db_getsession("DB_anousu");
       if($iValorNumerico == 2){
         $iAno = $iAno-1;
@@ -502,7 +502,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         }
       }
       /**
-       * o registro 70 √© o total do registro 71
+       * o registro 70 È o total do registro 71
        */
       $clbpdcasp70  = new cl_bpdcasp702022();
 

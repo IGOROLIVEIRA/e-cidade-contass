@@ -92,7 +92,7 @@ $where = ' 1=1 ';
 if ($codrec != '') {
 	$where .= ' and g.k02_codigo in ('.$codrec.') ';
 }
-if($sinana == 'A' || $sinana == 'S4' || $sinana == 'S3') {
+if($sinana == 'S1' || $sinana == 'S2' || $sinana == 'A' || $sinana == 'S4' || $sinana == 'S3') {
 	if ($conta != '') {
 		$where2 .= " and c61_reduz in ({$conta}) ";
 	}
@@ -187,7 +187,7 @@ if ($sinana == 'S1') {
 						( ";
 	}				
 
-  $sSqlInterno ="select g.k02_codigo, g.k02_tipo, g.k02_drecei,
+  $sSqlInterno ="select g.k02_codigo, g.k02_tipo, g.k02_drecei,c2.c61_reduz,
   				case when o.k02_codrec is not null 	then o.k02_codrec else p.k02_reduz end as codrec,
 				case when p.k02_codigo is null 	then o.k02_estorc else p.k02_estpla end as estrutural,
 				round(sum( f.k12_valor #subquery_desconto#) ,2) as valor
@@ -200,13 +200,15 @@ if ($sinana == 'S1') {
 										and o.k02_anousu	= extract (year from r.k12_data)
 				left outer join tabplan p on p.k02_codigo	= g.k02_codigo
 										 and p.k02_anousu 	= extract (year from r.k12_data)
+										 left outer join conplanoreduz c2 on r.k12_conta  	= c2.c61_reduz 
+										 and	c2.c61_anousu	= extract (year from r.k12_data)							 
 				left join corplacaixa on r.k12_id 	   		= k82_id
 										 and r.k12_data   	= k82_data
 										 and r.k12_autent  	= k82_autent
      			left join placaixarec on k82_seqpla 		= k81_seqpla
                 $inner_sql
 			    where $where and f.k12_data between '$datai' and '$dataf' and r.k12_instit = ".db_getsession("DB_instit")."
-			    group by g.k02_tipo, g.k02_codigo, g.k02_drecei, codrec, estrutural ";
+			    group by g.k02_tipo, g.k02_codigo, g.k02_drecei, codrec, estrutural,c2.c61_reduz ";
 
      $sql .= str_replace("#subquery_desconto#","$sSubQueryDesconto",$sSqlInterno).
              " union all " .
@@ -219,7 +221,7 @@ if ($sinana == 'S1') {
 	}elseif ($formarrecadacao == 2) {
 		$sql .= " ) as xxx $where2 $orderby)as x ";
 	}	
-//die($sql);
+// die($sql);
 }
 elseif ($sinana == 'S2') {
 	// sintetico estrutural
@@ -260,7 +262,7 @@ elseif ($sinana == 'S2') {
 			    ( ";
 	}
 
-	$sSqlInterno = "	select k02_tipo,
+	$sSqlInterno = "	select k02_tipo,c61_reduz,
 						case when c60_descr is not null then c60_descr else o57_descr end as descr,
 						case when p.k02_codigo is null then o.k02_estorc else p.k02_estpla end as estrutural,
 						round(f.k12_valor #subquery_desconto# ,2) as valor, g.k02_codigo, f.k12_data
@@ -273,7 +275,8 @@ elseif ($sinana == 'S2') {
 												and	o.k02_anousu 			= extract (year from r.k12_data)
 						left outer join tabplan p on p.k02_codigo 			= g.k02_codigo 
 												and	 p.k02_anousu 			= extract (year from r.k12_data)
-						left outer join conplanoreduz c1 on p.k02_reduz   	= c1.c61_reduz 
+						left outer join conplanoreduz c1 on		p.k02_reduz = c1.c61_reduz
+								or r.k12_conta  	= c1.c61_reduz
 														and	c1.c61_anousu	= extract (year from r.k12_data)
 						left outer join conplano on c1.c61_codcon 			= c60_codcon
 												and c1.c61_anousu 			= c60_anousu
@@ -305,7 +308,7 @@ elseif ($sinana == 'S2') {
 
 	$sql .= ' order by estrutural';
 
-//die($sql);
+// die($sql);
 } elseif ($sinana == 'A') {
 	/**
 	 *  analitico

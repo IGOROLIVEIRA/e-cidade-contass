@@ -204,7 +204,8 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
                WHEN liclicita.l20_criterioadjudicacao is null THEN 3
                WHEN liclicita.l20_criterioadjudicacao = 0 THEN 3
                ELSE liclicita.l20_criterioadjudicacao
-           END AS criterioAdjudicacao
+           END AS criterioAdjudicacao,
+		manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
     	FROM liclicita as liclicita
     	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
     	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
@@ -226,7 +227,8 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
     	LEFT JOIN aberlic112022 on (liclicitemlote.l04_descricao = aberlic112022.si47_dsclote  and aberlic112022.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
     	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
     	INNER JOIN itenshomologacao ON itenshomologacao.l203_homologaadjudicacao = homologacaoadjudica.l202_sequencial and l203_item = pc81_codprocitem
-    	WHERE db_config.codigo =" . db_getsession("DB_instit") . "
+    	LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
+		WHERE db_config.codigo =" . db_getsession("DB_instit") . "
     	AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao) =" . db_getsession("DB_anousu") . "
     	AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao) =" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
     	AND pc24_pontuacao = 1
@@ -256,7 +258,11 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 					$oDados10 = new stdClass();
 					$oDados10->si63_tiporegistro = 10;
 					$oDados10->si63_codorgao = $oResult10->codorgaoresp;
-					$oDados10->si63_codunidadesub = $oResult10->codunidadesubresp;
+					if($oResult10->codunidsubant!= null || $oResult10->codunidsubant!=''){
+						$oDados10->si63_codunidadesub = $oResult10->codunidsubant;    
+					}else{
+						$oDados10->si63_codunidadesub = $oResult10->codunidadesubresp;
+					}
 					$oDados10->si63_exerciciolicitacao = $oResult10->exerciciolicitacao;
 					$oDados10->si63_nroprocessolicitatorio = $oResult10->nroprocessolicitatorio;
 					$oDados10->si63_tipodocumento = $oResult10->tipodocumento;
@@ -320,7 +326,8 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
                WHEN liclicita.l20_criterioadjudicacao is null THEN 3
                WHEN liclicita.l20_criterioadjudicacao = 0 THEN 3
                ELSE liclicita.l20_criterioadjudicacao
-           END AS criterioAdjudicacao
+           END AS criterioAdjudicacao,
+	manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
     FROM liclicita
     INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
     INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
@@ -343,7 +350,8 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
     LEFT JOIN aberlic112022 on (liclicitemlote.l04_descricao = aberlic112022.si47_dsclote  and aberlic112022.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
     LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
     INNER JOIN itenshomologacao ON itenshomologacao.l203_homologaadjudicacao = homologacaoadjudica.l202_sequencial and l203_item = pc81_codprocitem
-    WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
+    LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
+	WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
     and liclicita.l20_codigo in (".implode(',', $aLicitacoes).") order by liclicita.l20_edital";
 
 		$rsResult20 = db_query($sSql);
@@ -360,7 +368,11 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 					$clhomolic20 = new cl_homolic202022();
 					$clhomolic20->si64_tiporegistro = 20;
 					$clhomolic20->si64_codorgao = $oDados20->codorgaoresp;
-					$clhomolic20->si64_codunidadesub = $oDados20->codunidadesubresp;
+					if($oDados20->codunidsubant!= null || $oDados20->codunidsubant!=''){
+						$clhomolic20->si64_codunidadesub = $oDados20->codunidsubant;    
+					}else{
+						$clhomolic20->si64_codunidadesub = $oDados20->codunidadesubresp;
+					}
 					$clhomolic20->si64_exerciciolicitacao = $oDados20->exerciciolicitacao;
 					$clhomolic20->si64_nroprocessolicitatorio = $oDados20->nroprocessolicitatorio;
 					$clhomolic20->si64_tipodocumento = $oDados20->tipodocumento;
@@ -408,7 +420,8 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
                WHEN liclicita.l20_criterioadjudicacao is null THEN 3
                WHEN liclicita.l20_criterioadjudicacao = 0 THEN 3
                ELSE liclicita.l20_criterioadjudicacao
-           END AS criterioAdjudicacao
+           END AS criterioAdjudicacao,
+		   manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
           FROM liclicita
           INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
           INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
@@ -430,7 +443,8 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
           LEFT JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
           LEFT JOIN aberlic112022 on (liclicitemlote.l04_descricao = aberlic112022.si47_dsclote  and aberlic112022.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
           LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
-          WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
+		  LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo) 
+		  WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
           AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao) =" . db_getsession("DB_anousu") . "
           AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao) =" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
           AND liclicita.l20_codigo in (".implode(",", $aLicitacoes).")  order by liclicita.l20_edital ";
@@ -449,7 +463,11 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 					$clhomolic30->si65_tiporegistro = 30;
 					$clhomolic30->si65_codorgao = $oDados30->codorgaoresp;
-					$clhomolic30->si65_codunidadesub = $oDados30->codunidadesubresp;
+					if($oDados30->codunidsubant!= null || $oDados30->codunidsubant!=''){
+						$clhomolic30->si65_codunidadesub = $oDados30->codunidsubant;    
+					}else{
+						$clhomolic30->si65_codunidadesub = $oDados30->codunidadesubresp;
+					}
 					$clhomolic30->si65_exerciciolicitacao = $oDados30->exerciciolicitacao;
 					$clhomolic30->si65_nroprocessolicitatorio = $oDados30->nroprocessolicitatorio;
 					$clhomolic30->si65_tipodocumento = $oDados30->tipodocumento;
@@ -487,11 +505,13 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,
 	homologacaoadjudica.l202_datahomologacao as dtHomologacao,
-	(case when liclicita.l20_tipnaturezaproced = 2 then null else homologacaoadjudica.l202_dataadjudicacao end) as dtAdjudicacao
+	(case when liclicita.l20_tipnaturezaproced = 2 then null else homologacaoadjudica.l202_dataadjudicacao end) as dtAdjudicacao,
+	manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 	FROM liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+	LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
 	WHERE db_config.codigo= " . db_getsession("DB_instit") . "
 	AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")
 	and l202_datahomologacao is not null
@@ -512,7 +532,11 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 				$clhomolic40 = new cl_homolic402022();
 				$clhomolic40->si65_tiporegistro = 40;
 				$clhomolic40->si65_codorgao = $oDados40->codorgaoresp;
-				$clhomolic40->si65_codunidadesub = $oDados40->codunidadesubresp;
+				if($oDados40->codunidsubant!= null || $oDados40->codunidsubant!=''){
+					$clhomolic40->si65_codunidadesub = $oDados40->codunidsubant;    
+				}else{
+					$clhomolic40->si65_codunidadesub = $oDados40->codunidadesubresp;
+				}
 				$clhomolic40->si65_exerciciolicitacao = $oDados40->exerciciolicitacao;
 				$clhomolic40->si65_nroprocessolicitatorio = $oDados40->nroprocessolicitatorio;
 				$clhomolic40->si65_dthomologacao = $oDados40->dthomologacao;
@@ -530,7 +554,11 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 			$clhomolic10->si63_tiporegistro = $oDadosAgrupados->si63_tiporegistro;
 			$clhomolic10->si63_codorgao = $oDadosAgrupados->si63_codorgao;
-			$clhomolic10->si63_codunidadesub = $oDadosAgrupados->si63_codunidadesub;
+			if($oDadosAgrupados->codunidsubant!= null || $oDadosAgrupados->codunidsubant!=''){
+				$clhomolic10->si63_codunidadesub = $oDadosAgrupados->codunidsubant;    
+			}else{
+				$clhomolic10->si63_codunidadesub = $oDadosAgrupados->si63_codunidadesub;
+			}
 			$clhomolic10->si63_exerciciolicitacao = $oDadosAgrupados->si63_exerciciolicitacao;
 			$clhomolic10->si63_nroprocessolicitatorio = $oDadosAgrupados->si63_nroprocessolicitatorio;
 			$clhomolic10->si63_tipodocumento = $oDadosAgrupados->si63_tipodocumento;
@@ -554,7 +582,11 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 			$clhomolic20->si64_tiporegistro = $oDadosAgrupados->si64_tiporegistro;
 			$clhomolic20->si64_codorgao = $oDadosAgrupados->si64_codorgao;
-			$clhomolic20->si64_codunidadesub = $oDadosAgrupados->si64_codunidadesub;
+			if($oDadosAgrupados->codunidsubant!= null || $oDadosAgrupados->codunidsubant!=''){
+				$clhomolic20->si64_codunidadesub = $oDadosAgrupados->codunidsubant;    
+			}else{
+				$clhomolic20->si64_codunidadesub = $oDadosAgrupados->si64_codunidadesub;
+			}
 			$clhomolic20->si64_exerciciolicitacao = $oDadosAgrupados->si64_exerciciolicitacao;
 			$clhomolic20->si64_nroprocessolicitatorio = $oDadosAgrupados->si64_nroprocessolicitatorio;
 			$clhomolic20->si64_tipodocumento = $oDadosAgrupados->si64_tipodocumento;
@@ -579,7 +611,11 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 			$clhomolic30->si65_tiporegistro = $oDadosAgrupados->si65_tiporegistro;
 			$clhomolic30->si65_codorgao = $oDadosAgrupados->si65_codorgao;
-			$clhomolic30->si65_codunidadesub = $oDadosAgrupados->si65_codunidadesub;
+			if($oDadosAgrupados->codunidsubant!= null || $oDadosAgrupados->codunidsubant!=''){
+				$clhomolic30->si65_codunidadesub = $oDadosAgrupados->codunidsubant;    
+			}else{
+				$clhomolic30->si65_codunidadesub = $oDadosAgrupados->si65_codunidadesub;
+			}
 			$clhomolic30->si65_exerciciolicitacao = $oDadosAgrupados->si65_exerciciolicitacao;
 			$clhomolic30->si65_nroprocessolicitatorio = $oDadosAgrupados->si65_nroprocessolicitatorio;
 			$clhomolic30->si65_tipodocumento = $oDadosAgrupados->si65_tipodocumento;
@@ -603,7 +639,11 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 			$clhomolic40->si65_tiporegistro = 40;
 			$clhomolic40->si65_codorgao = $oDadosAgrupados->si65_codorgao;
-			$clhomolic40->si65_codunidadesub = $oDadosAgrupados->si65_codunidadesub;
+			if($oDadosAgrupados->codunidsubant!= null || $oDadosAgrupados->codunidsubant!=''){
+				$clhomolic40->si65_codunidadesub = $oDadosAgrupados->codunidsubant;    
+			}else{
+				$clhomolic40->si65_codunidadesub = $oDadosAgrupados->si65_codunidadesub;
+			}
 			$clhomolic40->si65_exerciciolicitacao = $oDadosAgrupados->si65_exerciciolicitacao;
 			$clhomolic40->si65_nroprocessolicitatorio = $oDadosAgrupados->si65_nroprocessolicitatorio;
 			$clhomolic40->si65_dthomologacao = $oDadosAgrupados->si65_dthomologacao;
