@@ -70,22 +70,24 @@ if (isset($incluir)) {
     }
 
     #oGridItensrow0cell0 {
-      width: 30px !important;
+      width: 50px !important;
 
     }
 
+
+
     #col2 {
-      width: 30px !important;
+      width: 50px !important;
 
     }
 
     #oGridItensrow0cell1 {
-      width: 244px !important;
+      width: 380px !important;
 
     }
 
     #col3 {
-      width: 244px !important;
+      width: 380px !important;
 
     }
 
