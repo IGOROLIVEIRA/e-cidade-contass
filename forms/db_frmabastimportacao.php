@@ -377,7 +377,7 @@ if (isset($_POST["processar"])) {
 
                     </td>
                     <td>
-                        <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 1, "onchange='js_pesquisae60_codemp(false,0);'") ?>
+                        <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 1, "placeholder='num/ano' onchange='js_pesquisae60_codemp(false,0);'") ?>
                     </td>
                     <td>
                         <?
