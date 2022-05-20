@@ -169,7 +169,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         <table border="0">
                 <tr>
                     <td nowrap title="Número Empenho">
-                        <b>Número Empenho</b>
+                        <b>Número do Empenho</b>
                     </td>
                     <td>
                         <?php
