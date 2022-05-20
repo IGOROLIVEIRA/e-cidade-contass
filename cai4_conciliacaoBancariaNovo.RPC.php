@@ -184,6 +184,7 @@ try {
             $data_final = data($oParam->params[0]->data_final);
             $data_conciliacao = data($oParam->params[0]->data_final);
             $saldo_final_extrato = $oParam->params[0]->saldo_final_extrato;
+            $fechar_conciliacao = $oParam->params[0]->fechar_conciliacao ? data($oParam->params[0]->fechar_conciliacao) : "";
             // busca conciliação
             $oSql = $oDaoConciliacaoBancaria->sql_query_file(null, "*", null, "k171_conta = {$conta} AND k171_data = '{$data_final}' ");
             $oDaoConciliacaoBancaria->sql_record($oSql);
@@ -195,6 +196,7 @@ try {
                 $oDaoConciliacaoBancaria->k171_data = $data_final;
                 $oDaoConciliacaoBancaria->k171_dataconciliacao = $data_conciliacao;
                 $oDaoConciliacaoBancaria->k171_saldo = $saldo_final_extrato;
+                $oDaoConciliacaoBancaria->k171_datafechamento = $fechar_conciliacao;
                 $oDaoConciliacaoBancaria->alterar();
                 // $oRetorno->aLinhasExtrato[] = $oDaoConciliacaoBancaria;
             } else {
@@ -202,6 +204,7 @@ try {
                 $oDaoConciliacaoBancaria->k171_data = $data_final;
                 $oDaoConciliacaoBancaria->k171_dataconciliacao = $data_conciliacao;
                 $oDaoConciliacaoBancaria->k171_saldo = $saldo_final_extrato;
+                $oDaoConciliacaoBancaria->k171_datafechamento = $fechar_conciliacao;
                 $oDaoConciliacaoBancaria->incluir();
                 // $oRetorno->aLinhasExtrato[] = $oDaoConciliacaoBancaria;
             }
@@ -247,6 +250,7 @@ try {
             $oDadosLinha->total_saidas     = movimentacao_extrato($conta, $data_inicial, $data_final, 2);
             $oDadosLinha->saldo_final      = saldo_final_extrato($conta, $data_final);
             $oDadosLinha->valor_conciliado = valor_conciliado($conta, $data_final);
+            $oDadosLinha->fechar_conciliacao = fechar_conciliacao($conta, $data_final);
             // Retorna os dados
             $oRetorno->aLinhasExtrato[] = $oDadosLinha;
             break;
@@ -311,6 +315,16 @@ function saldo_final_extrato($conta, $data)
     $query = db_query($sql);
     if (pg_numrows($query) > 0) {
         return number_format(db_utils::fieldsMemory($query, 0)->k171_saldo, 2, ".", "");
+    }
+    return 0;
+}
+
+function fechar_conciliacao($conta, $data)
+{
+    $sql   = "select k171_datafechamento from conciliacaobancaria WHERE k171_conta = {$conta} AND k171_data = '{$data}'";
+    $query = db_query($sql);
+    if (pg_numrows($query) > 0) {
+        return 1;
     }
     return 0;
 }

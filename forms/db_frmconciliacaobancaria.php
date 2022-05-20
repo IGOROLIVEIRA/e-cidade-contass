@@ -188,7 +188,7 @@ db_app::load("widgets/windowAux.widget.js");
                                                 <td align="left">
                                                     <? db_input("total_selecionado", 10, 0, true, "text", 1, "disabled"); ?>
                                                 </td>
-                                                <td><input type="checkbox" name="fechar_conciliacao"/><b>Fechar Conciliação</b></td>
+                                                <td><input type="checkbox" name="fechar_conciliacao" id="fechar_conciliacao"/><b>Fechar Conciliação</b></td>
                                             </tr>
                                         </table>
                                     </fieldset>
@@ -367,12 +367,18 @@ db_app::load("widgets/windowAux.widget.js");
     }
 
     document.form1.saldo_final_extrato.addEventListener('change', js_registraSaldoExtrato);
+    document.form1.fechar_conciliacao.addEventListener('change', js_registraSaldoExtrato);
 
     function js_registraSaldoExtrato() {
         oParam                      = new Object();
         oParam.conta                = document.form1.k13_conta.value;
         oParam.data_final           = document.form1.data_final.value;
         oParam.saldo_final_extrato  = document.form1.saldo_final_extrato.value;
+        if (document.form1.fechar_conciliacao.checked == true) {
+            oParam.fechar_conciliacao = document.form1.data_final.value;
+        } else {
+            oParam.fechar_conciliacao = null;
+        }
 
         var sParam  = js_objectToJson(oParam);
         var sJson   = '{"exec": "RegistrarSaldoExtrato", "params": ['+ sParam + ']}';
@@ -481,7 +487,7 @@ db_app::load("widgets/windowAux.widget.js");
     function js_retorno_dados_extrato(oAjax) {
         // console.log(oAjax);
         var oResponse = eval("(" + oAjax.responseText + ")");
-        // console.log(oResponse);
+
         if (oResponse.status == 1) {
             // console.log(oResponse.aLinhasExtrato);
             for (var i = 0; i < oResponse.aLinhasExtrato.length; i++) {
@@ -496,6 +502,10 @@ db_app::load("widgets/windowAux.widget.js");
                     if (iZerarSaldoFinalExtrato == 0) {
                         document.form1.saldo_final_extrato.value = valor_conciliado;
                     }
+                    if (fechar_conciliacao == 1)
+                        document.getElementById("fechar_conciliacao").checked = true;
+                    else 
+                        document.getElementById("fechar_conciliacao").checked = false;
                     iZerarSaldoFinalExtrato = 0;
                     js_atualizar_diferenca();
                 }

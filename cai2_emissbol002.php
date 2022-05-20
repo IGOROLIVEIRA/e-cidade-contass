@@ -816,6 +816,13 @@ if($agrupar_tipo_conta == '2'&& $tipo_conta !=0){
 
 } 
 
+$contasNegrito = array();
+$sql = "SELECT k171_conta FROM conciliacaobancaria WHERE k171_datafechamento >= '{$dataf}' ";
+$query = pg_query($sql);
+while ($data = pg_fetch_object($query)) {
+    $contasNegrito[$data->k171_conta] = $data->k171_conta;
+}
+
 //db_criatabela($resultcontasmovimento);exit;
 $aContasMovs = array();
 
@@ -835,6 +842,15 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
         $oConta->c63_conta = "-";
         $oConta->descr = $k13_descr;
       }else{
+        // Condicionar o negrito
+        if ($negrito == 't') {
+            if (array_key_exists($k13_reduz, $contasNegrito))
+                $oConta->negrito = '';
+            else 
+                $oConta->negrito = 'B';
+            } else {
+                $oConta->negrito = '';
+        }
         $oConta->descr = $k13_reduz.' - '.$k13_descr;
         $oConta->c63_conta = "Nº Cta: ".$c63_conta.'-'.$c63_dvconta;
       }
@@ -931,10 +947,10 @@ foreach ($aContasMovs as $oConta) {
       $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->atual, 'f'), 1, 1, 'R', 0);
       $sVerificaFonte = $oConta->o15_descr;
     }
-		$pdf->SetFont('Arial', '', 6);
+		$pdf->SetFont('Arial', $oConta->negrito, 6);
 		$pdf->cell(78, $alt, $oConta->descr, "LTB", 0, 'L', $pre);
 
-		$pdf->SetFont('Arial', '', 6);
+		$pdf->SetFont('Arial', $oConta->negrito, 6);
 		$pdf->cell(18, $alt, substr($oConta->c63_conta,0,16), "RTB", 0, 'L', $pre);
 
 		$pdf->cell(24, $alt, db_formatar($oConta->anterior, 'f'), 1, 0, 'R', $pre);
