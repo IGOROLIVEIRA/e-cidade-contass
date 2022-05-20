@@ -2114,6 +2114,20 @@ if ($oInstit->db21_usasisagua == "t") {
         $('notificacao').setStyle({
               display: 'none'
             });  
+      }else if(iContaReceita == 105 && iConta == 103 || (iContaReceita == 105 && icontaAux== 103)){
+        
+        var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
+            ContaReceita: iContaReceita,
+            Conta: iConta
+          });
+
+          $('notificacao').childElements()[0].update("");
+          $('notificacao').childElements()[0].insert("<b>" + sMensagem + "</b>");
+
+          $('notificacao').setStyle({
+            display: 'table-row'
+          });        
+          return true;
       }else{      
       if (!empty(iContaReceita) && !empty(iConta)) {
        

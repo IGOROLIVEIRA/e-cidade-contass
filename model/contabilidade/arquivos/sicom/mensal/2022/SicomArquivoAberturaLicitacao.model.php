@@ -301,13 +301,15 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
        liclicita.l20_subcontratacao AS subcontratacao,
        liclicita.l20_limitcontratacao AS limiteContratacao,
        liclicita.l20_nroedital,
-       liclicita.l20_exercicioedital
+       liclicita.l20_exercicioedital,
+       manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
      FROM liclicita
      INNER JOIN homologacaoadjudica ON (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
      INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
      INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
      INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
      LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+     LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
      WHERE db_config.codigo=" . db_getsession("DB_instit") . "
      AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= " . db_getsession("DB_anousu") . "
      AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
@@ -335,7 +337,11 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             $claberlic10->si46_clausulaprorrogacao = $oDados10->clausulaprorrogacao;
             $claberlic10->si46_codmodalidadelicitacao = $oDados10->codmodalidadelicitacao;
             $claberlic10->si46_codorgaoresp = $oDados10->codorgaoresp;
-            $claberlic10->si46_codunidadesubresp = $oDados10->codunidadesubresp;
+            if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
+                $claberlic10->si46_codunidadesubresp = $oDados10->codunidsubant;    
+            }else{
+                $claberlic10->si46_codunidadesubresp = $oDados10->codunidadesubresp;
+            }
             $claberlic10->si46_criterioaceitabilidade = substr($this->removeCaracteres($oDados10->criterioaceitabilidade), 0, 80);
             $claberlic10->si46_criteriodesempate = $oDados10->criteriodesempate;
             $claberlic10->si46_nroedital = $oDados10->l20_nroedital;
@@ -415,12 +421,14 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
            liclicita.l20_anousu AS exercicioLicitacao,
            liclicita.l20_edital AS nroProcessoLicitatorio,
            liclicitemlote.l04_codigo AS nroLote,
-           liclicitemlote.l04_descricao AS dscLote
+           liclicitemlote.l04_descricao AS dscLote,
+           manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
          FROM liclicitem
          INNER JOIN liclicita ON (liclicitem.l21_codliclicita=liclicita.l20_codigo)
            INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
          INNER JOIN liclicitemlote ON (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
          LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+         LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
          WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND liclicita.l20_tipojulg = 3
            AND liclicita.l20_codigo=$oDados10->seqlicitacao order by liclicitemlote.l04_codigo";
 
@@ -438,7 +446,11 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
                     $claberlic11->si47_tiporegistro = 11;
                     $claberlic11->si47_codorgaoresp = $oResult11->codorgaoresp;
-                    $claberlic11->si47_codunidadesubresp = $oResult11->codunidadesubresp;
+                    if($oResult11->codunidsubant!= null || $oResult11->codunidsubant!=''){
+                        $claberlic11->si47_codunidadesubresp = $oResult11->codunidsubant;    
+                    }else{
+                        $claberlic11->si47_codunidadesubresp = $oResult11->codunidadesubresp;
+                    }
                     $claberlic11->si47_exerciciolicitacao = $oResult11->exerciciolicitacao;
                     $claberlic11->si47_nroprocessolicitatorio = $oResult11->nroprocessolicitatorio;
                     $claberlic11->si47_nrolote = substr($oResult11->nrolote, -4);
@@ -477,7 +489,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
         liclicita.l20_anousu as exercicioLicitacao,
         liclicita.l20_edital as nroProcessoLicitatorio,
-        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem
+        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
+        manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
         FROM liclicitem
         INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
         INNER JOIN pcprocitem  on (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
@@ -488,6 +501,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
         LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
         LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
         LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+        LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
         WHERE db_config.codigo= " . db_getsession("DB_instit") . "
         AND liclicita.l20_codigo= $oDados10->seqlicitacao";
 
@@ -499,7 +513,11 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
                 $claberlic12->si48_tiporegistro = 12;
                 $claberlic12->si48_codorgaoresp = $oDados12->codorgaoresp;
-                $claberlic12->si48_codunidadesubresp = $oDados12->codunidadesubresp;
+                if($oDados12->codunidsubant!= null || $oDados12->codunidsubant!=''){
+                    $claberlic12->si48_codunidadesubresp = $oDados12->codunidsubant;    
+                }else{
+                    $claberlic12->si48_codunidadesubresp = $oDados12->codunidadesubresp;
+                }
                 $claberlic12->si48_exerciciolicitacao = $oDados12->exerciciolicitacao;
                 $claberlic12->si48_nroprocessolicitatorio = $oDados12->nroprocessolicitatorio;
                 $claberlic12->si48_coditem = $oDados12->coditem;
@@ -538,7 +556,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
       liclicita.l20_anousu as exercicioLicitacao,
       liclicita.l20_edital as nroProcessoLicitatorio,
       aberlic112022.si47_nrolote as nroLote,
-      (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem
+      (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
+      manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
       FROM liclicitem
       INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
       INNER JOIN pcprocitem  on (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
@@ -551,6 +570,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
       LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
       LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
       LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+      LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
       WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND liclicita.l20_tipojulg = 3
       AND liclicita.l20_codigo= $oDados10->seqlicitacao";
 
@@ -563,7 +583,11 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
                 $claberlic13->si49_tiporegistro = 13;
                 $claberlic13->si49_codorgaoresp = $oDados13->codorgaoresp;
-                $claberlic13->si49_codunidadesubresp = $oDados13->codunidadesubresp;
+                if($oDados13->codunidsubant!= null || $oDados13->codunidsubant!=''){
+                    $claberlic13->si49_codunidadesubresp = $oDados13->codunidsubant;    
+                }else{
+                    $claberlic13->si49_codunidadesubresp = $oDados13->codunidadesubresp;
+                }
                 $claberlic13->si49_exerciciolicitacao = $oDados13->exerciciolicitacao;
                 $claberlic13->si49_nroprocessolicitatorio = $oDados13->nroprocessolicitatorio;
                 $claberlic13->si49_nrolote = $oDados13->nrolote;
@@ -606,7 +630,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     itemprecoreferencia.si02_vlpercreferencia AS vlRefPercentual,
     itemprecoreferencia.si02_vlprecoreferencia as vlcotprecosunitario,
     pcorcamval.pc23_quant as quantidade,
-    '0' as vlMinAlienBens
+    '0' as vlMinAlienBens,
+    manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
     FROM liclicitem
     INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
     LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
@@ -627,6 +652,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
     INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
     LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+    LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
     WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND pctipocompratribunal.l44_sequencial != 102
     AND liclicita.l20_codigo= $oDados10->seqlicitacao";
 
@@ -644,7 +670,11 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
                     $oDados14->si50_tiporegistro = 14;
                     $oDados14->si50_codorgaoresp = $oResult14->codorgaoresp;
-                    $oDados14->si50_codunidadesubresp = $oResult14->codunidadesubresp;
+                    if($oResult14->codunidsubant!= null || $oResult14->codunidsubant!=''){
+                        $oDados14->si50_codunidadesubresp = $oResult14->codunidsubant;    
+                    }else{
+                        $oDados14->si50_codunidadesubresp = $oResult14->codunidadesubresp;
+                    }
                     $oDados14->si50_exerciciolicitacao = $oResult14->exerciciolicitacao;
                     $oDados14->si50_nroprocessolicitatorio = $oResult14->nroprocessolicitatorio;
                     $oDados14->si50_nrolote = $oResult14->nrolote;
@@ -670,7 +700,12 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
                 $claberlic14->si50_tiporegistro = $oDadosAgrupados14->si50_tiporegistro;
                 $claberlic14->si50_codorgaoresp = $oDadosAgrupados14->si50_codorgaoresp;
-                $claberlic14->si50_codunidadesubresp = $oDadosAgrupados14->si50_codunidadesubresp;
+                if($oDadosAgrupados14->codunidsubant!= null || $oDadosAgrupados14->codunidsubant!=''){
+                    $claberlic14->si50_codunidadesubresp = $oDadosAgrupados14->codunidsubant;    
+                }else{
+                    $claberlic14->si50_codunidadesubresp = $oDadosAgrupados14->si50_codunidadesubresp;
+                }
+
                 $claberlic14->si50_exerciciolicitacao = $oDadosAgrupados14->si50_exerciciolicitacao;
                 $claberlic14->si50_nroprocessolicitatorio = $oDadosAgrupados14->si50_nroprocessolicitatorio;
                 $claberlic14->si50_nrolote = $oDadosAgrupados14->si50_nrolote;
@@ -715,7 +750,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     liclicita.l20_edital as nroProcessoLicitatorio,
     aberlic112022.si47_nrolote as nroLote,
     (pcmater.pc01_codmater::varchar || matunid.m61_codmatunid::varchar) as codItem,
-    itemprecoreferencia.si02_vlprecoreferencia as vlItem
+    itemprecoreferencia.si02_vlprecoreferencia as vlItem,
+    manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
     FROM liclicitem
     INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
     INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
@@ -736,6 +772,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
     INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
     LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+    LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
     WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND pctipocompratribunal.l44_sequencial = 102
     AND liclicita.l20_codigo= $oDados10->seqlicitacao";
 
@@ -748,7 +785,11 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
                 $claberlic15->si51_tiporegistro = 15;
                 $claberlic15->si51_codorgaoresp = $oDados15->codorgaoresp;
-                $claberlic15->si51_codunidadesubresp = $oDados15->codunidadesubresp;
+                if($oDados15->codunidsubant!= null || $oDados15->codunidsubant!=''){
+                    $claberlic15->si51_codunidadesubresp = $oDados15->codunidsubant;    
+                }else{
+                    $claberlic15->si51_codunidadesubresp = $oDados15->codunidadesubresp;
+                }
                 $claberlic15->si51_exerciciolicitacao = $oDados15->exerciciolicitacao;
                 $claberlic15->si51_nroprocessolicitatorio = $oDados15->nroprocessolicitatorio;
                 $claberlic15->si51_nrolote = $oDados15->nrolote;
@@ -804,7 +845,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     orcprojativ.o55_origemacao as idSubAcao,
     substr(orcelemento.o56_elemento,2,6) as naturezaDespesa,
     orctiporec.o15_codtri as codFontRecursos,
-    orcdotacao.o58_valor as vlRecurso
+    orcdotacao.o58_valor as vlRecurso,
+    manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
     FROM liclicita
     INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
     INNER JOIN pcprocitem on (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
@@ -817,6 +859,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     INNER JOIN orctiporec on (orcdotacao.o58_codigo=orctiporec.o15_codigo)
     INNER JOIN orcelemento on (orcdotacao.o58_anousu=orcelemento.o56_anousu and orcdotacao.o58_codele=orcelemento.o56_codele)
     LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+    LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
     WHERE db_config.codigo= " . db_getsession("DB_instit") . "
     AND liclicita.l20_codigo= $oDados10->seqlicitacao) as x group by tiporegistro,codorgaoresp,codunidadesubresp,
     exerciciolicitacao,nroprocessolicitatorio,codorgao,codunidadesub,codfuncao,codsubfuncao,codprograma,idacao,idsubacao,
@@ -831,7 +874,12 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
                 $claberlic16->si52_tiporegistro = 16;
                 $claberlic16->si52_codorgaoresp = $oDados16->codorgaoresp;
-                $claberlic16->si52_codunidadesubresp = $oDados16->codunidadesubresp;
+                if($oDados16->codunidsubant!= null || $oDados16->codunidsubant!=''){
+                    $claberlic16->si52_codunidadesubresp = $oDados16->codunidsubant;    
+                }else{
+                    $claberlic16->si52_codunidadesubresp = $oDados16->codunidadesubresp;
+                }
+                
                 $claberlic16->si52_exerciciolicitacao = $oDados16->exerciciolicitacao;
                 $claberlic16->si52_nroprocessolicitatorio = $oDados16->nroprocessolicitatorio;
                 $claberlic16->si52_codorgao = $oDados16->codorgao;

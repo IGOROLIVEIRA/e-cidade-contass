@@ -5,11 +5,11 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 ?>
-<fieldset style="width: 1000px;  margin-top: 25px;">
+<fieldset style="width: 1000px;  margin-top: 25px; ">
     <legend><b>Dados do acordo</b></legend>
     <form name="form1" method="post" action="">
 
-        <table border="0" style="margin-right: 10px; margin-left: -5%">
+        <table border="0" style="margin-right: 10px; margin-left: -45%;">
             <tr>
                 <td title="<?= @$Tac16_sequencial ?>">
                     <?php db_ancora("Acordo", "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
@@ -44,7 +44,6 @@ $clrotulo->label("ac16_resumoobjeto");
                     <?
                     $x = array("00" => "Selecione...", "01" => "Reajuste de preço previsto no contrato", "02" => "Atualizações, compensações ou penalizações", "03" => "Empenho de dotações orçamentárias suplementares");
                     db_select('si03_tipoapostila', $x, true, $db_opcao, "onchange='js_changeTipoApostila(this.value)'");
-                    //db_input('si03_tipoapostila',1,$Isi03_tipoapostila,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -89,11 +88,11 @@ $clrotulo->label("ac16_resumoobjeto");
 
             <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
-                    <b>Descrição da alteração:</b>
+                    <b>Descrição da Alteração:</b>
                 </td>
                 <td>
                     <?
-                    db_input('si03_descrapostila', 40, $Isi03_descrapostila, true, 'text', $db_opcao, "", "", "", "", "200");
+                    db_textarea('si03_descrapostila', 3, 48, $Isi03_descrapostila, true, 'text', $db_opcao, "style='resize: none'", "", "", "250");
                     ?>
                 </td>
             </tr>
@@ -106,11 +105,14 @@ $clrotulo->label("ac16_resumoobjeto");
             <?
             $controle = $db_opcao;
             db_input('controle', 10, $Icontrole, true, 'hidden', $db_opcao, "")
-            //db_input('controle',10,$Icontrole,true,'hidden',$db_opcao,"")
             ?>
+
             <tr>
+
+                <!-- tag <td> a seguir ocultada apos solicitacao de adequamento da tela na OC17626 -->
+
                 <td colspan='2'>
-                    <fieldset class="">
+                    <fieldset class="" style="display: none;">
                         <legend>Vigência</legend>
                         <table border='0'>
                             <tr>
@@ -129,9 +131,9 @@ $clrotulo->label("ac16_resumoobjeto");
 
                 <!-- tag <td> a seguir ocultada pois apresenta inconsistencia
                      no valor apresentado, a tag só ficará visivel novamente 
-                    caso cliente solicite o retorno -->
+                    caso cliente solicite o retorno  -->
 
-                <td colspan='2' style="visibility: hidden;">
+                <td colspan='2' style="display: none;">
                     <fieldset class="">
                         <legend>Valores</legend>
                         <table>
@@ -148,6 +150,7 @@ $clrotulo->label("ac16_resumoobjeto");
                         </table>
                     </fieldset>
                 </td>
+
 
 
             </tr>
@@ -211,7 +214,7 @@ $clrotulo->label("ac16_resumoobjeto");
     oGridItens.nameInstance = 'oGridItens';
     oGridItens.setCheckbox(0);
     oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
-    oGridItens.setCellWidth(["3%", "25%", "8%", "8%"]);
+    //oGridItens.setCellWidth(["50px", "30%", "8%", "8%", "3%", "25%", "8%", "8%", "3%", "25%", "8%", "8%", "8%"]);
     oGridItens.setHeader(["Cód", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotações", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
     oGridItens.aHeaders[10].lDisplayed = false;
@@ -1095,7 +1098,7 @@ $clrotulo->label("ac16_resumoobjeto");
         var oApostila = new Object();
         oApostila.dataapostila = $("si03_dataapostila").value;
         oApostila.tipoapostila = $("si03_tipoapostila").value;
-        oApostila.descrapostila = $("si03_descrapostila").value;
+        oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
 

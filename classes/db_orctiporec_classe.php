@@ -327,10 +327,9 @@ class cl_orctiporec {
        $sql  .= $virgula." o15_datalimite = '$this->o15_datalimite' ";
        $virgula = ",";
      }     else{
-       if(isset($GLOBALS["HTTP_POST_VARS"]["o15_datalimite_dia"])){
          $sql  .= $virgula." o15_datalimite = null ";
          $virgula = ",";
-       }
+  
      }
      if(trim($this->o15_db_estruturavalor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_db_estruturavalor"])){
        $sql  .= $virgula." o15_db_estruturavalor = $this->o15_db_estruturavalor ";

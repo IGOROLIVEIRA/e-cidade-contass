@@ -1,0 +1,66 @@
+<?php
+
+namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
+
+use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
+
+/**
+ * Classe responsável por montar as informações do evento S2200 Esocial
+ *
+ * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
+ * @author   Robson de Jesus
+ */
+class EventoS2230 extends EventoBase
+{
+
+    /**
+     *
+     * @param \stdClass $dados
+     */
+    public function __construct($dados)
+    {
+        parent::__construct($dados);
+    }
+
+    /**
+     * Retorna dados no formato necessario para envio
+     * pela API sped-esocial
+     * @return array stdClass
+     */
+    public function montarDados()
+    {
+        $aDadosAPI = array();
+        $iSequencial = 1;
+        
+        foreach ($this->dados as $oDados) {
+            $oDadosAPI                                                        = new \stdClass;
+            $oDadosAPI->evtAfastTemp                                          = new \stdClass;
+            $oDadosAPI->evtAfastTemp->sequencial                              = $iSequencial;
+            $oDadosAPI->evtAfastTemp->modo                                    = $this->modo;
+            $oDadosAPI->evtAfastTemp->indRetif                                = 1;
+            $oDadosAPI->evtAfastTemp->nrRecibo                                = null;
+            $oDadosAPI->evtAfastTemp->idevinculo->cpftrab                     = $oDados->ideVinculo->cpfTrab;
+            $oDadosAPI->evtAfastTemp->idevinculo->matricula                   = $oDados->ideVinculo->matricula;
+            //$oDadosAPI->evtAfastTemp->idevinculo->codcateg                  = $oDados->ideVinculo->codCateg;
+            
+            if($oDados->iniAfastamento->dtIniAfast != null){
+                $oDadosAPI->evtAfastTemp->iniafastamento->dtiniafast          = $oDados->iniAfastamento->dtIniAfast;
+                $oDadosAPI->evtAfastTemp->iniafastamento->codmotafast         = $oDados->iniAfastamento->codMotAfast;
+                if(!empty($oDados->perAquis->dtInicio)){
+                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtinicio  = $oDados->perAquis->dtInicio;                
+                }
+                if(!empty($oDados->perAquis->dtFim)){
+                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtfim = $oDados->perAquis->dtFim;
+                }
+            }
+            if(!empty($oDados->fimAfastamento->dtTermAfast)){
+                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->fimAfastamento->dtTermAfast;
+            }
+
+            $aDadosAPI[] = $oDadosAPI;
+            $iSequencial++;
+        }
+
+        return $aDadosAPI;
+    }
+}
