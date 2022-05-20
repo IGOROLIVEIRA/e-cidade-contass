@@ -159,11 +159,11 @@ if (isset($_GET['lRelatorio'])) {
       } else {
         $campos = "tabrec.*,k00_descr,k02_descr";
         $sql = $cltabrec->sql_query_inst_depto(null, $campos, null, "tabrec.k02_codigo = $pesquisa_chave  and $sWhere", $lRelatorio);
-       //die($sql);
+      //  die($sql);
         $result = $cltabrec->sql_record($sql);
         if ($cltabrec->numrows != 0) {
           db_fieldsmemory($result, 0);
-          echo "<script>" . $funcao_js . "('$k02_drecei',false,'$recurso','$arretipo','$k00_descr','$k02_descr');</script>";
+          echo "<script>" . $funcao_js . "('$k02_drecei',false,'$o70_codigo','$arretipo','$k00_descr','$k02_descr');</script>";
         } else {
           echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
         }
