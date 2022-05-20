@@ -14,7 +14,7 @@ class Oc17283Paramentro extends PostgresMigration
 
         if (!$column) {
 
-            $sqlInsert = "ALTER TABLE empparametro ADD COLUMN e30_empordemcron boolean default false;";
+            $sqlInsert = "ALTER TABLE empparametro ADD COLUMN e30_empordemcron boolean default true;";
 
             $this->execute($sqlInsert);
         }
