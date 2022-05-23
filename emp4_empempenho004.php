@@ -269,9 +269,9 @@ if (!empty($iElemento)) {
     }
 }
 
+// Data do sistema
+$dtDataUsu = $dDataMovimento == null ? date("Y-m-d", db_getsession('DB_datausu')) : $dDataMovimento;
 if(isset($incluir)) {
-  // Data do sistema
-  $dtDataUsu = $dDataMovimento; //date("Y-m-d", db_getsession('DB_datausu'));
 
   $clcondataconf = new cl_condataconf;
 
@@ -306,9 +306,9 @@ if(isset($incluir)) {
 
     if(pg_num_rows(db_query($sSqlLicitacao))) {
 
-      if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > $dDataMovimento) {
+      if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > strtotime($dDataMovimento)) {
 
-        db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$e60_emiss.").");
+        db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$dDataMovimento.").");
         db_redireciona("emp4_empempenho004.php");
 
       }
@@ -1299,8 +1299,8 @@ if(isset($incluir)) {
                           where e54_autori = {$e54_autori} limit 1";
 
     if(pg_num_rows(db_query($sSqlLicitacao))) {
-        if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > $dDataMovimento) {
-            db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$e60_emiss.").");
+        if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > strtotime($dtDataUsu)) {
+            db_msgbox("1 - Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$dtDataUsu.").");
             db_redireciona("emp4_empempenho004.php");
         }
     }
