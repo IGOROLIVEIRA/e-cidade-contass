@@ -223,6 +223,8 @@ if (isset($e54_concarpeculiar) && trim(@$e54_concarpeculiar) != ""){
 
 $anousu           = db_getsession("DB_anousu");
 $iInstituicao     = db_getsession("DB_instit");
+// Considerar para comparação de data de empenho sempre esta data.
+$dDataMovimento = implode("-",array_reverse(explode("/", $e60_emiss)));
 $alertar_retencao = false;
 $lControlePacto   = false;
 $aParametrosOrcamento = db_stdClass::getParametro("orcparametro",array(db_getsession("DB_anousu")));
@@ -267,9 +269,9 @@ if (!empty($iElemento)) {
     }
 }
 
-// Data do sistema
 $dtDataUsu = $dDataMovimento == null ? date("Y-m-d", db_getsession('DB_datausu')) : $dDataMovimento;
 if(isset($incluir)) {
+  // Data do sistema
 
   $clcondataconf = new cl_condataconf;
 
@@ -283,13 +285,14 @@ if(isset($incluir)) {
     $erro_sql   = "Valores lançamentos (".pg_result(db_query('select max(c69_sequen)+1 from conlancamval'),0,0).") nao Incluído. Inclusao Abortada.";
     $erro_msg   .= "Usuário: \\n\\n ".$erro_sql." \\n\\n";
     $erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n "));
-    $erro_msg   .=  " ERRO: DATA INVÁLIDA. LIMITE: {$c99_data} \\n\\n";
+    $erro_msg   .=  " ERRO: DATA DO ENCERRAMENTO CONTÁBIL. LIMITE: {$c99_data} \\n\\n";
     $erro_status = "0";
 
     unset($incluir);
     db_msgbox($erro_msg);
 
   }
+
 
     /* Ocorrência 2630
      * Validações de datas para geração de autorizações de empenhos e geração de empenhos
@@ -305,7 +308,7 @@ if(isset($incluir)) {
 
       if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > strtotime($dDataMovimento)) {
 
-        db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$dDataMovimento.").");
+        db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$e60_emiss.").");
         db_redireciona("emp4_empempenho004.php");
 
       }
@@ -424,7 +427,7 @@ if(isset($incluir)) {
 
     if ($sqlerro == false) {
         // chama função de critica para empenhos
-        $sql = "select fc_verifica_lancamento(" . $e54_autori . ",'" . date("Y-m-d", db_getsession("DB_datausu")) . "',1,00.00)";
+        $sql = "select fc_verifica_lancamento(" . $e54_autori . ",'" . $dDataMovimento . "',1,00.00)";
         $result_erro = db_query($sql) or die($sql);
         $erro_msg = pg_result($result_erro, 0, 0);
         if (substr($erro_msg, 0, 2) > 0) {
@@ -462,7 +465,7 @@ if(isset($incluir)) {
 
         if ($clempparamnum->numrows == 0) {
 
-            $result = $clempparametro->sql_record($clempparametro->sql_query_file($anousu, "(e30_codemp+1) as e60_codemp,e30_notaliquidacao"));
+            $result = $clempparametro->sql_record($clempparametro->sql_query_file($anousu, "(e30_codemp+1) as e60_codemp, e30_notaliquidacao"));
             if ($clempparametro->numrows > 0) {
                 db_fieldsmemory($result, 0);
                 $clempempenho->e60_codemp = $e60_codemp;
@@ -482,8 +485,9 @@ if(isset($incluir)) {
             }
 
         } else {
-
-            db_fieldsmemory($result, 0);
+            if( isset($incluir) && !$e60_codemp){
+                db_fieldsmemory($result, 0);
+            }
             $clempempenho->e60_codemp = $e60_codemp;
 
             /*rotina que atualiza a tabela empparametro*/
@@ -515,6 +519,50 @@ if(isset($incluir)) {
             }
         }
 
+        /**
+         * Verificamos se o empenho fora da ordem cronológica:
+         */
+        if (!$sqlerro) {
+
+            $result = $clempparametro->sql_record($clempparametro->sql_query_file($anousu, "e30_empordemcron"));
+            db_fieldsmemory($result, 0);
+            if ($clempparametro->numrows > 0) {
+
+            }
+            if($e30_empordemcron == 'f'){
+
+                // maior ou igual a anterior
+                $where = " e60_codemp::int8 > {$e60_codemp}";
+                $order = " order by e60_codemp::int8 asc";
+                $sSqlEmpenhoProximo = $clempempenho->sql_prox_data_empenho($anousu, $iInstituicao, $where, $order);
+                $rsVerificacaoEmpenhoProximo = $clempempenho->sql_record($sSqlEmpenhoProximo);
+
+                if ($clempempenho->numrows > 0) {
+                    db_fieldsmemory($rsVerificacaoEmpenhoProximo, 0);
+                    if(strtotime($dDataMovimento) > strtotime($emiss) ){
+                        $sqlerro   = true;
+                        $erro_msg  = "Empenho fora da ordem cronológica: ";
+                        $erro_msg .= "a data ".date("d/m/Y",strtotime($dDataMovimento))." do Empenho {$e60_codemp} é maior que a data ".date("d/m/Y",strtotime($emiss))." do Empenho {$codemp}!" . pg_last_error();
+                    }
+                }
+                // menor ou igual ao proximo e
+                $where = " e60_codemp::int8 < {$e60_codemp}";
+                $order = " order by e60_codemp::int8 desc";
+                $sSqlEmpenhoAnterior = $clempempenho->sql_prox_data_empenho($anousu, $iInstituicao, $where, $order);
+                $rsVerificacaoEmpenhoAnterior = $clempempenho->sql_record($sSqlEmpenhoAnterior);
+
+                if ($clempempenho->numrows > 0) {
+                    db_fieldsmemory($rsVerificacaoEmpenhoAnterior, 0);
+                    if(strtotime($dDataMovimento) < strtotime($emiss)){
+                        $sqlerro   = true;
+                        $erro_msg  = "Empenho fora da ordem cronológica: ";
+                        $erro_msg .= "a data ".date("d/m/Y",strtotime($dDataMovimento))." do Empenho {$e60_codemp} é menor que a data ".date("d/m/Y",strtotime($emiss))." do Empenho {$codemp}!" . pg_last_error();
+                    }
+                }
+
+            }
+        }
+
         $dados = (object) array(
           'tabela' => 'empautidot',
           'campo'  => 'e56_autori',
@@ -542,8 +590,8 @@ if(isset($incluir)) {
             $clempempenho->e60_anousu = $e56_anousu;
             $clempempenho->e60_coddot = $e56_coddot;
             $clempempenho->e60_numcgm = $e54_numcgm;
-            $clempempenho->e60_emiss  = date("Y-m-d", db_getsession("DB_datausu"));
-            $clempempenho->e60_vencim = date("Y-m-d", db_getsession("DB_datausu"));
+            $clempempenho->e60_emiss  = $dDataMovimento;
+            $clempempenho->e60_vencim = $dDataMovimento;
             /*OC4401*/
             $clempempenho->e60_id_usuario = db_getsession("DB_id_usuario");
             /*FIM - OC4401*/
@@ -645,6 +693,7 @@ if(isset($incluir)) {
                 $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
                 db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 
+
                 if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
 
                     $sqlerro = true;
@@ -672,9 +721,9 @@ if(isset($incluir)) {
             $sSqlDataAutEmp = "select e54_emiss from empautoriza where e54_autori = {$e54_autori} limit 1";
 
             if(pg_num_rows(db_query($sSqlDataAutEmp))) {
-                if (strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss) > db_getsession('DB_datausu')) {
+                if (strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss) > strtotime($dDataMovimento)) {
                     $sqlerro = true;
-                    $erro_msg = "Não é permitido emitir empenho cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".date("d/m/Y",db_getsession('DB_datausu')).").";
+                    $erro_msg = "Não é permitido emitir empenho cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$e60_emiss.").";
                 }
             }
 
@@ -728,7 +777,7 @@ if(isset($incluir)) {
         if ($e44_obriga != 0) {
 
             $clemppresta->e45_numemp = $e60_numemp;
-            $clemppresta->e45_data   = date("Y-m-d", db_getsession("DB_datausu"));;
+            $clemppresta->e45_data   = $dDataMovimento;
             $clemppresta->e45_tipo = $e44_tipo;
             $clemppresta->incluir(null);
             if ($clemppresta->erro_status == 0) {
@@ -940,7 +989,7 @@ if(isset($incluir)) {
     if (!$sqlerro) {
 
         $oDaoEmpenhoNl->e68_numemp = $e60_numemp;
-        $oDaoEmpenhoNl->e68_data   = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaoEmpenhoNl->e68_data   = $dDataMovimento;
         $oDaoEmpenhoNl->incluir(null);
         if ($oDaoEmpenhoNl->erro_status == 0) {
 
@@ -960,7 +1009,7 @@ if(isset($incluir)) {
     }
 
     $anousu             = db_getsession("DB_anousu");
-    $datausu            = date("Y-m-d", db_getsession("DB_datausu"));
+    $datausu            = $dDataMovimento;
     $c71_coddoc         = '1';
 
     $oEmpenhoFinanceiro = null;
@@ -1034,7 +1083,7 @@ if(isset($incluir)) {
                 $oLancamentoAuxiliar->setEmpenhoFinanceiro($oEmpenhoFinanceiro);
                 $oLancamentoAuxiliar->setCodigoDotacao($iCodigoDotacao);
                 $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
-                $oEventoContabil->executaLancamento($oLancamentoAuxiliar);
+                $oEventoContabil->executaLancamento($oLancamentoAuxiliar, $dDataMovimento);
 
                  /**
                  * Valida parametro de integracao da contabilidade com contratos
@@ -1045,7 +1094,7 @@ if(isset($incluir)) {
                      * Pesquisa contrato do empenho
                      * - caso exista gera lancamento
                      */
-                    $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
+                    $oDataImplantacao = new DBDate($dDataMovimento);
                     $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
                     if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
 
@@ -1069,7 +1118,7 @@ if(isset($incluir)) {
                             $oContaCorrente = new ContaCorrenteDetalhe();
                             $oContaCorrente->setAcordo($oAcordo);
                             $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrente);
-                            $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+                            $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo, $dDataMovimento);
                         }
                     }
                 }
@@ -1251,7 +1300,7 @@ if(isset($incluir)) {
 
     if(pg_num_rows(db_query($sSqlLicitacao))) {
         if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > strtotime($dtDataUsu)) {
-            db_msgbox("1 - Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$dtDataUsu.").");
+            db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$dtDataUsu.").");
             db_redireciona("emp4_empempenho004.php");
         }
     }
