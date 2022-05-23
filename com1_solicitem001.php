@@ -803,7 +803,6 @@ db_fieldsmemory($result_pcparam1, 0);
       $clsolicitemunid->pc17_codigo = $pc11_codigo;
       
       $result_solicitemunid = $clsolicitemunid->sql_record($clsolicitemunid->sql_query_file($pc11_codigo));
-      db_msgbox($clsolicitemunid->numrows);
       if ($clsolicitemunid->numrows > 0) {
         $clsolicitemunid->alterar($pc11_codigo);
       } else {
