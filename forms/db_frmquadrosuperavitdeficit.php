@@ -3,7 +3,7 @@
     <?php
 
     $clorctiporec = new cl_orctiporec();
-    $sql = "select distinct concat('1', substring(o15_codtri, 2, 2)) as o15_codtri from orctiporec o1 where o15_codtri != '' and o15_codtri::int >= 100 AND o15_codtri::int <= 299 AND (o15_datalimite IS NULL OR o15_datalimite <= '" . db_getsession("DB_anousu") . "-12-31') order by concat('1', substring(o15_codtri, 2, 2))";
+    $sql = "select distinct concat('1', substring(o15_codtri, 2, 2)) as o15_codtri, o15_descr from orctiporec o1 where o15_codtri != '' and o15_codtri::int >= 100 AND o15_codtri::int <= 299 AND (o15_datalimite IS NULL OR o15_datalimite <= '" . db_getsession("DB_anousu") . "-12-31') order by concat('1', substring(o15_codtri, 2, 2)), o15_descr";
 
     $recursos = $clorctiporec->sql_record($sql);
 
@@ -13,9 +13,10 @@
             <legend align="center">
                 <strong>Quadro do Superávit / Déficit Financeiro</strong>
             </legend>
-            <table class="DBGrid" style="width: 600px">
+            <table class="DBGrid" style="width: 800px">
                 <tr>
                     <th class="table_header">Fonte</th>
+                    <th class="table_header">Descrição</th>
                     <th class="table_header">Valor</th>
                     <th class="table_header">Suplementado</th>
                     <th class="table_header">Saldo</th>
@@ -33,6 +34,10 @@
                     <td class="linhagrid">
                         <?= $iFonte ?>
                         <input type="hidden" name="aFonte[<?= $iFonte ?>][fonte]" value="<?= $oFot->o15_codtri ?>" id="">
+                    </td>
+
+                    <td class="linhagrid" style="text-align: left;">
+                        <?= $oFot->o15_descr ?>
                     </td>
 
                     <td class="linhagrid">

@@ -76,7 +76,7 @@ class cl_emite_nota_empenho {
         $sqlemp .= "        paga.z01_nome AS ordenapaga, ";
         $sqlemp .= "        contador.z01_nome AS contador, ";
         $sqlemp .= "        contad.si166_crccontador AS crc, ";
-        $sqlemp .= "        controleinterno.z01_nome AS controleinterno, ac16_sequencial ";
+        $sqlemp .= "        controleinterno.z01_nome AS controleinterno ";
         $sqlemp .= " FROM empempenho ";
         $sqlemp .= " LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e60_id_usuario";
         $sqlemp .= " LEFT JOIN pctipocompra ON pc50_codcom = e60_codcom ";
@@ -91,7 +91,6 @@ class cl_emite_nota_empenho {
         $sqlemp .= " INNER JOIN orctiporec ON o58_codigo = o15_codigo ";
         $sqlemp .= " INNER JOIN cgm ON z01_numcgm = e60_numcgm ";
         $sqlemp .= " INNER JOIN concarpeculiar ON concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar ";
-        $sqlemp .= " LEFT JOIN acordo on ac16_contratado = e60_numcgm ";
         $sqlemp .= " LEFT JOIN cgm AS ordena ON ordena.z01_numcgm = o41_orddespesa ";
         $sqlemp .= " LEFT JOIN cgm AS paga ON paga.z01_numcgm = o41_ordpagamento ";
         $sqlemp .= " LEFT JOIN cgm AS liquida ON liquida.z01_numcgm = o41_ordliquidacao ";
@@ -114,7 +113,7 @@ class cl_emite_nota_empenho {
 
         return $sqlemp;
 
-    }
+    } 
 
     function get_sql_pacto($e61_autori) {
 
@@ -229,11 +228,11 @@ class cl_emite_nota_empenho {
         $sSqlFuncaoOrdenaPagamento .=" order by  rh02_seqpes asc limit 1 ";
 
         return $sSqlFuncaoOrdenaPagamento;
-
+        
     }
 
     function get_sql_funcao_ordena_despesa($cgmordenadespesa, $iAno, $iMes) {
-
+    
         $sSqlFuncaoOrdenadespesa =" select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenadespesa";
         $sSqlFuncaoOrdenadespesa .=" from rhpessoal ";
         $sSqlFuncaoOrdenadespesa .=" LEFT join rhpessoalmov on rh02_regist=rh01_regist ";
@@ -251,7 +250,7 @@ class cl_emite_nota_empenho {
     }
 
     function get_dados_licitacao($e54_tipoautorizacao, $e54_autori, $pc50_descr = '') {
-
+    
         /**
          * Crio os campos PROCESSO/ANO,MODALIDADE/ANO e DESCRICAO MODALIDADE de acordo com solicitação
          * @MarioJunior OC 7425
@@ -267,10 +266,10 @@ class cl_emite_nota_empenho {
         $oDado->modalidade          = '';
         $oDado->descr_tipocompra    = '';
         $oDado->descr_modalidade    = '';
-
+    
         //tipo Direta
         if($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
-
+            
             if ($clempautitem->numrows > 0) {
                 $oResult = db_utils::fieldsMemory($result_empaut, 0);
                 if($oResult->e54_numerl != "") {
@@ -289,7 +288,7 @@ class cl_emite_nota_empenho {
         //tipo licitacao de outros orgaos
 
         if($e54_tipoautorizacao == 2){
-
+            
             if ($clempautitem->numrows > 0) {
                 $oResult = db_utils::fieldsMemory($result_empaut, 0);
                 $arr_numerl = split("/", $oResult->e54_numerl);
@@ -302,7 +301,7 @@ class cl_emite_nota_empenho {
 
         //tipo licitacao
         if($e54_tipoautorizacao == 3){
-
+            
             if ($clempautitem->numrows > 0) {
                 $oResult = db_utils::fieldsMemory($result_empaut, 0);
                 $arr_numerl = split("/", $oResult->e54_numerl);
@@ -315,7 +314,7 @@ class cl_emite_nota_empenho {
 
         //tipo Adesao regpreco
         if($e54_tipoautorizacao == 4){
-
+            
             if ($clempautitem->numrows > 0) {
                 $oResult = db_utils::fieldsMemory($result_empaut, 0);
                 $arr_numerl = split("/", $oResult->e54_numerl);
@@ -331,7 +330,7 @@ class cl_emite_nota_empenho {
     }
 
     function get_acordo($e60_numemp) {
-
+    
         $sSql = " SELECT ac16_numeroacordo, ac16_anousu from empempenhocontrato JOIN acordo ON ac16_sequencial = e100_acordo where e100_numemp = ".$e60_numemp;
         $rsAcordo = db_query($sSql);
         return db_utils::fieldsMemory($rsAcordo, 0);
