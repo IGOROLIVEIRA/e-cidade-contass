@@ -1,9 +1,9 @@
 <?php
-/*       
- *     E-cidade Software Publico para Gestao Municipal    
- *  Copyright (C) 2014  DBSeller Servicos de Informatica 
+/*
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br     
+ *                         e-cidade@dbseller.com.br
  *
  *  Este programa e software livre; voce pode redistribui-lo e/ou
  *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
@@ -12,18 +12,18 @@
  *
  *  Este programa e distribuido na expectativa de ser util, mas SEM
  *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM  
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
  *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.   
+ *  detalhes.
  *
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
  *  junto com este programa; se nao, escreva para a Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  *  02111-1307, USA.
  *
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
- */   
+ */
 
 require_once ("libs/db_stdlib.php");
 require_once ("libs/db_utils.php");
@@ -139,10 +139,10 @@ $clemphist	      = new cl_emphist;
 $clempauthist	  	= new cl_empauthist;
 $clempemphist	  	= new cl_empemphist;
 $clemptipo	      = new cl_emptipo;
-$clempautitem	  	= new cl_empautitem; 
+$clempautitem	  	= new cl_empautitem;
 $clempautidot	  	= new cl_empautidot;
-$clempparametro	  = new cl_empparametro; 
-$clcflicita	      = new cl_cflicita; 
+$clempparametro	  = new cl_empparametro;
+$clcflicita	      = new cl_cflicita;
 $clempparamnum	  = new cl_empparamnum;
 $clconcarpeculiar = new cl_concarpeculiar;
 $oDaoEmpenhoNl    = new cl_empempenhonl;
@@ -181,7 +181,7 @@ $clconlancamlr	  = new cl_conlancamlr;
 $clconlancamcgm	  = new cl_conlancamcgm;
 $clconlancamemp	  = new cl_conlancamemp;
 $clconlancamval	  = new cl_conlancamval;
-$clconlancamdot	  = new cl_conlancamdot; 
+$clconlancamdot	  = new cl_conlancamdot;
 $clconlancamdoc	  = new cl_conlancamdoc;
 $clconlancamcompl = new cl_conlancamcompl;
 $clconlancamnota  = new cl_conlancamnota;
@@ -267,10 +267,9 @@ if (!empty($iElemento)) {
     }
 }
 
+// Data do sistema
+$dtDataUsu = $dDataMovimento == null ? date("Y-m-d", db_getsession('DB_datausu')) : $dDataMovimento;
 if(isset($incluir)) {
-
-  // Data do sistema
-  $dtDataUsu = date("Y-m-d", db_getsession('DB_datausu'));
 
   $clcondataconf = new cl_condataconf;
 
@@ -304,9 +303,9 @@ if(isset($incluir)) {
 
     if(pg_num_rows(db_query($sSqlLicitacao))) {
 
-      if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > db_getsession('DB_datausu')) {
+      if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > strtotime($dDataMovimento)) {
 
-        db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".date("d/m/Y",db_getsession('DB_datausu')).").");
+        db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$dDataMovimento.").");
         db_redireciona("emp4_empempenho004.php");
 
       }
@@ -523,15 +522,15 @@ if(isset($incluir)) {
         );
 
         $veConvMSC = $clempempenho->verificaConvenioSicomMSC($e54_autori, $anousu, $dados);
-  
+
         if ($veConvMSC > 0) {
 
           $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
-         
+
           if (!$rsResult) {
             $sqlerro  = true;
             $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183.\n";
-         
+
         }
 
         }
@@ -647,12 +646,12 @@ if(isset($incluir)) {
                 db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 
                 if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
-                    
+
                     $sqlerro = true;
                     $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!";
                 }
                 if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
-                    
+
                     $sqlerro = true;
                     $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!";
                 }
@@ -1251,8 +1250,8 @@ if(isset($incluir)) {
                           where e54_autori = {$e54_autori} limit 1";
 
     if(pg_num_rows(db_query($sSqlLicitacao))) {
-        if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > db_getsession('DB_datausu')) {
-            db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".date("d/m/Y",db_getsession('DB_datausu')).").");
+        if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > strtotime($dtDataUsu)) {
+            db_msgbox("1 - Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$dtDataUsu.").");
             db_redireciona("emp4_empempenho004.php");
         }
     }
