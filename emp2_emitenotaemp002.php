@@ -393,6 +393,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->marca            = 'e55_marca';
     $pdf1->acordo           = $oAcordo->ac16_numeroacordo;
     $pdf1->anoacordo        = $oAcordo->ac16_anousu;
+    $pdf1->seqacordo           = $ac16_sequencial;
 
     $sql  = "select c61_codcon
               from conplanoreduz
