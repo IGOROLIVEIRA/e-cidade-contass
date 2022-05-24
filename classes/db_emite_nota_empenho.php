@@ -76,7 +76,7 @@ class cl_emite_nota_empenho {
         $sqlemp .= "        paga.z01_nome AS ordenapaga, ";
         $sqlemp .= "        contador.z01_nome AS contador, ";
         $sqlemp .= "        contad.si166_crccontador AS crc, ";
-        $sqlemp .= "        controleinterno.z01_nome AS controleinterno, ac16_sequencial ";
+        $sqlemp .= "        controleinterno.z01_nome AS controleinterno ";
         $sqlemp .= " FROM empempenho ";
         $sqlemp .= " LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e60_id_usuario";
         $sqlemp .= " LEFT JOIN pctipocompra ON pc50_codcom = e60_codcom ";
@@ -91,7 +91,6 @@ class cl_emite_nota_empenho {
         $sqlemp .= " INNER JOIN orctiporec ON o58_codigo = o15_codigo ";
         $sqlemp .= " INNER JOIN cgm ON z01_numcgm = e60_numcgm ";
         $sqlemp .= " INNER JOIN concarpeculiar ON concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar ";
-        $sqlemp .= " LEFT JOIN acordo on ac16_contratado = e60_numcgm ";
         $sqlemp .= " LEFT JOIN cgm AS ordena ON ordena.z01_numcgm = o41_orddespesa ";
         $sqlemp .= " LEFT JOIN cgm AS paga ON paga.z01_numcgm = o41_ordpagamento ";
         $sqlemp .= " LEFT JOIN cgm AS liquida ON liquida.z01_numcgm = o41_ordliquidacao ";
