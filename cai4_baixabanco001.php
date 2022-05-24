@@ -58,6 +58,10 @@ $sMd5Arquivo   = null;
  */
 $lDebugAtivo   = false;
 
+if ($lDebugAtivo == true) {
+	 echo "   Debug Ativo<br/>";
+}
+
 $iInstitSessao = db_getsession("DB_instit");
 
 $result        = $cldb_config->sql_record($cldb_config->sql_query_file($iInstitSessao, "cgc, db21_codcli"));
@@ -1058,8 +1062,216 @@ if ($situacao == 2) {
                     $numpre = substr($arq_array[$i], substr($k15_numpre, 0, 3) - 1, substr($k15_numpre, 3, 3));
                     $numpar = substr($arq_array[$i], substr($k15_numpar, 0, 3) - 1, substr($k15_numpar, 3, 3));
                     $hlhposicaonumpre = substr($arq_array[$i], 67, 5);
+                    $elposicaonumpre = substr($arq_array[$i], 64, 4);
                     
+                    if ($lDebugAtivo == true) {
+                    	echo '<br>linha do hlh:'.$hlhposicaonumpre;
+                    	echo '<br>linha do el:'.$elposicaonumpre;
+                	}
+                                        
                     $oInstit = new Instituicao(db_getsession('DB_instit'));
+
+                    if( ($elposicaonumpre > 0 OR substr($arq_array[$i], 77, 4) == 9908) && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA) ){
+                    	if ($lDebugAtivo == true) {
+                            echo "     </br> continuando Guia da EL";
+                        }
+
+                    	$parcelaunica = false;
+                    	$numpre = substr($arq_array[$i], 64, 11);
+                    	$vencimentoguia = substr($arq_array[$i], 56, 8);
+
+                        if(substr($arq_array[$i], 80, 1) == 1){
+                    		if ($lDebugAtivo == true) {
+                    			echo '<br> guia IPTU/ALVARA';
+                    		}
+                    		$numpar = substr($arq_array[$i], 75, 2);
+                    		$numpre = substr($arq_array[$i], 64, 11);
+                    		if($numpar == 0){
+                    			$parcelaunica = true;                    			
+                    		}
+                    		$sqlel    	= "select distinct k00_numpre, k00_numpar, dtvencimento  from legacy_disbanco where numguia ilike '".$numpre."%' ";
+
+                    	}elseif(substr($arq_array[$i], 80, 1) == 8){
+                    		if ($lDebugAtivo == true) {
+                    			echo '<br> guia PARC DIVIDA';
+                    		}
+                    		$numpar = substr($arq_array[$i], 74, 2);
+                    		$numpre = substr($arq_array[$i], 64, 17);
+                    		if($numpar == 0){
+                    			$parcelaunica = true;                    			
+                    		}
+                    		$sqlel    	  = "select distinct k00_numpre, k00_numpar, dtvencimento  from legacy_disbanco where numguia ilike '".substr($arq_array[$i], 64, 17)."%' ";
+
+                    	}elseif(substr($arq_array[$i], 80, 1) == 2){
+                    		if ($lDebugAtivo == true) {
+                    			echo '<br> guia DIVIDA';
+							}
+							$numpre = substr($arq_array[$i], 64, 17);
+                    		$sqlel    	  = "select distinct k00_numpre, k00_numpar, dtvencimento  from legacy_disbanco where numguia = '".substr($arq_array[$i], 64, 17)."' ";
+
+                    	}elseif(substr($arq_array[$i], 80, 1) == 7){
+                    		if ($lDebugAtivo == true) {
+                    			echo '<br> guia ISS Mensal';
+							}                    			
+                    		$numpar = substr($arq_array[$i], 77, 2);
+                    		$numpre = substr($arq_array[$i], 64, 17);
+                    		$sqlel    	  = "select distinct k00_numpre, k00_numpar, dtvencimento  from legacy_disbanco where numguia = '".substr($arq_array[$i], 64, 17)."' and dtvencimento = '".substr($arq_array[$i], 56, 8)."' ";
+
+                    	}elseif(substr($arq_array[$i], 78, 3) == 910){
+                    		if ($lDebugAtivo == true) {
+                    			echo '<br> guia DIVERSOS';
+							}   
+							$numpre = substr($arq_array[$i], 64, 17);                 			
+                    		$sqlel    	  = "select distinct k00_numpre, k00_numpar, dtvencimento  from legacy_disbanco where numguia = '".substr($arq_array[$i], 64, 17)."' ";
+
+                    	}elseif(substr($arq_array[$i], 78, 3) == 810){
+                    		if ($lDebugAtivo == true) {
+                    			echo '<br> guia PARC DIVERSOS';
+							}                    			
+                    		$numpre = substr($arq_array[$i], 64, 17);
+                    		$sqlel    	  = "select distinct k00_numpre, k00_numpar, dtvencimento  from legacy_disbanco where numguia = '".substr($arq_array[$i], 64, 17)."' ";
+                    	}                    	
+                    	
+                    	$elvalor = substr($arq_array[$i], 81, 10).'.'.substr($arq_array[$i], 91, 2);
+                    	$numrows = 0;
+                        $numrowsarrecad = 0;
+                        
+                        if ($lDebugAtivo == true) {
+                        	echo "</br> Guia original da EL:".$numpre. " e <b>valor ".$elvalor." </b> e numpar".$numpar ;
+                        	echo "<br> 1º SQL ---- ".$sqlel;
+                    	}
+                        
+                        $resultel 	= db_query($sqlel) or die($sqlel);
+                        $numrows = pg_numrows($resultel);
+                        db_fieldsmemory($resultel, 0, true);
+
+                        if ($lDebugAtivo == true) {
+                        	echo " <br>Result 1º SQL k00_numpre = ".$k00_numpre.", k00_numpar = ".$k00_numpar.", dtvencimento = ".$dtvencimento;
+                        }
+
+                        if ($numrows == 0 && ((substr($arq_array[$i], 78, 3) == 910) OR (substr($arq_array[$i], 80, 1) == 2)) ){
+                    		$numpar = $k00_numpar;
+                    	}
+
+                        if($numrows == 0 ){
+                        	$numpar = 99;
+                        	$numpre = 9999999;
+                        }
+
+                        if($numrows == 1 && $k00_numpar == 0){
+                        	$sqldebarrecad = "select distinct arrecad.k00_numpre,arrecad.k00_numpar,arrecad.k00_receit,arrecad.k00_numcgm,arrecad.k00_tipo from arrecad 
+												inner join legacy_disbanco on (arrecad.k00_numpre) = (legacy_disbanco.k00_numpre) 
+												where numguia  ilike '".$numpre."%' ";
+                        }else{
+                        	$sqldebarrecad = "select  distinct arrecad.k00_numpre,arrecad.k00_numpar,arrecad.k00_receit,arrecad.k00_numcgm,arrecad.k00_tipo from arrecad 
+											inner join legacy_disbanco on (arrecad.k00_numpre,arrecad.k00_numpar) = (legacy_disbanco.k00_numpre,legacy_disbanco.k00_numpar) 
+											where numguia ilike '".$numpre."%' ";
+                        }
+
+                        if ($lDebugAtivo == true) {
+                        	echo '<br> 2º SQL ---- '.$sqldebarrecad;
+                    	}
+
+                        // verifica quantidade débitos na arrecad;
+            			$resultdebarrecad	= db_query($sqldebarrecad) or die($sqldebarrecad);
+            			$numrowsarrecad = pg_numrows($resultdebarrecad);
+            			
+                		if($numrows > 0){ // pega numpre da legacy_disbanco
+                			$numpre = $k00_numpre;
+                			if($numrowsarrecad == 1){
+                				$numpar = $k00_numpar;	
+                			}
+                		}
+                        
+                        if ($lDebugAtivo == true) {
+                        	echo '<br>Paranetros numrows ='.$numrows.', numpar ='.$numpar.', k00_numpar ='.$k00_numpar.', numrowsarrecad'.$numrowsarrecad;
+                    	}
+                        
+                        if ( ($numrows == 1 && $numpar == 0 && $numrowsarrecad >1) || ($numrows > 1 && $numrowsarrecad >1))  {
+                        	if ($lDebugAtivo == true) {
+                        		echo '<br>GERANDO RECIBO.............................................................';
+                        	}
+
+                        	//Gerar recibo
+                        	$oGeracaoBoleto = new RefactorGeracaoBoleto();                            	
+                        	
+						    //Adiciona debitos ao refactor
+						                                	                            	
+                        	while($oDebito = pg_fetch_array($resultdebarrecad)){
+                        		if ($lDebugAtivo == true) {
+						    		echo '<br> add numpre = '. $oDebito['k00_numpre'].', numpar = '. $oDebito['k00_numpar'].', receita = '.$oDebito['k00_receit'].', cgm = '.$oDebito['k00_numgm'];
+						    	}
+						    	$cgmguia = $oDebito['k00_numcgm'];
+						    	$tipodebitoguia = $oDebito['k00_tipo'];
+						        $oGeracaoBoleto->adicionarDebito($oDebito['k00_numpre'], $oDebito['k00_numpar'], $oDebito['k00_receit']);
+						    }							  
+						    
+						    $oGeracaoBoleto->set('ver_numcgm', $cgmguia);
+						    $oGeracaoBoleto->set('tipo_debito', $tipodebitoguia);
+						    $oGeracaoBoleto->set('k03_tipo', 3);
+						    $oGeracaoBoleto->set('totregistros', 1);
+						    $oGeracaoBoleto->set('forcarvencimento', true);
+						    $oGeracaoBoleto->set('processarDescontoRecibo', false);
+						    $oGeracaoBoleto->set('lNovoRecibo', true);
+
+						    if ( empty($vencimentoguia)  ) {
+						      throw new Exception("Data de operação não informada.");
+						    }
+						    $oGeracaoBoleto->set('k00_dtoper', $vencimentoguia);
+
+						    $oGeracaoBoleto->set('iCodigoModeloImpressao', 2);
+						    $oRetornoGeracaoBoleto = $oGeracaoBoleto->processar();
+						   
+						    $iNumpreBoleto = $oRetornoGeracaoBoleto->recibos_emitidos[0];
+						    if ($lDebugAtivo == true) {
+						    	echo '<br> iNumpreBoleto' .$iNumpreBoleto;
+							}
+
+						    $sqlhlhrec    	= "select * from recibopaga where k00_numnov =  '".$iNumpreBoleto."' ";
+                            $resulthlhrec 	= db_query($sqlhlhrec) or die($sqlhlhrec);
+                            $orec= pg_fetch_array($resulthlhrec);
+                           	                            
+						    $sqlsomarecibo    	= "select sum(k00_valor) as soma from recibopaga where k00_numnov =  '".$iNumpreBoleto."' ";
+                            $resultsomarecibo 	= db_query($sqlsomarecibo) or die($sqlsomarecibo);
+
+                            db_fieldsmemory($resultsomarecibo, 0, true);
+                            if ($lDebugAtivo == true) {
+                            	echo '<br>soma '.$soma;
+                        	}
+
+                        	$txexpediente = 0.00;
+                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){	$txexpediente = 5.76; }
+                        	
+                            $desconto = ($soma + $txexpediente) - $elvalor;
+                            if( $desconto > 0 ){
+                            	if ($lDebugAtivo == true) {echo '<br>Tem desconto '.$desconto.' e recibo '.$iNumpreBoleto.'';}
+                            	
+                            	//Adiciona desconto ao recibo
+                            	$sqlDescontoRec = "insert into recibopaga 
+													  select k00_numcgm,k00_dtoper,k00_receit,918,round(".$desconto."*(sum(k00_valor)/somaarrecadparcela),2) as desconto,k00_dtvenc,k00_numpre,k00_numpar,
+													  k00_numtot,k00_numdig,k00_conta,k00_dtpaga,k00_numnov
+													  from (
+													     select recibopaga.k00_numcgm,recibopaga.k00_dtoper,recibopaga.k00_receit,recibopaga.k00_dtvenc,recibopaga.k00_numpre, recibopaga.k00_numpar,
+													     recibopaga.k00_numtot,recibopaga.k00_numdig,recibopaga.k00_conta,recibopaga.k00_dtpaga,recibopaga.k00_numnov, recibopaga.k00_valor, (select sum(ar.k00_valor) from arrecad ar where (ar.k00_numpre,ar.k00_numpar) = (recibopaga.k00_numpre,recibopaga.k00_numpar)) as somaarrecadparcela
+													     from recibopaga 
+													     inner join arrecad on (arrecad.k00_numpre,arrecad.k00_numpar,arrecad.k00_receit) = (recibopaga.k00_numpre,recibopaga.k00_numpar,recibopaga.k00_receit) 
+													      where recibopaga.k00_numnov = ".$iNumpreBoleto." and recibopaga.k00_hist not in (918)    
+													  ) as y group by k00_numcgm,k00_dtoper,k00_numpre,k00_numpar,k00_receit,k00_dtvenc,k00_numtot,k00_numdig,k00_conta,k00_dtpaga,
+													  k00_numnov,somaarrecadparcela ";				                                  
+								    
+							    $rsSqlDescontoRec = db_query($sqlDescontoRec);
+
+							    if( !$rsSqlDescontoRec ) {
+							        throw new Exception(pg_last_error());
+							    }							    
+							    
+                            }                				
+							// troca Numpre e Numpar da disbanco pelo número do recibo
+            				$numpre = $iNumpreBoleto;
+            				$numpar = 0;                        		                          			
+                        }
+
+                    }
 
                     if($hlhposicaonumpre > 0 && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_NOVAPORTEIRINHA || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL) ){
                             if ($lDebugAtivo == true) {
@@ -1194,7 +1406,7 @@ if ($situacao == 2) {
 
                     }
                     if ($lDebugAtivo == true) {
-                            echo '<br>numpre '.$numpre.' e numpar '.$numpar.'<br>' ;
+                            echo '<br><b>Dados disbanco  numpre '.$numpre.' e numpar '.$numpar.'</b><br>' ;
                     }
 
 				}
@@ -1549,10 +1761,10 @@ if ($situacao == 2) {
 		}
 
 		if ($lDebugAtivo == true) {
-
 			echo "<br/>F I M<br/>";
 			exit;
 		}
+		
 
 		$sql  = "  select dtarq,                  ";
 		$sql .= "         sum(vlrpago)            ";

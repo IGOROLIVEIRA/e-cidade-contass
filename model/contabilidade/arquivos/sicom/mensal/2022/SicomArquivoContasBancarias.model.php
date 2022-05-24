@@ -1644,7 +1644,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
             $cCtb21->si97_saldocec              =  $oCtb21agrupado->si97_saldocec;
 			$cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
 			$cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
-			$cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário': ' ');
+			$cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário': ($oCtb21agrupado->si97_tipoentrsaida == 10 ? $oCtb21agrupado->si97_dscoutrasmov : ' '));
 			$cCtb21->si97_codctbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6
             || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9
             || $oCtb21agrupado->si97_tipoentrsaida == 95 || $oCtb21agrupado->si97_tipoentrsaida == 96) ? $oCtb21agrupado->si97_codctbtransf : 0;

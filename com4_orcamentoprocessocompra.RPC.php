@@ -83,7 +83,7 @@ try {
                                                                 . "          from pcorcamitemproc                                                                                 \n"
                                                                 . "               inner join pcorcamitem on pc31_orcamitem = pc22_orcamitem                                       \n"
                                                                 . "         where pc31_pcprocitem = pc81_codprocitem and pc22_codorc <> {$oParam->iCodigoOrcamento}) as bloqueado \n",
-                                                                "pc81_codprocitem",
+                                                                "pc11_seq",
                                                                 " pc80_codproc={$oParam->iCodigoProcesso} and (e54_autori is null or (e54_autori is not null and e54_anulad is not null)) ");
       $rsProcessoItem   = $oDaoProcessoItem->sql_record( $sSqlProcessoItem );
 
