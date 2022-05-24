@@ -1159,7 +1159,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         INNER JOIN acordo ON ac26_acordo = ac16_sequencial
         INNER JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-        WHERE ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+        WHERE  ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
           AND ac16_instit = " . db_getsession("DB_instit") . " ORDER BY ac26_sequencial ";
 
         $rsResult20 = db_query($sSql);
@@ -1490,6 +1490,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         if(!isset($oDadosAgrupados21[$sHash])){
                             $oDados21 = new stdClass();
                             $oDados21->codigoitem = $oAcordoItem->getCodigo();
+                            $oDados21->posicao = $oDados20->ac26_sequencial;
                             $oDados21->pcmater = $oAcordoItem->getMaterial()->getMaterial();
                             $oDados21->numeroaditamento = $oDados20->ac26_numeroaditamento;
                             $oDados21->quantidade = $iQuantidadeItem;
@@ -1570,8 +1571,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             foreach($oDadosAgrupados20 as $dadosposicao){
                 //esse array reverse foi uma forma que encontrei para pegar sempre o ultimo valor aditado
                 $dadosPosicaoReverte = array_reverse($dadosposicao);
+
                 foreach($dadosPosicaoReverte as $dados){
-                    $sHashGeracao = $dados->ac26_numeroaditamento.$dados->tipoalteracao;
+                    $sHashGeracao = $dados->ac26_numeroaditamento.$dados->tipoalteracao.$dados->posicao;
                     if(!isset($oDadosgerados[$sHashGeracao])){
                         //registro 20
                         $clcontratos20->si87_tiporegistro = 20;
@@ -1656,9 +1658,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         AND si03_dataapostila >= '{$this->sDataInicial}'
         AND si03_instit = " . db_getsession("DB_instit");
         $rsResult30 = db_query($sSql);
-        // echo $sSql;
-        // db_criatabela($rsResult30);
-        //exit;
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
