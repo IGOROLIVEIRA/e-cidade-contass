@@ -62,6 +62,7 @@ $clrotulo->label("pc10_resumo");
 $clrotulo = new rotulocampo;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
+$clrotulo->label("e54_adesaoregpreco");
 
 // funcao do sql
 function sql_query_file($c99_anousu = null, $c99_instit = null, $campos = "*", $ordem = null, $dbwhere = "")
@@ -279,6 +280,11 @@ if ($x->consultarDataDoSistema == true) {
                                             <strong>Modalidade:</strong>
                                             <?
                                             db_input('e54_nummodalidade', 7, "", true, 'text', 1, "onkeyup='somenteNumeros(this)';");
+                                            ?>
+                                        </td>
+                                        <td style="visibility: hidden">
+                                            <?
+                                            db_input('e54_adesaoregpreco', 5, "", true, 'text', 3, "onkeyup='somenteNumeros(this)';");
                                             ?>
                                         </td>
                                     </tr>
@@ -694,6 +700,7 @@ if ($x->consultarDataDoSistema == true) {
             tipoLic = oRetorno.l03_tipo;
             $('e54_numerl').value = oRetorno.iEdital + '/' + oRetorno.iAnoLicitacao;
             $('e54_nummodalidade').value = oRetorno.iNumModalidade;
+            $('e54_adesaoregpreco').value = oRetorno.iSequencial;
             $('iSequenciaCaracteristica').value = '000';
             $('sDescricaoCaracteristica').value = 'NÃO SE APLICA';
             js_buscarTipoLicitacao(oRetorno.pc50_codcom);
@@ -705,6 +712,7 @@ if ($x->consultarDataDoSistema == true) {
             $('e54_codcomdescr').value = '';
             $('e54_numerl').value = '';
             $('e54_nummodalidade').value = '';
+            $('e54_adesaoregpreco').value = '';
             $('e54_tipol').value = '';
             js_habilitaCamposLicitacao();
         } else if (oRetorno.iOrigemContrato == 3 && oRetorno.iCodigoLicitacao != '') {
@@ -715,6 +723,7 @@ if ($x->consultarDataDoSistema == true) {
             tipoLic = oRetorno.l03_tipo;
             $('e54_numerl').value = oRetorno.iEdital + '/' + oRetorno.iAnoLicitacao;
             $('e54_nummodalidade').value = oRetorno.iNumModalidade;
+            $('e54_adesaoregpreco').value = '';
             $('iSequenciaCaracteristica').value = '000';
             $('sDescricaoCaracteristica').value = 'NÃO SE APLICA'
             js_buscarTipoLicitacao(oRetorno.pc50_codcom);
@@ -724,6 +733,7 @@ if ($x->consultarDataDoSistema == true) {
             $('e54_codcomdescr').value = '';
             $('e54_numerl').value = '';
             $('e54_nummodalidade').value = '';
+            $('e54_adesaoregpreco').value = '';
             $('e54_tipol').value = '';
             js_habilitaCamposLicitacao();
         }
@@ -1467,6 +1477,7 @@ if ($x->consultarDataDoSistema == true) {
             oParam.dados.tipocompra = $F('e54_codcom');
             oParam.dados.licitacao = $F('e54_numerl');
             oParam.dados.iNumModalidade = $F('e54_nummodalidade');
+            oParam.dados.iSequencial = $F('e54_adesaoregpreco');
             oParam.dados.pagamento = encodeURIComponent(tagString($F('e54_conpag')));
             oParam.dados.resumo = encodeURIComponent(tagString($F('e54_resumo')));
             oParam.dados.iCaracteristicaPeculiar = $F("iSequenciaCaracteristica");
@@ -1559,6 +1570,7 @@ if ($x->consultarDataDoSistema == true) {
         $('e54_codcom').value = oRetorno.sTipo;
         $('e54_codcomdescr').value = oRetorno.sTipo;
         $('e54_nummodalidade').value = oRetorno.iNumModalidade;
+        $('e54_adesaoregpreco').value = oRetorno.iSequencial;
         $('iSequenciaCaracteristica').value = '000';
         $('sDescricaoCaracteristica').value = 'NÃO SE APLICA';
 

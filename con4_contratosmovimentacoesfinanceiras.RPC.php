@@ -597,7 +597,7 @@ switch ($oParam->exec) {
         if ($aAdesaoVinculada[0] != "") {
 
             $oDaoAcordo = db_utils::getDao("adesaoregprecos");
-            $sCampos = "si06_numeroadm||'/'||si06_anomodadm as si06_numeroadm,si06_nummodadm";
+            $sCampos = "si06_sequencial,si06_numeroadm||'/'||si06_anomodadm as si06_numeroadm,si06_nummodadm";
             $sSqlAdesao = $oDaoAcordo->sql_query($aAdesaoVinculada, $sCampos);
             $rsAdesao = $oDaoAcordo->sql_record($sSqlAdesao);
             $oDadosAdesao = db_utils::fieldsMemory($rsAdesao, 0);
@@ -605,6 +605,7 @@ switch ($oParam->exec) {
             $oRetorno->iModalidade = urlencode($oAcordo->getModalidade());
             $oRetorno->iNumModalidade = urlencode($oDadosAdesao->si06_nummodadm);
             $oRetorno->iProcesso = $oDadosAdesao->si06_numeroadm;
+            $oRetorno->iSequencial = $oDadosAdesao->si06_sequencial;
 
             //ACHAR CODCOMPRA
             $sPctipocampos = "pc50_codcom";

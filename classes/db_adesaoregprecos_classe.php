@@ -1125,6 +1125,7 @@ class cl_adesaoregprecos
     $sql .= "      inner join pcproc  on  pcproc.pc80_codproc = adesaoregprecos.si06_processocompra";
     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pcproc.pc80_usuario";
     $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";
+    $sql .= "      left join acordo on  acordo.ac16_adesaoregpreco = adesaoregprecos.si06_sequencial";
     $sql2 = "";
     // $dbwhere = "si06_instit = " . db_getsession("DB_instit");
     if ($dbwhere == "") {
