@@ -99,6 +99,7 @@ function js_carregarValores(oRetorno) {
         if (document.form1['aFonte[' + fonte.c241_fonte + '][valor]']) {
             document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value = valor.toFixed(2);
             var valor = fonte.c241_valor - document.form1['aFonte[' + fonte.c241_fonte + '][suplementado]'].value;
+            document.form1['aFonte[' + fonte.c241_fonte + '][saldo]'].value = valor.toFixed(2);
         }
     }
 
