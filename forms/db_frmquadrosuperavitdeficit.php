@@ -71,12 +71,10 @@ carregarvalores();
  */
 
 function carregarvalores() {
-    console.log("Estou aqui");
     buscarvalores({
         exec: 'getValores',
         // fonte: fonte
     }, js_carregarValores);
-    console.log("Aqui tbem");
     
     buscarvalores({
         exec: 'getSuplementado',
@@ -95,20 +93,12 @@ function importar()
 
 function js_carregarValores(oRetorno) {
     var valores = JSON.parse(oRetorno.responseText.urlDecode());
-    // console.log(valores);
     
     for (var [key, fonte] of Object.entries(valores.fonte)) {
-        // console.log(fonte);
-        // console.log("Estou no primeiro chaveamento");
         var valor = parseFloat(fonte.c241_valor);
         if (document.form1['aFonte[' + fonte.c241_fonte + '][valor]']) {
-            // console.log("Fonte: " + fonte.c241_fonte);
-            // console.log("Valor: " + valor);
-            // console.log("Valor do campo antes: " + document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value);
             document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value = valor.toFixed(2);
-            // console.log("Valor do campo depois: " + document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value);
             var valor = fonte.c241_valor - document.form1['aFonte[' + fonte.c241_fonte + '][suplementado]'].value;
-            // document.form1['aFonte[' + fonte.c241_fonte + '][saldo]'].value = valor.toFixed(2);
         }
     }
 
