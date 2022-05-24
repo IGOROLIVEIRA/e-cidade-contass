@@ -927,7 +927,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  */
 
                 if ($oContas10->nregobrig == 31) {
-                    $sSqlVinculoContaOrcamento = " SELECT DISTINCT k81_conta,
+                    $sSqlVinculoContaOrcamento = " SELECT DISTINCT ON (c60_estrut) k81_conta,
                                                                    c60_codcon,
                                                                    c60_descr,
                                                                    c60_estrut,
@@ -943,7 +943,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                        LEFT JOIN taborc on taborc.k02_anousu=o70_anousu and taborc.k02_codrec=o70_codrec
                                                        LEFT JOIN tabrec on tabrec.k02_codigo=taborc.k02_codigo
                                                        LEFT JOIN placaixarec on k81_receita = tabrec.k02_codigo
-                                                       LEFT JOIN saltes ON k13_reduz=k81_conta
+                                                       LEFT JOIN saltes ON k13_conta=k81_conta
                                                        LEFT JOIN conplanoreduz on k13_reduz=conplanoreduz.c61_reduz and conplanoreduz.c61_anousu=c60_anousu
                                                        LEFT JOIN conplanocontabancaria ON c56_codcon=conplanoreduz.c61_codcon and conplanoreduz.c61_anousu=c56_anousu
                                                        LEFT JOIN contabancaria ON c56_contabancaria=db83_sequencial
