@@ -47,12 +47,6 @@ class gerarEXEOBRAS extends GerarAM
             for ($iCont = 0; $iCont < pg_num_rows($rsexeobras102022); $iCont++) {
 
                 $aEXEOBRAS10 = pg_fetch_array($rsexeobras102022, $iCont);
-                $linhas[$iCont] = $aEXEOBRAS10;
-                var_dump($aEXEOBRAS10);
-                echo "--------------";
-                var_dump($linhas);
-                exit;
-
 
                 $aCSVEXEOBRAS10['si197_tiporegistro'] = $aEXEOBRAS10['si197_tiporegistro'];
                 $aCSVEXEOBRAS10['si197_codorgao'] = str_pad($aEXEOBRAS10['si197_codorgao'], 3, "0", STR_PAD_LEFT);
@@ -62,7 +56,7 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS10['si197_contdeclicitacao'] = $aEXEOBRAS10['si197_contdeclicitacao'];
                 $aCSVEXEOBRAS10['si197_exerciciolicitacao'] = $aEXEOBRAS10['si197_exerciciolicitacao'];
                 $aCSVEXEOBRAS10['si197_nroprocessolicitatorio'] = $aEXEOBRAS10['si197_nroprocessolicitatorio'];
-                $aCSVEXEOBRAS10['si197_codunidadesubresp'] = substr($aEXEOBRAS10['si197_codunidadesubresp'], 0, 8);
+                $aCSVEXEOBRAS10['si197_codunidadesubresp'] =  str_pad($aEXEOBRAS10['si197_codunidadesubresp'], 5, "0", STR_PAD_LEFT); // substr($aEXEOBRAS10['si197_codunidadesubresp'], 0, 8);
 
                 $nrolote = $aEXEOBRAS10['si197_nrolote'];
                 $sql = "select liclicitemlote.* from liclicitem
@@ -72,7 +66,7 @@ class gerarEXEOBRAS extends GerarAM
                 $rslotedescricao = db_query($sql);
                 $rslotedescricao = pg_fetch_array($rslotedescricao, 0);
 
-                /*
+
 
                 $l04_descricao = $rslotedescricao['l04_descricao'];
 
@@ -92,14 +86,50 @@ class gerarEXEOBRAS extends GerarAM
                     $aCSVEXEOBRAS10['si197_nrolote'] = $sequencial;
                     $sequencial++;
                 }
-                */
 
-                $aCSVEXEOBRAS10['si197_nrolote'] = $aEXEOBRAS10['si197_nrolote'];
+
+                //$aCSVEXEOBRAS10['si197_nrolote'] = $aEXEOBRAS10['si197_nrolote'];
                 $aCSVEXEOBRAS10['si197_codobra'] = $aEXEOBRAS10['si197_codobra'];
                 $aCSVEXEOBRAS10['si197_objeto'] = $aEXEOBRAS10['si197_objeto'];
                 $aCSVEXEOBRAS10['si197_linkobra'] = $aEXEOBRAS10['si197_linkobra'];
-                $this->sLinha = $aCSVEXEOBRAS10;
-                $this->adicionaLinha();
+                $inserir = true;
+
+                if (count($linhas) > 0) {
+
+                    for ($i = 0; $i < count($linhas); $i++) {
+                        if (
+                            $linhas[$i]['si197_tiporegistro'] == $aCSVEXEOBRAS10['si197_tiporegistro'] &&
+                            $linhas[$i]['si197_codorgao'] == $aCSVEXEOBRAS10['si197_codorgao'] &&
+                            $linhas[$i]['si197_codunidadesub'] == $aCSVEXEOBRAS10['si197_codunidadesub'] &&
+                            $linhas[$i]['si197_nrocontrato'] == $aCSVEXEOBRAS10['si197_nrocontrato'] &&
+                            $linhas[$i]['si197_exerciciocontrato'] == $aCSVEXEOBRAS10['si197_exerciciocontrato'] &&
+                            $linhas[$i]['si197_contdeclicitacao'] == $aCSVEXEOBRAS10['si197_contdeclicitacao'] &&
+                            $linhas[$i]['si197_exerciciolicitacao'] == $aCSVEXEOBRAS10['si197_exerciciolicitacao'] &&
+                            $linhas[$i]['si197_nroprocessolicitatorio'] == $aCSVEXEOBRAS10['si197_nroprocessolicitatorio'] &&
+                            $linhas[$i]['si197_codunidadesubresp'] == $aCSVEXEOBRAS10['si197_codunidadesubresp'] &&
+                            $linhas[$i]['si197_nrolote'] == $aCSVEXEOBRAS10['si197_nrolote'] &&
+                            $linhas[$i]['si197_codobra'] == $aCSVEXEOBRAS10['si197_codobra'] &&
+                            $linhas[$i]['si197_objeto'] == $aCSVEXEOBRAS10['si197_objeto'] &&
+                            $linhas[$i]['si197_linkobra'] == $aCSVEXEOBRAS10['si197_linkobra']
+
+                        ) {
+                            $inserir = false;
+                            break;
+                            //$i = count($linhas);
+                        }
+                    }
+
+                    if ($inserir == true) {
+                        $linhas[count($linhas)] = $aCSVEXEOBRAS10;
+                        $this->sLinha = $aCSVEXEOBRAS10;
+                        $this->adicionaLinha();
+                    }
+                } else {
+                    $linhas[$iCont] = $aCSVEXEOBRAS10;
+
+                    $this->sLinha = $aCSVEXEOBRAS10;
+                    $this->adicionaLinha();
+                }
             }
 
             /**
