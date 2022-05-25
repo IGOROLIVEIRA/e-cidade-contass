@@ -445,7 +445,7 @@ if ($lBloquear) {
                           true,
                           'text',
                           $iOpcao,
-                          "onkeyPress='return js_validaFracionamento(event,{$pc01_fraciona},this)'
+                          "onkeyPress='return js_teclas(event,this)'
               onchange='js_verifica($e62_quant,this.value,this.name,$e62_vlrun,$e60_numemp,$e62_sequencial)'",
                           '',
                           '',
