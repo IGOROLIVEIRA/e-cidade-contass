@@ -796,6 +796,7 @@ class cl_empagetipo {
     }
     /* PARA ATENDER A Portaria n° 3992/GM/MS/2017 DO MINISTERIO DA SAÚDE. QUE PERMITE PAGAMENTO DESTAS FONTES COM A MESMA CONTA BANCARIA */
     /* Acrescentado fonte 159 e 259 para atender alterações do TCE/MG a partir de 2020 */
+    $iAnoUsu = db_getsession("DB_anousu");
     $aFontes = array('148','149','150','151','152', '159', '248','249','250','251','252', '259');
     $sqlFonteEmp = " select o15_codtri from empempenho ";
     $sqlFonteEmp .= "   inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu ";    
@@ -808,8 +809,22 @@ class cl_empagetipo {
     } else {
         $sqlFonteEmp .= " where e50_codord = ".$op;
     }    
+    //ano empenho
+    $sqlanoEmp = " select e60_anousu from empempenho ";
+    $sqlanoEmp .= "   inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu ";    
+    if ($op != null) {
+        $sqlanoEmp .= " inner join pagordem on e60_numemp=e50_numemp ";
+    }    
+    $sqlanoEmp .= " inner join orctiporec on o58_codigo=o15_codigo ";
+    if ($numemp != null) {
+        $sqlanoEmp .= " where e60_numemp = ".$numemp;    
+    } else {
+        $sqlanoEmp .= " where e50_codord = ".$op;
+    }    
     $rsResultFonteEmp = db_query($sqlFonteEmp);
     $iFonteEmpenho = db_utils::fieldsMemory($rsResultFonteEmp, 0)->o15_codtri;
+    $rsResultAnoEmp = db_query($sqlanoEmp);
+    $iAnoEmpenho = db_utils::fieldsMemory($rsResultAnoEmp, 0)->e60_anousu;
     if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('148','149','150','151','152', '159', '248','249','250','251','252', '259')) and";
       $whereFonte2 = " ";
@@ -823,6 +838,16 @@ class cl_empagetipo {
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('100','161','261')) and";
     }elseif(substr($iFonteEmpenho, 1, 2) == '70'){
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('100','170')) and";  
+    }elseif(substr($iFonteEmpenho, 1, 2) == '60'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('186')) and";
+    }elseif($iAnoUsu > 2021 and $iAnoEmpenho <2022){
+      if(substr($iFonteEmpenho, 1, 2) == '22'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','171')) and";  
+      }elseif(substr($iFonteEmpenho, 1, 2) == '23'){
+        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','176')) and";
+      }elseif(substr($iFonteEmpenho, 1, 2) == '24'){
+        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','181')) and";
+      } 
     }elseif(substr($iFonteEmpenho, 1, 2) != '60'){ // OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100
       $whereFonte = " ";
       $whereFonte2 = " AND (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = c61_codigo) = (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = o58_codigo) ";
@@ -886,7 +911,7 @@ class cl_empagetipo {
     //     // JOIN contabancaria ON conplanocontabancaria.c56_contabancaria = contabancaria.db83_sequencial
     //     // WHERE conplanoreduz.c61_anousu = ". db_getsession('DB_anousu') ." AND contabancaria.db83_tipoconta = 1 AND conplanoreduz.c61_reduz = e83_conta) ";
     // }
-
+  //  echo $sSql;exit;
     return $sSql;
 
   }
