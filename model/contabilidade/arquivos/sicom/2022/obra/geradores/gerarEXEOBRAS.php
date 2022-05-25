@@ -56,7 +56,12 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS10['si197_contdeclicitacao'] = $aEXEOBRAS10['si197_contdeclicitacao'];
                 $aCSVEXEOBRAS10['si197_exerciciolicitacao'] = $aEXEOBRAS10['si197_exerciciolicitacao'];
                 $aCSVEXEOBRAS10['si197_nroprocessolicitatorio'] = $aEXEOBRAS10['si197_nroprocessolicitatorio'];
-                $aCSVEXEOBRAS10['si197_codunidadesubresp'] =  str_pad($aEXEOBRAS10['si197_codunidadesubresp'], 5, "0", STR_PAD_LEFT); // substr($aEXEOBRAS10['si197_codunidadesubresp'], 0, 8);
+                $aCSVEXEOBRAS10['si197_codunidadesubresp'] =  str_pad($aEXEOBRAS10['si197_codunidadesubresp'], 5, "0", STR_PAD_LEFT);
+
+                /*
+                * Trecho do código responsável por gerar sequenciais para o número do lote
+                * de acordo a l04_descricao e número do lote.
+                */
 
                 $nrolote = $aEXEOBRAS10['si197_nrolote'];
                 $sql = "select liclicitemlote.* from liclicitem
@@ -88,11 +93,16 @@ class gerarEXEOBRAS extends GerarAM
                 }
 
 
-                //$aCSVEXEOBRAS10['si197_nrolote'] = $aEXEOBRAS10['si197_nrolote'];
                 $aCSVEXEOBRAS10['si197_codobra'] = $aEXEOBRAS10['si197_codobra'];
                 $aCSVEXEOBRAS10['si197_objeto'] = $aEXEOBRAS10['si197_objeto'];
                 $aCSVEXEOBRAS10['si197_linkobra'] = $aEXEOBRAS10['si197_linkobra'];
                 $inserir = true;
+
+                /*
+                 * Trecho do código responsável por verificar se o registro 
+                *  após atribuição do sequencial ao número do lote já existe na planilha.
+                */
+
 
                 if (count($linhas) > 0) {
 
@@ -115,7 +125,6 @@ class gerarEXEOBRAS extends GerarAM
                         ) {
                             $inserir = false;
                             break;
-                            //$i = count($linhas);
                         }
                     }
 
