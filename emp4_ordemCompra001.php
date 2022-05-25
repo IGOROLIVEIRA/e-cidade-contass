@@ -221,10 +221,10 @@ db_postmemory($HTTP_POST_VARS);
         //----------------------------------------------------------------------
         function js_pesquisae60_numemp(mostra) {
             if (mostra == true) {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
             } else {
                 if (document.form1.e60_numemp.value != '') {
-                    js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&numemp=true&pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
                 } else {
                     document.form1.e60_numemp.value = '';
                 }
@@ -233,23 +233,28 @@ db_postmemory($HTTP_POST_VARS);
 
         function js_mostraempempenho(chave, chave2, chave3, chave4, erro) {
 
+            var r = true;
+            console.log(chave, chave2, chave3, chave4, erro);
+
+
             if (chave3 != "") {
                 data1 = new Date(chave3);
                 data2 = new Date(chave4)
                 dataAtual = new Date();
                 if (chave4 != "") {
                     if (data2 < dataAtual) {
-                        var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave4) + ". Deseja continuar?");
+                        r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave4) + ". Deseja continuar?");
                     }
                 } else {
                     if (data1 < dataAtual) {
-                        var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave3) + ". Deseja continuar?");
+                        r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave3) + ". Deseja continuar?");
                     }
                 }
 
             }
 
-            if (erro == true || r != true) {
+
+            if (erro == true || r != true || chave2 == true) {
                 document.form1.e60_numemp.value = '';
                 document.form1.e60_numemp.focus();
             }
@@ -294,10 +299,10 @@ db_postmemory($HTTP_POST_VARS);
         //-----------------------------------------------------
         function js_pesquisae60_codemp(mostra) {
             if (mostra == true) {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
             } else {
                 if (document.form1.e60_codemp.value != '') {
-                    js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&pesquisa_chave=' + document.form1.e60_codemp.value + '&funcao_js=parent.js_mostraempempenho3&lPesquisaPorCodigoEmpenho=true', 'Pesquisa', false);
+                    js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&codemp=true&pesquisa_chave=' + document.form1.e60_codemp.value + '&funcao_js=parent.js_mostraempempenho3&lPesquisaPorCodigoEmpenho=true', 'Pesquisa', false);
                 } else {
                     document.form1.e60_codemp.value = '';
                 }
@@ -305,6 +310,8 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_mostraempempenho3(chave, chave2, chave3, chave4, erro) {
+
+            console.log(chave, chave2, chave3, chave4, erro);
 
             if (chave3 != "") {
                 data1 = new Date(chave3);
@@ -322,7 +329,7 @@ db_postmemory($HTTP_POST_VARS);
 
             }
 
-            if (erro == true || r == false) {
+            if (erro == true || r == false || chave2 == true) {
                 document.form1.e60_codemp.value = '';
                 document.form1.e60_codemp.focus();
             }

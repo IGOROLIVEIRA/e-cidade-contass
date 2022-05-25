@@ -142,6 +142,7 @@ $rotulo->label("z01_cgccpf");
           $campos = "empempenho.e60_numemp,
           empempenho.e60_codemp,
           empempenho.e60_anousu,
+          e61_autori,
           empempenho.e60_numcgm,
           case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
           case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
@@ -158,6 +159,10 @@ $rotulo->label("z01_cgccpf");
           ";
           $campos = " distinct " . $campos;
           $dbwhere = " e60_instit = " . db_getsession("DB_instit");
+
+          if ($inclusaoordemcompra == true) {
+            $dbwhere .= " and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
+          }
 
           if (isset($pegaAnousu)) {
             $dbwhere .= " and e60_anousu = " . db_getsession("DB_anousu");
@@ -296,7 +301,6 @@ $rotulo->label("z01_cgccpf");
             $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
           }
 
-
           $result = $clempempenho->sql_record($sql);
         ?>
 
@@ -318,6 +322,8 @@ $rotulo->label("z01_cgccpf");
         } else {
 
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
+
+
 
             if (isset($lPesquisaPorCodigoEmpenho)) {
 
@@ -414,6 +420,19 @@ $rotulo->label("z01_cgccpf");
               //               UNION
               //               SELECT e69_numemp FROM empnota)
               //               and empempenho.e60_numemp = $pesquisa_chave ";
+
+              if ($inclusaoordemcompra == true) {
+
+                if ($codemp == true) {
+                  $where .= " empempenho.e60_codemp = '$pesquisa_chave' and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
+                }
+
+                if ($numemp == true) {
+                  $where .= " empempenho.e60_numemp = $pesquisa_chave and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
+                }
+              }
+
+              //$where .= "empempenho.e60_numemp = $pesquisa_chave and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
               $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null, $where, $filtroempelemento);
             }
 
