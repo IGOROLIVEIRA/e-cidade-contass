@@ -1159,7 +1159,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         INNER JOIN acordo ON ac26_acordo = ac16_sequencial
         INNER JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-        WHERE ac26_sequencial = 1642 and ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+        WHERE ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
           AND ac16_instit = " . db_getsession("DB_instit") . " ORDER BY ac26_sequencial ";
 
         $rsResult20 = db_query($sSql);
