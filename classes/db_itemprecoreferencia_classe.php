@@ -343,6 +343,19 @@ class cl_itemprecoreferencia {
          return false;
        }
      }
+     if(trim($this->si02_qtditem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si02_qtditem"])){
+      $sql  .= $virgula." si02_qtditem = $this->si02_qtditem ";
+      $virgula = ",";
+      if(trim($this->si02_qtditem) == null ){
+        $this->erro_sql = " Campo Media de desconto referencia nao Informado.";
+        $this->erro_campo = "si02_qtditem";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+      }
      $sql .= " where ";  
      if($si02_sequencial==null){
         $sql .= " si02_sequencial = $this->si02_sequencial";
@@ -556,5 +569,40 @@ class cl_itemprecoreferencia {
      }
      return $sql;
   }
+
+  public function sql_query_precoreferencia($pc80_codproc){
+    $sSql  = "select si01_sequencial "; 
+    $sSql .= " from sicom.precoreferencia "; 
+    $sSql .= " where si01_processocompra=$pc80_codproc";
+
+    return $sSql;
+
+  }
+
+
+
+  public function sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem){
+    $sSql  = "select si02_sequencial ";  
+    $sSql  .= "from sicom.itemprecoreferencia "; 
+    $sSql  .= "where si02_precoreferencia = $si01_sequencial and si02_itemproccompra = $pc23_orcamitem "; 
+
+    return $sSql;
+  }
+
+  public function sql_query_codprocesso($pc11_numero){
+    $sSql  = "select pc81_codproc ";  
+    $sSql  .= "from pcprocitem "; 
+    $sSql  .= "where pc81_solicitem = $pc11_numero "; 
+
+    return $sSql;
+  }
+
+
+
+  
+
+
+
+
 }
 ?>

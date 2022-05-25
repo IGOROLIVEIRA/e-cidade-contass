@@ -89,7 +89,7 @@ if (pg_numrows($rsCertidaoForo) == 0) {
     </tr>
     <tr> 
       <td>Observa&ccedil;&atilde;o:</td>
-      <td>&nbsp;</td>
+      <td><?php echo $oCertidaoForo->v01_obs; ?></td>
     </tr>
   </table>
   

@@ -121,7 +121,8 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
          liclicita.l20_edital AS nroProcessoLicitatorio,
          parecerlicitacao.l200_data AS dataParecer,
          parecerlicitacao.l200_tipoparecer AS tipoParecer,
-         cgm.z01_cgccpf AS nroCpf
+         cgm.z01_cgccpf AS nroCpf,
+         manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 		 FROM liclicita AS liclicita
 		 INNER JOIN homologacaoadjudica ON (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 		 INNER JOIN parecerlicitacao ON (liclicita.l20_codigo=parecerlicitacao.l200_licitacao)
@@ -130,6 +131,7 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
 		 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
 	INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 		 LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+     LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
 		 WHERE db_config.codigo= " . db_getsession("DB_instit") . "
          AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= " . db_getsession("DB_anousu") . "
          AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
@@ -150,7 +152,12 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
 
       $clparelic10->si66_tiporegistro = 10;
       $clparelic10->si66_codorgao = $oDados10->codorgaoresp;
-      $clparelic10->si66_codunidadesub = $oDados10->codunidadesubresp;
+      if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
+        $clparelic10->si66_codunidadesub = $oDados10->codunidsubant;  
+      }else{
+        $clparelic10->si66_codunidadesub = $oDados10->codunidadesubresp;
+      }
+      
       $clparelic10->si66_exerciciolicitacao = $oDados10->exerciciolicitacao;
       $clparelic10->si66_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
       $clparelic10->si66_dataparecer = $oDados10->dataparecer;
