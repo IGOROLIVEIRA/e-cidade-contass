@@ -244,7 +244,8 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
                  pcsubgrupo.pc04_descrsubgrupo as DB_pc04_descrsubgrupo,
                  pcmater.pc01_servico,
                  pcmater.pc01_veiculo,
-                 z01_nome as dl_fornecedor";
+                 z01_nome as dl_fornecedor,
+                 pc23_vlrun";
                     $repassa = array(
                         "chave_pc01_codmater"    => @$chave_pc01_codmater,
                         "chave_pc01_descrmater"  => @$chave_pc01_descrmater,
@@ -278,7 +279,7 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
                     } else {
                         $sql = $clpcmater->sql_query_desdobraregistropreco(null, $campos, "pc01_codmater", "$where_ativo");
                     }
-
+                    //echo $sql;
                     db_lovrot(@$sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
                 } else {
                     if ($pesquisa_chave != null && $pesquisa_chave != "") {
