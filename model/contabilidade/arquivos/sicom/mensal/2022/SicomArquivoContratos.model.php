@@ -1475,7 +1475,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 }
                             }
                             if($oAcordoItem->getQuantidade() != $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero)){
-                                $iQuantidadeItem = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
+                                $iQuantidadeItem = abs($oAcordoItem->getQuantiAditada());
                             }else{
                                 $iQuantidadeItem = $oAcordoItem->getQuantidade();
                             }
@@ -1513,9 +1513,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         
                             if ($oAcordoPosicao->getTipo() == 14) {
                                 $oDados21->si87_novadatatermino = ($oAcordoPosicao->getVigenciaAlterada() == 's') ? $oDataTermino->getDate() : "";
-                            } else {
-                                $oDados21->si87_novadatatermino = $oDataTermino->getDate();
                             }
+                            
                             $oDados21->tipoalteracao = $tipoalteracao;
                             $oDados21->ac35_datapublicacao = $oDados20->ac35_datapublicacao;
                             $oDados21->ac35_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao);
