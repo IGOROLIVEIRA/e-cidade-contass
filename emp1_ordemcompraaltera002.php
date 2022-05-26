@@ -119,7 +119,7 @@ if (isset($dados->altera)) {
         $clmatordem->m51_depto       = $dados->coddepto;
         $clmatordem->m51_deptoorigem = $dados->m51_deptoorigem;
         $clmatordem->m51_numcgm      = $m51_numcgm;
-        $clmatordem->m51_obs         = $dados->obs;
+        $clmatordem->m51_obs         = utf8_decode($dados->obs);
         $clmatordem->m51_valortotal  = $valor_total;
         $clmatordem->m51_prazoent    = $dados->m51_prazoent;
         $clmatordem->alterar($m51_codordem);

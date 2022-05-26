@@ -475,17 +475,16 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
         let oParam = new Object();
         let body = document.form1;
-
+        let obs = body.m51_obs.value
         oParam.m51_prazoent = body.m51_prazoent.value;
         oParam.m51_codordem = body.m51_codordem.value;
         oParam.coddepto = body.coddepto.value;
         oParam.coddeptodescr = body.coddeptodescr.value;
-        oParam.obs = body.m51_obs.value;
+        oParam.obs = encodeURIComponent(obs.replace('\'',''));
         oParam.m51_data = body.m51_data.value;
         oParam.m51_deptoorigem = body.m51_deptoorigem.value;
         oParam.itens = aItens;
         oParam.altera = true;
-
         let oAjax = new Ajax.Request('emp1_ordemcompraaltera002.php', {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
