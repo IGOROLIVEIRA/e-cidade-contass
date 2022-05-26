@@ -123,6 +123,7 @@ if ($agrupar == "s") {
 	                    and k60_instit = $instit 
                     group by debitos.k22_numcgm, 
                              cgm.z01_nome,
+			     cgm.z01_cgccpf,
                              k63_notifica
                  ) as x $xxordem";
 } else {
