@@ -395,9 +395,9 @@ if ($clempparametro->numrows > 0){
                             $ok = true;
                         }
                         if (isset($sol) && $sol=="true") {
-                            $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmatersol(null,"pc11_seq,pc11_resum,pc11_codigo,pc11_vlrun,pc11_quant,pc01_codmater,pc01_descrmater,pc22_orcamitem","pc22_orcamitem","pc20_codorc=$pc20_codorc"));
+                            $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmatersol(null,"pc11_seq,pc11_resum,pc11_codigo,pc11_vlrun,pc11_quant,pc01_codmater,pc01_descrmater,pc22_orcamitem","pc11_seq","pc20_codorc=$pc20_codorc"));
                         } else if (isset($sol) && $sol=="false") {
-                            $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterproc(null,"pc01_taxa,pc01_tabela,pc80_criterioadjudicacao,pc11_seq,pc11_resum,pc11_codigo,pc11_vlrun,pc11_quant,pc01_codmater,pc01_descrmater,pc22_orcamitem","pc22_orcamitem","pc20_codorc=$pc20_codorc"));
+                            $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterproc(null,"pc01_taxa,pc01_tabela,pc80_criterioadjudicacao,pc11_seq,pc11_resum,pc11_codigo,pc11_vlrun,pc11_quant,pc01_codmater,pc01_descrmater,pc22_orcamitem","pc11_seq","pc20_codorc=$pc20_codorc"));
                         }
                         $numrows_itens = $clpcorcamitem->numrows;
                         $criterioadjudicacao = db_utils::getCollectionByRecord($result_itens,0);

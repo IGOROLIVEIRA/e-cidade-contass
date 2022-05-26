@@ -896,4 +896,30 @@ function sql_query_fornec ( $pc23_orcamforne=null,$pc23_orcamitem=null,$campos="
     return $sSql;
   }
 
+  public function sql_query_pcorcamval($pc11_codigo, $pc11_numero){
+    $sSql  = "select pc23_orcamforne,pc23_orcamitem ";
+    $sSql .= " FROM solicitem ";
+    $sSql .= " inner join pcprocitem on pc81_solicitem = pc11_codigo ";
+    $sSql .= " inner join pcorcamitemproc on pc31_pcprocitem = pc81_codprocitem ";
+    $sSql .= " inner join pcorcamitem on pc31_orcamitem = pc22_orcamitem ";
+    $sSql .= " inner join pcorcamforne on pc21_codorc = pc22_codorc ";
+    $sSql .= " inner join pcorcamval on pc23_orcamforne = pc21_orcamforne and pc23_orcamitem = pc22_orcamitem ";
+    $sSql .= " WHERE pc11_numero = $pc11_numero and pc11_codigo = $pc11_codigo";
+
+    return $sSql;
+
+  }
+
+  public function sql_query_atualizavalor($pc23_orcamforne, $pc23_orcamitem){
+    $sSql  = "select pc23_quant, pc23_vlrun ";
+    $sSql .= " from pcorcamval ";
+    $sSql .= " where ";
+	  $sSql .= " pc23_orcamforne = $pc23_orcamforne ";
+	  $sSql .= " and pc23_orcamitem = $pc23_orcamitem";
+
+    return $sSql;
+
+  }
+ 
+
 }
