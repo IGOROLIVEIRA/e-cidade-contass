@@ -211,7 +211,7 @@ if (isset($incluir)) {
 		$erro_msg = "Selecione uma modalidade para a licitação.";
 		$sqlerro = true;
 	}
-	if ($l20_codtipocom != 8 && $l20_codtipocom != 9 && $l20_codtipocom != 10 && $l20_codtipocom != 11) {
+	if ($oPost->modalidade_tribunal != 100 && $oPost->modalidade_tribunal != 101 && $oPost->modalidade_tribunal != 102 && $oPost->modalidade_tribunal != 103) {
 		if($l20_leidalicitacao == 1){
 			if($l20_mododisputa == 0){
 			$erro_msg = "Selecione um modo de disputa para a licitação.";
