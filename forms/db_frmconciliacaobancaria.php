@@ -214,7 +214,7 @@ db_app::load("widgets/windowAux.widget.js");
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>Total de Entradas:</b>
+                                                    <b>Valores à Débito:</b>
                                                 </td>
                                                 <td valign='top'>
                                                     <?
@@ -224,7 +224,7 @@ db_app::load("widgets/windowAux.widget.js");
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>Total de Saídas:</b>
+                                                    <b>Valores à Crédito:</b>
                                                 </td>
                                                 <td valign='top'>
                                                     <?
@@ -474,6 +474,14 @@ db_app::load("widgets/windowAux.widget.js");
         oParam.data_final     = document.form1.data_final.value;
         var sParam = js_objectToJson(oParam);
         var url = 'cai4_conciliacaoBancariaNovo.RPC.php';
+        var sJson = '{"exec": "getFechamento", "params": ['+ sParam + ']}';
+        var oAjax = new Ajax.Request(url,
+            {
+                method    : 'post',
+                parameters: 'json=' + sJson,
+                onComplete: js_retorno_fechamento
+            }
+        );
         var sJson = '{"exec": "getDadosExtrato", "params": ['+ sParam + ']}';
         var oAjax = new Ajax.Request(url,
             {
@@ -482,6 +490,24 @@ db_app::load("widgets/windowAux.widget.js");
                 onComplete: js_retorno_dados_extrato
             }
         );
+    }
+
+    function js_retorno_fechamento(oAjax) {
+        // console.log(oAjax);
+        var oResponse = eval("(" + oAjax.responseText + ")");
+
+        if (oResponse.status == 1) {
+            // console.log(oResponse.aLinhasExtrato);
+            for (var i = 0; i < oResponse.aLinhasExtrato.length; i++) {
+                console.log(oResponse.aLinhasExtrato[i]);
+                with (oResponse.aLinhasExtrato[i]) {
+                    if (fechar_conciliacao == 1)
+                        document.getElementById("fechar_conciliacao").checked = true;
+                    else 
+                        document.getElementById("fechar_conciliacao").checked = false;
+                }
+            }
+        }
     }
 
     function js_retorno_dados_extrato(oAjax) {
@@ -493,6 +519,10 @@ db_app::load("widgets/windowAux.widget.js");
             for (var i = 0; i < oResponse.aLinhasExtrato.length; i++) {
                 // console.log(oResponse.aLinhasExtrato[i]);
                 with (oResponse.aLinhasExtrato[i]) {
+                    if (fechar_conciliacao == 1)
+                        document.getElementById("fechar_conciliacao").checked = true;
+                    else 
+                        document.getElementById("fechar_conciliacao").checked = false;
                     var conciliado = parseFloat(saldo_anterior) - parseFloat(total_entradas) + parseFloat(total_saidas);
                     // console.log("Query da Entrada: " + total_entradas);
                     document.form1.saldo_inicial_tesouraria.value = js_formatar(saldo_anterior, "f");
@@ -502,10 +532,6 @@ db_app::load("widgets/windowAux.widget.js");
                     if (iZerarSaldoFinalExtrato == 0) {
                         document.form1.saldo_final_extrato.value = valor_conciliado;
                     }
-                    if (fechar_conciliacao == 1)
-                        document.getElementById("fechar_conciliacao").checked = true;
-                    else 
-                        document.getElementById("fechar_conciliacao").checked = false;
                     iZerarSaldoFinalExtrato = 0;
                     js_atualizar_diferenca();
                 }
@@ -558,13 +584,13 @@ db_app::load("widgets/windowAux.widget.js");
         var oResponse = eval("(" + oAjax.responseText + ")");
         var iRowAtiva     = 0;
         var iTotalizador  = 0;
-        console.log(oResponse);
+        // console.log(oResponse);
         gridLancamentos.clearAll(true);
         gridLancamentos.setStatus("");
 
         if (oResponse.status == 1) {
             for (var iNotas = 0; iNotas < oResponse.aLinhasExtrato.length; iNotas++) {
-                console.log(oResponse.aLinhasExtrato[iNotas]);
+                // console.log(oResponse.aLinhasExtrato[iNotas]);
                 with (oResponse.aLinhasExtrato[iNotas]) {
                     var nValor = valor;
                     var lDisabled = false;
@@ -932,7 +958,7 @@ db_app::load("widgets/windowAux.widget.js");
             var lancamento = js_preenche_lancamento(movimentos[iMov]);
             oParam.movimentos.push(lancamento);
         }
-        // console.log(oParam);
+        console.log(oParam);
         // Final dos movimentos
         var sParam = js_objectToJson(oParam);
         url = 'cai4_conciliacaoBancariaNovo.RPC.php';
@@ -949,7 +975,7 @@ db_app::load("widgets/windowAux.widget.js");
     function js_retorno_processar_lancamentos(oAjax) {
         js_removeObj("msgBox");
         // console.log("Antes da resposta");
-        console.log(oAjax.responseText);
+        // console.log(oAjax.responseText);
 
         var oResponse = eval("(" + oAjax.responseText + ")");
         if (oResponse.error)
@@ -1015,6 +1041,10 @@ db_app::load("widgets/windowAux.widget.js");
         lancamento.codigo           = dados_complementares_oprecslip[movimento[1]];
         lancamento.documento        = dados_complementares_documento[movimento[1]];
         lancamento.movimentacao     = movimento[8];
+        if (movimento[8] == "EP") 
+            lancamento.movimentacao = "E";
+        if (movimento[8] == "SP") 
+            lancamento.movimentacao = "S";
         lancamento.valor            = dados_complementares_valor_individual[movimento[1]];
         console.log(lancamento);
         return lancamento;

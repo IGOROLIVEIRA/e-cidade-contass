@@ -237,6 +237,18 @@ try {
             $oRetorno->aLinhasExtrato[] = excluir_lancamentos_conciliados($oParam->params[0]->movimentos, $conta, $data_conciliacao);
             db_fim_transacao(false);
             break;
+
+        case 'getFechamento':
+            $oRetorno->aLinhasExtrato = array();
+            // $oRetorno->aLinhasExtrato[] = "Uso para debug";
+            $data_inicial = data($oParam->params[0]->data_inicial);
+            $data_final = data($oParam->params[0]->data_final);
+            $conta = $oParam->params[0]->conta;
+            $oDadosLinha->fechar_conciliacao = fechar_conciliacao($conta, $data_final);
+            // Retorna os dados
+            $oRetorno->aLinhasExtrato[] = $oDadosLinha;
+            break;
+
         case 'getDadosExtrato':
             $oRetorno->aLinhasExtrato = array();
             // $oRetorno->aLinhasExtrato[] = "Uso para debug";
