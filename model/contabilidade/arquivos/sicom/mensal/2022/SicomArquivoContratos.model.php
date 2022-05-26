@@ -1362,11 +1362,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                                 $clcontratos21->si88_quantacrescdecresc = 1;
                             } else {
-                                if ($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5) {
-                                    $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantiAditada());
-                                } else {
-                                    $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
-                                }
+                                $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantiAditada());
                             }
 
                             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -1472,9 +1468,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                     $tipoalteracao = 2;
                                 }
                             }
-                            if ($oAcordoItem->getQuantidade() != $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero)) {
-                                $iQuantidadeItem = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
-                            } else {
+                            if($oAcordoItem->getQuantidade() != $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero)){
+                                $iQuantidadeItem = abs($oAcordoItem->getQuantiAditada());
+                            }else{
                                 $iQuantidadeItem = $oAcordoItem->getQuantidade();
                             }
                             $iValorUnitarioAditadoItem = $oAcordoItem->getValorUnitario();
@@ -1511,9 +1507,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
                             if ($oAcordoPosicao->getTipo() == 14) {
                                 $oDados21->si87_novadatatermino = ($oAcordoPosicao->getVigenciaAlterada() == 's') ? $oDataTermino->getDate() : "";
-                            } else {
-                                $oDados21->si87_novadatatermino = $oDataTermino->getDate();
                             }
+                            
                             $oDados21->tipoalteracao = $tipoalteracao;
                             $oDados21->ac35_datapublicacao = $oDados20->ac35_datapublicacao;
                             $oDados21->ac35_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao);
