@@ -222,7 +222,6 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
 			INNER JOIN pcproc ON si06_processocompra = pc80_codproc
 			LEFT JOIN infocomplementaresinstit ON adesaoregprecos.si06_instit = infocomplementaresinstit.si09_instit
 			WHERE si06_instit= " . db_getsession('DB_instit') . "
-				AND date_part('year',si06_dataadesao) = " . db_getsession('DB_anousu') . "
 		  		AND ac16_sequencial = " . $sequencial . "
 	  ";
 
@@ -1173,17 +1172,17 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $oAcordo = new Acordo($oDados20->ac16_sequencial);
             $oDadosAgrupados21 = array();
 
-           $sSQL20 = "
+            $sSQL20 = "
            select si87_codaditivo
                from contratos202022
                where si87_codaditivo = {$oDados20->ac26_sequencial}
            ";
-           $rsConsultaR20  = db_query($sSQL20);
-           if (pg_num_rows($rsConsultaR20) > 0) {
-               continue;
-           }
+            $rsConsultaR20  = db_query($sSQL20);
+            if (pg_num_rows($rsConsultaR20) > 0) {
+                continue;
+            }
 
-           $sSql = "select  (CASE
+            $sSql = "select  (CASE
            WHEN o41_subunidade != 0
                OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
                    OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
@@ -1196,7 +1195,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                and db01_anousu = o41_anousu
                JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oDados20->ac16_deptoresponsavel;
-           $result = db_query($sSql);
+            $result = db_query($sSql);
 
             $sCodUnidade = db_utils::fieldsMemory($result, 0)->codunidadesub;
             /*
@@ -1220,7 +1219,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250);
                 $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal()); //317
                 if (in_array($oAcordoPosicao->getTipo(), array(6, 13))) {
-                        $clcontratos20->si87_novadatatermino = $oDataTermino->getDate();
+                    $clcontratos20->si87_novadatatermino = $oDataTermino->getDate();
                 } else {
                     $clcontratos20->si87_novadatatermino = "";
                 }
@@ -1228,13 +1227,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $iTotalPosicaoAditivo = 0;
                 $iQuantidadeAditada = 0;
                 $valortotaladitado = 0;
-                $iValorAditado=0;
+                $iValorAditado = 0;
                 //ini_set('display_errors','on');
                 /**
                  * AQUI IREI CALCULAR O VALOR ADITADO DO REGISTRO 20
                  */
                 foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
-                    if($oAcordoItem->getQuantiAditada() != 0 || $oAcordoItem->getValorAditado() != 0){
+                    if ($oAcordoItem->getQuantiAditada() != 0 || $oAcordoItem->getValorAditado() != 0) {
                         $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
                         $iTotalPosicaoAditivo += $oAcordoItem->getValorAditado();
 
@@ -1244,17 +1243,17 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
                             where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
                             and ac26_sequencial = {$oDados20->ac26_sequencial}";
-                            $rsMatServicoR21  = db_query($sqlServico);
-                            $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                        $rsMatServicoR21  = db_query($sqlServico);
+                        $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                             $valortotaladitado += abs($oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero) - $oAcordoItem->getValorTotal());
                         } else {
                             //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
                             //2 = reequilibrio 5 = reajuste
-                            if($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5){
+                            if ($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5) {
                                 $iQuantidadeAditada = $oAcordoItem->getQuantidade();
                                 $iValorAditado += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_sequencial) - $oAcordoItem->getValorTotal();
-                            }else{
+                            } else {
                                 $iQuantidadeAditada = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
                             }
                             $valortotaladitado = abs($iTotalPosicaoAnterior - $iTotalPosicaoAditivo);
@@ -1269,11 +1268,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 * 3 - nao houve alteracao no valor
                 */
 
-                if($iTotalPosicaoAditivo > $iTotalPosicaoAnterior){
+                if ($iTotalPosicaoAditivo > $iTotalPosicaoAnterior) {
                     $tipoalteracao = 1;
-                } elseif ($iTotalPosicaoAditivo < $iTotalPosicaoAnterior){
+                } elseif ($iTotalPosicaoAditivo < $iTotalPosicaoAnterior) {
                     $tipoalteracao = 2;
-                }else{
+                } else {
                     $tipoalteracao = 3;
                 }
                 $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao;
@@ -1299,7 +1298,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $iQuantidadeAditada = 0;
                     $valortotaladitado = 0;
                     foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
-                        if($oAcordoItem->getQuantiAditada() != 0 && $oAcordoItem->getValorAditado() != 0){
+                        if ($oAcordoItem->getQuantiAditada() != 0 && $oAcordoItem->getValorAditado() != 0) {
                             $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
                             $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
@@ -1365,7 +1364,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             } else {
                                 $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantiAditada());
                             }
-            
+
                             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                             $clcontratos21->si88_instit = db_getsession("DB_instit");
                             if ($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7") {
@@ -1392,15 +1391,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             if ($clcontratos21->erro_status == 0) {
                                 throw new Exception($clcontratos21->erro_msg);
                             }
-                        }   
+                        }
                     }
                 }
             }
-            
+
             /*
             *SOMENTE DOS TIPOS 11 e 14 
-            */
-            else{
+            */ else {
                 $valorAcrescimo = 0;
                 $valorDecrescimo = 0;
                 foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
@@ -1418,14 +1416,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
 
                     /** 
-                    * busca itens obra;
-                    */
+                     * busca itens obra;
+                     */
                     $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
                     $rsItems = db_query($sqlItemobra);
                     $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
 
                     //somente itens que sofream alteraçoes
-                    if($oAcordoItem->getQuantiAditada() != 0 && $oAcordoItem->getValorAditado() != 0){
+                    if ($oAcordoItem->getQuantiAditada() != 0 && $oAcordoItem->getValorAditado() != 0) {
                         //verifica se e servico controlado por valor
                         $sqlServico = "select pc01_servico, ac20_servicoquantidade
                         from acordoitem
@@ -1443,30 +1441,30 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                             $iQuantidadeItem = 1;
-                            if($iValorTotalItem > $iValorTotalItemAnterior){
+                            if ($iValorTotalItem > $iValorTotalItemAnterior) {
                                 $tipoalteracao = 1;
-                            }else{
+                            } else {
                                 $tipoalteracao = 2;
                             }
 
-                            if($iValorTotalItem == $iValorTotalItemAnterior){
-                                $iValorUnitarioAditadoItem =$iValorTotalItem;
+                            if ($iValorTotalItem == $iValorTotalItemAnterior) {
+                                $iValorUnitarioAditadoItem = $iValorTotalItem;
                                 $tipoalteracao = 1;
-                            }else{
+                            } else {
                                 $iValorUnitarioAditadoItem = ($iValorTotalItem - $iValorTotalItemAnterior);
                                 $tipoalteracao = 1;
                             }
-                        }else{
-                            if($iQuantidadeItem != $iQuantidadeItemAnterior){
-                                if($iQuantidadeItem > $iQuantidadeItemAnterior){
+                        } else {
+                            if ($iQuantidadeItem != $iQuantidadeItemAnterior) {
+                                if ($iQuantidadeItem > $iQuantidadeItemAnterior) {
                                     $tipoalteracao = 1;
-                                }else{
+                                } else {
                                     $tipoalteracao = 2;
                                 }
-                            }else{
-                                if($iValorTotalItem > $iValorTotalItemAnterior){
+                            } else {
+                                if ($iValorTotalItem > $iValorTotalItemAnterior) {
                                     $tipoalteracao = 1;
-                                }else{
+                                } else {
                                     $tipoalteracao = 2;
                                 }
                             }
@@ -1478,14 +1476,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $iValorUnitarioAditadoItem = $oAcordoItem->getValorUnitario();
                         }
 
-                        $sHash = $oDados20->ac26_sequencial.$oAcordoItem->getCodigo().$tipoalteracao;
-                        if($tipoalteracao == 1){
+                        $sHash = $oDados20->ac26_sequencial . $oAcordoItem->getCodigo() . $tipoalteracao;
+                        if ($tipoalteracao == 1) {
                             $valorAcrescimo += $iQuantidadeItem * $iValorUnitarioAditadoItem;
-                        }else{
+                        } else {
                             $valorDecrescimo += $iQuantidadeItem * $iValorUnitarioAditadoItem;
                         }
 
-                        if(!isset($oDadosAgrupados21[$sHash])){
+                        if (!isset($oDadosAgrupados21[$sHash])) {
                             $oDados21 = new stdClass();
                             $oDados21->codigoitem = $oAcordoItem->getCodigo();
                             $oDados21->posicao = $oDados20->ac26_sequencial;
@@ -1506,7 +1504,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $oDados21->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250);
 
                             $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal());
-                        
+
                             if ($oAcordoPosicao->getTipo() == 14) {
                                 $oDados21->si87_novadatatermino = ($oAcordoPosicao->getVigenciaAlterada() == 's') ? $oDataTermino->getDate() : "";
                             }
@@ -1546,32 +1544,32 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $oDados21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
                             $oDadosAgrupados21[$sHash] = $oDados21;
                         }
-                    }//fim quantidade aditada
+                    } //fim quantidade aditada
 
-                    if($tipoalteracao == 1){
-                        if($valorAcrescimo > 0){
+                    if ($tipoalteracao == 1) {
+                        if ($valorAcrescimo > 0) {
                             $oDadosAgrupados21[$sHash]->valoraditamento = $valorAcrescimo;
                         }
-                    }else{
-                        if($valorAcrescimo > 0){
+                    } else {
+                        if ($valorAcrescimo > 0) {
                             $oDadosAgrupados21[$sHash]->valoraditamento = $valorDecrescimo;
                         }
                     }
-                }//fim itens
+                } //fim itens
                 $oDadosAgrupados20[$oDados20->ac26_sequencial] = $oDadosAgrupados21;
-            }//fim tipo 14 e 15
-        }//fim for
+            } //fim tipo 14 e 15
+        } //fim for
 
         //AQUI SERA GERADO O REGISTRO 20 e 21
-        if(!empty($oDadosAgrupados20)){
+        if (!empty($oDadosAgrupados20)) {
             $oDadosgerados = array();
-            foreach($oDadosAgrupados20 as $dadosposicao){
+            foreach ($oDadosAgrupados20 as $dadosposicao) {
                 //esse array reverse foi uma forma que encontrei para pegar sempre o ultimo valor aditado
                 $dadosPosicaoReverte = array_reverse($dadosposicao);
 
-                foreach($dadosPosicaoReverte as $dados){
-                    $sHashGeracao = $dados->ac26_numeroaditamento.$dados->tipoalteracao.$dados->posicao;
-                    if(!isset($oDadosgerados[$sHashGeracao])){
+                foreach ($dadosPosicaoReverte as $dados) {
+                    $sHashGeracao = $dados->ac26_numeroaditamento . $dados->tipoalteracao . $dados->posicao;
+                    if (!isset($oDadosgerados[$sHashGeracao])) {
                         //registro 20
                         $clcontratos20->si87_tiporegistro = 20;
                         $clcontratos20->si87_codaditivo = $dados->si87_codaditivo;
@@ -1621,7 +1619,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     if ($clcontratos21->erro_status == 0) {
                         throw new Exception($clcontratos21->erro_msg);
                     }
-                }            
+                }
             }
         }
 
