@@ -119,6 +119,7 @@ ac20_quantidade as qtd_total,
 ac20_valorunitario as vlrunitario,
 ac20_valortotal as total,
 ac20_sequencial as sequencial,
+ac20_ordem as ordem,
 ac16_valor as valor_contrato,
 l20_anousu as ano_processo_licitatorio,
 ac16_numero,
@@ -149,6 +150,7 @@ ac20_quantidade,
 ac20_valorunitario,
 ac20_valortotal,
 ac20_sequencial,
+ac20_ordem,
 ac16_datainicio,
 ac16_valor,
 ac16_dataassinatura,
@@ -274,7 +276,7 @@ foreach ($materiais as $material) {
     $iquantidadeDisponivel = ($material->qtd_total - $material->quantidadeautorizada);
   }
   $ivalorDisponivel = 'R$' . number_format(($material->total - $material->valorautorizado), 2, ',', '.');
-  $oPdf->Cell(15, $iAlt, $material->sequencial, 'TBR', 0, 'C', $iCorFundo);
+  $oPdf->Cell(15, $iAlt, $material->ordem, 'TBR', 0, 'C', $iCorFundo);
   $oPdf->Cell(25, $iAlt, $material->codigomaterial, 'TBR', 0, 'C', $iCorFundo);
   $oPdf->Cell(150, $iAlt, $material->material, 'TBR', 0, 'L', $iCorFundo);
   $oPdf->Cell(25, $iAlt, $material->qtd_total, 'TBR', 0, 'C', $iCorFundo);
