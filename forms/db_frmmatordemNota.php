@@ -445,7 +445,7 @@ if ($lBloquear) {
                           true,
                           'text',
                           $iOpcao,
-                          "onkeyPress='return js_teclas(event,this)'
+                          "onkeyPress='return js_validaQuantidade(event,{$pc01_fraciona},this)' 
               onchange='js_verifica($e62_quant,this.value,this.name,$e62_vlrun,$e60_numemp,$e62_sequencial)'",
                           '',
                           '',
@@ -565,6 +565,39 @@ if ($lBloquear) {
 </form>
 </center>
 <script>
+  function js_validaQuantidade(evt, lFraciona, obj) {
+    t = document.all ? event.keyCode : evt.which;
+    if (obj.value.indexOf(".") != -1 && t == 46) {
+      return false;
+    }
+    if (lFraciona) {
+      sMask = "0-9|.";
+
+    } else {
+      sMask = "0-9";
+      return js_pressKey(evt, sMask);
+
+    }
+
+    var sMask = '';
+
+    var obj = event.srcElement ? event.srcElement : event.currentTarget;
+    var t = document.all ? event.keyCode : event.which;
+    if (t == 44) {
+      if (obj.value.indexOf(".") == -1) {
+        obj.value += ".";
+      }
+    }
+    if (obj != null) {
+
+      if (obj.value.indexOf(".") != -1 && t == 46) {
+        return false;
+      }
+    }
+    sMask = "0-9|.";
+    return js_mask(event, sMask);
+  }
+
   function js_pesquisaEmpenho(iNumEmp) {
     js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho001.php?e60_numemp=' + iNumEmp, 'Pesquisa', true);
   }
