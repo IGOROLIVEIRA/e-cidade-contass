@@ -60,6 +60,8 @@ if ( $iCaiParametro > 0 ) {
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
+
+    
 function js_relatorio() {
   
   var obj                  = document.form1;
@@ -70,6 +72,7 @@ function js_relatorio() {
   var agrupar              = obj.agrupar.value;
   var ordemconta           = obj.ordem_conta.value;
   var caixabanco           = obj.caixabanco.value;
+  var negrito              = obj.k29_destacarnaoconciliadas.value;
   //var caixa                = obj.k11_id.value;
   //var conta                = obj.k13_conta.value;
   var quebrarpag           = obj.quebrarpag.value;
@@ -86,6 +89,7 @@ function js_relatorio() {
                                                            +'&dataf='+dataf
                                                            +'&agrupar='+agrupar
                                                            +'&caixabanco='+caixabanco
+                                                           +'&negrito='+negrito
                                                            //+'&conta='+conta
                                                            +'&quebrarpag='+quebrarpag
                                                            +'&contassemmov='+contassemmov
@@ -145,11 +149,17 @@ function js_relatorio2() {
   jan.moveTo(0,0);
 }
 function js_bloquearordem(){
-  if (document.form1.agrupar.value == 'S') {
-    document.form1.ordem_conta.disabled = true;
-  }else{
-    document.form1.ordem_conta.disabled = false;
-  }
+    if (document.form1.agrupar.value == 'S') {
+        document.form1.ordem_conta.disabled = true;
+        // Incluindo condição de agrupamento
+        if (document.form1.k29_destacarnaoconciliadas.getElementsByTagName("option")[1].selected) {
+            // Desmarco o agrupamento
+            document.form1.k29_destacarnaoconciliadas.getElementsByTagName("option")[1].selected = false;
+            document.form1.k29_destacarnaoconciliadas.getElementsByTagName("option")[0].selected = true;
+        }
+    } else {
+        document.form1.ordem_conta.disabled = false;
+    }
 }
 
 function js_pesquisa_recurso(mostra){
@@ -266,6 +276,19 @@ function js_mostrarecurso1(chave1,chave2){
 		      <?
 		         $x = array('f'=>'Não','t'=>'Sim');
 		         db_select('k29_contassemmovimento',$x,true,2,"");
+		      ?>
+		    </td>
+		  </tr>
+
+
+          <tr>
+		    <td align="right" nowrap title="<?=@$Tk29_destacarnaoconciliadas?>">
+		       <strong>Destacar não Conciliadas:</strong>
+		    </td>
+		    <td align="left" nowrap>&nbsp; &nbsp; 
+		      <?
+		         $x = array('f'=>'Não','t'=>'Sim');
+		         db_select('k29_destacarnaoconciliadas',$x,true,2,"onchange='js_verifica_campos();'");
 		      ?>
 		    </td>
 		  </tr>
@@ -393,6 +416,16 @@ function js_mostrarecurso1(chave1,chave2){
 </body>
 </html>
 <script>
+function js_verifica_campos() {
+    if (document.form1.k29_destacarnaoconciliadas.value == 't') {
+        if (document.form1.agrupar.getElementsByTagName("option")[1].selected) {
+            // Desmarco o agrupamento
+            document.form1.agrupar.getElementsByTagName("option")[1].selected = false;
+            document.form1.agrupar.getElementsByTagName("option")[0].selected = true;
+        }
+    } 
+}
+    
 function verconta(){
   
   if(document.form1.agrupar_fonte.value == 'S'){
