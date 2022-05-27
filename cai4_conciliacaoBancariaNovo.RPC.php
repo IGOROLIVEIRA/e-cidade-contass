@@ -71,10 +71,10 @@ try {
             for ($linha = 0; $linha < $rows; $linha++) {
                 db_fieldsmemory($resultado, $linha);
                 $movimento = ($valor_debito > 0 or $valor_credito < 0) ? "E" : "S";
-                $movimento = ($cod_doc == 116 or $cod_doc == 418) ? "E" : $movimento;
+                $movimento = ($cod_doc == 116 or $cod_doc == 418 or $cod_doc == 122) ? "E" : $movimento;
 
                 if (in_array($movimento, $movimentacao_permitida)) {
-                    $cod_doc = ($cod_doc == 116 or $cod_doc == 418) ? 100 : $cod_doc;
+                    $cod_doc = ($cod_doc == 116 or $cod_doc == 418 or $cod_doc == 122) ? 100 : $cod_doc;
 
                     $documento = numero_documento_lancamento($tipo, $ordem, $codigo);
                     if ($tipo_lancamento == 0) {
@@ -386,10 +386,10 @@ function tipo_documento_lancamento($tipo_lancamento)
             return "31, 6";
             break;
         case "REC. ORCAMENTARIA":
-            return "100, 101 ) AND conlancamdoc.c71_coddoc IN (100, 116, 418 ";
+            return "100, 101 ) AND conlancamdoc.c71_coddoc IN (100, 122, 116, 418 ";
             break;
         case "EST. REC. ORCAMENTARIA":
-            return "101 ) AND ( conlancamdoc.c71_coddoc <> 116 OR conlancamdoc.c71_coddoc <> 418 ";
+            return "101 ) AND ( conlancamdoc.c71_coddoc <> 116 OR conlancamdoc.c71_coddoc <> 418 OR conlancamdoc.c71_coddoc <> 122 ";
             break;
         case "PGTO EXTRA ORCAMENTARIA":
             return "120, 161";
@@ -427,7 +427,7 @@ function descricaoTipoLancamento($cod_doc)
         case in_array($cod_doc, array("6", "31")):
             return "EST. PGTO EMPENHO";
             break;
-        case "100":
+        case in_array($cod_doc, array("100")):
             return "REC. ORCAMENTARIA";
             break;
         case "101":
@@ -1011,7 +1011,7 @@ function query_baixa_padrao()
     $sql .= "            corrente.k12_conta, ";
     $sql .= "            corrente.k12_data as data, ";
     $sql .= "            CASE ";
-    $sql .= "               WHEN conlancamdoc.c71_coddoc = 418 THEN -1 * c70_valor ";
+    $sql .= "               WHEN conlancamdoc.c71_coddoc IN (418, 122) THEN -1 * c70_valor ";
     $sql .= "               ELSE c70_valor ";
     $sql .= "            END as valor_debito, ";
     $sql .= "            0 as valor_credito, ";
@@ -1020,11 +1020,11 @@ function query_baixa_padrao()
     $sql .= "            0 as ordem, ";
     $sql .= "            z01_nome credor, ";
     $sql .= "             CASE
-    WHEN conlancamdoc.c71_coddoc = 418
+    WHEN conlancamdoc.c71_coddoc IN (418, 122)
     THEN 100
     ELSE conhistdoc.c53_tipo END as tipo_doc, ";
     $sql .= "             CASE
-    WHEN conlancamdoc.c71_coddoc = 418
+    WHEN conlancamdoc.c71_coddoc IN (418, 122)
     THEN 100
     ELSE c71_coddoc END as cod_doc, ";
     $sql .= "            z01_numcgm numcgm ";
