@@ -1011,7 +1011,7 @@ function query_baixa_padrao() {
     $sql .= "            corrente.k12_conta, ";
     $sql .= "            corrente.k12_data as data, ";
     $sql .= "            CASE ";
-    $sql .= "               WHEN conlancamdoc.c71_coddoc = 418 THEN -1 * c70_valor ";
+    $sql .= "               WHEN conlancamdoc.c71_coddoc IN (418, 122) THEN -1 * c70_valor ";
     $sql .= "               ELSE c70_valor ";
     $sql .= "            END as valor_debito, ";
     $sql .= "            0 as valor_credito, ";
@@ -1020,11 +1020,11 @@ function query_baixa_padrao() {
     $sql .= "            0 as ordem, ";
     $sql .= "            z01_nome credor, ";
     $sql .= "             CASE
-    WHEN conlancamdoc.c71_coddoc = 418
+    WHEN conlancamdoc.c71_coddoc IN (418, 122)
     THEN 100
     ELSE conhistdoc.c53_tipo END as tipo_doc, ";
     $sql .= "             CASE
-    WHEN conlancamdoc.c71_coddoc = 418
+    WHEN conlancamdoc.c71_coddoc IN (418, 122)
     THEN 100
     ELSE c71_coddoc END as cod_doc, ";
     $sql .= "            z01_numcgm numcgm ";
