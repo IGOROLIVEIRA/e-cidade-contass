@@ -427,7 +427,7 @@ function descricaoTipoLancamento($cod_doc)
         case in_array($cod_doc, array("6", "31")):
             return "EST. PGTO EMPENHO";
             break;
-        case in_array($cod_doc, array("100", "122")):
+        case in_array($cod_doc, array("100")):
             return "REC. ORCAMENTARIA";
             break;
         case "101":
