@@ -1183,18 +1183,18 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }
 
             $sSql = "select  (CASE
-           WHEN o41_subunidade != 0
-               OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
-                   OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                       OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
-           ELSE lpad((CASE WHEN o40_codtri = '0'
-               OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                   OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-           END) as codunidadesub
-           from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
-               and db01_anousu = o41_anousu
-               JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-               where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oDados20->ac16_deptoresponsavel;
+                    WHEN o41_subunidade != 0
+                        OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+                        OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                        OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+                    ELSE lpad((CASE WHEN o40_codtri = '0'
+                        OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                        OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+                    END) as codunidadesub
+                    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
+                        and db01_anousu = o41_anousu
+                    JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                    where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oDados20->ac16_deptoresponsavel;
             $result = db_query($sSql);
 
             $sCodUnidade = db_utils::fieldsMemory($result, 0)->codunidadesub;
@@ -1275,6 +1275,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $tipoalteracao = 3;
                 }
+                //tipos 9 e 10 tem tratamento diferente
+                if ($oAcordoPosicao->getTipo() == 9) {
+                    $tipoalteracao = 1;
+                } else if ($oAcordoPosicao->getTipo() == 10) {
+                    $tipoalteracao = 2;
+                }
+
                 $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao;
                 $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado));
                 $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao;
