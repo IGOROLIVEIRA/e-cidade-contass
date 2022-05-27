@@ -76,12 +76,12 @@ $clselorcdotacao->setDados($filtra_despesa); // passa os parametros vindos da fu
 // $instits= $clselorcdotacao->getInstit(); // nao usado, somente usada para carregar os parametros do filtro !
 $sele_work = $clselorcdotacao->getDados(false);
 
-if (substr($sele_work,0,7) == "1=1 and"){
-  $sele_work1 =  substr($sele_work,0,9);
-  $sele_work1 .= " y.";
-  $sele_work1 .= substr($sele_work, 9);
-  $sele_work = $sele_work1;
-}
+// if (substr($sele_work,0,7) == "1=1 and"){
+//   $sele_work1 =  substr($sele_work,0,8);
+//   $sele_work1 .= " y.";
+//   $sele_work1 .= substr($sele_work, 8);
+//   $sele_work = $sele_work1;
+// }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 $where_credor = '';
@@ -221,6 +221,7 @@ else{
 
 $sele_desdobramentos = "";
 $desdobramentos = $clselorcdotacao->getDesdobramento(); // coloca os codele dos desdobramntos no formato (x,y,z)
+
   if ($desdobramentos != "") {
       $sele_desdobramentos = " and empelemento.e64_codele in " . $desdobramentos; // adiciona desdobramentos
   }
@@ -237,7 +238,6 @@ $desdobramentos = $clselorcdotacao->getDesdobramento(); // coloca os codele dos 
 
   }
 }
-
 
 $sqlperiodo  = "  select empempenho.e60_numemp::integer as e60_numemp,                                             ";
 $sqlperiodo .= " 	       e60_resumo,                                                                               ";
@@ -273,7 +273,7 @@ $sqlperiodo .= " 	       c70_codlan,                                            
 $sqlperiodo .= " 	       c53_tipo,                                                                                 ";
 $sqlperiodo .= " 	       {$sCampos}                                                                                ";
 $sqlperiodo .= " 	       c53_descr,                                                                                ";
-$sqlperiodo .= " 	       y.o56_elemento                                                                            ";
+$sqlperiodo .= " 	       o56_elemento                                                                            ";
 $sqlperiodo .= "    from empempenho                                                                                ";
 $sqlperiodo .= "   inner join conlancamemp 	on c75_numemp                 = empempenho.e60_numemp                  ";
 $sqlperiodo .= "   inner join conlancam		  on c70_codlan                 = c75_codlan                             ";
@@ -294,6 +294,8 @@ $sqlperiodo .= "   inner join orcprograma 		on orcprograma.o54_anousu 	  = orcdo
 $sqlperiodo .= "                   		  	 and orcprograma.o54_programa   = orcdotacao.o58_programa                ";
 $sqlperiodo .= "   inner join orcelemento 		on orcelemento.o56_codele 	  = orcdotacao.o58_codele                ";
 $sqlperiodo .= "                            and orcdotacao.o58_anousu      = orcelemento.o56_anousu                ";
+$sqlperiodo .= "                                or (o56_codele             = e64_codele                            ";
+$sqlperiodo .= "                               and e60_anousu              = o56_anousu   )                        ";
 $sqlperiodo .= "   inner join orcprojativ 		on orcprojativ.o55_anousu 	  = orcdotacao.o58_anousu                ";
 $sqlperiodo .= "                          	 and orcprojativ.o55_projativ   = orcdotacao.o58_projativ              ";
 $sqlperiodo .= "   inner join orcorgao 		  on orcorgao.o40_anousu 		    = orcdotacao.o58_anousu                  ";
@@ -301,8 +303,6 @@ $sqlperiodo .= "                    			   and orcorgao.o40_orgao         = orcdo
 $sqlperiodo .= "   inner join orcunidade 		on orcunidade.o41_anousu      = orcdotacao.o58_anousu                  ";
 $sqlperiodo .= "                            and orcunidade.o41_orgao       = orcdotacao.o58_orgao                  ";
 $sqlperiodo .= "    	                       and orcunidade.o41_unidade     = orcdotacao.o58_unidade               ";
-$sqlperiodo .= "   inner join orcelemento as y on y.o56_codele             = e64_codele                            ";
-$sqlperiodo .= "                            and e60_anousu             = y.o56_anousu                          ";
 $sqlperiodo .= "   left join  empemphist 		on empemphist.e63_numemp      = empempenho.e60_numemp                  ";
 $sqlperiodo .= "   left join  emphist 		    on emphist.e40_codhist        = empemphist.e63_codhist               ";
 $sqlperiodo .= "   inner join pctipocompra 	on pctipocompra.pc50_codcom   = empempenho.e60_codcom                  ";
@@ -346,7 +346,7 @@ $sqlperiodo .= "           c53_tipo,                                            
 $sqlperiodo .= "           c53_descr,                                                                              ";
 $sqlperiodo .= "           {$sCampos}                                                                              ";
 $sqlperiodo .= "           e91_numemp,                                                                              ";
-$sqlperiodo .= "           y.o56_elemento                                                                          ";
+$sqlperiodo .= "           o56_elemento                                                                          ";
 $sqlperiodo .= "     order by $xordem                                                                              ";
 $res=$clempempenho->sql_record($sqlperiodo);
 
