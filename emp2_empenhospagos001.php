@@ -348,10 +348,11 @@ $oRotuloSaltes->label();
 
     for(var iRowRecursos = 0; iRowRecursos < $('recursos').length; iRowRecursos++){
       var oDadosRecursos = aRecursosSelecionados[iRowRecursos];
-      sRecursosSelecionados += sVirgula+oDadosRecursos.value;
-      sVirgula = ", ";
+      saspas ="*";
+      sRecursosSelecionados += sVirgula+saspas+oDadosRecursos.value+saspas;
+      sVirgula = ",";
+      
     }
-
     var aAcordosSelecionados = $('acordos');
     var sAcordosSelecionados = "";
     sVirgula = "";
