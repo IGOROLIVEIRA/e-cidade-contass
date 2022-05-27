@@ -12,21 +12,50 @@ $sql = "select distinct avaliacaogrupopergunta.* from avaliacao
         left join avaliacaogrupoperguntaresposta ON db106_sequencial = db108_avaliacaoresposta
         left join avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
         where db101_sequencial = 3000016";
-
 $rsAvaliacaoGrupoPergunta = pg_query($sql);
-//db_criatabela($result);exit;
-db_fieldsmemory($result,0);
 
 $pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
 $pdf->AddPage();
-$pdf->Image("imagens/files/".$logo,90,7,30);
+//$pdf->Image("imagens/files/".$logo,90,7,30);
 //$this->Image('imagens/files/'.$logo,2,3,30);
-$pdf->Ln(30);
-$pdf->SetFont('Arial','',8);
+
 for($AvGrup = 0; $AvGrup < pg_num_rows($rsAvaliacaoGrupoPergunta); $AvGrup ++){
+    $pdf->SetFont('Arial','b',12);
     $oDadosAvaliacaoGrupoPergunta = db_utils::fieldsMemory($rsAvaliacaoGrupoPergunta, $AvGrup);
+    $pdf->Cell(190,5,$oDadosAvaliacaoGrupoPergunta->db102_descricao,1,1,"L",0);
+    //busco as perguntas de acordo com o grupo
+    $sqlPerguntas = "SELECT db103_sequencial,
+                db103_descricao
+            FROM avaliacaopergunta
+            WHERE db103_avaliacaogrupopergunta = $oDadosAvaliacaoGrupoPergunta->db102_sequencial
+            ORDER BY db103_sequencial";
+    $rsAvaliacaoPergunta = pg_query($sqlPerguntas);
+
+    for($Avpergunta = 0; $Avpergunta < pg_num_rows($rsAvaliacaoPergunta); $Avpergunta ++){
+        $pdf->SetFont('Arial','',10);
+        $oDadosAvaliacaoPergunta = db_utils::fieldsMemory($rsAvaliacaoPergunta, $Avpergunta);
+        $pdf->Cell(190,5,$oDadosAvaliacaoPergunta->db103_descricao,1,1,"L",0);
+
+        $sqlResposta = "SELECT DISTINCT avaliacaoresposta.*
+        FROM avaliacao
+        LEFT JOIN avaliacaogrupopergunta ON db102_avaliacao = db101_sequencial
+        LEFT JOIN avaliacaopergunta ON db103_avaliacaogrupopergunta = db102_sequencial
+        LEFT JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
+        LEFT JOIN avaliacaoresposta ON db106_avaliacaoperguntaopcao = db104_sequencial
+        LEFT JOIN avaliacaogrupoperguntaresposta ON db106_sequencial = db108_avaliacaoresposta
+        LEFT JOIN avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
+        WHERE db103_sequencial = 4000361 and db106_sequencial is not null
+        ";
+        $rsAvaliacaoResposta = pg_query($sqlResposta);
+
+        for($AvResposta = 0;  $AvResposta < pg_num_rows($rsAvaliacaoResposta); $AvResposta ++){
+            $oDadosResposta = db_utils::fieldsMemory($rsAvaliacaoResposta, $AvResposta);
+            $pdf->SetFont('Arial','',8);
+            $pdf->Cell(190,5,$oDadosResposta->db106_resposta,1,1,"L",0);
+        }
+    }
 }
 /*
 $pdf->MultiCell(0,4,$db12_extenso,0,"C",0);
