@@ -1017,6 +1017,7 @@ class cl_pcmater {
      $sql .= "      inner join pcorcamitemlic   on l21_codigo = pc26_liclicitem";
      $sql .= "      inner join pcorcamjulg      on pc26_orcamitem = pc24_orcamitem and pc24_pontuacao = 1";
      $sql .= "      inner join pcorcamforne     on pc24_orcamforne = pc21_orcamforne";
+     $sql .= "      left  join pcorcamval       on pc21_orcamforne = pc23_orcamforne and pc24_orcamitem = pc23_orcamitem";
      $sql .= "      inner join cgm              on pc21_numcgm = z01_numcgm";
      $sql .= "      left  join orcelemento      on  orcelemento.o56_codele  = pc07_codele and orcelemento.o56_anousu = ".db_getsession("DB_anousu");
      $sql .= "      inner join solicitemregistropreco   on pc57_solicitem = pc11_codigo";
