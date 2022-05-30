@@ -76,7 +76,7 @@ class cl_empautoriza
     var $e54_codlicitacao = 0;
     var $e54_licoutrosorgaos = 0;
     var $e54_adesaoregpreco = 0;
-    var $e54_nummodalidade = null; 
+    var $e54_nummodalidade = null;
     var $e54_tipoautorizacao = null;
     var $e54_tipoorigem = null;
     var $e54_tipodespesa = null;
@@ -249,13 +249,13 @@ class cl_empautoriza
             $this->erro_status = "0";
             return false;
         }
-        if ($this->e54_numsol == null) { 
+        if ($this->e54_numsol == null) {
             $this->e54_numsol = "0";
         }
         if ($this->e54_anulad == null) {
             $this->e54_anulad = "null";
         }
-        if ($this->e54_emiss == null) { 
+        if ($this->e54_emiss == null) {
             $this->e54_emiss = "null";
         }
         if ($this->e54_gestaut == null || $this->e54_gestaut == "") {
@@ -264,7 +264,7 @@ class cl_empautoriza
         if ($this->e54_numerotermo == null || $this->e54_numerotermo == "") {
             $this->e54_numerotermo = "null";
         }
-        if ($this->e54_codtipo == null || $this->e54_codtipo == 0 ) {
+        if ($this->e54_codtipo == null || $this->e54_codtipo == 0) {
             $this->erro_sql = " Campo Tipo Empenho nao Informado.";
             $this->erro_campo = "e54_codtipo";
             $this->erro_banco = "";
@@ -622,7 +622,7 @@ class cl_empautoriza
             if (isset($GLOBALS["HTTP_POST_VARS"]["e54_emiss_dia"])) {
                 $sql  .= $virgula . " e54_emiss = null ";
                 $virgula = ",";
-            } 
+            }
         }
         if (trim($this->e54_resumo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e54_resumo"])) {
 
@@ -1023,6 +1023,7 @@ class cl_empautoriza
         }
         return $result;
     }
+
     function sql_query($e54_autori = null, $campos = "*", $ordem = null, $dbwhere = "", $possuiPC = false)
     {
         $sql = "select ";
@@ -1371,6 +1372,66 @@ class cl_empautoriza
         }
         return $sql;
     }
+
+    function sql_query_adesao($e54_autori = null, $campos = "*", $ordem = null, $dbwhere = "", $possuiPC = false)
+    {
+        $sql = "select ";
+        if ($campos != "*") {
+            $campos_sql = explode("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from empautoriza ";
+        $sql .= "      inner join cgm            on cgm.z01_numcgm = empautoriza.e54_numcgm";
+        $sql .= "      inner join db_config      on db_config.codigo = empautoriza.e54_instit";
+        $sql .= "      inner join db_usuarios    on db_usuarios.id_usuario = empautoriza.e54_login";
+        $sql .= "      inner join db_depart      on db_depart.coddepto = empautoriza.e54_depto";
+        $sql .= "      inner join pctipocompra   on pctipocompra.pc50_codcom = empautoriza.e54_codcom";
+        $sql .= "      inner join concarpeculiar on concarpeculiar.c58_sequencial = empautoriza.e54_concarpeculiar";
+        $sql .= "      left  join empempaut      on empautoriza.e54_autori = empempaut.e61_autori";
+        $sql .= "      left  join empempenho     on empempenho.e60_numemp = empempaut.e61_numemp";
+        $sql .= "      left  join empautidot     on e56_autori = empautoriza.e54_autori and e56_anousu=e54_anousu ";
+        $sql .= "      left join orcdotacao      on e56_Coddot = o58_coddot and e56_anousu = o58_anousu";
+        $sql .= "      left join adesaoregprecos on si06_sequencial = empautoriza.e54_adesaoregpreco";
+        $sql .= "      left join liclicita       on l20_codigo = empautoriza.e54_codlicitacao";
+
+        /*
+         * Filtro para buscar apenas autorizações que tenha vínculo com Processo de Compra
+         * */
+
+        if ($possuiPC) {
+            $sql .= " inner join empautitem ON e55_autori = e54_autori ";
+            $sql .= " inner join empautitempcprocitem on (e73_autori, e73_sequen) = (e55_autori, e55_sequen) ";
+            $sql .= " inner join pcprocitem on e73_pcprocitem = pc81_codprocitem ";
+            $sql .= " inner join pcproc on pc81_codproc = pc80_codproc ";
+        }
+
+        $sql2 = "";
+        if ($dbwhere == "") {
+            if ($e54_autori != null) {
+                $sql2 .= " where empautoriza.e54_autori = $e54_autori ";
+            }
+        } else if ($dbwhere != "") {
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($ordem != null) {
+            $sql .= " order by ";
+            $campos_sql = explode("#", $ordem);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
     function sql_anulaautorizacao($param_autori = null, $verifica_saldo = false, $erro_msg = "", $sqlerro = false, $flag_saldo = false, $vetor_dotacao = array(), $reservar = "false")
     {
 
