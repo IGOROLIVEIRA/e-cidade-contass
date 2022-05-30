@@ -1182,4 +1182,44 @@ class cl_adesaoregprecos
     }
     return $sql;
   }
+  function sql_query_completo($si06_sequencial = null, $campos = "si06_sequencial, si06_orgaogerenciador, si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_anomodadm,si06_nummodadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgm.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data", $ordem = null, $dbwhere = "")
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = split("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from adesaoregprecos ";
+    $sql .= "      inner join cgm  on  cgm.z01_numcgm = adesaoregprecos.si06_orgaogerenciador";
+    $sql .= "      inner join cgm c on c.z01_numcgm = adesaoregprecos.si06_cgm";
+    $sql .= "      inner join pcproc  on  pcproc.pc80_codproc = adesaoregprecos.si06_processocompra";
+    $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pcproc.pc80_usuario";
+    $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";
+    $sql2 = "";
+    // $dbwhere = "si06_instit = " . db_getsession("DB_instit");
+    if ($dbwhere == "") {
+      if ($si06_sequencial != null) {
+        $sql2 .= " where adesaoregprecos.si06_sequencial = $si06_sequencial ";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($ordem != null) {
+      $sql .= " order by ";
+      $campos_sql = split("#", $ordem);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
 }

@@ -1570,7 +1570,11 @@ if ($x->consultarDataDoSistema == true) {
         $('e54_codcom').value = oRetorno.sTipo;
         $('e54_codcomdescr').value = oRetorno.sTipo;
         $('e54_nummodalidade').value = oRetorno.iNumModalidade;
-        $('e54_adesaoregpreco').value = oRetorno.iSequencial;
+        if (oRetorno.sTipoorigem == 4) {
+            $('e54_adesaoregpreco').value = oRetorno.iSequencial;
+        } else {
+            $('e54_adesaoregpreco').value = null;
+        }
         $('iSequenciaCaracteristica').value = '000';
         $('sDescricaoCaracteristica').value = 'NÃO SE APLICA';
 

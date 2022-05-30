@@ -46,7 +46,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
                       c.z01_nome as dl_Resp_Aprovacao,si06_numeroadm,si06_anocadastro,si06_nummodadm,si06_anomodadm";
             }
           }
-          $sql = $cladesaoregprecos->sql_query(null, $campos, null, "si06_instit = " . db_getsession("DB_instit"));
+          $sql = $cladesaoregprecos->sql_query_completo(null, $campos, null, "si06_instit = " . db_getsession("DB_instit"));
           $repassa = array();
 
           db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
@@ -56,7 +56,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
               $sSQL = "select si06_objetoadesao,si06_numeroprc,si06_numlicitacao,si06_anoproc from adesaoregprecos where si06_sequencial = {$pesquisa_chave} and si06_instit = " . db_getsession("DB_instit");
               $result = $cladesaoregprecos->sql_record($sSQL);
             } else {
-              $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($pesquisa_chave, "*", "", "si06_instit = " . db_getsession("DB_instit")));
+              $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query_completo($pesquisa_chave, "*", "", "si06_instit = " . db_getsession("DB_instit")));
             }
 
             if ($cladesaoregprecos->numrows != 0) {
