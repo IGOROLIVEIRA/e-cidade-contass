@@ -46,7 +46,7 @@ for($AvGrup = 0; $AvGrup < pg_num_rows($rsAvaliacaoGrupoPergunta); $AvGrup ++){
         LEFT JOIN avaliacaoresposta ON db106_avaliacaoperguntaopcao = db104_sequencial
         LEFT JOIN avaliacaogrupoperguntaresposta ON db106_sequencial = db108_avaliacaoresposta
         LEFT JOIN avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
-        WHERE db103_sequencial = 4000361 and db106_sequencial is not null
+        WHERE db103_sequencial = $oDadosAvaliacaoPergunta->db103_sequencial and db106_sequencial is not null
         ";
         $rsAvaliacaoResposta = pg_query($sqlResposta);
 
