@@ -1454,13 +1454,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $tipoalteracao = 2;
                             }
 
-                            if ($iValorTotalItem == $iValorTotalItemAnterior) {
-                                $iValorUnitarioAditadoItem = $iValorTotalItem;
-                                $tipoalteracao = 1;
-                            } else {
-                                $iValorUnitarioAditadoItem = ($iValorTotalItem - $iValorTotalItemAnterior);
-                                $tipoalteracao = 1;
-                            }
+                            $iValorUnitarioAditadoItem = abs($oAcordoItem->getValorAditado());
+                            $tipoalteracao = 1;
+
                         } else {
                             if ($iQuantidadeItem != $iQuantidadeItemAnterior) {
                                 if ($iQuantidadeItem > $iQuantidadeItemAnterior) {
