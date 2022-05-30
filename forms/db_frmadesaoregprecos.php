@@ -180,7 +180,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 
       </table>
 </fieldset>
-<fieldset style="width: 640px; height: 400px; margin-top: 40px; ">
+<fieldset style="width: 640px; height: 410px; margin-top: 40px; ">
   <legend><b>Informações do Orgão de Adesão</b></legend>
   <table>
     <tr>
@@ -297,7 +297,6 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
         db_input('si06_processocompra', 10, $Isi06_processocompra, true, 'text', $db_opcao, " onchange='js_pesquisasi06_processocompra(false);'")
         ?>
       </td>
-    </tr>
   </table>
   <table>
     <tr>
