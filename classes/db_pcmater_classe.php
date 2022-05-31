@@ -64,6 +64,7 @@ class cl_pcmater {
    var $pc01_justificativa = null;
    var $pc01_dataalteracao = null;
    var $pc01_instit = null;
+   var $pc01_codmaterant = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc01_codmater = int4 = Código do Material
@@ -88,6 +89,7 @@ class cl_pcmater {
                  pc01_justificativa = varchar(100) = Justificativa da Alteração
                  pc01_dataalteracao = date = Data da Alteração
                  pc01_instit = int = instituicao do item
+                 pc01_codmaterant = int4 = codigo material anterior
                  ";
    //funcao construtor da classe
    function cl_pcmater() {
@@ -125,6 +127,7 @@ class cl_pcmater {
        $this->pc01_justificativa = ($this->pc01_justificativa == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_justificativa"]:$this->pc01_justificativa);
        $this->pc01_dataalteracao = ($this->pc01_dataalteracao == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_dataalteracao"]:$this->pc01_dataalteracao);
        $this->pc01_instit = ($this->pc01_instit == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_instit"]:$this->pc01_instit);
+       $this->pc01_codmaterant = ($this->pc01_codmaterant == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_codmaterant"]:$this->pc01_codmaterant);
      }else{
        $this->pc01_codmater = ($this->pc01_codmater == ""?@$GLOBALS["HTTP_POST_VARS"]["pc01_codmater"]:$this->pc01_codmater);
      }
@@ -296,6 +299,7 @@ class cl_pcmater {
                                       ,pc01_taxa
                                       ,pc01_obras
                                       ,pc01_instit
+                                      ,pc01_codmaterant
                        )
                 values (
                                 $this->pc01_codmater
@@ -317,6 +321,7 @@ class cl_pcmater {
                                ,'$this->pc01_taxa'
                                ,'$this->pc01_obras'
                                ,$this->pc01_instit
+                               ,$this->pc01_codmaterant
                       )";
      $result = db_query($sql);
      if($result==false){
