@@ -246,7 +246,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                 </td>
                                 <td colspan='3' align='left'>
                                     <?
-                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 3);
+                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 3,"onkeyup = 'return js_validaCaracteres(this.value, m51_obs.id)';");
                                     ?>
                                 </td>
 
@@ -365,7 +365,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                         <td colspan='3' align='left'>
                             <?
                                     $obs = $m51_obs;
-                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 1);
+                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 1,"onkeyup = 'return js_validaCaracteres(this.value, m51_obs.id)';");
                             ?>
                         </td>
                     <?
@@ -538,6 +538,55 @@ if (isset($m51_codordem) && $m51_codordem != '') {
             document.form1.coddepto.value = '';
         }
     }
+
+
+    function js_validaCaracteres(texto, campo) {
+    let temporario = '';
+    temporario = texto.replace(/\n/g, ' ');
+
+    /*Caracteres não permitidos na descrição e complemento material*/
+    let charBuscados = [";", "'", "\"", "\\", "*", ":"];
+    let novoTexto = temporario;
+    let erro = '';
+
+    charBuscados.map(caractere => {
+      if (texto.includes(caractere)) {
+        erro = true;
+      }
+    })
+
+
+    if (window.event) {
+      /* Lança o erro quando a tecla Enter é pressionada. */
+      if (window.event.keyCode == 13) {
+        erro = true;
+        novoTexto = texto.replace(/(\r\n|\n|\r)/g, '');
+      }
+    }
+
+    /* Remove os caracteres contidos no array charBuscados */
+    novoTexto = novoTexto.match(/[^;\*\\\:\"\']/gm);
+
+    for (let cont = 0; cont < novoTexto.length; cont++) {
+
+      /* Remove aspas duplas e simples pelo código, pelo fato de virem de fontes diferentes*/
+
+      if (novoTexto[cont].charCodeAt(0) == 8221 || novoTexto[cont].charCodeAt(0) == 8220 || novoTexto[cont].charCodeAt(0) == 8216) {
+        novoTexto[cont] = '';
+        erro = true;
+      }
+    }
+
+    // if(erro){
+    //   alert('Caractere não permitido para inclusão!');
+    // }
+
+    novoTexto = novoTexto.join('');
+
+      //alert(novoTexto);
+      document.form1.m51_obs.value = novoTexto;
+     
+  }
 </script>
 </body>
 
