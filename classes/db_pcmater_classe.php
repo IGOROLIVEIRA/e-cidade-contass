@@ -246,6 +246,10 @@ class cl_pcmater {
      if($this->pc01_instit == null ){ 
         $this->pc01_instit = db_getsession('DB_instit');
       }
+      
+      if($this->pc01_codmaterant == null ){ 
+        $this->pc01_codmaterant = "0";
+      }
 
      if($pc01_codmater == "" || $pc01_codmater == null ){
        $result = db_query("select nextval('pcmater_pc01_codmater_seq')");
