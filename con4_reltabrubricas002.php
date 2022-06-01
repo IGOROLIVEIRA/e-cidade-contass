@@ -28,20 +28,20 @@ for($rRubricas = 0; $rRubricas < pg_num_rows($rsRubricasResposta); $rRubricas ++
         left join avaliacaoresposta on db106_avaliacaoperguntaopcao = db104_sequencial
         left join avaliacaogrupoperguntaresposta ON db106_sequencial = db108_avaliacaoresposta
         left join avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
-        where db101_sequencial = 3000016";
+        where db101_sequencial = 3000016 ORDER BY db102_sequencial";
     $rsAvaliacaoGrupoPergunta = pg_query($sql);
     //GRUPO
     for($AvGrup = 0; $AvGrup < pg_num_rows($rsAvaliacaoGrupoPergunta); $AvGrup ++){
-        $pdf->SetFont('Arial','b',12);
+        $pdf->SetFont('Arial','b',9);
         $oDadosAvaliacaoGrupoPergunta = db_utils::fieldsMemory($rsAvaliacaoGrupoPergunta, $AvGrup);
         $pdf->Cell(190,5,$oDadosAvaliacaoGrupoPergunta->db102_descricao,1,1,"L",0);
         //PERGUNTAS
-        $sqlPerguntas = "SELECT db103_sequencial,
-                    db103_descricao
+        $sqlPerguntas = "SELECT *
                 FROM avaliacaopergunta
                 WHERE db103_avaliacaogrupopergunta = $oDadosAvaliacaoGrupoPergunta->db102_sequencial
                 ORDER BY db103_sequencial";
         $rsAvaliacaoPergunta = pg_query($sqlPerguntas);
+        //db_criatabela($rsAvaliacaoPergunta);
         for($Avpergunta = 0; $Avpergunta < pg_num_rows($rsAvaliacaoPergunta); $Avpergunta ++){
             $pdf->SetFont('Arial','b',9);
             $oDadosAvaliacaoPergunta = db_utils::fieldsMemory($rsAvaliacaoPergunta, $Avpergunta);
@@ -56,14 +56,27 @@ for($rRubricas = 0; $rRubricas < pg_num_rows($rsRubricasResposta); $rRubricas ++
             LEFT JOIN avaliacaoresposta ON db106_avaliacaoperguntaopcao = db104_sequencial
             LEFT JOIN avaliacaogrupoperguntaresposta ON db106_sequencial = db108_avaliacaoresposta
             LEFT JOIN avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
-            WHERE db103_sequencial = $oDadosAvaliacaoPergunta->db103_sequencial and db106_sequencial is not null
-            ";
+            WHERE db103_sequencial = $oDadosAvaliacaoPergunta->db103_sequencial ORDER BY db106_sequencial";
             $rsAvaliacaoResposta = pg_query($sqlResposta);
+            //db_criatabela($rsAvaliacaoResposta);
             $oDadosResposta = db_utils::fieldsMemory($rsAvaliacaoResposta, $rRubricas);
             $pdf->SetFont('Arial','',9);
-            $pdf->Cell(190,5,$oDadosResposta->db106_resposta,1,1,"L",0);
+            //DESCRICAO DA RESPOSATA
+            if($oDadosAvaliacaoPergunta->db103_tipo == 1){
+                $sqlDescResposta = "
+                    SELECT db104_descricao
+                    FROM avaliacaoperguntaopcao
+                    WHERE db104_sequencial = $oDadosResposta->db104_sequencial
+                ";
+                $rsDescrResposta = pg_query($sqlDescResposta);
+                $oDadosDescrResposta = db_utils::fieldsMemory($rsDescrResposta, 0);
+                $pdf->Cell(190,5,$oDadosDescrResposta->db104_descricao,1,1,"L",0);
+            }else{
+                $pdf->Cell(190,5,$oDadosResposta->db106_resposta,1,1,"L",0);
+            }
         }
     }
 }
+exit;
 $pdf->Output();
 ?>
