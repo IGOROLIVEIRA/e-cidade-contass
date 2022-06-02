@@ -759,39 +759,30 @@ db_fieldsmemory($result_pcparam1, 0);
               
               
               $result_codprocesso = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_codprocesso($pc11_codigo));
-              db_fieldsmemory($result_codprocesso,0);
 
-              if($clitemprecoreferencia->erro_status == 0){
+              if($clitemprecoreferencia->numrows > 0){
+                db_fieldsmemory($result_codprocesso,0);
                 $result_itemprecorefe = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferencia($pc81_codproc));
-              
-                if($clitemprecoreferencia->erro_status == 0){
+
+                if($clitemprecoreferencia->numrows > 0){
                   db_fieldsmemory($result_itemprecorefe,0);
-                  
                   $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
-                  
                   $clitemprecoreferencia->si02_itemproccompra = $pc23_orcamitem;
                   $result_precoreferensequncial = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem));
-                  db_fieldsmemory($result_precoreferensequncial,0);
                   
-                  $clitemprecoreferencia->si02_sequencial = $si02_sequencial;
-                  $clitemprecoreferencia->si02_qtditem = $pc23_quant;
-                  
-                  $clitemprecoreferencia->alterar($si02_sequencial);
+                  if ($clitemprecoreferencia->numrows > 0 ) {
+                    db_fieldsmemory($result_precoreferensequncial,0);
+                    $clitemprecoreferencia->si02_sequencial = $si02_sequencial;
+                    $clitemprecoreferencia->si02_qtditem = $pc23_quant;
+                    $clitemprecoreferencia->alterar($si02_sequencial);
+                  }
                 }
               }
 
             }
           }
           
-        }/*else{ 
-          if($clpcorcamval->erro_banco == ""){
-              
-          
-          }else{
-            $sqlerro = true;
-            $erro_msg = $clpcorcamval->erro_msg;
-          }
-        }*/
+        }
       }
       $erro_msg = $clsolicitem->erro_msg;
     }
