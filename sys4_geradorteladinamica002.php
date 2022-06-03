@@ -1,93 +1,105 @@
 <?
-require("fpdf151/pdf.php");
 
-class PDF_MC_Table extends FPDF
-{
-  var $widths;
-  var $aligns;
 
-  function SetWidths($w)
-  {
-    //Set the array of column widths
-    $this->widths = $w;
+include("fpdf151/pdf.php");
+require_once("libs/db_utils.php");
+
+
+db_postmemory($HTTP_SERVER_VARS);
+$oLicitacao = new licitacao($l20_codigo);
+
+$sql = "select uf, db12_extenso, logo, munic, cgc, ender, bairro, numero, codigo, nomeinst
+			from db_config  
+				inner join db_uf on db12_uf = uf
+			where codigo = " . db_getsession("DB_instit");
+
+$result = pg_query($sql);
+db_fieldsmemory($result, 0);
+
+$sql_acordo = "SELECT acordo.ac16_sequencial AS SEQUENCIAL,
+CAST(acordo.ac16_numeroacordo AS NUMERIC) AS NUMERO,
+acordo.ac16_anousu AS ANO,
+acordo.ac16_numeroprocesso AS PROCESSO,
+acordo.ac16_tipomodalidade AS TIPO_MODALIDADE,
+acordo.ac16_numodalidade AS MODALIDADE,
+acordo.ac16_dataassinatura AS ASSINATURA,
+acordo.ac16_datafim AS VENCIMENTO,
+acordo.ac16_objeto AS OBJETO,
+acordo.ac16_contratado AS CODIGO,
+cgm.z01_nome AS CONTRATADO,
+acordo.ac16_valor as valor,
+ac28_descricao as origem,
+ac17_descricao as status,
+l20_edital as processolicitatorio,
+l20_codtipocom as codmodalidade,
+l03_descr as modalidade
+FROM acordo
+JOIN cgm ON z01_numcgm = ac16_contratado
+JOIN acordos.acordoorigem on ac28_sequencial = ac16_origem
+JOIN acordos.acordosituacao on ac17_sequencial = ac16_acordosituacao
+left join liclicita on l20_codigo = ac16_licitacao
+left join cflicita on l03_codigo = l20_codtipocom
+WHERE ac16_sequencial in (683,682,413,51)
+ORDER BY CAST(ac16_numeroacordo AS NUMERIC),ac16_sequencial";
+
+$rs_acordo = db_query($sql_acordo);
+
+$pdf = new PDF('Landscape', 'mm', 'A4');
+$pdf->Open();
+$pdf->AliasNbPages();
+$pdf->AddPage();
+$pdf->Ln(3);
+$linhas = 1;
+$y = 0;
+
+
+for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
+
+  $oDadosAcordo = db_utils::fieldsMemory($rs_acordo, $i);
+
+  if (strlen($oDadosAcordo->objeto) > 76) {
+    $linhas = floor(strlen($oDadosAcordo->objeto) / 58) + 1;
   }
 
-  function SetAligns($a)
-  {
-    //Set the array of column alignments
-    $this->aligns = $a;
+  $pdf->SetFont("Arial", "B", 9);
+  $pdf->Cell(20, 7, "Código", 1, 0, "C");
+  $pdf->Cell(30, 7, "Número/Ano", 1, 0, "C");
+  $pdf->Cell(90, 7, "Objeto", 1, 0, "C");
+  $pdf->Cell(70, 7, "Fornecedor", 1, 0, "C");
+  $pdf->Cell(20, 7, "Vigência", 1, 0, "C");
+  $pdf->Cell(20, 7, "Assinatura", 1, 0, "C");
+  $pdf->Cell(29, 7, "Valor", 1, 0, "C");
+
+  $pdf->Ln();
+
+  $pdf->SetFont("Arial", "", 7);
+
+  $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->sequencial, 1, 0, "C");
+  $pdf->Cell(30, 7 * $linhas, $oDadosAcordo->processo, 1, 0, "C");
+  $pdf->MultiCell(90, 7, $oDadosAcordo->objeto, 1, "C", 0);
+  $pdf->SetXY(150, 45 + $y);
+  $pdf->Cell(70, 7 * $linhas, substr($oDadosAcordo->contratado, 0, 50), 1, 0, "C");
+  $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->vencimento, 1, 0, "C");
+  $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->assinatura, 1, 0, "C");
+  $pdf->Cell(29, 7 * $linhas, $oDadosAcordo->valor, 1, 0, "C");
+  $pdf->Ln();
+  $pdf->SetFont("Arial", "B", 9);
+  $pdf->Cell(230, 7, "Origem: " . $oDadosAcordo->origem, 1, 0, "L");
+  $pdf->Cell(49, 7, "Status: " . $oDadosAcordo->status, 1, 0, "L");
+  $pdf->Ln();
+
+  if ($oDadosAcordo->processolicitatorio != null) {
+    $pdf->Cell(140, 7, "Processo Licitatório: " . $oDadosAcordo->sequencial, 1, 0, "L");
+    $pdf->Cell(90, 7, "Modalidade: " . "Teste", 1, 0, "L");
+    $pdf->Cell(49, 7, "Numeração: " . $oDadosAcordo->codmodalidade, 1, 0, "L");
+    $pdf->Ln();
+    $y += 25 + (7 * $linhas);
+  } else {
+    $y += 18 + (7 * $linhas);
   }
 
-
-
-  function CheckPageBreak($h)
-  {
-    //If the height h would cause an overflow, add a new page immediately
-    if ($this->GetY() + $h > $this->PageBreakTrigger)
-      $this->AddPage($this->CurOrientation);
-  }
-
-  function NbLines($w, $txt)
-  {
-    //Computes the number of lines a MultiCell of width w will take
-    $cw = &$this->CurrentFont['cw'];
-    if ($w == 0)
-      $w = $this->w - $this->rMargin - $this->x;
-    $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
-    $s = str_replace("\r", '', $txt);
-    $nb = strlen($s);
-    if ($nb > 0 and $s[$nb - 1] == "\n")
-      $nb--;
-    $sep = -1;
-    $i = 0;
-    $j = 0;
-    $l = 0;
-    $nl = 1;
-    while ($i < $nb) {
-      $c = $s[$i];
-      if ($c == "\n") {
-        $i++;
-        $sep = -1;
-        $j = $i;
-        $l = 0;
-        $nl++;
-        continue;
-      }
-      if ($c == ' ')
-        $sep = $i;
-      $l += $cw[$c];
-      if ($l > $wmax) {
-        if ($sep == -1) {
-          if ($i == $j)
-            $i++;
-        } else
-          $i = $sep + 1;
-        $sep = -1;
-        $j = $i;
-        $l = 0;
-        $nl++;
-      } else
-        $i++;
-    }
-    return $nl;
-  }
+  $pdf->Ln(4);
 }
 
-
-
-
-$pdf = new PDF_MC_Table();
-
-$pdf->AddPage();
-$pdf->SetFont('Arial', '', 16);
-$pdf->Cell(20, 7, 'Hi1', 1);
-$pdf->Cell(20, 7, 'Hi2', 1);
-$pdf->Cell(20, 7, 'Hi3', 1);
-
-$pdf->Ln();
-
-$pdf->Cell(20, 7, 'Hi4', 1);
-$pdf->Cell(20, 7, 'Hi5(xtra)', 1);
-$pdf->Cell(20, 7, 'Hi5', 1);
 
 $pdf->Output();
