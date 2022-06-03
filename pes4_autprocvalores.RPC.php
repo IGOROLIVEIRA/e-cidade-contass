@@ -125,11 +125,7 @@ try {
     $sSqlConsultaAutonomos .= " from (select z01_nome,                                                                                                   ";
     $sSqlConsultaAutonomos .= "              z01_numcgm, e50_codord as codord,                                                                         ";
     $sSqlConsultaAutonomos .= "              e50_data as data_calculo,                                                          ";
-    $sSqlConsultaAutonomos .= "              sum(coalesce((select rr.e23_valorretencao                                                                   ";
-    $sSqlConsultaAutonomos .= "                              from retencaoreceitas rr                                                                    ";
-    $sSqlConsultaAutonomos .= "                                   inner join retencaotiporec  on retencaotiporec.e21_sequencial = rr.e23_retencaotiporec ";
-    $sSqlConsultaAutonomos .= "                             where rr.e23_retencaopagordem = retencaopagordem.e20_sequencial                              ";
-    $sSqlConsultaAutonomos .= "                               and retencaotiporec.e21_retencaotipocalc in (3,7)),0) ) as valor_inss,                     ";
+    $sSqlConsultaAutonomos .= "              case when retencaotiporec.e21_retencaotipocalc IN (3,7) then coalesce(e23_valorretencao, 0) end as valor_inss,";
     $sSqlConsultaAutonomos .= "              sum(case                                                                                                    ";
     $sSqlConsultaAutonomos .= "                      when retencaotiporec.e21_retencaotipocalc in (1,2)                                                  ";
     $sSqlConsultaAutonomos .= "                      then (select sum(rr.e23_valorretencao)                                                              ";
@@ -168,7 +164,7 @@ try {
     $sSqlConsultaAutonomos .= "              z01_numcgm,                                                                                                 ";
     $sSqlConsultaAutonomos .= "              pis,                                                                                                        ";
     $sSqlConsultaAutonomos .= "              cbo,                                                                                                        ";
-    $sSqlConsultaAutonomos .= "              configurado                                                                                                 ";
+    $sSqlConsultaAutonomos .= "              configurado, e23_valorretencao, retencaotiporec.e21_retencaotipocalc                                        ";
     $sSqlConsultaAutonomos .= "        order by e50_codord) as                                                                                         ";
     $sSqlConsultaAutonomos .= "    retencoes                                                                                                             ";
     $sSqlConsultaAutonomos .= "       inner join conlancamord on retencoes.codord = c80_codord                                                           ";
@@ -184,7 +180,7 @@ try {
     $sSqlConsultaAutonomos .= "          pis,                                                                                                            ";
     $sSqlConsultaAutonomos .= "          cbo,                                                                                                            ";
     $sSqlConsultaAutonomos .= "          data_liquidacao,                                                                                                ";
-    $sSqlConsultaAutonomos .= "          configurado  																																																	 ";
+    $sSqlConsultaAutonomos .= "          configurado                                                          											 ";
  		
     $rsListaAutonomos       = db_query($sSqlConsultaAutonomos);
     $aListaAutonomos        = db_utils::getColectionByRecord($rsListaAutonomos,false,false,true);
