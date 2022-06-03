@@ -84,14 +84,15 @@ if (($data_autenticacao != "--") && ($data_autenticacao1 != "--")) {
 
 // Filtro em conta espe
 $codconta = isset($codconta) ? intval($codconta) : '';
+$codcontacred = isset($codcontacred) ? intval($codcontacred) : '';
 
-if (!empty($codconta)) {
-  if($movimento==1){//somente conta a debito
+if (!empty($codconta) || !empty($codcontacred)) {
+  if($codconta > 0 and $codcontacred == 0){//somente conta a debito
     $sWhere .= " AND (k17_debito = {$codconta}) ";
-  }else if ($movimento==2){//somente conta a credito
-    $sWhere .= " AND (k17_credito = {$codconta}) ";
+  }else if ($codconta == 0 and $codcontacred > 0){//somente conta a credito
+    $sWhere .= " AND (k17_credito = {$codcontacred}) ";
   }else{
-    $sWhere .= " AND ( (k17_debito = {$codconta}) OR (k17_credito = {$codconta}) ) ";
+    $sWhere .= " AND ( (k17_debito = {$codconta}) AND (k17_credito = {$codcontacred}) ) ";
   }
 
 }
@@ -237,8 +238,7 @@ $sql = "         select slip.k17_codigo {$sCampoProcesso},
                  left join sliptipooperacaovinculo on slip.k17_codigo = sliptipooperacaovinculo.k153_slip
            where {$sWhere} {$where1} {$sWhere3}
 		      order by {$sAgrupar}" ;
-
-
+// echo $sql;exit;
 $result = db_query($sql);
 
 

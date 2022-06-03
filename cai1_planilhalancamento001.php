@@ -2105,7 +2105,7 @@ if ($oInstit->db21_usasisagua == "t") {
         else  
            icontaAux  = iConta;
              
-      if((iContaReceita == 170 && iConta == 100) || (iContaReceita == 119 && iConta == 118) || (iContaReceita == 166 && iConta == 118) || (iContaReceita == 167 && iConta == 118) ||
+      if((iContaReceita == 160 && icontaAux== 186) || (iContaReceita == 160 && iConta == 186) || (iContaReceita == 170 && iConta == 100) || (iContaReceita == 119 && iConta == 118) || (iContaReceita == 166 && iConta == 118) || (iContaReceita == 167 && iConta == 118) ||
       (iContaReceita == 166 && iConta == 119) || (iContaReceita == 167 && iConta == 119) || (iContaReceita == 118 && iConta == 119) || (iContaReceita == 101 && iConta == 100) || (iContaReceita == 102 && iConta == 100) ||
       (iContaReceita == 154 && iConta == 159) || (iContaReceita == 154 && iConta == 153) ||(iContaReceita == 161 && iConta == 100) ||(iContaReceita == 160 && iConta == 186) ||
       (iContaReceita == 170 && icontaAux== 100) || (iContaReceita == 119 && icontaAux== 118) || (iContaReceita == 166 && icontaAux== 118) || (iContaReceita == 167 && icontaAux== 118) ||
@@ -2114,6 +2114,20 @@ if ($oInstit->db21_usasisagua == "t") {
         $('notificacao').setStyle({
               display: 'none'
             });  
+      }else if(iContaReceita == 105 && iConta == 103 || (iContaReceita == 105 && icontaAux== 103)){
+        
+        var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
+            ContaReceita: iContaReceita,
+            Conta: iConta
+          });
+
+          $('notificacao').childElements()[0].update("");
+          $('notificacao').childElements()[0].insert("<b>" + sMensagem + "</b>");
+
+          $('notificacao').setStyle({
+            display: 'table-row'
+          });        
+          return true;
       }else{      
       if (!empty(iContaReceita) && !empty(iConta)) {
        

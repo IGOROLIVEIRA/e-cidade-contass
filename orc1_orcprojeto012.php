@@ -50,11 +50,53 @@ if (isset($gravar)){
      $mensagem =$clorcprojeto->erro_msg;
      $erro = true;
    }  
-   db_fim_transacao($erro);  
+   db_fim_transacao($erro); 
+   if($erro == false)
+    {
+      ?>
+      <script>
+        alert("Dados Alterados com Sucesso!")
+      </script>
+      <?
+        
+    } 
 
 } 
+$tiposuple = $clorcprojeto->sql_record($clorcprojeto->sql_query_file($o39_codproj,"o39_tiposuplementacao"));	
+ if (@pg_numrows($tiposuple)>0){
+               echo @db_fieldsmemory($tiposuple,0);
+          }   
+
 
 ?>
+<script>
+
+
+
+    var iTipoSup = "<?php echo $o39_tiposuplementacao;?>";
+  
+      
+    if(iTipoSup == 1004 || iTipoSup == 1009 ||iTipoSup == 1025 || iTipoSup == 1027 || iTipoSup == 1029){
+     document.getElementById('o39_texto').value = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+     document.getElementById('o39_texto').value += " será usado como recurso o excesso de arrecadação na fonte:   ";
+      }
+    else if(iTipoSup == 1003 || iTipoSup == 1008 ||iTipoSup == 1028 || iTipoSup == 2026 ){
+      
+      document.getElementById('o39_texto').value = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+      document.getElementById('o39_texto').value += "  será usado como recurso o Superávit Financeiro apurado no Balanço Patrimonial anterior:   ";
+    }
+    else if(iTipoSup == 1011){
+      
+      document.getElementById('o39_texto').value = "Art. 2º - Fica o serviço de contabilidade autorizado a promover as adequações necessárias na Lei Orçamentária Municipal";
+      document.getElementById('o39_texto').value += "  e no Plano Plurianual vigente, com a respectiva ação.   ";
+    }
+    else{
+      
+      document.getElementById('o39_texto').value = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,"; 
+      document.getElementById('o39_texto').value += " será usado como recurso as seguintes reduções orçamentárias: ";
+          } 
+     
+</script>
 <html>
 <head>
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
@@ -83,15 +125,39 @@ if (isset($gravar)){
        <td> 
         <? 
 	   if (isset($o39_codproj) && $o39_codproj!=""){
-              $ro = $clorcprojeto->sql_record($clorcprojeto->sql_query_file($o39_codproj,"o39_texto"));	   
-   	      //db_criatabela($ro);
+              $ro = $clorcprojeto->sql_record($clorcprojeto->sql_query_file($o39_codproj,"o39_texto"));
+              $tiposuple = $clorcprojeto->sql_record($clorcprojeto->sql_query_file($o39_codproj,"o39_tiposuplementacao"));	  
+             
+
 	      if (@pg_numrows($ro)>0){
                  @db_fieldsmemory($ro,0);
-   	      }  
-  	      if ($o39_texto ==""){
-                $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,"; 
-                $o39_texto.= " será usado como recurso as seguintes reduções orçamentárias:   ";
-	      }  
+   	      } 
+         if (@pg_numrows($tiposuple)>0){
+               echo @db_fieldsmemory($tiposuple,0);
+          }  
+          // echo $o39_texto;exit;
+        // preencher caso for vazio
+  	     if ($o39_texto ==""){
+         
+           if($o39_tiposuplementacao == 1004 || $o39_tiposuplementacao == 1009 ||$o39_tiposuplementacao == 1025 || $o39_tiposuplementacao == 1027 ||$o39_tiposuplementacao == 1029){
+               $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+               $o39_texto.= " será usado como recurso o excesso de arrecadação na fonte:   ";
+           }
+           elseif($o39_tiposuplementacao == 1003 || $o39_tiposuplementacao == 1008 ||$o39_tiposuplementacao == 1028 || $o39_tiposuplementacao == 2026 ){
+             $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+             $o39_texto.= "  será usado como recurso o Superávit Financeiro apurado no Balanço Patrimonial anterior:   ";
+           }
+           elseif($o39_tiposuplementacao == 1011){
+             $o39_texto = "Art. 2º - Fica o serviço de contabilidade autorizado a promover as adequações necessárias na Lei Orçamentária Municipal";
+             $o39_texto.= "  e no Plano Plurianual vigente, com a respectiva ação.   ";
+           }
+           else{
+            $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,"; 
+            $o39_texto.= " será usado como recurso as seguintes reduções orçamentárias: ";
+          }
+	       }
+        
+       
 	      db_textarea('o39_texto',7,80,$Io39_texto,true,'text',$db_opcao); 
 	   }   
 

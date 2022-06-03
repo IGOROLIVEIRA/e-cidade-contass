@@ -2204,6 +2204,10 @@ class Acordo
                 foreach ($oAutorizacaoItens->aItens as $oItemAutorizacao) {
                     $nValorAutorizacao += round($oItemAutorizacao->valorunitario * $oItemAutorizacao->quantidade, 2);
                 }
+
+                //                echo "<pre>";
+                //                var_dump($oDadosAutorizacao);
+                //                exit;
                 /**
                  * Gera a autorização de empenho
                  */
@@ -2222,6 +2226,7 @@ class Acordo
                 $oAutorizacaoEmpenho->setSTipoorigem($oDadosAutorizacao->sTipoorigem);
                 $oAutorizacaoEmpenho->setSTipoautorizacao($oDadosAutorizacao->sTipoautorizacao);
                 $oAutorizacaoEmpenho->setValor($nValorAutorizacao);
+                $oAutorizacaoEmpenho->setSAdesaoregpreco($oDadosAutorizacao->iSequencial);
                 $iSeq        = 1;
                 $nValorTotal = 0;
 
@@ -3555,7 +3560,7 @@ class Acordo
         /**
          * Valida se existe execução dentro do período do contrato, não permitindo a remoção
          */
-        if (!$this->verificaSeTemExecucaoPeriodo(null, $oDataInicial, $oDataFinal)) { 
+        if (!$this->verificaSeTemExecucaoPeriodo(null, $oDataInicial, $oDataFinal)) {
 
             $oDados               = new stdClass();
             $oDados->sDataInicial = $oDataInicial->getDate(DBDate::DATA_PTBR);

@@ -74,14 +74,20 @@ $mesfolha = DBPessoal::getMesFolha();
                         <a id="lbl_rh01_regist" for="matricula"><?= $Lrh01_regist ?></a>
                     </td>
                     <td>
-                        <?php db_input('rh01_regist', 10, $Irh01_regist, true, "text", 3); ?>
+                        <?php db_input('rh01_regist', 10, $Irh01_regist, true, "text", 1, "", "", "", "width: 16%"); ?>
+                        <?php db_input('z01_nome', 50, $Iz01_nome, true, "text", 3, "", "", "", "width: 61%"); ?>
+                        <input type="button" name="adicionar" value="Adicionar" onclick="js_adicionar_matric()" />
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap title="<?php echo $Tz01_nome; ?>">
-                        <label id="lbl_z01_nome" for="z01_nome">Servidor:</label>
+                    <td>
+                        <strong>Matrículas</strong>
                     </td>
-                    <td><?php db_input('z01_nome', 50, $Iz01_nome, true, "text", $db_opcao); ?></td>
+                    <td>
+                        <select multiple="multiple" name="matriculas" id="matriculas" style="width: 78%;"
+                        ondblclick="js_remover_matric(this);">
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td align="left"><label for="cboEmpregador">Empregador:</label></td>
@@ -94,7 +100,7 @@ $mesfolha = DBPessoal::getMesFolha();
                 <tr>
                     <td align="right"><label for="tpAmb">Ambiente:</label></td>
                     <td>
-                        <select name="tpAmb" id="tpAmb" style="width: 76%;">
+                        <select name="tpAmb" id="tpAmb" style="width: 78%;">
                             <option value="">selecione</option>
                             <option value="1">Produção</option>
                             <option value="2">Produção restrita - dados reais</option>
@@ -105,7 +111,7 @@ $mesfolha = DBPessoal::getMesFolha();
                 <tr>
                     <td align="right"><label for="modo">Tipo:</label></td>
                     <td>
-                        <select name="modo" id="modo" style="width: 76%;">
+                        <select name="modo" id="modo" style="width: 78%;">
                             <option value="">selecione</option>
                             <option value="INC">Inclusão</option>
                             <option value="ALT">Alteração</option>
@@ -120,6 +126,17 @@ $mesfolha = DBPessoal::getMesFolha();
                       db_input('anofolha', 4, 1, true, 'text', 2, "class='field-size1'");
                       db_input('mesfolha', 2, 1, true, 'text', 2, "class='field-size1'");
                       ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right"><label for="evento">Evento:</label></td>
+                    <td>
+                        <select name="evento" id="evento" style="width: 78%;">
+                            <option value="">selecione</option>
+                            <option value="S2200">S2200</option>
+                            <option value="S2300">S2300</option>
+                            <option value="S2306">S2306</option>
+                        </select>
                     </td>
                 </tr>
             </table>
@@ -179,10 +196,36 @@ var empregador = Object();
             'oObjetoLookUp': 'func_nome'
         });
 
-        let aArquivosSelecionados = new Array();
-        aArquivosSelecionados.push('S2200');
-
         $('envioESocial').addEventListener('click', function() {
+
+            if ($F('tpAmb') == '') {
+                alert('Selecione o ambiente de envio.');
+                return;
+            }
+
+            if ($F('modo') == '') {
+                alert('Selecione o tipo de envio.');
+                return;
+            }
+
+            if ($F('evento') == '') {
+                alert('Selecione um evento.');
+                return;
+            }
+            
+            let aArquivosSelecionados = new Array();
+            aArquivosSelecionados.push($F('evento'));
+
+            var selectobject = document.getElementById("matriculas");
+            var aMatriculas = [];
+            for (var iCont = 0; iCont < selectobject.length; iCont++) {
+                aMatriculas.push(selectobject.options[iCont].value);
+            }
+
+            if (aMatriculas.length == 0) {
+                alert('Selecione pelo menos uma matrícula.');
+                return;
+            }
 
             var parametros = {
                 'exec': 'transmitir',
@@ -192,7 +235,7 @@ var empregador = Object();
                 'tpAmb': $F('tpAmb'),
                 'iAnoValidade': $F('anofolha'),
                 'iMesValidade': $F('mesfolha'),
-                'matricula': $F('rh01_regist')
+                'matricula': aMatriculas.join(',')
             }; //Codigo Tipo::CADASTRAMENTO_INICIAL
             new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
 
@@ -207,5 +250,34 @@ var empregador = Object();
     function js_consultar() {
 
         js_OpenJanelaIframe('top.corpo', 'iframe_consulta_envio', 'func_consultaenvioesocial.php', 'Pesquisa', true);
+    }
+    function js_adicionar_matric() {
+        var selectobject = document.getElementById("matriculas");
+        for (var iCont = 0; iCont < selectobject.length; iCont++) {
+            if (selectobject.options[iCont].value == $F('rh01_regist')) {
+                js_limpar_matric();
+                return;
+            }
+        }
+        var select = document.getElementById('matriculas');
+        var opt = document.createElement('option');
+        opt.value = $F('rh01_regist');
+        opt.innerHTML = $F('rh01_regist')+' - '+$F('z01_nome');
+        select.appendChild(opt);
+        js_limpar_matric();
+    }
+
+    function js_remover_matric(select) {
+        var selectobject = document.getElementById("matriculas");
+        for (var iCont = 0; iCont < selectobject.length; iCont++) {
+            if (selectobject.options[iCont].value == select.value) {
+                selectobject.remove(iCont);
+            }
+        }
+    }
+
+    function js_limpar_matric() {
+        $('rh01_regist').value = '';
+        $('z01_nome').value = '';
     }
 </script>

@@ -475,6 +475,8 @@ switch ($oParam->exec) {
       $oEndereco->setBdi($oParam->endereco->bdi);
       $oEndereco->setLicita($oParam->endereco->licitacao);
       $oEndereco->setSequencial($oParam->endereco->sequencial);
+      $oEndereco->setSeqObrasCodigos($oParam->endereco->seqobrascodigo);
+
 
       $oEndereco->salvaDadosComplementares($oParam->acao);
       db_fim_transacao(false);
@@ -486,6 +488,7 @@ switch ($oParam->exec) {
     echo $oJson->encode($oRetorno);
     break;
 
+
   case 'findDadosObra':
     $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByCodigo($oParam->iSequencial, $oParam->licitacao);
     $oRetorno->status = 1;
@@ -496,6 +499,8 @@ switch ($oParam->exec) {
     try {
       if ($oParam->codLicitacao) {
         $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByLicitacao($oParam->codLicitacao);
+        //echo "<pre>";
+        //var_dump(obrasDadosComplementares::findObrasByLicitacao($oParam->codLicitacao));
       }
       $oRetorno->status = 1;
     } catch (Exception $error) {
@@ -582,7 +587,7 @@ switch ($oParam->exec) {
             $sSqlItens = "
                             SELECT obrasdadoscomplementareslote.*
                               FROM obrasdadoscomplementareslote
-                              INNER JOIN obrascodigos ON db151_sequencial = db150_codobras
+                              INNER JOIN obrascodigos ON db151_sequencial = db150_seqobrascodigos
                               WHERE db151_liclicita = $oParam->licitacao
                         ";
 
@@ -640,6 +645,22 @@ switch ($oParam->exec) {
       $oRetorno->status = 1;
     } else {
       $oRetorno->status = 2;
+    }
+
+    echo $oJson->encode($oRetorno);
+
+    break;
+
+  case 'getBdi':
+    $rsBdi = db_query('select distinct db150_bdi as bdi from obrasdadoscomplementareslote inner join obrascodigos on db151_sequencial = db150_seqobrascodigos inner join liclicita on l20_codigo = db151_liclicita where l20_codigo =  ' . $oParam->licitacao);
+
+    $bdi = db_utils::fieldsMemory($rsBdi, 0);
+
+    if ($bdi->bdi) {
+
+      $oRetorno->bdi = $bdi->bdi;
+    } else {
+      $oRetorno->bdi = '';
     }
 
     echo $oJson->encode($oRetorno);

@@ -188,8 +188,10 @@ if (!empty($oPost->sCredoresSelecionados)) {
 
 $sWhereRecursosSelecionados = "";
 if (!empty($oPost->sRecursosSelecionados))  {
-  $sWhereRecursosSelecionados = "o15_codtri::integer in ({$oPost->sRecursosSelecionados})";
+  $oPost->sRecursosSelecionados = strtr($oPost->sRecursosSelecionados, "*", "'");
+  $sWhereRecursosSelecionados = "o15_codtri in ({$oPost->sRecursosSelecionados})";
   $aWhere[]                   = $sWhereRecursosSelecionados;
+ 
 }
 
 $sWhereAcordosSelecionados = "";
@@ -389,9 +391,9 @@ $sSqlBuscaEmpenhos .= "                   k12_autent) AS y                      
 $sSqlBuscaEmpenhos .= "     WHERE tipo = 'ext') AS todo                                                          																			";
 $sSqlBuscaEmpenhos .= " WHERE {$sWhereEmpenho}                                                          																					";
 $sSqlBuscaEmpenhos .= "   AND {$sImplodeWhere} {$sImplodeGroupBy} {$sImplodeOrderBy}                                                          												";
-
+// echo $sSqlBuscaEmpenhos;exit;
 $rsExecutaBuscaEmpenho = db_query($sSqlBuscaEmpenhos);
-//db_criatabela($rsExecutaBuscaEmpenho);die($sSqlBuscaEmpenhos);
+// db_criatabela($rsExecutaBuscaEmpenho);die($sSqlBuscaEmpenhos);
 $iLinhasRetornadasBuscaEmpenho = pg_num_rows($rsExecutaBuscaEmpenho);
 if ($iLinhasRetornadasBuscaEmpenho == 0) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Não existem empenhos para o filtro selecionado.");
@@ -520,14 +522,14 @@ foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
     $oPdf->sety($iYlinha + 1);
 
     if($oPost->iPrestacaoConta==2) {
-      $oPdf->cell(240, $iAltura, "Histórico: " . $oDadoEmpenho->e60_resumo, 0, 0, "L", 0);
-      $oPdf->sety($iYlinha + 6);
+      $oPdf->multiCell(260, 3, "Histórico: " . $oDadoEmpenho->e60_resumo, 0, "L", 0);
+      $oPdf->sety($iYlinha + 10);
     }
-
     $total_nadata += $oDadoEmpenho->k12_valor;
     $count_dados += 1;
   }
-  $total_geral += $total_nadata;$oPdf->sety($iYlinha + 1);
+  $total_geral += $total_nadata;
+  $oPdf->sety($iYlinha + 10);
   $oPdf->setfont('arial', 'B', 7);
   $oPdf->cell(226, 4, "SubTotal :", 1, 0, "R", 1);
   $oPdf->cell(20, 4, db_formatar($total_nadata, 'f'), 1, 0, "R", 1);

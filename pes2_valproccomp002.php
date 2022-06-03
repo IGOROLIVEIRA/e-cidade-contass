@@ -29,6 +29,14 @@ require_once("fpdf151/pdf.php");
 require_once("libs/db_utils.php");
 
 $oGet = db_utils::postMemory($_GET);
+// ordenar por projativ
+$order = '';
+if($projeto == 's')
+	$order = ' order by o58_projativ ';
+if($fonte == 's')
+	$order = ' order by o58_codigo ';	
+if($fonte == 's' and $projeto == 's')
+	$order = ' order by o58_codigo,  o58_projativ ';	
 
 $sSqlDadosArquivo = "select distinct 
                             rh89_mesusu||' / '||rh89_anousu as competencia_liquidadcao,
@@ -40,19 +48,27 @@ $sSqlDadosArquivo = "select distinct
 														rh89_dataliq      as data_liquidacao,
 														e60_codemp        as codigo_empenho,
 														e60_anousu        as ano_usu,
+															o58_codigo,
+															o58_projativ,
+															o55_descr,
+															o15_descr,
 														case
 														  when rh90_sequencial is not null then 'SIM' else 'NÃO'
 														end as enviado_sefip
  											 from rhautonomolanc
-														inner join cgm                   on cgm.z01_numcgm                            = rhautonomolanc.rh89_numcgm
+							inner join cgm                   on cgm.z01_numcgm                            = rhautonomolanc.rh89_numcgm
                             inner join pagordem              on rh89_codord                               = e50_codord
                             inner join empempenho            on e50_numemp                                = e60_numemp
+							inner join orcdotacao on (o58_coddot,o58_anousu) 					= (e60_coddot,e60_anousu)	
+							inner join orcprojativ on (o55_projativ,o55_anousu)					= (o58_projativ,o58_anousu)
+							inner join orctiporec on o15_codigo 								= o58_codigo
 														left  join rhsefiprhautonomolanc on rhsefiprhautonomolanc.rh92_rhautonomolanc = rhautonomolanc.rh89_sequencial
 														left  join rhsefip               on rhsefip.rh90_sequencial                   = rhsefiprhautonomolanc.rh92_rhsefip
 														                                and rhsefip.rh90_ativa is true
  										where rhautonomolanc.rh89_anousu = {$oGet->iAnoCompetencia}
-											and rhautonomolanc.rh89_mesusu = {$oGet->iMesCompetencia}  ";
-
+											and rhautonomolanc.rh89_mesusu = {$oGet->iMesCompetencia}  
+											$order";
+// echo $sSqlDadosArquivo;exit;
 $rsDadosArquivo = db_query($sSqlDadosArquivo);										  
 $iLinhasArquivo = pg_num_rows($rsDadosArquivo);										  
 
@@ -89,7 +105,137 @@ for ( $iInd=0; $iInd < $iLinhasArquivo; $iInd++ ) {
 	} else {
 		$iPreenche = 1;
 	}
-	
+	//quebra por projeto e por fonte
+	if($projeto=='s' and $fonte =='s'){
+		if(!$aux){
+			$contvalor = 0;
+			$contpatronal = 0;
+			$continss = 0;
+			$aux =  $oDadosGerados->o58_projativ;
+			$oPdf->ln();
+			$oPdf->SetFont('Arial','b',$iFonte);
+			$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_projativ,0,0,'C',0);
+			$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
+			$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o55_descr,0,1,'C',0);
+			$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_codigo,0,0,'C',0);
+			$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
+			$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o15_descr,0,1,'C',0);
+			$oPdf->ln();
+		}else{
+			if($aux != $oDadosGerados->o58_projativ){
+				// impimindo total
+				$oPdf->ln();
+				$oPdf->SetFont('Arial','b',$iFonte);
+				$oPdf->Cell(30 ,$iAlt, ' Total ' ,0,0,'C');
+				$oPdf->Cell(20 ,$iAlt, '' ,0,0,'C',0);
+				$oPdf->Cell(65 ,$iAlt, '' ,0,0,'L',0);
+				$oPdf->Cell(25 ,$iAlt,db_formatar($contvalor,'f'),0,0,'C',0);
+				$oPdf->Cell(24 ,$iAlt,db_formatar($contpatronal,'f'),0,0,'C',0);
+				$oPdf->Cell(25 ,$iAlt,db_formatar($continss,'f'),0,1,'C',0);
+				$oPdf->ln();
+				$oPdf->ln();
+				$oPdf->SetFont('Arial','b',$iFonte);
+				$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_projativ,0,0,'C',0);
+				$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
+				$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o55_descr,0,1,'C',0);
+				$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_codigo,0,0,'C',0);
+				$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
+				$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o15_descr,0,1,'C',0);
+				$oPdf->ln();
+				$aux =  $oDadosGerados->o58_projativ;
+				$contvalor = 0;
+				$contpatronal = 0;
+				$continss = 0;
+			}
+		}	
+		$contvalor += $oDadosGerados->valor_servico;
+		$contpatronal += $oDadosGerados->valor_servico*20/100;
+		$continss += $oDadosGerados->valor_inss;
+	}	
+	//quebra por projeto
+	if($projeto=='s' and $fonte =='n'){
+		if(!$aux){
+			$contvalor = 0;
+			$contpatronal = 0;
+			$continss = 0;
+			$aux =  $oDadosGerados->o58_projativ;
+			$oPdf->ln();
+			$oPdf->SetFont('Arial','b',$iFonte);
+			$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_projativ,0,0,'C',0);
+			$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
+			$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o55_descr,0,1,'C',0);
+			$oPdf->ln();
+		}else{
+			if($aux != $oDadosGerados->o58_projativ){
+				// impimindo total
+				$oPdf->ln();
+				$oPdf->SetFont('Arial','b',$iFonte);
+				$oPdf->Cell(30 ,$iAlt, ' Total ' ,0,0,'C');
+				$oPdf->Cell(20 ,$iAlt, '' ,0,0,'C',0);
+				$oPdf->Cell(65 ,$iAlt, '' ,0,0,'L',0);
+				$oPdf->Cell(25 ,$iAlt,db_formatar($contvalor,'f'),0,0,'C',0);
+				$oPdf->Cell(24 ,$iAlt,db_formatar($contpatronal,'f'),0,0,'C',0);
+				$oPdf->Cell(25 ,$iAlt,db_formatar($continss,'f'),0,1,'C',0);
+				$oPdf->ln();
+				$oPdf->ln();
+				$oPdf->SetFont('Arial','b',$iFonte);
+				$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_projativ,0,0,'C',0);
+				$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
+				$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o55_descr,0,1,'C',0);
+				$oPdf->ln();
+				$aux =  $oDadosGerados->o58_projativ;
+				$contvalor = 0;
+				$contpatronal = 0;
+				$continss = 0;
+			}
+		}	
+		$contvalor += $oDadosGerados->valor_servico;
+		$contpatronal += $oDadosGerados->valor_servico*20/100;
+		$continss += $oDadosGerados->valor_inss;
+
+	}
+	//quebra por fonte
+	if($fonte=='s' and $projeto == 'n'){
+		if(!$aux){
+			$contvalor = 0;
+			$contpatronal = 0;
+			$continss = 0;
+			$aux =  $oDadosGerados->o58_codigo;
+			$oPdf->ln();
+			$oPdf->SetFont('Arial','b',$iFonte);
+			$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_codigo,0,0,'C',0);
+			$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
+			$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o15_descr,0,1,'C',0);
+			$oPdf->ln();
+		}else{
+			if($aux != $oDadosGerados->o58_codigo){
+				// impimindo total
+				$oPdf->ln();
+				$oPdf->SetFont('Arial','b',$iFonte);
+				$oPdf->Cell(30 ,$iAlt, ' Total ' ,0,0,'C');
+				$oPdf->Cell(20 ,$iAlt, '' ,0,0,'C',0);
+				$oPdf->Cell(65 ,$iAlt, '' ,0,0,'L',0);
+				$oPdf->Cell(25 ,$iAlt,db_formatar($contvalor,'f'),0,0,'C',0);
+				$oPdf->Cell(24 ,$iAlt,db_formatar($contpatronal,'f'),0,0,'C',0);
+				$oPdf->Cell(25 ,$iAlt,db_formatar($continss,'f'),0,1,'C',0);
+				$oPdf->ln();
+				$oPdf->ln();
+				$oPdf->SetFont('Arial','b',$iFonte);
+				$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_codigo,0,0,'C',0);
+				$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
+				$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o15_descr,0,1,'C',0);
+				$oPdf->ln();
+				$aux =  $oDadosGerados->o58_codigo;
+				$contvalor = 0;
+				$contpatronal = 0;
+				$continss = 0;
+			}
+		}	
+		$contvalor += $oDadosGerados->valor_servico;
+		$contpatronal += $oDadosGerados->valor_servico*20/100;
+		$continss += $oDadosGerados->valor_inss;
+	}
+	$oPdf->SetFont('Arial','',$iFonte);
 	$oPdf->Cell(20 ,$iAlt,$oDadosGerados->competencia_liquidadcao                    ,0,0,'C',$iPreenche);
 	$oPdf->Cell(20 ,$iAlt,$oDadosGerados->numcgm                                     ,0,0,'C',$iPreenche);
 	$oPdf->Cell(70 ,$iAlt,$oDadosGerados->nome                                       ,0,0,'L',$iPreenche);
@@ -103,6 +249,63 @@ for ( $iInd=0; $iInd < $iLinhasArquivo; $iInd++ ) {
 	
 	$iTotalValorServico +=  $oDadosGerados->valor_servico;
 	$iTotalValorInss    +=  $oDadosGerados->valor_inss;
+}
+if($fonte=='s' and $projeto == 'n'){
+	if($iInd == $iLinhasArquivo ){
+		// impimindo total
+		$oPdf->ln();
+		$oPdf->SetFont('Arial','b',$iFonte);
+		$oPdf->Cell(30 ,$iAlt, ' Total ' ,0,0,'C');
+		$oPdf->Cell(20 ,$iAlt, '' ,0,0,'C',0);
+		$oPdf->Cell(65 ,$iAlt, '' ,0,0,'L',0);
+		$oPdf->Cell(25 ,$iAlt,db_formatar($contvalor,'f'),0,0,'C',0);
+		$oPdf->Cell(24 ,$iAlt,db_formatar($contpatronal,'f'),0,0,'C',0);
+		$oPdf->Cell(25 ,$iAlt,db_formatar($continss,'f'),0,1,'C',0);
+		$oPdf->ln();
+
+		$oPdf->ln();
+		$contvalor = 0;
+		$contpatronal = 0;
+		$continss = 0;
+	}
+}
+if($fonte=='n' and $projeto == 's'){
+	if($iInd == $iLinhasArquivo ){
+		// impimindo total
+		$oPdf->ln();
+		$oPdf->SetFont('Arial','b',$iFonte);
+		$oPdf->Cell(30 ,$iAlt, ' Total ' ,0,0,'C');
+		$oPdf->Cell(20 ,$iAlt, '' ,0,0,'C',0);
+		$oPdf->Cell(65 ,$iAlt, '' ,0,0,'L',0);
+		$oPdf->Cell(25 ,$iAlt,db_formatar($contvalor,'f'),0,0,'C',0);
+		$oPdf->Cell(24 ,$iAlt,db_formatar($contpatronal,'f'),0,0,'C',0);
+		$oPdf->Cell(25 ,$iAlt,db_formatar($continss,'f'),0,1,'C',0);
+		$oPdf->ln();
+
+		$oPdf->ln();
+		$contvalor = 0;
+		$contpatronal = 0;
+		$continss = 0;
+	}
+}
+if($fonte=='s' and $projeto == 's'){
+	if($iInd == $iLinhasArquivo ){
+		// impimindo total
+		$oPdf->ln();
+		$oPdf->SetFont('Arial','b',$iFonte);
+		$oPdf->Cell(30 ,$iAlt, ' Total ' ,0,0,'C');
+		$oPdf->Cell(20 ,$iAlt, '' ,0,0,'C',0);
+		$oPdf->Cell(65 ,$iAlt, '' ,0,0,'L',0);
+		$oPdf->Cell(25 ,$iAlt,db_formatar($contvalor,'f'),0,0,'C',0);
+		$oPdf->Cell(24 ,$iAlt,db_formatar($contpatronal,'f'),0,0,'C',0);
+		$oPdf->Cell(25 ,$iAlt,db_formatar($continss,'f'),0,1,'C',0);
+		$oPdf->ln();
+
+		$oPdf->ln();
+		$contvalor = 0;
+		$contpatronal = 0;
+		$continss = 0;
+	}
 }
 
 $oPdf->Cell(30 ,$iAlt, '' ,0,1,'C');

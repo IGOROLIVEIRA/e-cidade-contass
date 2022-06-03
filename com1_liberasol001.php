@@ -268,15 +268,26 @@ if (isset($incluir)) {
 					}
 				}
 			}
-			$seq = $i + 1;
 			$clsolicitem->pc11_liberado = "true";
 			$clsolicitem->pc11_codigo = $codigo;
-			$clsolicitem->pc11_seq = $seq;
 			$clsolicitem->alterar($codigo);
 			$erro_msg = $clsolicitem->erro_msg;
 			if ($clsolicitem->erro_status == 0) {
 				$sqlerro = true;
 			}
+		}
+		$rsSeqSolicitem = $clsolicitem->sql_record($clsolicitem->sql_query_file(null,"*","pc11_seq","pc11_numero={$pc10_numero} and pc11_liberado = 't'"));
+		for ($i = 0; $i < pg_num_rows($rsSeqSolicitem); $i++) {
+			db_fieldsmemory($rsSeqSolicitem, $i);
+			$seq = $i + 1;
+			$clsolicitem->pc11_seq = $seq;
+			$clsolicitem->pc11_codigo = $pc11_codigo;
+			$clsolicitem->alterar($pc11_codigo);
+		}
+		if($sequencial != ""){
+			$seq = $sequencial + 1;
+		}else{
+			$seq= $i + 1;
 		}
 	}
 	/*
