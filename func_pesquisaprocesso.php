@@ -154,7 +154,7 @@ if (isset($chave_p58_requer)) {
                                 <table>
                                     <tr>
                                         <td width="4%" align="right" nowrap>
-                                            <strong>Nome/Razão Social:</strong>
+                                            <strong>Código/Nome do Titular:</strong>
                                         </td>
                                         <td width="96%" align="left" nowrap>
                                             <?
@@ -543,6 +543,9 @@ if (isset($chave_p58_requer)) {
 
 </html>
 <script type="text/javascript">
+    var z01_nome = document.getElementsByName("z01_nome");
+    z01_nome[1].value = "Titular do processo";
+
     function limparTela() {
         location.href = 'pro3_consultaprocesso001.php';
 
