@@ -35,27 +35,32 @@ $oJson       = new Services_JSON();
 $oParametros = $oJson->decode(str_replace("\\","",$_GET["sFiltros"]));
 $sWhere = "e60_instit = ".db_getsession("DB_instit");
 if ($oParametros->iPagamento == 'p') {
-  $sHeaderTipo = "Pagamento";
-  $sWhere .= " and corrente.k12_estorn is false ";
-} if ($oParametros->iPagamento == 'nf') {
-  $sHeaderTipo = "NotaFiscal"; 
-  $datatime = mktime(12, 0, 0, date("m"), date("d"), date("Y"));
-  $anousu   = date("Y", $datatime);
-  $mesusu   = date("m", $datatime);
-  $diausu   = date("d", $datatime);         
-  $dataatual = $anousu.'-'.$mesusu.'-'.$diausu;     
+  
+    $sHeaderTipo = "Pagamento";
+    $sWhere .= " and corrente.k12_estorn is false ";
+
+} elseif ($oParametros->iPagamento == 'nf') {
+  
+    $sHeaderTipo = "NotaFiscal"; 
+    $datatime = mktime(12, 0, 0, date("m"), date("d"), date("Y"));
+    $anousu   = date("Y", $datatime);
+    $mesusu   = date("m", $datatime);
+    $diausu   = date("d", $datatime);         
+    $dataatual = $anousu.'-'.$mesusu.'-'.$diausu;     
     
 } else {
-  $sHeaderTipo = "Liquidacao";
+  
+    $sHeaderTipo = "Liquidacao";    
 }
 
 if ($oParametros->datainicial != "" && $oParametros->datafinal == "") {
 
    $dataInicial  = implode("-", array_reverse(explode("/", $oParametros->datainicial)));
    if ($oParametros->iPagamento == 'l') {
-     $sWhere      .= " and retencao.e23_dtcalculo = '{$dataInicial}'";
+    /* OC 17741 */
+     $sWhere      .= " AND c53_tipo = 20 AND c71_data = '{$dataInicial}'";
    } else {
-    $sWhere      .= " and corrente.k12_data = '{$dataInicial}'";
+     $sWhere      .= " and corrente.k12_data = '{$dataInicial}'";
    }
    $sHeaderData  = "{$oParametros->datainicial} a {$oParametros->datainicial}";
 
@@ -65,7 +70,8 @@ if ($oParametros->datainicial != "" && $oParametros->datafinal == "") {
   $dataInicial = implode("-", array_reverse(explode("/", $oParametros->datainicial)));
   $dataFinal   = implode("-", array_reverse(explode("/", $oParametros->datafinal)));
   if ($oParametros->iPagamento == 'l') {
-    $sWhere     .= "and retencao.e23_dtcalculo between '{$dataInicial}' and '{$dataFinal}'";
+    /* OC 17741 */
+    $sWhere     .= "AND c53_tipo = 20 AND c71_data BETWEEN '{$dataInicial}' AND '{$dataFinal}'";
   } else if ($oParametros->iPagamento == 'nf') {
     $sWhere     .= "and (retencao.e23_dtcalculo between '{$dataInicial}' and '{$dataatual}') and e69_dtnota between '{$dataInicial}' and '{$dataFinal}'";
   }
@@ -193,6 +199,17 @@ if ($oParametros->iTipoLancamento != "" || $oParametros->isubtipo != "" || $oPar
   $sSqlRetencoes .= " LEFT JOIN tabplan          ON tabplan.k02_codigo = tabrec.k02_codigo
                       LEFT JOIN conplano lanctos ON tabplan.k02_estpla = lanctos.c60_estrut AND lanctos.c60_anousu = tabplan.k02_anousu
                       LEFT JOIN subtipo          ON c200_tipo = lanctos.c60_tipolancamento ";
+}
+
+/*
+ * OC 17741
+ *  Nesse caso, mesmo a demanda sendo para o Dpto. Pessoal, 
+ * percebeu-se que no relatório de retenções tb havia inconsistencias.
+ */
+if ($oParametros->iPagamento == 'l') {
+    $sSqlRetencoes .= "LEFT JOIN conlancamord   ON c80_codord = pagordem.e50_codord ";
+    $sSqlRetencoes .= "LEFT JOIN conlancamdoc   ON c71_codlan = c80_codlan ";
+    $sSqlRetencoes .= "LEFT JOIN conhistdoc     ON c53_coddoc = conlancamdoc.c71_coddoc  ";
 }
 
 $sSqlRetencoes .= " where e23_ativo is true ";
