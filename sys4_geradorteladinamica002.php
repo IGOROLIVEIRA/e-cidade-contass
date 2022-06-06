@@ -6,6 +6,7 @@ require_once("libs/db_utils.php");
 
 
 db_postmemory($HTTP_SERVER_VARS);
+$oGet  = db_utils::postMemory($_GET);
 $oLicitacao = new licitacao($l20_codigo);
 
 $sql = "select uf, db12_extenso, logo, munic, cgc, ender, bairro, numero, codigo, nomeinst
@@ -15,6 +16,41 @@ $sql = "select uf, db12_extenso, logo, munic, cgc, ender, bairro, numero, codigo
 
 $result = pg_query($sql);
 db_fieldsmemory($result, 0);
+
+$where = "";
+$and = false;
+
+if ($oGet->ac16_sequencial != null || $oGet->ac16_sequencial != "") {
+  $where .= " WHERE ac16_sequencial = $oGet->ac16_sequencial ";
+  $and = true;
+}
+
+if ($oGet->situacao != 0) {
+  if ($and == true) {
+    $where .= " and ac16_acordosituacao = $oGet->situacao ";
+  } else {
+    $where .= " WHERE ac16_acordosituacao = $oGet->situacao ";
+    $and = true;
+  }
+}
+
+if ($oGet->exercicio != null || $oGet->exercicio != 0) {
+  if ($and == true) {
+    $where .= " and ac16_anousu = $oGet->exercicio ";
+  } else {
+    $where .= " WHERE ac16_anousu = $oGet->exercicio ";
+    $and = true;
+  }
+}
+
+if ($oGet->cgms != null) {
+  if ($and == true) {
+    $where .= " and ac16_contratado in ($oGet->cgms) ";
+  } else {
+    $where .= " WHERE ac16_contratado in ($oGet->cgms) ";
+    $and = true;
+  }
+}
 
 $sql_acordo = "SELECT acordo.ac16_sequencial AS SEQUENCIAL,
 CAST(acordo.ac16_numeroacordo AS NUMERIC) AS NUMERO,
@@ -39,7 +75,7 @@ JOIN acordos.acordoorigem on ac28_sequencial = ac16_origem
 JOIN acordos.acordosituacao on ac17_sequencial = ac16_acordosituacao
 left join liclicita on l20_codigo = ac16_licitacao
 left join cflicita on l03_codigo = l20_codtipocom
-WHERE ac16_sequencial in (683,682,413,51,151,150,152)
+ $where
 ORDER BY CAST(ac16_numeroacordo AS NUMERIC),ac16_sequencial";
 
 $rs_acordo = db_query($sql_acordo);
@@ -62,6 +98,8 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
     $linhas = floor(strlen($oDadosAcordo->objeto) / 58) + 1;
   }
 
+
+
   $pdf->SetFont("Arial", "B", 9);
   $pdf->Cell(20, 7, "Código", 1, 0, "C");
   $pdf->Cell(30, 7, "Número/Ano", 1, 0, "C");
@@ -83,7 +121,11 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
   if ($pagina != $pdf->PageNo()) {
     $pdf->SetXY(150, $yi);
   } else {
-    $pdf->SetXY(150, 45 + $y);
+    if ($pagina != 1) {
+      $pdf->SetXY(150, $yi);
+    } else {
+      $pdf->SetXY(150, 45 + $y);
+    }
   }
 
   $pdf->Cell(70, 7 * $linhas, substr($oDadosAcordo->contratado, 0, 50), 1, 0, "C");
