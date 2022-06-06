@@ -848,7 +848,7 @@ class cl_empagetipo {
     }
     if($iAnoUsu > 2021 and $iAnoEmpenho <2022){
       if(substr($iFonteEmpenho, 1, 2) == '22'){
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','171')) and";  
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','171','122')) and";  
       }elseif(substr($iFonteEmpenho, 1, 2) == '23'){
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','176')) and";
       }elseif(substr($iFonteEmpenho, 1, 2) == '24'){
