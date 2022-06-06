@@ -39,7 +39,7 @@ JOIN acordos.acordoorigem on ac28_sequencial = ac16_origem
 JOIN acordos.acordosituacao on ac17_sequencial = ac16_acordosituacao
 left join liclicita on l20_codigo = ac16_licitacao
 left join cflicita on l03_codigo = l20_codtipocom
-WHERE ac16_sequencial in (683,682,413,51)
+WHERE ac16_sequencial in (683,682,413,51,151,150,152)
 ORDER BY CAST(ac16_numeroacordo AS NUMERIC),ac16_sequencial";
 
 $rs_acordo = db_query($sql_acordo);
@@ -51,6 +51,7 @@ $pdf->AddPage();
 $pdf->Ln(3);
 $linhas = 1;
 $y = 0;
+$pagina = 1;
 
 
 for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
@@ -76,8 +77,15 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
 
   $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->sequencial, 1, 0, "C");
   $pdf->Cell(30, 7 * $linhas, $oDadosAcordo->processo, 1, 0, "C");
+  $yi = $pdf->getY();
   $pdf->MultiCell(90, 7, $oDadosAcordo->objeto, 1, "C", 0);
-  $pdf->SetXY(150, 45 + $y);
+
+  if ($pagina != $pdf->PageNo()) {
+    $pdf->SetXY(150, $yi);
+  } else {
+    $pdf->SetXY(150, 45 + $y);
+  }
+
   $pdf->Cell(70, 7 * $linhas, substr($oDadosAcordo->contratado, 0, 50), 1, 0, "C");
   $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->vencimento, 1, 0, "C");
   $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->assinatura, 1, 0, "C");
@@ -96,6 +104,11 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
     $y += 25 + (7 * $linhas);
   } else {
     $y += 18 + (7 * $linhas);
+  }
+
+  if ($pagina != $pdf->PageNo()) {
+    $y = $yi;
+    $pagina = $pdf->PageNo();
   }
 
   $pdf->Ln(4);
