@@ -184,7 +184,7 @@ try {
     $sSqlConsultaAutonomos .= "          pis,                                                                                                            ";
     $sSqlConsultaAutonomos .= "          cbo,                                                                                                            ";
     $sSqlConsultaAutonomos .= "          data_liquidacao,                                                                                                ";
-    $sSqlConsultaAutonomos .= "          configurado  																																																	 ";
+    $sSqlConsultaAutonomos .= "          configurado                                                          											 ";
  		
     $rsListaAutonomos       = db_query($sSqlConsultaAutonomos);
     $aListaAutonomos        = db_utils::getColectionByRecord($rsListaAutonomos,false,false,true);

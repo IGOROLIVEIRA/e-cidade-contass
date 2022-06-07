@@ -80,7 +80,7 @@ $tiposuple = $clorcprojeto->sql_record($clorcprojeto->sql_query_file($o39_codpro
      document.getElementById('o39_texto').value = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
      document.getElementById('o39_texto').value += " será usado como recurso o excesso de arrecadação na fonte:   ";
       }
-    else if(iTipoSup == 1003 || iTipoSup == 1008 ||iTipoSup == 1028 || iTipoSup == 1026 ){
+    else if(iTipoSup == 1003 || iTipoSup == 1008 ||iTipoSup == 1028 || iTipoSup == 2026 ){
       
       document.getElementById('o39_texto').value = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
       document.getElementById('o39_texto').value += "  será usado como recurso o Superávit Financeiro apurado no Balanço Patrimonial anterior:   ";
@@ -143,7 +143,7 @@ $tiposuple = $clorcprojeto->sql_record($clorcprojeto->sql_query_file($o39_codpro
                $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
                $o39_texto.= " será usado como recurso o excesso de arrecadação na fonte:   ";
            }
-           elseif($o39_tiposuplementacao == 1003 || $o39_tiposuplementacao == 1008 ||$o39_tiposuplementacao == 1028 || $o39_tiposuplementacao == 1026 ){
+           elseif($o39_tiposuplementacao == 1003 || $o39_tiposuplementacao == 1008 ||$o39_tiposuplementacao == 1028 || $o39_tiposuplementacao == 2026 ){
              $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
              $o39_texto.= "  será usado como recurso o Superávit Financeiro apurado no Balanço Patrimonial anterior:   ";
            }

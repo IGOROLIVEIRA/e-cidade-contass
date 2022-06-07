@@ -415,6 +415,9 @@ $clrotulo->label("ac16_resumoobjeto");
             sizeLabelItens = sizeLabelItens + "px";
             document.getElementById('body-container-oGridItens').style.height = sizeLabelItens;
 
+        } else {
+            document.getElementById('body-container-oGridItens').style.height = "340px";
+
         }
 
 
