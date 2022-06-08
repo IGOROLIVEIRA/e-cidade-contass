@@ -290,7 +290,7 @@ class cl_permanexo
   }
 
   // funcao do sql 
-  function sql_query($oid = null, $campos = "permanexo.oid,*", $ordem = null, $dbwhere = "")
+  function sql_query($oid = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
@@ -307,7 +307,7 @@ class cl_permanexo
     $sql2 = "";
     if ($dbwhere == "") {
       if ($oid != "" && $oid != null) {
-        $sql2 = " where permanexo.oid = '$oid'";
+        $sql2 = " where p202_sequencial = $oid";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
