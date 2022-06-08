@@ -2,7 +2,6 @@
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
 include("libs/db_utils.php");
-//db_postmemory($HTTP_SERVER_VARS);
 
 $sqlRubricasRespostas = "SELECT DISTINCT avaliacaoresposta.*,db108_avaliacaogruporesposta
 FROM avaliacao
@@ -14,7 +13,6 @@ LEFT JOIN avaliacaogrupoperguntaresposta ON db106_sequencial = db108_avaliacaore
 LEFT JOIN avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
 WHERE db103_sequencial = 3000944 order by db106_sequencial";
 $rsRubricasResposta = pg_query($sqlRubricasRespostas);
-
 $pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
@@ -31,7 +29,6 @@ for($rRubricas = 0; $rRubricas < pg_num_rows($rsRubricasResposta); $rRubricas ++
         left join avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
         where db101_sequencial = 3000016 ORDER BY db102_sequencial";
     $rsAvaliacaoGrupoPergunta = pg_query($sql);
-
     //GRUPO
     for($AvGrup = 0; $AvGrup < pg_num_rows($rsAvaliacaoGrupoPergunta); $AvGrup ++){
         $pdf->SetFont('Arial','b',9);
@@ -43,7 +40,6 @@ for($rRubricas = 0; $rRubricas < pg_num_rows($rsRubricasResposta); $rRubricas ++
                 WHERE db103_avaliacaogrupopergunta = $oDadosAvaliacaoGrupoPergunta->db102_sequencial
                 ORDER BY db103_sequencial";
         $rsAvaliacaoPergunta = pg_query($sqlPerguntas);
-
         for($Avpergunta = 0; $Avpergunta < pg_num_rows($rsAvaliacaoPergunta); $Avpergunta ++){
             $pdf->SetFont('Arial','b',9);
             $oDadosAvaliacaoPergunta = db_utils::fieldsMemory($rsAvaliacaoPergunta, $Avpergunta);
@@ -63,8 +59,7 @@ for($rRubricas = 0; $rRubricas < pg_num_rows($rsRubricasResposta); $rRubricas ++
             and db108_avaliacaogruporesposta = $oDadoscarga->db108_avaliacaogruporesposta
             ORDER BY db106_sequencial";
             $rsAvaliacaoResposta = pg_query($sqlResposta);
-
-            $oDadosResposta = db_utils::fieldsMemory($rsAvaliacaoResposta, $rRubricas);
+            $oDadosResposta = db_utils::fieldsMemory($rsAvaliacaoResposta, 0);
             $pdf->SetFont('Arial','',9);
             //DESCRICAO DA RESPOSATA
             $sqlDescResposta = "
