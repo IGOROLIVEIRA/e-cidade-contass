@@ -121,7 +121,7 @@ $clrotulo->label("ac16_resumoobjeto");
             </td>
             <td>
               <?php
-              db_input("exercicio", 8, $exercicio, true, "text", 1, 'onkeyup="js_validaCaracteres(this);onchange=js_limitaExercicio(this);"');
+              db_input("exercicio", 10, $exercicio, true, "text", 1, 'onkeyup="js_validaCaracteres(this);onchange=js_limitaExercicio(this);"');
               ?>
             </td>
           </tr>
@@ -131,7 +131,7 @@ $clrotulo->label("ac16_resumoobjeto");
               <b>Filtrar por fornecedor:</b>
             </td>
             <td>
-              <select name="lQuebraFornecedor" id="lQuebraFornecedor">
+              <select name="lQuebraFornecedor" id="lQuebraFornecedor" style="width: 94px;">
                 <option value="f" selected>NÃO</option>
                 <option value="t">SIM</option>
               </select>

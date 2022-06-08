@@ -5,6 +5,7 @@ include("fpdf151/pdf.php");
 require_once("libs/db_utils.php");
 
 
+
 db_postmemory($HTTP_SERVER_VARS);
 $oGet  = db_utils::postMemory($_GET);
 $oLicitacao = new licitacao($l20_codigo);
@@ -56,8 +57,6 @@ $sql_acordo = "SELECT acordo.ac16_sequencial AS SEQUENCIAL,
 CAST(acordo.ac16_numeroacordo AS NUMERIC) AS NUMERO,
 acordo.ac16_anousu AS ANO,
 acordo.ac16_numeroprocesso AS PROCESSO,
-acordo.ac16_tipomodalidade AS TIPO_MODALIDADE,
-acordo.ac16_numodalidade AS MODALIDADE,
 acordo.ac16_dataassinatura AS ASSINATURA,
 acordo.ac16_datafim AS VENCIMENTO,
 acordo.ac16_objeto AS OBJETO,
@@ -114,7 +113,7 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
   $pdf->SetFont("Arial", "", 7);
 
   $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->sequencial, 1, 0, "C");
-  $pdf->Cell(30, 7 * $linhas, $oDadosAcordo->processo, 1, 0, "C");
+  $pdf->Cell(30, 7 * $linhas, $oDadosAcordo->numero . "/" . $oDadosAcordo->ano, 1, 0, "C");
   $yi = $pdf->getY();
   $pdf->MultiCell(90, 7, $oDadosAcordo->objeto, 1, "C", 0);
 
@@ -129,9 +128,9 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
   }
 
   $pdf->Cell(70, 7 * $linhas, substr($oDadosAcordo->contratado, 0, 50), 1, 0, "C");
-  $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->vencimento, 1, 0, "C");
-  $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->assinatura, 1, 0, "C");
-  $pdf->Cell(29, 7 * $linhas, $oDadosAcordo->valor, 1, 0, "C");
+  $pdf->Cell(20, 7 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->vencimento)), 1, 0, "C");
+  $pdf->Cell(20, 7 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->assinatura)), 1, 0, "C");
+  $pdf->Cell(29, 7 * $linhas, 'R$' . number_format($oDadosAcordo->valor, 2, ',', '.'), 1, 0, "C");
   $pdf->Ln();
   $pdf->SetFont("Arial", "B", 9);
   $pdf->Cell(230, 7, "Origem: " . $oDadosAcordo->origem, 1, 0, "L");
@@ -139,8 +138,8 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
   $pdf->Ln();
 
   if ($oDadosAcordo->processolicitatorio != null) {
-    $pdf->Cell(140, 7, "Processo Licitatório: " . $oDadosAcordo->sequencial, 1, 0, "L");
-    $pdf->Cell(90, 7, "Modalidade: " . "Teste", 1, 0, "L");
+    $pdf->Cell(140, 7, "Processo Licitatório: " . $oDadosAcordo->processolicitatorio, 1, 0, "L");
+    $pdf->Cell(90, 7, "Modalidade: " . $oDadosAcordo->modalidade, 1, 0, "L");
     $pdf->Cell(49, 7, "Numeração: " . $oDadosAcordo->codmodalidade, 1, 0, "L");
     $pdf->Ln();
     $y += 25 + (7 * $linhas);
