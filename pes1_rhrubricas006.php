@@ -112,7 +112,7 @@ if(isset($excluir)){
 	  }
   }
   if($sqlerro == true){
-    $erro_msg = "Usuário:\\n\\nCálculos já efetuados com esta rubrica.\\nExclusão abortada.\\n\\nAdministrador: ";
+    $erro_msg = "Usuï¿½rio:\\n\\nCï¿½lculos jï¿½ efetuados com esta rubrica.\\nExclusï¿½o abortada.\\n\\nAdministrador: ";
   }
 
   if($sqlerro == false){
@@ -145,7 +145,7 @@ if(isset($excluir)){
 		   }
 	  }
     if($sqlerro == false){
-       $clbaserubricasesocial->excluir($rh27_rubric,null,db_getsession("DB_instit"));  
+       $clbaserubricasesocial->excluir($rh27_rubric,null,db_getsession("DB_instit"));
        if($clbaserubricasesocial->erro_status==0){
         $erro_msg = $clbaserubricasesocial->erro_msg;
          $sqlerro=true;
@@ -186,12 +186,11 @@ if(isset($excluir)){
   $rsRetencao = $clrhrubretencao->sql_record($clrhrubretencao->sql_query(null,$sCamposRetencao,null,$sWhereRetencao));
   if ( $clrhrubretencao->numrows > 0 ) {
     db_fieldsmemory($rsRetencao,0);
-  }  
+  }
   $result = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query(null,'e991_rubricasesocial',null,"e991_rubricas = '$rh27_rubric' and  e991_instit = ".db_getsession("DB_instit")));
-  if($clbaserubricasesocial->numrows > 0) { 
+  if($clbaserubricasesocial->numrows > 0) {
     db_fieldsmemory($result, 0);
   }
-  
 }
 ?>
 <html>

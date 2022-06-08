@@ -121,7 +121,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                                 </td>
                                 <td>
                                     <?
-                                    $info = array("1" => "Fixa", "2" => "Variável");
+                                    $info = array("1" => "Fixa", "2" => "Variï¿½vel");
                                     db_select('rh27_tipo', $info, true, $db_opcao, "style='width:101px;'");
                                     ?>
                                 </td>
@@ -177,7 +177,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                     </fieldset>
 
                     <fieldset id="ctnInformacoes">
-                        <Legend><b>Informações</b></Legend>
+                        <Legend><b>Informaï¿½ï¿½es</b></Legend>
                         <table width="100%">
                             <?
                             if ($db_opcao == 1 && (!isset($rh27_calc1) || $rh27_calc1 == "") && (!isset($rh27_calc2) || $rh27_calc2 == "")) {
@@ -249,9 +249,9 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                                     $aTipo = array(
                                         'n' => 'Nenhum',
                                         'e' => 'Empenho',
-                                        'c' => 'Consignação',
+                                        'c' => 'Consignaï¿½ï¿½o',
                                         'p' => 'Pagamento-Extra',
-                                        'd' => 'Devolução'
+                                        'd' => 'Devoluï¿½ï¿½o'
                                     );
 
                                     db_select('tipo', $aTipo, true, $db_opcao, "onChange='js_validaTelaTipo(this.value);'; style='width:125px;'");
@@ -452,7 +452,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                     </fieldset>
 
                     <fieldset id="ctnFormulas">
-                        <Legend> <b>Fórmulas</b> </Legend>
+                        <Legend> <b>Fï¿½rmulas</b> </Legend>
                         <table width="100%">
                             <tr>
                                 <td title="<?= @$Trh27_form ?>" width="35%"> <?= @$Lrh27_form ?> </td>
@@ -558,7 +558,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
         return setTimeout(function() {
             var lNumeros = new RegExp(/^[0-9\/]+$/).test(self.value);
             if (!lNumeros) {
-                alert('Código Fundamentação Legal deve ser preenchido somente com números!');
+                alert('Cï¿½digo Fundamentaï¿½ï¿½o Legal deve ser preenchido somente com nï¿½meros!');
                 self.value = '';
             }
         }, 5);
@@ -579,7 +579,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
          * Rubrica vazia
          */
         if ($('rh27_rubric').value == '') {
-            alert('Código da rubrica não informado.');
+            alert('Cï¿½digo da rubrica nï¿½o informado.');
             return false;
         }
 
@@ -588,13 +588,13 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
         }
 
         if ($F('rh27_valorpadrao') != '' && !js_validaSomenteNumeros($F('rh27_valorpadrao'))) {
-            alert('Valor padrão deve ser preenchido somente com números decimais.');
+            alert('Valor padrï¿½o deve ser preenchido somente com nï¿½meros decimais.');
             return false;
         }
 
 
         if ($F('rh27_quantidadepadrao') != '' && !js_validaSomenteNumeros($F('rh27_quantidadepadrao'))) {
-            alert('Quantidade padrão deve ser preenchido somente com números decimais.');
+            alert('Quantidade padrï¿½o deve ser preenchido somente com nï¿½meros decimais.');
             return false;
         }
 
@@ -605,7 +605,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
 
         require_once("scripts/classes/DBViewFormularioFolha/ValidarCodigoRubrica.js");
         /**
-         * Valida se o Código da Rubrica foi informado no formato correto.
+         * Valida se o Cï¿½digo da Rubrica foi informado no formato correto.
          */
         var lValidaCodigoRubrica = DBViewFormularioFolha.ValidarCodigoRubrica($('rh27_rubric'));
 
@@ -614,7 +614,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
          */
         if (!lValidaCodigoRubrica) {
 
-            alert('Código da rubrica com o formato inválido.');
+            alert('Cï¿½digo da rubrica com o formato invï¿½lido.');
             $('rh27_rubric').value = '';
             return false;
         }
@@ -638,7 +638,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
         var oOptEmpenho = new Option('Empenho', 'e');
         var oOptConsignacao = new Option('Consignacao', 'c');
         var oOptPagExtra = new Option('Pagamento-Extra', 'p');
-        var oOptDevolucao = new Option('Devolução', 'd');
+        var oOptDevolucao = new Option('Devoluï¿½ï¿½o', 'd');
 
         $('tipo').options.length = 0;
         $('tipo').add(oOptNenhum, null);

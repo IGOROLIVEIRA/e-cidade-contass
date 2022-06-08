@@ -86,89 +86,92 @@ $db_botao = true;
 $sqlerro   = false;
 if (isset($incluir)) {
 
-  $valor = split(",",$valores);
+  $valor = split(",", $valores);
   // arrays para dados do empautoriza
-  $arr_vals = Array();
-  $arr_cgms = Array();
-  $arr_help = Array();
+  $arr_vals = array();
+  $arr_cgms = array();
+  $arr_help = array();
   $indexaut = 0;
-  
+
   // arrays para dados do empautitem
-  $arr_proc = Array();
-  $arr_hell = Array();
+  $arr_proc = array();
+  $arr_hell = array();
   $indexitm = 0;
   $vir = "";
-  
+
   // Rotina para pegar saldo das dotacoes
   $vetor_dotacao = array();
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
   db_inicio_transacao();
   if ($reservar == "true") {
     $flag_reservar = true;
   }
-  
+
   if ($reservar == "false") {
     $flag_reservar = false;
   }
   for ($i = 0; $i < sizeof($valor); $i++) {
 
-    $dados = split("_",$valor[$i]);
+    $dados = split("_", $valor[$i]);
 
     $rsParam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_contrandsol"));
-    $oParam  = db_utils::fieldsMemory($rsParam,0);
+    $oParam  = db_utils::fieldsMemory($rsParam, 0);
 
-    if (isset ($oParam->pc30_contrandsol) && $oParam->pc30_contrandsol == 't') {
+    if (isset($oParam->pc30_contrandsol) && $oParam->pc30_contrandsol == 't') {
 
-      $sSqlItensTransf = $clempautitem->sql_query_anuaut(null,null,"pc11_codigo",null,"e55_autori = ".$dados[1]." and e54_anulad is null");
+      $sSqlItensTransf = $clempautitem->sql_query_anuaut(null, null, "pc11_codigo", null, "e55_autori = " . $dados[1] . " and e54_anulad is null");
       $rsItensTransf   = $clempautitem->sql_record();
       $iNroItensTransf = $clempautitem->numrows;
 
       for ($x = 0; $x < $iNroItensTransf; $x++) {
 
-        $oItensTransf      = db_utils::fieldsMemory($rsItensTransf,$x);
-        $sSqlSolicitemProc = $clsolicitemprot->sql_query_transf(null,"max(p63_codtran) as codtran ",null," pc49_solicitem = {$oItensTransf->pc11_codigo}");
+        $oItensTransf      = db_utils::fieldsMemory($rsItensTransf, $x);
+        $sSqlSolicitemProc = $clsolicitemprot->sql_query_transf(null, "max(p63_codtran) as codtran ", null, " pc49_solicitem = {$oItensTransf->pc11_codigo}");
         $rsSolicitemProt   = $clsolicitemprot->sql_record($sSqlSolicitemProc);
         $iNroSolicitemProt = $clsolicitemprot->numrows;
 
         for ($y = 0; $y < $iNroSolicitemProt; $y++) {
 
-          $oSolicitemProt = db_utils::fieldsMemory($rsSolicitemProt,$y);
+          $oSolicitemProt = db_utils::fieldsMemory($rsSolicitemProt, $y);
 
           $clproctransferproc->excluir($oSolicitemProt->codtran);
           if ($clproctransferproc->erro_status == "0") {
 
-            $erro_msg = $clproctransferproc->erro_msg;	
+            $erro_msg = $clproctransferproc->erro_msg;
             $sqlerro  = true;
           }
 
-          $clsolordemtransf->excluir(null," pc41_codtran = {$oSolicitemProt->codtran} ");
+          $clsolordemtransf->excluir(null, " pc41_codtran = {$oSolicitemProt->codtran} ");
           if ($clsolordemtransf->erro_status == "0") {
 
             $erro_msg = $clsolordemtransf->erro_msg;
             $sqlerro  = true;
-          } 	  	
+          }
 
           $clproctransfer->excluir($oSolicitemProt->codtran);
           if ($clproctransfer->erro_status == "0") {
 
-            $erro_msg = $clproctransfer->erro_msg; 	
+            $erro_msg = $clproctransfer->erro_msg;
             $sqlerro  = true;
-          } 	  	
+          }
         }
       }
     }
 
-    $clempautoriza->sql_anulaautorizacao($dados[1],false,&$erro_msg,&$sqlerro,&$flag_saldo,$vetor_dotacao,$flag_reservar);
+    $clempautoriza->sql_anulaautorizacao($dados[1], false, $erro_msg, $sqlerro, $flag_saldo, $vetor_dotacao, $flag_reservar);
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
   db_fim_transacao($sqlerro);
 }
 $numrows_itens = 0;
 if (isset($e54_autori) && trim($e54_autori) != "") {
-  
-  $sql_itens     = $clempautitem->sql_query_anuaut(null,null," distinct e54_autori,
+
+  $sql_itens     = $clempautitem->sql_query_anuaut(
+    null,
+    null,
+    " distinct e54_autori,
                                                                         pc81_codproc,
                                                                         pc81_codprocitem,
                                                                         pc01_codmater,
@@ -179,207 +182,215 @@ if (isset($e54_autori) && trim($e54_autori) != "") {
                                                                         z01_nome,
                                                                         e55_vltot,
                                                                         e55_quant",
-                                                                        "z01_numcgm,
+    "z01_numcgm,
                                                                         e56_coddot,
                                                                         pc01_codmater,
                                                                         pc81_codprocitem",
-                                                                        "e55_autori = $e54_autori 
+    "e55_autori = $e54_autori 
                                                                         and e54_anulad is null 
-                                                                        and(e61_numemp is null or(e61_numemp is not null and e60_vlremp=e60_vlranu))");
-                                                                        
+                                                                        and(e61_numemp is null or(e61_numemp is not null and e60_vlremp=e60_vlranu))"
+  );
+
   $result_itens  = $clempautitem->sql_record($sql_itens);
   $numrows_itens = $clempautitem->numrows;
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<style>
-.bordas {
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <style>
+    .bordas {
 
-  border: 1px solid #cccccc;
-  border-top-color: #999999;
-  border-right-color: #999999;
-  border-left-color: #999999;
-  border-bottom-color: #999999;
-  background-color: #cccccc;
-}
-.bordas01 {
+      border: 1px solid #cccccc;
+      border-top-color: #999999;
+      border-right-color: #999999;
+      border-left-color: #999999;
+      border-bottom-color: #999999;
+      background-color: #cccccc;
+    }
 
-  border: 1px solid #cccccc;
-  border-top-color: #999999;
-  border-right-color: #999999;
-  border-left-color: #999999;
-  border-bottom-color: #999999;
-  background-color: #DEB887;
-}
-.bordas02 {
+    .bordas01 {
 
-  border: 2px solid #cccccc;
-  border-top-color: #999999;
-  border-right-color: #999999;
-  border-left-color: #999999;
-  border-bottom-color: #999999;
-  background-color: #999999;
-}
-</style>
+      border: 1px solid #cccccc;
+      border-top-color: #999999;
+      border-right-color: #999999;
+      border-left-color: #999999;
+      border-bottom-color: #999999;
+      background-color: #DEB887;
+    }
+
+    .bordas02 {
+
+      border: 2px solid #cccccc;
+      border-top-color: #999999;
+      border-right-color: #999999;
+      border-left-color: #999999;
+      border-bottom-color: #999999;
+      background-color: #999999;
+    }
+  </style>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<form name="form1">
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
-  <tr> 
-    <td align="left" valign="top" bgcolor="#CCCCCC"> 
-    <center>
-    <?php
-    db_input('valores',8,0,true,'hidden',3);
-    $locationh = false;
-    if ($numrows_itens == 0) {
-      $locationh = true;
-      echo "                                                                                                                                                                                                                                                                                   <br><br><br><br><br><br><br>
+  <form name="form1">
+    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr>
+        <td align="left" valign="top" bgcolor="#CCCCCC">
+          <center>
+            <?php
+            db_input('valores', 8, 0, true, 'hidden', 3);
+            $locationh = false;
+            if ($numrows_itens == 0) {
+              $locationh = true;
+              echo "                                                                                                                                                                                                                                                                                   <br><br><br><br><br><br><br>
             <strong>Autorização não existente ou já empenhada.</strong>\n
            ";
-      echo "
+              echo "
             <script>
 	      parent.document.form1.incluir.disabled=true;
             </script>
            ";
-    } else {
+            } else {
 
-      if (isset($e54_autori)) {
-	     db_fieldsmemory($result_itens,0);
-      }
-      echo "<center>";
-      echo "<table border='1' align='center'>\n";
-      
-      echo "<tr bgcolor=''>\n";
-      echo "  <td nowrap class='bordas02' align='center' title='Marcar todos os itens de todas autorizações'><strong>";db_ancora("M","js_marcatudo();",1);echo "</strong></td>\n";
-      echo "  <td nowrap class='bordas02' align='center'><strong>Item</strong></td>\n";
-      echo "  <td nowrap class='bordas02' align='center'><strong>Material</strong></td>\n";
-      echo "  <td nowrap class='bordas02' align='center'><strong>Descrição</strong></td>\n";
-      echo "  <td nowrap class='bordas02' align='center'><strong>Fornecedor</strong></td>\n";
-      echo "  <td nowrap class='bordas02' align='center'><strong>Dotação</strong></td>\n";
-      echo "  <td nowrap class='bordas02' align='center'><strong>Quant.</strong></td>\n";
-      echo "  <td nowrap class='bordas02' align='center'><strong>Val Unit.</strong></td>\n";
-      echo "  <td nowrap class='bordas02' align='center'><strong>Val Tot.</strong></td>\n";
-      echo "</tr>\n";
-      
-      $dot_ant = "";
-      $forn_ant= "";
-      $contador= 1;
-      $testatot= 0;
-      $valortotalautori = 0;
-      
-      for ($i=0;$i<$numrows_itens;$i++) {
+              if (isset($e54_autori)) {
+                db_fieldsmemory($result_itens, 0);
+              }
+              echo "<center>";
+              echo "<table border='1' align='center'>\n";
 
-        db_fieldsmemory($result_itens,$i);
+              echo "<tr bgcolor=''>\n";
+              echo "  <td nowrap class='bordas02' align='center' title='Marcar todos os itens de todas autorizações'><strong>";
+              db_ancora("M", "js_marcatudo();", 1);
+              echo "</strong></td>\n";
+              echo "  <td nowrap class='bordas02' align='center'><strong>Item</strong></td>\n";
+              echo "  <td nowrap class='bordas02' align='center'><strong>Material</strong></td>\n";
+              echo "  <td nowrap class='bordas02' align='center'><strong>Descrição</strong></td>\n";
+              echo "  <td nowrap class='bordas02' align='center'><strong>Fornecedor</strong></td>\n";
+              echo "  <td nowrap class='bordas02' align='center'><strong>Dotação</strong></td>\n";
+              echo "  <td nowrap class='bordas02' align='center'><strong>Quant.</strong></td>\n";
+              echo "  <td nowrap class='bordas02' align='center'><strong>Val Unit.</strong></td>\n";
+              echo "  <td nowrap class='bordas02' align='center'><strong>Val Tot.</strong></td>\n";
+              echo "</tr>\n";
 
-        if ($dot_ant!=$e56_coddot || $forn_ant!=$z01_numcgm) {
+              $dot_ant = "";
+              $forn_ant = "";
+              $contador = 1;
+              $testatot = 0;
+              $valortotalautori = 0;
 
-          if ($contador != 1) {
+              for ($i = 0; $i < $numrows_itens; $i++) {
 
-            echo "<tr>\n";
-            echo "  <td nowrap colspan='8' class='$bordas'align='right'><strong>Valor Total </strong></td>\n";
-            echo "  <td nowrap colspan='1' class='$bordas'align='right'><strong>R$ ".db_formatar($valortotalautori,"f")."</strong></td>\n";
-            echo "<tr>\n";
-            echo "<tr>\n";
-            echo "  <td nowrap colspan='11' align='center' >&nbsp;</td>\n";
-            echo "</tr>\n";
-          }
-          //----------------Controla andamento da solicitação-------------
-          //------------------------Rogerio--------------------------
-          $result_conand = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_contrandsol"));
-          db_fieldsmemory($result_conand, 0);
-          if (isset ($pc30_contrandsol) && $pc30_contrandsol == 't') {
+                db_fieldsmemory($result_itens, $i);
 
-            $result_testitem=pg_exec($sql_itens);
-            $numrows_testitem=pg_numrows($result_testitem);
-            for ($w = 0;$w < $numrows_testitem; $w++) {
+                if ($dot_ant != $e56_coddot || $forn_ant != $z01_numcgm) {
 
-              db_fieldsmemory($result_testitem,$w);
-              $result_prot = $clsolicitemprot->sql_record($clsolicitemprot->sql_query_file($cod_item));
-              if ($clsolicitemprot->numrows > 0) {
+                  if ($contador != 1) {
 
-                $result_andam = $clsolandam->sql_record($clsolandam->sql_query_file(null, "*", "pc43_codigo desc limit 1", "pc43_solicitem=$cod_item"));
-                if ($clsolandam->numrows > 0) {
+                    echo "<tr>\n";
+                    echo "  <td nowrap colspan='8' class='$bordas'align='right'><strong>Valor Total </strong></td>\n";
+                    echo "  <td nowrap colspan='1' class='$bordas'align='right'><strong>R$ " . db_formatar($valortotalautori, "f") . "</strong></td>\n";
+                    echo "<tr>\n";
+                    echo "<tr>\n";
+                    echo "  <td nowrap colspan='11' align='center' >&nbsp;</td>\n";
+                    echo "</tr>\n";
+                  }
+                  //----------------Controla andamento da solicitação-------------
+                  //------------------------Rogerio--------------------------
+                  $result_conand = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_contrandsol"));
+                  db_fieldsmemory($result_conand, 0);
+                  if (isset($pc30_contrandsol) && $pc30_contrandsol == 't') {
 
-                  db_fieldsmemory($result_andam, 0);						
-                  $result_tipo = $clsolandpadraodepto->sql_record($clsolandpadraodepto->sql_query(null, "*", null, "pc47_solicitem=$cod_item and pc47_ordem=$pc43_ordem"));
-                  if ($clsolandpadraodepto->numrows > 0) {
+                    $result_testitem = pg_exec($sql_itens);
+                    $numrows_testitem = pg_numrows($result_testitem);
+                    for ($w = 0; $w < $numrows_testitem; $w++) {
 
-                    db_fieldsmemory($result_tipo, 0);
-                    if ($pc47_pctipoandam != 5 || $pc48_depto != db_getsession("DB_coddepto")) {
-                      $simnaod = " disabled ";
+                      db_fieldsmemory($result_testitem, $w);
+                      $result_prot = $clsolicitemprot->sql_record($clsolicitemprot->sql_query_file($cod_item));
+                      if ($clsolicitemprot->numrows > 0) {
+
+                        $result_andam = $clsolandam->sql_record($clsolandam->sql_query_file(null, "*", "pc43_codigo desc limit 1", "pc43_solicitem=$cod_item"));
+                        if ($clsolandam->numrows > 0) {
+
+                          db_fieldsmemory($result_andam, 0);
+                          $result_tipo = $clsolandpadraodepto->sql_record($clsolandpadraodepto->sql_query(null, "*", null, "pc47_solicitem=$cod_item and pc47_ordem=$pc43_ordem"));
+                          if ($clsolandpadraodepto->numrows > 0) {
+
+                            db_fieldsmemory($result_tipo, 0);
+                            if ($pc47_pctipoandam != 5 || $pc48_depto != db_getsession("DB_coddepto")) {
+                              $simnaod = " disabled ";
+                            }
+                          }
+                        }
+                      }
                     }
                   }
+                  echo "</tr>\n";
+                  echo "  <td nowrap colspan='1' class='bordas' align='center'><strong><input type='checkbox' name='aut_$e54_autori' value='aut_'></strong></td>\n";
+                  echo "  <td nowrap colspan='10' class='bordas' align='left'><strong>AUTORIZAÇÃO  " . ($e54_autori) . "</strong></td>\n";
+                  echo "</tr>\n";
+                  $dot_ant = $e56_coddot;
+                  $forn_ant = $z01_numcgm;
+                  $contador++;
+                  $valortotalautori = 0;
                 }
-              }
-            }
-          }
-          echo "</tr>\n";
-          echo "  <td nowrap colspan='1' class='bordas' align='center'><strong><input type='checkbox' name='aut_$e54_autori' value='aut_'></strong></td>\n";
-          echo "  <td nowrap colspan='10' class='bordas' align='left'><strong>AUTORIZAÇÃO  ".($e54_autori)."</strong></td>\n";
-          echo "</tr>\n";
-          $dot_ant = $e56_coddot;
-          $forn_ant= $z01_numcgm;
-          $contador++;
-          $valortotalautori = 0;
-        }
 
-        $bordas = "bordas";
-        echo "<tr>\n";
-        echo "  <td nowrap class='$bordas' align='center'>&nbsp;</td>\n";
-        echo "  <td nowrap class='$bordas' align='center'>$pc81_codprocitem</td>\n";
-        echo "  <td nowrap class='$bordas' align='center'>$pc01_codmater</td>\n";
-        echo "  <td class='$bordas' align='left' >".ucfirst(strtolower($pc01_descrmater))."</td>\n";
-        echo "  <td class='$bordas' align='left' >$z01_nome</td>\n";
-        echo "  <td nowrap class='$bordas' align='center'>$e56_coddot</td>\n";
-        echo "  <td nowrap class='$bordas' align='right' >$e55_quant</td>\n";
-        echo "  <td nowrap class='$bordas' align='right' >R$ ".db_formatar($e55_vltot/$e55_quant,"f")."</td>\n"; 
-        echo "  <td nowrap class='$bordas' align='right' >R$ ".db_formatar($e55_vltot,"f")."</td>\n";
-        $valortotalautori += $e55_vltot;
-        echo "</tr>\n";
-      } 
-      echo "<tr>\n";
-      echo "  <td nowrap colspan='8' class='$bordas'align='right'><strong>Valor Total </strong></td>\n";
-      echo "  <td nowrap colspan='1' class='$bordas'align='right'><strong>R$ ".db_formatar($valortotalautori,"f")."</strong></td>\n";
-      echo "<tr>\n";
-      echo "</table>\n";
-      echo "</center>";
-      echo "<script>
+                $bordas = "bordas";
+                echo "<tr>\n";
+                echo "  <td nowrap class='$bordas' align='center'>&nbsp;</td>\n";
+                echo "  <td nowrap class='$bordas' align='center'>$pc81_codprocitem</td>\n";
+                echo "  <td nowrap class='$bordas' align='center'>$pc01_codmater</td>\n";
+                echo "  <td class='$bordas' align='left' >" . ucfirst(strtolower($pc01_descrmater)) . "</td>\n";
+                echo "  <td class='$bordas' align='left' >$z01_nome</td>\n";
+                echo "  <td nowrap class='$bordas' align='center'>$e56_coddot</td>\n";
+                echo "  <td nowrap class='$bordas' align='right' >$e55_quant</td>\n";
+                echo "  <td nowrap class='$bordas' align='right' >R$ " . db_formatar($e55_vltot / $e55_quant, "f") . "</td>\n";
+                echo "  <td nowrap class='$bordas' align='right' >R$ " . db_formatar($e55_vltot, "f") . "</td>\n";
+                $valortotalautori += $e55_vltot;
+                echo "</tr>\n";
+              }
+              echo "<tr>\n";
+              echo "  <td nowrap colspan='8' class='$bordas'align='right'><strong>Valor Total </strong></td>\n";
+              echo "  <td nowrap colspan='1' class='$bordas'align='right'><strong>R$ " . db_formatar($valortotalautori, "f") . "</strong></td>\n";
+              echo "<tr>\n";
+              echo "</table>\n";
+              echo "</center>";
+              echo "<script>
         parent.document.form1.incluir.disabled=false;
             </script>";
-    }
-    ?>
-    </center>
-    </td>
-  </tr>
-</table>
-</form>
+            }
+            ?>
+          </center>
+        </td>
+      </tr>
+    </table>
+  </form>
 </body>
+
 </html>
 <script>
-function js_marcatudo() {
+  function js_marcatudo() {
 
-  x = document.form1;
-  for (i = 0;i < x.length;i++) {
+    x = document.form1;
+    for (i = 0; i < x.length; i++) {
 
-    if (x.elements[i].type == 'checkbox') {
+      if (x.elements[i].type == 'checkbox') {
 
-      if (x.elements[i].disabled == false) {
+        if (x.elements[i].disabled == false) {
 
-        if (x.elements[i].checked == true) {
-          x.elements[i].checked=false;
-        } else {
-          x.elements[i].checked=true;
-        }        
+          if (x.elements[i].checked == true) {
+            x.elements[i].checked = false;
+          } else {
+            x.elements[i].checked = true;
+          }
+        }
       }
     }
   }
-}
 </script>
 <?php
 if (isset($incluir)) {

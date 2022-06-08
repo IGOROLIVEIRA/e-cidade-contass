@@ -51,14 +51,14 @@ if(isset($alterar)){
         db_fieldsmemory($rsParamLic, 0)->l12_validacadfornecedor;
 
         if($l12_validacadfornecedor == "t"){
-          
+
           if($z01_telef == ""){
-            db_msgbox("Usuário: Campo Email não informado !");
+            db_msgbox("Usuï¿½rio: Campo Email nï¿½o informado !");
             $sqlerro = true;
           }
-  
+
           if($z01_email == ""){
-            db_msgbox("Usuário: Campo Telefone não informado !");
+            db_msgbox("Usuï¿½rio: Campo Telefone nï¿½o informado !");
             $sqlerro = true;
           }
 
@@ -68,12 +68,12 @@ if(isset($alterar)){
           $rsContaBancaria = $clpcfornecon->sql_record($clpcfornecon->sql_query(null,"*",null,"pc63_numcgm={$pc60_numcgm}"));
           //db_criatabela($rsContaBancaria);exit;
           if(pg_numrows($rsContaBancaria) == 0) {
-            db_msgbox("Usuário: E necessario cadastrar ao menos uma conta bancaria !");
+            db_msgbox("Usuï¿½rio: E necessario cadastrar ao menos uma conta bancaria !");
             $sqlerro = true;
 
             echo "
               <script>
-                  function js_db_libera(){         
+                  function js_db_libera(){
                     parent.document.formaba.pcfornecon.disabled=false;
                     top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$pc60_numcgm."';
                 ";
@@ -100,7 +100,7 @@ if(isset($alterar)){
     }
   }
 
-  $erro_msg = $clpcforne->erro_msg; 
+  $erro_msg = $clpcforne->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 2;
    $db_botao = true;

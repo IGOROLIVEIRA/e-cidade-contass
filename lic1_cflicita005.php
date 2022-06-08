@@ -54,7 +54,7 @@ if (isset($alterar)) {
   if (LicitacaoModalidade::possuiTipoCadastrado($l03_tipo) && $oModalidade->getSigla() <> $sTipo) {
 
     $sqlerro = true;
-    $erro_msg = "Tipo da Licitação [" . strtoupper($l03_tipo) . "] já cadastrado no sistema.";
+    $erro_msg = "Tipo da Licitaï¿½ï¿½o [" . strtoupper($l03_tipo) . "] jï¿½ cadastrado no sistema.";
   } else {
 
     db_inicio_transacao();

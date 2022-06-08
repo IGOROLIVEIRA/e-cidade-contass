@@ -77,7 +77,7 @@ if( isset($_GET['lConsulta']) ) {
 if ( !empty($iMatricula) ) {
 
 	$matric = $matricula = $r01_regist = $iMatricula;
-} 
+}
 
 /**
  * GET - Define datas para consulta
@@ -526,8 +526,8 @@ $iMesImplantacao = $aImplantacao[1];
         $sSqlInformacoesServidor .= "   INNER JOIN rhpessoal ON z01_numcgm  = rh01_numcgm                               ";
         $sSqlInformacoesServidor .= "   INNER JOIN rhpessoalmov ON (rh01_regist,rh01_instit) = (rh02_regist,rh02_instit) AND (rh02_anousu,rh02_mesusu) = ({$ano},{$mes})";
         $sSqlInformacoesServidor .= "   INNER JOIN rhfuncao  ON rh02_funcao = rh37_funcao AND rh01_instit = rh37_instit ";
-        $sSqlInformacoesServidor .= " WHERE {$sWhere}                                                                   "; 
-            
+        $sSqlInformacoesServidor .= " WHERE {$sWhere}                                                                   ";
+
         $dados = db_query($sSqlInformacoesServidor);
         db_fieldsmemory($dados,0);
 
@@ -776,7 +776,7 @@ $iMesImplantacao = $aImplantacao[1];
        * Complementar : com
        * Fixo         : fx
        */
-      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ponto','pes1_pontofx001.php?lConsulta=1&sPonto='+sPonto+'&iMatricula='+iMatricula+'&sChama='+sChama+'&sMuda='+sMuda+'&funcao_js=parent.js_preenche|0|1|2|3','Manutençã do Ponto',true);
+      js_OpenJanelaIframe('top.corpo','db_iframe_ponto','pes1_pontofx001.php?lConsulta=1&sPonto='+sPonto+'&iMatricula='+iMatricula+'&sChama='+sChama+'&sMuda='+sMuda+'&funcao_js=parent.js_preenche|0|1|2|3','Manutençã do Ponto',true);
     }
 
     </script>
@@ -1424,7 +1424,7 @@ function js_buscarMatricula() {
     return
   }
 
-  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_rhpessoal', 'func_rhpessoal.php?pesquisa_chave=' + iMatriculaPesquisar + '&funcao_js=parent.js_retornoBuscaMatricula', 'Pesquisa', false);
+  js_OpenJanelaIframe('top.corpo', 'db_iframe_rhpessoal', 'func_rhpessoal.php?pesquisa_chave=' + iMatriculaPesquisar + '&funcao_js=parent.js_retornoBuscaMatricula', 'Pesquisa', false);
 }
 
 /**
@@ -1845,9 +1845,9 @@ function js_verificaregistro(){
 
 function js_pesquisaregist(mostra){
      if(mostra==true){
-       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome','Pesquisa',true);
+       js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome','Pesquisa',true);
      }else{
-       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+$F('r01_regist')+'&funcao_js=parent.js_mostraregist','Pesquisa',false);
+       js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+$F('r01_regist')+'&funcao_js=parent.js_mostraregist','Pesquisa',false);
 //     db_iframepessoal.jan.location.href =               'func_rhpessoal.php?pesquisa_chave='+document.form1.r01_regist.value+'&funcao_js=parent.js_mostraregist';
 
      }
@@ -1955,7 +1955,7 @@ function js_relatorio(){
 
 function js_Pesquisa(solicitacao) {
   var descricao_janela = 'CONSULTAS';
-  js_OpenJanelaIframe('CurrentWindow.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro=<?=$r01_regist?>&ano=<?=$ano?>&mes=<?=$mes?>',descricao_janela,true,'20');
+  js_OpenJanelaIframe('top.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro=<?=$r01_regist?>&ano=<?=$ano?>&mes=<?=$mes?>',descricao_janela,true,'20');
 }
 
 </script>

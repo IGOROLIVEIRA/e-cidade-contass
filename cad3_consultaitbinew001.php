@@ -199,8 +199,8 @@ db_fieldsmemory($config,0);
     </tr>
     <?php endif ?>
 
-  <tr> 
-    <td title="<?=@$Tj14_nome?>"> 
+  <tr>
+    <td title="<?=@$Tj14_nome?>">
        <?
        db_ancora(@$Lj14_nome,"js_ruas(true);",$db_opcao);
        ?>

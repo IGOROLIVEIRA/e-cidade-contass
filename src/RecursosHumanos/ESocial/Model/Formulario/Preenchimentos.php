@@ -5,20 +5,20 @@ namespace ECidade\RecursosHumanos\ESocial\Model\Formulario;
 use ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosResposta;
 
 /**
- * Classe responsável por buscar os dados de preenchimento dos formulários
+ * Classe responsï¿½vel por buscar os dados de preenchimento dos formulï¿½rios
  * @package ECidade\RecursosHumanos\ESocial\Model\Formulario
  */
 class Preenchimentos
 {
     /**
-     * Responsável pelo preenchimento do formulário
+     * Responsï¿½vel pelo preenchimento do formulï¿½rio
      *
      * @var mixed
      */
     private $responsavelPreenchimento;
 
     /**
-     * Informa o responsável pelo preenchimento. Se não indormado, busca de todos
+     * Informa o responsï¿½vel pelo preenchimento. Se nï¿½o indormado, busca de todos
      *
      * @param mixed $responsavel
      */
@@ -50,7 +50,7 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulários dos empregadores.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios dos empregadores.");
         }
 
         return \db_utils::getCollectionByRecord($rs);
@@ -72,18 +72,18 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulários dos servidores.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios dos servidores.");
         }
 
         /**
-         * Para pegar o empregador, vai ter que ver a lotação do servidor na competência.
+         * Para pegar o empregador, vai ter que ver a lotaï¿½ï¿½o do servidor na competï¿½ncia.
          */
         return \db_utils::getCollectionByRecord($rs);
     }
 
     /**
-     * Busca o preenchimento dos formulários genéricos.
-     * Aqueles que possuem uma carga de dados e um campo pk (Uma chave única )
+     * Busca o preenchimento dos formulï¿½rios genï¿½ricos.
+     * Aqueles que possuem uma carga de dados e um campo pk (Uma chave ï¿½nica )
      *
      * @param integer $codigoFormulario
      * @return stdClass[]
@@ -106,7 +106,7 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulários.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios.");
         }
 
         return \db_utils::getCollectionByRecord($rs);
@@ -151,13 +151,13 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulários das rubricas.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios das rubricas.");
         }
 
         $rubricas = \db_utils::getCollectionByRecord($rs);
 
         /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         * @todo busca os empregadores da instituiï¿½ï¿½o e adicona para cada rubriuca
          */
         return \db_utils::getCollectionByRecord($rs);
     }
@@ -179,7 +179,7 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulários dos empregadores.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios dos empregadores.");
         }
 
         return \db_utils::getCollectionByRecord($rs);

@@ -47,7 +47,7 @@ require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "libs/db_sessoes.php");
 //   * @see https://tools.ietf.org/html/rfc7235#section-3.1
 //   */
 //  if (empty($_SESSION) || empty($_SESSION['DB_login'])) {
-//    throw new AccessDeniedHttpException('Sessão inválida ou expirada. Tente logar novamente.');
+//    throw new AccessDeniedHttpException('Sessï¿½o invï¿½lida ou expirada. Tente logar novamente.');
 //  }
 
 global $conn;

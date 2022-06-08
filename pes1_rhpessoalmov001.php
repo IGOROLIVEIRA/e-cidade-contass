@@ -127,7 +127,7 @@ if (isset($incluir) && !$lErro) {
             $rh02_art1leioutros == 'f'
         ) {
             $sqlerro  = true;
-            $erro_msg = 'Pelo menos uma das opções do Siope(Art. 1 da Lei nº 13.935/2019) deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (119, 1119, 219, 167, 267)
+            $erro_msg = 'Pelo menos uma das opções do Siope deve ser marcada com SIM quando a matrícula for vinculada a um dos seguintes recursos: (118, 1118, 218, 166, 266)
 ';
         }
     }
@@ -791,7 +791,9 @@ if (isset($rh02_regist)) {
 if (isset($limparbanco) && $limparbanco == true) {
     unset($inputCodigoBanco, $inputNomeBanco, $inputNumeroAgencia, $inputDvAgencia, $inputNumeroConta, $inputDvConta);
 } else {
+
     try {
+
         $oServidor           = ServidorRepository::getInstanciaByCodigo($rh02_regist, $rh02_anousu, $rh02_mesusu);
         $oContaBancaria      = $oServidor->getContaBancaria();
 
@@ -829,7 +831,7 @@ if (isset($rh02_salari)) {
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-    <?php
+    <?
     db_app::load("scripts.js");
     db_app::load("prototype.js");
     db_app::load("strings.js");
@@ -862,7 +864,7 @@ if (isset($rh02_salari)) {
 
 </html>
 
-<?php
+<?
 
 if ((isset($alterar) || isset($excluir) || isset($incluir)) && !$lErro) {
 
@@ -918,21 +920,21 @@ if ($lErro) {
 if (isset($rh02_seqpes)) {
     echo "<script>
           parent.document.formaba.rhpeslocaltrab.disabled=false;
-          top.corpo.iframe_rhpeslocaltrab.location.href='pes1_rhpeslocaltrab001.php?rh56_seqpes=" . @$rh02_seqpes . "&rh02_regist={$rh02_regist}';
+          (window.CurrentWindow || parent.CurrentWindow || top).corpo.iframe_rhpeslocaltrab.location.href='pes1_rhpeslocaltrab001.php?rh56_seqpes=" . @$rh02_seqpes . "&rh02_regist={$rh02_regist}';
        ";
     if (
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4507) == 'true' ||
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4515) == 'true'
     ) {
         echo "parent.document.formaba.rhpontofixo.disabled=false;\n";
-        echo "top.corpo.iframe_rhpontofixo.location.href='pes1_rhpessoalponto001.php?ponto=fx&r90_regist=" . @$rh02_regist . "'\n";
+        echo "(window.CurrentWindow || parent.CurrentWindow || top).corpo.iframe_rhpontofixo.location.href='pes1_rhpessoalponto001.php?ponto=fx&r90_regist=" . @$rh02_regist . "'\n";
     }
     if (
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4506)  == 'true' ||
         db_permissaomenu(db_getsession("DB_anousu"), 952, 4514)  == 'true'
     ) {
         echo "parent.document.formaba.rhpontosalario.disabled=false;\n";
-        echo "top.corpo.iframe_rhpontosalario.location.href='pes1_rhpessoalponto001.php?ponto=fs&r90_regist=" . @$rh02_regist . "'\n";
+        echo "(window.CurrentWindow || parent.CurrentWindow || top).corpo.iframe_rhpontosalario.location.href='pes1_rhpessoalponto001.php?ponto=fs&r90_regist=" . @$rh02_regist . "'\n";
     }
 
     echo "</script>";

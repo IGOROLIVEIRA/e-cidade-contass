@@ -75,7 +75,7 @@ if (isset($oPost->cancelarliberacao)) {
 
   if( pg_num_rows($rsItbiNumpre) > 0) {
     $lSqlErro = true;
-    $sMsgErro = 'Já existe recibo gerado para esta ITBI.';
+    $sMsgErro = 'Jï¿½ existe recibo gerado para esta ITBI.';
   }
 
 
@@ -119,7 +119,7 @@ SQL;
 
         if (!empty($oDadosArrecad->k00_numpre)) {
 
-          $msgCancelDebtItbi = "Cancelamento de débito ITBI";
+          $msgCancelDebtItbi = "Cancelamento de dï¿½bito ITBI";
 
           $clcancdebitos->k20_descr           = $msgCancelDebtItbi;
           $clcancdebitos->k20_hora            = db_hora();
@@ -208,14 +208,13 @@ SQL;
 
           if ($result == false) {
             $lSqlErro = true;
-            $sMsgErro .= "[4] - Erro ao cancelar débito ITBI\n";
+            $sMsgErro .= "[4] - Erro ao cancelar dï¿½bito ITBI\n";
           }
 
         }
 
     }
   }
-  
   db_fim_transacao($lSqlErro);
 
   $it01_guia = "";
@@ -245,7 +244,7 @@ SQL;
     <tr>
       <td>
         <fieldset>
-        <legend><b>Cancela Liberação</b></legend>
+        <legend><b>Cancela Liberaï¿½ï¿½o</b></legend>
           <table border="0">
               <tr>
                 <td title="<?=@$Tit01_guia?>">
@@ -273,7 +272,7 @@ SQL;
     </tr>
     <tr align="center">
       <td>
-        <input name="cancelarliberacao" id="cancelarliberacao" disabled="disabled" type="submit" onclick="return js_valida()" value="Cancelar Liberação">
+        <input name="cancelarliberacao" id="cancelarliberacao" disabled="disabled" type="submit" onclick="return js_valida()" value="Cancelar Liberaï¿½ï¿½o">
       </td>
     </tr>
   </table>
@@ -323,7 +322,7 @@ function js_valida() {
 
   if ( document.form1.it01_guia.value == '' || document.form1.it03_nome.value == '' ) {
 
-    alert('Por favor, selecione um código de ITBI Válido');
+    alert('Por favor, selecione um cï¿½digo de ITBI Vï¿½lido');
     return false;
   }
 

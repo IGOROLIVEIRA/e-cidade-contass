@@ -1,35 +1,35 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
 //CLASSE DA ENTIDADE basesr
 class cl_basesr
 {
-  // cria variaveis de erro 
+  // cria variaveis de erro
   var $rotulo     = null;
   var $query_sql  = null;
   var $numrows    = 0;
@@ -42,28 +42,28 @@ class cl_basesr
   var $erro_msg   = null;
   var $erro_campo = null;
   var $pagina_retorno = null;
-  // cria variaveis do arquivo 
+  // cria variaveis do arquivo
   var $r09_instit = 0;
   var $r09_anousu = 0;
   var $r09_mesusu = 0;
   var $r09_base = null;
   var $r09_rubric = null;
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 r09_instit = int4 = Cod. Instituição 
-                 r09_anousu = int4 = Ano do Exercicio 
-                 r09_mesusu = int4 = Mes do Exercicio 
-                 r09_base = varchar(4) = Base 
-                 r09_rubric = varchar(4) = Rubrica 
+                 r09_instit = int4 = Cod. Instituiï¿½ï¿½o
+                 r09_anousu = int4 = Ano do Exercicio
+                 r09_mesusu = int4 = Mes do Exercicio
+                 r09_base = varchar(4) = Base
+                 r09_rubric = varchar(4) = Rubrica
                  ";
-  //funcao construtor da classe 
+  //funcao construtor da classe
   function cl_basesr()
   {
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("basesr");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  //funcao erro 
+  //funcao erro
   function erro($mostra, $retorna)
   {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -102,7 +102,7 @@ class cl_basesr
     if (($this->r09_anousu == null) || ($this->r09_anousu == "")) {
       $this->erro_sql = " Campo r09_anousu nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -110,7 +110,7 @@ class cl_basesr
     if (($this->r09_mesusu == null) || ($this->r09_mesusu == "")) {
       $this->erro_sql = " Campo r09_mesusu nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -118,7 +118,7 @@ class cl_basesr
     if (($this->r09_base == null) || ($this->r09_base == "")) {
       $this->erro_sql = " Campo r09_base nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -126,7 +126,7 @@ class cl_basesr
     if (($this->r09_rubric == null) || ($this->r09_rubric == "")) {
       $this->erro_sql = " Campo r09_rubric nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -134,36 +134,36 @@ class cl_basesr
     if (($this->r09_instit == null) || ($this->r09_instit == "")) {
       $this->erro_sql = " Campo r09_instit nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
     }
     $sql = "insert into basesr(
-                                       r09_instit 
-                                      ,r09_anousu 
-                                      ,r09_mesusu 
-                                      ,r09_base 
-                                      ,r09_rubric 
+                                       r09_instit
+                                      ,r09_anousu
+                                      ,r09_mesusu
+                                      ,r09_base
+                                      ,r09_rubric
                        )
                 values (
-                                $this->r09_instit 
-                               ,$this->r09_anousu 
-                               ,$this->r09_mesusu 
-                               ,'$this->r09_base' 
-                               ,'$this->r09_rubric' 
+                                $this->r09_instit
+                               ,$this->r09_anousu
+                               ,$this->r09_mesusu
+                               ,'$this->r09_base'
+                               ,'$this->r09_rubric'
                       )";
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql   = "Interliga o arquivo bases com as rubricas          ($this->r09_anousu." - ".$this->r09_mesusu." - ".$this->r09_base." - ".$this->r09_rubric." - ".$this->r09_instit) nao Incluído. Inclusao Abortada.";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_banco = "Interliga o arquivo bases com as rubricas          já Cadastrado";
+        $this->erro_sql   = "Interliga o arquivo bases com as rubricas          ($this->r09_anousu." - ".$this->r09_mesusu." - ".$this->r09_base." - ".$this->r09_rubric." - ".$this->r09_instit) nao Incluï¿½do. Inclusao Abortada.";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_banco = "Interliga o arquivo bases com as rubricas          jï¿½ Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = "Interliga o arquivo bases com as rubricas          ($this->r09_anousu." - ".$this->r09_mesusu." - ".$this->r09_base." - ".$this->r09_rubric." - ".$this->r09_instit) nao Incluído. Inclusao Abortada.";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_sql   = "Interliga o arquivo bases com as rubricas          ($this->r09_anousu." - ".$this->r09_mesusu." - ".$this->r09_base." - ".$this->r09_rubric." - ".$this->r09_instit) nao Incluï¿½do. Inclusao Abortada.";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
       $this->erro_status = "0";
@@ -173,7 +173,7 @@ class cl_basesr
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
     $this->erro_sql .= "Valores : " . $this->r09_anousu . "-" . $this->r09_mesusu . "-" . $this->r09_base . "-" . $this->r09_rubric . "-" . $this->r09_instit;
-    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
@@ -205,10 +205,10 @@ class cl_basesr
       $sql  .= $virgula . " r09_instit = $this->r09_instit ";
       $virgula = ",";
       if (trim($this->r09_instit) == null) {
-        $this->erro_sql = " Campo Cod. Instituição nao Informado.";
+        $this->erro_sql = " Campo Cod. Instituiï¿½ï¿½o nao Informado.";
         $this->erro_campo = "r09_instit";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -221,7 +221,7 @@ class cl_basesr
         $this->erro_sql = " Campo Ano do Exercicio nao Informado.";
         $this->erro_campo = "r09_anousu";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -234,7 +234,7 @@ class cl_basesr
         $this->erro_sql = " Campo Mes do Exercicio nao Informado.";
         $this->erro_campo = "r09_mesusu";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -247,7 +247,7 @@ class cl_basesr
         $this->erro_sql = " Campo Base nao Informado.";
         $this->erro_campo = "r09_base";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -260,7 +260,7 @@ class cl_basesr
         $this->erro_sql = " Campo Rubrica nao Informado.";
         $this->erro_campo = "r09_rubric";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -310,7 +310,7 @@ class cl_basesr
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Interliga o arquivo bases com as rubricas          nao Alterado. Alteracao Abortada.\\n";
       $this->erro_sql .= "Valores : " . $this->r09_anousu . "-" . $this->r09_mesusu . "-" . $this->r09_base . "-" . $this->r09_rubric . "-" . $this->r09_instit;
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
@@ -320,16 +320,16 @@ class cl_basesr
         $this->erro_banco = "";
         $this->erro_sql = "Interliga o arquivo bases com as rubricas          nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_sql .= "Valores : " . $this->r09_anousu . "-" . $this->r09_mesusu . "-" . $this->r09_base . "-" . $this->r09_rubric . "-" . $this->r09_instit;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+        $this->erro_sql = "Alteraï¿½ï¿½o efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->r09_anousu . "-" . $this->r09_mesusu . "-" . $this->r09_base . "-" . $this->r09_rubric . "-" . $this->r09_instit;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
@@ -337,7 +337,7 @@ class cl_basesr
       }
     }
   }
-  // funcao para exclusao 
+  // funcao para exclusao
   function excluir($r09_anousu = null, $r09_mesusu = null, $r09_base = null, $r09_rubric = null, $r09_instit = null, $dbwhere = null)
   {
     if ($dbwhere == null || $dbwhere == "") {
@@ -402,9 +402,9 @@ class cl_basesr
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Interliga o arquivo bases com as rubricas          nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql   = "Interliga o arquivo bases com as rubricas          nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
       $this->erro_sql .= "Valores : " . $r09_anousu . "-" . $r09_mesusu . "-" . $r09_base . "-" . $r09_rubric . "-" . $r09_instit;
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
@@ -412,18 +412,18 @@ class cl_basesr
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "Interliga o arquivo bases com as rubricas          nao Encontrado. Exclusão não Efetuada.\\n";
+        $this->erro_sql = "Interliga o arquivo bases com as rubricas          nao Encontrado. Exclusï¿½o nï¿½o Efetuada.\\n";
         $this->erro_sql .= "Valores : " . $r09_anousu . "-" . $r09_mesusu . "-" . $r09_base . "-" . $r09_rubric . "-" . $r09_instit;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+        $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $r09_anousu . "-" . $r09_mesusu . "-" . $r09_base . "-" . $r09_rubric . "-" . $r09_instit;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
@@ -431,7 +431,7 @@ class cl_basesr
       }
     }
   }
-  // funcao do recordset 
+  // funcao do recordset
   function sql_record($sql)
   {
     $result = db_query($sql);
@@ -439,7 +439,7 @@ class cl_basesr
       $this->numrows    = 0;
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Erro ao selecionar os registros.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -448,7 +448,7 @@ class cl_basesr
     if ($this->numrows == 0) {
       $this->erro_banco = "";
       $this->erro_sql   = "Record Vazio na Tabela:basesr";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -473,9 +473,9 @@ class cl_basesr
       $sql .= $campos;
     }
     $sql .= " from basesr ";
-    $sql .= "      inner join bases  on  bases.r08_anousu = basesr.r09_anousu 
-		                                 and  bases.r08_mesusu = basesr.r09_mesusu 
-																		 and  bases.r08_codigo = basesr.r09_base 
+    $sql .= "      inner join bases  on  bases.r08_anousu = basesr.r09_anousu
+		                                 and  bases.r08_mesusu = basesr.r09_mesusu
+																		 and  bases.r08_codigo = basesr.r09_base
 																		 and  bases.r08_instit = basesr.r09_instit";
     $sql .= "      inner join db_config  on  db_config.codigo = bases.r08_instit";
     $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";

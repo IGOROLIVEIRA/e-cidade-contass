@@ -51,7 +51,7 @@ $clAcordo = new Acordo($oGet->ac16_sequencial);
 if ($clAcordo->getInstit() != db_getsession('DB_instit')) {
 
     $oInstituicao = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
-    $sMensagem = "Acordo de código {$oGet->ac16_sequencial} não pertence a instituição {$oInstituicao->getDescricao()}.";
+    $sMensagem = "Acordo de cï¿½digo {$oGet->ac16_sequencial} nï¿½o pertence a instituiï¿½ï¿½o {$oInstituicao->getDescricao()}.";
     header("Location: db_erros.php?db_erro={$sMensagem}");
 }
 
@@ -98,7 +98,7 @@ db_app::import("configuracao.DBDepartamento");
 
                             <tr>
                                 <td class="tdWidth">
-                                    <b>Código:</b>
+                                    <b>Cï¿½digo:</b>
                                 </td>
                                 <td class="tdBgColor" width="150">
                                     <?php echo $clAcordo->getCodigoAcordo(); ?>
@@ -118,7 +118,7 @@ db_app::import("configuracao.DBDepartamento");
                                     );
                                     $rsSqlAcordoGrupo      = $oDaoAcordoGrupo->sql_record($sSqlAcordoGrupo);
                                     $iNumRowsAcordoGrupo   = $oDaoAcordoGrupo->numrows;
-                                    $sDescricaoAcordoGrupo = "Não definido!";
+                                    $sDescricaoAcordoGrupo = "Nï¿½o definido!";
                                     if ($iNumRowsAcordoGrupo > 0) {
 
                                         $oAcordoGrupo          = db_utils::fieldsMemory($rsSqlAcordoGrupo, 0);
@@ -183,7 +183,7 @@ db_app::import("configuracao.DBDepartamento");
                                     ?>
                                 </td>
                                 <td width="150">
-                                    <b>Período de Vigência:</b>
+                                    <b>Perï¿½odo de Vigï¿½ncia:</b>
                                 </td>
                                 <td class="tdBgColor">
 
@@ -191,7 +191,7 @@ db_app::import("configuracao.DBDepartamento");
                                     if (!$clAcordo->getSituacaoVigencia()) {
                                         $oDataInicial  = $clAcordo->getDataInicialVigenciaOriginal();
                                         $oDataFinal    = $clAcordo->getDataFinalVigenciaOriginal();
-                                        echo "{$oDataInicial->getDate(DBDate::DATA_PTBR)} até {$oDataFinal->getDate(DBDate::DATA_PTBR)}";
+                                        echo "{$oDataInicial->getDate(DBDate::DATA_PTBR)} atï¿½ {$oDataFinal->getDate(DBDate::DATA_PTBR)}";
                                     } else {
                                         echo "-";
                                     }
@@ -207,7 +207,7 @@ db_app::import("configuracao.DBDepartamento");
                                     <?php echo $clAcordo->getDescricaoTipo(); ?>
                                 </td>
                                 <td width="150">
-                                    <b>Depto. de Inclusão:</b>
+                                    <b>Depto. de Inclusï¿½o:</b>
                                 </td>
                                 <td class="tdBgColor">
                                     <?php
@@ -223,7 +223,7 @@ db_app::import("configuracao.DBDepartamento");
                                 <td class="tdBgColor" colspan="1"><?php echo $clAcordo->getLei(); ?></td>
 
                                 <td width="150">
-                                    <b>Depto. Responsável:</b>
+                                    <b>Depto. Responsï¿½vel:</b>
                                 </td>
                                 <td class="tdBgColor">
                                     <?php
@@ -240,7 +240,7 @@ db_app::import("configuracao.DBDepartamento");
                                     <?php echo db_formatar($clAcordo->getValorContrato(), 'f'); ?>
                                 </td>
 
-                                <td class="tdWidth"><b>Classificação:</b></td>
+                                <td class="tdWidth"><b>Classificaï¿½ï¿½o:</b></td>
                                 <td class="tdBgColor" colspan="1">
                                     <?php echo $clAcordo->getClassificacao()->getDescricao(); ?>
                                 </td>
@@ -373,43 +373,43 @@ db_app::import("configuracao.DBDepartamento");
             if ($clAcordo->getTipoOrigem() ==  "2" || $clAcordo->getOrigem() == "2") {
                 $oTabDetalhes->add(
                     "empenhamentos",
-                    "Licitações",
+                    "Licitaï¿½ï¿½es",
                     "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licitacoes"
                 );
             }
             if ($clAcordo->getTipoOrigem() ==  "4") {
                 $oTabDetalhes->add(
-                    "Adesão de Registro de Preços",
-                    "Adesão de Registro de Preços",
+                    "Adesï¿½o de Registro de Preï¿½os",
+                    "Adesï¿½o de Registro de Preï¿½os",
                     "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=adesaoregpreco"
                 );
             }
             if ($clAcordo->getTipoOrigem() ==  "5" || $clAcordo->getTipoOrigem() ==  "8" || $clAcordo->getTipoOrigem() ==  "9") {
                 $oTabDetalhes->add(
-                    "Licitação Realizada por outros Órgãos",
-                    "Licitação Realizada por outros Órgãos",
+                    "Licitaï¿½ï¿½o Realizada por outros ï¿½rgï¿½os",
+                    "Licitaï¿½ï¿½o Realizada por outros ï¿½rgï¿½os",
                     "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licrealizadaoutrosorgaos"
                 );
             }
 
             $oTabDetalhes->add(
                 "posicoes",
-                "Posições",
+                "Posiï¿½ï¿½es",
                 "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=posicoes"
             );
 
             $oTabDetalhes->add(
                 "rescisoes",
-                "Rescisões",
+                "Rescisï¿½es",
                 "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=rescisoes"
             );
 
-            //    $oTabDetalhes->add("paralisacoes", "Paralisações",
+            //    $oTabDetalhes->add("paralisacoes", "Paralisaï¿½ï¿½es",
             //      "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=paralisacoes");
 
             $oTabDetalhes->add(
                 "anulacoes",
-                "Anulações",
+                "Anulaï¿½ï¿½es",
                 "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=anulacoes"
             );
 
@@ -421,14 +421,14 @@ db_app::import("configuracao.DBDepartamento");
 
             $oTabDetalhes->add(
                 "Dotacoes",
-                "Dotações",
+                "Dotaï¿½ï¿½es",
                 "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=getdotacaoacordo"
             );
 
             $iCodigoComissao = $clAcordo->getComissao()->getCodigo();
             $oTabDetalhes->add(
                 "comissao",
-                "Comissões",
+                "Comissï¿½es",
                 "con4_consacordosdetalhecomissao001.php?iComissao={$iCodigoComissao}"
             );
 
@@ -467,7 +467,7 @@ db_app::import("configuracao.DBDepartamento");
         var iWidthGrid = 790;
         var iWheigthGrid = 330;
 
-        oWindowGridDetalhesAditamento = new windowAux('wndGridDetalhesAditamento', 'Ítens do Aditamento ',
+        oWindowGridDetalhesAditamento = new windowAux('wndGridDetalhesAditamento', 'ï¿½tens do Aditamento ',
             iWidthGrid, iWheigthGrid);
 
         sContentGridAditamento = "<div  id='ctnMessageBoardRua' style='text-align:center;padding:2px;width:99%;'>";
@@ -494,7 +494,7 @@ db_app::import("configuracao.DBDepartamento");
 
         oGrvDetalhesAditamento.setCellAlign(new Array('right', 'left', 'right', 'right', 'right', 'right'));
 
-        oGrvDetalhesAditamento.setHeader(new Array('Código', 'Descrição', 'Quantidade', 'Unidade', 'Valor Unitário',
+        oGrvDetalhesAditamento.setHeader(new Array('Cï¿½digo', 'Descriï¿½ï¿½o', 'Quantidade', 'Unidade', 'Valor Unitï¿½rio',
             'Valor Total'));
         oGrvDetalhesAditamento.setHeight(230);
 
@@ -539,11 +539,11 @@ db_app::import("configuracao.DBDepartamento");
     }
 
     function js_consultaLicitacao(iCodigoLicitacao) {
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitaï¿½ï¿½o', true);
     }
 
     function js_consultaLicitacaooutroorgao(iCodigoLicitacao) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitaï¿½ï¿½o', true);
     }
 
     function js_consultaProcessoCompras(iCodigoProcesso) {
@@ -609,7 +609,7 @@ db_app::import("configuracao.DBDepartamento");
         sContent += "  </fieldset>";
         sContent += "  </div>";
         sContent += "  <fieldset style='text-align:center;border:0px;border-top:2px groove white'>";
-        sContent += "    <legend><b>Dotações</b></legend>";
+        sContent += "    <legend><b>Dotaï¿½ï¿½es</b></legend>";
         sContent += "  <div style='width:100%' id='cntgridDotacoes'>";
         sContent += "  </div>";
         sContent += "  </fieldset>";
@@ -638,7 +638,7 @@ db_app::import("configuracao.DBDepartamento");
         oGridDotacoes.nameInstance = 'oGridDotacoes';
         oGridDotacoes.setCellWidth(new Array('30%', '30%', '30%', '10%'));
         oGridDotacoes.setCellAlign(new Array("center", "right", "right", "right"));
-        oGridDotacoes.setHeader(new Array("Dotação", "Valor", "Valor Util.", "Valor reservado", "Reserva"));
+        oGridDotacoes.setHeader(new Array("Dotaï¿½ï¿½o", "Valor", "Valor Util.", "Valor reservado", "Reserva"));
         oGridDotacoes.setHeight(oWindowGridDetalhesItem.getHeight() / 3.2);
         oGridDotacoes.show($('cntgridDotacoes'));
         oGridDotacoes.clearAll(true);
@@ -663,7 +663,7 @@ db_app::import("configuracao.DBDepartamento");
         sQuery = 'e54_autori=' + iCodigo;
         js_OpenJanelaIframe('parent', 'db_iframe_autorizacao',
             'func_empempenhoaut001.php?' + sQuery,
-            'Detalhes Autorização', true);
+            'Detalhes Autorizaï¿½ï¿½o', true);
     }
 
     function js_detalhesEmpenho(iCodigo) {
@@ -678,7 +678,7 @@ db_app::import("configuracao.DBDepartamento");
     function js_mostraSaldo(chave) {
 
         arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da dotaï¿½ï¿½o', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 
@@ -687,7 +687,7 @@ db_app::import("configuracao.DBDepartamento");
         var iCodigoContrato = iCodigo;
         var sDescricaoContrato = '<?php echo $clAcordo->getResumoObjeto(); ?>';
 
-        oPrevisao = new DBViewAcordoPrevisao(iCodigo, 'oPrevisao', 'Previsão de Execução do Contrato',
+        oPrevisao = new DBViewAcordoPrevisao(iCodigo, 'oPrevisao', 'Previsï¿½o de Execuï¿½ï¿½o do Contrato',
             true, true, null, false);
         oPrevisao.onPeriodoClick = function(iPeriodo, iItem) {
 
@@ -699,6 +699,6 @@ db_app::import("configuracao.DBDepartamento");
 
         }
         oPrevisao.show();
-        oPrevisao.setAjuda('Previsões de execução do contrato ' + iCodigo + ' - ' + sDescricaoContrato);
+        oPrevisao.setAjuda('Previsï¿½es de execuï¿½ï¿½o do contrato ' + iCodigo + ' - ' + sDescricaoContrato);
     }
 </script>

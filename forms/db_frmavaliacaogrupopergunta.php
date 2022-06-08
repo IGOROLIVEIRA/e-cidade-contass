@@ -79,7 +79,7 @@ if (isset($oPost->db_opcaoal)) {
 <table border="0" align="left" width="100%">
   <tr>
     <td nowrap title="<?=@$Tdb102_avaliacao?>">
-      <b>Código da Avaliação:</b>
+      <b>Cï¿½digo da Avaliaï¿½ï¿½o:</b>
     </td>
     <td width="10">
 			<?
@@ -155,7 +155,7 @@ if (isset($oPost->db_opcaoal)) {
 			  $cliframe_alterar_excluir->chavepri=$chavepri;
 			  $cliframe_alterar_excluir->sql     = $clavaliacaogrupopergunta->sql_query_file(null, "*", "db102_sequencial", $sWhere);
 			  $cliframe_alterar_excluir->campos  ="db102_sequencial,db102_avaliacao,db102_descricao, db102_identificador,db102_identificadorcampo";
-			  $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
+			  $cliframe_alterar_excluir->legenda="ITENS LANï¿½ADOS";
 			  $cliframe_alterar_excluir->iframe_height ="160";
 			  $cliframe_alterar_excluir->iframe_width ="600";
 			  $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
@@ -203,7 +203,7 @@ function js_validaCaracteres() {
 
   if (sValorInicial == '') {
 
-    alert('É necessário informar um identificador');
+    alert('ï¿½ necessï¿½rio informar um identificador');
     $('db102_identificador').focus();
     return false;
   }
@@ -216,19 +216,19 @@ function js_validaCaracteres() {
     var lResultadoCaracteres  = sRegExpCaracteres.test(sValorCaracteres);
     if (!lResultadoCaracteres) {
 
-      alert('São permitidas apenas letras, números e/ou caracter "_" (underline)');
+      alert('Sï¿½o permitidas apenas letras, nï¿½meros e/ou caracter "_" (underline)');
       return false;
     }
   } else {
 
-    alert('É permitido apenas letra no caracter inicial');
+    alert('ï¿½ permitido apenas letra no caracter inicial');
     return false;
   }
   return true;
 }
 function montarIdentificador(textoBase) {
 
-        var listaStringTrocar = "áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÖÔÚÙÛÜÇ";
+        var listaStringTrocar = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
         var listaStringSubstituir = "aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC";
         var stringIdentificador = "";
         for (var i = 0; i < textoBase.length; i++) {

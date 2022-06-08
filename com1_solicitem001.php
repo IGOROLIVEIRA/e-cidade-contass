@@ -115,7 +115,7 @@ $clsolicitemveic     = new cl_solicitemveic;
 $clproctransferproc  = new cl_proctransferproc;
 $clempautitempcprocitem = new cl_empautitempcprocitem;
 
-// Nova rotina inclui solicitação de compras em processo ou licitação
+// Nova rotina inclui solicitaï¿½ï¿½o de compras em processo ou licitaï¿½ï¿½o
 $clpcproc            = new cl_pcproc;
 $clpcprocitem        = new cl_pcprocitem;
 $clliclicitem        = new cl_liclicitem;
@@ -175,7 +175,7 @@ $msg_alert2 = "";
 $result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "*"));
 db_fieldsmemory($result_pcparam, 0);
 /**
- * Verificamos se a solicitação é de um registro de preco(pc10_solicitacaotipo = 5);
+ * Verificamos se a solicitaï¿½ï¿½o ï¿½ de um registro de preco(pc10_solicitacaotipo = 5);
  * devemos trazer na lookup dos itens somente os itens que fazem parte do registro de preco
  */
 $oDaoSolicitaVInculo = db_utils::getDao("solicitavinculo");
@@ -189,31 +189,31 @@ if ($oDaoSolicitaVInculo->numrows > 0) {
 if (isset($incluir) || isset($alterar)) {
 
   if (isset($incluir)) {
-    $operacao = "Inclusão";
-    if ($pc30_contrandsol == 't') {
-      // db_msgbox("Controle do Andamento da Solicitação!!Em manutenção!!Não é nescessário dar Andamento Inicial!!");
+    $operacao = "Inclusï¿½o";
+    if ($pc30_contrandsol=='t') {
+      // db_msgbox("Controle do Andamento da Solicitaï¿½ï¿½o!!Em manutenï¿½ï¿½o!!Nï¿½o ï¿½ nescessï¿½rio dar Andamento Inicial!!");
     }
   } else {
-    $operacao = "Alteração";
+    $operacao = "Alteraï¿½ï¿½o";
   }
 
   if ($pc30_obrigamat == 't') {
     if ((isset($pc16_codmater) && $pc16_codmater == "") || !isset($pc16_codmater)) {
       $naodig = false;
       $sqlerro = true;
-      $erro_msg = "Usuário: \\n\\n$operacao abortada.\\nCódigo do material não informado. Campo obrigatório.\\n\\nAdministrador:";
+      $erro_msg = "Usuï¿½rio: \\n\\n$operacao abortada.\\nCï¿½digo do material nï¿½o informado. Campo obrigatï¿½rio.\\n\\nAdministrador:";
     }
   }
   if ($pc30_obrigajust == 't') {
     if ((isset($pc11_just) && $pc11_just == "") || !isset($pc11_just)) {
       $naodig = true;
       $sqlerro = true;
-      $erro_msg = "Usuário: \\n\\n$operacao abortada.\\nJustificativa para compra não informada.\\n\\nAdministrador:";
+      $erro_msg = "Usuï¿½rio: \\n\\n$operacao abortada.\\nJustificativa para compra nï¿½o informada.\\n\\nAdministrador:";
     } else {
       if (strlen(trim($pc11_just)) < $pc30_mincar) {
         $naodig = true;
         $sqlerro = true;
-        $erro_msg = "Usuário: \\n\\n$operacao abortada.\\nJustificativa para compra deve ter no mínimo $pc30_mincar caracteres.\\n\\nAdministrador:";
+        $erro_msg = "Usuï¿½rio: \\n\\n$operacao abortada.\\nJustificativa para compra deve ter no mï¿½nimo $pc30_mincar caracteres.\\n\\nAdministrador:";
       }
     }
   }
@@ -268,7 +268,7 @@ if (isset($incluir) && $sqlerro == false) {
     if ($sqlerro == false) {
       if (isset($param) && trim($param) != "") {
         if (isset($codproc) && trim($codproc) != "") {
-          // Esse teste e para o caso de materiais de licitacao excluidos, o processo é excluido qdo nao
+          // Esse teste e para o caso de materiais de licitacao excluidos, o processo ï¿½ excluido qdo nao
           // tem mais itens e caso o usuario queira incluir mais itens usa novamente o processo (recria)
           $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_file($codproc));
           if ($clpcproc->numrows == 0) {
@@ -340,7 +340,7 @@ if (isset($incluir) && $sqlerro == false) {
                   db_fieldsmemory($res_liclicita, 0);
                 } else {
                   $sqlerro  = true;
-                  $erro_msg = "Tipo de Julgamento não encontrado para Licitação $codliclicita. Verifique.";
+                  $erro_msg = "Tipo de Julgamento nï¿½o encontrado para Licitaï¿½ï¿½o $codliclicita. Verifique.";
                 }
               }
 
@@ -382,7 +382,7 @@ if (isset($incluir) && $sqlerro == false) {
             }
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Orçamento da Licitação
+            // Orï¿½amento da Licitaï¿½ï¿½o
             if ($sqlerro == false) {
               $codigo        = $clliclicitem->l21_codigo;
               $dbwhere_orcam = "l21_codliclicita = $codliclicita and l21_codigo != $codigo limit 1";
@@ -452,7 +452,7 @@ if (isset($incluir) && $sqlerro == false) {
 
       $result_msgcodmater = $clsolicitempcmater->sql_record($clsolicitempcmater->sql_query_file(null, null, "pc16_codmater", "", " pc16_codmater=$pc16_codmater and pc16_solicitem in (select pc11_codigo from solicitem where pc11_numero in ($pc11_numero))"));
       if ($clsolicitempcmater->numrows > 0) {
-        $msg_alert = "AVISO \\n\\nItem ja cadastrado nesta solicitação.";
+        $msg_alert = "AVISO \\n\\nItem ja cadastrado nesta solicitaï¿½ï¿½o.";
         db_msgbox($msg_alert);
         db_redireciona("com1_solicitem001.php?pc11_numero=$pc11_numero");
       }
@@ -511,7 +511,7 @@ if (isset($incluir) && $sqlerro == false) {
       }
     }
     /**
-     * Quando o Serviço Controlado por Quantidade: NÃO o sistema sete automaticamente a unidade de medida serviço para ele
+     * Quando o Serviï¿½o Controlado por Quantidade: Nï¿½O o sistema sete automaticamente a unidade de medida serviï¿½o para ele
      * @see: OC 3666
      */
     if ($pc11_servicoquantidade == 'false' && $pc01_servico == "t") {
@@ -553,9 +553,9 @@ if (isset($incluir) && $sqlerro == false) {
 
     //---------------------------------------------------------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------------------------------------------------------
-    //-----------------------CONTROLE DE ANDAMENTO DOS ITENS DA  SOLICITAÇÃO - ROGERIO BAUM --------------------------------
+    //-----------------------CONTROLE DE ANDAMENTO DOS ITENS DA  SOLICITAï¿½ï¿½O - ROGERIO BAUM --------------------------------
     /*
-*CRIA UM PROCESSO PARA CADA ITEM DA SOLICITAÇÃO E GRAVA O CODIGO DA SOLICITAÇÃO E DO PROCESSO NA TABELA SOLICITEMPROT
+*CRIA UM PROCESSO PARA CADA ITEM DA SOLICITAï¿½ï¿½O E GRAVA O CODIGO DA SOLICITAï¿½ï¿½O E DO PROCESSO NA TABELA SOLICITEMPROT
 */
     /*
 $result_pcparam1 = $clpcparam->sql_record($clpcparam->sql_query_file(null, "pc30_contrandsol,pc30_tipoprocsol"));
@@ -637,7 +637,7 @@ db_fieldsmemory($result_pcparam1, 0);
 
       $naodig = true;
       $sqlerro = true;
-      $erro_msg = "Usuário:\\n\\nAlteração abortada. \\nMaterial e resumo do item não informados.\\n\\nAdministrador:";
+      $erro_msg = "Usuï¿½rio:\\n\\nAlteraï¿½ï¿½o abortada. \\nMaterial e resumo do item nï¿½o informados.\\n\\nAdministrador:";
       $solicitem->erro_campo = "pc16_codmater";
     }
   }
@@ -682,7 +682,7 @@ db_fieldsmemory($result_pcparam1, 0);
       ));
       if ($clpcproc->numrows > 0) {
         $sqlerro  = true;
-        $erro_msg = "Item não pode ser alterado, pois já autorizado a empenho!";
+        $erro_msg = "Item nï¿½o pode ser alterado, pois jï¿½ autorizado a empenho!";
       }
 
       if ($sqlerro == false) {
@@ -726,16 +726,16 @@ db_fieldsmemory($result_pcparam1, 0);
 
       if ($clsolicitem->erro_status == 0) {
         $sqlerro = true;
-        
+
       }else{
         $result_pcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_pcorcamval($pc11_codigo,$pc11_numero));
-        
-        
+
+
         if($clpcorcamval->numrows > 0){
           $quant_linha = $clpcorcamval->numrows;
           for($i=0;$i<$quant_linha;$i++){
             db_fieldsmemory($result_pcorcamval,$i);
-            
+
             $clpcorcamval->pc23_quant = $pc11_quant;
             $clpcorcamval->pc23_orcamforne = $pc23_orcamforne;
             $clpcorcamval->pc23_orcamitem = $pc23_orcamitem;
@@ -743,12 +743,12 @@ db_fieldsmemory($result_pcparam1, 0);
             if ($clpcorcamval->erro_status == 0) {
               $sqlerro = true;
               $erro_msg = $clpcorcamval->erro_msg;
-  
+
             }else{
-            
+
               $result_valorpcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_atualizavalor($pc23_orcamforne, $pc23_orcamitem));
               db_fieldsmemory($result_valorpcorcamval,0);
-              
+
               $clpcorcamval->pc23_quant = $pc23_quant;
               $clpcorcamval->pc23_vlrun = $pc23_vlrun;
               $clpcorcamval->pc23_valor = $pc23_quant * $pc23_vlrun;
@@ -756,8 +756,8 @@ db_fieldsmemory($result_pcparam1, 0);
               $clpcorcamval->pc23_quant =0;
               $clpcorcamval->pc23_vlrun = 0;
               $clpcorcamval->pc23_valor = 0;
-              
-              
+
+
               $result_codprocesso = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_codprocesso($pc11_codigo));
 
               if($clitemprecoreferencia->numrows > 0){
@@ -769,7 +769,7 @@ db_fieldsmemory($result_pcparam1, 0);
                   $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
                   $clitemprecoreferencia->si02_itemproccompra = $pc23_orcamitem;
                   $result_precoreferensequncial = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem));
-                  
+
                   if ($clitemprecoreferencia->numrows > 0 ) {
                     db_fieldsmemory($result_precoreferensequncial,0);
                     $clitemprecoreferencia->si02_sequencial = $si02_sequencial;
@@ -781,7 +781,7 @@ db_fieldsmemory($result_pcparam1, 0);
 
             }
           }
-          
+
         }
       }
       $erro_msg = $clsolicitem->erro_msg;
@@ -792,7 +792,7 @@ db_fieldsmemory($result_pcparam1, 0);
       $clsolicitemunid->pc17_unid = $pc17_unid;
       $clsolicitemunid->pc17_quant = $pc17_quant;
       $clsolicitemunid->pc17_codigo = $pc11_codigo;
-      
+
       $result_solicitemunid = $clsolicitemunid->sql_record($clsolicitemunid->sql_query_file($pc11_codigo));
       if ($clsolicitemunid->numrows > 0) {
         $clsolicitemunid->alterar($pc11_codigo);
@@ -805,7 +805,7 @@ db_fieldsmemory($result_pcparam1, 0);
       }
     }
     /**
-     * Quando o Serviço Controlado por Quantidade: NÃO o sistema sete automaticamente a unidade de medida serviço para ele
+     * Quando o Serviï¿½o Controlado por Quantidade: Nï¿½O o sistema sete automaticamente a unidade de medida serviï¿½o para ele
      * @see: OC 3666
      */
 
@@ -926,7 +926,7 @@ db_fieldsmemory($result_pcparam1, 0);
               db_fieldsmemory($result_quant_rest, 0);
               if ($pc11_quant < $quant_solic) {
                 $passa1 = true;
-                $msg_alert2 = " - Quantidade de itens por dotação.\\n";
+                $msg_alert2 = " - Quantidade de itens por dotaï¿½ï¿½o.\\n";
                 $quant = $pc11_quant * ($pc13_quant / $pc11_quant_ant);
                 $soma += $quant;
                 if (($i + 1) == $numrows_pcdotac) {
@@ -970,14 +970,14 @@ db_fieldsmemory($result_pcparam1, 0);
               $sqlerrosaldo = true;
               $saldoreserva = $atual_menos_reservado + $o80_valor;
               if ($saldoreserva == 0) {
-                db_msgbox("\\nATENÇÃO: \\nUma, ou mais dotações, está sem saldo disponível para reserva.\\nReserva será excluída.\\n");
+                db_msgbox("\\nATENï¿½ï¿½O: \\nUma, ou mais dotaï¿½ï¿½es, estï¿½ sem saldo disponï¿½vel para reserva.\\nReserva serï¿½ excluï¿½da.\\n");
               }
             }
           }
 
           if ($passa == true || $passa1 == true) {
-            $msg_alert = "ALERTA: \\n Ocorrerão, automaticamente, as seguintes alterações nas dotações com este item: \\n";
-            $msg_alert1 = " - Valores das dotações.\\n";
+            $msg_alert = "ALERTA: \\n Ocorrerï¿½o, automaticamente, as seguintes alteraï¿½ï¿½es nas dotaï¿½ï¿½es com este item: \\n";
+            $msg_alert1 = " - Valores das dotaï¿½ï¿½es.\\n";
           }
 
           if ($sqlerro == false) {
@@ -992,7 +992,7 @@ db_fieldsmemory($result_pcparam1, 0);
             $clpcdotac->pc13_sequencial = $oPcDotac->pc13_sequencial;
             $clpcdotac->alterar($oPcDotac->pc13_sequencial);
             if ($clpcdotac->erro_status == 0) {
-              $msg_alert = "Alteração nas dotações não efetuada.";
+              $msg_alert = "Alteraï¿½ï¿½o nas dotaï¿½ï¿½es nï¿½o efetuada.";
               $sqlerro = true;
               break;
             }
@@ -1016,14 +1016,14 @@ db_fieldsmemory($result_pcparam1, 0);
                 $clorcreservasol->excluir($oPcDotac->pc13_sequencial);
                 if ($clorcreservasol->erro_status == 0) {
                   $erro_msg = $clorcreservasol->erro_msg;
-                  $msg_alert = "Alteração na reserva de saldo não efetuada.";
+                  $msg_alert = "Alteraï¿½ï¿½o na reserva de saldo nï¿½o efetuada.";
                   $sqlerro = true;
                   break;
                 }
                 $clorcreserva->excluir($o80_codres);
                 if ($clorcreserva->erro_status == 0) {
                   $erro_msg = $clorcreserva->erro_msg;
-                  $msg_alert = "Alteração na reserva de saldo não efetuada.";
+                  $msg_alert = "Alteraï¿½ï¿½o na reserva de saldo nï¿½o efetuada.";
                   $sqlerro = true;
                   break;
                 }
@@ -1124,7 +1124,7 @@ e55_sequen is not null and e54_anulad is null"
         // Caso esteja vai avisar que nao pode excluir
         $flag_pcproc = true;
       } else {
-        // Exclusao de orçamento de processo de compras
+        // Exclusao de orï¿½amento de processo de compras
         // Testa se item tem orcamento de processo de compras
         $result_item = $clpcproc->sql_record($clpcproc->sql_query_autitem(
           null,
@@ -1250,7 +1250,7 @@ where pc20_codorc = $codorc";
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       if ($flag_pcproc == true) {
         $sqlerro  = true;
-        $erro_msg = "Item não pode ser excluido, pois já autorizado a empenho!";
+        $erro_msg = "Item nï¿½o pode ser excluido, pois jï¿½ autorizado a empenho!";
       }
     }
 
@@ -1271,7 +1271,7 @@ e55_sequen is not null and e54_anulad is null"
 
       if ($flag_liclicita == true) {
         $sqlerro  = true;
-        $erro_msg = "Item não pode ser excluido, pois já autorizado a empenho!";
+        $erro_msg = "Item nï¿½o pode ser excluido, pois jï¿½ autorizado a empenho!";
       }
     }
 
@@ -1289,8 +1289,14 @@ e55_sequen is not null and e54_anulad is null"
         }
 
         if (isset($codlic) && trim($codlic) != "") {
-          // Excluir orçamento de licitacao
-          $result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(
+          // Excluir orï¿½amento de licitacao
+          $result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,
+          "pc22_orcamitem as codorcitem, pc22_codorc as codorc",
+          null,
+          "l21_codigo = $codlic"));
+          if ($clpcorcamitem->numrows > 0) {
+            db_fieldsmemory($result_pcorcamitem,0);
+            $result_pcorcamjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query(null,
             null,
             "pc22_orcamitem as codorcitem, pc22_codorc as codorc",
             null,
@@ -1758,7 +1764,7 @@ where pc20_codorc = $codorc";
 
   //  $sqlerro = true;
   db_fim_transacao($sqlerro);
-  // A quantidade de itens das dotações serão atualizadas automaticamente!
+  // A quantidade de itens das dotaï¿½ï¿½es serï¿½o atualizadas automaticamente!
 }
 
 if ($sqlerro == false) {
@@ -1827,8 +1833,8 @@ $lMostraItensPacto = false;
 if (isset($pc11_numero)) {
 
   /**
-   * Verificamos se o usuário vinculou algum plano no cadastro da
-   * solicitacao, caso a a solicitação esteje vicnulado,
+   * Verificamos se o usuï¿½rio vinculou algum plano no cadastro da
+   * solicitacao, caso a a solicitaï¿½ï¿½o esteje vicnulado,
    * devemos disponibilizar a possibilidade de o usuario
    * vincular um item da solicitacao a um item do pacto.
    */
@@ -1915,9 +1921,9 @@ function js_ver(){
 }
 */
   //$codigo_proc = localStorage.getItem("codigoprocesso");
-  
-   
-  
+
+
+
   function teste() {
 
     teste = new ultimosOrcamentos();

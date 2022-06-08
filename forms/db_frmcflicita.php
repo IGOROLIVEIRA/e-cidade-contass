@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
-//MODULO: licitação
+//MODULO: licitaï¿½ï¿½o
 $clcflicita->rotulo->label();
 $clpctipocompratribunal->rotulo->label();
 $clrotulo = new rotulocampo;

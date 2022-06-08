@@ -21,30 +21,34 @@ $db_opcao = isset($alterar) ? 2 : 1;
 
 if (isset($incluir) || isset($alterar)) {
 
+  $dataAux = $si06_dataadesao_ano+1;
+  $resultado = db_query("select * from adesaoregprecos where si06_dataadesao >= '$si06_dataadesao_ano-01-01 00:00:00'
+  and si06_dataadesao < '$dataAux-01-01 00:00:00' and si06_numeroadm = $si06_numeroadm");
 
   if (isset($incluir)) {
     $dataAux = $si06_dataadesao_ano + 1;
-    $resultado = db_query("select * from adesaoregprecos where si06_dataadesao >= '$si06_dataadesao_ano-01-01 00:00:00' 
+    $resultado = db_query("select * from adesaoregprecos where si06_dataadesao >= '$si06_dataadesao_ano-01-01 00:00:00'
     and si06_dataadesao < '$dataAux-01-01 00:00:00' and si06_numeroadm = $si06_numeroadm");
 
-    $objeto = db_utils::fieldsMemory($resultado, 0);
+  if($objeto->si06_dataadesao != null){
+        $erro_msg = 'Erro, o nï¿½mero do processo de adesï¿½o informado jï¿½ estï¿½ sendo utilizado no exercï¿½cio de ' . $si06_dataadesao_ano;
+        $sqlerro = true;
+  }
 
-    if ($objeto->si06_dataadesao != null) {
-      $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $si06_dataadesao_ano;
-      $sqlerro = true;
+    if(!intval($si06_edital) && !$sqlerro){
+        $erro_msg = 'Valor do campo Edital invï¿½lido. Verifique!';
+        $sqlerro = true;
     }
   }
 
 
-  if (isset($alterar)) {
+	$sDataAta = join('-', array_reverse(explode('/', $si06_dataata)));
+	$sDataAbertura = join('-', array_reverse(explode('/', $si06_dataabertura)));
 
-    $resultado = db_query("select * from adesaoregprecos where si06_numeroadm = $si06_numeroadm  ");
-    $objeto = db_utils::fieldsMemory($resultado, 0);
-    $tamanho = pg_num_rows($resultado);
-
-    $registroDePrecoSelecionado = db_query("select * from adesaoregprecos where si06_sequencial = $si06_sequencial");
-    $objetoRegistroDePrecoSelecionado = db_utils::fieldsMemory($registroDePrecoSelecionado, 0);
-    $anoAdesaoSelecionado = substr($objetoRegistroDePrecoSelecionado->si06_dataadesao, 0, strpos($objetoRegistroDePrecoSelecionado->si06_dataadesao, "-"));
+    if ($sDataAta > $sDataAbertura && !$sqlerro) {
+        $sqlerro = true;
+        $erro_msg = 'Data da Ata ï¿½ maior que a Data de Abertura!';
+    }
 
 
     for ($i = 0; $i < $tamanho; $i++) {
@@ -54,7 +58,7 @@ if (isset($incluir) || isset($alterar)) {
       if ($objeto->si06_dataadesao != null && ($si06_dataadesao_ano == $ano && $si06_dataadesao_ano != $anoAdesaoSelecionado)) {
         $erro_msg = 'Erro, o número do processo de adesão informado já está sendo utilizado no exercício de ' . $ano;
         $sqlerro = true;
-      }
+        $erro_msg = 'Data da Cotaï¿½ï¿½o ï¿½ maior que a Data de Abertura!';
     }
   }
 
@@ -113,32 +117,32 @@ if (!$sqlerro) {
       }
     }
 
-    if (!$sqlerro) {
-      $cladesaoregprecos->si06_anocadastro = db_getsession('DB_anousu');
-      if (db_getsession('DB_anousu') >= 2020) {
-        $cladesaoregprecos->si06_edital = $si06_edital;
-        $cladesaoregprecos->si06_cadinicial = 1;
-        $cladesaoregprecos->si06_exercicioedital = db_getsession('DB_anousu');
-      }
-      $cladesaoregprecos->incluir(null);
-    }
-    if ($cladesaoregprecos->erro_status == "0") {
+        if (!$sqlerro) {
+            $cladesaoregprecos->si06_anocadastro = db_getsession('DB_anousu');
+            if (db_getsession('DB_anousu') >= 2020) {
+                $cladesaoregprecos->si06_edital = $si06_edital;
+                $cladesaoregprecos->si06_cadinicial = 1;
+                $cladesaoregprecos->si06_exercicioedital = db_getsession('DB_anousu');
+            }
+            $cladesaoregprecos->incluir(null);
+        }
+        if ($cladesaoregprecos->erro_status == "0") {
 
-      $cladesaoregprecos->erro(true, false);
-      $db_botao = true;
-      echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-      if ($cladesaoregprecos->erro_campo != "") {
-        echo "<script> document.form1." . $cladesaoregprecos->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
-        echo "<script> document.form1." . $cladesaoregprecos->erro_campo . ".focus();</script>";
-      }
-    } else {
-      if (!$sqlerro) {
-        $sSql = "select * from adesaoregprecos order by si06_sequencial desc limit 1;";
-        $rsResult = pg_query($sSql);
-        db_fieldsmemory($rsResult, 0);
-        $_SESSION["codigoAdesao"] = $si06_sequencial;
-        echo "<script>
-                alert('Inclusão efetuada com sucesso');
+            $cladesaoregprecos->erro(true, false);
+            $db_botao = true;
+            echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+            if ($cladesaoregprecos->erro_campo != "") {
+                echo "<script> document.form1." . $cladesaoregprecos->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+                echo "<script> document.form1." . $cladesaoregprecos->erro_campo . ".focus();</script>";
+            }
+        } else {
+            if (!$sqlerro) {
+                $sSql = "select * from adesaoregprecos order by si06_sequencial desc limit 1;";
+                $rsResult = pg_query($sSql);
+                db_fieldsmemory($rsResult, 0);
+                $_SESSION["codigoAdesao"] = $si06_sequencial;
+                echo "<script>
+                alert('Inclusï¿½o efetuada com sucesso');
                 parent.document.formaba.db_itens.disabled=false;
                 parent.mo_camada('db_itens');
                 top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
@@ -214,27 +218,42 @@ if (!$sqlerro) {
     $db_botao = true;
   }
 
-  if (isset($excluir)) {
-    if (!$si06_sequencial) {
-      $sqlerro = true;
-      $erro_msg = 'Adesão de Registro de Preço ainda não cadastrada.';
-    } else {
-      db_inicio_transacao();
-      $db_opcao = 3;
+    if (isset($excluir)) {
+        if (!$si06_sequencial) {
+            $sqlerro = true;
+            $erro_msg = 'Adesï¿½o de Registro de Preï¿½o ainda nï¿½o cadastrada.';
+        } else {
+            db_inicio_transacao();
+            $db_opcao = 3;
 
-      /**
-       * Verificar Encerramento Periodo Patrimonial
-       */
-      $dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial, "si06_dataadesao")), 0)->si06_dataadesao;
+            /**
+             * Verificar Encerramento Periodo Patrimonial
+             */
+            $dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial, "si06_dataadesao")), 0)->si06_dataadesao;
 
-      if (!empty($si06_dataadesao)) {
-        $clcondataconf = new cl_condataconf;
-        if (!$clcondataconf->verificaPeriodoPatrimonial($dataadesao)) {
-          $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
-          $cladesaoregprecos->erro_status = "0";
+            if (!empty($si06_dataadesao)) {
+                $clcondataconf = new cl_condataconf;
+                if (!$clcondataconf->verificaPeriodoPatrimonial($dataadesao)) {
+                    $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
+                    $cladesaoregprecos->erro_status = "0";
 
-          $sqlerro  = true;
-          $erro_msg = $clcondataconf->erro_msg;
+                    $sqlerro  = true;
+                    $erro_msg = $clcondataconf->erro_msg;
+                }
+            }
+
+            if ($sqlerro == false) {
+                $clitensregpreco = new cl_itensregpreco;
+                $clitensregpreco->excluir(null, " si07_sequencialadesao = $si06_sequencial");
+                $cladesaoregprecos->excluir($si06_sequencial);
+            }
+
+            db_fim_transacao();
+        }
+    } else if (isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])) {
+        //$db_opcao = 3;
+        if (!isset($chavepesquisa)) {
+            $chavepesquisa = $_SESSION["codigoAdesao"];
         }
       }
 

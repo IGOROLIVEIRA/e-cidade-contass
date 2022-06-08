@@ -8,7 +8,7 @@ $clrotulo->label("o40_descr");
 <form name="form1" method="post" action="">
   <center>
     <fieldset style="margin-left: 80px; margin-top: 10px;">
-      <legend>Identificação dos Resposáveis</legend>
+      <legend>Identificaï¿½ï¿½o dos Resposï¿½veis</legend>
       <table border="0">
         <tr>
           <td nowrap title="<?= @$Tsi166_sequencial ?>">
@@ -43,9 +43,9 @@ $clrotulo->label("o40_descr");
             <?
             //OC16203
             if (db_getsession("DB_modulo") != 952) {
-              $x = array('1' => 'Gestor', '2' => 'Contador', '3' => 'Controle Interno', '4' => 'Ordenador de Despesa por Delegação', '5' => 'Tesoureiro', '6' => 'Responsável Pelo Orçamento Municipal');
+              $x = array('1' => 'Gestor', '2' => 'Contador', '3' => 'Controle Interno', '4' => 'Ordenador de Despesa por Delegaï¿½ï¿½o', '5' => 'Tesoureiro', '6' => 'Responsï¿½vel Pelo Orï¿½amento Municipal');
             } else {
-              $x = array('7' => 'Responsável pelo envio');
+              $x = array('7' => 'Responsï¿½vel pelo envio');
             }
             db_select("si166_tiporesponsavel", $x, true, $db_opcao, "onchange='mostrar_campos()'");
             //db_input('si166_tiporesponsavel',11,$Isi166_tiporesponsavel,true,'text',$db_opcao,"")
@@ -54,7 +54,7 @@ $clrotulo->label("o40_descr");
         </tr>
         <tr id="orgao" style="visibility: hidden;">
           <td nowrap title="<?= @$Tsi166_orgao ?>">
-            <? db_ancora("<b>Orgão</b>", "js_pesquisao41_orgao(true);", $db_opcao); ?>
+            <? db_ancora("<b>Orgï¿½o</b>", "js_pesquisao41_orgao(true);", $db_opcao); ?>
           </td>
           <td>
             <?

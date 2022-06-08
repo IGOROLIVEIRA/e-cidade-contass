@@ -70,155 +70,158 @@ class dbGeradorRelatorio
 
     private function loadRelatorio($iCodRelatorio)
     {
-
-        if (empty($iCodRelatorio)) {
-            throw new Exception("Código do relatório vazio!");
-        }
-
-        $cldb_relatorio = new cl_db_relatorio();
-
-        $rsConsultaRelatorio = $cldb_relatorio->sql_record($cldb_relatorio->sql_query($iCodRelatorio));
-
-        if ($cldb_relatorio->numrows > 0) {
-
-            $oRelatorio           = db_utils::fieldsMemory($rsConsultaRelatorio, 0);
-            $this->sEstruturaXML  = $oRelatorio->db63_xmlestruturarel;
-            $this->iTipoRelatorio = $oRelatorio->db63_db_tiporelatorio;
-
-            $oDomXml = new DOMDocument();
-            $oDomXml->loadXML($this->sEstruturaXML);
-
-
-            try {
-                $this->setCodRelatorio($oRelatorio->db63_sequencial);
-            } catch (Exception $eException) {
-                throw new Exception($eException->getMessage());
+        try {
+            if (empty($iCodRelatorio)) {
+                throw new Exception("Código do relatório vazio!");
             }
 
-            try {
-                $this->setOrigemRelatorio($oRelatorio->db63_db_relatorioorigem);
-            } catch (Exception $eException) {
-                throw new Exception($eException->getMessage());
-            }
+            $cldb_relatorio = new cl_db_relatorio();
+
+            $rsConsultaRelatorio = $cldb_relatorio->sql_record($cldb_relatorio->sql_query($iCodRelatorio));
+
+            if ($cldb_relatorio->numrows > 0) {
+
+                $oRelatorio           = db_utils::fieldsMemory($rsConsultaRelatorio, 0);
+                $this->sEstruturaXML  = $oRelatorio->db63_xmlestruturarel;
+                $this->iTipoRelatorio = $oRelatorio->db63_db_tiporelatorio;
+
+                $oDomXml = new DOMDocument();
+                $oDomXml->loadXML($this->sEstruturaXML);
 
 
-            $aPropriedades = $oDomXml->getElementsByTagName('Propriedades');
-
-            foreach ($aPropriedades as $oXMLPropriedades) {
-
-                $oPropriedades = new dbPropriedadeRelatorio();
-
-                $oPropriedades->setVersao(utf8_decode($oXMLPropriedades->getAttribute('versao')));
-                $oPropriedades->setFormato(utf8_decode($oXMLPropriedades->getAttribute('formato')));
-                $oPropriedades->setLayout(utf8_decode($oXMLPropriedades->getAttribute('layout')));
-                $oPropriedades->setMargemDir(utf8_decode($oXMLPropriedades->getAttribute('margemdir')));
-                $oPropriedades->setMargemEsq(utf8_decode($oXMLPropriedades->getAttribute('margemesq')));
-                $oPropriedades->setMargemInf(utf8_decode($oXMLPropriedades->getAttribute('margeminf')));
-                $oPropriedades->setMargemSup(utf8_decode($oXMLPropriedades->getAttribute('margemsup')));
-                $oPropriedades->setNome(utf8_decode($oXMLPropriedades->getAttribute('nome')));
-                $oPropriedades->setOrientacao(utf8_decode($oXMLPropriedades->getAttribute('orientacao')));
-                $oPropriedades->setTipoSaida(utf8_decode($oXMLPropriedades->getAttribute('tiposaida')));
-
-                $this->addPropriedades($oPropriedades);
-            }
-
-
-            $aCabecalho = $oDomXml->getElementsByTagName("Cabecalho");
-            if (!empty($aCabecalho)) {
-                foreach ($aCabecalho as $oXMLCabecalho) {
-                    if ($oXMLCabecalho->nodeValue) {
-                        $this->addCabecalho($oXMLCabecalho->nodeValue);
-                    }
+                try {
+                    $this->setCodRelatorio($oRelatorio->db63_sequencial);
+                } catch (Exception $eException) {
+                    throw new Exception($eException->getMessage());
                 }
-            }
 
-            $aRodape = $oDomXml->getElementsByTagName("Rodape");
-            if (!empty($aRodape)) {
-                foreach ($aRodape as $oXMLRodape) {
-                    if ($oXMLRodape->nodeValue) {
-                        $this->addRodape($oXMLRodape->nodeValue);
-                    }
+                try {
+                    $this->setOrigemRelatorio($oRelatorio->db63_db_relatorioorigem);
+                } catch (Exception $eException) {
+                    throw new Exception($eException->getMessage());
                 }
-            }
 
-            $aVariavel = $oDomXml->getElementsByTagName("Variavel");
-            if (!empty($aVariavel)) {
-                foreach ($aVariavel as $oXMLVariavel) {
-                    $oVariavel = new dbVariaveisRelatorio();
-                    $oVariavel->setNome(utf8_decode($oXMLVariavel->getAttribute('nome')));
-                    $oVariavel->setLabel(utf8_decode($oXMLVariavel->getAttribute('label')));
-                    $oVariavel->setValor(utf8_decode($oXMLVariavel->getAttribute('valor')));
-                    $oVariavel->setTipoDado(utf8_decode($oXMLVariavel->getAttribute('tipodado')));
-                    $this->addVariavel(utf8_decode($oXMLVariavel->getAttribute('nome')), $oVariavel);
+
+                $aPropriedades = $oDomXml->getElementsByTagName('Propriedades');
+
+                foreach ($aPropriedades as $oXMLPropriedades) {
+
+                    $oPropriedades = new dbPropriedadeRelatorio();
+
+                    $oPropriedades->setVersao(utf8_decode($oXMLPropriedades->getAttribute('versao')));
+                    $oPropriedades->setFormato(utf8_decode($oXMLPropriedades->getAttribute('formato')));
+                    $oPropriedades->setLayout(utf8_decode($oXMLPropriedades->getAttribute('layout')));
+                    $oPropriedades->setMargemDir(utf8_decode($oXMLPropriedades->getAttribute('margemdir')));
+                    $oPropriedades->setMargemEsq(utf8_decode($oXMLPropriedades->getAttribute('margemesq')));
+                    $oPropriedades->setMargemInf(utf8_decode($oXMLPropriedades->getAttribute('margeminf')));
+                    $oPropriedades->setMargemSup(utf8_decode($oXMLPropriedades->getAttribute('margemsup')));
+                    $oPropriedades->setNome(utf8_decode($oXMLPropriedades->getAttribute('nome')));
+                    $oPropriedades->setOrientacao(utf8_decode($oXMLPropriedades->getAttribute('orientacao')));
+                    $oPropriedades->setTipoSaida(utf8_decode($oXMLPropriedades->getAttribute('tiposaida')));
+
+                    $this->addPropriedades($oPropriedades);
                 }
-            }
 
-            $aConsulta = $oDomXml->getElementsByTagName("Consulta");
 
-            foreach ($aConsulta as $oXMLConsulta) {
-                $aSelect = $oXMLConsulta->getElementsByTagName('Select');
-                foreach ($aSelect as $oXMLCamposSelect) {
-                    $aCampoSelect = $oXMLCamposSelect->getElementsByTagName('Campo');
-                    foreach ($aCampoSelect as $oXMLCampoSelect) {
-                        $aCampos = $oDomXml->getElementsByTagName("Campos");
-                        foreach ($aCampos as $oXMLCampos) {
-                            $aCampo = $oXMLCampos->getElementsByTagName("Campo");
-                            foreach ($aCampo as $oXMLCampo) {
-                                if ($oXMLCampo->getAttribute('id') == $oXMLCampoSelect->getAttribute('id')) {
-
-                                    $oCampo = new dbColunaRelatorio();
-
-                                    $oCampo->setId($oXMLCampo->getAttribute('id'));
-                                    $oCampo->setNome(utf8_decode($oXMLCampo->getAttribute('nome')));
-                                    $oCampo->setAlias(utf8_decode($oXMLCampo->getAttribute('alias')));
-                                    $oCampo->setAlinhamento(utf8_decode($oXMLCampo->getAttribute('alinhamento')));
-                                    $oCampo->setAlinhamentoCab(utf8_decode($oXMLCampo->getAttribute('alinhamentocab')));
-                                    $oCampo->setLargura(utf8_decode($oXMLCampo->getAttribute('largura')));
-                                    $oCampo->setMascara(utf8_decode($oXMLCampo->getAttribute('mascara')));
-                                    $oCampo->setTotalizar(utf8_decode($oXMLCampo->getAttribute('totalizar')));
-                                    if ($oXMLCampo->hasAttribute('quebra')) {
-                                        $oCampo->setQuebra($oXMLCampo->getAttribute('quebra'));
-                                    } else {
-                                        $oCampo->setQuebra(false);
-                                    }
-                                    $this->addColuna($oCampo, $oXMLConsulta->getAttribute('tipo'));
-                                }
-                            }
+                $aCabecalho = $oDomXml->getElementsByTagName("Cabecalho");
+                if (!empty($aCabecalho)) {
+                    foreach ($aCabecalho as $oXMLCabecalho) {
+                        if ($oXMLCabecalho->nodeValue) {
+                            $this->addCabecalho($oXMLCabecalho->nodeValue);
                         }
                     }
                 }
 
-                $aWhere  = $oXMLConsulta->getElementsByTagName('Filtro');
-                foreach ($aWhere as $oXMLWhere) {
-                    $oFiltro = new dbFiltroRelatorio();
-                    $oFiltro->setOperador(utf8_decode($oXMLWhere->getAttribute('operador')));
-                    $oFiltro->setCampo(utf8_decode($oXMLWhere->getAttribute('campo')));
-                    $oFiltro->setCondicao(utf8_decode($oXMLWhere->getAttribute('condicao')));
-                    $oFiltro->setValor(utf8_decode($oXMLWhere->getAttribute('valor')));
-                    $this->addFiltro($oFiltro, $oXMLConsulta->getAttribute('tipo'));
+                $aRodape = $oDomXml->getElementsByTagName("Rodape");
+                if (!empty($aRodape)) {
+                    foreach ($aRodape as $oXMLRodape) {
+                        if ($oXMLRodape->nodeValue) {
+                            $this->addRodape($oXMLRodape->nodeValue);
+                        }
+                    }
                 }
 
-                $aGroup  = $oXMLConsulta->getElementsByTagName('Group');
-                foreach ($aGroup as $oXMLGroup) {
+                $aVariavel = $oDomXml->getElementsByTagName("Variavel");
+                if (!empty($aVariavel)) {
+                    foreach ($aVariavel as $oXMLVariavel) {
+                        $oVariavel = new dbVariaveisRelatorio();
+                        $oVariavel->setNome(utf8_decode($oXMLVariavel->getAttribute('nome')));
+                        $oVariavel->setLabel(utf8_decode($oXMLVariavel->getAttribute('label')));
+                        $oVariavel->setValor(utf8_decode($oXMLVariavel->getAttribute('valor')));
+                        $oVariavel->setTipoDado(utf8_decode($oXMLVariavel->getAttribute('tipodado')));
+                        $this->addVariavel(utf8_decode($oXMLVariavel->getAttribute('nome')), $oVariavel);
+                    }
                 }
 
-                $aOrder  = $oXMLConsulta->getElementsByTagName('Ordem');
-                foreach ($aOrder as $oXMLOrder) {
-                    $oOrdem = new dbOrdemRelatorio();
-                    $oOrdem->setId($oXMLOrder->getAttribute('id'));
-                    $oOrdem->setNome(utf8_decode($oXMLOrder->getAttribute('nome')));
-                    $oOrdem->setAscDesc(utf8_decode($oXMLOrder->getAttribute('ascdesc')));
-                    $oOrdem->setAlias(utf8_decode($oXMLOrder->getAttribute('alias')));
-                    $this->addOrdem($oOrdem, $oXMLConsulta->getAttribute('tipo'));
-                }
+                $aConsulta = $oDomXml->getElementsByTagName("Consulta");
 
-                $aFrom   = $oXMLConsulta->getElementsByTagName('From');
-                foreach ($aFrom as $oXMLFrom) {
-                    $this->addSqlFrom($oXMLFrom->nodeValue, $oXMLConsulta->getAttribute('tipo'));
+                foreach ($aConsulta as $oXMLConsulta) {
+                    $aSelect = $oXMLConsulta->getElementsByTagName('Select');
+                    foreach ($aSelect as $oXMLCamposSelect) {
+                        $aCampoSelect = $oXMLCamposSelect->getElementsByTagName('Campo');
+                        foreach ($aCampoSelect as $oXMLCampoSelect) {
+                            $aCampos = $oDomXml->getElementsByTagName("Campos");
+                            foreach ($aCampos as $oXMLCampos) {
+                                $aCampo = $oXMLCampos->getElementsByTagName("Campo");
+                                foreach ($aCampo as $oXMLCampo) {
+                                    if ($oXMLCampo->getAttribute('id') == $oXMLCampoSelect->getAttribute('id')) {
+
+                                        $oCampo = new dbColunaRelatorio();
+
+                                        $oCampo->setId($oXMLCampo->getAttribute('id'));
+                                        $oCampo->setNome(utf8_decode($oXMLCampo->getAttribute('nome')));
+                                        $oCampo->setAlias(utf8_decode($oXMLCampo->getAttribute('alias')));
+                                        $oCampo->setAlinhamento(utf8_decode($oXMLCampo->getAttribute('alinhamento')));
+                                        $oCampo->setAlinhamentoCab(utf8_decode($oXMLCampo->getAttribute('alinhamentocab')));
+                                        $oCampo->setLargura(utf8_decode($oXMLCampo->getAttribute('largura')));
+                                        $oCampo->setMascara(utf8_decode($oXMLCampo->getAttribute('mascara')));
+                                        $oCampo->setTotalizar(utf8_decode($oXMLCampo->getAttribute('totalizar')));
+                                        if ($oXMLCampo->hasAttribute('quebra')) {
+                                            $oCampo->setQuebra($oXMLCampo->getAttribute('quebra'));
+                                        } else {
+                                            $oCampo->setQuebra(false);
+                                        }
+                                        $this->addColuna($oCampo, $oXMLConsulta->getAttribute('tipo'));
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $aWhere  = $oXMLConsulta->getElementsByTagName('Filtro');
+                    foreach ($aWhere as $oXMLWhere) {
+                        $oFiltro = new dbFiltroRelatorio();
+                        $oFiltro->setOperador(utf8_decode($oXMLWhere->getAttribute('operador')));
+                        $oFiltro->setCampo(utf8_decode($oXMLWhere->getAttribute('campo')));
+                        $oFiltro->setCondicao(utf8_decode($oXMLWhere->getAttribute('condicao')));
+                        $oFiltro->setValor(utf8_decode($oXMLWhere->getAttribute('valor')));
+                        $this->addFiltro($oFiltro, $oXMLConsulta->getAttribute('tipo'));
+                    }
+
+                    $aGroup  = $oXMLConsulta->getElementsByTagName('Group');
+                    foreach ($aGroup as $oXMLGroup) {
+                    }
+
+                    $aOrder  = $oXMLConsulta->getElementsByTagName('Ordem');
+                    foreach ($aOrder as $oXMLOrder) {
+                        $oOrdem = new dbOrdemRelatorio();
+                        $oOrdem->setId($oXMLOrder->getAttribute('id'));
+                        $oOrdem->setNome(utf8_decode($oXMLOrder->getAttribute('nome')));
+                        $oOrdem->setAscDesc(utf8_decode($oXMLOrder->getAttribute('ascdesc')));
+                        $oOrdem->setAlias(utf8_decode($oXMLOrder->getAttribute('alias')));
+                        $this->addOrdem($oOrdem, $oXMLConsulta->getAttribute('tipo'));
+                    }
+
+                    $aFrom   = $oXMLConsulta->getElementsByTagName('From');
+                    foreach ($aFrom as $oXMLFrom) {
+                        $this->addSqlFrom($oXMLFrom->nodeValue, $oXMLConsulta->getAttribute('tipo'));
+                    }
                 }
+            } else {
+                throw new Exception("Nenhum relatório encontrado!");
             }
-        } else {
-            throw new Exception("Nenhum relatório encontrado!");
+        } catch (Exception $oErro) {
+            db_msgbox($oErro->getMessage());
         }
     }
 
@@ -467,8 +470,8 @@ class dbGeradorRelatorio
             foreach ($aPalavrasFrom as $iInd => $sValor) {
                 $sPalavra = trim($sValor);
                 if (isset($sPalavra{
-                0}) && $sPalavra{
-                0} == '$') {
+                    0}) && $sPalavra{
+                    0} == '$') {
                     $oVariavel = new dbVariaveisRelatorio($sPalavra, "", "", "varchar");
                     if (!isset($this->aVariaveis[$sPalavra])) {
                         $this->addVariavel($sPalavra, $oVariavel);
@@ -1057,7 +1060,7 @@ class dbGeradorRelatorio
                         }
 
                         if (trim($sValor) != "" && is_string($sValor) && $sValor{
-                        0} != "$") {
+                            0} != "$") {
                             $sWhere[]  = $sOperador . " \"" . $sNomeCampo . "\" " . $sCondicao . " '" . $sValor . "' ";
                         } else if (trim($sCondicao) == "in") {
                             $sWhere[]  = $sOperador . " \"" . $sNomeCampo . "\" " . $sCondicao . " (" . $sValor . ") ";

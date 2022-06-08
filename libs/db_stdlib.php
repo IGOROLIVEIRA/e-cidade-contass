@@ -146,7 +146,7 @@ function db_dias_mes($ano, $mes, $ret_data = false)
  */
 function checkPIS($pis)
 {
-    $pis = str_pad(ereg_replace('[^0-9]', '', $pis), 11, '0', STR_PAD_LEFT);
+    $pis = str_pad(preg_replace('[^0-9]', '', $pis), 11, '0', STR_PAD_LEFT);
 
     if (strlen($pis) != 11 || intval($pis) == 0) {
         return false;
@@ -3730,16 +3730,16 @@ function db_removeAcentuacao($sRemover)
 
     $var = $sRemover;
 
-    $var = ereg_replace("[ÁÀÂğ]", "A", $var);
-    $var = ereg_replace("[áàâğª]", "a", $var);
-    $var = ereg_replace("[ÉÈÊ]", "E", $var);
-    $var = ereg_replace("[éèê]", "e", $var);
-    $var = ereg_replace("[íì]", "i", $var);
-    $var = ereg_replace("[ÍÌ]", "I", $var);
-    $var = ereg_replace("[ÓÒÔÕ]", "O", $var);
-    $var = ereg_replace("[óòôõº]", "o", $var);
-    $var = ereg_replace("[ÚÙÛ]", "U", $var);
-    $var = ereg_replace("[úùû]", "u", $var);
+    $var = preg_replace("[ÁÀÂğ]", "A", $var);
+    $var = preg_replace("[áàâğª]", "a", $var);
+    $var = preg_replace("[ÉÈÊ]", "E", $var);
+    $var = preg_replace("[éèê]", "e", $var);
+    $var = preg_replace("[íì]", "i", $var);
+    $var = preg_replace("[ÍÌ]", "I", $var);
+    $var = preg_replace("[ÓÒÔÕ]", "O", $var);
+    $var = preg_replace("[óòôõº]", "o", $var);
+    $var = preg_replace("[ÚÙÛ]", "U", $var);
+    $var = preg_replace("[úùû]", "u", $var);
     $var = str_replace("Ç", "C", $var);
     $var = str_replace("ç", "c", $var);
 

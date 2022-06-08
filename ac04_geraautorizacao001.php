@@ -69,7 +69,7 @@ function sql_query_file($c99_anousu = null, $c99_instit = null, $campos = "*", $
 {
     $sql = "select ";
     if ($campos != "*") {
-        $campos_sql = split("#", $campos);
+        $campos_sql = explode("#", $campos);
         $virgula = "";
         for ($i = 0; $i < sizeof($campos_sql); $i++) {
             $sql .= $virgula . $campos_sql[$i];
@@ -98,7 +98,7 @@ function sql_query_file($c99_anousu = null, $c99_instit = null, $campos = "*", $
     $sql .= $sql2;
     if ($ordem != null) {
         $sql .= " order by ";
-        $campos_sql = split("#", $ordem);
+        $campos_sql = explode("#", $ordem);
         $virgula = "";
         for ($i = 0; $i < sizeof($campos_sql); $i++) {
             $sql .= $virgula . $campos_sql[$i];
@@ -151,15 +151,18 @@ if ($x->consultarDataDoSistema == true) {
     <br>
     <br>
     <center>
-        <fieldset style="width: 75%;">
+        <fieldset style="width: 100%;">
             <legend><b>Gerar Autorizações</b></legend>
             <table style='width: 100%' border='0'>
                 <tr>
                     <td width="100%">
                         <table width="100%">
-                            <tr style="text-align: center;">
-                                <td title="<?php echo $Tac16_sequencial; ?>">
+                            <tr>
+                                <td title="<?php echo $Tac16_sequencial; ?>" style="text-align: right;">
                                     <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", 1); ?>
+
+                                </td>
+                                <td style="width: 58%;">
                                     <span id='ctnTxtCodigoAcordo'></span>
                                     <span id='ctnTxtDescricaoAcordo'></span>
                                 </td>
@@ -280,11 +283,6 @@ if ($x->consultarDataDoSistema == true) {
                                             <strong>Modalidade:</strong>
                                             <?
                                             db_input('e54_nummodalidade', 7, "", true, 'text', 1, "onkeyup='somenteNumeros(this)';");
-                                            ?>
-                                        </td>
-                                        <td style="visibility: hidden">
-                                            <?
-                                            db_input('e54_adesaoregpreco', 5, "", true, 'text', 3, "onkeyup='somenteNumeros(this)';");
                                             ?>
                                         </td>
                                     </tr>
@@ -1253,7 +1251,7 @@ if ($x->consultarDataDoSistema == true) {
     function js_mostraSaldo(chave) {
 
         arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 
@@ -1477,7 +1475,6 @@ if ($x->consultarDataDoSistema == true) {
             oParam.dados.tipocompra = $F('e54_codcom');
             oParam.dados.licitacao = $F('e54_numerl');
             oParam.dados.iNumModalidade = $F('e54_nummodalidade');
-            oParam.dados.iSequencial = $F('e54_adesaoregpreco');
             oParam.dados.pagamento = encodeURIComponent(tagString($F('e54_conpag')));
             oParam.dados.resumo = encodeURIComponent(tagString($F('e54_resumo')));
             oParam.dados.iCaracteristicaPeculiar = $F("iSequenciaCaracteristica");

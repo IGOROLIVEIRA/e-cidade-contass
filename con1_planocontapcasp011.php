@@ -114,13 +114,13 @@ $iOpcao = 1;
                 <legend><b>Plano de Contas PCASP</b></legend>
                 <table border="0" width="500px;">
                     <tr>
-                        <td><b>Código:</b></td>
+                        <td><b>Cï¿½digo:</b></td>
                         <td>
                             <?php
                             db_input("iCodigoConta", 5, false, 3, "text", 3);
                             ?>
 
-                            <b> Nº Registro Obrig TCE-MG:</b>
+                            <b> Nï¿½ Registro Obrig TCE-MG:</b>
 
                             <?php
                             db_input("c60_nregobrig", 2, true, 3, "text", $db_opcao, "", "", "", "", 2);
@@ -149,7 +149,7 @@ $iOpcao = 1;
                         </td>
                     </tr>
                     <tr>
-                        <td><b>Título:</b></td>
+                        <td><b>Tï¿½tulo:</b></td>
                         <td>
                             <?php
                             db_input("sTitulo", 50, "0", true, "text", $db_opcao, "", "", "", "", 50);
@@ -183,11 +183,11 @@ $iOpcao = 1;
                         </td>
                     </tr>
                     <tr id="trIndicadorSuperavit" style="display: none;">
-                        <td nowrap="nowrap"><b>Indicador Superávit:</b></td>
+                        <td nowrap="nowrap"><b>Indicador Superï¿½vit:</b></td>
                         <td>
                             <?php
                             /*
-                         * Organiza um array com os valores padrão cadastrado no dicionário de dados
+                         * Organiza um array com os valores padrï¿½o cadastrado no dicionï¿½rio de dados
                          */
                             $aIndicadorSuperavit = getValoresPadroesCampo("c60_identificadorfinanceiro");
                             $aRecordSuperavit    = array();
@@ -215,7 +215,7 @@ $iOpcao = 1;
                         <td><b>Tipo de Conta</b></td>
                         <td>
                             <?php
-                            $aTipoConta = array(0 => "Sintética", 1 => "Analítica");
+                            $aTipoConta = array(0 => "Sintï¿½tica", 1 => "Analï¿½tica");
                             db_select("iTipoConta", $aTipoConta, true, $db_opcao, "onchange='js_verificaEstrutural();'");
                             ?>
                         </td>
@@ -238,7 +238,7 @@ $iOpcao = 1;
                         <td>
                             <?php
                             $aInfCompMSC = array(
-                                "" => "Selecione", 1 => "01 - Poder e Orgão", 2 => "02 - Atributos do Superávit Financeiro", 3 => "03 - Dívida Consolidada", 4 => "04 - Financeiro por Fonte", 5 => "05 - Fonte de recursos", 6 => "06 - Célula da Receita", 7 => "07 - Célula da Despesa", 8 => "08 - Financeiro por fonte mais DC", 9 => "09 - Restos a Pagar"
+                                "" => "Selecione", 1 => "01 - Poder e Orgï¿½o", 2 => "02 - Atributos do Superï¿½vit Financeiro", 3 => "03 - Dï¿½vida Consolidada", 4 => "04 - Financeiro por Fonte", 5 => "05 - Fonte de recursos", 6 => "06 - Cï¿½lula da Receita", 7 => "07 - Cï¿½lula da Despesa", 8 => "08 - Financeiro por fonte mais DC", 9 => "09 - Restos a Pagar"
                             );
                             db_select("c60_infcompmsc", $aInfCompMSC, true, $db_opcao, "");
                             ?>
@@ -251,11 +251,11 @@ $iOpcao = 1;
                                 <table>
                                     <tr>
                                         <td nowrap="nowrap">
-                                            <b>Tipo Lançamento</b>
+                                            <b>Tipo Lanï¿½amento</b>
                                         </td>
                                         <td>
                                             <?php
-                                            $aTipoLancamento = array(0 => "", 1 => "01-Depósitos e Consignações", 2 => "02-Débitos de Tesouraria", 3 => "03-Ativo Realizável", 4 => "04-Transferências Financeiras", 5 => "05-Valores Disponibilizados em Conta Única do Tesouro Municipal", 9999 => "99-Outros");
+                                            $aTipoLancamento = array(0 => "", 1 => "01-Depï¿½sitos e Consignaï¿½ï¿½es", 2 => "02-Dï¿½bitos de Tesouraria", 3 => "03-Ativo Realizï¿½vel", 4 => "04-Transferï¿½ncias Financeiras", 5 => "05-Valores Disponibilizados em Conta ï¿½nica do Tesouro Municipal", 9999 => "99-Outros");
                                             db_select("iTipoLancamento", $aTipoLancamento, true, $db_opcao, "onchange='js_getSubtipo();'");
                                             ?>
                                         </td>
@@ -280,7 +280,7 @@ $iOpcao = 1;
                                             <fieldset>
                                                 <legend>Incluir SubTipo</legend>
                                                 <b>SubTipo</b><?php db_input("c200_subtipo", 5, 1, 3, "text", $db_opcao, "", "", "", "", 4); ?>
-                                                <b>Descrição</b><?php db_input("c200_descsubtipo", 35, 0, 3, "text", $db_opcao, "", "", "", "text-transform: uppercase;", 100); ?>
+                                                <b>Descriï¿½ï¿½o</b><?php db_input("c200_descsubtipo", 35, 0, 3, "text", $db_opcao, "", "", "", "text-transform: uppercase;", 100); ?>
                                                 <input type="button" name="btnIncluirSubtipo" id="btnIncluirSubtipo" value="Adicionar" />
                                             </fieldset>
                                         </td>
@@ -303,7 +303,7 @@ $iOpcao = 1;
                                             <fieldset>
                                                 <legend>Incluir SubTipo</legend>
                                                 <b>Desdobra SubTipo</b><?php db_input("c201_desdobrasubtipo", 5, 1, 3, "text", $db_opcao, "", "", "", "", 4); ?>
-                                                <b>Descrição</b><?php db_input("c201_descdesdobrasubtipo", 35, 0, 3, "text", $db_opcao, "", "", "", "text-transform: uppercase;", 100); ?>
+                                                <b>Descriï¿½ï¿½o</b><?php db_input("c201_descdesdobrasubtipo", 35, 0, 3, "text", $db_opcao, "", "", "", "text-transform: uppercase;", 100); ?>
                                                 <input type="button" name="btnIncluirDesdobraSubtipo" id="btnIncluirDesdobraSubtipo" value="Adicionar" />
                                             </fieldset>
                                         </td>
@@ -314,7 +314,7 @@ $iOpcao = 1;
                     <tr id='trdivContaBancaria' style='display: none'>
                         <td>
                             <?php
-                            db_ancora("<b>Conta Bancária:</b>", "js_abreContaBancaria(true)", $db_opcao);
+                            db_ancora("<b>Conta Bancï¿½ria:</b>", "js_abreContaBancaria(true)", $db_opcao);
                             ?>
                         </td>
                         <td>
@@ -350,7 +350,7 @@ $iOpcao = 1;
                     <tr>
                         <td colspan="2">
                             <fieldset>
-                                <legend><b>Função</b></legend>
+                                <legend><b>Funï¿½ï¿½o</b></legend>
                                 <?php
                                 db_textarea("sFuncao", 3, 65, false, true, 'text', $db_opcao);
                                 ?>
@@ -391,7 +391,7 @@ $iOpcao = 1;
     var detalhesistema = $("iDetalhamentoSistema").value;
 
     /**
-     * Função adicionada para incluir o subtipo conforme layout do sicom
+     * Funï¿½ï¿½o adicionada para incluir o subtipo conforme layout do sicom
      */
     $("btnIncluirSubtipo").observe("click", function() {
         //alert($("c200_subtipo").value);
@@ -558,7 +558,7 @@ $iOpcao = 1;
     }
 
     /**
-     * Função adicionada para incluir o desdobrasubtipo conforme layout do sicom
+     * Funï¿½ï¿½o adicionada para incluir o desdobrasubtipo conforme layout do sicom
      */
     $("btnIncluirDesdobraSubtipo").observe("click", function() {
         js_divCarregando("Cadastrando DesdobraSubTipo, aguarde...", "msgBox");
@@ -733,7 +733,7 @@ $iOpcao = 1;
     }
 
     /**
-     * Atualiza a conta removendo o indicador de superávit
+     * Atualiza a conta removendo o indicador de superï¿½vit
      */
     function removerIndicadorsuperavit() {
 
@@ -745,16 +745,16 @@ $iOpcao = 1;
                 if (lError) {
                     return alert(oResponse.message.urlDecode());
                 }
-            }).setMessage("Aguarde, alterando o indicador de superávit.")
+            }).setMessage("Aguarde, alterando o indicador de superï¿½vit.")
             .execute();
     }
 
     /**
-     * Valida o indicador de superávit
-     * Caso o indicador seja diferente de não se aplica, deve ter algum reduzido cadastrado
+     * Valida o indicador de superï¿½vit
+     * Caso o indicador seja diferente de nï¿½o se aplica, deve ter algum reduzido cadastrado
      */
     /**
-     * Função comentada pois não estava deixando incluir uma conta com puperavit sem reduzido
+     * Funï¿½ï¿½o comentada pois nï¿½o estava deixando incluir uma conta com puperavit sem reduzido
      */
     /*$('sIndicadorSuperavit').observe('change', function() {
 
@@ -765,7 +765,7 @@ $iOpcao = 1;
         if (oGridReduzidos == undefined || oGridReduzidos.getRows().length < 1) {
 
           this.value = 'N';
-          alert('Somente contas analíticas possuem Indicador de Superávit. É necessário cadastrar um reduzido para a conta.');
+          alert('Somente contas analï¿½ticas possuem Indicador de Superï¿½vit. ï¿½ necessï¿½rio cadastrar um reduzido para a conta.');
 
           if ($("iCodigoConta").value) {
             removerIndicadorsuperavit();
@@ -807,11 +807,11 @@ $iOpcao = 1;
         var sFuncao = encodeURIComponent(tagString($("sFuncao").value));
 
         /**
-         * Validações dos campos
+         * Validaï¿½ï¿½es dos campos
          */
         if (iDetalhamentoSistema == 7) {
             if (iTipoLancamento == "0") {
-                alert("Informe o tipo de lançamento.");
+                alert("Informe o tipo de lanï¿½amento.");
                 $("iTipoLancamento").style.backgroundColor = '#CDC9C9';
                 $("sTitulo").focus();
                 return false;
@@ -820,7 +820,7 @@ $iOpcao = 1;
 
         if (sEstrutural == "") {
 
-            alert("Informe a estrutura contábil do plano de contas.");
+            alert("Informe a estrutura contï¿½bil do plano de contas.");
             $("c90_estrutcontabil").style.backgroundColor = '#CDC9C9';
             $("sTitulo").focus();
             return false;
@@ -828,7 +828,7 @@ $iOpcao = 1;
 
         if (sTitulo == "") {
 
-            alert("Informe o título do plano de contas.");
+            alert("Informe o tï¿½tulo do plano de contas.");
             $("sTitulo").style.backgroundColor = '#CDC9C9';
             $("sTitulo").focus();
             return false;
@@ -836,7 +836,7 @@ $iOpcao = 1;
 
         if ($("sTitulo").value.length > 50) {
 
-            alert("O Título do plano de contas excede o tamanho máximo de caracteres (50).");
+            alert("O Tï¿½tulo do plano de contas excede o tamanho mï¿½ximo de caracteres (50).");
             $("sTitulo").style.backgroundColor = '#CDC9C9';
             $("sTitulo").focus();
             return false;
@@ -851,7 +851,7 @@ $iOpcao = 1;
         }
 
         /**
-         * retirado validação por que alguns clientes precisam salvar o desdobramento em branco
+         * retirado validaï¿½ï¿½o por que alguns clientes precisam salvar o desdobramento em branco
          * /
          /*if(iTipoLancamento=='1' && (iSubTipo=='1' || iSubTipo=='2' || iSubTipo=='3' || iSubTipo=='4')){
 	 if(iDesdobramento==""){
@@ -910,25 +910,25 @@ $iOpcao = 1;
 
         if (iTipoConta == 1) {
             if (iNaturezaReceita == '' && iEstrututalpermitido.contains(iEstrutValid)) {
-                alert('Natureza da Receita não Informado !');
+                alert('Natureza da Receita nï¿½o Informado !');
                 return false;
             }
 
             if (infCompMSC == '') {
-                alert('Informação Complementar da MSC não Informado!');
+                alert('Informaï¿½ï¿½o Complementar da MSC nï¿½o Informado!');
                 return false;
             }
         }
 
         /*
-         * Valida se o sistema de contas é "Informações Patrimoniais - 2" caso seja, o indicador
-         * de superavit não pode ser "NÃO SE APLICA"
+         * Valida se o sistema de contas ï¿½ "Informaï¿½ï¿½es Patrimoniais - 2" caso seja, o indicador
+         * de superavit nï¿½o pode ser "Nï¿½O SE APLICA"
          */
         if (iSistemaConta == 2) {
 
             if ($("sIndicadorSuperavit").value == "N") {
 
-                alert("Selecione uma opção para cálculo de superavit.");
+                alert("Selecione uma opï¿½ï¿½o para cï¿½lculo de superavit.");
                 return false;
             } else {
                 sSuperavitFinanceiro = $("sIndicadorSuperavit").value;
@@ -941,7 +941,7 @@ $iOpcao = 1;
         if (iDetalhamentoSistema == 6) {
 
             if ($('iContaBancaria').value == "") {
-                alert("Informe uma conta bancária.");
+                alert("Informe uma conta bancï¿½ria.");
                 return false;
             }
         }
@@ -1021,7 +1021,7 @@ $iOpcao = 1;
 
     /**
      * Valida o Subsistema de contas escolhido e mostra a TR do indicador do superavit.
-     * Isso só acontecerá caso o sub-sistema de contas escolhidos seja 2.
+     * Isso sï¿½ acontecerï¿½ caso o sub-sistema de contas escolhidos seja 2.
      */
     function js_validaSistemaConta() {
         var iSistemaConta = $("iSistemaConta").value;
@@ -1043,11 +1043,11 @@ $iOpcao = 1;
     }
 
     /**
-     * Funções de Pesquisa da Classificação do Sistema
+     * Funï¿½ï¿½es de Pesquisa da Classificaï¿½ï¿½o do Sistema
      */
 
     /**
-     * Funções de Pesquisa do Detalhamento do Sistema de contas
+     * Funï¿½ï¿½es de Pesquisa do Detalhamento do Sistema de contas
      */
     function js_lookupDetalhamentoSistema(lMostra) {
 
@@ -1111,7 +1111,7 @@ $iOpcao = 1;
     }
 
     /**
-     * Funções de Pesquisa do Sistema de Contas (Sub-Sistema)
+     * Funï¿½ï¿½es de Pesquisa do Sistema de Contas (Sub-Sistema)
      */
     function js_lookupSistemaConta(lMostra) {
 
@@ -1226,13 +1226,13 @@ $iOpcao = 1;
 
 
     /**
-     *  Abre uma WINDOW com para preencher uma conta bancária ou cadastrar uma nova caso não exista
+     *  Abre uma WINDOW com para preencher uma conta bancï¿½ria ou cadastrar uma nova caso nï¿½o exista
      */
     function js_abreContaBancaria() {
 
         var iWidth = 650;
         var iHeight = 400;
-        oWindowContaBancaria = new windowAux('wndContaBAncaria', 'Infomar conta bancária', iWidth, iHeight);
+        oWindowContaBancaria = new windowAux('wndContaBAncaria', 'Infomar conta bancï¿½ria', iWidth, iHeight);
         var sContent = "<div id='msgContaBancaria' style='text-align:center;'>";
         sContent += "  <div id='divContaBancaria'>";
         sContent += "  </div>";
@@ -1243,9 +1243,9 @@ $iOpcao = 1;
             oWindowContaBancaria.destroy();
         });
 
-        var sMsgHelp = 'Informe os dados abaixo, caso a conta não exista, é necessário acessar as rotinas de cadastro.';
+        var sMsgHelp = 'Informe os dados abaixo, caso a conta nï¿½o exista, ï¿½ necessï¿½rio acessar as rotinas de cadastro.';
         oMessageBoard = new DBMessageBoard('msgBoard1',
-            'Vinculo com Conta Bancária',
+            'Vinculo com Conta Bancï¿½ria',
             sMsgHelp,
             oWindowContaBancaria.getContentContainer()
         );
@@ -1271,7 +1271,7 @@ $iOpcao = 1;
     }
 
     /**
-     * Função que remove uma conta bancária do sistema
+     * Funï¿½ï¿½o que remove uma conta bancï¿½ria do sistema
      */
     function js_removerConta() {
 
@@ -1376,7 +1376,7 @@ $iOpcao = 1;
     });
 
     /**
-     * Função que retorna conta corrente de acordo com o inicial do estrutural
+     * Funï¿½ï¿½o que retorna conta corrente de acordo com o inicial do estrutural
      */
 
     function js_verificaContaEstrutural(sEstrutural) {

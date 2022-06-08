@@ -225,7 +225,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         }
 
                         /*
-                           a opção mantem a seleção escolhida pelo usuario ao trocar o tipo de compra
+                           a opção mantem a selção escolhida pelo usuario ao trocar o tipo de compra
 
 
                         */
@@ -362,8 +362,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
                                         foreach ($oResult as $oRow) {
                                             $aEle[$oRow->o56_codele] = $oRow->o56_descr;
-                                            $aCodele[] = substr($oRow->o56_elemento, 0 , -6);
-                                            $aCodele2[] = $oRow->o56_elemento;
+                                            $aCodele[] = substr($oRow->o56_elemento, 0, -6);
                                         }
 
                                     }
@@ -503,8 +502,8 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 $anousu = db_getsession("DB_anousu");
 
                 if ($anousu > 2007) {
-                    ?>
-                    <tr style="display: none;">
+                ?>
+                    <tr>
                         <td nowrap title="<?= @$Te54_concarpeculiar ?>"><?
                                                                         db_ancora(@$Le54_concarpeculiar, "js_pesquisae54_concarpeculiar(true);", $db_opcao);
                                                                         ?></td>
@@ -538,9 +537,16 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td align="left">
                         <?php
-                        db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text',
-                            $db_opcao, " onchange='js_pesquisaac16_sequencial(false);'");
-                        db_input('ac16_resumoobjeto', 50, $Iac16_resumoobjeto, true, 'text', 3);
+                        db_input(
+                            'ac16_sequencial',
+                            10,
+                            $Iac16_sequencial,
+                            true,
+                            'text',
+                            $db_opcao,
+                            " onchange='js_pesquisaac16_sequencial(false);'"
+                        );
+                        db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
                         $db_opcao = $db_opcao_antiga;
                         ?>
                     </td>
@@ -561,15 +567,15 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 </tr>
                 -->
                 <tr>
-                  <td nowrap title="Código c206_sequencial" align="left">
-                    <? db_ancora("Convênio:","js_pesquisae60_numconvenio(true);",$db_opcao); ?>
-                  </td>
-                  <td align="left">
-                      <?
-                      db_input("e60_numconvenio",10,$Ie60_numconvenio,true,'text',$db_opcao,"onchange='js_pesquisae60_numconvenio(false);'");
-                      db_input("c206_objetoconvenio",49,$Ic206_objetoconvenio,true,'text',3);
-                      ?>
-                  </td>
+                    <td nowrap title="Código c206_sequencial">
+                        <? db_ancora("Convênio", "js_pesquisae60_numconvenio(true);", $db_opcao); ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('e60_numconvenio', 11, $Ie60_numconvenio, true, 'text', $db_opcao, "onChange='js_pesquisae60_numconvenio(false);'");
+                        db_input("c206_objetoconvenio", 50, 0, true, "text", 3);
+                        ?>
+                    </td>
                 </tr>
                 <!--
                 <tr>
@@ -606,82 +612,81 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
             <?php $lDisable = empty($e60_numemp) ? "disabled" : ''; ?>
 
-            <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar autorizações"
-                   onclick="js_pesquisa();">
+            <input type="button" id="btnLancarCotasMensais" value="Manutenção das Cotas Mensais" onclick="manutencaoCotasMensais();" <?php echo $lDisable; ?> />
+            <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar autorizações" onclick="js_pesquisa();">
         </center>
 </form>
 
 <div id="ctnCotasMensais" class="container" style=" width: 500px;">
 </div>
 <style>
-    #e60_tipodespesa{ width: 282px; }#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 370px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 85px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}
+    #e60_tipodespesa {
+        width: 282px;
+    }
+
+    #e44_tipo {
+        width: 228px;
+    }
+
+    #e57_codhistdescr {
+        width: 158px;
+    }
+
+    #e54_codtipodescr {
+        width: 158px;
+    }
+
+    #e54_codtipo {
+        width: 67px;
+    }
+
+    #e54_tipol {
+        width: 67px;
+    }
+
+    #e54_tipoldescr {
+        width: 158px;
+    }
+
+    #e54_codcom {
+        width: 67px;
+    }
+
+    #z01_nome {
+        width: 333px;
+    }
+
+    #e54_destin {
+        width: 424px;
+    }
+
+    #e54_gestaut {
+        width: 67px;
+    }
+
+    #e54_nomedodepartamento {
+        width: 354px;
+    }
+
+    #ac16_resumoobjeto {
+        width: 364px;
+    }
+
+    #e60_numconvenio {
+        width: 83px;
+    }
+
+    #e54_resumo {
+        width: 588px;
+    }
+
+    #e50_obs {
+        width: 588px;
+    }
 </style>
 
 <script>
-// executar a primeira vez
-document.form1.e54_gestaut.value = '<?= $iCodDepartamentoAtual ?>';
-    document.form1.e54_nomedodepartamento.value = '<?= $sNomDepartamentoAtual ?>';
-/**
-     * Ajustes no layout
-     */
-
-document.getElementById("e54_resumo").style.width="640px";
-document.getElementById("e50_obs").style.width="640px";
-document.getElementById("e54_emiss").style.width="71px";
-document.getElementById("e54_codcom").style.width="71px";
-document.getElementById("e54_codcomdescr").style.width="367px";
-document.getElementById("e54_codtipo").style.width="70px";
-document.getElementById("e54_codtipodescr").style.width="367px";
-document.getElementById("z01_nome").style.width="367px";
-document.getElementById("e54_nummodalidade").style.width="100px";
-document.getElementById("e44_tipo").style.width="442px";
-document.getElementById("e56_codele").style.width="130px";
-document.getElementById("e56_codele2").style.width="312px";
-document.getElementById("e60_tipodespesa").style.width="442px";
-document.getElementById("e54_destin").style.width="442px";
-document.getElementById("e40_descr").style.width="367px";
-document.getElementById("e54_gestaut").style.width="80px";
-document.getElementById("e54_nomedodepartamento").style.width="359px";
-document.getElementById("c58_descr").style.width="360px";
-document.getElementById("ac16_resumoobjeto").style.width="360px";
-document.getElementById("e60_convenio").style.width="360px";
-document.getElementById("c206_objetoconvenio").style.width="2px";
-document.getElementById("e54_concarpeculiar").style.width="360px";
-document.getElementById("e54_tipol").style.width="710px";
-document.getElementById("e54_tipoldescr").style.width="730px";
-
-function js_pesquisahistorico(mostra) {
-      if (mostra == true) {
-        js_OpenJanelaIframe('', 'db_iframe_emphist', 'func_emphist.php?funcao_js=parent.js_mostrahistorico1|e40_codhist|e40_descr|e40_historico|e54_resumo', 'Pesquisa', true);
-      } else {
-        if (document.form1.e57_codhist.value != '') {
-          js_OpenJanelaIframe('', 'db_iframe_emphist', 'func_emphist.php?pesquisa_chave=' + document.form1.e57_codhist.value +'&funcao_js=parent.js_mostrahistorico', 'Pesquisa', false);
-        } else {
-          document.form1.e57_codhist.value = '';
-          document.form1.e40_descr.value = '';
-          document.form1.e54_resumo.value = '';
-        }
-      }
-	}
-  function js_mostrahistorico1(chave,chave1,chave2,chave3) {
-
-           document.form1.e57_codhist.value = chave;
-           document.form1.e54_resumo.value = chave2 ;
-           document.form1.e40_descr.value = chave1;
-
-            db_iframe_emphist.hide();
-	}
-
-	function js_mostrahistorico(chave,chave1,erro) {
-		document.form1.e40_descr.value = chave;
-        document.form1.e54_resumo.value = chave1;
-
-        db_iframe_emphist.hide();
-	}
-
-
-
-/*===========================================
+    /*===========================================
     =            pesquisa 54_gestaut            =
     ===========================================*/
 

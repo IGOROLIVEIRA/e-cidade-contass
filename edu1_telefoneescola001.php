@@ -1,40 +1,40 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
-require_once ("libs/db_stdlibwebseller.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("classes/db_db_depart_classe.php");
-require_once ("classes/db_telefoneescola_classe.php");
-require_once ("classes/db_escola_classe.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("libs/db_jsplibwebseller.php");
+require_once (modification("libs/db_stdlibwebseller.php"));
+require_once (modification("libs/db_stdlib.php"));
+require_once (modification("libs/db_conecta.php"));
+require_once (modification("libs/db_sessoes.php"));
+require_once (modification("libs/db_usuariosonline.php"));
+require_once (modification("classes/db_db_depart_classe.php"));
+require_once (modification("classes/db_telefoneescola_classe.php"));
+require_once (modification("classes/db_escola_classe.php"));
+require_once (modification("dbforms/db_funcoes.php"));
+require_once (modification("libs/db_jsplibwebseller.php"));
 
 db_postmemory($HTTP_POST_VARS);
 $cltelefoneescola = new cl_telefoneescola;
@@ -45,11 +45,11 @@ $db_opcao         = 1;
 $db_botao         = true;
 
 if (isset($alterar)||isset($alterar1)) {
-  
+
   db_inicio_transacao();
   $db_opcao = 2;
   if (isset($alterar1)) {
-    
+
     $clescola->ed18_c_email    = $ed18_c_email;
     $clescola->ed18_c_homepage = $ed18_c_homepage;
     $clescola->ed18_i_codigo   = $ed18_i_codigo;
@@ -65,7 +65,7 @@ $result_depto = $cldb_depart->sql_record($cldb_depart->sql_query_file("","*","",
 db_fieldsmemory($result_depto,0);
 
 if ($clescola->numrows != 0) {
-  
+
   db_fieldsmemory($result,0);
   $db_opcao  = 2;
   $db_opcao1 = 1;
@@ -108,16 +108,16 @@ if(isset($incluir)||isset($incluir1)){
   $iPrimeiroNumero = substr($ed26_i_numero, 0, 1);
   $iTotalNumeros   = strlen($ed26_i_numero);
   $sString         = str_replace($iPrimeiroNumero, " ", $ed26_i_numero, $iContador);
-  
+
   if ($iContador == $iTotalNumeros) {
-   
+
     db_msgbox('Por favor, informe um telefone válido.');
     $lTelefoneValido = false;
   }
-  
-  
+
+
   if ($iTotalNumeros == 9 && $iPrimeiroNumero != 9) {
-    
+
     db_msgbox('Ao informar um telefone com 9 casas decimais, obrigatoriamente a primeira deve ser o número 9.');
     $lTelefoneValido = false;
   }
@@ -125,7 +125,7 @@ if(isset($incluir)||isset($incluir1)){
   if ($lTelefoneValido) {
 
     db_inicio_transacao();
-    
+
       if(isset($incluir1)){
         $clescola->incluir($ed18_i_codigo);
       }else{
@@ -133,13 +133,13 @@ if(isset($incluir)||isset($incluir1)){
       }
     db_fim_transacao();
     if($cltelefoneescola->erro_status == "0") {
-  
+
       $cltelefoneescola->erro(true,false);
       $db_botao=true;
       echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-      
+
       if($cltelefoneescola->erro_campo != "") {
-  
+
         echo "<script> document.form1.".$cltelefoneescola->erro_campo.".style.backgroundColor='#99A9AE';</script>";
         echo "<script> document.form1.".$cltelefoneescola->erro_campo.".focus();</script>";
       };

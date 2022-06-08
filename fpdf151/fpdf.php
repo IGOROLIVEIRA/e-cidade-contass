@@ -999,7 +999,11 @@ class FPDF
         $this->SetX($x);
     }
 
-    function Output($name = '', $dest = '')
+    function GeraArquivoTemp(){
+      return "tmp/rp".rand(1,10000)."_".time().".pdf";
+    }
+
+    /*function Output($name = '', $dest = '')
     {
         // Output PDF to some destination
         if ($this->state < 3)
@@ -1049,7 +1053,96 @@ class FPDF
                 $this->Error('Incorrect output destination: ' . $dest);
         }
         return '';
+    }*/
+
+    function Output($file='',$download=false,$mostrar=false)
+    //#00#//output
+    //#10#//Salva um documento PDF em um arquivo local ou envia-o para o browser. Neste último caso, o  plug-in  será  usado
+    //#10#//(se instalado) ou um download (caixa de diálogo "Salvar como") será apresentada.
+    //#10#//O método primeiro chama |close|, se necessário para terminar o documento.
+    //#15#//output($file='',$download=false)
+    //#20#//file         : O nome do arquivo. Se vazio ou não informado, o documento será enviado ao browser para que ele  o
+    //#20#//               use com o plug-in (se instalado).
+    //#20#//download     : Se file for informado, indica que ele deve ser salvo localmente  (false) ou  mostrar a  caixa  de
+    //#20#//               diálogo "Salvar como" no browser. Valor padrão: false.
+
+    {
+        if($file=='')
+          $file = $this->GeraArquivoTemp();
+
+      //Output PDF to file or browser
+      global $HTTP_ENV_VARS;
+
+      if($this->state<3)
+        $this->Close();
+      if($file=='')
+      {
+        //Send to browser
+        Header('Content-Type: application/pdf');
+                    header("Expires: Mon, 26 Jul 2001 05:00:00 GMT");              // Date in the past
+                    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
+                    header("Cache-Control: no-store, no-cache, must-revalidate");  // HTTP/1.1
+                    header("Cache-Control: post-check=0, pre-check=0", false);
+                    header("Pragma: no-cache");                                    // HTTP/1.0
+                    header("Cache-control: private");
+
+
+        if(headers_sent())
+            $this->Error('Some data has already been output to browser, can\'t send PDF file');
+        Header('Content-Length: '.strlen($this->buffer));
+        echo $this->buffer;
+
+      }
+      else
+      {
+              if($download)
+        {
+
+               if(isset($HTTP_ENV_VARS['HTTP_USER_AGENT']) and strpos($HTTP_ENV_VARS['HTTP_USER_AGENT'],'MSIE 5.5'))
+                 Header('Content-Type: application/dummy');
+               else
+                 Header('Content-Type: application/octet-stream');
+               if(headers_sent())
+                 $this->Error('Some data has already been output to browser, can\'t send PDF file');
+                 Header('Content-Length: '.strlen($this->buffer));
+                 Header('Content-disposition: attachment; filename='.$file);
+           echo $this->buffer;
+        }
+        else
+        {
+
+              ////////// NÃO RETIRAR ESSE IF SEM FALAR COM MARLON
+              ////////// NECESSÁRIO PARA PROGRAMA DO MÓDULO PESSOAL
+              ////////// geração de arquivos BB
+              if($mostrar == false){
+            header('Content-Type: application/pdf');
+            header("Expires: Mon, 26 Jul 2001 05:00:00 GMT");              // Date in the past
+            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
+            header("Cache-Control: no-store, no-cache, must-revalidate");  // HTTP/1.1
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Pragma: no-cache");                                    // HTTP/1.0
+            header("Cache-control: private");
+            echo $this->buffer;
+              }
+
+
+          //Save file locally
+          $f=fopen($file,'wb');
+          if(!$f)
+            $this->Error('Unable to create output file: '.$file);
+          fwrite($f,$this->buffer,strlen($this->buffer));
+          fclose($f);
+
+          $this->arquivo_retorno  = $file;
+
+    //echo "<script>location.href='tmp/".$file."'</script>";
+
+
+        }
+      }
     }
+
+    
 
     /*******************************************************************************
      *                                                                              *

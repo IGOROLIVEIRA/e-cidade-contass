@@ -28,7 +28,7 @@ db_app::load("prototype.js, scripts.js");
                     ?>
                 </td>
                 <td>
-                    <input id="l20_edital" type="text" autocomplete="off" onkeydown="return js_controla_tecla_enter(this,event);" onkeyup="js_ValidaCampos(this,1,'Licicitação','f','f',event);" onblur="js_ValidaMaiusculo(this,'f',event);" onchange="js_pesquisal200_licitacao(false);" maxlength="10" size="10" value="<?php  echo $l20_edital; ?>" tabindex="1">
+                    <input id="l20_edital" type="text" autocomplete="off" onkeydown="return js_controla_tecla_enter(this,event);" onkeyup="js_ValidaCampos(this,1,'Licicitaï¿½ï¿½o','f','f',event);" onblur="js_ValidaMaiusculo(this,'f',event);" onchange="js_pesquisal200_licitacao(false);" maxlength="10" size="10" value="<?php  echo $l20_edital; ?>" tabindex="1">
 
                     <?
                     db_input('l200_licitacao',10,$Il200_licitacao,true,'hidden',$db_opcao," onchange='js_pesquisal200_licitacao(false);'")
@@ -80,7 +80,7 @@ db_app::load("prototype.js, scripts.js");
             <tr>
                 <td nowrap title="<?=@$Tl200_numcgm?>">
                     <?
-                    db_ancora("Responsável pelo Parecer:","js_pesquisal200_numcgm(true);",$db_opcao);
+                    db_ancora("Responsï¿½vel pelo Parecer:","js_pesquisal200_numcgm(true);",$db_opcao);
                     ?>
                 </td>
                 <td>

@@ -40,7 +40,7 @@ require_once ("classes/db_pagordemele_classe.php");
 require_once ("classes/db_empnota_classe.php");
 require_once ("classes/db_empnotaele_classe.php");
 
-//////////////////////////////Controle Andamento da SOlicitação de Compras/////////////////////
+//////////////////////////////Controle Andamento da Solicitação de Compras/////////////////////
 require_once("classes/db_pcparam_classe.php");
 require_once("classes/db_protprocesso_classe.php");
 require_once("classes/db_proctransfer_classe.php");
@@ -336,7 +336,7 @@ if(isset($incluir)) {
     db_query($sSql);
 
 
-    //////////////////////////////Controle Andamento da SOlicitação de Compras/////////////////////
+    //////////////////////////////Controle Andamento da Solicitação de Compras/////////////////////
     //----------------------------REcebe processo se existe tranferencia -------------
     $result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_gerareserva,pc30_contrandsol"));
     db_fieldsmemory($result_pcparam, 0);
@@ -465,7 +465,7 @@ if(isset($incluir)) {
         $e60_numemp = '';
 
         /*
-         *  NÃO COMENTAR A LINHA ABAIXO,
+         *  NãO COMENTAR A LINHA ABAIXO,
         *  ELA SERVE PARA NUMERAR OS EMPENHOS EM BAGE, ONDE EXISTE O EMPENHO 1 NA PREFEITURA,1 NO DAEBE E 1 NA CAMARA
         *
         */
@@ -577,15 +577,11 @@ if(isset($incluir)) {
         $veConvMSC = $clempempenho->verificaConvenioSicomMSC($e54_autori, $anousu, $dados);
 
         if ($veConvMSC > 0) {
-
-          $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
-
-          if (!$rsResult) {
-            $sqlerro  = true;
-            $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183.\n";
-
-        }
-
+            $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
+            if (!$rsResult) {
+                $sqlerro  = true;
+                $erro_msg = "Inclusão Abortada!\n é obrigatório informar o convénio para os empenhos de fontes 122, 123, 124 e 142.\n";
+            }
         }
 
         if ($sqlerro == false) {
@@ -627,7 +623,7 @@ if(isset($incluir)) {
             $clempempenho->e60_concarpeculiar = $e54_concarpeculiar;
 
             /**
-             * Validação solicitada pela OC 6457
+             * ValidaÇÃo solicitada pela OC 6457
              * @author MarioJunior
              */
 
@@ -638,7 +634,7 @@ if(isset($incluir)) {
             $rsResult = db_query($sSql);
             db_fieldsMemory($rsResult, 0);
 
-            //rotina para pegar o elemento da dotação
+            //rotina para pegar o elemento da dotações
             if ($sqlerro == false) {
 
                 $result09  = $clorcdotacao->sql_record($clorcdotacao->sql_query_ele(db_getsession("DB_anousu"), $e56_coddot, "o56_elemento as elemento_emp"));
@@ -647,7 +643,7 @@ if(isset($incluir)) {
                     db_fieldsmemory($result09, 0);
                 } else {
                     $sqlerro  = true;
-                    $erro_msg = "Não existe elemento para dotação $e56_coddot";
+                    $erro_msg = "Não existe elemento para dotações $e56_coddot";
                 }
             }
 
@@ -663,10 +659,10 @@ if(isset($incluir)) {
 
             $aElementos = array('3319001', '3319003', '3319091', '3319092', '3319094', '3319191', '3319192', '3319194');
 
-            if ( ($tipoinstit == 5 || $tipoinstit == 6) &&
-                (in_array(substr($o56_elemento, 0 , -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0 , -6), $aElementos) && db_getsession("DB_anousu") >= 2021) )
-                ) {
-                if($e60_tipodespesa != 0) {
+            if (($tipoinstit == 5 || $tipoinstit == 6) &&
+                (in_array(substr($o56_elemento, 0, -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0, -6), $aElementos) && db_getsession("DB_anousu") >= 2021))
+            ) {
+                if ($e60_tipodespesa != 0) {
                     $clempempenho->e60_tipodespesa = $e60_tipodespesa;
                     $sqlerro = false;
                 } else {
@@ -679,7 +675,7 @@ if(isset($incluir)) {
                 $sqlerro = false;
             }
             /**
-             * Validação solicitada pela OC 8359
+             * ValidaÇÃo solicitada pela OC 8359
              *
              */
 
@@ -688,7 +684,7 @@ if(isset($incluir)) {
             if (in_array(substr($o56_elemento, 0, -6), $elementosemp)) {
                 if ($clempempenho->e60_datasentenca == null) {
                     if (substr($o56_elemento, 0, -6) == '3319091') {
-                        $erro_msg = "Usuário: Para este elemento é obrigatório informar a data da sentença judicial";
+                        $erro_msg = "Usuário: Para este elemento e obrigatório informar a data da sentença judicial";
                         db_msgbox($erro_msg);
                         $sqlerro = true;
                     }
@@ -795,7 +791,7 @@ if(isset($incluir)) {
     }
     /*final*/
 
-    //rotina para pegar o elemento da dotação
+    //rotina para pegar o elemento da dotações
     if ($sqlerro == false) {
 
         $result09  = $clorcdotacao->sql_record($clorcdotacao->sql_query_ele(db_getsession("DB_anousu"), $e56_coddot, "o56_elemento as elemento_emp"));
@@ -805,7 +801,7 @@ if(isset($incluir)) {
         } else {
 
             $sqlerro  = true;
-            $erro_msg = "Não existe elemento para dotação $e56_coddot";
+            $erro_msg = "Não existe elemento para dotações $e56_coddot";
         }
     }
     //final
@@ -818,7 +814,7 @@ if(isset($incluir)) {
         for ($i = 0; $i < $numrows; $i++) {
 
             db_fieldsmemory($result, $i);
-            //rotina para pegar o elemento da dotação
+            //rotina para pegar o elemento da dotações
             $result09  = $clorcelemento->sql_record($clorcelemento->sql_query_file($e55_codele, db_getsession("DB_anousu"), "o56_elemento as elemento_item"));
             $numrows09 = $clorcelemento->numrows;
             if ($numrows09 > 0) {
@@ -830,9 +826,9 @@ if(isset($incluir)) {
             }
             //final
 
-            //rotina que compara os elementos da dotação do empenho com a dotação dos itens
+            //rotina que compara os elementos da dotações do empenho com a dotações dos itens
             if (substr($elemento_emp, 0, 6) != substr($elemento_item, 0, 6)) {
-                $erro_msg = "Subelemento do item diferente da dotação. Verifique!";
+                $erro_msg = "Subelemento do item diferente da dotações. Verifique!";
                 $sqlerro  = true;
             }
             if ($sqlerro == false) {
@@ -857,7 +853,7 @@ if(isset($incluir)) {
 
                 /*
                 * Verificamos se o item está vinculado a uma autorização de um pacto sem solicitação
-                * Se a autorização foi gerada sem solicitaçao, controla o saldo do pacto, do contrário esse controle foi realizado
+                * Se a autorização foi gerada sem solicitação, controla o saldo do pacto, do contrário esse controle foi realizado
                 * no momento da inclusão da solicitação
                 *
                 */
@@ -1049,7 +1045,7 @@ if(isset($incluir)) {
             }
 
             if ($isPrecatoria) {
-                $c71_coddoc = 500; // EMPENHO DE PRECATÓRIOS
+                $c71_coddoc = 500; // EMPENHO DE PRECATÁRIOS
             }
         }
 
@@ -1087,11 +1083,11 @@ if(isset($incluir)) {
                 $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
                 $oEventoContabil->executaLancamento($oLancamentoAuxiliar, $dDataMovimento);
 
-                 /**
+                /**
                  * Valida parametro de integracao da contabilidade com contratos
                  */
                 // após 2021 este lançamento será feito no modulo de contratos.
-                if(db_getsession('DB_anousu') < 2022){
+                if (db_getsession('DB_anousu') < 2022) {
                     /**
                      * Pesquisa contrato do empenho
                      * - caso exista gera lancamento
@@ -1124,8 +1120,6 @@ if(isset($incluir)) {
                         }
                     }
                 }
-
-
             } catch (Exception $eErro) {
 
                 $erro_msg = $eErro->getMessage();
@@ -1165,7 +1159,7 @@ if(isset($incluir)) {
     if ($sqlerro == false) {
         if ($opc == 1) {
             //$dados tem todos os elementos e seus valores
-            //variáveis necessárias//
+            //variáveis necessérias//
             //$dados =  $elemento-$valorliquidar#$elemento-$valorliquidar#elemen...
             //$e60_numemp =  $e60_numemp;
             //$vlrliq     =  $vlrliq;
@@ -1199,13 +1193,13 @@ if(isset($incluir)) {
         /**
          * esta opção deve :
          * - lançar ordem de compra ( modulo compras )
-         * - dar entrada dos ítens na ordem de compra com nota ( modulo almoxarifado )
+         * - dar entrada dos itens na ordem de compra com nota ( modulo almoxarifado )
          * - liquidar o empenho com nota , obrigatorio usar nota (modulo contabilidade)
          *
          * // ordem de compra
          *
          * - matordem :  lança 1 registro, ordem de compra
-         * - matordemitem : ítens da ordem de compra
+         * - matordemitem : itens da ordem de compra
          *
          * // nota do fornecedor
          *
@@ -1218,8 +1212,8 @@ if(isset($incluir)) {
          * - matestoqueini : estoque
          * - matmater : materiais/itens, cadastro de materiais ( 1:pcmatar ------ N:matmater )
          * - matestoque : uma tabela que sintetiza valores para relatorios do modulo  almox/estoque
-         * - matestoqueitem : representa os ítens que estao no almox
-         * - matestoqueitemunid : representa como as quantidades são representadas dos ítens
+         * - matestoqueitem : representa os itens que estao no almox
+         * - matestoqueitemunid : representa como as quantidades são representadas dos itens
          * - matestoqueitemoc : itens ligados a ordem de com pra
          * - matestoqueitemnota : itens ligados a nota ( empnota )
          *

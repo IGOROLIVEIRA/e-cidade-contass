@@ -25,15 +25,15 @@
  *                                licenca/licenca_pt.txt
  */
 
-require("libs/db_stdlibwebseller.php");
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("classes/db_calendario_classe.php");
-include("classes/db_feriado_classe.php");
-include("classes/db_regencia_classe.php");
-include("dbforms/db_funcoes.php");
+require_once(modification("libs/db_stdlibwebseller.php"));
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("classes/db_calendario_classe.php"));
+require_once(modification("classes/db_feriado_classe.php"));
+require_once(modification("classes/db_regencia_classe.php"));
+require_once(modification("dbforms/db_funcoes.php"));
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
@@ -68,8 +68,8 @@ if(isset($chavepesquisa)) {
     parent.document.formaba.a2.style.color = "black";
     parent.document.formaba.a3.disabled = false;
     parent.document.formaba.a3.style.color = "black";
-    CurrentWindow.corpo.iframe_a2.location.href='edu1_periodocalendario001.php?ed53_i_calendario=<?=$ed52_i_codigo?>&ed52_c_descr=<?=$ed52_c_descr?>';
-    CurrentWindow.corpo.iframe_a3.location.href='edu1_feriado001.php?ed54_i_calendario=<?=$ed52_i_codigo?>&ed52_c_descr=<?=$ed52_c_descr?>';
+    (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a2.location.href='edu1_periodocalendario001.php?ed53_i_calendario=<?=$ed52_i_codigo?>&ed52_c_descr=<?=$ed52_c_descr?>';
+    (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a3.location.href='edu1_feriado001.php?ed54_i_calendario=<?=$ed52_i_codigo?>&ed52_c_descr=<?=$ed52_c_descr?>';
   </script>
   <?
   if($clregencia->numrows>0) {

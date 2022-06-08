@@ -67,8 +67,8 @@ class cl_inssirf
     var $r33_tiporegime = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 r33_instit = int4 = Cod. Instituição
-                 r33_codigo = int8 = Código da tabela
+                 r33_instit = int4 = Cod. Instituiï¿½ï¿½o
+                 r33_codigo = int8 = Cï¿½digo da tabela
                  r33_anousu = int4 = Ano do Exercicio
                  r33_mesusu = int4 = Mes do Exercicio
                  r33_codtab = int4 = Tabela
@@ -78,16 +78,16 @@ class cl_inssirf
                  r33_deduzi = float8 = Deduzir
                  r33_nome = varchar(15) = Tabela
                  r33_tipo = varchar(1) = Tipo
-                 r33_rubmat = varchar(4) = Rubrica salário maternidade
-                 r33_rubmat13 = varchar(4) = Rubrica salário maternidade 13
-                 r33_ppatro = float8 = Percentual Previdência Patronal
-                 r33_rubsau = varchar(4) = Rubrica Licença Saúde
+                 r33_rubmat = varchar(4) = Rubrica salï¿½rio maternidade
+                 r33_rubmat13 = varchar(4) = Rubrica salï¿½rio maternidade 13
+                 r33_ppatro = float8 = Percentual Previdï¿½ncia Patronal
+                 r33_rubsau = varchar(4) = Rubrica Licenï¿½a Saï¿½de
                  r33_rubaci = varchar(4) = Rubrica Acidente de Trabalho
-                 r33_basfer = varchar(4) = Base Previdência Férias
-                 r33_basfet = varchar(4) = Base Previdência Férias (Total)
+                 r33_basfer = varchar(4) = Base Previdï¿½ncia Fï¿½rias
+                 r33_basfet = varchar(4) = Base Previdï¿½ncia Fï¿½rias (Total)
                  r33_tinati = float8 = Teto para Inativos
-                 r33_codele = int4 = Código do Desdobramento
-                 r33_novocalculo = Boolean = Alíquota Progressiva
+                 r33_codele = int4 = Cï¿½digo do Desdobramento
+                 r33_novocalculo = Boolean = Alï¿½quota Progressiva
                  r33_tiporegime = varchar(1) = Tipo Regime
                  ";
     //funcao construtor da classe
@@ -146,7 +146,7 @@ class cl_inssirf
             $this->erro_sql = " Campo Ano do Exercicio nao Informado.";
             $this->erro_campo = "r33_anousu";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -155,7 +155,7 @@ class cl_inssirf
             $this->erro_sql = " Campo Mes do Exercicio nao Informado.";
             $this->erro_campo = "r33_mesusu";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -164,7 +164,7 @@ class cl_inssirf
             $this->erro_sql = " Campo Tabela nao Informado.";
             $this->erro_campo = "r33_codtab";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -173,7 +173,7 @@ class cl_inssirf
             $this->erro_sql = " Campo Valor Inicial da Faixa nao Informado.";
             $this->erro_campo = "r33_inic";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -182,7 +182,7 @@ class cl_inssirf
             $this->erro_sql = " Campo Valor Final da Faixa nao Informado.";
             $this->erro_campo = "r33_fim";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -191,7 +191,7 @@ class cl_inssirf
             $this->erro_sql = " Campo Percentual nao Informado.";
             $this->erro_campo = "r33_perc";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -200,7 +200,7 @@ class cl_inssirf
             $this->erro_sql = " Campo Deduzir nao Informado.";
             $this->erro_campo = "r33_deduzi";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -222,7 +222,7 @@ class cl_inssirf
             if ($result == false) {
                 $this->erro_banco = str_replace("\n", "", @pg_last_error());
                 $this->erro_sql   = "Verifique o cadastro da sequencia: inssirf_r33_codigo_seq do campo: r33_codigo";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -231,9 +231,9 @@ class cl_inssirf
         } else {
             $result = db_query("select last_value from inssirf_r33_codigo_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $r33_codigo)) {
-                $this->erro_sql = " Campo r33_codigo maior que último número da sequencia.";
-                $this->erro_banco = "Sequencia menor que este número.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_sql = " Campo r33_codigo maior que ï¿½ltimo nï¿½mero da sequencia.";
+                $this->erro_banco = "Sequencia menor que este nï¿½mero.";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -244,7 +244,7 @@ class cl_inssirf
         if (($this->r33_codigo == null) || ($this->r33_codigo == "")) {
             $this->erro_sql = " Campo r33_codigo nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -252,7 +252,7 @@ class cl_inssirf
         if (($this->r33_instit == null) || ($this->r33_instit == "")) {
             $this->erro_sql = " Campo r33_instit nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -309,13 +309,13 @@ class cl_inssirf
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-                $this->erro_sql   = "Cadastro das Tabelas                               ($this->r33_codigo." - ".$this->r33_instit) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_banco = "Cadastro das Tabelas                               já Cadastrado";
+                $this->erro_sql   = "Cadastro das Tabelas                               ($this->r33_codigo." - ".$this->r33_instit) nao Incluï¿½do. Inclusao Abortada.";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_banco = "Cadastro das Tabelas                               jï¿½ Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
-                $this->erro_sql   = "Cadastro das Tabelas                               ($this->r33_codigo." - ".$this->r33_instit) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_sql   = "Cadastro das Tabelas                               ($this->r33_codigo." - ".$this->r33_instit) nao Incluï¿½do. Inclusao Abortada.";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
@@ -325,7 +325,7 @@ class cl_inssirf
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->r33_codigo . "-" . $this->r33_instit;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
@@ -368,10 +368,10 @@ class cl_inssirf
             $sql  .= $virgula . " r33_instit = $this->r33_instit ";
             $virgula = ",";
             if (trim($this->r33_instit) == null) {
-                $this->erro_sql = " Campo Cod. Instituição nao Informado.";
+                $this->erro_sql = " Campo Cod. Instituiï¿½ï¿½o nao Informado.";
                 $this->erro_campo = "r33_instit";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -381,10 +381,10 @@ class cl_inssirf
             $sql  .= $virgula . " r33_codigo = $this->r33_codigo ";
             $virgula = ",";
             if (trim($this->r33_codigo) == null) {
-                $this->erro_sql = " Campo Código da tabela nao Informado.";
+                $this->erro_sql = " Campo Cï¿½digo da tabela nao Informado.";
                 $this->erro_campo = "r33_codigo";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -397,7 +397,7 @@ class cl_inssirf
                 $this->erro_sql = " Campo Ano do Exercicio nao Informado.";
                 $this->erro_campo = "r33_anousu";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -410,7 +410,7 @@ class cl_inssirf
                 $this->erro_sql = " Campo Mes do Exercicio nao Informado.";
                 $this->erro_campo = "r33_mesusu";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -423,7 +423,7 @@ class cl_inssirf
                 $this->erro_sql = " Campo Tabela nao Informado.";
                 $this->erro_campo = "r33_codtab";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -436,7 +436,7 @@ class cl_inssirf
                 $this->erro_sql = " Campo Valor Inicial da Faixa nao Informado.";
                 $this->erro_campo = "r33_inic";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -449,7 +449,7 @@ class cl_inssirf
                 $this->erro_sql = " Campo Valor Final da Faixa nao Informado.";
                 $this->erro_campo = "r33_fim";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -462,7 +462,7 @@ class cl_inssirf
                 $this->erro_sql = " Campo Percentual nao Informado.";
                 $this->erro_campo = "r33_perc";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -475,7 +475,7 @@ class cl_inssirf
                 $this->erro_sql = " Campo Deduzir nao Informado.";
                 $this->erro_campo = "r33_deduzi";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -605,7 +605,7 @@ class cl_inssirf
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Cadastro das Tabelas                               nao Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->r33_codigo . "-" . $this->r33_instit;
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
@@ -615,16 +615,16 @@ class cl_inssirf
                 $this->erro_banco = "";
                 $this->erro_sql = "Cadastro das Tabelas                               nao foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : " . $this->r33_codigo . "-" . $this->r33_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+                $this->erro_sql = "Alteraï¿½ï¿½o efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $this->r33_codigo . "-" . $this->r33_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
@@ -695,9 +695,9 @@ class cl_inssirf
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Cadastro das Tabelas                               nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql   = "Cadastro das Tabelas                               nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
             $this->erro_sql .= "Valores : " . $r33_codigo . "-" . $r33_instit;
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
@@ -705,18 +705,18 @@ class cl_inssirf
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Cadastro das Tabelas                               nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql = "Cadastro das Tabelas                               nao Encontrado. Exclusï¿½o nï¿½o Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $r33_codigo . "-" . $r33_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $r33_codigo . "-" . $r33_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
@@ -732,7 +732,7 @@ class cl_inssirf
             $this->numrows    = 0;
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -741,7 +741,7 @@ class cl_inssirf
         if ($this->numrows == 0) {
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:inssirf";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -944,7 +944,7 @@ class cl_inssirf
         }
 
         /**
-         * Valores padrão para base dos valores patronais
+         * Valores padrï¿½o para base dos valores patronais
          */
         $oValoresPatronais = new stdClass();
         $oValoresPatronais->aBasePrevidencia1 = (object) array("sNome" => "BASE PREV.1", "nValor" => 0);

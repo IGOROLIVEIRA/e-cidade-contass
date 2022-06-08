@@ -131,9 +131,10 @@ class DBHttpRequest
             ),
         );
 
-        if (!empty($options['proxy'])) {
-            $contextOptions['http']['proxy'] = $options['proxy'];
-        }
+        // Com essa parte nao funcionou
+        // if (!empty($options['proxy'])) {
+        //     $contextOptions['http']['proxy'] = $options['proxy'];
+        // }
 
         if (!empty($options['headers'])) {
             $contextOptions['http']['header'] = $this->headersToString();
@@ -143,6 +144,8 @@ class DBHttpRequest
             $contextOptions['http']['content'] = $options['body'];
         }
 
+        // echo $url.' contextOptions ';
+        // print_r($contextOptions);exit;
         $context = stream_context_create($contextOptions);
         $result  = @file_get_contents($url, false, $context);
 

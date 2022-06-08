@@ -39,9 +39,9 @@ require_once("dbforms/db_classesgenericas.php");
 require_once("classes/db_contabancaria_classe.php");
 
 $clplacaixa    = new cl_placaixa;
-$clplacaixarec = new cl_placaixarec; 
+$clplacaixarec = new cl_placaixarec;
 $clrotulo      = new rotulocampo;
-$ano = db_getsession("DB_anousu"); //ano 
+$ano = db_getsession("DB_anousu"); //ano
 
 $clcontabancaria = new cl_contabancaria;
 $clcontabancaria->rotulo->label();
@@ -53,7 +53,7 @@ $clplacaixarec->rotulo->label();
 $clrotulo->label("k80_data");
 $clrotulo->label("k13_descr");
 $clrotulo->label("k02_descr");
-$clrotulo->label("k02_drecei");  
+$clrotulo->label("k02_drecei");
 $clrotulo->label("c61_codigo");
 $clrotulo->label("o15_codigo");
 $clrotulo->label("z01_numcgm");
@@ -144,14 +144,14 @@ if ($oInstit->db21_usasisagua == "t") {
     <form name="form1" method="post" action="<?= $db_action ?>" >
       <input type="hidden" value="0" id="iEmParlamentarAux" />
       <fieldset style="margin-top: 30px; width: 800px;">
-        <legend><strong>Planilha de Arrecadação</strong></legend>
+        <legend><strong>Planilha de Arrecadaï¿½ï¿½o</strong></legend>
         <fieldset style='width:95%;'>
           <legend><strong>Dados da Planilha</strong></legend>
 
-          <table width="100%" border="0" >
-            <!-- Número da Planilha -->
+          <table width="100%" border="0">
+            <!-- Nï¿½mero da Planilha -->
             <tr>
-              <td class='tamanho-primeira-col' nowrap><strong>Código da Planilha:</strong></td>
+              <td class='tamanho-primeira-col' nowrap><strong>Cï¿½digo da Planilha:</strong></td>
               <td>
                 <?
                 db_input('k80_codpla', 10, $Ik80_codpla, true, 'text', 3, "")
@@ -198,7 +198,7 @@ if ($oInstit->db21_usasisagua == "t") {
               </td>
             </tr>
 
-            <!-- Código Conta -->
+            <!-- Cï¿½digo Conta -->
             <tr>
               <td class='tamanho-primeira-col' nowrap title="<?= @$Tk81_conta ?>">
                 <?
@@ -213,15 +213,45 @@ if ($oInstit->db21_usasisagua == "t") {
                 ?>
               </td>
             </tr>
+            <!-- Nï¿½mero do Contrato da Operaï¿½ï¿½o de Crï¿½dito -->
+            <?php if ($ano >= 2022) { ?>
+              <tr>
+                <td class='tamanho-primeira-col' nowrap title="<?= @$Tdb83_numerocontratooc ?>"><? echo $Ldb83_numerocontratooc ?></td>
+                <td colspan='3'>
+                  <?
+                  $oDaoOrctiporec = db_utils::getDao("contabancaria");
+                  $sWhere         = " ";
+                  $sCampos        = "db83_numerocontratooc";
+                  $sSQLOrctiporec = $oDaoOrctiporec->sql_query_file(null, $sCampos, "db83_numerocontratooc");
+                  $rsOrctiporec   = $oDaoOrctiporec->sql_record($sSQLOrctiporec);
+                  db_input('db83_numerocontratooc', $rsOrctiporec, true, $db_opcao);
+                  ?>
+                </td>
+              </tr>
+              <tr>
+                <td nowrap title="<?= @$Tdb83_dataassinaturacop ?>"><? echo $Ldb83_dataassinaturacop ?></td>
+                <td colspan='3'>
+                  <?
+                  $oDaoOrctiporec = db_utils::getDao("contabancaria");
+                  $sWhere         = " ";
+                  $sCampos        = "db83_dataassinaturacop";
+                  $sSQLOrctiporec = $oDaoOrctiporec->sql_query_file(null, $sCampos, "db83_dataassinaturacop");
+                  $rsOrctiporec   = $oDaoOrctiporec->sql_record($sSQLOrctiporec);
+                  db_input('db83_dataassinaturacop', $rsOrctiporec, true, $db_opcao);
+                  ?>
+                </td>
+              </tr>
+            <?php } ?>
+
             <tr id="notificacao" style="display:none;">
               <td colspan='4' style="text-align: left; background-color: #fcf8e3; border: 1px solid #fcc888; padding: 10px">
-                <!-- Mensagem de notificação -->
+                <!-- Mensagem de notificaï¿½ï¿½o -->
               </td>
             </tr>
 
             <tr id="notificacao2" style="display:none;">
               <td colspan='4' style="text-align: left; background-color: #fcf8e3; border: 1px solid #fcc888; padding: 10px">
-                <!-- Mensagem de notificação -->
+                <!-- Mensagem de notificaï¿½ï¿½o -->
               </td>
             </tr>
 
@@ -285,7 +315,7 @@ if ($oInstit->db21_usasisagua == "t") {
               </td>
             </tr>
 
-            <!--Convênio -->
+            <!--Convï¿½nio -->
             <tr>
               <td nowrap title="<?= @$Tk81_convenio ?>"><? echo $Lk81_convenio ?></td>
               <td colspan='3'>
@@ -295,33 +325,12 @@ if ($oInstit->db21_usasisagua == "t") {
                 ?>
               </td>
             </tr>
-
-            <!-- Número do Contrato da Operação de Crédito -->
-            <?php if ($ano >= 2022) { ?>
-              <tr id="numerocontrato" style="display: none;">
-                <td nowrap title="<?= @$Top01_numerocontratoopc ?>"><? echo $Ldb83_numerocontratooc ?></td>
-                <td colspan='3'>
-                  <?
-                  db_input('op01_numerocontratoopc', 75, 0, true, $db_opcaotext);
-                  ?>
-                </td>
-              </tr>
-              <tr id="datacontrato" style="display: none;">
-                <td nowrap title="<?= @$Tdb83_dataassinaturacop ?>"><? echo $Ldb83_dataassinaturacop ?></td>
-                <td colspan='3'>
-                  <? 
-                    db_input('op01_dataassinaturacop', 75, $rsOrctiporec, true, $db_opcao);
-                  ?>
-                </td>
-              </tr>
-              
-            <?php } ?>
-            <!-- Regularização de Repasse -->
+            <!-- Regularizaï¿½ï¿½o de Repasse -->
             <tr id="regrepasse" style="display: none;">
               <td class='tamanho-primeira-col' nowrap title="<?= @$Tk81_regrepasse ?>"><?= $Lk81_regrepasse ?></td>
               <td colspan='1'>
                 <?
-                $aOpcoes = array('' => 'Selecione', '1' => 'Sim', '2' => 'Não');
+                $aOpcoes = array('' => 'Selecione', '1' => 'Sim', '2' => 'Nï¿½o');
                 db_select("k81_regrepasse", $aOpcoes, true, 1, "class='input-menor' onChange='js_toogleRegRepasse(this.value)'");
                 ?>
               </td>
@@ -345,31 +354,31 @@ if ($oInstit->db21_usasisagua == "t") {
                     '' => 'Selecione',
                     '1' => '1 - Emenda parlamentar individual',
                     '2' => '2 - Emenda parlamentar de bancada',
-                    '3' => '3 - Não se aplica'
+                    '3' => '3 - Nï¿½o se aplica'
                   );
                 } elseif (db_getsession("DB_anousu") >= 2021) {
                   $aOpcoes = array(
                     '' => 'Selecione',
                     '1' => '1 - Emenda parlamentar individual',
                     '2' => '2 - Emenda parlamentar de bancada ou de bloco',
-                    '3' => '3 - Não se aplica',
-                    '4' => '4 - Emenda não impositiva (Emendas de comissão e relatoria)'
+                    '3' => '3 - Nï¿½o se aplica',
+                    '4' => '4 - Emenda nï¿½o impositiva (Emendas de comissï¿½o e relatoria)'
                   );
                 }
                 db_select("k81_emparlamentar", $aOpcoes, true, 1, "class='input-menor'");
                 ?>
               </td>
-            </tr> 
+            </tr>
 
             <tr id="notificacao-conv" style="display:none;">
               <td colspan='4' style="text-align: left; background-color: #fcf8e3; border: 1px solid #fcc888; padding: 10px">
-                <!-- Mensagem de notificação -->
+                <!-- Mensagem de notificaï¿½ï¿½o -->
               </td>
             </tr>
 
-            <!-- Característica Peculiar -->
+            <!-- Caracterï¿½stica Peculiar -->
             <tr style='display: none'>
-              <td><b><? db_ancora("C.Peculiar / C.Aplicação :", "js_pesquisaPeculiar(true);", $db_opcao); ?></b></td>
+              <td><b><? db_ancora("C.Peculiar / C.Aplicaï¿½ï¿½o :", "js_pesquisaPeculiar(true);", $db_opcao); ?></b></td>
               <td colspan='3'>
                 <?
                 db_input('c58_sequencial', 10, '', true, 'text', 2, "onchange='js_pesquisaPeculiar(false);'");
@@ -405,7 +414,7 @@ if ($oInstit->db21_usasisagua == "t") {
             <tr>
               <td colspan='4'>
                 <fieldset>
-                  <legend><strong>Observação</strong></legend>
+                  <legend><strong>Observaï¿½ï¿½o</strong></legend>
                   <? db_textarea("k81_obs", 1, 40, $Ik81_obs, "true", "text", $db_opcao); ?>
                 </fieldset>
               </td>
@@ -413,7 +422,7 @@ if ($oInstit->db21_usasisagua == "t") {
           </table>
         </fieldset>
         <br>
-                  
+
         <input type='button' value='Salvar Item' id='incluir' onclick='js_addReceita();' />
         <input type='button' value='Pesquisar' id='btnPesquisar' onclick='js_pesquisaPlanilha(false);' />
         <input type='button' value='Importar' id='importar' onclick='js_pesquisaPlanilha(true);' />
@@ -433,23 +442,23 @@ if ($oInstit->db21_usasisagua == "t") {
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
 </body>
- 
+
 </html>
 
 <script>
-  
+
   const CAMINHO_MENSAGEM = 'financeiro.caixa.cai1_planilhalancamento001.';
   sRPC = 'cai4_planilhaarrecadacao.RPC.php';
- 
- 
-  
+
+
+
   if ($('anoUsu').value >= 2020) {
     document.getElementById("k81_emparlamentar").options[3].selected = true;
     let lEmendaParlamentarObrigatoria = false;
-  } 
+  }
 
   function js_pesquisak81_convenio(mostra) {
-   
+
     if (mostra == true) {
       js_OpenJanelaIframe('', 'db_iframe_convconvenios', 'func_convconvenios.php?funcao_js=parent.js_mostrak81_convenio1|c206_sequencial|c206_objetoconvenio', 'Pesquisa', true);
     } else {
@@ -458,7 +467,7 @@ if ($oInstit->db21_usasisagua == "t") {
       } else {
         document.form1.c206_objetoconvenio.value = '';
       }
-    } 
+    }
   }
 
   function js_mostrak81_convenio(chave, erro) {
@@ -523,7 +532,7 @@ if ($oInstit->db21_usasisagua == "t") {
     }
   }
   /**
-   * função para montar a grid de receitas:
+   * funï¿½ï¿½o para montar a grid de receitas:
    */
   var oGridReceitas;
   var aReceitas = new Array();
@@ -587,7 +596,7 @@ if ($oInstit->db21_usasisagua == "t") {
       'Dados da Conta',
       'Conta Tesouraria',
       'Valor',
-      'Ação'));
+      'Aï¿½ï¿½o'));
 
 
     oGridReceitas.aHeaders[1].lDisplayed = false;
@@ -669,7 +678,7 @@ if ($oInstit->db21_usasisagua == "t") {
    *   CONTA
    */
   function js_pesquisaConta(lMostra) {
-  
+
     var sFuncao = 'funcao_js=parent.js_mostraSaltes|k13_conta|k13_descr|c61_codigo|db83_conta|db83_codigoopcredito|db83_tipoconta';
     var sPesquisa = 'func_saltesrecurso.php?recurso=0&' + sFuncao + '&data_limite=<?= date("Y-m-d", db_getsession("DB_datausu")) ?>'
 
@@ -698,73 +707,64 @@ if ($oInstit->db21_usasisagua == "t") {
     );
   }
 
-  function js_getSaltesOP(idb83_codigoopcredito) {
-    sJson = '{"exec":"getSaltesOP","idb83_codigoopcredito":' + idb83_codigoopcredito + '}';
-    url = 'cai4_planilhalancamento.RPC.php';
-    oAjax = new Ajax.Request(
-      url, {
-        method: 'post',
-        parameters: 'sJson=' + sJson,
-        onComplete: js_retornoSaltesOP
-      }
-    );
-  }
-
-  function js_retornoSaltesOP(oAjax) { 
-    oSaltesOP = eval("(" + oAjax.responseText + ")");
-    if(oSaltesOP.op01_sequencial){
-        $('op01_numerocontratoopc').value = oSaltesOP.op01_numerocontratoopc;
-        const data = oSaltesOP.op01_dataassinaturacop.split('-');
-        $('op01_dataassinaturacop').value = data[2] + "/" + data[1] + "/" + data[0];
-    }else{
-      $('op01_numerocontratoopc').value = '';
-      $('op01_dataassinaturacop').value = '';
-    }
-     
-    js_mostrarNotificacaoOP(oSaltesOP);
-  }
-
   function js_retornoSaltesConvenio(oAjax) {
     oSaltesConvenio = eval("(" + oAjax.responseText + ")");
     $('c206_objetoconvenio').value = oSaltesConvenio.c206_objetoconvenio.urlDecode();
     $('k81_convenio').value = oSaltesConvenio.c206_sequencial;
-    
-   
+
+
     js_mostrarNotificacaoConvenio(oSaltesConvenio);
   }
 
   function js_preencheSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb83_codigoopcredito,db83_tipoconta, lErro) {
-   
+
     $tipocontabancaria = db83_tipoconta
-    
+
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
 
-    if ($('anoUsu').value >= 2022){
+    if (iCodigoConta != '') {
+      $('db83_numerocontratooc').value = idb83_numerocontratooc;
+    } else {
+      $('db83_numerocontratooc').value = '';
+    }
+
+    if (idb83_dataassinaturacop != '') {
+      const data = idb83_dataassinaturacop.split('-');
+      $('db83_dataassinaturacop').value = data[2] + "/" + data[1] + "/" + data[0];
+    } else {
+      $('db83_dataassinaturacop').value = '';
+    }
+
+    if (iCodigoRecurso == 174 || iCodigoRecurso == 179 || iCodigoRecurso == 190 || iCodigoRecurso == 191) {
+      if (idb83_dataassinaturacop == '' || idb83_numerocontratooc == '') {
+        alert('ï¿½ obrigatï¿½rio informar o nï¿½mero do contrato da operaï¿½ï¿½o de crï¿½dito para as receitas de fontes 174,179,190 e 191');
+        $('k81_conta').focus();
+        return false;
 
      if(typeof $receitaTipo !== "undefined"){
         if($receitaTipo.substr(0, 5) != 41321){
           if($tipocontabancaria == 2 || $tipocontabancaria == 3){
           $('k81_conta').value = "";
           $('k13_descr').value = "";
-          $('c61_codigo').value = "";  
+          $('c61_codigo').value = "";
           alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
           return;
         }
       }
-    }    
     }
-   
-    
+    }
+
+
     var recursoreceita = iCodigoRecurso;
-    
+
     if ($('anoUsu').value >= 2022) {
         if (iCodigoConta != '' & idb83_codigoopcredito != '') {
           js_getSaltesOP(idb83_codigoopcredito);
-        } 
+        }
     }
-    
+
     iCodRecursoConta = $F('c61_codigo').substr(-3);
 
     if ($('estrutural').value.substr(0, 3) == '211') {
@@ -811,9 +811,9 @@ if ($oInstit->db21_usasisagua == "t") {
         $('c206_objetoconvenio').value = '';
       }
     }
-    
+
     if ($('anoUsu').value >= 2022) {
-        
+
         if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
           document.getElementById('numerocontrato').style.display = "";
           document.getElementById('datacontrato').style.display = "";
@@ -821,7 +821,7 @@ if ($oInstit->db21_usasisagua == "t") {
             alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
             $('k81_conta').focus();
             $('op01_numerocontratoopc').value = '';
-            $('op01_dataassinaturacop').value = '';            
+            $('op01_dataassinaturacop').value = '';
             return false;
           }
         }
@@ -830,37 +830,30 @@ if ($oInstit->db21_usasisagua == "t") {
           document.getElementById('datacontrato').style.display = "none";
         }
     }
-    
+
     js_mostrarNotificacaoConta();
   }
 
-  function js_mostraSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb_conta, idb83_codigoopcredito,db83_tipoconta) {
-    
-    $tipocontabancaria = 0; 
+
+
+  function js_mostraSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb_conta, idb83_numerocontratooc, idb83_dataassinaturacop) {
 
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
-        
-    if ($('anoUsu').value >= 2022){
-      $tipocontabancaria = db83_tipoconta
-     
-     if(typeof $receitaTipo !== "undefined"){
-      if($receitaTipo.substr(0, 5) != 41321){
-          if($tipocontabancaria == 2 || $tipocontabancaria == 3){
-          $('k81_conta').value = "";
-          $('k13_descr').value = "";
-          $('c61_codigo').value = "";   
-          alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
-          return;  
-        }
+
+    <?php if ($ano >= 2022) { ?>
+      if (iCodigoConta != '') {
+        $('db83_numerocontratooc').value = idb83_numerocontratooc;
+      } else {
+        $('db83_numerocontratooc').value = '';
       }
-      }          
+      }
     }
-    
-    
+
+
     var recursoreceita = iCodigoRecurso;
-    
+
     if ($('anoUsu').value >= 2022) {
       if (idb83_codigoopcredito != '' & iCodigoConta != '') {
         js_getSaltesOP(idb83_codigoopcredito);
@@ -868,14 +861,13 @@ if ($oInstit->db21_usasisagua == "t") {
         $('op01_numerocontratoopc').value = '';
         $('op01_dataassinaturacop').value = '';
       }
-    
-     
-      if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
-        document.getElementById('numerocontrato').style.display = "";
-        document.getElementById('datacontrato').style.display = "";
-      }else{
-        document.getElementById('numerocontrato').style.display = "none";
-        document.getElementById('datacontrato').style.display = "none";
+
+
+      if (iCodigoRecurso == 174 || iCodigoRecurso == 179 || iCodigoRecurso == 190 || iCodigoRecurso == 191) {
+        if (idb83_dataassinaturacop == '' || idb83_numerocontratooc == '') {
+          alert('ï¿½ obrigatï¿½rio informar o nï¿½mero do contrato da operaï¿½ï¿½o de crï¿½dito para as receitas de fontes 174,179,190 e 191');
+
+        }
       }
     }
 
@@ -965,13 +957,13 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   function js_mostratabrec(iReceita, sReceita, chave3, chave4, erro, chave5, chave6) {
-        
+
     $receitaTipo =  chave4;
     if($('anoUsu').value >= 2022){
       if(chave4.substr(0, 1) != 4){
         $('k81_receita').value = '';
           alert('Selecione apenas receita do grupo orçamentária');
-          
+
           return;
       }
     }
@@ -983,8 +975,8 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if ($('anoUsu').value >= 2020) {
       if($('k81_conta').value){
-            
-            if($receitaTipo.substr(0, 5) != 41321){ 
+
+            if($receitaTipo.substr(0, 5) != 41321){
               if($tipocontabancaria == 2 || $tipocontabancaria == 3){
                 $('k81_receita').value = "";
                 $('k02_drecei').value = "";
@@ -996,11 +988,11 @@ if ($oInstit->db21_usasisagua == "t") {
               }
             }
           }
-    }  
+    }
 
-   
 
-    
+
+
     if($('anoUsu').value >= 2022 & !$('k81_conta').value){
       $('op01_numerocontratoopc').value = '';
       $('op01_dataassinaturacop').value = '';
@@ -1054,14 +1046,14 @@ if ($oInstit->db21_usasisagua == "t") {
     }
 
     if($('anoUsu').value >= 2022){
-      
+
     function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
-    $receitaTipo =  chave4; 
+    $receitaTipo =  chave4;
     if(chave4.substr(0, 1) != 4){
         alert('Selecione apenas receita do grupo orçamentária');
         return;
     }
-    
+
     $('k81_receita').value = iReceita;
     $('k02_drecei').value = sReceita;
     $('recurso').value = chave3;
@@ -1069,8 +1061,8 @@ if ($oInstit->db21_usasisagua == "t") {
     $('k02_tipo').value = chave5;
 
     if($('k81_conta').value){
-            
-      if($receitaTipo.substr(0, 5) != 41321){ 
+
+      if($receitaTipo.substr(0, 5) != 41321){
         if($tipocontabancaria == 2 || $tipocontabancaria == 3){
           $('k81_receita').value = "";
           $('k02_drecei').value = "";
@@ -1079,7 +1071,7 @@ if ($oInstit->db21_usasisagua == "t") {
           $('k02_tipo').value = "";
         //   $('k81_conta').value = "";
         //   $('k13_descr').value = "";
-        //   $('c61_codigo').value = ""; 
+        //   $('c61_codigo').value = "";
           alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
         return;
         }
@@ -1125,7 +1117,7 @@ if ($oInstit->db21_usasisagua == "t") {
         document.getElementById('datacontrato').style.display = "none";
     }
 
-   
+
 
     db_iframe_tabrec.hide();
     js_verificaReceita();
@@ -1134,55 +1126,7 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoConvenio();
     js_mostrarNotificacaoOP();
 
-    }
-    }else{
-    function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
-
-      $('k81_receita').value = iReceita;
-      $('k02_drecei').value = sReceita;
-      $('recurso').value = chave3;
-      $('estrutural').value = chave4;
-      $('k02_tipo').value = chave5;
-     
-      if ($('anoUsu').value >= 2022) {
-        if ($('estrutural').value.substr(0, 7) == '4121004' || $('estrutural').value.substr(0, 7) == '4721004' || $('estrutural').value.substr(0, 5) == '41215' || $('estrutural').value.substr(0, 5) == '47215') {
-          if ($('bAtualiza').value == 0) {
-            $('k81_numcgm').value = '';
-            $('z01_nome').value = '';
-          }
-        } else {
-          js_getCgmConta($('k81_conta').value);
-        }
-      } else {
-        if ($('anoUsu').value >= 2020) {
-
-        js_verificaEmendaParlamentar();
-        js_verificaRegularizaRepasse();
-
-        }
-
-            if ($('estrutural').value.substr(0, 7) == '4121004' || $('estrutural').value.substr(0, 7) == '4721004' || $('estrutural').value.substr(0, 5) == '41218' || $('estrutural').value.substr(0, 5) == '47218') {
-              if ($('bAtualiza').value == 0) {
-                $('k81_numcgm').value = '';
-                $('z01_nome').value = '';
-              }
-            } else {
-              js_getCgmConta($('k81_conta').value);
-            }
-          }
-
-          
-
-          db_iframe_tabrec.hide();
-          js_verificaReceita();
-          js_mostrarNotificacaoEstruturais();
-          js_mostrarNotificacaoConta();
-          js_mostrarNotificacaoConvenio();
-          js_mostrarNotificacaoOP();
-
-        }
-       
-}
+  }
 
   /**
    * Pesquisa CGM
@@ -1219,7 +1163,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
 
   /**
-   *  Pesquisa Inscrição
+   *  Pesquisa Inscriï¿½ï¿½o
    */
   function js_pesquisaInscricao(lMostra) {
 
@@ -1342,14 +1286,13 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   /**
-   * Função para Adicionar uma Receita na Grid
+   * Funï¿½ï¿½o para Adicionar uma Receita na Grid
    */
   function js_addReceita() {
     if ($('anoUsu').value >= 2022) {
-      var recursoreceita = $('recurso').value;
-      if ($F('op01_dataassinaturacop') == '' || $F('op01_numerocontratoopc') == '') {
-        if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {        
-          alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
+      if ($F('db83_dataassinaturacop') == '' || $F('db83_numerocontratooc') == '') {
+        if ($F('c61_codigo') == 174 || $F('c61_codigo') == 179 || $F('c61_codigo') == 190 || $F('c61_codigo') == 191) {
+          alert('ï¿½ obrigatï¿½rio informar o nï¿½mero do contrato da operaï¿½ï¿½o de crï¿½dito para as receitas de fontes 174,179,190 e 191');
           $('k81_conta').focus();
           return false;
         }
@@ -1358,7 +1301,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if ($F('k81_receita') == '') {
 
-      alert("Informe o código da receita.");
+      alert("Informe o cï¿½digo da receita.");
       $('k81_receita').focus();
       return false;
     }
@@ -1366,7 +1309,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if ($F('k81_conta') == '') {
 
-      alert("Informe o código da conta.");
+      alert("Informe o cï¿½digo da conta.");
       $('k81_conta').focus();
       return false;
     }
@@ -1379,21 +1322,21 @@ if ($oInstit->db21_usasisagua == "t") {
         aEstrutsDed.indexOf($('estrutural').value.substr(0, 10)) > -1 ||
         ($('estrutural').value.substr(0, 7) == '42428991' && $('recurso').value == '106')) {
         if ($('k81_regrepasse').value == '') {
-          alert("É obrigatório informar o Regularização de Repasse.");
+          alert("ï¿½ obrigatï¿½rio informar o Regularizaï¿½ï¿½o de Repasse.");
           return false;
         } else if ($('k81_regrepasse').value == 1) {
           if ($('k81_exerc').value == '') {
-            alert("É obrigatório informar o Ano de Referência.");
+            alert("ï¿½ obrigatï¿½rio informar o Ano de Referï¿½ncia.");
             return false;
           } else if ($('k81_exerc').value.length < 4) {
-            alert("O campo Ano de Referência deve conter obrigatoriamente 4 caracteres.");
+            alert("O campo Ano de Referï¿½ncia deve conter obrigatoriamente 4 caracteres.");
             return false;
           }
         }
       }
 
       if (lEmendaParlamentarObrigatoria && $('k81_emparlamentar').value == '') {
-        alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
+        alert("ï¿½ obrigatï¿½rio informar o campo: Referente a Emenda Parlamentar.");
         return false;
       }
     }
@@ -1406,21 +1349,21 @@ if ($oInstit->db21_usasisagua == "t") {
         aEstrutsDed.indexOf($('estrutural').value.substr(0, 10)) > -1 ||
         ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
         if ($('k81_regrepasse').value == '') {
-          alert("É obrigatório informar o Regularização de Repasse.");
+          alert("ï¿½ obrigatï¿½rio informar o Regularizaï¿½ï¿½o de Repasse.");
           return false;
         } else if ($('k81_regrepasse').value == 1) {
           if ($('k81_exerc').value == '') {
-            alert("É obrigatório informar o Ano de Referência.");
+            alert("ï¿½ obrigatï¿½rio informar o Ano de Referï¿½ncia.");
             return false;
           } else if ($('k81_exerc').value.length < 4) {
-            alert("O campo Ano de Referência deve conter obrigatoriamente 4 caracteres.");
+            alert("O campo Ano de Referï¿½ncia deve conter obrigatoriamente 4 caracteres.");
             return false;
           }
         }
       }
-      
+
       if (lEmendaParlamentarObrigatoria && $('k81_emparlamentar').value == '') {
-        alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
+        alert("ï¿½ obrigatï¿½rio informar o campo: Referente a Emenda Parlamentar.");
         return false;
       }
 
@@ -1434,7 +1377,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if ($F('c58_sequencial') == '') {
 
-      alert("Informe a característica peculiar.");
+      alert("Informe a caracterï¿½stica peculiar.");
       $('c58_sequencial').focus();
       return false;
     }
@@ -1459,7 +1402,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 122:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1467,7 +1410,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 123:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1475,7 +1418,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 124:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1483,7 +1426,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 142:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1491,7 +1434,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 163:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1499,7 +1442,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 171:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1507,7 +1450,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 172:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1515,7 +1458,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 173:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1523,7 +1466,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 176:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1531,7 +1474,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 177:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1539,7 +1482,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 178:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1547,7 +1490,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 181:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1555,7 +1498,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 182:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1563,7 +1506,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 183:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183. ");
             $('k81_convenio').focus();
             return false;
           }
@@ -1574,7 +1517,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 122:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124 e 142.");
             $('k81_convenio').focus();
             return false;
           }
@@ -1582,7 +1525,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 123:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124 e 142.");
             $('k81_convenio').focus();
             return false;
           }
@@ -1590,7 +1533,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 124:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124 e 142.");
             $('k81_convenio').focus();
             return false;
           }
@@ -1598,7 +1541,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 142:
           if (!$('k81_convenio').value) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124 e 142.");
             $('k81_convenio').focus();
             return false;
           }
@@ -1606,7 +1549,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
         case 163:
           if ($('anoUsu').value >= 2021 && (!$('k81_convenio').value) && ($('estrutural').value.substr(0, 8) == '41718113')) {
-            alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142 e 163.");
+            alert("ï¿½ obrigatï¿½rio informar o convï¿½nio para as receitas de fontes 122, 123, 124, 142 e 163.");
             $('k81_convenio').focus();
             return false;
           }
@@ -1634,14 +1577,14 @@ if ($oInstit->db21_usasisagua == "t") {
     oReceita.k81_codigo = $F('k81_codigo');
     oReceita.k81_codigodescr = $F('k81_codigodescr');
 
-    //Regularização Repasse
+    //Regularizaï¿½ï¿½o Repasse
     oReceita.k81_regrepasse = $F('k81_regrepasse');
     oReceita.k81_exerc = $F('k81_exerc');
 
     //Referente a Emenda Parlamentar
     oReceita.k81_emparlamentar = $F('k81_emparlamentar');
 
-    //Característica Peculiar
+    //Caracterï¿½stica Peculiar
     oReceita.c58_sequencial = $F('c58_sequencial');
 
     //Data Recebimento
@@ -1649,14 +1592,14 @@ if ($oInstit->db21_usasisagua == "t") {
 
     //Dados Adicionais
     if (js_isReceitaFundeb()) {
-     
+
       if($('recurso').value =='118'){
            oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 118);
       }
       if($('recurso').value =='166'){
           oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 166);
       }
-      
+
     } else {
       oReceita.k81_valor = $F('k81_valor');
     }
@@ -1741,14 +1684,14 @@ if ($oInstit->db21_usasisagua == "t") {
       oReceita.k81_codigo = $F('k81_codigo');
       oReceita.k81_codigodescr = $F('k81_codigodescr');
 
-      //Regularização Repasse
+      //Regularizaï¿½ï¿½o Repasse
       oReceita.k81_regrepasse = $F('k81_regrepasse');
       oReceita.k81_exerc = $F('k81_exerc');
 
       //Referente a Emenda Parlamentar
       oReceita.k81_emparlamentar = $F('k81_emparlamentar');
 
-      //Característica Peculiar
+      //Caracterï¿½stica Peculiar
       oReceita.c58_sequencial = $F('c58_sequencial');
 
       //Data Recebimento
@@ -1757,10 +1700,10 @@ if ($oInstit->db21_usasisagua == "t") {
       //Dados Adicionais
       if (js_isReceitaFundeb()) {
         if($('recurso').value =='118'){
-           oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 119); 
+           oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 119);
         }
-        if($('recurso').value =='166'){      
-            oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 167); 
+        if($('recurso').value =='166'){
+            oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 167);
         }
       } else {
         oReceita.k81_valor = (new Number($F('k81_valor')) * 0.20) * (-1);
@@ -1785,7 +1728,7 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   /**
-   * Função para redesenhar a grid na tela
+   * Funï¿½ï¿½o para redesenhar a grid na tela
    */
   function js_renderizarGrid() {
 
@@ -1812,7 +1755,7 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   /**
-   * Função que mostra na tela, para alteração, uma receita selecionada através da grid
+   * Funï¿½ï¿½o que mostra na tela, para alteraï¿½ï¿½o, uma receita selecionada atravï¿½s da grid
    */
   function js_mostraReceita(iIndice) {
 
@@ -1850,9 +1793,9 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   function js_salvarPlanilha() {
-   
+
     if (lMenuAlteracao && !$F('k80_codpla')) {
-      alert("Selecione uma planilha para alteração.");
+      alert("Selecione uma planilha para alteraï¿½ï¿½o.");
       return false;
     }
     var aReceitasPlanilha = new Array();
@@ -1889,17 +1832,17 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if (aReceitasPlanilha.length == 0) {
 
-      alert("Não é possível incluir uma planilha zerada.");
+      alert("Nï¿½o ï¿½ possï¿½vel incluir uma planilha zerada.");
       return false;
     }
 
-    var sMensagemSalvar = "Deseja salvar a planilha de arrecadação?\n\n";
+    var sMensagemSalvar = "Deseja salvar a planilha de arrecadaï¿½ï¿½o?\n\n";
     sMensagemSalvar += "Este procedimento pode demandar algum tempo.";
     if (!confirm(sMensagemSalvar)) {
       return false;
     }
 
-    js_divCarregando("Aguarde, salvando planilha de arrecadação...", "msgBox");
+    js_divCarregando("Aguarde, salvando planilha de arrecadaï¿½ï¿½o...", "msgBox");
 
     var oParametro = new Object();
     oParametro.exec = 'salvarPlanilha';
@@ -1942,7 +1885,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
 
   /**
-   * função para retornar registros selecinados na grid
+   * funï¿½ï¿½o para retornar registros selecinados na grid
    *
    */
   function getSelecionados() {
@@ -1970,7 +1913,7 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   /**
-   * Funções para importar dados de uma segunda planilha
+   * Funï¿½ï¿½es para importar dados de uma segunda planilha
    **/
   function js_pesquisaPlanilha(lImportarPlanilha) {
 
@@ -2004,8 +1947,8 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   /**
-   * Função que cria um objeto para cada receita da planilha importada, adicionando ao array (objeto)
-   * que possui todas receitas que serão vinculadas a planilha atual
+   * Funï¿½ï¿½o que cria um objeto para cada receita da planilha importada, adicionando ao array (objeto)
+   * que possui todas receitas que serï¿½o vinculadas a planilha atual
    */
   function js_completaImportar(oAjax) {
 
@@ -2061,7 +2004,7 @@ if ($oInstit->db21_usasisagua == "t") {
         oReceitaImportada.k81_operbanco = oReceita.sOperacaoBancaria.urlDecode();
         oReceitaImportada.k81_convenio = convenio = oReceita.iConvenio;
 
-        //Adiciona índice na receita e adiciona no array de receitas (cria propriedade no objeto)
+        //Adiciona ï¿½ndice na receita e adiciona no array de receitas (cria propriedade no objeto)
         oReceitaImportada.iIndice = "a" + iIndiceReceitas;
         aReceitas["a" + iIndiceReceitas] = oReceitaImportada;
         iIndiceReceitas++;
@@ -2086,25 +2029,25 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   /**
-   * Verifica se a conta da receita orcamentária é igual ao código da conta
+   * Verifica se a conta da receita orcamentï¿½ria ï¿½ igual ao cï¿½digo da conta
    *
    * @returns {Boolean}
    */
-  if($('anoUsu').value >= 2022){          
-       
+  if($('anoUsu').value >= 2022){
+
     function js_mostrarNotificacaoConta() {
 
       var iContaReceita = $('recurso').value;
       var iConta = $('c61_codigo').value;
       var icontaAux = 0;
-      
-      document.getElementById("incluir").disabled = false; 
+
+      document.getElementById("incluir").disabled = false;
 
       if(iConta.length == 4)
            icontaAux = iConta.substr(1,3);
-        else  
+        else
            icontaAux  = iConta;
-             
+
       if((iContaReceita == 160 && icontaAux== 186) || (iContaReceita == 160 && iConta == 186) || (iContaReceita == 170 && iConta == 100) || (iContaReceita == 119 && iConta == 118) || (iContaReceita == 166 && iConta == 118) || (iContaReceita == 167 && iConta == 118) ||
       (iContaReceita == 166 && iConta == 119) || (iContaReceita == 167 && iConta == 119) || (iContaReceita == 118 && iConta == 119) || (iContaReceita == 101 && iConta == 100) || (iContaReceita == 102 && iConta == 100) ||
       (iContaReceita == 154 && iConta == 159) || (iContaReceita == 154 && iConta == 153) ||(iContaReceita == 161 && iConta == 100) ||(iContaReceita == 160 && iConta == 186) ||
@@ -2113,9 +2056,9 @@ if ($oInstit->db21_usasisagua == "t") {
       (iContaReceita == 154 && icontaAux== 159) || (iContaReceita == 154 && icontaAux== 153) ||(iContaReceita == 161 && icontaAux== 100) ||(iContaReceita == 160 && icontaAux== 186)){
         $('notificacao').setStyle({
               display: 'none'
-            });  
+            });
       }else if(iContaReceita == 105 && iConta == 103 || (iContaReceita == 105 && icontaAux== 103)){
-        
+
         var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
             ContaReceita: iContaReceita,
             Conta: iConta
@@ -2126,20 +2069,20 @@ if ($oInstit->db21_usasisagua == "t") {
 
           $('notificacao').setStyle({
             display: 'table-row'
-          });        
+          });
           return true;
-      }else{      
+      }else{
       if (!empty(iContaReceita) && !empty(iConta)) {
-       
+
         var sTipoReceita = $('k02_tipo').value;
-      
+
         if(iConta.length == 4)
            icontaAux = iConta.substr(1,3);
-        else  
+        else
            icontaAux  = iConta;
-               
+
         if ((sTipoReceita == 'O') && (icontaAux !== iContaReceita)) {
-          
+
           var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
             ContaReceita: iContaReceita,
             Conta: iConta
@@ -2152,7 +2095,7 @@ if ($oInstit->db21_usasisagua == "t") {
             display: 'table-row'
           });
           document.getElementById("incluir").disabled = true;
-          
+
           return true;
         }
       }
@@ -2165,13 +2108,13 @@ if ($oInstit->db21_usasisagua == "t") {
     }
   }
   }
-  else{  
+  else{
     function js_mostrarNotificacaoConta() {
 
     var iContaReceita = $('recurso').value;
     var iConta = $('c61_codigo').value;
     var icontaAux = 0;
-      
+
 
     if (!empty(iContaReceita) && !empty(iConta)) {
 
@@ -2179,16 +2122,16 @@ if ($oInstit->db21_usasisagua == "t") {
 
         if(iConta.length == 4)
            icontaAux = iConta.substr(1,3);
-        else  
+        else
            icontaAux  = iConta;
-      
+
            $('notificacao').setStyle({
               display: 'none'
-            });    
+            });
 
       if ((sTipoReceita == 'O') && (icontaAux !== iContaReceita)) {
-       
-         
+
+
 
         var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
           ContaReceita: iContaReceita,
@@ -2222,7 +2165,7 @@ if ($oInstit->db21_usasisagua == "t") {
     if ($('anoUsu').value >= 2022) {
       if (($('estrutural').value.substr(0, 7) == '4121004' || $('estrutural').value.substr(0, 7) == '4721004' || $('estrutural').value.substr(0, 5) == '41215' || $('estrutural').value.substr(0, 5) == '47215') && $('k81_numcgm').value == "") {
 
-        var sMensagem = "Ao arrecadar receitas de contribuições para o Regime Próprio de Previdência Social é obrigatório informar o CGM do Contribuinte.";
+        var sMensagem = "Ao arrecadar receitas de contribuiï¿½ï¿½es para o Regime Prï¿½prio de Previdï¿½ncia Social ï¿½ obrigatï¿½rio informar o CGM do Contribuinte.";
 
         $('notificacao2').childElements()[0].update("");
         $('notificacao2').childElements()[0].insert("<b>" + sMensagem + "</b>");
@@ -2236,7 +2179,7 @@ if ($oInstit->db21_usasisagua == "t") {
     } else {
       if (($('estrutural').value.substr(0, 7) == '4121004' || $('estrutural').value.substr(0, 7) == '4721004' || $('estrutural').value.substr(0, 5) == '41218' || $('estrutural').value.substr(0, 5) == '47218') && $('k81_numcgm').value == "") {
 
-        var sMensagem = "Ao arrecadar receitas de contribuições para o Regime Próprio de Previdência Social é obrigatório informar o CGM do Contribuinte.";
+        var sMensagem = "Ao arrecadar receitas de contribuiï¿½ï¿½es para o Regime Prï¿½prio de Previdï¿½ncia Social ï¿½ obrigatï¿½rio informar o CGM do Contribuinte.";
 
         $('notificacao2').childElements()[0].update("");
         $('notificacao2').childElements()[0].insert("<b>" + sMensagem + "</b>");
@@ -2257,7 +2200,7 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   /**
-   * Verifica se a conta possui convênio cadastrado
+   * Verifica se a conta possui convï¿½nio cadastrado
    *
    * @returns {Boolean}
    */
@@ -2291,17 +2234,17 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if (iPlaninhaAutentica == '') {
 
-      alert('Planilha de arrecadação não localizada.');
+      alert('Planilha de arrecadaï¿½ï¿½o nï¿½o localizada.');
       return false;
     }
 
-    var sMensagemSalvar = "Deseja autenticar a planilha de arrecadação selecionada?\n\n";
+    var sMensagemSalvar = "Deseja autenticar a planilha de arrecadaï¿½ï¿½o selecionada?\n\n";
     sMensagemSalvar += "Este procedimento pode demandar algum tempo.";
     if (!confirm(sMensagemSalvar)) {
       return false;
     }
 
-    js_divCarregando("Aguarde, autenticando planilha de arrecadação...", "msgBox");
+    js_divCarregando("Aguarde, autenticando planilha de arrecadaï¿½ï¿½o...", "msgBox");
 
     var oParametro = new Object();
     oParametro.exec = 'autenticarPlanilha';
@@ -2405,7 +2348,7 @@ if ($oInstit->db21_usasisagua == "t") {
       );
 
     } else {
-     
+
       lEmendaParlamentarObrigatoria = (
         (sReceita == '417189911' && sRecurso == '100') ||
         (sReceita == '417189911' && sRecurso == '164') ||
@@ -2481,7 +2424,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
   }
 
-  function js_verificaRegularizaRepasse() { 
+  function js_verificaRegularizaRepasse() {
 
     if ($('anoUsu').value >= 2022) {
       aEstruts = ['4172150', '4172151', '4175150','4171550'];
@@ -2551,70 +2494,33 @@ if ($oInstit->db21_usasisagua == "t") {
 
     let sEstrutural = $('estrutural').value.substr(0, 9);
     let sRecurso = $('recurso').value;
-    let iAno = $('anoUsu').value; 
+    let iAno = $('anoUsu').value;
 
-    if ($('anoUsu').value>2021){     
-      if(sRecurso == '118'){ 
-          return (iAno > 2021 && sRecurso == '118' && (sEstrutural == '417515001' || sEstrutural == '417180911')) ? true : false;
-      }
-      if(sRecurso == '166'){ 
-          return (iAno > 2021 && sRecurso == '166' && (sEstrutural == '417155001' )) ? true : false;
-      }
-    }else{
-      if(sRecurso == '118'){ 
-          return (iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
-      }
-      if(sRecurso == '166'){ 
-         return (iAno >= 2021 && sRecurso == '166' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
-      }  
-    }
-  } 
+    return (iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
+
+  }
 
   /**
-   * Em arrecadações do fundeb, a receita é desdobrada em duas fontes: 
+   * Em arrecadaï¿½ï¿½es do fundeb, a receita ï¿½ desdobrada em duas fontes:
    * 70% para fonte 118 e 30% para fonte 119.
-   * Em algumas situações a função js_round arredonda os valores causando diferença de 0.01 no valor total da arrecadação. 
-   * Essa função verifica se há divergência no valor final, e, caso exista,
-   * a diferença é atribuída para fonte 118.
+   * Em algumas situaï¿½ï¿½es a funï¿½ï¿½o js_round arredonda os valores causando diferenï¿½a de 0.01 no valor total da arrecadaï¿½ï¿½o.
+   * Essa funï¿½ï¿½o verifica se hï¿½ divergï¿½ncia no valor final, e, caso exista,
+   * a diferenï¿½a ï¿½ atribuï¿½da para fonte 118.
    */
   function js_arredondamentoFundeb(fValor, iTipo) {
 
-    if($('recurso').value == '118'){
-    
-          let fTotal = js_round((new Number(fValor)), 2);
-          let fVl118 = js_round((new Number(fValor) * 0.70), 2);
-          let fVl119 = js_round((new Number(fValor) * 0.30), 2);
+    let fTotal = js_round((new Number(fValor)), 2);
+    let fVl118 = js_round((new Number(fValor) * 0.70), 2);
+    let fVl119 = js_round((new Number(fValor) * 0.30), 2);
 
-          let fDif = js_round((fTotal - (fVl118 + fVl119)), 2);
+    let fDif = js_round((fTotal - (fVl118 + fVl119)), 2);
 
-          if (fDif > 0) {
-            fVl118 += fDif;
-            fVl119 = js_round((fTotal - fVl118), 2);
-          } else { 
-            fVl118 += fDif;
-            fVl119 += fDif;
-            fVl118 = js_round((fTotal - fVl119), 2);
-          }  
-          return iTipo == 118 ? fVl118 : fVl119;
-    }
-    if($('recurso').value == '166'){ 
-       
-          let fTotal = js_round((new Number(fValor)), 2); 
-          let fVl166 = js_round((new Number(fValor) * 0.70), 2);
-          let fVl167 = js_round((new Number(fValor) * 0.30), 2);
-        
-          let fDif = js_round((fTotal - (fVl166 + fVl167)), 2);
-      
-            if (fDif > 0) {
-                fVl166 += fDif;
-                fVl167 = js_round((fTotal - fVl166), 2);    
-            } else {
-              fVl166 += fDif;
-              fVl167 += fDif;
-              fVl166 = js_round((fTotal - fVl167), 2);
-            }
-          return iTipo == 166 ? fVl166 : fVl167;
+    if (fDif > 0) {
+      fVl118 += fDif;
+      fVl119 = js_round((fTotal - fVl118), 2);
+    } else {
+      fVl119 += fDif;
+      fVl118 = js_round((fTotal - fVl119), 2);
     }
   }
- 
-</script> 
+</script>

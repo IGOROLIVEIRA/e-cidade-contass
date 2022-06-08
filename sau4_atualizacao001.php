@@ -663,7 +663,7 @@ if (isset($processar)) {
       if ($aVet[19] == '1') {
 
         $aTabela[] = array("funcao" => "funcServClassificacao", "arquivo" => "tb_servico_classificacao",
-                           "tabela" => "sau_servclassificacao"
+                           "tabela" => "sau_servclassificacao",
                           );
 
       }
@@ -741,14 +741,17 @@ if (isset($processar)) {
       if ($aVet[25] == '1') {
 
         $aTabela[] = array("funcao" => "funcProcRestricao", "arquivo" => "rl_excecao_compatibilidade",
-                           "tabela" => "sau_execaocompatibilidade"
+                           "tabela" => "sau_execaocompatibilidade", "nextval" => "nextval('sau_prochabilitacao_sd77_i_codigo_seq')",
+                           "campos" => "sd67_i_codigo, sd67_i_procrestricao, sd67_i_anocomp, sd67_i_mescomp, sd67_i_procprincipal, sd67_i_regprincipal, ".
+                           " sd67_i_proccompativel, sd67_i_regcompativel, sd67_i_compatibilidade "
                           );
 
       }
       if ($aVet[26] == '1') {
 
         $aTabela[] = array("funcao" => "funcProcHabilitacao", "arquivo" => "rl_procedimento_habilitacao",
-                           "tabela" => "sau_prochabilitacao"
+                           "tabela" => "sau_prochabilitacao", "nextval" => "nextval('sau_execaocompatibilidade_sd67_i_codigo_seq')",
+                           "campos" => "sd77_i_codigo, sd77_i_procedimento, sd77_i_habilitacao, sd77_i_anocomp, sd77_i_mescomp, sd77_i_grupohabilitacao"
                           );
 
       }
@@ -764,6 +767,7 @@ if (isset($processar)) {
 
         flush(); // descarga do processamento PHP para o HTML
         if (!$lSucesso) {
+            db_msgbox("Processo cancelado entre em contato com o suporte.");
           break;
         }
 
@@ -779,6 +783,7 @@ if (isset($processar)) {
           fwrite($pArqConf, "$sArqTb|$sStrConf|$iContRegInseridos\n");
 
           if (!$lSucesso) {
+            db_msgbox("Processo cancelado entre em contato com o suporte.");
             break;
           }
 
@@ -864,7 +869,6 @@ if (isset($processar)) {
 
             //Insert
             if ($sStrComp == ($sd97_i_compano.$sd97_i_compmes)) {
-
               // Verifico se o registro já foi incluído
               $aCampos                 = explode(',', $aTabela[$iContArq]['campos']);
               $sTmp                    = trim($sStrValues);

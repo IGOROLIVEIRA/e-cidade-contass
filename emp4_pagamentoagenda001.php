@@ -41,7 +41,7 @@ if ($oGet->iForma == 1) {
 } else if ($oGet->iForma == 2) {
     $sCaption = "Pagamento em Cheque";
 } else if ($oGet->iForma == 4) {
-    $sCaption = "Débito em Conta";
+    $sCaption = "Dï¿½bito em Conta";
 }
 $iTipoControleRetencaoMesAnterior = 0;
 $aParametrosEmpenho = db_stdClass::getParametro("empparametro", array(db_getsession("DB_anousu")));
@@ -81,7 +81,7 @@ if (count($aParametrosEmpenho) > 0) {
               visibility:hidden;' id='digitarHistorico'>
 
             <div style='padding:0px;text-align:right;border-bottom: 2px outset white;background-color: #2C7AFE;color:white'>
-                <span style='float:left'><b>Histórico</b></span>
+                <span style='float:left'><b>Histï¿½rico</b></span>
                 <img src='imagens/jan_fechar_on.gif' border='0' onclick="$('digitarHistorico').style.visibility='hidden';">
             </div>
 
@@ -107,7 +107,7 @@ if (count($aParametrosEmpenho) > 0) {
     </div>
     <input type='button' value='Pagar Selecionados' onclick='js_pagarEmpenhos()'>
     <input type="checkbox" id='autenticar' unchecked><label for="autenticar">Autenticar no documento</label>
-    <input type="checkbox" id='emiterelatorio'><label for="emiterelatorio">Emite Relatório de Pagamento</label>
+    <input type="checkbox" id='emiterelatorio'><label for="emiterelatorio">Emite Relatï¿½rio de Pagamento</label>
     <input type="checkbox" id='emiterecibo'><label for="emiterecibo">Emite Reciboderetencoes</label>
 </body>
 
@@ -173,13 +173,13 @@ if (count($aParametrosEmpenho) > 0) {
             "right",
             "left",
             "left"));
-        // Condição incluída na OC
+        // Condiï¿½ï¿½o incluï¿½da na OC
 
         if (iForma == 4) {
-            gridNotas.setHeader(new Array("Mov.", "Cod. Cheque", "Empenho", "Recurso", "Ordem", "Conta Pagadora", "Nome", "Data Pgto", "Vlr Atual Nota", "Retenção", "Pagar", "Histórico", "Cheque", "Nº Documento"));
+            gridNotas.setHeader(new Array("Mov.", "Cod. Cheque", "Empenho", "Recurso", "Ordem", "Conta Pagadora", "Nome", "Data Pgto", "Vlr Atual Nota", "Retenï¿½ï¿½o", "Pagar", "Histï¿½rico", "Cheque", "Nï¿½ Documento"));
             //gridNotas.setCellWidth(new Array('7%', '7%', '7%', '7%', '7%', '7%', '15%', '15%', '17%', '5%', '7%', '7%', '7%', '7%'));
         } else {
-            gridNotas.setHeader(new Array("Mov.", "Cod. Cheque", "Empenho", "Recurso", "Ordem", "Conta Pagadora", "Nome", "Data Pgto", "Vlr Atual Nota", "Retenção", "Pagar", "Histórico", "Cheque"));
+            gridNotas.setHeader(new Array("Mov.", "Cod. Cheque", "Empenho", "Recurso", "Ordem", "Conta Pagadora", "Nome", "Data Pgto", "Vlr Atual Nota", "Retenï¿½ï¿½o", "Pagar", "Histï¿½rico", "Cheque"));
             //gridNotas.setCellWidth(new Array('7%', '7%', '7%', '7%', '7%', '7%', '15%', '15%', '17%', '5%', '7%', '7%', '7%', '7%'));
         }
         gridNotas.aHeaders[2].lDisplayed = false;
@@ -285,7 +285,7 @@ if (count($aParametrosEmpenho) > 0) {
             }
             gridNotas.renderRows();
         } else if (oResponse.status == 2) {
-            $('gridNotasstatus').innerHTML = "&nbsp;<b>Não foram encontrados movimentos.</b>";
+            $('gridNotasstatus').innerHTML = "&nbsp;<b>Nï¿½o foram encontrados movimentos.</b>";
         }
     }
 
@@ -394,7 +394,7 @@ if (count($aParametrosEmpenho) > 0) {
         }
         /*
         if (js_comparadata(sDataDia, parent.$F('data_para_pagamento'), ">")) {
-            alert("Data Informada Inválida.\nData menor que a data do sistema");
+            alert("Data Informada Invï¿½lida.\nData menor que a data do sistema");
             return false;
         }
         */
@@ -403,7 +403,7 @@ if (count($aParametrosEmpenho) > 0) {
         oRequisicao.dtPagamento = parent.$F('data_para_pagamento');
         oRequisicao.aMovimentos = new Array();
         var lMostraMsgErroRetencao = false;
-        var sMsgRetencaoMesAnterior = "Atenção:\n";
+        var sMsgRetencaoMesAnterior = "Atenï¿½ï¿½o:\n";
         var sVirgula = "";
 
         for (var i = 0; i < aMovimentos.length; i++) {
@@ -423,7 +423,7 @@ if (count($aParametrosEmpenho) > 0) {
 
                 lMostraMsgErroRetencao = true;
                 sMsgRetencaoMesAnterior += sVirgula + "Movimento " + oMovimento.iCodMov + " da OP ";
-                sMsgRetencaoMesAnterior += oMovimento.iNotaLiq + " possui retenções configuradas em meses anteriores.\n";
+                sMsgRetencaoMesAnterior += oMovimento.iNotaLiq + " possui retenï¿½ï¿½es configuradas em meses anteriores.\n";
                 sVirgula = ", ";
 
             }
@@ -438,10 +438,10 @@ if (count($aParametrosEmpenho) > 0) {
             oRequisicao.aMovimentos.push(oMovimento);
         }
         /**
-         * verificamos o parametro para controle de retencões em meses anteriores.
-         * caso seje 0 - não faz nenhuma critica ao usuário. apenas realiza o pagamento.
-         *           1 - Avisa ao usuário e pede uma confirmação para realizar o pagamento.
-         *           2 - Avisa ao usuário e cancela o pagamento do movimento
+         * verificamos o parametro para controle de retencï¿½es em meses anteriores.
+         * caso seje 0 - nï¿½o faz nenhuma critica ao usuï¿½rio. apenas realiza o pagamento.
+         *           1 - Avisa ao usuï¿½rio e pede uma confirmaï¿½ï¿½o para realizar o pagamento.
+         *           2 - Avisa ao usuï¿½rio e cancela o pagamento do movimento
          */
         var sMsgConfirmaPagamento = "Deseja realmente efetuar pagamento para os movimentos selecionados?";
         if (iTipoControleRetencaoMesAnterior == 1) {
@@ -449,7 +449,7 @@ if (count($aParametrosEmpenho) > 0) {
             if (lMostraMsgErroRetencao) {
 
                 sMsgConfirmaPagamento = sMsgRetencaoMesAnterior;
-                sMsgConfirmaPagamento += "É Recomendável recalcular as retenções.\n";
+                sMsgConfirmaPagamento += "ï¿½ Recomendï¿½vel recalcular as retenï¿½ï¿½es.\n";
                 sMsgConfirmaPagamento += "Deseja realmente efetuar pagamento para os movimentos selecionados?";
                 if (!confirm(sMsgConfirmaPagamento)) {
                     return false;
@@ -460,7 +460,7 @@ if (count($aParametrosEmpenho) > 0) {
             if (lMostraMsgErroRetencao) {
 
                 sMsgConfirmaPagamento = sMsgRetencaoMesAnterior;
-                sMsgRetencaoMesAnterior += "Recalcule as Retenções do movimento.";
+                sMsgRetencaoMesAnterior += "Recalcule as Retenï¿½ï¿½es do movimento.";
                 alert(sMsgRetencaoMesAnterior);
                 return false;
 

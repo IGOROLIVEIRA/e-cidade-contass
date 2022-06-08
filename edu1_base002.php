@@ -168,10 +168,10 @@ var sParametros  = 'iBase=<?=$ed31_i_codigo?>&sBase=<?=$ed31_c_descr?>&iCurso=<?
 
 var sDisciplinaGlobal = '&sDisciplinaGlobal=<?=$sDisciplinaGlobal?>';
 
-CurrentWindow.corpo.iframe_a2.location.href = 'edu1_disciplinaetapa001.php?' + sParametros + sDisciplinaGlobal;
-CurrentWindow.corpo.iframe_a3.location.href = 'edu1_escolabase001.php?ed77_i_base=<?=$ed31_i_codigo?>'
+(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a2.location.href = 'edu1_disciplinaetapa001.php?' + sParametros + sDisciplinaGlobal;
+(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a3.location.href = 'edu1_escolabase001.php?ed77_i_base=<?=$ed31_i_codigo?>'
                                                          +'&ed31_c_descr=<?=$ed31_c_descr?>';
-CurrentWindow.corpo.iframe_a4.location.href = 'edu1_baseato001.php?ed77_i_base=<?=$ed31_i_codigo?>'
+(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a4.location.href = 'edu1_baseato001.php?ed77_i_base=<?=$ed31_i_codigo?>'
                                                          +'&ed31_c_descr=<?=$ed31_c_descr?>';
 </script>
  <?
@@ -257,11 +257,11 @@ if( isset( $alterar ) ) {
 
     var sDisciplinaGlobal = '&sDisciplinaGlobal=<?=$sDisciplinaGlobal?>';
 
-    CurrentWindow.corpo.iframe_a2.location.href = 'edu1_disciplinaetapa001.php?' + sParametros + sDisciplinaGlobal;
+    (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a2.location.href = 'edu1_disciplinaetapa001.php?' + sParametros + sDisciplinaGlobal;
 
-    CurrentWindow.corpo.iframe_a3.location.href = 'edu1_escolabase001.php?ed77_i_base=<?=$ed31_i_codigo?>&ed31_c_descr=<?=$ed31_c_descr?>';
-    CurrentWindow.corpo.iframe_a4.location.href = 'edu1_baseato001.php?ed77_i_base=<?=$ed31_i_codigo?>&ed31_c_descr=<?=$ed31_c_descr?>';
-    CurrentWindow.corpo.iframe_a1.location.href = 'edu1_base002.php?chavepesquisa=<?=$ed31_i_codigo?>';
+    (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a3.location.href = 'edu1_escolabase001.php?ed77_i_base=<?=$ed31_i_codigo?>&ed31_c_descr=<?=$ed31_c_descr?>';
+    (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a4.location.href = 'edu1_baseato001.php?ed77_i_base=<?=$ed31_i_codigo?>&ed31_c_descr=<?=$ed31_c_descr?>';
+    (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a1.location.href = 'edu1_base002.php?chavepesquisa=<?=$ed31_i_codigo?>';
     </script>
     <?
   }

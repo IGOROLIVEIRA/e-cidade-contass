@@ -17,9 +17,9 @@ class FormatterFactory
         /*if ($tipo == Tipo::S1000) {
             $formatter = new Formatter\EmpregadorFormatter();
         }*/
-        
+
         if (!file_exists($path. DS . "template{$tipo}.php")) {
-            throw new \Exception('Template não encontrado.');
+            throw new \Exception('Template nï¿½o encontrado.');
         }
         $formatter->setDePara(require($path . DS . "template{$tipo}.php"));
 

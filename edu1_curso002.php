@@ -64,11 +64,11 @@ if (isset($alterar)) {
   parent.document.formaba.a2.disabled = false;
   parent.document.formaba.a3.disabled = false;
   parent.document.formaba.a4.disabled = false;
-  CurrentWindow.corpo.iframe_a2.location.href   = 'edu1_cursoescola001.php?ed71_i_curso=<?=$ed29_i_codigo?>'+
+  (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a2.location.href   = 'edu1_cursoescola001.php?ed71_i_curso=<?=$ed29_i_codigo?>'+
                                         '&ed29_c_descr=<?=$ed29_c_descr?>';
-  CurrentWindow.corpo.iframe_a3.location.href   = 'edu1_cursoturno001.php?ed85_i_curso=<?=$ed29_i_codigo?>'+
+  (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a3.location.href   = 'edu1_cursoturno001.php?ed85_i_curso=<?=$ed29_i_codigo?>'+
                                         '&ed29_c_descr=<?=$ed29_c_descr?>';
-  CurrentWindow.corpo.iframe_a4.location.href   = 'edu1_cursoato001.php?ed71_i_curso=<?=$ed29_i_codigo?>'+
+  (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a4.location.href   = 'edu1_cursoato001.php?ed71_i_curso=<?=$ed29_i_codigo?>'+
                                         '&ed29_c_descr=<?=$ed29_c_descr?>';
  </script>
  <?
@@ -121,11 +121,11 @@ if (isset($alterar)) {
      parent.document.formaba.a2.disabled = false;
      parent.document.formaba.a3.disabled = false;
      parent.document.formaba.a4.disabled = false;
-     CurrentWindow.corpo.iframe_a2.location.href   = 'edu1_cursoescola001.php?ed71_i_curso=<?=$ed29_i_codigo?>'+
+     (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a2.location.href   = 'edu1_cursoescola001.php?ed71_i_curso=<?=$ed29_i_codigo?>'+
                                            '&ed29_c_descr=<?=$ed29_c_descr?>';
-     CurrentWindow.corpo.iframe_a3.location.href   = 'edu1_cursoturno001.php?ed85_i_curso=<?=$ed29_i_codigo?>'+
+     (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a3.location.href   = 'edu1_cursoturno001.php?ed85_i_curso=<?=$ed29_i_codigo?>'+
                                            '&ed29_c_descr=<?=$ed29_c_descr?>';
-     CurrentWindow.corpo.iframe_a4.location.href   = 'edu1_cursoato001.php?ed71_i_curso=<?=$ed29_i_codigo?>'+
+     (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_a4.location.href   = 'edu1_cursoato001.php?ed71_i_curso=<?=$ed29_i_codigo?>'+
                                            '&ed29_c_descr=<?=$ed29_c_descr?>';
     </script>
   <?

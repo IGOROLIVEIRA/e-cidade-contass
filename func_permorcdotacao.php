@@ -1,28 +1,28 @@
 <?
-/* 
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+/*
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("libs/db_utils.php");
@@ -45,25 +45,6 @@ $clorcdotacao->rotulo->label();
 $clestrutura = new cl_estrutura;
 $sWhere = null;
 
-$array_elementos = explode(",", $elementos);
-$elementos = "";
-
-/* Transformando todos os elementos do array de elementos em uma única String
-*  para que possa ser utilizada na consulta das dotacoes */
-
-for ($i = 0; $i < count($array_elementos); $i++) {
-  $array_elementos[$i] = "'" . $array_elementos[$i] . "%" . "'";
-  if ($i == count($array_elementos) - 1) {
-    $elementos = $elementos . $array_elementos[$i];
-  } else {
-    $elementos = $elementos . $array_elementos[$i] . ",";
-  }
-}
-
-
-
-if (isset($pactoplano) && $pactoplano != "") {
-
   $oDaoPactoSolicita = db_utils::getDao("pactoplano");
   $sSqlPacto         = $oDaoPactoSolicita->sql_query(null, "*", null, "o74_sequencial={$pactoplano}");
   $rsPacto           = $oDaoPactoSolicita->sql_record($sSqlPacto);
@@ -73,9 +54,6 @@ if (isset($pactoplano) && $pactoplano != "") {
     $sWhere .= " (o15_tipo = 1  or o58_codigo = {$oPlano->o16_orctiporec})";
   }
 }
-
-// variável que determina o obrigatoriedade de digitar departamento
-//$obriga_depto = "sim";
 
 if (empty($elemento)) {
   $elemento = null;
@@ -102,12 +80,12 @@ $clpermusuario_dotacao =  new cl_permusuario_dotacao(
 
 
 if (!isset($filtroquery)) {
-  // variável usada na solicitação de compras para retornar departamento quando o reduzido é digitado
+  // variï¿½vel usada na solicitaï¿½ï¿½o de compras para retornar departamento quando o reduzido ï¿½ digitado
   if (!isset($retornadepart)) {
     $retornadepart = null;
   }
-  // desmentando abaixo descobrimos se a classe 
-  // esta retornando as permissões
+  // desmentando abaixo descobrimos se a classe
+  // esta retornando as permissï¿½es
   if ($clpermusuario_dotacao->sql != "") {
     if (isset($chave_o58_coddot) && $chave_o58_coddot != "") {
 
@@ -127,7 +105,7 @@ if (!isset($filtroquery)) {
         }
         if ($passar) {
           $executa = split("\|", $executar);
-          // variável retornadepart usada na solicitação de compras para retornar departamento quando o reduzido é digitado
+          // variï¿½vel retornadepart usada na solicitaï¿½ï¿½o de compras para retornar departamento quando o reduzido ï¿½ digitado
           if ($retornadepart == null) {
             echo "<script>" . $executa[0] . "('$chave_o58_coddot');</script>";
           } else {
@@ -135,12 +113,13 @@ if (!isset($filtroquery)) {
           }
           exit;
         } else {
-          $erro  = "Você deve selecionar um Departamento!";
+          $erro  = "Vocï¿½ deve selecionar um Departamento!";
         }
       } else {
-        $erro = "Sem permissão para esta dotação!";
+        $erro = "Sem permissï¿½o para esta dotaï¿½ï¿½o!";
       }
     }
+  }
 }
 ?>
 <html>
@@ -203,7 +182,8 @@ if (!isset($filtroquery)) {
                 </td>
               </tr>
               <?
-
+              //$clestrutura->nomeform="form2";//o nome do campo ï¿½ DB_txtdotacao
+              //$clestrutura->estrutura('o50_estrutdespesa')
               ?>
               <tr>
                 <td><strong>Secretaria:</strong></td>
@@ -239,7 +219,7 @@ if (!isset($filtroquery)) {
                       }
                     } else {
                       global $sem_departamento;
-                      $sem_departamento = "Não existem departamentos para esta secretária";
+                      $sem_departamento = "Nï¿½o existem departamentos para esta secretï¿½ria";
                       db_input("sem_departamento", 50, 1, true, 3);
                     }
                   }
@@ -255,7 +235,7 @@ if (!isset($filtroquery)) {
                   <input name="executar" type="hidden" id="executar" value="<?= $funcao_js ?>">
                   <input name="obriga_depto" type="hidden" id="obriga_depto" value="<?= (isset($obriga_depto) ? "sim" : "nao") ?>">
                   <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_orcdotacao.hide();">
-                  <input name="origempermissao" type="button" id="origempermissao" value="Origem Permissão" onClick="js_origempermissao();">
+                  <input name="origempermissao" type="button" id="origempermissao" value="Origem Permissï¿½o" onClick="js_origempermissao();">
                 </td>
               </tr>
             </table>
@@ -281,7 +261,7 @@ if (!isset($filtroquery)) {
 
             db_lovrot($clpermusuario_dotacao->sql, 15, "()", "", $funcao_js, "", "NoMe", $variaveis, false);
           } else {
-            echo "<table><tr><td><br><strong>Não existe dotação para este item</strong>.</td></tr></table>";
+            echo "<table><tr><td><br><strong>Nï¿½o existe dotaï¿½ï¿½o para este item</strong>.</td></tr></table>";
           }
 
           ?>

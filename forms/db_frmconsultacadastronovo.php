@@ -43,7 +43,7 @@ $clrotulo->label("j06_lote");
 $clrotulo->label("j34_distrito");
 $clrotulo->label("j01_unidade");
 ?>
-<? 
+<?
   db_app::load('scripts.js, prototype.js, strings.js, dbcomboBox.widget.js, estilos.css');
   db_sel_instit(null, "db21_usadistritounidade");
 ?>
@@ -60,58 +60,58 @@ function mostraJanelaPesquisa() {
           VisualizacaoProprietario.jan.location.href = 'func_nome.php?funcao_js=parent.mostraTodasMatCad|0&nomeDigitadoParaPesquisa=' +encodeURIComponent(F.z01_nome.value)+'&lCadTecMunic=true';
     VisualizacaoProprietario.mostraMsg();
     VisualizacaoProprietario.show();
-    VisualizacaoProprietario.focus();   
+    VisualizacaoProprietario.focus();
   } else if(F.imobiliaria.value.length > 0) {
     VisualizacaoImobiliaria.jan.location.href = 'func_imobiliarias.php?funcao_js=parent.mostraTodasMatCad_IMobil|0&nome_imobiliaria=' +encodeURIComponent(F.imobiliaria.value);
     VisualizacaoImobiliaria.mostraMsg();
     VisualizacaoImobiliaria.show();
-    VisualizacaoImobiliaria.focus();    
+    VisualizacaoImobiliaria.focus();
   } else if (F.j34_setor.value.length > 0 || F.j34_quadra.value.length > 0 || F.j34_lote.value.length > 0) {
-    $parametro = ""; 
+    $parametro = "";
     //alert('setor '+F.j34_setor.value+' quadra = '+F.j34_quadra.value+' lote= '+F.j34_lote.value);
     if (F.j34_setor.value.length == 0){
-    alert('É necessário preencher o setor');
+    alert('ï¿½ necessï¿½rio preencher o setor');
     return false;
     }
     if (F.j34_setor.value.length > 0) $parametro = $parametro + "setor=" + encodeURIComponent(F.j34_setor.value);
     if (F.j34_quadra.value.length > 0) {
-      if (F.j34_setor.value.length > 0) 
+      if (F.j34_setor.value.length > 0)
       $parametro = $parametro + "&quadra=" + encodeURIComponent(F.j34_quadra.value);
-    else 
+    else
       $parametro = $parametro + "quadra=" + encodeURIComponent(F.j34_quadra.value);
     }
     if (F.j34_lote.value.length > 0) {
-      if (F.j34_setor.value.length > 0 || F.j34_quadra.value.length > 0) 
+      if (F.j34_setor.value.length > 0 || F.j34_quadra.value.length > 0)
       $parametro = $parametro + "&lote=" + encodeURIComponent(F.j34_lote.value);
     else $parametro = $parametro + "lote=" + encodeURIComponent(F.j34_lote.value);
-    } 
+    }
     VisualizacaoSetorQuadraLote.jan.location.href = 'func_lotealt.php?funcao_js=parent.mostraTodasMatCadIDBQL|0&' + $parametro;
     VisualizacaoSetorQuadraLote.mostraMsg();
     VisualizacaoSetorQuadraLote.show();
-    VisualizacaoSetorQuadraLote.focus();    
+    VisualizacaoSetorQuadraLote.focus();
   } else if (F.j05_codigoproprio && F.j06_quadraloc && F.j06_lote && F.j05_codigoproprio.value != 'todos') {
 
     if(F.j05_codigoproprio.value != 'todos' || F.j06_quadraloc.value != '' || F.j06_lote.value != '') {
 
       var sQueryString = '';
       var sAnd = '';
-      
+
       if(F.j05_codigoproprio.value.length > 0) {
-        sQueryString += sAnd + 'j05_codigoproprio=' + F.j05_codigoproprio.value; 
+        sQueryString += sAnd + 'j05_codigoproprio=' + F.j05_codigoproprio.value;
         sAnd = '&';
-      } 
+      }
       if(F.j06_quadraloc.value.length > 0) {
         sQueryString += sAnd + 'j06_quadraloc=' + F.j06_quadraloc.value;
-        sAnd = '&'; 
-      } 
+        sAnd = '&';
+      }
       if(F.j06_lote.value.length > 0) {
         sQueryString += sAnd + 'j06_lote=' + F.j06_lote.value;
         sAnd = '&';
-      }  
+      }
       VisualizacaoSetorQuadraLoteLoc.jan.location.href = 'func_iptubase.php?funcao_js=parent.mostraTodasMatriculasSetorLoc|j01_matric&'+sQueryString;
       VisualizacaoSetorQuadraLoteLoc.mostraMsg();
       VisualizacaoSetorQuadraLoteLoc.show();
-      VisualizacaoSetorQuadraLoteLoc.focus();   
+      VisualizacaoSetorQuadraLoteLoc.focus();
 
     }
   } else if(F.j14_codigo.value.length > 0) {
@@ -119,25 +119,25 @@ function mostraJanelaPesquisa() {
     VisualizacaoRuas.jan.location.href = 'func_ruas.php?funcao_js=parent.mostraTodasMatriculas_PesquisaRuas|0&codrua=' + F.j14_codigo.value;
     VisualizacaoRuas.mostraMsg();
     VisualizacaoRuas.show();
-    VisualizacaoRuas.focus();   
+    VisualizacaoRuas.focus();
   } else if(F.j14_nome.value.length > 0) {
-    
+
     VisualizacaoNomeRuas.jan.location.href='func_ruas.php?funcao_js=parent.mostraTodasMatriculas_PesquisaRuas|0&nomerua='+ F.j14_nome.value;
     VisualizacaoNomeRuas.mostraMsg();
     VisualizacaoNomeRuas.show();
-    VisualizacaoNomeRuas.focus();   
+    VisualizacaoNomeRuas.focus();
   } else if(F.j13_codi.value.length > 0) {
-    
+
     VisualizacaoBairros.jan.location.href = 'func_bairros.php?funcao_js=parent.mostraTodasMatriculas_PesquisaBairro|0&codbairro=' + F.j13_codi.value;
     VisualizacaoBairros.mostraMsg();
     VisualizacaoBairros.show();
-    VisualizacaoBairros.focus();    
+    VisualizacaoBairros.focus();
   } else if(F.j13_descr.value.length > 0) {
-    
+
     VisualizacaoNomeBairro.jan.location.href = 'func_bairros.php?funcao_js=parent.mostraTodasMatriculas_PesquisaBairro|0&nomeBairro=' + F.j13_descr.value;
     VisualizacaoNomeBairro.mostraMsg();
     VisualizacaoNomeBairro.show();
-    VisualizacaoNomeBairro.focus();   
+    VisualizacaoNomeBairro.focus();
   }else if(F.j04_matricregimo.value.length > 0 && F.j04_setorregimovel.value.length) {
     VisualizacaoMatricula.jan.location.href = 'func_iptubaseregimovel.php?funcao_js=parent.mostraTodasMatriculas_PesquisaMatricregimo|2&setor='+F.j04_setorregimovel.value+'&matricregimo=' + F.j04_matricregimo.value;
 
@@ -149,32 +149,32 @@ function mostraJanelaPesquisa() {
   }else if(F.j04_matricregimo.value.length > 0) {
 
     VisualizacaoMatricula.jan.location.href = 'func_iptubaseregimovel.php?funcao_js=parent.mostraTodasMatriculas_PesquisaMatricregimo|2&matricregimo=' + F.j04_matricregimo.value;
-      
+
 //    VisualizacaoMatricula.jan.location.href = 'cad3_conscadastronovo_002.php?cod_matricularegimo=' + F.j04_matricregimo.value;
     VisualizacaoMatricula.mostraMsg();
     VisualizacaoMatricula.show();
     VisualizacaoMatricula.focus();
   }else if (F.j04_setorregimovel.value.length > 0 || F.j04_quadraregimo.value.length > 0 || F.j04_loteregimo.value.length > 0) {
-     $parametro = ""; 
+     $parametro = "";
     if (F.j04_setorregimovel.value.length > 0) $parametro = $parametro + "setor=" + F.j04_setorregimovel.value;
     if (F.j04_quadraregimo.value.length > 0) {
-      if (F.j04_setorregimovel.value.length > 0) 
+      if (F.j04_setorregimovel.value.length > 0)
       $parametro = $parametro + "&quadra=" + F.j04_quadraregimo.value;
-    else 
+    else
       $parametro = $parametro + "quadra=" + F.j04_quadraregimo.value;
     }
     if (F.j04_loteregimo.value.length > 0) {
-      if (F.j04_setorregimovel.value.length > 0 || F.j04_quadraregimo.value.length > 0) 
+      if (F.j04_setorregimovel.value.length > 0 || F.j04_quadraregimo.value.length > 0)
       $parametro = $parametro + "&lote=" + F.j04_loteregimo.value;
     else $parametro = $parametro + "lote=" + F.j04_loteregimo.value;
-    } 
-            
+    }
+
     VisualizacaoSetorQuadraLote.jan.location.href = 'func_iptubaseregimovel.php?funcao_js=parent.mostraregistro|j04_matric&' + $parametro;
     VisualizacaoSetorQuadraLote.mostraMsg();
     VisualizacaoSetorQuadraLote.show();
-    VisualizacaoSetorQuadraLote.focus();   
+    VisualizacaoSetorQuadraLote.focus();
   }
-  
+
   F.reset();
 }
   function mostraTodasMatCad(numerocgm){
@@ -200,26 +200,26 @@ function mostraJanelaPesquisa() {
     VisualizacaoMatricula.jan.location.href = 'cad3_conscadastronovo_002.php?cod_matricula=' + numeroMat;
     VisualizacaoMatricula.mostraMsg();
     VisualizacaoMatricula.show();
-    VisualizacaoMatricula.focus();    
+    VisualizacaoMatricula.focus();
   }
   function mostraTodasMatriculas_PesquisaRuas(rua){
     VisualizacaoRuas.jan.location.href = 'cad3_conscadastro_003.php?pesquisaRua=' + rua;
     VisualizacaoRuas.mostraMsg();
     VisualizacaoRuas.show();
-    VisualizacaoRuas.focus();   
+    VisualizacaoRuas.focus();
   }
   function mostraTodasMatriculas_PesquisaBairro(bairro){
     VisualizacaoBairros.jan.location.href = 'cad3_conscadastro_003.php?pesquisaBairro=' + bairro;
     VisualizacaoBairros.mostraMsg();
     VisualizacaoBairros.show();
-  VisualizacaoBairros.focus();    
+  VisualizacaoBairros.focus();
   }
-  // adicionada lookup para mostrar todas matrículas da matricula do registro de imóveis
+  // adicionada lookup para mostrar todas matrï¿½culas da matricula do registro de imï¿½veis
   function mostraTodasMatriculas_PesquisaMatricregimo(matricula){
       VisualizacaoMatricula.jan.location.href = 'cad3_conscadastronovo_002.php?cod_matricula=' + matricula;
       VisualizacaoMatricula.mostraMsg();
       VisualizacaoMatricula.show();
-      VisualizacaoMatricula.focus();    
+      VisualizacaoMatricula.focus();
     }
   function mostraregistro(matricula){
     VisualizacaoSetorQuadraLote.jan.location.href = 'cad3_conscadastronovo_002.php?cod_matricula=' + matricula;
@@ -262,7 +262,7 @@ function js_pesquisaMatricula(lMostra) {
   var sQueryString = 'func_iptubase.php?';
   if(lMostra) {
     sQueryString += 'funcao_js=parent.js_mostraMatricula|j01_matric|z01_nome';
-  } 
+  }
   js_OpenJanelaIframe('top.corpo', 'db_iframe_iptubase', sQueryString, 'Pesquisa', lMostra, 20);
 }
 function js_mostraMatricula(iMatricula, sNome) {
@@ -285,12 +285,12 @@ function js_comTeclaEnter(evt) {
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td colspan="2">
-        <fieldset><legend> <b>Dados referentes a matrícula</b></legend>
+        <fieldset><legend> <b>Dados referentes a matrï¿½cula</b></legend>
         <table border="0">
 
 
           <tr>
-          
+
             <td nowrap title="<?=@$Tj01_matric?>" width="240">
             <?
               db_ancora($Lj01_matric, 'js_pesquisaMatricula(true)', 1);
@@ -299,30 +299,30 @@ function js_comTeclaEnter(evt) {
             <td nowrap><?
             db_input('j01_matric',10,$Ij01_matric,true,'text',1,"onBlur='js_ValidaCamposText(this,1);' onkeypress='js_comTeclaEnter(event)'")
             ?>
-          
+
           </tr>
           <tr>
-            
+
             <td nowrap title="<?=@$Tz01_nome?>"><?=@$Lz01_nome?></td>
             <td nowrap><?
             db_input('z01_nome',63,$Iz01_nome,true,'text',1,"")
             ?>
-          
+
           </tr>
           </tr>
           <tr title="Nome da imobiliaria">
-            
+
             <td nowrap><strong>Imobili&aacute;ria :</strong></td>
             <td nowrap><?
             db_input('imobiliaria',63,$Iz01_nome,true,'text',1,"onkeypress='js_comTeclaEnter(event)' onKeyUp=\"js_ValidaCampos(this,3,'Imobiliaria','f','t',event);\" ","imobiliaria")
             ?>
-          
+
           </tr>
           <tr title="<?=@$Tj34_setor?>">
-            
+
             <td nowrap><?=($db21_usadistritounidade=='t') ? str_replace(":","",$Lj34_distrito)."/".str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".str_replace(":","",$Lj34_lote)."/".$Lj01_unidade : str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".$Lj34_lote?>
             </td>
-            <td nowrap><?=($db21_usadistritounidade=='t') ? 
+            <td nowrap><?=($db21_usadistritounidade=='t') ?
             db_input('j34_distrito',5,$Ij34_distrito,true,'text',1, "onkeypress='js_comTeclaEnter(event)'").'/' : ''
             ?><?
             db_input('j34_setor',5,$Ij34_setor,true,'text',1, "onkeypress='js_comTeclaEnter(event)'")
@@ -346,36 +346,36 @@ function js_comTeclaEnter(evt) {
           <tr>
             <td width="34%" nowrap title="<?=$Tj06_quadraloc?>"><?=$Lj06_quadraloc?></td>
             <td id="cboquadraloc" width="66%" >
-              
+
             </td>
           </tr>
 
           <tr>
             <td width="34%" nowrap title="<?=$Tj06_lote?>"><?=$Lj06_lote?></td>
             <td id="cboloteloc" width="66%" >
-              
+
             </td>
           </tr>
           <?php }?>
-          
+
           <tr>
-            
+
             <td nowrap title="<?=@$Tj14_codigo?>"><?=@$Lj14_codigo?></td>
             <td nowrap><? db_input('j14_codigo',10,$Ij14_codigo,true,'text',1,"onkeypress='js_comTeclaEnter(event)' onBlur='js_ValidaCamposText(this,1)'"); ?></td>
           </tr>
           <tr>
-            
+
             <td nowrap title="<?=@$Tj14_nome?>"><?=@$Lj14_nome?></td>
             <td nowrap><? db_input('j14_nome',63,$Ij14_nome,true,'text',1, "onkeypress='js_comTeclaEnter(event)'");?></td>
           </tr>
           <tr>
-            
+
             <td nowrap title="<?=@$Tj13_codi?>"><?=@$Lj13_codi?></td>
             <td nowrap><? db_input('j13_codi',10,$Ij13_codi,true,'text',1,"onkeypress='js_comTeclaEnter(event)' onBlur='js_ValidaCamposText(this,1)'"); ?>
             </td>
           </tr>
           <tr>
-            
+
             <td nowrap title="<?=@$Tj13_descr?>"><?=@$Lj13_descr?></td>
             <td nowrap><?
             db_input('j13_descr',63,$Ij13_descr,true,'text',1, "onkeypress='js_comTeclaEnter(event)'");
@@ -392,7 +392,7 @@ function js_comTeclaEnter(evt) {
 
       <tr>
         <td colspan="3" align="left" valign="top" nowrap><?$db_opcao=1; ?>
-        <fieldset><legend> <b>Dados referentes ao registro de imóveis</b></legend>
+        <fieldset><legend> <b>Dados referentes ao registro de imï¿½veis</b></legend>
         <table>
           </tr>
           <tr>
@@ -481,7 +481,7 @@ oParametro.iCodSetor = iCodSetor;
 var oAjax = new Ajax.Request('func_iptubase.RPC.php',
                           {
                            method: 'POST',
-                           parameters: 'json='+Object.toJSON(oParametro), 
+                           parameters: 'json='+Object.toJSON(oParametro),
                              onComplete: js_retornaQuadra
                           });
 
@@ -498,7 +498,7 @@ if(oRetorno.status == 1) {
       cboQuadras.addItem(j06_quadraloc, j06_quadraloc);
     }
   }
-} 
+}
 js_carregaLote($F('j06_quadraloc'));
 
 return false;
@@ -517,7 +517,7 @@ oParametro.iSetor    = $F('j05_codigoproprio');
 var oAjax = new Ajax.Request('func_iptubase.RPC.php',
                           {
                            method: 'POST',
-                             parameters: 'json='+Object.toJSON(oParametro), 
+                             parameters: 'json='+Object.toJSON(oParametro),
                              onComplete: js_retornaLote });
 
 }
@@ -534,7 +534,7 @@ if(oRetorno.status == 1) {
       cboLotes.addItem(j06_lote, j06_lote);
     }
   }
-} 
+}
 
 return false;
 

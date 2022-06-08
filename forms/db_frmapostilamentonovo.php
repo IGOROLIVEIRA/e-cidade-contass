@@ -130,7 +130,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
 
                 <!-- tag <td> a seguir ocultada pois apresenta inconsistencia
-                     no valor apresentado, a tag só ficará visivel novamente 
+                     no valor apresentado, a tag só ficará visivel novamente
                     caso cliente solicite o retorno  -->
 
                 <td colspan='2' style="display: none;">
@@ -606,16 +606,16 @@ $clrotulo->label("ac16_resumoobjeto");
         windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotações Item', 430, 380);
 
         var sContent = "<div class=\"subcontainer\">";
-        sContent += "<fieldset><legend>Adicionar Dotação</legend>";
+        sContent += "<fieldset><legend>Adicionar Dotações</legend>";
         sContent += "  <table>";
         sContent += "   <tr>";
         sContent += "     <td>";
         sContent += "     <a href='#' class='dbancora' style='text-decoration: underline;'";
-        sContent += "       onclick='pesquisao47_coddot(true);'><b>Dotação:</b></a>";
+        sContent += "       onclick='pesquisao47_coddot(true);'><b>Dotações:</b></a>";
         sContent += "     </td>";
         sContent += "     <td id='inputdotacao'></td>";
         sContent += "     <td>";
-        sContent += "      <b>Saldo Dotação:</b>";
+        sContent += "      <b>Saldo Dotações:</b>";
         sContent += "     </td>";
         sContent += "     <td id='inputsaldodotacao'></td>";
         sContent += "   </tr>";
@@ -667,8 +667,8 @@ $clrotulo->label("ac16_resumoobjeto");
         oMessageBoard.show();
         oGridDotacoes = new DBGrid('gridDotacoes');
         oGridDotacoes.nameInstance = 'oGridDotacoes';
-        oGridDotacoes.setCellWidth(['20% !important', '60% !important', '20% !important']);
-        oGridDotacoes.setHeader(["Dotação", "Valor", "&nbsp;"]);
+        oGridDotacoes.setCellWidth(['20%', '60%', '20%']);
+        oGridDotacoes.setHeader(["Dotações", "Valor", "&nbsp;"]);
         oGridDotacoes.setCellAlign(["center", "right", "Center"]);
         oGridDotacoes.setHeight(100);
         oGridDotacoes.hasTotalizador = true;
@@ -716,7 +716,7 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     /**
-     * Atualiza a informação das dotações do item
+     * Atualiza a informaï¿½ï¿½o das dotações do item
      */
     function atualizarItemDotacao(iLinha, iDotacao, oValor) {
 
@@ -749,7 +749,7 @@ $clrotulo->label("ac16_resumoobjeto");
      */
     function removerDotacao(iLinha, iDotacao) {
 
-        if (confirm("Remover dotação do item?")) {
+        if (confirm("Remover dotações do item?")) {
 
             aItensPosicao[iLinha].dotacoes.splice(iDotacao, 1);
             preencheGridDotacoes(iLinha);
@@ -760,22 +760,12 @@ $clrotulo->label("ac16_resumoobjeto");
 
         if (oTxtDotacao.getValue() == "") {
 
-            alert("Campo dotação é de preenchimento obrigatório.");
+            alert("Campo dotações é de preenchimento obrigatário.");
             js_pesquisao47_coddot(true);
             return false;
         }
 
         var nValor = js_strToFloat(oTxtValorDotacao.getValue());
-
-        /**
-         * Removido validacao de inclusao de dotacao zerada conforme solicitado na OC 3855
-         */
-        /*if (nValor == 0) {
-
-            alert('Campo Valor é de preenchimento obrigatório.');
-            $('oTxtValorDotacao').focus();
-            return false;
-        }*/
 
         var oDotacao = {
             dotacao: oTxtDotacao.getValue(),
@@ -806,7 +796,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             if (oDotacaoItem.dotacao == oDotacao.dotacao) {
                 lInserir = false;
-                alert("Dotação já incluida para o item.");
+                alert("Dotações já incluida para o item.");
             }
         });
 
@@ -847,12 +837,12 @@ $clrotulo->label("ac16_resumoobjeto");
     function mostraSaldo(chave) {
 
         var arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_saldos', arq, 'Saldo da dotações', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 
     /**
-     * calcula os valores da dotação conforme o valor modificado pelo usuario
+     * calcula os valores da dotações conforme o valor modificado pelo usuario
      */
     function salvarInfoDotacoes(iLinha) {
 
@@ -1068,22 +1058,22 @@ $clrotulo->label("ac16_resumoobjeto");
         var iSelecionados = [];
 
         /**
-         * @todo incluir aqui todas as validações de campos obrigatórios para o SICOM contratos
+         * @todo incluir aqui todas as validações de campos obrigatários para o SICOM contratos
          */
         if ($("si03_tipoapostila").value == "00") {
             return alert("Obrigatório informar o  tipo de Apostila.");
         }
 
         if ($("si03_numapostilamento").value == "") {
-            return alert("Obrigatório informar o  Numero Seq. Apostila.");
+            return alert("Obrigatário informar o  Numero Seq. Apostila.");
         }
 
         if ($("si03_dataapostila").value == "") {
-            return alert("Obrigatório informar a data da Apostila.");
+            return alert("Obrigatário informar a data da Apostila.");
         }
 
         if ($("si03_descrapostila").value == "") {
-            return alert("Obrigatório informar a descrição da Apostila.");
+            return alert("Obrigatário informar a descrição da Apostila.");
         }
 
         oGridItens.getRows().forEach(function(oRow) {
@@ -1100,7 +1090,7 @@ $clrotulo->label("ac16_resumoobjeto");
         var oApostila = new Object();
         oApostila.dataapostila = $("si03_dataapostila").value;
         oApostila.tipoapostila = $("si03_tipoapostila").value;
-        oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
+        oApostila.descrapostila = $("si03_descrapostila").value;
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
 

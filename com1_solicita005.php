@@ -25,29 +25,29 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_app.utils.php");
-require_once ("std/db_stdClass.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("classes/db_solicita_classe.php");
-require_once ("classes/db_solicitem_classe.php");
-require_once ("classes/db_solicitemprot_classe.php");
-require_once ("classes/db_solicitatipo_classe.php");
-require_once ("classes/db_pctipocompra_classe.php");
-require_once ("classes/db_db_depart_classe.php");
-require_once ("classes/db_pcsugforn_classe.php");
-require_once ("classes/db_pcparam_classe.php");
-require_once ("classes/db_empautoriza_classe.php");
-require_once ("classes/db_pcprocitem_classe.php");
-require_once ("classes/db_solandam_classe.php");
-require_once ("classes/db_pcproc_classe.php");
-require_once ("classes/db_liclicitem_classe.php");
-require_once ("classes/db_solicitavinculo_classe.php");
-require_once ("classes/db_solicitaprotprocesso_classe.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
+require_once("std/db_stdClass.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("dbforms/db_funcoes.php");
+require_once("classes/db_solicita_classe.php");
+require_once("classes/db_solicitem_classe.php");
+require_once("classes/db_solicitemprot_classe.php");
+require_once("classes/db_solicitatipo_classe.php");
+require_once("classes/db_pctipocompra_classe.php");
+require_once("classes/db_db_depart_classe.php");
+require_once("classes/db_pcsugforn_classe.php");
+require_once("classes/db_pcparam_classe.php");
+require_once("classes/db_empautoriza_classe.php");
+require_once("classes/db_pcprocitem_classe.php");
+require_once("classes/db_solandam_classe.php");
+require_once("classes/db_pcproc_classe.php");
+require_once("classes/db_liclicitem_classe.php");
+require_once("classes/db_solicitavinculo_classe.php");
+require_once("classes/db_solicitaprotprocesso_classe.php");
 
 $liberaaba = '';
 db_postmemory($HTTP_GET_VARS);
@@ -61,7 +61,7 @@ $oPost = db_utils::postMemory($_POST);
 
 $iTipoSolicitacao = null;
 
-if ( !empty($pc10_solicitacaotipo) ) {
+if (!empty($pc10_solicitacaotipo)) {
   $iTipoSolicitacao = $oPost->pc10_solicitacaotipo;
 }
 
@@ -89,32 +89,33 @@ $iOpcaoTipoSolicitacao = $db_botao;
 
 $db_opcaoBtnRegistroPreco = 1;
 
-$aParametrosOrcamento = db_stdClass::getParametro("orcparametro",array(db_getsession("DB_anousu")));
+$aParametrosOrcamento = db_stdClass::getParametro("orcparametro", array(db_getsession("DB_anousu")));
 $lUtilizaPacto        = false;
 if (count($aParametrosOrcamento) > 0) {
 
   if ($aParametrosOrcamento[0]->o50_utilizapacto == "t") {
     $lUtilizaPacto = true;
   }
-
 }
 if (!isset($param)) {
 
   if (isset($chavepesquisa) && trim($chavepesquisa) != "" && $liberaaba == "false") {
 
     $dbwhere       = "pc11_numero = $chavepesquisa";
-    $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_autitem(null,
-                                                                        "distinct pc80_codproc as codproc4,pc10_solicitacaotipo",
-                                                									      null,
-                                                									      "$dbwhere"));
+    $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_autitem(
+      null,
+      "distinct pc80_codproc as codproc4,pc10_solicitacaotipo",
+      null,
+      "$dbwhere"
+    ));
     if ($clpcproc->numrows > 0) {
 
-      $oSolicitacao = db_utils::fieldsMemory($result_pcproc,0);
+      $oSolicitacao = db_utils::fieldsMemory($result_pcproc, 0);
       if ($oSolicitacao->pc10_solicitacaotipo != 5) {
 
         db_msgbox("Solicitação em processo de compras.");
-  	    echo "<script>location.href='com1_solicita005.php';</script>";
-  	    exit;
+        echo "<script>location.href='com1_solicita005.php';</script>";
+        exit;
       }
     }
   }
@@ -122,57 +123,61 @@ if (!isset($param)) {
 
 if (isset($param) && trim($param) != "") {
   $trancaIte = 1;
-  
-  $parametro = "&param=".$param;
-  if (isset($chavepesquisa) && trim($chavepesquisa) != "" && @$liberaaba == "false"){
-	  $dbwhere       = "pc11_numero = $chavepesquisa";
-	  $campo         = ",pc11_numero as codsol2";
-	  $flag_achou    = false;
 
-    $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_autitem(null,
-	                                                                      "distinct pc80_codproc as codproc4",
-		                                                        			      null,
-					      																												"$dbwhere"));
-    $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_inf(null,
-	                                                                              "distinct l21_codliclicita as codliclicita4$campo",
-                                                    							              null,
-                                                    							              "$dbwhere"));
+  $parametro = "&param=" . $param;
+  if (isset($chavepesquisa) && trim($chavepesquisa) != "" && @$liberaaba == "false") {
+    $dbwhere       = "pc11_numero = $chavepesquisa";
+    $campo         = ",pc11_numero as codsol2";
+    $flag_achou    = false;
+
+    $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_autitem(
+      null,
+      "distinct pc80_codproc as codproc4",
+      null,
+      "$dbwhere"
+    ));
+    $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_inf(
+      null,
+      "distinct l21_codliclicita as codliclicita4$campo",
+      null,
+      "$dbwhere"
+    ));
     if ($clpcproc->numrows > 0) {
 
-	    db_fieldsmemory($result_pcproc,0);
-  	  if (@$codproc != $codproc4) {
-  		  $codproc = $codproc4;
-  	  }
-	  }
+      db_fieldsmemory($result_pcproc, 0);
+      if (@$codproc != $codproc4) {
+        $codproc = $codproc4;
+      }
+    }
 
     if ($clliclicitem->numrows > 0) {
 
-	    $numrows = $clliclicitem->numrows;
+      $numrows = $clliclicitem->numrows;
       for ($i = 0; $i < $numrows; $i++) {
 
-        db_fieldsmemory($result_liclicitem,$i);
-		    if ($codsol2 == $chavepesquisa) {
-		      $codliclicita = $codliclicita4;
-		      break;
-		    }
-	    }
-	  }
+        db_fieldsmemory($result_liclicitem, $i);
+        if ($codsol2 == $chavepesquisa) {
+          $codliclicita = $codliclicita4;
+          break;
+        }
+      }
+    }
   }
 
   if (isset($codproc) && trim($codproc) != "") {
-    $parametro .= "&codproc=".$codproc;
+    $parametro .= "&codproc=" . $codproc;
   }
 
   if (isset($codliclicita) && trim($codliclicita) != "") {
-    $parametro .= "&codliclicita=".$codliclicita;
+    $parametro .= "&codliclicita=" . $codliclicita;
   }
 } else {
   $parametro = "";
 }
 
 $result_tipo = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "*"));
-if($clpcparam->numrows>0){
-    db_fieldsmemory($result_tipo,0);
+if ($clpcparam->numrows > 0) {
+  db_fieldsmemory($result_tipo, 0);
 }
 
 if (isset($alterar) || isset($chavepesquisa)) {
@@ -188,20 +193,22 @@ if (isset($alterar) || isset($chavepesquisa)) {
     $clsolicita->alterar($pc10_numero);
     $pc10_numero = $clsolicita->pc10_numero;
     if ($clsolicita->erro_status == 0) {
-      $sqlerro=true;
+      $sqlerro = true;
     }
     $erro_msg = $clsolicita->erro_msg;
 
     /**
-     * Alteração do código do Protocolo Administrativo
+     * Alteração do cï¿½digo do Protocolo Administrativo
      */
     if (!$sqlerro) {
       $pc90_sequencial              = null;
       $sWhereProcessoAdministrativo = " pc90_solicita = {$pc10_numero}";
-      $sSqlProcessoAdministrativo   = $oDaoProcessoAdministrativo->sql_query_file(null,
-                                                                                  "pc90_sequencial",
-                                                                                  null,
-                                                                                  $sWhereProcessoAdministrativo);
+      $sSqlProcessoAdministrativo   = $oDaoProcessoAdministrativo->sql_query_file(
+        null,
+        "pc90_sequencial",
+        null,
+        $sWhereProcessoAdministrativo
+      );
       $rsProcessoAdministrativo     = $oDaoProcessoAdministrativo->sql_record($sSqlProcessoAdministrativo);
 
       if ($oDaoProcessoAdministrativo->numrows > 0) {
@@ -226,27 +233,29 @@ if (isset($alterar) || isset($chavepesquisa)) {
         $sqlerro  = true;
         $erro_msg = $oDaoProcessoAdministrativo->erro_msg;
       }
-
     }
 
     if (!$sqlerro) {
 
-     /**
-      * verificamos se a solicitacao é de Regitro de preco
-      */
-      $sSqlDadoRegistroPreco = $oDaoSolicitaVinculo->sql_query_file(null, "pc53_sequencial, pc53_solicitapai",
-                                                                    null,
-                                                                    "pc53_solicitafilho = {$pc10_numero}"
-                                                                  );
+      /**
+       * verificamos se a solicitacao ï¿½ de Regitro de preco
+       */
+      $sSqlDadoRegistroPreco = $oDaoSolicitaVinculo->sql_query_file(
+        null,
+        "pc53_sequencial, pc53_solicitapai",
+        null,
+        "pc53_solicitafilho = {$pc10_numero}"
+      );
       $rsDadosRegistroPreco = $oDaoSolicitaVinculo->sql_record($sSqlDadoRegistroPreco);
       if ($oDaoSolicitaVinculo->numrows > 0) {
 
-        $sSqlItensSolicitacao = $clsolicitem->sql_query_file(null,
-                                                             "coalesce(count(*), 0) as total",
-                                                             null,
-                                                             "pc11_numero = {$pc10_numero}"
+        $sSqlItensSolicitacao = $clsolicitem->sql_query_file(
+          null,
+          "coalesce(count(*), 0) as total",
+          null,
+          "pc11_numero = {$pc10_numero}"
 
-                                                             );
+        );
         $rsItensSolicitacao     = $clsolicitem->sql_record($sSqlItensSolicitacao);
         $iTotalItensCadastrados = db_utils::fieldsMemory($rsItensSolicitacao, 0)->total;
         /**
@@ -259,7 +268,7 @@ if (isset($alterar) || isset($chavepesquisa)) {
         if ($pc10_solicitacaotipo == 5   && $pc54_solicita != $iNumeroRegistroPrecoAnterior) {
 
           /**
-           * verifica se existe itens lançados para a Solicitacao
+           * verifica se existe itens lanï¿½ados para a Solicitacao
            */
           if ($iTotalItensCadastrados > 0) {
 
@@ -317,95 +326,94 @@ if (isset($alterar) || isset($chavepesquisa)) {
             $sqlerro  = true;
           }
         }
-     }
-   }
-   if ($sqlerro==false && $pc30_seltipo == "t") {
-
-     $clsolicitatipo->sql_record($clsolicitatipo->sql_query_file($pc10_numero,"pc12_numero"));
-     if ($clsolicitatipo->numrows > 0) {
-
-    	 $clsolicitatipo->pc12_tipo = $pc12_tipo;
-    	 $clsolicitatipo->pc12_numero = $pc10_numero;
-    	 $clsolicitatipo->alterar($pc10_numero);
-    	 if ($clsolicitatipo->erro_status == 0) {
-
-    	   $sqlerro=true;
-    	   $erro_msg = $clsolicitatipo->erro_msg;
-    	 }
-     } else {
-    	 $clsolicitatipo->pc12_numero = $pc10_numero;
-    	 $clsolicitatipo->incluir($pc10_numero);
-
-    	 if ($clsolicitatipo->erro_status == 0) {
-    	   $sqlerro=true;
-    	   $erro_msg = $clsolicitatipo->erro_msg;
-    	 }
+      }
     }
-   }
-   /*
+    if ($sqlerro == false && $pc30_seltipo == "t") {
+
+      $clsolicitatipo->sql_record($clsolicitatipo->sql_query_file($pc10_numero, "pc12_numero"));
+      if ($clsolicitatipo->numrows > 0) {
+
+        $clsolicitatipo->pc12_tipo = $pc12_tipo;
+        $clsolicitatipo->pc12_numero = $pc10_numero;
+        $clsolicitatipo->alterar($pc10_numero);
+        if ($clsolicitatipo->erro_status == 0) {
+
+          $sqlerro = true;
+          $erro_msg = $clsolicitatipo->erro_msg;
+        }
+      } else {
+        $clsolicitatipo->pc12_numero = $pc10_numero;
+        $clsolicitatipo->incluir($pc10_numero);
+
+        if ($clsolicitatipo->erro_status == 0) {
+          $sqlerro = true;
+          $erro_msg = $clsolicitatipo->erro_msg;
+        }
+      }
+    }
+    /*
     * Verificamos se a solicitação possui vinculo com o  pacto, e entao
     * validamos se o usuario
     */
-   $oDaoOrctiporecConvenioPacto  = db_utils::getDao("orctiporecconveniosolicita");
-   $sSqlPacto                    = $oDaoOrctiporecConvenioPacto->sql_query(null,
-                                                                          "o74_sequencial, o78_sequencial,o74_descricao",
-                                                                           null,
-                                                                           "o78_solicita = {$pc10_numero}");
-   $rsPacto = $oDaoOrctiporecConvenioPacto->sql_record($sSqlPacto);
-   if ($oDaoOrctiporecConvenioPacto->numrows > 0) {
+    $oDaoOrctiporecConvenioPacto  = db_utils::getDao("orctiporecconveniosolicita");
+    $sSqlPacto                    = $oDaoOrctiporecConvenioPacto->sql_query(
+      null,
+      "o74_sequencial, o78_sequencial,o74_descricao",
+      null,
+      "o78_solicita = {$pc10_numero}"
+    );
+    $rsPacto = $oDaoOrctiporecConvenioPacto->sql_record($sSqlPacto);
+    if ($oDaoOrctiporecConvenioPacto->numrows > 0) {
 
-     require_once("classes/solicitacaocompras.model.php");
-     require_once("model/itempacto.model.php");
-     $oConvenio  =  db_utils::fieldsmemory($rsPacto, 0);
+      require_once("classes/solicitacaocompras.model.php");
+      require_once("model/itempacto.model.php");
+      $oConvenio  =  db_utils::fieldsmemory($rsPacto, 0);
 
-     if ($oConvenio->o74_sequencial != $o74_sequencial) {
+      if ($oConvenio->o74_sequencial != $o74_sequencial) {
 
-       try {
+        try {
 
-         $oSolitacao = new solicitacaoCompra($pc10_numero);
-         $oSolitacao->excluirItensPactoGeral();
-         $oDaoOrctiporecConvenioPacto->excluir($oConvenio->o78_sequencial);
-         $oDaoOrctiporecConvenioPacto->o78_solicita   = $pc10_numero;
-         $oDaoOrctiporecConvenioPacto->o78_pactoplano = $o74_sequencial;
-         $oDaoOrctiporecConvenioPacto->incluir(null);
+          $oSolitacao = new solicitacaoCompra($pc10_numero);
+          $oSolitacao->excluirItensPactoGeral();
+          $oDaoOrctiporecConvenioPacto->excluir($oConvenio->o78_sequencial);
+          $oDaoOrctiporecConvenioPacto->o78_solicita   = $pc10_numero;
+          $oDaoOrctiporecConvenioPacto->o78_pactoplano = $o74_sequencial;
+          $oDaoOrctiporecConvenioPacto->incluir(null);
+        } catch (Exception $eSolicitacao) {
 
-       } catch (Exception $eSolicitacao) {
-
-           $sqlerro  = true;
-           $erro_msg = $eSolicitacao->getMessage();
-       }
-     }
-   } else if (isset($o74_sequencial) && $o74_sequencial != "") {
+          $sqlerro  = true;
+          $erro_msg = $eSolicitacao->getMessage();
+        }
+      }
+    } else if (isset($o74_sequencial) && $o74_sequencial != "") {
 
       /**
-       * Verificamos se o usuário já cadastrou algum item
+       * Verificamos se o usuï¿½rio já cadastrou algum item
        * caso tenha, nao podemos deixar o usuario vincular a solicitacao
        * a um pacto
        */
       $oDaoSolicitem = new cl_solicitem;
-      $sSqlItem      = $oDaoSolicitem->sql_query_file(null,"pc11_codigo",null,"pc11_numero = {$pc10_numero}");
+      $sSqlItem      = $oDaoSolicitem->sql_query_file(null, "pc11_codigo", null, "pc11_numero = {$pc10_numero}");
       $rsItem        = $oDaoSolicitem->sql_record($sSqlItem);
       if ($oDaoSolicitem->numrows > 0) {
 
         $sqlerro  = true;
         $erro_msg = "Solicitação já possui itens cadastrados!\\nA solicitação não podera ser vinculada a  um pacto.";
-
       } else {
 
         $oDaoOrctiporecConvenioPacto->o78_solicita   = $pc10_numero;
         $oDaoOrctiporecConvenioPacto->o78_pactoplano = $o74_sequencial;
         $oDaoOrctiporecConvenioPacto->incluir(null);
-
       }
-
-   }
+    }
     db_fim_transacao($sqlerro);
   }
   if (isset($chavepesquisa)) {
     $pc10_numero = $chavepesquisa;
   }
-  $result_solicita = $clsolicita->sql_record($clsolicita->sql_query_solicita($pc10_numero,
-  																																					 "pc10_numero,
+  $result_solicita = $clsolicita->sql_record($clsolicita->sql_query_solicita(
+    $pc10_numero,
+    "pc10_numero,
   																																						pc10_data,
                                                                               pc10_resumo,
                                                                               pc10_depto,
@@ -413,34 +421,39 @@ if (isset($alterar) || isset($chavepesquisa)) {
                                                                               descrdepto,
                                                                               pc50_descr,
                                                                               pc12_tipo,
-                                                                              pc10_solicitacaotipo"));
+                                                                              pc10_solicitacaotipo"
+  ));
   if ($clsolicita->numrows > 0) {
 
-    db_fieldsmemory($result_solicita,0);
+    db_fieldsmemory($result_solicita, 0);
     unset($_SESSION["processocompras{$pc10_numero}"]);
     unset($_SESSION["processoorcamento{$pc10_numero}"]);
     /**
-     * verifica se a solicitacao é de RP. caso for, traz o codigo da compilacao
+     * verifica se a solicitacao ï¿½ de RP. caso for, traz o codigo da compilacao
      */
     if ($pc10_solicitacaotipo == 5) {
 
-      $sSqlDadoRegistroPreco = $oDaoSolicitaVinculo->sql_query_file(null, "pc53_solicitapai",
-                                                                    null,
-                                                                    "pc53_solicitafilho = {$pc10_numero}"
-                                                                  );
+      $sSqlDadoRegistroPreco = $oDaoSolicitaVinculo->sql_query_file(
+        null,
+        "pc53_solicitapai",
+        null,
+        "pc53_solicitafilho = {$pc10_numero}"
+      );
       $rsDadosRegistroPreco = $oDaoSolicitaVinculo->sql_record($sSqlDadoRegistroPreco);
       if ($oDaoSolicitaVinculo->numrows > 0) {
         $pc54_solicita = db_utils::fieldsMemory($rsDadosRegistroPreco, 0)->pc53_solicitapai;
       }
     }
     /**
-		 * Busca os Dados do Processo administrativo
+     * Busca os Dados do Processo administrativo
      */
     $sWhereProcessoAdministrativo = " pc90_solicita = {$pc10_numero}";
-    $sSqlProcessoAdministrativo   = $oDaoProcessoAdministrativo->sql_query_file(null,
-                                                                            		"pc90_numeroprocesso",
-                                                                                null,
-                                                                                $sWhereProcessoAdministrativo);
+    $sSqlProcessoAdministrativo   = $oDaoProcessoAdministrativo->sql_query_file(
+      null,
+      "pc90_numeroprocesso",
+      null,
+      $sWhereProcessoAdministrativo
+    );
     $rsProcessoAdministrativo     = $oDaoProcessoAdministrativo->sql_record($sSqlProcessoAdministrativo);
 
     if ($oDaoProcessoAdministrativo->numrows > 0) {
@@ -450,46 +463,51 @@ if (isset($alterar) || isset($chavepesquisa)) {
 
 
 
-  $result_libera = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_liberaitem,pc30_libdotac,pc30_contrandsol"));
-  db_fieldsmemory($result_libera,0);
+  $result_libera = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_liberaitem,pc30_libdotac,pc30_contrandsol"));
+  db_fieldsmemory($result_libera, 0);
 
   $oDaoOrctiporecConvenioPacto  = db_utils::getDao("orctiporecconveniosolicita");
-  $sSqlPacto                    = $oDaoOrctiporecConvenioPacto->sql_query(null,
-                                                                          "o74_sequencial, o74_descricao",
-                                                                          null,
-                                                                          "o78_solicita = {$pc10_numero}");
+  $sSqlPacto                    = $oDaoOrctiporecConvenioPacto->sql_query(
+    null,
+    "o74_sequencial, o74_descricao",
+    null,
+    "o78_solicita = {$pc10_numero}"
+  );
   $rsPacto = $oDaoOrctiporecConvenioPacto->sql_record($sSqlPacto);
   if ($oDaoOrctiporecConvenioPacto->numrows > 0) {
     db_fieldsmemory($rsPacto, 0);
   }
 }
 
-if ( empty($iTipoSolicitacao) && !empty($pc10_solicitacaotipo) ) {
+if (empty($iTipoSolicitacao) && !empty($pc10_solicitacaotipo)) {
 
   $iTipoSolicitacao      = $pc10_solicitacaotipo;
   $iOpcaoTipoSolicitacao = 3;
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <?
   db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js, estilos.css");
-?>
+  ?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="margin-top:30px;" >
-    <center>
-	    <?php include("forms/db_frmsolicita.php"); ?>
-    </center>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="margin-top:30px;">
+  <center>
+    <?php include("forms/db_frmsolicita.php"); ?>
+  </center>
 </body>
+
 </html>
 <?
-if(isset($chavepesquisa) || isset($pc10_numero)){
-  if(isset($chavepesquisa)){
+if (isset($chavepesquisa) || isset($pc10_numero)) {
+  if (isset($chavepesquisa)) {
     $codigoteste = $chavepesquisa;
-  }else{
+  } else {
     $codigoteste = $pc10_numero;
   }
   /*
@@ -502,16 +520,16 @@ if(isset($chavepesquisa) || isset($pc10_numero)){
     }
   }
   if($erro==true){
-    db_msgbox("Usuário: \\n\\nFoi gerada autorização de empenho para um ou mais item desta solicitação.\\nSolicitação de compras não poderá ser alterada.\\n\\nAdiministrador:");
+    db_msgbox("Usuï¿½rio: \\n\\nFoi gerada autorização de empenho para um ou mais item desta solicitação.\\nSolicitação de compras não poderï¿½ ser alterada.\\n\\nAdiministrador:");
     echo "<script>CurrentWindow.corpo.iframe_solicita.location.href = 'com1_solicita005.php'</script>";
   }
   */
 
-  if (isset($param) && trim($param) == ""){
+  if (isset($param) && trim($param) == "") {
 
     $result_pcproc = $clpcprocitem->sql_record($clpcprocitem->sql_query_pcmater(null, "pc10_numero, pc80_codproc", "", "pc10_numero=$codigoteste"));
 
-    if ( $clpcprocitem->numrows > 0 ) {
+    if ($clpcprocitem->numrows > 0) {
 
       $oDaoProcessoCompras = db_utils::fieldsMemory($result_pcproc, 0);
 
@@ -519,56 +537,53 @@ if(isset($chavepesquisa) || isset($pc10_numero)){
        * Tipo de solicatao: 5 - Registro de preço
        * - exibe numero do processo de compras na mensagem de erro
        */
-      if ( $iTipoSolicitacao == TIPO_SOLICITACAO_REGISTRO_PRECO ) {
+      if ($iTipoSolicitacao == TIPO_SOLICITACAO_REGISTRO_PRECO) {
 
         $oStdMensagemErro = new Stdclass();
         $oStdMensagemErro->iCodigoProcesso = $oDaoProcessoCompras->pc80_codproc;
         db_msgbox(_M('patrimonial.compras.com1_solicita005.erro_processo_vinculado_mais_um_item_solicitacao_tipo_registro_de_preco', $oStdMensagemErro));
-
       } else {
         db_msgbox(_M('patrimonial.compras.com1_solicita005.erro_processo_vinculado_mais_um_item_solicitacao'));
       }
 
       echo "<script>CurrentWindow.corpo.iframe_solicita.location.href = 'com1_solicita005.php';</script>";
     }
-
   }
-
 }
 
-if(isset($alterar) && $erro_msg!=""){
-  if($sqlerro==true){
+if (isset($alterar) && $erro_msg != "") {
+  if ($sqlerro == true) {
     db_msgbox($erro_msg);
-    if($clsolicita->erro_campo!=""){
-      echo "<script> document.form1.".$clbens->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clbens->erro_campo.".focus();</script>";
+    if ($clsolicita->erro_campo != "") {
+      echo "<script> document.form1." . $clbens->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clbens->erro_campo . ".focus();</script>";
     };
   }
 }
-if(isset($chavepesquisa)){
+if (isset($chavepesquisa)) {
   echo "
   <script>
       function js_db_libera(){
          parent.document.formaba.solicitem.disabled=false;
       ";
-       if(!isset($ld)){
-       echo "
+  if (!isset($ld)) {
+    echo "
          CurrentWindow.corpo.iframe_solicitem.location.href='com1_solicitem001.php?pc11_numero=$chavepesquisa$parametro';
             ";
-       }
+  }
 
-       /**
-        * Habilita aba de fornecedores sugeridos
-        * - Parametro definido para exibir aba
-        * - Tipo de solicitacao diferente de registro de preco
-        */
-       if ( $pc30_sugforn == 't' && $iTipoSolicitacao != TIPO_SOLICITACAO_REGISTRO_PRECO ) {
-         echo "
+  /**
+   * Habilita aba de fornecedores sugeridos
+   * - Parametro definido para exibir aba
+   * - Tipo de solicitacao diferente de registro de preco
+   */
+  if ($pc30_sugforn == 't' && $iTipoSolicitacao != TIPO_SOLICITACAO_REGISTRO_PRECO) {
+    echo "
                 parent.document.formaba.sugforn.disabled=false;
                 CurrentWindow.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$chavepesquisa$parametro';
               ";
-       }
-  if(@$liberaaba == 'true'){
+  }
+  if (@$liberaaba == 'true') {
     echo "
          parent.mo_camada('solicitem');
 	 ";
@@ -579,37 +594,37 @@ if(isset($chavepesquisa)){
     js_db_libera();
   </script>\n
        ";
-}else if(isset($pc10_numero)){
+} else if (isset($pc10_numero)) {
   echo "
   <script>
       function js_db_bloqueia(){
          parent.document.formaba.solicitem.disabled=true;
          //CurrentWindow.corpo.iframe_solicitem.location.href='com1_solicitem001.php?pc11_numero=$pc10_numero$parametro';
        ";
-       if(!isset($ld)){
-       echo "
+  if (!isset($ld)) {
+    echo "
          CurrentWindow.corpo.iframe_solicitem.location.href='com1_solicitem001.php?pc11_numero=$pc10_numero$parametro';
 	    ";
-       }
+  }
 
-       /**
-        * Habilita aba de fornecedores sugeridos
-        * - Parametro definido para exibir aba
-        * - Tipo de solicitacao diferente de registro de preco
-        */
-       if ( $pc30_sugforn == 't' && $iTipoSolicitacao == TIPO_SOLICITACAO_REGISTRO_PRECO ) {
-         echo "
+  /**
+   * Habilita aba de fornecedores sugeridos
+   * - Parametro definido para exibir aba
+   * - Tipo de solicitacao diferente de registro de preco
+   */
+  if ($pc30_sugforn == 't' && $iTipoSolicitacao == TIPO_SOLICITACAO_REGISTRO_PRECO) {
+    echo "
           parent.document.formaba.sugforn.disabled=true;
           CurrentWindow.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc10_numero';
         ";
-       }
+  }
   echo "
       }\n
     js_db_bloqueia();
   </script>\n
        ";
 }
-if($db_opcao==22){
+if ($db_opcao == 22) {
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>
