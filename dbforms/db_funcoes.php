@@ -578,71 +578,54 @@ function db_multiploselect($valueobj, $descrobj, $objnsel = "", $objsel = "", $r
         function js_db_multiploselect_incluir_item<?= $jsnomeunico ?>(obj1, obj2) {
             var erro = 0;
 
-            // Tirar o foco de todos os itens do select RECEPTOR
-            for (i = 0; i < obj2.length; i++) {
-                obj2.options[i].selected = false;
-            }
+function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script = "", $nomevar = "", $bgcolor = "", $todos = "", $onchange = "", $numcol = 2) {
+		//#00#//db_selectrecord
+		//#10#//Função para montar um ou dois objetos select na tela, recebendo dados de um recordset
+		//#15#//db_selectrecord($nome,$record,$dbcadastro,$db_opcao=3,$js_script="",$nomevar="",$bgcolor="",$todos="",$onchange="",$numcol=2);
+		//#20#//Nome            : Nome do ca po da documentacao do sistema ou do arquivo
+		//#20#//Record Set      : Recordset que gerará os objetos select, sendo o primeiro campo do recordset o campo chave
+		//#20#//                  e o segundo campo a descricao.
+		//#20#//Cadastro        : True se cadastro ou false se nao cadastro Padrão: true )
+		//#20#//Opcao           : *db_opcao* do programa a ser executado neste objeto input, inclusão(1) alteração(2) exclusão(3)
+		//#20#//Script          : JAVASCRIPT  a ser executado juntamento com o objeto, indicando os métodos
+		//#20#//Nome Secundário : Nome do input que será gerado, assumindo somente as características do campo Nome
+		//#20#//Cor Background  : Cor de fundo da tela, no caso de *db_opcao*=3 será "#DEB887"
+		//#20#//Todos           : Indica de será colocado um ítem inicial com opção de todos "Todos ..." com valor zero (0)
+		//#20#//OnChange        : Função que será incluída no método onchange dos objetos select, além das funçõe ja incluídas
+		//#20#//                  que servem para movimentar os select. Sempre que alterar um deles, o sistema altera o outro
+		//#20#//Numero Select   : Número de select que serão mostrados na tela. O padrão é dois, caso seja indicado este
+		//#20#//                  parâmetro, o sistema mostrará somente o select do segundo campo (descrição) e retornará o
+		//#20#//                  código do ítem, o valor do primeiro campo
+		//#99#//Quando o parâmetro *db_opcao* for de alteração (Opcao = 22) ou exclusão (Opção = 33) o sistema
+		//#99#//não mostrará os objetos desta função e sim executará o objeto INPUT com as opções deste
+		//#99#//objeto. Isto faz com que o usuário não movimente um select enquanto não selecionar um
+		//#99#//código de registro para alterar ou excluir
+		//#99#//
+		//#99#//O tamanho do objeto na tela dependerá do tamanho do campo inserido no select
+		//#99#//
+		//#99#//Após montar o select, sistema executa uma função javascript para selecionar o elemento
+		//#99#//do select que possui o mesmo valor do campo indicado na variável Nome
+	if ($db_opcao != 3 && $db_opcao != 5 && $db_opcao != 22 && $db_opcao != 33 && $db_opcao != 11) {
+		if ($nomevar != "") {
+			$nome = $nomevar;
+			$nomedescr = $nomevar."descr";
+		} else {
+			$nomedescr = $nome."descr";
+		}
+		if ($numcol == 2) {
+      //OC17312 OCULTA A CAIXA DO NUMERO SEQUENCIAL DA MODALIDADE - PEDIDO FEITO PELA ANALISE
+      if($nome=="l20_codtipocom"){
 
-            // Verifica a quantidade de itens no SELECT EMISSOR
-            for (i = 0; i < obj1.length; i++) {
+        ?>
 
-                // Testa se o item corrente esta selecionado
-                if (obj1.options[i].selected) {
+        <select style ="display : none" name="<?=$nome?>" id="<?=$nome?>"
+        <?
+      }elseif($nome!="l20_codtipocom"){
 
-                    // Seta o valor defaul do novo item do SELECT RECEPTOR
-                    x = obj2.length;
-
-                    // Se for para ordenar os itens dentro dos selects ao serem mudados de local
-                    ordenaritens = true;
-                    <?
-                    if ($ordenarselect == false) {
-                        echo "ordenaritens = false;\n";
-                    }
-                    ?>
-
-                    // Se a quantidade de itens do SELECT RECEPTOR for maior que zero, testa se encontra algum item que o valor
-                    // seja maior que o item corrente do SELECT EMISSOR
-                    if (obj2.length > 0 && ordenaritens == true) {
-                        for (x = 0; x < obj2.length; x++) {
-                            if (obj1.options[i].value < obj2.options[x].value) {
-                                break;
-                            }
-                        }
-
-                        // Repete no SELECT RECEPTOR o seu último item
-                        obj2.options[obj2.length] = new Option(obj2.options[obj2.length - 1].text, obj2.options[obj2.length - 1].value);
-
-                        // Busca todos os itens que o valor é menor que o último item e reorganiza os dados dentro do SELECT
-                        for (y = obj2.length - 1; x < y; y--) {
-                            obj2.options[y] = new Option(obj2.options[y - 1].text, obj2.options[y - 1].value)
-                        }
-                    }
-
-                    // Inclui o item que esta vindo do select EMISSOR
-                    obj2.options[x] = new Option(obj1.options[i].text, obj1.options[i].value);
-                    obj2.options[x].selected = true;
-                    erro++;
-                }
-            }
-            if (erro > 0) {
-                // Tira a seleção dos itens do SELECT EMISSOR
-                for (i = 0; i < obj1.length; i++) {
-                    if (obj1.options[i].selected) {
-                        obj1.options[i] = null;
-                        i = -1;
-                    }
-                }
-            } else {
-                alert("Selecione um item");
-            }
-            <?= $jsincluir ?>
-            js_trocacordeselect();
-        }
-        js_trocacordeselect();
-    </script>
-    <?
-}
-
+        ?>
+        <select name="<?=$nome?>" id="<?=$nome?>"
+        <?
+      }
 
 function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script = "", $nomevar = "", $bgcolor = "", $todos = "", $onchange = "", $numcol = 2)
 {
@@ -683,6 +666,31 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
     ?>
             <select name="<?= $nome ?>" id="<?= $nome ?>" <?
 
+			if ($numcol == 2)
+				echo "onchange=\"js_ProcCod_$nome('$nome','$nomedescr');$onchange\"";
+			else
+				echo "onchange=\"$onchange\"";
+			if ($dbcadastro == true) {
+				if ($db_opcao == 3 || $db_opcao == 22 || $db_opcao == 11) {
+					echo " readonly ";
+					if ($bgcolor == "")
+						$bgcolor = "#DEB887";
+				}
+				if ($db_opcao == 5) {
+					echo " disabled ";
+				}
+			}
+			echo $js_script;
+      //OC17312 OCULTA A CAIXA DO NUMERO SEQUENCIAL DA MODALIDADE - PEDIDO FEITO PELA ANALISE
+      if($nome=="l20_codtipocom"){
+        ?>
+        >
+        <?
+      }elseif($nome!="l20_codtipocom"){
+        ?>
+        >
+        <?
+      }
 
 
                                                             if ($numcol == 2)
@@ -703,6 +711,14 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
                                                             ?>>
                 <?
 
+			if ($todos != "") {
+				if (strpos($todos, "-") > 0)
+					$todos = split("-", $todos);
+				else
+					$todos = array ("0" => $todos, "1" => "Todos ...");
+      ?>
+      <option value="<?=$todos[0]?>" ><?=$todos[0]?></option>
+      <?
 
 
                 if ($todos != "") {
@@ -714,6 +730,18 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
                     <option value="<?= $todos[0] ?>"><?= $todos[0] ?></option>
                 <?
 
+			}
+			for ($sqli = 0; $sqli < pg_numrows($record); $sqli ++) {
+				$sqlv = pg_result($record, $sqli, 0);
+      //OC17312 COLOQUEI UMA VALIDAÇÃO DE CHAMADA PARA ACRESCENTAR UMA OPÇÃO "SELECIONE" NA MODALIDADE
+      if($sqli==0 && $nome=="l20_codtipocom"){
+          ?>
+          <option value="99" selected>99</option>
+          <?
+        }
+      ?>
+      <option value="<?=$sqlv?>" <?=(@$GLOBALS[$nome]==$sqlv?"selected":"")?>><?=$sqlv?></option>
+      <?
 
 
                 }
@@ -755,6 +783,19 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
                 <?
 
 
+			}
+			for ($sqli = 0; $sqli < pg_numrows($record); $sqli ++) {
+				$sqlv = pg_result($record, $sqli, 0);
+				$sqlv1 = pg_result($record, $sqli, 1);
+        //OC17312 COLOQUEI UMA VALIDAÇÃO DE CHAMADA PARA ACRESCENTAR UMA OPÇÃO "SELECIONE" NA MODALIDADE
+        if($sqli==0 && $nome=="l20_codtipocom"){
+          ?>
+          <option value="99" >Selecione</option>
+          <?
+        }
+?>
+      <option value="<?=$sqlv?>" ><?=$sqlv1?></option>
+        <?
 
                 if (is_array($todos) || $todos != "") {
                 ?>

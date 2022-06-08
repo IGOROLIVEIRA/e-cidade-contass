@@ -50,10 +50,13 @@ class gerarLICOBRAS extends GerarAM
                 $aCSVLICOBRAS10['si195_codunidadesubrespestadual'] = str_pad($alICOBRAS10['si195_codunidadesubrespestadual'], 4, "0", STR_PAD_LEFT);
                 $aCSVLICOBRAS10['si195_exerciciolicitacao'] = $alICOBRAS10['si195_exerciciolicitacao'];
                 $aCSVLICOBRAS10['si195_nroprocessolicitatorio'] = $alICOBRAS10['si195_nroprocessolicitatorio'];
+                $aCSVLICOBRAS10['si195_nrolote'] = $alICOBRAS10['si195_nrolote'];
+                $aCSVLICOBRAS10['si195_contdeclicitacao'] = $alICOBRAS10['si195_contdeclicitacao'];
                 $aCSVLICOBRAS10['si195_codobra'] = $alICOBRAS10['si195_codobra'];
                 $aCSVLICOBRAS10['si195_objeto'] = $alICOBRAS10['si195_objeto'];
                 $aCSVLICOBRAS10['si195_linkobra'] = $alICOBRAS10['si195_linkobra'];
-                $aCSVLICOBRAS10['si195_nrolote'] = $alICOBRAS10['si195_nrolote'];
+                $aCSVLICOBRAS10['si195_codorgaorespsicom'] = $alICOBRAS10['si195_codorgaorespsicom'];
+                $aCSVLICOBRAS10['si195_codunidadesubsicom'] = $alICOBRAS10['si195_codunidadesubsicom'];
                 $aCSVLICOBRAS10['si195_nrocontrato'] = $alICOBRAS10['si195_nrocontrato'];
                 $aCSVLICOBRAS10['si195_exerciciocontrato'] = $alICOBRAS10['si195_exerciciocontrato'];
                 $aCSVLICOBRAS10['si195_dataassinatura'] = $this->sicomDate($alICOBRAS10['si195_dataassinatura']);
@@ -87,9 +90,12 @@ class gerarLICOBRAS extends GerarAM
                 $aCSVLICOBRAS20['si196_exerciciolicitacao'] = $aLICOBRAS20['si196_exerciciolicitacao'];
                 $aCSVLICOBRAS20['si196_nroprocessolicitatorio'] = $aLICOBRAS20['si196_nroprocessolicitatorio'];
                 $aCSVLICOBRAS20['si196_tipoprocesso'] = $aLICOBRAS20['si196_tipoprocesso'];
+                $aCSVLICOBRAS20['si196_contdeclicitacao'] = $aLICOBRAS20['si196_contdeclicitacao'];
                 $aCSVLICOBRAS20['si196_codobra'] = $aLICOBRAS20['si196_codobra'];
                 $aCSVLICOBRAS20['si196_objeto'] = $aLICOBRAS20['si196_objeto'];
                 $aCSVLICOBRAS20['si196_linkobra'] = $aLICOBRAS20['si196_linkobra'];
+                $aCSVLICOBRAS20['si196_codorgaorespsicom'] = $aLICOBRAS20['si196_codorgaorespsicom'];
+                $aCSVLICOBRAS20['si196_codunidadesubsicom'] = $aLICOBRAS20['si196_codunidadesubsicom'];
                 $aCSVLICOBRAS20['si196_nrocontrato'] = $aLICOBRAS20['si196_nrocontrato'];
                 $aCSVLICOBRAS20['si196_exerciciocontrato'] = $aLICOBRAS20['si196_exerciciocontrato'];
                 $aCSVLICOBRAS20['si196_dataassinatura'] = $aLICOBRAS20['si196_dataassinatura'];

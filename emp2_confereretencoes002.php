@@ -35,27 +35,32 @@ $oJson       = new Services_JSON();
 $oParametros = $oJson->decode(str_replace("\\","",$_GET["sFiltros"]));
 $sWhere = "e60_instit = ".db_getsession("DB_instit");
 if ($oParametros->iPagamento == 'p') {
-  $sHeaderTipo = "Pagamento";
-  $sWhere .= " and corrente.k12_estorn is false ";
-} if ($oParametros->iPagamento == 'nf') {
-  $sHeaderTipo = "NotaFiscal"; 
-  $datatime = mktime(12, 0, 0, date("m"), date("d"), date("Y"));
-  $anousu   = date("Y", $datatime);
-  $mesusu   = date("m", $datatime);
-  $diausu   = date("d", $datatime);         
-  $dataatual = $anousu.'-'.$mesusu.'-'.$diausu;     
+  
+    $sHeaderTipo = "Pagamento";
+    $sWhere .= " and corrente.k12_estorn is false ";
+
+} elseif ($oParametros->iPagamento == 'nf') {
+  
+    $sHeaderTipo = "NotaFiscal"; 
+    $datatime = mktime(12, 0, 0, date("m"), date("d"), date("Y"));
+    $anousu   = date("Y", $datatime);
+    $mesusu   = date("m", $datatime);
+    $diausu   = date("d", $datatime);         
+    $dataatual = $anousu.'-'.$mesusu.'-'.$diausu;     
     
 } else {
-  $sHeaderTipo = "Liquidacao";
+  
+    $sHeaderTipo = "Liquidacao";    
 }
 
 if ($oParametros->datainicial != "" && $oParametros->datafinal == "") {
 
    $dataInicial  = implode("-", array_reverse(explode("/", $oParametros->datainicial)));
    if ($oParametros->iPagamento == 'l') {
-     $sWhere      .= " and retencao.e23_dtcalculo = '{$dataInicial}'";
+    /* OC 17741 */
+     $sWhere      .= " AND c53_tipo = 20 AND c71_data = '{$dataInicial}'";
    } else {
-    $sWhere      .= " and corrente.k12_data = '{$dataInicial}'";
+     $sWhere      .= " and corrente.k12_data = '{$dataInicial}'";
    }
    $sHeaderData  = "{$oParametros->datainicial} a {$oParametros->datainicial}";
 
@@ -65,7 +70,8 @@ if ($oParametros->datainicial != "" && $oParametros->datafinal == "") {
   $dataInicial = implode("-", array_reverse(explode("/", $oParametros->datainicial)));
   $dataFinal   = implode("-", array_reverse(explode("/", $oParametros->datafinal)));
   if ($oParametros->iPagamento == 'l') {
-    $sWhere     .= "and retencao.e23_dtcalculo between '{$dataInicial}' and '{$dataFinal}'";
+    /* OC 17741 */
+    $sWhere     .= "AND c53_tipo = 20 AND c71_data BETWEEN '{$dataInicial}' AND '{$dataFinal}'";
   } else if ($oParametros->iPagamento == 'nf') {
     $sWhere     .= "and (retencao.e23_dtcalculo between '{$dataInicial}' and '{$dataatual}') and e69_dtnota between '{$dataInicial}' and '{$dataFinal}'";
   }
@@ -195,6 +201,17 @@ if ($oParametros->iTipoLancamento != "" || $oParametros->isubtipo != "" || $oPar
                       LEFT JOIN subtipo          ON c200_tipo = lanctos.c60_tipolancamento ";
 }
 
+/*
+ * OC 17741
+ *  Nesse caso, mesmo a demanda sendo para o Dpto. Pessoal, 
+ * percebeu-se que no relatório de retenções tb havia inconsistencias.
+ */
+if ($oParametros->iPagamento == 'l') {
+    $sSqlRetencoes .= "LEFT JOIN conlancamord   ON c80_codord = pagordem.e50_codord ";
+    $sSqlRetencoes .= "LEFT JOIN conlancamdoc   ON c71_codlan = c80_codlan ";
+    $sSqlRetencoes .= "LEFT JOIN conhistdoc     ON c53_coddoc = conlancamdoc.c71_coddoc  ";
+}
+
 $sSqlRetencoes .= " where e23_ativo is true ";
 $sSqlRetencoes .= "   and {$sWhere} ";
 
@@ -322,6 +339,8 @@ for ($i = 0; $i < $iTotalRetencoes; $i++) {
    }
 }
 
+if ($oParametros->tipo == "p"){
+
 $oPdf  = new PDF("L","mm","A4");
 $oPdf->Open();
 $oPdf->SetAutoPageBreak(false);
@@ -446,3 +465,72 @@ $oPdf->cell(15, 5, db_formatar($nTotalOrdemPagamento, "f"), "TBR", 0, "R");
 $oPdf->cell(131,5,"Total Geral:","TBR",0,"R");
 $oPdf->cell(25, 5,db_formatar($nTotalRetencoes,"f"),"TBL",1,"R");
 $oPdf->Output();
+}
+else{
+  $totalOP = 0;
+  $totalgeralOP = 0;
+  $totalRetencoes = 0;
+  $totalgeral = 0;
+  $fp = fopen("tmp/emp2_confereretencoes002.csv","w");
+
+  fputs($fp,"Retenção;");
+  if ($oParametros->group != 2)
+    fputs($fp,"Conta;"); 
+  fputs($fp,"OP;Empenho;Recurso;Receita;Valor OP;Nota;Data Nota;Data Rec.;");
+  if ($oParametros->group != 3)
+    fputs($fp,"Credor;");
+  fputs($fp,"Slip;Valor Ret.\n"); 
+  foreach ($aRetencoes as $oQuebra) {
+    if ($oQuebra->texto != "") {
+      
+      // Quebra por ano
+  
+      if($oParametros->group == 4){
+        fputs($fp,$sNomeQuebra."\n");
+        }
+      // fputs($fp,substr($ln["k12_conta"]."-".$ln["c60_descr"],0,30).";");
+      fputs($fp,$oQuebra->texto."\n");
+      
+      }
+      foreach ($oQuebra->itens as $aRetencoes) {
+  // foreach ($aRetencoes as $oQuebra) {
+      $ln = pg_fetch_array($rsRetencoes);
+      $totalOP += $ln["e53_valor"];  
+      $totalgeralOP += $ln["e53_valor"];
+      $totalRetencoes += $ln["e23_valorretencao"];
+      $totalgeral += $ln["e23_valorretencao"];
+  
+      fputs($fp,$ln["e21_sequencial"].";");
+      if ($oParametros->group != 2) {
+        fputs($fp,substr($ln["k12_conta"]."-".$ln["c60_descr"],0,30).";");
+      }
+      fputs($fp,$ln["e50_codord"].";"
+      .$ln["e60_codemp"]."/".$ln["e60_anousu"].";"
+      .$ln["o58_codigo"].";"
+      .substr($ln["k02_codigo"]."-".$ln["k02_descr"],0,20).";"
+      .db_formatar($ln["e53_valor"],"f").";"
+      .substr($ln["e69_numero"],0,14).";"
+      .db_formatar($ln["e69_dtnota"],"d").";"
+      .db_formatar($ln["k12_data"],"d").";"
+      );
+      if($oParametros->group != 3) {
+       fputs($fp,substr($ln["z01_numcgm"]."-".$ln["z01_nome"],0,40).";");
+      }
+       fputs($fp,$ln["k17_codigo"].";"
+       .db_formatar($ln["e23_valorretencao"],"f").";\n");
+  }
+}
+  if ($oParametros->group != 2){
+       fputs($fp,";;;;;Total da OP:".";".db_formatar($totalOP,"f").";;;;;Total da Retenção:".";".db_formatar($totalRetencoes,"f").";\n"); 
+       fputs($fp,";;;;;Total Geral OP:".";".db_formatar($totalgeralOP,"f").";;;;;Total Geral:".";".db_formatar($totalgeral,"f").";\n");
+  }else{
+        fputs($fp,";;;;Total da OP:".";".db_formatar($totalOP,"f").";;;;;Total da Retenção:".";".db_formatar($totalRetencoes,"f").";\n"); 
+        fputs($fp,";;;;Total Geral OP:".";".db_formatar($totalgeralOP,"f").";;;;;Total Geral:".";".db_formatar($totalgeral,"f").";\n");
+
+  }
+
+  echo "<html><body bgcolor='#cccccc'><center><a href='tmp/emp2_confereretencoes002.csv'>Clique com botão direito para Salvar o arquivo <b>emp2_confereretencoes002.csv</b></a></body></html>";
+  fclose($fp);
+
+
+}

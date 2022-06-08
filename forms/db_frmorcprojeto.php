@@ -37,7 +37,7 @@ $clrotulo->label("o45_numlei");
       <tr>
         <td valign=top>
 
-          <table border=1 style="border:0px solid #999999; width:60%;margin:auto;">
+          <table border=0 style="border:0px solid #999999; width:60%;margin:auto;">
             <tr>
               <td nowrap title="<?= @$To39_anousu ?>"><?= @$Lo39_anousu ?></td>
               <td><? $o39_anousu = db_getsession('DB_anousu');
@@ -63,8 +63,12 @@ $clrotulo->label("o45_numlei");
             </tr>
             <?php if (db_getsession('DB_anousu') > 2021) { ?>
             <tr>
-              <td nowrap title="<?= @$To39_justi ?>"><?= @$Lo39_justi ?></td>
+              <td  nowrap title="<?= @$To39_justi ?>"><?= @$Lo39_justi ?></td>
               <td><? db_textarea('o39_justi', 0, 72, $Io39_justi, true, 'text', $db_opcao, "", "","",1000) ?></td>
+            </tr>
+            <tr style="display: none;">
+              <td nowrap title="<?= @$To39_texto ?>"><?= @$Lo39_texto ?></td>
+              <td><? db_textarea('o39_texto', 0, 72, $Io39_texto, true, 'text', $db_opcao, "", "","",1000) ?></td>
             </tr>
             <?php } ?>
             <tr>
@@ -93,16 +97,20 @@ $clrotulo->label("o45_numlei");
                     //$aWhere=array();
                     //array_push($aWhere, "1001 ","1002","1003","1004","1017","1016","1014","1015");
                     $sSqlTipoSuplem = $clorcsuplemtipo->sql_query("", "o48_tiposup as o46_tiposup,o48_descr", "o48_tiposup"/*,"o48_tiposup in (".implode(",", $aWhere).")"*/);
-
-                    $rtipo          = $clorcsuplemtipo->sql_record($sSqlTipoSuplem);
+                    $rtipo          = $clorcsuplemtipo->sql_record($sSqlTipoSuplem);                   
                     db_fieldsmemory($rtipo, 0);
 
+                    $sSqlTipoprojeto = $clorcprojeto->sql_query($o39_codproj, "o39_tipoproj"); 
+                    $ptipo          = $clorcprojeto->sql_record($sSqlTipoprojeto);                   
+                    db_fieldsmemory($ptipo, 0);
+                   
                     if ($o39_tiposuplementacao == "") {
                       $o39_tiposuplementacao = $o46_tiposup;
                     }
                     db_selectrecord("o39_tiposuplementacao", $rtipo, false, $db_opcao != 3 ? $edita : $db_opcao, "", "", "", "Selecione", "js_validaTipoSup();");
-
+                    
                     ?>
+                    
               </td>
             </tr>
 
@@ -147,6 +155,10 @@ $clrotulo->label("o45_numlei");
     let iTipoLei = document.getElementById('iTipoLei').value;
     let iTipoSup = document.getElementById('o39_tiposuplementacao').value;
 
+    if(!iTipoLei){
+      iTipoLei = "<?php print $o39_tipoproj; ?>";
+    }
+       
     if (iTipoLei == 1) {
 
       let aTipoSupPermitidosLOA = ['Selecione', '1001', '1002', '1003', '1004', '1011', '1018', '1019', '1020', '1021', '1022', '2026'];
@@ -162,8 +174,8 @@ $clrotulo->label("o45_numlei");
     }
 
     if (iTipoLei == 3) {
-
-      let aTipoSupPermitidosLAO = ['Selecione', '1001', '1002', '1003', '1006', '1007', '1008', '1009', '1010', '1012', '1013', '1023', '1024', '1025', '1014', '1015', '1016', '2026'];
+      
+      let aTipoSupPermitidosLAO = ['Selecione', '1006', '1007', '1008', '1009', '1010', '1012', '1013', '1023', '1024', '1025', '1014', '1015', '1016', '1026', '1027', '1028', '1029', '2026'];
       js_validaTipoSupArray(aTipoSupPermitidosLAO, iTipoSup, iTipoLei);
 
     }
@@ -191,6 +203,8 @@ $clrotulo->label("o45_numlei");
       return false;
 
     }
+   
+       
 
   }
 
@@ -228,6 +242,7 @@ $clrotulo->label("o45_numlei");
       alert("Informe o Tipo de Suplementação.");
       event.preventDefault();
     }
+
 
   }
 

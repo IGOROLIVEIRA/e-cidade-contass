@@ -41,6 +41,7 @@ $clacordo->rotulo->label();
 $iInstituicaoSessao = db_getsession('DB_instit');
 ?>
 <html>
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
@@ -50,131 +51,130 @@ $iInstituicaoSessao = db_getsession('DB_instit');
   <link href="estilos.css" rel="stylesheet" type="text/css">
 
 </head>
+
 <body style="background-color: #CCCCCC">
 
-<div class="container">
-  <form name="form2" method="post" action="" >
-    <fieldset>
-      <legend class="bold">Filtros</legend>
+  <div class="container">
+    <form name="form2" method="post" action="">
+      <fieldset>
+        <legend class="bold">Filtros</legend>
 
-      <table border="0" align="center" cellspacing="0">
-        <tr>
-          <td width="4%" align="left" nowrap title="<?php echo $Tac16_sequencial; ?>">
-            <?php echo $Lac16_sequencial; ?>
-          </td>
-          <td width="96%" align="left" nowrap>
-            <?php
-            db_input("ac16_sequencial",10,$Iac16_sequencial,true,"text",4,"","chave_ac16_sequencial");
-            ?>
-          </td>
-        </tr>
+        <table border="0" align="center" cellspacing="0">
+          <tr>
+            <td width="4%" align="left" nowrap title="<?php echo $Tac16_sequencial; ?>">
+              <?php echo $Lac16_sequencial; ?>
+            </td>
+            <td width="96%" align="left" nowrap>
+              <?php
+              db_input("ac16_sequencial", 10, $Iac16_sequencial, true, "text", 4, "", "chave_ac16_sequencial");
+              ?>
+            </td>
+          </tr>
 
-        <tr>
-          <td width="4%" align="left" nowrap title="<?php echo $Tac16_numeroacordo; ?>" class="bold">
-            Número do Acordo:
-          </td>
-          <td width="96%" align="left" nowrap>
-            <?php db_input("ac16_numeroacordo", 10, 0, true, "text", 4); ?>
-          </td>
-        </tr>
+          <tr>
+            <td width="4%" align="left" nowrap title="<?php echo $Tac16_numeroacordo; ?>" class="bold">
+              Número do Acordo:
+            </td>
+            <td width="96%" align="left" nowrap>
+              <?php db_input("ac16_numeroacordo", 10, 0, true, "text", 4); ?>
+            </td>
+          </tr>
 
-        <tr>
-          <td nowrap title="<?php echo @$Tac16_acordogrupo; ?>" class="bold" align="">
-            <?php
-            db_ancora("Grupo:", "js_pesquisaac16_acordogrupo(true);", 1);
-            ?>
-          </td>
-          <td>
-            <?php
-            db_input('ac16_acordogrupo', 10, $Iac16_acordogrupo, true, 'text', 1, "onchange='js_pesquisaac16_acordogrupo(false);'");
-            db_input('ac02_descricao', 30, "", true, 'text', 3);
-            ?>
-          </td>
-        </tr>
-      </table>
+          <tr>
+            <td nowrap title="<?php echo @$Tac16_acordogrupo; ?>" class="bold" align="">
+              <?php
+              db_ancora("Grupo:", "js_pesquisaac16_acordogrupo(true);", 1);
+              ?>
+            </td>
+            <td>
+              <?php
+              db_input('ac16_acordogrupo', 10, $Iac16_acordogrupo, true, 'text', 1, "onchange='js_pesquisaac16_acordogrupo(false);'");
+              db_input('ac02_descricao', 30, "", true, 'text', 3);
+              ?>
+            </td>
+          </tr>
+        </table>
 
-    </fieldset>
-    <p align="center">
-      <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-      <input name="limpar" type="reset" id="limpar" value="Limpar" >
-      <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_acordo.hide();">
-    </p>
+      </fieldset>
+      <p align="center">
+        <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+        <input name="limpar" type="reset" id="limpar" value="Limpar">
+        <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_acordo.hide();">
+      </p>
 
-  </form>
-</div>
+    </form>
+  </div>
 
-<fieldset style="width: 98%">
-  <legend class="bold">Registros</legend>
+  <fieldset style="width: 98%">
+    <legend class="bold">Registros</legend>
 
 
 
-  <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <tr>
-      <td align="center" valign="top">
-        <?php
+    <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
+      <tr>
+        <td align="center" valign="top">
+          <?php
 
-        $sWhere  = " 1 = 1 ";
+          $sWhere  = " 1 = 1 ";
 
-        $sWhere .= " and ac16_instit = {$iInstituicaoSessao} ";
-        if (!isset($lNovoDetalhe)) {
+          $sWhere .= " and ac16_instit = {$iInstituicaoSessao} ";
+          if (!isset($lNovoDetalhe)) {
 
-          if (!isset($lDepartamento)) {
+            if (!isset($lDepartamento)) {
 
-            $sDepartamentos = "( ac16_coddepto = ".db_getsession("DB_coddepto"). " or ac16_deptoresponsavel = ".db_getsession("DB_coddepto")." )";
-            $sWhere .= " and {$sDepartamentos} ";
-          }
+              $sDepartamentos = "( ac16_coddepto = " . db_getsession("DB_coddepto") . " or ac16_deptoresponsavel = " . db_getsession("DB_coddepto") . " )";
+              $sWhere .= " and {$sDepartamentos} ";
+            }
 
-          if (isset($iTipoFiltro)) {
-            $sWhere .= " and ac16_acordosituacao in ({$iTipoFiltro})";
-          }
+            if (isset($iTipoFiltro)) {
+              $sWhere .= " and ac16_acordosituacao in ({$iTipoFiltro})";
+            }
 
-          if ( !empty($lLancamento) ) {
-            $sWhere .= " and exists (select 1 from conlancamacordo where c87_acordo = ac16_sequencial limit 1) ";
-          }
+            if (!empty($lLancamento)) {
+              $sWhere .= " and exists (select 1 from conlancamacordo where c87_acordo = ac16_sequencial limit 1) ";
+            }
 
-          /**
-           * Caso tenha sido setado $lComExecucao como false, buscamos os acordos que nao tiveram item executado
-           */
-          if (isset($lComExecucao) && $lComExecucao == 'false') {
+            /**
+             * Caso tenha sido setado $lComExecucao como false, buscamos os acordos que nao tiveram item executado
+             */
+            if (isset($lComExecucao) && $lComExecucao == 'false') {
 
-            $sWhere .= " and not exists (select 1 from acordoitemexecutadoperiodo     aitemexecutadoperiodo
+              $sWhere .= " and not exists (select 1 from acordoitemexecutadoperiodo     aitemexecutadoperiodo
 	                                                   inner join acordoitemexecutado aitemexecutado on aitemexecutado.ac29_sequencial = aitemexecutadoperiodo.ac38_acordoitemexecutado
 	                                                   inner join acordoitemprevisao  aitemprevisao  on aitemprevisao.ac37_sequencial  = aitemexecutadoperiodo.ac38_acordoitemprevisao
 	                                                   inner join acordoitem          aitem          on aitem.ac20_sequencial          = aitemprevisao.ac37_acordoitem
 	                                        where aitemprevisao.ac37_acordoitem = acordoitem.ac20_sequencial
 	                                    )";
-          }
+            }
 
-          if (isset($lAtivo)) {
+            if (isset($lAtivo)) {
 
-            if ($lAtivo == 1) {
-              $sWhere .= " and ac17_ativo is true";
-            } else if ($lAtivo == 2) {
-              $sWhere .= " and ac17_ativo is false";
+              if ($lAtivo == 1) {
+                $sWhere .= " and ac17_ativo is true";
+              } else if ($lAtivo == 2) {
+                $sWhere .= " and ac17_ativo is false";
+              }
+            }
+
+            if (isset($lGeraAutorizacao) && $lGeraAutorizacao == "true") {
+              $sWhere .= " and ac16_origem in(1, 2, 6) ";
+            }
+
+            if (isset($sListaOrigens) && !empty($sListaOrigens)) {
+              $sWhere .= " and ac16_origem in({$sListaOrigens}) ";
             }
           }
 
-          if (isset($lGeraAutorizacao) && $lGeraAutorizacao == "true") {
-            $sWhere .= " and ac16_origem in(1, 2, 6) ";
-          }
+          if (!isset($pesquisa_chave)) {
 
-          if (isset($sListaOrigens) && !empty($sListaOrigens)) {
-            $sWhere .= " and ac16_origem in({$sListaOrigens}) ";
-          }
+            if (isset($campos) == false) {
 
-
-        }
-
-        if (!isset($pesquisa_chave)) {
-
-          if (isset($campos) == false) {
-
-            if (file_exists("funcoes/db_func_acordo.php")) {
+              if (file_exists("funcoes/db_func_acordo.php")) {
                 require_once("funcoes/db_func_acordo.php");
 
                 /* Pega os campos do arquivo e adiciona o DISTINCT */
-				$campos = 'DISTINCT '.$campos;
-            } else {
+                $campos = 'DISTINCT ' . $campos;
+              } else {
                 $campos  = "distinct acordo.ac16_sequencial, ";
                 $campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
                 $campos .= "ac16_dataassinatura, ";
@@ -182,100 +182,108 @@ $iInstituicaoSessao = db_getsession('DB_instit');
                 $campos .= "acordo.ac16_valor,";
                 $campos .= "acordo.ac16_datainicio, ";
                 $campos .= "acordo.ac16_datafim,ac16_resumoobjeto";
-//              $campos = "acordo.*";
+                //              $campos = "acordo.*";
+              }
             }
-          }
 
 
-          /**
-           * Numero e ano do acordo - separados por '/', caso nao for informado ano, pega da sessao
-           */
-          if (!empty($ac16_numeroacordo)) {
+            /**
+             * Numero e ano do acordo - separados por '/', caso nao for informado ano, pega da sessao
+             */
+            if (!empty($ac16_numeroacordo)) {
 
-            $aNumeroAcordo = explode('/', $ac16_numeroacordo);
-            $iNumero = $aNumeroAcordo[0];
-            $iAno    = !empty($aNumeroAcordo[1]) ? $aNumeroAcordo[1] : db_getsession("DB_anousu");
-            $sWhere  = "ac16_numeroacordo = {$iNumero} and ac16_anousu = {$iAno} and ac16_instit = {$iInstituicaoSessao} and {$sDepartamentos}";
-          }
+              $aNumeroAcordo = explode('/', $ac16_numeroacordo);
+              $iNumero = $aNumeroAcordo[0];
+              $iAno    = !empty($aNumeroAcordo[1]) ? $aNumeroAcordo[1] : db_getsession("DB_anousu");
+              $sWhere  = "ac16_numeroacordo = {$iNumero} and ac16_anousu = {$iAno} and ac16_instit = {$iInstituicaoSessao} and {$sDepartamentos}";
+            }
 
-          if (isset($chave_ac16_sequencial) && (trim($chave_ac16_sequencial)!="")) {
+            if (isset($chave_ac16_sequencial) && (trim($chave_ac16_sequencial) != "")) {
 
-            $sql = $clacordo->sql_query_acordoitemexecutado(null, $campos,"ac16_sequencial",
-                                                            "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao}");
+              $sql = $clacordo->sql_query_acordoitemexecutado(
+                null,
+                $campos,
+                "ac16_sequencial",
+                "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao}"
+              );
+            } else if (isset($ac16_acordogrupo) && (trim($ac16_acordogrupo) != "")) {
 
-          } else if (isset($ac16_acordogrupo) && (trim($ac16_acordogrupo)!="")) {
+              $sql = $clacordo->sql_query_acordoitemexecutado(
+                "",
+                $campos,
+                "ac16_sequencial",
+                "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao}"
+              );
+            } else {
 
-            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial",
-                                                            "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao}");
+              $sql = $clacordo->sql_query_acordoitemexecutado("", $campos, "ac16_sequencial DESC", $sWhere . " and ac16_instit = {$iInstituicaoSessao} ");
+            }
+
+            $repassa = array();
+
+            if (isset($chave_ac16_sequencial)) {
+              $repassa = array("chave_ac16_sequencial" => $chave_ac16_sequencial, "chave_ac16_sequencial" => $chave_ac16_sequencial);
+            }
+
+            db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
           } else {
 
-            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial", $sWhere . " and ac16_instit = {$iInstituicaoSessao} " );
-          }
 
-          $repassa = array();
+            if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
-          if (isset($chave_ac16_sequencial)) {
-            $repassa = array("chave_ac16_sequencial"=>$chave_ac16_sequencial,"chave_ac16_sequencial"=>$chave_ac16_sequencial);
-          }
-
-          db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
-
-        } else {
+              $sSqlBuscaAcordo = $clacordo->sql_query_acordoitemexecutado(
+                null,
+                "*",
+                null,
+                "ac16_sequencial = {$pesquisa_chave}
+                                                                       and {$sWhere}"
+              );
 
 
-          if ($pesquisa_chave != null && $pesquisa_chave != "") {
+              $result = $clacordo->sql_record($sSqlBuscaAcordo);
 
-            $sSqlBuscaAcordo = $clacordo->sql_query_acordoitemexecutado(null,
-                                                                        "*",
-                                                                        null,
-                                                                        "ac16_sequencial = {$pesquisa_chave}
-                                                                       and {$sWhere}");
+              if ($clacordo->numrows != 0) {
 
-
-            $result = $clacordo->sql_record($sSqlBuscaAcordo);
-
-            if ($clacordo->numrows != 0) {
-
-              db_fieldsmemory($result,0);
-              if (isset($descricao) && $descricao == 'true') {
-                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto','$ac16_dataassinatura',false);</script>";
+                db_fieldsmemory($result, 0);
+                if (isset($descricao) && $descricao == 'true') {
+                  echo "<script>" . $funcao_js . "('$ac16_sequencial','$ac16_resumoobjeto','$ac16_dataassinatura',false);</script>";
+                } else {
+                  echo "<script>" . $funcao_js . "('$ac16_sequencial',false);</script>";
+                }
               } else {
-                echo "<script>".$funcao_js."('$ac16_sequencial',false);</script>";
+
+                if (isset($descricao) && $descricao == 'true') {
+                  echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado','','',true);</script>";
+                } else {
+                  echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                }
               }
             } else {
 
               if (isset($descricao) && $descricao == 'true') {
-                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','','',true);</script>";
+                echo "<script>" . $funcao_js . "('','',false);</script>";
               } else {
-                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                echo "<script>" . $funcao_js . "('',false);</script>";
               }
             }
-          } else {
-
-            if (isset($descricao) && $descricao == 'true') {
-              echo "<script>".$funcao_js."('','',false);</script>";
-            } else {
-              echo "<script>".$funcao_js."('',false);</script>";
-            }
           }
-        }
-        ?>
-      </td>
-    </tr>
-  </table>
-</fieldset>
+          ?>
+        </td>
+      </tr>
+    </table>
+  </fieldset>
 </body>
+
 </html>
 <?php
 if (!isset($pesquisa_chave)) {
-  ?>
+?>
   <script>
   </script>
 <?
 }
 ?>
 <script>
-
   /**
    * Formata numero / ano de um elemento html
    *
@@ -311,7 +319,7 @@ if (!isset($pesquisa_chave)) {
 
   js_formatarNumeroAno(document.getElementById('ac16_numeroacordo'));
 
-  js_tabulacaoforms("form2","chave_ac16_sequencial",true,1,"chave_ac16_sequencial",true);
+  js_tabulacaoforms("form2", "chave_ac16_sequencial", true, 1, "chave_ac16_sequencial", true);
 
   function js_pesquisaac16_acordogrupo(mostra) {
 
@@ -331,7 +339,7 @@ if (!isset($pesquisa_chave)) {
 
         js_OpenJanelaIframe('',
           'db_iframe_acordogrupo',
-          'func_acordogrupo.php?pesquisa_chave='+$('ac16_acordogrupo').value+
+          'func_acordogrupo.php?pesquisa_chave=' + $('ac16_acordogrupo').value +
           '&funcao_js=parent.js_mostraacordogrupo',
           'Pesquisa de Grupo de Acordo',
           false,
@@ -342,7 +350,7 @@ if (!isset($pesquisa_chave)) {
     }
   }
 
-  function js_mostraacordogrupo(chave,erro) {
+  function js_mostraacordogrupo(chave, erro) {
 
     $('ac02_descricao').value = chave;
     if (erro == true) {
@@ -352,10 +360,10 @@ if (!isset($pesquisa_chave)) {
     }
   }
 
-  function js_mostraacordogrupo1(chave1,chave2) {
+  function js_mostraacordogrupo1(chave1, chave2) {
 
     $('ac16_acordogrupo').value = chave1;
-    $('ac02_descricao').value   = chave2;
+    $('ac02_descricao').value = chave2;
     $('ac16_acordogrupo').focus();
 
     db_iframe_acordogrupo.hide();

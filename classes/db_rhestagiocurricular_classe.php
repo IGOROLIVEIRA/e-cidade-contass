@@ -267,7 +267,7 @@ class cl_rhestagiocurricular
                                ,$this->h83_instit 
                                ,'$this->h83_naturezaestagio'
                                ,$this->h83_nivelestagio 
-                               ,$this->h83_numapoliceseguro 
+                               ," . ($this->h83_numapoliceseguro == "null" || $this->h83_numapoliceseguro == "" ? "null" : $this->h83_numapoliceseguro ) . "  
 
                       )";
     $result = db_query($sql);
@@ -523,17 +523,8 @@ class cl_rhestagiocurricular
       }
     }
     if (trim($this->h83_numapoliceseguro) != "" || isset($GLOBALS["HTTP_POST_VARS"]["h83_numapoliceseguro"])) {
-      $sql  .= $virgula . " h83_numapoliceseguro = $this->h83_numapoliceseguro ";
+      $sql  .= $virgula . " h83_numapoliceseguro = ".($this->h83_numapoliceseguro == "null" || $this->h83_numapoliceseguro == "" ? "null" : $this->h83_numapoliceseguro )." ";
       $virgula = ",";
-      if (trim($this->h83_numapoliceseguro) == null) {
-        $this->erro_sql = " Campo Número da apólice de seguro não informado.";
-        $this->erro_campo = "h83_numapoliceseguro";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
     }
     $sql .= " where ";
     if ($h83_sequencial != null) {

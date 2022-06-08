@@ -110,7 +110,7 @@ $clcgm->rotulo->label("z01_cgccpf");
         //   if(file_exists("funcoes/db_func_pcforne.php")==true){
         //     include("funcoes/db_func_pcforne.php");
         //   }else{
-           $campos = "pcforne.*,z01_nome,z01_cgccpf";
+           $campos = "pc60_numcgm, z01_nome, z01_cgccpf, pc60_dtlanc";
         //   }
         }
         if (isset ($chave_pc60_numcgm) && (trim($chave_pc60_numcgm) != "")) {
@@ -124,6 +124,7 @@ $clcgm->rotulo->label("z01_cgccpf");
         } else {
            $sql = $clpcforne->sql_query("",$campos,"pc60_numcgm","");
         }
+        
         db_lovrot($sql, 15, "()", "", $funcao_js);
       } else {
         if (($pesquisa_chave != null) && ($pesquisa_chave != "")) {

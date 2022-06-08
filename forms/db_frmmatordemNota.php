@@ -262,7 +262,7 @@ if ($lBloquear) {
                   <?
                   $sSql = db_query("select e60_resumo as m51_obs from empempenho where e60_numemp = $e60_numemp");
                   db_fieldsmemory($sSql, 0, true);
-                  db_textarea("m51_obs", "", "110", $Im51_obs, true, 'text', $dbopcao);
+                  db_textarea("m51_obs", "", "110", $Im51_obs, true, 'text', $dbopcao, "onkeyup = 'return js_validaCaracteres(this.value, m51_obs.id)';");
 
                   ?>
                 </td>
@@ -641,6 +641,7 @@ if ($lBloquear) {
       alert("Não há itens Selecionados.\nVerifique.");
       return false;
     } else {
+      js_validaCaracteres($('m51_obs').value, m51_obs.id);
       return true;
     }
   }
@@ -872,5 +873,53 @@ if ($lBloquear) {
     }
 
     return valorFinal;
+  }
+
+  function js_validaCaracteres(texto, campo) {
+    let temporario = '';
+    temporario = texto.replace(/\n/g, ' ');
+
+    /*Caracteres não permitidos na descrição e complemento material*/
+    let charBuscados = [";", "'", "\"", "\\", "*", ":"];
+    let novoTexto = temporario;
+    let erro = '';
+
+    charBuscados.map(caractere => {
+      if (texto.includes(caractere)) {
+        erro = true;
+      }
+    })
+
+
+    if (window.event) {
+      /* Lança o erro quando a tecla Enter é pressionada. */
+      if (window.event.keyCode == 13) {
+        erro = true;
+        novoTexto = texto.replace(/(\r\n|\n|\r)/g, '');
+      }
+    }
+
+    /* Remove os caracteres contidos no array charBuscados */
+    novoTexto = novoTexto.match(/[^;\*\\\:\"\']/gm);
+
+    for (let cont = 0; cont < novoTexto.length; cont++) {
+
+      /* Remove aspas duplas e simples pelo código, pelo fato de virem de fontes diferentes*/
+
+      if (novoTexto[cont].charCodeAt(0) == 8221 || novoTexto[cont].charCodeAt(0) == 8220 || novoTexto[cont].charCodeAt(0) == 8216) {
+        novoTexto[cont] = '';
+        erro = true;
+      }
+    }
+
+    // if(erro){
+    //   alert('Caractere não permitido para inclusão!');
+    // }
+
+    novoTexto = novoTexto.join('');
+
+      //alert(novoTexto);
+      document.form1.m51_obs.value = novoTexto;
+     
   }
 </script>

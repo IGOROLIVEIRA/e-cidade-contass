@@ -136,7 +136,7 @@ if ($db21_usadebitoitbi == 't') {
                     inner join itbinumpre on itbinumpre.it15_guia = itbi.it01_guia
                     inner join recibo on recibo.k00_numpre = itbinumpre.it15_numpre
                     inner join arrecad_itbi on arrecad_itbi.it01_guia = itbi.it01_guia
-                        where recibo.k00_numpre = (select k00_numpre from disbanco where codret = $oGet->codret);
+                        where recibo.k00_numpre IN (select k00_numpre from disbanco where codret = $oGet->codret);
 SQL;
 
     $resultItbi = db_query($sSQL_ITBI);

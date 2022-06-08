@@ -848,7 +848,7 @@ class licitacao
 
         $sCampos = "l21_codigo AS codigo,pc01_codmater AS codigomaterial,pc01_descrmater AS material,
         (select si02_vlprecoreferencia from itemprecoreferencia where si02_itemproccompra = pcorcamitemproc.pc31_orcamitem) AS valorunitario,pc01_servico AS servico,1 AS origem,pc18_codele AS elemento,pc23_quant AS quantidade,
-        pc23_valor AS valortotal,l20_numero AS numero,sum(l213_qtdcontratada) as l213_qtdcontratada";
+        pc23_valor AS valortotal,l20_numero AS numero,sum(l213_qtdcontratada) as l213_qtdcontratada, l21_ordem as sequencia";
 
         $sWhere  = "l20_codigo = {$iLicitacao} AND l205_fornecedor = {$iFornecedor} and pc24_pontuacao = 1";
         $sWhere .= "GROUP BY l21_codigo,pc01_codmater,pc23_vlrun,pc18_codele,pc23_quant,pc23_valor,l20_numero,pcorcamitemproc.pc31_orcamitem";

@@ -513,7 +513,7 @@ class cl_departdiv {
          $sql2 .= " where departdiv.t30_codigo = $t30_codigo "; 
        } 
      }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
+       $sql2 = " where $dbwhere and t30_ativo is true ";
      }
      $sql .= $sql2;
      if($ordem != null ){

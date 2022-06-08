@@ -65,7 +65,7 @@ if(isset($codtaxa) && (!empty($codtaxa)) ) {
       parent.document.form1.valor.value      = '$k07_valorf';
       parent.document.form1.codsubrec.value  = '$codsubrec';
       parent.document.form1.k07_descr.value  = '$k07_descr';
-      parent.document.form1.o15_codigo.value = '$recurso';
+      parent.document.form1.o15_codigo.value = '$o70_codigo';
       parent.document.form1.arretipo.value = '$arretipo';
       parent.document.form1.descrarretipo.value = '$k00_descr';
       parent.document.form1.o15_codigo.onchange();
@@ -114,21 +114,21 @@ function js_calculavalor(){
 }
 function js_verificavalor(vvalor){
   // TESTA SE EXISTE O IFRAME db_recibo (CASO A TELA DE RECIBO SEJA CHAMADA DO PROGRAMA DE EMISSAO DA CGF)
-  if(CurrentWindow.corpo.db_recibo){
-    CurrentWindow.corpo.db_recibo.jan.document.form1.k02_codigo.value = '<?=$k02_codigo?>';
-    CurrentWindow.corpo.db_recibo.jan.document.form1.k02_drecei.value='<?=$k02_drecei?>';
-    CurrentWindow.corpo.db_recibo.jan.document.form1.codsubrec.value='<?=$codsubrec?>';
-    CurrentWindow.corpo.db_recibo.jan.document.form1.k07_descr.value='<?=$k07_descr?>';
-    CurrentWindow.corpo.db_recibo.jan.document.form1.o15_codigo.value='<?=$recurso?>';
-    CurrentWindow.corpo.db_recibo.jan.document.form1.o15_codigo.onchange();
-    CurrentWindow.corpo.db_recibo.jan.document.form1.valor.value = vvalor;
-    CurrentWindow.corpo.db_recibo.jan.document.form1.gravar.focus();
+  if(top.corpo.db_recibo){
+    top.corpo.db_recibo.jan.document.form1.k02_codigo.value = '<?=$k02_codigo?>';
+    top.corpo.db_recibo.jan.document.form1.k02_drecei.value='<?=$k02_drecei?>';
+    top.corpo.db_recibo.jan.document.form1.codsubrec.value='<?=$codsubrec?>';
+    top.corpo.db_recibo.jan.document.form1.k07_descr.value='<?=$k07_descr?>';
+    top.corpo.db_recibo.jan.document.form1.o15_codigo.value='<?=$o70_codigo?>';
+    top.corpo.db_recibo.jan.document.form1.o15_codigo.onchange();
+    top.corpo.db_recibo.jan.document.form1.valor.value = vvalor;
+    top.corpo.db_recibo.jan.document.form1.gravar.focus();
   }else{
     parent.document.form1.k02_codigo.value = '<?=$k02_codigo?>';
     parent.document.form1.k02_drecei.value='<?=$k02_drecei?>';
     parent.document.form1.codsubrec.value='<?=$codsubrec?>';
     parent.document.form1.k07_descr.value='<?=$k07_descr?>';
-    parent.document.form1.o15_codigo.value='<?=$recurso?>' ;
+    parent.document.form1.o15_codigo.value='<?=$o70_codigo?>' ;
     parent.document.form1.arretipo.value='<?=$arretipo?>'		;
     parent.document.form1.descrarretipo.value = '<?=$k00_descr?>';
     parent.document.form1.o15_codigo.onchange();

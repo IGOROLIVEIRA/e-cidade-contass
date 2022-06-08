@@ -139,7 +139,7 @@ if (isset($alterar)) {
     }
   }
 
-  if ($manutlic_codunidsubanterior != $manutlic_codunidsubanterior_old) {
+  if ($manutlic_codunidsubanterior != $manutlic_codunidsubanterior_old || $manutlic_codunidsubanterior == '') {
     $change = true;
 
     $sSqlMaxManutLic = $clmanutencaolicitacao->sql_query_file(null, "max(manutlic_sequencial)", null, "manutlic_licitacao = $l20_codigo");
@@ -177,8 +177,15 @@ if (isset($alterar)) {
 
         $datah = implode('-', array_reverse(explode('/', $$datahomologacao)));
         $dataa = implode('-', array_reverse(explode('/', $$dataadjudicacao)));
-
-        $resultado = db_query("update homologacaoadjudica  set l202_datahomologacao = '$datah', l202_dataadjudicacao  = '$dataa' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+        if($datah != null || $datah != ''){
+          if($dataa != null || $dataa != ''){
+            $resultado = db_query("update homologacaoadjudica set l202_datahomologacao = '$datah', l202_dataadjudicacao  = '$dataa' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+          }else{
+            $resultado = db_query("update homologacaoadjudica set l202_datahomologacao = '$datah' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+          }
+        }elseif($dataa != null || $dataa != ''){
+          $resultado = db_query("update homologacaoadjudica set l202_dataadjudicacao  = '$dataa' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+        }
         $sqlerro = false;
       }
     }
@@ -393,6 +400,20 @@ if (isset($alterar)) {
               endif;
               ?>
 
+
+
+<tr>
+                    <td nowrap title="Codunidsubanterior">
+                      <strong>Codunidsubanterior:</strong>
+                    </td>
+                    <td>
+                      <?
+                      db_input('manutlic_codunidsubanterior', 10, $Imanutlic_codunidsubanterior, true, 'text', 2, "");
+                      db_input('manutlic_codunidsubanterior_old', 10, $Imanutlic_codunidsubanterior, true, 'hidden', 2, "");
+                      ?>
+                    </td>
+                  </tr>
+
               <?php
               if ($chavepesquisa2 != 101) :
                 if ($chavepesquisa2 != 100) :
@@ -413,18 +434,10 @@ if (isset($alterar)) {
                   db_input('l20_nroedital_old', 10, $Il20_nroedital, true, 'hidden', 2, "");
                   ?>
 
-                  <tr>
-                    <td nowrap title="Codunidsubanterior">
-                      <strong>Codunidsubanterior:</strong>
-                    </td>
-                    <td>
-                      <?
-                      db_input('manutlic_codunidsubanterior', 10, $Imanutlic_codunidsubanterior, true, 'text', 2, "");
-                      db_input('manutlic_codunidsubanterior_old', 10, $Imanutlic_codunidsubanterior, true, 'hidden', 2, "");
-                      ?>
-                    </td>
-                  </tr>
 
+              
+                  
+                  
 
 
                   <?php

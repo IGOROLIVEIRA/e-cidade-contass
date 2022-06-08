@@ -399,10 +399,12 @@ function js_atualiza_variavel_retorno(objeto){
       <input id="programa" type="button" value="Programa" onclick="js_marca_orgaos('programa');return false" >
       <input id="prjativ" type="button" value="Proj/Atividade" onclick="js_marca_orgaos('projativ');return false" >
       <input id="elemento" type="button" value="Elemento" onclick="js_marca_orgaos('elemento');return false" >
-      <?  if (isset($desdobramento) && $desdobramento==true){  ?>                 
+      <? if (isset($desdobramento) && $desdobramento==true){  ?>              
                  <!-- não exibe opção de desdobramento -->
                  <input id="desdobramento" type="button" value="Desdobramento" onclick="js_marca_orgaos('desdobramento');return false" >
-      <?  }  ?>
+      <?  }else {  ?>
+        <input id="desdobramento" type="button" value="Desdobramento" onclick="js_marca_orgaos('desdobramento');return false" >   
+        <?  }  ?>
       <input id="recurso" type="button" value="Recurso" onclick="js_marca_orgaos('recurso');return false" >
     </td>
   </tr>

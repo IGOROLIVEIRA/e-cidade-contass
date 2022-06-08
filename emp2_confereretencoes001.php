@@ -344,6 +344,19 @@ $db_opcao = 1;
                           </fieldset>
                       </td>
                   </tr>
+                  <tr>  
+                    <td>
+                       <b>Tipo:</b>
+                    </td>
+                    <td>
+                      <?
+                        $tipo  = array("p"  => "PDF",
+                                       "c"  => "CSV");
+                        db_select("tipo", $tipo, true, 1, "style='width:10em'");
+                      ?>
+                    </td>
+                  </tr>
+                  
 
                 </table>
             </fieldset>
@@ -575,6 +588,8 @@ function js_emitir() {
   oParametro.order       = $F('order');
   oParametro.group       = $F('group');
   oParametro.credorsim   = $F('credorsim');
+  oParametro.tipo        = $F('tipo');
+
 
   /*OC4581*/
   oParametro.iTipoLancamento = $F('iTipoLancamento');

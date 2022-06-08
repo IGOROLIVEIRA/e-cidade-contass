@@ -76,6 +76,29 @@ $oRotulo->label('rh90_mesusu');
               ?>
             </td>
           </tr>
+          <tr>
+              <td>
+                <b>Quebra por Fonte:</b>
+              </td>
+              <td >
+              <?
+                $x = array("n"=>"NÃO","s"=>"SIM");
+                db_select('qfonte',$x,true,4,"");
+              ?>
+
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Quebra por Projeto/Atividade:</b>
+              </td>
+              <td>
+              <?
+                $x = array("n"=>"NÃO","s"=>"SIM");
+                db_select('qprojeto',$x,true,4,"");
+              ?>
+              </td>
+            </tr>
         </table>
       </fieldset>
     </td>
@@ -97,6 +120,8 @@ $oRotulo->label('rh90_mesusu');
     
     var sAnoUsu = new String($F('anousu'));
     var sMesUsu = new String($F('mesusu'));
+    var sFonte = new String($F('qfonte'));
+    var sProjeto = new String($F('qprojeto'));
       
     if ( sAnoUsu.trim() == '' || sMesUsu.trim() == '' ) {
       alert('Competência não informada!');
@@ -109,7 +134,9 @@ $oRotulo->label('rh90_mesusu');
     }
       
 	  var sQuery  ="?iAnoCompetencia="+sAnoUsu
-	              +"&iMesCompetencia="+sMesUsu;
+	              +"&iMesCompetencia="+sMesUsu
+                +"&fonte="+sFonte
+                +"&projeto="+sProjeto;
 
 	  var sUrl    = 'pes2_valproccomp002.php'+sQuery;
 	  var sParam  = 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ';

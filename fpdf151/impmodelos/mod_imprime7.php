@@ -4,65 +4,93 @@ $nTotalRetencaoRecolhido = 0;
 $iInstituicao = db_getsession("DB_instit");
 for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
-    $this->objpdf->AliasNbPages();
-    $this->objpdf->AddPage();
-    $this->objpdf->settopmargin(1);
-    $pagina = 1;
-    $xlin = 20;
-    $xcol = 12;
-    $ano = $this->ano;
+  $this->objpdf->AliasNbPages();
+  $this->objpdf->AddPage();
+  $this->objpdf->settopmargin(1);
+  $pagina = 1;
+  $xlin = 20;
+  $xcol = 12;
+  $ano = $this->ano;
 
-    $this->objpdf->setfillcolor(245);
-    $this->objpdf->rect($xcol - 2, $xlin - 18, 198, 292, 2, 'DF', '1234');
-    $this->objpdf->setfillcolor(255, 255, 255);
-    $this->objpdf->Setfont('Arial', 'B', 10);
-    $this->objpdf->text(128, $xlin - 10, 'ORDEM DE PAGAMENTO N' . CHR(176) . ': ');
-    $this->objpdf->Setfont('Arial', 'B', 12);
-    $this->objpdf->text(180, $xlin - 10, $this->ordpag);
-    $this->objpdf->Setfont('Arial', 'B', 10);
-    $this->objpdf->text(134, $xlin - 5, 'DATA DE EMISSÃO : ');
-    $this->objpdf->text(175, $xlin - 5, $this->emissao);
-    $this->objpdf->Image('imagens/files/' . $this->logo, 15, $xlin - 17, 12);
-    $this->objpdf->Setfont('Arial', 'B', 9);
-    $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
-    $this->objpdf->Setfont('Arial', '', 9);
-    $this->objpdf->text(40, $xlin - 11, $this->enderpref);
-    $this->objpdf->text(40, $xlin - 8, $this->municpref);
-    $this->objpdf->text(40, $xlin - 5, $this->telefpref);
-    $this->objpdf->text(40, $xlin - 2, $this->emailpref);
-    $this->objpdf->text(40, $xlin + 1, db_formatar($this->cgcpref, 'cnpj'));
+  $this->objpdf->setfillcolor(245);
+  $this->objpdf->rect($xcol-2,$xlin-18,198,292,2,'DF','1234');
+  $this->objpdf->setfillcolor(255,255,255);
+  $this->objpdf->Setfont('Arial','B',10);
+  $this->objpdf->text(128,$xlin-10,'ORDEM DE PAGAMENTO N'.CHR(176).': ');
+  $this->objpdf->Setfont('Arial','B',12);
+  $this->objpdf->text(180,$xlin-10,$this->ordpag);
+  $this->objpdf->Setfont('Arial','B',10);
+  $this->objpdf->text(134,$xlin-5,'DATA DE EMISSÃO : ');
+  $this->objpdf->text(175,$xlin-5,$this->emissao);
+  $this->objpdf->Image('imagens/files/'.$this->logo,15,$xlin-17,12);
+  $this->objpdf->Setfont('Arial','B',9);
+  $this->objpdf->text(40,$xlin-15,$this->prefeitura);
+  $this->objpdf->Setfont('Arial','',9);
+  $this->objpdf->text(40,$xlin-11,$this->enderpref);
+  $this->objpdf->text(40,$xlin-8,$this->municpref);
+  $this->objpdf->text(40,$xlin-5,$this->telefpref);
+  $this->objpdf->text(40,$xlin-2,$this->emailpref);
+  $this->objpdf->text(40, $xlin +1, db_formatar($this->cgcpref, 'cnpj'));
 
-    // retangulo dos dados da dotação
-    $this->objpdf->rect($xcol, $xlin + 2, $xcol + 90, 41, 2, 'DF', '1234');
-    $this->objpdf->Setfont('Arial', 'B', 8);
+  // retangulo dos dados da dotação
+  $this->objpdf->rect($xcol,$xlin+2,$xcol+90,41,2,'DF','1234');
+  $this->objpdf->Setfont('Arial','B',8);
 
-    $this->objpdf->text($xcol + 2, $xlin + 7, 'Órgão');
-    $this->objpdf->text($xcol + 2, $xlin + 11, 'Unidade');
-    $this->objpdf->text($xcol + 2, $xlin + 15, 'Função');
+  $this->objpdf->text($xcol+2,$xlin+7,'Órgão');
+  $this->objpdf->text($xcol+2,$xlin+11,'Unidade');
+  $this->objpdf->text($xcol+2,$xlin+15,'Função');
 
-    $this->objpdf->text($xcol + 2, $xlin + 19, 'Proj/Ativ');
-    $this->objpdf->text($xcol + 2, $xlin + 23, 'Dotação');
-    $this->objpdf->text($xcol + 2, $xlin + 27, 'Elemento');
-    $this->objpdf->text($xcol + 2, $xlin + 34, 'Recurso');
-    $this->objpdf->text($xcol + 2, $xlin + 38, 'Processo');
-    $this->objpdf->text($xcol + 2, $xlin + 42, 'Tipo Compra');
-    $this->objpdf->text($xcol + 70, $xlin + 38, 'Reduzido:');
-    $this->objpdf->Setfont('Arial', '', 8);
-    $this->objpdf->text($xcol + 17, $xlin + 7, ':  ' . db_formatar($this->orgao, 'orgao') . ' - ' . substr($this->descr_orgao, 0, 46));
-    $this->objpdf->text($xcol + 17, $xlin + 11, ':  ' . db_formatar($this->unidade, 'unidade') . ' - ' . $this->descr_unidade);
-    $this->objpdf->text($xcol + 17, $xlin + 15, ':  ' . db_formatar($this->funcao, 'funcao') . ' - ' . $this->descr_funcao);
+  $this->objpdf->text($xcol+2,$xlin+19,'Proj/Ativ');
+  $this->objpdf->text($xcol+2,$xlin+23,'Dotação');
+  $this->objpdf->text($xcol+2,$xlin+27,'Elemento');
+  $this->objpdf->text($xcol+2,$xlin+34,'Recurso');
+  $this->objpdf->text($xcol+2,$xlin+38,'Processo');
+  $this->objpdf->text($xcol+2,$xlin+42,'Tipo Compra');
+  $this->objpdf->text($xcol+70,$xlin+38,'Reduzido:');
+  $this->objpdf->Setfont('Arial','',8);
+  $this->objpdf->text($xcol+17,$xlin+7,':  '.db_formatar($this->orgao,'orgao').' - '.substr($this->descr_orgao,0,46));
+  $this->objpdf->text($xcol+17,$xlin+11,':  '.db_formatar($this->unidade,'unidade').' - '.$this->descr_unidade);
+  $this->objpdf->text($xcol+17,$xlin+15,':  '.db_formatar($this->funcao,'funcao').' - '.$this->descr_funcao);
 
-    $this->objpdf->text($xcol + 17, $xlin + 19, ':  ' . db_formatar($this->projativ, 'projativ') . ' - ' . $this->descr_projativ);
-    $this->objpdf->text($xcol + 17, $xlin + 23, ':  ' . $this->dotacao);
-    $this->objpdf->text($xcol + 17, $xlin + 27, ':  ' . db_formatar($this->elemento, 'elemento'));
-    $this->objpdf->text($xcol + 17, $xlin + 30, '   ' . $this->descr_elemento);
-    $this->objpdf->text($xcol + 17, $xlin + 34, ':  ' . substr($this->recurso . ' - ' . $this->descr_recurso, 0, 50));
-    $this->objpdf->text($xcol + 17, $xlin + 38, ':  ' . $this->processo);
-    $this->objpdf->text($xcol + 21, $xlin + 42, ':  ' . $this->descr_tipocompra);
-    $this->objpdf->text($xcol + 85, $xlin + 38, $this->coddot);
+  $this->objpdf->text($xcol+17,$xlin+19,':  '.db_formatar($this->projativ,'projativ').' - '.$this->descr_projativ);
+  $this->objpdf->text($xcol+17,$xlin+23,':  '.$this->dotacao);
+  $this->objpdf->text($xcol+17,$xlin+27,':  '.db_formatar($this->elemento,'elemento'));
+  $this->objpdf->text($xcol+17,$xlin+30,'   '.$this->descr_elemento);
+  $this->objpdf->text($xcol+17,$xlin+34,':  '.substr($this->recurso.' - '.$this->descr_recurso,0,50));
+  $this->objpdf->text($xcol+17,$xlin+38,':  '.$this->processo);
+  $this->objpdf->text($xcol+21,$xlin+42,':  '.$this->descr_tipocompra);
+  $this->objpdf->text($xcol+85,$xlin+38,$this->coddot);
 
-    if ($ano < db_getsession("DB_anousu")) {
-        $this->objpdf->text($xcol + 19, $xlin + 38, 'RESTOS A PAGAR ');
+  // if ($ano < db_getsession("DB_anousu")) {
+  //   // $this->objpdf->text($xcol+19,$xlin+38,'RESTOS A PAGAR ');
+  // }
+
+  // retangulo dos dados do credor
+  $this->objpdf->rect($xcol+106,$xlin+2,88,32,2,'DF','1234');
+  $this->objpdf->Setfont('Arial','',6);
+  $this->objpdf->text($xcol+107,$xlin+4,'Dados do Credor:');
+  $this->objpdf->Setfont('Arial','B',8);
+  $this->objpdf->text($xcol+107,$xlin+7,'Nº Credor');
+  $this->objpdf->text($xcol+150,$xlin+7,(strlen($this->cnpj) == 11?'CPF':'CNPJ'));
+  $this->objpdf->text($xcol+107,$xlin+15,'Banco/Ag./Conta');
+  $this->objpdf->text($xcol+107,$xlin+11,'Nome');
+  $this->objpdf->text($xcol+107,$xlin+19,'Município');
+  $this->objpdf->text($xcol+107,$xlin+23,'Endereço');
+  $this->objpdf->text($xcol+107,$xlin+27,'Bairro');
+  $this->objpdf->text($xcol+150,$xlin+31,'Telefone');
+  $this->objpdf->text($xcol+107,$xlin+31,'Número');
+  $this->objpdf->Setfont('Arial','',8);
+  $this->objpdf->text($xcol+122,$xlin+7,': '.$this->numcgm);
+  $this->objpdf->text($xcol+157,$xlin+7,' :  '.(strlen($this->cnpj) == 11 ? db_formatar($this->cnpj, 'cpf') : db_formatar($this->cnpj, 'cnpj')));
+  $this->objpdf->text($xcol+122,$xlin+11,': '.$this->nome);
+  $this->objpdf->text($xcol+122,$xlin+23,': '.$this->ender.' '.$this->compl);
+  $this->objpdf->text($xcol+122,$xlin+27,': '.$this->bairro);
+  $this->objpdf->text($xcol+122,$xlin+19,': '.$this->munic.'-'.$this->ufFornecedor.'    CEP : '.$this->cep);
+  if ($this->banco != null) {
+    $agenciadv = "";
+    $contadv = "";
+    if (trim($this->agenciadv)!="") {
+      $agenciadv = "-".$this->agenciadv;
     }
 
     // retangulo dos dados do credor

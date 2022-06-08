@@ -88,14 +88,34 @@ $clrotulo->label("o39_texto");
     <td>
         <?
            @$ro = $clorcprojeto->sql_record($clorcprojeto->sql_query_file($o46_codlei,"o39_texto"));
+           $tiposuple = $clorcprojeto->sql_record($clorcprojeto->sql_query_file($o39_codproj,"o39_tiposuplementacao"));
 	   //db_criatabela($ro);
 	   if (@pg_numrows($ro)>0){
              @db_fieldsmemory($ro,0);
  	   }
-	   if ($o39_texto ==""){
-             $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
-             $o39_texto.= " será usado como recurso as seguintes reduções orçamentárias:   ";
-	   }
+
+    if (@pg_numrows($tiposuple)>0){
+          echo @db_fieldsmemory($tiposuple,0);
+     }
+
+	  //  if ($o39_texto ==""){
+      if($o39_tiposuplementacao == 1004 || $o39_tiposuplementacao == 1009 ||$o39_tiposuplementacao == 1025 || $o39_tiposuplementacao == 1027 ||$o39_tiposuplementacao == 1029){
+        $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+        $o39_texto.= " será usado como recurso o excesso de arrecadação na fonte:   ";
+    }
+    elseif($o39_tiposuplementacao == 1003 || $o39_tiposuplementacao == 1008 ||$o39_tiposuplementacao == 1028 || $o39_tiposuplementacao == 1026 ){
+      $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+      $o39_texto.= "  será usado como recurso o Superávit Financeiro, do Balanço Patrimonial anterior:   ";
+    }
+    elseif($o39_tiposuplementacao == 1011){
+      $o39_texto = "Art. 2º - Fica o serviço de contabilidade autorizado a promover as adequações necessárias na Lei Orçamentária Municipal";
+      $o39_texto.= "  e no Plano Plurianual vigente, com a respectiva ação.   ";
+    }
+    else{
+     $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+     $o39_texto.= " será usado como recurso as seguintes reduções orçamentárias: ";
+   }
+	  //  }
 	   db_textarea('o39_texto',7,60,$Io39_texto,true,'text',1); ?>
     </td>
   </tr>

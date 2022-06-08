@@ -27,8 +27,8 @@ class cl_julglic402022
   var $si62_dtjulgamento_mes = null;
   var $si62_dtjulgamento_ano = null;
   var $si62_dtjulgamento = null;
-  var $si62_presencalicitantes = 0;
-  var $si62_renunciarecurso = 0;
+  var $si62_presencalicitantes = null;
+  var $si62_renunciarecurso = null;
   var $si62_mes = 0;
   var $si62_instit = 0;
   // cria propriedade com as variaveis do arquivo
@@ -113,10 +113,10 @@ class cl_julglic402022
       $this->si62_dtjulgamento = "null";
     }
     if ($this->si62_presencalicitantes == null) {
-      $this->si62_presencalicitantes = "0";
+      $this->si62_presencalicitantes = "null";
     }
     if ($this->si62_renunciarecurso == null) {
-      $this->si62_renunciarecurso = "0";
+      $this->si62_renunciarecurso = "null";
     }
     if ($this->si62_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -597,5 +597,3 @@ class cl_julglic402022
     return $sql;
   }
 }
-
-?>

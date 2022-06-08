@@ -413,7 +413,7 @@ if ($oInstit->db21_usasisagua == "t") {
           </table>
         </fieldset>
         <br>
-
+                  
         <input type='button' value='Salvar Item' id='incluir' onclick='js_addReceita();' />
         <input type='button' value='Pesquisar' id='btnPesquisar' onclick='js_pesquisaPlanilha(false);' />
         <input type='button' value='Importar' id='importar' onclick='js_pesquisaPlanilha(true);' />
@@ -440,7 +440,9 @@ if ($oInstit->db21_usasisagua == "t") {
   
   const CAMINHO_MENSAGEM = 'financeiro.caixa.cai1_planilhalancamento001.';
   sRPC = 'cai4_planilhaarrecadacao.RPC.php';
-
+ 
+ 
+  
   if ($('anoUsu').value >= 2020) {
     document.getElementById("k81_emparlamentar").options[3].selected = true;
     let lEmendaParlamentarObrigatoria = false;
@@ -667,8 +669,8 @@ if ($oInstit->db21_usasisagua == "t") {
    *   CONTA
    */
   function js_pesquisaConta(lMostra) {
-
-    var sFuncao = 'funcao_js=parent.js_mostraSaltes|k13_conta|k13_descr|c61_codigo|db83_conta|db83_codigoopcredito';
+  
+    var sFuncao = 'funcao_js=parent.js_mostraSaltes|k13_conta|k13_descr|c61_codigo|db83_conta|db83_codigoopcredito|db83_tipoconta';
     var sPesquisa = 'func_saltesrecurso.php?recurso=0&' + sFuncao + '&data_limite=<?= date("Y-m-d", db_getsession("DB_datausu")) ?>'
 
     if (!lMostra) {
@@ -731,10 +733,29 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoConvenio(oSaltesConvenio);
   }
 
-  function js_preencheSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb83_codigoopcredito, lErro) {
+  function js_preencheSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb83_codigoopcredito,db83_tipoconta, lErro) {
+   
+    $tipocontabancaria = db83_tipoconta
+    
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
+
+    if ($('anoUsu').value >= 2022){
+
+     if(typeof $receitaTipo !== "undefined"){
+        if($receitaTipo.substr(0, 5) != 41321){
+          if($tipocontabancaria == 2 || $tipocontabancaria == 3){
+          $('k81_conta').value = "";
+          $('k13_descr').value = "";
+          $('c61_codigo').value = "";  
+          alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
+          return;
+        }
+      }
+    }    
+    }
+   
     
     var recursoreceita = iCodigoRecurso;
     
@@ -813,13 +834,31 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoConta();
   }
 
+  function js_mostraSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb_conta, idb83_codigoopcredito,db83_tipoconta) {
+    
+    $tipocontabancaria = 0; 
 
-
-  function js_mostraSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb_conta, idb83_codigoopcredito) {
-   
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
+        
+    if ($('anoUsu').value >= 2022){
+      $tipocontabancaria = db83_tipoconta
+     
+     if(typeof $receitaTipo !== "undefined"){
+      if($receitaTipo.substr(0, 5) != 41321){
+          if($tipocontabancaria == 2 || $tipocontabancaria == 3){
+          $('k81_conta').value = "";
+          $('k13_descr').value = "";
+          $('c61_codigo').value = "";   
+          alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
+          return;  
+        }
+      }
+      }          
+    }
+    
+    
     var recursoreceita = iCodigoRecurso;
     
     if ($('anoUsu').value >= 2022) {
@@ -909,7 +948,7 @@ if ($oInstit->db21_usasisagua == "t") {
   */
   function js_pesquisaReceita(lMostra) {
 
-    var sPesquisa = 'func_tabrec_recurso.php?funcao_js=parent.js_mostratabrec1|k02_codigo|k02_drecei|recurso|k02_estorc|k02_tipo|recurso';
+    var sPesquisa = 'func_tabrec_recurso.php?funcao_js=parent.js_mostratabrec1|k02_codigo|k02_drecei|o70_codigo|k02_estorc|k02_tipo|recurso';
 
     if (!lMostra) {
 
@@ -926,12 +965,40 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   function js_mostratabrec(iReceita, sReceita, chave3, chave4, erro, chave5, chave6) {
-
+        
+    $receitaTipo =  chave4;
+    if($('anoUsu').value >= 2022){
+      if(chave4.substr(0, 1) != 4){
+        $('k81_receita').value = '';
+          alert('Selecione apenas receita do grupo orçamentária');
+          
+          return;
+      }
+    }
     $('k81_receita').value = iReceita;
     $('k02_drecei').value = sReceita;
     $('recurso').value = chave3;
     $('estrutural').value = chave4;
-    $('k02_tipo').value = chave6;
+    $('k02_tipo').value = chave5;
+
+    if ($('anoUsu').value >= 2020) {
+      if($('k81_conta').value){
+            
+            if($receitaTipo.substr(0, 5) != 41321){ 
+              if($tipocontabancaria == 2 || $tipocontabancaria == 3){
+                $('k81_receita').value = "";
+                $('k02_drecei').value = "";
+                $('recurso').value = "";
+                $('estrutural').value = "";
+                $('k02_tipo').value = "";
+              alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
+              return;
+              }
+            }
+          }
+    }  
+
+   
 
     
     if($('anoUsu').value >= 2022 & !$('k81_conta').value){
@@ -987,13 +1054,37 @@ if ($oInstit->db21_usasisagua == "t") {
     }
 
     if($('anoUsu').value >= 2022){
+      
     function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
-
+    $receitaTipo =  chave4; 
+    if(chave4.substr(0, 1) != 4){
+        alert('Selecione apenas receita do grupo orçamentária');
+        return;
+    }
+    
     $('k81_receita').value = iReceita;
     $('k02_drecei').value = sReceita;
     $('recurso').value = chave3;
     $('estrutural').value = chave4;
     $('k02_tipo').value = chave5;
+
+    if($('k81_conta').value){
+            
+      if($receitaTipo.substr(0, 5) != 41321){ 
+        if($tipocontabancaria == 2 || $tipocontabancaria == 3){
+          $('k81_receita').value = "";
+          $('k02_drecei').value = "";
+          $('recurso').value = "";
+          $('estrutural').value = "";
+          $('k02_tipo').value = "";
+        //   $('k81_conta').value = "";
+        //   $('k13_descr').value = "";
+        //   $('c61_codigo').value = ""; 
+          alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
+        return;
+        }
+      }
+    }
 
     if(!$('k81_conta').value){
       $('op01_numerocontratoopc').value = '';
@@ -1759,7 +1850,7 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   function js_salvarPlanilha() {
-
+   
     if (lMenuAlteracao && !$F('k80_codpla')) {
       alert("Selecione uma planilha para alteração.");
       return false;
@@ -1999,16 +2090,105 @@ if ($oInstit->db21_usasisagua == "t") {
    *
    * @returns {Boolean}
    */
-  function js_mostrarNotificacaoConta() {
+  if($('anoUsu').value >= 2022){          
+       
+    function js_mostrarNotificacaoConta() {
+
+      var iContaReceita = $('recurso').value;
+      var iConta = $('c61_codigo').value;
+      var icontaAux = 0;
+      
+      document.getElementById("incluir").disabled = false; 
+
+      if(iConta.length == 4)
+           icontaAux = iConta.substr(1,3);
+        else  
+           icontaAux  = iConta;
+             
+      if((iContaReceita == 160 && icontaAux== 186) || (iContaReceita == 160 && iConta == 186) || (iContaReceita == 170 && iConta == 100) || (iContaReceita == 119 && iConta == 118) || (iContaReceita == 166 && iConta == 118) || (iContaReceita == 167 && iConta == 118) ||
+      (iContaReceita == 166 && iConta == 119) || (iContaReceita == 167 && iConta == 119) || (iContaReceita == 118 && iConta == 119) || (iContaReceita == 101 && iConta == 100) || (iContaReceita == 102 && iConta == 100) ||
+      (iContaReceita == 154 && iConta == 159) || (iContaReceita == 154 && iConta == 153) ||(iContaReceita == 161 && iConta == 100) ||(iContaReceita == 160 && iConta == 186) ||
+      (iContaReceita == 170 && icontaAux== 100) || (iContaReceita == 119 && icontaAux== 118) || (iContaReceita == 166 && icontaAux== 118) || (iContaReceita == 167 && icontaAux== 118) ||
+      (iContaReceita == 166 && icontaAux== 119) || (iContaReceita == 167 && icontaAux== 119) || (iContaReceita == 118 && icontaAux== 119) || (iContaReceita == 101 && icontaAux== 100) || (iContaReceita == 102 && icontaAux== 100) ||
+      (iContaReceita == 154 && icontaAux== 159) || (iContaReceita == 154 && icontaAux== 153) ||(iContaReceita == 161 && icontaAux== 100) ||(iContaReceita == 160 && icontaAux== 186)){
+        $('notificacao').setStyle({
+              display: 'none'
+            });  
+      }else if(iContaReceita == 105 && iConta == 103 || (iContaReceita == 105 && icontaAux== 103)){
+        
+        var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
+            ContaReceita: iContaReceita,
+            Conta: iConta
+          });
+
+          $('notificacao').childElements()[0].update("");
+          $('notificacao').childElements()[0].insert("<b>" + sMensagem + "</b>");
+
+          $('notificacao').setStyle({
+            display: 'table-row'
+          });        
+          return true;
+      }else{      
+      if (!empty(iContaReceita) && !empty(iConta)) {
+       
+        var sTipoReceita = $('k02_tipo').value;
+      
+        if(iConta.length == 4)
+           icontaAux = iConta.substr(1,3);
+        else  
+           icontaAux  = iConta;
+               
+        if ((sTipoReceita == 'O') && (icontaAux !== iContaReceita)) {
+          
+          var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
+            ContaReceita: iContaReceita,
+            Conta: iConta
+          });
+
+          $('notificacao').childElements()[0].update("");
+          $('notificacao').childElements()[0].insert("<b>" + sMensagem + "</b>");
+
+          $('notificacao').setStyle({
+            display: 'table-row'
+          });
+          document.getElementById("incluir").disabled = true;
+          
+          return true;
+        }
+      }
+
+      $('notificacao').setStyle({
+        display: 'none'
+      });
+
+      return false;
+    }
+  }
+  }
+  else{  
+    function js_mostrarNotificacaoConta() {
 
     var iContaReceita = $('recurso').value;
     var iConta = $('c61_codigo').value;
+    var icontaAux = 0;
+      
 
     if (!empty(iContaReceita) && !empty(iConta)) {
 
       var sTipoReceita = $('k02_tipo').value;
 
-      if ((sTipoReceita == 'O') && (iConta !== iContaReceita)) {
+        if(iConta.length == 4)
+           icontaAux = iConta.substr(1,3);
+        else  
+           icontaAux  = iConta;
+      
+           $('notificacao').setStyle({
+              display: 'none'
+            });    
+
+      if ((sTipoReceita == 'O') && (icontaAux !== iContaReceita)) {
+       
+         
 
         var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
           ContaReceita: iContaReceita,
@@ -2031,7 +2211,10 @@ if ($oInstit->db21_usasisagua == "t") {
     });
 
     return false;
+    }
+
   }
+
   //OC5689
   function js_mostrarNotificacaoEstruturais() {
 
